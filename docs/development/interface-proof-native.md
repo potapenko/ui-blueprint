@@ -85,6 +85,24 @@ F02 public AXPosition/AXSize and ScreenCaptureKit metadata have evidence only on
 the owned fixture. Transfer to real applications and exact AX-to-pixel transforms
 remain unverified. These cautions constrain future normalization, not new collection.
 
+## Collector WIP saved before common-support handoff
+
+[Collector.swift](../../tests/bridges/native/Collector.swift) is compiling source,
+not a verified live bridge. It accepts one bounded request and the committed
+Stage A artifact shapes; exact own-F02 binding and public APIs stay within the
+native packet. It can emit a descriptor without tree/pixel acquisition, then
+accept a real host Ticket sequence for separate channel replies. AX output is
+written before capture. Without a sequence only standalone Snapshot/Error
+artifacts are produced; those cannot substitute for common lifecycle proof.
+
+No runtime or shared-validator check has run for this source. The defensive
+8-second helper watchdog and injected 6-second pending capture are WIP test
+mechanisms, not D05 production defaults or accepted channel deadlines. The shared
+host still must enforce explicit 1s AX/2s capture budgets, its authoritative outer
+clock/deadline, bounded framing and owned process cleanup. No concurrency fix,
+permission result, late-frame rejection or independent-session claim follows from
+compilation. Integration owns reusable framing/lifecycle/negative orchestration.
+
 ## Next implementation after the committed Stage A SHA
 
 The following is the bounded execution plan, not an implemented wire schema:

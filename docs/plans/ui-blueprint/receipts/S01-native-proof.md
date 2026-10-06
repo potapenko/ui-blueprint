@@ -1,10 +1,11 @@
-# S01-Native preparation receipt
+# S01-Native preparation and collector WIP receipt
 
-- packet_id / status: `S01-Native / preparation checkpoint saved; full proof in progress`.
+- packet_id / status: `S01-Native / collector WIP checkpoint; waiting for committed shared support`.
   Root supplied Stage A and own-fixture runtime grant; reusable common test support
   is Integration-owned. No standalone executable requirement is an extra gate.
 - work_classification / outcome: verification preparation/minimal build tooling.
   Immutable current F02 source compiled; concrete shared-interface handoff recorded.
+  Thin Swift collector source compiles; its runtime/wire behavior remains unverified.
   No common bridge runtime, production capability or P1 acceptance delivered.
 - authority: PLAN.UIB@1; explicit user parallel-work request relayed by root;
   S01-native-proof/shared S01-bridges dispatch. No nested delegation.
@@ -20,13 +21,15 @@
 - fixture input: `9a88b12b5855bac54bf04ba7b64d233df719ddec`, current one-shot F02;
   source/setup no diff from that checkpoint. Stage A revision:
   `9d2df153abd2a7d7567100e06d4260e5edda3bb3`; shared paths match it.
-- exact_changed_paths: `tests/bridges/native/prepare.py`,
-  `tests/bridges/native/README.md`, `docs/development/interface-proof-native.md`,
-  this receipt. No fixtures/native, Cargo/schema/plugin-api/spec/other-worker edits.
-- checkpoint_commit / push: preparation commit containing this receipt, exact SHA
-  and origin/master push result returned in terminal handoff. Exclusive grant is
-  limited to these four paths; Collector.swift remains unstaged work for the next
-  coherent bridge checkpoint. Full S01-Native is not complete.
+- preparation_checkpoint / push: `27c413f6c4f4ee862805443add00920946e8555a`,
+  pushed successfully to origin/master; four preparation paths saved.
+- current_checkpoint_paths: `tests/bridges/native/Collector.swift`,
+  `docs/development/interface-proof-native.md`, this receipt. No fixtures/native,
+  Cargo/schema/plugin-api/spec, root/Web/G01 or other-worker changes included.
+- current_checkpoint / push: WIP commit containing this receipt, exact SHA and
+  origin/master push result returned in terminal handoff. Root granted these
+  Native paths only; branch/index preflight confirmed master and empty index.
+  Full S01-Native and D02-PROOF are not complete.
 
 ## Checks and artifacts
 
@@ -44,6 +47,25 @@ The temporary directory belongs to S01-Native; root retains it through this proo
 acceptance or explicit discard. Local links, Python syntax, whitespace and rejection of a repository output path
 passed. No raw logs/captures were committed or written to
 Codex/config/skill directories. No durable live D02 evidence exists yet.
+
+## Collector WIP compile evidence
+
+`xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0
+ tests/bridges/native/Collector.swift -o <task-temp>/native-collector` succeeded
+before this checkpoint; collector-build.log is empty. No unchanged build was
+repeated for this save. Collector source SHA-256:
+`08ef3643d709d7ec6d7e1d2f1eb7050ac5c8e3c90d24bcd52fdf9527ce6c84a4`.
+
+The source prepares bounded one-request input and canonical Stage A artifact
+shapes, public own-F02 binding, separate channel output, per-field unavailable
+states and an AX-first flush before capture. A descriptor-only path does not
+acquire AX tree/pixels; collection accepts only a host-supplied Ticket sequence.
+Without that sequence it emits standalone Snapshot/Error artifacts, explicitly
+not lifecycle proof. Injected waiting after AX is distinct from real capture.
+These are source observations plus compile evidence only. Shared-validator,
+actual streaming, deadline/cleanup, cancel/detach/late response and runtime
+permission/channel behavior have not yet been exercised. The common support
+owner must provide the real Ticket and parent clock; no values are fabricated.
 
 ## Scope and exact next dependencies
 
@@ -70,6 +92,8 @@ frame metadata, unknown transforms, partial scope and injected results stay sepa
 Next action: bind the platform collector to Integration's committed reusable
 test-support handoff, preserving the real Ticket/clock and existing grant scope.
 
-Root granted commit+push for these four preparation files. Commit only those on
-master, push origin master, return SHA/index/lease; then continue authorized source
-work without the index. Do not claim full native proof from this preparation.
+Root granted a short WIP commit+push lease for Collector.swift and the two own
+handoff documents. Stage only those, push origin master, return exact SHA/index
+and release Git lease. No runtime or repeated measurements during this save.
+Then wait for committed Integration support; native desktop lane remains free.
+No temporary or durable evidence is deleted by this checkpoint.
