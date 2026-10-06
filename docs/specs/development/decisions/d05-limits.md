@@ -77,3 +77,11 @@ addition does not change CONTENT policy or advance its semantic revision.
 Independent P1-R1 additionally identifies unbounded path expansion in the current
 plugin depth check. It remains awaiting repair authority; small memory samples do
 not close bounded-work/deadline acceptance or justify reducing limits to hide it.
+
+[Working-allocation evidence](../../../../tests/bridges/resources/working-memory.md)
+now distinguishes parser/encoding/framing/session phases. Larger actual32-node Web
+and76-node Native inputs remain partial, not complete configured worst cases.
+Synthetic admitted64KiB inputs can require over1.5MB parser working storage;
+rejected inputs also allocate transiently. Encoded counters are not process caps.
+No numbers become production defaults here. Decoder bound/process-owner and K01
+actual storage/index/release semantics are the exact remaining policy dependencies.

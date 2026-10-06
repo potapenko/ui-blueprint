@@ -97,3 +97,11 @@ own accounted limits. K01 owns real cache eviction/resync; no imitation cache he
 Record a justified D05 revision before numeric policy implementation. Full D05
 remains waiting_evidence, including largest/configured-bound and transient-memory
 coverage; these measured payload capacities alone do not close the gate.
+
+The later [working-allocation study](working-memory.md) adds explicitly synthetic
+configured-bound inputs, a diagnostic-only System allocator counter, framing and
+session ownership phases, and the larger actual32-node Web/76-node Native samples.
+Its unsafe forwarding is isolated to that executable, not this safe ownership
+walker or production libraries. Parser peaks/encoding order explain why the
+earlier small DTO figures cannot become process caps. All remaining gaps and
+K01 storage-owner dependencies are recorded there; production policy is still open.
