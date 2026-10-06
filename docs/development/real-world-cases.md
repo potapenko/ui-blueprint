@@ -8,6 +8,7 @@ or production UI Blueprint collector were created by this packet.
 | --- | --- | --- | --- |
 | RC01 Settings | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-settings/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-settings/observations.json), AX excerpt | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-settings/expected-answer.md) | Whole native window and dialog crop |
 | RC02 Genre/Director | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-filters/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-filters/observations.json), two AX excerpts | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-filters/expected-answer.md) | Two whole native windows and bounded popover/anchor crops |
+| RC03 Mac resize | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/observations.json), two AX excerpts | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/expected-answer.md) | Two actual native window sizes; requested 1440 × 900 not obtained |
 
 Give only the agent inputs and referenced PNGs to an evaluated agent. The answer
 keys contain expected interpretation/spec references and must remain separate.
@@ -57,3 +58,21 @@ modes, platform collector acceptance, agent quality or mobile implementation.
 The current window title stayed Search & Learn / English in Clip content, and the
 Genre AX text reported buttons while pixels showed checkbox-like controls; both
 are retained as useful interpretation cases without fixing the application.
+
+## F03b addition RC03
+
+The [resize pair](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/README.md) adds actual
+961 × 1050 pt and restored 1920 × 1050 pt windows, captured narrow then wide.
+Reference 1440 × 900 was not obtained with the used CUA sizing route; do not
+report it as measured or infer that the app cannot support it. Content/control
+bounds remain unknown. Both chosen captures show the same paused first clip.
+
+A setup drag inadvertently started playback and exposed an access gate. Visible
+query/item/pause were recovered before capture; internal view/statistics effects
+were not inspected or reverted. This is disclosed, not part of the resize proof.
+Window geometry was restored exactly; runtime leases were released.
+
+F03b assets live at `/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03b/2026-10-06-1usid7xh`, owner=root, consumer Q03/P7 through acceptance
+or explicit discard. PNGs were native lossless captures without resampling.
+See [mobile prerequisites](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/mobile-prerequisites.md)
+for read-only device/runtime findings. No mobile app was launched or configured.

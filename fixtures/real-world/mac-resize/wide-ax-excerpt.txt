@@ -1,0 +1,24 @@
+0 standard window Search & Learn / English, ID: learner, Secondary Actions: Raise
+	1 container Description: Search & Learn, Details: default, ID: searchLearn.root
+		2 scroll area searchLearn.suggestedCommonPhrases.overlay
+			74 button (selected) Description: Learn Common Phrases, ID: searchLearn.learner.tabs
+			75 button Description: Vocabulary, ID: searchLearn.learner.tabs
+			76 button Description: Favorites, ID: searchLearn.learner.tabs
+			77 button Description: Grammar, ID: searchLearn.learner.tabs
+			78 button Description: Statistics, ID: searchLearn.learner.tabs
+			79 scroll area searchLearn.learner.commonPhrases
+		159 container searchLearn.transport
+			160 button (disabled) Description: Previous, ID: searchLearn.transport.previous
+			161 button Description: Next, ID: searchLearn.transport.next
+			162 button Description: Play, Value: Video — Ready: All right, I'll see you soon., ID: searchLearn.transport.toggle
+			163 button Description: Playback speed (1.0x)., ID: searchLearn.transport.speed
+			164 button Description: Playback repeat (x1)., ID: searchLearn.transport.repeat
+			165 button Description: ✂️ Focused playback, ID: searchLearn.transport.focus
+			166 button Description: Phrase Context, ID: searchLearn.study.context
+			168 button Description: Download video, ID: searchLearn.study.download
+				177 button Description: Remember Me (2010) [00:08:29], ID: searchLearn.source
+		179 container searchLearn.query.band
+			181 text field (settable) Description: Search phrases, Value: all right i'll see you soon, ID: searchLearn.query
+			187 text Value: 1/40, ID: searchLearn.query.counter
+			190 button Description: Settings, ID: searchLearn.query.settings
+The focused UI element is 0 standard window Search & Learn / English, ID: learner, Secondary Actions: Raise

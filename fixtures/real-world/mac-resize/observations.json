@@ -1,0 +1,179 @@
+{
+  "fixture_kind": "selected real-world reference observations; not production wire schema",
+  "case_id": "RC03",
+  "packet": "F03b",
+  "status": "captured_pair_with_reference_size_residual",
+  "source": {
+    "repository": "/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac",
+    "branch": "beta-01",
+    "head": "48d0dfd1cd0fe46ac88c073e99ffab7bd1abe76e",
+    "preexisting_dirty_paths": [
+      "PlayphrasemeApp.xcodeproj/project.pbxproj"
+    ],
+    "changed_by_packet": false
+  },
+  "app": {
+    "pid": 74964,
+    "bundle_id": "playphraseme.Playphraseme",
+    "canonical_configuration": "Release",
+    "binary_path": "/Users/eugenepotapenko/Library/Developer/Xcode/DerivedData/PlayphrasemeApp-cfwbwxubxwecqkfoiaormkljzhki/Build/Products/Release/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe",
+    "binary_sha256": "f3dfd42483d1984cbdb429915c83f6e5f03c946fd25df26e12eac2e9fc1b6150",
+    "binary_source_revision": {
+      "availability": "unknown",
+      "reason": "Pre-existing canonical product; no rebuild or exact historical build receipt"
+    },
+    "os": "macOS 27.0.1 (26A434)"
+  },
+  "original_window_frame_pt": {
+    "Height": 1050,
+    "Width": 1920,
+    "X": 0,
+    "Y": 30
+  },
+  "restored_window_frame_pt": {
+    "Height": 1050,
+    "Width": 1920,
+    "X": 0,
+    "Y": 30
+  },
+  "reference_1440x900": {
+    "obtained": false,
+    "reason": "CUA edge/corner drags did not change the native window to requested size. Native Left placement produced 961x1050; Return to Previous Size restored 1920x1050. This does not establish that the application cannot support 1440x900."
+  },
+  "states": [
+    {
+      "id": "narrow",
+      "collection_order": 1,
+      "actual_window_frame": {
+        "availability": "known",
+        "value": {
+          "Height": 1050,
+          "Width": 961,
+          "X": 0,
+          "Y": 30
+        },
+        "units": "pt",
+        "coordinate_space": "screen",
+        "source": "CGWindowListCopyWindowInfo",
+        "observed_at_utc": "2026-10-06T12:13:41.189130+00:00"
+      },
+      "content_frame": {
+        "availability": "unknown",
+        "reason": "Chosen bounded tools exposed native window bounds and AX roles, not a verified NSWindow content rect. Do not copy window size into content size."
+      },
+      "per_control_geometry": {
+        "availability": "unknown",
+        "reason": "CUA text omitted layout/accessibility bounds and hit/paint regions; no new collector or app probe added"
+      },
+      "ax_request_interval_utc": {
+        "started": "2026-10-06T12:13:20.474Z",
+        "ended": "2026-10-06T12:13:20.636Z"
+      },
+      "ax_excerpt": "narrow-ax-excerpt.txt",
+      "asset": {
+        "name": "search-narrow-window.png",
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03b/2026-10-06-1usid7xh/search-narrow-window.png",
+        "pixel_size": [
+          1922,
+          2100
+        ],
+        "sha256": "0753d9f78e80d3e2015e9cafe730430f54331cb3ae2999816a423e5c7fcef2a5",
+        "capture_file_time_utc": "2026-10-06T12:13:41.437040+00:00",
+        "bytes": 3990948,
+        "capture_command": "/usr/sbin/screencapture -x -o -l1277 -t png <output>",
+        "lossless_format": "PNG",
+        "resized": false,
+        "derived_pixel_per_window_point": {
+          "x": 2,
+          "y": 2
+        }
+      },
+      "reported_state": {
+        "query": "all right i'll see you soon",
+        "source_label": "Remember Me (2010) [00:08:29]",
+        "counter": "1/40",
+        "playback_control": "Play",
+        "selected_tab": "Learn Common Phrases",
+        "speed": "1.0x",
+        "repeat": "x1"
+      },
+      "synchronization": "Separate bounded AX, CG and PNG operations in an unchanged paused state; not atomic or performance evidence",
+      "setup_operation": "Window > Move & Resize > Left"
+    },
+    {
+      "id": "wide",
+      "collection_order": 2,
+      "actual_window_frame": {
+        "availability": "known",
+        "value": {
+          "Height": 1050,
+          "Width": 1920,
+          "X": 0,
+          "Y": 30
+        },
+        "units": "pt",
+        "coordinate_space": "screen",
+        "source": "CGWindowListCopyWindowInfo",
+        "observed_at_utc": "2026-10-06T12:14:19.912241+00:00"
+      },
+      "content_frame": {
+        "availability": "unknown",
+        "reason": "Chosen bounded tools exposed native window bounds and AX roles, not a verified NSWindow content rect. Do not copy window size into content size."
+      },
+      "per_control_geometry": {
+        "availability": "unknown",
+        "reason": "CUA text omitted layout/accessibility bounds and hit/paint regions; no new collector or app probe added"
+      },
+      "ax_request_interval_utc": {
+        "started": "2026-10-06T12:14:43.292Z",
+        "ended": "2026-10-06T12:14:43.474Z"
+      },
+      "ax_excerpt": "wide-ax-excerpt.txt",
+      "asset": {
+        "name": "search-wide-window.png",
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03b/2026-10-06-1usid7xh/search-wide-window.png",
+        "pixel_size": [
+          3840,
+          2100
+        ],
+        "sha256": "71f963c0afb8fb011f340f7a3c05e236fcdf28f64867619a3e569126d52cd796",
+        "capture_file_time_utc": "2026-10-06T12:14:55.801537+00:00",
+        "bytes": 7745836,
+        "capture_command": "/usr/sbin/screencapture -x -o -l1277 -t png <output>",
+        "lossless_format": "PNG",
+        "resized": false,
+        "derived_pixel_per_window_point": {
+          "x": 2,
+          "y": 2
+        }
+      },
+      "reported_state": {
+        "query": "all right i'll see you soon",
+        "source_label": "Remember Me (2010) [00:08:29]",
+        "counter": "1/40",
+        "playback_control": "Play",
+        "selected_tab": "Learn Common Phrases",
+        "speed": "1.0x",
+        "repeat": "x1"
+      },
+      "synchronization": "Separate bounded AX, CG and PNG operations in an unchanged paused state; not atomic or performance evidence",
+      "setup_operation": "Window > Move & Resize > Return to Previous Size"
+    }
+  ],
+  "state_preservation": {
+    "between_selected_captures": "same query/source/counter/tab/playback state; no preference changes",
+    "original_visible_state_restored": true,
+    "setup_incident": "Before capture, a drag hit video and started playback; selection advanced and access gate appeared. Dismissed gate without login/purchase and paused using Return, restoring original first clip before both selected captures. Internal view/statistics side effects were not inspected or reverted."
+  },
+  "evidence_retention": {
+    "root": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03b/2026-10-06-1usid7xh",
+    "owner": "UI Blueprint root coordinator",
+    "consumer": [
+      "Q03",
+      "P7"
+    ],
+    "until": "acceptance or explicit discard"
+  },
+  "UI_Blueprint_collector_executed": false,
+  "agent_evaluation_executed": false
+}
