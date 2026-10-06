@@ -82,7 +82,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Integration transient/configured-bound accounting + Core K01-replay active; Web D05 fcf48be and Native D05 51c7809 pushed/idle; root Git lease; desktop released; five review repairs await user |
+| Активные чаты/пакеты/ресурсы | Integration D05 accounting + Export E01 active; replay e4ecee7, Web D05 fcf48be and Native D05 51c7809 saved/idle; root Git lease; desktop released; five review repairs await user |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | actual Web/Native D02 + Native sizing input; Integration CLI membership для binary checks, bounded proposal canonical MeasurementResult/result-space (no shared mutation during pinned D02); D05 policy; four P2 awaiting_authority; RC05 gaps remain |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -119,7 +119,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | D05-Web sample | existing Web owner | `fcf48be57c31d3e3cfa48f38fa1b16d1d6af9357`, pushed | [receipt](receipts/D05-web-samples.md):32 nodes/17 relations/160 properties/96unknown,78241 exact bytes; predeclared128KiB diagnostic budget, graphdepth1; input handed to Integration, no total memory/latency acceptance |
 | D05-Native sample | existing Native owner | `51c780959907dc85f6e2c5998850c25964ce7296`, pushed | [receipt](receipts/D05-native-samples.md):76nodes/75edges, incoming337500B vs retained338001B, partial; separate75-node canary check passed, difference causeunknown; no pixels, cleanup/lane release; not160/depth9 coverage |
 | [K01-replay](packets/K01-replay.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` | `e4ecee76f43662a3b6d29b4712b904a2877222d7`, pushed | checked pure replay candidate saved; [receipt](receipts/K01-replay.md),11tests/check/fmt/Clippy; no storage/eviction/D05 or protected-validator acceptance |
-| [E01](packets/E01.md) | new bounded Export owner, dispatch next | full EXPORT/DRAWING closure read; saved schema/geometry candidates | ready independent model-free document/propose/package compiler; original detail/flow/compare gates retained; no image generation or shared-schema fixes |
+| [E01](packets/E01.md) | `01a11286-a187-7720-a452-41b6ea7b228b` / local | full EXPORT/DRAWING closure read; saved schema/geometry candidates | running independent model-free package compiler in crates/export; document/propose/detail/flow/compare gates retained; actual saved Web examples provided; no model/image generation/shared-schema fixes; membership via Integration |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
