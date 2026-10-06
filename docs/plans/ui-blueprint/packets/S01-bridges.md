@@ -45,6 +45,19 @@ If a common driver or API repair is necessary, return exact producer/consumer
 contract and reproduction to Integration; do not each invent a competing driver.
 The four user-review fixes remain awaiting_authority and may not be repaired here.
 
+Observed Stage A: pure ObservationSession and document validator exist; Web lacks
+a runnable consumer, while Native can call the library from a Rust harness.
+D02 requires the shared typed boundary, actual Ticket-before-collection, parent
+monotonic clock, bounded frames and lifecycle controls; a standalone executable
+control protocol is not an additional product gate. Integration chooses minimal
+reusable test support in its plugin-api/common bridge scope, with an executable
+wrapper only if needed. Platform-specific launch/collection harnesses may call
+that support directly; no duplicate schema/state machine or new product transport.
+Exact caller/IO contract and SHA are handed off before full proof.
+Platform collector functions and scoped checks may proceed
+independently against supplied canonical test context; label them honestly and
+never treat a fabricated Ticket, authored clock or direct helper test as full proof.
+
 Both platform receipts must prove one valid live request/response through the
 same Rust validator and preserve requested/observed scope and coverage. Verify
 wrong version, malformed/oversize framing, cancel/detach and late-response handling
