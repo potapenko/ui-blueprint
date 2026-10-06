@@ -338,7 +338,7 @@ record!(Transform {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(tag = "status", rename_all = "snake_case", deny_unknown_fields)]
 pub enum TransformState {
-    LocalOnly,
+    LocalOnly {},
     Known { transform: Transform },
     Unknown { reason: Id },
 }
@@ -381,7 +381,7 @@ pub enum Availability {
     Known { value: Value },
     Unknown { reason: Id },
     Unsupported { reason: Id },
-    Redacted,
+    Redacted {},
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -475,17 +475,17 @@ record!(Anchor {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(tag = "intent", rename_all = "snake_case", deny_unknown_fields)]
 pub enum Intent {
-    Focus,
-    Activate,
+    Focus {},
+    Activate {},
     SetChecked { value: bool },
     Fill { text: String },
     Type { text: String },
     FillSecret { secret_reference: Id },
     SelectOption { option: Id },
-    Scroll,
+    Scroll {},
     Press { key: Id },
-    Submit,
-    Dismiss,
+    Submit {},
+    Dismiss {},
 }
 record!(Action {
     id: Id,
@@ -527,7 +527,7 @@ pub enum Operation {
     Act {
         action: Action,
     },
-    Detach,
+    Detach {},
 }
 record!(Request {
     clock_domain: Id,
@@ -636,7 +636,7 @@ record!(Document {
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(tag = "status", rename_all = "snake_case", deny_unknown_fields)]
 pub enum FocusRef {
-    NotRequested,
+    NotRequested {},
     Known {
         target: SourceKey,
         evidence: Evidence,
@@ -678,6 +678,21 @@ record!(TargetCandidate {
 });
 record!(ResolutionRefusal { requested: Context, candidates: Vec<TargetCandidate>, issue: Issue, dispatched: bool });
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
-#[serde(tag = "status", content = "data", rename_all = "snake_case", deny_unknown_fields)]
-pub enum ChannelResult { Observed(Box<Snapshot>), Failed(Issue) }
-record!(ChannelResponse { request_id: Id, session_id: Id, dispatch_sequence: u64, target: Identity, channel: Channel, result: ChannelResult });
+#[serde(
+    tag = "status",
+    content = "data",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ChannelResult {
+    Observed(Box<Snapshot>),
+    Failed(Issue),
+}
+record!(ChannelResponse {
+    request_id: Id,
+    session_id: Id,
+    dispatch_sequence: u64,
+    target: Identity,
+    channel: Channel,
+    result: ChannelResult
+});

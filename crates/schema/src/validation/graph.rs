@@ -14,7 +14,7 @@ fn nodes(nodes: &[Node], c: &Context, observations: &[Observation]) -> Result {
         for declaration in &node.source_declarations {
             require(
                 declaration.sensitivity != Sensitivity::Sensitive
-                    || matches!(declaration.state, Availability::Redacted),
+                    || matches!(declaration.state, Availability::Redacted { .. }),
                 ValidationError::PrivateValue,
             )?;
         }

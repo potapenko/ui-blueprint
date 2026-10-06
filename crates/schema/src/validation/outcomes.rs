@@ -59,16 +59,16 @@ pub fn validate_action(snapshot: &Snapshot, action: &Action) -> Result {
         ValidationError::StaleTarget,
     )?;
     let requested = match action.intent {
-        Intent::Focus => "focus",
-        Intent::Activate => "activate",
+        Intent::Focus {} => "focus",
+        Intent::Activate {} => "activate",
         Intent::SetChecked { .. } => "set_checked",
         Intent::Fill { .. } | Intent::FillSecret { .. } => "fill",
         Intent::Type { .. } => "type",
         Intent::SelectOption { .. } => "select_option",
-        Intent::Scroll => "scroll",
+        Intent::Scroll {} => "scroll",
         Intent::Press { .. } => "press",
-        Intent::Submit => "submit",
-        Intent::Dismiss => "dismiss",
+        Intent::Submit {} => "submit",
+        Intent::Dismiss {} => "dismiss",
     };
     require(
         action
