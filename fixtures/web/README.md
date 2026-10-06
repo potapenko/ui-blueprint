@@ -12,8 +12,17 @@ only the verification driver does. [run.cjs](run.cjs) checks browser observation
 against that oracle and records which assertions test the fixture, CDP, or driver.
 It is not a production adapter, graph, schema or executor.
 
-Run from repository root using the existing tested Playwright Core 1.58.2 runtime
-and its Chromium 145.0.7632.6 bundle (1208):
+The [direct user clarification](../../docs/plans/ui-blueprint/receipts/product-context.md)
+sets the product path: explicit request → bounded current UI collection →
+calculations/response. There is no periodic collection between requests. Stored
+snapshots can serve inspect/measure/check; events may invalidate cache without
+triggering recollection. Per-request latency/cost and fixture evidence remain useful.
+The fixed 5 Hz, saturated polling and rAF experiments below are historical only:
+they are excluded from candidate product gates and C01 policy.
+
+Historical combined harness command, using Playwright Core 1.58.2 and Chromium
+145.0.7632.6 bundle (1208). This unchanged script also runs the retired saturation/
+rAF experiment; it is not the current product acceptance procedure:
 
 ```sh
 F01_PLAYWRIGHT_CORE=/absolute/path/to/playwright-core \
@@ -58,16 +67,19 @@ Unexpected-transition stopping is driver policy, not a shipped executor claim.
 Geometry uses CSSOM CSS pixels with explicit viewport/document context. Two hit
 samples and rect intersection do not prove arbitrary visibility or occlusion.
 
-See [scenario mapping, baseline and proposed gates](../../docs/development/fixtures-web.md)
+See [scenario mapping, per-request baseline and historical experiments](../../docs/development/fixtures-web.md)
 and [F01 receipt](../../docs/plans/ui-blueprint/receipts/F01.md).
 
-## Focused fixed 5 Hz supplement
+## Historical fixed 5 Hz supplement — excluded from product gates
 
-This mode runs only four paired off/on windows of 2 seconds each. It does not
-rerun scenarios or the original cold/warm/saturation baseline. On windows schedule
-10 whole-fixture captures at 200 ms intervals; a full-period-late slot is skipped
-and makes schedule verification fail, with no catch-up burst. Off windows keep
-identical AX/Performance/rAF instrumentation and perform no captures.
+This experiment was an unnecessary addition to the request-driven product scope.
+Its measurements and command are retained for provenance, not as a recommendation
+to run polling, monitor animation or select a C01 gate.
+The mode ran four paired off/on windows of 2 seconds each without rerunning
+scenarios or the original cold/warm/saturation baseline. On windows scheduled
+10 whole-fixture captures at 200 ms intervals. Its scheduler would skip a slot
+that was a full period late and fail schedule verification rather than catch up. Off windows
+retained identical AX/Performance/rAF instrumentation and performed no captures.
 
 ```sh
 F01_PLAYWRIGHT_CORE=/absolute/path/to/playwright-core \
@@ -82,4 +94,4 @@ match the original report's harness hash. The F01 receipt locates both retained
 artifacts. Repeats can use a new filename beside that same retained harness.
 The mode verifies identical runtime metadata and unchanged fixture inputs, records
 new harness hashes and the frozen report hash, and preserves the original report.
-Five Hz is an experimental demand hypothesis, not a product polling policy.
+Five Hz is a retired experimental hypothesis, not a candidate gate or product policy.

@@ -6,6 +6,14 @@ launch in [registry](../plans/ui-blueprint/task-registry.md), accepted R01
 `71ea44235cddf63381d1fea4acd121ad642e7ddf`. Historical R01 source, receipt and report
 are preserved; [fixture README](../../fixtures/web/README.md) explains composition.
 
+The later [direct user clarification](../plans/ui-blueprint/receipts/product-context.md)
+governs interpretation: explicit request → bounded current UI collection →
+calculations/response, with no periodic recollection between requests. Local
+inspect/measure/check can use stored snapshots; events may invalidate cache without
+starting a new collection. Fixed 5 Hz, saturated polling and rAF experiments are
+historical only and excluded from candidate product gates and C01 policy. Their
+reports, source hashes and measured numbers remain unchanged.
+
 ## Basis and boundaries
 
 Traversal: AGENTS → [UIB.ROUTING@1](../specs/README.md) →
@@ -21,14 +29,18 @@ real products and future platforms are excluded. F01 packet links/closure agree;
 no coordination-document correction is requested.
 
 **Specified:** independent fixture states, exact identity, coverage/provenance,
-real runtime actions separated from applied state, separate cold/warm costs and
-observer overhead. **Observed:** the checks and measurements below. **Proposed:**
-D05/D06 candidate gates, not new requirements or final engineering decisions.
-Mode is Evolve of task-owned fixture/harness only; no semantic contract delta.
+real runtime actions separated from applied state, and per-request cold/warm
+latency/cost. **Observed:** fixture/per-request evidence and explicitly historical
+polling experiments below. **Proposed:** only the retained request/quality D05/D06
+conditions, not new requirements or final engineering decisions.
+Original F01 work evolved only its fixture/harness. This docs-only correction
+removes an inapplicable experimental premise; no new product decision or spec delta.
 
 ## Scenario → expectation → observed evidence
 
-Single command: `F01_PLAYWRIGHT_CORE=<runtime> F01_OUTPUT=<report> node fixtures/web/run.cjs`.
+Historical evidence command: `F01_PLAYWRIGHT_CORE=<runtime> F01_OUTPUT=<report> node fixtures/web/run.cjs`.
+The unchanged combined harness also runs the historical saturation experiment;
+this command is not prescribed as the current product acceptance procedure.
 The [literal oracle](../../fixtures/web/expected.json) is not produced by the
 collector. The retained report lists every expected/observed check and source-state
 checkpoint. 58 focused checks passed, including one unchanged-state baseline check.
@@ -49,7 +61,7 @@ Each controller mutation advances revision; reset creates a fresh document and
 fixture generation. B05 source-0 through source-3 and source-3-repeat give K01/W03
 controlled before/after data. They do not equate two arbitrary live captures.
 
-## Baseline method and result
+## Per-request baseline method and result
 
 Run UTC 2026-10-06T10:28:08.416Z; macOS 27.0.1 build 26A434, Darwin 27.0.0 arm64,
 Apple M4 Pro, 12 logical CPUs, 24 GiB RAM; Node 24.15.0, Playwright Core 1.58.2,
@@ -85,6 +97,11 @@ match/diff/check/format cost exists to measure. CDP request counts and re-serial
 are in report; byte counts are not network-wire measurements and exclude
 Playwright driver's private protocol traffic.
 
+## Historical saturation/rAF experiment — excluded from product gates
+
+The following polling/animation measurements are retained facts from an unnecessary
+experiment. They do not define product workload, ongoing monitoring or C01 gates.
+
 Three paired 500ms off/on windows, order off/on, on/off, off/on. Both modes retain
 the same AX/Performance domains and one rAF sampler. Off means no repeated capture;
 on saturates serial **full** captures:1345,1410,1383 per window (4138 total).
@@ -107,7 +124,7 @@ returning partial AX later does not fix its acquisition cost/scope. W01 must sup
 bounded production acquisition or explicit unavailable coverage without widening
 scope. Fast full-fixture numbers do not relax that requirement.
 
-## Fixed 5 Hz supplement for D06 calibration
+## Historical fixed 5 Hz supplement — excluded from C01 policy
 
 Run UTC 2026-10-06T10:37:22.000Z, with runtime/hardware metadata checked equal to
 the original run and all fixture/oracle hashes unchanged. The harness adds only
@@ -142,24 +159,25 @@ metrics-interval wall time, not assumed exact timer duration. Renderer JS heap
 and TaskDuration interpretation remain as described above; report records call
 counts, serialized response bytes, every schedule time and raw rAF interval.
 
-These paired differences are below the already proposed +5 ms rAF / +25 ms task
-limits in this small exploratory run, supporting feasibility for C01 discussion.
-No threshold or expected value was tuned after seeing the result. This is not
-production acceptance, a 5 Hz policy, or proof that arbitrary collection is cheap.
+These paired differences were below the then-proposed +5 ms rAF / +25 ms task
+limits in this small exploratory run. Those proposals are withdrawn from product
+gates and C01 policy under the direct user clarification; this comparison has
+historical meaning only. No measured value is changed. It does not support a
+monitoring requirement or demonstrate the requested per-request product behavior.
 Off rAF p95 differs from the earlier saturation run's off baseline, so only paired
 within-run differences support this comparison; ambient host load is uncontrolled.
 
-## D05/D06 proposals for C01 — not frozen gates
+## Retained per-request/quality proposals for C01 — not frozen gates
 
 | Proposed condition | Rationale / remaining decision |
 | --- | --- |
 | D05: 0.5 css_px maximum absolute error for these authored axis-aligned rects, at specified viewport/DPR; unknown measurement fails positive gate | Current harness uses 0.01 arithmetic tolerance and exact literals. 0.5 is a proposed future cross-channel tolerance, not permission to guess bounds. Zoom/transforms need separate calibration. |
 | D05:single-control scope plus declared context, max 32 output elements, depth 8, 250ms request deadline, 64KiB output cap | Small explicit envelope for this fixture's initial W01 slice. Acquisition must also be bounded; truncated response is partial with omissions. Proposed numbers need C01 ownership; memory retention remains unmeasured. |
 | D06:warm single-control semantic/geometry response p95≤20ms each; process-cold total≤500ms and attach+capture≤50ms on this fixed environment | Measured direct baselines are below 0.34ms warm,171ms total and 2.5ms attach/capture. Extra budget accommodates future Rust/IPC/validation without assuming speedup. Evaluate only equal fresh fields and correct results. |
-| D06:zero wrong targets, no stale fallback or lost required field; observer overhead at a fixed 5 Hz demand should add≤5ms rAF p95 and≤25ms task time per 500ms | Correctness cannot be traded for latency. Saturated baseline shows why request rate must be fixed. The paired supplement above measures this hypothesis; C01 still owns freezing the gate before evaluating a candidate. |
+| D06:zero wrong targets, no stale fallback or lost required field | Correctness cannot be traded for per-request latency. The former polling/rAF conditions are withdrawn; they are not candidate gates. |
 
 For final comparison, propose at least 20 process-cold and 100 warm samples with
-same fixture/backend/source state and interleaved fixed-demand overhead trials.
+the same fixture/backend/source state, measuring explicit individual requests.
 Current small exploratory distribution is enough to expose mechanism cost, not
 hardware portability or a promised acceleration percentage. Safari/Firefox/OOPIF,
 real-product performance, privacy canaries, event recovery, cancellation and full
