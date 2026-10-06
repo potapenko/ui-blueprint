@@ -617,3 +617,106 @@ fn distinct_observations_survive_and_declared_other_surface_is_not_consumed() {
         Some(UnknownReason::MissingTransform)
     );
 }
+
+#[test]
+fn every_manifest_engine_expectation_is_verified_at_its_contract_layer() {
+    use std::{
+        collections::BTreeSet,
+        path::{Component, Path, PathBuf},
+    };
+    let directory = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../fixtures/analysis");
+    let manifest: serde_json::Value = serde_json::from_slice(
+        &std::fs::read(directory.join("manifest.json")).expect("authored analysis manifest"),
+    )
+    .expect("manifest JSON");
+    let cases = manifest.as_array().expect("manifest is an array");
+    assert!(
+        !cases.is_empty(),
+        "manifest cannot erase verification coverage"
+    );
+    let mut paths = BTreeSet::new();
+    let mut failures = Vec::new();
+    let (mut matches, mut mismatches, mut inputs, mut invalid) = (0, 0, 0, 0);
+    for case in cases {
+        let name = case
+            .get("path")
+            .and_then(serde_json::Value::as_str)
+            .expect("manifest path string");
+        let path = Path::new(name);
+        let mut components = path.components();
+        assert!(
+            matches!(components.next(), Some(Component::Normal(_))) && components.next().is_none(),
+            "fixture must stay inside the declared directory: {name}"
+        );
+        assert!(paths.insert(name), "duplicate manifest fixture: {name}");
+        let contract_valid = case
+            .get("contract_valid")
+            .and_then(serde_json::Value::as_bool)
+            .expect("explicit contract_valid");
+        let structural_valid = case
+            .get("structural_valid")
+            .and_then(serde_json::Value::as_bool)
+            .expect("explicit structural_valid");
+        assert!(
+            !contract_valid || structural_valid,
+            "contract-valid input must be structurally valid: {name}"
+        );
+        let expected = case
+            .get("engine_verification")
+            .and_then(serde_json::Value::as_str)
+            .expect("explicit engine_verification");
+        assert!(
+            matches!(expected, "match" | "mismatch" | "not_checked"),
+            "unsupported engine expectation {expected:?}: {name}"
+        );
+        let bytes = std::fs::read(directory.join(path)).expect("listed fixture");
+        let parsed = AnalysisDocument::from_json(&bytes, bytes.len());
+        if !contract_valid {
+            invalid += 1;
+            if expected != "not_checked" || parsed.is_ok() {
+                failures.push(format!("{name}: contract-invalid case must reject before engine verification (label={expected}, rejected={})", parsed.is_err()));
+            }
+            continue;
+        }
+        let document = match parsed {
+            Ok(document) => document,
+            Err(error) => {
+                failures.push(format!("{name}: expected contract-valid, got {error:?}"));
+                continue;
+            }
+        };
+        let actual = verify_analysis_result(&document);
+        let correct = match expected {
+            "match" => {
+                matches += 1;
+                actual == Ok(())
+            }
+            "mismatch" => {
+                mismatches += 1;
+                actual == Err(VerificationError::ResultMismatch)
+            }
+            "not_checked" => {
+                inputs += 1;
+                matches!(
+                    document.artifact,
+                    AnalysisArtifact::GeometryQuery(_) | AnalysisArtifact::EvaluationInput(_)
+                ) && actual == Err(VerificationError::NotAResult)
+            }
+            _ => unreachable!("expectation vocabulary checked above"),
+        };
+        if !correct {
+            failures.push(format!(
+                "{name}: declared {expected}, verifier returned {actual:?}"
+            ));
+        }
+    }
+    assert!(
+        matches > 0 && mismatches > 0,
+        "manifest must exercise successful and tampered recomputation"
+    );
+    assert!(
+        failures.is_empty(),
+        "manifest engine coverage: {matches} match, {mismatches} mismatch, {inputs} input-only, {invalid} contract-invalid\n{}",
+        failures.join("\n")
+    );
+}
