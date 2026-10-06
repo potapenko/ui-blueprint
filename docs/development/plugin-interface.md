@@ -70,3 +70,12 @@ D02 still requires the same wire exchange through current F01/F02 fixtures with
 real channel attribution. Native proof requires a separate finite runtime grant.
 Injected failure preservation here does not fix/prove F02's actual simultaneous
 capture continuation failure, M01 session isolation or P01 probe invariance.
+
+## Shared D02 caller support
+
+[Common test support](../../tests/bridges/common/README.md) now supplies a reusable
+Rust Harness with real parent Instant/Ticket and bounded reader. Native may call it
+directly; Node may use the finite `d02_host` example wrapper. stdin remains canonical
+channel documents, not a new command protocol. Platform owners retain setup,
+collection, injection labeling and owned-process cleanup. A committed support SHA
+is required before proof; synthetic support checks are not actual D02 acceptance.
