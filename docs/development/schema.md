@@ -382,9 +382,11 @@ remaining work is the named spec registration and bounded coupled implementation
 
 ## S01 analysis API slice — concrete consumer handoff
 
-The first schema source slice compiles; result validation/dispatcher/accounting/
-generator/complete fixtures and production-feature round-trip proof remain pending.
-No dummy functions or promise that raw serde decoding validates semantics.
+The first types/input slice is saved in67d7e49. The remaining result validators,
+bounded dispatcher, accounting, generated schema and48 authored vectors now compile
+and pass their scoped checks. ANALYSIS-FLOAT-001 resolves the observed production
+float dependency below; integrated consumer/independent acceptance remains open.
+Raw serde decoding alone is not claimed semantic or arithmetic validation.
 
 All types are exported directly from `uiblueprint_schema::analysis`:
 AnalysisVersion, AnalysisDocument, AnalysisArtifact, GeometryQuery, EvaluationInput,
@@ -411,13 +413,27 @@ Implemented callable API (all validators return Result<(), ValidationError>):
   source validity, exact ID/revision/full-compatible Context and evidence references.
   It does not choose transform paths, calculate results or confirm observed reality.
 
-Pending implementation signatures in this same packet, deliberately not stubs:
+The remaining signatures below are now implemented (no stubs):
 AnalysisDocument::from_json(&[u8],usize) -> Result<Self,ValidationError>;
 AnalysisDocument::validate(&self) -> Result<(),ValidationError>;
 analysis::validate_measurement_case(&MeasurementCase) and
 analysis::validate_geometry_check_case(&GeometryCheckCase) -> Result<(),ValidationError>;
 analysis::json_schema() -> Result<serde_json::Value,ValidationError>;
 analysis::validate_input_document(&[u8],usize) -> Result<(),ValidationError>.
-Core may start query/result factoring against the concrete types and input validators;
-consumer result verification/CLI parsing waits for these real remaining functions.
-The source receipt records checks/identity; none of this completes L01/S01 or live QA.
+Core can use these actual validators/parsers for result verification and CLI wiring.
+Result contract checks include eligible evidence, declared connectivity and
+known-source restrictions, not transformed coordinates or measurement recomputation.
+The source receipt records checks/identity; this does not complete L01/S01/live QA.
+
+Production decoder fidelity was an observed dependency: serde_json1.0.151's old
+alloc/default/std graph changed one bit for0.9394596570041933,0.9958796677339681
+and0.9216624818153901. Under authorized ANALYSIS-FLOAT-001, the same2,054-value
+corpus passed with runtime float_roundtrip in a task-temp production profile;
+all17 registry packages/versions remained unchanged. D07@3/route metadata were
+recorded before the workspace feature change. Cargo.lock did not change.
+The configured production driver fixtures/analysis/check_production_roundtrip.py
+now passes22/22 fixed core0.1/analysis0.2 cases, including source geometry and
+query/condition metadata. It builds real production rlibs without selecting
+features; dev-only jsonschema feature unification is not used as proof. Existing
+wire versions/schema/fixtures and UI tolerances remain unchanged. This closes the
+specific measured fidelity dependency, not general runtime/D05 peak acceptance.

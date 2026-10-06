@@ -882,3 +882,98 @@ payload_heap!(Artifact {
     TransitionContext
 });
 payload_heap!(ChannelResult { Observed, Failed });
+
+// Analysis reuses the core graph walk above; only its additional ownership is
+// enumerated here. Existing Snapshot layout/accounting is not changed.
+mod analysis_layout {
+    use super::*;
+    use crate::analysis::*;
+
+    record_heap!(AnalysisDocument {
+        schema_version,
+        artifact
+    });
+    record_heap!(GeometryQuery {
+        id,
+        scope_id,
+        targets,
+        operation,
+        anchors,
+        quantity_kind,
+        units,
+        applies_when
+    });
+    record_heap!(ObservedConditions { values, evidence });
+    record_heap!(EvaluationInput {
+        snapshot_id,
+        revision,
+        context,
+        result_space,
+        transforms,
+        conditions
+    });
+    record_heap!(Measurement {
+        value,
+        space,
+        details,
+        evidence
+    });
+    record_heap!(MeasurementCase {
+        snapshot,
+        query,
+        evaluation,
+        result
+    });
+    record_heap!(GeometryCheckCase {
+        snapshot,
+        expectation,
+        evaluation,
+        measurement,
+        finding
+    });
+    unit_heap!(AnalysisVersion { V0_2_0 });
+    unit_heap!(MeasurementUnknownReason {
+        NotRequested,
+        UnknownProperty,
+        UnsupportedProperty,
+        RedactedProperty,
+        MissingTarget,
+        MissingTransform,
+        FrameKindMismatch,
+        UnsupportedShape,
+        IncompleteScope,
+        UnstableState,
+        ApplicabilityUnknown,
+        NotApplicable,
+        UndefinedRatio
+    });
+    payload_heap!(AnalysisArtifact {
+        GeometryQuery,
+        EvaluationInput,
+        Measurement,
+        GeometryCheck
+    });
+    impl HeapSize for MeasurementDetails {
+        fn heap(&self) -> Result<Heap, Overflow> {
+            match self {
+                Self::Scalar {} => Ok(Heap::default()),
+                Self::Insets {
+                    left,
+                    top,
+                    right,
+                    bottom,
+                } => sum([left.heap()?, top.heap()?, right.heap()?, bottom.heap()?]),
+                Self::Intersection { rect } => rect.heap(),
+                Self::Gaps { values } => values.heap(),
+            }
+        }
+    }
+    impl HeapSize for MeasurementResult {
+        fn heap(&self) -> Result<Heap, Overflow> {
+            match self {
+                Self::Known { measurement } => measurement.heap(),
+                Self::Unknown { reason, evidence } => sum([reason.heap()?, evidence.heap()?]),
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+# Canonical analysis0.2 vectors
+
+These are authored normalized fixtures, not live captures or engine-generated
+answers. build.py reuses the immutable independent GEO source records and literal
+numbers, then constructs explicitly synthetic query/evaluation/result mutations.
+It never invokes the candidate engine. Existing0.1 files are not modified.
+
+manifest.json separates JSON Schema structural validity, declared-contract validity,
+and the independent expected engine-verification result. `not_checked` denotes
+standalone input/invalid cases without a result-recomputation expectation.
+The three tampered-*-contract-only records intentionally satisfy declarations
+while claiming wrong arithmetic/availability; the engine MUST reject them on
+recomputation. Schema validator valid/0 does not verify those claims.
+
+Positive numeric facts include GEO gap8, literal A.right40 with B.left40/30 ->0/-10,
+width30/height10/ratio3, inside insets10/20/80/30, overflow110/20/-10/30,
+intersection(35,25,5,5)/area25 and edge contact area0, ordered gaps[8,8]/spread0.
+The explicit two-hop mapping translates then scales by2: gap8 ->16px. Baselines
+27/30 map to46/40 under y'=-2y+100: spread6px. No implicit inverse or tolerance.
+Distinct/unused transform and condition observations are authored source records,
+not evidence invented by the evaluation consumer or new runtime collection.
+
+Run `python3 fixtures/analysis/build.py` to reproduce the authored JSON/manifest.
+The schema tests check structural/semantic parity and the validator executable;
+the engine owner consumes the separate verification expectations.
+
+`python3 fixtures/analysis/check_production_roundtrip.py` builds the real production
+schema rlib with its actual locked features and checks22 fixed core0.1/analysis0.2
+float cases through their public decoders. It does not select a feature or use
+dev/test rlibs. All temporary caller files/binaries are run-owned OS-temp and removed.
+The original production serde_json default graph lost low bits. ANALYSIS-FLOAT-001
+adopts the same pinned version's runtime float_roundtrip feature; configured
+production now passes22/22. Exact counterexamples and dependency proof remain in
+S01-analysis receipt. The driver checks actual features/results; no epsilon or
+feature-unified development test can stand in for that production check.

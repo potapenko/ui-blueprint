@@ -1,0 +1,380 @@
+{
+  "schema_version": "0.2.0",
+  "artifact": {
+    "kind": "measurement",
+    "data": {
+      "snapshot": {
+        "surface_records": [],
+        "id": "S11",
+        "revision": 11,
+        "source_state": "fixture-checkpoint-11",
+        "context": {
+          "schema_version": "0.1.0",
+          "session_id": "a1",
+          "target": {
+            "id": "native-app",
+            "generation": "g1"
+          },
+          "surfaces": [
+            {
+              "id": "window-1",
+              "generation": "w1"
+            }
+          ],
+          "scope_id": "form-1",
+          "projection": "interaction",
+          "fields": [
+            "baseline"
+          ],
+          "plugin": {
+            "id": "macos",
+            "version": "0.1.0"
+          },
+          "environment_revision": "display-1"
+        },
+        "observations": [
+          {
+            "id": "OG1",
+            "source_namespace": "fixture.authored_layout",
+            "channel": "external_semantics",
+            "start": 120,
+            "end": 130,
+            "clock_domain": "fixture-parent-monotonic",
+            "time_unit": "milliseconds",
+            "freshness_basis": "live_read",
+            "consistency_reason": null,
+            "answer_source": "live",
+            "freshness": "current",
+            "last_verified": 130,
+            "consistency": "stable",
+            "coverage": {
+              "status": "complete",
+              "scope_id": "form-1",
+              "fields": [
+                "baseline"
+              ],
+              "omitted_count": 0,
+              "unknown_count": 0
+            }
+          },
+          {
+            "id": "OT-baseline",
+            "source_namespace": "fixture.authored_layout",
+            "channel": "external_semantics",
+            "start": 120,
+            "end": 130,
+            "clock_domain": "fixture-parent-monotonic",
+            "time_unit": "milliseconds",
+            "freshness_basis": "live_read",
+            "consistency_reason": null,
+            "answer_source": "live",
+            "freshness": "current",
+            "last_verified": 130,
+            "consistency": "stable",
+            "coverage": {
+              "status": "complete",
+              "scope_id": "form-1",
+              "fields": [
+                "baseline"
+              ],
+              "omitted_count": 0,
+              "unknown_count": 0
+            }
+          }
+        ],
+        "nodes": [
+          {
+            "key": {
+              "namespace": "fixture.authored_layout",
+              "key": "text-1"
+            },
+            "surface": {
+              "id": "window-1",
+              "generation": "w1"
+            },
+            "native_role": {
+              "availability": "unsupported",
+              "reason": "not_exposed"
+            },
+            "children": [],
+            "extensions": [],
+            "source_declarations": [],
+            "properties": [
+              {
+                "selection": "requested",
+                "field": "baseline",
+                "sensitivity": "public",
+                "evidence": {
+                  "observation_id": "OG1",
+                  "source_namespace": "fixture.authored_layout",
+                  "provenance": "reported",
+                  "method": "authored_fixture",
+                  "uncertainty": null
+                },
+                "state": {
+                  "availability": "known",
+                  "value": {
+                    "type": "baseline",
+                    "value": {
+                      "coordinate": 27,
+                      "space": {
+                        "id": "local-form",
+                        "kind": "local",
+                        "units": "css_px",
+                        "origin": "top_left"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "key": {
+              "namespace": "fixture.authored_layout",
+              "key": "text-2"
+            },
+            "surface": {
+              "id": "window-1",
+              "generation": "w1"
+            },
+            "native_role": {
+              "availability": "unsupported",
+              "reason": "not_exposed"
+            },
+            "children": [],
+            "extensions": [],
+            "source_declarations": [],
+            "properties": [
+              {
+                "selection": "requested",
+                "field": "baseline",
+                "sensitivity": "public",
+                "evidence": {
+                  "observation_id": "OG1",
+                  "source_namespace": "fixture.authored_layout",
+                  "provenance": "reported",
+                  "method": "authored_fixture",
+                  "uncertainty": null
+                },
+                "state": {
+                  "availability": "known",
+                  "value": {
+                    "type": "baseline",
+                    "value": {
+                      "coordinate": 30,
+                      "space": {
+                        "id": "local-form",
+                        "kind": "local",
+                        "units": "css_px",
+                        "origin": "top_left"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "relations": [],
+        "components": [],
+        "focus": {
+          "keyboard": {
+            "status": "unknown",
+            "reason": "not_observed"
+          },
+          "accessibility": {
+            "status": "unknown",
+            "reason": "not_observed"
+          },
+          "active_descendant": {
+            "status": "unknown",
+            "reason": "not_observed"
+          },
+          "text_selection": null,
+          "composition_state": {
+            "selection": "not_requested",
+            "field": "value"
+          }
+        },
+        "captures": [],
+        "coverage": {
+          "status": "complete",
+          "scope_id": "form-1",
+          "fields": [
+            "baseline"
+          ],
+          "omitted_count": 0,
+          "unknown_count": 0
+        }
+      },
+      "query": {
+        "id": "geometry-check",
+        "scope_id": "form-1",
+        "targets": [
+          {
+            "namespace": "fixture.authored_layout",
+            "key": "text-1"
+          },
+          {
+            "namespace": "fixture.authored_layout",
+            "key": "text-2"
+          }
+        ],
+        "applies_when": {
+          "platform": null,
+          "input_mode": null,
+          "text_scale": null
+        },
+        "operation": "baseline",
+        "anchors": [
+          {
+            "element": {
+              "namespace": "fixture.authored_layout",
+              "key": "text-1"
+            },
+            "frame_kind": "layout_bounds",
+            "coordinate_space": {
+              "id": "local-form",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "fraction": 0.5,
+            "axis": "x"
+          },
+          {
+            "element": {
+              "namespace": "fixture.authored_layout",
+              "key": "text-2"
+            },
+            "frame_kind": "layout_bounds",
+            "coordinate_space": {
+              "id": "local-form",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "fraction": 0.5,
+            "axis": "x"
+          }
+        ],
+        "quantity_kind": "length",
+        "units": "px"
+      },
+      "evaluation": {
+        "snapshot_id": "S11",
+        "revision": 11,
+        "context": {
+          "schema_version": "0.1.0",
+          "session_id": "a1",
+          "target": {
+            "id": "native-app",
+            "generation": "g1"
+          },
+          "surfaces": [
+            {
+              "id": "window-1",
+              "generation": "w1"
+            }
+          ],
+          "scope_id": "form-1",
+          "projection": "interaction",
+          "fields": [
+            "baseline"
+          ],
+          "plugin": {
+            "id": "macos",
+            "version": "0.1.0"
+          },
+          "environment_revision": "display-1"
+        },
+        "result_space": {
+          "id": "flipped-px",
+          "kind": "local",
+          "units": "px",
+          "origin": "bottom_left"
+        },
+        "transforms": [
+          {
+            "from": {
+              "id": "local-form",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "to": {
+              "id": "flipped-px",
+              "kind": "local",
+              "units": "px",
+              "origin": "bottom_left"
+            },
+            "affine": [
+              2,
+              0,
+              0,
+              -2,
+              0,
+              100
+            ],
+            "evidence": {
+              "observation_id": "OT-baseline",
+              "source_namespace": "fixture.authored_layout",
+              "provenance": "reported",
+              "method": "authored_baseline_flip",
+              "uncertainty": null
+            },
+            "target": {
+              "id": "native-app",
+              "generation": "g1"
+            },
+            "surface": {
+              "id": "window-1",
+              "generation": "w1"
+            },
+            "environment_revision": "display-1"
+          }
+        ],
+        "conditions": null
+      },
+      "result": {
+        "status": "known",
+        "measurement": {
+          "value": {
+            "type": "quantity",
+            "value": {
+              "amount": 6,
+              "kind": "length",
+              "source_units": "px"
+            }
+          },
+          "space": {
+            "id": "flipped-px",
+            "kind": "local",
+            "units": "px",
+            "origin": "bottom_left"
+          },
+          "details": {
+            "kind": "scalar"
+          },
+          "evidence": [
+            {
+              "observation_id": "OG1",
+              "source_namespace": "fixture.authored_layout",
+              "provenance": "reported",
+              "method": "authored_fixture",
+              "uncertainty": null
+            },
+            {
+              "observation_id": "OT-baseline",
+              "source_namespace": "fixture.authored_layout",
+              "provenance": "reported",
+              "method": "authored_baseline_flip",
+              "uncertainty": null
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,8 @@
 # D07 — initial dependencies and no-copy disposition
 
 - Domain: `uib.development.d07`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence).
-- Node type: leaf; contract: `UIB.D07@2`; clause: `UIB.D07.CONTENT`.
+- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), ANALYSIS-FLOAT-001 below.
+- Node type: leaf; contract: `UIB.D07@3`; clause: `UIB.D07.CONTENT`; supersedes @2.
 - Authority: Active / Stability: Evolving; initial dependency intent, no installation.
 - Read when: T01/S01 dependency resolution or later selected code/dependency adoption.
 - Do not read when: no dependency/source transfer is proposed.
@@ -26,7 +26,7 @@ Exact initial root workspace dependencies when T01/S01 need serialization:
 | Package / version / features | Purpose / evidence |
 | --- | --- |
 | `serde = =1.0.229`, default std, `derive` | Typed envelope serialization; registry metadata Rust minimum1.56, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde/1.0.229/serde/) |
-| `serde_json = =1.0.151`, default std only | JSON parser/writer; registry minimum1.71, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde_json/1.0.151/serde_json/) |
+| `serde_json = =1.0.151`, default std + runtime `float_roundtrip` | Exact finite-f64 JSON decoding; minimum1.71, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde_json/1.0.151/serde_json/) |
 | `schemars = =1.2.2`, std/derive only | S01 schema generation from canonical types; minimum1.74, MIT (Graham Esau2019) |
 | dev-only `jsonschema = =0.58.5`, default-features=false | S01 structural validation/parity; minimum1.85, MIT (Dmitry Dygalo2020–2026); HTTP/file/TLS/async resolution disabled |
 
@@ -38,7 +38,7 @@ schemars_derive1.2.2 also MIT/minimum1.74. No source copied. Semantic reference/
 generation checks still belong to our validator. A common map-only serde visitor
 rejects nested array-shaped records without another JSON parser. jsonschema stays
 in tests, avoiding its large transitive runtime graph; generated schemas use local
-references only. Its float_roundtrip feature is test-only. No URL/file is loaded
+references only. float_roundtrip was test-only before ANALYSIS-FLOAT-001. No URL/file is loaded
 from input documents. Schema/parser parity is independently checked on the goldens.
 
 Crates.io version metadata checked 2026-10-06: both non-yanked stable releases.
@@ -79,3 +79,16 @@ distribution inventory plus applicable licenses/notices; no claims that an
 upstream test was run, a license audit was universal, or a dependency was installed
 by this decision. Further adoption is bounded D07 work before transfer, not a
 blanket authorization for extra platform/model/transport architecture.
+
+## ANALYSIS-FLOAT-001 — exact source-number preservation
+
+Authorized [packet amendment](../../../plans/ui-blueprint/packets/S01-analysis-schema.md#authorized-fidelity-dependency--analysis-float-001)00b19d3 selects runtime float_roundtrip on2026-10-07, before root Cargo mutation.
+Production default decoding changed204/2,054 fixed f64 bit patterns. The SAME corpus
+in task-temp production profile with this feature passed2,054/2,054; serde_json stayed
+1.0.151 and all17 registry packages/versions stayed identical. Pinned Cargo.toml
+declares float_roundtrip=[]; src/de.rs selects its existing lexical conversion path.
+The internal lexical module remains MIT OR Apache-2.0, copyright Alexander Huszagh;
+I01 retains that upstream attribution with the existing dependency license material.
+No source copy, new dependency, geometric epsilon, wire promotion or fixture change.
+Configured production22-case core0.1/analysis0.2 regression must also pass; dev-feature
+tests alone are insufficient. [Receipt](../../../plans/ui-blueprint/receipts/S01-analysis.md) retains exact failures/proof; broad runtime/D05 peak acceptance remains open.

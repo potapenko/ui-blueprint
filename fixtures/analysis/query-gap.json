@@ -1,0 +1,60 @@
+{
+  "schema_version": "0.2.0",
+  "artifact": {
+    "kind": "geometry_query",
+    "data": {
+      "id": "geometry-check",
+      "scope_id": "form-1",
+      "targets": [
+        {
+          "namespace": "fixture.authored_layout",
+          "key": "A"
+        },
+        {
+          "namespace": "fixture.authored_layout",
+          "key": "B"
+        }
+      ],
+      "applies_when": {
+        "platform": null,
+        "input_mode": null,
+        "text_scale": null
+      },
+      "operation": "gap",
+      "anchors": [
+        {
+          "element": {
+            "namespace": "fixture.authored_layout",
+            "key": "A"
+          },
+          "frame_kind": "layout_bounds",
+          "coordinate_space": {
+            "id": "local-form",
+            "kind": "local",
+            "units": "css_px",
+            "origin": "top_left"
+          },
+          "fraction": 1,
+          "axis": "x"
+        },
+        {
+          "element": {
+            "namespace": "fixture.authored_layout",
+            "key": "B"
+          },
+          "frame_kind": "layout_bounds",
+          "coordinate_space": {
+            "id": "local-form",
+            "kind": "local",
+            "units": "css_px",
+            "origin": "top_left"
+          },
+          "fraction": 0,
+          "axis": "x"
+        }
+      ],
+      "quantity_kind": "length",
+      "units": "css_px"
+    }
+  }
+}

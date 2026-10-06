@@ -4,7 +4,7 @@ use std::{
     io::{self, Read},
     process::ExitCode,
 };
-use uiblueprint_schema::{model::Document, validation::ValidationError};
+use uiblueprint_schema::{analysis::validate_input_document, validation::ValidationError};
 
 fn report(code: &'static str, exit: u8) -> ExitCode {
     println!("{{\"valid\":{},\"code\":\"{}\"}}", exit == 0, code);
@@ -34,7 +34,7 @@ fn main() -> ExitCode {
     if reader.take(limit + 1).read_to_end(&mut data).is_err() {
         return report("io_error", 1);
     }
-    match Document::from_json(&data, limit as usize) {
+    match validate_input_document(&data, limit as usize) {
         Ok(_) => report("valid", 0),
         Err(ValidationError::InternalSchema) => report("internal_schema", 1),
         Err(error) => {

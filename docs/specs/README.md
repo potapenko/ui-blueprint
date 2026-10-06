@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 6.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 7.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -49,6 +49,10 @@ Working-memory enforcement and live acceptance remain open; D02/wire contracts u
 [ANALYSIS@1](product/analysis.md) under delegated ROADMAP representation authority,
 using accepted handoff8fdf608. Local analysis0.2 reuses protected core0.1 data;
 registration precedes implementation and does not accept runtime or new arithmetic.
+
+`ANALYSIS-FLOAT-001` records [D07@3](development/decisions/d07-reuse.md)'s verified
+need for the same pinned serde_json runtime float_roundtrip feature, preserving
+source-number fidelity without new dependencies, tolerance or core wire changes.
 
 ## Select a route
 

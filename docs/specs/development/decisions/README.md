@@ -36,7 +36,7 @@ documentation candidate separately from the author marking work complete.
 | [D04](d04-identity.md) / `UIB.D04@1` / `UIB.D04.CONTENT` | Freshness policy chosen; adversarial proof before P4/P5 | W01/M01, K02, A01 |
 | [D05](d05-limits.md) / `UIB.D05@2` / `UIB.D05.CONTENT` | Retained limits/ownership chosen in [D05-MEMORY@1](d05-memory.md); working enforcement/calibration remain | K01 storage; S01 before first live adapter; W01/M01/P01 before affected checks |
 | [D06](d06-performance.md) / `UIB.D06@1` / `UIB.D06.CONTENT` | **P0 numeric gates frozen here**, candidate not evaluated | Q02; W01/M01 instrumentation |
-| [D07](d07-reuse.md) / `UIB.D07@2` / `UIB.D07.CONTENT` | S01 schema generation/parity dependencies added by S01-DEP-001; no source copying | T01/S01, platform owner, I01 |
+| [D07](d07-reuse.md) / `UIB.D07@3` / `UIB.D07.CONTENT` | ANALYSIS-FLOAT-001 adds measured-needed runtime float_roundtrip; versions/dependency set unchanged | S01/analysis, platform owner, I01 |
 | [T01/S01 handoff](handoff.md) / `UIB.C01-HANDOFF@1` / `UIB.C01-HANDOFF.CONTENT` | Concrete next work and proof obligations | Assigned Integration workers |
 | [Evidence](evidence.md) / `UIB.C01-EVIDENCE@1` / `UIB.C01-EVIDENCE.CONTENT` | Supporting facts/limits; never new product intent | Trace a decision to an accepted input |
 

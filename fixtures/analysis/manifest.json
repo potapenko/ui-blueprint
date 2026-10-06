@@ -1,0 +1,290 @@
+[
+  {
+    "path": "query-gap.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "evaluation-local.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "measurement-gap.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "known-zero.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "signed-gap.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "width.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "height.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "ratio.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "insets.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "overflow.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "intersection.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "ordered-gaps.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "empty-intersection.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "unknown-property.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "unsupported-property.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "not-requested.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "redacted.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "missing-target.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "unsupported-shape.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "missing-transform.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "unstable-source.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "distinct-observations.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "multi-hop-conversion.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "baseline-origin-conversion.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "observed-conditions.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "missing-conditions.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "not-applicable.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "unstable-conditions.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "check-pass.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "check-converted.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "match"
+  },
+  {
+    "path": "invalid-revision.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-result-space.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-units.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-details.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-empty-evidence.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-evidence-source.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-known-missing-target.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-kind.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-query-normative-field.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-unknown-value.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-scalar-payload.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-check-outcome.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-transform-generation.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-singular-transform.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-condition-reference.json",
+    "contract_valid": false,
+    "structural_valid": true,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "tampered-quantity-contract-only.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "mismatch"
+  },
+  {
+    "path": "tampered-check-contract-only.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "mismatch"
+  },
+  {
+    "path": "tampered-unknown-contract-only.json",
+    "contract_valid": true,
+    "structural_valid": true,
+    "engine_verification": "mismatch"
+  }
+]
