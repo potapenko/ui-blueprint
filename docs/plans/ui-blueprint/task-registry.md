@@ -79,9 +79,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01/F03c running; Git lease root; desktop/owned Simulator lane product advisor |
+| Активные чаты/пакеты/ресурсы | S01/F03c stopped for completed user review; resuming bounded work after coordination checkpoint; Git lease root until handoff |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
+| Следующий шаг | S01 schema/parity/plugin Stage A и F03c RC04/RC05; четыре review findings awaiting_authority по ограничению пользователя; Stage A acceptance ещё отсутствует |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -100,9 +100,10 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
 | [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
 | [F03b](packets/F03b.md) | product advisor | `8f93735ed14e03380a76094c1370c32efd42552f` | accepted reference with explicit playback/statistics/geometry limits; [receipt](receipts/F03b.md) |
-| [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | running; native proof waits for lane; no Git lease |
+| [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; WIP `1d12859` + `61022a9`, both pushed | stopped for review, bounded continuation next; redacted negative failing; schema artifact/plugin/proofs/receipt incomplete |
+| S01-user-review | collaboration `/root/checkpoint_review` | `eb0edbf..1d12859` + changes saved in `61022a9` | completed static review; four findings, not accepted; [result](receipts/S01-user-review.md); no fixes authorized by review alone |
 | [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | `d539a0ec2bac243375256652fb75da7065b27350` | accepted oracle input; [receipt](receipts/S01-oracles.md); code/contract review still required |
-| [F03c](packets/F03c.md) | product advisor | RC04/RC05; F03c-build@eda0d77 | running; owned devices/desktop grant; no Git lease |
+| [F03c](packets/F03c.md) | product advisor | RC04/RC05; F03c-build@eda0d77 | stopped for review; no repo writes; three owned devices shutdown, desktop free; iPad13 filter lower bound A2→A1 and inspector close remain; continuation next |
 | [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | `eda0d7753f85f9e5c03b1d90613ea69586fd8016` | accepted build artifacts; [receipt](receipts/F03c-build.md); runtime still unverified |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.

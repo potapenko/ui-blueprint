@@ -33,7 +33,7 @@ forbidden: новые frameworks/сервисы вне outcome, чужие пр�
 resource_lease: target/session/build/Git lane; owner; release condition
 checks: конкретные команды/сценарии для этого изменения
 acceptance: обязательные критерии; optional references отдельно
-done_when: результат + checks + checkpoint + terminal receipt
+done_when: результат + checks + checkpoint commit + push + terminal receipt
 waiting: точная dependency/permission/resource; не обходить границу
 return: финальный ответ по формату ниже; следующую задачу не начинать
 ```
@@ -63,7 +63,7 @@ economy_basis:
 spec_basis_read / specified_expectation:
 observed_evidence / discrepancy_classification:
 authority_used / authority_mode:
-changed_paths / reused_owners / checkpoint_commit:
+changed_paths / reused_owners / checkpoint_commit / push_result:
 checks_run: command + relevant revision/environment + result
 scope_check / semantic_scope_check:
 deviations / residual / next_dependency:

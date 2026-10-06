@@ -36,7 +36,10 @@ Cargo/schema/CLI/integration — отдельный Integration worker. Глоб
 - Git index общий: stage/commit получает одного владельца. Перед grant сверяются
   paths и пустота index; чужой staged diff не трогают и не включают в коммит.
 - Каждый изменяющий файлы пакет заканчивается своим path-limited checkpoint
-  в текущей ветке; root выдаёт Git-аренду исполнителю и принимает его receipt.
+  и push в текущей ветке; root выдаёт Git-аренду исполнителю и принимает его receipt.
+  Прямое уточнение пользователя 2026-10-06 требует commit **и push** после каждого
+  checkpoint, в том числе от исполнителей; старые no-push указания пакетов отменены.
+  В receipt обязательны SHA и результат push; при ошибке push работа не закрывается.
   Commit сохраняет кандидата, но не означает product acceptance.
 - Перед checkpoint build/review вводится короткий write barrier для затронутого
   набора; проверяется неизменность diff и фиксируется точный commit/build identity.
