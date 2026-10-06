@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | C01 running; F03a commit-only; Git lease F03a; runtime lanes свободны |
+| Активные чаты/пакеты/ресурсы | C01 commit-only; F03a reference pack accepted; Git lease C01; runtime lanes свободны |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -96,8 +96,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [F01](packets/F01.md) | Web chat R01 | `a8368076cdf0d4a917e7c3c5448ca6b6d919cf64` | accepted tooling/baseline; [receipt](receipts/F01.md); no product acceptance |
 | [F02](packets/F02.md) | Native chat R02 | `9a88b12b5855bac54bf04ba7b64d233df719ddec` | accepted supporting fixture; current proof limits in [receipt](receipts/F02.md); M/P01 gates open |
 | F01-doc | Web chat R01 | `585bcd90ad455110bcc2432f8f36f58e3c8d7ecf` | accepted docs correction; no new measurements |
-| [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | 3 real states, 13 files, 6 PNG outside Git | commit-only; [receipt](receipts/F03a.md); runtime released |
-| [C01](packets/C01.md) | Core chat R03, Integration role | R01/R02/R03/F01/F02 commits + product consultation | running; docs-only decisions; no Git/runtime lease |
+| [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | `5d1e0a53670fb8bfbd0c3982db5e164f4bf9bb6d` | accepted reference data; [receipt](receipts/F03a.md); agent/collector proof pending |
+| [C01](packets/C01.md) | Core chat R03, Integration role | D01–D07 candidate, 13 docs | commit-only; Git lease C01; [receipt](receipts/C01.md) |
+| [T01](packets/T01.md) | Integration role | C01 checkpoint/acceptance | queued; first schema-version Rust owner |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
