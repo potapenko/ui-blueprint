@@ -1,5 +1,18 @@
 # K01 retained-store independent review
 
+## Final disposition — accepted
+
+The same reviewer inspected the exact negative snippet, compiler diagnostic and
+positive control. Negative compilation failed only with E0502; moving final read
+use before detach compiled successfully. The evidence gap is closed. Verdict:
+**accept for retained Snapshot storage at f85f06f**, with no scoped findings/gaps.
+Execution remains author evidence. Proof and the final disposition are saved in
+Core receipt checkpoint `9b12eba568e18d400fab7d4f334934918f837d67`, pushed.
+Only that task's temporary compiler proof was removed afterward; product source
+is unchanged. Full K01, live freshness and transient enforcement remain open.
+
+## Earlier evidence gap
+
 - Fresh non-author `/root/k01_store_review`, fork_turns none, single child.
 - [Packet](../packets/K01-store-review.md), source candidate
   `f85f06f555772ecbb610acf6e66e8f0bf1c2a642`.
