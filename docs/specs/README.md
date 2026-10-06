@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 4.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 5.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -40,6 +40,10 @@ C01 engineering choices under ROADMAP D01–D07 are registered in
 policy (`DEV.RUST@2`) and initial candidate interfaces/gates; it does not accept
 product runtime or alter existing CONTENT@1 requirements. The linked direct user
 clarification preserves explicit request-driven collection, without periodic polling.
+
+`D05-RET-002` selects [D05@2 retained memory policy](development/decisions/d05-memory.md)
+under ROADMAP's delegated engineering authority before K01 storage implementation.
+Working-memory enforcement and live acceptance remain open; D02/wire contracts unchanged.
 
 ## Select a route
 

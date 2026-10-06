@@ -1,14 +1,15 @@
 # D05 — limits, tolerances and unresolved calibration
 
 - Domain: `uib.development.d05`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence).
-- Node type: leaf; contract: `UIB.D05@1`; clause: `UIB.D05.CONTENT`.
+- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [D05-RET-002](d05-memory.md#change-record).
+- Node type: leaf; contract: `UIB.D05@2`; clause: `UIB.D05.CONTENT`; supersedes @1.
 - Authority: Active / Stability: Evolving; policy selected, numeric coverage bounded.
 - Read when: S01 limits/validator or a platform/geometry acceptance test is prepared.
 - Do not read when: no limits/precision/deadline choice is affected.
 - Requires: [GEOMETRY@1](../../product/geometry.md), [PROJECTIONS@1](../../product/projections.md),
   [LIFECYCLE@1](../../product/lifecycle.md), [CACHE@1](../../product/cache.md),
-  [PERFORMANCE@1](../../acceptance/performance.md), [evidence](evidence.md).
+  [PERFORMANCE@1](../../acceptance/performance.md), [evidence](evidence.md),
+  [D05-MEMORY@1](d05-memory.md) for retained storage/admission.
 - Owner/deadline: S01 sizing before W01/M01; W01/M01/P01 calibration before
   corresponding tests; K01 implements the established retention bounds.
 
@@ -62,26 +63,23 @@ Each unresolved item needs named evidence/parameters before its test, not larger
 tolerance or a timeout chosen after a failing product result. Existing positive
 pilots and privacy requirements remain unchanged.
 
-## S01 measurement status — policy unchanged
+## Retained decision and remaining proof
 
-[Owned-model sizing](../../../../tests/bridges/resources/README.md) now measures
-canonical P1 records and actual returned narrow Web/Native D02 samples. It counts
-inline/owned container capacities, not JSON bytes or another process's RSS.
-Largest observed P1 Snapshot:8,731 bytes; Web B03 Snapshot:46,184 bytes; selected
-one-node Native AX Snapshot:6,694 bytes, capture metadata:5,768 bytes. Scope and
-allocator/parser/pixel exclusions are explicit in the report. These are not
-largest-platform/worst-permitted or total-process measurements.
-No numeric production caps selected or implemented; D05-RES remains open pending
-the named largest-example and working-memory evidence. This evidence/status
-addition does not change CONTENT policy or advance its semantic revision.
-Independent P1-R1 additionally identifies unbounded path expansion in the current
-plugin depth check. It remains awaiting repair authority; small memory samples do
-not close bounded-work/deadline acceptance or justify reducing limits to hide it.
+[Owned-model sizing](../../../../tests/bridges/resources/README.md) and
+[working-allocation evidence](../../../../tests/bridges/resources/working-memory.md)
+distinguish owned capacities from wire bytes, parser/encoding/framing work and RSS.
+Larger actual32-node Web/76-node Native inputs remain partial; configured synthetic
+trees/list payloads are labelled synthetic. No universal decoder bound is claimed.
+`D05-RET-002` now selects explicit finite retained limits, quota ownership,
+admission/eviction and lifetime in D05-MEMORY@1, before K01 storage source work.
+This closes the retained-policy decision only; implementation/proof remain open.
+It does not change scenario scope/deadlines/tolerances, D02 packaging or wire schema.
+Independent P1-R1 identifies unbounded path expansion in the current plugin depth
+check. Its assigned repair is separate; small memory samples do not close bounded-
+work/deadline acceptance or justify reducing limits to hide it.
 
-[Working-allocation evidence](../../../../tests/bridges/resources/working-memory.md)
-now distinguishes parser/encoding/framing/session phases. Larger actual32-node Web
-and76-node Native inputs remain partial, not complete configured worst cases.
-Synthetic admitted64KiB inputs can require over1.5MB parser working storage;
-rejected inputs also allocate transiently. Encoded counters are not process caps.
-No numbers become production defaults here. Decoder bound/process-owner and K01
-actual storage/index/release semantics are the exact remaining policy dependencies.
+Full D05-RES remains open before live W01/M01: decoder/replay/encoding allocation
+enforcement, framing and completed-channel owners, aggregate working-memory quotas,
+actual cleanup and bounded resync proof. A host permit or retained counter alone
+does not enforce transient allocations. The subprocess proposal is not adopted;
+any D02 owner/lifecycle delta requires its own bounded decision before source work.
