@@ -72,3 +72,65 @@ reconcile them in this same context, inspect deferred receipt links/check claims
 then issue the criterion-backed Stage 2 verdict. Missing proof is not a residual.
 No repair is proposed at Stage 1. Stop after the path-limited checkpoint;
 do not start R01/R02/R03 or read the author receipt before Stage 2 dispatch.
+
+## Stage 2 — reconciliation and final verdict
+
+Stage 2 explicitly dispatched after initial checkpoint
+`f8d63cbc1968c337483e2bde59771056ed0dccf1`; exclusive Git lease renewed for this
+file only. Read the author receipt from candidate `92d2bf8` after that checkpoint.
+No additional prior findings were supplied beyond the C00 lease wording.
+
+**Final verdict: accept** for C00 candidate
+`92d2bf89ea9acab091fd166eef4432408e353744` and its documentation-routing scope.
+
+| Mandatory criterion | Final result | Reconciled evidence |
+| --- | --- | --- |
+| 1. Originals unchanged | PASS | Both source blobs are byte-identical to `358c757`; candidate tree has no drift. |
+| 2. Normative fidelity | PASS | Initial full mapped-content comparison stands; 62 source spans preserve requirements and exceptions. |
+| 3. IDs, size, mapping, closure | PASS | Initial checks stand; independent graph traversal also finds no dependency cycle. |
+| 4. Provenance/dependencies | PASS | Complete research and export closures; no full-original preload imposed on downstream workers. |
+| 5. Future boundaries | PASS | Preserved future material remains outside authorized P0–P7 implementation. |
+| 6. Authority/coordination | PASS | Author's old lease-sentence finding is resolved in current C00 by coordination commit `2115e99`; dispatch and packet agree. |
+| 7. Documentation checks | PASS | Deferred author-receipt links pass; complete candidate `git diff --check` passes, including that receipt. |
+| 8. Allowed paths | PASS | Candidate remains limited to the 51 allowed paths; review checkpoint changes this file only. |
+
+Author-check reconciliation: source identity, leaf/span counts, node limit,
+dependencies and link checks agree with independent evidence. The author's
+“full prompt A+B equality” is content equality: literal concatenation of the
+two fenced blocks omits one blank separator before `ГЕОМЕТРИЯ`; all nonblank
+lines and their order match exactly. This formatting difference loses no norm
+or placeholder and does not require product repair or a semantic revision.
+
+Blocking findings: none. Mandatory evidence gaps: none within C00. Residual: none.
+Repair owner/recheck: not required for this candidate; changes to the pinned
+candidate or contract closure require affected-scope review. Runtime capability,
+upstream license verification and eventual R01/R02/R03 results are not accepted
+by this verdict. Next consumer: root may record C00 acceptance and dispatch P0
+research with the required ownership/commit identities.
+
+## Separate review — prepared root research packets
+
+Reviewed the four supplied root-owned files without editing them. This check is
+separate from C00 acceptance and does not grant resource ownership or accept research.
+
+| File under `docs/plans/ui-blueprint/packets/` | Reviewed Git blob |
+| --- | --- |
+| research-common.md | `1e778d22fe101e6bf8cdd4db38907c69c7fd3f5e` |
+| R01.md | `36597acccbd19e72bf4992dab4f6b1f1f774f838` |
+| R02.md | `51fa568d6be28ededc127eb38df028a78eb88d24` |
+| R03.md | `afc0b7fe9b14a1d1b8517515da8f22c498c6ccf2` |
+
+Findings for root: none. Ordered @1 CONTENT lists match accepted R01/R02/R03
+routes exactly (16/18/14 nodes). Write sets are disjoint; root Cargo/specs/API and
+other owners stay protected. Git index ownership is expressly deferred to a
+separate grant. R01 is confined to an isolated owned headless fixture, R02's visible
+fixture requires the native lane, R03 needs no UI resource. Prototypes remain P0
+diagnostic evidence and recommendations remain proposals for C01. No new D01–D07
+decision, live-product authority, nested delegation, or future stage is introduced.
+Author receipt plus four packets: 17 local links/anchors checked, no errors.
+Raw byte identities above pin these untracked packet versions for root's checkpoint.
+Dispatch must still supply the promised candidate/acceptance identity and resource
+grants; these are explicit dispatch conditions, not defects in prepared packets.
+
+Terminal status: C00-review / done; supporting independent documentation review
+only. Checkpoint this receipt, release its Git lease in the terminal reply, and stop.
