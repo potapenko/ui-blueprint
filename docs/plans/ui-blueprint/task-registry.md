@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01 running; oracles commit-only; mobile build ready; Git lease oracles; runtime lanes свободны |
+| Активные чаты/пакеты/ресурсы | S01/mobile build running; Git lease root; runtime lanes свободны |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -101,12 +101,12 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
 | [F03b](packets/F03b.md) | product advisor | `8f93735ed14e03380a76094c1370c32efd42552f` | accepted reference with explicit playback/statistics/geometry limits; [receipt](receipts/F03b.md) |
 | [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | running; native proof waits for lane; no Git lease |
-| [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | 97 contract-derived cases; 5 own paths | commit-only; [receipt](receipts/S01-oracles.md); Git lease oracles |
+| [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | `d539a0ec2bac243375256652fb75da7065b27350` | accepted oracle input; [receipt](receipts/S01-oracles.md); code/contract review still required |
 | [F03c](packets/F03c.md) | product advisor | RC04/RC05 owned mobile targets; source inventory | queued after F03b checkpoint; no runtime/Git grant yet |
-| [F03c-build](packets/F03c-build.md) | new isolated builder | Release Tablet/Phone bundles for F03c | ready; no device/runtime or Git lease |
+| [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | Release Tablet/Phone bundles for F03c | running; no device/runtime or Git lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
-Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
+T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
 Research packet версии проверены reviewer в `9bedecc`; P0 hypotheses остаются
 предложениями для C01. Независимый review не подтверждает runtime прототипов заранее.
 R03 подтвердил cleanup task-temp; durable verification.json сохранён для C01/P7.
