@@ -1,0 +1,19 @@
+{
+  "authority": "F02 owned synthetic fixture design; expectations fixed before runtime sampling",
+  "window_title": "F02 Synthetic",
+  "surface_identifiers": ["a", "b"],
+  "initial": {"name": "", "secret_present": false, "checked": false, "applied": "none", "activations": 0, "expanded": false, "wide": false, "popup": false, "scroll_end": false, "focus": "name"},
+  "activation_delta": 1,
+  "completion": "Ada Lovelace",
+  "accepted_form_requires": ["completion name", "nonempty synthetic secure input", "checked"],
+  "accepted_result_by_window": {"a": "accepted-a", "b": "accepted-b"},
+  "gap_pt": {"baseline": 8, "expanded": 18},
+  "row_count": 40,
+  "resize_content_width_pt": {"baseline": 550, "wide": 650},
+  "popup_result_by_window": {"a": "popup-a", "b": "popup-b"},
+  "synthetic_slow_delay_seconds": 0.3,
+  "synthetic_partial_node_limit": 8,
+  "unsupported_attribute": "AXF02Unsupported",
+  "lost_event": "source revision advances while event revision remains unchanged",
+  "permission_denied": "injected channel refusal only; not real TCC revocation"
+}
