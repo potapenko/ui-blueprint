@@ -1,5 +1,9 @@
 # E02 proposal geometry repair candidate
 
+Current follow-up: E02-R3 is source-ready; see the final addendum. Earlier
+sections preserve the checked/saved R1–R2 candidate and its historical101-test
+barrier, not a claim that the reviewer accepted that candidate.
+
 ## Authority, basis and write boundary
 
 Finite [E02-repair packet](../packets/E02-repair.md) at `36f2089`, under the
@@ -101,3 +105,60 @@ The terminal receipt returns the exact package SHA/push and full211-file saved-H
 reconciliation against the checked hash above, without another suite run.
 Same E02 reviewer performs the affected independent recheck after the saved
 candidate; author tests do not accept E02/P6/P7 or unrelated shared repairs.
+
+
+## E02-R3 finite cancellation follow-up
+
+Authority: same bounded E02 repair packet and existing approval, dispatched after
+[the same reviewer's recheck](E02-recheck.md) at `0ecd875`. R1/R2 counterexamples
+were closed; R3 rejected the introduced finite-cancellation behavior at `9ca645a`.
+No renewed product choice, spec delta or broader arithmetic engine is introduced.
+
+Changed only proposal_arithmetic.rs and one additional independent test in each
+export proposal_regressions.rs and CLI export_binary.rs, plus this receipt.
+proposal.rs remains unchanged. For A x=-1e16,width=1e16 and B x=1,width=0,
+A.right=0 and B.left=1: authored1 now passes,0/2 reject in both directions through
+the library and actual command. Tests retain independent literal expected values.
+
+The helper now computes both equivalent signed-distance enclosures for every
+finite case: relative base/offset arithmetic and endpoint arithmetic. When both
+exist, it intersects them before taking the absolute distance. This retains
+same-base small widths while finite cancellation is narrowed by exact endpoints;
+[0,2] intersects[1,1] to[1,1] in R3. One finite enclosure remains the fallback
+when the other path overflows. No fixed/relative epsilon, UI check tolerance,
+source mutation or precision truncation is added. Prior origins/fractional/
+subnormal/overflow/unknown/chain cases remain covered.
+
+Focused checks on a fixed216-file working input set, inspection HEAD
+`9d405dee22faebb064fb60053099e215c4ecd0ce`:
+
+- `cargo check --locked -p uiblueprint-export -p uiblueprint-cli --all-targets`: pass.
+- `cargo fmt -p uiblueprint-export -p uiblueprint-cli -- --check`: pass.
+- `cargo test --locked -p uiblueprint-export`:19 passed (12 compiler +7 proposal).
+- `cargo test --locked -p uiblueprint-cli --test export_binary proposal_`:3 passed,
+  including the two prior repair cases and the new cancellation case.
+- Full dependency-Clippy stopped on Core's new cache/store.rs:310 collapsible_if;
+  no E02 source finding, no repair to the other owner's file.
+- Scoped `cargo clippy --locked -p uiblueprint-export -p uiblueprint-cli
+  --all-targets --no-deps -- -D warnings`: pass; dependency-Clippy remains separately
+  attributable to Core. This is not claimed as a full workspace lint pass.
+
+Before/after216-file hash matched:
+`2ae6e89c56cc62e3d6a714e225727a8db9e4a41c06a863aa2e08d5544c62e05e`.
+Input-map definition is the same full regular-file recipe above; membership now
+includes Core's in-progress disjoint cache module. These checks do not accept
+that module or become saved integrated proof before its matching checkpoint.
+Frozen own four-path hash (including unchanged proposal.rs):
+`b34560ba8eacd3645adaabf7b139f8f6e7712c91350390474a69f81200208ee9`.
+
+Root granted the four changed paths for a coherent source checkpoint; master,
+empty index and the unchanged own four-path hash were verified. proposal.rs stays
+unstaged and unchanged. After commit+push, the Git lease is released before testing.
+One task-temp git archive of that exact saved commit will run scoped check/fmt/
+Clippy, export tests and the3 affected CLI cases using --locked/offline dependencies.
+This explicitly authorized verification-only copy excludes the neighbor's unsaved
+cache module; it creates no branch/worktree or competing workspace owner and makes
+no product edits. Inputs differ from the working-copy run, justifying one rerun.
+Compact proof updates this receipt only after a separate root Git grant; raw logs
+and the task-temp copy are removed after proof acceptance. Same-reviewer independent
+acceptance is still pending. Source changes are frozen.

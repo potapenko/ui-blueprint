@@ -274,3 +274,28 @@ fn finite_endpoint_fallback_and_unknown_overflow_do_not_invent_dimensions() {
     );
     assert!(compile(&b, limits()).is_ok());
 }
+
+#[test]
+fn finite_cancellation_requires_exact_distance_in_both_directions() {
+    for reverse in [false, true] {
+        let mut edges = [("A", Edge::Right), ("B", Edge::Left)];
+        if reverse {
+            edges.reverse();
+        }
+        let mut b = brief(
+            Origin::TopLeft,
+            rect(-1e16, 0.0, 1e16, 1.0),
+            rect(1.0, 0.0, 0.0, 1.0),
+            edges,
+            Some(1.0),
+        );
+        assert!(compile(&b, limits()).is_ok());
+        for wrong in [0.0, 2.0] {
+            layout(&mut b).dimensions[0].value = Some(wrong);
+            assert_eq!(
+                compile(&b, limits()).unwrap_err(),
+                ExportError::InvalidGeometry
+            );
+        }
+    }
+}

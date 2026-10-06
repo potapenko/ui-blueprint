@@ -41,6 +41,11 @@ impl Interval {
             upper: -rhs.lower,
         })
     }
+    fn intersect(self, rhs: Self) -> Option<Self> {
+        let lower = self.lower.max(rhs.lower);
+        let upper = self.upper.min(rhs.upper);
+        (lower <= upper).then_some(Self { lower, upper })
+    }
     fn absolute(self) -> Self {
         if self.lower >= 0.0 {
             self
@@ -76,16 +81,24 @@ fn sum_bounds(a: f64, b: f64) -> Option<Interval> {
     (lower.is_finite() && upper.is_finite()).then_some(Interval { lower, upper })
 }
 
-/// Keep base and offset separate: (x + width) - x must retain width even when
-/// width is below an ULP of x. Different bases and offsets are subtracted first.
-/// If the base subtraction overflows, finite endpoint arithmetic is the fallback.
+/// Keep both algebraically equivalent enclosures. Relative arithmetic preserves
+/// sub-ULP extents at a shared large base; endpoint arithmetic preserves small
+/// distances after a large base cancels its own offset. Intersecting the finite
+/// enclosures avoids promoting either path's lost precision into accepted values.
+/// If one path overflows, retain the other finite enclosure.
 pub(super) fn distance(a: (f64, Interval), b: (f64, Interval)) -> Option<Interval> {
-    let offset = b.1.subtract(a.1)?;
-    let difference = match Interval::exact(b.0).subtract(Interval::exact(a.0)) {
-        Some(base) => base.add(offset)?,
-        None => Interval::exact(b.0)
-            .add(b.1)?
-            .subtract(Interval::exact(a.0).add(a.1)?)?,
-    };
+    let relative = Interval::exact(b.0)
+        .subtract(Interval::exact(a.0))
+        .and_then(|base| b.1.subtract(a.1).and_then(|offset| base.add(offset)));
+    let endpoints = Interval::exact(b.0).add(b.1).and_then(|right| {
+        Interval::exact(a.0)
+            .add(a.1)
+            .and_then(|left| right.subtract(left))
+    });
+    let difference = match (relative, endpoints) {
+        (Some(relative), Some(endpoints)) => relative.intersect(endpoints),
+        (Some(finite), None) | (None, Some(finite)) => Some(finite),
+        (None, None) => None,
+    }?;
     Some(difference.absolute())
 }

@@ -530,3 +530,41 @@ fn proposal_fractional_repair_preserves_source_values_unknowns_and_statuses() {
         assert!(!bad.root.join("package").exists());
     }
 }
+
+#[test]
+fn proposal_finite_cancellation_rejects_zero_and_two_in_actual_command() {
+    for reverse in [false, true] {
+        for value in [1.0, 0.0, 2.0] {
+            let mut c = proposal_geometry_case("top_left", -1e16, 1e16, false, value);
+            let layout = &mut c.brief["views"][0]["source"]["layout"];
+            layout["components"][1]["geometry"]["shape"]["value"] =
+                json!({"x":1.0,"y":0.0,"width":0.0,"height":1.0});
+            layout["dimensions"][0]["anchors"][0]["edge"] = "right".into();
+            layout["dimensions"][0]["anchors"][1]["component"] = "B".into();
+            layout["dimensions"][0]["anchors"][1]["edge"] = "left".into();
+            if reverse {
+                layout["dimensions"][0]["anchors"]
+                    .as_array_mut()
+                    .unwrap()
+                    .reverse();
+            }
+            c.save();
+            if value == 1.0 {
+                let receipt = success(c.run(&["--json"], 2_000_000, 4_000_000));
+                assert_eq!(receipt["validation_status"], "unverified");
+                assert_eq!(receipt["approval_status"], "draft");
+                assert_eq!(
+                    c.package("dimensions.json")[0]["dimensions"][0]["value"],
+                    1.0
+                );
+            } else {
+                fail(
+                    c.run(&[], 2_000_000, 4_000_000),
+                    2,
+                    "export_invalid_geometry",
+                );
+                assert!(!c.root.join("package").exists());
+            }
+        }
+    }
+}
