@@ -1,6 +1,6 @@
 # S01-Web common interface proof
 
-State: fixture/setup prepared; Stage A pinned; shared executable test-host pending.
+State: independent live collector/normalizer checked; shared Rust support entrypoint pending.
 Consumer D02-PROOF/P1 boundary, then W01. No production adapter or pilot accepted.
 Authority: [platform packet](../plans/ui-blueprint/packets/S01-web-proof.md) and
 [shared handoff](../plans/ui-blueprint/packets/S01-bridges.md), approved PLAN.UIB@1
@@ -16,7 +16,8 @@ BOUNDARIES, ROADMAP, MODEL, EXCHANGE, IDENTITY, GEOMETRY, PROJECTIONS, FORMS,
 CACHE, ACTIONS, LIFECYCLE, PRIVACY, PERFORMANCE, REUSE, PILOTS and WEB-PILOTS
 CONTENT@1 from R01/F01 after no-diff check. RUST.md, DEV.RUST@2, D07@2 and
 C01-HANDOFF@1 with D04@1/D06@1 dependencies read for subsequent validator/build
-integration. No Rust build or shared source inspection during this preparation.
+integration. Initial preparation did not consume shared Rust; the subsequent focused check
+built the unchanged Stage A schema validator as recorded below.
 Excluded: detailed export, mobile/ML/future products, real apps and native runtime.
 
 ## Owned setup and input fragment
@@ -39,7 +40,7 @@ Playwright Core 1.58.2 and installed Chromium executable; starts one ephemeral
 loopback server, fetches only its fixture document and closes it. It does not
 launch a browser, observe UI or validate an envelope. `fixture-host.cjs` provides
 a callback-based owned headless setup for the later bridge; it is not invoked
-until Stage A is pinned and the common driver's outer deadline/teardown is known.
+by a finite check/bridge with explicit outer timeout and cleanup.
 Browser launch/navigation setup timeouts are fixture parameters, not D05 defaults.
 
 Selected proof scenario, following root's user-designated Web coauthor advice:
@@ -76,37 +77,67 @@ checks. Do not run the historical combined `fixtures/web/run.cjs` as acceptance.
 Real-site Director popup is contextual only: its DOM portal structure is not
 established here; no real-site launch, collection or changes are authorized.
 
+## Independent collector/normalizer result
+
+[collector.cjs](../../tests/bridges/web/collector.cjs) accepts supplied canonical
+request/context and a remaining budget. It performs only fixed ID lookups, depth0
+DOM descriptions, selected CSSOM reads, a bounded point hit-test and addressed AX
+with fetchRelatives=false. No full DOM/AX snapshot or recursive collector traversal.
+Its current test-supported request selects the five documented fields together;
+other field sets reject before acquisition. At most seven DOM nodes and their AX
+mappings are admitted, within the caller's 32-node limit; insufficient limits
+reject. Frame-tree metadata checks document continuity on this fixed two-frame
+fixture. This is not qualification of general W01 acquisition on arbitrary pages.
+
+Stage A has `external_semantics`, `rendered_capture`, `opt_in_layout_probe` channels.
+External Web DOM/CSSOM and AX use the first, with separate observations/namespaces,
+source IDs, raw roles and times. DOM geometry is not mislabeled as an opt-in probe;
+AX geometry stays unknown. Returned Snapshot has partial coverage, explicit
+corresponds_to mappings from backend IDs and a sourced anchored_to relation.
+Parent tag and point-hit samples remain bounded diagnostic evidence, not invented
+normalized geometry. No full visible_region is claimed from rect intersection.
+
+`collector-check.cjs` independently reads only the existing B03 oracle and sets up
+popup-open, overlay-on and overlay-off. It checks the collector's observed data,
+focus/scroll/application state invariance and injected wrong target/fields/limits/
+expired-budget refusals. Supplied request context is explicitly **test-only**;
+there is no Ticket, parent clock reading or lifecycle emulation in this test.
+The collector never reads the oracle. The same function remains suitable for a
+future real supplied request after common Rust admission.
+
+45 focused checks passed, including six Rust file-validator exits (request and
+snapshot for each state). Syntax checks passed. Canonical schema validator built
+with `cargo +1.96.0 build --locked -p uiblueprint-schema --bin uiblueprint-validate`,
+offline in a task-temp target directory; Cargo.toml/lock and schema sources matched
+Stage A before/after build. No shared source changes, workspace suites or P2 repairs.
+These are live collector + schema-format checks, **not D02 session proof**.
+
+```sh
+S01_WEB_PLAYWRIGHT_CORE=<absolute-playwright-core-path> \
+S01_WEB_VALIDATOR=<pinned-built-uiblueprint-validate> \
+S01_WEB_OUTPUT=<task-evidence-path> \
+node tests/bridges/web/collector-check.cjs
+```
+
 ## Committed Stage A and exact remaining dependency
 
-Baseline supplied by root: `9d2df153abd2a7d7567100e06d4260e5edda3bb3`, committed
-and pushed; packet/runbook checkpoint `553a4e9`. Read the current execution runbook
-and committed [schema handoff](schema.md), [plugin handoff](plugin-interface.md),
-`crates/plugin-api/Cargo.toml` and complete `crates/plugin-api/src/lib.rs`.
-Shared working files match Stage A for those owners. No shared build or mutation.
-This is a candidate, not acceptance; four known P2 findings stay untouched.
+Baseline `9d2df153abd2a7d7567100e06d4260e5edda3bb3`, committed/pushed; runbook
+checkpoint `553a4e9` read. Inspected committed schema/plugin handoffs, canonical
+model, relevant validation paths and plugin-api library. Four P2 findings untouched.
+Preparation checkpoint `6029c7d6f912f826d9fd48633469a51b6b6e7496` was pushed to
+origin/master; its short Git lease was released. The collector is saved in a
+separate path-limited checkpoint identified in its terminal handoff/receipt history.
 
-Observed API: `ObservationSession::attach/begin/receive/complete/cancel/expire/detach`
-operates on canonical schema frames and a Ticket. It intentionally performs no IO,
-clock reads or spawning. Committed plugin-api contains its library and authored
-`tests/lifecycle.rs`; no binary/example/common bridge host. The available
-`uiblueprint-validate` binary validates documents but does not exercise the session
-state machine. Schema-only validation cannot satisfy the live plugin-boundary proof.
+Root accepted one producer dependency and clarified its minimal form: Integration
+owns reusable Rust **test support/entrypoint**, not necessarily an executable host
+or new command protocol. Typed Rust orchestration can directly call the common
+ObservationSession. A Node wrapper is needed only if chosen for this bridge.
+Absence of a binary alone is not a product blocker. Platform-specific orchestration
+may differ while the actual API, validation, Ticket/clock and lifecycle stay common.
 
-**One dependency request to Integration, through root:** provide a committed shared
-executable test-host, usable by both platform bridges, that calls this existing
-ObservationSession rather than introducing another protocol/lifecycle policy.
-It must admit the canonical session/request with explicit test limits, return the
-actual Ticket before collection, accept canonical channel frames, and expose
-completion/cancel/expire/detach/late-response results. The host owns the real parent
-monotonic clock and bounded framing; failure-injection mode must be labelled.
-Document invocation/IO contract and existing negative-test reuse. Keep the same
-schema validator and no platform SDKs in this owner. Integration chooses its exact
-test command interface; this Web packet does not invent a competing one.
-
-Next: root supplies the committed host revision/entry point; read that finite API,
-then implement selected F01/B03 collection and wire binding in web paths, run live
-request → channel results → shared Rust session/validator, plus assigned negatives.
-Wrong-version, malformed/oversize, cancellation/detach and late replies must use
-that common boundary. No second Web/Native driver, fabricated Ticket/clock or
-mock-only pass. Existing preparation is checkpoint-ready but not D02-complete;
-Git stage/commit/push still require root's short lease. No browser resources held.
+Next: receive Integration's committed support revision/usage contract, bind the
+collector to admitted canonical requests, return live channels using the real
+Ticket and parent monotonic clock, and run complete/cancel/expire/detach/late-response
+and malformed/oversize/version checks through that existing common owner. Do not
+create a competing driver or policy. Until then the collector result is useful
+independent preparation, not D02 acceptance. No browser resources held.
