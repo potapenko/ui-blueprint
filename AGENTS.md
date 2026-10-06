@@ -25,10 +25,12 @@ The user confirmed the product specification and visualization guide on
 remain separate. Explicitly open engineering choices and future phases retain
 their stated scope. Use the registry for the current authority and revisions.
 
-The [development plan](docs/plans/ui-blueprint-development.md) is proposed
-execution scope until the user approves and launches it. For coordinated work,
-follow its selected execution route and task registry. Planning does not start
-workers, a persistent goal, or implementation.
+The [development plan](docs/plans/ui-blueprint-development.md), `PLAN.UIB@1`, was
+approved and launched on 2026-10-06 for P0–P7. The actual approval, original
+plan revision and active ownership are preserved in the
+[task registry](docs/plans/ui-blueprint/task-registry.md). Root is coordination-only;
+finite workers execute assigned packets through the selected execution route.
+Future stages retain their separate scope. A plan or checkpoint is not acceptance.
 
 Do not create empty crates merely to match a proposed directory tree. Introduce
 concrete owners when an authorized implementation needs them.

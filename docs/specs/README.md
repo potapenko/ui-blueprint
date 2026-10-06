@@ -1,73 +1,63 @@
 # Specification registry
 
-- Node type: root
-- Status: Active
-- Revision: 2
-- Read when: selecting contracts for product or development work.
-- Do not read when: an already selected, current contract fully governs the task.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 3.
+- Authority: Active; stability: Evolving; accepted/released implementation: none.
+- Read when: selecting product/development contracts or recovering uncertain routes.
+- Do not read when: a fully read, current selected closure already governs the task.
+- Requires: select only the route below; branch summaries do not replace leaves.
 
-This registry routes work; it does not approve product proposals.
-Global product-truth governance owns authority, change control, and evidence
-rules. [Repository instructions](../../AGENTS.md) and
-[Rust rules](../../RUST.md) contain only local routing and engineering practice.
+## Authority and precedence
 
-## Development contract
+`UIB.ROUTING.AUTHORITY`: user confirmation on 2026-10-06 made
+[UIB.TZ@1.4](../ui-blueprint-spec.md) and
+[UIB.DRAWING@1.1](../engineering-blueprint-guide.md) Active / Evolving.
+General specification governs product boundaries; drawing guide governs export
+within them. Neither overrides global safety. Active does not mean implemented,
+accepted or released. D01–D07, preliminary names and future phases retain their scope.
 
-| Domain | Contract | Authority / stability | Read when |
-| --- | --- | --- | --- |
-| Rust development | [Rust development](development/rust.md), `DEV.RUST@1` | Active / Evolving; documentation setup approved by the user on 2026-10-06 | Toolchain, Cargo, dependencies, targets, features, or Rust verification |
+`UIB.ROUTING.FIDELITY`: C00 leaves are faithful restatements of those sources,
+with stable clause IDs and semantic revision 1, not new product decisions.
+If a difference is found, the original Active norm prevails; repair transcription
+without inventing a product choice. [Inverse source map](reference/source-map.md)
+connects every source section to its routed owner. Source links are provenance,
+not a requirement to reread both full originals for each task. Read selected
+leaves completely and follow explicit `Requires`; follow additional task routes
+only when their trigger applies. Catalog/reference links do not authorize work
+in another project or import all upstream contracts.
 
-Approval covers the documentation foundation. It does not authorize application
-implementation or mean that a Rust workspace has been built and accepted.
+`UIB.ROUTING.SCOPE`: [PLAN.UIB@1](../plans/ui-blueprint-development.md) was
+approved and launched; exact approval and original commit are preserved in the
+[task registry](../plans/ui-blueprint/task-registry.md). Root is coordination-only;
+finite workers implement/review within packets. Approval covers P0–P7, not F1–F4,
+mobile implementations or unrelated products. Plan status is not runtime evidence.
 
-## Product contracts
+Historical authority delta `UIB-AUTH-001`: Draft 1.3 / Draft 1.0 → Active 1.4 / 1.1
+on user confirmation; no wire schema or released behavior changed. Field-level
+`draft` and historical statements remain meaningful. C00 adds routing only.
 
-| Material | Recorded state | Read when |
+## Select a route
+
+| Task | Entry | Authority / selection |
 | --- | --- | --- |
-| [UI Blueprint general specification](../ui-blueprint-spec.md), `UIB.TZ@1.4` | Active / Evolving; confirmed by the user on 2026-10-06 | Product scope, architecture, behavior, P0–P7 and D01–D07 |
-| [Engineering visualization and ImageGen guide](../engineering-blueprint-guide.md), `UIB.DRAWING@1.1` | Active / Evolving; confirmed by the user on 2026-10-06 | DrawingBrief, engineering drawings, or ImageGen preparation |
+| Product behavior/schema/engine/plugin/CLI/export | [Product tree](product/README.md) | Current norms; select the smallest applicable leaf closure |
+| R01 browser / R02 native / R03 core research | [Exact research routes](reference/research-routes.md) | Pinned source-reading scopes; no design decision D01–D07 by C00 |
+| Fixtures, GOLDEN01, pilots, integration or performance | [Acceptance tree](acceptance/README.md) | Positive/negative evidence requirements, not claimed results |
+| Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
+| Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
+| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@1](development/rust.md) | Active / Evolving; documentation setup approved 2026-10-06 |
+| New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 
-The user's direct confirmation supersedes their former document-level Draft
-status. This is an authority change, not proof of implementation or release.
-Required behavior governs; explicitly open decisions, preliminary names, and
-future phases retain their stated meaning. D01–D07 resolve within approved
-implementation scope, not through unrelated product invention.
-The general specification governs product boundaries; the visualization guide
-governs export detail within those boundaries. Neither overrides global safety.
+## Routing invariants
 
-Contract delta `UIB-AUTH-001`: prior Draft 1.3 / Draft 1.0 become Active 1.4 / 1.1
-on the user's 2026-10-06 confirmation. Product rules and acceptance scenarios are
-preserved; no schema wire version, released behavior, or implemented API changes.
-Field-level `draft` values and historical source labels retain their meaning.
+`UIB.ROUTING.NODES`: every new node is at most 100 physical lines. Stable clause
+IDs identify meaning; source line ranges aid fidelity checks and do not replace
+IDs. Original imported documents remain unchanged. Leaf `CONTENT` clauses retain
+normative distinctions and source-local examples; example numbers are not defaults.
+Explicit `Requires` links name semantic dependencies; navigation/provenance links
+are not automatic preload. All current routed nodes have no accepted/released
+baseline; future/reference evidence remains future/reference even inside Active sources.
 
-[Development plan](../plans/ui-blueprint-development.md), `PLAN.UIB@1`, is a
-planning deliverable awaiting execution approval. It decomposes these contracts
-and cannot weaken them. Its registry records proposed work, not running tasks.
-
-## Routes and ownership
-
-- Rust source: [RUST.md](../../RUST.md); product changes additionally follow
-  their selected product contract.
-- Development environment: [Rust development](development/rust.md).
-- Product specification: applicable product material or future registered
-  contract, then its explicit dependencies and acceptance scenarios.
-- New domain: [feature template](templates/feature-spec.md). Register the domain,
-  contract revision, authority source, stability, selection conditions,
-  dependencies, precedence, and accepted/released baseline when one exists.
-
-Keep future specification nodes at most 100 physical lines; split substantial
-contracts into routed children. Existing imported documents are preserved source
-material, not silently rewritten to fit the new tree.
-
-Do not preload sibling domains, source catalogs, or historical plans merely
-because they appear in an imported document. Follow requirements applicable to
-the selected task. No product source catalog is needed for a behavior-neutral
-edit to these development instructions.
-
-## Provenance
-
-The separation of `AGENTS.md`, `RUST.md`, development contracts, and feature
-templates is adapted from `ai-friendly-search-engine`. Routed nodes, revision
-metadata, and separation of authority from release evidence also draw on
-`swiftui-semantic-audit`. These are structural references, not product
-dependencies; their contracts and release history are not imported.
+`UIB.ROUTING.PROVENANCE`: repository instruction/development separation is adapted
+from ai-friendly-search-engine; routing/revision and authority-vs-release structure
+also draws on swiftui-semantic-audit. These references import no product dependencies.
+[Repository instructions](../../AGENTS.md) retain local routing only.
