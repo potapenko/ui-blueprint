@@ -19,6 +19,14 @@ only to preserve later live scope; they are not claimed by this packet. Reuse
 fully read current worker context, reload missing/changed required nodes.
 No relevant ambiguity or revision drift; analysis0.2 and float feature preserved.
 
+Narrow dependency clarification: Web identified actual upstream payload-bearing
+log calls. Direct use of the SAME locked `log` already required transitively by
+tungstenite is permitted solely for the target-filter privacy boundary. Confirm
+exact version/features/license and record its reason in D07@4 before adoption.
+No additional logging framework or CLI/global-host redesign is authorized; preserve
+non-upstream diagnostics and existing host logger ownership, document installation
+or refusal semantics and prove canaries. Absence of a logger alone is not proof.
+
 Required by contracts: Rust-owned addressed connection, finite scope/deadline,
 independent Target progress, no automatic recollection/retry, sanitized output,
 minimal optional platform dependencies. Observed evidence is saved
@@ -44,7 +52,7 @@ Bounded writes:
 
 - `plugins/web/Cargo.toml`, `plugins/web/src/lib.rs`, `plugins/web/src/transport/**`
   and `plugins/web/tests/transport.rs` for actual codec/socket implementation;
-- root `Cargo.toml` only exact workspace dependency and concrete member wiring;
+- root `Cargo.toml` only exact transport dependencies above and concrete member wiring;
   `Cargo.lock` only required new dependency resolution, preserving existing pins;
 - `docs/specs/development/decisions/d07-reuse.md` and decision/spec README routing
   metadata only for D07@4/registry8; no other semantic contract changes;
