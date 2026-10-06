@@ -272,6 +272,62 @@ pub fn validate_delta(base: &Snapshot, delta: &Delta) -> Result {
     )
 }
 
+/// Compare an explicit source oracle with the selected-field update, without
+/// materializing/publishing another graph. Call after validate_delta. Snapshot
+/// ordering/IDs are not replayed identities; unchanged metadata remains historical.
+pub(super) fn validate_delta_source(base: &Snapshot, delta: &Delta, source: &Snapshot) -> Result {
+    validate_snapshot(source)?;
+    require(
+        source.source_state.is_some()
+            && source.source_state == delta.source_state
+            && contexts_compatible(&source.context, &delta.context)
+            && source.revision == delta.revision
+            && source.relations == delta.relations
+            && source.focus == delta.focus
+            && source.coverage == delta.coverage
+            && source.surface_records == base.surface_records
+            && source.components == base.components
+            && source.captures == base.captures,
+        ValidationError::InvalidEvidence,
+    )?;
+    let mut expected: BTreeMap<_, _> = base.nodes.iter().map(|n| (&n.key, n)).collect();
+    for removal in &delta.removed {
+        expected.remove(&removal.key);
+    }
+    for node in &delta.upsert {
+        expected.insert(&node.key, node);
+    }
+    require(
+        expected.len() == source.nodes.len()
+            && source
+                .nodes
+                .iter()
+                .all(|n| expected.get(&n.key) == Some(&n)),
+        ValidationError::InvalidEvidence,
+    )?;
+    // All update observations survive; historical observations may remain when
+    // their original records are retained. No observation can be invented or
+    // changed under an existing identity to restamp unchanged properties.
+    require(
+        delta.observations.iter().all(|o| {
+            source.observations.contains(o)
+                && base
+                    .observations
+                    .iter()
+                    .find(|old| old.id == o.id)
+                    .is_none_or(|old| old == o)
+        }) && source.observations.iter().all(|o| {
+            delta
+                .observations
+                .iter()
+                .find(|new| new.id == o.id)
+                .or_else(|| base.observations.iter().find(|old| old.id == o.id))
+                == Some(o)
+        }),
+        ValidationError::InvalidEvidence,
+    )
+}
+
 pub(super) fn node<'a>(snapshot: &'a Snapshot, key: &SourceKey) -> Result<&'a Node> {
     snapshot
         .nodes

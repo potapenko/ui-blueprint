@@ -2,6 +2,9 @@
 //! Callers own transport, unique attachment IDs and actual collection deadlines.
 #![forbid(unsafe_code)]
 
+mod depth;
+use depth::depth_within;
+
 use std::collections::BTreeMap;
 use uiblueprint_schema::{SchemaVersion, model::*, validation::contexts_compatible};
 
@@ -390,24 +393,4 @@ fn completion(p: Pending, terminal: Terminal) -> Completion {
         channels: p.channels,
         missing_channels,
     }
-}
-
-fn depth_within(snapshot: &Snapshot, limit: u32) -> bool {
-    let nodes: BTreeMap<_, _> = snapshot.nodes.iter().map(|n| (&n.key, n)).collect();
-    // Semantic validation has already rejected cycles/dangling children. Stop
-    // at the request limit instead of calculating an unbounded graph traversal.
-    for node in &snapshot.nodes {
-        let mut pending = vec![(node, 1)];
-        while let Some((node, depth)) = pending.pop() {
-            if depth > limit {
-                return false;
-            }
-            for child in &node.children {
-                if let Some(child) = nodes.get(child) {
-                    pending.push((child, depth + 1));
-                }
-            }
-        }
-    }
-    true
 }

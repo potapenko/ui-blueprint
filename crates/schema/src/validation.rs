@@ -151,16 +151,7 @@ fn validate_semantics(artifact: &Artifact) -> Result {
         Artifact::Delta(x) => {
             validate_delta(&x.base, &x.update)?;
             if let Some(source) = &x.source_snapshot {
-                validate_snapshot(source)?;
-                require(
-                    source.source_state == x.update.source_state
-                        && source.context == x.update.context
-                        && x.update
-                            .upsert
-                            .iter()
-                            .all(|n| source.nodes.iter().any(|s| s == n)),
-                    ValidationError::InvalidEvidence,
-                )?;
+                graph::validate_delta_source(&x.base, &x.update, source)?;
             }
             Ok(())
         }
@@ -338,6 +329,15 @@ fn validate_geometry(x: &Geometry, observations: &[Observation]) -> Result {
     }
     Ok(())
 }
+fn geometry_field(kind: FrameKind) -> Field {
+    match kind {
+        FrameKind::LayoutBounds => Field::LayoutBounds,
+        FrameKind::AccessibilityBounds => Field::AccessibilityBounds,
+        FrameKind::HitRegion => Field::HitRegion,
+        FrameKind::VisibleRegion => Field::VisibleRegion,
+        FrameKind::PaintBounds => Field::PaintBounds,
+    }
+}
 fn field_value(field: Field, value: &Value) -> bool {
     match field {
         Field::Baseline => matches!(value, Value::Baseline { .. }),
@@ -354,7 +354,9 @@ fn field_value(field: Field, value: &Value) -> bool {
         | Field::AccessibilityBounds
         | Field::HitRegion
         | Field::VisibleRegion
-        | Field::PaintBounds => matches!(value, Value::Geometry(_)),
+        | Field::PaintBounds => {
+            matches!(value, Value::Geometry(g) if geometry_field(g.frame_kind) == field)
+        }
         Field::Actions => matches!(value, Value::TextList(_)),
         Field::Value => matches!(value, Value::Text(_) | Value::Number(_) | Value::Flag(_)),
         _ => matches!(value, Value::Text(_)),

@@ -30,6 +30,7 @@ pub fn validate_action(snapshot: &Snapshot, action: &Action) -> Result {
             && property(n, Field::Enabled).and_then(Property::known) == Some(&Value::Flag(true)),
         ValidationError::UnknownMeasurement,
     )?;
+    current_property(snapshot, n, Field::Enabled)?;
     if matches!(
         action.intent,
         Intent::Fill { .. }
@@ -53,9 +54,12 @@ pub fn validate_action(snapshot: &Snapshot, action: &Action) -> Result {
             ValidationError::UnknownMeasurement,
         )?;
     }
-    evidence(&action.resolution.evidence, &snapshot.observations)?;
+    let resolution = evidence(&action.resolution.evidence, &snapshot.observations)?;
     require(
-        action.resolution.evidence.provenance == Provenance::Reported,
+        action.resolution.evidence.provenance == Provenance::Reported
+            && resolution.freshness == Freshness::Current
+            && resolution.id == r.observation_id
+            && resolution.source_namespace == n.key.namespace,
         ValidationError::StaleTarget,
     )?;
     let requested = match action.intent {
@@ -91,6 +95,7 @@ pub fn validate_action(snapshot: &Snapshot, action: &Action) -> Result {
         )?;
     }
     if action.modality == InputModality::Pointer {
+        current_property(snapshot, n, Field::HitRegion)?;
         let input_space = action
             .input_space
             .as_ref()
@@ -101,6 +106,23 @@ pub fn validate_action(snapshot: &Snapshot, action: &Action) -> Result {
         )?;
     }
     Ok(())
+}
+
+// A property is bound to this node by ownership; its observation must also be
+// current and cover this field/source. Resolution has no node key of its own,
+// so the resolution record above must bind to the backend ref's observation.
+fn current_property(snapshot: &Snapshot, n: &Node, field: Field) -> Result {
+    let Some(Property::Requested { evidence: e, .. }) = property(n, field) else {
+        return Err(ValidationError::UnknownMeasurement);
+    };
+    let observed = evidence(e, &snapshot.observations)?;
+    require(
+        observed.freshness == Freshness::Current
+            && observed.source_namespace == n.key.namespace
+            && observed.coverage.scope_id == snapshot.context.scope_id
+            && observed.coverage.fields.contains(&field),
+        ValidationError::StaleTarget,
+    )
 }
 
 pub fn validate_transition(t: &Transition) -> Result {
@@ -276,6 +298,7 @@ pub fn validate_finding(s: &Snapshot, e: &Expectation, f: &Finding) -> Result {
             matches == (f.status == CheckStatus::Pass),
             ValidationError::InvalidOutcome,
         )?;
+        let mut common_spaces: Option<Vec<&Space>> = None;
         for a in anchors {
             let n = node(s, &a.element)?;
             if *operation == GeometryRelation::Baseline {
@@ -283,15 +306,10 @@ pub fn validate_finding(s: &Snapshot, e: &Expectation, f: &Finding) -> Result {
                     matches!(property(n,Field::Baseline).and_then(Property::known),Some(Value::Baseline { coordinate, space }) if coordinate.is_finite() && space == &a.coordinate_space),
                     ValidationError::UnknownMeasurement,
                 )?;
+                common_measurement_space(&mut common_spaces, vec![&a.coordinate_space], *units)?;
                 continue;
             }
-            let field = match a.frame_kind {
-                FrameKind::LayoutBounds => Field::LayoutBounds,
-                FrameKind::AccessibilityBounds => Field::AccessibilityBounds,
-                FrameKind::HitRegion => Field::HitRegion,
-                FrameKind::VisibleRegion => Field::VisibleRegion,
-                FrameKind::PaintBounds => Field::PaintBounds,
-            };
+            let field = geometry_field(a.frame_kind);
             let Some(Value::Geometry(g)) = property(n, field).and_then(Property::known) else {
                 return Err(ValidationError::UnknownMeasurement);
             };
@@ -299,14 +317,36 @@ pub fn validate_finding(s: &Snapshot, e: &Expectation, f: &Finding) -> Result {
                 g.coordinate_space == a.coordinate_space,
                 ValidationError::UnknownMeasurement,
             )?;
-            require(
-                g.coordinate_space.units == *units
-                    || matches!(&g.transform,TransformState::Known { transform } if transform.to.units == *units),
-                ValidationError::MissingTransform,
-            )?;
+            let mut spaces = vec![&g.coordinate_space];
+            if let TransformState::Known { transform } = &g.transform
+                && transform.surface == n.surface
+            {
+                spaces.push(&transform.to);
+            }
+            common_measurement_space(&mut common_spaces, spaces, *units)?;
         }
     }
     Ok(())
+}
+
+// Finding has no result-space field yet. Establish at least one actual common
+// destination using only the source spaces and validated explicit transforms.
+// Equal units alone cannot establish coordinate-space identity.
+fn common_measurement_space<'a>(
+    common: &mut Option<Vec<&'a Space>>,
+    mut candidates: Vec<&'a Space>,
+    units: Unit,
+) -> Result {
+    candidates.retain(|space| space.units == units);
+    if let Some(previous) = common {
+        previous.retain(|space| candidates.contains(space));
+    } else {
+        *common = Some(candidates);
+    }
+    require(
+        common.as_ref().is_some_and(|spaces| !spaces.is_empty()),
+        ValidationError::MissingTransform,
+    )
 }
 pub(super) fn validate_chain(c: &GoldenChain) -> Result {
     validate_snapshot(&c.before)?;
@@ -349,44 +389,7 @@ pub(super) fn validate_chain(c: &GoldenChain) -> Result {
         }),
         ValidationError::InvalidOutcome,
     )?;
-    let post_keys: BTreeSet<_> = c
-        .before
-        .nodes
-        .iter()
-        .filter(|n| !c.delta.removed.iter().any(|r| r.key == n.key))
-        .map(|n| &n.key)
-        .chain(c.delta.upsert.iter().map(|n| &n.key))
-        .collect();
-    require(
-        post_keys == c.after.nodes.iter().map(|n| &n.key).collect()
-            && c.delta.focus == c.after.focus
-            && c.delta.relations == c.after.relations
-            && c.delta.coverage == c.after.coverage,
-        ValidationError::InvalidOutcome,
-    )?;
-    for old in &c.before.nodes {
-        if !c.delta.removed.iter().any(|r| r.key == old.key)
-            && !c.delta.upsert.iter().any(|n| n.key == old.key)
-        {
-            require(
-                c.after.nodes.iter().any(|n| n == old),
-                ValidationError::InvalidOutcome,
-            )?;
-        }
-    }
-    for node in &c.delta.upsert {
-        require(
-            c.after.nodes.iter().any(|after| after == node),
-            ValidationError::InvalidOutcome,
-        )?;
-    }
-    require(
-        c.delta
-            .removed
-            .iter()
-            .all(|r| c.after.nodes.iter().all(|n| n.key != r.key)),
-        ValidationError::InvalidOutcome,
-    )?;
+    graph::validate_delta_source(&c.before, &c.delta, &c.after)?;
     require(
         c.export.before == c.before.id
             && c.export.after == c.after.id
