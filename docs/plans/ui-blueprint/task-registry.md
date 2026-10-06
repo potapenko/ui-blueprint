@@ -89,7 +89,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Integration S01 five-finding repair + Export E02 repair active; Web W01-transport source decision active; D05 policydf99864 saved/pushed, Core K01-storage ready for dispatch with disjoint sizing paths; desktop released; no repair authority wait |
+| Активные чаты/пакеты/ресурсы | Integration S01 repair + Export E02 repair + Core K01-storage active; Web transport source decisione5da7d6 saved/pushed; Native M01-capture-repair ready, exclusive own-F02 desktop lane reserved for its finite proof; no repair authority wait |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | Сохранить D05 policy, затем canonical sizing/K01 storage; параллельно исправить S01/E02 findings и выполнить affected review. CLI wiring уже saved; D05 full enforcement, canonical MeasurementResult и RC05 evidence остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -134,8 +134,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [E02-candidate-review](packets/E02-candidate-review.md) | collaboration `/root/e02_candidate_review` | packet4e04161; artifactfe06537, export00b70cc and CLI delta afterdbdccf6 | completed two-stage review, reject; [receipt](receipts/E02-candidate-review.md): E02-R1 bottom-left vertical anchors and E02-R2 f64 exact equality; authority wait removed by current user clarification, same reviewer retained for recheck |
 | [S01-review-repair](packets/S01-review-repair.md) | Integration `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | original four S01 findings + P1-R1; D05@2, packet36f2089 and user clarification | running after saved D05 checkpoint; exact shared validation/plugin write set, affected consumer checks then independent recheck |
 | [E02-repair](packets/E02-repair.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | E02-R1/R2; existing GEOMETRY/DRAWING contracts, packet36f2089 and user clarification | running in disjoint proposal arithmetic/tests; final checks coordinated with shared validator changes |
-| [W01-transport](packets/W01-transport.md) | Web `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | D02@1/D07@2; packet e5ed9c0 | running read-only source/API/license decision, two docs only; no live adapter before D05 |
-| [K01-storage](packets/K01-storage.md) | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | D05@2/D05-MEMORY@1 atdf99864; design0d40af7, replaye4ecee7 and sizingc6a5df6 | ready to dispatch: canonical sizing extraction and real Snapshot store, exact paths delegated in packet; shared validation remains Integration; no live/peak/whole-K01 acceptance |
+| [W01-transport](packets/W01-transport.md) | Web `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | `e5da7d65247a24920c706f17ece8d15330527bf1`, pushed | finite source evidence accepted; [receipt](receipts/W01-transport.md), proposed tungstenite0.30.0 handshake-only with numeric-loopback ws and explicit guards; dependency adoption/runtime not performed |
+| [K01-storage](packets/K01-storage.md) | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | D05@2/D05-MEMORY@1 atdf99864; packet e70ce02 | running canonical sizing extraction and real Snapshot store; exact paths delegated, shared validation remains Integration; no live/peak/whole-K01 acceptance |
+| [M01-capture-repair](packets/M01-capture-repair.md) | Native `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | D02@1/D05@2 known F02 failure; existing own fixture/bridge | ready for dispatch, bounded prerequisite repair/proof; exclusive Native own-F02 desktop lane until receipt/cleanup or wait; no real apps/production adapter/permission changes |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
