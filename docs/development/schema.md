@@ -95,13 +95,14 @@ suite does not close that live gate. Historical fixtures/evidence stay unchanged
 
 <a id="l01-analysis-result-contract"></a>
 
-## L01 analysis result decision — implementation-ready, not yet registered
+## L01 analysis result decision — registered, implementation in progress
 
 This replaces the earlier proposal. The finite
 [L01-result-contract packet](../plans/ui-blueprint/packets/L01-result-contract.md)
 under PLAN.UIB@1 and ROADMAP's delegated D03 choices authorizes this engineering
-decision. Root must pin its spec delta and source packet before implementation.
-No source, wire fixture, product-spec revision or released behavior changes here.
+decision. Root registered D03@2/ANALYSIS@1 in7a61a65 and assigned the schema
+source packet06d339b. The decision text below remains the implementation contract;
+current implemented API and remaining work are recorded at the end of this file.
 Existing requirement: measurements are facts; checks add an actual sourced
 Expectation; selected Space, units, details, evidence and unknowns must survive.
 Observed: G01 already computes these locally, but L01 cannot serialize standalone
@@ -321,11 +322,10 @@ Exits stay0 known/pass,3 measured fail,4 unknown,2 invalid/limits,1 IO/internal,
 
 ### Registration, source order and independent cases
 
-Before code, root pins D03@2's exact dual-format/minor boundary and registers a
-small UIB.ANALYSIS@1 leaf in the product/spec/decision routes. It restates these
-record/version/validation obligations under delegated representation authority;
+The before-code registration is saved at7a61a65: D03@2 and the three routed
+ANALYSIS/TYPES/VALIDATION@1 leaves restate these record/version/validation duties.
 GEOMETRY/EXCHANGE/MODEL/PRIVACY meaning and the accepted five fixes stay unchanged.
-This document is the implementation handoff, not an Active spec edit by itself.
+This document remains the implementation handoff; the spec tree owns the norms.
 
 1. Schema packet: new analysis module/validation; lib export; crate-local reuse of
    model record macros only if necessary (no existing DTO change); owned_size;
@@ -378,3 +378,46 @@ JSON plus existing-context input support. It does not claim live observation,
 per-field supplemental-condition capture, new transform discovery, generic diff,
 D05 peak enforcement or full S01/P1/P6 acceptance. No product fork was found;
 remaining work is the named spec registration and bounded coupled implementation.
+
+
+## S01 analysis API slice — concrete consumer handoff
+
+The first schema source slice compiles; result validation/dispatcher/accounting/
+generator/complete fixtures and production-feature round-trip proof remain pending.
+No dummy functions or promise that raw serde decoding validates semantics.
+
+All types are exported directly from `uiblueprint_schema::analysis`:
+AnalysisVersion, AnalysisDocument, AnalysisArtifact, GeometryQuery, EvaluationInput,
+ObservedConditions, Measurement, MeasurementDetails, MeasurementUnknownReason,
+MeasurementResult, MeasurementCase, GeometryCheckCase. Exact fields follow the
+registered records above; Artifact variants box their record payloads.
+Core can re-export MeasurementDetails as Details and MeasurementUnknownReason as
+UnknownReason. MeasurementResult::Known is a STRUCT variant `{ measurement }`;
+Unknown is `{ reason, evidence }`. Details constructors are Scalar {},
+Insets { left,top,right,bottom }, Intersection { rect }, Gaps { values }.
+MissingTarget remains the Rust reason variant, serialized as target_unresolved.
+
+Implemented callable API (all validators return Result<(), ValidationError>):
+- AnalysisVersion::CURRENT and as_str() identify exactly0.2.0; core CURRENT stays0.1.
+- GeometryQuery::from_expectation(&Expectation) -> Option<GeometryQuery> copies
+  only geometry/query fields; None for a non-geometry rule. It is not validation.
+- MeasurementUnknownReason::as_str() -> &'static str and
+  MeasurementResult::unknown_reason() -> Option<MeasurementUnknownReason> preserve
+  the existing engine helper semantics.
+- validate_query(&GeometryQuery): IDs/conditions/targets/anchors/arity/kind/axes.
+- validate_evaluation_input(&EvaluationInput): its own finite/context/transform/
+  condition declarations, WITHOUT claiming missing source references resolved.
+- validate_bound_evaluation(&Snapshot, &EvaluationInput): additionally canonical
+  source validity, exact ID/revision/full-compatible Context and evidence references.
+  It does not choose transform paths, calculate results or confirm observed reality.
+
+Pending implementation signatures in this same packet, deliberately not stubs:
+AnalysisDocument::from_json(&[u8],usize) -> Result<Self,ValidationError>;
+AnalysisDocument::validate(&self) -> Result<(),ValidationError>;
+analysis::validate_measurement_case(&MeasurementCase) and
+analysis::validate_geometry_check_case(&GeometryCheckCase) -> Result<(),ValidationError>;
+analysis::json_schema() -> Result<serde_json::Value,ValidationError>;
+analysis::validate_input_document(&[u8],usize) -> Result<(),ValidationError>.
+Core may start query/result factoring against the concrete types and input validators;
+consumer result verification/CLI parsing waits for these real remaining functions.
+The source receipt records checks/identity; none of this completes L01/S01 or live QA.

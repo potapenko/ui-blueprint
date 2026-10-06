@@ -4,6 +4,7 @@
 use serde::{Deserialize, Serialize};
 use std::{fmt, str::FromStr};
 
+pub mod analysis;
 pub mod model;
 pub mod owned_size;
 pub mod validation;

@@ -28,6 +28,7 @@ macro_rules! record {
         }
     };
 }
+pub(crate) use record;
 macro_rules! vocabulary {
     ($name:ident { $($variant:ident),* $(,)? }) => {
         #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Serialize, JsonSchema)]

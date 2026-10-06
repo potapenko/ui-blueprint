@@ -39,7 +39,7 @@ impl fmt::Display for ValidationError {
 }
 impl std::error::Error for ValidationError {}
 type Result<T = ()> = std::result::Result<T, ValidationError>;
-fn require(condition: bool, error: ValidationError) -> Result {
+pub(crate) fn require(condition: bool, error: ValidationError) -> Result {
     if condition { Ok(()) } else { Err(error) }
 }
 fn unique<T: Ord>(items: impl IntoIterator<Item = T>) -> bool {
@@ -245,7 +245,10 @@ pub fn validate_observation(x: &Observation) -> Result {
     )?;
     validate_coverage(&x.coverage)
 }
-fn evidence<'a>(e: &Evidence, observations: &'a [Observation]) -> Result<&'a Observation> {
+pub(crate) fn evidence<'a>(
+    e: &Evidence,
+    observations: &'a [Observation],
+) -> Result<&'a Observation> {
     let o = observations
         .iter()
         .find(|o| o.id == e.observation_id)
@@ -294,7 +297,7 @@ pub fn validate_request(x: &Request) -> Result {
     }
 }
 
-fn validate_anchor(x: &Anchor) -> Result {
+pub(crate) fn validate_anchor(x: &Anchor) -> Result {
     require(
         x.fraction.is_finite()
             && (0.0..=1.0).contains(&x.fraction)
