@@ -31,7 +31,21 @@ protected. Exclude unrelated platform/actions/export/drawing decisions, D05 host
 implementation and live QA; no broad source survey. Original candidate c30aa20
 and review receipt are evidence inputs. Author receipts are available to builders.
 
-## Integration assignment — after current D05 decision packet is saved
+## Ownership update — 2026-10-07
+
+Integration's queued schema/fixture assignment had not started. Root explicitly
+retires that assignment and transfers its exact bounded write set below to the
+existing Core owner, alongside Core's saved manifest testcffd8d3. Integration was
+notified before dispatch and continues only D05 decision docs. No competing source
+owner or replacement implementation exists. This keeps dependency-independent
+repair moving while the concrete memory decision is prepared; semantics/acceptance
+and same independent reviewer are unchanged. Core inherits settings; no new agent.
+
+Web exclusively owns root Cargo/lock for its transport packet. Core may edit now
+but runs no dependency-resolving checks until root announces its stable manifest
+checkpoint. Do not acquire or edit Web/D07/Cargo paths as a workaround.
+
+## Canonical decoder and fixture assignment — Core owner
 
 Bounded writes: `crates/schema/src/analysis/types.rs`, narrow analysis-local decoder
 helper if genuinely needed and its module declaration; schema tests
@@ -49,7 +63,7 @@ Return an exact dependency if another protected owner is necessary.
 
 Run focused schema/validator checks, negative parity and existing analysis vectors,
 fmt/check/Clippy scoped to schema. Confirm core schema/legacy fixtures unchanged.
-Notify root/Core when fixture inputs stabilize; commit+push after root Git grant.
+Notify root when fixture inputs stabilize; commit+push after root Git grant.
 
 ## Core assignment — independent test owner, ready now
 
@@ -58,11 +72,12 @@ Bounded writes: `crates/engine/tests/analysis.rs` and
 Exercise every declared manifest engine_verification match/mismatch using the
 canonical parse/validation/verifier API; reject unsupported expectation labels
 rather than silently skipping them. Keep contract-invalid cases classified at
-their proper validation layer. No production logic, fixture or schema edits.
-The current redacted match case is known to fail until Integration supplies its
+their proper validation layer. This test slice changes no engine production logic;
+decoder/fixture edits are separately authorized in the preceding assignment.
+The current redacted match case is known to fail until its owner supplies the
 fix; establish that failure once, then reuse it without repeated unchanged runs.
 
-After saved Integration inputs, run focused engine analysis and affected validator/
+After saved decoder/fixture inputs, run focused engine analysis and affected validator/
 CLI analysis consumer checks on a frozen source set; use existing150-test evidence
 for unaffected cache/export/plugin cases. Check/fmt/Clippy only affected packages;
 no full workspace suite absent a concrete new regression. Record exact source/
@@ -71,9 +86,9 @@ to root rather than modifying expectations to become green.
 
 ## Coordination and acceptance
 
-One writable owner per path. Core may implement its test while Integration finishes
-the disjoint D05 documents; schema/fixture edits begin only after that packet's
-terminal receipt is recorded. Git lease stays short and serialized: ready → grant →
+One writable owner per path. Core owns decoder/fixture/test repair while Integration
+finishes disjoint D05 documents. The ownership update supersedes the earlier
+Integration queue. Git lease stays short and serialized: ready → grant →
 branch/index check → exact-path checkpoint → push origin master → SHA/release.
 Root records each receipt before next assignment. Both stop at finite outcomes;
 no autonomous next packet. Missing inputs use waiting_evidence with exact owner,
