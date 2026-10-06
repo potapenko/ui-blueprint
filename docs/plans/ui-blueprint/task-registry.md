@@ -82,7 +82,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Integration transient/configured-bound accounting + Native sizing active; Web D05 sample fcf48be pushed/idle; root Git lease; Native own-F02 desktop grant; five review repairs await user |
+| Активные чаты/пакеты/ресурсы | Integration transient/configured-bound accounting + Core K01-replay active; Web D05 fcf48be and Native D05 51c7809 pushed/idle; root Git lease; desktop released; five review repairs await user |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | actual Web/Native D02 + Native sizing input; Integration CLI membership для binary checks, bounded proposal canonical MeasurementResult/result-space (no shared mutation during pinned D02); D05 policy; four P2 awaiting_authority; RC05 gaps remain |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -117,7 +117,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [P1-review](packets/P1-review.md) | collaboration `/root/p1_candidate_review` | committed `61022a9..8069710`; two-stage independent review | completed; [receipt](receipts/P1-review.md); one new P2 DAG-depth exponential traversal in plugin API, no other new high-confidence findings; five total review repairs await user authority, no P1 acceptance |
 | [D05-platform-samples](packets/D05-platform-samples.md) | existing Web/Native owners, disjoint paths | D05@1; partial c6a5df6; existing collectors/proofs | running: larger actual normalized samples within Web32/depth8 and Native160/depth9; actual input-size/coverage gaps explicit, no fabricated maximum or D05 acceptance |
 | D05-Web sample | existing Web owner | `fcf48be57c31d3e3cfa48f38fa1b16d1d6af9357`, pushed | [receipt](receipts/D05-web-samples.md):32 nodes/17 relations/160 properties/96unknown,78241 exact bytes; predeclared128KiB diagnostic budget, graphdepth1; input handed to Integration, no total memory/latency acceptance |
-| [K01-replay](packets/K01-replay.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` | approved early GOLDEN01 work; saved schema/engine/oracles | ready pure atomic replay slice; no cache/eviction/production limits before D05, no protected validator fixes |
+| D05-Native sample | existing Native owner | `51c780959907dc85f6e2c5998850c25964ce7296`, pushed | [receipt](receipts/D05-native-samples.md):76nodes/75edges, incoming337500B vs retained338001B, partial; separate75-node canary check passed, difference causeunknown; no pixels, cleanup/lane release; not160/depth9 coverage |
+| [K01-replay](packets/K01-replay.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` | approved early GOLDEN01 work; saved schema/engine/oracles | running pure atomic replay slice; no cache/eviction/production limits before D05, no protected validator fixes |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
