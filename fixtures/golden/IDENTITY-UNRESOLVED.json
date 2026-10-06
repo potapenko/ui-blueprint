@@ -1,0 +1,69 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "resolution_refusal",
+    "data": {
+      "requested": {
+        "schema_version": "0.1.0",
+        "session_id": "a1",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "scope_id": "form-1",
+        "projection": "interaction",
+        "fields": [
+          "role",
+          "name",
+          "enabled",
+          "checked"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "environment_revision": "display-1"
+      },
+      "candidates": [
+        {
+          "process_id": 42,
+          "window_id": 7,
+          "title": "Example",
+          "bounds": {
+            "x": 0,
+            "y": 0,
+            "width": 100,
+            "height": 100
+          },
+          "coordinate_space": {
+            "id": "screen",
+            "kind": "screen",
+            "units": "pt",
+            "origin": "top_left"
+          },
+          "process_continuity": {
+            "availability": "unknown",
+            "reason": "unknown_incarnation"
+          },
+          "owner_binding": {
+            "availability": "unknown",
+            "reason": "no_mapping"
+          }
+        }
+      ],
+      "issue": {
+        "code": "target_unresolved",
+        "scope_id": "form-1",
+        "failed_step": "capture",
+        "recovery_class": "reobserve"
+      },
+      "dispatched": false
+    }
+  }
+}

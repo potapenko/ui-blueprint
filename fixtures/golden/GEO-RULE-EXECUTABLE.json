@@ -1,0 +1,30 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "expectation",
+    "data": {
+      "id": "geometry-check",
+      "scope_id": "form-1",
+      "targets": [
+        {
+          "namespace": "fixture.authored_layout",
+          "key": "A"
+        },
+        {
+          "namespace": "fixture.authored_layout",
+          "key": "B"
+        }
+      ],
+      "rule": {
+        "relation": "javascript",
+        "code": "return true"
+      },
+      "applies_when": {
+        "platform": null,
+        "input_mode": null,
+        "text_scale": null
+      },
+      "expected_from": "fixture_literal"
+    }
+  }
+}

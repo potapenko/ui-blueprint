@@ -1,0 +1,106 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "session_context",
+    "data": {
+      "session": {
+        "allowed_scopes": [
+          "form-1"
+        ],
+        "session_id": "a1",
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "supported_versions": [
+          "0.1.0"
+        ],
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "capabilities": [
+          {
+            "channel": "external_semantics",
+            "operation": "observe",
+            "status": "supported",
+            "reason": null
+          },
+          {
+            "channel": "rendered_capture",
+            "operation": "observe",
+            "status": "permission_required",
+            "reason": "capture_permission_absent"
+          }
+        ]
+      },
+      "request": {
+        "clock_domain": "fixture-parent-monotonic",
+        "request_id": "request-1",
+        "context": {
+          "schema_version": "0.1.0",
+          "session_id": "a1",
+          "target": {
+            "id": "native-app",
+            "generation": "g1"
+          },
+          "surfaces": [
+            {
+              "id": "window-1",
+              "generation": "w1"
+            }
+          ],
+          "scope_id": "form-1",
+          "projection": "interaction",
+          "fields": [
+            "role",
+            "name",
+            "enabled",
+            "checked"
+          ],
+          "plugin": {
+            "id": "macos",
+            "version": "0.1.0"
+          },
+          "environment_revision": "display-1"
+        },
+        "limits": {
+          "max_elements": 32,
+          "max_depth": 8,
+          "max_output_bytes": 65536,
+          "deadline_ms": 250
+        },
+        "freshness_policy": "current_required",
+        "operation": {
+          "operation": "observe",
+          "channels": [
+            "external_semantics"
+          ]
+        }
+      },
+      "backend_ref": {
+        "session_id": "a1",
+        "key": {
+          "namespace": "macos.ax",
+          "key": "check-1"
+        },
+        "snapshot_id": "S10",
+        "observation_id": "O10",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surface": {
+          "id": "window-1",
+          "generation": "w1"
+        }
+      }
+    }
+  }
+}

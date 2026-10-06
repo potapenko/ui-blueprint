@@ -1,0 +1,77 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "geometry",
+    "data": {
+      "context": {
+        "schema_version": "0.1.0",
+        "session_id": "a1",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "scope_id": "form-1",
+        "projection": "interaction",
+        "fields": [
+          "layout_bounds"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "environment_revision": "display-1"
+      },
+      "geometry": {
+        "frame_kind": "layout_bounds",
+        "coordinate_space": {
+          "id": "local-form",
+          "kind": "local",
+          "units": "em",
+          "origin": "top_left"
+        },
+        "shape": {
+          "shape": "rect",
+          "value": {
+            "x": 10,
+            "y": 20,
+            "width": 30,
+            "height": 10
+          }
+        },
+        "transform": {
+          "status": "local_only"
+        }
+      },
+      "observation": {
+        "id": "OG1",
+        "source_namespace": "fixture.authored_layout",
+        "channel": "external_semantics",
+        "start": 120,
+        "end": 130,
+        "clock_domain": "fixture-parent-monotonic",
+        "time_unit": "milliseconds",
+        "freshness_basis": "live_read",
+        "consistency_reason": null,
+        "answer_source": "live",
+        "freshness": "current",
+        "last_verified": 130,
+        "consistency": "stable",
+        "coverage": {
+          "status": "complete",
+          "scope_id": "form-1",
+          "fields": [
+            "layout_bounds"
+          ],
+          "omitted_count": 0,
+          "unknown_count": 0
+        }
+      }
+    }
+  }
+}

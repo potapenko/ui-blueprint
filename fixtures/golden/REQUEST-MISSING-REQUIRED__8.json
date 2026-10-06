@@ -1,0 +1,49 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "request",
+    "data": {
+      "clock_domain": "fixture-parent-monotonic",
+      "request_id": "request-1",
+      "context": {
+        "schema_version": "0.1.0",
+        "session_id": "a1",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "scope_id": "form-1",
+        "projection": "interaction",
+        "fields": [
+          "role",
+          "name",
+          "enabled",
+          "checked"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "environment_revision": "display-1"
+      },
+      "limits": {
+        "max_elements": 32,
+        "max_depth": 8,
+        "deadline_ms": 250
+      },
+      "freshness_policy": "current_required",
+      "operation": {
+        "operation": "observe",
+        "channels": [
+          "external_semantics"
+        ]
+      }
+    }
+  }
+}

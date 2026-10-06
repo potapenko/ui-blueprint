@@ -1,0 +1,884 @@
+[
+  {
+    "case_id": "GOLDEN01",
+    "variant": "",
+    "path": "GOLDEN01.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-READONLY",
+    "variant": "",
+    "path": "G01-READONLY.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-UNSUPPORTED",
+    "variant": "",
+    "path": "G01-UNSUPPORTED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-GENERATION",
+    "variant": "",
+    "path": "G01-GENERATION.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-TARGET_GONE",
+    "variant": "",
+    "path": "G01-TARGET_GONE.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-SAME_LABELS",
+    "variant": "",
+    "path": "G01-SAME_LABELS.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-CANCEL_AFTER_DELIVERY",
+    "variant": "",
+    "path": "G01-CANCEL_AFTER_DELIVERY.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-LOST_BASE",
+    "variant": "",
+    "path": "G01-LOST_BASE.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-SKIPPED_REVISION",
+    "variant": "",
+    "path": "G01-SKIPPED_REVISION.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-REDACTED",
+    "variant": "",
+    "path": "G01-REDACTED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-VERIFY_MISSING",
+    "variant": "",
+    "path": "G01-VERIFY_MISSING.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "G01-VERIFY_TARGET_CHANGED",
+    "variant": "",
+    "path": "G01-VERIFY_TARGET_CHANGED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-REQUEST-VALID",
+    "variant": "",
+    "path": "ENV-REQUEST-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-REQUEST-INVALID",
+    "variant": "",
+    "path": "ENV-REQUEST-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-CAPABILITY-VALID",
+    "variant": "",
+    "path": "ENV-CAPABILITY-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-CAPABILITY-INVALID",
+    "variant": "",
+    "path": "ENV-CAPABILITY-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-SESSION-VALID",
+    "variant": "",
+    "path": "ENV-SESSION-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-SESSION-INVALID",
+    "variant": "",
+    "path": "ENV-SESSION-INVALID.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-PROPERTY-VALID",
+    "variant": "",
+    "path": "ENV-PROPERTY-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-PROPERTY-INVALID",
+    "variant": "",
+    "path": "ENV-PROPERTY-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-OBSERVATION-VALID",
+    "variant": "",
+    "path": "ENV-OBSERVATION-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-OBSERVATION-INVALID",
+    "variant": "",
+    "path": "ENV-OBSERVATION-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-SNAPSHOT-VALID",
+    "variant": "",
+    "path": "ENV-SNAPSHOT-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-SNAPSHOT-INVALID",
+    "variant": "",
+    "path": "ENV-SNAPSHOT-INVALID.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-DELTA-VALID",
+    "variant": "",
+    "path": "ENV-DELTA-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-DELTA-INVALID",
+    "variant": "",
+    "path": "ENV-DELTA-INVALID.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-ACTION-VALID",
+    "variant": "",
+    "path": "ENV-ACTION-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-ACTION-INVALID",
+    "variant": "",
+    "path": "ENV-ACTION-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-TRANSITION-VALID",
+    "variant": "",
+    "path": "ENV-TRANSITION-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-TRANSITION-INVALID",
+    "variant": "",
+    "path": "ENV-TRANSITION-INVALID.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-EXPECTATION-VALID",
+    "variant": "",
+    "path": "ENV-EXPECTATION-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-EXPECTATION-INVALID",
+    "variant": "",
+    "path": "ENV-EXPECTATION-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-FINDING-VALID",
+    "variant": "",
+    "path": "ENV-FINDING-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-FINDING-INVALID",
+    "variant": "",
+    "path": "ENV-FINDING-INVALID.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "ENV-ERROR-VALID",
+    "variant": "",
+    "path": "ENV-ERROR-VALID.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ENV-ERROR-INVALID",
+    "variant": "",
+    "path": "ENV-ERROR-INVALID.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "PROP-KNOWN_EMPTY",
+    "variant": "",
+    "path": "PROP-KNOWN_EMPTY.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "PROP-UNKNOWN",
+    "variant": "",
+    "path": "PROP-UNKNOWN.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "PROP-UNSUPPORTED",
+    "variant": "",
+    "path": "PROP-UNSUPPORTED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "PROP-REDACTED",
+    "variant": "",
+    "path": "PROP-REDACTED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "PROP-UNAVAILABLE-WITH-VALUE",
+    "variant": "unknown",
+    "path": "PROP-UNAVAILABLE-WITH-VALUE__unknown.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "PROP-UNAVAILABLE-WITH-VALUE",
+    "variant": "unsupported",
+    "path": "PROP-UNAVAILABLE-WITH-VALUE__unsupported.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "PROP-UNAVAILABLE-WITH-VALUE",
+    "variant": "redacted",
+    "path": "PROP-UNAVAILABLE-WITH-VALUE__redacted.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "PROP-NOT-REQUESTED",
+    "variant": "",
+    "path": "PROP-NOT-REQUESTED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "PROP-NOT-REQUESTED-AS-AVAILABILITY",
+    "variant": "",
+    "path": "PROP-NOT-REQUESTED-AS-AVAILABILITY.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "PROP-NULL",
+    "variant": "",
+    "path": "PROP-NULL.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAP-MISSING-PROPERTY",
+    "variant": "",
+    "path": "SNAP-MISSING-PROPERTY.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-UNKNOWN-REPLACES-KNOWN",
+    "variant": "",
+    "path": "DELTA-UNKNOWN-REPLACES-KNOWN.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "DELTA-STALE-CONTAMINATION",
+    "variant": "",
+    "path": "DELTA-STALE-CONTAMINATION.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-TARGET_GENERATION",
+    "variant": "",
+    "path": "DELTA-CONTEXT-TARGET_GENERATION.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-SURFACE_GENERATION",
+    "variant": "",
+    "path": "DELTA-CONTEXT-SURFACE_GENERATION.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-SCOPE",
+    "variant": "",
+    "path": "DELTA-CONTEXT-SCOPE.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-PROJECTION",
+    "variant": "",
+    "path": "DELTA-CONTEXT-PROJECTION.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-FIELDS",
+    "variant": "",
+    "path": "DELTA-CONTEXT-FIELDS.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-SCHEMA_VERSION",
+    "variant": "",
+    "path": "DELTA-CONTEXT-SCHEMA_VERSION.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-PLUGIN_VERSION",
+    "variant": "",
+    "path": "DELTA-CONTEXT-PLUGIN_VERSION.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-BASE_REVISION",
+    "variant": "",
+    "path": "DELTA-CONTEXT-BASE_REVISION.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-CONTEXT-ENVIRONMENT",
+    "variant": "",
+    "path": "DELTA-CONTEXT-ENVIRONMENT.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-ATOMIC-RELATIONS",
+    "variant": "",
+    "path": "DELTA-ATOMIC-RELATIONS.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "DELTA-JUSTIFIED-REMOVAL",
+    "variant": "",
+    "path": "DELTA-JUSTIFIED-REMOVAL.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "COVERAGE-EMPTY",
+    "variant": "",
+    "path": "COVERAGE-EMPTY.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "COVERAGE-NOT-DELETED",
+    "variant": "node_cap",
+    "path": "COVERAGE-NOT-DELETED__node_cap.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "COVERAGE-NOT-DELETED",
+    "variant": "extraction_failed",
+    "path": "COVERAGE-NOT-DELETED__extraction_failed.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "COVERAGE-NOT-DELETED",
+    "variant": "projection",
+    "path": "COVERAGE-NOT-DELETED__projection.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "COVERAGE-NOT-DELETED",
+    "variant": "scope",
+    "path": "COVERAGE-NOT-DELETED__scope.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "COVERAGE-NOT-DELETED",
+    "variant": "virtualized",
+    "path": "COVERAGE-NOT-DELETED__virtualized.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "COVERAGE-NOT-DELETED",
+    "variant": "base_evicted",
+    "path": "COVERAGE-NOT-DELETED__base_evicted.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "OBS-INDEPENDENT-AXES",
+    "variant": "",
+    "path": "OBS-INDEPENDENT-AXES.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "OBS-TTL",
+    "variant": "",
+    "path": "OBS-TTL.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "OBS-CROSS-CLOCK",
+    "variant": "",
+    "path": "OBS-CROSS-CLOCK.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "OBS-REVERSED-INTERVAL",
+    "variant": "",
+    "path": "OBS-REVERSED-INTERVAL.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "IDENTITY-WRONG-TARGET",
+    "variant": "",
+    "path": "IDENTITY-WRONG-TARGET.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "IDENTITY-REQUERY",
+    "variant": "old_ref",
+    "path": "IDENTITY-REQUERY__old_ref.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "IDENTITY-REQUERY",
+    "variant": "new_ref",
+    "path": "IDENTITY-REQUERY__new_ref.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "IDENTITY-UNRESOLVED",
+    "variant": "",
+    "path": "IDENTITY-UNRESOLVED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GRAPH-MANY-TO-MANY",
+    "variant": "",
+    "path": "GRAPH-MANY-TO-MANY.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GRAPH-HEURISTIC-NOT-ACTION",
+    "variant": "",
+    "path": "GRAPH-HEURISTIC-NOT-ACTION.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "FORMS-SEPARATE",
+    "variant": "",
+    "path": "FORMS-SEPARATE.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "FORMS-MISSING-OFFSET-UNIT",
+    "variant": "",
+    "path": "FORMS-MISSING-OFFSET-UNIT.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "VERSION-UNKNOWN-CORE",
+    "variant": "",
+    "path": "VERSION-UNKNOWN-CORE.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "RAW-ROLES",
+    "variant": "macos.ax",
+    "path": "RAW-ROLES__macos.ax.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "RAW-ROLES",
+    "variant": "web.dom",
+    "path": "RAW-ROLES__web.dom.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "ERROR-PRIVATE-PAYLOAD",
+    "variant": "",
+    "path": "ERROR-PRIVATE-PAYLOAD.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "GEO-GAP",
+    "variant": "",
+    "path": "GEO-GAP.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-GAP-FAIL",
+    "variant": "",
+    "path": "GEO-GAP-FAIL.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-CENTERS",
+    "variant": "",
+    "path": "GEO-CENTERS.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-SIZE-RATIO",
+    "variant": "width",
+    "path": "GEO-SIZE-RATIO__width.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-SIZE-RATIO",
+    "variant": "height",
+    "path": "GEO-SIZE-RATIO__height.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-SIZE-RATIO",
+    "variant": "ratio",
+    "path": "GEO-SIZE-RATIO__ratio.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-ALIGNED",
+    "variant": "",
+    "path": "GEO-ALIGNED.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-INSIDE",
+    "variant": "",
+    "path": "GEO-INSIDE.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-INTERSECTS",
+    "variant": "",
+    "path": "GEO-INTERSECTS.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-OVERFLOW",
+    "variant": "",
+    "path": "GEO-OVERFLOW.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-EQUAL-SPACING",
+    "variant": "",
+    "path": "GEO-EQUAL-SPACING.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-BASELINE",
+    "variant": "",
+    "path": "GEO-BASELINE.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-BASELINE-UNKNOWN",
+    "variant": "",
+    "path": "GEO-BASELINE-UNKNOWN.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-TRANSFORM",
+    "variant": "",
+    "path": "GEO-TRANSFORM.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-MISSING-TRANSFORM",
+    "variant": "",
+    "path": "GEO-MISSING-TRANSFORM.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-FRAME-KIND",
+    "variant": "",
+    "path": "GEO-FRAME-KIND.json",
+    "structural_valid": true,
+    "validator_exit": 0
+  },
+  {
+    "case_id": "GEO-INVALID-UNIT",
+    "variant": "",
+    "path": "GEO-INVALID-UNIT.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "GEO-INVALID-SHAPE",
+    "variant": "",
+    "path": "GEO-INVALID-SHAPE.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "GEO-NONFINITE",
+    "variant": "",
+    "path": "GEO-NONFINITE.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "GEO-TRANSFORM-CONTEXT",
+    "variant": "",
+    "path": "GEO-TRANSFORM-CONTEXT.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "GEO-RULE-MISSING-TOLERANCE",
+    "variant": "",
+    "path": "GEO-RULE-MISSING-TOLERANCE.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "GEO-RULE-EXECUTABLE",
+    "variant": "",
+    "path": "GEO-RULE-EXECUTABLE.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "0",
+    "path": "REQUEST-MISSING-REQUIRED__0.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "1",
+    "path": "REQUEST-MISSING-REQUIRED__1.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "2",
+    "path": "REQUEST-MISSING-REQUIRED__2.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "3",
+    "path": "REQUEST-MISSING-REQUIRED__3.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "4",
+    "path": "REQUEST-MISSING-REQUIRED__4.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "5",
+    "path": "REQUEST-MISSING-REQUIRED__5.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "6",
+    "path": "REQUEST-MISSING-REQUIRED__6.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "7",
+    "path": "REQUEST-MISSING-REQUIRED__7.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "8",
+    "path": "REQUEST-MISSING-REQUIRED__8.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "REQUEST-MISSING-REQUIRED",
+    "variant": "9",
+    "path": "REQUEST-MISSING-REQUIRED__9.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "0",
+    "path": "SNAPSHOT-MISSING-CONTEXT__0.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "1",
+    "path": "SNAPSHOT-MISSING-CONTEXT__1.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "2",
+    "path": "SNAPSHOT-MISSING-CONTEXT__2.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "3",
+    "path": "SNAPSHOT-MISSING-CONTEXT__3.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "4",
+    "path": "SNAPSHOT-MISSING-CONTEXT__4.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "5",
+    "path": "SNAPSHOT-MISSING-CONTEXT__5.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "6",
+    "path": "SNAPSHOT-MISSING-CONTEXT__6.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "7",
+    "path": "SNAPSHOT-MISSING-CONTEXT__7.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "8",
+    "path": "SNAPSHOT-MISSING-CONTEXT__8.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "SNAPSHOT-MISSING-CONTEXT",
+    "variant": "9",
+    "path": "SNAPSHOT-MISSING-CONTEXT__9.json",
+    "structural_valid": false,
+    "validator_exit": 2
+  },
+  {
+    "case_id": "OBS-CROSS-CLOCK-FALSE-PROOF",
+    "variant": "",
+    "path": "OBS-CROSS-CLOCK-FALSE-PROOF.json",
+    "structural_valid": true,
+    "validator_exit": 2
+  }
+]

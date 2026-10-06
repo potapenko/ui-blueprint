@@ -1,0 +1,33 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "observation",
+    "data": {
+      "id": "O11",
+      "source_namespace": "macos.ax",
+      "channel": "external_semantics",
+      "start": 120,
+      "end": 130,
+      "clock_domain": "fixture-parent-monotonic",
+      "time_unit": "milliseconds",
+      "freshness_basis": "revalidated",
+      "consistency_reason": "source_mismatch",
+      "answer_source": "cache",
+      "freshness": "current",
+      "last_verified": 130,
+      "consistency": "unknown",
+      "coverage": {
+        "status": "partial",
+        "scope_id": "form-1",
+        "fields": [
+          "role",
+          "name",
+          "enabled",
+          "checked"
+        ],
+        "omitted_count": 0,
+        "unknown_count": 0
+      }
+    }
+  }
+}

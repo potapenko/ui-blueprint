@@ -1,0 +1,43 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "session",
+    "data": {
+      "allowed_scopes": [
+        "form-1"
+      ],
+      "session_id": "a1",
+      "plugin": {
+        "id": "macos",
+        "version": "0.1.0"
+      },
+      "supported_versions": [
+        "0.1.0"
+      ],
+      "target": {
+        "id": "native-app",
+        "generation": "g1"
+      },
+      "surfaces": [
+        {
+          "id": "window-1",
+          "generation": "w1"
+        }
+      ],
+      "capabilities": [
+        {
+          "channel": "external_semantics",
+          "operation": "observe",
+          "status": "supported",
+          "reason": null
+        },
+        {
+          "channel": "rendered_capture",
+          "operation": "observe",
+          "status": "permission_required",
+          "reason": "capture_permission_absent"
+        }
+      ]
+    }
+  }
+}

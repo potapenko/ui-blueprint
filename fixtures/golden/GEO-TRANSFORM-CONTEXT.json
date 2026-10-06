@@ -1,0 +1,115 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "geometry",
+    "data": {
+      "context": {
+        "schema_version": "0.1.0",
+        "session_id": "a1",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "scope_id": "form-1",
+        "projection": "interaction",
+        "fields": [
+          "layout_bounds"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "environment_revision": "display-2"
+      },
+      "geometry": {
+        "frame_kind": "layout_bounds",
+        "coordinate_space": {
+          "id": "window-content",
+          "kind": "local",
+          "units": "pt",
+          "origin": "top_left"
+        },
+        "shape": {
+          "shape": "rect",
+          "value": {
+            "x": 10,
+            "y": 20,
+            "width": 30,
+            "height": 10
+          }
+        },
+        "transform": {
+          "status": "known",
+          "transform": {
+            "from": {
+              "id": "window-content",
+              "kind": "local",
+              "units": "pt",
+              "origin": "top_left"
+            },
+            "to": {
+              "id": "frame",
+              "kind": "local",
+              "units": "px",
+              "origin": "top_left"
+            },
+            "affine": [
+              2,
+              0,
+              0,
+              2,
+              6,
+              8
+            ],
+            "evidence": {
+              "observation_id": "OG1",
+              "source_namespace": "fixture.authored_layout",
+              "provenance": "reported",
+              "method": "authored_fixture",
+              "uncertainty": null
+            },
+            "target": {
+              "id": "native-app",
+              "generation": "g1"
+            },
+            "surface": {
+              "id": "window-1",
+              "generation": "w1"
+            },
+            "environment_revision": "display-1"
+          }
+        }
+      },
+      "observation": {
+        "id": "OG1",
+        "source_namespace": "fixture.authored_layout",
+        "channel": "external_semantics",
+        "start": 120,
+        "end": 130,
+        "clock_domain": "fixture-parent-monotonic",
+        "time_unit": "milliseconds",
+        "freshness_basis": "live_read",
+        "consistency_reason": null,
+        "answer_source": "live",
+        "freshness": "current",
+        "last_verified": 130,
+        "consistency": "stable",
+        "coverage": {
+          "status": "complete",
+          "scope_id": "form-1",
+          "fields": [
+            "layout_bounds"
+          ],
+          "omitted_count": 0,
+          "unknown_count": 0
+        }
+      }
+    }
+  }
+}

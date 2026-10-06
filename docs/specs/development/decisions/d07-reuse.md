@@ -2,7 +2,7 @@
 
 - Domain: `uib.development.d07`; accepted/released baseline: none.
 - Authority source: [C01-DEC-001](README.md#meaning-and-precedence).
-- Node type: leaf; contract: `UIB.D07@1`; clause: `UIB.D07.CONTENT`.
+- Node type: leaf; contract: `UIB.D07@2`; clause: `UIB.D07.CONTENT`.
 - Authority: Active / Stability: Evolving; initial dependency intent, no installation.
 - Read when: T01/S01 dependency resolution or later selected code/dependency adoption.
 - Do not read when: no dependency/source transfer is proposed.
@@ -27,6 +27,19 @@ Exact initial root workspace dependencies when T01/S01 need serialization:
 | --- | --- |
 | `serde = =1.0.229`, default std, `derive` | Typed envelope serialization; registry metadata Rust minimum1.56, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde/1.0.229/serde/) |
 | `serde_json = =1.0.151`, default std only | JSON parser/writer; registry minimum1.71, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde_json/1.0.151/serde_json/) |
+| `schemars = =1.2.2`, std/derive only | S01 schema generation from canonical types; minimum1.74, MIT (Graham Esau2019) |
+| dev-only `jsonschema = =0.58.5`, default-features=false | S01 structural validation/parity; minimum1.85, MIT (Dmitry Dygalo2020–2026); HTTP/file/TLS/async resolution disabled |
+
+S01 authorized delta `S01-DEP-001`, revision2: these two dependencies prevent
+handwritten schema drift and supply an independent structural checker. Exact crate
+archives/manifests/LICENSE and schemars JsonSchema API inspected2026-10-06; no
+NOTICE in selected library archives (jsonschema includes its test-suite license).
+schemars_derive1.2.2 also MIT/minimum1.74. No source copied. Semantic reference/
+generation checks still belong to our validator. A common map-only serde visitor
+rejects nested array-shaped records without another JSON parser. jsonschema stays
+in tests, avoiding its large transitive runtime graph; generated schemas use local
+references only. Its float_roundtrip feature is test-only. No URL/file is loaded
+from input documents. Schema/parser parity is independently checked on the goldens.
 
 Crates.io version metadata checked 2026-10-06: both non-yanked stable releases.
 serde checksum `4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba`;

@@ -1,0 +1,12 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "error",
+    "data": {
+      "code": "permission_required",
+      "scope_id": "form-1",
+      "failed_step": "capture",
+      "recovery_class": "reobserve"
+    }
+  }
+}

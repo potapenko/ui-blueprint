@@ -1,0 +1,55 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "property",
+    "data": {
+      "property": {
+        "selection": "requested",
+        "field": "value",
+        "sensitivity": "public",
+        "evidence": {
+          "observation_id": "O10",
+          "source_namespace": "macos.ax",
+          "provenance": "reported",
+          "method": "authored_fixture",
+          "uncertainty": null
+        },
+        "state": {
+          "availability": "unknown",
+          "reason": "not_exposed",
+          "value": {
+            "type": "flag",
+            "value": false
+          }
+        }
+      },
+      "observation": {
+        "id": "O10",
+        "source_namespace": "macos.ax",
+        "channel": "external_semantics",
+        "start": 100,
+        "end": 110,
+        "clock_domain": "fixture-parent-monotonic",
+        "time_unit": "milliseconds",
+        "freshness_basis": "live_read",
+        "consistency_reason": null,
+        "answer_source": "live",
+        "freshness": "current",
+        "last_verified": 110,
+        "consistency": "stable",
+        "coverage": {
+          "status": "complete",
+          "scope_id": "form-1",
+          "fields": [
+            "role",
+            "name",
+            "enabled",
+            "checked"
+          ],
+          "omitted_count": 0,
+          "unknown_count": 0
+        }
+      }
+    }
+  }
+}

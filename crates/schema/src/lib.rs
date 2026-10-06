@@ -4,11 +4,22 @@
 use serde::{Deserialize, Serialize};
 use std::{fmt, str::FromStr};
 
+pub mod model;
+pub mod validation;
+
 /// A supported candidate wire version, separate from the package version.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, schemars::JsonSchema)]
 pub enum SchemaVersion {
     #[serde(rename = "0.1.0")]
     V0_1_0,
+}
+
+impl<'de> Deserialize<'de> for SchemaVersion {
+    fn deserialize<D: serde::Deserializer<'de>>(d: D) -> Result<Self, D::Error> {
+        String::deserialize(d)?
+            .parse()
+            .map_err(serde::de::Error::custom)
+    }
 }
 
 impl SchemaVersion {

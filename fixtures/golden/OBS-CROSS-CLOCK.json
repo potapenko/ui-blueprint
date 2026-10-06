@@ -1,0 +1,67 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "temporal_comparison",
+    "data": {
+      "observations": [
+        {
+          "id": "O10",
+          "source_namespace": "macos.ax",
+          "channel": "external_semantics",
+          "start": 100,
+          "end": 110,
+          "clock_domain": "helper-monotonic",
+          "time_unit": "milliseconds",
+          "freshness_basis": "live_read",
+          "consistency_reason": null,
+          "answer_source": "live",
+          "freshness": "current",
+          "last_verified": 110,
+          "consistency": "stable",
+          "coverage": {
+            "status": "complete",
+            "scope_id": "form-1",
+            "fields": [
+              "role",
+              "name",
+              "enabled",
+              "checked"
+            ],
+            "omitted_count": 0,
+            "unknown_count": 0
+          }
+        },
+        {
+          "id": "O11",
+          "source_namespace": "macos.ax",
+          "channel": "external_semantics",
+          "start": 105,
+          "end": 115,
+          "clock_domain": "parent-monotonic",
+          "time_unit": "milliseconds",
+          "freshness_basis": "live_read",
+          "consistency_reason": null,
+          "answer_source": "live",
+          "freshness": "current",
+          "last_verified": 115,
+          "consistency": "stable",
+          "coverage": {
+            "status": "complete",
+            "scope_id": "form-1",
+            "fields": [
+              "role",
+              "name",
+              "enabled",
+              "checked"
+            ],
+            "omitted_count": 0,
+            "unknown_count": 0
+          }
+        }
+      ],
+      "transform": null,
+      "overlap": null,
+      "atomic_claim": false
+    }
+  }
+}

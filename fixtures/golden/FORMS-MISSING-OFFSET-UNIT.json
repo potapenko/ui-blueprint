@@ -1,0 +1,478 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "snapshot",
+    "data": {
+      "surface_records": [],
+      "id": "S10",
+      "revision": 10,
+      "source_state": "fixture-checkpoint-10",
+      "context": {
+        "schema_version": "0.1.0",
+        "session_id": "a1",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "scope_id": "form-1",
+        "projection": "interaction",
+        "fields": [
+          "visible_text",
+          "accessibility_name",
+          "value"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "environment_revision": "display-1"
+      },
+      "observations": [
+        {
+          "id": "O10",
+          "source_namespace": "macos.ax",
+          "channel": "external_semantics",
+          "start": 100,
+          "end": 110,
+          "clock_domain": "fixture-parent-monotonic",
+          "time_unit": "milliseconds",
+          "freshness_basis": "live_read",
+          "consistency_reason": null,
+          "answer_source": "live",
+          "freshness": "current",
+          "last_verified": 110,
+          "consistency": "stable",
+          "coverage": {
+            "status": "complete",
+            "scope_id": "form-1",
+            "fields": [
+              "visible_text",
+              "accessibility_name",
+              "value"
+            ],
+            "omitted_count": 0,
+            "unknown_count": 0
+          }
+        }
+      ],
+      "nodes": [
+        {
+          "key": {
+            "namespace": "macos.ax",
+            "key": "textbox-1"
+          },
+          "surface": {
+            "id": "window-1",
+            "generation": "w1"
+          },
+          "native_role": {
+            "availability": "unsupported",
+            "reason": "not_exposed"
+          },
+          "children": [],
+          "extensions": [],
+          "source_declarations": [],
+          "properties": [
+            {
+              "selection": "requested",
+              "field": "visible_text",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "A😀B"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "accessibility_name",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "A😀B"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "value",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "A😀B"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "namespace": "macos.ax",
+            "key": "button-1"
+          },
+          "surface": {
+            "id": "window-1",
+            "generation": "w1"
+          },
+          "native_role": {
+            "availability": "unsupported",
+            "reason": "not_exposed"
+          },
+          "children": [],
+          "extensions": [],
+          "source_declarations": [],
+          "properties": [
+            {
+              "selection": "requested",
+              "field": "visible_text",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "Apply"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "accessibility_name",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "Confirm filters"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "value",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "Apply"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "namespace": "macos.ax",
+            "key": "option-1"
+          },
+          "surface": {
+            "id": "window-1",
+            "generation": "w1"
+          },
+          "native_role": {
+            "availability": "unsupported",
+            "reason": "not_exposed"
+          },
+          "children": [],
+          "extensions": [],
+          "source_declarations": [],
+          "properties": [
+            {
+              "selection": "requested",
+              "field": "visible_text",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "Option"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "accessibility_name",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "Option"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "value",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "Option"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "key": {
+            "namespace": "macos.ax",
+            "key": "draft-1"
+          },
+          "surface": {
+            "id": "window-1",
+            "generation": "w1"
+          },
+          "native_role": {
+            "availability": "unsupported",
+            "reason": "not_exposed"
+          },
+          "children": [],
+          "extensions": [
+            {
+              "namespace": "fixture.app",
+              "name": "applied_value",
+              "property": {
+                "selection": "requested",
+                "field": "value",
+                "sensitivity": "public",
+                "evidence": {
+                  "observation_id": "O10",
+                  "source_namespace": "macos.ax",
+                  "provenance": "reported",
+                  "method": "authored_fixture",
+                  "uncertainty": null
+                },
+                "state": {
+                  "availability": "unknown",
+                  "reason": "not_exposed"
+                }
+              }
+            }
+          ],
+          "source_declarations": [],
+          "properties": [
+            {
+              "selection": "requested",
+              "field": "visible_text",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "draft"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "accessibility_name",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "draft"
+                }
+              }
+            },
+            {
+              "selection": "requested",
+              "field": "value",
+              "sensitivity": "public",
+              "evidence": {
+                "observation_id": "O10",
+                "source_namespace": "macos.ax",
+                "provenance": "reported",
+                "method": "authored_fixture",
+                "uncertainty": null
+              },
+              "state": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "draft"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "relations": [],
+      "components": [],
+      "focus": {
+        "keyboard": {
+          "status": "known",
+          "target": {
+            "namespace": "macos.ax",
+            "key": "textbox-1"
+          },
+          "evidence": {
+            "observation_id": "O10",
+            "source_namespace": "macos.ax",
+            "provenance": "reported",
+            "method": "authored_fixture",
+            "uncertainty": null
+          }
+        },
+        "accessibility": {
+          "status": "known",
+          "target": {
+            "namespace": "macos.ax",
+            "key": "button-1"
+          },
+          "evidence": {
+            "observation_id": "O10",
+            "source_namespace": "macos.ax",
+            "provenance": "reported",
+            "method": "authored_fixture",
+            "uncertainty": null
+          }
+        },
+        "active_descendant": {
+          "status": "known",
+          "target": {
+            "namespace": "macos.ax",
+            "key": "option-1"
+          },
+          "evidence": {
+            "observation_id": "O10",
+            "source_namespace": "macos.ax",
+            "provenance": "reported",
+            "method": "authored_fixture",
+            "uncertainty": null
+          }
+        },
+        "text_selection": {
+          "anchor": 1,
+          "focus": 3,
+          "evidence": {
+            "observation_id": "O10",
+            "source_namespace": "macos.ax",
+            "provenance": "reported",
+            "method": "authored_fixture",
+            "uncertainty": null
+          }
+        },
+        "composition_state": {
+          "selection": "requested",
+          "field": "value",
+          "sensitivity": "public",
+          "evidence": {
+            "observation_id": "O10",
+            "source_namespace": "macos.ax",
+            "provenance": "reported",
+            "method": "authored_fixture",
+            "uncertainty": null
+          },
+          "state": {
+            "availability": "unknown",
+            "reason": "not_exposed"
+          }
+        }
+      },
+      "captures": [],
+      "coverage": {
+        "status": "complete",
+        "scope_id": "form-1",
+        "fields": [
+          "visible_text",
+          "accessibility_name",
+          "value"
+        ],
+        "omitted_count": 0,
+        "unknown_count": 0
+      }
+    }
+  }
+}

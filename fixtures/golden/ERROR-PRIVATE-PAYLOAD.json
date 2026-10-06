@@ -1,0 +1,13 @@
+{
+  "schema_version": "0.1.0",
+  "artifact": {
+    "kind": "error",
+    "data": {
+      "code": "timeout",
+      "scope_id": "form-1",
+      "failed_step": "capture",
+      "recovery_class": "reobserve",
+      "raw_backend_message": "CANARY_ORACLE_SECRET"
+    }
+  }
+}
