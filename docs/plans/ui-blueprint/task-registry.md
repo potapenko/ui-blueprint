@@ -91,7 +91,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | --- | --- |
 | Активные чаты/пакеты/ресурсы | Analysis migration saved through Corec30aa20, 281-input hash matched150-test barrier; fresh analysis reviewer active. Integration D05-runtime-decision dispatched; other owners retained idle. Desktop released; B pixels remain stopped |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | Принять affected recheck семи repairs либо вернуть точечный repair владельцу; завершить K01 store и Native capture prerequisite. D05 transient/host enforcement, D07 Web adoption/transport, canonical MeasurementResult и RC05 evidence остаются открытыми |
+| Следующий шаг | Закрыть ANALYSIS-R1/R2 через Integration/Core и same-reviewer recheck; Integration завершает D05-runtime-decision перед schema repair. Retained K01 и bounded Native prerequisite уже scoped accepted; live D05 enforcement, Web adoption/transport и RC05 остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -146,7 +146,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [L01-analysis-engine-cli](packets/L01-analysis-engine-cli.md) | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | `c30aa20091f7fc166b6ec0af63a39f74ceeecff7`, pushed | [receipt](receipts/L01-analysis-engine-cli.md): workspace check/fmt/Clippy,150tests+borrower doctest; saved281-inputhash6fe25292…47f96e matched; exact15paths saved, source frozen for independent review |
 | [E01-analysis-adaptation](packets/E01-analysis-adaptation.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | `264a838d440e687aa1eca988aeb7cd54ccc18083`, pushed | [receipt](receipts/E01-analysis.md): factual query caller replaces placeholder Expectation; saved packages unchanged,21 distinct tests/check/fmt/Clippy on recorded working provider; final saved migration proof pending |
 | ANALYSIS-FLOAT-001 | Integration same chat | saved in b68b5b7; D07@3, registry7, same serde_json1.0.151 | default production204/2054 bit failures corrected to0/2054, production22-case proof passes; same17-package versions/unchanged lock, manifest1df267dd…cc821b. No epsilon or wire promotion; independent migration review pending |
-| [L01-analysis-review](packets/L01-analysis-review.md) | fresh collaboration `/root/analysis_integration_review` | packet259f6ff; base8bb5c02 → candidatec30aa20 | running two-stage review; no author receipts supplied before first observations; no builds/runtime/mutations/external services |
+| [L01-analysis-review](packets/L01-analysis-review.md) | collaboration `/root/analysis_integration_review` | packet259f6ff; base8bb5c02 → candidatec30aa20 | completed two-stage reject; [receipt](receipts/L01-analysis-review.md), R1 array decoding and R2 redacted oracle/manifest coverage; same reviewer retained; independent281-inputhash match |
+| [L01-analysis-repair](packets/L01-analysis-repair.md) | Integration schema/fixtures; Core engine tests | Restore ANALYSIS@1, findings atc30aa20 | Core ready now with disjoint test scope; Integration queued after D05 decision docs; no authority wait, no product/spec delta |
 | [D05-runtime-decision](packets/D05-runtime-decision.md) | Integration same chat | packetc826b86; store/source audit/fidelity evidence | dispatched finite enforcement choice/ownership/failure plan; two docs only, no source/spec/Cargo mutation or new profiling |
 
 Saved integration barrier: at `9ca645a`, all211 checked inputs are committed and
