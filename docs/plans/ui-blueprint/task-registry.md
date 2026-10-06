@@ -82,7 +82,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Integration D05/canonical-result proposal active; CLI `c9555f6` + membership `5522966`, Web `91475d3`, Native `88ac606` pushed/idle; Git lease root; desktop released |
+| Активные чаты/пакеты/ресурсы | D05 partial c6a5df6 and independent review a416570 pushed; root Git lease; next Web/Native sizing-input packets + Integration transient/configured-bound work; five review repairs await user |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | actual Web/Native D02 + Native sizing input; Integration CLI membership для binary checks, bounded proposal canonical MeasurementResult/result-space (no shared mutation during pinned D02); D05 policy; four P2 awaiting_authority; RC05 gaps remain |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -115,6 +115,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [G01](packets/G01.md) | `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | package `b1475c8476bdb43880fe56162f4bb76d26958a83` + membership `84a87a66bdb206a740301d97166b957b0eed2277`, pushed | saved controlled-data candidate; preliminary check/fmt/Clippy/14 tests, saved shared hashes match checked inputs; [receipt](receipts/G01.md); multi-hop/conditions/finding consumer residual and S01/four-review gates open |
 | [L01](packets/L01.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | package `c9555f6e9d1e888231f43afdc9b16d332cb08e1b` + membership `5522966935cf878bc68fc12703400dafb15bc0a7`, pushed | check/fmt/Clippy/11binarytests on matching saved inputs; [receipt](receipts/L01.md); source frozen; full measure/conversion JSON awaits canonical result/evidence contract; not complete L01 |
 | [P1-review](packets/P1-review.md) | collaboration `/root/p1_candidate_review` | committed `61022a9..8069710`; two-stage independent review | completed; [receipt](receipts/P1-review.md); one new P2 DAG-depth exponential traversal in plugin API, no other new high-confidence findings; five total review repairs await user authority, no P1 acceptance |
+| [D05-platform-samples](packets/D05-platform-samples.md) | existing Web/Native owners, disjoint paths | D05@1; partial c6a5df6; existing collectors/proofs | ready for dispatch: larger actual normalized samples within Web32/depth8 and Native160/depth9; no fabricated maximum, no D05 acceptance |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
