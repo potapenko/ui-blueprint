@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | F02 ждёт checkpoint; F03a ready; Git lease root; native lane свободен |
+| Активные чаты/пакеты/ресурсы | F02 commit-only; F03a running; Git lease F02; native lane product advisor |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -94,9 +94,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [R02](packets/R02.md) | `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | `19cd1359ff4c239695f5da21f90d101d878c067d` | accepted diagnostic; [receipt](receipts/R02.md); full M05 proof → F02/P01 |
 | [R03](packets/R03.md) | `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | `26a19faed84b468dd21f77bf2c78516cd917d223` | accepted diagnostic; [receipt](receipts/R03.md); proposals for C01 only |
 | [F01](packets/F01.md) | Web chat R01 | `a8368076cdf0d4a917e7c3c5448ca6b6d919cf64` | accepted tooling/baseline; [receipt](receipts/F01.md); no product acceptance |
-| [F02](packets/F02.md) | Native chat R02 | current one-shot + named residuals | waiting_resource checkpoint; native lane released; [receipt](receipts/F02.md) |
+| [F02](packets/F02.md) | Native chat R02 | current one-shot + named residuals | commit-only; Git lease F02; [receipt](receipts/F02.md) |
 | F01-doc | Web chat R01 | `585bcd90ad455110bcc2432f8f36f58e3c8d7ecf` | accepted docs correction; no new measurements |
-| [F03a](packets/F03a.md) | product advisor | RC01 Settings + RC02 Genre/Director; source inventory turn `01a110da` | ready; native lane can be granted; no Git lease |
+| [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | RC01 Settings + RC02 Genre/Director; inventory `01a110da` | running; native lane granted subject to source reservation; no Git lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
