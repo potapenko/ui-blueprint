@@ -1,6 +1,6 @@
 use crate::{ExportError as E, Result, types::*, validate::public_text};
 use std::collections::BTreeMap;
-use uiblueprint_engine::{self as engine, EvaluationContext, MeasurementResult};
+use uiblueprint_engine::{self as engine, EvaluationContext, GeometryQuery, MeasurementResult};
 use uiblueprint_schema::model::*;
 
 /// Per-view aliases preserve equality without exposing process/collector identifiers.
@@ -277,25 +277,19 @@ pub(crate) fn dimensions(s: &Snapshot, aliases: &mut Aliases) -> Result<Vec<Dime
                     fraction: 0.0,
                     axis: Id(axis.into()),
                 };
-                let expectation = Expectation {
+                let query = GeometryQuery {
                     id: Id("export-dimension".into()),
                     scope_id: s.context.scope_id.clone(),
                     targets: vec![n.key.clone()],
-                    rule: Rule::Geometry {
-                        operation: op,
-                        anchors: vec![anchor],
-                        expected: 0.0,
-                        comparison: Comparison::Equal,
-                        quantity_kind: QuantityKind::Length,
-                        units: g.coordinate_space.units,
-                        tolerance: 0.0,
-                    },
+                    operation: op,
+                    anchors: vec![anchor],
+                    quantity_kind: QuantityKind::Length,
+                    units: g.coordinate_space.units,
                     applies_when: ContextConditions {
                         platform: None,
                         input_mode: None,
                         text_scale: None,
                     },
-                    expected_from: Id("export-measure-only".into()),
                 };
                 let context = EvaluationContext {
                     space: &g.coordinate_space,
@@ -303,9 +297,9 @@ pub(crate) fn dimensions(s: &Snapshot, aliases: &mut Aliases) -> Result<Vec<Dime
                     conditions: None,
                 };
                 let measured =
-                    engine::measure(s, &expectation, &context).map_err(|_| E::InvalidGeometry)?;
+                    engine::measure_query(s, &query, &context).map_err(|_| E::InvalidGeometry)?;
                 let (value, reason, evidence) = match measured {
-                    MeasurementResult::Known(m) => {
+                    MeasurementResult::Known { measurement: m } => {
                         let Value::Quantity { amount, .. } = m.value else {
                             return Err(E::InvalidGeometry);
                         };

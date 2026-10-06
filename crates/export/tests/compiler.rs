@@ -312,3 +312,65 @@ fn confirmed_flow_retains_modality_and_requires_action_and_after_evidence() {
     b.transitions[0].after = None;
     assert!(compile(&b, limits()).is_err());
 }
+
+#[test]
+fn factual_query_migration_keeps_saved_packages_structurally_unchanged() {
+    for name in ["observed", "proposed"] {
+        let package = compile(&fixture(name), limits()).expect("existing package");
+        for (file, actual) in package.files() {
+            let path = format!(
+                "{}/../../fixtures/export/{name}-package/{file}",
+                env!("CARGO_MANIFEST_DIR")
+            );
+            let expected = std::fs::read(path).expect("saved package artifact");
+            if file.ends_with(".json") {
+                let actual: serde_json::Value = serde_json::from_slice(actual).unwrap();
+                let expected: serde_json::Value = serde_json::from_slice(&expected).unwrap();
+                assert!(actual == expected, "{name}/{file}");
+            } else {
+                assert!(actual == &expected, "{name}/{file}");
+            }
+        }
+    }
+}
+
+#[test]
+fn factual_query_known_extents_keep_source_evidence_without_normative_fields() {
+    let doc = Document::from_json(
+        include_bytes!("../../../fixtures/golden/GEO-SIZE-RATIO__width.json"),
+        100_000,
+    )
+    .unwrap();
+    let Artifact::Finding(case) = doc.artifact else {
+        panic!("canonical authored fixture")
+    };
+    let mut b = fixture("observed");
+    b.views[0].source = SourceInput::Observed {
+        snapshot: Box::new(case.snapshot),
+        public_text_fields: vec![],
+    };
+    b.views[0].safe_source_reference =
+        "GEO-SIZE-RATIO authored fixture; not runtime evidence".into();
+    b.views[0].environment = "Synthetic canonical test data".into();
+    let before = serde_json::to_vec(&b).unwrap();
+    let package = compile(&b, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), before);
+    let dimensions = data(&package, "dimensions.json");
+    let first = &dimensions[0]["dimensions"][0];
+    assert_eq!(first["value"], 30.0);
+    assert_eq!(dimensions[0]["dimensions"][1]["value"], 10.0);
+    assert_eq!(first["source_kind"], "observed");
+    assert_eq!(first["units"], "css_px");
+    assert!(first["requirement_ref"].is_null());
+    assert!(first["check_tolerance"].is_null());
+    assert!(first["unknown_reason"].is_null());
+    let scene = data(&package, "scene.json");
+    assert_eq!(
+        first["evidence"],
+        serde_json::json!([scene["views"][0]["components"][0]["properties"][0]["evidence"]])
+    );
+    assert_eq!(
+        data(&package, "manifest.json")["validation_status"],
+        "unverified"
+    );
+}

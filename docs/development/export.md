@@ -30,9 +30,18 @@ records syntax, aggregate output bounds, versioned receipt and exit behavior.
 No engine/schema wire change is requested. The ordinary live observe → stored
 Snapshot ID → export path still awaits the session/storage and adapter owners;
 local brief export does not claim that end-to-end capability.
-The existing G01 `measure` API computes observed rect width/height; export adds
-only artifact-specific labels and anchors. Shared MeasurementResult/result-space
-cutover must revalidate this consumer; it is not implemented here.
+The engine's factual `measure_query(&Snapshot, &GeometryQuery,
+&EvaluationContext) -> Result<MeasurementResult, GeometryError>` API computes
+observed rect width/height. Export constructs a canonical GeometryQuery with
+scope, targets, operation, anchors, quantity kind, units and empty applicability
+conditions; it creates no placeholder Expectation, expected value, comparison,
+tolerance or normative source. The engine re-exports schema::analysis result types;
+Known carries `measurement`, Unknown retains reason and reached evidence. Export
+still adds only artifact-specific labels/anchors and safe source aliases.
+The ANALYSIS@1 migration leaves DrawingBrief/package version, complete package
+contents, source facts and independent statuses unchanged. The registered
+analysis0.2 format does not relabel embedded source0.1 data. Final migration
+acceptance depends on the saved shared schema/engine/CLI integration barrier.
 
 Run the public command on the saved examples:
 
