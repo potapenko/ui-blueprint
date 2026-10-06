@@ -6,7 +6,11 @@ const crypto=require('node:crypto');
 const {spawn}=require('node:child_process');
 const {performance}=require('node:perf_hooks');
 const {withOwnedFixture}=require('./fixture-host.cjs');
-const {connect,collect,FIELDS}=require('./collector.cjs');
+const {connect,collect,FIELDS,SIZING_IDS}=require('./collector.cjs');
+const sizing=process.argv.includes('--sizing-input');
+const scopeId=sizing?'f01-d05-form-popup':'f01-b03-selected';
+const frameBytes=sizing?131072:65536;
+const pendingBytes=sizing?262144:131072;
 const oracle=require('../../../fixtures/web/expected.json').B03;
 const hostPath=process.env.S01_WEB_HOST;
 const output=process.env.S01_WEB_PROOF_DIR;
@@ -23,8 +27,8 @@ const doc=(kind,data)=>({schema_version:'0.1.0',artifact:{kind,data}});
 const digest=value=>crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
 function makeInput(binding,cached=false){
  const sessionId=crypto.randomUUID();
- const session={allowed_scopes:['f01-b03-selected'],session_id:sessionId,plugin:{id:'web-proof',version:'0.1.0'},supported_versions:['0.1.0'],target:binding.target,surfaces:[binding.surface],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'source-specific-geometry-unknown'}]};
- const request={request_id:crypto.randomUUID(),clock_domain:`rust-parent:${crypto.randomUUID()}`,context:{schema_version:'0.1.0',session_id:sessionId,target:binding.target,surfaces:[binding.surface],scope_id:'f01-b03-selected',projection:'design',fields:[...FIELDS],plugin:session.plugin,environment_revision:'f01-800x600-dpr1'},limits:{max_elements:32,max_depth:8,max_output_bytes:65536,deadline_ms:250},freshness_policy:cached?'cached_allowed':'current_required',operation:{operation:'observe',channels:['external_semantics']}};
+ const session={allowed_scopes:[scopeId],session_id:sessionId,plugin:{id:'web-proof',version:'0.1.0'},supported_versions:['0.1.0'],target:binding.target,surfaces:[binding.surface],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'source-specific-geometry-unknown'}]};
+ const request={request_id:crypto.randomUUID(),clock_domain:`rust-parent:${crypto.randomUUID()}`,context:{schema_version:'0.1.0',session_id:sessionId,target:binding.target,surfaces:[binding.surface],scope_id:scopeId,projection:'design',fields:[...FIELDS],plugin:session.plugin,environment_revision:'f01-800x600-dpr1'},limits:{max_elements:32,max_depth:8,max_output_bytes:frameBytes,deadline_ms:250},freshness_policy:cached?'cached_allowed':'current_required',operation:{operation:'observe',channels:['external_semantics']}};
  return {session,request};
 }
 function channel(request,ticket,snapshot){
@@ -36,7 +40,7 @@ async function startHost(name,session,request,mode='complete'){
  fs.writeFileSync(path.join(dir,'session.json'),JSON.stringify(doc('session',session)));
  fs.writeFileSync(path.join(dir,'request.json'),JSON.stringify(doc('request',request)));
  const retained=path.join(dir,'retained');
- const child=spawn(hostPath,[path.join(dir,'session.json'),path.join(dir,'request.json'),'65536','131072',mode,'1000','8',retained],{stdio:['pipe','pipe','pipe']});
+ const child=spawn(hostPath,[path.join(dir,'session.json'),path.join(dir,'request.json'),String(frameBytes),String(pendingBytes),mode,'1000','8',retained],{stdio:['pipe','pipe','pipe']});
  hostChildren.add(child);const receipts=[];let buffer='',stderr='',waiter,exited=false;
  const timeout=setTimeout(()=>child.kill('SIGKILL'),4000);
  const exit=new Promise((resolve,reject)=>{
@@ -70,15 +74,16 @@ function assertOracle(result,state){
  assert.ok(s.relations.some(r=>r.kind==='anchored_to'));
 }
 async function retainedEqual(host,frame){
- const retained=JSON.parse(fs.readFileSync(path.join(host.retained,'channel-0.json')));
+ const returnedBytes=fs.readFileSync(path.join(host.retained,'channel-0.json'));
+ const retained=JSON.parse(returnedBytes);
  assert.deepEqual(retained,frame,'actual Rust Completion data preserves submitted canonical frame');
- return {submitted_sha256:digest(frame),retained_sha256:digest(retained),nodes:retained.artifact.data.result.data.nodes.length};
+ return {returned_wire_bytes:returnedBytes.length,returned_wire_sha256:crypto.createHash('sha256').update(returnedBytes).digest('hex'),submitted_sha256:digest(frame),retained_sha256:digest(retained),nodes:retained.artifact.data.result.data.nodes.length};
 }
 (async()=>{
  await withOwnedFixture(async({context,page})=>{
   ownedBrowser=context.browser();await page.locator('#open-popup').click();await page.evaluate(()=>scrollTo(0,0));
   const binding=await connect(context,page);
-  for(const state of ['popup-open','overlay-on','overlay-off']){
+  for(const state of (sizing?['overlay-on']:['popup-open','overlay-on','overlay-off'])){
    if(state==='overlay-on')await page.evaluate(()=>window.f01.operate('overlay'));
    if(state==='overlay-off')await page.evaluate(()=>window.f01.operate('removeOverlay'));
    const {session,request}=makeInput(binding);const host=await startHost(state,session,request);
@@ -88,6 +93,13 @@ async function retainedEqual(host,frame){
     assert.ok(result.snapshot.observations.every(o=>o.start>=ticket.received_node_ms),'real Ticket receipt precedes requested field collection');
     assert.ok(result.snapshot.observations.every(o=>o.clock_domain!==ticket.parent_clock_domain));
     assertOracle(result,state);
+    if(sizing){
+     assert.deepEqual(result.diagnostic.fixed_ids,SIZING_IDS);
+     assert.equal(new Set(result.snapshot.nodes.map(n=>`${n.key.namespace}:${n.key.key}`)).size,result.snapshot.nodes.length);
+     assert.ok(result.snapshot.nodes.length<=32);
+     assert.equal(result.diagnostic.dom_returned+result.diagnostic.missing_ids.length,SIZING_IDS.length);
+     assert.ok(result.snapshot.nodes.every(n=>n.properties.length===FIELDS.length));
+    }
     const frame=channel(request,ticket,result.snapshot);
     host.send(frame);const terminal=await host.next('terminal');host.end();
     const exit=await host.exit;assert.equal(exit.code,0);assert.equal(terminal.terminal,'Completed');
@@ -98,6 +110,7 @@ async function retainedEqual(host,frame){
    }catch(e){host.stop();await host.exit;throw e;}
   }
   // Recorded live data + explicitly injected lifecycle controls. No new UI reads.
+  if(!sizing){
   for(const [mode,wanted] of [['cancel-after-first','Cancelled'],['detach-after-first','Detached'],['expire-after-first','TimedOut']]){
    const {session,request}=makeInput(binding,true);const host=await startHost(mode,session,request,mode);
    try{
@@ -129,14 +142,15 @@ async function retainedEqual(host,frame){
     }
    }catch(e){host.stop();await host.exit;throw e;}
   }
+  }
   assert.ok(!binding.calls.some(x=>['DOMSnapshot.captureSnapshot','Accessibility.getFullAXTree','DOM.getDocument'].includes(x)));
   await binding.cdp.detach();
  });
  ownedBrowser=null;
  const hashes={};for(const f of ['interface-proof.cjs','collector.cjs','fixture-host.cjs'])hashes[f]=crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,f))).digest('hex');
- const report={status:'pass',kind:'D02-Web-live-common-boundary',support_commit:'73d772e97efcf550ea4a4d3e8480b56509ebc548',schema_commit:'9d2df153abd2a7d7567100e06d4260e5edda3bb3',created_utc:new Date().toISOString(),host_sha256:crypto.createHash('sha256').update(fs.readFileSync(hostPath)).digest('hex'),source_hashes:hashes,limits:{frame_bytes:65536,pending_bytes:131072,max_frames:8,request_deadline_ms:250,late_grace_ms:1000,host_process_watchdog_ms:4000,whole_run_watchdog_ms:40000},results,
-  limitations:['finite test support; no production adapter or P1 freeze','source clocks distinct from Rust parent Instant','injected lifecycle controls do not prove interruption of browser/OS syscalls','four P2 unchanged','generic common_support 3 tests/8 synthetic cases reused, not rerun','no B02/B04, real-site or polling runs']};
+ const report={status:'pass',kind:sizing?'D05-Web-actual-normalized-input':'D02-Web-live-common-boundary',support_commit:'73d772e97efcf550ea4a4d3e8480b56509ebc548',schema_commit:'9d2df153abd2a7d7567100e06d4260e5edda3bb3',created_utc:new Date().toISOString(),host_sha256:crypto.createHash('sha256').update(fs.readFileSync(hostPath)).digest('hex'),source_hashes:hashes,limits:{frame_bytes:frameBytes,pending_bytes:pendingBytes,max_frames:8,request_deadline_ms:250,late_grace_ms:1000,host_process_watchdog_ms:4000,whole_run_watchdog_ms:40000},results,sizing_scope:sizing?{id:scopeId,dom_ids:SIZING_IDS,source_node_ceiling:32,max_depth:8,fields:FIELDS,counts_from_result:true}:null,
+  limitations:['finite test support; no production adapter or P1 freeze','source clocks distinct from Rust parent Instant','injected lifecycle controls do not prove interruption of browser/OS syscalls','five protected review findings unchanged','generic common_support 3 tests/8 synthetic cases reused, not rerun','no B02/B04, real-site or polling runs']};
  fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
- console.log(JSON.stringify({status:'pass',live_cases:3,injected_cases:6,retained_equality_cases:8,common_support:report.support_commit}));
+ console.log(JSON.stringify({status:'pass',live_cases:sizing?1:3,injected_cases:sizing?0:6,retained_equality_cases:sizing?1:8,common_support:report.support_commit}));
 })().catch(e=>{console.error(`S01-Web interface proof failed: ${e.message}`);process.exitCode=1;})
 .finally(async()=>{for(const child of hostChildren)child.kill('SIGKILL');clearTimeout(watchdog);});

@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const crypto = require('node:crypto');
 const { performance } = require('node:perf_hooks');
 const IDS = Object.freeze(['open-popup', 'portal', 'close-popup', 'left', 'cover', 'clip', 'clip-child']);
+const SIZING_IDS = Object.freeze([...IDS, 'f01', 'draft', 'suggestions', 'validation', 'commit', 'applied', 'surprise', 'responsive', 'sized']);
+const SCOPES = Object.freeze({ 'f01-b03-selected': IDS, 'f01-d05-form-popup': SIZING_IDS });
 const FIELDS = Object.freeze(['role', 'accessibility_name', 'layout_bounds', 'hit_region', 'visible_region']);
 const known = (type, value) => ({ availability: 'known', value: { type, value } });
 const unknown = reason => ({ availability: 'unknown', reason });
@@ -83,11 +85,12 @@ async function collect(request, binding, remainingMs = request.limits.deadline_m
   // Parent supplies remaining budget; its clock is never read, fabricated or compared here.
   assert.deepEqual(request.context.target, binding.target, 'exact target');
   assert.deepEqual(request.context.surfaces, [binding.surface], 'exact document surface');
-  assert.equal(request.context.scope_id, 'f01-b03-selected');
+  const ids = SCOPES[request.context.scope_id];
+  assert.ok(ids, 'registered fixture scope');
   assert.equal(request.operation.operation, 'observe');
   assert.deepEqual(request.operation.channels, ['external_semantics']);
   assert.deepEqual([...request.context.fields].sort(), [...FIELDS].sort(), 'selected proof fields only');
-  if (request.limits.max_elements < IDS.length * 2 || request.limits.max_depth < 1) throw issue('incomplete_scope');
+  if (request.limits.max_elements < ids.length * 2 || request.limits.max_depth < 1) throw issue('incomplete_scope');
   const deadline = performance.now() + Math.min(remainingMs, request.limits.deadline_ms);
   const group = `s01-web:${crypto.randomUUID()}`;
   const frame = (await binding.send('Page.getFrameTree',{},deadline)).frameTree.frame;
@@ -96,7 +99,7 @@ async function collect(request, binding, remainingMs = request.limits.deadline_m
   const domStart = performance.now();
   try {
     // Fixed ID index lookups only. No textContent, descendants, selectors or full snapshot.
-    for (const id of IDS) {
+    for (const id of ids) {
       const result = await binding.send('Runtime.evaluate',{expression:`document.getElementById(${JSON.stringify(id)})`,objectGroup:group},deadline);
       if (result.result.subtype==='null') {missing.push(id);continue;}
       if (result.result.subtype!=='node') throw issue('target_unresolved');
@@ -124,7 +127,7 @@ async function collect(request, binding, remainingMs = request.limits.deadline_m
     const snapshot=normalize(request,binding,records,observations,metadata.result.value.state||null);
     if(Buffer.byteLength(JSON.stringify(snapshot))>request.limits.max_output_bytes)throw issue('incomplete_scope');
     if(performance.now()>=deadline)throw issue('timeout');
-    return {snapshot,diagnostic:{fixed_ids:IDS,missing_ids:missing,dom_returned:records.length,ax_returned:axReturned,
+    return {snapshot,diagnostic:{fixed_ids:ids,missing_ids:missing,dom_returned:records.length,ax_returned:axReturned,
       parent_tags:records.map(r=>({id:r.id,parent:r.dom.parent_tag})),anchors:records.filter(r=>r.dom.anchor).map(r=>({id:r.id,anchor:r.dom.anchor})),
       point_hit:metadata.result.value.hit,source_state:metadata.result.value.state,partial_reason:'source-specific unavailable geometry; no arbitrary visibility/occlusion'}};
   } finally {
@@ -132,4 +135,4 @@ async function collect(request, binding, remainingMs = request.limits.deadline_m
     await binding.send('Runtime.releaseObjectGroup',{objectGroup:group},performance.now()+1000);
   }
 }
-module.exports={connect,collect,IDS,FIELDS};
+module.exports={connect,collect,IDS,SIZING_IDS,FIELDS};

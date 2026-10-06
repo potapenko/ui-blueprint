@@ -183,3 +183,25 @@ or four-P2 changes. This closes the worker's finite Web proof candidate, not
 Native proof, D05 calibration, S01/P1 freeze, platform pilot or product acceptance.
 Checkpoint/push identity is returned in the terminal handoff and receipt history;
 no next production task started.
+
+## D05 larger selected-scope input
+
+The later [D05-Web receipt](../plans/ui-blueprint/receipts/D05-web-samples.md)
+records one additional explicit request using `interface-proof.cjs --sizing-input`.
+It reuses the same collector normalization and Rust host, selects 16 existing DOM
+IDs (form/popup/B03 context) and actually returns 32 distinct DOM/AX source nodes,
+17 relations and 160 requested properties. No new fixture, full-tree scan or
+fabricated nodes. Original B03 mode/scope and its frozen evidence remain available.
+
+This request predeclared 32 nodes/depth 8,128KiB response/frame,256KiB pending and
+250ms deadline before collection. The 78,241-byte exact Rust-returned canonical
+Document and adjacent request/session files are retained for owned-memory sizing;
+the receipt gives path/hash/retention. It would exceed the older narrow 64KiB
+allowance, so it is explicitly a wider diagnostic sizing envelope, not a silent
+product-limit increase. No post-failure budget change occurred.
+
+The selected node ceiling is reached; coverage remains partial with 96 unknown
+properties and a flat normalized children graph. This is not worst permitted
+string/depth/graph-sharing or transient/process-memory evidence, nor a D05 policy.
+Only this affected sizing request and scope checks ran; no previous suites or
+historical polling experiments were repeated.
