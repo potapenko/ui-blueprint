@@ -100,8 +100,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
 | [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
 | [F03b](packets/F03b.md) | product advisor | RC03 real resize; point-sizing@1 | running; native lane subject to source reservation; no Git lease |
-| [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | ready; native proof waits for lane; no Git lease |
-| [S01-oracles](packets/S01-oracles.md) | new independent author | C01/GOLDEN semantic inputs and expected outcomes | ready; disjoint oracle files; no Git/runtime lease |
+| [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | running; native proof waits for lane; no Git lease |
+| [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | C01/GOLDEN semantic inputs and expected outcomes | running; disjoint oracle files; no Git/runtime lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
