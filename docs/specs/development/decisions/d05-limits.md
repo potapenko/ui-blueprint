@@ -61,3 +61,19 @@ calibrate zoom/frame/scroll mappings; frame dimensions alone cannot prove mappin
 Each unresolved item needs named evidence/parameters before its test, not larger
 tolerance or a timeout chosen after a failing product result. Existing positive
 pilots and privacy requirements remain unchanged.
+
+## S01 measurement status — policy unchanged
+
+[Owned-model sizing](../../../../tests/bridges/resources/README.md) now measures
+canonical P1 records and actual returned narrow Web/Native D02 samples. It counts
+inline/owned container capacities, not JSON bytes or another process's RSS.
+Largest observed P1 Snapshot:8,731 bytes; Web B03 Snapshot:46,184 bytes; selected
+one-node Native AX Snapshot:6,694 bytes, capture metadata:5,768 bytes. Scope and
+allocator/parser/pixel exclusions are explicit in the report. These are not
+largest-platform/worst-permitted or total-process measurements.
+No numeric production caps selected or implemented; D05-RES remains open pending
+the named largest-example and working-memory evidence. This evidence/status
+addition does not change CONTENT policy or advance its semantic revision.
+Independent P1-R1 additionally identifies unbounded path expansion in the current
+plugin depth check. It remains awaiting repair authority; small memory samples do
+not close bounded-work/deadline acceptance or justify reducing limits to hide it.

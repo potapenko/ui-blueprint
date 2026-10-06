@@ -89,3 +89,38 @@ kind agreement, complete delta/source equivalence and fresh resolution evidence.
 They prevent treating Stage A as accepted/frozen despite the covered tests passing.
 D02 actual two-platform wire proof and D05 calibrated frame/retention/admission/
 memory policy are unfinished. No native proof or other runtime was launched here.
+
+## L01 consumer proposal — not implemented or authorized cutover
+
+L01 currently reports consumer_contract_gap/5 for standalone measure JSON and
+conversion/check contexts the wire cannot represent. Existing G01 Measurement
+contains quantity, result Space, Scalar/Insets/Intersection/Gaps details and every
+contributing Evidence; unknown results retain a typed reason/evidence. Finding
+holds only one Observation, and FindingCase has no selected result space.
+
+Minimal proposed shared delta: one canonical MeasurementResult/validation bundle,
+with known quantity/result-space/typed details/all evidence or unknown reason/no
+value. Relation inputs should use the existing geometry operation/anchor/unit/
+quantity-kind vocabulary without fabricating expected values or tolerances. A
+measurement record has no pass/fail or implicit normative expectation. G01 keeps
+the arithmetic; no CLI-private DTO or second implementation.
+
+A shared evaluation-context record would carry selected result space, sourced
+additional transforms and optional observed conditions with evidence. Extend the
+check validation bundle to carry that same context and full measurement provenance;
+keep its actual Expectation and Finding separate. Require all evidence references,
+target/surface/environment binding, finite quantities and unit/space consistency.
+Never mutate Snapshot facts to force the old Finding validator to accept conversion.
+
+This needs a coordinated schema/engine/CLI packet after pinned D02 consumers are
+released. Because current0.1 readers reject new core members/artifacts, recommend
+a new candidate minor version with explicit compatibility/migration tests rather
+than silently broadening0.1. Preserve historical evidence and revalidate affected
+goldens, generated schema, D02 bindings and memory sizing at that cutover.
+
+Space/path and frame validation intersect protected P2#1/#2; repairing existing
+behavior requires the pending user authority. Delta/source equivalence P2#3 and
+action-resolution freshness P2#4 are separate, not implicitly authorized by this
+proposal. Root must pin the exact compatibility delta and review/consumer boundary
+before implementation. The proposal does not close L01/S01 or choose new product
+meaning; it represents already-required measurement facts and provenance.
