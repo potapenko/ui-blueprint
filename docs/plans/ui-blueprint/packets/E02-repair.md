@@ -1,5 +1,17 @@
 # E02 proposal geometry repair
 
+## Current affected follow-up
+
+At saved9ca645a the same reviewer closed original R1/R2, but found E02-R3 in
+[recheck receipt](../receipts/E02-recheck.md): finite cancellation can accept0/2
+when the true distance is1. Repair this concrete regression within the same paths,
+contracts and authority below. Add independent positive1/negative0,2 library and
+actual-CLI regression; cover the corresponding axes/origins as applicable. Preserve
+previous fractional/large-coordinate/unknown/overflow and true-mismatch behavior.
+Choose the narrow reliable arithmetic correction, not a broader epsilon or UI
+tolerance. Update E02-repair receipt with this second coherent checkpoint and its
+focused proof. Same reviewer rechecks; no new general audit or optional hardening.
+
 - Class: shipping_product; existing Export owner, inherit model/reasoning.
 - Authority: approved PLAN.UIB@1 plus user's clarification «Какой ответ от меня
   нужен? Уже всё же обсудили уже.» Root removed the mistaken implementation wait;
