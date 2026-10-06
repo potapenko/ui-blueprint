@@ -82,9 +82,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Integration shared D02 support + G01 geometry active; Web `7813cd7` and Native `3bdf34d` collector checkpoints pushed, both waiting committed support; Git lease root; desktop released; advisors idle/reusable |
+| Активные чаты/пакеты/ресурсы | Integration D02 support active; G01 package `b1475c8` + membership `84a87a6` pushed; root Git lease for L01 handoff; Core moves to L01, Web/Native wait committed support; desktop free |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | Integration: minimal D02 support + bounded root Cargo membership for existing G01 package; затем common live D02 и engine checks; D05 sizing uses available Web samples, Native pending; four P2 awaiting_authority; RC05 gaps remain |
+| Следующий шаг | сохранить D02 support и возобновить оба platform proof; L01 local CLI на сохранённом engine; D05 uses Web samples, Native pending; four P2 awaiting_authority and G01 consumer residual open; RC05 gaps remain |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -112,7 +112,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | Web-test-advice | `01a1102f-e21d-7251-9597-c29a1c66d088` / local | direct user request; existing Web coauthor context | completed read-only; [handoff](receipts/platform-test-advice.md); F01/B03 reuse sent to Web owner; reusable advisor retained |
 | [S01-Web](packets/S01-web-proof.md) | `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | [shared handoff](packets/S01-bridges.md), F01 + Stage A `9d2df15`; prep `6029c7d`, collector `7813cd76b301aa0002b05818f42363d5d2df18a1` pushed | author45 checks/six file-validator documents; [receipt](receipts/S01-web-proof.md) names normalized D05 samples; full D02 waiting committed reusable support; idle, no runtime held |
 | [S01-Native](packets/S01-native-proof.md) | `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | [shared handoff](packets/S01-bridges.md), F02 + Stage A `9d2df15`; prep `27c413f`, WIP collector `3bdf34d48bd888c91e564ee82db8dda5143b48b1` pushed | compile proof only, no runtime/common lifecycle acceptance; [receipt](receipts/S01-native-proof.md); actual Session→Ticket→channel consumer contract returned; waiting committed support, native lane released |
-| [G01](packets/G01.md) | `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | Stage A `9d2df15` + R03; approved plan permits early controlled-data implementation | formulas/tests written, compile/test waiting Integration root Cargo membership; source/docs continue; coordinate saved engine+membership before acceptance; no runtime/Git lease; S01/four-review gates stay open |
+| [G01](packets/G01.md) | `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | package `b1475c8476bdb43880fe56162f4bb76d26958a83` + membership `84a87a66bdb206a740301d97166b957b0eed2277`, pushed | saved controlled-data candidate; preliminary check/fmt/Clippy/14 tests, saved shared hashes match checked inputs; [receipt](receipts/G01.md); multi-hop/conditions/finding consumer residual and S01/four-review gates open |
+| [L01](packets/L01.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | CLI@1 + G01 on `84a87a6`; early controlled-data clause | ready for dispatch: crates/cli only + own doc/receipt; root Cargo/lock Integration; no engine/schema edits or runtime/Git grant |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.

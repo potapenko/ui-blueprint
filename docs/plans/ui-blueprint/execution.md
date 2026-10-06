@@ -60,8 +60,9 @@ Cargo/schema/CLI/integration — отдельный Integration worker. Глоб
 
 - Все работают в текущей `master`. Другие ветки/worktrees требуют отдельного запроса.
 - Один писатель на файл; отдельные модули одного crate допустимы при disjoint files.
-- Integration worker владеет root Cargo.toml/lockfile, schema/plugin API и CLI
-  wiring; root — реестром/пакетами. Продуктовую документацию пишет назначенный worker.
+- Integration worker владеет root Cargo.toml/lockfile и schema/plugin API;
+  CLI получает отдельного назначенного L01 владельца, engine — Core. Root владеет
+  реестром/пакетами. Продуктовую документацию пишет назначенный worker.
 - Web/Native/Core/Export получают только нужные paths и symbols. `lib.rs`, общий
   manifest и shared fixtures не редактируются двумя владельцами одновременно.
 - Workspace mutation и lockfile updates сериализуются. Cargo используют --locked;
