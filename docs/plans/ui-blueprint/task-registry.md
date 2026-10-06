@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | C01 commit-only; F03a reference pack accepted; Git lease C01; runtime lanes свободны |
+| Активные чаты/пакеты/ресурсы | T01 running; Git lease root; runtime lanes свободны |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -97,8 +97,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [F02](packets/F02.md) | Native chat R02 | `9a88b12b5855bac54bf04ba7b64d233df719ddec` | accepted supporting fixture; current proof limits in [receipt](receipts/F02.md); M/P01 gates open |
 | F01-doc | Web chat R01 | `585bcd90ad455110bcc2432f8f36f58e3c8d7ecf` | accepted docs correction; no new measurements |
 | [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | `5d1e0a53670fb8bfbd0c3982db5e164f4bf9bb6d` | accepted reference data; [receipt](receipts/F03a.md); agent/collector proof pending |
-| [C01](packets/C01.md) | Core chat R03, Integration role | D01–D07 candidate, 13 docs | commit-only; Git lease C01; [receipt](receipts/C01.md) |
-| [T01](packets/T01.md) | Integration role | C01 checkpoint/acceptance | queued; first schema-version Rust owner |
+| [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
+| [T01](packets/T01.md) | Core chat R03, Integration role | C01@42d2e6b; D01–D07@1/DEV.RUST@2 | running; first schema-version Rust owner; no Git/runtime lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
