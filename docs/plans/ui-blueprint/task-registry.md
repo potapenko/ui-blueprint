@@ -21,7 +21,7 @@
 | R03 / P0 | D / Core | C00 | Семантика update/geometry/projections; source records; вход D03 и G01/K01 |
 | F01 / P0 | T / Web | R01 | Контролируемый Web fixture B01–B06 с независимыми expectations; baseline D05/D06 |
 | F02 / P0 | T / Native | R02 | Mac fixture M01–M06, измеримый merged control и probe off/on режим; baseline D05/D06 |
-| C01 / P0 | C / root | R01,R02,R03,F01,F02 | Решения D01–D07 по срокам ТЗ, toolchain/MSRV/edition, support matrix и начальные frozen gates; вход P1/P2 |
+| C01 / P0 | C / Integration | R01,R02,R03,F01,F02 | Решения D01–D07 по срокам ТЗ, toolchain/MSRV/edition, support matrix и начальные frozen gates; вход P1/P2; root принимает receipt |
 | T01 / P1 | T / Integration | C01 | Минимальная Cargo-сборка нужных owners, lockfile, выбранные host/feature проверки; вход первого исполнимого результата |
 | S01 / P1 | S / Integration | T01 | Schema/plugin-api candidate, parser/serializer, validator и GOLDEN01 с valid/invalid envelopes; вход всех модулей |
 | G01 / P1 | S / Core | S01,R03 | Типизированные пространства, transforms и geometry checks pass/fail/unknown; детерминированные fixtures |
@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | --- | --- |
 | Активные чаты/пакеты/ресурсы | F01/F02 running; Git lease root; native desktop/focus lane только F02 |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | принимать source/prototype receipts; выдавать один Git grant; далее F01/F02 и C01 |
+| Следующий шаг | принять F01/F02 через Git очередь; затем [C01](packets/C01.md) Integration worker |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
