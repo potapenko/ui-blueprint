@@ -1,0 +1,600 @@
+{
+  "oracle_format": "uib-semantic-oracle/1 (source mapping)",
+  "authority": {
+    "packet": "docs/plans/ui-blueprint/packets/S01-oracles.md",
+    "approved_plan": "PLAN.UIB@1",
+    "original_plan_commit": "358c757e7eab84a3989d150dbad57924d866601a",
+    "approval_record": "docs/plans/ui-blueprint/task-registry.md",
+    "C01": "42d2e6b059c5822476a39a59ac89a8a5c223db3a",
+    "T01": "28a08d34e66687cb5668608fe7ddd3429aa9807b",
+    "wire_candidate": "0.1.0"
+  },
+  "traversal": "AGENTS -> docs/specs/README -> decisions/README -> handoff,D03,D04,D05; product/README and acceptance/README -> GOLDEN -> complete explicit dependency closure. Array below enumerates read nodes; dependency cycles deduplicated.",
+  "selected_nodes": [
+    {
+      "path": "docs/specs/README.md",
+      "contract": "UIB.ROUTING@1",
+      "bytes": 4918,
+      "role": "routing"
+    },
+    {
+      "path": "docs/specs/development/decisions/README.md",
+      "contract": "UIB.DECISIONS@1",
+      "bytes": 4950,
+      "role": "routing"
+    },
+    {
+      "path": "docs/specs/acceptance/README.md",
+      "contract": "UIB.ACCEPTANCE-ROUTES@1",
+      "bytes": 1753,
+      "role": "routing"
+    },
+    {
+      "path": "docs/specs/product/README.md",
+      "contract": "UIB.PRODUCT-ROUTES@1",
+      "bytes": 5129,
+      "role": "routing"
+    },
+    {
+      "path": "docs/specs/development/decisions/handoff.md",
+      "contract": "UIB.C01-HANDOFF@1",
+      "bytes": 5542,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d03-data.md",
+      "contract": "UIB.D03@1",
+      "bytes": 6344,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d04-identity.md",
+      "contract": "UIB.D04@1",
+      "bytes": 3915,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d05-limits.md",
+      "contract": "UIB.D05@1",
+      "bytes": 5061,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/evidence.md",
+      "contract": "UIB.C01-EVIDENCE@1",
+      "bytes": 6447,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d01-support.md",
+      "contract": "UIB.D01@1",
+      "bytes": 4192,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d02-boundaries.md",
+      "contract": "UIB.D02@1",
+      "bytes": 4850,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d06-performance.md",
+      "contract": "UIB.D06@1",
+      "bytes": 5968,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/decisions/d07-reuse.md",
+      "contract": "UIB.D07@2",
+      "bytes": 5591,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/model.md",
+      "contract": "UIB.MODEL@1",
+      "bytes": 5824,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/exchange.md",
+      "contract": "UIB.EXCHANGE@1",
+      "bytes": 7211,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/identity.md",
+      "contract": "UIB.IDENTITY@1",
+      "bytes": 3359,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/geometry.md",
+      "contract": "UIB.GEOMETRY@1",
+      "bytes": 7026,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/projections.md",
+      "contract": "UIB.PROJECTIONS@1",
+      "bytes": 4516,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/forms.md",
+      "contract": "UIB.FORMS@1",
+      "bytes": 3764,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/cache.md",
+      "contract": "UIB.CACHE@1",
+      "bytes": 6153,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/actions.md",
+      "contract": "UIB.ACTIONS@1",
+      "bytes": 5188,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/lifecycle.md",
+      "contract": "UIB.LIFECYCLE@1",
+      "bytes": 3419,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/native.md",
+      "contract": "UIB.NATIVE@1",
+      "bytes": 9729,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/privacy.md",
+      "contract": "UIB.PRIVACY@1",
+      "bytes": 6029,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/boundaries.md",
+      "contract": "UIB.BOUNDARIES@1",
+      "bytes": 10957,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/roadmap.md",
+      "contract": "UIB.ROADMAP@1",
+      "bytes": 14417,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/product/rust-boundaries.md",
+      "contract": "UIB.RUST-BOUNDARIES@1",
+      "bytes": 4490,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/acceptance/golden.md",
+      "contract": "UIB.GOLDEN@1",
+      "bytes": 4534,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/acceptance/performance.md",
+      "contract": "UIB.PERFORMANCE@1",
+      "bytes": 3819,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/acceptance/pilots.md",
+      "contract": "UIB.PILOTS@1",
+      "bytes": 2392,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/reference/reuse.md",
+      "contract": "UIB.REUSE@1",
+      "bytes": 9216,
+      "role": "required contract closure"
+    },
+    {
+      "path": "docs/specs/development/rust.md",
+      "contract": "DEV.RUST@2",
+      "bytes": 4872,
+      "role": "required contract closure"
+    }
+  ],
+  "resolved_spec_bytes": 181575,
+  "supporting_reads": [
+    "AGENTS.md",
+    "RUST.md",
+    "docs/plans/ui-blueprint-development.md",
+    "docs/plans/ui-blueprint/execution.md",
+    "docs/plans/ui-blueprint/task-registry.md",
+    "docs/plans/ui-blueprint/packets/S01-oracles.md"
+  ],
+  "excluded": "Implementation/tests, actual wire fixtures/golden, real-case answer keys, external source audits, full export/drawing closure, platform-specific pilots, runtime/native/browser work, mobile and future phases. Handoff toolchain/engineering dependency leaves read only for closure; no Rust work.",
+  "clause_coverage": {
+    "UIB.ACTIONS.CONTENT": {
+      "contract": "UIB.ACTIONS@1",
+      "path": "docs/specs/product/actions.md",
+      "cases": [
+        "GOLDEN01",
+        "G01-READONLY",
+        "G01-UNSUPPORTED",
+        "G01-GENERATION",
+        "G01-TARGET_GONE",
+        "G01-SAME_LABELS",
+        "G01-CANCEL_AFTER_DELIVERY",
+        "G01-LOST_BASE",
+        "G01-SKIPPED_REVISION",
+        "G01-REDACTED",
+        "G01-VERIFY_MISSING",
+        "G01-VERIFY_TARGET_CHANGED",
+        "ENV-ACTION-VALID",
+        "ENV-ACTION-INVALID",
+        "ENV-TRANSITION-VALID",
+        "ENV-TRANSITION-INVALID",
+        "ENV-ERROR-VALID",
+        "ENV-ERROR-INVALID"
+      ]
+    },
+    "UIB.BOUNDARIES.CONTENT": {
+      "contract": "UIB.BOUNDARIES@1",
+      "path": "docs/specs/product/boundaries.md",
+      "cases": [
+        "ENV-CAPABILITY-VALID",
+        "ENV-CAPABILITY-INVALID"
+      ]
+    },
+    "UIB.CACHE.CONTENT": {
+      "contract": "UIB.CACHE@1",
+      "path": "docs/specs/product/cache.md",
+      "cases": [
+        "GOLDEN01",
+        "G01-READONLY",
+        "G01-UNSUPPORTED",
+        "G01-GENERATION",
+        "G01-TARGET_GONE",
+        "G01-SAME_LABELS",
+        "G01-CANCEL_AFTER_DELIVERY",
+        "G01-LOST_BASE",
+        "G01-SKIPPED_REVISION",
+        "G01-REDACTED",
+        "G01-VERIFY_MISSING",
+        "G01-VERIFY_TARGET_CHANGED",
+        "ENV-DELTA-VALID",
+        "ENV-DELTA-INVALID",
+        "PROP-NOT-REQUESTED",
+        "SNAP-MISSING-PROPERTY",
+        "DELTA-UNKNOWN-REPLACES-KNOWN",
+        "DELTA-STALE-CONTAMINATION",
+        "DELTA-CONTEXT-TARGET_GENERATION",
+        "DELTA-CONTEXT-SURFACE_GENERATION",
+        "DELTA-CONTEXT-SCOPE",
+        "DELTA-CONTEXT-PROJECTION",
+        "DELTA-CONTEXT-FIELDS",
+        "DELTA-CONTEXT-SCHEMA_VERSION",
+        "DELTA-CONTEXT-PLUGIN_VERSION",
+        "DELTA-CONTEXT-BASE_REVISION",
+        "DELTA-CONTEXT-ENVIRONMENT",
+        "DELTA-ATOMIC-RELATIONS",
+        "DELTA-JUSTIFIED-REMOVAL",
+        "COVERAGE-NOT-DELETED",
+        "OBS-TTL",
+        "SNAPSHOT-MISSING-CONTEXT"
+      ]
+    },
+    "UIB.D02.CONTENT": {
+      "contract": "UIB.D02@1",
+      "path": "docs/specs/development/decisions/d02-boundaries.md",
+      "cases": [
+        "OBS-CROSS-CLOCK"
+      ]
+    },
+    "UIB.D03.CONTENT": {
+      "contract": "UIB.D03@1",
+      "path": "docs/specs/development/decisions/d03-data.md",
+      "cases": [
+        "GOLDEN01",
+        "G01-READONLY",
+        "G01-UNSUPPORTED",
+        "G01-GENERATION",
+        "G01-TARGET_GONE",
+        "G01-SAME_LABELS",
+        "G01-CANCEL_AFTER_DELIVERY",
+        "G01-LOST_BASE",
+        "G01-SKIPPED_REVISION",
+        "G01-REDACTED",
+        "G01-VERIFY_MISSING",
+        "G01-VERIFY_TARGET_CHANGED",
+        "ENV-CAPABILITY-VALID",
+        "ENV-CAPABILITY-INVALID",
+        "ENV-SESSION-VALID",
+        "ENV-SESSION-INVALID",
+        "ENV-PROPERTY-VALID",
+        "ENV-PROPERTY-INVALID",
+        "ENV-OBSERVATION-VALID",
+        "ENV-OBSERVATION-INVALID",
+        "ENV-SNAPSHOT-VALID",
+        "ENV-SNAPSHOT-INVALID",
+        "ENV-DELTA-VALID",
+        "ENV-DELTA-INVALID",
+        "ENV-ACTION-VALID",
+        "ENV-ACTION-INVALID",
+        "ENV-TRANSITION-VALID",
+        "ENV-TRANSITION-INVALID",
+        "ENV-EXPECTATION-VALID",
+        "ENV-EXPECTATION-INVALID",
+        "ENV-FINDING-VALID",
+        "ENV-FINDING-INVALID",
+        "ENV-ERROR-VALID",
+        "ENV-ERROR-INVALID",
+        "PROP-KNOWN_EMPTY",
+        "PROP-UNKNOWN",
+        "PROP-UNSUPPORTED",
+        "PROP-REDACTED",
+        "PROP-UNAVAILABLE-WITH-VALUE",
+        "PROP-NOT-REQUESTED",
+        "PROP-NOT-REQUESTED-AS-AVAILABILITY",
+        "PROP-NULL",
+        "SNAP-MISSING-PROPERTY",
+        "DELTA-UNKNOWN-REPLACES-KNOWN",
+        "DELTA-STALE-CONTAMINATION",
+        "DELTA-CONTEXT-TARGET_GENERATION",
+        "DELTA-CONTEXT-SURFACE_GENERATION",
+        "DELTA-CONTEXT-SCOPE",
+        "DELTA-CONTEXT-PROJECTION",
+        "DELTA-CONTEXT-FIELDS",
+        "DELTA-CONTEXT-SCHEMA_VERSION",
+        "DELTA-CONTEXT-PLUGIN_VERSION",
+        "DELTA-CONTEXT-BASE_REVISION",
+        "DELTA-CONTEXT-ENVIRONMENT",
+        "DELTA-ATOMIC-RELATIONS",
+        "DELTA-JUSTIFIED-REMOVAL",
+        "COVERAGE-EMPTY",
+        "COVERAGE-NOT-DELETED",
+        "OBS-CROSS-CLOCK",
+        "OBS-REVERSED-INTERVAL",
+        "GRAPH-MANY-TO-MANY",
+        "GRAPH-HEURISTIC-NOT-ACTION",
+        "FORMS-SEPARATE",
+        "FORMS-MISSING-OFFSET-UNIT",
+        "VERSION-UNKNOWN-CORE",
+        "RAW-ROLES",
+        "ERROR-PRIVATE-PAYLOAD",
+        "GEO-GAP",
+        "GEO-GAP-FAIL",
+        "GEO-CENTERS",
+        "GEO-SIZE-RATIO",
+        "GEO-ALIGNED",
+        "GEO-INSIDE",
+        "GEO-INTERSECTS",
+        "GEO-OVERFLOW",
+        "GEO-EQUAL-SPACING",
+        "GEO-BASELINE",
+        "GEO-BASELINE-UNKNOWN",
+        "GEO-TRANSFORM",
+        "GEO-MISSING-TRANSFORM",
+        "GEO-FRAME-KIND",
+        "GEO-INVALID-UNIT",
+        "GEO-INVALID-SHAPE",
+        "GEO-NONFINITE",
+        "GEO-TRANSFORM-CONTEXT",
+        "GEO-RULE-MISSING-TOLERANCE",
+        "GEO-RULE-EXECUTABLE",
+        "REQUEST-MISSING-REQUIRED",
+        "SNAPSHOT-MISSING-CONTEXT",
+        "OBS-CROSS-CLOCK-FALSE-PROOF"
+      ]
+    },
+    "UIB.D04.CONTENT": {
+      "contract": "UIB.D04@1",
+      "path": "docs/specs/development/decisions/d04-identity.md",
+      "cases": [
+        "G01-READONLY",
+        "G01-UNSUPPORTED",
+        "G01-GENERATION",
+        "G01-TARGET_GONE",
+        "G01-SAME_LABELS",
+        "G01-CANCEL_AFTER_DELIVERY",
+        "G01-LOST_BASE",
+        "G01-SKIPPED_REVISION",
+        "G01-REDACTED",
+        "G01-VERIFY_MISSING",
+        "G01-VERIFY_TARGET_CHANGED",
+        "COVERAGE-NOT-DELETED",
+        "OBS-INDEPENDENT-AXES",
+        "OBS-TTL",
+        "IDENTITY-WRONG-TARGET",
+        "IDENTITY-REQUERY",
+        "IDENTITY-UNRESOLVED",
+        "GRAPH-HEURISTIC-NOT-ACTION"
+      ]
+    },
+    "UIB.D05.CONTENT": {
+      "contract": "UIB.D05@1",
+      "path": "docs/specs/development/decisions/d05-limits.md",
+      "cases": [
+        "ENV-REQUEST-VALID",
+        "ENV-REQUEST-INVALID",
+        "ENV-EXPECTATION-VALID",
+        "ENV-EXPECTATION-INVALID",
+        "GEO-GAP",
+        "GEO-GAP-FAIL",
+        "GEO-CENTERS",
+        "GEO-SIZE-RATIO",
+        "GEO-ALIGNED",
+        "GEO-INSIDE",
+        "GEO-INTERSECTS",
+        "GEO-OVERFLOW",
+        "GEO-EQUAL-SPACING",
+        "GEO-BASELINE",
+        "GEO-BASELINE-UNKNOWN",
+        "GEO-TRANSFORM",
+        "GEO-MISSING-TRANSFORM",
+        "GEO-FRAME-KIND",
+        "GEO-INVALID-UNIT",
+        "GEO-INVALID-SHAPE",
+        "GEO-NONFINITE",
+        "GEO-TRANSFORM-CONTEXT",
+        "GEO-RULE-MISSING-TOLERANCE",
+        "GEO-RULE-EXECUTABLE",
+        "REQUEST-MISSING-REQUIRED"
+      ]
+    },
+    "UIB.EXCHANGE.CONTENT": {
+      "contract": "UIB.EXCHANGE@1",
+      "path": "docs/specs/product/exchange.md",
+      "cases": [
+        "ENV-REQUEST-VALID",
+        "ENV-REQUEST-INVALID",
+        "ENV-SESSION-VALID",
+        "ENV-SESSION-INVALID",
+        "ENV-PROPERTY-VALID",
+        "ENV-PROPERTY-INVALID",
+        "ENV-OBSERVATION-VALID",
+        "ENV-OBSERVATION-INVALID",
+        "ENV-ACTION-VALID",
+        "ENV-ACTION-INVALID",
+        "ENV-TRANSITION-VALID",
+        "ENV-TRANSITION-INVALID",
+        "ENV-ERROR-VALID",
+        "ENV-ERROR-INVALID",
+        "PROP-KNOWN_EMPTY",
+        "PROP-UNKNOWN",
+        "PROP-UNSUPPORTED",
+        "PROP-REDACTED",
+        "PROP-UNAVAILABLE-WITH-VALUE",
+        "PROP-NOT-REQUESTED",
+        "PROP-NOT-REQUESTED-AS-AVAILABILITY",
+        "PROP-NULL",
+        "DELTA-CONTEXT-TARGET_GENERATION",
+        "DELTA-CONTEXT-SURFACE_GENERATION",
+        "DELTA-CONTEXT-SCOPE",
+        "DELTA-CONTEXT-PROJECTION",
+        "DELTA-CONTEXT-FIELDS",
+        "DELTA-CONTEXT-SCHEMA_VERSION",
+        "DELTA-CONTEXT-PLUGIN_VERSION",
+        "DELTA-CONTEXT-BASE_REVISION",
+        "DELTA-CONTEXT-ENVIRONMENT",
+        "OBS-CROSS-CLOCK",
+        "OBS-REVERSED-INTERVAL",
+        "REQUEST-MISSING-REQUIRED",
+        "SNAPSHOT-MISSING-CONTEXT",
+        "OBS-CROSS-CLOCK-FALSE-PROOF"
+      ]
+    },
+    "UIB.FORMS.CONTENT": {
+      "contract": "UIB.FORMS@1",
+      "path": "docs/specs/product/forms.md",
+      "cases": [
+        "PROP-KNOWN_EMPTY",
+        "PROP-UNKNOWN",
+        "PROP-UNSUPPORTED",
+        "PROP-REDACTED",
+        "FORMS-SEPARATE",
+        "FORMS-MISSING-OFFSET-UNIT"
+      ]
+    },
+    "UIB.GEOMETRY.CONTENT": {
+      "contract": "UIB.GEOMETRY@1",
+      "path": "docs/specs/product/geometry.md",
+      "cases": [
+        "ENV-EXPECTATION-VALID",
+        "ENV-EXPECTATION-INVALID",
+        "ENV-FINDING-VALID",
+        "ENV-FINDING-INVALID",
+        "GEO-GAP",
+        "GEO-GAP-FAIL",
+        "GEO-CENTERS",
+        "GEO-SIZE-RATIO",
+        "GEO-ALIGNED",
+        "GEO-INSIDE",
+        "GEO-INTERSECTS",
+        "GEO-OVERFLOW",
+        "GEO-EQUAL-SPACING",
+        "GEO-BASELINE",
+        "GEO-BASELINE-UNKNOWN",
+        "GEO-TRANSFORM",
+        "GEO-MISSING-TRANSFORM",
+        "GEO-FRAME-KIND",
+        "GEO-INVALID-UNIT",
+        "GEO-INVALID-SHAPE",
+        "GEO-NONFINITE",
+        "GEO-TRANSFORM-CONTEXT",
+        "GEO-RULE-MISSING-TOLERANCE",
+        "GEO-RULE-EXECUTABLE"
+      ]
+    },
+    "UIB.GOLDEN.CONTENT": {
+      "contract": "UIB.GOLDEN@1",
+      "path": "docs/specs/acceptance/golden.md",
+      "cases": [
+        "GOLDEN01",
+        "G01-READONLY",
+        "G01-UNSUPPORTED",
+        "G01-GENERATION",
+        "G01-TARGET_GONE",
+        "G01-SAME_LABELS",
+        "G01-CANCEL_AFTER_DELIVERY",
+        "G01-LOST_BASE",
+        "G01-SKIPPED_REVISION",
+        "G01-REDACTED",
+        "G01-VERIFY_MISSING",
+        "G01-VERIFY_TARGET_CHANGED",
+        "RAW-ROLES"
+      ]
+    },
+    "UIB.IDENTITY.CONTENT": {
+      "contract": "UIB.IDENTITY@1",
+      "path": "docs/specs/product/identity.md",
+      "cases": [
+        "ENV-SNAPSHOT-VALID",
+        "ENV-SNAPSHOT-INVALID",
+        "IDENTITY-WRONG-TARGET",
+        "IDENTITY-REQUERY",
+        "IDENTITY-UNRESOLVED"
+      ]
+    },
+    "UIB.MODEL.CONTENT": {
+      "contract": "UIB.MODEL@1",
+      "path": "docs/specs/product/model.md",
+      "cases": [
+        "ENV-PROPERTY-VALID",
+        "ENV-PROPERTY-INVALID",
+        "ENV-SNAPSHOT-VALID",
+        "ENV-SNAPSHOT-INVALID",
+        "OBS-INDEPENDENT-AXES",
+        "RAW-ROLES"
+      ]
+    },
+    "UIB.NATIVE.CONTENT": {
+      "contract": "UIB.NATIVE@1",
+      "path": "docs/specs/product/native.md",
+      "cases": [
+        "ENV-CAPABILITY-VALID",
+        "ENV-CAPABILITY-INVALID",
+        "IDENTITY-UNRESOLVED"
+      ]
+    },
+    "UIB.PRIVACY.CONTENT": {
+      "contract": "UIB.PRIVACY@1",
+      "path": "docs/specs/product/privacy.md",
+      "cases": [
+        "ERROR-PRIVATE-PAYLOAD"
+      ]
+    },
+    "UIB.PROJECTIONS.CONTENT": {
+      "contract": "UIB.PROJECTIONS@1",
+      "path": "docs/specs/product/projections.md",
+      "cases": [
+        "COVERAGE-EMPTY",
+        "COVERAGE-NOT-DELETED",
+        "GRAPH-MANY-TO-MANY",
+        "GRAPH-HEURISTIC-NOT-ACTION"
+      ]
+    }
+  },
+  "revision_drift": "During authoring, concurrent Integration advanced D07@1 to D07@2 (S01-DEP-001 schema tooling dependencies) and its decision route. Both current files were reread completely. D03/D04/D05/GOLDEN and all semantic oracle CONTENT bases are unchanged from C01; no expected answer changed."
+}

@@ -1,0 +1,1389 @@
+{
+  "oracle_format": "uib-semantic-oracle/1 (independent expected answers)",
+  "cases": [
+    {
+      "case_id": "GOLDEN01",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "observe": "S10 checked=false is known",
+        "prepare_resolve": "eligible, no new authority granted",
+        "act": "delivery confirmed; user success pending verification",
+        "verify": "succeeded after O11 confirms true",
+        "delta": "atomic apply yields structural equality with full S11",
+        "check": "pass with S11/O11 evidence",
+        "export_record": "only checkbox changed false to true; no dimensions, pixels or unobserved content"
+      },
+      "evidence_requirements": [
+        "O10 and O11 with intervals/source/coverage; ref generation binding and fresh resolution; completed dispatch and O11 result; structural full/delta equality at checkpoint-11; compare claims confined to checked."
+      ],
+      "protected_distinction": "Delivery versus verification; checked=false versus unavailable; recorded same-state equality."
+    },
+    {
+      "case_id": "G01-READONLY",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "dispatch": false,
+        "result": "unsupported",
+        "checked": "remains known false"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Readable property does not imply setter support."
+    },
+    {
+      "case_id": "G01-UNSUPPORTED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "dispatch": false,
+        "result": "unsupported",
+        "check": "unknown"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Unsupported is not false, empty or missing."
+    },
+    {
+      "case_id": "G01-GENERATION",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "dispatch": false,
+        "result": "stale_target"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Same window ID does not preserve generation."
+    },
+    {
+      "case_id": "G01-TARGET_GONE",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "dispatch": false,
+        "result": "stale_target"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Known invalid old binding; do not locate a similar target."
+    },
+    {
+      "case_id": "G01-SAME_LABELS",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "dispatch": false,
+        "result": "ambiguous_target",
+        "distinct_source_nodes": 2
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Equal labels neither merge identity nor select first/nth implicitly."
+    },
+    {
+      "case_id": "G01-CANCEL_AFTER_DELIVERY",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "delivery": "confirmed",
+        "result": "action_outcome_unknown",
+        "completed_steps": [
+          "set_checked dispatch"
+        ],
+        "subsequent_dispatch": false,
+        "automatic_retry": false,
+        "rollback_claim": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Cancellation cannot undo already accepted input."
+    },
+    {
+      "case_id": "G01-LOST_BASE",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "delta_apply": "resync_required",
+        "mutation_of_graph": false,
+        "deleted_nodes_inferred": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Eviction is not UI disappearance."
+    },
+    {
+      "case_id": "G01-SKIPPED_REVISION",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "delta_apply": "resync_required",
+        "mutation_of_graph": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Cannot skip missing base by patching current graph."
+    },
+    {
+      "case_id": "G01-REDACTED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "check": "unknown",
+        "value_emitted": false,
+        "export_value_emitted": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Redacted does not become empty or false."
+    },
+    {
+      "case_id": "G01-VERIFY_MISSING",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "delivery": "confirmed",
+        "verification": "unknown",
+        "succeeded": false,
+        "automatic_retry": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "API acceptance does not prove checked=true."
+    },
+    {
+      "case_id": "G01-VERIFY_TARGET_CHANGED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "delivery": "confirmed",
+        "verification": "not established for g1",
+        "succeeded": false,
+        "dependent_dispatch": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Another target’s true value cannot verify original action."
+    },
+    {
+      "case_id": "ENV-REQUEST-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-REQUEST-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "External request lacks deadline"
+    },
+    {
+      "case_id": "ENV-CAPABILITY-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "AX_retained": true,
+        "capture": "permission_required",
+        "whole_platform_unsupported": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-CAPABILITY-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Incompatible schema ranges; attach cannot deserialize optimistically"
+    },
+    {
+      "case_id": "ENV-SESSION-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-SESSION-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Opaque binding belongs to a different session"
+    },
+    {
+      "case_id": "ENV-PROPERTY-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "value": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-PROPERTY-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Known requested property lacks value"
+    },
+    {
+      "case_id": "ENV-OBSERVATION-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "duration_ms": 10
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-OBSERVATION-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Observation lacks clock domain"
+    },
+    {
+      "case_id": "ENV-SNAPSHOT-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-SNAPSHOT-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Duplicate source identity for different nodes in the same snapshot"
+    },
+    {
+      "case_id": "ENV-DELTA-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "atomic_result": "S11"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-DELTA-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Selected-field full upsert is incomplete; old properties cannot fill missing current facts"
+    },
+    {
+      "case_id": "ENV-ACTION-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "dispatch_eligible": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-ACTION-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Action request lacks actual backend ref"
+    },
+    {
+      "case_id": "ENV-TRANSITION-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "scenario": "succeeded"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-TRANSITION-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Succeeded claim has delivery only and no verified result"
+    },
+    {
+      "case_id": "ENV-EXPECTATION-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-EXPECTATION-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Expectation lacks normative source"
+    },
+    {
+      "case_id": "ENV-FINDING-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-FINDING-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Unknown required measurement cannot yield pass"
+    },
+    {
+      "case_id": "ENV-ERROR-VALID",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "scenario_success": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Valid record may describe unavailable data or failed operation."
+    },
+    {
+      "case_id": "ENV-ERROR-INVALID",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Invalid contract is different from a valid error/unknown outcome.",
+      "invalid_reason": "Error lacks affected scope"
+    },
+    {
+      "case_id": "PROP-KNOWN_EMPTY",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "availability": "known",
+        "value_present": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Known empty string differs from unavailable and absent."
+    },
+    {
+      "case_id": "PROP-UNKNOWN",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "availability": "unknown",
+        "value_present": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Known empty string differs from unavailable and absent."
+    },
+    {
+      "case_id": "PROP-UNSUPPORTED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "availability": "unsupported",
+        "value_present": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Known empty string differs from unavailable and absent."
+    },
+    {
+      "case_id": "PROP-REDACTED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "availability": "redacted",
+        "value_present": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Known empty string differs from unavailable and absent."
+    },
+    {
+      "case_id": "PROP-UNAVAILABLE-WITH-VALUE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject_each": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Only known carries value.",
+      "invalid_reason": "Unavailable property carries value"
+    },
+    {
+      "case_id": "PROP-NOT-REQUESTED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "current_checked_present": false,
+        "history_may_remain": "false under O10 only"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Selection not_requested is not availability or deletion."
+    },
+    {
+      "case_id": "PROP-NOT-REQUESTED-AS-AVAILABILITY",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Selection and availability are separate axes.",
+      "invalid_reason": "not_requested used as requested-property availability"
+    },
+    {
+      "case_id": "PROP-NULL",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "No nullable candidate type is defined.",
+      "invalid_reason": "Undeclared null value"
+    },
+    {
+      "case_id": "SNAP-MISSING-PROPERTY",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Missing requested field does not implicitly mean unknown.",
+      "invalid_reason": "Requested property absent"
+    },
+    {
+      "case_id": "DELTA-UNKNOWN-REPLACES-KNOWN",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "current_checked": "unknown O11 with no value",
+        "historical_checked": "may retain false O10 separately",
+        "check_true": "unknown"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Unknown must not borrow old false under a fresh timestamp."
+    },
+    {
+      "case_id": "DELTA-STALE-CONTAMINATION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "History is not current evidence.",
+      "invalid_reason": "Fresh current value synthesized from stale history"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-TARGET_GENERATION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: target_generation"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-SURFACE_GENERATION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: surface_generation"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-SCOPE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: scope"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-PROJECTION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: projection"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-FIELDS",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: fields"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-SCHEMA_VERSION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: schema_version"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-PLUGIN_VERSION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: plugin_version"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-BASE_REVISION",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: base_revision"
+    },
+    {
+      "case_id": "DELTA-CONTEXT-ENVIRONMENT",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "delta_apply": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Reject whole incompatible replacement; do not partially update.",
+      "invalid_reason": "Delta context/base incompatible: environment"
+    },
+    {
+      "case_id": "DELTA-ATOMIC-RELATIONS",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "result": "resync_required",
+        "base_unchanged": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Children, relations and focus must agree in one published revision.",
+      "invalid_reason": "Removed node remains a dangling child/relation/focus target"
+    },
+    {
+      "case_id": "DELTA-JUSTIFIED-REMOVAL",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "remaining_nodes": [
+          "parent"
+        ],
+        "dangling_references": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Observed deletion needs coverage and atomic relation/focus changes."
+    },
+    {
+      "case_id": "COVERAGE-EMPTY",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "empty_within_requested_scope": true,
+        "whole_app_empty": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Complete empty is meaningful within its stated scope only."
+    },
+    {
+      "case_id": "COVERAGE-NOT-DELETED",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject_each_removal_claim": true,
+        "absence_proves_deletion": false,
+        "coverage": "partial or unknown according to actual variant"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Truncation/filter/eviction cannot prove disappearance.",
+      "invalid_reason": "Deletion lacks observation in covered compatible scope"
+    },
+    {
+      "case_id": "OBS-INDEPENDENT-AXES",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "partial_remains_partial": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Cache is not automatically stale; current is not complete/stable."
+    },
+    {
+      "case_id": "OBS-TTL",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "TTL alone does not establish current evidence.",
+      "invalid_reason": "Unverified freshness advertised current"
+    },
+    {
+      "case_id": "OBS-CROSS-CLOCK",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "cross_channel_order": "unknown",
+        "overlap_duration": "unknown",
+        "global_atomic_snapshot_claim": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Similar monotonic numbers in separate processes are incomparable."
+    },
+    {
+      "case_id": "OBS-REVERSED-INTERVAL",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Interval order is checked within its clock domain.",
+      "invalid_reason": "End precedes start in one clock domain"
+    },
+    {
+      "case_id": "IDENTITY-WRONG-TARGET",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "dispatch": false,
+        "result": "stale_target"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Labels cannot retarget an existing ref."
+    },
+    {
+      "case_id": "IDENTITY-REQUERY",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "old_ref_dispatch": false,
+        "old_ref_result": "stale_target",
+        "new_binding": "requires new ref tied to d2 observation"
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Re-query creates a new binding and never repairs old ref silently."
+    },
+    {
+      "case_id": "IDENTITY-UNRESOLVED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "result": "target_unresolved",
+        "dispatch": false,
+        "candidates": "minimal within authorized scope",
+        "other_window_content": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "PID/title/window ID/rect alone do not establish ownership or incarnation."
+    },
+    {
+      "case_id": "GRAPH-MANY-TO-MANY",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "distinct_nodes": 4,
+        "many_to_many_mapping_allowed": true,
+        "action_ref_owner": "AX button only",
+        "projection_suppression_deletes_nodes": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Explicit component mapping does not merge source IDs or make decoration actionable."
+    },
+    {
+      "case_id": "GRAPH-HEURISTIC-NOT-ACTION",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "heuristic_for_diff": "allowed when marked",
+        "logical_component_key_inference": false,
+        "action_ref_from_match": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Heuristic correspondence is not identity or authority."
+    },
+    {
+      "case_id": "FORMS-SEPARATE",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted": true,
+        "selected_text": "😀",
+        "labels_distinct": true,
+        "focus_channels_distinct": true,
+        "business_success_inferred": false,
+        "IME_inferred": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Visible label/name/focus/draft/applied/business outcome stay separate."
+    },
+    {
+      "case_id": "FORMS-MISSING-OFFSET-UNIT",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Offsets need explicit units.",
+      "invalid_reason": "Text selection lacks offset units"
+    },
+    {
+      "case_id": "VERSION-UNKNOWN-CORE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Namespaced extensions do not permit arbitrary core fields.",
+      "invalid_reason": "Unknown core field"
+    },
+    {
+      "case_id": "RAW-ROLES",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "accepted_each": true,
+        "raw_roles_preserved": true,
+        "source_ids_remain_distinct": true
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Normalization does not erase raw roles/channels."
+    },
+    {
+      "case_id": "ERROR-PRIVATE-PAYLOAD",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "secret_in_stdout_stderr_trace_cache_export": false
+      },
+      "evidence_requirements": [
+        "Preserve the referenced context, Observation, source and coverage; assertions use only the listed facts."
+      ],
+      "protected_distinction": "Sanitize errors before serialization, not after storage.",
+      "invalid_reason": "Declared sensitive content leaks through diagnostic output"
+    },
+    {
+      "case_id": "GEO-GAP",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "value": 8,
+        "units": "css_px",
+        "result": "pass"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-GAP-FAIL",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "value": 8,
+        "units": "css_px",
+        "result": "fail"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-CENTERS",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "centers": [
+          [
+            25,
+            25
+          ],
+          [
+            58,
+            25
+          ]
+        ],
+        "value": 33,
+        "units": "css_px",
+        "result": "pass"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-SIZE-RATIO",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "width": {
+          "value": 30,
+          "units": "css_px",
+          "result": "pass"
+        },
+        "height": {
+          "value": 10,
+          "units": "css_px",
+          "result": "pass"
+        },
+        "ratio": {
+          "value": 3,
+          "units": "dimensionless mathematical quotient (wire representation belongs to Integration)",
+          "result": "pass"
+        }
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Ratio is dimensionless; do not label it a length."
+    },
+    {
+      "case_id": "GEO-ALIGNED",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "max_minus_min": 0,
+        "units": "css_px",
+        "result": "pass"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-INSIDE",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "insets": {
+          "left": 10,
+          "top": 20,
+          "right": 80,
+          "bottom": 30
+        },
+        "minimum": 10,
+        "units": "css_px",
+        "result": "pass",
+        "padding_claim": false
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-INTERSECTS",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "intersection_rect": [
+          35,
+          25,
+          5,
+          5
+        ],
+        "area": 25,
+        "area_units": "css_px squared (derived quantity)",
+        "result": "pass",
+        "visual_occlusion_proven": false
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Bounding-box intersection does not prove painted overlap/occlusion."
+    },
+    {
+      "case_id": "GEO-OVERFLOW",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "right_overflow": 10,
+        "units": "css_px",
+        "inside_result": "fail"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-EQUAL-SPACING",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "gaps": [
+          8,
+          8
+        ],
+        "max_minus_min": 0,
+        "units": "css_px",
+        "result": "pass"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-BASELINE",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "difference": 0.2,
+        "units": "css_px",
+        "result": "pass"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-BASELINE-UNKNOWN",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "result": "unknown",
+        "reason": "required baseline unavailable",
+        "value_present": false
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Large tolerance does not replace a missing baseline; layout bottom is not baseline."
+    },
+    {
+      "case_id": "GEO-TRANSFORM",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "output_rect": [
+          26,
+          48,
+          60,
+          20
+        ],
+        "units": "px",
+        "result": "pass"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit."
+    },
+    {
+      "case_id": "GEO-MISSING-TRANSFORM",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "result": "unknown",
+        "reason": "missing_transform",
+        "value_present": false,
+        "exact_overlay_allowed": false
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "No global scale or huge tolerance substitutes for mapping; semantic AX action remains separately possible."
+    },
+    {
+      "case_id": "GEO-FRAME-KIND",
+      "record_contract": "valid",
+      "validator_exit": 0,
+      "expected_semantics": {
+        "result": "unknown",
+        "value_present": false
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "AX geometry cannot silently substitute for layout."
+    },
+    {
+      "case_id": "GEO-INVALID-UNIT",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit.",
+      "invalid_reason": "Unsupported geometry length unit outside px/css_px/pt/dp"
+    },
+    {
+      "case_id": "GEO-INVALID-SHAPE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit.",
+      "invalid_reason": "Negative rectangle width is not a valid shape"
+    },
+    {
+      "case_id": "GEO-NONFINITE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit.",
+      "invalid_reason": "Nonfinite geometry is forbidden; token is not permission to serialize a string coordinate"
+    },
+    {
+      "case_id": "GEO-TRANSFORM-CONTEXT",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true,
+        "dependent_measurement": "unknown until mapped",
+        "reason": "missing_transform"
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit.",
+      "invalid_reason": "Transform invalidated by changed display configuration"
+    },
+    {
+      "case_id": "GEO-RULE-MISSING-TOLERANCE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit.",
+      "invalid_reason": "Required explicit tolerance absent; no default allowed"
+    },
+    {
+      "case_id": "GEO-RULE-EXECUTABLE",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject": true
+      },
+      "evidence_requirements": [
+        "OG1/source/method and exact local-form coordinates; explicitly stated expectation, units, tolerance and conditions; preserve missing data without substitution."
+      ],
+      "protected_distinction": "Literal fixture tolerance only; frame kind, units, space and provenance remain explicit.",
+      "invalid_reason": "Closed declarative relations do not accept executable code"
+    },
+    {
+      "case_id": "REQUEST-MISSING-REQUIRED",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject_each": true
+      },
+      "invalid_reason": "Each required request fact must be present; no hidden budget defaults.",
+      "evidence_requirements": [
+        "Keep every other baseline fact intact; validate omissions separately, not as one multiply broken record."
+      ],
+      "protected_distinction": "Missing required context is not unknown availability or permission to invent defaults."
+    },
+    {
+      "case_id": "SNAPSHOT-MISSING-CONTEXT",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject_each": true
+      },
+      "invalid_reason": "Snapshot must carry required identity and observation/coverage compatibility context.",
+      "evidence_requirements": [
+        "Keep every other baseline fact intact; validate omissions separately, not as one multiply broken record."
+      ],
+      "protected_distinction": "Missing required context is not unknown availability or permission to invent defaults."
+    },
+    {
+      "case_id": "OBS-CROSS-CLOCK-FALSE-PROOF",
+      "record_contract": "invalid",
+      "validator_exit": 2,
+      "expected_semantics": {
+        "reject_each": true
+      },
+      "invalid_reason": "No established transformation between clock domains supports claimed overlap.",
+      "evidence_requirements": [
+        "Keep every other baseline fact intact; validate omissions separately, not as one multiply broken record."
+      ],
+      "protected_distinction": "Missing required context is not unknown availability or permission to invent defaults."
+    }
+  ]
+}
