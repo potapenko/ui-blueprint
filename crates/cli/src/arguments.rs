@@ -73,7 +73,7 @@ impl Arguments {
         })
     }
 }
-fn limit(value: OsString) -> Result<usize, Failure> {
+pub(crate) fn limit(value: OsString) -> Result<usize, Failure> {
     value
         .to_str()
         .filter(|s| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit()))

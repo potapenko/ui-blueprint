@@ -181,3 +181,24 @@ fn write_compact(
     }
     Ok(())
 }
+
+/// The export-owned receipt is bounded using the same writer as existing output.
+/// It is not a normalized measurement/observation schema.
+pub(crate) fn export_receipt(
+    receipt: &serde_json::Value,
+    json: bool,
+    limit: usize,
+) -> Result<Vec<u8>, Failure> {
+    let mut output = Bounded::new(limit);
+    if json {
+        serde_json::to_writer(&mut output, receipt).map_err(|_| output.error())?;
+        output.write_all(b"\n").map_err(|_| output.error())?;
+    } else {
+        writeln!(output,
+            "command=imagegen-prompt status=package_written purpose={} package_bytes={} local_numeric_validation=checked validation_status=unverified approval_status={} generated_image=false references_count=0 comparison_attribution={}\nviews={}",
+            receipt["purpose"], receipt["package_bytes"], receipt["approval_status"],
+            receipt["comparison_attribution"], receipt["views"]
+        ).map_err(|_| output.error())?;
+    }
+    Ok(output.bytes)
+}

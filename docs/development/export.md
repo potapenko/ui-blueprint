@@ -23,28 +23,36 @@ and components-per-detail. No numbers are product defaults or calibrated D05 cap
 Encoding is bounded; total package bytes include all six files. Rust values
 already exist before a programmatic call: this API is not a process memory cap.
 
-The product CLI remains owned by L01/I01. Integration should resolve explicit
-snapshot/document input, supply reviewed metadata and caller limits, invoke this
-API, and write an explicit output directory. It must preserve its own bounded
-input/error/exit-code contract. No engine/schema wire change is requested.
+The public `uiblueprint imagegen-prompt` command now accepts an explicit local
+DrawingBrief with embedded canonical Snapshot or explicit ProposedLayout, reviewed
+metadata and caller limits. Its [finite CLI contract](cli.md#e01-public-imagegen-prompt-command)
+records syntax, aggregate output bounds, versioned receipt and exit behavior.
+No engine/schema wire change is requested. The ordinary live observe → stored
+Snapshot ID → export path still awaits the session/storage and adapter owners;
+local brief export does not claim that end-to-end capability.
 The existing G01 `measure` API computes observed rect width/height; export adds
 only artifact-specific labels and anchors. Shared MeasurementResult/result-space
 cutover must revalidate this consumer; it is not implemented here.
 
-A local example adapter is available for repeatable package compilation:
+Run the public command on the saved examples:
 
 ```sh
-cargo run --locked -p uiblueprint-export --example compile -- \
-  fixtures/export/proposed-brief.json /tmp/my-new-proposal-package \
-  2000000 4000000 256 8 12
-cargo run --locked -p uiblueprint-export --example compile -- \
-  fixtures/export/observed-brief.json /tmp/my-new-observed-package \
-  2000000 4000000 256 8 12
+cargo run --locked -p uiblueprint-cli --bin uiblueprint -- imagegen-prompt \
+  --brief fixtures/export/proposed-brief.json --purpose propose \
+  --out /tmp/my-new-proposal-package --max-input-bytes 2000000 \
+  --max-output-bytes 4000000 --max-components 256 --max-views 8 \
+  --components-per-detail 12 --json
+cargo run --locked -p uiblueprint-cli --bin uiblueprint -- imagegen-prompt \
+  --brief fixtures/export/observed-brief.json --purpose document \
+  --out /tmp/my-new-observed-package --max-input-bytes 2000000 \
+  --max-output-bytes 4000000 --max-components 256 --max-views 8 \
+  --components-per-detail 12
 ```
 
 The numbers above are finite example parameters. The destination must not exist.
-This example is not the public `uiblueprint imagegen-prompt` command. It emits no
-payload on failure and exits 2 for its local adapter failure; I01 owns CLI mapping.
+CLI max-output-bytes includes both all package files and the response on stdout.
+The earlier `uiblueprint-export --example compile` remains a library demonstration;
+the commands above exercise the actual public binary.
 
 ## Source and mode contract
 

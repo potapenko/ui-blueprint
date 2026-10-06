@@ -6,7 +6,7 @@ use std::{
 };
 use uiblueprint_schema::model::*;
 
-fn read(path: &Path, remaining: &mut usize) -> Result<Vec<u8>, Failure> {
+pub(crate) fn read(path: &Path, remaining: &mut usize) -> Result<Vec<u8>, Failure> {
     let metadata = fs::metadata(path).map_err(|_| Failure::io())?;
     if !metadata.is_file() {
         return Err(Failure::invalid("invalid_input_file"));

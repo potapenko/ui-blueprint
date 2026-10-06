@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 mod arguments;
+mod export;
 mod input;
 mod output;
 
@@ -13,11 +14,13 @@ use std::{
 use uiblueprint_engine::{self as engine, EvaluationContext, MeasurementResult};
 use uiblueprint_schema::{model::*, validation};
 
-const HELP: &str = "UI Blueprint: local saved-snapshot geometry\n\
+const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--json]\n\
 Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
 JSON is available for check. Measure JSON awaits a canonical measurement record.\n\
-Exits: 0 pass/known; 1 IO/internal; 2 invalid/limit; 3 fail; 4 unknown; 5 unsupported/contract gap.\n";
+Export: uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose MODE] [--profile blue-engineering] [--json]\n\
+Export requires a complete DrawingBrief with canonical Snapshot or explicit ProposedLayout, public document metadata and caller limits. No model or live collection.\n\
+Exits: 0 package written/pass/known; 1 IO/internal; 2 invalid/limit; 3 fail; 4 unknown; 5 unsupported/contract gap.\n";
 
 #[derive(Clone, Copy, Debug)]
 struct Failure {
@@ -107,6 +110,8 @@ fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
     let result = if args.len() == 1 && args[0] == "--help" {
         Ok((HELP.as_bytes().to_vec(), 0))
+    } else if args.first().is_some_and(|arg| arg == "imagegen-prompt") {
+        export::execute(args.into_iter().skip(1).collect())
     } else {
         Arguments::parse(args).and_then(execute)
     };

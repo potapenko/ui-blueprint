@@ -82,14 +82,85 @@ Diagnostics are stable bounded codes such as `invalid_arguments`,
 `invalid_input`, `invalid_input_file`, `input_limit`, `output_limit`, `io_error`, `invalid_geometry`,
 `unknown_space`, `ambiguous_space`, `unsupported_command`, `unsupported_rule`
 and `consumer_contract_gap`. No raw serde, filesystem, argument or payload error
-is printed. Future observe/action/export/plugin commands are unsupported and
+is printed. Future observe/action/plugin commands are unsupported and
 cannot pretend to collect or act. This does not change schema validator exits.
 
 ## Scope and checks
 
 Only CLI source/docs change. No engine/schema/validator fix, model/SDK/runtime,
-cache owner, profile meaning, external action, export or release/install claim.
+cache owner, profile meaning, external action or release/install claim.
 Canonical GEO fixtures provide independently authored expected calculations;
 binary tests cover pass/fail/unknown, invalid versions/payloads, finite byte
 bounds, escaped compact strings and stdout/stderr separation. Exact preliminary
 and saved-state results belong in the [L01 receipt](../plans/ui-blueprint/receipts/L01.md).
+
+
+## E01 public imagegen-prompt command
+
+Finite choices below are recorded before E01-cli source edits under the approved
+P6 packet. This command uses the existing export compiler; it adds no graph,
+measurement, schema validator or package writer.
+
+```text
+uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose document|explain|propose|detail|flow|compare] [--profile blue-engineering] [--json]
+```
+
+`--brief` is the export-owned DrawingBrief JSON, including canonical Snapshot
+records inside observed views or an explicit ProposedLayout inside proposed
+views. A bare Snapshot is invalid brief input (2). `--snapshot FILE` without
+DrawingBrief metadata returns `export_metadata_required` (2): document identity, safe source labels, state,
+environment, retention, approval, requirements and scope cannot be guessed.
+Stored Snapshot-ID resolution awaits K01 and is not emulated by a path lookup.
+
+The optional purpose overrides the input brief's purpose before compiler
+validation. Without it, the brief's explicit purpose applies; a missing JSON
+purpose defaults to document. Thus propose must be explicit either in the brief
+or the flag. `explain` aliases document. Detail, flow and compare retain exactly
+the compiler's data/evidence gates and current G02 attribution limitation.
+The only implemented profile is blue-engineering; another profile returns
+`unsupported_profile` (5). Unknown/duplicate flags and invalid positive limits
+return `invalid_arguments` (2). All numeric limits are required, with no hidden
+production defaults.
+
+Input is one explicitly named local regular file, read through the existing
+bounded reader. No embedded reference, path, URL, source ID or payload_ref is
+opened. Input bytes and the compiler's serialized in-memory input validation
+must both fit max-input-bytes. The compiler's own node/view/density limits apply.
+`max-output-bytes` bounds the aggregate six package files **plus stdout including
+its final newline**. The whole package and success response are prepared and
+checked before creating the destination. Oversize input/output produces no
+partial stdout and no destination. These are caller bounds, not a process-memory
+cap or D05 calibration.
+
+The existing package writer creates only a new directory and refuses existing
+exports, symlinks or baselines. Its six files retain the full A+B prompt, scene,
+dimensions and sheets. No images/references are added automatically. Compact
+stdout reports mode, view/component counts, coverage per view, independent
+source/validation/approval statuses, package bytes and unresolved comparison
+attribution. It contains no input/output path or raw collector identifier.
+
+`--json` emits one export-owned versioned result object, followed by a newline:
+`result_version="0.1.0"`, `command="imagegen-prompt"`,
+`status="package_written"`, `purpose`, `views` (safe view ID, source_kind,
+coverage status or proposed, omitted_count, unknown_count, component count),
+`package_bytes`, six fixed `files`, `local_numeric_validation="checked"`,
+`validation_status="unverified"`, `approval_status`, `generated_image=false`,
+`references_count=0`, and `comparison_attribution` (not_requested or
+unresolved_g02). This is a package receipt, not a replacement normalized schema.
+Unknown quantities stay unknown in the package; successful compilation does not
+make measurements pass, generate/verify an image, or approve the source.
+
+Export exits:0 means all package files were written and the success result was
+written to stdout;1 means IO/internal failure;2 means invalid/missing/oversize/
+sensitive input or existing destination;5 means unsupported profile. Other CLI
+commands keep their existing exits and behavior. Compiler failures map to bounded
+constant codes: `export_invalid_input`, `export_invalid_source`,
+`export_invalid_reference`, `export_invalid_geometry`, `export_invalid_chain`,
+`export_incompatible_views`, `export_private_content`,
+`export_approval_record_required`, `export_destination_exists`, `input_limit`,
+`output_limit` or `io_error`. Parse/missing top-level metadata uses
+`export_metadata_required`; malformed JSON uses `export_invalid_input`.
+No raw serde, filesystem, payload or argument errors are printed. A write failure
+is never reported as success. If stdout itself fails after files were written,
+exit1 reports IO failure and the completed package remains at the explicit
+location; retrying cannot overwrite it. No automatic retry is performed.
