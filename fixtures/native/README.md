@@ -18,7 +18,8 @@ mkdir -p /absolute/task-evidence/live
 open -n /absolute/task-temp/build/F02-on.app --args --run-dir /absolute/task-evidence/live
 # In this owned app: choose A or B, establish state, then press Snapshot.
 python3 fixtures/native/capture.py /absolute/task-temp/build/f02-observe \
-  /absolute/task-evidence/live/a.json /absolute/task-evidence/request-1
+  /absolute/task-evidence/live/a.json /absolute/task-evidence/request-1 \
+  --capture-lock /absolute/task-temp/capture.lock
 ```
 
 Every output directory must be new. `a.json` and `b.json` are the last explicitly
@@ -47,12 +48,13 @@ Close/reopen rotates the fixture generation even when SwiftUI retains the same
 NSWindow and CGWindowID. Reset resets content; it does not promise a new generation.
 
 Only the explicit own fixture bundle IDs are allowed. AX requests are bounded to
-160 nodes, depth 9 and a 3-second traversal budget, with 0.2-second object timeout.
-A 45-second process watchdog bounds an unresponsive capture; the driver also has
-a 50-second default process deadline. These are diagnostic limits, not frozen
-product gates. The current helper writes a combined result after capture; if
-ScreenCaptureKit never resumes, that request's AX result is not persisted. This
-limitation is recorded, not masked by older observations.
+160 nodes, depth 9 and a 1-second traversal budget, with 0.2-second object timeout.
+The current helper persists ax-N.json before capture. Capture uses explicit public
+callbacks, one-result timeout/cancel ownership and a caller-supplied capture-only
+lease. Its2s budget includes bounded admission; no AX wait holds that lease. The
+driver defaults to3s parent timeout, helper has a4s last-resort watchdog, and failure
+stops the batch. capture.py preserves completed-AX paths in failure/timeout receipts
+and returns nonzero. These are diagnostic bounds, not new production defaults.
 
 Secure values are absent from fixture manifests and not requested by the external
 collector. The synthetic form is not a universal secret-detection test. Capture
@@ -65,3 +67,26 @@ No inputs are synthesized by the Python driver; use the granted Computer Use lan
 for visible actions. Stop only the known owned process when finished. Outputs,
 bundles and compiler logs belong outside Git. `check.py` checks the recorded F02
 run and reports open gates explicitly; it is not a full M01–M06 release oracle.
+
+## M01 capture prerequisite repair
+
+All participating helpers in a parent run must receive the same task-owned absolute
+`UIB_CAPTURE_LOCK_PATH` (or capture.py `--capture-lock`). It names an advisory file
+under task-temp, never a user/settings file. Only capture admission/SDK calls are
+serialized. This is not a claim of successful simultaneous screenshot calls.
+On an uncertain timeout/cancel/error the helper keeps its capture FD until process
+exit; the owner must retire/reap that one-shot helper before reuse. No UI action,
+permission request or alternate backend is used to acquire the lease.
+
+`UIB_AX_ONLY=1` performs the explicitly requested AX-only case without capture.
+`UIB_CAPTURE_FAULT=stall|failure` is test-only injection with no capture API call;
+unknown fault values reject before platform access. `--gate-checks` checks injected
+single-result/late-reply handling and recorded error classification without UI.
+These modes do not prove real OS failure or concurrency repair by themselves.
+
+Real reproduction: old simultaneous helpers lost continuations/AX; bounded public
+callbacks retained AX but screenshot callbacks still timed out. Capture-only
+serialization produced actual Window A pixels; B returned SDK-3801 UserDeclined
+after preflight succeeded. This is permission_required, not evidence of a human
+click or whole-platform unsupported. B pixels were not retried. Full M01 remains
+open; see [repair receipt](../../docs/plans/ui-blueprint/receipts/M01-capture-repair.md).

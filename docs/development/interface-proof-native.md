@@ -243,3 +243,69 @@ was not isolated. Both counts remain actual, never padded to match. The original
 sizing sample and limits are immutable. privacy-validation.json and privacy-cleanup.json
 record the added check; the scoped privacy case does not close configured-bound
 coverage or production privacy acceptance.
+
+## M01 capture prerequisite repair
+
+Authority: [finite M01 packet](../plans/ui-blueprint/packets/M01-capture-repair.md),
+Restore under D01/D02@1 and D05@2/D05-MEMORY@1; current native closure retained.
+The new retained-memory decision is read, not implemented in this helper. No UI,
+shipping adapter, shared Rust repair, native framework or permission policy change.
+
+A bounded reproduction on the same own F02 a/b windows re-established the real
+problem: two original helpers both emitted checked-continuation misuse, wrote no
+AX result, and were killed/reaped at the declared3s parent bound. Source showed
+unbounded imported SDK async awaits and combined-only persistence. Explicit public
+callbacks with an owned one-result gate removed continuation misuse and preserved
+AX, but both screenshot callbacks still failed to complete within2s. That locates
+the observed callback loss at screenshot acquisition; SDK internal cause is unknown.
+
+The repair shares CaptureLifecycle between Observe.swift and Collector.swift.
+It uses the same public ScreenCaptureKit backend, bounds callback completion and
+capture admission, serializes only capture with a caller-owned flock, and resumes
+once across success/error/timeout/cancellation. No lock is held over AX. Completed
+AX is flushed/persisted first. An uncertain capture retains its lease until the
+one-shot helper exits/reaps, preventing a replacement while its OS call may still
+be active. Late replies cannot revive the local gate; canonical late-frame rejection
+still belongs to the actual common ObservationSession. No new lifecycle protocol.
+
+Real simultaneous requests with capture-only serialization: A exited0 with an
+attributed1100×1022 isolated Window A image, audio/children off, unknown transform;
+B exited2 with SCStreamErrorDomain/-3801 (UserDeclined). Both preserved AX and had
+no continuation misuse. Preflight succeeded on the entered capture path. The API
+code is an operation permission-required residual, not evidence the user clicked
+refusal or that the platform has no capture capability. No B retry, new pixel
+attempt after denial, backend switch, permission dialog action or settings change.
+System prompt presence was not observed; only the own fixture was inspected.
+
+Final independent/fault checks: B AX completed in143ms while A held the capture
+lease in an injected stall; AX A survived timeout, both helpers reaped and the
+lease was available afterward. On pinned common support73d772e, current live AX
+survived injected capture timeout/failure, cancel and detach; retained canonical
+completion equalled submitted data, late success replay rejected, platform readers
+joined. Gate terminal/late-reply and recorded permission-code classification checks
+are explicitly injected. The modified capture.py failure path retained the AX file
+and returned nonzero rather than claiming full success. No new pixels in fault tests.
+
+Bounds fixed before attempts: AX1s, capture/admission2s, parent3s, cleanup1s;
+helper4s legacy-diagnostic backstop and canonical collector8s backstop. The common
+fault reader allows2.2s only for delivery around the2s callback deadline, while the
+actual parent3s deadline remains authoritative. The focused whole driver is30s.
+These are test bounds, not retained-memory/RSS defaults or a new performance baseline.
+
+Positive A pixels used the callback+lease build; the unchanged successful path was
+not rerun after B denial. Final changes classify/audit failures and validate fault
+modes; final affected fault paths were compiled/checked. Integration uses saved
+support73d772e, not concurrently edited Rust; a recheck against the eventual saved
+shared repair remains separate. Positive B capture and full M01/D05/P7 acceptance
+remain open. Exact builds/requests/condition/cleanup and retained evidence are in
+[the M01 repair receipt](../plans/ui-blueprint/receipts/M01-capture-repair.md).
+
+### Saved-validator compatibility after the capture repair
+
+At root's request, validator9ca645aab6816425ee64bb20eeb1201750d0d2b0 was built from
+an immutable Git archive, locked/offline. All20 stored Session/Request/submitted
+ChannelResponse/retained documents in final-fault-proof passed. Exact document
+and binary hashes are in compatibility-9ca645a.json under the repair evidence root.
+No SDK, pixel, fixture application or full-suite execution occurred. This closes
+only that offline compatibility check; it is not a fresh live integration test,
+B permission resolution or full M01/D05/P7 acceptance.

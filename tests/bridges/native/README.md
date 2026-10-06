@@ -13,8 +13,8 @@ It uses Integration's actual common host; it owns no second lifecycle or schema.
 ```sh
 python3 tests/bridges/native/prepare.py
 python3 tests/bridges/native/build_support.py /absolute/task-temp/common-build
-xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 \
-  tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift \
+xcrun swiftc -parse-as-library -swift-version 6 -D CAPTURE_LIBRARY -target arm64-apple-macos14.0 \
+  fixtures/native/Observe.swift tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift \
   -o /absolute/task-temp/native-collector
 ```
 
@@ -22,7 +22,9 @@ xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 \
 reuse its products while inputs are unchanged. `build_support.py` extracts the
 pinned common support/workspace inputs to task-temp and builds only d02_host and
 the validator, locked/offline. It never consumes mutable neighboring Rust files.
-Neither build script launches UI or changes checkout/branch/index. All products
+The pinned preparation helper remains historical F02 input; compile the current
+fixtures/native/Observe.swift separately when testing the M01 repair. Neither build
+script launches UI or changes checkout/branch/index. All products
 and compiler logs belong outside the repository/config/skill trees.
 
 ## Explicit own-fixture setup
@@ -35,7 +37,7 @@ Both window titles are F02 Synthetic; title is not identity. Use that run's actu
 manifest for PID/launch time/CG window ID and surface generation, never a copied ID.
 
 ```sh
-python3 tests/bridges/native/prove.py \
+UIB_CAPTURE_LOCK_PATH=/absolute/task-temp/capture.lock python3 tests/bridges/native/prove.py \
   --host /absolute/task-temp/common-build/target/debug/examples/d02_host \
   --validator /absolute/task-temp/common-build/target/debug/uiblueprint-validate \
   --collector /absolute/task-temp/native-collector \
@@ -135,3 +137,21 @@ output in memory, and records only absence/status/byte counts. Never store the r
 canary or diagnostic text. It also preserves known empty/false versus unavailable.
 Actions come from AXUIElementCopyActionNames, not role-derived setters/modalities.
 This is scoped fixture evidence, not universal secret recognition.
+
+## Capture lifecycle prerequisite
+
+Collector.swift now consumes the same CaptureLifecycle implementation from
+fixtures/native/Observe.swift, compiled with CAPTURE_LIBRARY to omit the fixture
+helper main. Canonical schema/common Rust lifecycle remains unchanged. Real capture
+requires a shared run-owned capture lease; the helper emits AX before waiting.
+SDK authorization error-3801 maps to permission_required with explicit_permission
+recovery, never an automatic retry or another backend.
+
+The focused capture_lifecycle.py driver reuses the pinned common host/reader/reap
+helpers. It performs live AX with labelled injected capture stall/failure,
+actual common cancel/detach and late-frame replay rejection. It separately verifies
+unrelated B AX while A holds a stalled capture lease, plus lease availability after
+reap. This driver issues no real pixel requests; real pre/post-repair capture
+attempts and the remaining B permission condition are recorded in the receipt.
+The known SDK simultaneous-callback failure is addressed by explicit bounded
+callbacks and capture-only serialization, not relabelled as parallel-capture success.

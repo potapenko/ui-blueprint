@@ -122,7 +122,7 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
         }
         func failed(_ code: String, _ channel: String) throws {
             try reply(channel, ["status": "failed", "data": ["code": code, "scope_id": scope,
-                "failed_step": channel, "recovery_class": "new_explicit_request"]])
+                "failed_step": channel, "recovery_class": code == "permission_required" ? "explicit_permission" : "new_explicit_request"]])
         }
         let axStart = ProcessInfo.processInfo.systemUptime
         if !axAllowed { try failed("permission_required", "external_semantics") }
@@ -183,29 +183,33 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
         // AX frame is already flushed. Injected timeout never invokes capture APIs.
         if args[3] != "live" { try await Task.sleep(for: .seconds(6)); return }
         let captureStart = ProcessInfo.processInfo.systemUptime
-        if !captureAllowed { try failed("permission_required", "rendered_capture"); return }
-        let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-        guard let window = content.windows.first(where: { $0.windowID == wid && $0.owningApplication?.processID == pid }) else {
-            throw NSError(domain: "capture_target_unresolved", code: 4)
+        if !captureAllowed && ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"] == nil { try failed("permission_required", "rendered_capture"); return }
+        let captured: OwnedCapture
+        do { captured = try await CaptureLifecycle.capture(windowID: wid, pid: pid) }
+        catch {
+            let issue = CaptureLifecycle.issue(error)
+            let native = CaptureLifecycle.nativeError(error)
+            try JSONSerialization.data(withJSONObject: ["code": issue.code, "failed_step": issue.step,
+                "error_domain": native.domain, "error_code": native.code,
+                "injected": ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"] != nil,
+                "requires_owned_helper_retirement": true], options: [.sortedKeys]).write(
+                    to: URL(fileURLWithPath: args[2]).appendingPathComponent("capture-error.json"))
+            try failed(issue.code, "rendered_capture")
+            return
         }
-        let filter = SCContentFilter(desktopIndependentWindow: window)
-        let config = SCStreamConfiguration(); config.capturesAudio = false; config.showsCursor = false
-        config.ignoreShadowsSingleWindow = true
-        config.width = Int((filter.contentRect.width * CGFloat(filter.pointPixelScale)).rounded())
-        config.height = Int((filter.contentRect.height * CGFloat(filter.pointPixelScale)).rounded())
-        if #available(macOS 14.2, *) { config.includeChildWindows = false }
-        let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+        let image = captured.image
         guard NSRunningApplication(processIdentifier: pid)?.launchDate?.timeIntervalSince1970 == launch else { throw NSError(domain: "stale_target", code: 5) }
         let url = URL(fileURLWithPath: args[2]).appendingPathComponent("capture.png")
         guard let dest = CGImageDestinationCreateWithURL(url as CFURL, UTType.png.identifier as CFString, 1, nil) else { exit(1) }
         CGImageDestinationAddImage(dest, image, nil); guard CGImageDestinationFinalize(dest) else { exit(1) }
         let metadata: [String: Any] = ["observation_id": "\(requestID)-rendered_capture",
             "source": "ScreenCaptureKit filter_and_window_metadata", "units": "pt", "origin": "top_left",
-            "filter_content_rect": ["x": filter.contentRect.minX, "y": filter.contentRect.minY,
-                "width": filter.contentRect.width, "height": filter.contentRect.height],
-            "filter_point_pixel_scale": filter.pointPixelScale,
-            "window_id": wid, "window_frame": ["x": window.frame.minX, "y": window.frame.minY,
-                "width": window.frame.width, "height": window.frame.height],
+            "filter_content_rect": ["x": captured.filterRect.minX, "y": captured.filterRect.minY,
+                "width": captured.filterRect.width, "height": captured.filterRect.height],
+            "filter_point_pixel_scale": captured.scale,
+            "capture_serialization": "exclusive_run_owned_flock", "capture_admission_wait_seconds": captured.admissionWait,
+            "window_id": wid, "window_frame": ["x": captured.windowFrame.minX, "y": captured.windowFrame.minY,
+                "width": captured.windowFrame.width, "height": captured.windowFrame.height],
             "capture_call_start": captureStart, "capture_call_end": ProcessInfo.processInfo.systemUptime,
             "clock_domain": clock, "time_unit": "seconds", "transform_status": "unknown"]
         try JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]).write(

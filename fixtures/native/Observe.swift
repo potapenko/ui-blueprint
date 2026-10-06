@@ -3,6 +3,189 @@ import ApplicationServices
 import ScreenCaptureKit
 import ImageIO
 import UniformTypeIdentifiers
+import Darwin
+
+// Shared by the fixture helper and the canonical native test bridge.
+// Public ScreenCaptureKit callbacks avoid the imported async overlay involved in
+// the reproduced lost-continuation path. A local gate owns exactly one reply.
+enum OwnedCaptureError: Error {
+    case timeout(String), cancelled, permissionRequired, targetUnresolved, emptyCallback(String), resourceUnavailable
+}
+struct CapturePlatformFailure: Error {
+    let stage: String
+    let domain: String
+    let code: Int
+}
+struct CaptureTransfer<Value>: @unchecked Sendable {
+    // Immutable callback value is transferred once to the awaiting MainActor.
+    // Late values are dropped; no mutable SDK object is accessed on both sides.
+    let value: Value
+}
+final class CaptureReply<Value: Sendable>: @unchecked Sendable {
+    private let lock = NSLock()
+    private var continuation: CheckedContinuation<Value, any Error>?
+    private var terminal: Result<Value, any Error>?
+    private var ignored = 0
+    func install(_ continuation: CheckedContinuation<Value, any Error>) {
+        lock.lock()
+        if let terminal { lock.unlock(); continuation.resume(with: terminal) }
+        else { self.continuation = continuation; lock.unlock() }
+    }
+    @discardableResult func finish(_ result: Result<Value, any Error>) -> Bool {
+        lock.lock()
+        guard terminal == nil else { ignored += 1; lock.unlock(); return false }
+        terminal = result
+        let waiting = continuation; continuation = nil
+        lock.unlock()
+        waiting?.resume(with: result)
+        return true
+    }
+    var pending: Bool { lock.lock(); defer { lock.unlock() }; return terminal == nil }
+    var ignoredReplies: Int { lock.lock(); defer { lock.unlock() }; return ignored }
+}
+struct OwnedCapture {
+    let image: CGImage
+    let windowFrame: CGRect
+    let filterRect: CGRect
+    let scale: Float
+    let admissionWait: Double
+}
+@MainActor enum CaptureLifecycle {
+    static func callback<Value>(stage: String, deadline: Double,
+        begin: (@escaping @Sendable (Value?, (any Error)?) -> Void) -> Void) async throws -> Value {
+        let gate = CaptureReply<CaptureTransfer<Value>>()
+        let transferred: CaptureTransfer<Value> = try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { continuation in
+                gate.install(continuation)
+                guard gate.pending else { return }
+                let remaining = deadline - ProcessInfo.processInfo.systemUptime
+                guard remaining > 0 else { gate.finish(.failure(OwnedCaptureError.timeout(stage))); return }
+                DispatchQueue.global().asyncAfter(deadline: .now() + remaining) {
+                    gate.finish(.failure(OwnedCaptureError.timeout(stage)))
+                }
+                // No gate/global lock is held over the platform call.
+                begin { value, error in
+                    if let error {
+                        let native = error as NSError
+                        gate.finish(.failure(CapturePlatformFailure(stage: stage, domain: native.domain, code: native.code)))
+                    }
+                    else if let value { gate.finish(.success(CaptureTransfer(value: value))) }
+                    else { gate.finish(.failure(OwnedCaptureError.emptyCallback(stage))) }
+                }
+            }
+        } onCancel: { gate.finish(.failure(OwnedCaptureError.cancelled)) }
+        return transferred.value
+    }
+    static func validatedFault(_ fault: String?) throws -> String? {
+        guard fault == nil || fault == "stall" || fault == "failure" else { throw OwnedCaptureError.resourceUnavailable }
+        return fault
+    }
+    static func capture(windowID: UInt32, pid: Int32, budget: Double = 2) async throws -> OwnedCapture {
+        guard budget.isFinite && budget > 0 && budget <= 2 else { throw OwnedCaptureError.resourceUnavailable }
+        let fault = try validatedFault(ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"])
+        if fault == nil { guard CGPreflightScreenCaptureAccess() else { throw OwnedCaptureError.permissionRequired } }
+        guard let path = ProcessInfo.processInfo.environment["UIB_CAPTURE_LOCK_PATH"], path.hasPrefix("/") else {
+            throw OwnedCaptureError.resourceUnavailable
+        }
+        let begin = ProcessInfo.processInfo.systemUptime
+        let deadline = begin + budget
+        let fd = open(path, O_RDWR | O_CREAT | O_CLOEXEC | O_NOFOLLOW, mode_t(0o600))
+        guard fd >= 0 else { throw OwnedCaptureError.resourceUnavailable }
+        var admitted = false
+        do {
+            while flock(fd, LOCK_EX | LOCK_NB) != 0 {
+                guard errno == EWOULDBLOCK else { throw OwnedCaptureError.resourceUnavailable }
+                try Task.checkCancellation()
+                guard ProcessInfo.processInfo.systemUptime < deadline else { throw OwnedCaptureError.timeout("capture_admission") }
+                try await Task.sleep(for: .milliseconds(5)) // bounded resource wait, no UI recollection
+            }
+            admitted = true
+            try Task.checkCancellation()
+        } catch { close(fd); throw error }
+        let admissionWait = ProcessInfo.processInfo.systemUptime - begin
+        var completedPlatformCall = false
+        defer {
+            // On timeout/cancel the OS call may still run: keep the FD until this
+            // owned one-shot helper exits/reaps. Never admit a replacement early.
+            if !admitted || completedPlatformCall { flock(fd, LOCK_UN); close(fd) }
+        }
+        if fault == "stall" {
+            let _: Int = try await callback(stage: "injected_capture_stall", deadline: deadline) { _ in }
+        }
+        if fault == "failure" {
+            throw OwnedCaptureError.emptyCallback("injected_capture_failure")
+        }
+        let content: SCShareableContent = try await callback(stage: "shareable_content", deadline: deadline) { complete in
+            SCShareableContent.getExcludingDesktopWindows(true, onScreenWindowsOnly: false, completionHandler: complete)
+        }
+        try Task.checkCancellation()
+        guard let window = content.windows.first(where: { $0.windowID == windowID && $0.owningApplication?.processID == pid }) else {
+            throw OwnedCaptureError.targetUnresolved
+        }
+        let filter = SCContentFilter(desktopIndependentWindow: window)
+        let configuration = SCStreamConfiguration()
+        configuration.capturesAudio = false; configuration.showsCursor = false
+        configuration.ignoreShadowsSingleWindow = true
+        configuration.width = Int((filter.contentRect.width * CGFloat(filter.pointPixelScale)).rounded())
+        configuration.height = Int((filter.contentRect.height * CGFloat(filter.pointPixelScale)).rounded())
+        if #available(macOS 14.2, *) { configuration.includeChildWindows = false }
+        let image: CGImage = try await callback(stage: "screenshot", deadline: deadline) { complete in
+            SCScreenshotManager.captureImage(contentFilter: filter, configuration: configuration, completionHandler: complete)
+        }
+        try Task.checkCancellation()
+        completedPlatformCall = true
+        return OwnedCapture(image: image, windowFrame: window.frame, filterRect: filter.contentRect, scale: filter.pointPixelScale, admissionWait: admissionWait)
+    }
+    static func nativeError(_ error: any Error) -> (domain: String, code: Int) {
+        if let platform = error as? CapturePlatformFailure { return (platform.domain, platform.code) }
+        let value = error as NSError
+        return (value.domain, value.code)
+    }
+    static func gateChecks() async -> [[String: Any]] {
+        var result: [[String: Any]] = []
+        for mode in ["complete", "timeout", "cancel", "detach"] {
+            let gate = CaptureReply<Int>()
+            let task = Task { () throws -> Int in
+                try await withCheckedThrowingContinuation { gate.install($0) }
+            }
+            let initial: Result<Int, any Error> = mode == "complete" ? .success(7)
+                : .failure(mode == "timeout" ? OwnedCaptureError.timeout("synthetic") : OwnedCaptureError.cancelled)
+            let first = gate.finish(initial)
+            let lateRejected = !gate.finish(.success(99))
+            let value = try? await task.value
+            result.append(["case": mode, "injected": true, "first_admitted": first,
+                "late_rejected": lateRejected, "ignored_replies": gate.ignoredReplies,
+                "outcome_matches": mode == "complete" ? value == 7 : value == nil])
+        }
+        let denied = issue(CapturePlatformFailure(stage: "recorded_unspecified_stage", domain: "com.apple.ScreenCaptureKit.SCStreamErrorDomain", code: -3801))
+        result.append(["case": "recorded_permission_error_classification", "injected": true, "permission_required": denied.code == "permission_required"])
+        var invalidRefused = false
+        do { _ = try validatedFault("invalid") } catch { invalidRefused = true }
+        result.append(["case": "unknown_fault_refused_before_platform_access", "injected": true, "outcome_matches": invalidRefused])
+        return result
+    }
+    static func issue(_ error: any Error) -> (code: String, step: String) {
+        if let platform = error as? CapturePlatformFailure {
+            // SDK27 SCError.h: -3801 is UserDeclined. Do not retry via another backend.
+            if platform.domain == "com.apple.ScreenCaptureKit.SCStreamErrorDomain", platform.code == -3801 {
+                return ("permission_required", platform.stage)
+            }
+            return ("incomplete_scope", platform.stage)
+        }
+        if let capture = error as? OwnedCaptureError {
+            switch capture {
+            case .timeout(let step): return ("timeout", step)
+            case .cancelled: return ("interrupted", "cancelled")
+            case .permissionRequired: return ("permission_required", "permission")
+            case .targetUnresolved: return ("target_unresolved", "window_binding")
+            case .emptyCallback(let step): return ("incomplete_scope", step)
+            case .resourceUnavailable: return ("incomplete_scope", "capture_resource_unavailable")
+            }
+        }
+        if error is CancellationError { return ("interrupted", "cancelled") }
+        return ("incomplete_scope", "platform_callback")
+    }
+}
 
 // This diagnostic only accepts the manifest of the one-window owned fixture.
 // It never widens unresolved window scope to application content.
@@ -57,7 +240,7 @@ private func semantics(pid: pid_t, identifier: String, stimulus: String) -> [Str
     var nodes: [[String: Any]] = []
     let baseFields = [kAXRoleAttribute, kAXIdentifierAttribute, kAXTitleAttribute, kAXDescriptionAttribute,
                   kAXPositionAttribute, kAXSizeAttribute, kAXEnabledAttribute, kAXFocusedAttribute, "AXF02Unsupported"]
-    while !queue.isEmpty, nodes.count < (stimulus == "partial" ? 8 : 160), ProcessInfo.processInfo.systemUptime - start < 3 {
+    while !queue.isEmpty, nodes.count < (stimulus == "partial" ? 8 : 160), ProcessInfo.processInfo.systemUptime - start < 1 {
         let (el, parent, depth) = queue.removeFirst()
         AXUIElementSetMessagingTimeout(el, 0.2)
         let elementID = attr(el, kAXIdentifierAttribute) as? String ?? ""
@@ -86,12 +269,20 @@ private func semantics(pid: pid_t, identifier: String, stimulus: String) -> [Str
             "design_internals": "not_exposed_unless_reported",
             "duration_seconds": ProcessInfo.processInfo.systemUptime - channelStart, "injection": stimulus == "normal" ? "none" : stimulus]
 }
+#if !CAPTURE_LIBRARY
 @main
 struct Observe {
     @MainActor static func main() async {
         // Independent process watchdog; system requests cannot hold a global queue.
-        DispatchQueue.global().asyncAfter(deadline: .now() + 45) { _exit(124) }
+        DispatchQueue.global().asyncAfter(deadline: .now() + 4) { _exit(124) }
         let args = CommandLine.arguments
+        if args.count == 2 && args[1] == "--gate-checks" {
+            let report = await CaptureLifecycle.gateChecks()
+            if let data = try? JSONSerialization.data(withJSONObject: report, options: [.sortedKeys]) {
+                try? FileHandle.standardOutput.write(contentsOf: data)
+            }
+            return
+        }
         guard args.count == 3 || args.count == 4 else { exit(2) }
         let manifestURL = URL(fileURLWithPath: args[1])
         let out = URL(fileURLWithPath: args[2], isDirectory: true)
@@ -129,25 +320,21 @@ struct Observe {
                 "observation_start_utc": ISO8601DateFormatter().string(from: Date()),
                 "sample_index": sampleIndex, "source_state": state,
                 "external_semantics": semantics(pid: pid, identifier: identifier, stimulus: stimulus)]
+            // Persist completed AX before any capture wait or failure.
+            try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys])
+                .write(to: out.appendingPathComponent("ax-\(sampleIndex).json"), options: .atomic)
             let captureStart = ProcessInfo.processInfo.systemUptime
-            if stimulus == "permission_denied" {
+            var captureFailed = false
+            if ProcessInfo.processInfo.environment["UIB_AX_ONLY"] == "1" {
+                result["rendered_capture"] = ["selection": "not_requested"]
+            } else if stimulus == "permission_denied" {
                 result["rendered_capture"] = ["status": "permission_required", "injection": "synthetic", "prompted": false]
             } else if !CGPreflightScreenCaptureAccess() {
                 result["rendered_capture"] = ["status": "permission_required", "prompted": false]
             } else {
                 do {
-                    let content = try await SCShareableContent.excludingDesktopWindows(true, onScreenWindowsOnly: false)
-                    guard let window = content.windows.first(where: {
-                        $0.windowID == wid && $0.owningApplication?.processID == pid
-                    }) else { throw NSError(domain: "capture_target_unresolved", code: 2) }
-                    let filter = SCContentFilter(desktopIndependentWindow: window)
-                    let config = SCStreamConfiguration()
-                    config.capturesAudio = false; config.showsCursor = false
-                    config.ignoreShadowsSingleWindow = true
-                    config.width = Int((filter.contentRect.width * CGFloat(filter.pointPixelScale)).rounded())
-                    config.height = Int((filter.contentRect.height * CGFloat(filter.pointPixelScale)).rounded())
-                    if #available(macOS 14.2, *) { config.includeChildWindows = false }
-                    let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
+                    let captured = try await CaptureLifecycle.capture(windowID: wid, pid: pid)
+                    let image = captured.image
                     guard NSRunningApplication(processIdentifier: pid)?.launchDate?.timeIntervalSince1970 == launch else {
                         throw NSError(domain: "stale_target", code: 3)
                     }
@@ -161,15 +348,22 @@ struct Observe {
                     }
                     result["rendered_capture"] = ["status": "observed", "capture_kind": "window_isolated",
                         "capture_target": wid, "pixel_buffer_size": [image.width, image.height],
-                        "filter_content_rect_pt": rect(filter.contentRect), "window_frame_screen_pt": rect(window.frame),
-                        "filter_point_pixel_scale": filter.pointPixelScale,
+                        "filter_content_rect_pt": rect(captured.filterRect), "window_frame_screen_pt": rect(captured.windowFrame),
+                        "filter_point_pixel_scale": captured.scale,
+                        "capture_admission_wait_seconds": captured.admissionWait,
+                        "capture_serialization": "exclusive_run_owned_flock",
                         "crop_transform": "unknown_until_validated", "includes_children": false,
                         "included_surface_ids": [wid], "excluded_surface_ids": [], "unresolved_surface_ids": [],
                         "surface_coverage": "explicit_fixture_window_only_other_surfaces_not_included", "captures_audio": false,
                         "capture_filter": "desktopIndependentWindow", "desktop_visibility": "unknown"]
                 } catch {
-                    result["rendered_capture"] = ["status": "error", "error_domain": (error as NSError).domain,
-                                                  "error_code": (error as NSError).code]
+                    captureFailed = true
+                    let issue = CaptureLifecycle.issue(error)
+                    let native = CaptureLifecycle.nativeError(error)
+                    result["rendered_capture"] = ["status": issue.code == "timeout" ? "timeout" : "error",
+                        "code": issue.code, "failed_step": issue.step, "error_domain": native.domain,
+                        "error_code": native.code, "requires_owned_helper_retirement": true,
+                        "injected": ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"] != nil]
                 }
             }
             result["capture_duration_seconds"] = ProcessInfo.processInfo.systemUptime - captureStart
@@ -177,6 +371,7 @@ struct Observe {
             result["observation_end_utc"] = ISO8601DateFormatter().string(from: Date())
             try JSONSerialization.data(withJSONObject: result, options: [.prettyPrinted, .sortedKeys])
                 .write(to: out.appendingPathComponent("external-\(sampleIndex).json"), options: .atomic)
+            if captureFailed { fputs("F02 capture failed; completed AX preserved\n", stderr); exit(2) }
             }
             print("F02 observations saved: \(sampleCount)")
         } catch {
@@ -185,3 +380,5 @@ struct Observe {
         }
     }
 }
+
+#endif
