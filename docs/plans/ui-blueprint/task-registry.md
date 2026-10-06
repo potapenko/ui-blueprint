@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01 + independent oracles + F03b; Git lease root; native desktop lane product advisor |
+| Активные чаты/пакеты/ресурсы | S01/oracles running; F03b commit-only; Git lease F03b; runtime lanes свободны |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -99,9 +99,10 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | `5d1e0a53670fb8bfbd0c3982db5e164f4bf9bb6d` | accepted reference data; [receipt](receipts/F03a.md); agent/collector proof pending |
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
 | [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
-| [F03b](packets/F03b.md) | product advisor | RC03 real resize; point-sizing@1 | running; native lane subject to source reservation; no Git lease |
+| [F03b](packets/F03b.md) | product advisor | actual 961×1050 / 1920×1050 pt; incidental playback documented | commit-only; [receipt](receipts/F03b.md); runtime released |
 | [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | running; native proof waits for lane; no Git lease |
 | [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | C01/GOLDEN semantic inputs and expected outcomes | running; disjoint oracle files; no Git/runtime lease |
+| [F03c](packets/F03c.md) | product advisor | RC04/RC05 owned mobile targets; source inventory | queued after F03b checkpoint; no runtime/Git grant yet |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
