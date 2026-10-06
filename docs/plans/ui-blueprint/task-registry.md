@@ -89,7 +89,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Analysis R1/R2 open; Core savedcffd8d3 now owns whole bounded decoder/fixture/test repair; Integration queued repair retired before edits and continues only D05 docs. Web owns exact D07/Cargo offline transport integration; Core edits may proceed but Cargo checks wait stable Web lock. Git index free after Core release. Desktop released; B pixels remain stopped |
+| Активные чаты/пакеты/ресурсы | Analysis R1/R2 open; Core owns whole bounded repair and scoped checks, Cargo barrier released on exact stable Web hashes below. Integration continues only D05 docs. Web continues transport source/tests/docs, root manifest/lock frozen after successful package check; checkpoint pending. Git index free. Desktop released; B pixels remain stopped |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | Закрыть ANALYSIS-R1/R2 через Core и same-reviewer recheck; принять конечный D05 decision от Integration; Web завершает offline transport. Retained K01 и bounded Native prerequisite уже scoped accepted; live D05 enforcement и RC05 остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -147,9 +147,18 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [E01-analysis-adaptation](packets/E01-analysis-adaptation.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | `264a838d440e687aa1eca988aeb7cd54ccc18083`, pushed | [receipt](receipts/E01-analysis.md): factual query caller replaces placeholder Expectation; saved packages unchanged,21 distinct tests/check/fmt/Clippy on recorded working provider; final saved migration proof pending |
 | ANALYSIS-FLOAT-001 | Integration same chat | saved in b68b5b7; D07@3, registry7, same serde_json1.0.151 | default production204/2054 bit failures corrected to0/2054, production22-case proof passes; same17-package versions/unchanged lock, manifest1df267dd…cc821b. No epsilon or wire promotion; independent migration review pending |
 | [L01-analysis-review](packets/L01-analysis-review.md) | collaboration `/root/analysis_integration_review` | packet259f6ff; base8bb5c02 → candidatec30aa20 | completed two-stage reject; [receipt](receipts/L01-analysis-review.md), R1 array decoding and R2 redacted oracle/manifest coverage; same reviewer retained; independent281-inputhash match |
-| [L01-analysis-repair](packets/L01-analysis-repair.md) | Core sole decoder/fixture/test owner; Integration assignment retired before edits | Restore ANALYSIS@1; Corecffd8d318f02abad4adb55248286f06ed7e878b3 pushed | [Core receipt](receipts/L01-analysis-repair.md): all48 manifest cases visited, sole expected redacted mismatch; exact2files saved. Core now implements R1/R2 concurrently with D05 docs; affected checks await stable Web lock. Same reviewer retained |
+| [L01-analysis-repair](packets/L01-analysis-repair.md) | Core sole decoder/fixture/test owner; Integration assignment retired before edits | Restore ANALYSIS@1; Corecffd8d318f02abad4adb55248286f06ed7e878b3 pushed | [Core receipt](receipts/L01-analysis-repair.md): initial48 cases/sole redacted mismatch saved. Core implements R1/R2 and now runs scoped schema/engine/CLI checks against stable Web manifest identity; no workspace suite or Web acceptance. Same reviewer retained |
 | [D05-runtime-decision](packets/D05-runtime-decision.md) | Integration same chat | packetc826b86; store/source audit/fidelity evidence | dispatched finite enforcement choice/ownership/failure plan; two docs only, no source/spec/Cargo mutation or new profiling |
-| [W01-transport-implementation](packets/W01-transport-implementation.md) | existing Web owner | packeta21b69a; saved source audite5da7d6; D02@1/D07@3 → narrow D07@4 adoption | dispatched actual offline codec/socket implementation and finite local-peer proof. Manifest/build grant issued after Core reproduction; Web alone owns exact D07/root Cargo/lock until stable handoff, Git grant separate. Live adapter still gated by D05 |
+| [W01-transport-implementation](packets/W01-transport-implementation.md) | existing Web owner | packeta21b69a + logging clarificationcb90b7e; D02@1/D07@3 → narrow D07@4 adoption | active actual transport implementation; package check passed per owner, manifest/lock stable and frozen, Core check barrier released.20 new registry packages, no existing-version drift; exact inventory/transport proof/checkpoint pending. Live adapter still gated by D05 |
+
+Current Web manifest handoff (working identity, not yet a saved acceptance):
+Cargo.toml SHA256 `a87adec8d6b011a88b1ccbb40191eeae0dc2964b52bc50e01a1d9b2a073a36c2`;
+Cargo.lock `a3f321614b4551712fa44ee402f697f159dc43d0a613fb85e1e8ecae371d6173`.
+Root independently matched these bytes. Web reports coherent package check,
+tungstenite0.30.0 handshake-only, log0.4.29 no features, existing float_roundtrip
+preserved. Core may check only affected schema/engine/CLI and pin hashes before/
+after; new Web runtime/tests remain separately unverified. Save corresponding
+manifest/source checkpoint before claiming integrated saved evidence.
 
 Saved integration barrier: at `9ca645a`, all211 checked inputs are committed and
 match `db7792faeea43667960657a53560c90fd47aa4f947cf1b62daec896dc5d35afe`.
