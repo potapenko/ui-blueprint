@@ -1,0 +1,13 @@
+[package]
+name = "uiblueprint-engine"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+description = "Pure UI Blueprint geometry measurements and checks"
+
+[dependencies]
+uiblueprint-schema = { path = "../schema" }
+
+[dev-dependencies]
+serde_json.workspace = true
