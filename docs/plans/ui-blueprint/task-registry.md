@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | T01 commit-only; F03b running; Git lease T01; native desktop lane product advisor |
+| Активные чаты/пакеты/ресурсы | S01 + independent oracles + F03b; Git lease root; native desktop lane product advisor |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -98,8 +98,10 @@ LICENSE/NOTICE выбранного материала → собственна�
 | F01-doc | Web chat R01 | `585bcd90ad455110bcc2432f8f36f58e3c8d7ecf` | accepted docs correction; no new measurements |
 | [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | `5d1e0a53670fb8bfbd0c3982db5e164f4bf9bb6d` | accepted reference data; [receipt](receipts/F03a.md); agent/collector proof pending |
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
-| [T01](packets/T01.md) | Core chat R03, Integration role | schema-version owner; 6 focused tests/check/fmt/Clippy passed | commit-only; Git lease T01; [receipt](receipts/T01.md) |
+| [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
 | [F03b](packets/F03b.md) | product advisor | RC03 real resize; point-sizing@1 | running; native lane subject to source reservation; no Git lease |
+| [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | ready; native proof waits for lane; no Git lease |
+| [S01-oracles](packets/S01-oracles.md) | new independent author | C01/GOLDEN semantic inputs and expected outcomes | ready; disjoint oracle files; no Git/runtime lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
@@ -122,5 +124,6 @@ saturation и rAF proposals больше не используются как п
 Это разрешает F03/Q03 через названного advisor в PlayPhrase.me, включая Mac и
 iPhone/iPad данные, при соблюдении конкретных project/runtime routes. Запрет
 реальных приложений из исходного goal уступает этому более позднему узкому разрешению.
-Advisor готовит inventory; live capture ещё не выдан. Код реального приложения
-и другие проекты не открыты для произвольных изменений. Цель не остановлена.
+Inventory принят; F03a собрал RC01/RC02, F03b собирает RC03 по отдельным grants.
+Код реального приложения и другие проекты не открыты для произвольных изменений.
+Цель не остановлена; мобильные примеры следуют отдельным конечным пакетам.
