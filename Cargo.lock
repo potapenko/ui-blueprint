@@ -650,6 +650,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "uiblueprint-export"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "uiblueprint-engine",
+ "uiblueprint-schema",
+]
+
+[[package]]
 name = "uiblueprint-plugin-api"
 version = "0.1.0"
 dependencies = [
