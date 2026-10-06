@@ -1,0 +1,15 @@
+0 standard window Search & Learn / English, ID: learner, Secondary Actions: Raise
+	1 container
+		16 text Value: Director, ID: clipSearch.root
+		17 button Description: About Director, ID: clipSearch.root
+		18 container clipSearch.root
+			19 button Description: Director, Value: Any director, ID: clipSearch.filter.director-trigger
+			20 popover Secondary Actions: Cancel
+				21 container Description: Director filter options, ID: clipSearch.filter.director-popover
+					22 text Directors
+					23 button (disabled) Clear
+					24 text field (settable) Description: Director name, Placeholder: Type a director, ID: clipSearch.filter.director.query
+					25 scroll area
+						26 list Secondary Actions: AXScrollToTop, AXScrollToBottom
+							27 text Search by director name
+The focused UI element is 24 text field (settable) Description: Director name, Placeholder: Type a director, ID: clipSearch.filter.director.query

@@ -1,0 +1,37 @@
+0 standard window Search & Learn / English, ID: learner, Secondary Actions: Raise
+	1 container
+		2 scroll area
+			3 text Settings
+			4 button Description: Close, ID: xmark
+			5 scroll area
+				6 container
+					7 text Interface Language
+					8 menu button ⁨English⁩ — ⁦English⁩, ID: searchLearn.settings.interfaceLocale
+				9 container
+					10 text Show subtitles
+					11 menu button Always, ID: searchLearn.settings.karaokeDisplayMode
+				12 container
+					13 text Translate Directions
+					14 menu button English, ID: searchLearn.settings.translationLanguage
+				15 container
+					16 text Show Phrase Translate
+					17 menu button When Video Paused, ID: searchLearn.settings.translationDisplayMode
+				18 container
+					19 text Show Common Phrases
+					20 menu button When Video Paused, ID: searchLearn.settings.commonPhrasesMode
+				21 container
+					22 text Pause Between Repeats
+					23 menu button Off, ID: searchLearn.settings.repeatPause
+				24 container
+					25 text Default Interface
+					26 menu button Search & Learn, ID: searchLearn.settings.defaultInterface
+				27 container
+					28 text Save favorites to
+					29 menu button This Mac, ID: searchLearn.settings.libraryStorage
+				30 text Choose where your favorites are saved. 17+ Content Settings
+				31 container searchLearn.settings.hideHardOffensive
+					32 text Hide highly offensive phrases Hide phrases with strong insults, slurs, or abusive language.
+					33 menu button Hide highly offensive phrases, Value: off
+				34 container searchLearn.settings.hideExplicitNudity
+					35 text Hide explicit nudity Hide phrases with explicit nudity while allowing mild or suggestive content. Nudity detection is powered by AI and may occasionally be inaccurate.
+					36 menu button Hide explicit nudity, Value: off

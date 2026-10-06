@@ -1,0 +1,340 @@
+{
+  "fixture_kind": "selected normalized real-world observations; not a production wire schema",
+  "case_id": "RC02",
+  "environment": {
+    "product": "PlayPhrase.me",
+    "os": "macOS 27.0.1 (26A434)",
+    "source_repository": "/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac",
+    "source_head_at_collection": "48d0dfd1cd0fe46ac88c073e99ffab7bd1abe76e",
+    "source_branch": "beta-01",
+    "source_dirty_paths": [
+      "PlayphrasemeApp.xcodeproj/project.pbxproj"
+    ],
+    "source_modified_by_F03a": false,
+    "scheme": "PlayphrasemeApp",
+    "resolved_configuration": "Release",
+    "app_pid": 74964,
+    "app_process_started_local": "2026-10-05 14:33:32",
+    "app_process_preexisting": true,
+    "binary": {
+      "path": "/Users/eugenepotapenko/Library/Developer/Xcode/DerivedData/PlayphrasemeApp-cfwbwxubxwecqkfoiaormkljzhki/Build/Products/Release/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe",
+      "sha256": "f3dfd42483d1984cbdb429915c83f6e5f03c946fd25df26e12eac2e9fc1b6150",
+      "mtime_utc": "2026-10-05T11:12:51.547600+00:00",
+      "bundle_id": "playphraseme.Playphraseme",
+      "version": "1.0",
+      "build": "1"
+    },
+    "binary_source_commit": {
+      "availability": "unknown",
+      "reason": "Existing canonical Release preferred by packet. No rebuild or verified historical build receipt; current source HEAD does not establish binary source."
+    },
+    "main_native_window": {
+      "cg_window_id": 1277,
+      "owner_pid": 74964,
+      "title": "Search & Learn / English",
+      "bounds_screen_pt": {
+        "x": 0,
+        "y": 30,
+        "width": 1920,
+        "height": 1050
+      },
+      "source": "CGWindowListCopyWindowInfo filtered to PID 74964"
+    },
+    "capture_density": {
+      "source_pixel_size": [
+        3840,
+        2100
+      ],
+      "native_window_size_pt": [
+        1920,
+        1050
+      ],
+      "scale_x": 2,
+      "scale_y": 2,
+      "method": "pixel dimensions / reported CG window bounds, native -o capture without resize"
+    },
+    "retention": {
+      "evidence_root": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3",
+      "owner": "UI Blueprint root coordinator",
+      "consumers": [
+        "C01",
+        "Q03",
+        "P7"
+      ],
+      "until": "P7 acceptance or explicit discard"
+    },
+    "timing": {
+      "run_interval_utc": [
+        "2026-10-06T11:15:29.277763+00:00",
+        "2026-10-06T11:24:18.687792+00:00"
+      ],
+      "exact_ax_request_times_utc": null,
+      "limitation": "AX calls ordered in CUA transcript but exact timestamps were not separately retained; PNG file times are recorded. Channels are not an atomic snapshot; not performance evidence."
+    }
+  },
+  "initial_and_final_filters": {
+    "genre": "Any genre",
+    "director": "Any director",
+    "cast": "Any cast member",
+    "voice": "Any voice",
+    "source": "All"
+  },
+  "states": [
+    {
+      "id": "genre-open",
+      "evidence": {
+        "source_png": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3/genre-window.png",
+        "source_sha256": "23d0d30541f2074997e0e84b13441c11ae19f256ae617a2fb692073103b05a31",
+        "source_pixel_size": [
+          3840,
+          2100
+        ],
+        "native_capture_file_time_utc": "2026-10-06T11:20:15.919779+00:00",
+        "native_capture_command": "/usr/sbin/screencapture -x -o -l1277 -t png <source_png>",
+        "requested_cg_window_id": 1277,
+        "capture_kind": "native_window_capture_with_attached_content",
+        "resized": false,
+        "crop": {
+          "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3/genre-popover-and-anchor.png",
+          "sha256": "4889cc12b4e736633d881957dedf92fee72eb874a482b3e0259c10f1ad2df627",
+          "pixel_size": [
+            1440,
+            640
+          ],
+          "rectangle_in_source_px": [
+            40,
+            300,
+            1440,
+            640
+          ],
+          "method": "sips crop only; no resize flags",
+          "selection_provenance": "manual region selection from the retained native PNG, not measured UI layout"
+        }
+      },
+      "ax_excerpt": "genre-ax-excerpt.txt",
+      "trigger_id": "clipSearch.filter.genre-trigger",
+      "reported_popover_id": "clipSearch.filter.genre-popover",
+      "reported_ax_role": "popover",
+      "title": "Genres",
+      "clear_reported_disabled": true,
+      "options": [
+        {
+          "label": "Action",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Adventure",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Animation",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Comedy",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Crime",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Documentary",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Drama",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Family",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Fantasy",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Horror",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Mystery",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Romance",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Sci-Fi",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        },
+        {
+          "label": "Thriller",
+          "reported_ax_role": "button",
+          "checked": {
+            "availability": "unknown",
+            "reason": "No checked value in CUA text"
+          }
+        }
+      ],
+      "focused_source_id": "clipSearch.filter.genre.action",
+      "native_popup_candidate": {
+        "cg_window_id": 2950,
+        "owner_pid": 74964,
+        "bounds_screen_pt": {
+          "x": 272,
+          "y": 186,
+          "width": 456,
+          "height": 306
+        },
+        "provenance": "reported CG window inventory; correspondence to CUA popover is temporal/visual inference, not AX-to-CG exact match"
+      },
+      "element_geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "id": "director-open",
+      "evidence": {
+        "source_png": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3/director-window.png",
+        "source_sha256": "5712bf316da35c1f13b3bc401300d81157ea94a6cb65b5c0198966f4121e3951",
+        "source_pixel_size": [
+          3840,
+          2100
+        ],
+        "native_capture_file_time_utc": "2026-10-06T11:21:34.384489+00:00",
+        "native_capture_command": "/usr/sbin/screencapture -x -o -l1277 -t png <source_png>",
+        "requested_cg_window_id": 1277,
+        "capture_kind": "native_window_capture_with_attached_content",
+        "resized": false,
+        "crop": {
+          "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3/director-popover-and-anchor.png",
+          "sha256": "8e149891f857c4ae3f4ace6080904c73250edd28d529bc687ebbb786ea478c12",
+          "pixel_size": [
+            1400,
+            740
+          ],
+          "rectangle_in_source_px": [
+            40,
+            400,
+            1400,
+            740
+          ],
+          "method": "sips crop only; no resize flags",
+          "selection_provenance": "manual region selection from the retained native PNG, not measured UI layout"
+        }
+      },
+      "ax_excerpt": "director-ax-excerpt.txt",
+      "trigger_id": "clipSearch.filter.director-trigger",
+      "reported_popover_id": "clipSearch.filter.director-popover",
+      "reported_ax_role": "popover",
+      "title": "Directors",
+      "clear_reported_disabled": true,
+      "query": {
+        "source_id": "clipSearch.filter.director.query",
+        "reported_ax_role": "text field",
+        "description": "Director name",
+        "placeholder": "Type a director",
+        "reported_settable": true,
+        "reported_focused": true,
+        "value": {
+          "availability": "unknown",
+          "reason": "AX text omits a value; image shows placeholder, no text was entered"
+        }
+      },
+      "guidance": {
+        "reported_role": "text",
+        "text": "Search by director name"
+      },
+      "result_rows_observed": 0,
+      "native_popup_candidate": {
+        "cg_window_id": 2955,
+        "owner_pid": 74964,
+        "bounds_screen_pt": {
+          "x": 272,
+          "y": 239,
+          "width": 436,
+          "height": 348
+        },
+        "provenance": "reported CG window inventory; correspondence to CUA popover is temporal/visual inference, not exact AX-to-CG match"
+      },
+      "element_geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    }
+  ],
+  "actions_observed": [
+    "Sections > Clip Search",
+    "open Genre",
+    "Escape closes Genre",
+    "open Director without typing",
+    "Escape closes Director",
+    "Sections > Search & Learn"
+  ]
+}

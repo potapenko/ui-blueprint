@@ -1,0 +1,27 @@
+0 standard window Search & Learn / English, ID: learner, Secondary Actions: Raise
+	1 container
+		13 text Value: Genre, ID: clipSearch.root
+		14 button Description: About Genre, ID: clipSearch.root
+		15 container clipSearch.root
+			16 button Description: Genre, Value: Any genre, ID: clipSearch.filter.genre-trigger
+			17 popover Secondary Actions: Cancel
+				18 container
+					19 container Description: Genre filter options, ID: clipSearch.filter.genre-popover
+						20 text Genres
+						21 button (disabled) Clear
+						22 collection Secondary Actions: AXScrollToTop, AXScrollToBottom
+							23 button Description: Action, ID: clipSearch.filter.genre.action
+							24 button Description: Adventure, ID: clipSearch.filter.genre.adventure
+							25 button Description: Animation, ID: clipSearch.filter.genre.animation
+							26 button Description: Comedy, ID: clipSearch.filter.genre.comedy
+							27 button Description: Crime, ID: clipSearch.filter.genre.crime
+							28 button Description: Documentary, ID: clipSearch.filter.genre.documentary
+							29 button Description: Drama, ID: clipSearch.filter.genre.drama
+							30 button Description: Family, ID: clipSearch.filter.genre.family
+							31 button Description: Fantasy, ID: clipSearch.filter.genre.fantasy
+							32 button Description: Horror, ID: clipSearch.filter.genre.horror
+							33 button Description: Mystery, ID: clipSearch.filter.genre.mystery
+							34 button Description: Romance, ID: clipSearch.filter.genre.romance
+							35 button Description: Sci-Fi, ID: clipSearch.filter.genre.sci-fi
+							36 button Description: Thriller, ID: clipSearch.filter.genre.thriller
+The focused UI element is 23 button Description: Action, ID: clipSearch.filter.genre.action

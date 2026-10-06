@@ -1,0 +1,293 @@
+{
+  "fixture_kind": "selected normalized real-world observations; not a production wire schema",
+  "case_id": "RC01",
+  "state": "settings-open",
+  "environment": {
+    "product": "PlayPhrase.me",
+    "os": "macOS 27.0.1 (26A434)",
+    "source_repository": "/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac",
+    "source_head_at_collection": "48d0dfd1cd0fe46ac88c073e99ffab7bd1abe76e",
+    "source_branch": "beta-01",
+    "source_dirty_paths": [
+      "PlayphrasemeApp.xcodeproj/project.pbxproj"
+    ],
+    "source_modified_by_F03a": false,
+    "scheme": "PlayphrasemeApp",
+    "resolved_configuration": "Release",
+    "app_pid": 74964,
+    "app_process_started_local": "2026-10-05 14:33:32",
+    "app_process_preexisting": true,
+    "binary": {
+      "path": "/Users/eugenepotapenko/Library/Developer/Xcode/DerivedData/PlayphrasemeApp-cfwbwxubxwecqkfoiaormkljzhki/Build/Products/Release/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe",
+      "sha256": "f3dfd42483d1984cbdb429915c83f6e5f03c946fd25df26e12eac2e9fc1b6150",
+      "mtime_utc": "2026-10-05T11:12:51.547600+00:00",
+      "bundle_id": "playphraseme.Playphraseme",
+      "version": "1.0",
+      "build": "1"
+    },
+    "binary_source_commit": {
+      "availability": "unknown",
+      "reason": "Existing canonical Release preferred by packet. No rebuild or verified historical build receipt; current source HEAD does not establish binary source."
+    },
+    "main_native_window": {
+      "cg_window_id": 1277,
+      "owner_pid": 74964,
+      "title": "Search & Learn / English",
+      "bounds_screen_pt": {
+        "x": 0,
+        "y": 30,
+        "width": 1920,
+        "height": 1050
+      },
+      "source": "CGWindowListCopyWindowInfo filtered to PID 74964"
+    },
+    "capture_density": {
+      "source_pixel_size": [
+        3840,
+        2100
+      ],
+      "native_window_size_pt": [
+        1920,
+        1050
+      ],
+      "scale_x": 2,
+      "scale_y": 2,
+      "method": "pixel dimensions / reported CG window bounds, native -o capture without resize"
+    },
+    "retention": {
+      "evidence_root": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3",
+      "owner": "UI Blueprint root coordinator",
+      "consumers": [
+        "C01",
+        "Q03",
+        "P7"
+      ],
+      "until": "P7 acceptance or explicit discard"
+    },
+    "timing": {
+      "run_interval_utc": [
+        "2026-10-06T11:15:29.277763+00:00",
+        "2026-10-06T11:24:18.687792+00:00"
+      ],
+      "exact_ax_request_times_utc": null,
+      "limitation": "AX calls ordered in CUA transcript but exact timestamps were not separately retained; PNG file times are recorded. Channels are not an atomic snapshot; not performance evidence."
+    }
+  },
+  "evidence": {
+    "source_png": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3/settings-window.png",
+    "source_sha256": "92714547c42344618fb7f825f9a21d4718f793f9f43cc89b1f734442b1a632c0",
+    "source_pixel_size": [
+      3840,
+      2100
+    ],
+    "native_capture_file_time_utc": "2026-10-06T11:18:15.126270+00:00",
+    "native_capture_command": "/usr/sbin/screencapture -x -o -l1277 -t png <source_png>",
+    "requested_cg_window_id": 1277,
+    "capture_kind": "native_window_capture_with_attached_content",
+    "resized": false,
+    "crop": {
+      "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03a/2026-10-06-8z711yn3/settings-dialog.png",
+      "sha256": "f37ab0a0ec98dd8f61c4bab9898deb7ec487eb31196891fa379ac00d4dd4c7de",
+      "pixel_size": [
+        1200,
+        1410
+      ],
+      "rectangle_in_source_px": [
+        1320,
+        380,
+        1200,
+        1410
+      ],
+      "method": "sips crop only; no resize flags",
+      "selection_provenance": "manual region selection from the retained native PNG, not measured UI layout"
+    }
+  },
+  "ax_excerpt": "ax-excerpt.txt",
+  "coverage": {
+    "scope": "Settings subtree plus selected learner background state",
+    "unrelated_rows_removed": true,
+    "source": "CUA getAXState, not UI Blueprint collector"
+  },
+  "elements": [
+    {
+      "source_id": "xmark",
+      "reported_ax_role": "button",
+      "description": "Close",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.interfaceLocale",
+      "reported_ax_role": "menu button",
+      "label": "Interface Language",
+      "reported_text_or_value": "English — English",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.karaokeDisplayMode",
+      "reported_ax_role": "menu button",
+      "label": "Show subtitles",
+      "reported_text_or_value": "Always",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.translationLanguage",
+      "reported_ax_role": "menu button",
+      "label": "Translate Directions",
+      "reported_text_or_value": "English",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.translationDisplayMode",
+      "reported_ax_role": "menu button",
+      "label": "Show Phrase Translate",
+      "reported_text_or_value": "When Video Paused",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.commonPhrasesMode",
+      "reported_ax_role": "menu button",
+      "label": "Show Common Phrases",
+      "reported_text_or_value": "When Video Paused",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.repeatPause",
+      "reported_ax_role": "menu button",
+      "label": "Pause Between Repeats",
+      "reported_text_or_value": "Off",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.defaultInterface",
+      "reported_ax_role": "menu button",
+      "label": "Default Interface",
+      "reported_text_or_value": "Search & Learn",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.libraryStorage",
+      "reported_ax_role": "menu button",
+      "label": "Save favorites to",
+      "reported_text_or_value": "This Mac",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.hideHardOffensive",
+      "reported_ax_role": "menu button",
+      "label": "Hide highly offensive phrases",
+      "reported_text_or_value": "off",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    },
+    {
+      "source_id": "searchLearn.settings.hideExplicitNudity",
+      "reported_ax_role": "menu button",
+      "label": "Hide explicit nudity",
+      "reported_text_or_value": "off",
+      "provenance": "selected CUA AX text; interfaceLocale normalized only by removing bidi isolation marks",
+      "geometry": {
+        "layout_bounds": "unknown",
+        "accessibility_bounds": "unknown",
+        "hit_region": "unknown",
+        "paint_bounds": "unknown",
+        "material_parameters": "unknown",
+        "corner_radius": "unknown",
+        "reason": "CUA text exposes semantics without per-element bounds; no app probe or property instrumentation was added. Native window bounds do not supply child layout."
+      }
+    }
+  ],
+  "actions_observed": [
+    "Command-comma opens Settings",
+    "Escape closes Settings",
+    "return exposes Play on the same ready phrase"
+  ],
+  "final_state": "original paused Search/query restored; no setting selection actions performed"
+}
