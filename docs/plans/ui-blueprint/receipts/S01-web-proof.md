@@ -1,69 +1,86 @@
-# S01-Web collector checkpoint receipt
+# S01-Web common-interface proof receipt
 
-- status: `waiting_evidence: committed reusable Rust support/entrypoint`.
-- classification: verification with minimal test tooling; finite packet incomplete.
-- authority: [S01-Web](../packets/S01-web-proof.md) and
-  [shared S01 bridges](../packets/S01-bridges.md); approved S01 D02 obligation,
-  explicit user parallel-work request. No new product choice.
-- spec_basis: [full traversal/dependency receipt](../../../development/interface-proof-web.md#spec-basis).
-- ready input: committed F01 `a8368076cdf0d4a917e7c3c5448ca6b6d919cf64` and docs
-  correction `585bcd90ad455110bcc2432f8f36f58e3c8d7ecf`.
-- supporting outcome: saved preparation plus independent bounded F01/B03 live
-  collector/normalizer and schema file-validator evidence, explicitly test context.
-- shipping/interface proof delivered: none. Shared source unchanged; D02 needs
-  actual common-session admission, Ticket, parent clock and lifecycle evidence.
+- status: `done` (finite Web proof candidate checkpointed; root acceptance separate).
+  No S01/P1/product or Native acceptance claim.
+- authority: S01-Web/S01-bridges packets and direct root follow-ups under approved
+  PLAN.UIB@1. Scope F01/B03 popup/overlay only; no new product choice.
+- basis: [complete traversal and implementation handoff](../../../development/interface-proof-web.md#spec-basis);
+  current D02/D03/D05 and normative closure retained; execution runbook read.
+- schema Stage A: `9d2df153abd2a7d7567100e06d4260e5edda3bb3`.
+- common support: `73d772e97efcf550ea4a4d3e8480b56509ebc548`, committed/pushed.
+- fixture: F01 `a8368076cdf0d4a917e7c3c5448ca6b6d919cf64`, docs correction `585bcd9`.
+- previous saved checkpoints: preparation `6029c7d6f912f826d9fd48633469a51b6b6e7496`,
+  collector `7813cd76b301aa0002b05818f42363d5d2df18a1`; both pushed, leases released.
 
-Write set: `tests/bridges/web/fixture-host.cjs`, `tests/bridges/web/prepare.cjs`,
-`tests/bridges/web/collector.cjs`, `tests/bridges/web/collector-check.cjs`, `docs/development/interface-proof-web.md`, this receipt.
-No fixture/schema/Cargo/shared-driver/coordination edits or review-P2 repairs.
-Root granted a short collector checkpoint lease: only collector.cjs,
-collector-check.cjs, interface-proof-web.md and this receipt. Master and empty
-index confirmed; exact checkpoint SHA/push returned in terminal handoff.
-Shared Rust changes belong to Integration.
+## Outcome and checks
 
-Preparation checkpoint: `6029c7d6f912f826d9fd48633469a51b6b6e7496`, push to
-origin/master succeeded and remote-tracking SHA matched; preparation lease released.
-Collector checkpoint is the commit containing this updated receipt; its short
-lease is released after push. Native/root/shared files remain untouched.
+Supporting verification/tooling delivered: live isolated F01 request → actual
+common Rust Ticket → bounded DOM/CSSOM/addressed AX → canonical channel frame →
+ObservationSession/schema validation → returned Completion data. The three live
+states popup-open/overlay-on/overlay-off retain 12/14/12 source nodes respectively,
+partial coverage, raw roles, source times/clocks, identities and anchor evidence.
+Actual returned channel Documents equal submitted normalized data structurally.
+Parent terminal elapsed 32/29/24ms; this is deadline evidence, not Q02 acceptance.
 
-## Independent scoped checks
+Six additional Web-orchestration negatives: injected cancel/detach/expiry with
+recorded live data marked stale/cache and correctly correlated late reply rejection;
+wrong response version and malformed frame reject then canonical recovery succeeds;
+oversize rejects with host exit2. All nine scenarios meet literal expectations;
+eight retained-data equality comparisons pass. No fake Ticket or parent reading.
+Live vs recorded/synthetic source and injected control are explicit in report.
 
-Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3`; runbook `553a4e9` read.
-Read canonical model, relevant validator and plugin API. Offline scoped schema
-validator build used separate task-temp target dir; Cargo.toml/lock/crates/schema
-matched Stage A before/after build. No P2 repair or shared write.
+Commands/checks:
 
-`node --check` for both new collector files passed.
-`S01_WEB_PLAYWRIGHT_CORE=<approved-runtime> S01_WEB_VALIDATOR=<pinned-validator> S01_WEB_OUTPUT=<report> node tests/bridges/web/collector-check.cjs`
-passed 45 checks: existing F01/B03 popup-open, overlay-on/off; BODY parent,
-explicit anchor, hit targets, clipping oracle, separate DOM/AX source observations,
-partial/unknown properties, read-only UI invariance and injected collector-argument
-refusals. Six request/snapshot documents passed Rust file validator. This is NOT
-ObservationSession/D02 proof and contains no fabricated Ticket or parent reading.
-B02/B04, real site and historical combined polling runner were not executed.
+- `cargo +1.96.0 build --locked --offline -p uiblueprint-plugin-api --example d02_host`:
+  pass, separate task-temp target directory. Shared build inputs matched support
+  commit before/after; exact host hash in retained build identity.
+- `node --check tests/bridges/web/interface-proof.cjs`: pass.
+- `S01_WEB_PLAYWRIGHT_CORE=<runtime> S01_WEB_HOST=<pinned-host> S01_WEB_PROOF_DIR=<new-dir> node tests/bridges/web/interface-proof.cjs`:
+  pass 3 live/6 injected cases. Existing B03 oracle used by assertions, not collector.
+- Common support 3 tests/8 synthetic scenarios reused from producer handoff;
+  prior 45 collector checks not rerun. Wrong request-version coverage remains that
+  labelled synthetic producer evidence; live response-version is tested here.
+- Changed local links, scope and whitespace: pass; current source hashes match report.
 
-Minimal retained evidence for D02/P1/P7 and Integration's example inspection:
-`/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P1/D02/web-collector-0ec44061-82cd-4d96-a9cd-17729a63b563/`:
-`collector-report.json` plus `build-identity.json` with validator hash/basis.
-Minimum normalized sample locations for D05 sizing are the report's
-`snapshots[0].snapshot` (popup-open), `snapshots[1].snapshot` (overlay-on), and
-`snapshots[2].snapshot` (overlay-off); each adjacent `request` records its selected
-fields/context/limits. No duplicate sample files or new collection needed.
-Owner=root; retain until P1/P7 acceptance or explicit discard. Narrow B03 samples
-are not the largest complete F01 graph or a D05 memory policy. Raw build output
-not retained/committed. Browser, CDP attachment and localhost resources closed.
+Limits explicit: 32 nodes/depth 8,65536 frame/output bytes,131072 pending encoded bytes,
+8 frames,250ms request,1000ms late grace,4s host watchdog,40s whole-run watchdog.
+Node 24.15.0/Playwright Core 1.58.2/Chromium 145.0.7632.6,800×600/DPR1; same owned
+headless fixture environment. All owned hosts/CDP/browser/localhost resources closed.
+Queue/read-thread limits are not proof of OS-syscall cancellation. No physical focus,
+real site, B02/B04, historical polling runner or production adapter used.
 
-## Exact remaining dependency
+## Exact checkpoint scope and evidence
 
-Root forwarded the common API need to Integration and clarified: reusable typed
-Rust test support may directly call ObservationSession; no new executable protocol
-is required merely because a binary is absent. Platform orchestration is allowed,
-common API/validator/Ticket/clock/lifecycle must be reused. One shared support owner;
-no competing host or policy in Web paths.
+New file `tests/bridges/web/interface-proof.cjs`; updates only
+`docs/development/interface-proof-web.md` and this receipt. Existing collector and
+fixture files unchanged. No Cargo/schema/common-support/Native/root edits and
+no review-P2 fixes. Root granted an exclusive three-path checkpoint lease;
+master and empty index confirmed. This receipt belongs to that checkpoint; exact
+SHA/push result is returned in the terminal handoff. Lease released after push.
 
-Next action: consume Integration's committed support entrypoint, bind existing
-collector to an admitted canonical request and actual Ticket, then prove live
-channels through the common Rust boundary and assigned version/framing/lifecycle
-negatives. Full packet remains waiting_evidence after saving this collector
-checkpoint. No prior checks rerun, new measurements or support tools added for
-checkpoint; next work waits for committed Integration API handoff.
+Minimum durable proof directory:
+`/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P1/D02/web-proof-956d43cd-9297-41fb-ba24-ae5612e75e3a/`.
+`report.json` contains actual host receipts, labelled cases, equality hashes and
+collector/source/build identities; `build-identity.json` records pinned build.
+For D05 use canonical returned normalized Documents:
+
+- `popup-open/retained/channel-0.json`
+- `overlay-on/retained/channel-0.json`
+- `overlay-off/retained/channel-0.json`
+
+Adjacent session.json/request.json retain exact capability/scope/field/budget inputs.
+Injected-case retained data are labelled separately; they are not fresh samples.
+Earlier collector-only evidence remains at
+`/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P1/D02/web-collector-0ec44061-82cd-4d96-a9cd-17729a63b563/`
+(report snapshots[0..2].snapshot plus build identity), explicitly not full D02.
+Owner=root; consumers D02/D05/P1/P7; retain through P1/P7 acceptance or explicit
+discard. Narrow B03 samples are not the largest complete F01 graph or a memory
+policy. No raw build logs or captures committed.
+
+## Remaining condition
+
+The shared API dependency is satisfied for this finite Web proof. The three-path
+checkpoint and push save the candidate; root owns its acceptance. No unchanged
+runtime checks repeated for checkpoint. All original proof evidence is preserved.
+S01/P1 freeze, Native proof, D05 sizing and four P2 findings remain separate owners/
+gates. Stop after this finite packet; do not start W01 or a host redesign.

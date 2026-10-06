@@ -1,6 +1,6 @@
 # S01-Web common interface proof
 
-State: independent live collector/normalizer checked; shared Rust support entrypoint pending.
+State: live Web/common Rust proof candidate checkpointed; root acceptance separate.
 Consumer D02-PROOF/P1 boundary, then W01. No production adapter or pilot accepted.
 Authority: [platform packet](../plans/ui-blueprint/packets/S01-web-proof.md) and
 [shared handoff](../plans/ui-blueprint/packets/S01-bridges.md), approved PLAN.UIB@1
@@ -119,25 +119,67 @@ S01_WEB_OUTPUT=<task-evidence-path> \
 node tests/bridges/web/collector-check.cjs
 ```
 
-## Committed Stage A and exact remaining dependency
+## Live common-boundary result
 
-Baseline `9d2df153abd2a7d7567100e06d4260e5edda3bb3`, committed/pushed; runbook
-checkpoint `553a4e9` read. Inspected committed schema/plugin handoffs, canonical
-model, relevant validation paths and plugin-api library. Four P2 findings untouched.
-Preparation checkpoint `6029c7d6f912f826d9fd48633469a51b6b6e7496` was pushed to
-origin/master; its short Git lease was released. The collector is saved in a
-separate path-limited checkpoint identified in its terminal handoff/receipt history.
+Consumed Integration support `73d772e97efcf550ea4a4d3e8480b56509ebc548`, schema
+Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3`. Read committed
+[common README](../../tests/bridges/common/README.md), session_support.rs and
+plugin-api `examples/d02_host.rs`. Its existing ObservationSession owns admission,
+Ticket sequence, parent Instant and lifecycle; Web adds orchestration only.
 
-Root accepted one producer dependency and clarified its minimal form: Integration
-owns reusable Rust **test support/entrypoint**, not necessarily an executable host
-or new command protocol. Typed Rust orchestration can directly call the common
-ObservationSession. A Node wrapper is needed only if chosen for this bridge.
-Absence of a binary alone is not a product blocker. Platform-specific orchestration
-may differ while the actual API, validation, Ticket/clock and lifecycle stay common.
+Build: `cargo +1.96.0 build --locked --offline -p uiblueprint-plugin-api --example d02_host`
+in a separate task-temp target directory. Cargo.toml/lock, schema, plugin-api and
+common support matched that committed baseline around the build. No shared edits.
 
-Next: receive Integration's committed support revision/usage contract, bind the
-collector to admitted canonical requests, return live channels using the real
-Ticket and parent monotonic clock, and run complete/cancel/expire/detach/late-response
-and malformed/oversize/version checks through that existing common owner. Do not
-create a competing driver or policy. Until then the collector result is useful
-independent preparation, not D02 acceptance. No browser resources held.
+```sh
+S01_WEB_PLAYWRIGHT_CORE=<approved-absolute-runtime> \
+S01_WEB_HOST=<pinned-built-d02_host> \
+S01_WEB_PROOF_DIR=<new-absolute-task-evidence-directory> \
+node tests/bridges/web/interface-proof.cjs
+```
+
+Three live cases: popup-open, overlay-on, overlay-off. Fixture setup and exact
+attachment identity precede admission; requested field collection starts only
+after the host's actual ticket receipt. Canonical ChannelResponse correlation
+uses those returned request/session IDs and sequence. Source intervals remain on
+the collector clock; no authored parent reading or cross-clock equality. Parent
+request deadline remains authoritative. Ticket-before-source-read is checked on
+the Node receipt/collector monotonic timeline within the same process.
+
+Each live response passed the shared schema semantic validator via receive,
+ObservationSession completed, and its actual retained canonical channel document
+was structurally identical to the submitted normalized frame. Returned source nodes:
+12/14/12. Host terminal elapsed 32/29/24ms, within explicit 250ms request budgets;
+these multi-node proof timings are not Q02 performance acceptance. Existing B03
+oracle verifies portal parent/anchor, hit target and clip bounds on this new chain.
+Partial coverage, unknown source-specific geometry and source IDs survive retention.
+
+| Case | Source/control | Actual common boundary result |
+| --- | --- | --- |
+| Three B03 states | Live data, normal control | Completed; host exit0; retained equality |
+| cancel-after-first | Recorded live snapshot, stale/cache-labelled; injected control | Cancelled; retained equality; canonical correlated late reply rejected; exit0 |
+| detach-after-first | Same recorded/injected distinction | Detached; retained equality; late reply rejected; exit0 |
+| expire-after-first | Same recorded data; actual parent deadline expires | TimedOut; retained equality; late reply rejected; exit0 |
+| Wrong response version | Injected incompatible frame using recorded Web shape | InvalidFrame; subsequent canonical frame completes and retains equal data; exit0 |
+| Malformed frame | Injected malformed bytes followed by recorded canonical Web data | InvalidFrame; recovery completes/equality; exit0 |
+| Oversize frame | Injected 65537-byte payload plus newline, cap 65536 | Oversize; terminal rejection/exit2; no false completion |
+
+All nine cases passed their explicit expectations; eight check retained equality.
+Generic support's three tests/eight synthetic scenarios (including wrong request
+version) were reused from its committed producer receipt, not rerun. Prior 45
+collector-only checks were not rerun. New proof syntax and docs checks passed.
+
+Explicit limits: 32 nodes/depth 8,65536 output/frame bytes,131072 pending encoded
+bytes,8 frames,250ms request,1000ms late grace. Each owned host has a 4s watchdog;
+the entire orchestration has 40s watchdog with owned host termination/browser
+closure. Normal/failure paths close their own host, CDP attachment, browser and
+localhost server. No shared desktop, user process or existing browser touched.
+A bounded reader/queue is not OS-call cancellation; injected lifecycle cases do
+not claim interruption of an in-flight browser syscall. No polling between requests.
+
+Evidence/normalized sample paths and retention are in the
+[receipt](../plans/ui-blueprint/receipts/S01-web-proof.md). No core/schema/fixture
+or four-P2 changes. This closes the worker's finite Web proof candidate, not
+Native proof, D05 calibration, S01/P1 freeze, platform pilot or product acceptance.
+Checkpoint/push identity is returned in the terminal handoff and receipt history;
+no next production task started.
