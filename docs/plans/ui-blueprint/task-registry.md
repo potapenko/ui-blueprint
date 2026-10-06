@@ -89,7 +89,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Analysis migration saved through Corec30aa20, 281-input hash matched150-test barrier; fresh analysis reviewer active. Integration D05-runtime-decision dispatched; other owners retained idle. Desktop released; B pixels remain stopped |
+| Активные чаты/пакеты/ресурсы | Analysis review rejected R1/R2; Core writes manifest verification test, Integration finishes D05 decision then schema/fixture repair. Web receives independent offline transport packet; root Cargo/lock frozen until Core reproduction, separate mutation grant required. Desktop released; B pixels remain stopped |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | Закрыть ANALYSIS-R1/R2 через Integration/Core и same-reviewer recheck; Integration завершает D05-runtime-decision перед schema repair. Retained K01 и bounded Native prerequisite уже scoped accepted; live D05 enforcement, Web adoption/transport и RC05 остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -149,6 +149,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [L01-analysis-review](packets/L01-analysis-review.md) | collaboration `/root/analysis_integration_review` | packet259f6ff; base8bb5c02 → candidatec30aa20 | completed two-stage reject; [receipt](receipts/L01-analysis-review.md), R1 array decoding and R2 redacted oracle/manifest coverage; same reviewer retained; independent281-inputhash match |
 | [L01-analysis-repair](packets/L01-analysis-repair.md) | Integration schema/fixtures; Core engine tests | Restore ANALYSIS@1, findings atc30aa20 | Core ready now with disjoint test scope; Integration queued after D05 decision docs; no authority wait, no product/spec delta |
 | [D05-runtime-decision](packets/D05-runtime-decision.md) | Integration same chat | packetc826b86; store/source audit/fidelity evidence | dispatched finite enforcement choice/ownership/failure plan; two docs only, no source/spec/Cargo mutation or new profiling |
+| [W01-transport-implementation](packets/W01-transport-implementation.md) | existing Web owner | saved source audite5da7d6; D02@1/D07@3 → narrow D07@4 adoption | ready offline codec/socket implementation and finite local-peer proof; Web temporarily owns exact D07/Cargo integration paths. Root manifest grant waits for Core reproduction; live adapter still gated by D05 |
 
 Saved integration barrier: at `9ca645a`, all211 checked inputs are committed and
 match `db7792faeea43667960657a53560c90fd47aa4f947cf1b62daec896dc5d35afe`.
