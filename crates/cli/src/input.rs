@@ -1,10 +1,13 @@
-use crate::{Failure, arguments::Arguments};
+use crate::{
+    Failure,
+    arguments::{Arguments, QueryFile},
+};
 use std::{
     fs::{self, File},
     io::Read,
     path::Path,
 };
-use uiblueprint_schema::model::*;
+use uiblueprint_schema::{analysis::*, model::*};
 
 pub(crate) fn read(path: &Path, remaining: &mut usize) -> Result<Vec<u8>, Failure> {
     let metadata = fs::metadata(path).map_err(|_| Failure::io())?;
@@ -34,50 +37,108 @@ pub(crate) fn read(path: &Path, remaining: &mut usize) -> Result<Vec<u8>, Failur
     Ok(bytes)
 }
 
-pub(crate) fn load(args: &Arguments) -> Result<(Snapshot, Expectation), Failure> {
+pub(crate) struct Loaded {
+    pub snapshot: Snapshot,
+    pub query: GeometryQuery,
+    pub expectation: Option<Expectation>,
+    pub evaluation: EvaluationInput,
+}
+pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
     let mut remaining = args.max_input;
-    let snapshot = Document::from_json(&read(&args.snapshot, &mut remaining)?, args.max_input)
+    let document = Document::from_json(&read(&args.snapshot, &mut remaining)?, args.max_input)
         .map_err(|_| Failure::invalid("invalid_input"))?;
-    let expectation =
-        Document::from_json(&read(&args.expectation, &mut remaining)?, args.max_input)
-            .map_err(|_| Failure::invalid("invalid_input"))?;
-    match (snapshot.artifact, expectation.artifact) {
-        (Artifact::Snapshot(snapshot), Artifact::Expectation(expectation)) => {
-            Ok((*snapshot, *expectation))
+    let Artifact::Snapshot(snapshot) = document.artifact else {
+        return Err(Failure::invalid("invalid_input"));
+    };
+    let (query, expectation) = match &args.query {
+        QueryFile::Expectation(path) => {
+            let document = Document::from_json(&read(path, &mut remaining)?, args.max_input)
+                .map_err(|_| Failure::invalid("invalid_input"))?;
+            let Artifact::Expectation(expectation) = document.artifact else {
+                return Err(Failure::invalid("invalid_input"));
+            };
+            let query = GeometryQuery::from_expectation(&expectation)
+                .ok_or(Failure::unsupported("unsupported_rule"))?;
+            (query, Some(*expectation))
         }
-        _ => Err(Failure::invalid("invalid_input")),
-    }
+        QueryFile::Query(path) => {
+            let document =
+                AnalysisDocument::from_json(&read(path, &mut remaining)?, args.max_input)
+                    .map_err(|_| Failure::invalid("invalid_input"))?;
+            let AnalysisArtifact::GeometryQuery(query) = document.artifact else {
+                return Err(Failure::invalid("invalid_input"));
+            };
+            (*query, None)
+        }
+    };
+    let supplied = if let Some(path) = &args.evaluation {
+        let document = AnalysisDocument::from_json(&read(path, &mut remaining)?, args.max_input)
+            .map_err(|_| Failure::invalid("invalid_input"))?;
+        let AnalysisArtifact::EvaluationInput(input) = document.artifact else {
+            return Err(Failure::invalid("invalid_input"));
+        };
+        Some(*input)
+    } else {
+        None
+    };
+    let selected = space(&snapshot, &query, supplied.as_ref(), &args.space)?;
+    let evaluation = if let Some(input) = supplied {
+        if input.result_space != selected {
+            return Err(Failure::invalid("invalid_input"));
+        }
+        input
+    } else {
+        EvaluationInput {
+            snapshot_id: snapshot.id.clone(),
+            revision: snapshot.revision,
+            context: snapshot.context.clone(),
+            result_space: selected,
+            transforms: vec![],
+            conditions: None,
+        }
+    };
+    validate_bound_evaluation(&snapshot, &evaluation)
+        .map_err(|_| Failure::invalid("invalid_input"))?;
+    Ok(Loaded {
+        snapshot: *snapshot,
+        query,
+        expectation,
+        evaluation,
+    })
 }
 
-pub(crate) fn space(
+fn transform_spaces<'a>(transform: &'a TransformState, spaces: &mut Vec<&'a Space>) {
+    if let TransformState::Known { transform } = transform {
+        spaces.push(&transform.from);
+        spaces.push(&transform.to);
+    }
+}
+fn space(
     snapshot: &Snapshot,
-    expectation: &Expectation,
+    query: &GeometryQuery,
+    evaluation: Option<&EvaluationInput>,
     id: &str,
 ) -> Result<Space, Failure> {
-    let Rule::Geometry { anchors, .. } = &expectation.rule else {
-        return Err(Failure::unsupported("unsupported_rule"));
-    };
-    let mut candidates = Vec::new();
-    for anchor in anchors {
-        candidates.push(&anchor.coordinate_space);
-        let field = match anchor.frame_kind {
-            FrameKind::LayoutBounds => Field::LayoutBounds,
-            FrameKind::AccessibilityBounds => Field::AccessibilityBounds,
-            FrameKind::HitRegion => Field::HitRegion,
-            FrameKind::VisibleRegion => Field::VisibleRegion,
-            FrameKind::PaintBounds => Field::PaintBounds,
-        };
-        if let Some(node) = snapshot.nodes.iter().find(|n| n.key == anchor.element)
-            && let Some(Value::Geometry(geometry)) = node
-                .properties
-                .iter()
-                .find(|p| p.field() == field)
-                .and_then(Property::known)
-        {
-            candidates.push(&geometry.coordinate_space);
-            if let TransformState::Known { transform } = &geometry.transform {
-                candidates.push(&transform.to);
+    let mut candidates: Vec<_> = query.anchors.iter().map(|a| &a.coordinate_space).collect();
+    for node in &snapshot.nodes {
+        for property in &node.properties {
+            match property.known() {
+                Some(Value::Geometry(geometry)) => {
+                    candidates.push(&geometry.coordinate_space);
+                    transform_spaces(&geometry.transform, &mut candidates);
+                }
+                Some(Value::Baseline { space, .. }) => candidates.push(space),
+                _ => (),
             }
+        }
+    }
+    for capture in &snapshot.captures {
+        transform_spaces(&capture.crop_transform, &mut candidates);
+    }
+    if let Some(evaluation) = evaluation {
+        for transform in &evaluation.transforms {
+            candidates.push(&transform.from);
+            candidates.push(&transform.to);
         }
     }
     let mut matches = candidates.into_iter().filter(|s| s.id.0 == id);

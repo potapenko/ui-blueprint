@@ -38,11 +38,10 @@ pub(crate) fn record_evidence(
 
 pub(crate) fn applicability(
     snapshot: &Snapshot,
-    expectation: &Expectation,
+    required: &ContextConditions,
     context: &EvaluationContext<'_>,
     evidence: &mut Vec<Evidence>,
 ) -> Result<Option<UnknownReason>, GeometryError> {
-    let required = &expectation.applies_when;
     if required.platform.is_none() && required.input_mode.is_none() && required.text_scale.is_none()
     {
         return Ok(None);
@@ -105,10 +104,11 @@ fn property<'a>(
     else {
         return Ok(Err(UnknownReason::NotRequested));
     };
+    let source_state = record_evidence(snapshot, source, evidence)?;
     if *sensitivity == Sensitivity::Sensitive {
         return Ok(Err(UnknownReason::RedactedProperty));
     }
-    if let Some(reason) = record_evidence(snapshot, source, evidence)? {
+    if let Some(reason) = source_state {
         return Ok(Err(reason));
     }
     Ok(match state {

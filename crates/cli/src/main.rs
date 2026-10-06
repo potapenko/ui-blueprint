@@ -6,18 +6,18 @@ mod export;
 mod input;
 mod output;
 
-use arguments::{Arguments, Command};
+use arguments::{Arguments, Command, ResultVersion};
 use std::{
     io::{self, Write},
     process::ExitCode,
 };
-use uiblueprint_engine::{self as engine, EvaluationContext, MeasurementResult};
-use uiblueprint_schema::{model::*, validation};
+use uiblueprint_engine::{self as engine, MeasurementResult};
+use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
-Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--json]\n\
+Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
-JSON is available for check. Measure JSON awaits a canonical measurement record.\n\
+Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
 Export: uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose MODE] [--profile blue-engineering] [--json]\n\
 Export requires a complete DrawingBrief with canonical Snapshot or explicit ProposedLayout, public document metadata and caller limits. No model or live collection.\n\
 Exits: 0 package written/pass/known; 1 IO/internal; 2 invalid/limit; 3 fail; 4 unknown; 5 unsupported/contract gap.\n";
@@ -43,47 +43,59 @@ impl Failure {
 }
 
 fn execute(args: Arguments) -> Result<(Vec<u8>, u8), Failure> {
-    if args.command == Command::Measure && args.json {
-        return Err(Failure::unsupported("consumer_contract_gap"));
-    }
-    let (snapshot, expectation) = input::load(&args)?;
-    if !matches!(expectation.rule, Rule::Geometry { .. }) {
-        return Err(Failure::unsupported("unsupported_rule"));
-    }
-    let space = input::space(&snapshot, &expectation, &args.space)?;
-    // FindingCase retains anchor source spaces, but cannot record a separately
-    // selected result space. Do not serialize a converted quantity ambiguously.
-    if args.json
-        && let Rule::Geometry { anchors, .. } = &expectation.rule
-        && anchors
-            .iter()
-            .any(|anchor| anchor.coordinate_space != space)
-    {
-        return Err(Failure::unsupported("consumer_contract_gap"));
-    }
-    let context = EvaluationContext {
-        space: &space,
-        transforms: &[],
-        conditions: None,
-    };
+    let loaded = input::load(&args)?;
+    let input::Loaded {
+        snapshot,
+        query,
+        expectation,
+        evaluation,
+    } = loaded;
     match args.command {
         Command::Check => {
-            let result = engine::check(&snapshot, &expectation, &context)
+            let expectation = expectation.ok_or(Failure::invalid("invalid_arguments"))?;
+            if args.json
+                && args.result_version == ResultVersion::Core
+                && (!evaluation.transforms.is_empty()
+                    || evaluation.conditions.is_some()
+                    || query
+                        .anchors
+                        .iter()
+                        .any(|a| a.coordinate_space != evaluation.result_space))
+            {
+                return Err(Failure::unsupported("unsupported_result_version"));
+            }
+            let result = engine::check_bound(&snapshot, &expectation, &evaluation)
                 .map_err(|_| Failure::invalid("invalid_geometry"))?;
-            validation::validate_finding(&snapshot, &expectation, &result.finding)
-                .map_err(|_| Failure::unsupported("consumer_contract_gap"))?;
             let exit = match result.finding.status {
                 CheckStatus::Pass => 0,
                 CheckStatus::Fail => 3,
                 CheckStatus::Unknown => 4,
             };
-            let bytes = if args.json {
+            let bytes = if args.json && args.result_version == ResultVersion::Core {
+                validation::validate_finding(&snapshot, &expectation, &result.finding)
+                    .map_err(|_| Failure::unsupported("unsupported_result_version"))?;
                 output::json(snapshot, expectation, result.finding, args.max_output)?
+            } else if args.json {
+                output::analysis_json(
+                    AnalysisDocument {
+                        schema_version: AnalysisVersion::CURRENT,
+                        artifact: AnalysisArtifact::GeometryCheck(Box::new(GeometryCheckCase {
+                            snapshot,
+                            expectation,
+                            evaluation,
+                            measurement: result.measurement,
+                            finding: result.finding,
+                        })),
+                    },
+                    args.max_output,
+                )?
             } else {
                 output::compact(
                     &args,
                     &snapshot,
-                    &expectation,
+                    &query,
+                    Some(&expectation),
+                    &evaluation,
                     &result.measurement,
                     Some(result.finding.status),
                 )?
@@ -91,17 +103,38 @@ fn execute(args: Arguments) -> Result<(Vec<u8>, u8), Failure> {
             Ok((bytes, exit))
         }
         Command::Measure => {
-            let result = engine::measure(&snapshot, &expectation, &context)
+            let result = engine::measure_query_bound(&snapshot, &query, &evaluation)
                 .map_err(|_| Failure::invalid("invalid_geometry"))?;
-            let exit = if matches!(result, MeasurementResult::Known(_)) {
+            let exit = if matches!(result, MeasurementResult::Known { .. }) {
                 0
             } else {
                 4
             };
-            Ok((
-                output::compact(&args, &snapshot, &expectation, &result, None)?,
-                exit,
-            ))
+            let bytes = if args.json {
+                output::analysis_json(
+                    AnalysisDocument {
+                        schema_version: AnalysisVersion::CURRENT,
+                        artifact: AnalysisArtifact::Measurement(Box::new(MeasurementCase {
+                            snapshot,
+                            query,
+                            evaluation,
+                            result,
+                        })),
+                    },
+                    args.max_output,
+                )?
+            } else {
+                output::compact(
+                    &args,
+                    &snapshot,
+                    &query,
+                    expectation.as_ref(),
+                    &evaluation,
+                    &result,
+                    None,
+                )?
+            };
+            Ok((bytes, exit))
         }
     }
 }

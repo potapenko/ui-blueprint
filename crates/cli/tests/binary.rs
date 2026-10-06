@@ -184,12 +184,17 @@ fn measure_returns_fact_without_inventing_success_for_failed_expectation() {
     );
 }
 #[test]
-fn missing_shared_measurement_json_contract_is_explicit() {
-    assert_error(
-        Case::new("GEO-GAP").run("measure", true, 100_000, 100_000),
-        5,
-        "consumer_contract_gap",
-    );
+fn measurement_json_uses_the_registered_canonical_analysis_record() {
+    let output = Case::new("GEO-GAP").run("measure", true, 100_000, 100_000);
+    assert_eq!(output.status.code(), Some(0));
+    assert!(output.stderr.is_empty());
+    let document =
+        uiblueprint_schema::analysis::AnalysisDocument::from_json(&output.stdout, 100_000)
+            .expect("analysis result");
+    assert!(matches!(
+        document.artifact,
+        uiblueprint_schema::analysis::AnalysisArtifact::Measurement(_)
+    ));
 }
 #[test]
 fn input_limit_is_aggregate_and_output_limit_has_no_partial_json() {
@@ -317,7 +322,7 @@ fn converted_json_does_not_drop_selected_result_space() {
     assert_error(
         case.run_at("check", true, 100_000, 100_000, "converted"),
         5,
-        "consumer_contract_gap",
+        "unsupported_result_version",
     );
     let compact = case.run_at("measure", false, 100_000, 100_000, "converted");
     assert_eq!(compact.status.code(), Some(0));

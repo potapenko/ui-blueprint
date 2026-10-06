@@ -1,11 +1,13 @@
 //! Deterministic geometry over canonical snapshots. No collection or side effects.
 #![forbid(unsafe_code)]
 
+pub mod analysis;
 mod arithmetic;
 pub mod cache;
 pub mod replay;
 mod resolve;
 
+pub use analysis::{VerificationError, check_bound, measure_query_bound, verify_analysis_result};
 use uiblueprint_schema::{model::*, validation};
 
 /// Calculation failure, distinct from an unavailable measurement or a failed check.
@@ -23,42 +25,10 @@ impl std::fmt::Display for GeometryError {
 }
 impl std::error::Error for GeometryError {}
 
-/// A payload-free reason why geometry cannot establish a result.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub enum UnknownReason {
-    NotRequested,
-    UnknownProperty,
-    UnsupportedProperty,
-    RedactedProperty,
-    MissingTarget,
-    MissingTransform,
-    FrameKindMismatch,
-    UnsupportedShape,
-    IncompleteScope,
-    UnstableState,
-    ApplicabilityUnknown,
-    NotApplicable,
-    UndefinedRatio,
-}
-impl UnknownReason {
-    pub const fn as_str(self) -> &'static str {
-        match self {
-            Self::NotRequested => "not_requested",
-            Self::UnknownProperty => "unknown_property",
-            Self::UnsupportedProperty => "unsupported_property",
-            Self::RedactedProperty => "redacted_property",
-            Self::MissingTarget => "target_unresolved",
-            Self::MissingTransform => "missing_transform",
-            Self::FrameKindMismatch => "frame_kind_mismatch",
-            Self::UnsupportedShape => "unsupported_shape",
-            Self::IncompleteScope => "incomplete_scope",
-            Self::UnstableState => "unstable_state",
-            Self::ApplicabilityUnknown => "applicability_unknown",
-            Self::NotApplicable => "not_applicable",
-            Self::UndefinedRatio => "undefined_ratio",
-        }
-    }
-}
+pub use uiblueprint_schema::analysis::{
+    GeometryQuery, Measurement, MeasurementDetails as Details, MeasurementResult,
+    MeasurementUnknownReason as UnknownReason,
+};
 
 /// Explicit calculation inputs; these are borrowed canonical types, not wire fields.
 /// `space` is the requested result space. Additional directional transforms must
@@ -68,48 +38,6 @@ pub struct EvaluationContext<'a> {
     pub space: &'a Space,
     pub transforms: &'a [Transform],
     pub conditions: Option<(&'a ContextConditions, &'a Evidence)>,
-}
-
-/// Diagnostic geometry components in the result space. Insets are not padding;
-/// rectangle intersection is not evidence of visual occlusion.
-#[derive(Clone, Debug, PartialEq)]
-pub enum Details {
-    Scalar,
-    Insets {
-        left: f64,
-        top: f64,
-        right: f64,
-        bottom: f64,
-    },
-    Intersection(Option<Rect>),
-    Gaps(Vec<f64>),
-}
-
-/// Pure measured quantity with all contributing source evidence in input order.
-#[derive(Clone, Debug, PartialEq)]
-pub struct Measurement {
-    pub value: Value,
-    pub space: Space,
-    pub details: Details,
-    pub evidence: Vec<Evidence>,
-}
-#[derive(Clone, Debug, PartialEq)]
-pub enum MeasurementResult {
-    Known(Measurement),
-    Unknown {
-        reason: UnknownReason,
-        evidence: Vec<Evidence>,
-    },
-}
-
-impl MeasurementResult {
-    /// Availability reason without discarding the attempted measurement evidence.
-    pub fn unknown_reason(&self) -> Option<UnknownReason> {
-        match self {
-            Self::Unknown { reason, .. } => Some(*reason),
-            Self::Known(_) => None,
-        }
-    }
 }
 
 /// Canonical finding plus the richer local measurement provenance/details.
@@ -131,22 +59,39 @@ pub fn measure(
     expectation: &Expectation,
     context: &EvaluationContext<'_>,
 ) -> Result<MeasurementResult, GeometryError> {
-    validation::validate_snapshot(snapshot).map_err(GeometryError::InvalidInput)?;
     validation::validate_expectation(expectation).map_err(GeometryError::InvalidInput)?;
-    if snapshot.context.scope_id != expectation.scope_id {
+    let query = GeometryQuery::from_expectation(expectation).ok_or(GeometryError::InvalidRule)?;
+    measure_query(snapshot, &query, context)
+}
+
+/// Compute a factual query with no expected value, tolerance or normative source.
+/// Borrowed local callers retain the existing geometry facade; serialized/imported
+/// evaluation inputs must use the binding-checked analysis entrypoints.
+/// # Errors
+/// Rejects invalid canonical snapshots/query declarations and nonfinite arithmetic.
+pub fn measure_query(
+    snapshot: &Snapshot,
+    query: &GeometryQuery,
+    context: &EvaluationContext<'_>,
+) -> Result<MeasurementResult, GeometryError> {
+    validation::validate_snapshot(snapshot).map_err(GeometryError::InvalidInput)?;
+    uiblueprint_schema::analysis::validate_query(query).map_err(|error| {
+        if error == validation::ValidationError::InvalidGeometry {
+            GeometryError::InvalidRule
+        } else {
+            GeometryError::InvalidInput(error)
+        }
+    })?;
+    if snapshot.context.scope_id != query.scope_id {
         return Err(GeometryError::InvalidRule);
     }
-    let Rule::Geometry {
+    let GeometryQuery {
         operation,
         anchors,
         quantity_kind,
         units,
         ..
-    } = &expectation.rule
-    else {
-        return Err(GeometryError::InvalidRule);
-    };
-    arithmetic::validate_rule(*operation, anchors, *quantity_kind)?;
+    } = query;
     let mut evidence = Vec::new();
     if *units != context.space.units {
         return Ok(MeasurementResult::Unknown {
@@ -154,7 +99,9 @@ pub fn measure(
             evidence,
         });
     }
-    if let Some(reason) = resolve::applicability(snapshot, expectation, context, &mut evidence)? {
+    if let Some(reason) =
+        resolve::applicability(snapshot, &query.applies_when, context, &mut evidence)?
+    {
         return Ok(MeasurementResult::Unknown { reason, evidence });
     }
     if matches!(
@@ -169,7 +116,7 @@ pub fn measure(
             evidence,
         });
     }
-    for target in &expectation.targets {
+    for target in &query.targets {
         if !snapshot.nodes.iter().any(|n| &n.key == target) {
             return Ok(MeasurementResult::Unknown {
                 reason: UnknownReason::MissingTarget,
@@ -181,16 +128,18 @@ pub fn measure(
     match result {
         Ok((amount, details)) => {
             finite(amount)?;
-            Ok(MeasurementResult::Known(Measurement {
-                value: Value::Quantity {
-                    amount,
-                    kind: *quantity_kind,
-                    source_units: *units,
+            Ok(MeasurementResult::Known {
+                measurement: Measurement {
+                    value: Value::Quantity {
+                        amount,
+                        kind: *quantity_kind,
+                        source_units: *units,
+                    },
+                    space: context.space.clone(),
+                    details,
+                    evidence,
                 },
-                space: context.space.clone(),
-                details,
-                evidence,
-            }))
+            })
         }
         Err(reason) => Ok(MeasurementResult::Unknown { reason, evidence }),
     }
@@ -217,7 +166,7 @@ pub fn check(
         return Err(GeometryError::InvalidRule);
     };
     let (status, measured, observation_id, reason) = match &result {
-        MeasurementResult::Known(m) => {
+        MeasurementResult::Known { measurement: m } => {
             let Value::Quantity { amount, .. } = m.value else {
                 unreachable!("measure only constructs quantities")
             };

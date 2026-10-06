@@ -1,99 +1,60 @@
-# Local CLI candidate contract
+# Local CLI and canonical analysis
 
-L01 implements the existing [CLI contract](../specs/product/cli.md) over saved
-canonical data and the [G01 geometry engine](geometry.md). These finite syntax,
-format and exit choices are authorized engineering decisions under L01/PLAN.UIB@1,
-recorded before implementation. No new wire schema or live observer is defined.
+Local commands use the existing engine and registered [ANALYSIS@1](../specs/product/analysis.md), reusing core0.1 source records. No model, live collection or reference IO. Export remains the separate unchanged command below.
 
-## Finite syntax
+## Syntax and inputs
 
 ```text
-uiblueprint check --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--json]
-uiblueprint measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N
+uiblueprint measure --snapshot S --query Q --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json]
+uiblueprint measure --snapshot S --expectation X --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json]
+uiblueprint check --snapshot S --expectation X --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json --result-version 0.2.0]
 uiblueprint --help
 ```
 
-All five value flags are required exactly once; numbers are positive byte bounds.
-`max-input-bytes` bounds the aggregate bytes read from both files, before parsing.
-Only explicitly named local regular files are read; stdin, URLs and files named
-inside documents are not loaded. No defaults for budgets, tolerance or space.
-`max-output-bytes` includes the final newline. Output is prepared within that
-bound; overflow produces no partial stdout. OS write failure can leave a partial
-write and is an IO failure, never a successful result. Help is fixed text.
+S/X are strict core0.1 Snapshot/Expectation Documents; Q/E are strict analysis0.2 GeometryQuery/EvaluationInput Documents. Measure accepts exactly one query/expectation; check requires expectation and rejects query. Duplicate/unknown/incompatible flags reject. Compatibility measure extracts factual fields from the actual expectation, never a normative placeholder or pass/fail.
+All named regular files share ONE aggregate input byte budget before parsing. No budget/tolerance/space defaults. Only those files are read: no stdin, URLs or embedded references. Source IDs, generations, coverage, timestamps and freshness stay unchanged; saved analysis is not a fresh UI read.
+SPACE_ID resolves unambiguously among query anchors, existing geometry/baselines/capture transforms and supplied transform endpoints. Same ID with different Space definitions rejects. E must select that complete Space and bind Snapshot ID/revision/full Context and existing evidence. Without E: source binding, selected Space, no extra transforms/conditions. Missing facts stay unknown, not guessed.
 
-Snapshot input is a canonical `Document` containing `Artifact::Snapshot`;
-expectation input is a canonical `Document` containing `Artifact::Expectation`.
-Both use the existing bounded parser/validator. The rule must be Geometry and
-specify its normative source, conditions, targets, relation, expected value,
-comparison, quantity kind, units and tolerance. `measure` uses the same supplied
-relation to compute a fact without claiming its expectation passed. It does not
-synthesize a normative expectation from a request, observed value or UI state.
+## Output and versions
 
-SPACE_ID selects an existing unambiguous full Space from the expectation's
-anchors or their requested geometry/direct transform destinations in the
-Snapshot. It never creates a scale/origin mapping from a string. Geometry,
-space handling and all arithmetic remain G01's responsibility.
+Compact output reports saved-data attribution, snapshot/target/generation/scope, coverage/fields, byte budgets, original Observations, factual query/anchors, selected Space/conditions, quantity/details/evidence or unavailable reason. Actual Expectation/source/tolerance appear only when supplied. Query mode invents no normative fields. Strings are escaped.
+Measure JSON emits canonical analysis0.2 MeasurementCase. Check JSON defaults to core0.1 FindingCase; explicit result-version0.2.0 emits GeometryCheckCase with full evaluation, measurement and expectation. Explicit0.1.0 keeps legacy check. Result-version requires JSON; measure accepts only0.2.0. Unknown has no fake value; known zero/empty intersection stays known.
+Legacy0.1 refuses extra transforms, any condition record or converted selected Space: unsupported_result_version/5, never silent downgrade. Empty E restating binding/same Space remains legal. Compact/0.2 support full registered inputs; no old core validator is weakened.
+Typed validation and bounded encoding precede stdout; output budget includes newline. No partial stdout on validation/encoding/oversize failure. Analysis output passes the actual canonical decoder and exact round-trip equality; fidelity failure is analysis_roundtrip_mismatch/1, never an epsilon adjustment. OS write failure can leave a partial write and returns1. Diagnostics never enter machine stdout.
+Schema valid/0 means declaration-valid, not recomputed or observed truth. CLI always computes through engine. Imported analysis MUST pass engine::verify_analysis_result before reuse as a computed result; all semantic fields are recomputed, except an assigned Finding.id may differ.
 
-## Output contract
+## Concrete synthetic example
 
-Compact stdout is default. It identifies `saved_snapshot` analysis, command,
-snapshot/revision, target/generation, scope, coverage/selected fields, explicit
-byte budgets, source Observations and their original freshness/consistency.
-It includes the expectation/source/conditions and all contributing engine
-measurement evidence, plus measured quantity/details or unavailable reason.
-Untrusted strings use escaped representations; no terminal control text is
-interpolated raw. Input paths/private payloads are absent from errors.
+Prepare the canonical source from the supplied fixture in a unique temporary directory; do not reuse its declared result as the calculation:
 
-Check JSON is exactly the existing versioned canonical `Document` with
-`Artifact::Finding(FindingCase { snapshot, expectation, finding })`; source
-Snapshot and Expectation are preserved intact. Thus coverage, selection,
-Observations, source evidence, generations, units/frame kinds, applicability and
-tolerance remain available without a parallel CLI envelope. The document is
-bounded and validated before writing. JSON check requires every anchor source
-space to equal the selected result space: FindingCase cannot record a separate
-CLI-selected destination. Converted results remain available in compact; JSON
-conversion returns `consumer_contract_gap` until the shared record is defined.
-Its stored live/cache/freshness fields are
-historical input facts, not a fresh collection claim. Check exit status agrees
-with its Finding. JSON stdout never contains diagnostics; failures use only a
-bounded constant code on stderr and leave stdout empty before write failure.
+```sh
+python3 - <<'PY'
+import json, pathlib, tempfile
+case = json.load(open('fixtures/analysis/measurement-gap.json'))['artifact']['data']
+folder = pathlib.Path(tempfile.mkdtemp(prefix='uib-analysis-example-'))
+source = {'schema_version':'0.1.0','artifact':{'kind':'snapshot','data':case['snapshot']}}
+path = folder / 'snapshot.json'
+path.write_text(json.dumps(source))
+print(path)
+PY
+cargo run --locked -p uiblueprint-cli -- measure --snapshot PRINTED_PATH --query fixtures/analysis/query-gap.json --evaluation fixtures/analysis/evaluation-local.json --space local-form --max-input-bytes 131072 --max-output-bytes 131072 --json
+```
 
-Standalone measure JSON is not yet representable: the schema has no canonical
-measurement record retaining details, result space, all contributing evidence
-and unknown reason without inventing a normative pass/fail. `measure --json`
-returns `consumer_contract_gap` (5). Compact measure retains this evidence.
-Additional transform chains or observed applicability context need a shared
-validated input record; CLI accepts neither a private format nor a guess.
-An unsupported canonical Finding combination likewise reports the consumer gap,
-without mutating the source Snapshot or changing the shared validator.
+Replace PRINTED_PATH with the printed path. Expected fact: gap8 css_px in local-form, analysis0.2/source Context0.1, no normative pass/fail. Remove only that temporary directory after use. Example byte bounds are not production defaults or process-memory promises.
 
-## Exit mapping
+## Exits and scope
 
 | Exit | Meaning |
 | --- | --- |
-| 0 | Check pass; or measure known; or help |
-| 1 | IO/internal failure, including allocation/output write failure |
-| 2 | Invalid arguments/document/shape/rule/space or exceeded explicit byte limit |
-| 3 | Check fail with a real measurement |
-| 4 | Check/measure unknown, including missing required applicability evidence |
-| 5 | Unsupported finite command/rule/output or missing shared consumer contract |
+| 0 | Check pass / measure known / help |
+| 1 | IO/internal, including serialization fidelity or stdout failure |
+| 2 | Invalid argument/document/binding/geometry/space or byte limit |
+| 3 | Measured check fail |
+| 4 | Check/measure unknown, including missing/mismatched applicability |
+| 5 | Unsupported command/rule/version or unrepresentable legacy result |
 
-Diagnostics are stable bounded codes such as `invalid_arguments`,
-`invalid_input`, `invalid_input_file`, `input_limit`, `output_limit`, `io_error`, `invalid_geometry`,
-`unknown_space`, `ambiguous_space`, `unsupported_command`, `unsupported_rule`
-and `consumer_contract_gap`. No raw serde, filesystem, argument or payload error
-is printed. Future observe/action/plugin commands are unsupported and
-cannot pretend to collect or act. This does not change schema validator exits.
-
-## Scope and checks
-
-Only CLI source/docs change. No engine/schema/validator fix, model/SDK/runtime,
-cache owner, profile meaning, external action or release/install claim.
-Canonical GEO fixtures provide independently authored expected calculations;
-binary tests cover pass/fail/unknown, invalid versions/payloads, finite byte
-bounds, escaped compact strings and stdout/stderr separation. Exact preliminary
-and saved-state results belong in the [L01 receipt](../plans/ui-blueprint/receipts/L01.md).
-
+Bounded diagnostics: invalid_arguments, invalid_input, invalid_input_file, input_limit, output_limit, io_error, invalid_geometry, invalid_analysis, unknown_space, ambiguous_space, unsupported_command, unsupported_rule, unsupported_result_version, analysis_roundtrip_mismatch. No raw path/argument/serde/private payload error is echoed. Observe/action/plugin commands are absent; schema-validator exits remain0/2/1.
+The sole engine uses schema-owned results. Cache/replay, bridges/transport, core schema/fixtures and export package format stay protected. Live condition acquisition, transform discovery, generic diff, cache ID resolution and D05 peak enforcement remain separate. [Analysis receipt](../plans/ui-blueprint/receipts/L01-analysis-engine-cli.md) records current proof; [initial L01 receipt](../plans/ui-blueprint/receipts/L01.md) retains the old boundary.
 
 ## E01 public imagegen-prompt command
 

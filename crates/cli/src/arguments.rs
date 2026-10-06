@@ -6,10 +6,21 @@ pub(crate) enum Command {
     Check,
     Measure,
 }
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum ResultVersion {
+    Core,
+    Analysis,
+}
+pub(crate) enum QueryFile {
+    Expectation(PathBuf),
+    Query(PathBuf),
+}
 pub(crate) struct Arguments {
     pub command: Command,
     pub snapshot: PathBuf,
-    pub expectation: PathBuf,
+    pub query: QueryFile,
+    pub evaluation: Option<PathBuf>,
+    pub result_version: ResultVersion,
     pub space: String,
     pub max_input: usize,
     pub max_output: usize,
@@ -26,6 +37,9 @@ impl Arguments {
         };
         let mut snapshot = None;
         let mut expectation = None;
+        let mut query = None;
+        let mut evaluation = None;
+        let mut result_version = None;
         let mut space = None;
         let mut max_input = None;
         let mut max_output = None;
@@ -44,6 +58,13 @@ impl Arguments {
                 Some("--expectation") if expectation.is_none() => {
                     expectation = Some(PathBuf::from(value))
                 }
+                Some("--query") if query.is_none() => query = Some(PathBuf::from(value)),
+                Some("--evaluation") if evaluation.is_none() => {
+                    evaluation = Some(PathBuf::from(value))
+                }
+                Some("--result-version") if result_version.is_none() => {
+                    result_version = Some(value)
+                }
                 Some("--space") if space.is_none() => {
                     space = Some(
                         value
@@ -59,13 +80,35 @@ impl Arguments {
             }
         }
         let missing = Failure::invalid("invalid_arguments");
+        let query = match (command, expectation, query) {
+            (_, Some(path), None) => QueryFile::Expectation(path),
+            (Command::Measure, None, Some(path)) => QueryFile::Query(path),
+            _ => return Err(missing),
+        };
+        if result_version.is_some() && !json {
+            return Err(missing);
+        }
+        let result_version = match result_version.as_ref().and_then(|v| v.to_str()) {
+            Some("0.2.0") => ResultVersion::Analysis,
+            Some("0.1.0") if command == Command::Check => ResultVersion::Core,
+            None if result_version.is_none() => {
+                if command == Command::Check {
+                    ResultVersion::Core
+                } else {
+                    ResultVersion::Analysis
+                }
+            }
+            _ => return Err(Failure::unsupported("unsupported_result_version")),
+        };
         let space = space
             .filter(|s| !s.is_empty() && s.chars().count() <= 256)
             .ok_or(missing)?;
         Ok(Self {
             command,
             snapshot: snapshot.ok_or(missing)?,
-            expectation: expectation.ok_or(missing)?,
+            query,
+            evaluation,
+            result_version,
             space,
             max_input: max_input.ok_or(missing)?,
             max_output: max_output.ok_or(missing)?,

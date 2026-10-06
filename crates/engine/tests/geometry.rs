@@ -129,7 +129,7 @@ fn independent_geo_literal_vectors() {
 #[test]
 fn geometric_details_do_not_claim_padding_or_occlusion() {
     let inside = run(&fixture("GEO-INSIDE"));
-    let MeasurementResult::Known(m) = inside.measurement else {
+    let MeasurementResult::Known { measurement: m } = inside.measurement else {
         panic!("known")
     };
     assert_eq!(
@@ -142,17 +142,19 @@ fn geometric_details_do_not_claim_padding_or_occlusion() {
         }
     );
     let intersects = run(&fixture("GEO-INTERSECTS"));
-    let MeasurementResult::Known(m) = intersects.measurement else {
+    let MeasurementResult::Known { measurement: m } = intersects.measurement else {
         panic!("known")
     };
     assert_eq!(
         m.details,
-        Details::Intersection(Some(Rect {
-            x: 35.0,
-            y: 25.0,
-            width: 5.0,
-            height: 5.0
-        }))
+        Details::Intersection {
+            rect: Some(Rect {
+                x: 35.0,
+                y: 25.0,
+                width: 5.0,
+                height: 5.0
+            })
+        }
     );
 }
 #[test]
@@ -219,10 +221,15 @@ fn r03_e1_ordered_gaps_and_partial_membership() {
     let result = run(&case);
     assert_eq!(amount(&result), 5.0);
     assert_eq!(result.finding.status, CheckStatus::Fail);
-    let MeasurementResult::Known(m) = result.measurement else {
+    let MeasurementResult::Known { measurement: m } = result.measurement else {
         panic!("known")
     };
-    assert_eq!(m.details, Details::Gaps(vec![8.0, 9.0, 13.0]));
+    assert_eq!(
+        m.details,
+        Details::Gaps {
+            values: vec![8.0, 9.0, 13.0]
+        }
+    );
     case.snapshot.coverage.status = CoverageStatus::Partial;
     assert_eq!(
         run(&case).measurement.unknown_reason(),

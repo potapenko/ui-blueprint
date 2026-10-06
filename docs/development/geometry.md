@@ -1,87 +1,47 @@
-# Pure geometry candidate
+# Pure geometry and canonical analysis
 
-G01 introduces `uiblueprint-engine` for L01/E01/G02. It reads canonical
-`Snapshot`, `Expectation`, `Space`, `Transform`, `Evidence` and condition types
-from `uiblueprint-schema`. It performs no IO, collection, action, clock read or
-cache mutation. This is a controlled-data candidate, not P1/runtime acceptance.
+`uiblueprint-engine` computes deterministic geometry on immutable canonical data without IO, collection, actions, clocks, cache mutation or a model. [ANALYSIS@1](../specs/product/analysis.md) owns factual queries/versioned results; [GEOMETRY@1](../specs/product/geometry.md) still governs arithmetic.
 
-## Entry points and explicit context
+## Entry points and ownership
 
-`measure(snapshot, expectation, &EvaluationContext)` returns a known quantity
-with geometric details and contributing evidence, or a typed unknown reason.
-`check` additionally applies the expectation's comparison and explicit tolerance,
-returning a canonical `Finding`, the measurement and the tolerance used. Finding
-IDs initially equal expectation IDs; a storage consumer can assign its own ID.
-Invalid canonical inputs, relation arity/quantity kinds and nonfinite arithmetic
-return `GeometryError`. Unknown inputs never pass, regardless of tolerance.
+| API | Meaning |
+| --- | --- |
+| `measure_query(snapshot, query, &EvaluationContext)` | Factual GeometryQuery; no expected value/tolerance/normative source |
+| `measure(snapshot, expectation, &EvaluationContext)` | Compatibility wrapper validating the actual Expectation and extracting only query fields |
+| `check(snapshot, expectation, &EvaluationContext)` | Sourced requirement, explicit comparison/tolerance, Finding plus full measurement |
+| `measure_query_bound(snapshot, query, &EvaluationInput)` | Full binding validation before the same calculation |
+| `check_bound(snapshot, expectation, &EvaluationInput)` | Full bound check without the narrower legacy0.1 FindingCase gate |
+| `verify_analysis_result(&AnalysisDocument)` | Contract validation then exact engine recomputation of imported results |
 
-`EvaluationContext` borrows the explicitly requested result space, an optional
-slice of canonical directional transforms, and optional observed canonical
-`ContextConditions` with `Evidence`. It is a calculation input, not another wire
-schema. Snapshot does not represent platform/input-mode/text-scale facts: absent
-required applicability evidence yields `applicability_unknown`; a proved mismatch
-returns `not_applicable`/unknown. Neither case is a passed check.
-
-Anchor spaces identify source geometry; their fraction selects a coordinate in
-[0,1]. Physical x/y are coordinate axes, not inferred leading/trailing directions.
-Distance on xy uses both fractions as a point inside each rectangle; fraction
-0.5 gives centers. Target order is explicit and is never spatially sorted.
+GeometryQuery and Measurement are schema-owned. Engine re-exports `MeasurementResult`, `MeasurementDetails as Details`, `MeasurementUnknownReason as UnknownReason`; no second result DTO or arity/dimension/axis validator. Variants: `Known { measurement }`, `Unknown { reason, evidence }`, `Scalar {}`, `Insets { ... }`, `Intersection { rect }`, `Gaps { values }`.
+EvaluationContext remains the borrowed local facade. It carries no Snapshot identity: imported EvaluationInput must use bound APIs; private adaptation occurs after validation. Bad IDs/revisions/full Context/generations/evidence reject without changing Snapshot. New facts need existing canonical Observations, not a supplemental registry or guessed metadata.
+GeometryError retains typed input/rule/transform/nonfinite failures. Unavailable inputs are unknown, never pass. Finding.id initially equals expectation.id; callers may assign another storage ID. Query mode invents no Expectation/expected_from.
 
 ## Quantities
 
-| Relation | Derived scalar / prerequisites |
+| Relation | Derived scalar / prerequisite |
 | --- | --- |
-| width / height / ratio | One rect's width, height, width/height; zero denominator unknown |
-| gap | Second anchor coordinate minus first; signed x or y |
-| distance | Absolute axial distance or xy Euclidean distance |
-| aligned | Maximum minus minimum anchor coordinate; at least two anchors |
-| baseline | Maximum minus minimum reported baseline y; no inference from layout |
-| inside | Minimum of all four signed child-to-container insets |
-| overflow | Maximum escape across four sides, clamped to zero |
-| intersects | Positive rectangle intersection area; edge contact has area zero |
-| equal_spacing | Spread of signed adjacent edge gaps in explicit box order; at least three |
+| width / height / ratio | Rect width, height, width/height; zero denominator unknown |
+| gap | Second anchor minus first; signed x/y |
+| distance | Absolute axial or xy Euclidean distance; fraction0.5 selects centers |
+| aligned / baseline | Coordinate spread / reported baseline-y spread; at least2 |
+| inside / overflow | Minimum four signed insets / maximum escape clamped to zero |
+| intersects | Rect intersection area; edge contact is known area0 with rect=None |
+| equal_spacing | Spread of signed adjacent edge gaps in explicit order; at least3 |
 
-Alignment and equal-spacing require complete scope coverage with no declared
-omitted/unknown members. A missing target/property, unrequested/unsupported/
-redacted property, unstable/unknown observation consistency, missing mapping or
-unsupported shape remains unknown. Each anchor requires its specified frame kind to match its property; explicitly
-different frame kinds remain distinct and AX never replaces requested layout. Insets are
-not declared padding; intersection is not visual occlusion. Area/ratio use
-canonical `QuantityKind`, preserving `source_units` without new length units.
+Canonical query validation owns shape vocabulary; arithmetic remains G01 Rust. Physical axes are not inferred leading/trailing, target order is not spatial sorting, and each anchor requires its own frame kind. AX does not replace layout, measured insets are not padding, intersection is not visual occlusion.
+Alignment/equal-spacing require complete scope with no omitted/unknown members. Missing target/property, unrequested/unsupported/redacted data, unstable/unknown consistency, missing mapping and unsupported shape stay unknown. Sensitive-redacted properties retain attempted source Evidence without exposing a quantity. Missing applicability facts→applicability_unknown, mismatch→not_applicable, unstable source→unstable_state. Empty applies_when consumes no unnecessary conditions.
+Area/ratio retain QuantityKind and selected source_units; area squares coordinate units, ratio is dimensionless. Equal uses absolute error; at-least/at-most extend threshold by explicit tolerance; greater-than requires expected+tolerance. No hidden epsilon, precision allowance or truncation.
 
-Comparisons follow canonical schema semantics: equal uses absolute error;
-at-least and at-most extend their threshold by the explicit tolerance;
-greater-than requires exceeding expected+tolerance. No decimal truncation,
-implicit 1/2-pixel allowance or precision-derived tolerance is applied.
+## Spaces and evidence
 
-## Spaces, transforms and provenance
+Output uses the complete selected Space. Sourced directional paths preserve units/origin: no implicit inverse, global scale or discovery. Affine convention: x'=a*x+c*y+e, y'=b*x+d*y+f. Consumed transforms bind target, anchor-node Surface and environment. Canonical bound input also validates all declared transforms/conditions against existing Observation references.
+All four corners are mapped. Axis-preserving translations/scales/flips/quarter turns remain exact rects; rotated/sheared nonrectangular results and quad/polygon/fragments remain unsupported_shape. An enclosing box cannot prove containment/intersection. Baseline y cannot depend on an unavailable x.
+Evidence deduplicates full equality in first-use order, not Observation ID alone. Distinct methods/uncertainties/observations remain; unused inputs are not invented as contributors. Unknown retains reached sources and no numeric placeholder; its evaluation still carries result Space. Finding references first contributing Observation; analysis0.2 retains secondary provenance and evaluation.
 
-Conversion requires an explicit directional path; no implicit inverse, global
-scale or origin flip. Each consumed transform must bind the snapshot's target,
-node surface and environment revision, with an Observation/source/method.
-The affine convention is x'=a*x+c*y+e, y'=b*x+d*y+f. All four corners are mapped.
-Axis-preserving scales/translations/flips/quarter turns remain exact rectangles.
-A rotated/sheared nonrectangular result, quad/polygon/fragments input remains
-`unsupported_shape`; an enclosing box never proves containment/intersection.
-Baseline conversion requires a y mapping independent of unavailable x.
+## Verification and compatibility
 
-Known measurements preserve source and transform evidence, including distinct
-Observation IDs. The wire Finding can reference only one Observation, so it uses
-the first contributing one; consumers needing full provenance use Measurement.
-Unavailable results retain any evidence reached before the failure, a bounded
-reason and no fabricated measurement. Their Finding references the first such
-Observation when present.
-
-## Source and verification boundary
-
-Implementation is original Rust arithmetic. The accepted [R03 ledger](../research/R03-core.md)
-provides Galen signed relations, Extras explicit ordered pairs and Compose
-anchors, with exact upstream revisions/license dispositions. No upstream source
-or runner dependency was copied. R03 G1/G2/E1/B1 and the unchanged independent
-[GEO corpus](../../fixtures/golden-oracles/README.md) supply expected numbers.
-
-Tests exercise canonical GEO fixtures plus separately authored arithmetic,
-negative availability, transforms and applicability. Test-only numeric assertion
-allowances for IEEE-754 representation are not product rule tolerances.
-Scoped check/fmt/Clippy/test results and residuals live in the [G01 receipt](../plans/ui-blueprint/receipts/G01.md).
-Shared schema/validator, oracle files and workspace/lock remain other owners.
+Schema checks declarations/binding/consistency, not geometry truth. Engine verification recomputes quantity, Space, details, ordered evidence, unknown reason and Finding semantics. Only caller-assigned Finding.id may differ. Contract-valid tampered amount/details/eligible-unused evidence/unknown reason/false pass fails recomputation.
+AnalysisDocument is strict0.2; embedded Snapshot/Context and transport remain core0.1. Cache/replay, old fixtures and generated core schema do not migrate. Legacy check JSON defaults to0.1; full results explicitly select0.2 ([CLI](cli.md)). Export uses factual queries; its package format stays unchanged.
+Exact finite-f64 decoding uses [D07@3 ANALYSIS-FLOAT-001](../specs/development/decisions/d07-reuse.md#analysis-float-001--exact-source-number-preservation) on the same serde_json version. No comparison is relaxed for serialization. Actual binary/round-trip checks supplement in-process tests.
+[R03](../research/R03-core.md) and unchanged [independent GEO oracles](../../fixtures/golden-oracles/README.md) remain the numeric basis; no upstream source/runner copied. New checks cover factual/unknown values, bound conversion/baselines, conditions, evidence and tampering. [Analysis receipt](../plans/ui-blueprint/receipts/L01-analysis-engine-cli.md) records current proof; [G01](../plans/ui-blueprint/receipts/G01.md) preserves earlier history. Live condition acquisition/transform discovery and D05 working-memory enforcement remain separate.

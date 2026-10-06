@@ -1,39 +1,6 @@
 use crate::{Available, Details, EvaluationContext, GeometryError, UnknownReason, finite, resolve};
 use uiblueprint_schema::model::*;
 
-pub(crate) fn validate_rule(
-    op: GeometryRelation,
-    anchors: &[Anchor],
-    kind: QuantityKind,
-) -> Result<(), GeometryError> {
-    use GeometryRelation::*;
-    let valid_arity = match op {
-        Width | Height | Ratio => anchors.len() == 1,
-        Aligned | Baseline => anchors.len() >= 2,
-        EqualSpacing => anchors.len() >= 3,
-        _ => anchors.len() == 2,
-    };
-    let expected_kind = match op {
-        Ratio => QuantityKind::Ratio,
-        Intersects => QuantityKind::Area,
-        _ => QuantityKind::Length,
-    };
-    let common_axis = anchors.windows(2).all(|a| a[0].axis == a[1].axis);
-    let axis_valid = match op {
-        Gap | Aligned | EqualSpacing => {
-            common_axis
-                && anchors
-                    .iter()
-                    .all(|a| matches!(a.axis.0.as_str(), "x" | "y"))
-        }
-        Distance => common_axis,
-        _ => true,
-    };
-    if !valid_arity || kind != expected_kind || !axis_valid {
-        return Err(GeometryError::InvalidRule);
-    }
-    Ok(())
-}
 fn coordinate(rect: &Rect, anchor: &Anchor) -> Result<f64, GeometryError> {
     if anchor.axis.0 == "x" {
         finite(rect.x + finite(rect.width * anchor.fraction)?)
@@ -63,7 +30,7 @@ pub(crate) fn calculate(
                 Err(reason) => return Ok(Err(reason)),
             }
         }
-        return Ok(Ok((spread(&values)?, Details::Scalar)));
+        return Ok(Ok((spread(&values)?, Details::Scalar {})));
     }
     let mut rects = Vec::new();
     for anchor in anchors {
@@ -82,7 +49,7 @@ fn calculate_rects(
     origin: Origin,
 ) -> Available<(f64, Details)> {
     use GeometryRelation::*;
-    // validate_rule guarantees arity before entering calculation.
+    // The canonical query validator guarantees arity before calculation.
     let first = &rects[0];
     let scalar = match op {
         Width => first.width,
@@ -128,7 +95,7 @@ fn calculate_rects(
                 };
                 gaps.push(gap);
             }
-            return Ok(Ok((spread(&gaps)?, Details::Gaps(gaps))));
+            return Ok(Ok((spread(&gaps)?, Details::Gaps { values: gaps })));
         }
         Inside | Overflow => {
             let outer = &rects[1];
@@ -176,9 +143,9 @@ fn calculate_rects(
             } else {
                 None
             };
-            return Ok(Ok((area, Details::Intersection(intersection))));
+            return Ok(Ok((area, Details::Intersection { rect: intersection })));
         }
         Baseline => unreachable!("baseline resolved without rectangles"),
     };
-    Ok(Ok((finite(scalar)?, Details::Scalar)))
+    Ok(Ok((finite(scalar)?, Details::Scalar {})))
 }
