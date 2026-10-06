@@ -9,7 +9,7 @@ four tracked separately in [the earlier review](../../../docs/plans/ui-blueprint
 This sizer counts owned containers; it does not expand graph paths or repair/prove
 the receiver's bounded-work behavior. No reported hang was executed here.
 
-[owned_memory.rs](owned_memory.rs) counts inline layout once, then owned heap:
+[canonical owned_size.rs](../../../crates/schema/src/owned_size.rs) counts inline layout once, then owned heap:
 String capacity bytes, Vec capacity×element layout plus live nested allocations,
 Box payload layout and descendants, and Option/array/enum contents. Allocation
 blocks and unused capacity are reported separately. Checked sums/products reject

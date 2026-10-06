@@ -1,6 +1,5 @@
 //! Explicit-input D05 sizing probe. No UI collection or production policy.
-#[path = "../../../tests/bridges/resources/owned_memory.rs"]
-mod memory;
+use uiblueprint_schema::owned_size as memory;
 
 use std::{
     env,

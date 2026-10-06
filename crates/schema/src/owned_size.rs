@@ -1,7 +1,7 @@
-//! Safe sizing of canonical owned DTO storage. Not an allocator/RSS profiler.
+//! Exhaustive canonical owned-layout sizing. Not an allocator/RSS or peak cap.
 //! Inline layout is counted once; heap payload uses actual container capacities.
+use crate::{SchemaVersion, model::*};
 use std::mem::size_of;
-use uiblueprint_schema::{SchemaVersion, model::*};
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Heap {

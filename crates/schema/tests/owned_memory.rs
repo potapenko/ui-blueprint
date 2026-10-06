@@ -1,7 +1,6 @@
-#[path = "../../../tests/bridges/resources/owned_memory.rs"]
-mod memory;
 use memory::{Heap, HeapSize};
 use std::{fs, mem::size_of, path::PathBuf};
+use uiblueprint_schema::owned_size as memory;
 use uiblueprint_schema::{SchemaVersion, model::*};
 
 fn snapshot() -> Snapshot {

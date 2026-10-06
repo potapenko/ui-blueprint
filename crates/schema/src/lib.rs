@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use std::{fmt, str::FromStr};
 
 pub mod model;
+pub mod owned_size;
 pub mod validation;
 
 /// A supported candidate wire version, separate from the package version.

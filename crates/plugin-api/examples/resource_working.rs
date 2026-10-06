@@ -1,8 +1,7 @@
 //! Single-process synthetic allocation experiment, not production allocation policy.
 #[path = "../../../tests/bridges/resources/count_alloc.rs"]
 mod allocation;
-#[path = "../../../tests/bridges/resources/owned_memory.rs"]
-mod owned;
+use uiblueprint_schema::owned_size as owned;
 #[path = "../../../tests/bridges/resources/synthetic.rs"]
 mod synthetic;
 // This measurement selects the shared framing function; its other public entry
