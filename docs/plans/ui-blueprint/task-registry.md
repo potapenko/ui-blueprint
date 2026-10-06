@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | C01/F03a running; Git lease root; native lane product advisor |
+| Активные чаты/пакеты/ресурсы | C01 running; F03a commit-only; Git lease F03a; runtime lanes свободны |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -96,7 +96,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [F01](packets/F01.md) | Web chat R01 | `a8368076cdf0d4a917e7c3c5448ca6b6d919cf64` | accepted tooling/baseline; [receipt](receipts/F01.md); no product acceptance |
 | [F02](packets/F02.md) | Native chat R02 | `9a88b12b5855bac54bf04ba7b64d233df719ddec` | accepted supporting fixture; current proof limits in [receipt](receipts/F02.md); M/P01 gates open |
 | F01-doc | Web chat R01 | `585bcd90ad455110bcc2432f8f36f58e3c8d7ecf` | accepted docs correction; no new measurements |
-| [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | RC01 Settings + RC02 Genre/Director; inventory `01a110da` | running; native lane granted subject to source reservation; no Git lease |
+| [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | 3 real states, 13 files, 6 PNG outside Git | commit-only; [receipt](receipts/F03a.md); runtime released |
 | [C01](packets/C01.md) | Core chat R03, Integration role | R01/R02/R03/F01/F02 commits + product consultation | running; docs-only decisions; no Git/runtime lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
