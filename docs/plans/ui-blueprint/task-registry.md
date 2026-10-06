@@ -91,7 +91,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [R01](packets/R01.md) | `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | `71ea44235cddf63381d1fea4acd121ad642e7ddf` | accepted diagnostic; [receipt](receipts/R01.md); bounded acquisition → W01 |
 | [R02](packets/R02.md) | `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | `19cd1359ff4c239695f5da21f90d101d878c067d` | accepted diagnostic; [receipt](receipts/R02.md); full M05 proof → F02/P01 |
 | [R03](packets/R03.md) | `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | `26a19faed84b468dd21f77bf2c78516cd917d223` | accepted diagnostic; [receipt](receipts/R03.md); proposals for C01 only |
-| [F01](packets/F01.md) | Web chat R01 | R01 checkpoint + WEB-PILOTS/PERFORMANCE @1 | running; headless only; no Git lease |
+| [F01](packets/F01.md) | Web chat R01 | R01 checkpoint + WEB-PILOTS/PERFORMANCE @1 | refining baseline: proposed 5 Hz overhead unmeasured; no Git lease |
 | [F02](packets/F02.md) | Native chat R02 | R02 checkpoint + NATIVE-PILOTS/PERFORMANCE @1 | running; owned native lane; no Git lease |
 
 Root coordination checkpoint: `7c48392`; все R-пакеты имеют disjoint write sets.
