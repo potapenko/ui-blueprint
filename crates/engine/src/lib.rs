@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 mod arithmetic;
+pub mod cache;
 pub mod replay;
 mod resolve;
 
