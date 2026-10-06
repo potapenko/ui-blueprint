@@ -1,0 +1,63 @@
+Selected exact CUA AX lines; indentation removed, unrelated siblings omitted.
+Historical numeric indices are not live references or stable unique IDs.
+Repeated pagination/tab IDs must not be treated as globally unique nodes.
+This excerpt supplies no bounds, visibility flags, hit regions or VoiceOver proof.
+
+[ipad13-default] AX request 2026-10-06T13:13:55.676Z
+93 button (disabled) Description: Previous Video, ID: searchLearn.transport.previous, Secondary Actions: Cancel
+94 button Description: Play, ID: searchLearn.transport.toggle, Secondary Actions: Cancel
+95 button Description: Next Video, ID: searchLearn.transport.next, Secondary Actions: Cancel
+101 button (selected) Description: Learn Common Phrases, ID: searchLearn.learner.tabs, Secondary Actions: Cancel
+102 button Description: Vocabulary, ID: searchLearn.learner.tabs, Secondary Actions: Cancel
+106 button Description: Filters, Secondary Actions: Cancel
+107 button (disabled) Description: First page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+108 button (disabled) Description: Previous page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+109 pop up button Description: Page, Value: 1-20, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+110 text Description:  / 62,321, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+111 button Description: Next page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+112 button Description: Last page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+
+[ipad13-filters-open] AX request 2026-10-06T13:15:13.797Z
+53 container Description: dismiss popup, Help: Activate to dismiss pop-up window., ID: PopoverDismissRegion, Secondary Actions: Cancel
+55 button (selected) Description: Only idioms, Secondary Actions: Cancel
+56 button (selected) Description: Only questions, Secondary Actions: Cancel
+57 pop up button Description: Level from, Value: A2, Secondary Actions: Cancel
+58 pop up button Description: Level to, Value: C2, Secondary Actions: Cancel
+59 pop up button Description: Emotion, Value: Any, Secondary Actions: Cancel
+60 pop up button Description: Polarity, Value: Any, Secondary Actions: Cancel
+61 pop up button Description: Topic, Value: Any, Secondary Actions: Cancel
+
+[ipad13-summary] AX request 2026-10-06T13:16:13.442Z
+95 button Description: Play, ID: searchLearn.transport.toggle, Secondary Actions: Cancel
+102 button (selected) Description: Learn Common Phrases, ID: searchLearn.learner.tabs, Secondary Actions: Cancel
+107 button Description: Filters, Value: A2–C2, Only idioms, Only questions, Secondary Actions: Cancel
+108 button (disabled) Description: First page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+109 button (disabled) Description: Previous page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+110 pop up button Description: Page, Value: 1-17, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+111 text Description:  / 17, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+112 button (disabled) Description: Next page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+113 button (disabled) Description: Last page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+
+[ipad11-default] AX request 2026-10-06T13:36:52.850Z
+79 button (disabled) Description: Previous Video, ID: searchLearn.transport.previous, Secondary Actions: Cancel
+80 button Description: Play, ID: searchLearn.transport.toggle, Secondary Actions: Cancel
+81 button Description: Next Video, ID: searchLearn.transport.next, Secondary Actions: Cancel
+87 button (selected) Description: Learn Common Phrases, ID: searchLearn.learner.tabs, Secondary Actions: Cancel
+88 button Description: Vocabulary, ID: searchLearn.learner.tabs, Secondary Actions: Cancel
+92 button Description: Filters, Secondary Actions: Cancel
+93 button (disabled) Description: First page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+94 button (disabled) Description: Previous page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+95 pop up button Description: Page, Value: 1-20, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+96 text Description:  / 62,321, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+97 button Description: Next page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+98 button Description: Last page, ID: searchLearn.learner.commonPhrases.pagination, Secondary Actions: Cancel
+
+[ipad11-filters-open] AX request 2026-10-06T13:37:18.807Z
+53 container Description: dismiss popup, Help: Activate to dismiss pop-up window., ID: PopoverDismissRegion, Secondary Actions: Cancel
+55 button Description: Only idioms, Secondary Actions: Cancel
+56 button Description: Only questions, Secondary Actions: Cancel
+57 pop up button Description: Level from, Value: A1, Secondary Actions: Cancel
+58 pop up button Description: Level to, Value: C2, Secondary Actions: Cancel
+59 pop up button Description: Emotion, Value: Any, Secondary Actions: Cancel
+60 pop up button Description: Polarity, Value: Any, Secondary Actions: Cancel
+61 pop up button Description: Topic, Value: Any, Secondary Actions: Cancel

@@ -9,6 +9,8 @@ or production UI Blueprint collector were created by this packet.
 | RC01 Settings | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-settings/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-settings/observations.json), AX excerpt | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-settings/expected-answer.md) | Whole native window and dialog crop |
 | RC02 Genre/Director | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-filters/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-filters/observations.json), two AX excerpts | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-filters/expected-answer.md) | Two whole native windows and bounded popover/anchor crops |
 | RC03 Mac resize | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/observations.json), two AX excerpts | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/expected-answer.md) | Two actual native window sizes; requested 1440 × 900 not obtained |
+| RC04 iPad filters | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/ipad-filters/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/ipad-filters/observations.json), selected AX | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/ipad-filters/expected-answer.md) | Pro 13/11 landscape; five native frames; visual truncation retained |
+| RC05 iPhone Reels | [prompt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/iphone-reels/prompt.md), [observations](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/iphone-reels/observations.json), selected AX | [key](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/iphone-reels/expected-answer.md) | Three same-Reel frames; long-text and trailing-selector coverage remain open |
 
 Give only the agent inputs and referenced PNGs to an evaluated agent. The answer
 keys contain expected interpretation/spec references and must remain separate.
@@ -76,3 +78,24 @@ F03b assets live at `/Users/eugenepotapenko/Library/Application Support/UIBluepr
 or explicit discard. PNGs were native lossless captures without resampling.
 See [mobile prerequisites](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/mobile-prerequisites.md)
 for read-only device/runtime findings. No mobile app was launched or configured.
+
+## F03c addition RC04/RC05
+
+[iPad filters](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/ipad-filters/README.md) and
+[iPhone Reels](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/iphone-reels/README.md) add eight original
+internal-display Simulator PNGs with selected AX observations, prompts and separate
+reviewer keys. These are model/engine/export reference inputs, not evaluated-agent,
+UI Blueprint iOS collector or source-application acceptance.
+
+Tablet and Phone Release artifacts came from F03c-build, source HEAD plus its
+pre-existing project edit, with executable hashes verified. Three fresh owned
+iOS 27 devices used normal guest continuation. All run-installed apps and
+temporary devices were removed; desktop was released. No source files changed.
+
+iPad captures expose visual caption truncation despite complete AX semantics.
+The iPhone reading-region scroll changes visible content without changing the
+selected AX text. Exact control/hit/content geometry remains unknown.
+RC05 lacks a separate long description/translated content and verified access
+to trailing selectors at maximum Dynamic Type. These requirements remain open.
+See [receipt](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/docs/plans/ui-blueprint/receipts/F03c.md) for exact scope,
+recovery/cleanup, missing-state classification and the next bounded evidence path.

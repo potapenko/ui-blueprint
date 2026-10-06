@@ -1,0 +1,251 @@
+{
+  "packet": "F03c",
+  "format": "reference-case-metadata; not a production UI Blueprint snapshot",
+  "source": {
+    "repository": "/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac",
+    "branch": "beta-01",
+    "head": "48d0dfd1cd0fe46ac88c073e99ffab7bd1abe76e",
+    "included_existing_change": "PlayphrasemeApp.xcodeproj/project.pbxproj",
+    "project_sha256": "7b26d3ad560da98ae06d406da7b7397238075009eb648e7b6df22ff89530ee75",
+    "build_manifest": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c-build/playphrase-f03c-build.6vPRSB/manifest.json",
+    "configuration": "Release",
+    "sdk": "iphonesimulator27.0",
+    "architecture": "arm64",
+    "minimum_os": "17.0",
+    "build_receipt_commit": "eda0d7753f85f9e5c03b1d90613ea69586fd8016",
+    "binary_correspondence": "source HEAD plus existing project edit, not pristine HEAD; executable hashes checked before install"
+  },
+  "runtime": {
+    "platform": "Simulator",
+    "os": "iOS 27.0",
+    "runtime_build": "24A434",
+    "capture_tool": "xcrun simctl io EXACT-UDID screenshot --type=png (internal display)",
+    "ax_tool": "Computer Use Device Hub getAXState; selected text only",
+    "capture_atomicity": "separate AX and pixel acquisitions; no atomicity or latency claim",
+    "resampling": false,
+    "crop": null
+  },
+  "geometry_unknowns": [
+    "app content bounds",
+    "safe-area insets",
+    "per-control AX/layout/paint/hit bounds",
+    "padding",
+    "corner radii",
+    "occlusion and hit-test completeness"
+  ],
+  "retention": {
+    "raw_root": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14",
+    "owner": "root coordinator",
+    "consumers": [
+      "Q03",
+      "P7",
+      "engine/export reference evaluation"
+    ],
+    "until": "acceptance or explicit discard"
+  },
+  "evaluation": {
+    "agent_run": false,
+    "collector_run": false,
+    "product_acceptance": false,
+    "independent_acceptance": false
+  },
+  "case_id": "RC05",
+  "status": "captured_partial_long_text_and_horizontal_reachability_coverage",
+  "bundle": {
+    "scheme": "PlayphrasemePhone",
+    "id": "playphraseme.Playphraseme",
+    "version": "1.2",
+    "build": "6",
+    "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c-build/playphrase-f03c-build.6vPRSB/DerivedData/Build/Products/Release-iphonesimulator/PlayphrasemePhone.app",
+    "executable_sha256": "16450521953ae5ec0dbacdf521309cbf80ff0c43bc3a072eba26fa374e941ca2"
+  },
+  "states": [
+    {
+      "id": "iphone-ordinary",
+      "device": "iPhone 17 Pro",
+      "ax_request_started_utc": "2026-10-06T13:40:44.478Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "iphone-ordinary",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/iphone-ordinary.png",
+        "pixel_size": [
+          1206,
+          2622
+        ],
+        "sha256": "134aafbc47cca787f2161a7e7a14ed566857d97c51f6508b4006a4b9609f16b9",
+        "file_mtime_utc": "2026-10-06T13:41:02.307891+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 3,
+        "reported_orientation": "Portrait",
+        "derived_whole_display_size_pt": [
+          402.0,
+          874.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "reported_content_size_category": "large",
+      "reported_ax": {
+        "title": "Hi, it's nice to meet you.",
+        "source": "Happy Death Day (2017)",
+        "counter": "1/40",
+        "transport": "Play",
+        "translation_selector_value": "Translate",
+        "autoplay_control_name": "Autoplay"
+      },
+      "collection_order": 1,
+      "visual_annotations": [
+        "title wraps into two lines above video",
+        "source/counter/karaoke overlay video",
+        "summary/hint and two complete action rows with Translate and Manual below"
+      ]
+    },
+    {
+      "id": "iphone-accessibility-top",
+      "device": "iPhone 17 Pro",
+      "ax_request_started_utc": "2026-10-06T13:41:28.668Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "iphone-accessibility-top",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/iphone-accessibility-top.png",
+        "pixel_size": [
+          1206,
+          2622
+        ],
+        "sha256": "ae8721146c3f792e7ae2d4cb0c5e2886fcb31ecf349f1383593d2358e5809084",
+        "file_mtime_utc": "2026-10-06T13:41:47.600070+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 3,
+        "reported_orientation": "Portrait",
+        "derived_whole_display_size_pt": [
+          402.0,
+          874.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "reported_content_size_category": "accessibility-extra-extra-extra-large",
+      "reported_ax": {
+        "title": "Hi, it's nice to meet you.",
+        "source": "Happy Death Day (2017)",
+        "counter": "1/40",
+        "transport": "Play",
+        "translation_selector_value": "Translate",
+        "autoplay_control_name": "Autoplay"
+      },
+      "collection_order": 2,
+      "visual_annotations": [
+        "video above reading region",
+        "three-line title below video then wrapped source",
+        "counter only partially visible at reading viewport bottom",
+        "Random toolbar control has no readable label/icon"
+      ]
+    },
+    {
+      "id": "iphone-accessibility-actions",
+      "device": "iPhone 17 Pro",
+      "ax_request_started_utc": "2026-10-06T13:42:32.520Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "iphone-accessibility-actions",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/iphone-accessibility-actions.png",
+        "pixel_size": [
+          1206,
+          2622
+        ],
+        "sha256": "c7e88d9f527df880d1d25a10f7ad949986822f454f691e07860023dbd5b45e1a",
+        "file_mtime_utc": "2026-10-06T13:42:46.261787+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 3,
+        "reported_orientation": "Portrait",
+        "derived_whole_display_size_pt": [
+          402.0,
+          874.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "reported_content_size_category": "accessibility-extra-extra-extra-large",
+      "reported_ax": {
+        "title": "Hi, it's nice to meet you.",
+        "source": "Happy Death Day (2017)",
+        "counter": "1/40",
+        "transport": "Play",
+        "translation_selector_value": "Translate",
+        "autoplay_control_name": "Autoplay"
+      },
+      "collection_order": 3,
+      "visual_annotations": [
+        "video stays above; reading content scrolled to A1 fragment, hint and both action rows",
+        "leading controls visible, trailing selectors outside horizontal view",
+        "same video frame and paused affordance",
+        "Random toolbar control has no readable label/icon"
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "action": "normal guest continuation and visible root selector → Reels",
+      "result": "paused first observed Reel; no explicit Play"
+    },
+    {
+      "action": "owned simctl content_size large → accessibility-extra-extra-extra-large",
+      "result": "reported category confirmed; CUA verified structural reflow"
+    },
+    {
+      "action": "CUA wheel scroll at reading-region point [1380,1100], down 1",
+      "result": "no visible change"
+    },
+    {
+      "action": "CUA touch drag [1400,1180] → [1400,850] wholly below video, Device Hub screenshot coordinates",
+      "result": "reading region moved to both action rows; same source/counter/Play; AX text unchanged"
+    },
+    {
+      "action": "CUA horizontal drag [1490,1090] → [1150,1090] inside observed first action row",
+      "result": "no visible change; trailing selector reachability unverified"
+    },
+    {
+      "action": "restore owned content_size large",
+      "result": "command readback large; CUA source/counter/Play remained same; stopped/uninstalled app and deleted own device"
+    }
+  ],
+  "matching": {
+    "basis": [
+      "same title",
+      "same source",
+      "same counter",
+      "same paused visible video"
+    ],
+    "confidence": "observed continuity only",
+    "internal_reel_id": "unknown",
+    "mounted_player_identity": "unknown"
+  },
+  "limits": [
+    "short-content multiline title only; no separate long description or translated content",
+    "only ordinary large and maximum accessibility size",
+    "trailing selector horizontal reachability unverified",
+    "AX presence is not visibility or action success",
+    "no player identity instrumentation, RTL, VoiceOver or physical-device coverage"
+  ]
+}

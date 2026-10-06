@@ -1,0 +1,371 @@
+{
+  "packet": "F03c",
+  "format": "reference-case-metadata; not a production UI Blueprint snapshot",
+  "source": {
+    "repository": "/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac",
+    "branch": "beta-01",
+    "head": "48d0dfd1cd0fe46ac88c073e99ffab7bd1abe76e",
+    "included_existing_change": "PlayphrasemeApp.xcodeproj/project.pbxproj",
+    "project_sha256": "7b26d3ad560da98ae06d406da7b7397238075009eb648e7b6df22ff89530ee75",
+    "build_manifest": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c-build/playphrase-f03c-build.6vPRSB/manifest.json",
+    "configuration": "Release",
+    "sdk": "iphonesimulator27.0",
+    "architecture": "arm64",
+    "minimum_os": "17.0",
+    "build_receipt_commit": "eda0d7753f85f9e5c03b1d90613ea69586fd8016",
+    "binary_correspondence": "source HEAD plus existing project edit, not pristine HEAD; executable hashes checked before install"
+  },
+  "runtime": {
+    "platform": "Simulator",
+    "os": "iOS 27.0",
+    "runtime_build": "24A434",
+    "capture_tool": "xcrun simctl io EXACT-UDID screenshot --type=png (internal display)",
+    "ax_tool": "Computer Use Device Hub getAXState; selected text only",
+    "capture_atomicity": "separate AX and pixel acquisitions; no atomicity or latency claim",
+    "resampling": false,
+    "crop": null
+  },
+  "geometry_unknowns": [
+    "app content bounds",
+    "safe-area insets",
+    "per-control AX/layout/paint/hit bounds",
+    "padding",
+    "corner radii",
+    "occlusion and hit-test completeness"
+  ],
+  "retention": {
+    "raw_root": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14",
+    "owner": "root coordinator",
+    "consumers": [
+      "Q03",
+      "P7",
+      "engine/export reference evaluation"
+    ],
+    "until": "acceptance or explicit discard"
+  },
+  "evaluation": {
+    "agent_run": false,
+    "collector_run": false,
+    "product_acceptance": false,
+    "independent_acceptance": false
+  },
+  "case_id": "RC04",
+  "status": "captured_with_visual_discrepancies_and_scope_limits",
+  "bundle": {
+    "scheme": "PlayphrasemeTablet",
+    "id": "playphraseme.PlayphrasemeTablet",
+    "version": "1.0",
+    "build": "1",
+    "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c-build/playphrase-f03c-build.6vPRSB/DerivedData/Build/Products/Release-iphonesimulator/PlayphrasemeTablet.app",
+    "executable_sha256": "2d28160327d369633e5d8bfd36053cc907c2d0a7e210a5a171c2889100a968fe"
+  },
+  "states": [
+    {
+      "id": "ipad13-default",
+      "device": "iPad Pro 13-inch (M5)",
+      "ax_request_started_utc": "2026-10-06T13:13:55.676Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "ipad13-default",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/ipad13-default.png",
+        "pixel_size": [
+          2752,
+          2064
+        ],
+        "sha256": "74e472ea097276ee5e5aacfd682323715c86aedcb89c042d0520f8b6a3f2c1d5",
+        "file_mtime_utc": "2026-10-06T13:14:09.687005+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 2,
+        "reported_orientation": "Landscape Right",
+        "derived_whole_display_size_pt": [
+          1376.0,
+          1032.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "filters": {
+        "basis": "reported AX values in open inspector or closed summary; defaults confirmed by inspector",
+        "cefr_from": "A1",
+        "cefr_to": "C2",
+        "only_idioms": false,
+        "only_questions": false,
+        "emotion": "Any",
+        "polarity": "Any",
+        "topic": "Any"
+      },
+      "visual_context": {
+        "query": "I'm so excited to see you.",
+        "source": "The Good Night (2007) [00:13:11]",
+        "counter": "1/31",
+        "paused_affordance": "Play"
+      },
+      "visual_annotations": [
+        "Common Phrases filter bar visible"
+      ],
+      "reported_ax": {
+        "filters_name": "Filters",
+        "filters_value": null,
+        "page": "1-20",
+        "total": "62,321",
+        "first_previous_disabled": true,
+        "next_last_disabled": false,
+        "selected_tab": "Learn Common Phrases",
+        "transport": "Play"
+      },
+      "collection_order": 1
+    },
+    {
+      "id": "ipad13-filters-open",
+      "device": "iPad Pro 13-inch (M5)",
+      "ax_request_started_utc": "2026-10-06T13:15:13.797Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "ipad13-filters-open",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/ipad13-filters-open.png",
+        "pixel_size": [
+          2752,
+          2064
+        ],
+        "sha256": "bf532e79332886d3ae3f9a80b7efd6ba0a6311ff741864c42842ee2a35214041",
+        "file_mtime_utc": "2026-10-06T13:15:35.796861+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 2,
+        "reported_orientation": "Landscape Right",
+        "derived_whole_display_size_pt": [
+          1376.0,
+          1032.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "filters": {
+        "basis": "reported AX values in open inspector or closed summary; defaults confirmed by inspector",
+        "cefr_from": "A2",
+        "cefr_to": "C2",
+        "only_idioms": true,
+        "only_questions": true,
+        "emotion": "Any",
+        "polarity": "Any",
+        "topic": "Any"
+      },
+      "visual_context": {
+        "query": "I'm so excited to see you.",
+        "source": "The Good Night (2007) [00:13:11]",
+        "counter": "1/31",
+        "paused_affordance": "Play"
+      },
+      "visual_annotations": [
+        "popover with arrow near Filters bottom-leading edge; Reset and X visible; Topic below captured form viewport",
+        "Filters caption truncates after A2–C2; complete two-value +N is not visible"
+      ],
+      "collection_order": 2
+    },
+    {
+      "id": "ipad13-summary",
+      "device": "iPad Pro 13-inch (M5)",
+      "ax_request_started_utc": "2026-10-06T13:16:13.442Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "ipad13-summary",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/ipad13-summary.png",
+        "pixel_size": [
+          2752,
+          2064
+        ],
+        "sha256": "4524b811fcf34459d374cbb47188a7fc715ba370e067fefe6b4ec0d5a17ede48",
+        "file_mtime_utc": "2026-10-06T13:16:34.216182+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 2,
+        "reported_orientation": "Landscape Right",
+        "derived_whole_display_size_pt": [
+          1376.0,
+          1032.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "filters": {
+        "basis": "reported AX values in open inspector or closed summary; defaults confirmed by inspector",
+        "cefr_from": "A2",
+        "cefr_to": "C2",
+        "only_idioms": true,
+        "only_questions": true,
+        "emotion": "Any",
+        "polarity": "Any",
+        "topic": "Any"
+      },
+      "visual_context": {
+        "query": "I'm so excited to see you.",
+        "source": "The Good Night (2007) [00:13:11]",
+        "counter": "1/31",
+        "paused_affordance": "Play"
+      },
+      "visual_annotations": [
+        "Common Phrases filter bar visible",
+        "Filters caption truncates after A2–C2; complete two-value +N is not visible"
+      ],
+      "reported_ax": {
+        "filters_name": "Filters",
+        "filters_value": "A2–C2, Only idioms, Only questions",
+        "page": "1-17",
+        "total": "17",
+        "first_previous_disabled": true,
+        "next_last_disabled": true,
+        "selected_tab": "Learn Common Phrases",
+        "transport": "Play"
+      },
+      "collection_order": 3
+    },
+    {
+      "id": "ipad11-default",
+      "device": "iPad Pro 11-inch (M5)",
+      "ax_request_started_utc": "2026-10-06T13:36:52.850Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "ipad11-default",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/ipad11-default.png",
+        "pixel_size": [
+          2420,
+          1668
+        ],
+        "sha256": "760cfadaa3ffce4ce463970cb8d2cec949893ede55214de6dba9e50166ed9cfb",
+        "file_mtime_utc": "2026-10-06T13:37:05.778686+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 2,
+        "reported_orientation": "Landscape Right",
+        "derived_whole_display_size_pt": [
+          1210.0,
+          834.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "filters": {
+        "basis": "reported AX values in open inspector or closed summary; defaults confirmed by inspector",
+        "cefr_from": "A1",
+        "cefr_to": "C2",
+        "only_idioms": false,
+        "only_questions": false,
+        "emotion": "Any",
+        "polarity": "Any",
+        "topic": "Any"
+      },
+      "visual_context": {
+        "query": "Thank you for joining us.",
+        "source": "Being There (1979) [01:19:08]",
+        "counter": "1/215",
+        "paused_affordance": "Play"
+      },
+      "visual_annotations": [
+        "Common Phrases filter bar visible",
+        "Default Filters caption rendered F…; learner tab labels also wrap/truncate"
+      ],
+      "reported_ax": {
+        "filters_name": "Filters",
+        "filters_value": null,
+        "page": "1-20",
+        "total": "62,321",
+        "first_previous_disabled": true,
+        "next_last_disabled": false,
+        "selected_tab": "Learn Common Phrases",
+        "transport": "Play"
+      },
+      "collection_order": 4
+    },
+    {
+      "id": "ipad11-filters-open",
+      "device": "iPad Pro 11-inch (M5)",
+      "ax_request_started_utc": "2026-10-06T13:37:18.807Z",
+      "ax_excerpt_file": "ax-excerpts.txt",
+      "ax_excerpt_section": "ipad11-filters-open",
+      "asset": {
+        "path": "/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/real-cases/F03c/2026-10-06-hxp5gk14/ipad11-filters-open.png",
+        "pixel_size": [
+          2420,
+          1668
+        ],
+        "sha256": "09075226f3f5f42984dbe7079bd31892f66ae63ab25e301284b159dd44863d57",
+        "file_mtime_utc": "2026-10-06T13:37:32.581594+00:00",
+        "lossless_original_png": true
+      },
+      "display": {
+        "reported_preferred_ui_scale": 2,
+        "reported_orientation": "Landscape Right",
+        "derived_whole_display_size_pt": [
+          1210.0,
+          834.0
+        ],
+        "derivation": "oriented PNG dimensions / simctl IO preferred UI scale; not content bounds"
+      },
+      "content_frame": {
+        "availability": "unknown"
+      },
+      "per_control_geometry": {
+        "availability": "unknown"
+      },
+      "filters": {
+        "basis": "reported AX values in open inspector or closed summary; defaults confirmed by inspector",
+        "cefr_from": "A1",
+        "cefr_to": "C2",
+        "only_idioms": false,
+        "only_questions": false,
+        "emotion": "Any",
+        "polarity": "Any",
+        "topic": "Any"
+      },
+      "visual_context": {
+        "query": "Thank you for joining us.",
+        "source": "Being There (1979) [01:19:08]",
+        "counter": "1/215",
+        "paused_affordance": "Play"
+      },
+      "visual_annotations": [
+        "popover with arrow near Filters bottom-leading edge; Reset and X visible; Topic below captured form viewport",
+        "Default Filters caption rendered F…; learner tab labels also wrap/truncate"
+      ],
+      "collection_order": 5
+    }
+  ],
+  "restoration": {
+    "ipad13": "Idioms/Questions switched off before coordinator pause; A2 persisted through restart; restored A1 on resume in landscape, verified inspector defaults; app uninstalled and task-created device deleted",
+    "ipad11": "no filter changes; exposed Cancel invoked; app uninstalled and task-created device deleted",
+    "setup_playback": "no observed active playback in the retained selected states; no intentional Play, no stats inspection"
+  },
+  "limits": [
+    "different first-use query/media across iPads; not a controlled same-content responsive pair",
+    "Vocabulary and compact sheet not exercised",
+    "VoiceOver and paging activation not tested",
+    "visible +N expectation not met by captured caption",
+    "no exact hit-size/anchor measurements",
+    "Done label not exposed in selected AX; X close seen visually"
+  ]
+}

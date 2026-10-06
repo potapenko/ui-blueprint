@@ -1,0 +1,63 @@
+Selected exact CUA AX lines; indentation removed, unrelated siblings omitted.
+Numeric indices are historical observation-local references. No bounds or
+visibility proof are supplied. Matching text is not mounted-player identity.
+
+[iphone-ordinary] AX request 2026-10-06T13:40:44.478Z
+53 text Description: Hi, it's nice to meet you., Secondary Actions: Cancel
+55 button Description: Happy Death Day (2017), Secondary Actions: Cancel
+56 text Description: 1/40, Secondary Actions: Cancel
+58 button Description: Play, Secondary Actions: Cancel, Playback speed
+59 text Description: Hi, it's nice to meet you., Secondary Actions: Cancel
+60 text Description: Found: 40 matches. Level: A1., Secondary Actions: Cancel
+62 button Description: Select collection, Secondary Actions: Cancel
+63 button Description: Filters, Secondary Actions: Cancel
+64 button Description: Search phrases, Secondary Actions: Cancel
+65 button Description: Add to favorites., Secondary Actions: Cancel
+66 button Description: Toggle focused playback for searched words with minimal context., Secondary Actions: Cancel
+67 button Description: Choose translation language., Value: Translate, Secondary Actions: Cancel
+68 button Description: Download video, Secondary Actions: Cancel
+69 button Description: Copy link to this reel, Secondary Actions: Cancel
+70 button Description: Toggle fullscreen, Secondary Actions: Cancel
+71 button Description: Playback speed (1x)., Secondary Actions: Cancel
+72 button Description: Playback repeat (x1)., Secondary Actions: Cancel
+73 button Description: Autoplay, Secondary Actions: Cancel
+
+[iphone-accessibility-top] AX request 2026-10-06T13:41:28.668Z
+53 button Description: Play, Secondary Actions: Cancel, Playback speed
+54 text Description: Hi, it's nice to meet you., Secondary Actions: Cancel
+56 button Description: Happy Death Day (2017), Secondary Actions: Cancel
+57 text Description: 1/40, Secondary Actions: Cancel
+59 text Description: Hi, it's nice to meet you., Secondary Actions: Cancel
+60 text Description: Found: 40 matches. Level: A1., Secondary Actions: Cancel
+62 button Description: Select collection, Secondary Actions: Cancel
+63 button Description: Filters, Secondary Actions: Cancel
+64 button Description: Search phrases, Secondary Actions: Cancel
+65 button Description: Add to favorites., Secondary Actions: Cancel
+66 button Description: Toggle focused playback for searched words with minimal context., Secondary Actions: Cancel
+67 button Description: Choose translation language., Value: Translate, Secondary Actions: Cancel
+68 button Description: Download video, Secondary Actions: Cancel
+69 button Description: Copy link to this reel, Secondary Actions: Cancel
+70 button Description: Toggle fullscreen, Secondary Actions: Cancel
+71 button Description: Playback speed (1x)., Secondary Actions: Cancel
+72 button Description: Playback repeat (x1)., Secondary Actions: Cancel
+73 button Description: Autoplay, Secondary Actions: Cancel
+
+[iphone-accessibility-actions] AX request 2026-10-06T13:42:32.520Z
+53 button Description: Play, Secondary Actions: Cancel, Playback speed
+54 text Description: Hi, it's nice to meet you., Secondary Actions: Cancel
+56 button Description: Happy Death Day (2017), Secondary Actions: Cancel
+57 text Description: 1/40, Secondary Actions: Cancel
+59 text Description: Hi, it's nice to meet you., Secondary Actions: Cancel
+60 text Description: Found: 40 matches. Level: A1., Secondary Actions: Cancel
+62 button Description: Select collection, Secondary Actions: Cancel
+63 button Description: Filters, Secondary Actions: Cancel
+64 button Description: Search phrases, Secondary Actions: Cancel
+65 button Description: Add to favorites., Secondary Actions: Cancel
+66 button Description: Toggle focused playback for searched words with minimal context., Secondary Actions: Cancel
+67 button Description: Choose translation language., Value: Translate, Secondary Actions: Cancel
+68 button Description: Download video, Secondary Actions: Cancel
+69 button Description: Copy link to this reel, Secondary Actions: Cancel
+70 button Description: Toggle fullscreen, Secondary Actions: Cancel
+71 button Description: Playback speed (1x)., Secondary Actions: Cancel
+72 button Description: Playback repeat (x1)., Secondary Actions: Cancel
+73 button Description: Autoplay, Secondary Actions: Cancel
