@@ -84,7 +84,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | --- | --- |
 | Активные чаты/пакеты/ресурсы | four lanes: Integration D05, Core L01, Web/Native live D02 on support `73d772e`; Git lease root, short grants on readiness; Native own-F02 desktop grant renewed, Web isolated headless |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | принять actual Web/Native D02 + normalized Native sizing input; L01 first executable checks; D05 calibrated policy; four P2 awaiting_authority and G01 consumer residual open; RC05 gaps remain |
+| Следующий шаг | actual Web/Native D02 + Native sizing input; Integration CLI membership для binary checks, bounded proposal canonical MeasurementResult/result-space (no shared mutation during pinned D02); D05 policy; four P2 awaiting_authority; RC05 gaps remain |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -113,7 +113,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [S01-Web](packets/S01-web-proof.md) | `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | F01 + Stage A `9d2df15`; collector `7813cd7`, support `73d772e` pushed | resumed full live proof via common Harness/d02_host; prior author45 collector checks remain separate; [receipt](receipts/S01-web-proof.md) has narrow D05 samples; own headless only |
 | [S01-Native](packets/S01-native-proof.md) | `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | F02 + Stage A `9d2df15`; collector `3bdf34d`, support `73d772e` pushed | resumed full live proof; own-F02 runtime lane regranted with reservation/cleanup checks; [receipt](receipts/S01-native-proof.md); actual vs injected capture separate, no concurrency-fix claim |
 | [G01](packets/G01.md) | `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | package `b1475c8476bdb43880fe56162f4bb76d26958a83` + membership `84a87a66bdb206a740301d97166b957b0eed2277`, pushed | saved controlled-data candidate; preliminary check/fmt/Clippy/14 tests, saved shared hashes match checked inputs; [receipt](receipts/G01.md); multi-hop/conditions/finding consumer residual and S01/four-review gates open |
-| [L01](packets/L01.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | CLI@1 + G01 on `84a87a6`; early controlled-data clause | running: crates/cli only + own doc/receipt; root Cargo/lock Integration; no engine/schema edits or runtime/Git grant |
+| [L01](packets/L01.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | CLI@1 + G01 on `84a87a6`; early controlled-data clause | source/binary tests ready, Cargo checks wait Integration membership; [receipt](receipts/L01.md); compact measure/same-space check candidate, full measure/conversion JSON waits canonical result/evidence contract; no complete-L01 claim |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
