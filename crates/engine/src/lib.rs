@@ -2,6 +2,7 @@
 #![forbid(unsafe_code)]
 
 mod arithmetic;
+pub mod replay;
 mod resolve;
 
 use uiblueprint_schema::{model::*, validation};
