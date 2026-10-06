@@ -14,7 +14,8 @@
 This contract prepares Rust development. No Cargo package, toolchain pin,
 supported target matrix, CI workflow, runtime, or framework is installed by it.
 The initial implementation must resolve these choices against its approved
-requirements. Do not infer them from the donor search service or product Drafts.
+requirements. Do not infer them from the donor search service or unresolved
+product proposals.
 
 ## DEV.RUST.TOOLCHAIN — Reproducible setup
 

@@ -20,14 +20,18 @@ belong in `RUST.md`; development setup and command applicability belong in
 
 ## Bootstrap boundary
 
-This repository currently contains documentation, including imported Draft
-product proposals. Importing or indexing them does not approve their proposed
-architecture, APIs, package layout, dependencies, or implementation stages.
-Use the registry to distinguish their authority from active engineering rules.
+The user confirmed the product specification and visualization guide on
+2026-10-06. They are Active requirements; implementation and release acceptance
+remain separate. Explicitly open engineering choices and future phases retain
+their stated scope. Use the registry for the current authority and revisions.
 
-Do not create empty crates or select frameworks merely to match a draft
-directory tree. Introduce concrete owners when an authorized implementation
-needs them.
+The [development plan](docs/plans/ui-blueprint-development.md) is proposed
+execution scope until the user approves and launches it. For coordinated work,
+follow its selected execution route and task registry. Planning does not start
+workers, a persistent goal, or implementation.
+
+Do not create empty crates merely to match a proposed directory tree. Introduce
+concrete owners when an authorized implementation needs them.
 
 ## Documentation verification
 
