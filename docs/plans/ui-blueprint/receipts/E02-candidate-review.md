@@ -1,5 +1,9 @@
 # E02 compiler and CLI candidate review
 
+Current disposition: the user clarified that implementation was already agreed.
+Root removed its mistaken authority wait; [E02 repair](../packets/E02-repair.md)
+now covers both findings. The review and prior waiting record below are historical.
+
 - Reviewer: fresh non-author `/root/e02_candidate_review`, fork_turns none,
   one child, no nested delegation. [Packet](../packets/E02-candidate-review.md)
   at `4e04161`; artifact `fe0653752b85443e52db690400de6d161fdd9142`.

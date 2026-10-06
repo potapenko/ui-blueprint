@@ -1,5 +1,9 @@
 # P1 saved-candidate independent review
 
+Current disposition: the user's later clarification removed root's mistaken
+repair-authority wait. [S01 repair](../packets/S01-review-repair.md) covers P1-R1;
+historical review findings and original waiting record below remain unchanged.
+
 - Reviewer: fresh collaboration `/root/p1_candidate_review`; no author context,
   no nested agents, no file changes, builds/tests/runtime or external communication.
 - Base `61022a919b1a064e901f5021fdcabf6e28b41eef`; artifact

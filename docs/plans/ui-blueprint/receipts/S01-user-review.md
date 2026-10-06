@@ -1,5 +1,9 @@
 # S01 — requested checkpoint review
 
+Current disposition: the user's later clarification removed root's mistaken
+repair-authority wait. See [S01 repair packet](../packets/S01-review-repair.md)
+and the registry. Review observations and the historical boundary below are kept.
+
 - User explicitly requested one fresh read-only reviewer, including staged,
   unstaged and untracked changes; no repairs without a further user instruction.
 - Reviewer: collaboration `/root/checkpoint_review`, fresh context, no delegation.

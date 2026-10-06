@@ -8,6 +8,13 @@
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
 - Объём: P0–P7, рабочие чаты и follow-up по плану; root не реализует и не проверяет продукт.
+- Уточнение пользователя 2026-10-06: «Какой ответ от меня нужен? Уже всё же
+  обсудили уже.» Исправления семи findings входят в уже одобренную реализацию;
+  root ошибочно распространил read-only review restriction на дальнейшую работу.
+  Текущее awaiting_authority снято; [ранбук](execution.md) закрепляет границу,
+  [S01 repair](packets/S01-review-repair.md) и [E02 repair](packets/E02-repair.md)
+  назначают владельцев. Старые receipts сохраняют историческое ожидание, а не
+  действующий запрет. Reviewer сам код не меняет.
 - Начальный checkpoint `358c757`; код продукта отсутствует; строки `queued`, если статус ниже не уточнён.
 
 ## Очередь
@@ -82,9 +89,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | E01-cli 9cd6666 + lock fe06537 saved/pushed; Core storage design0d40af7 saved/pushed; Integration D05-policy resumed with handoff; E02 reviewer completed with two new P2; Export/Web/Native retained idle; desktop released; seven review repairs await user |
+| Активные чаты/пакеты/ресурсы | Integration finishes D05-policy then S01 five-finding repair; Export E02 two-finding repair next; Web W01-transport active; Core waits pinned storage policy; desktop released; no repair authority wait |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | Параллельно получить concrete K01 storage ownership и D05 admission/retention decision; связать через root перед source implementation. E01 CLI wiring/E02 ещё не выполнены; D05 full enforcement, canonical MeasurementResult, пять review repairs и RC05 evidence остаются открытыми |
+| Следующий шаг | Сохранить D05 policy, затем canonical sizing/K01 storage; параллельно исправить S01/E02 findings и выполнить affected review. CLI wiring уже saved; D05 full enforcement, canonical MeasurementResult и RC05 evidence остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -124,7 +131,10 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [K01-storage-design](packets/K01-storage-design.md) | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | `0d40af78d2ae5f14b8fe0343a4a1c3007d40d3ca`, pushed | completed finite design; [receipt](receipts/K01-storage-design.md); transferred to Integration, no source implementation before pinned D05 policy |
 | [D05-policy](packets/D05-policy.md) | Integration `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | ROADMAP delegated D05 decision; packet56dc93b, draft8103675 + Core0d40af7 | resumed for final retained/admission policy; [proposal](receipts/D05-policy.md), D05@1/D02 not yet changed; no new profiling or approved subprocess policy |
 | [E01-cli](packets/E01-cli.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | package9cd6666994f3314875403c143a07e82e9620a082 + lockfe0653752b85443e52db690400de6d161fdd9142, pushed | saved candidate; [receipt](receipts/E01-cli.md):20 distinct binary tests/check/fmt/Clippy; saved shared hash1018d7cb…4c12c1 matched, Git lease released; local brief→package only, live Snapshot-ID path and E02 remain open |
-| [E02-candidate-review](packets/E02-candidate-review.md) | collaboration `/root/e02_candidate_review` | packet4e04161; artifactfe06537, export00b70cc and CLI delta afterdbdccf6 | completed two-stage review, reject; [receipt](receipts/E02-candidate-review.md): E02-R1 bottom-left vertical anchors and E02-R2 f64 exact equality, owner Export, awaiting_authority; seven total findings await user, no code repairs |
+| [E02-candidate-review](packets/E02-candidate-review.md) | collaboration `/root/e02_candidate_review` | packet4e04161; artifactfe06537, export00b70cc and CLI delta afterdbdccf6 | completed two-stage review, reject; [receipt](receipts/E02-candidate-review.md): E02-R1 bottom-left vertical anchors and E02-R2 f64 exact equality; authority wait removed by current user clarification, same reviewer retained for recheck |
+| [S01-review-repair](packets/S01-review-repair.md) | Integration `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | original four S01 findings + P1-R1, existing contracts; current user clarification | ready after D05 checkpoint; exact shared validation/plugin write set, affected consumer checks then independent recheck |
+| [E02-repair](packets/E02-repair.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | E02-R1/R2; existing GEOMETRY/DRAWING contracts and current user clarification | ready for dispatch, disjoint proposal arithmetic/tests; final checks coordinated with shared validator changes |
+| [W01-transport](packets/W01-transport.md) | Web `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | D02@1/D07@2; packet e5ed9c0 | running read-only source/API/license decision, two docs only; no live adapter before D05 |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
