@@ -82,7 +82,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | E01 package 00b70cc + membership dbdccf6 saved/pushed, shared hashes match, leases released; Core K01-storage-design and Integration D05-policy next, disjoint documentation scopes; Web/Native/Export retained idle; desktop released; five review repairs await user |
+| Активные чаты/пакеты/ресурсы | E01 package 00b70cc + membership dbdccf6 saved/pushed; Core K01-storage-design and Integration D05-policy active in disjoint docs, Export E01-cli dispatched with CLI source lease; Web/Native retained idle; desktop released; five review repairs await user |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | Параллельно получить concrete K01 storage ownership и D05 admission/retention decision; связать через root перед source implementation. E01 CLI wiring/E02 ещё не выполнены; D05 full enforcement, canonical MeasurementResult, пять review repairs и RC05 evidence остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -121,8 +121,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 | D05 working allocation diagnostic | existing Integration owner | `2a5dfefdab219f4e76b8631854e39a897d209ec1`, push verified against origin/master | [receipt](receipts/S01.md); seven scoped paths saved, index released; parser/framing/session evidence only, not process RSS or production policy. K01 ownership/accounting handoff is a proposal for the next finite packet |
 | [K01-replay](packets/K01-replay.md) | existing Core chat `01a111a7-9887-7983-9aa0-c08dfa2d46bc` | `e4ecee76f43662a3b6d29b4712b904a2877222d7`, pushed | checked pure replay candidate saved; [receipt](receipts/K01-replay.md),11tests/check/fmt/Clippy; no storage/eviction/D05 or protected-validator acceptance |
 | [E01](packets/E01.md) | `01a11286-a187-7720-a452-41b6ea7b228b` / local | package `00b70cc41bb022c27b92f8598e1090430bb0c79a` + membership `dbdccf637c85d135f38faf9a4cab9c89e729a0a0`, pushed | saved candidate; [receipt](receipts/E01.md), check/fmt/Clippy/12 tests; Integration confirms saved shared hash 769ab201…a3e79c8 matches checked input. CLI wiring, G02 attribution and E02 acceptance remain open |
-| [K01-storage-design](packets/K01-storage-design.md) | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | D05@1/replay e4ecee7/diagnostic 2a5dfef; exact closure in packet | queued for dispatch; documentation-only ownership/accounting handoff, no cache source before D05 policy |
-| [D05-policy](packets/D05-policy.md) | Integration `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | ROADMAP delegated D05 decision; existing measurements and pending Core storage handoff | queued for dispatch; finite policy/enforcement decision, no more open-ended profiling, no protected review repair |
+| [K01-storage-design](packets/K01-storage-design.md) | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | D05@1/replay e4ecee7/diagnostic 2a5dfef; exact closure in packet56dc93b | running, handle confirmed; documentation-only ownership/accounting handoff, no cache source before D05 policy |
+| [D05-policy](packets/D05-policy.md) | Integration `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | ROADMAP delegated D05 decision; packet56dc93b, existing measurements and pending Core storage handoff | running, handle confirmed; finite policy/enforcement decision, no more open-ended profiling, no protected review repair |
+| [E01-cli](packets/E01-cli.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | packet ecde1ed; EXPORT/CLI closure, saved E01 and L01 candidates | dispatched; exclusive CLI source/docs lease, full model-free package through public binary; root lockfile stays Integration; E02 acceptance remains open |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
