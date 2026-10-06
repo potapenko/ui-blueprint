@@ -12,6 +12,10 @@ its conditional governance documents remain applicable; do not copy them here.
   changes also require [Rust development](docs/specs/development/rust.md).
 - New product contracts use [the feature template](docs/specs/templates/feature-spec.md)
   and are registered before implementation. A template is not product authority.
+- Coordinating the user-authorized goal or managing its worker chats starts at
+  [the orchestration runbook](docs/plans/ui-blueprint/execution.md) and the
+  [task registry](docs/plans/ui-blueprint/task-registry.md). The runbook records
+  this goal's authorization; it does not authorize delegation in unrelated tasks.
 
 Follow selected contracts and their explicit dependencies, not every sibling.
 Product meaning belongs in the specification tree; Rust engineering rules

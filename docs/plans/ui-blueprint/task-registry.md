@@ -1,6 +1,9 @@
 # Единый реестр задач
 
 - План: [PLAN.UIB@1](../ui-blueprint-development.md).
+- Правила исполнения и восстановления: [ранбук](execution.md); этот реестр хранит
+  текущее состояние, а не вторую копию правил. Прямой запрос пользователя требует
+  сохранять правила push, чатов/параллельности и архивирования в файлах.
 - Режим: `coordinated`, root coordination-only; цель активна в чате `01a11088-e608-7801-bdfb-db5c9383af9d`.
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
@@ -79,9 +82,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01 Stage A running; F03c reference return received; Git lease root after F03c push; desktop free, all F03c task devices removed |
+| Активные чаты/пакеты/ресурсы | Stage A returned/pushed, Git lease root; Web/Native proof preparation running; both advisor handoffs complete; desktop free until explicit Native proof grant |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | S01 schema/parity/plugin Stage A checkpoint; четыре review findings awaiting_authority по ограничению пользователя; затем bounded D02/D05 proof и unresolved RC05 evidence; Stage A acceptance ещё отсутствует |
+| Следующий шаг | передать Stage A `9d2df15` Web/Native owners для D02 и Integration для D05; четыре review findings awaiting_authority по ограничению пользователя; RC05 gaps remain; Stage A acceptance отсутствует |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -100,11 +103,15 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
 | [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
 | [F03b](packets/F03b.md) | product advisor | `8f93735ed14e03380a76094c1370c32efd42552f` | accepted reference with explicit playback/statistics/geometry limits; [receipt](receipts/F03b.md) |
-| [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; WIP `1d12859` + `61022a9`; intermediate `0b4af9c`, all pushed | redacted/tag-only fix saved; author goldens pass (97 cases/126 wire fixtures), [receipt](receipts/S01.md); plugin WIP + schema artifact/CLI/lifecycle/docs remain; four P2 await user; D02/D05 open, no acceptance/freeze |
+| [S01](packets/S01.md) | Core chat R03, Integration role | Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3`, pushed; prior `0b4af9c` redacted fix | implemented/author checks pass: check/fmt/Clippy/20 tests, 97 cases/126 CLI fixtures; [receipt](receipts/S01.md); four P2 await user; D02/D05 open, not accepted/frozen |
 | S01-user-review | collaboration `/root/checkpoint_review` | `eb0edbf..1d12859` + changes saved in `61022a9` | completed static review; four findings, not accepted; [result](receipts/S01-user-review.md); no fixes authorized by review alone |
 | [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | `d539a0ec2bac243375256652fb75da7065b27350` | accepted oracle input; [receipt](receipts/S01-oracles.md); code/contract review still required |
 | [F03c](packets/F03c.md) | product advisor | `492ac0075625ff7e9988294fc23d2bca6e0146f1`, pushed; F03c-build@eda0d77 | reference pack saved (8 PNG/12 scoped files), [receipt](receipts/F03c.md); RC05 long metadata/translation and trailing-selector reachability waiting_evidence, control bounds unknown; cleanup complete, lanes released; no collector/Q03 acceptance |
 | [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | `eda0d7753f85f9e5c03b1d90613ea69586fd8016` | accepted build artifacts; [receipt](receipts/F03c-build.md); runtime still unverified |
+| Mac-test-advice | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | direct user request; F03c residual and D02/M01/Q03 | completed read-only; [handoff](receipts/platform-test-advice.md); implications sent to Native owner; reusable advisor retained |
+| Web-test-advice | `01a1102f-e21d-7251-9597-c29a1c66d088` / local | direct user request; existing Web coauthor context | completed read-only; [handoff](receipts/platform-test-advice.md); F01/B03 reuse sent to Web owner; reusable advisor retained |
+| [S01-Web](packets/S01-web-proof.md) | existing R01/F01 Web owner | [shared handoff](packets/S01-bridges.md), committed F01 now; Stage A for binding | fixture/setup preparation dispatched; common-interface code/proof waits exact Stage A checkpoint |
+| [S01-Native](packets/S01-native-proof.md) | existing R02/F02 Native owner | [shared handoff](packets/S01-bridges.md), committed F02 now; Stage A for binding | fixture/build preparation dispatched; common-interface code/proof waits exact Stage A checkpoint; no runtime until root grant |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
@@ -130,3 +137,21 @@ iPhone/iPad данные, при соблюдении конкретных proje
 Inventory принят; F03a собрал RC01/RC02, F03b собирает RC03 по отдельным grants.
 Код реального приложения и другие проекты не открыты для произвольных изменений.
 Цель не остановлена; мобильные примеры следуют отдельным конечным пакетам.
+
+## Advisor routing and chat lifecycle
+
+Latest direct user instruction adds «Research website UI blueprint» as the Web
+product/test advisor beside «Спроектировать UI Blueprint» for Mac. Both may be
+asked finite questions within their respective source context; advice is separated
+from verified runtime evidence and cannot silently change the Active local specs.
+The user explicitly requests parallel ready work, status verification and archival
+of completed chats that are no longer needed. Root checks actual thread handles;
+idle with unfinished assigned work triggers a bounded continuation, not assumed
+background progress. Shared code/Git/desktop ownership remains explicit.
+
+Archived after authoritative terminal-status checks and accepted saved receipts:
+C00 author `01a1109a-5d6e-7792-b926-e767c7f63642`, C00 reviewer
+`01a110a5-8af7-7ef1-8fb6-fd989e78e666`, S01-oracles
+`01a11126-55ad-7d03-bd05-30e9feff0818`, F03c-build
+`01a11145-9a6a-7913-86d5-d9f0d483d961`. History and artifacts are preserved.
+R01/F01 and R02/F02 chats remain for their next dependency-ready platform proof.
