@@ -1,0 +1,1116 @@
+[
+  {
+    "view": "proposal",
+    "dimensions": [
+      {
+        "id": "N00-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N00",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N00",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 1200.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N00-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N00",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N00",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 800.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N01-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N01",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N01",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 1152.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N01-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N01",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N01",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 64.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N02-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 224.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N02-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 664.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N03-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 904.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N03-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 664.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N04-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N04",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N04",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 856.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N04-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N04",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N04",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 32.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N05-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 856.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N05-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 456.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N06-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 400.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N06-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 48.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N07-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N07",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N07",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 400.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N07-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N07",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N07",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 48.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N08-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N08",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N08",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 856.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N08-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N08",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N08",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 72.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N09-width",
+        "label": "Целевая ширина",
+        "anchors": [
+          {
+            "component": "N09",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N09",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 120.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "N09-height",
+        "label": "Целевая высота",
+        "anchors": [
+          {
+            "component": "N09",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N09",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": 48.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "outer-left",
+        "label": "Внешний отступ",
+        "anchors": [
+          {
+            "component": "N00",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "column-gap",
+        "label": "Промежуток колонок",
+        "anchors": [
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          },
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "outer-right",
+        "label": "Внешний отступ",
+        "anchors": [
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          },
+          {
+            "component": "N00",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "vertical-nav",
+        "label": "Вертикальный интервал",
+        "anchors": [
+          {
+            "component": "N01",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          },
+          {
+            "component": "N02",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "vertical-main",
+        "label": "Вертикальный интервал",
+        "anchors": [
+          {
+            "component": "N01",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          },
+          {
+            "component": "N03",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "form-left",
+        "label": "Проектный внутренний отступ",
+        "anchors": [
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "form-top",
+        "label": "Проектный внутренний отступ",
+        "anchors": [
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "field-gap",
+        "label": "Промежуток полей",
+        "anchors": [
+          {
+            "component": "N06",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          },
+          {
+            "component": "N07",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          }
+        ],
+        "value": 8.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "form-right",
+        "label": "Проектный внутренний отступ",
+        "anchors": [
+          {
+            "component": "N07",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          },
+          {
+            "component": "N05",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "button-right",
+        "label": "Положение кнопки",
+        "anchors": [
+          {
+            "component": "N09",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          },
+          {
+            "component": "N08",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": 24.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      },
+      {
+        "id": "button-top",
+        "label": "Положение кнопки",
+        "anchors": [
+          {
+            "component": "N08",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N09",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "canvas-local",
+              "kind": "local",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          }
+        ],
+        "value": 12.0,
+        "units": "css_px",
+        "source_kind": "proposed",
+        "evidence": [],
+        "requirement_ref": "UIB.DRAWING-EXAMPLE@1 explicit target layout",
+        "unknown_reason": null,
+        "check_tolerance": null
+      }
+    ],
+    "chains": [
+      {
+        "terms": [
+          "outer-left",
+          "N02-width",
+          "column-gap",
+          "N03-width",
+          "outer-right"
+        ],
+        "total": "N00-width",
+        "arithmetic_tolerance": 0.0
+      },
+      {
+        "terms": [
+          "form-left",
+          "N06-width",
+          "field-gap",
+          "N07-width",
+          "form-right"
+        ],
+        "total": "N05-width",
+        "arithmetic_tolerance": 0.0
+      }
+    ]
+  }
+]

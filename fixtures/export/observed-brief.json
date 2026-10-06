@@ -1,0 +1,4730 @@
+{
+  "metadata": {
+    "document_id": "F01-D05-OBSERVED",
+    "revision": "1",
+    "title": "F01 saved form and popup observation",
+    "audience": "Клиент и разработчик",
+    "language": "ru",
+    "date": "2026-10-06",
+    "owner": "E01 fixture maintainer",
+    "retention": "Until fixture contract is superseded",
+    "specification_refs": [
+      "UIB.DRAWING@1.1",
+      "F01 D05 Web sample fcf48be"
+    ],
+    "approval": {
+      "status": "draft",
+      "named_record": null
+    },
+    "page_format": "A3 proportions",
+    "output_size": "3840 x 2160 output pixels; UI units unchanged"
+  },
+  "purpose": "document",
+  "views": [
+    {
+      "id": "observed",
+      "title": "F01 form and popup",
+      "state": "overlay-on",
+      "scope": "f01-d05-form-popup; all 32 returned source nodes; partial selected scope and fields",
+      "environment": "historical own F01 fixture; Chromium; 800 x 600 CSS viewport; DPR 1; external semantics; not PlayPhrase.me",
+      "safe_source_reference": "F01 D05 Web sample fcf48be; original channel SHA256 11e2a77cf6460636050e90ed0f6f63bcf3412c062bb3eb917d677be035858180",
+      "not_depicted": [
+        "Hidden or uncollected UI; partial coverage, unknown_count unknown",
+        "Source identifiers pseudonymized; geometry and observation intervals preserved",
+        "No screenshot, no fresh measurement, no real-site acceptance"
+      ],
+      "source": {
+        "source_kind": "observed",
+        "snapshot": {
+          "surface_records": [
+            {
+              "identity": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_owner": {
+                "availability": "known",
+                "value": {
+                  "type": "identity",
+                  "value": {
+                    "id": "fixture-ref-001",
+                    "generation": "fixture-ref-003"
+                  }
+                }
+              },
+              "initiated_by": null,
+              "anchor": null,
+              "evidence": {
+                "observation_id": "fixture-ref-004",
+                "source_namespace": "web.dom",
+                "provenance": "reported",
+                "method": "cdp-target-frame-binding",
+                "uncertainty": null
+              }
+            }
+          ],
+          "id": "fixture-ref-005",
+          "revision": 1,
+          "source_state": "fixture-ref-006",
+          "context": {
+            "schema_version": "0.1.0",
+            "session_id": "fixture-ref-007",
+            "target": {
+              "id": "fixture-ref-001",
+              "generation": "fixture-ref-003"
+            },
+            "surfaces": [
+              {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              }
+            ],
+            "scope_id": "fixture-ref-008",
+            "projection": "design",
+            "fields": [
+              "role",
+              "accessibility_name",
+              "layout_bounds",
+              "hit_region",
+              "visible_region"
+            ],
+            "plugin": {
+              "id": "fixture-ref-009",
+              "version": "0.1.0"
+            },
+            "environment_revision": "fixture-ref-010"
+          },
+          "observations": [
+            {
+              "id": "fixture-ref-004",
+              "source_namespace": "web.dom",
+              "channel": "external_semantics",
+              "start": 1443.29475,
+              "end": 1463.6775,
+              "clock_domain": "fixture-ref-011",
+              "time_unit": "milliseconds",
+              "freshness_basis": "live_read",
+              "consistency_reason": "sequential-source-reads-not-atomic",
+              "answer_source": "live",
+              "freshness": "current",
+              "last_verified": 1463.6775,
+              "consistency": "unknown",
+              "coverage": {
+                "status": "partial",
+                "scope_id": "fixture-ref-008",
+                "fields": [
+                  "role",
+                  "accessibility_name",
+                  "layout_bounds",
+                  "hit_region",
+                  "visible_region"
+                ],
+                "omitted_count": 0,
+                "unknown_count": null
+              }
+            },
+            {
+              "id": "fixture-ref-012",
+              "source_namespace": "web.ax",
+              "channel": "external_semantics",
+              "start": 1463.677625,
+              "end": 1474.420625,
+              "clock_domain": "fixture-ref-011",
+              "time_unit": "milliseconds",
+              "freshness_basis": "live_read",
+              "consistency_reason": "sequential-source-reads-not-atomic",
+              "answer_source": "live",
+              "freshness": "current",
+              "last_verified": 1474.420625,
+              "consistency": "unknown",
+              "coverage": {
+                "status": "partial",
+                "scope_id": "fixture-ref-008",
+                "fields": [
+                  "role",
+                  "accessibility_name",
+                  "layout_bounds",
+                  "hit_region",
+                  "visible_region"
+                ],
+                "omitted_count": 0,
+                "unknown_count": null
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-013"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "BUTTON"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 477.234375,
+                            "y": 111.0,
+                            "width": 97.296875,
+                            "height": 32.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "open-popup"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-013"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "button"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Open options"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "open-popup"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-015"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "dialog"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 400.0,
+                            "y": 290.0,
+                            "width": 200.0,
+                            "height": 60.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "portal"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-015"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "dialog"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "dialog"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Options"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "portal"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-016"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "BUTTON"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 400.0,
+                            "y": 290.0,
+                            "width": 98.78125,
+                            "height": 32.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "close-popup"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-016"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "button"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Close options"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "close-popup"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-017"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "BUTTON"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 40.0,
+                            "y": 60.0,
+                            "width": 120.0,
+                            "height": 40.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "left"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-017"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "button"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Apply"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "left"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-018"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 40.0,
+                            "y": 60.0,
+                            "width": 120.0,
+                            "height": 40.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "cover"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-018"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "generic"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "cover"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-019"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 40.0,
+                            "y": 400.0,
+                            "width": 100.0,
+                            "height": 40.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "clip"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-019"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "generic"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "clip"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-020"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 120.0,
+                            "y": 400.0,
+                            "width": 60.0,
+                            "height": 30.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "clip-child"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-020"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "generic"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "clip-child"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-021"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "SECTION"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 380.0,
+                            "y": 20.0,
+                            "width": 360.0,
+                            "height": 123.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "f01"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-021"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "region"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Fixture form"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "f01"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-022"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "INPUT"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 380.0,
+                            "y": 42.0,
+                            "width": 188.0,
+                            "height": 21.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "draft"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-022"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "combobox"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "City"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "draft"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-023"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 380.0,
+                            "y": 67.0,
+                            "width": 360.0,
+                            "height": 22.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "suggestions"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-023"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "listbox"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "suggestions"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-024"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 380.0,
+                            "y": 89.0,
+                            "width": 360.0,
+                            "height": 22.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "validation"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-024"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "status"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "validation"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-025"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "BUTTON"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 380.0,
+                            "y": 111.0,
+                            "width": 87.625,
+                            "height": 32.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "commit"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-025"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "button"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Commit city"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "commit"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-026"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "OUTPUT"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 477.234375,
+                            "y": 117.5,
+                            "width": 0.0,
+                            "height": 18.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "applied"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-026"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "status"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "applied"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-027"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "BUTTON"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 584.140625,
+                            "y": 111.0,
+                            "width": 146.9375,
+                            "height": 32.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "surprise"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-027"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "button"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "button"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "Unexpected transition"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "surprise"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-028"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 660.0,
+                            "y": 120.0,
+                            "width": 100.0,
+                            "height": 30.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "responsive"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-028"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "generic"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "responsive"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-029"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "DIV"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "cssom-getBoundingClientRect",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "geometry",
+                      "value": {
+                        "frame_kind": "layout_bounds",
+                        "coordinate_space": {
+                          "id": "fixture-ref-014",
+                          "kind": "viewport",
+                          "units": "css_px",
+                          "origin": "top_left"
+                        },
+                        "shape": {
+                          "shape": "rect",
+                          "value": {
+                            "x": 40.0,
+                            "y": 480.0,
+                            "width": 32.0,
+                            "height": 16.0
+                          }
+                        },
+                        "transform": {
+                          "status": "local_only"
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-004",
+                    "source_namespace": "web.dom",
+                    "provenance": "reported",
+                    "method": "selected-dom-read",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "sized"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            },
+            {
+              "key": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-029"
+              },
+              "surface": {
+                "id": "fixture-ref-001",
+                "generation": "fixture-ref-002"
+              },
+              "native_role": {
+                "availability": "known",
+                "value": {
+                  "type": "text",
+                  "value": "generic"
+                }
+              },
+              "properties": [
+                {
+                  "selection": "requested",
+                  "field": "role",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "role",
+                      "value": "unknown"
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "accessibility_name",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": ""
+                    }
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "layout_bounds",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "hit_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                },
+                {
+                  "selection": "requested",
+                  "field": "visible_region",
+                  "sensitivity": "public",
+                  "evidence": {
+                    "observation_id": "fixture-ref-012",
+                    "source_namespace": "web.ax",
+                    "provenance": "reported",
+                    "method": "cdp-partial-ax-tree",
+                    "uncertainty": null
+                  },
+                  "state": {
+                    "availability": "unknown",
+                    "reason": "not-exposed-by-selected-source"
+                  }
+                }
+              ],
+              "children": [],
+              "extensions": [],
+              "source_declarations": [
+                {
+                  "namespace": "f01.dom",
+                  "name": "element-id",
+                  "state": {
+                    "availability": "known",
+                    "value": {
+                      "type": "text",
+                      "value": "sized"
+                    }
+                  },
+                  "sensitivity": "public",
+                  "source": "live-dom-id-attribute"
+                }
+              ]
+            }
+          ],
+          "relations": [
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-013"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-013"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-015"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-015"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-016"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-016"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-017"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-017"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-018"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-018"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-019"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-019"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-020"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-020"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-021"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-021"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-022"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-022"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-023"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-023"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-024"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-024"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-025"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-025"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-026"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-026"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-027"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-027"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-028"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-028"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "corresponds_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-029"
+              },
+              "to": {
+                "namespace": "web.ax",
+                "key": "fixture-ref-029"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-012",
+                "source_namespace": "web.ax",
+                "provenance": "reported",
+                "method": "cdp-backendDOMNodeId",
+                "uncertainty": null
+              }
+            },
+            {
+              "kind": "anchored_to",
+              "from": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-015"
+              },
+              "to": {
+                "namespace": "web.dom",
+                "key": "fixture-ref-013"
+              },
+              "evidence": {
+                "observation_id": "fixture-ref-004",
+                "source_namespace": "web.dom",
+                "provenance": "reported",
+                "method": "fixture-data-anchor-attribute",
+                "uncertainty": null
+              }
+            }
+          ],
+          "components": [],
+          "focus": {
+            "keyboard": {
+              "status": "not_requested"
+            },
+            "accessibility": {
+              "status": "not_requested"
+            },
+            "active_descendant": {
+              "status": "not_requested"
+            },
+            "text_selection": null,
+            "composition_state": {
+              "selection": "not_requested",
+              "field": "value"
+            }
+          },
+          "captures": [],
+          "coverage": {
+            "status": "partial",
+            "scope_id": "fixture-ref-008",
+            "fields": [
+              "role",
+              "accessibility_name",
+              "layout_bounds",
+              "hit_region",
+              "visible_region"
+            ],
+            "omitted_count": 0,
+            "unknown_count": null
+          }
+        },
+        "public_text_fields": [
+          "accessibility_name"
+        ]
+      }
+    }
+  ],
+  "details": [],
+  "comparisons": [],
+  "transitions": []
+}

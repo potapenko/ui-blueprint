@@ -1,0 +1,1384 @@
+[
+  {
+    "view": "observed",
+    "dimensions": [
+      {
+        "id": "M0001",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N000",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N000",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0002",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N000",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N000",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0003",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N002",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N002",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0004",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N002",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N002",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0005",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N004",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N004",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0006",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N004",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N004",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0007",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N006",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N006",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0008",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N006",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N006",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0009",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N008",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N008",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0010",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N008",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N008",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0011",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N010",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N010",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0012",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N010",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N010",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0013",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N012",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N012",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0014",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N012",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N012",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0015",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N014",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N014",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0016",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N014",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N014",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0017",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N016",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N016",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0018",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N016",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N016",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0019",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N018",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N018",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0020",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N018",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N018",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0021",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N020",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N020",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0022",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N020",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N020",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0023",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N022",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N022",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0024",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N022",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N022",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0025",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N024",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N024",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0026",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N024",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N024",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0027",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N026",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N026",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0028",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N026",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N026",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0029",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N028",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N028",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0030",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N028",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N028",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0031",
+        "label": "Width LayoutBounds",
+        "anchors": [
+          {
+            "component": "N030",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "left"
+          },
+          {
+            "component": "N030",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "right"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      },
+      {
+        "id": "M0032",
+        "label": "Height LayoutBounds",
+        "anchors": [
+          {
+            "component": "N030",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "top"
+          },
+          {
+            "component": "N030",
+            "frame_kind": "layout_bounds",
+            "space": {
+              "id": "REF0010",
+              "kind": "viewport",
+              "units": "css_px",
+              "origin": "top_left"
+            },
+            "edge": "bottom"
+          }
+        ],
+        "value": null,
+        "units": "css_px",
+        "source_kind": "observed",
+        "evidence": [
+          {
+            "observation_id": "REF0006",
+            "source_namespace": "REF0004",
+            "provenance": "reported",
+            "method": "REF0009",
+            "uncertainty": null
+          }
+        ],
+        "requirement_ref": null,
+        "unknown_reason": "unstable_state",
+        "check_tolerance": null
+      }
+    ],
+    "chains": []
+  }
+]

@@ -1,0 +1,45 @@
+{
+  "approval_status": "draft",
+  "document": {
+    "approval": {
+      "named_record": null,
+      "status": "draft"
+    },
+    "audience": "Клиент и разработчик",
+    "date": "2026-10-06",
+    "document_id": "F01-D05-OBSERVED",
+    "language": "ru",
+    "output_size": "3840 x 2160 output pixels; UI units unchanged",
+    "owner": "E01 fixture maintainer",
+    "page_format": "A3 proportions",
+    "retention": "Until fixture contract is superseded",
+    "revision": "1",
+    "specification_refs": [
+      "UIB.DRAWING@1.1",
+      "F01 D05 Web sample fcf48be"
+    ],
+    "title": "F01 saved form and popup observation"
+  },
+  "files": [
+    "manifest.json",
+    "drawing-brief.md",
+    "scene.json",
+    "dimensions.json",
+    "sheets.json",
+    "prompt.txt"
+  ],
+  "generated_image": false,
+  "guide": "UIB.DRAWING@1.1",
+  "guide_reference": "docs engineering-blueprint-guide.md revision 1.1",
+  "local_numeric_validation": "checked",
+  "package_version": "0.1.0",
+  "purpose": "document",
+  "references": [],
+  "retention_condition": "Until fixture contract is superseded",
+  "retention_owner": "E01 fixture maintainer",
+  "scale_mode": "schematic",
+  "source_kinds": [
+    "observed"
+  ],
+  "validation_status": "unverified"
+}
