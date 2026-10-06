@@ -34,8 +34,12 @@ bounded failure and comparable probe off/on. Full product acceptance stays in it
 The user subsequently requested real PlayPhrase.me examples and agent evaluation,
 including Mac dialogs/popovers and complex iPhone/iPad scenes. Advisor was asked for
 3–5 sourced cases with expected semantics/geometry, safe setup/actions, exact
-build/environment and evidence. A second consultation is running; no live lane was
-granted to it yet. This is a narrow authorization for F03/Q03, not app-source changes
+build/environment and evidence. Second turn `01a110da-c1b3-7190-b5c0-509859189624`
+returned RC01 Mac Settings, RC02 Mac Genre/Director, RC03 Mac resize, RC04 iPad
+learner Filters and RC05 iPhone Reels accessibility reflow, based on source `48d0dfd`.
+These are sourced cases, not new runtime evidence. F03a selects RC01/RC02 first;
+follow source runtime lanes and keep task prompts separate from answer keys.
+This is a narrow authorization for F03/Q03, not app-source changes
 or an implicit implementation of mobile plugins. Original goal wording is superseded
 only for these authorized real-application example/evaluation operations.
 
