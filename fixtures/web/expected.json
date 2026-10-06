@@ -1,0 +1,15 @@
+{
+  "oracle": "F01 authored expectations v1; independent of collector and application controller",
+  "geometry_tolerance_css_px": 0.01,
+  "initial": {
+    "source_state": "initial", "draft": "", "selected": "", "applied": "", "valid": false, "delivered": 0,
+    "rows": [{"id":"r1","label":"One"},{"id":"r2","label":"Two"},{"id":"r3","label":"Three"},{"id":"r4","label":"Four"},{"id":"r5","label":"Five"},{"id":"r6","label":"Six"}]
+  },
+  "B01": {"main_apply_count":2,"old_handle":"detached","other_target_unchanged":true},
+  "B02": {"partial_draft":"Lo","invalid_draft":"?","valid_draft":"Lon","option":"London","applied":"London","rejected_applied":"","dependent_steps_after_surprise":0},
+  "B03": {"portal_parent":"BODY","anchor":"open-popup","blocked_hit":"cover","visible_hit":"left","clip_bounds":[120,400,60,30],"clip_visible_width":20,"child_bounds":[12,18,90,30]},
+  "B04": {"responsive_before":[660,120,100,30],"responsive_after_resize":[860,120,100,30],"responsive_after_scroll":[860,20,100,30],"scroll_y":100,"text_before":[40,480,32,16],"text_after":[40,480,48,24],"locale":"fr","localized_label":"Adaptatif"},
+  "B05": {"child_before":[120,32],"child_after_parent":[150,32],"child_after_font":[150,48],"delivered_event_sequences":[1,3],"full_event_sequences":[1,2,3],"limit":2,"omitted_count":4,"rows_after":[{"id":"r1","label":"One"},{"id":"r2","label":"Deux"},{"id":"r4","label":"Four"},{"id":"r5","label":"Five"},{"id":"r6","label":"Six"},{"id":"r7","label":"Seven"}]},
+  "B06": {"component":"apply-control","ax_role":"button","ax_name":"Apply","dom_parts":["compound-icon","compound-label"],"action_owner":"left"},
+  "baseline_sampling": {"cold_samples":5,"warm_samples":30,"overhead_pairs":3,"window_ms":500,"viewport":{"width":800,"height":600},"dpr":1,"percentile":"nearest-rank"}
+}

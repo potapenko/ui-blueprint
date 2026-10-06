@@ -1,0 +1,32 @@
+<!-- F01 composes the frozen R01 base; this is the canonical extension. -->
+<style>
+#f01 { position:absolute; left:380px; top:20px; width:360px; font:16px monospace; }
+#f01 button, #portal button { position:static; width:auto; height:32px; border:1px solid; padding:4px 8px; }
+#f01 input { display:block; width:180px; margin:4px 0; }
+#suggestions, #validation { min-height:22px; }
+#portal { position:absolute; left:400px; top:290px; width:200px; height:60px; background:#ddd; }
+#cover { position:absolute; left:40px; top:60px; width:120px; height:40px; z-index:10; background:#888; }
+#clip { position:absolute; left:40px; top:400px; width:100px; height:40px; overflow:hidden; }
+#clip-child { position:absolute; left:80px; top:0; width:60px; height:30px; background:blue; }
+#responsive { position:absolute; right:40px; top:120px; width:100px; height:30px; }
+#sized { position:absolute; left:40px; top:480px; width:2em; height:1em; font-size:16px; }
+#mutation-parent { position:absolute; left:40px; top:550px; width:240px; font:16px monospace; }
+#mutation-child { width:50%; height:2em; }
+#rows { position:absolute; left:400px; top:430px; }
+#rows div { height:20px; }
+</style>
+<section id="f01" aria-label="Fixture form">
+<label for="draft">City</label><input id="draft" role="combobox" aria-autocomplete="list" aria-controls="suggestions" aria-expanded="false">
+<div id="suggestions" role="listbox"></div>
+<div id="validation" role="status"></div>
+<button id="commit" type="button">Commit city</button>
+<output id="applied"></output>
+<button id="open-popup" aria-controls="portal" aria-expanded="false">Open options</button>
+<button id="surprise">Unexpected transition</button>
+</section>
+<div id="clip"><div id="clip-child"></div></div>
+<div id="responsive">Responsive</div>
+<div id="sized">AA</div>
+<div id="mutation-parent"><div id="mutation-child">Text</div></div>
+<div id="rows"><div data-row="r1">One</div><div data-row="r2">Two</div><div data-row="r3">Three</div><div data-row="r4">Four</div><div data-row="r5">Five</div><div data-row="r6">Six</div></div>
+<script src="/fixture.js"></script>
