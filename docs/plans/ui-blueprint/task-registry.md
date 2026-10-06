@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01 running; mobile build commit-only; Git lease F03c-build; runtime lanes свободны |
+| Активные чаты/пакеты/ресурсы | S01/F03c running; Git lease root; desktop/owned Simulator lane product advisor |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -102,8 +102,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [F03b](packets/F03b.md) | product advisor | `8f93735ed14e03380a76094c1370c32efd42552f` | accepted reference with explicit playback/statistics/geometry limits; [receipt](receipts/F03b.md) |
 | [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; shared schema/validator/plugin API | running; native proof waits for lane; no Git lease |
 | [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | `d539a0ec2bac243375256652fb75da7065b27350` | accepted oracle input; [receipt](receipts/S01-oracles.md); code/contract review still required |
-| [F03c](packets/F03c.md) | product advisor | RC04/RC05 owned mobile targets; source inventory | queued after F03b checkpoint; no runtime/Git grant yet |
-| [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | both Release bundles built; source preserved | commit-only; [receipt](receipts/F03c-build.md); no runtime performed |
+| [F03c](packets/F03c.md) | product advisor | RC04/RC05; F03c-build@eda0d77 | running; owned devices/desktop grant; no Git lease |
+| [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | `eda0d7753f85f9e5c03b1d90613ea69586fd8016` | accepted build artifacts; [receipt](receipts/F03c-build.md); runtime still unverified |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
