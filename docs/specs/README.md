@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 3.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 4.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -35,6 +35,12 @@ Historical authority delta `UIB-AUTH-001`: Draft 1.3 / Draft 1.0 → Active 1.4 
 on user confirmation; no wire schema or released behavior changed. Field-level
 `draft` and historical statements remain meaningful. C00 adds routing only.
 
+C01 engineering choices under ROADMAP D01–D07 are registered in
+[UIB.DECISIONS@1](development/decisions/README.md). `C01-DEC-001` selects development
+policy (`DEV.RUST@2`) and initial candidate interfaces/gates; it does not accept
+product runtime or alter existing CONTENT@1 requirements. The linked direct user
+clarification preserves explicit request-driven collection, without periodic polling.
+
 ## Select a route
 
 | Task | Entry | Authority / selection |
@@ -44,7 +50,8 @@ on user confirmation; no wire schema or released behavior changed. Field-level
 | Fixtures, GOLDEN01, pilots, integration or performance | [Acceptance tree](acceptance/README.md) | Positive/negative evidence requirements, not claimed results |
 | Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
 | Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
-| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@1](development/rust.md) | Active / Evolving; documentation setup approved 2026-10-06 |
+| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@2](development/rust.md) | Active / Evolving; C01 setup choices, product builds still unaccepted |
+| D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 
 ## Routing invariants

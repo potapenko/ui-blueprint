@@ -3,19 +3,22 @@
 - Node type: leaf
 - Authority: Active
 - Stability: Evolving
-- Contract: `DEV.RUST@1`
-- Authority source: user approval on 2026-10-06 of the five-file documentation plan.
+- Contract: `DEV.RUST@2`; supersedes `DEV.RUST@1` setup policy.
+- Authority source: original documentation approval and PLAN.UIB@1 delegated
+  ROADMAP decisions; [C01-DEC-001](decisions/README.md#meaning-and-precedence).
 - Read when: changing toolchain, Cargo, dependencies, features, targets, or checks.
 - Do not read when: no Rust development infrastructure is affected.
-- Requires: [Rust engineering rules](../../../RUST.md).
+- Requires: [Rust engineering rules](../../../RUST.md), [D01](decisions/d01-support.md),
+  [D07](decisions/d07-reuse.md).
 
-## DEV.RUST.SCOPE — Documentation foundation
+## DEV.RUST.SCOPE — Selected initial setup
 
-This contract prepares Rust development. No Cargo package, toolchain pin,
-supported target matrix, CI workflow, runtime, or framework is installed by it.
-The initial implementation must resolve these choices against its approved
-requirements. Do not infer them from the donor search service or unresolved
-product proposals.
+This document selects setup; it does not install/build anything. T01 pins stable
+Rust `1.96.0` with rustfmt/Clippy, edition `2024`, resolver `3`, rust-version `1.96`
+and initial host `aarch64-apple-darwin`. D01 distinguishes compilation policy from
+runtime qualification. [T01/S01 handoff](decisions/handoff.md) names concrete owners
+and commands; no empty crates or imported donor framework/runtime assumptions.
+New setup policy is unreleased; existing engineering/check requirements preserved.
 
 ## DEV.RUST.TOOLCHAIN — Reproducible setup
 
