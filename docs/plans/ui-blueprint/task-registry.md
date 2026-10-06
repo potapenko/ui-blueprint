@@ -79,7 +79,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | T01 running; Git lease root; runtime lanes свободны |
+| Активные чаты/пакеты/ресурсы | T01/F03b running; Git lease root; native desktop lane product advisor |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | завершить F02; получить продуктовую консультацию; затем C01 без cadence-предпосылки |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -99,6 +99,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [F03a](packets/F03a.md) | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | `5d1e0a53670fb8bfbd0c3982db5e164f4bf9bb6d` | accepted reference data; [receipt](receipts/F03a.md); agent/collector proof pending |
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
 | [T01](packets/T01.md) | Core chat R03, Integration role | C01@42d2e6b; D01–D07@1/DEV.RUST@2 | running; first schema-version Rust owner; no Git/runtime lease |
+| [F03b](packets/F03b.md) | product advisor | RC03 real resize; point-sizing@1 | running; native lane subject to source reservation; no Git lease |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
