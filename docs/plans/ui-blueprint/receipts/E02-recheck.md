@@ -1,5 +1,27 @@
 # E02 affected repair recheck
 
+## Final R3 recheck — accepted
+
+Same independent reviewer at `bd5270ae22b30c9730cc3fe0622b02e0cec72ca4`:
+**accept for the scoped repair**, no actionable findings. E02-R1/R2/R3 are closed.
+Initial code/tests inspection preceded the latest author proof. Reviewer confirmed
+the relative/endpoint enclosure intersection closes the exact R3 counterexample,
+with both anchor directions and preserved fractional/unknown/status behavior.
+Receipt reconciliation used `94ecbb418568a22fd045218b74463135c7cbc12b`: one
+verification-only archive of the source commit, Rust1.96 locked/offline check/fmt/
+Clippy,19 export tests and3 affected CLI tests passed. The211-file input hash
+before/after matched saved Git objects:
+`712739f939e27d133e9c621a325507b903a863656be117544c339e14ee9a7a18`.
+Reviewer did not independently execute tests. Scoped files matched the candidate;
+unrelated cache/native work was excluded. Author removed only its task-temp build
+copy after this reproducible compact proof was saved.
+
+This closes the three code findings, not live adapters, generated-image checks or
+whole E02/P6/P7 acceptance. The earlier rejected candidate below is preserved as
+history; no further optional arithmetic hardening or repeated review is scheduled.
+
+## Earlier R3 finding
+
 - Same independent reviewer `/root/e02_candidate_review`; artifact
   `9ca645aab6816425ee64bb20eeb1201750d0d2b0`.
 - Initial repair-code/test observations preceded author receipts. Stage2 reconciled
