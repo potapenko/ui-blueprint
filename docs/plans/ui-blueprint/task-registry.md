@@ -77,7 +77,17 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | C00 ready; root Git lease для startup checkpoint; остальные ресурсы свободны |
+| Активные чаты/пакеты/ресурсы | C00 review-ready; Git lease C00 освобождён; root сохраняет coordination checkpoint |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | dispatch C00, scoped review нормализации, затем R01/R02/R03 |
+| Следующий шаг | независимый C00-review, затем R01/R02/R03 после acceptance |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
+
+## Активное исполнение
+
+| Packet | Owner chat / host | Basis / scope | Status / receipt |
+| --- | --- | --- | --- |
+| [C00](packets/C00.md) | `01a1109a-5d6e-7792-b926-e767c7f63642` / local | candidate `92d2bf89ea9acab091fd166eef4432408e353744`; `UIB.ROUTING@1` | review; [receipt](receipts/C00.md) |
+| [C00-review](packets/C00-review.md) | pending | тот же candidate; fresh context | queued, first observation before author receipt |
+
+Root coordination checkpoint: `daa85a4`; candidate сохранён C00 отдельно.
+Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
