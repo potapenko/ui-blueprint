@@ -443,3 +443,90 @@ fn stdout_failure_is_io_failure_and_preserves_the_completed_package() {
     fail(child.wait_with_output().unwrap(), 1, "io_error");
     check_files(&c);
 }
+
+fn proposal_geometry_case(origin: &str, x: f64, width: f64, vertical: bool, value: f64) -> Case {
+    let mut c = Case::new("proposed");
+    let space = json!({"id":"e02-local","kind":"local","units":"css_px","origin":origin});
+    let component = |id: &str, x: f64, y: f64, width: f64, height: f64| {
+        json!({
+            "id":id,"parent":null,"role":"group","label":id,"state_and_actions":"Synthetic proposal; no runtime",
+            "geometry":{"frame_kind":"layout_bounds","coordinate_space":space,"shape":{"shape":"rect","value":{"x":x,"y":y,"width":width,"height":height}},"transform":{"status":"local_only"}}
+        })
+    };
+    c.brief["metadata"]["title"] = "E02 geometry regression".into();
+    c.brief["views"][0]["safe_source_reference"] = "E02 explicit synthetic arithmetic case".into();
+    c.brief["views"][0]["scope"] = "Two explicit test rectangles".into();
+    c.brief["details"] = json!([]);
+    c.brief["views"][0]["source"]["layout"] = json!({
+        "requirements":["E02 explicit target geometry"],
+        "components":[component("A",x,0.0,width,10.0),component("B",0.0,30.0,1.0,20.0)],
+        "dimensions":[{"id":"distance","label":"Authored edge distance","anchors":[
+            {"component":"A","frame_kind":"layout_bounds","space":space,"edge":if vertical {"top"} else {"left"}},
+            {"component":if vertical {"B"} else {"A"},"frame_kind":"layout_bounds","space":space,"edge":if vertical {"bottom"} else {"right"}}
+        ],"value":value,"units":"css_px","source_kind":"proposed","evidence":[],"requirement_ref":"E02 explicit target geometry","unknown_reason":null,"check_tolerance":null}],
+        "chains":[],"unknowns":["radius unknown"]
+    });
+    c.save();
+    c
+}
+#[test]
+fn proposal_origin_repair_reaches_actual_command_in_both_directions() {
+    for (origin, correct, wrong) in [("bottom_left", 20.0, 50.0), ("top_left", 50.0, 20.0)] {
+        for reverse in [false, true] {
+            let mut c = proposal_geometry_case(origin, 0.0, 1.0, true, correct);
+            if reverse {
+                c.brief["views"][0]["source"]["layout"]["dimensions"][0]["anchors"]
+                    .as_array_mut()
+                    .unwrap()
+                    .reverse();
+                c.save();
+            }
+            success(c.run(&["--json"], 2_000_000, 4_000_000));
+            assert_eq!(
+                c.package("dimensions.json")[0]["dimensions"][0]["value"],
+                correct
+            );
+            let mut bad = proposal_geometry_case(origin, 0.0, 1.0, true, wrong);
+            if reverse {
+                bad.brief["views"][0]["source"]["layout"]["dimensions"][0]["anchors"]
+                    .as_array_mut()
+                    .unwrap()
+                    .reverse();
+                bad.save();
+            }
+            fail(
+                bad.run(&[], 2_000_000, 4_000_000),
+                2,
+                "export_invalid_geometry",
+            );
+            assert!(!bad.root.join("package").exists());
+        }
+    }
+}
+#[test]
+fn proposal_fractional_repair_preserves_source_values_unknowns_and_statuses() {
+    for (x, width) in [(0.2, 0.1), (1e16, 1.0), (1e-12, 1e-14)] {
+        let c = proposal_geometry_case("top_left", x, width, false, width);
+        let receipt = success(c.run(&["--json"], 2_000_000, 4_000_000));
+        assert_eq!(receipt["validation_status"], "unverified");
+        assert_eq!(receipt["approval_status"], "draft");
+        assert_eq!(receipt["views"][0]["source_kind"], "proposed");
+        assert_eq!(
+            c.package("dimensions.json")[0]["dimensions"][0]["value"].as_f64(),
+            Some(width)
+        );
+        let scene = c.package("scene.json");
+        assert_eq!(scene["views"][0]["unknowns"], json!(["radius unknown"]));
+        assert_eq!(
+            scene["views"][0]["components"][0]["geometry"]["shape"]["value"]["width"].as_f64(),
+            Some(width)
+        );
+        let bad = proposal_geometry_case("top_left", x, width, false, width * 2.0);
+        fail(
+            bad.run(&[], 2_000_000, 4_000_000),
+            2,
+            "export_invalid_geometry",
+        );
+        assert!(!bad.root.join("package").exists());
+    }
+}

@@ -4,6 +4,9 @@ use crate::{
     validate::{identifier, require, text},
 };
 use std::collections::{BTreeMap, BTreeSet};
+#[path = "proposal_arithmetic.rs"]
+mod arithmetic;
+use arithmetic::Interval;
 use uiblueprint_schema::model::*;
 
 pub(crate) fn validate(p: &ProposedLayout) -> Result<()> {
@@ -80,7 +83,8 @@ pub(crate) fn validate(p: &ProposedLayout) -> Result<()> {
             Some(v) => require(
                 v.is_finite()
                     && v >= 0.0
-                    && v == (coords[1] - coords[0]).abs()
+                    && arithmetic::distance(coords[0], coords[1])
+                        .is_some_and(|distance| distance.contains(v))
                     && d.unknown_reason.is_none(),
                 E::InvalidGeometry,
             )?,
@@ -118,7 +122,10 @@ pub(crate) fn validate(p: &ProposedLayout) -> Result<()> {
 fn axis(e: Edge) -> bool {
     matches!(e, Edge::Left | Edge::Right | Edge::CenterX)
 }
-fn coordinate(a: &DimensionAnchor, objects: &BTreeMap<&String, &ProposedComponent>) -> Result<f64> {
+fn coordinate(
+    a: &DimensionAnchor,
+    objects: &BTreeMap<&String, &ProposedComponent>,
+) -> Result<(f64, Interval)> {
     let g = &objects
         .get(&a.component)
         .ok_or(E::InvalidReference)?
@@ -131,12 +138,26 @@ fn coordinate(a: &DimensionAnchor, objects: &BTreeMap<&String, &ProposedComponen
         return Err(E::InvalidGeometry);
     };
     Ok(match a.edge {
-        Edge::Left => r.x,
-        Edge::Right => r.x + r.width,
-        Edge::Top => r.y,
-        Edge::Bottom => r.y + r.height,
-        Edge::CenterX => r.x + r.width / 2.0,
-        Edge::CenterY => r.y + r.height / 2.0,
+        Edge::Left => (r.x, Interval::exact(0.0)),
+        Edge::Right => (r.x, Interval::exact(r.width)),
+        Edge::Top => (
+            r.y,
+            Interval::exact(if a.space.origin == Origin::BottomLeft {
+                r.height
+            } else {
+                0.0
+            }),
+        ),
+        Edge::Bottom => (
+            r.y,
+            Interval::exact(if a.space.origin == Origin::TopLeft {
+                r.height
+            } else {
+                0.0
+            }),
+        ),
+        Edge::CenterX => (r.x, Interval::half(r.width)),
+        Edge::CenterY => (r.y, Interval::half(r.height)),
     })
 }
 pub(crate) fn components(p: &ProposedLayout) -> Vec<SceneComponent> {
