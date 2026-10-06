@@ -82,9 +82,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Stage A returned/pushed, Git lease root; Web/Native proof preparation running; both advisor handoffs complete; desktop free until explicit Native proof grant |
+| Активные чаты/пакеты/ресурсы | S01 D05 Stage B + Web/Native D02 running on Stage A `9d2df15`; Git lease root (short grants on readiness); native own-fixture desktop lane R02 owner; advisors idle/reusable |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | передать Stage A `9d2df15` Web/Native owners для D02 и Integration для D05; четыре review findings awaiting_authority по ограничению пользователя; RC05 gaps remain; Stage A acceptance отсутствует |
+| Следующий шаг | принять scoped D02/D05 результаты и необходимые shared API requests; четыре review findings awaiting_authority по ограничению пользователя; RC05 gaps remain; Stage A acceptance отсутствует |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -103,15 +103,15 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [C01](packets/C01.md) | Core chat R03, Integration role | `42d2e6b059c5822476a39a59ac89a8a5c223db3a` | accepted engineering decisions; [receipt](receipts/C01.md); later proof gates remain open |
 | [T01](packets/T01.md) | Core chat R03, Integration role | `28a08d34e66687cb5668608fe7ddd3429aa9807b` | accepted bounded Rust owner; [receipt](receipts/T01.md); S01 full review follows |
 | [F03b](packets/F03b.md) | product advisor | `8f93735ed14e03380a76094c1370c32efd42552f` | accepted reference with explicit playback/statistics/geometry limits; [receipt](receipts/F03b.md) |
-| [S01](packets/S01.md) | Core chat R03, Integration role | Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3`, pushed; prior `0b4af9c` redacted fix | implemented/author checks pass: check/fmt/Clippy/20 tests, 97 cases/126 CLI fixtures; [receipt](receipts/S01.md); four P2 await user; D02/D05 open, not accepted/frozen |
+| [S01](packets/S01.md) | Core chat R03, Integration role | Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3`, pushed; prior `0b4af9c` redacted fix | Stage A author checks pass (check/fmt/Clippy/20 tests,97 cases/126 fixtures); [receipt](receipts/S01.md); Stage B D05 P1 memory sizing active, final F01/F02 sizing waits bridges; four P2 await user, no freeze |
 | S01-user-review | collaboration `/root/checkpoint_review` | `eb0edbf..1d12859` + changes saved in `61022a9` | completed static review; four findings, not accepted; [result](receipts/S01-user-review.md); no fixes authorized by review alone |
 | [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | `d539a0ec2bac243375256652fb75da7065b27350` | accepted oracle input; [receipt](receipts/S01-oracles.md); code/contract review still required |
 | [F03c](packets/F03c.md) | product advisor | `492ac0075625ff7e9988294fc23d2bca6e0146f1`, pushed; F03c-build@eda0d77 | reference pack saved (8 PNG/12 scoped files), [receipt](receipts/F03c.md); RC05 long metadata/translation and trailing-selector reachability waiting_evidence, control bounds unknown; cleanup complete, lanes released; no collector/Q03 acceptance |
 | [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | `eda0d7753f85f9e5c03b1d90613ea69586fd8016` | accepted build artifacts; [receipt](receipts/F03c-build.md); runtime still unverified |
 | Mac-test-advice | `01a1102f-791c-7e91-bec3-1877ea004d51` / local | direct user request; F03c residual and D02/M01/Q03 | completed read-only; [handoff](receipts/platform-test-advice.md); implications sent to Native owner; reusable advisor retained |
 | Web-test-advice | `01a1102f-e21d-7251-9597-c29a1c66d088` / local | direct user request; existing Web coauthor context | completed read-only; [handoff](receipts/platform-test-advice.md); F01/B03 reuse sent to Web owner; reusable advisor retained |
-| [S01-Web](packets/S01-web-proof.md) | existing R01/F01 Web owner | [shared handoff](packets/S01-bridges.md), committed F01 now; Stage A for binding | fixture/setup preparation dispatched; common-interface code/proof waits exact Stage A checkpoint |
-| [S01-Native](packets/S01-native-proof.md) | existing R02/F02 Native owner | [shared handoff](packets/S01-bridges.md), committed F02 now; Stage A for binding | fixture/build preparation dispatched; common-interface code/proof waits exact Stage A checkpoint; no runtime until root grant |
+| [S01-Web](packets/S01-web-proof.md) | `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | [shared handoff](packets/S01-bridges.md), F01 + Stage A `9d2df15` | full binding/live isolated-headless proof dispatched; own web bridge paths only; Git grant on readiness |
+| [S01-Native](packets/S01-native-proof.md) | `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | [shared handoff](packets/S01-bridges.md), F02 + Stage A `9d2df15` | full binding/live proof dispatched; explicit desktop grant for owned F02 only, check actual reservations; Git grant on readiness |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
 T01 принят как ограниченный Rust owner; collector/full P1/runtime acceptance ещё отсутствуют.
