@@ -1,5 +1,22 @@
 # Canonical analysis0.2 schema implementation
 
+## Authorized fidelity dependency — ANALYSIS-FLOAT-001
+
+Production alloc/default/std probe found204 bit mismatches among2,054 fixed finite
+f64 values, including0.9394596570041933 (3fee100db2d7d206→3fee100db2d7d205).
+This is concrete evidence for the existing exact-fidelity requirement, not a new
+product feature. Integration may verify float_roundtrip for the SAME serde_json
+1.0.151 in its task-temp production probe, inspect its exact feature/dependency
+impact, and if the regression closes, record D07@3/route metadata BEFORE enabling
+it in root Cargo.toml. Cargo.lock may change only if that feature requires it;
+no version update/cargo update, unrelated dependency or default change. Report any
+unexpected new dependency before broadening. This explicitly opens these narrow
+paths despite the general Cargo restriction below. No geometric epsilon allowed.
+Preserve an independent production-feature regression within the assigned tests/
+fixture/receipt scope and verify old core schema/fixtures remain unchanged. Notify
+Core/root when manifest inputs change; Web's bound audit qualifies the new feature
+path. A passing dev test alone cannot close this dependency.
+
 - Class: shipping_product; Integration owner, inherit settings; no nested work.
 - Consumer: factual measure JSON and full result-space/check CLI through subsequent
   Core/Export packets. Real canonical API/validator, not a private CLI DTO layer.
