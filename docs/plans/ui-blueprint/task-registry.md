@@ -77,17 +77,22 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | C00 review-ready; Git lease C00 освобождён; root сохраняет coordination checkpoint |
+| Активные чаты/пакеты/ресурсы | R01/R02/R03 ready; root Git lease для dispatch checkpoint; Native lane резерв R02 |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | независимый C00-review, затем R01/R02/R03 после acceptance |
+| Следующий шаг | dispatch R01/R02/R03; принимать source/prototype receipts, затем F01/F02 и C01 |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [C00](packets/C00.md) | `01a1109a-5d6e-7792-b926-e767c7f63642` / local | candidate `92d2bf89ea9acab091fd166eef4432408e353744`; `UIB.ROUTING@1` | review; [receipt](receipts/C00.md) |
-| [C00-review](packets/C00-review.md) | pending | тот же candidate; fresh context | queued, first observation before author receipt |
+| [C00](packets/C00.md) | `01a1109a-5d6e-7792-b926-e767c7f63642` / local | candidate `92d2bf89ea9acab091fd166eef4432408e353744`; `UIB.ROUTING@1` | accepted; [receipt](receipts/C00.md) |
+| [C00-review](packets/C00-review.md) | `01a110a5-8af7-7ef1-8fb6-fd989e78e666` / local | initial `f8d63cb`; final `9bedeccbf4c5a92206d24d0794b299e54a2b22e1` | accepted; [verdict](receipts/C00-review.md) |
+| [R01](packets/R01.md) | pending | research route R01 @1; scoped Web/headless | ready; no Git lease |
+| [R02](packets/R02.md) | pending | research route R02 @1; own native fixture lane | ready; no Git lease |
+| [R03](packets/R03.md) | pending | research route R03 @1; no UI resource | ready; no Git lease |
 
-Root coordination checkpoint: `daa85a4`; candidate сохранён C00 отдельно.
+Root coordination checkpoint: `2115e99`; candidate сохранён C00 отдельно.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
+Research packet версии проверены reviewer в `9bedecc`; P0 hypotheses остаются
+предложениями для C01. Независимый review не подтверждает runtime прототипов заранее.
