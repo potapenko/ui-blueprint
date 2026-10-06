@@ -79,9 +79,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01 intermediate return, next Stage A continuation pending dispatch; F03c running; Git lease root after S01 push; desktop/owned Simulator lane F03c |
+| Активные чаты/пакеты/ресурсы | S01 Stage A running; F03c reference return received; Git lease root after F03c push; desktop free, all F03c task devices removed |
 | Последний принятый результат продукта | нет |
-| Следующий шаг | S01 schema/parity/plugin Stage A и F03c RC04/RC05; четыре review findings awaiting_authority по ограничению пользователя; Stage A acceptance ещё отсутствует |
+| Следующий шаг | S01 schema/parity/plugin Stage A checkpoint; четыре review findings awaiting_authority по ограничению пользователя; затем bounded D02/D05 proof и unresolved RC05 evidence; Stage A acceptance ещё отсутствует |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -103,7 +103,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [S01](packets/S01.md) | Core chat R03, Integration role | T01 + C01; WIP `1d12859` + `61022a9`; intermediate `0b4af9c`, all pushed | redacted/tag-only fix saved; author goldens pass (97 cases/126 wire fixtures), [receipt](receipts/S01.md); plugin WIP + schema artifact/CLI/lifecycle/docs remain; four P2 await user; D02/D05 open, no acceptance/freeze |
 | S01-user-review | collaboration `/root/checkpoint_review` | `eb0edbf..1d12859` + changes saved in `61022a9` | completed static review; four findings, not accepted; [result](receipts/S01-user-review.md); no fixes authorized by review alone |
 | [S01-oracles](packets/S01-oracles.md) | `01a11126-55ad-7d03-bd05-30e9feff0818` / local | `d539a0ec2bac243375256652fb75da7065b27350` | accepted oracle input; [receipt](receipts/S01-oracles.md); code/contract review still required |
-| [F03c](packets/F03c.md) | product advisor | RC04/RC05; F03c-build@eda0d77 | running; iPad13 original filters restored, task install removed/device shutdown; iPad11 next, then RC05; desktop lease, no Git lease |
+| [F03c](packets/F03c.md) | product advisor | `492ac0075625ff7e9988294fc23d2bca6e0146f1`, pushed; F03c-build@eda0d77 | reference pack saved (8 PNG/12 scoped files), [receipt](receipts/F03c.md); RC05 long metadata/translation and trailing-selector reachability waiting_evidence, control bounds unknown; cleanup complete, lanes released; no collector/Q03 acceptance |
 | [F03c-build](packets/F03c-build.md) | `01a11145-9a6a-7913-86d5-d9f0d483d961` / local | `eda0d7753f85f9e5c03b1d90613ea69586fd8016` | accepted build artifacts; [receipt](receipts/F03c-build.md); runtime still unverified |
 
 Initial research dispatch: `7c48392`; последующее состояние — в commit этого реестра.
