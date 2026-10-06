@@ -162,3 +162,84 @@ ScreenCaptureKit continuation leak/124. M01 still owns production concurrency an
 session isolation; P01 owns current one-shot probe off/on invariance and transforms.
 No real PlayPhrase.me application was collected. No cadence or background service
 was added. Future native setup must derive fresh identities, not reuse run IDs here.
+
+## D05-Native actual window sample
+
+Follow-up authority: [D05 platform packet](../plans/ui-blueprint/packets/D05-platform-samples.md),
+D05@1 and the existing S01 full closure; [resource sizing requirements](../../tests/bridges/resources/README.md)
+read before scope selection. This follows Native88ac606 and common support73d772e.
+Five review repairs remain untouched. No fixture, schema, engine or CLI changes.
+
+The scope/limits were recorded before launch/request in scope-before-run.json:
+one fresh exact F02 Window B, normal state, no popup, strict AXChildren only;
+160-node/depth9 ceiling. Core fields: role, description, value, placeholder,
+enabled, focused, actions and accessibility_bounds; raw AXIdentifier/AXSubrole
+metadata for source binding/redaction. No application fallback or new pixels.
+Literal frame/output512KiB, pending1MiB, parent deadline1s, collector admission900ms,
+four frames/one request and whole-driver watchdog15s. These are test inputs, not
+D05 memory defaults, and were not increased after a failure.
+
+The first request completed through the actual common Ticket and validator:
+
+| Measurement | Actual result |
+| --- | --- |
+| Visited / returned / discovered unique AX handles | 76 / 76 / 76 |
+| Child edges / duplicate-handle references | 75 / 0 |
+| Maximum observed depth | 4 zero-based, 5 levels; ceiling9 |
+| Known unread child entries / unreturned refs / queued handles | 0 / 0 / 0 |
+| Unknown child-list reads | 0; unexposed visual/native nodes still unknown |
+| Selected property availability | 384 known,165 unknown,58 unsupported,1 redacted =608 (8×76) |
+| Coverage / capture | partial; no new pixel capture |
+| Exact returned wire bytes, including newline | 337500 |
+| Common retained serialization bytes | 338001; structurally equal to returned document |
+| Parent frame accepted / terminal | 142ms /296ms, one trace, not a latency gate |
+
+One secure Value property was marked sensitive/redacted and AXValue was not
+requested for it. The eight requested properties exist for each returned node;
+raw roles and separate unknown transforms remain. All nodes reference the same
+actual selected surface. The local aliases identify actual CFEqual-distinct AX
+handles within this observation only; they are not action refs or global IDs.
+
+This exhausts the available strict AX child list for the chosen current window,
+not all painted internals or every possible fixture state. The160-node ceiling is
+not reached:84 nodes and deeper configured-bound stress remain unrepresented.
+No node duplication, long-value manufacture, popup opening or UI changes for size.
+Artificial worst-permitted documents remain separate Integration work. Full D05
+coverage remains waiting_evidence; no production cap or acceptance is inferred.
+
+Use the exact incoming wire for Integration sizing because JSON member order may
+affect deserializer capacities; do not substitute its common-host reserialization.
+Request/session/limits and actual common completion are retained alongside it.
+Existing D02 capture metadata remains a separate earlier-session document and was
+neither recaptured nor transplanted into the new graph. Fixture/support products
+were reused; only the changed native collector was compiled. The common generic
+checks were not rerun. Owned helpers exited0/reaped and platform readers joined;
+CUA after collection was unchanged, then the own fixture exited and lane released.
+
+Exact paths, hashes, cleanup and checkpoint status are in the
+[D05-Native receipt](../plans/ui-blueprint/receipts/D05-native-samples.md).
+
+### Focused secure-value check for the expanded field scope
+
+Root requested a targeted privacy check because whole-window sizing newly requests
+Value across a window containing secure input. The collector checks actual
+role/subrole and the known fixture identifier before requesting AXValue; secure
+Value is sensitive/redacted. No setter/modality is inferred from a role; Actions
+are the actual AXUIElementCopyActionNames result. Missing/unsupported/nil results
+do not become empty strings or false values.
+
+A separate own-fixture run entered a nonempty synthetic canary, then explicitly
+requested Snapshot and the same field/limit scope. The API reported
+AXSecureTextField subrole; the normalized Value stayed redacted. Canary was absent
+from exact wire, submitted/retained documents and diagnostics (0 diagnostic bytes).
+Known empty text, known false flags and unsupported properties remained distinct.
+The driver checks the returned bytes before writing/submitting them; the one-use
+canary environment value is removed before helper/host launch. No raw canary or
+raw diagnostic log is retained, and no pixels were collected.
+
+Privacy case:75 nodes,333119 wire bytes; original sizing case:76 nodes,337500 bytes.
+One AXGroup differs and focus context changed; the mechanism of that difference
+was not isolated. Both counts remain actual, never padded to match. The original
+sizing sample and limits are immutable. privacy-validation.json and privacy-cleanup.json
+record the added check; the scoped privacy case does not close configured-bound
+coverage or production privacy acceptance.

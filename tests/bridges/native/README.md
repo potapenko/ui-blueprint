@@ -14,7 +14,8 @@ It uses Integration's actual common host; it owns no second lifecycle or schema.
 python3 tests/bridges/native/prepare.py
 python3 tests/bridges/native/build_support.py /absolute/task-temp/common-build
 xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 \
-  tests/bridges/native/Collector.swift -o /absolute/task-temp/native-collector
+  tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift \
+  -o /absolute/task-temp/native-collector
 ```
 
 `prepare.py` extracts only committed F02 inputs and compiles off/on fixture bundles;
@@ -82,3 +83,55 @@ is claimed. F02's concurrent capture continuation failure/exit124 remains an M01
 gate. Probe invariance, production input/privacy/isolation and four review P2
 remain outside this proof. Validator validity and lifecycle completion do not
 mean product acceptance or P1 compatibility freeze.
+
+## D05 actual window sizing input
+
+`WindowAX.swift` adds a strict window-only AX mode to the same collector. No capture
+API is called in `describe-window`/`window-ax`; old D02 cases retain their selected
+sample/two-channel path. The new mode enumerates AXChildren with count + bounded
+array reads. It deduplicates actual AX handles with CFEqual, emits observation-local
+aliases, preserves child edges and never invents nodes to fill a ceiling. Raw
+AXIdentifier/AXSubrole are runtime extensions, not code declarations. Secure value
+is redacted before requesting AXValue. Unsupported/unknown and known empty/false
+remain distinct. Full visual/native coverage stays partial.
+
+After a fresh explicit Snapshot with normal stimulus and no popup:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/sizing.py \
+  --host /absolute/task-temp/common-build/target/debug/examples/d02_host \
+  --validator /absolute/task-temp/common-build/target/debug/uiblueprint-validate \
+  --collector /absolute/task-temp/native-collector \
+  --manifest /absolute/evidence/fixture/b.json \
+  --output /absolute/evidence/sample
+```
+
+The driver reuses the bounded reader/reap helpers from prove.py and the actual
+common Ticket/lifecycle. Literal sizing limits are fixed before acquisition:
+160 nodes/depth9, 512KiB frame/output, 1MiB pending, one request, four frames,
+1,000ms parent deadline and 15s whole-driver watchdog. They are not production
+memory defaults. The original D02 limits are unchanged. This larger wire allowance
+is a separately declared eight-field whole-window sizing case, not a retry of a
+failed smaller request. Collector AX admission remains at most900ms.
+
+Selected core fields: role, description, value, placeholder, enabled, focused,
+actions, accessibility_bounds; raw identifier/subrole metadata supports binding
+and redaction. Only a small explicit raw-role mapping is applied; other roles stay
+unknown while native_role is preserved. AX bounds are never promoted to layout/hit.
+Acquisition metrics state actual visited/returned/discovered counts, depth, duplicate
+references and known/unknown omission counts. A response smaller than160 is valid
+partial evidence, not proof of the configured maximum.
+
+`returned-wire.ndjson` preserves exact collector bytes/member order, including its
+newline; use it unchanged for the memory measurer. The common retained document is
+also saved and structurally compared, but its serialization may differ. No fixture,
+shared schema or sizing policy is changed. No new pixels are needed or captured.
+
+For a focused nonempty secure-field check, type a synthetic canary into the owned
+fixture, press Snapshot, and pass `--check-canary-env NAME` to sizing.py. The driver
+removes that one-use environment value before child launches, checks wire bytes
+before persistence and host submission, checks retained data and bounded diagnostic
+output in memory, and records only absence/status/byte counts. Never store the raw
+canary or diagnostic text. It also preserves known empty/false versus unavailable.
+Actions come from AXUIElementCopyActionNames, not role-derived setters/modalities.
+This is scoped fixture evidence, not universal secret recognition.

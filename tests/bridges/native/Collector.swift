@@ -32,6 +32,11 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
     @MainActor static func run() async throws {
         let args = CommandLine.arguments
         guard args.count == 4 || args.count == 5 else { exit(2) }
+        let windowMode = ["window-ax", "describe-window"].contains(args[3])
+        let expectedFields = windowMode
+            ? ["role", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]
+            : ["role", "accessibility_name", "enabled", "accessibility_bounds"]
+        let expectedChannels = windowMode ? ["external_semantics"] : ["external_semantics", "rendered_capture"]
         // Optional sequence must be supplied by the committed common host.
         // Without it only standalone Snapshot/Error artifacts are emitted.
         let sequence: UInt64? = args.count == 5 ? UInt64(args[4]) : nil
@@ -48,11 +53,11 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
               let artifact = doc["artifact"] as? [String: Any], artifact["kind"] as? String == "request",
               let request = artifact["data"] as? [String: Any], let context = request["context"] as? [String: Any],
               let target = context["target"] as? [String: Any], let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
-              let fields = context["fields"] as? [String], fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"],
+              let fields = context["fields"] as? [String], fields == expectedFields,
               let scope = context["scope_id"] as? String, let session = context["session_id"] as? String,
               let requestID = request["request_id"] as? String,
               let operation = request["operation"] as? [String: Any], operation["operation"] as? String == "observe",
-              operation["channels"] as? [String] == ["external_semantics", "rendered_capture"],
+              operation["channels"] as? [String] == expectedChannels,
               let limits = request["limits"] as? [String: Any],
               let maxNodes = limits["max_elements"] as? Int, (1...160).contains(maxNodes),
               let maxDepth = limits["max_depth"] as? Int, (1...9).contains(maxDepth),
@@ -73,7 +78,7 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
         else { throw NSError(domain: "invalid_or_unresolved_target", code: 1) }
         let surface = surfaces[0]
         let axAllowed = AXIsProcessTrusted()
-        let captureAllowed = CGPreflightScreenCaptureAccess()
+        let captureAllowed = windowMode ? false : CGPreflightScreenCaptureAccess()
         func capability(_ channel: String, _ allowed: Bool) -> [String: Any] {
             ["channel": channel, "operation": "observe", "status": allowed ? "partial" : "permission_required",
              "reason": allowed ? "fixture_scope_partial" : "permission_not_granted"]
@@ -81,9 +86,9 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
         if sequence == nil {
         try emit("session", ["allowed_scopes": [scope], "session_id": session, "plugin": context["plugin"]!,
             "supported_versions": ["0.1.0"], "target": target, "surfaces": surfaces,
-            "capabilities": [capability("external_semantics", axAllowed), capability("rendered_capture", captureAllowed)]])
+            "capabilities": windowMode ? [capability("external_semantics", axAllowed)] : [capability("external_semantics", axAllowed), capability("rendered_capture", captureAllowed)]])
         }
-        if args[3] == "describe" { return } // No AX tree or pixels acquired.
+        if args[3] == "describe" || args[3] == "describe-window" { return } // No AX tree or pixels acquired.
         let clock = "helper-\(ProcessInfo.processInfo.processIdentifier)-monotonic"
         let coverage: [String: Any] = ["status": "partial", "scope_id": scope, "fields": fields, "omitted_count": null, "unknown_count": null]
         func evidence(_ id: String, _ source: String, _ method: String) -> [String: Any] {
@@ -127,6 +132,15 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
                 attribute($0, kAXIdentifierAttribute) as? String == identifier
             }
             guard windows.count == 1 else { throw NSError(domain: "ambiguous_window", code: 2) }
+            if windowMode {
+                let collected = collectWindowAX(windows[0], surface: surface,
+                    observationID: "\(requestID)-external_semantics", maxNodes: maxNodes, maxDepth: maxDepth,
+                    deadline: axStart + min(0.9, deadlineMS / 1000))
+                try JSONSerialization.data(withJSONObject: collected.metrics, options: [.sortedKeys]).write(
+                    to: URL(fileURLWithPath: args[2]).appendingPathComponent("acquisition.json"))
+                try reply("external_semantics", ["status": "observed", "data": snapshot("external_semantics", "macos.ax", axStart, collected.nodes, [])])
+                return
+            }
             var queue: [(AXUIElement, Int)] = [(windows[0], 0)]
             var matches: [AXUIElement] = []; var visited = 0
             while !queue.isEmpty, visited < maxNodes, ProcessInfo.processInfo.systemUptime - axStart < min(0.9, deadlineMS / 1000) {
@@ -165,6 +179,7 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
                     property("accessibility_bounds", bounds)], "children": [], "extensions": [], "source_declarations": []]
             try reply("external_semantics", ["status": "observed", "data": snapshot("external_semantics", "macos.ax", axStart, [node], [])])
         }
+        if windowMode { return }
         // AX frame is already flushed. Injected timeout never invokes capture APIs.
         if args[3] != "live" { try await Task.sleep(for: .seconds(6)); return }
         let captureStart = ProcessInfo.processInfo.systemUptime
