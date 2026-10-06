@@ -162,3 +162,43 @@ no product edits. Inputs differ from the working-copy run, justifying one rerun.
 Compact proof updates this receipt only after a separate root Git grant; raw logs
 and the task-temp copy are removed after proof acceptance. Same-reviewer independent
 acceptance is still pending. Source changes are frozen.
+
+## E02-R3 pinned saved-commit verification
+
+Source checkpoint `bd5270ae22b30c9730cc3fe0622b02e0cec72ca4` was committed and
+successfully pushed to origin/master; own source paths were clean and Git lease
+released before verification. Root explicitly authorized one task-temp `git archive`
+build copy of exactly that commit to exclude Core's unsaved cache module. This
+was verification only: no branch/worktree/new product owner, no source edits,
+no lock update, model/network/runtime collection or unrelated suite.
+
+On Rust1.96.0, all following commands passed in that copy:
+
+```sh
+cargo +1.96.0 check --locked --offline -p uiblueprint-export -p uiblueprint-cli --all-targets
+cargo +1.96.0 fmt -p uiblueprint-export -p uiblueprint-cli -- --check
+cargo +1.96.0 clippy --locked --offline -p uiblueprint-export -p uiblueprint-cli --all-targets -- -D warnings
+cargo +1.96.0 test --locked --offline -p uiblueprint-export
+cargo +1.96.0 test --locked --offline -p uiblueprint-cli --test export_binary proposal_
+```
+
+Export:19 passed (12 compiler +7 proposal regressions), zero failures/ignored.
+Affected actual CLI:3 passed, zero failures/ignored,9 unrelated tests filtered.
+Check/fmt/Clippy all passed, including dependency lint with no --no-deps exclusion.
+The previous working-copy cache lint is not present in this saved source. The
+remaining101-test workspace suite was not repeated or claimed by this run.
+
+The same full input-map recipe above yields exactly211 files in this archive.
+Before/after checks were identical, and an independent reconstruction from
+`git ls-tree` plus `git cat-file` blob contents of the saved source commit matched:
+`712739f939e27d133e9c621a325507b903a863656be117544c339e14ee9a7a18`.
+This is saved Git-object equality, not just equality of the four E02 files.
+Cargo.lock stayed unchanged under --locked/offline; existing dependency cache was
+used. No raw command logs or build artifacts are stored in this repository.
+
+Root accepted this compact proof as author verification evidence and granted only
+this receipt's checkpoint. After its successful commit+push, cleanup is authorized
+only for this run's unique task-temp archive/build copy; the terminal receipt
+confirms cleanup and Git release. Code remains frozen at bd5270 for the same
+independent reviewer's affected recheck. This author proof is not independent
+acceptance, completion of E02/P6/P7, or permission to start another packet.
