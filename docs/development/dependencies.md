@@ -1,4 +1,38 @@
-# Resolved T01 dependency inventory
+# Resolved dependency inventory — T01 and S01 Stage A
+
+## S01 additions under D07@2
+
+The Stage A normal/build dependency closure contains17 external packages: the
+eleven T01 packages below plus the six schema-generation packages in this table.
+`cargo tree --locked --offline -p uiblueprint-plugin-api -e normal,build` confirms
+that jsonschema and its validation-only dependency graph do not enter that closure.
+Cargo metadata may unify dev features in its output; it is not evidence that every
+reported feature is active in a normal shipping build.
+
+| Added package | Version / declared MSRV | Actual license files inspected |
+| --- | --- | --- |
+| schemars | 1.2.2 / 1.74 | LICENSE, MIT; Graham Esau2019 |
+| schemars_derive | 1.2.2 / 1.74 | LICENSE, MIT; Graham Esau2019 |
+| dyn-clone | 1.0.20 / 1.60 | LICENSE-MIT, LICENSE-APACHE; MIT option |
+| ref-cast | 1.0.27 / 1.71 | LICENSE-MIT, LICENSE-APACHE; MIT option |
+| ref-cast-impl | 1.0.27 / 1.71 | LICENSE-MIT, LICENSE-APACHE; MIT option |
+| serde_derive_internals | 0.30.0 / 1.71 | LICENSE-MIT, LICENSE-APACHE; MIT option |
+
+Direct dev-only jsonschema0.58.5 (MSRV1.85, MIT, Dmitry Dygalo2020–2026) performs
+structural parity checks against the generated schema. Default HTTP/file/TLS/IDNA
+and async features are disabled. Its actual LICENSE was read; its archive also
+contains a test-suite license. No root NOTICE in the selected added packages.
+Normal/build declared maximum MSRV is1.74; project policy remains1.96. No source
+copying or platform/transport/model framework adoption occurred. Full distribution
+notice assembly remains I01; this inventory is not a universal dependency audit.
+
+The lockfile preserves exact checksums for the generation and dev validation graphs;
+adding plugin-api added only the local package entry. The validator uses serde
+map-only visitors and semantic checks; it never loads an input-selected schema.
+The saved JSON Schema is generated from canonical Rust types. Existing T01 direct
+versions/checksums are unchanged. The following T01 observations remain historical.
+
+## T01 baseline
 
 Authority: [D07@1](../specs/development/decisions/d07-reuse.md); actual resolution
 for [uiblueprint-schema](../../crates/schema/Cargo.toml), Rust1.96.0,

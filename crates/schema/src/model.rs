@@ -339,7 +339,7 @@ record!(Transform {
 #[serde(tag = "status", rename_all = "snake_case", deny_unknown_fields)]
 pub enum TransformState {
     LocalOnly {},
-    Known { transform: Transform },
+    Known { transform: Box<Transform> },
     Unknown { reason: Id },
 }
 record!(Geometry {
@@ -372,7 +372,7 @@ pub enum Value {
     Role(Role),
     TextList(Vec<String>),
     Identity(Identity),
-    Geometry(Geometry),
+    Geometry(Box<Geometry>),
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -606,27 +606,27 @@ record!(GoldenChain {
     deny_unknown_fields
 )]
 pub enum Artifact {
-    Request(Request),
-    Session(SessionDescriptor),
-    SessionContext(SessionCase),
-    ResolutionRefusal(ResolutionRefusal),
-    ChannelResponse(ChannelResponse),
-    Capability(Capability),
-    Property(PropertyCase),
-    Observation(Observation),
-    Snapshot(Snapshot),
-    Geometry(GeometryCase),
-    Delta(DeltaCase),
-    Action(ActionCase),
-    Transition(Transition),
-    Expectation(Expectation),
-    Finding(FindingCase),
-    Error(Issue),
+    Request(Box<Request>),
+    Session(Box<SessionDescriptor>),
+    SessionContext(Box<SessionCase>),
+    ResolutionRefusal(Box<ResolutionRefusal>),
+    ChannelResponse(Box<ChannelResponse>),
+    Capability(Box<Capability>),
+    Property(Box<PropertyCase>),
+    Observation(Box<Observation>),
+    Snapshot(Box<Snapshot>),
+    Geometry(Box<GeometryCase>),
+    Delta(Box<DeltaCase>),
+    Action(Box<ActionCase>),
+    Transition(Box<Transition>),
+    Expectation(Box<Expectation>),
+    Finding(Box<FindingCase>),
+    Error(Box<Issue>),
     GoldenChain(Box<GoldenChain>),
-    ActionResult(ActionResult),
-    DeltaResult(DeltaResult),
-    TemporalComparison(TemporalComparison),
-    TransitionContext(TransitionCase),
+    ActionResult(Box<ActionResult>),
+    DeltaResult(Box<DeltaResult>),
+    TemporalComparison(Box<TemporalComparison>),
+    TransitionContext(Box<TransitionCase>),
 }
 record!(Document {
     schema_version: SchemaVersion,

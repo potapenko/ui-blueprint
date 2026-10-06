@@ -86,7 +86,7 @@ fn validate_semantics(artifact: &Artifact) -> Result {
             Ok(())
         }
         Artifact::SessionContext(x) => {
-            validate_semantics(&Artifact::Session(x.session.clone()))?;
+            validate_semantics(&Artifact::Session(Box::new(x.session.clone())))?;
             validate_request(&x.request)?;
             require(
                 x.session

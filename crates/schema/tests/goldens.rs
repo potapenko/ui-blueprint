@@ -16,6 +16,36 @@ fn root() -> PathBuf {
 }
 
 #[test]
+fn published_schema_matches_the_canonical_rust_records() {
+    let saved: Value = serde_json::from_slice(
+        &fs::read(root().join("schemas/uiblueprint-0.1.0.schema.json")).expect("published schema"),
+    )
+    .expect("schema JSON");
+    assert_eq!(saved, json_schema().expect("generate schema"));
+}
+
+#[test]
+fn nested_array_records_and_extra_tag_only_members_are_rejected() {
+    let mut snapshot: Value = serde_json::from_slice(
+        &fs::read(root().join("fixtures/golden/ENV-SNAPSHOT-VALID.json")).expect("snapshot"),
+    )
+    .expect("JSON");
+    snapshot["artifact"]["data"]["context"]["target"] = serde_json::json!(["native-app", "g1"]);
+    let bytes = serde_json::to_vec(&snapshot).expect("encoded negative");
+    assert!(Document::from_json(&bytes, bytes.len()).is_err());
+    assert!(!structurally_valid(&snapshot).expect("schema"));
+    let mut geometry: Value = serde_json::from_slice(
+        &fs::read(root().join("fixtures/golden/GEO-INVALID-SHAPE.json")).expect("geometry"),
+    )
+    .expect("JSON");
+    geometry["artifact"]["data"]["geometry"]["shape"]["value"]["width"] = 30.into();
+    geometry["artifact"]["data"]["geometry"]["transform"]["extra"] = true.into();
+    let bytes = serde_json::to_vec(&geometry).expect("encoded negative");
+    assert!(Document::from_json(&bytes, bytes.len()).is_err());
+    assert!(!structurally_valid(&geometry).expect("schema"));
+}
+
+#[test]
 fn independent_cases_and_every_expanded_variant_match_the_wire_validator() {
     let root = root();
     let manifest: Vec<Value> = serde_json::from_slice(
@@ -78,10 +108,10 @@ fn nonfinite_typed_geometry_and_sensitive_known_values_are_rejected_without_echo
     let path = root().join("fixtures/golden/GEO-TRANSFORM.json");
     let mut doc =
         Document::from_json(&fs::read(path).expect("fixture"), 1_048_576).expect("valid transform");
-    if let uiblueprint_schema::model::Artifact::Geometry(case) = &mut doc.artifact {
-        if let uiblueprint_schema::model::Shape::Rect(rect) = &mut case.geometry.shape {
-            rect.x = f64::INFINITY;
-        }
+    if let uiblueprint_schema::model::Artifact::Geometry(case) = &mut doc.artifact
+        && let uiblueprint_schema::model::Shape::Rect(rect) = &mut case.geometry.shape
+    {
+        rect.x = f64::INFINITY;
     }
     assert!(doc.validate().is_err());
     let mut raw: Value = serde_json::from_slice(

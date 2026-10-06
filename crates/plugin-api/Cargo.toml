@@ -1,0 +1,11 @@
+[package]
+name = "uiblueprint-plugin-api"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+description = "Request-owned observation sessions for UI Blueprint adapters"
+
+[dependencies]
+uiblueprint-schema = { path = "../schema" }
+serde_json.workspace = true

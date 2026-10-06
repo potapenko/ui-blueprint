@@ -72,10 +72,10 @@ fn graph_refs(
         let mut seen = BTreeSet::new();
         while let Some(key) = pending.pop() {
             require(key != node.key, ValidationError::DanglingReference)?;
-            if seen.insert(key.clone()) {
-                if let Some(child) = nodes.get(&key) {
-                    pending.extend(child.children.iter().cloned());
-                }
+            if seen.insert(key.clone())
+                && let Some(child) = nodes.get(&key)
+            {
+                pending.extend(child.children.iter().cloned());
             }
         }
     }
@@ -279,6 +279,6 @@ pub(super) fn node<'a>(snapshot: &'a Snapshot, key: &SourceKey) -> Result<&'a No
         .find(|n| &n.key == key)
         .ok_or(ValidationError::DanglingReference)
 }
-pub(super) fn property<'a>(node: &'a Node, field: Field) -> Option<&'a Property> {
+pub(super) fn property(node: &Node, field: Field) -> Option<&Property> {
     node.properties.iter().find(|p| p.field() == field)
 }
