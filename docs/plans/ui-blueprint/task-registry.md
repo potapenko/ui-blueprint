@@ -77,7 +77,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | R02 running; R01 commit-only; Git lease R01; R03 accepted diagnostic; native lane свободен |
+| Активные чаты/пакеты/ресурсы | R02 running; F01 ready; Git lease root; R03 cleanup; native lane свободен |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | принимать source/prototype receipts; выдавать один Git grant; далее F01/F02 и C01 |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -88,9 +88,10 @@ LICENSE/NOTICE выбранного материала → собственна�
 | --- | --- | --- | --- |
 | [C00](packets/C00.md) | `01a1109a-5d6e-7792-b926-e767c7f63642` / local | candidate `92d2bf89ea9acab091fd166eef4432408e353744`; `UIB.ROUTING@1` | accepted; [receipt](receipts/C00.md) |
 | [C00-review](packets/C00-review.md) | `01a110a5-8af7-7ef1-8fb6-fd989e78e666` / local | initial `f8d63cb`; final `9bedeccbf4c5a92206d24d0794b299e54a2b22e1` | accepted; [verdict](receipts/C00-review.md) |
-| [R01](packets/R01.md) | `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | R01 @1; 6 own files; Web runtime closed | commit-only; [receipt](receipts/R01.md); Git lease R01 |
+| [R01](packets/R01.md) | `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | `71ea44235cddf63381d1fea4acd121ad642e7ddf` | accepted diagnostic; [receipt](receipts/R01.md); bounded acquisition → W01 |
 | [R02](packets/R02.md) | `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | R02 @1; base `7c48392`; native lane released | running; no Git lease |
 | [R03](packets/R03.md) | `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | `26a19faed84b468dd21f77bf2c78516cd917d223` | accepted diagnostic; [receipt](receipts/R03.md); proposals for C01 only |
+| [F01](packets/F01.md) | Web chat R01 | R01 checkpoint + WEB-PILOTS/PERFORMANCE @1 | ready; headless only; no Git lease |
 
 Root coordination checkpoint: `7c48392`; все R-пакеты имеют disjoint write sets.
 Code/runtime acceptance по-прежнему отсутствует; C00 — supporting work.
