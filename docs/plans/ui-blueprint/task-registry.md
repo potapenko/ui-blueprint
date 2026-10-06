@@ -21,6 +21,7 @@
 | R03 / P0 | D / Core | C00 | Семантика update/geometry/projections; source records; вход D03 и G01/K01 |
 | F01 / P0 | T / Web | R01 | Контролируемый Web fixture B01–B06 с независимыми expectations; baseline D05/D06 |
 | F02 / P0 | T / Native | R02 | Mac fixture M01–M06, измеримый merged control и probe off/on режим; baseline D05/D06 |
+| F03 / P0–P7 | T / product advisor | пользовательское уточнение, case inventory, runtime lane | Реальные Mac/iPhone/iPad case/data examples PlayPhrase.me; consumer C01/engine/agent/Q03 |
 | C01 / P0 | C / Integration | R01,R02,R03,F01,F02 | Решения D01–D07 по срокам ТЗ, toolchain/MSRV/edition, support matrix и начальные frozen gates; вход P1/P2; root принимает receipt |
 | T01 / P1 | T / Integration | C01 | Минимальная Cargo-сборка нужных owners, lockfile, выбранные host/feature проверки; вход первого исполнимого результата |
 | S01 / P1 | S / Integration | T01 | Schema/plugin-api candidate, parser/serializer, validator и GOLDEN01 с valid/invalid envelopes; вход всех модулей |
@@ -43,7 +44,8 @@
 | I01 / P6 | S / Integration | V01,P01,G02 | CLI integration, installable выбранный набор, recovery/docs, зависимости и NOTICE, никаких обязательных моделей |
 | Q01 / P7 | V / review | I01 | Полные M01–M06, B01–B06 и два E2E на фиксированной сборке; совместимость schema после обоих пилотов |
 | Q02 / P7 | V / performance | Q01,C01 | Cold/warm quality/latency и overhead против baseline; не подгонять gates |
-| C02 / P7 | C / root | Q01,Q02 | Проверить всю матрицу, записать limitations и accepted baseline, сохранить checkpoint; цель complete только по результату |
+| Q03 / P7 | V / real cases | I01,F03 | Проверить данные UI Blueprint и задачи агента на реальных кейсах; source/build/scope/expected/observed и ограничения |
+| C02 / P7 | C / root | Q01,Q02,Q03 | Проверить всю матрицу, записать limitations и accepted baseline, сохранить checkpoint; цель complete только по результату |
 
 Для защищённых рисков независимая V-проверка обязательна до accepted каждого
 готового среза; final V01 объединяет актуальные доказательства. Q01 повторно
@@ -108,6 +110,12 @@ saturation и rAF proposals больше не используются как п
 Прошлые измерения не переписываются; per-request baseline и fixtures сохраняются.
 Пользователь поручил продуктовые вопросы задавать чату «Спроектировать UI Blueprint»:
 `01a1102f-791c-7e91-bec3-1877ea004d51` / local. Это advisory, без записи в другие проекты.
-Консультация отправлена; F02 получил немедленную коррекцию и заканчивает независимые
-one-shot проверки. Продуктовые нормы не переписываются до сверки контекста;
-план P0–P7 остаётся границей. Новая цель/пауза/отмена не запрашивались.
+Первая [консультация](receipts/product-context.md) получена: основной путь on-demand;
+широкая правка ТЗ не нужна. F02 получил коррекцию; cadence-направление закрыто.
+Дополнение пользователя: «Можешь тестировать на нормальном приложении ... Точнее
+не тестировать, а агента тестировать»; поручено внести реальные примеры в план.
+Это разрешает F03/Q03 через названного advisor в PlayPhrase.me, включая Mac и
+iPhone/iPad данные, при соблюдении конкретных project/runtime routes. Запрет
+реальных приложений из исходного goal уступает этому более позднему узкому разрешению.
+Advisor готовит inventory; live capture ещё не выдан. Код реального приложения
+и другие проекты не открыты для произвольных изменений. Цель не остановлена.
