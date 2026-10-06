@@ -89,7 +89,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | S01/E02 repairs and K01 retained store accepted; D03@2/ANALYSIS@1 registered7a61a65; Integration schema implementation next, Core/Export await concrete schema API; Native848ec6 saved/cleaned, desktop released, B pixels remain permission-required; fresh Native review next |
+| Активные чаты/пакеты/ресурсы | Integration S01-analysis-schema active; Core/Export await compiling API. K01 retained store accepted; Native848ec6 bounded repair reviewed with explicit residuals, desktop released and B pixels stopped. Web D05-decode-bound ready for independent source-based decision input |
 | Последний принятый результат продукта | нет |
 | Следующий шаг | Принять affected recheck семи repairs либо вернуть точечный repair владельцу; завершить K01 store и Native capture prerequisite. D05 transient/host enforcement, D07 Web adoption/transport, canonical MeasurementResult и RC05 evidence остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -140,8 +140,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [L01-result-contract](packets/L01-result-contract.md) | Integration `01a110ac-30da-7ab0-bed1-8d7a8e4de45e` / local | `8fdf608f686586892799b9dfaba82db8878a50a4`, pushed | [receipt](receipts/L01-result-contract.md); exact0.2 local analysis records reusing unchanged0.1 source data; root accepts delegated representation decision; source/spec registration still pending |
 | [L01-analysis-registration](packets/L01-analysis-registration.md) | Integration same chat | `7a61a65aefe22dfed9b9e041260c006912dcfabe`, pushed | [receipt](receipts/L01-analysis-registration.md), faithful technical registration accepted by root: D03@2, ANALYSIS/TYPES/VALIDATION@1, registry6; source work not yet claimed |
 | [K01-store-review](packets/K01-store-review.md) | collaboration `/root/k01_store_review` | packet4a707e9, artifactf85f06f, proof9b12eba | [review](receipts/K01-store-review.md): accept after exact borrower diagnostic/control proof; no scoped findings; broader cache/live/peak obligations unchanged |
-| [S01-analysis-schema](packets/S01-analysis-schema.md) | Integration same chat | registered7a61a65, complete ANALYSIS closure | ready for dispatch; canonical0.2 types/API first then validation/generator/fixtures, preserve core0.1; Core/Export consumers start after concrete compiling API handoff |
-| [M01-capture-review](packets/M01-capture-review.md) | fresh reviewer, not yet dispatched | artifact848ec6, bounded own-fixture scope | ready for single fresh two-stage review, no runtime/pixel calls or permission changes |
+| [S01-analysis-schema](packets/S01-analysis-schema.md) | Integration same chat | registered7a61a65, packet06d339b and full ANALYSIS closure | running canonical0.2 schema; types/API handoff unblocks Core/Export, old core0.1 protected |
+| [M01-capture-review](packets/M01-capture-review.md) | collaboration `/root/m01_capture_review` | artifact848ec6, bounded own-fixture scope | [review](receipts/M01-capture-review.md): accept_with_residual support repair; no source findings. Positive final pixels/B permission/current-host live proof remain open; intermediate source and sixth test provenance limitations explicit |
+| [D05-decode-bound](packets/D05-decode-bound.md) | Web `01a110ac-2aae-7841-9c8b-12ff38c52d9d` / local | D05 open working-bound obligation, saved core0.1 and exact dependency source | ready to dispatch finite code-based bound feasibility, no more profiling or new host architecture; docs only |
 
 Saved integration barrier: at `9ca645a`, all211 checked inputs are committed and
 match `db7792faeea43667960657a53560c90fd47aa4f947cf1b62daec896dc5d35afe`.
