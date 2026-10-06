@@ -184,6 +184,17 @@ func attribute(_ el: AXUIElement, _ key: String) -> CFTypeRef? {
         let url = URL(fileURLWithPath: args[2]).appendingPathComponent("capture.png")
         guard let dest = CGImageDestinationCreateWithURL(url as CFURL, UTType.png.identifier as CFString, 1, nil) else { exit(1) }
         CGImageDestinationAddImage(dest, image, nil); guard CGImageDestinationFinalize(dest) else { exit(1) }
+        let metadata: [String: Any] = ["observation_id": "\(requestID)-rendered_capture",
+            "source": "ScreenCaptureKit filter_and_window_metadata", "units": "pt", "origin": "top_left",
+            "filter_content_rect": ["x": filter.contentRect.minX, "y": filter.contentRect.minY,
+                "width": filter.contentRect.width, "height": filter.contentRect.height],
+            "filter_point_pixel_scale": filter.pointPixelScale,
+            "window_id": wid, "window_frame": ["x": window.frame.minX, "y": window.frame.minY,
+                "width": window.frame.width, "height": window.frame.height],
+            "capture_call_start": captureStart, "capture_call_end": ProcessInfo.processInfo.systemUptime,
+            "clock_domain": clock, "time_unit": "seconds", "transform_status": "unknown"]
+        try JSONSerialization.data(withJSONObject: metadata, options: [.sortedKeys]).write(
+            to: URL(fileURLWithPath: args[2]).appendingPathComponent("capture-metadata.json"))
         let capture: [String: Any] = ["observation_id": "\(requestID)-rendered_capture", "capture_target": surface,
             "capture_kind": "window_isolated", "pixel_width": image.width, "pixel_height": image.height,
             "crop_transform": ["status": "unknown", "reason": "frame_mapping_not_calibrated"],

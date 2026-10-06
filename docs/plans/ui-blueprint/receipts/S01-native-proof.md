@@ -1,99 +1,105 @@
-# S01-Native preparation and collector WIP receipt
+# S01-Native proof receipt
 
-- packet_id / status: `S01-Native / collector WIP checkpoint; waiting for committed shared support`.
-  Root supplied Stage A and own-fixture runtime grant; reusable common test support
-  is Integration-owned. No standalone executable requirement is an extra gate.
-- work_classification / outcome: verification preparation/minimal build tooling.
-  Immutable current F02 source compiled; concrete shared-interface handoff recorded.
-  Thin Swift collector source compiles; its runtime/wire behavior remains unverified.
-  No common bridge runtime, production capability or P1 acceptance delivered.
-- authority: PLAN.UIB@1; explicit user parallel-work request relayed by root;
-  S01-native-proof/shared S01-bridges dispatch. No nested delegation.
-- spec_basis_read: AGENTS → UIB.ROUTING@1 registry4 → UIB.DECISIONS@1 →
-  D02/D03/D05@1 with full explicit closure. Reused current F02 CONTENT@1 leaves;
-  loaded missing RUST-BOUNDARIES/GOLDEN/D01/C01-EVIDENCE@1, RUST.md, DEV.RUST@2,
-  D04@1/D06@1/D07@2 and C01-HANDOFF@1 as routed. Exact revisions/clauses and the legacy
-  DEV.RUST link-label discrepancy are detailed in the
-  [handoff](../../../development/interface-proof-native.md).
-- specified expectation: one explicit scoped acquisition; same committed Rust
-  envelope/validator as Web; completed AX survives capture timeout; cancellation/
-  detach reject late success; cleanup only owned helpers. These are not proved yet.
-- fixture input: `9a88b12b5855bac54bf04ba7b64d233df719ddec`, current one-shot F02;
-  source/setup no diff from that checkpoint. Stage A revision:
-  `9d2df153abd2a7d7567100e06d4260e5edda3bb3`; shared paths match it.
-- preparation_checkpoint / push: `27c413f6c4f4ee862805443add00920946e8555a`,
-  pushed successfully to origin/master; four preparation paths saved.
-- current_checkpoint_paths: `tests/bridges/native/Collector.swift`,
-  `docs/development/interface-proof-native.md`, this receipt. No fixtures/native,
-  Cargo/schema/plugin-api/spec, root/Web/G01 or other-worker changes included.
-- current_checkpoint / push: WIP commit containing this receipt, exact SHA and
-  origin/master push result returned in terminal handoff. Root granted these
-  Native paths only; branch/index preflight confirmed master and empty index.
-  Full S01-Native and D02-PROOF are not complete.
+- packet_id / status: `S01-Native / done` (finite native proof; root acceptance remains separate).
+- outcome / classification: finite native D02 verification with narrow test tooling.
+  Live F02 AX/capture passed the common validator and actual common lifecycle;
+  completed AX survived separately labelled injected timeout/cancel/detach.
+  No production adapter, independent product acceptance or P1 freeze claimed.
+- authority: PLAN.UIB@1 and explicit coordinated S01 bridge packet; root's renewed
+  own-F02 runtime grant after common support dispatch. No nested delegation.
+- Spec Basis: AGENTS → UIB.ROUTING@1 registry4 → UIB.DECISIONS@1 → D02/D03/D05@1
+  and full explicit closure; current F02 CONTENT@1 retained. Missing GOLDEN/
+  RUST-BOUNDARIES/D01/C01-EVIDENCE/D04/D06/C01-HANDOFF@1, RUST.md, DEV.RUST@2,
+  D07@2 read. Details and the legacy DEV.RUST link-label note are in the
+  [handoff/report](../../../development/interface-proof-native.md).
+- pinned inputs: F02 `9a88b12b5855bac54bf04ba7b64d233df719ddec`;
+  Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3`;
+  common support `73d772e97efcf550ea4a4d3e8480b56509ebc548`.
+- prior checkpoints: preparation `27c413f6c4f4ee862805443add00920946e8555a` and
+  collector WIP `3bdf34d48bd888c91e564ee82db8dda5143b48b1`, both pushed origin/master.
+- final changed paths: `tests/bridges/native/Collector.swift`,
+  `tests/bridges/native/build_support.py`, `tests/bridges/native/prove.py`,
+  `tests/bridges/native/README.md`, `docs/development/interface-proof-native.md`,
+  this receipt. prepare.py unchanged from its saved checkpoint.
+- final checkpoint / push: commit containing this receipt on master, with exact
+  SHA and origin/master push result in the terminal handoff. Root granted only
+  the six paths above; preflight confirmed master and an empty index. Git lease
+  released after the successful push. No runtime or unchanged check was repeated.
 
-## Checks and artifacts
+## Runtime proof and evidence distinction
 
-`python3 tests/bridges/native/prepare.py` extracted three exact F02 Git objects to
-system task-temp and compiled off/on SwiftUI bundles plus the original diagnostic
-helper. Exit0; compile.log empty (no warning/error). Swift6.4, SDK27.0,
-macOS27.0.1 build26A434, arm64; compile target macOS14.0. No runtime support claim
-for macOS14 and no app/helper launch or AX/capture request.
+Explicit setup only: prepared own F02-on bundle → observed Window B → Snapshot.
+Actual bindings came from that fresh receipt: PID/launch incarnation, window3898,
+fixture surface generation. No reused title/coordinate identity and no other app.
+AX selected the unique sample within that exact fixture window; selected fields
+role/accessibility_name/enabled/accessibility_bounds are observed, with raw AXButton
+and pt screen frame preserved. Capture is independently observed, isolated window,
+1100×1022 pixels, no audio/children, explicit partial surface coverage and unknown
+transform. Actual filter/window metadata and capture-call interval are retained.
 
-Preparation receipt:
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-s01-native-vmy829z0/preparation.json`
+The common host created every Ticket using actual ObservationSession::begin and
+its parent Instant. Collector used only the returned sequence. All canonical
+Request/Session/live ChannelResponse documents passed the committed Rust validator.
+Actual core-retained channel documents equal submitted observations structurally.
+No second schema, protocol, parent clock or lifecycle implementation was introduced.
 
-It records immutable source and binary SHA-256 values, environment and build paths.
-The temporary directory belongs to S01-Native; root retains it through this proof's
-acceptance or explicit discard. Local links, Python syntax, whitespace and rejection of a repository output path
-passed. No raw logs/captures were committed or written to
-Codex/config/skill directories. No durable live D02 evidence exists yet.
+| Case | Actual source | Result | Explicit injection |
+| --- | --- | --- | --- |
+| live | current F02 AX and ScreenCaptureKit | Completed, both channels retained; host/helper exit0 | none |
+| capture-timeout | current F02 AX | TimedOut, AX retained exactly, capture missing | no capture call; pending helper killed/reaped after2s; common parent expires at3s; late AX-success replay rejected StaleTicket |
+| cancel | current F02 AX | Cancelled, AX retained exactly | control after first channel; helper reaped; late canonical AX replay rejected StaleTicket |
+| detach | current F02 AX | Detached, AX retained exactly | control after first channel; helper reaped; late canonical AX replay rejected Detached |
 
-## Collector WIP compile evidence
+Late frames are labelled replays of that case's valid live AX success, not late
+OS callbacks or fabricated capture success. Injected capture timeout does not
+repair/prove the historical concurrent ScreenCaptureKit continuation failure124.
 
-`xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0
- tests/bridges/native/Collector.swift -o <task-temp>/native-collector` succeeded
-before this checkpoint; collector-build.log is empty. No unchanged build was
-repeated for this save. Collector source SHA-256:
-`08ef3643d709d7ec6d7e1d2f1eb7050ac5c8e3c90d24bcd52fdf9527ce6c84a4`.
+## Checks, limits and scope
 
-The source prepares bounded one-request input and canonical Stage A artifact
-shapes, public own-F02 binding, separate channel output, per-field unavailable
-states and an AX-first flush before capture. A descriptor-only path does not
-acquire AX tree/pixels; collection accepts only a host-supplied Ticket sequence.
-Without that sequence it emits standalone Snapshot/Error artifacts, explicitly
-not lifecycle proof. Injected waiting after AX is distinct from real capture.
-These are source observations plus compile evidence only. Shared-validator,
-actual streaming, deadline/cleanup, cancel/detach/late response and runtime
-permission/channel behavior have not yet been exercised. The common support
-owner must provide the real Ticket and parent clock; no values are fabricated.
+Host macOS27.0.1 build26A434, arm64, Swift6.4/SDK27; deployment compile target14.0.
+Prepared F02 artifacts reused. Collector rebuilt only for changed metadata output;
+no Swift warning/error. Common host+validator built locked/offline with Rust1.96.0
+from immutable support Git archive; no mutable CLI/other-owner implementation was
+consumed. The committed three Rust/eight generic support checks are reused for
+wrong version, malformed/oversize frames and generic lifecycle negatives, not rerun.
+The native prove.py live four-case run exited0. Changed Python syntax, local links,
+whitespace and executed-code hash checks passed; index is empty. No unrelated
+suite or review repair.
 
-## Scope and exact next dependencies
+Literal finite test limits: frame65,536 bytes including newline; pending131,072
+encoded bytes;1 in-flight;8 frames;3,000ms common parent deadline;1s AX/2s capture
+waits;1s cleanup wait;45s whole-proof watchdog;8s helper last-resort watchdog.
+These bound this known one-node proof and its fault cases, not D05 heap/cache/
+retention defaults. Parent terminal observations301/3012/122/121ms are trace data,
+not D06 evaluation. Shared parent clock and helper source domains stay separate.
 
-Initial shared Cargo/schema/plugin-api files were dirty under Integration ownership
-and were not consumed then. After Stage A commit, exact no-diff provenance was
-verified and its public API/types/docs were read. No Rust build or staging of those
-paths occurred. Build preparation did not operate the desktop. No CUA/app operation
-has occurred; the subsequently granted lane is released while common support waits.
-The four user-review P2 items remain untouched. Mac co-author RC01/RC02 keys were
-read in this repository only; their unknown geometry/roles/mapping cautions are
-recorded. No other-project links or real PlayPhrase.me app were opened.
+Reader queues are capacity1, reads byte-bounded. Only spawned Popen helper/host
+children were terminated/reaped; platform Python readers joined after reap before
+stream close. The common wrapper's own stdin reader ends with its process exit,
+as specified in its README.
+All four proof.json files record actual PIDs, exit codes and cleanup. Live children
+exited0; fault helpers exited-15 after owned SIGTERM; all hosts exited0. The test-
+created fixture was stopped separately after proof, not by detach. CUA reported
+no tree change after collection and the same focus. Native lane **released**.
 
-Stage A is supplied; Integration is preparing reusable test support over its canonical
-request/channel/session types, validator command and common lifecycle/framing
-entrypoint with explicit test limits. Only then bind this narrow collector and
-reuse that boundary's version/framing/cancel/detach negatives. A missing shared
-entrypoint returns to Integration, never becomes a second native protocol owner.
-Runtime authority is supplied; current reservation must be rechecked before use.
+## D05 samples and retention
 
-Known F02 concurrent ScreenCaptureKit continuation failure/exit124 remains an
-open M01 gate. The planned injected capture timeout will prove completed AX
-preservation only, not repair real capture concurrency. Actual AX/capture channels,
-frame metadata, unknown transforms, partial scope and injected results stay separate.
-Next action: bind the platform collector to Integration's committed reusable
-test-support handoff, preserving the real Ticket/clock and existing grant scope.
+Evidence root:
+`/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P1/D02/3642d7a8-c2a8-49b9-8d6a-4cdc7fe4b60d`
 
-Root granted a short WIP commit+push lease for Collector.swift and the two own
-handoff documents. Stage only those, push origin master, return exact SHA/index
-and release Git lease. No runtime or repeated measurements during this save.
-Then wait for committed Integration support; native desktop lane remains free.
-No temporary or durable evidence is deleted by this checkpoint.
+Minimal actual normalized examples for D05:
+`proof/live/retained/channel-0.json` —4597 bytes, one AX node/four requested fields;
+`proof/live/retained/channel-1.json` —3246 bytes, attributed capture. They are not
+largest-native-graph or parsed-heap calibration. Each case includes canonical
+request/session/submitted/retained documents and payload-free host receipts.
+Live PNG and metadata establish actual capture. report.json/provenance.json/cleanup.json
+pin checks, source/binary hashes, environment identities and owned teardown.
+Owner root; consumers D02-PROOF/D05/P1/P7; retain until P1/P7 acceptance or explicit
+discard. No raw command logs/captures are in Git or Codex/config/skill directories.
+Task-temp remains `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-s01-native-vmy829z0`.
+
+Remaining: root review of the finite proof; checkpoint+push is the saved candidate,
+not full S01/P1 acceptance. Native runtime lane remains released.
+Four P2 remain awaiting authority; D05 resource policy, real native concurrency,
+input/privacy/isolation, current probe invariance and calibrated transforms retain
+their named owners. No M01 production work or real PlayPhrase.me collection occurred.

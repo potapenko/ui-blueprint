@@ -85,100 +85,80 @@ F02 public AXPosition/AXSize and ScreenCaptureKit metadata have evidence only on
 the owned fixture. Transfer to real applications and exact AX-to-pixel transforms
 remain unverified. These cautions constrain future normalization, not new collection.
 
-## Collector WIP saved before common-support handoff
+## Executed native proof on committed common support
 
-[Collector.swift](../../tests/bridges/native/Collector.swift) is compiling source,
-not a verified live bridge. It accepts one bounded request and the committed
-Stage A artifact shapes; exact own-F02 binding and public APIs stay within the
-native packet. It can emit a descriptor without tree/pixel acquisition, then
-accept a real host Ticket sequence for separate channel replies. AX output is
-written before capture. Without a sequence only standalone Snapshot/Error
-artifacts are produced; those cannot substitute for common lifecycle proof.
+The WIP source checkpoint was `3bdf34d48bd888c91e564ee82db8dda5143b48b1`.
+After Integration supplied common support `73d772e97efcf550ea4a4d3e8480b56509ebc548`,
+[build_support.py](../../tests/bridges/native/build_support.py) built its host and
+validator from immutable Git archive inputs. Mutable neighboring CLI work was
+excluded. No generic shared check was repeated: the committed three Rust/eight
+synthetic checks supply wrong-version, malformed/oversize and generic lifecycle
+negative coverage. The native-specific live chain adds fresh channel evidence.
 
-No runtime or shared-validator check has run for this source. The defensive
-8-second helper watchdog and injected 6-second pending capture are WIP test
-mechanisms, not D05 production defaults or accepted channel deadlines. The shared
-host still must enforce explicit 1s AX/2s capture budgets, its authoritative outer
-clock/deadline, bounded framing and owned process cleanup. No concurrency fix,
-permission result, late-frame rejection or independent-session claim follows from
-compilation. Integration owns reusable framing/lifecycle/negative orchestration.
+[prove.py](../../tests/bridges/native/prove.py) wires the common executable directly:
+descriptor → real attach/begin Ticket → native canonical ChannelResponse frames →
+actual receive/complete/cancel/expire/detach → canonical retained documents.
+[Collector.swift](../../tests/bridges/native/Collector.swift) writes AX before
+waiting for capture. The helper does not create Ticket/parent-clock values or a
+lifecycle protocol. Its independent clock domain labels actual source intervals.
+Canonical channel frames also pass the same Rust validator used by the Web proof.
 
-## Next implementation after the committed Stage A SHA
+| Case | Actual acquisition | Common terminal / retained evidence | Injected portion |
+| --- | --- | --- | --- |
+| Live | AX sample + own-window ScreenCaptureKit PNG | Completed; both observed channels retained exactly | none |
+| Capture timeout | AX sample, flushed before wait | TimedOut at parent deadline; exact AX retained, capture missing | pending capture instead of calling ScreenCaptureKit; late AX-success replay rejected StaleTicket |
+| Cancel | AX sample | Cancelled; exact AX retained, capture missing | cancel after first admitted channel; late AX-success replay rejected StaleTicket |
+| Detach | AX sample | Detached; exact AX retained, capture missing | detach after first admitted channel; late AX-success replay rejected Detached |
 
-The following is the bounded execution plan, not an implemented wire schema:
+The selected control was `f02.sample.b` in exact fixture window3898, generation
+`2C9BB0E1-BD7E-419D-87A5-A3D3573A9BB9` for this run only. Raw role AXButton,
+accessibility name Activate sample, enabled=true and accessibility bounds
+(705,388,173.5,48) screen pt were reported. No layout/hit bounds substituted.
+Both channels retain partial coverage and consistency=unknown with separate API
+read intervals. The captured 1100×1022 px image visibly contains owned Window B;
+filter/window metadata is 550×511 pt, scale2. Exact AX-to-pixel mapping remains
+unknown. The whole-window image scope is explicit; it is not a sample-control crop.
 
-1. Read the committed Stage A schema/plugin API documentation and relevant exact
-   types/tests at the supplied SHA. Confirm ancestor/current-file provenance before
-   invoking a shared build. Never accept results from Integration's uncommitted files.
-2. Bind a narrow Swift test collector to the canonical envelope, preserving
-   request/session/target/surface IDs, selected fields, actual raw AX roles,
-   per-channel capabilities, source/time/clock domain and partial coverage. Use
-   actual observed properties only; missing requested values remain explicitly
-   unavailable under the canonical type. No second protocol declaration.
-3. Emit and flush the completed sanitized AX channel before capture begins. The
-   Rust common boundary owns aggregation, monotonic deadline and terminal state.
-   Transfer remaining duration to helper clock; never compare process clock readings
-   as a shared monotonic timeline. Use D05's explicit 1s AX / 2s capture test budgets
-   and Stage A's supplied outer/cleanup/frame limits, not new production defaults.
-4. After a separate runtime grant, launch only the prepared owned fixture, establish
-   exact A/B setup through Computer Use, explicitly request Snapshot, then perform
-   one common live request. Keep setup mutation separate from read-only acquisition.
-   Validate actual AX and independently attributed capture using the same committed
-   Rust validator used by the Web proof. Preserve unknown transforms and capture scope.
-5. Through the same available common boundary, exercise incompatible version,
-   malformed/oversize framing, cancel/detach and late-response rejection. Reuse
-   Stage A's focused tests where applicable and label live versus injected evidence.
-6. Inject capture timeout **after real AX completion**. The parent must retain the
-   emitted AX result, report capture timeout and reap only the owned hung helper.
-   Deliver an injected late frame to the common boundary after cancel/detach and
-   prove rejection. This is not a hung-OS/capture-concurrency repair claim.
-7. Stop the proof's own resources, release native lane, preserve minimum evidence,
-   then request the serialized Git lease for own-file commit and origin/master push.
+Explicit setup was separate: launch the prepared own F02 bundle, observe Window B,
+press Snapshot. No collection request moved/resized/focused the fixture. CUA after
+the four cases reported no tree change and the same Open A focus. That is bounded
+fixture evidence, not full no-side-effect or probe-invariance acceptance.
 
-Detach concerns session helpers/handles, not termination of the fixture or user
-apps. Closing a test-created fixture is a separately owned harness cleanup action.
-The bridge must not recollect between explicit requests or hold a global lock
-across AX/capture. Collection/channel preservation are the finite D02 consumer;
-input correctness, full privacy/lifecycle and probe invariance stay with later owners.
+## Resource, timing and cleanup accounting
 
-## Minimal consumer contract for Integration
+The literal proof limits reuse common small-frame accounting, widened in duration
+for D05 native budgets: frame65,536 bytes including newline; pending131,072 bytes;
+1 in-flight;8 frames;3,000ms parent deadline;1s AX wait;2s capture wait;1s cleanup;
+45s whole-proof process watchdog. These are explicit test inputs, not D05 memory,
+retention or production defaults. The collector has an independent 8s last-resort
+watchdog. Its injected wait performs no capture call or periodic collection.
 
-The canonical ObservationSession API is available in Stage A; an executable is
-not an additional product gate. Integration owns reusable framing/lifecycle test
-support, as requested by root, whether module/harness or executable.
+Observed host terminal elapsed values: live301ms, expiry3012ms, cancel122ms,
+detach121ms. These single proof traces are not D06 latency evaluation. The exact
+workload differs from the earlier 75-node F02 baseline: one normalized AX node
+with four selected fields, plus an explicitly attributed window capture.
 
-Native producer inputs: canonical Request Document as one bounded UTF-8 JSON line,
-explicit own manifest/output paths, test mode and **actual** Ticket.sequence from
-the common host. A descriptor-only invocation returns canonical Session Document
-from public permission preflights and exact own-target binding, without acquiring
-AX tree/pixels. Host attach+begin then supplies the real Ticket for collection.
-Collector streams canonical ChannelResponse Documents, AX flushed before capture.
-No worker invents Ticket values or parent clock readings.
+All four helper/host PIDs are recorded in each proof.json. Live helper/host exited0;
+injected helpers were terminated by this owner with SIGTERM and reaped, host exited0.
+The timeout helper was stopped after its2s capture budget before common parent
+expiry. Platform capacity-one Python reader threads were joined after producer reap; the
+common wrapper's own stdin reader ends at its process exit per its README. The separate
+owned fixture exited after the proof; plugin detach did not terminate it. Native
+lane released. No other process, Simulator, permission or display was changed.
 
-Consumer operations needed: attach(descriptor, explicit limits/parent clock domain),
-begin(request, current parent reading) returning Ticket; bounded line admission to
-receive(ticket, frame, current parent reading); complete/cancel/expire/detach;
-terminal channel/missing-channel summary and rejection of late canonical frames.
-Host uses a real monotonic clock, reaps only its owned helper on timeout/cancel,
-and runs shared wrong-version/malformed/oversize/late-response checks once. Native
-provides launched child handles, live/injected frames and channel-specific evidence;
-it does not duplicate the common orchestration. D05 channel tests use 1s AX/2s
-capture; outer/cleanup/frame/admission bounds remain explicit shared test inputs.
+Minimal D05 samples are actual core-retained canonical documents:
+`proof/live/retained/channel-0.json` (4597 bytes, one AX node) and
+`channel-1.json` (3246 bytes, capture). They are selected-fragment examples, not
+largest-native-graph or parsed-heap calibration. D05 remains Integration-owned.
+Retention/paths/hashes are in the [receipt](../plans/ui-blueprint/receipts/S01-native-proof.md).
 
-## Exact dependencies requested from Integration/root
+## Remaining boundaries
 
-- Received: Stage A `9d2df153abd2a7d7567100e06d4260e5edda3bb3` and explicit
-  own-F02 runtime lane grant. Runtime still requires checking current reservations.
-  Fixture preparation alone has no Stage A acceptance claim.
-- Integration: canonical request/channel/completion and attach/session types;
-  documented validator invocation and plugin boundary entrypoint; one native-ready
-  example with explicit outer deadline, cleanup bound and frame-size limit.
-- Integration: actual common driver or test entrypoint for streaming channel
-  completion, request cancellation/detach and stale/late-frame refusal. If the
-  committed boundary cannot express these, return that exact missing operation to
-  the shared owner. Do not build a competing lifecycle/protocol in this directory.
-
-No live request, framing negative, channel timeout, cancellation or detach proof
-has run in this preparation phase. Their status remains waiting for the reusable common test-support handoff,
-not mock pass or P1 interface freeze. A module/API harness is sufficient; no
-standalone binary requirement is invented.
+This provides the finite native D02 interface evidence; it does not independently
+accept S01/P1 or freeze compatibility. The four review P2 findings remain untouched.
+Injected capture timeout proves preservation of completed AX through the actual
+common lifecycle and bounded owned cleanup, **not** repair of F02's real concurrent
+ScreenCaptureKit continuation leak/124. M01 still owns production concurrency and
+session isolation; P01 owns current one-shot probe off/on invariance and transforms.
+No real PlayPhrase.me application was collected. No cadence or background service
+was added. Future native setup must derive fresh identities, not reuse run IDs here.
