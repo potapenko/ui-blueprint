@@ -32,7 +32,7 @@ documentation candidate separately from the author marking work complete.
 | --- | --- | --- |
 | [D01](d01-support.md) / `UIB.D01@1` / `UIB.D01.CONTENT` | Initial matrix chosen; runtime qualification open before P2 claims | T01 toolchain; W01/M01 capabilities |
 | [D02](d02-boundaries.md) / `UIB.D02@1` / `UIB.D02.CONTENT` | Packaging chosen; common interface proof open before P1 freeze | S01 protocol; W01/M01 adapters |
-| [D03](d03-data.md) / `UIB.D03@1` / `UIB.D03.CONTENT` | Data/rules responsibilities chosen; examples/validator before P1 tests | S01, G01, K01 |
+| [D03](d03-data.md) / `UIB.D03@2` / `UIB.D03.CONTENT` | Core0.1 protected; local analysis0.2 contract registered before implementation | S01/G01/L01 analysis, K01 compatibility |
 | [D04](d04-identity.md) / `UIB.D04@1` / `UIB.D04.CONTENT` | Freshness policy chosen; adversarial proof before P4/P5 | W01/M01, K02, A01 |
 | [D05](d05-limits.md) / `UIB.D05@2` / `UIB.D05.CONTENT` | Retained limits/ownership chosen in [D05-MEMORY@1](d05-memory.md); working enforcement/calibration remain | K01 storage; S01 before first live adapter; W01/M01/P01 before affected checks |
 | [D06](d06-performance.md) / `UIB.D06@1` / `UIB.D06.CONTENT` | **P0 numeric gates frozen here**, candidate not evaluated | Q02; W01/M01 instrumentation |

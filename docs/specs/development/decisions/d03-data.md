@@ -1,8 +1,8 @@
 # D03 — candidate data and rules ownership
 
 - Domain: `uib.development.d03`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence).
-- Node type: leaf; contract: `UIB.D03@1`; clause: `UIB.D03.CONTENT`.
+- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [L01-ANALYSIS-001](../../product/analysis.md#change-record).
+- Node type: leaf; contract: `UIB.D03@2`; clause: `UIB.D03.CONTENT`; supersedes @1.
 - Authority: Active / Stability: Evolving; candidate schema, no released format.
 - Read when: S01 envelopes/validator, G01 rules or K01 graph delta.
 - Do not read when: no shared data/compatibility choice is affected.
@@ -10,7 +10,8 @@
   [IDENTITY@1](../../product/identity.md), [GEOMETRY@1](../../product/geometry.md),
   [PROJECTIONS@1](../../product/projections.md), [FORMS@1](../../product/forms.md),
   [CACHE@1](../../product/cache.md), [ACTIONS@1](../../product/actions.md),
-  [GOLDEN@1](../../acceptance/golden.md), [evidence](evidence.md).
+  [GOLDEN@1](../../acceptance/golden.md), [evidence](evidence.md);
+  [ANALYSIS@1](../../product/analysis.md) and its closure for local analysis serialization.
 - Owner/deadline: S01 definitions and valid/invalid examples before P1 tests;
   G01 measurements, K01 atomic replay; final compatibility after both pilots/P3.
 
@@ -22,7 +23,7 @@ Choose Rust structs/newtypes and closed enums with serde JSON at the boundary.
 Schema owns wire types/validation; engine owns materialized graph/analysis, plugin
 API owns lifecycle/capability methods. No second schema in adapters or experiments.
 
-Initial candidate wire version is `0.1.0`; advertised accepted range initially
+Initial core transport wire version is `0.1.0`; advertised accepted range initially
 exactly `0.1.0`. It is not the illustrative `0.3-draft` from CACHE. A compatible
 range can expand only with tests. Core fields are snake_case, unknown core fields
 rejected; bounded namespaced extensions preserve native identifiers explicitly.
@@ -75,3 +76,18 @@ resize/reflow and source mappings; no Settings/Genre/Director or mobile-specific
 business meaning in schema/engine. Mobile shapes in types do not claim adapters.
 Schema candidate stays Evolving until Mac/Web P2/P5 and P3 acceptance, even if
 S01 parser/tests pass. No exported DrawingBrief implementation is decided here.
+
+## Local analysis boundary — L01-ANALYSIS-001
+
+ROADMAP delegates this technical choice under PLAN.UIB@1; root accepted the exact
+handoff8fdf608 before [registration](../../../plans/ui-blueprint/packets/L01-analysis-registration.md).
+D03@2 adds schema-owned analysis0.2 query/evaluation/measurement/check artifacts
+through ANALYSIS/TYPES/VALIDATION@1. Reuse unchanged core0.1 Snapshot/Context and
+strict transport/parser/negotiation/cache keys; old generated schema/126 fixtures
+do not migrate. No crate/dependency bump is implied by this local wire version.
+Measure JSON gains factual0.2 output; full check JSON explicitly selects0.2 while
+legacy check remains0.1. Schema contract validation is not arithmetic verification;
+the sole engine recomputes imported results. No fabricated facts or source mutation.
+Compatibility: unreleased new analysis format with explicit version rejection;
+old product meaning, accepted shared/E02 fixes and remaining live gates protected.
+Source packets and affected consumer proof follow this registration, not vice versa.

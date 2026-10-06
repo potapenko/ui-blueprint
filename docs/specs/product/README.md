@@ -2,7 +2,7 @@
 
 - Node type: branch; contract: `UIB.PRODUCT-ROUTES@1`; clause: `UIB.PRODUCT-ROUTES.ROUTE`.
 - Authority: Active / Stability: Evolving; routing only; accepted/released baseline: none.
-- Authority source: [registry](../README.md), C00 faithful routing of user-confirmed originals.
+- Authority source: [registry](../README.md), C00 faithful routing of user-confirmed originals; L01-ANALYSIS-001 adds the delegated analysis route.
 - Read when: выбор поведения/данных/экспорта.
 - Do not read when: путь уже установлен и актуален.
 - Requires: только выбранные ниже листья и их explicit closure.
@@ -26,6 +26,7 @@
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
 | [UIB.CLI@1](cli.md) | CLI commands, compact/JSON и публикация; contract |
+| [UIB.ANALYSIS@1](analysis.md) | local measurement/check0.2, result-space/evaluation, validation layers and protected0.1 compatibility; contract with types/validation closure |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |
 | [UIB.EXPORT@1](export.md) | E01/E02, imagegen-prompt, человеческий экспорт; contract |
@@ -44,7 +45,7 @@ Acceptance выбирается по [карте проверок](../acceptance
 | Consumer | Выбор перед explicit dependency closure |
 | --- | --- |
 | C01/T01 | ROADMAP; RUST-BOUNDARIES; DEV.RUST@1 по trigger; REUSE и принятые source records |
-| S01/L01 | MODEL, EXCHANGE, CLI, GOLDEN; schema решения D03 |
+| S01/L01 | MODEL, EXCHANGE, CLI, GOLDEN; schema решения D03; ANALYSIS для local analysis JSON/evaluation |
 | G01/G02 | GEOMETRY, PROJECTIONS; NATIVE для probe mapping; platform PILOTS по проверке |
 | W01/M01/P01 | соответствующий PILOTS; для Native NATIVE; его requires включает privacy/lifecycle |
 | K01–K02/W03/M03 | CACHE, LIFECYCLE, GOLDEN; соответствующий PILOTS для живых событий |
