@@ -1,0 +1,25 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>R01 owned fixture</title>
+<style>
+body { margin: 0; height: 1600px; }
+button { position: absolute; width: 120px; height: 40px; padding: 0; border: 0; }
+#left { left: 40px; top: 60px; }
+#right { left: 200px; top: 60px; }
+#hidden { display: none; }
+iframe { position: absolute; left: 40px; top: 200px; width: 300px; height: 150px; border: 0; }
+</style>
+<button id="left"><span aria-hidden="true">★</span><span>Apply</span></button>
+<button id="right">Apply</button>
+<button id="hidden">Hidden</button>
+<output id="outcome" data-delivered="0" data-applied="0"></output>
+<iframe id="child" title="Owned child" srcdoc="<!doctype html><style>body{margin:0}button{position:absolute;left:12px;top:18px;width:90px;height:30px;border:0;padding:0}</style><button id='child-button'>Apply</button>"></iframe>
+<script>
+// A fixture transition, not collector code. Delivery and application result differ.
+document.addEventListener('click', event => {
+  if (!event.target.closest('#left')) return;
+  const out = document.querySelector('#outcome');
+  out.dataset.delivered = String(Number(out.dataset.delivered) + 1);
+  setTimeout(() => { out.dataset.applied = out.dataset.delivered; }, 40);
+});
+</script>
