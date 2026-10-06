@@ -610,6 +610,7 @@ pub enum Artifact {
     Session(SessionDescriptor),
     SessionContext(SessionCase),
     ResolutionRefusal(ResolutionRefusal),
+    ChannelResponse(ChannelResponse),
     Capability(Capability),
     Property(PropertyCase),
     Observation(Observation),
@@ -676,3 +677,7 @@ record!(TargetCandidate {
     owner_binding: Availability
 });
 record!(ResolutionRefusal { requested: Context, candidates: Vec<TargetCandidate>, issue: Issue, dispatched: bool });
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(tag = "status", content = "data", rename_all = "snake_case", deny_unknown_fields)]
+pub enum ChannelResult { Observed(Box<Snapshot>), Failed(Issue) }
+record!(ChannelResponse { request_id: Id, session_id: Id, dispatch_sequence: u64, target: Identity, channel: Channel, result: ChannelResult });

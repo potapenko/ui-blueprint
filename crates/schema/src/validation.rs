@@ -124,6 +124,7 @@ fn validate_semantics(artifact: &Artifact) -> Result {
                 ValidationError::InvalidOutcome,
             )
         }
+        Artifact::ChannelResponse(x) => match &x.result { ChannelResult::Observed(snapshot) => { validate_snapshot(snapshot)?; require(snapshot.context.session_id == x.session_id && snapshot.context.target == x.target && snapshot.observations.iter().all(|o| o.channel == x.channel),ValidationError::IncompatibleContext) }, ChannelResult::Failed(_) => Ok(()) },
         Artifact::Capability(x) => validate_capability(x),
         Artifact::Observation(x) => validate_observation(x),
         Artifact::Property(x) => {
