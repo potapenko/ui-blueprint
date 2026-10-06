@@ -1,0 +1,125 @@
+//! Local saved-data analysis. Never attaches to a runtime or loads input URLs.
+#![forbid(unsafe_code)]
+
+mod arguments;
+mod input;
+mod output;
+
+use arguments::{Arguments, Command};
+use std::{
+    io::{self, Write},
+    process::ExitCode,
+};
+use uiblueprint_engine::{self as engine, EvaluationContext, MeasurementResult};
+use uiblueprint_schema::{model::*, validation};
+
+const HELP: &str = "UI Blueprint: local saved-snapshot geometry\n\
+Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--json]\n\
+Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
+JSON is available for check. Measure JSON awaits a canonical measurement record.\n\
+Exits: 0 pass/known; 1 IO/internal; 2 invalid/limit; 3 fail; 4 unknown; 5 unsupported/contract gap.\n";
+
+#[derive(Clone, Copy, Debug)]
+struct Failure {
+    code: &'static str,
+    exit: u8,
+}
+impl Failure {
+    const fn invalid(code: &'static str) -> Self {
+        Self { code, exit: 2 }
+    }
+    const fn unsupported(code: &'static str) -> Self {
+        Self { code, exit: 5 }
+    }
+    const fn io() -> Self {
+        Self {
+            code: "io_error",
+            exit: 1,
+        }
+    }
+}
+
+fn execute(args: Arguments) -> Result<(Vec<u8>, u8), Failure> {
+    if args.command == Command::Measure && args.json {
+        return Err(Failure::unsupported("consumer_contract_gap"));
+    }
+    let (snapshot, expectation) = input::load(&args)?;
+    if !matches!(expectation.rule, Rule::Geometry { .. }) {
+        return Err(Failure::unsupported("unsupported_rule"));
+    }
+    let space = input::space(&snapshot, &expectation, &args.space)?;
+    // FindingCase retains anchor source spaces, but cannot record a separately
+    // selected result space. Do not serialize a converted quantity ambiguously.
+    if args.json
+        && let Rule::Geometry { anchors, .. } = &expectation.rule
+        && anchors
+            .iter()
+            .any(|anchor| anchor.coordinate_space != space)
+    {
+        return Err(Failure::unsupported("consumer_contract_gap"));
+    }
+    let context = EvaluationContext {
+        space: &space,
+        transforms: &[],
+        conditions: None,
+    };
+    match args.command {
+        Command::Check => {
+            let result = engine::check(&snapshot, &expectation, &context)
+                .map_err(|_| Failure::invalid("invalid_geometry"))?;
+            validation::validate_finding(&snapshot, &expectation, &result.finding)
+                .map_err(|_| Failure::unsupported("consumer_contract_gap"))?;
+            let exit = match result.finding.status {
+                CheckStatus::Pass => 0,
+                CheckStatus::Fail => 3,
+                CheckStatus::Unknown => 4,
+            };
+            let bytes = if args.json {
+                output::json(snapshot, expectation, result.finding, args.max_output)?
+            } else {
+                output::compact(
+                    &args,
+                    &snapshot,
+                    &expectation,
+                    &result.measurement,
+                    Some(result.finding.status),
+                )?
+            };
+            Ok((bytes, exit))
+        }
+        Command::Measure => {
+            let result = engine::measure(&snapshot, &expectation, &context)
+                .map_err(|_| Failure::invalid("invalid_geometry"))?;
+            let exit = if matches!(result, MeasurementResult::Known(_)) {
+                0
+            } else {
+                4
+            };
+            Ok((
+                output::compact(&args, &snapshot, &expectation, &result, None)?,
+                exit,
+            ))
+        }
+    }
+}
+
+fn main() -> ExitCode {
+    let args: Vec<_> = std::env::args_os().skip(1).collect();
+    let result = if args.len() == 1 && args[0] == "--help" {
+        Ok((HELP.as_bytes().to_vec(), 0))
+    } else {
+        Arguments::parse(args).and_then(execute)
+    };
+    let (bytes, exit) = match result {
+        Ok(value) => value,
+        Err(failure) => {
+            let _ = writeln!(io::stderr().lock(), "{}", failure.code);
+            return ExitCode::from(failure.exit);
+        }
+    };
+    if io::stdout().lock().write_all(&bytes).is_err() {
+        let _ = writeln!(io::stderr().lock(), "io_error");
+        return ExitCode::from(1);
+    }
+    ExitCode::from(exit)
+}
