@@ -88,3 +88,14 @@ Current-operation build output uses system temp, removed and verified after use.
 Completion: coherent saved/pushed source with exact paths, API handoff, attributed
 checks and remaining host/provider/live dependencies; request short Git lease.
 Inheritance/no nested delegation/master/user-approved parallel goal unchanged.
+
+
+Narrow shared-owner integration dependency, before Web trait compilation: Core alone
+may add plugins/web/Cargo.toml's path dependency on existing uiblueprint-plugin-api
+at ../../crates/plugin-api and the corresponding Cargo.lock package dependency edge.
+Current Web manifest was schema-only per its source handoff. No package/version/
+feature/update/network/new dependency adoption; preserve existing pins and policies.
+This internal edge connects the already selected canonical lifecycle owner, avoiding
+another executor. Include exact two paths in Core coherent checkpoint; Web validates
+its affected consumer only after saved Core API/edge. Do not compile or claim Web
+unfinished WIP accepted as part of Core package tests.
