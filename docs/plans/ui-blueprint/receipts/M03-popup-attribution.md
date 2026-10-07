@@ -120,3 +120,40 @@ or deleted. Retention is through this immediate operation, not persistent archiv
 remove owned non-image outputs at its finish, preserve all image paths/dirs if created.
 Live public popover binding/positive capture and independent repair acceptance remain
 open. Request short exact4 Git lease; no next runtime is authorized by this receipt.
+
+## First actual own-popup qualification — interrupted before Snapshot
+
+Same-reviewer accepted71c82f47 repair; root activated one bounded own A popup run.
+Verified retained helper a0b43bdd…6a2f1ad and exact repaired source bytes; built only
+matching saved off fixture bundle plus saved CLI/worker for the immediate operation.
+No prior suites, moving other-owner source or code change. CLI@5 complete OBSERVE/
+INSPECT route read; no recorded-diff scope needed. Preparation duration is separate
+from runtime and is not a D06 timing claim.
+
+A bounded launcher owned PID60891/canonical fixture path/unique current run-dir.
+Cleanup was in its finally block with independent5s bound, never after an outer
+assertion. Current CUA bound exact own A; existing Edge popup action showed real
+popover, f02.popup.owner.a and Confirm popup. Next Snapshot action was rejected
+before confirmation with tool notice that app state changed and must be re-queried.
+Fresh full same-provider AX state then showed no popup. The cause of dismissal/
+state change was not established; do not call it permission denial or mapping failure.
+
+No a.json/Snapshot manifest existed. Popup identity-only file existed CLOSED, matching
+the observed closed state. Actual FixturePopupAttribution.window Snapshot path was
+not executed, so public window mapping is NOT qualified or disproved by this attempt.
+No canonical popup config/observe/inspect, close-stale/new-positive chain or capture
+was run. No reopened/forced Snapshot or unchanged retry, B capture, source app,
+permissions/display/backend or pointer claim. Classify this interval interrupted.
+
+Operation stopped explicitly; finally cleanup confirmed exact own fixture exit,
+elapsed153.39s inside300s and outer_timeout=false. Physical lane released. All current
+non-image retained repair/build/cache/source/working files under uib-m03-repair-azfmpl29
+were removed after consumption; absence verified. Image count0; no image or containing
+directory deleted, no persistent output/archive, old assets/evidence untouched.
+
+Finite next dependency is a supported stable own-popup→explicit Snapshot setup
+interval; first tool notice/refreshed popup absence is the exact failure boundary.
+No new product-source defect or public-API impossibility inferred. Current source
+and synthetic acceptance remain intact; real public popup binding/canonical AX/positive
+capture/M03 remain waiting_evidence. One-path human outcome checkpoint pending root
+Git lease; no running process/resources/index or additional runtime attempt held.
