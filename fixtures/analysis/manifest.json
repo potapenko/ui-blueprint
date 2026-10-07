@@ -286,5 +286,71 @@
     "contract_valid": true,
     "structural_valid": true,
     "engine_verification": "mismatch"
+  },
+  {
+    "path": "invalid-details-array-scalar.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-details-array-insets.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-details-array-intersection.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-details-array-gaps.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-result-array-known.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-result-array-unknown.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-check-result-array.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-artifact-array-geometry-query.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-artifact-array-evaluation-input.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-artifact-array-measurement.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
+  },
+  {
+    "path": "invalid-artifact-array-geometry-check.json",
+    "contract_valid": false,
+    "structural_valid": false,
+    "engine_verification": "not_checked"
   }
 ]

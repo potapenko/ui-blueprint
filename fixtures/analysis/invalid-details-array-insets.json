@@ -79,40 +79,6 @@
               {
                 "selection": "requested",
                 "field": "layout_bounds",
-                "sensitivity": "sensitive",
-                "evidence": {
-                  "observation_id": "OG1",
-                  "source_namespace": "fixture.authored_layout",
-                  "provenance": "reported",
-                  "method": "authored_fixture",
-                  "uncertainty": null
-                },
-                "state": {
-                  "availability": "redacted"
-                }
-              }
-            ]
-          },
-          {
-            "key": {
-              "namespace": "fixture.authored_layout",
-              "key": "B"
-            },
-            "surface": {
-              "id": "window-1",
-              "generation": "w1"
-            },
-            "native_role": {
-              "availability": "unsupported",
-              "reason": "not_exposed"
-            },
-            "children": [],
-            "extensions": [],
-            "source_declarations": [],
-            "properties": [
-              {
-                "selection": "requested",
-                "field": "layout_bounds",
                 "sensitivity": "public",
                 "evidence": {
                   "observation_id": "OG1",
@@ -136,67 +102,9 @@
                       "shape": {
                         "shape": "rect",
                         "value": {
-                          "x": 48,
+                          "x": 10,
                           "y": 20,
-                          "width": 20,
-                          "height": 10
-                        }
-                      },
-                      "transform": {
-                        "status": "local_only"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "key": {
-              "namespace": "fixture.authored_layout",
-              "key": "C"
-            },
-            "surface": {
-              "id": "window-1",
-              "generation": "w1"
-            },
-            "native_role": {
-              "availability": "unsupported",
-              "reason": "not_exposed"
-            },
-            "children": [],
-            "extensions": [],
-            "source_declarations": [],
-            "properties": [
-              {
-                "selection": "requested",
-                "field": "layout_bounds",
-                "sensitivity": "public",
-                "evidence": {
-                  "observation_id": "OG1",
-                  "source_namespace": "fixture.authored_layout",
-                  "provenance": "reported",
-                  "method": "authored_fixture",
-                  "uncertainty": null
-                },
-                "state": {
-                  "availability": "known",
-                  "value": {
-                    "type": "geometry",
-                    "value": {
-                      "frame_kind": "layout_bounds",
-                      "coordinate_space": {
-                        "id": "local-form",
-                        "kind": "local",
-                        "units": "css_px",
-                        "origin": "top_left"
-                      },
-                      "shape": {
-                        "shape": "rect",
-                        "value": {
-                          "x": 76,
-                          "y": 20,
-                          "width": 20,
+                          "width": 30,
                           "height": 10
                         }
                       },
@@ -310,7 +218,7 @@
           },
           {
             "namespace": "fixture.authored_layout",
-            "key": "B"
+            "key": "container"
           }
         ],
         "applies_when": {
@@ -318,7 +226,7 @@
           "input_mode": null,
           "text_scale": null
         },
-        "operation": "gap",
+        "operation": "inside",
         "anchors": [
           {
             "element": {
@@ -332,13 +240,13 @@
               "units": "css_px",
               "origin": "top_left"
             },
-            "fraction": 1,
+            "fraction": 0.5,
             "axis": "x"
           },
           {
             "element": {
               "namespace": "fixture.authored_layout",
-              "key": "B"
+              "key": "container"
             },
             "frame_kind": "layout_bounds",
             "coordinate_space": {
@@ -347,7 +255,7 @@
               "units": "css_px",
               "origin": "top_left"
             },
-            "fraction": 0,
+            "fraction": 0.5,
             "axis": "x"
           }
         ],
@@ -391,17 +299,39 @@
         "conditions": null
       },
       "result": {
-        "status": "unknown",
-        "reason": "redacted_property",
-        "evidence": [
-          {
-            "observation_id": "OG1",
-            "source_namespace": "fixture.authored_layout",
-            "provenance": "reported",
-            "method": "authored_fixture",
-            "uncertainty": null
-          }
-        ]
+        "status": "known",
+        "measurement": {
+          "value": {
+            "type": "quantity",
+            "value": {
+              "amount": 10,
+              "kind": "length",
+              "source_units": "css_px"
+            }
+          },
+          "space": {
+            "id": "local-form",
+            "kind": "local",
+            "units": "css_px",
+            "origin": "top_left"
+          },
+          "details": [
+            "insets",
+            10,
+            20,
+            80,
+            30
+          ],
+          "evidence": [
+            {
+              "observation_id": "OG1",
+              "source_namespace": "fixture.authored_layout",
+              "provenance": "reported",
+              "method": "authored_fixture",
+              "uncertainty": null
+            }
+          ]
+        }
       }
     }
   }

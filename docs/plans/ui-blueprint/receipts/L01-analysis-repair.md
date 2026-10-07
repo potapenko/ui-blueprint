@@ -1,8 +1,8 @@
 # ANALYSIS-R2 — manifest-driven engine verification
 
-Status: Core test implemented; known fixture defect reproduced once.
-waiting_evidence: Integration owns saved R1 decoder and R2 redacted evidence repair.
-No production/fixture/schema change or acceptance claim by Core.
+Status: initial manifest test/red-proof saved at cffd8d3; combined bounded repair
+is now author-checked. No self-acceptance. The ownership update below supersedes
+the initial test-only scope and waiting_evidence record.
 
 ## Basis and exact scope
 
@@ -61,16 +61,27 @@ Input/test SHA256 at reproduction:
 
 Own rustfmt and changed link/whitespace checks passed. No raw command logs retained.
 
-## Remaining proof / checkpoint
+## Ownership transfer and green proof
 
-Await Integration's saved canonical enum/fixture correction; do not weaken the
-match label or erase attempted evidence. Then freeze the affected inputs and run
-focused engine analysis, affected schema/validator/CLI analysis consumers and
-scoped check/fmt/Clippy as coordinated by root. Reuse unaffected150-test evidence;
-no full workspace repeat without a new concrete regression. Same reviewer receives
-saved repairs and proof; Core does not self-accept R1/R2.
+Updated packet0736ec7 retired Integration's queued source assignment before it
+started and explicitly assigned Core the decoder/fixture/test scope. The original
+engine manifest test/expected labels remain unchanged at SHA051aa129…549a8c.
+[Canonical repair receipt](S01-analysis-repair.md) records exact source mechanism,
+paths, commands, hashes and boundary; no production engine calculation changed.
 
-Root granted only the test and this receipt after `a21b69a`, explicitly as an
-initial known-failing-fixture checkpoint, not acceptance. Terminal chat returns
-SHA/push/release. No additional Cargo checks before root confirms saved Integration
-corrections and stable Web lock. No schema/fixture/production/cache/export edits.
+Root released Cargo checks after Web stabilized its manifests. Focused check/fmt/
+Clippy and49 affected tests passed. All59 manifest rows now pass their expected
+layer:28 engine match,3 ResultMismatch,2 input-only NotAResult,26 parser/contract
+rejections. Redacted evidence was repaired from source provenance, not suppressed.
+No full workspace/Web suite or unchanged failing-input repeat was performed.
+
+Stable before/after278-input hash:
+`bc410094569952089186bdc5c9bf745a36bbdd2a41e5fc2df70a8b8946c8e724`.
+Root Cargo/lock pins and input-map definition are in the canonical repair receipt.
+Final proof will bind to Web's matching saved manifest identity without repeating
+unchanged checks. Own source/fixtures are frozen; only receipts can change.
+
+Root granted the exact20 canonical repair/receipt paths; the engine test is already
+saved and excluded. Same reviewer receives saved R1/R2 before acceptance; prior
+unaffected150-test evidence is reused. Terminal chat records SHA/push/Git release.
+No old core schema/fixtures, engine production, CLI/export/cache or Cargo changes.

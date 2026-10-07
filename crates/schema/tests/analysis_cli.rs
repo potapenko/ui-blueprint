@@ -75,3 +75,41 @@ fn two_version_dispatch_is_bounded_strict_and_payload_free() {
         assert!(output.stderr.is_empty());
     }
 }
+
+#[test]
+fn positional_analysis_enums_reject_in_actual_validator_without_payload_echo() {
+    let positive = fs::read(root().join("fixtures/analysis/measurement-gap.json")).unwrap();
+    assert_eq!(run_stdin(&positive, positive.len()).status.code(), Some(0));
+    for name in [
+        "invalid-details-array-scalar",
+        "invalid-result-array-known",
+        "invalid-result-array-unknown",
+        "invalid-check-result-array",
+        "invalid-artifact-array-geometry-query",
+        "invalid-artifact-array-evaluation-input",
+        "invalid-artifact-array-measurement",
+        "invalid-artifact-array-geometry-check",
+    ] {
+        let mut value: Value = serde_json::from_slice(
+            &fs::read(
+                root()
+                    .join("fixtures/analysis")
+                    .join(format!("{name}.json")),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+        // A valid changed source identifier must not escape through parse errors.
+        if let Some(snapshot) = value.pointer_mut("/artifact/data/snapshot") {
+            snapshot["source_state"] = serde_json::json!("PRIVATE-ARRAY-CANARY");
+        }
+        let bytes = serde_json::to_vec(&value).unwrap();
+        let output = run_stdin(&bytes, bytes.len());
+        assert_eq!(output.status.code(), Some(2), "{name}");
+        let result: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(result["valid"], false);
+        assert_eq!(result["code"], "invalid_document");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("CANARY"));
+        assert!(output.stderr.is_empty());
+    }
+}

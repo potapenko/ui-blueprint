@@ -28,8 +28,11 @@ def measurement(name="GEO-GAP", details=None):
 
 
 def save(name, data, kind="measurement", valid=True, structural=True, engine="not_checked"):
-    (OUT / (name + ".json")).write_text(json.dumps(dict(schema_version="0.2.0",
-        artifact=dict(kind=kind, data=data)), ensure_ascii=False, indent=2) + "\n")
+    path = OUT / (name + ".json")
+    text = json.dumps(dict(schema_version="0.2.0", artifact=dict(kind=kind, data=data)),
+        ensure_ascii=False, indent=2) + "\n"
+    if not path.exists() or path.read_text() != text:
+        path.write_text(text)
     cases.append(dict(path=name + ".json", contract_valid=valid, structural_valid=structural,
         engine_verification=engine))
 
@@ -97,7 +100,7 @@ d["evaluation"]["context"] = C(d["snapshot"]["context"])
 save("not-requested", unknown(d,"not_requested"), engine="match")
 d = C(gap); p = d["snapshot"]["nodes"][0]["properties"][0]
 p["sensitivity"] = "sensitive"; p["state"] = dict(availability="redacted")
-save("redacted", unknown(d,"redacted_property"), engine="match")
+save("redacted", unknown(d,"redacted_property",[p["evidence"]]), engine="match")
 d = C(gap); d["query"]["targets"].append(dict(namespace="fixture.authored_layout",key="absent"))
 save("missing-target", unknown(d,"target_unresolved"), engine="match")
 d = C(gap); geom(d)["shape"] = dict(shape="polygon",value=[dict(x=10,y=20),dict(x=40,y=20),dict(x=40,y=30)])
@@ -189,6 +192,31 @@ d=C(check);d["measurement"]["measurement"]["value"]["value"]["amount"]=9
 d["finding"].update(status="fail",reason="expectation_mismatch",measured=C(d["measurement"]["measurement"]["value"]))
 save("tampered-check-contract-only",d,"geometry_check",engine="mismatch")
 save("tampered-unknown-contract-only",unknown(C(gap),"unknown_property"),engine="mismatch")
+
+# R1: positional forms violate the existing object-only schema at each enum boundary.
+for name, source_name, replacement in [
+    ("invalid-details-array-scalar", "measurement-gap", ["scalar"]),
+    ("invalid-details-array-insets", "insets", ["insets", 10, 20, 80, 30]),
+    ("invalid-details-array-intersection", "intersection", ["intersection", dict(x=35,y=25,width=5,height=5)]),
+    ("invalid-details-array-gaps", "ordered-gaps", ["gaps", [8,8]]),
+]:
+    d=C(json.loads((OUT / (source_name + ".json")).read_text())["artifact"]["data"])
+    d["result"]["measurement"]["details"] = replacement
+    save(name,d,valid=False,structural=False)
+d=C(gap);d["result"]=["known",C(gap["result"]["measurement"])]
+save("invalid-result-array-known",d,valid=False,structural=False)
+d=C(gap);d["result"]=["unknown","unknown_property",[]]
+save("invalid-result-array-unknown",d,valid=False,structural=False)
+d=C(check);d["measurement"]=["known",C(check["measurement"]["measurement"])]
+save("invalid-check-result-array",d,"geometry_check",valid=False,structural=False)
+for kind, payload in [("geometry_query",gap["query"]),("evaluation_input",gap["evaluation"]),
+                      ("measurement",gap),("geometry_check",check)]:
+    name="invalid-artifact-array-" + kind.replace("_", "-")
+    path=OUT / (name + ".json")
+    text=json.dumps(dict(schema_version="0.2.0",artifact=[kind,C(payload)]),ensure_ascii=False,indent=2)+"\n"
+    if not path.exists() or path.read_text()!=text:
+        path.write_text(text)
+    cases.append(dict(path=name+".json",contract_valid=False,structural_valid=False,engine_verification="not_checked"))
 
 (OUT / "manifest.json").write_text(json.dumps(cases,indent=2)+"\n")
 print(f"Authored {len(cases)} analysis cases; no engine invoked.")

@@ -79,7 +79,7 @@
               {
                 "selection": "requested",
                 "field": "layout_bounds",
-                "sensitivity": "sensitive",
+                "sensitivity": "public",
                 "evidence": {
                   "observation_id": "OG1",
                   "source_namespace": "fixture.authored_layout",
@@ -88,7 +88,31 @@
                   "uncertainty": null
                 },
                 "state": {
-                  "availability": "redacted"
+                  "availability": "known",
+                  "value": {
+                    "type": "geometry",
+                    "value": {
+                      "frame_kind": "layout_bounds",
+                      "coordinate_space": {
+                        "id": "local-form",
+                        "kind": "local",
+                        "units": "css_px",
+                        "origin": "top_left"
+                      },
+                      "shape": {
+                        "shape": "rect",
+                        "value": {
+                          "x": 10,
+                          "y": 20,
+                          "width": 30,
+                          "height": 10
+                        }
+                      },
+                      "transform": {
+                        "status": "local_only"
+                      }
+                    }
+                  }
                 }
               }
             ]
@@ -390,19 +414,11 @@
         "transforms": [],
         "conditions": null
       },
-      "result": {
-        "status": "unknown",
-        "reason": "redacted_property",
-        "evidence": [
-          {
-            "observation_id": "OG1",
-            "source_namespace": "fixture.authored_layout",
-            "provenance": "reported",
-            "method": "authored_fixture",
-            "uncertainty": null
-          }
-        ]
-      }
+      "result": [
+        "unknown",
+        "unknown_property",
+        []
+      ]
     }
   }
 }

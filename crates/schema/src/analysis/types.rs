@@ -2,6 +2,59 @@ use crate::model::{record, *};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+// Same map-only boundary as model::record!: preserve Serde's duplicate/unknown
+// member handling, but never permit its sequence representation of an enum.
+// The macro keeps each public variant/field inventory in one declaration.
+fn map_only<'de, D, T>(decoder: D) -> Result<T, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    T: Deserialize<'de>,
+{
+    struct MapOnly<T>(std::marker::PhantomData<T>);
+    impl<'de, T: Deserialize<'de>> serde::de::Visitor<'de> for MapOnly<T> {
+        type Value = T;
+        fn expecting(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            formatter.write_str("an object record")
+        }
+        fn visit_map<A: serde::de::MapAccess<'de>>(self, access: A) -> Result<T, A::Error> {
+            T::deserialize(serde::de::value::MapAccessDeserializer::new(access))
+        }
+    }
+    decoder.deserialize_map(MapOnly(std::marker::PhantomData))
+}
+macro_rules! strict_enum {
+    ($(#[$meta:meta])* pub enum $name:ident { $($variant:ident { $($field:ident: $ty:ty),* $(,)? }),* $(,)? }) => {
+        #[derive(Clone, Debug, PartialEq, Serialize, JsonSchema)]
+        $(#[$meta])*
+        pub enum $name { $($variant { $($field: $ty),* }),* }
+        impl<'de> Deserialize<'de> for $name {
+            fn deserialize<D: serde::Deserializer<'de>>(decoder: D) -> Result<Self, D::Error> {
+                #[derive(Deserialize)]
+                $(#[$meta])*
+                enum Fields { $($variant { $($field: $ty),* }),* }
+                Ok(match map_only::<D, Fields>(decoder)? {
+                    $(Fields::$variant { $($field),* } => Self::$variant { $($field),* }),*
+                })
+            }
+        }
+    };
+    ($(#[$meta:meta])* pub enum $name:ident { $($variant:ident($ty:ty)),* $(,)? }) => {
+        #[derive(Clone, Debug, PartialEq, Serialize, JsonSchema)]
+        $(#[$meta])*
+        pub enum $name { $($variant($ty)),* }
+        impl<'de> Deserialize<'de> for $name {
+            fn deserialize<D: serde::Deserializer<'de>>(decoder: D) -> Result<Self, D::Error> {
+                #[derive(Deserialize)]
+                $(#[$meta])*
+                enum Fields { $($variant($ty)),* }
+                Ok(match map_only::<D, Fields>(decoder)? {
+                    $(Fields::$variant(value) => Self::$variant(value)),*
+                })
+            }
+        }
+    };
+}
+
 /// Exact local analysis version. It does not participate in plugin negotiation.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, JsonSchema)]
 pub enum AnalysisVersion {
@@ -71,9 +124,9 @@ record!(
     }
 );
 
+strict_enum! {
 /// Rect details are in the selected result space; insets are not padding and
 /// intersection is not a claim about visual occlusion.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum MeasurementDetails {
     Scalar {},
@@ -89,6 +142,7 @@ pub enum MeasurementDetails {
     Gaps {
         values: Vec<f64>,
     },
+}
 }
 record!(Measurement {
     value: Value, space: Space, details: MeasurementDetails, evidence: Vec<Evidence>
@@ -154,7 +208,7 @@ impl<'de> Deserialize<'de> for MeasurementUnknownReason {
     }
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+strict_enum! {
 #[serde(tag = "status", rename_all = "snake_case", deny_unknown_fields)]
 pub enum MeasurementResult {
     Known {
@@ -164,6 +218,7 @@ pub enum MeasurementResult {
         reason: MeasurementUnknownReason,
         evidence: Vec<Evidence>,
     },
+}
 }
 impl MeasurementResult {
     pub fn unknown_reason(&self) -> Option<MeasurementUnknownReason> {
@@ -187,7 +242,7 @@ record!(GeometryCheckCase {
     finding: Finding
 });
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
+strict_enum! {
 #[serde(
     tag = "kind",
     content = "data",
@@ -199,6 +254,7 @@ pub enum AnalysisArtifact {
     EvaluationInput(Box<EvaluationInput>),
     Measurement(Box<MeasurementCase>),
     GeometryCheck(Box<GeometryCheckCase>),
+}
 }
 record!(AnalysisDocument {
     schema_version: AnalysisVersion,

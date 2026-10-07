@@ -268,3 +268,108 @@ fn typed_nonfinite_metadata_and_extra_capacity_cannot_hide() {
     assert_eq!(after.1.bytes - before.1.bytes, added);
     assert_eq!(serde_json::to_vec(&doc).unwrap(), wire);
 }
+
+fn enum_object_array_parity<T>(objects: Vec<serde_json::Value>, arrays: Vec<serde_json::Value>)
+where
+    T: serde::de::DeserializeOwned
+        + serde::Serialize
+        + schemars::JsonSchema
+        + PartialEq
+        + std::fmt::Debug,
+{
+    let schema = serde_json::to_value(schemars::schema_for!(T)).expect("enum schema");
+    let validator = jsonschema::validator_for(&schema).expect("local schema");
+    for object in objects {
+        assert!(validator.is_valid(&object), "object must stay schema-valid");
+        let decoded: T = serde_json::from_value(object.clone()).expect("valid object form");
+        let encoded = serde_json::to_value(&decoded).expect("encode");
+        assert!(validator.is_valid(&encoded));
+        let reparsed: T = serde_json::from_value(encoded).expect("object roundtrip");
+        assert_eq!(reparsed, decoded);
+    }
+    for array in arrays {
+        assert!(
+            !validator.is_valid(&array),
+            "schema rejects positional enum"
+        );
+        assert!(
+            serde_json::from_value::<T>(array).is_err(),
+            "runtime must reject positional enum before semantics"
+        );
+    }
+}
+
+#[test]
+fn all_analysis_enum_variants_require_objects_and_preserve_positive_parity() {
+    let rect = json!({"x":35,"y":25,"width":5,"height":5});
+    enum_object_array_parity::<MeasurementDetails>(
+        vec![
+            json!({"kind":"scalar"}),
+            json!({"kind":"insets","left":10,"top":20,"right":80,"bottom":30}),
+            json!({"kind":"intersection","rect":rect}),
+            json!({"kind":"intersection","rect":null}),
+            json!({"kind":"gaps","values":[8,-2]}),
+        ],
+        vec![
+            json!(["scalar"]),
+            json!(["insets", 10, 20, 80, 30]),
+            json!(["intersection", rect]),
+            json!(["intersection", null]),
+            json!(["gaps", [8, -2]]),
+        ],
+    );
+    let gap: serde_json::Value =
+        serde_json::from_slice(&analysis_fixture("measurement-gap")).expect("fixture");
+    let measurement = gap["artifact"]["data"]["result"]["measurement"].clone();
+    enum_object_array_parity::<MeasurementResult>(
+        vec![
+            json!({"status":"known","measurement":measurement}),
+            json!({"status":"unknown","reason":"unknown_property","evidence":[]}),
+        ],
+        vec![
+            json!(["known", measurement]),
+            json!(["unknown", "unknown_property", []]),
+        ],
+    );
+    let mut objects = Vec::new();
+    let mut arrays = Vec::new();
+    for name in [
+        "query-gap",
+        "evaluation-local",
+        "measurement-gap",
+        "check-pass",
+    ] {
+        let value: serde_json::Value =
+            serde_json::from_slice(&analysis_fixture(name)).expect("fixture");
+        let artifact = value["artifact"].clone();
+        arrays.push(json!([artifact["kind"], artifact["data"]]));
+        objects.push(artifact);
+    }
+    enum_object_array_parity::<AnalysisArtifact>(objects, arrays);
+}
+
+#[test]
+fn map_only_enum_adaptation_keeps_duplicate_and_unknown_member_rejection() {
+    for text in [
+        r#"{"kind":"scalar","kind":"scalar"}"#,
+        r#"{"kind":"scalar","extra":1}"#,
+        r#"{"kind":"scalar","value":null}"#,
+    ] {
+        assert!(serde_json::from_str::<MeasurementDetails>(text).is_err());
+    }
+    for text in [
+        r#"{"status":"unknown","status":"unknown","reason":"unknown_property","evidence":[]}"#,
+        r#"{"status":"unknown","reason":"unknown_property","reason":"redacted_property","evidence":[]}"#,
+        r#"{"status":"unknown","reason":"unknown_property","evidence":[],"extra":1}"#,
+    ] {
+        assert!(serde_json::from_str::<MeasurementResult>(text).is_err());
+    }
+    let query: serde_json::Value =
+        serde_json::from_slice(&analysis_fixture("query-gap")).expect("fixture");
+    let payload = serde_json::to_string(&query["artifact"]["data"]).expect("query body");
+    let duplicate =
+        format!("{{\"kind\":\"geometry_query\",\"data\":{payload},\"data\":{payload}}}");
+    let unknown = format!("{{\"kind\":\"geometry_query\",\"data\":{payload},\"extra\":1}}");
+    assert!(serde_json::from_str::<AnalysisArtifact>(&duplicate).is_err());
+    assert!(serde_json::from_str::<AnalysisArtifact>(&unknown).is_err());
+}

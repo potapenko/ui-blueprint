@@ -1,0 +1,42 @@
+{
+  "schema_version": "0.2.0",
+  "artifact": [
+    "evaluation_input",
+    {
+      "snapshot_id": "S11",
+      "revision": 11,
+      "context": {
+        "schema_version": "0.1.0",
+        "session_id": "a1",
+        "target": {
+          "id": "native-app",
+          "generation": "g1"
+        },
+        "surfaces": [
+          {
+            "id": "window-1",
+            "generation": "w1"
+          }
+        ],
+        "scope_id": "form-1",
+        "projection": "interaction",
+        "fields": [
+          "layout_bounds"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "environment_revision": "display-1"
+      },
+      "result_space": {
+        "id": "local-form",
+        "kind": "local",
+        "units": "css_px",
+        "origin": "top_left"
+      },
+      "transforms": [],
+      "conditions": null
+    }
+  ]
+}
