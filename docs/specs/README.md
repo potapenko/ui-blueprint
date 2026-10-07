@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 15.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 16.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -71,8 +71,8 @@ Existing locked version/policies remain; registration does not accept unsafe/run
 Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; common quotas/wire/permissions/F02/D06 and implementation/live gates remain unchanged.
 
 ## Select a route
-`L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@5](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
-
+`L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
+`L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
 | Product behavior/schema/engine/plugin/CLI/export | [Product tree](product/README.md) | Current norms; select the smallest applicable leaf closure |

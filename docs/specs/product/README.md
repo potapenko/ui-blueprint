@@ -25,7 +25,7 @@
 | [UIB.LIFECYCLE@1](lifecycle.md) | cancel/dispatch, native handles, очереди Target и изоляция; contract |
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
-| [UIB.CLI@5](cli.md) | CLI commands/output; preserved CONTENT/INSPECT/OBSERVE, [recorded diff@2](cli-diff.md) permits separately attributed environments |
+| [UIB.CLI@6](cli.md) | CLI commands/output; preserved CONTENT/INSPECT/OBSERVE, [recorded diff@2](cli-diff.md) and selected [single-step CLI-ACTIONS@1](cli-actions.md) |
 | [UIB.ANALYSIS@1](analysis.md) | local measurement/check0.2, result-space/evaluation, validation layers and protected0.1 compatibility; contract with types/validation closure |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |

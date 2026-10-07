@@ -318,3 +318,82 @@ Repair source SHA256 pins:
 - worker_web.rs:7bf49b5c2586506d7574338dcd5f82673ccbd3e457fdd3a97ab82415dba3382f
 - effect_peer.rs:4a3509641fad60b4d2929d0214a8437e2d581960660d6a124bacb421741d99a8
 - effects_host.rs:a98c0ceeef0c936d998d4f7c13d12ae07e522aef2c2bf4619c768bce73432e6c
+
+## First action CLI registration — L01-ACTIONS-001
+
+Selected authority: [L01-actions-contract packet](../packets/L01-actions-contract.md),
+approved PLAN.UIB@1 P5/P6 under ROADMAP. Mode Evolve the unreleased CLI caller;
+no schema/action/kernel meaning change. Exact5 documentation writes: new
+product/cli-actions.md, product/cli.md metadata/conditional route, product/README.md,
+specs/README.md registration, this existing receipt. No source/Cargo/runtime edits.
+
+Traversal reused current instructions → registry15 → product route → CLI@5
+CONTENT/OBSERVE → EXCHANGE/PRIVACY/MODEL/IDENTITY/BOUNDARIES@1; ACTIONS/FORMS/
+LIFECYCLE@1 and current pinned A01 D02/D04/D05 closure; feature template read fully.
+Root's selected packet supplies syntax/authority/exits, not source inference.
+Registered [CLI-ACTIONS@1](../../../specs/product/cli-actions.md) SCOPE/INPUT/
+AUTHORITY/OUTPUT/EXITS/ACCEPTANCE, CLI@6 and registry16. Original approval remains
+358c757/task registry. Existing inspect/observe/diff/core0.1/analysis0.2/connection1.0.0
+are protected; scenario/form/Native/multi-step capabilities remain future goal work.
+
+Immediate caller uses existing Connection/Profile and attach/event/rebind/shutdown
+owners in crates/cli/src/observe.rs, bounded read in input.rs, writer/publication in
+output.rs, arguments.rs/main.rs dispatch. The existing private supported module
+needs a narrow reuse extraction for action callers, not a copied connection parser
+or second host. Prepare accepts Snapshot or observed ChannelResponse plus Prepare
+Request; guarded worker validates the envelope/extracts unchanged embedded Snapshot,
+and failed/no-snapshot response refuses. This direct Observe→Prepare input is root's
+explicit registration-review correction. Execute uses ActionCase plus Act Request.
+Rebind only Request.clock_domain after actual
+Attached; preserve saved evidence and independently revalidate exact live binding.
+Explicit Execute selects trusted mutation request only for the validated connection
+target under policy; Prepare remains read-only. No additional force/permission flag.
+
+Observed frozen baseline c3967ca: worker_action.rs publishes validated TransitionCase
+then returns nonce for Confirmed delivery even when verification is Failed/Unknown.
+HostCompletion lacks verification metadata; incomplete_channels is Observe-only.
+Parent cannot distinguish those outcomes from verified success today. Worker/provider
+source and Web live qualification are unchanged by this registration.
+
+### Selected private header encoding — not implemented
+
+Reuse existing Frame/Commit/ACK flags byte; no new kind/header size/public version.
+Keep flags0 legacy opaque/ordinary and flags1 pre-Possible Mutation refusal exactly.
+Root selected this concrete proposal in the appended packet review. These are exact
+class-specific enum values, not combinable bit flags. For typed action routes only,
+flags2 = Prepared for Prepare, VerifiedSuccess
+for Mutation; flags3 = verified Checked mismatch for Mutation; flags4 = uncertain
+Mutation result. Other class/flag combinations reject. Prepare Error keeps ordinary
+flags0 plus failure terminal; Mutation refusal keeps flags1 and closes effect lane.
+Mutation2/3/4 requires existing Possible receipt before frame; none mints/confirms
+nonce or permits post-refusal dispatch. Legacy/untyped flags0 gives no verified tag.
+
+Producer derives2 only from validated prepared ActionCase or finished Succeeded
+with Confirmed delivery;3 requires actual verify() Ok(CheckStatus::Fail), confirmed
+delivery and matching finished Failed case, not arbitrary Outcome::Failed;4 covers
+remaining post-Possible non-success. Capture existing verify return before finish;
+no kernel signature/state graph change. Parent validates identical class/correlation/
+slot/length/flags on Frame/Commit/ACK, saves a fixed inline status only after ACK,
+and retains it with original committed bytes. Missing/late/corrupt status never0.
+Execute0 additionally needs existing nonce-confirmed terminal and real cleanup;
+tag alone is insufficient. Without ACKed verified evidence, lost terminal/post-
+Possible uncertainty remains4 unless IO/internal/unconfirmed cleanup1 applies;
+an ACKed known mismatch remains distinct in the report and selected exit mapping.
+
+Exact selected host owners: worker_action.rs producer/classifier; worker_main.rs
+existing publish flags parameter; publication.rs strict envelope/ACK-held status;
+supervisor.rs typed action/effect/refusal class guard; host_types.rs status accessor.
+Changing the existing bool publish parameter to flags requires mechanical unchanged
+Observe conversions at worker_native.rs:115 and worker_web.rs:334; obtain sequential
+owner handoff before those callsite writes, not a new wrapper/duplicate publisher.
+Account added fixed inline status in actual D05 control inventory; no pool/cap growth.
+Existing controls13/14 deadline, refusal latch, Observe flags1, effect one-use and
+capture/helper/physical rights remain protected. Encoding selection does not grant
+source edits in this docs-only step; exact host/CLI implementation packet follows
+save. Public contract requires outcome fidelity, not these private numbers.
+
+Documentation checks only: changed local links/anchors, routing/revisions, node
+line ceilings and git diff --check. CLI/source/runtime/metadata acceptance has not
+run and is not claimed; required scenarios are explicit pending in the new leaf.
+No image/task temp/persistent directory or resource created. Scoped checkpoint/push
+follows separate exact5 Git lease; actual Web live runs independently on c3967ca.
