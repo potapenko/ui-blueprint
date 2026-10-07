@@ -90,17 +90,19 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core parent-death POLLIN repair passes reproduced case per owner; affected checks ongoing, save pending. Integration prepared validator WIP5639cba pushed, waits saved repair/ACK; no source hold. Native proposal45c2667 selected under ROADMAP/D05, registration packet ready. Web waits mandatory H01 proof. No live/UI/Git grants |
+| Активные чаты/пакеты/ресурсы | Core repair5f52cb5 saved/reviewed, timing-doc correction pending. Integration direct-validator PASS on unchanged saved67inputs, hold released, receipt save pending. Native registrationa0281dff accepted, source packet M01-acquisition ready; Web waits remaining bounded H01 evidence reconciliation. No live/UI/Git grants |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Core fixes/rechecks/saves actual parent-death defect, then Integration gets fresh provider ACK for fixed direct-validator case; recheck waiting resource after next completion or within3min. Preserve prepared work with truthful WIP checkpoint. Native returns concrete acquisition limits before registration/source changes. Full H01/live/D06/RC05 remain open |
+| Следующий шаг | Save validator receipt and timing-doc correction, reconcile new allocation proof, and dispatch Native acquisition source against registered profile. Keep strict source/probe/integrated/live distinctions; use exact remaining H01 requirements before the next live packet. Full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [M01-acquisition-plan](packets/M01-acquisition-plan.md) | retained Native owner | current7c6e078; D05 copied strings/batches/JSON/pixels, same owners | ready finite engineering proposal before source/registration; no invented user-authority gap, SDK/runtime unchanged |
-| [M01-acquisition-registration](packets/M01-acquisition-registration.md) | retained Native owner | selected proposal45c2667649c347202dfc64b6d5d978c3e47271f0 | ready6doc registration to D05@4/Native acquisition@1, registry11; Rust quotas and D06 unchanged, no code/live acceptance |
+| [M01-acquisition-plan](packets/M01-acquisition-plan.md) | retained Native owner | proposal45c2667649c347202dfc64b6d5d978c3e47271f0, pushed | selected engineering handoff under ROADMAP/D05; public-header/source/old-sample evidence, no SDK/runtime claim |
+| [M01-acquisition-registration](packets/M01-acquisition-registration.md) | retained Native owner | a0281dff74657b10baa4c7d137fb14572d88476f, pushed6docs | accepted faithful registration: D05@4/Native acquisition@1, registry11; all17ceilings/derived8192 preserve selection/common Rust/D06, no implementation acceptance |
+| [M01-acquisition](packets/M01-acquisition.md) | retained Native owner | registereda0281dff, helper7c6e078/provider5f52cb5 | ready finite source/admission/offline proof; disjoint Native owners, synthetic nonvisual codec inputs allowed, no live AX/SDK capture |
+| H01 parent-death repair | Core same chat | 5f52cb5abd39fc088543b5bc3bd9504e05795386, pushed4paths | [same-reviewer acceptance](receipts/H01-producer-review.md), independent89hash match; watchdog exits during held network read. Timing claim qualified to source assertion<2s, doc correction pending; no orphan-reap/live claim |
 | [M01-host-helper](packets/M01-host-helper.md) | Native `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | `7c6e0780ac085c2a024281c2f8b0196ce536bfa0`, pushed9paths | [source review](receipts/M01-host-helper-review.md) accepts bounded connection, no findings; independent19/7 manifest and3binary hash equality. Author4builds/31offline cases, no SDK/live. Retained owner for next consumer |
 | H01 parent allocation proof | Core same chat | `ff92c5111754c9a79b352a9207fd562325d69f97`, pushed3test/doc paths | [receipt](receipts/H01-host.md): actual setup backing+inline roots equals reported inventory; zero additional observed allocations on named paths, not OS/SDK/RSS or all-path runtime acceptance |
 | H01 rejection allocation proof | Integration same chat | `da6330ee68c640d4b3687bf9ac46a0577eef2f30`, pushed2paths | [receipt](receipts/H01-allocation-proof.md): fixed1MiB key/3MiB quota, actual Decode fatal and prior ACK/reap; saved71 digestfc155032…48c36. Direct semantic-validation proof remains separately assigned |

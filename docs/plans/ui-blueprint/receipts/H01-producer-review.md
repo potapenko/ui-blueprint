@@ -69,3 +69,26 @@ Six passing tests and scoped default/Web compile, Clippy and formatting remain
 author-attributed execution. No reviewer tests or runtime operation occurred.
 Live Chromium/JavaScript, broader privacy channels, SDK/pixels/backend resources
 and D06/full H01 stay open. Working Core/Native/Integration deltas were excluded.
+
+## Actual parent-death repair
+
+New runtime evidence justified focused same-reviewer recheck of
+5f52cb5abd39fc088543b5bc3bd9504e05795386 against its parent. Source/test observations
+preceded the new author receipt. Verdict: accept_with_residual; no actionable
+introduced findings. POLLIN in the existing watchdog poll preserves allocation-
+free observation, protocol-byte ownership, deadline checks and fatal handling.
+The actual supervisor-death regression keeps the CDP peer stalled, signals/reaps
+only its owned supervisor and observes worker exit read-only. It does not claim
+test-owned waitpid/reap of the orphan worker. Failure cleanup closes the own peer.
+
+Reviewer independently reconstructed89 saved inputs and matched
+99894edd5086fbc5e9b398b22d343b5fb8f8e4c2a6899bf1f8da07b2068ea13e, plus worker/test
+hashes. Parent-death pass, affected regressions, Clippy and formatting remain
+author execution evidence; reviewer ran none. Current D05@4 adds only conditional
+Native acquisition; applicable common Rust contracts remain unchanged.
+
+Timing qualification: one-second polling deadline can be overrun by process
+queries; explicit test assertion is under two seconds from observed stall.
+No exact measured exit latency was supplied. Author's within1s wording is not an
+independent strict bound; root returned that documentation correction to Core.
+This closes the scoped repair, not live browser/Native SDK, D06 or full H01.
