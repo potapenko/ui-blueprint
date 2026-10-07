@@ -51,3 +51,23 @@ Finish coherent source by short exact-path Git lease/checkpoint/push; report SHA
 scope, actual checks, unresolved dependencies and released resources. No goal-level
 completion, hidden next packet or broad retest. User decisions only for real external
 authority/product forks, not the already approved implementation.
+
+
+## Focused review repair on c8d5287
+
+Independent source-first review found one concrete classification defect in
+Collector.popup: construction/encoding resource refusal is caught as target_unresolved
+when both identities are current. D05-NATIVE-ACQUISITION.OUTCOMES requires whole-channel
+resource refusal as incomplete_scope; preserve target_unresolved for actual binding
+failure and stale_target for known invalidation. Restore only this boundary in
+Collector.swift and focused PopupChecks.swift/popup_check.py cases as needed, plus
+the existing M03 receipt. No semantic delta, new error vocabulary or broad refactor.
+Exercise actual small response slot/string/output budgets with valid identities and
+verify bounded canonical incomplete_scope, no observed/partial payload; retain
+existing missing/stale identity outcomes. Request exact-path checkpoint/push after
+focused checks. Same reviewer rechecks the saved repair only. No runtime yet.
+Non-image compiler outputs needed by the immediately following M03 live qualification
+may stay in current operation's system temp through this review/run, then clean up;
+this is not a persistent archive. Latest all-images retention rule overrides every
+older cleanup phrase: system-temp images and containing directories are never
+agent-deleted, tool-managed originals stay when a temp copy is required.
