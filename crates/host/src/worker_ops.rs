@@ -106,6 +106,14 @@ impl<'a> CanonicalSession<'a> {
             Ok(())
         }
     }
+    /// Call after the active ObservationRun borrow ends. Existing recorded bytes,
+    /// evidence and expiry remain intact; the adapter owns pending-signal ACK.
+    #[cfg(feature = "web")]
+    pub(crate) fn invalidate_retained_session(&mut self) -> Result<usize, HostError> {
+        self.store
+            .invalidate_session(self.cache_session)
+            .map_err(|_| HostError::InvalidState)
+    }
     pub fn execute(
         &mut self,
         class: OperationClass,

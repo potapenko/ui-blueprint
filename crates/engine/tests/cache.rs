@@ -489,6 +489,95 @@ fn full_context_partition_and_owner_generations_prevent_aliases() {
     ));
 }
 #[test]
+fn session_invalidation_marks_all_contexts_without_touching_history_or_other_sessions() {
+    let ledger = ledger();
+    let mut cache = store(&ledger);
+    let id = Id("clock".into());
+    let first = snapshot(10);
+    let mut second = snapshot(11);
+    second.context.scope_id = Id("another-scope".into());
+    second.coverage.scope_id = second.context.scope_id.clone();
+    for observation in &mut second.observations {
+        observation.coverage.scope_id = second.context.scope_id.clone();
+    }
+    let mut outside = snapshot(12);
+    outside.context.session_id = Id("other-session".into());
+    let session = cache.open_session(header(&first)).unwrap();
+    let other = cache.open_session(header(&outside)).unwrap();
+    let a = cache
+        .admit_full(session, incoming(first.clone()), clock(&id, 10))
+        .unwrap();
+    let b = cache
+        .admit_full(session, incoming(second.clone()), clock(&id, 20))
+        .unwrap();
+    let c = cache
+        .admit_full(other, incoming(outside.clone()), clock(&id, 30))
+        .unwrap();
+    let usage = cache.usage();
+    let reservations = ledger.usage();
+    let bytes = [&first, &second, &outside].map(|s| serde_json::to_vec(s).unwrap());
+    // Context-only invalidation remains selective and compatible.
+    assert_eq!(cache.invalidate(session, &first.context), Ok(1));
+    assert!(
+        cache
+            .read(a.handle, ReadPolicy::Recorded, clock(&id, 40))
+            .unwrap()
+            .invalidated
+    );
+    assert!(
+        !cache
+            .read(b.handle, ReadPolicy::Recorded, clock(&id, 40))
+            .unwrap()
+            .invalidated
+    );
+    assert_eq!(cache.invalidate_session(session), Ok(2));
+    assert_eq!(
+        cache.invalidate_session(session),
+        Ok(2),
+        "idempotent flags, matching-entry count"
+    );
+    for (index, handle, source, invalidated, expires) in [
+        (0, a.handle, &first, true, 1010),
+        (1, b.handle, &second, true, 1020),
+        (2, c.handle, &outside, false, 1030),
+    ] {
+        let recorded = cache
+            .read(handle, ReadPolicy::Recorded, clock(&id, 40))
+            .unwrap();
+        assert_eq!(recorded.invalidated, invalidated);
+        assert_eq!(recorded.snapshot, source);
+        assert_eq!(serde_json::to_vec(recorded.snapshot).unwrap(), bytes[index]);
+        assert_eq!(recorded.expires_at_ms, expires);
+        assert!(matches!(
+            cache.read(handle, ReadPolicy::CurrentRequired, clock(&id, 40)),
+            Err(CacheError::RevalidationRequired)
+        ));
+    }
+    assert_eq!(cache.usage(), usage, "no heap release/growth or eviction");
+    assert_eq!(ledger.usage(), reservations, "grant and charge unchanged");
+    let mut foreign = store(&ledger);
+    let foreign_session = foreign.open_session(header(&first)).unwrap();
+    assert!(matches!(
+        cache.invalidate_session(foreign_session),
+        Err(CacheError::InvalidHandle)
+    ));
+    assert!(
+        !cache
+            .read(c.handle, ReadPolicy::Recorded, clock(&id, 40))
+            .unwrap()
+            .invalidated
+    );
+    cache.detach(session).unwrap();
+    assert!(matches!(
+        cache.invalidate_session(session),
+        Err(CacheError::InvalidHandle)
+    ));
+    assert_eq!(cache.invalidate_session(other), Ok(1));
+    let empty = cache.open_session(header(&first)).unwrap();
+    assert_eq!(cache.invalidate_session(empty), Ok(0));
+}
+
+#[test]
 fn clock_expiry_and_invalidation_do_not_relabel_source_freshness() {
     let ledger = ledger();
     let mut cache = store(&ledger);

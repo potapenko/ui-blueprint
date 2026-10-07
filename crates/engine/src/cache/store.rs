@@ -304,6 +304,26 @@ impl<'ledger> CacheStore<'ledger> {
         }
         Ok(changed)
     }
+    /// Marks every retained context in this session without collecting, freeing,
+    /// refreshing or modifying canonical records. Returns the number of matching
+    /// entries, including those already marked, as context-only invalidate does.
+    /// # Errors
+    /// Rejects a foreign or retired session handle before changing any entry.
+    pub fn invalidate_session(&mut self, handle: SessionHandle<'_>) -> Result<usize, CacheError> {
+        self.session(handle)?;
+        let mut matched = 0;
+        if let Some(session) = &mut self.sessions[handle.slot].value {
+            for entry in session
+                .slots
+                .iter_mut()
+                .filter_map(|slot| slot.value.as_mut())
+            {
+                entry.invalidated = true;
+                matched += 1;
+            }
+        }
+        Ok(matched)
+    }
     /// Drops expired entry heaps; vacant slot backing remains charged.
     pub fn expire(
         &mut self,
