@@ -16,3 +16,13 @@ Tests use trusted fake ports. Real provider freshness and setter continuity,
 parent authorization/nonce/lane ownership, watchdog cleanup and committed transition
 publication remain separate A01/W02 integration obligations. Canonical Current
 metadata is not proof of those guarantees. No full A01/K02/P5/live acceptance.
+
+
+Guarded composition80b7449dca32b9d9853d8aaaf353d26be69e9d4b: same reviewer source-first
+then WIP receipt reconciliation found no introduced defects, exact15 paths and
+saved kernel/Web dependencies matched. Status not_verified because declared mandatory
+Prepare class/payload/budget/cancel, mismatched permit correlation/nonce and exact
+before/after-Possible failures remain unexecuted in this checkpoint. Four composed
+peer cases/seven refusal cases/Clippy are attributed. Core continues these checks;
+same reviewer consumes final evidence without repeating unchanged source inspection.
+Actual live browser and full P5 remain separate. Not a source repair or goal block.

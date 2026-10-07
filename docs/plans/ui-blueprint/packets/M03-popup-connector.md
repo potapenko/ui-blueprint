@@ -48,3 +48,29 @@ identity/scope boundary before live canonical observation. No runtime in this so
 grant; current direct-window diagnostic is not inherited as collector acceptance.
 Positive popup capture and full M03 remain next required work after this binding.
 All image system-temp/no-deletion and scoped non-image cleanup rules remain.
+
+
+## Activate one current canonical AX qualification
+
+Saved21ac1d source accepted by same reviewer. Native now owns the sole own-F02 setup
+lane and one fresh actual CLI sequence using current retained matching helper/fixture/
+validator; prepare only missing CLI/worker inputs from saved source, never Core WIP.
+This does not activate capture or product input. Same previously selected native
+profile/160nodes/depth9/512KiB AX/1s request/1s cleanup, explicit aggregate CLI budget,
+300s live sequence plus5s fixture cleanup; preparation separately timed and bounded.
+
+Exact own A attribution → Edge popup → fresh state → Snapshot shortcut. Require
+current popup binding and direct native-owner evidence. Actual CLI AX Observe/inspect
+must contain current popup root/expected own content and sourced actual parent trigger,
+with correct Surface/context/clock/availability and truthful partial coverage.
+No assumed node count, title/geometry fallback, parent capture or invisible expansion.
+Confirm popup closes → old same request/ref refuses stale without observed data →
+reopen/Snapshot/new binding positive if remaining budget permits. Validate real
+canonical outputs and unchanged non-setup state during read-only collection.
+
+Stop at exact failed condition without changing oracle/caps or inventing mapping.
+Cleanup in finally before timing assertions; no repeated attempt in interrupted
+interval, no other backend/CUA stop bypass. Only existing receipt written. Source
+repair, if necessary, is separately identified/saved before another run. All images
+remain system-temp/no-delete; non-image operation outputs cleaned after consumption.
+Positive popup capture stays the next required capability, not accepted by AX alone.

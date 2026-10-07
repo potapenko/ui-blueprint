@@ -27,3 +27,14 @@ missing binding stays target_unresolved and stale identity keeps precedence. A t
 fallback yields no partial frame. Author38 checks/eight canonical validations and
 helper/checker builds remain attributed. No remaining scoped source findings; actual
 SDK/CLI popup, lifecycle and positive capture gates remain separate.
+
+
+Connector21ac1d38309984b7f74aa7b5011c6233d37fd9b2 plus prerequisite d5fd03f:
+same reviewer accepts scoped source, no findings, after source-first observations
+and author evidence reconciliation. Three source files and four reported binaries
+independently match. Current direct weak physical-window ownership is distinct from
+bounded unique AXPopover/marker under authorized parent; attachment changes close
+identity, parent preserved, prior resource refusal maintained. Author46 checks/eight
+canonical validations/builds are attributed. Prior actual direct-reader9437/9430
+run proves attachment prerequisite only. Current canonical CLI/lifecycle and positive
+popup capture remain required; shared-parent private representation remains open.
