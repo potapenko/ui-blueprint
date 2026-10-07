@@ -1,0 +1,29 @@
+# W01 collector repair recheck
+
+Same reviewer `/root/web_collector_review`; saved candidate
+4a45400d12a4aff9f02dd01930877333a4977df1 against5bce7c6. Verdict:
+**accept_with_residual**, affected R1/R2 source repairs only, not full W01.
+
+Source-first observations preceded access to new author docs/receipt. R1 checks
+the original bounded node handles against current document ownership/connectivity
+before release/publication, without rereading values, locator fallback or timestamp
+rewrite. R2 uses the actual immutable codec configuration to refuse incompatible
+frame/message caps before prepare, including remaining cumulative allowance.
+The two root-authorized getters preserve accepted transport/CDP behavior.
+Focused source tests cover removal during later-node reading, incompatible caps,
+compatible positive operation, getter immutability and detached/cancelled state.
+No new actionable issue found; both original findings are closed in this scope.
+
+Stage2 reconciled saved documentation and author receipt. The11-path checkpoint
+matches reviewed source and there is no related staged/unstaged/untracked drift.
+Source counts and manifest hashes agree. The28 Rust tests,14 offline JS scenarios,
+Clippy/fmt and aggregate fingerprint4223d94d65a5a51c958ca291263d0062115c578349f240b5c5f063268c92f37d
+remain author-attributed evidence; reviewer did not rerun checks or independently
+claim aggregate-fingerprint reproduction. Source/contract review and reported
+execution are kept distinct.
+
+Bootstrap, broader projections/frames, guarded H01/ACK integration, live Chromium
+invariance/cleanup and B01–B06/D06 remain open. No tests, browser/network operation,
+source mutation or external post occurred during review. Retain exact primary
+source evidence while the same Web owner needs it for the immediate bootstrap work;
+cleanup stays with that owner after the consuming handoff is accepted.
