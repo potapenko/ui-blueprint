@@ -90,7 +90,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core diagnostic1810b1d and Web mapping2cc4753 saved/pushed; Git released. Web runs changed first-observe5263b74d-e4f7-4396-84cc-562cce874d2c with saved97/executable pins; Core common source held only for that run. Native offline follow-up8d4f501 accepted and next caller handoff returned; no Native runtime granted yet. All nine review subagents completed; no new audit wave |
+| Активные чаты/пакеты/ресурсы | Web run5263b74d returned Collect/CollectorMalformed, no frames; cleanup/pins confirmed and Core hold released. Same Web owner diagnoses/repairs actual collector refusal under amended packet. Native implements its four-path H01/F02 caller preparation concurrently. Core idle awaiting concrete shared dependency; Git free outside short checkpoint grants. All nine review subagents completed; no new audit wave |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
 | Следующий шаг | Web obtains exact first-observe cause with unchanged limits, then actual owner repairs it. Native advances to first real H01/F02 acquisition preparation, without repeating accepted offline proofs. Core awaits concrete producer/caller dependency while Web uses saved common source. Root forwards completed handoffs promptly; no new approval for already-authorized steps. Full P0–P7 scope unchanged |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -99,6 +99,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
+| [G02-source-handoff](packets/G02-source-handoff.md) | retained Core owner | current accepted G01/local analysis; existing projection contracts | running finite read-only source handoff for next independent scope/neighbors/projection implementation; no audit, code mutation or live acceptance |
 | [M01-host-observe](packets/M01-host-observe.md) | retained Native owner | accepted helper/acquisition through8d4f501; Core1810b1d | preparation running in four disjoint consumer/launcher/doc paths; actual first F02 A AX response is immediate consumer. No UI/runtime yet. Existing512KiB reply cap selected before evaluation from337500-byte retained sample; no scope/field reduction |
 | [W01-live](packets/W01-live.md) | retained Web owner | Core diagnostic1810b1d + Web2cc47531108bb7cf03f0445c2521ddc20347bbba pushed; frozen F01/R01 oracles | changed first-observe5263b74d runs on matching saved97/executable pins; previous8705b4 returned invalid_input/zero frames and confirmed cleanup. Git released; short common-source hold remains through run. No source-app/input/Q02 expansion |
 | H01 private diagnostic handoff | Core retained owner | 1810b1dabd6a2d07d4931606f3859dd96f614d44 pushed8paths | [receipt](receipts/H01-host.md): bounded cause/stage carrier saved, common paths/index clean and Git released. Focused checks pass; prior full-target timing residual remains explicit. Immediate consumer Web; no live acceptance |

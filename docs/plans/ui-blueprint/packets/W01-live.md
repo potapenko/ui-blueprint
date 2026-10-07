@@ -153,3 +153,35 @@ coherent scoped changes with commit/push and actual pins. One bounded retry of t
 changed failed case may follow matching builds, a fresh UUID and a short provider
 hold under this already-approved repair scope; no extra user approval or unchanged
 retry. Return exact stage/cause immediately so the true product defect can be fixed.
+
+## Repair actual CollectorMalformed
+
+Changed run5263b74d-e4f7-4396-84cc-562cce874d2c on saved Core1810b1d/Web2cc4753
+reported Collect/CollectorMalformed, zero canonical frames, remote Released and
+sessions0/groups0/abandonedfalse. Author confirms launcher cleanup and97 source/
+binary pins; provider hold released. This is the observed failure, not proof of
+which CDP field or collector branch is responsible. Native caller preparation
+continues independently.
+
+Same Web owner now diagnoses and repairs that concrete refusal under current
+Spec Basis above. Additional bounded write scope: plugins/web/src/collector/**,
+plugins/web/src/normalize/** and plugins/web/tests/collector.rs plus its existing
+safe fixtures/collector/**. Declare actual subset before editing. Reuse accepted
+collector/source protections from [collector packet](W01-collector.md); do not
+reopen its completed audit or change transport/CDP/Core/fixtures/oracles/Cargo.
+Return an actual extra owner dependency promptly. No general hardening or API
+redesign. Missing source evidence is resolved by targeted inspection of the actual
+Malformed paths, not guesses or a larger limit.
+
+Preserve real CDP semantics and known/unknown/redacted/source identity distinctions.
+For diagnosis use the smallest static method/branch code necessary; no raw UI/CDP
+payload, private error string, full stdout/stderr or canary persistence. Existing
+fixed diagnostic metadata is sufficient until an actual missing shared owner is
+shown. Add a focused regression for the established cause, compile affected
+consumers and save/push exact paths. No unchanged broad suite or new reviewer wave.
+
+One changed first-observe run may then proceed under the existing owned-browser,
+fixed limits, fresh UUID and saved-input/cleanup conditions. Coordinate a short
+Core hold only when ready. Missing required known fields remain failures; do not
+change expected results to make a response pass. Return actual result and release
+holds immediately; broader W01 positive cases follow a successful first response.
