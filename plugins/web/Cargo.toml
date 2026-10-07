@@ -12,3 +12,4 @@ log.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 uiblueprint-schema = { path = "../../crates/schema" }
+uiblueprint-plugin-api = { path = "../../crates/plugin-api" }

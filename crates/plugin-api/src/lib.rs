@@ -2,6 +2,7 @@
 //! Callers own transport, unique attachment IDs and actual collection deadlines.
 #![forbid(unsafe_code)]
 
+pub mod actions;
 mod depth;
 use depth::depth_within;
 
