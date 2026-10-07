@@ -127,3 +127,29 @@ live authorization or canonical schema. Recheck syntax/no-run only where this
 small test/sink change affects inputs, then save the preparation checkpoint before
 requesting concrete runtime activation. No successful runtime is repeated merely
 to obtain artifacts that could have been declared before its first run.
+
+## Observed first-observe diagnostic repair
+
+Initial afba17cb run failed without canonical frames. Changed harness8705b4 then
+proved left-initial invalid_input/committed0/missing1/operation1 and actual cleanup:
+sessions0/groups0/abandonedfalse; browser survived worker reap and owned launcher
+cleanup completed. UUID495ecfe4-e5ab-49b5-8769-f9013645caa2 and the initial report
+remain immutable. Provider/input hashes matched; no source hold remains.
+
+Core source trace confirms loss of collector cause in worker_web::collector_error
+and further terminal mapping in worker_main. Restore bounded useful failure
+metadata, not an invented production cause. Web may now additionally edit its
+existing owner crates/host/src/worker_web.rs at callback/collected error boundaries.
+Core owns the minimal shared terminal/control/metadata plumbing under H01, and
+supplies an actual compiling handoff. Preserve existing Failure enum/code/count/
+cleanup/send-progress information with a trusted static stage; no payload, raw
+CDP/error text, graph parsing, generic telemetry framework or production fault mode.
+Existing HostError meanings, canonical/CLI schema versions and limits stay fixed.
+Fixed storage/encoding must stay charged to current owners; check affected paths.
+
+The four harness/doc paths remain Web-owned. Source implementations proceed in
+parallel without overlap; no placeholder interface is a compiling handoff. Save
+coherent scoped changes with commit/push and actual pins. One bounded retry of the
+changed failed case may follow matching builds, a fresh UUID and a short provider
+hold under this already-approved repair scope; no extra user approval or unchanged
+retry. Return exact stage/cause immediately so the true product defect can be fixed.

@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | First actual Chromium run on afba17cb failed at first guarded observe, zero canonical frames; Rust terminal error missing from sanitized report. Web owns bounded harness diagnostic repair; Core owns actual host integration diagnosis/necessary producer fix; Native continues three specific missing offline paths. All review subagents completed; no new reviews dispatched. Core hold released |
+| Активные чаты/пакеты/ресурсы | Changed diagnostic8705b4 proved invalid_input/committed0/missing1 at first actual observe and confirmed sessions0/groups0/abandonedfalse cleanup; provider hold released. Core supplies fixed private cause/stage handoff; Web connects worker_web and harness; Native actual-path proofs run independently. All review subagents completed; no new audit wave |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Obtain exact first-observe terminal cause and confirmed worker cleanup, repair owning path, then repeat only the changed failed real case with fixed limits. Native proof runs independently. User challenged serial coordination: prioritize usable live UI data, immediately resume ready owners, batch necessary review after concrete results. Full P0–P7 scope unchanged |
+| Следующий шаг | Preserve collector cause before known lossy mapping, run changed first-observe with unchanged limits, fix its actual cause. Immediate compiling Core→Web handoff, no serial paperwork barrier for independent source work. Native closes three existing proof gaps; prioritize real UI data. Full P0–P7 scope unchanged |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
