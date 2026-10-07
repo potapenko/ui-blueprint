@@ -257,6 +257,84 @@ fn bound_transforms_preserve_units_origin_path_and_distinct_consumed_evidence() 
     assert!(measure_query_bound(&s, &q, &e).is_err());
 }
 #[test]
+fn unknown_consistency_preserves_known_dimensions_and_unstable_refusal() {
+    for (name, expected) in [
+        ("GEO-SIZE-RATIO__width", 30.0),
+        ("GEO-SIZE-RATIO__height", 10.0),
+    ] {
+        for consistency in [
+            Consistency::Stable,
+            Consistency::Unknown,
+            Consistency::Unstable,
+        ] {
+            let (mut s, q, e) = inputs(name);
+            for observation in &mut s.observations {
+                observation.consistency = consistency;
+                observation.consistency_reason = match consistency {
+                    Consistency::Stable => None,
+                    Consistency::Unknown => Some(Id("sequential-reads-not-atomic".into())),
+                    Consistency::Unstable => Some(Id("changing".into())),
+                };
+            }
+            let before = s.clone();
+            let result = measure_query_bound(&s, &q, &e).expect("valid source");
+            if consistency == Consistency::Unstable {
+                assert_eq!(result.unknown_reason(), Some(UnknownReason::UnstableState));
+                let MeasurementResult::Unknown { evidence, .. } = &result else {
+                    panic!("unstable")
+                };
+                assert_eq!(evidence, &vec![source(&s)]);
+            } else {
+                assert_eq!(amount(&result), expected);
+                assert_eq!(measured(&result).evidence, vec![source(&s)]);
+                assert_eq!(measured(&result).space, e.result_space);
+            }
+            assert_eq!(
+                s, before,
+                "measurement cannot promote consistency or restamp"
+            );
+            verify_analysis_result(&declaration(s, q, e)).expect("recompute unchanged binding");
+        }
+    }
+    for (state, reason) in [
+        (
+            Availability::Unknown {
+                reason: Id("missing".into()),
+            },
+            UnknownReason::UnknownProperty,
+        ),
+        (
+            Availability::Unsupported {
+                reason: Id("not_exposed".into()),
+            },
+            UnknownReason::UnsupportedProperty,
+        ),
+        (Availability::Redacted {}, UnknownReason::RedactedProperty),
+    ] {
+        let (mut s, q, e) = inputs("GEO-SIZE-RATIO__width");
+        s.observations[0].consistency = Consistency::Unknown;
+        s.observations[0].consistency_reason = Some(Id("sequential-reads-not-atomic".into()));
+        let Property::Requested { state: actual, .. } = property(&mut s, 0) else {
+            panic!("property")
+        };
+        *actual = state;
+        let result = measure_query_bound(&s, &q, &e).expect("unavailable source");
+        assert_eq!(result.unknown_reason(), Some(reason));
+    }
+    let (mut s, q, e) = inputs("GEO-EQUAL-SPACING");
+    s.observations[0].consistency = Consistency::Unknown;
+    s.observations[0].consistency_reason = Some(Id("sequential-reads-not-atomic".into()));
+    s.coverage.status = CoverageStatus::Partial;
+    s.coverage.omitted_count = None;
+    assert_eq!(
+        measure_query_bound(&s, &q, &e)
+            .expect("partial")
+            .unknown_reason(),
+        Some(UnknownReason::IncompleteScope)
+    );
+}
+
+#[test]
 fn conditions_are_observed_bound_and_never_inferred() {
     let (mut s, mut q, mut e) = inputs("GEO-GAP");
     q.applies_when.platform = Some(Id("fixture".into()));

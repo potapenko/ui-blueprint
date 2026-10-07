@@ -30,7 +30,7 @@ pub(crate) fn record_evidence(
     if !evidence.contains(source) {
         evidence.push(source.clone());
     }
-    if observation.consistency != Consistency::Stable {
+    if observation.consistency == Consistency::Unstable {
         return Ok(Some(UnknownReason::UnstableState));
     }
     Ok(None)

@@ -189,6 +189,71 @@ fn declaration_validation_never_claims_arithmetic_recomputation() {
 }
 
 #[test]
+fn known_dimensions_keep_unknown_consistency_but_reject_unstable_or_unavailable_sources() {
+    use uiblueprint_schema::model::{Availability, Consistency, GeometryRelation, Property, Value};
+    let mut document =
+        AnalysisDocument::from_json(&analysis_fixture("measurement-gap"), 65536).unwrap();
+    let AnalysisArtifact::Measurement(base) = &mut document.artifact else {
+        panic!("measurement")
+    };
+    base.query.operation = GeometryRelation::Width;
+    base.query.targets.truncate(1);
+    base.query.anchors.truncate(1);
+    let MeasurementResult::Known { measurement } = &mut base.result else {
+        panic!("known")
+    };
+    let Value::Quantity { amount, .. } = &mut measurement.value else {
+        panic!("quantity")
+    };
+    *amount = 30.0; // Authored GEO-GAP rectangle A width, not a computed oracle.
+    for consistency in [
+        Consistency::Stable,
+        Consistency::Unknown,
+        Consistency::Unstable,
+    ] {
+        let mut case = base.clone();
+        case.snapshot.observations[0].consistency = consistency;
+        case.snapshot.observations[0].consistency_reason = match consistency {
+            Consistency::Stable => None,
+            Consistency::Unknown => Some(Id("sequential-reads-not-atomic".into())),
+            Consistency::Unstable => Some(Id("changing".into())),
+        };
+        let before = case.clone();
+        assert_eq!(
+            validate_measurement_case(&case),
+            if consistency == Consistency::Unstable {
+                Err(ValidationError::UnknownMeasurement)
+            } else {
+                Ok(())
+            }
+        );
+        assert_eq!(case, before, "validation cannot restamp source uncertainty");
+    }
+    for unavailable in [
+        Availability::Unknown {
+            reason: Id("missing".into()),
+        },
+        Availability::Unsupported {
+            reason: Id("not_exposed".into()),
+        },
+        Availability::Redacted {},
+    ] {
+        let mut case = base.clone();
+        case.snapshot.observations[0].consistency = Consistency::Unknown;
+        case.snapshot.observations[0].consistency_reason =
+            Some(Id("sequential-reads-not-atomic".into()));
+        let Property::Requested { state, .. } = &mut case.snapshot.nodes[0].properties[0] else {
+            panic!("property")
+        };
+        *state = unavailable;
+        assert_eq!(
+            validate_measurement_case(&case),
+            Err(ValidationError::UnknownMeasurement)
+        );
+    }
+}
+
+#[test]
 fn known_declarations_cannot_claim_unsupported_source_shapes_or_baseline_x() {
     let mut doc =
         AnalysisDocument::from_json(&analysis_fixture("measurement-gap"), 1_048_576).unwrap();

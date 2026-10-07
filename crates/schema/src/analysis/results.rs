@@ -80,7 +80,7 @@ fn validate_sources(
         )?;
         let observation = core::evidence(source, &snapshot.observations)?;
         require(
-            !known || observation.consistency == Consistency::Stable,
+            !known || observation.consistency != Consistency::Unstable,
             ValidationError::UnknownMeasurement,
         )?;
     }
