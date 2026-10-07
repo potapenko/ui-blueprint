@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Web74ea8e1 peer proof and Native7c6e078 source review accepted within scope. Core parent-death/watchdog and Integration direct-validator cases active; no source/Git holds. Native identified concrete acquisition gaps and receives M01-acquisition-plan proposal; Web waits these mandatory H01 gates. No live/UI grants |
+| Активные чаты/пакеты/ресурсы | Core reproduced real parent-death failure: worker remained alive in CDP read after owned supervisor SIGKILL, then exited after peer teardown. Core repairs existing IO/watchdog owner; cause not yet accepted. Integration direct-validator prepared, waiting_resource on saved repair; source hold explicitly released before its run. Native acquisition proposal active; Web waits mandatory H01 proof. No live/UI/Git grants |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Execute remaining finite H01 parent-death and direct-validator proofs on pinned inputs; reconcile their exact coverage before next live producer packet. Native source review does not qualify SDK/resource/privacy/positive pilots. Full H01/live/D06/RC05 remain open; no renewed approval inside existing scope |
+| Следующий шаг | Core fixes/rechecks/saves actual parent-death defect, then Integration gets fresh provider ACK for fixed direct-validator case; recheck waiting resource after next completion or within3min. Preserve prepared work with truthful WIP checkpoint. Native returns concrete acquisition limits before registration/source changes. Full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
