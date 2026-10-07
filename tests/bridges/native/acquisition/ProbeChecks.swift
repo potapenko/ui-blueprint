@@ -12,7 +12,7 @@ import Darwin
         var assertions=0
         func check(_ b:Bool){precondition(b);assertions+=1}
         let binding:[String:Any]=["pid":123,"bundle_id":"local.uiblueprint.f02.on","launch_time":100.0,"window_id":456,"window_identifier":"a","target_generation":"g1","surface_generation":"w1"]
-        let config:[String:Any]=["binding":binding,"scope_id":"probe-scope","collection":"sample","acquisition_limits":profile,
+        let config:[String:Any]=["binding":binding,"scope_id":"probe-scope","collection":"sample","identity_path":"/tmp/synthetic-probe-identity","acquisition_limits":profile,
             "probe_manifest_path":"/tmp/owned-probe-manifest","probe_snapshot_request":1,"probe_source_revision":2,"probe_uptime":20.0]
         let configBytes=try JSONSerialization.data(withJSONObject:config);check(configBytes.count<=4032)
         let configuration=try NativeConfiguration.decode(configBytes)

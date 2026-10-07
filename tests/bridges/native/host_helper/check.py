@@ -39,6 +39,7 @@ def inputs(channel=0, cap=65_536, duration=1000, request=None, config=None):
                              'launch_time': 100.0, 'window_id': 456, 'window_identifier': 'a',
                              'target_generation': 'g1', 'surface_generation': 'w1'},
                   'scope_id': 'form-1', 'collection': 'sample',
+                  'identity_path': '/tmp/synthetic-protocol-identity',
                   'artifact_directory': '/tmp/unused-offline-native-fixture',
                   'pixel_policy': 'owned_synthetic_fixture',
                   'acquisition_limits': json.loads((ROOT / 'tests/bridges/native/acquisition/profile.json').read_text()),

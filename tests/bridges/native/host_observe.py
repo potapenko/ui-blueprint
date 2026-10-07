@@ -199,6 +199,7 @@ def live(args):
     (inputs / 'request.json').write_bytes(encode(request))
     binding = {k: manifest[k] for k in ('pid', 'bundle_id', 'launch_time', 'window_id', 'window_identifier', 'target_generation', 'surface_generation')}
     config = {'binding': binding, 'scope_id': context['scope_id'], 'collection': 'sample',
+              'identity_path': manifest['identity_path'],
               'acquisition_limits': json.loads(Path(prepared['profile']).read_text()), 'acquisition_evidence': False}
     if probe:
         config.update(probe_manifest_path=str(args.manifest.resolve()), probe_snapshot_request=manifest['snapshot_request'],

@@ -2,6 +2,27 @@ import AppKit
 import ApplicationServices
 import ScreenCaptureKit
 import Foundation
+import Darwin
+
+// Trusted current identity-only file, never last measurement publication. Public
+// process/window/AX binding checks remain independent in the collection path.
+enum NativeCurrentIdentity {
+    static func verify(path: String, expected: [String: Any]) throws {
+        let fd = open(path, O_RDONLY | O_CLOEXEC | O_NOFOLLOW)
+        guard fd >= 0 else { throw NativeAcquisitionError.invalidValue }
+        let file = FileHandle(fileDescriptor: fd, closeOnDealloc: true)
+        defer { try? file.close() }
+        let bytes = try file.read(upToCount: 4033) ?? Data()
+        guard bytes.count <= 4032,
+              let actual = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
+              Set(actual.keys) == Set(["identity_version","pid","bundle_id","launch_time","window_id","window_identifier","target_generation","surface_generation","state"]),
+              actual["identity_version"] as? String == "1.0.0", actual["state"] as? String == "open"
+        else { throw NativeAcquisitionError.invalidValue }
+        for name in ["pid","bundle_id","launch_time","window_id","window_identifier","target_generation","surface_generation"] {
+            guard let a = actual[name] as? NSObject, let b = expected[name] as? NSObject, a == b else { throw NativeAcquisitionError.invalidValue }
+        }
+    }
+}
 
 #if !HOST_HELPER
 @main
@@ -75,7 +96,10 @@ struct Collector {
         let chosen = selectedChannel.map { [$0] } ?? channels
         let wantsAX = chosen.contains("external_semantics"), wantsCapture = chosen.contains("rendered_capture")
         let app = NSRunningApplication(processIdentifier: pid)
-        let identityResolved = app?.bundleIdentifier == bundle && app?.launchDate?.timeIntervalSince1970 == launch
+        let identityCurrent = (manifest["identity_path"] as? String).map { path in
+            (try? NativeCurrentIdentity.verify(path: path, expected: manifest)) != nil
+        } ?? false
+        let identityResolved = identityCurrent && app?.bundleIdentifier == bundle && app?.launchDate?.timeIntervalSince1970 == launch
             && windowOwnedBy(pid: pid, window: wid)
         let axAllowed = wantsAX && identityResolved ? AXIsProcessTrusted() : false
         let captureAllowed = wantsCapture && identityResolved ? CGPreflightScreenCaptureAccess() : false
@@ -125,7 +149,8 @@ struct Collector {
             // Reserve a complete failure before risky construction. No new uncharged
             // error graph is needed when the ordinary builder reaches its ceiling.
             let failure = try envelope { try json.failure("incomplete_scope", scope: scope, channel: channel) }
-            let unresolved = try envelope { try json.failure("target_unresolved", scope: scope, channel: channel) }
+            let unresolved = try envelope { try json.failure(identityCurrent ? "target_unresolved" : "stale_target", scope: scope, channel: channel) }
+            let stale = try envelope { try json.failure("stale_target", scope: scope, channel: channel) }
             var proof: [String: Any] = [:]
             var proofDirectory: URL?
             func prepare() async throws {
@@ -219,13 +244,27 @@ struct Collector {
                         admission: admission, directory: output)
                 }
             }
-            try await finishChannel(frame: frame, failure: failure, prepare: prepare, evidence: emitEvidence, send: send)
+            try await finishChannel(frame: frame, failure: failure, prepare: prepare, evidence: emitEvidence, send: { value in
+                guard NSRunningApplication(processIdentifier: pid)?.launchDate?.timeIntervalSince1970 == launch,
+                      windowOwnedBy(pid: pid, window: wid) else {
+                    value.reset(); try value.encode(stale); try send(value); return
+                }
+                try sendCurrentIdentity(value, stale: stale, manifest: manifest, send: send)
+            })
 
         }
     }
 }
 
 extension Collector {
+    @MainActor static func sendCurrentIdentity(_ frame: NativeJSONFrame, stale: [String: Any],
+        manifest: [String: Any], send: (NativeJSONFrame) throws -> Void) throws {
+        guard let path = manifest["identity_path"] as? String,
+              (try? NativeCurrentIdentity.verify(path: path, expected: manifest)) != nil else {
+            frame.reset(); try frame.encode(stale); try send(frame); return
+        }
+        try send(frame)
+    }
     // Same production binding decision, with only the public AX calls replaceable
     // by bounded synthetic CF objects in this executable's offline tests.
     @MainActor static func resolveWindow(_ root: CFTypeRef, identifier: String,

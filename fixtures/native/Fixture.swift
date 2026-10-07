@@ -1,6 +1,35 @@
 import SwiftUI
 import AppKit
+import Darwin
 
+// Identity-only invalidation, independent of UI measurements. The directory is
+// existing run-owned setup; this owner creates no new directory or history.
+final class FixtureIdentity {
+    let directory: URL
+    let windowKey: String
+    private(set) var generation = UUID().uuidString
+    private var windowID: Int?
+    init(directory: URL, windowKey: String) { self.directory = directory; self.windowKey = windowKey }
+    private func write(pid: Int32, bundle: String, launch: Double, id: Int, state: String) throws {
+        let record: [String: Any] = ["identity_version": "1.0.0", "pid": pid, "bundle_id": bundle,
+            "launch_time": launch, "window_id": id, "window_identifier": windowKey,
+            "target_generation": "\(pid):\(launch)", "surface_generation": generation, "state": state]
+        let bytes = try JSONSerialization.data(withJSONObject: record, options: [.sortedKeys])
+        guard bytes.count <= 4032 else { throw NSError(domain: "identity_limit", code: 1) }
+        try bytes.write(to: directory.appendingPathComponent("\(windowKey)-identity.json"), options: .atomic)
+    }
+    func snapshot(pid: Int32, bundle: String, launch: Double, window: Int) throws -> String {
+        if windowID != window { generation = UUID().uuidString; windowID = window }
+        try write(pid: pid, bundle: bundle, launch: launch, id: window, state: "open")
+        return generation
+    }
+    func close(pid: Int32, bundle: String, launch: Double, window: Int) throws {
+        generation = UUID().uuidString
+        try write(pid: pid, bundle: bundle, launch: launch, id: window, state: "closed")
+    }
+}
+
+#if !IDENTITY_TEST
 // Reusable synthetic pilot only. All visible content/windows/state are SwiftUI.
 @main struct F02Fixture: App {
     var body: some Scene {
@@ -75,6 +104,7 @@ private struct PilotView: View {
     @State private var sourceRevision = 0
     @State private var eventRevision = 0
     @State private var measurements = Measurements()
+    @State private var identity: FixtureIdentity?
     @State private var snapshotRequest = 0
     @FocusState private var focus: Field?
     @Environment(\.openWindow) private var openWindow
@@ -194,7 +224,21 @@ private struct PilotView: View {
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { notification in
             guard let window = notification.object as? NSWindow, window.identifier?.rawValue == role else { return }
             // SwiftUI Window may reopen the same NSWindow/CGWindowID with retained state.
-            measurements.surfaceGeneration = UUID().uuidString
+            let app = NSRunningApplication.current
+            let owner = identity ?? FixtureIdentity(directory: runDirectory, windowKey: role)
+            identity = owner
+            // Rotate and publish CLOSED only. No geometry/probe/manifest collection.
+            do {
+                try owner.close(pid: app.processIdentifier, bundle: app.bundleIdentifier ?? "unknown",
+                    launch: app.launchDate?.timeIntervalSince1970 ?? 0, window: window.windowNumber)
+                measurements.surfaceGeneration = owner.generation
+            } catch {
+                // A stale OPEN file must not survive failure of invalidation.
+                try? FileManager.default.removeItem(at: runDirectory.appendingPathComponent("\(role)-identity.json"))
+                // If storage cannot invalidate the receipt, fail the OWN debug
+                // fixture closed: its public process incarnation is no longer live.
+                _exit(2)
+            }
         }
         #if PROBE
         .backgroundPreferenceValue(MarkerAnchors.self) { anchors in
@@ -216,10 +260,13 @@ private struct PilotView: View {
         let app = NSRunningApplication.current
         // Read-only adapter: SwiftUI doesn't expose CGWindowID/launch identity.
         guard let window = NSApp.windows.first(where: { $0.identifier?.rawValue == role && $0.isVisible }) else { return }
-        if measurements.windowID != window.windowNumber {
-            measurements.windowID = window.windowNumber
-            measurements.surfaceGeneration = UUID().uuidString
-        }
+        let owner = identity ?? FixtureIdentity(directory: runDirectory, windowKey: role)
+        identity = owner
+        guard let currentGeneration = try? owner.snapshot(pid: app.processIdentifier,
+            bundle: app.bundleIdentifier ?? "unknown", launch: app.launchDate?.timeIntervalSince1970 ?? 0,
+            window: window.windowNumber) else { return }
+        measurements.windowID = window.windowNumber
+        measurements.surfaceGeneration = currentGeneration
         #if PROBE
         let probeEnabled = true
         #else
@@ -236,6 +283,7 @@ private struct PilotView: View {
             "pid": app.processIdentifier, "bundle_id": app.bundleIdentifier ?? "unknown", "launch_time": processStart,
             "target_generation": "\(app.processIdentifier):\(processStart)",
             "surface_generation": measurements.surfaceGeneration, "window_id": window.windowNumber,
+            "identity_path": runDirectory.appendingPathComponent("\(role)-identity.json").path,
             "live_manifest_path": runDirectory.appendingPathComponent("\(role).json").path,
             "popup_generation": popupGeneration, "popup_anchor_declared": role,
             "window_identifier": role, "windows": windows,
@@ -257,3 +305,5 @@ private struct PilotView: View {
         }
     }
 }
+
+#endif

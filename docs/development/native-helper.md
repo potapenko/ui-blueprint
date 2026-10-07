@@ -28,6 +28,7 @@ embedded in this private JSON configuration:
     "target_generation": "g1",
     "surface_generation": "w1"
   },
+  "identity_path": "/absolute/owned-fixture-run/a-identity.json",
   "scope_id": "form-1",
   "collection": "sample",
   "artifact_directory": "/absolute/run-owned/new-capture-directory",
@@ -421,3 +422,36 @@ invariance is not this sequence. All current builds/module caches/inputs/results
 belong in operation system-temp and are removed after inline facts; no persistent
 archive/destination. Runtime begins only on saved matching Core channel2 provider
 and this saved caller, with exact owned setup and cleanup as the activation states.
+
+## Current own-fixture identity after close/reopen
+
+Modern trusted configuration requires `identity_path`, the exact caller-owned
+`a-identity.json` or `b-identity.json` in the existing temporary fixture run directory.
+The fresh Snapshot manifest reports that path. File cap4032 bytes/read-only/no-follow;
+no arbitrary UI path, title matching or filesystem discovery. Missing evidence from
+older fixture builds refuses; there is no compatibility bypass or implicit default.
+
+FixtureIdentity, within Fixture.swift, owns only fixed version/PID/bundle/launch/
+window key/ID/target+surface generations/open|closed data. Explicit Snapshot atomically
+publishes OPEN for the current window. Close rotates the existing surface generation
+and atomically publishes CLOSED without calling measurement publish, collecting UI
+or adding timers/polling. Reopen remains invalid until a fresh explicit Snapshot.
+If close invalidation storage fails, the OWN debug fixture terminates fail-closed so
+a stale OPEN record cannot coexist with its expected live process incarnation.
+Visible SwiftUI content/layout/controls and independent expectations are unchanged.
+
+Collector compares the current identity receipt with the trusted expected binding
+before collection and immediately before sending the complete channel. Public launch/
+CG owner and exact AX window matching remain independent; public process/window
+binding is checked again at publication. Closed/mismatched/racing generation becomes
+existing stale_target; unresolved public mapping remains target_unresolved. Probe
+also checks identity before/after import, retaining cache/unverified measurement time.
+Identity evidence never upgrades a stored Snapshot into current measured geometry.
+Already ACKed channels stay governed by the parent publication/cleanup contract.
+
+Next finite CLI proof must rebuild matching own off/on fixture/helper sources,
+never reuse old9a88b12 fixture binaries as if they have identity receipts. Same-title
+A/B AX-only cases use each fresh Snapshot's own identity_path. Keep A's old trusted
+binding, close/reopen (even if CG ID reused), attempt old binding and require refusal;
+then explicit Snapshot and fresh binding must succeed. B capture remains stopped.
+This source step runs only synthetic lifecycle/reader checks, no UI/live proof.

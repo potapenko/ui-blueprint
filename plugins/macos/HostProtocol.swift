@@ -49,6 +49,7 @@ struct NativeConfiguration: Decodable {
     let collection: String
     let artifact_directory: String?
     let pixel_policy: String?
+    let identity_path: String
     let acquisition_limits: NativeAcquisitionLimits
     let acquisition_evidence: Bool?
     let probe_manifest_path: String?
@@ -58,12 +59,14 @@ struct NativeConfiguration: Decodable {
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
         let config = try JSONDecoder().decode(Self.self, from: bytes)
         try config.acquisition_limits.validate()
+        guard config.identity_path.hasPrefix("/"), !config.identity_path.utf8.contains(0),
+              !config.identity_path.split(separator: "/").contains("..") else { throw NativeProtocolError.configuration }
         if config.acquisition_evidence == true && config.artifact_directory == nil { throw NativeProtocolError.configuration }
         guard config.binding.pid > 0, config.binding.window_id > 0,
               config.binding.launch_time.isFinite && config.binding.launch_time > 0,

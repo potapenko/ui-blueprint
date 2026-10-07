@@ -90,3 +90,14 @@ serialization produced actual Window A pixels; B returned SDK-3801 UserDeclined
 after preflight succeeded. This is permission_required, not evidence of a human
 click or whole-platform unsupported. B pixels were not retried. Full M01 remains
 open; see [repair receipt](../../docs/plans/ui-blueprint/receipts/M01-capture-repair.md).
+
+## Identity-only invalidation
+
+Current Fixture.swift additionally writes a/b-identity.json in the existing run-dir.
+Explicit Snapshot binds OPEN; close rotates surface generation and writes CLOSED,
+without measurement publication or UI collection. Reopen requires a fresh Snapshot.
+The file is bounded identity/state only, not UI history; helper config receives its
+exact trusted path. Old fixture builds lack this capability and current helper must
+refuse them. Rebuild matching fixtures for current close/reopen qualification.
+Identity storage failure at close terminates only this owned debug fixture fail-closed.
+No visible UI/oracle/layout or capture permission behavior was changed.
