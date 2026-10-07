@@ -25,20 +25,37 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         if worker.cleanup_deadline.is_some() || worker.ownership_lost {
             return Err(HostError::CleanupPending);
         }
-        let index = worker
-            .helpers
-            .iter()
-            .position(Option::is_none)
-            .ok_or(HostError::ResourceLimit)?;
-        let helper = Helper::spawn(
-            self.domain,
-            session,
-            index,
-            kind,
-            &spec,
-            deadline,
-            &mut state.platform,
-        )?;
+        // A reaped helper's ingress may still belong to a caller-held frame.
+        // Search the two fixed slots rather than letting that lease hide the
+        // other free slot. Busy admission returns no child to discard/retry.
+        let mut admitted = None;
+        let mut busy = false;
+        for index in 0..worker.helpers.len() {
+            if worker.helpers[index].is_some() {
+                continue;
+            }
+            match Helper::spawn(
+                self.domain,
+                session,
+                index,
+                kind,
+                &spec,
+                deadline,
+                &mut state.platform,
+            ) {
+                Ok(helper) => {
+                    admitted = Some((index, helper));
+                    break;
+                }
+                Err(HostError::Busy) => busy = true,
+                Err(error) => return Err(error),
+            }
+        }
+        let (index, helper) = admitted.ok_or(if busy {
+            HostError::Busy
+        } else {
+            HostError::ResourceLimit
+        })?;
         let handle = helper.handle;
         let lost = helper.lost;
         worker.helpers[index] = Some(helper);

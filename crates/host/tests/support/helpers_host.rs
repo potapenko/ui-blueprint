@@ -90,6 +90,11 @@ fn capture_claim_and_ingress_survive_until_real_helper_reap_without_blocking_ax(
     let cap_b = host
         .spawn_helper(b, HelperKind::Capture, peer(), deadline())
         .unwrap();
+    // The old A ingress is still leased by raw. Its other vacant helper slot
+    // must remain usable instead of always selecting the first vacant slot.
+    let ax_a = host
+        .spawn_helper(a, HelperKind::ExternalSemantics, peer(), deadline())
+        .unwrap();
     assert!(matches!(
         host.spawn_helper(b, HelperKind::ExternalSemantics, peer(), deadline()),
         Err(HostError::ResourceLimit)
@@ -105,6 +110,7 @@ fn capture_claim_and_ingress_survive_until_real_helper_reap_without_blocking_ax(
         "caller bytes outlive helper and allow independent slot"
     );
     host.close_helper(ax).unwrap();
+    host.close_helper(ax_a).unwrap();
     host.close_helper(cap_b).unwrap();
     shutdown(&mut host);
     assert_eq!(raw.bytes()[0], 0xa1);

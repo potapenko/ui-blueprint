@@ -500,3 +500,28 @@ compact sorted JSON method. Source hash and saved equality follow the checkpoint
 handoff. Full H01/allocator/streaming/live/D06 acceptance remains open.
 
 Helper71 digest: `dc0be5f4a660193a381419d96c9d01014f943ba775e4462b0bfbf80c57d3df57`.
+
+## Vacant helper slot admission repair
+
+Helper stage saved/pushede11b44bd8840e443b6bf46f9f956ca0e5f585b38; saved71 digest
+matched checked bytes, Git lease released. A focused extension found an admission
+defect: after helper0 reap, its caller-held raw ingress made the first vacant slot
+Busy while helper1 was free. That let retained capture bytes hide independent AX
+capacity. The new assertion failed with Busy on the saved owner.
+
+spawn_helper now searches only the two structurally vacant slots, skipping Busy
+admission without discarding any returned child. Other failures return immediately;
+all occupied slots still refuse ResourceLimit. No new queue, buffer, parser, count
+or helper retry after successful spawn. Fixed accounting and capture/reap ownership
+are unchanged. Same-session AX now proceeds through the other slot while old raw
+bytes stay leased; existing cross-session/capture checks remain in that scenario.
+
+Focused command passes:
+cargo test --locked -p uiblueprint-host --test runtime helpers::capture_claim_and_ingress_survive_until_real_helper_reap_without_blocking_ax -- --exact.
+Scoped cargo clippy --locked -p uiblueprint-host --lib --test runtime -- -D warnings
+passes; rustfmt/diff check pass. Broader unchanged cases are not repeated.
+Exact3-path checkpoint: crates/host/src/helper_runtime.rs,
+crates/host/tests/support/helpers_host.rs and this receipt. Native binding remains
+unconnected WIP, excluded. No allocator/Cargo/protocol/worker pin/Integration file
+changes. After save these tracked sources can be held for the requested4-case
+Integration worker run; no other consumed-provider drift is present.
