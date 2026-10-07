@@ -406,3 +406,31 @@ on this change. Integration rechecks only affected method-level cases and new nu
 case after saved-input handoff. Scoped rustfmt/diff check pass. Helper WIP remains
 unconnected/unverified and excluded; no Integration source is staged by Core.
 Exact2-path checkpoint: crates/host/src/quota_allocator.rs and this receipt.
+
+## Private realloc-null seam extension
+
+Root d9188b8 extends the same narrow forwarding authorization after Integration
+identified the still-unreachable realloc-null branch. Existing allocate_with remains;
+new executable-private entry:
+`pub(super) unsafe fn reallocate_with(pointer: *mut u8, layout: Layout, new_size: usize, forward: unsafe fn(*mut u8, Layout, usize) -> *mut u8) -> *mut u8`.
+The old allocation must be uniquely live, valid for its exact layout and already
+charged; new size/alignment are valid. Backend null preserves old storage; success
+obeys GlobalAlloc::realloc ownership/content requirements. No unwind/recursion or
+added allocation/logging/locks. Shipping always uses fixed System.realloc.
+
+The shared production path reserves FULL new size while old remains charged,
+forwards once, releases only new reservation on null, retains old charge/storage
+and uses the existing System fatal. Success releases the old charge. Dealloc and
+all quota/publication/fatal policy remain unchanged. No public test API/request
+mode, limits/dependencies or huge allocation/VM-pressure probe were introduced.
+Integration owns valid small-pointer null callback/proof and runs affected cases
+in one wave; Core has not counted alloc-null as realloc-null or claimed execution.
+
+Scoped shipping/probe cargo check and shipping Clippy passed; rustfmt/diff check
+passed. Full-null runtime evidence awaits Integration. The separately developed
+helper owner compiled and passed4 helper cases plus the then-current16 runtime
+cases before this final forwarding extension, using allocator pin bfa9a61d…59d9aa;
+that earlier run is not attributed to the new pin. Helper source remains outside
+this two-path checkpoint. New source pin is returned in the terminal handoff.
+Exact2 paths: quota_allocator.rs and this H01-host receipt. No Integration source
+or other worker pins changed; saved-source recheck belongs to the affected proof.
