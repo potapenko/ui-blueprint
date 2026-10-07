@@ -705,3 +705,78 @@ CUA call before guarded input was getApp observation; no successful input outcom
 established in this attempt. After guard only that read occurred, no further input.
 No new attempt now; remaining packet work is actual scoped AX+popup capture with
 separate current identity proof after an authorized intact setup interval.
+
+
+## Actual AX + isolated popup pixels — successful fresh semantic setup
+
+Root activated a fresh complete bounded scenario with documented CUA refresh recovery,
+not a user-confirmation gate. Same reviewed saved Native23f22fb/Rust138d7bc candidate;
+current Core/Web WIP excluded. Preparation20.3364s before live, binary hashes identical
+to preceding recorded pins. Task-temp build products served this immediate operation;
+no source/fixture/config API/cap change, no new runner/framework or persistent directory.
+Acquisition@2/registry17, unchanged selected full Native product/acceptance closure.
+Root-selected combined Request1000ms bounds both helpers by remaining parent deadline;
+AX≤1s, capture≤1s≤2s, cleanup1s,160/depth9/512KiB per channel; no quality reduction.
+
+Own bundle/PID39459 launched by exact executable/run argument. getApp then fresh full
+getAXState immediately before each input established Window A/actual enabled indices.
+Fresh Edge popup index12 click produced Popup A/Confirm, focused Confirm. Fresh full
+state confirmed popup owner and enabled Snapshot index4; semantic AX Snapshot click
+preserved open Popup A and focus Confirm, assigned popup-a. No guard this interval,
+keyboard/coords/Raise/Compare/reset/Confirm/fallback/permission/display action.
+Snapshot1 popup=true/current bound direct own containing-window visible/equal_parent=false.
+This is setup semantic AX action, never product action-provider or physical hit proof.
+
+One metadata preparation failed before Observe: describe-window accepts AX-only, not
+combined channels. Used existing describe with its four sample metadata fields and
+both channels; actual Request retains form5. This temp input correction did not change
+source/limits/oracle, collect pixels/tree or retry an Observe. No actual dispatch before
+correct descriptor capability/current binding setup. Trusted Session explicitly holds
+popup first/parent second, mask3; own synthetic pixel policy/system-temp destination.
+
+Independent current identity values recorded individually immediately before and after
+actual Observe, before finally; all comparisons true in all four records:
+identity_version1.0.0/state OPEN/PID/bundle/launch/window ID/window identifier/target
+and surface generations. Expected==actual, pre==post for both current files.
+PID39459/bundle local.uiblueprint.f02.off/launch1791417144.1329353,
+target_generation39459:1791417144.1329353. Parent window10916/identifiera/generation
+2BFFCBAD-9CAE-4396-97CA-7FAC59C3EA07; popup10922/identifierpopup-a/generation
+9EA646C3-E60F-4187-ACC6-827BA2D02C69. No combined opaque assertion or cleanup-time
+reconstruction: each exact value/check captured before teardown. This closes the named
+independent post-Observe identity gap for this actual current candidate/run only.
+
+One actual product CLI combined Observe request577699c95e36431e837188a1b67b5605
+returned4/observe_incomplete due honest partial coverage,23607 stdout bytes/two lines.
+Both canonical documents validator0; channel order AX then capture, observed/partial.
+AX five actual nodes include Popup A owner/Confirm and sourced actual parent trigger,
+correct context/Surface generations/anchor and separate reported fixture association.
+Capture contains zero AX nodes/relations, anchor null, initiated_by parent with explicit
+fixture-binding evidence; actual capture_target/window_isolated/include popup10922,
+exclude known parent10916, unresolved established pair empty, surface coverage partial.
+Audio false, desktopIndependentWindow-no-children-no-audio, crop_transform unknown;
+no parent pixel substitute, geometric mapping/gap/occlusion inference or full-scope claim.
+
+Actual ScreenCaptureKit/ImageIO PNG362×228px/13232 bytes visibly shows Popup A and
+Confirm popup, shown inline in current chat. SHA256
+0b4a2ea3a01783af8d7f197d53b92bb64378c1361dfe3edb00dfa6cebe1a2b28.
+Both same-inode image paths retained, never agent-cleaned:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m03-recovery-images-zf3shh1b/capture/capture.png
+and that directory/.native-063ADFC1-3D69-47EC-8801-5E020F923E57.partial.
+Containing capture/root directories also retained; lifecycle OS/user, no promised deletion
+time. Exact full CUA AX state immediately before/after Observe compared equal: popup
+subtree, focus Confirm, Count0, Resultnone and exposed form/scroll state unchanged.
+No pixel/layout/hit invariance or universal SDK/reader qualification follows.
+
+Launcher start273250.07962925/deadline273550.07962925; Observe monotonic
+273289.257048708→273289.859470833 (remaining260.22s). Builds/setup outside request.
+Finally before outer timing assertions: elapsed53.406245791s,cleanup0.139333292s,
+timeout=false, exact fixture absent. Actual CLI owned helper/worker absent after
+publication and before fixture cleanup; Native desktop lane released. No extra Observe,
+Inspect or close/stale/reopen loops; no tuning/retry or B permission operation.
+Consumed current non-image responses/identity/input/build/source/cache removed with
+absence verified, two images/containing dirs excluded; historical assets untouched.
+
+Receipt-only outcome ready for exact1 checkpoint/push lease; author actual proof is
+not independent runtime acceptance or full M03/P7 completion. Shared-parent private
+representation/transform/hit/remaining full pilots remain open. Reviewed source and
+prior successful lifecycle facts preserved; no next source/runtime task silently begun.
