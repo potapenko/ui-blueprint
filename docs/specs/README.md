@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 10.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 11.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -63,10 +63,12 @@ All source-audit guards apply; runtime float_roundtrip and open D05 gates remain
 [D05-MEMORY@2](development/decisions/d05-memory.md), [D05-WORK@1](development/decisions/d05-working-memory.md).
 Delegated technical registration is not runtime acceptance; D07@4, wire meanings
 and all implementation/platform/positive D06 gates remain protected.
-
 `H01-PROCESS-001` registers [D07@5](development/decisions/d07-reuse.md)'s exact libc
 OS-binding use at the host boundary from Core's root-accepted source/license request.
 Existing locked version/policies remain; registration does not accept unsafe/runtime proof.
+`D05-NATIVE-ACQUISITION-001` registers [D05@4](development/decisions/d05-limits.md) and
+[Native acquisition@1](development/decisions/d05-native-acquisition.md) under [root's ROADMAP/D05 selection](../plans/ui-blueprint/packets/M01-acquisition-registration.md) of45c2667.
+Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; common quotas/wire/permissions/F02/D06 and implementation/live gates remain unchanged.
 
 ## Select a route
 

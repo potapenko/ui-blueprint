@@ -2,7 +2,7 @@
 
 - Domain: `uib.development.d05`; accepted/released baseline: none.
 - Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [D05-RET-002 / PARTITION-001](d05-memory.md#change-record), [D05-WORK-001](d05-working-memory.md).
-- Node type: leaf; contract: `UIB.D05@3`; clause: `UIB.D05.CONTENT`; supersedes @2.
+- Node type: leaf; contract: `UIB.D05@4`; clause: `UIB.D05.CONTENT`; supersedes @3.
 - Authority: Active / Stability: Evolving; policy selected, numeric coverage bounded.
 - Read when: S01 limits/validator or a platform/geometry acceptance test is prepared.
 - Do not read when: no limits/precision/deadline choice is affected.
@@ -10,6 +10,7 @@
   [LIFECYCLE@1](../../product/lifecycle.md), [CACHE@1](../../product/cache.md),
   [PERFORMANCE@1](../../acceptance/performance.md), [evidence](evidence.md),
   [D05-MEMORY@2](d05-memory.md), [D05-WORK@1](d05-working-memory.md) for host ownership/enforcement.
+- Conditional requires, Native acquisition only: [D05-NATIVE-ACQUISITION@1](d05-native-acquisition.md); pure Rust H01 does not inherit Swift scope.
 - Owner/deadline: S01 sizing before W01/M01; W01/M01/P01 calibration before
   corresponding tests; K01 implements the established retention bounds.
 
@@ -84,3 +85,13 @@ actual cleanup and bounded resync proof. A host permit or retained counter alone
 does not enforce transient allocations. The reviewed reusable-worker design is now
 adopted under [registration authority](../../../plans/ui-blueprint/packets/D05-runtime-registration.md),
 before source work; platform/allocator/publication and unchanged D06 gates stay open.
+
+## D05-NATIVE-ACQUISITION-001
+
+Under ROADMAP D05 and [root registration authority](../../../plans/ui-blueprint/packets/M01-acquisition-registration.md),
+register selected45c2667 as [D05-NATIVE-ACQUISITION@1](d05-native-acquisition.md):
+explicit Native copied-value/shape/pixel metrics, ceilings and admission before
+copy/dispatch/write, with opaque SDK/codec costs and unchanged canonical outcomes.
+D05@4 adds only this conditional Native profile; D02@2/D04@1/MEMORY@2/WORK@1,
+common Rust quotas, wire/privacy/permissions, F02 coverage/pixels and D06@1 remain.
+Implementation, isolated-helper SDK lifetime and positive live acceptance stay open.

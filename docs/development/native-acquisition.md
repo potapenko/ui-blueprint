@@ -1,7 +1,10 @@
 # Native acquisition limits — engineering proposal
 
-Status: **proposed, not an Active contract or implemented profile**. Packet
-[M01-acquisition-plan](../plans/ui-blueprint/packets/M01-acquisition-plan.md),
+Status: **selected45c2667; profile registered as [UIB.D05-NATIVE-ACQUISITION@1](../specs/development/decisions/d05-native-acquisition.md)**
+under [root's registration authority](../plans/ui-blueprint/packets/M01-acquisition-registration.md).
+This document preserves the selected engineering proposal/provenance; the leaf is
+normative. Source implementation, SDK/H01 proof and live acceptance remain open.
+Original proposal packet: [M01-acquisition-plan](../plans/ui-blueprint/packets/M01-acquisition-plan.md),
 PLAN.UIB@1/ROADMAP delegated D05 choices. Consumer: the next finite Native source
 slice on helper7c6e078 and Core c0abcff. Preserve one collector/canonical schema,
 D02 ownership, current F02 workload and D06@1; no SDK/live execution is authorized
