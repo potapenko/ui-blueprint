@@ -49,3 +49,23 @@ real-site launch or B02 input. Existing source snapshot build mechanism avoids
 holding Core/Native. Each coherent step checkpoint+push under short Git lease.
 Immediate consumer is useful popup context for inspect/measure; full Director/
 real-app behavior and B03 hit/clip/pixel gates remain truthfully separate.
+
+Latest user storage rule overrides older W01 evidence-directory instructions:
+do not create a new persistent Application Support UUID directory for B03.
+Use a fresh owned system-temp directory for this current finite check. Check the
+result there, return compact factual findings, then remove its run-owned outputs
+and empty directories after use and verify removal. No archive for future P7.
+Keep existing earlier evidence intact. If the driver enforces the old destination,
+change only that existing expression to the owned temporary path with the same
+exclusive/no-overwrite/privacy protections; no new flags or storage abstraction.
+No screenshots are required by this data check; do not deliver a disposable file
+link as the result. Report any genuinely necessary durable consumer separately;
+it does not authorize a new permanent location.
+
+Prepared d11c077 is now saved and pushed (root's ordinary push recovered the
+transient GitHub failure). Activate one popup_relations run with matching recorded
+inputs/binaries, unchanged finite cases/limits and a fresh owned system-temp UUID
+destination. No common-source hold or unchanged rebuild. Report factual result,
+invariance and exact owned cleanup, then remove this run's temporary output and
+verify removal. Existing earlier evidence remains untouched. This is the already
+approved B03 continuation, not a new product or permission decision.

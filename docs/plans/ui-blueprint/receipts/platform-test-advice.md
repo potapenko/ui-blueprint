@@ -109,3 +109,17 @@ background/Close targets. Mac [RC01 expected](../../../../fixtures/real-world/ma
 does not establish persistence or inner spacing. iPad filters/iPhone Reels remain
 existing reference data, not mobile implementation authority. Immediate next
 owners consume this handoff for useful scoped inspect/measure, not another audit.
+
+### Known dimensions with unknown overall consistency
+
+Web coauthor was asked about the actual four CLI unstable_state results. Read-only
+answer: MODEL separates known property availability from stable/unstable/unknown
+Observation consistency; GEOMETRY scopes stabilization; EXCHANGE promises no
+global atomic snapshot; ANALYSIS-VALIDATION explicitly rejects unstable source.
+Known width/height of one recorded known rect therefore need not be suppressed
+solely for unknown overall consistency. Preserve that unknown and all original
+evidence; it is not a claim that current UI is stable or final verification passed.
+The advisor cautioned that no universal unknown-consistency operation table exists;
+Core separately checked protected G01/accepted-analysis clauses and tests before
+aligning the actual engine/schema guards. This records reconciliation of existing
+meaning, not a new blanket permission for incoherent comparisons.
