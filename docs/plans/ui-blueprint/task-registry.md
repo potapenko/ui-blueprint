@@ -90,8 +90,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G02 source53c6f74 saved/pushed, pins match; Core turn failed capacity only after successful push/cleanup, no work lost. Web static-site run identified ReadException; one-flag acquire repaird19d130 pushed and changed first-case run proceeds from immutable saved inputs. Same collector reviewer checks only changed read-only boundary, no general audit. Native four-path caller preparation continues independently. Git released; no shared source hold |
-| Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
+| Активные чаты/пакеты/ресурсы | G02 source53c6f74 saved/pushed, pins match; Core capacity failure happened after successful push/cleanup. Web first guarded response PASSED on d19d130/provider9b881e6, result1acc4b8 pushed; one ACKed5681B frame, DOM/AX/invariance and cleanup confirmed. Same reviewer reconciles this changed boundary only. Web continues already-prepared five-case sequence; Native caller preparation remains parallel. No shared source hold |
+| Последний принятый результат продукта | local analysis and G02 explicit stored-relation neighbors accepted in their finite scope. First actual guarded Chromium response passes author oracle/invariance/cleanup; narrow source review reconciliation pending. No full Web/Native/release acceptance |
 | Следующий шаг | Forward minimal Core branch-code provider, then changed Web first-case run on saved pins and actual-owner repair. Native caller compile/handoff and Core G02 deterministic implementation remain parallel. No repeated accepted offline proofs or product reapproval; root transfers completed handoffs promptly. Full P0–P7 scope unchanged |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 

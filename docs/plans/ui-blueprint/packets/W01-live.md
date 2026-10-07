@@ -208,3 +208,21 @@ integrated acceptance. No hold on unrelated engine edits is then necessary;
 otherwise the original short source hold still applies. Build exports are temporary
 and owned by Web through this immediate proof, never committed or stored as raw
 permanent evidence. Numeric limits, cases, outcomes and runtime authority unchanged.
+
+## Continue prepared Web cases after first success
+
+First real ACKed response passed on repaird19d130/provider9b881e6; saved receipt
+1acc4b8 records current data, DOM/AX oracle, read-only invariance and complete
+cleanup. Same Web owner now runs the already-prepared five-case sequence above,
+once, with its unchanged saved harness and binaries when pins match. The initial
+observation is setup for this complete sequence, not a rerun solely for artifacts.
+Fresh exclusive UUID, existing evidence contract/retention, fixed caps/oracles and
+120s whole-run bound remain. No new cases, physical input, browser/profile, backend,
+permission, Q02 or real-app scope. Reuse compiled artifacts; no unchanged rebuild.
+Record exact executable/source recipe (prior engine snapshot excludes G02), case
+outcomes and cleanup. On a concrete failure, stop that sequence, preserve bounded
+failure evidence and return the owning cause; no unchanged retry or expected-result
+relaxation. Source repair remains limited to the currently assigned Web owners.
+No common-source hold is needed for immutable builds. Save/push the result receipt
+through the next short Git lease. This continuation is already within the approved
+goal and requires no new user decision or general audit.
