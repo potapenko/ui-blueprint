@@ -82,12 +82,13 @@ enum CaptureAdmission { case legacyRun, parentOwned }
         return fault
     }
     static func capture(windowID: UInt32, pid: Int32, budget: Double = 2,
-                        admission: CaptureAdmission = .legacyRun) async throws -> OwnedCapture {
+                        admission: CaptureAdmission = .legacyRun, acquisition: NativeAcquisition) async throws -> OwnedCapture {
+        try acquisition.check()
         guard budget.isFinite && budget > 0 && budget <= 2 else { throw OwnedCaptureError.resourceUnavailable }
         let fault = admission == .legacyRun ? try validatedFault(ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"]) : nil
         if fault == nil { guard CGPreflightScreenCaptureAccess() else { throw OwnedCaptureError.permissionRequired } }
         let begin = ProcessInfo.processInfo.systemUptime
-        let deadline = begin + budget
+        let deadline = min(acquisition.deadline, begin + budget)
         var fd: Int32 = -1
         if admission == .legacyRun {
             guard let path = ProcessInfo.processInfo.environment["UIB_CAPTURE_LOCK_PATH"], path.hasPrefix("/") else {
@@ -131,13 +132,18 @@ enum CaptureAdmission { case legacyRun, parentOwned }
         let configuration = SCStreamConfiguration()
         configuration.capturesAudio = false; configuration.showsCursor = false
         configuration.ignoreShadowsSingleWindow = true
-        configuration.width = Int((filter.contentRect.width * CGFloat(filter.pointPixelScale)).rounded())
-        configuration.height = Int((filter.contentRect.height * CGFloat(filter.pointPixelScale)).rounded())
+        let dimensions = try acquisition.imageDimensions(width: Double(filter.contentRect.width),
+            height: Double(filter.contentRect.height), scale: Double(filter.pointPixelScale))
+        configuration.width = dimensions.0; configuration.height = dimensions.1
+        if #available(macOS 15.0, *) { configuration.captureDynamicRange = .SDR }
         if #available(macOS 14.2, *) { configuration.includeChildWindows = false }
         let image: CGImage = try await callback(stage: "screenshot", deadline: deadline) { complete in
             SCScreenshotManager.captureImage(contentFilter: filter, configuration: configuration, completionHandler: complete)
         }
         try Task.checkCancellation()
+        try acquisition.returnedImage(width: image.width, height: image.height, rowBytes: image.bytesPerRow, requested: dimensions)
+        guard image.bitsPerComponent == 8, image.bitsPerPixel == 32, image.colorSpace?.model == .rgb
+        else { throw NativeAcquisitionError.invalidValue }
         completedPlatformCall = true
         return OwnedCapture(image: image, windowFrame: window.frame, filterRect: filter.contentRect, scale: filter.pointPixelScale, admissionWait: admissionWait)
     }
@@ -170,6 +176,9 @@ enum CaptureAdmission { case legacyRun, parentOwned }
         return result
     }
     static func issue(_ error: any Error) -> (code: String, step: String) {
+        if let acquisition = error as? NativeAcquisitionError {
+            return (acquisition == .expired ? "timeout" : "incomplete_scope", "native_acquisition")
+        }
         if let platform = error as? CapturePlatformFailure {
             // SDK27 SCError.h: -3801 is UserDeclined. Do not retry via another backend.
             if platform.domain == "com.apple.ScreenCaptureKit.SCStreamErrorDomain", platform.code == -3801 {
@@ -288,12 +297,18 @@ struct Observe {
             }
             return
         }
-        guard args.count == 3 || args.count == 4 else { exit(2) }
+        guard args.count == 4 || args.count == 5 else { exit(2) }
         let manifestURL = URL(fileURLWithPath: args[1])
         let out = URL(fileURLWithPath: args[2], isDirectory: true)
-        let sampleCount = args.count == 4 ? (Int(args[3]) ?? 0) : 1
+        let sampleCount = args.count == 5 ? (Int(args[4]) ?? 0) : 1
         guard (1...30).contains(sampleCount) else { exit(2) }
         do {
+            let limitsFile = try FileHandle(forReadingFrom: URL(fileURLWithPath: args[3]))
+            defer { try? limitsFile.close() }
+            let limitsData = try limitsFile.read(upToCount: 4033) ?? Data()
+            guard limitsData.count <= 4032 else { throw NativeAcquisitionError.limit }
+            let acquisitionLimits = try JSONDecoder().decode(NativeAcquisitionLimits.self, from: limitsData)
+            try acquisitionLimits.validate()
             let data = try Data(contentsOf: manifestURL)
             guard let manifest = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let pid = manifest["pid"] as? Int32,
@@ -338,18 +353,14 @@ struct Observe {
                 result["rendered_capture"] = ["status": "permission_required", "prompted": false]
             } else {
                 do {
-                    let captured = try await CaptureLifecycle.capture(windowID: wid, pid: pid)
+                    let acquisition = try NativeAcquisition(acquisitionLimits, deadline: captureStart + 2)
+                    let captured = try await CaptureLifecycle.capture(windowID: wid, pid: pid, acquisition: acquisition)
                     let image = captured.image
                     guard NSRunningApplication(processIdentifier: pid)?.launchDate?.timeIntervalSince1970 == launch else {
                         throw NSError(domain: "stale_target", code: 3)
                     }
                     if sampleIndex == 0 {
-                    let imageURL = out.appendingPathComponent("window.png")
-                    guard let dest = CGImageDestinationCreateWithURL(imageURL as CFURL, UTType.png.identifier as CFString, 1, nil) else {
-                        throw NSError(domain: "capture_write_failed", code: 4)
-                    }
-                    CGImageDestinationAddImage(dest, image, nil)
-                    guard CGImageDestinationFinalize(dest) else { throw NSError(domain: "capture_write_failed", code: 5) }
+                    _ = try writeNativePNG(image, admission: acquisition, directory: out, name: "window.png")
                     }
                     result["rendered_capture"] = ["status": "observed", "capture_kind": "window_isolated",
                         "capture_target": wid, "pixel_buffer_size": [image.width, image.height],

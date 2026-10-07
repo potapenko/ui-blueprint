@@ -15,7 +15,8 @@ import Darwin
                 manifest: command.configuration.binding.manifest,
                 directory: command.configuration.artifact_directory.map { URL(fileURLWithPath: $0) },
                 mode: command.configuration.collection == "window-ax" ? "window-ax" : "live",
-                sequence: command.control.ticket, selectedChannel: command.channel,
+                sequence: command.control.ticket, limits: command.configuration.acquisition_limits,
+                evidence: command.configuration.acquisition_evidence == true, wireCap: command.replyCap, selectedChannel: command.channel,
                 deadline: command.deadline) { bytes in
                     try io.reply(bytes, cap: command.replyCap, deadline: command.deadline)
                 }

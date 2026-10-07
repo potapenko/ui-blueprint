@@ -102,7 +102,7 @@ def proof_case(args, manifest, mode):
     request_file.write_bytes(encoded(request))
     validate(args.validator, request_file)
     # Descriptor-only call reads public identity/permission metadata, not requested UI fields.
-    descriptor = subprocess.run([str(args.collector), str(args.manifest), str(folder), 'describe'],
+    descriptor = subprocess.run([str(args.collector), str(args.manifest), str(folder), 'describe', str(args.acquisition_limits)],
                                 input=encoded(request), capture_output=True, timeout=2)
     if descriptor.returncode != 0 or len(descriptor.stdout) > FRAME:
         raise RuntimeError('descriptor acquisition failed')
@@ -130,7 +130,7 @@ def proof_case(args, manifest, mode):
         assert ticket['parent_clock_domain'] == request['artifact']['data']['clock_domain']
         # Sequence comes only from the actual common ObservationSession::begin.
         collector = subprocess.Popen([str(args.collector), str(args.manifest), str(folder),
-                                      'live' if mode == 'live' else 'injected-capture-wait', str(ticket['sequence'])],
+                                      'live' if mode == 'live' else 'injected-capture-wait', str(args.acquisition_limits), str(ticket['sequence'])],
                                      stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
         processes.append(collector)
         cr = Reader(collector.stdout)
@@ -212,7 +212,7 @@ def proof_case(args, manifest, mode):
 
 def main():
     parser = argparse.ArgumentParser()
-    for name in ('host', 'validator', 'collector', 'manifest', 'output'):
+    for name in ('host', 'validator', 'collector', 'manifest', 'output', 'acquisition-limits'):
         parser.add_argument(f'--{name}', required=True, type=pathlib.Path)
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)

@@ -40,7 +40,9 @@ def inputs(channel=0, cap=65_536, duration=1000, request=None, config=None):
                              'target_generation': 'g1', 'surface_generation': 'w1'},
                   'scope_id': 'form-1', 'collection': 'sample',
                   'artifact_directory': '/tmp/unused-offline-native-fixture',
-                  'pixel_policy': 'owned_synthetic_fixture'}
+                  'pixel_policy': 'owned_synthetic_fixture',
+                  'acquisition_limits': json.loads((ROOT / 'tests/bridges/native/acquisition/profile.json').read_text()),
+                  'acquisition_evidence': False}
     # Pretty input proves length framing accepts whitespace/newlines unchanged.
     body = json.dumps(request, indent=2).encode()
     setup = encoded(config)
@@ -167,6 +169,10 @@ def main():
     case('actual helper rejects header before SDK', wire[:63], binary=args.helper)
     bad_config = copy.deepcopy(config); del bad_config['artifact_directory']; del bad_config['pixel_policy']
     case('actual helper rejects missing pixel policy before SDK', inputs(channel=1, config=bad_config)[0], binary=args.helper)
+    bad_config = copy.deepcopy(config); del bad_config['acquisition_limits']
+    case('missing mandatory acquisition profile', inputs(config=bad_config)[0], binary=args.helper)
+    bad_config = copy.deepcopy(config); bad_config['acquisition_limits']['png_bytes'] = 67_108_865
+    case('out-of-profile acquisition cap', inputs(config=bad_config)[0], binary=args.helper)
     bad_config = copy.deepcopy(config); bad_config['binding']['bundle_id'] = 'other.app'
     case('unsupported binding', inputs(config=bad_config)[0])
     bad_config = copy.deepcopy(config); bad_config['artifact_directory'] = '/tmp/../outside'

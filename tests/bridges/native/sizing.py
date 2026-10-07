@@ -18,7 +18,7 @@ prove.FRAME = FRAME
 
 def main():
     parser = argparse.ArgumentParser()
-    for name in ('host', 'validator', 'collector', 'manifest', 'output'):
+    for name in ('host', 'validator', 'collector', 'manifest', 'output', 'acquisition-limits'):
         parser.add_argument(f'--{name}', required=True, type=pathlib.Path)
     parser.add_argument("--check-canary-env", help="Name of a one-use test environment value; removed before child launch")
     args = parser.parse_args()
@@ -49,7 +49,7 @@ def main():
     request_file = args.output/'request.json'
     request_file.write_bytes(prove.encoded(request))
     checked_validate(request_file)
-    descriptor = subprocess.run([str(args.collector), str(args.manifest), str(args.output), 'describe-window'],
+    descriptor = subprocess.run([str(args.collector), str(args.manifest), str(args.output), 'describe-window', str(args.acquisition_limits)],
                                 input=prove.encoded(request), capture_output=True, timeout=2)
     private_check(descriptor.stdout); private_check(descriptor.stderr)
     diagnostics_bytes += len(descriptor.stderr)
@@ -66,7 +66,7 @@ def main():
         hr = prove.Reader(host.stdout); readers.append(hr)
         ticket = json.loads(hr.get(2)); receipts.append(ticket)
         assert ticket['event'] == 'ticket' and ticket['session_id'] == context['session_id']
-        collector = subprocess.Popen([str(args.collector), str(args.manifest), str(args.output), 'window-ax', str(ticket['sequence'])],
+        collector = subprocess.Popen([str(args.collector), str(args.manifest), str(args.output), 'window-ax', str(args.acquisition_limits), str(ticket['sequence'])],
                                      stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         owned.append(collector)
         cr = prove.Reader(collector.stdout); readers.append(cr)

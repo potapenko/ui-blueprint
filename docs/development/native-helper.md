@@ -31,7 +31,16 @@ embedded in this private JSON configuration:
   "scope_id": "form-1",
   "collection": "sample",
   "artifact_directory": "/absolute/run-owned/new-capture-directory",
-  "pixel_policy": "owned_synthetic_fixture"
+  "pixel_policy": "owned_synthetic_fixture",
+  "acquisition_evidence": false,
+  "acquisition_limits": {
+    "ax_windows": 32, "array_page": 32, "child_entries": 1280,
+    "value_utf8_bytes": 4096, "action_names": 32, "action_name_utf8_bytes": 256,
+    "batch_values": 8, "batch_utf8_bytes": 16384, "copied_utf8_bytes": 262144,
+    "response_slots": 65536, "response_string_utf8_bytes": 1048576,
+    "image_width": 4096, "image_height": 4096, "image_pixels": 8388608,
+    "image_bytes": 67108864, "png_bytes": 67108864, "sidecar_bytes": 16384
+  }
 }
 ```
 
@@ -51,17 +60,28 @@ new arbitrary-subtree capability. A selected capture channel uses the original
 Context even when AX's selected collection is window-ax. Canonical channel sets
 can contain AX, capture or both; each helper performs only its selected channel.
 
-`artifact_directory` and `pixel_policy` are optional for AX, mandatory for capture.
-Only explicit `owned_synthetic_fixture` policy is supported; it is not a general
-masking policy or permission to export real-user pixels. The parent authorizes a
-new directory under its run-owned location with an existing trusted parent.
-Native creates it with mode0700, refuses an existing path (including a symlink),
-and writes capture.png/capture-metadata.json there. `payload_ref` is capture.png
-relative to that configured directory; no output path comes from Request/UI text.
-The caller retains the directory-to-operation association, owns partial artifacts
-and cleanup, and configures a fresh directory for subsequent capture requests
-(after prior helpers reap). AX does not create that directory. No automatic export,
-permission prompt, backend fallback or retry is implemented.
+All acquisition limits are mandatory explicit caller values, positive and at or
+below [the registered profile](../specs/development/decisions/d05-native-acquisition.md).
+The example uses the selected initial ceilings, not implicit defaults. Smaller
+request and parent limits still govern. `acquisition_evidence` enables only bounded
+private counters/metadata; ordinary canonical output gains no telemetry.
+
+`artifact_directory` is a trusted private per-operation container. Capture requires
+explicit `pixel_policy: owned_synthetic_fixture`; AX evidence only requires the
+trusted directory, not pixel permission. No general real-user pixel policy exists.
+The helper creates the container if absent and requires ownership/private0700/no
+final symlink. Each selected channel creates a NEW0700 child (`ax` or `capture`),
+so AX evidence cannot consume capture's destination and neither overwrites files.
+Capture's canonical payload_ref is `capture/capture.png` relative to the configured
+container. Legacy combined collector retains capture.png relative to its supplied
+fixture directory. The caller retains the operation-to-container association and
+owns cleanup/partial files after abrupt child death; every later operation needs
+a fresh destination. No output path comes from Request/UI text.
+
+H01 AX writes `ax/acquisition.json` only with evidence enabled. Capture writes
+`capture/capture.png`, and optionally `capture/capture-metadata.json`; all use
+exclusive/no-follow partial files and complete-only no-overwrite publication.
+No permission prompt, backend fallback, automatic export or retry is implemented.
 
 ## Wire and deadline
 
@@ -109,10 +129,15 @@ bounded callback gate and late-result rejection. AX never waits for capture or
 checks its permission; capture never queries AX permission/tree. Audio/cursor/
 child-window exclusion and unknown AX-to-image transform remain unchanged.
 
-Swift/SDK allocations, AX strings/batches/window inventory and image buffers are
-not a Rust heap/RSS bound. Further acquisition/string/pixel ceilings, arbitrary-app
-identity, safe production pixel redaction/storage and real installable-adapter
-qualification remain Native/M01 work. The recorded B ScreenCaptureKit−3801 outcome
+NativeAcquisition now bounds ranged AX entries and additional copied strings/
+actions/batches; NativeJSON charges object/string construction and writes through
+the existing Foundation codec to a reserved LF-inclusive sink. NativeArtifacts
+checks image dimensions/area/footprint and caps ImageIO callback bytes BEFORE file
+writes. The UTF-8 conversion buffer and owned String are both charged; batch
+admission includes that overlap. Requested/admitted/actual copied bytes are distinct.
+Source-controlled bounds do not cover initial opaque CF objects, Foundation/ImageIO
+internal scratch or SDK allocations and are not a Rust heap/RSS bound. Arbitrary-app
+identity, safe production pixel redaction/storage and real SDK qualification remain. The recorded B ScreenCaptureKit−3801 outcome
 stays permission_required; this packet does not retry pixels or alter permissions.
 
 ## Build and offline checks
@@ -121,10 +146,12 @@ stays permission_required; this packet does not retry pixels or alter permission
 
 ```sh
 xcrun swiftc -parse-as-library -swift-version 6 -D CAPTURE_LIBRARY \
-  -target arm64-apple-macos14.0 fixtures/native/Observe.swift \
+  -target arm64-apple-macos14.0 plugins/macos/NativeAcquisition.swift \
+  plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift fixtures/native/Observe.swift \
   tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift \
   -o "$NATIVE_TASK_TMP/legacy-collector"
 xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 \
+  plugins/macos/NativeAcquisition.swift plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift \
   fixtures/native/Observe.swift -o "$NATIVE_TASK_TMP/legacy-observe"
 ```
 
@@ -133,7 +160,8 @@ and common collector failure encoder, never Collector.collect or SDK APIs:
 
 ```sh
 xcrun swiftc -parse-as-library -swift-version 6 -D CAPTURE_LIBRARY -D HOST_HELPER \
-  -target arm64-apple-macos14.0 fixtures/native/Observe.swift \
+  -target arm64-apple-macos14.0 plugins/macos/NativeAcquisition.swift \
+  plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift fixtures/native/Observe.swift \
   tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift \
   plugins/macos/HostProtocol.swift tests/bridges/native/host_helper/ProtocolPeer.swift \
   -o "$NATIVE_TASK_TMP/protocol-peer"
@@ -150,3 +178,37 @@ limited to malformed header/scope/missing pixel-policy refusal before SDK access
 These checks do not prove live collector success or parent integration with this
 Swift binary. That needs its subsequent runtime packet, independent changed-source
 review and the remaining positive M01/D05/D06 gates.
+
+## Registered acquisition checks and legacy callers
+
+The three shared files NativeAcquisition.swift, NativeJSON.swift and
+NativeArtifacts.swift are linked by H01 and legacy builds. WindowAX and sample
+collection use the same ranged-array/value admission. The standalone historical
+Observe diagnostic retains its own noncanonical AX reporting; its shared capture
+admission/PNG sink consumes the explicit profile. It is not relabelled a guarded
+canonical H01 path.
+
+Legacy Collector argv is `manifest output mode acquisition-limits.json [Ticket]`;
+standalone Observe argv is `manifest output acquisition-limits.json [sample-count]`.
+The pure `--gate-checks` path performs no acquisition and needs no limits. prove.py,
+sizing.py and capture_lifecycle.py require `--acquisition-limits`; use their explicit
+current source builds, not the historical Observe binary extracted by prepare.py.
+Their expected outcomes/stimuli/fault semantics remain unchanged; these live drivers
+were not executed for the source packet.
+
+Compile and run the nonvisual synthetic suite (own CF values, tiny CGImage/ImageIO,
+streams and files; no live AX/ScreenCaptureKit):
+
+```sh
+xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 \
+  plugins/macos/NativeAcquisition.swift plugins/macos/NativeJSON.swift \
+  plugins/macos/NativeArtifacts.swift tests/bridges/native/WindowAX.swift \
+  tests/bridges/native/acquisition/Checks.swift -o "$NATIVE_TASK_TMP/acquisition-checks"
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/acquisition/check.py \
+  --checks "$NATIVE_TASK_TMP/acquisition-checks" --validator "$VERIFIED_VALIDATOR" \
+  --sample "$RETAINED_NATIVE_SAMPLE" --output "$NATIVE_TASK_TMP"
+```
+
+The sample is the existing D05 Native returned-wire.ndjson identified in its receipt.
+The runner proves unchanged canonical data through a bounded codec and the existing
+validator; it does not pretend to reacquire that old UI or prove live AX node output.

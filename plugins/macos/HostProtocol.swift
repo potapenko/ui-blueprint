@@ -49,14 +49,18 @@ struct NativeConfiguration: Decodable {
     let collection: String
     let artifact_directory: String?
     let pixel_policy: String?
+    let acquisition_limits: NativeAcquisitionLimits
+    let acquisition_evidence: Bool?
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "acquisition_limits", "acquisition_evidence"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
         let config = try JSONDecoder().decode(Self.self, from: bytes)
+        try config.acquisition_limits.validate()
+        if config.acquisition_evidence == true && config.artifact_directory == nil { throw NativeProtocolError.configuration }
         guard config.binding.pid > 0, config.binding.window_id > 0,
               config.binding.launch_time.isFinite && config.binding.launch_time > 0,
               ["local.uiblueprint.f02.on", "local.uiblueprint.f02.off"].contains(config.binding.bundle_id),
@@ -67,7 +71,7 @@ struct NativeConfiguration: Decodable {
         if let directory = config.artifact_directory {
             guard directory.hasPrefix("/"), !directory.utf8.contains(0),
                   !directory.split(separator: "/").contains(".."),
-                  config.pixel_policy == "owned_synthetic_fixture"
+                  config.pixel_policy == nil || config.pixel_policy == "owned_synthetic_fixture"
             else { throw NativeProtocolError.configuration }
         } else if config.pixel_policy != nil { throw NativeProtocolError.configuration }
         return config
@@ -130,22 +134,11 @@ struct NativeDescriptorIO {
         }
         return result
     }
-    func reply(_ frame: Data, cap: Int, deadline: Double) throws {
-        guard !frame.isEmpty, frame.count < cap, !frame.contains(10), !frame.contains(13),
-              String(data: frame, encoding: .utf8) != nil else { throw NativeProtocolError.limit }
-        var bytes = frame
-        bytes.append(10) // Count LF before the first output byte.
-        var used = 0
-        while used < bytes.count {
-            try ready(output, Int16(POLLOUT), deadline)
-            let n = bytes.withUnsafeBytes { Darwin.write(output, $0.baseAddress!.advanced(by: used), bytes.count - used) }
-            if n <= 0 {
-                if n < 0 && (errno == EINTR || errno == EAGAIN) { continue }
-                throw NativeProtocolError.io
-            }
-            used += n
-        }
+    func reply(_ frame: NativeJSONFrame, cap: Int, deadline: Double) throws {
+        guard frame.count > 1, frame.count <= cap, !frame.failed else { throw NativeProtocolError.limit }
+        try frame.write(to: output, deadline: deadline)
     }
+
 }
 
 @MainActor enum NativeHostProtocol {

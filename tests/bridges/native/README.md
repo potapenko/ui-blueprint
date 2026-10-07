@@ -14,6 +14,7 @@ It uses Integration's actual common host; it owns no second lifecycle or schema.
 python3 tests/bridges/native/prepare.py
 python3 tests/bridges/native/build_support.py /absolute/task-temp/common-build
 xcrun swiftc -parse-as-library -swift-version 6 -D CAPTURE_LIBRARY -target arm64-apple-macos14.0 \
+  plugins/macos/NativeAcquisition.swift plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift \
   fixtures/native/Observe.swift tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift \
   -o /absolute/task-temp/native-collector
 ```
@@ -42,6 +43,7 @@ UIB_CAPTURE_LOCK_PATH=/absolute/task-temp/capture.lock python3 tests/bridges/nat
   --validator /absolute/task-temp/common-build/target/debug/uiblueprint-validate \
   --collector /absolute/task-temp/native-collector \
   --manifest /absolute/evidence/fixture/b.json \
+  --acquisition-limits tests/bridges/native/acquisition/profile.json \
   --output /absolute/evidence/proof
 ```
 
@@ -105,6 +107,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/sizing.py \
   --validator /absolute/task-temp/common-build/target/debug/uiblueprint-validate \
   --collector /absolute/task-temp/native-collector \
   --manifest /absolute/evidence/fixture/b.json \
+  --acquisition-limits tests/bridges/native/acquisition/profile.json \
   --output /absolute/evidence/sample
 ```
 
@@ -155,3 +158,13 @@ reap. This driver issues no real pixel requests; real pre/post-repair capture
 attempts and the remaining B permission condition are recorded in the receipt.
 The known SDK simultaneous-callback failure is addressed by explicit bounded
 callbacks and capture-only serialization, not relabelled as parallel-capture success.
+
+## Explicit acquisition profile
+
+Current Collector requires `--acquisition-limits` on prove.py/sizing.py and the
+capture lifecycle driver. The supplied JSON is mandatory; no default profile is
+installed. The checked-in acquisition/profile.json is an explicit synthetic test
+caller choice at the registered ceilings. See the [helper contract](../../../docs/development/native-helper.md)
+for current compile commands and offline checks. For current standalone Observe,
+pass the limits file before the optional sample count. Historical preparation
+products remain historical and are not silently treated as the current helper.

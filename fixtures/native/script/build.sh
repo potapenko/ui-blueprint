@@ -16,4 +16,4 @@ for mode in off on; do
     /usr/bin/plutil -insert "${entry%%:*}" -string "${entry#*:}" "$bundle/Contents/Info.plist"
   done
  done
-xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 "$base/Observe.swift" -o "$output/f02-observe"
+xcrun swiftc -parse-as-library -swift-version 6 -target arm64-apple-macos14.0 "$base/Observe.swift" "$base/../../plugins/macos/NativeAcquisition.swift" "$base/../../plugins/macos/NativeJSON.swift" "$base/../../plugins/macos/NativeArtifacts.swift" -o "$output/f02-observe"

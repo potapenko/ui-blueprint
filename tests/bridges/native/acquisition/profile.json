@@ -1,0 +1,19 @@
+{
+  "ax_windows": 32,
+  "array_page": 32,
+  "child_entries": 1280,
+  "value_utf8_bytes": 4096,
+  "action_names": 32,
+  "action_name_utf8_bytes": 256,
+  "batch_values": 8,
+  "batch_utf8_bytes": 16384,
+  "copied_utf8_bytes": 262144,
+  "response_slots": 65536,
+  "response_string_utf8_bytes": 1048576,
+  "image_width": 4096,
+  "image_height": 4096,
+  "image_pixels": 8388608,
+  "image_bytes": 67108864,
+  "png_bytes": 67108864,
+  "sidecar_bytes": 16384
+}

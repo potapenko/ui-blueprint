@@ -33,7 +33,7 @@ def bridge_case(args, mode):
     request_path = folder/'request.json'; request_path.write_bytes(prove.encoded(request))
     prove.validate(args.validator, request_path)
     environment = dict(os.environ, UIB_CAPTURE_LOCK_PATH=str(args.lock))
-    descriptor = subprocess.run([str(args.collector), str(args.fixtures/'a.json'), str(folder), 'describe'],
+    descriptor = subprocess.run([str(args.collector), str(args.fixtures/'a.json'), str(folder), 'describe', str(args.acquisition_limits)],
                                 input=prove.encoded(request), capture_output=True, timeout=2, env=environment)
     assert descriptor.returncode == 0
     session_path = folder/'session.json'; session_path.write_bytes(descriptor.stdout)
@@ -48,7 +48,7 @@ def bridge_case(args, mode):
         owned.append(host); hr = prove.Reader(host.stdout); readers.append(hr)
         ticket = json.loads(hr.get(2)); events.append(ticket); assert ticket['event'] == 'ticket'
         environment['UIB_CAPTURE_FAULT'] = 'failure' if mode == 'failure' else 'stall'
-        collector = subprocess.Popen([str(args.collector), str(args.fixtures/'a.json'), str(folder), 'live', str(ticket['sequence'])],
+        collector = subprocess.Popen([str(args.collector), str(args.fixtures/'a.json'), str(folder), 'live', str(args.acquisition_limits), str(ticket['sequence'])],
                                      stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=environment)
         owned.append(collector); cr = prove.Reader(collector.stdout); readers.append(cr)
         collector.stdin.write(prove.encoded(request)); collector.stdin.close()
@@ -97,7 +97,7 @@ def isolation(args):
     folder=args.output/'ax-isolation'; folder.mkdir(); (folder/'a').mkdir(); (folder/'b').mkdir()
     env=dict(os.environ,UIB_CAPTURE_LOCK_PATH=str(args.lock),UIB_CAPTURE_FAULT='stall')
     start=time.monotonic()
-    a=subprocess.Popen([str(args.observe),str(args.fixtures/'a.json'),str(folder/'a'),'1'],
+    a=subprocess.Popen([str(args.observe),str(args.fixtures/'a.json'),str(folder/'a'),str(args.acquisition_limits),'1'],
                        stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
     b=None; cleanup=[]
     try:
@@ -113,7 +113,7 @@ def isolation(args):
         assert held, 'capture stall did not acquire its scoped resource'
         env=dict(os.environ,UIB_CAPTURE_LOCK_PATH=str(args.lock),UIB_AX_ONLY='1')
         b_start=time.monotonic()
-        b=subprocess.Popen([str(args.observe),str(args.fixtures/'b.json'),str(folder/'b'),'1'],
+        b=subprocess.Popen([str(args.observe),str(args.fixtures/'b.json'),str(folder/'b'),str(args.acquisition_limits),'1'],
                            stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env=env)
         assert b.wait(timeout=1)==0
         b_ms=round((time.monotonic()-b_start)*1000)
@@ -138,7 +138,7 @@ def isolation(args):
 
 def main():
     parser=argparse.ArgumentParser()
-    for name in ('observe','collector','host','validator','fixtures','lock','output'):
+    for name in ('observe','collector','host','validator','fixtures','lock','output','acquisition-limits'):
         parser.add_argument('--'+name,type=pathlib.Path,required=True)
     args=parser.parse_args();args.output.mkdir(parents=True,exist_ok=False)
     tests=json.loads(subprocess.check_output([str(args.observe),'--gate-checks'],timeout=3))
