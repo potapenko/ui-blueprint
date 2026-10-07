@@ -416,3 +416,67 @@ delivered inline; four current non-image output files/empty directory removed an
 absence verified. Current source/build temp contained no image files and was
 removed with absence verified. No images generated/deleted, older evidence intact.
 No source/Git/runtime resource held. This result changes only the existing receipt.
+
+## W02 form-read-facts restart handoff — 2026-10-08
+
+Status: investigation only; NO form-read source/test changes or new runtime.
+Root's drain instruction supersedes further implementation: save this existing
+receipt, checkpoint/push through a short Git lease, then stop. No next packet,
+review, runtime or initializer dependency work before explicit continuation.
+Immediate consumer after restart is [W02-form-read-facts](../packets/W02-form-read-facts.md),
+not another checkbox qualification. Prior actual checkbox result above is unchanged.
+
+Recovered route: global implementation/product-truth restart rules → repository
+AGENTS → docs/specs/README.md registry17 → finite W02-form-read-facts packet.
+The packet pins FORMS/MODEL/EXCHANGE/IDENTITY/PROJECTIONS/PRIVACY/BOUNDARIES,
+ACTIONS/LIFECYCLE/CACHE, WEB-PILOTS/PILOTS and D02/D04/D05 closure. No new product
+decision was made during drain. Resume must recover the full applicable contract
+content before source implementation; this handoff is navigation, not authority.
+Current save is behavior-neutral documentation only, with this receipt as its
+entire write set. Core/host/kernel/CLI/Cargo/fixtures and all other WIP are excluded.
+
+Prior source inspection identified these continuation points, not implemented facts:
+collector/read-node.js reads Value for input/textarea/select, not native output;
+wire.rs owns private DomRead; normalize/mod.rs leaves TextSelection absent;
+acquire.rs assembles normalized focus facts. Canonical TextSelection has
+anchor/focus/units/Evidence, without a separate selection target or direction field.
+collector/action.rs also constructs DomRead directly. A new optional private DTO
+member would need a mechanical None initializer there; that action-file scope
+addition was requested but NOT granted or performed before drain. Recheck these
+owners and their current bytes on continuation; do not reuse unsaved source pins.
+
+Unresolved mapping PROPOSALS, not accepted contract requirements:
+- Gate acquisition on requested Focused plus Value, public bounded native value,
+  actual document.activeElement identity and document.hasFocus(); bind canonical
+  selection only to a unique confirmed keyboard-focus source. The request gate
+  and target-binding semantics still need reconciliation with the selected basis.
+- Report native offsets in explicit UTF-16 code units; map forward/backward to
+  anchor/focus order. A collapsed range can describe offsets without asserting a
+  visible caret. Noncollapsed direction=none cannot establish anchor/focus order
+  without a mapping decision; preserve unknown instead of guessing. Validate null,
+  unsupported, malformed and out-of-bound readings; zero is not an unknown marker.
+- Proposed private optional selection DTO could carry document-focus evidence
+  alongside offsets/direction, avoiding a second top-level field. Its exact shape
+  and normalization are unimplemented; canonical schema remains protected.
+- To bound native output.value acquisition, consider only an empty output or a
+  single Text child with length within the existing text cap. Nested/multiple or
+  oversized content would remain unknown without invoking the value getter.
+  Qualification and unknown-reason mapping remain proposals requiring source and
+  contract reconciliation; no boundedness proof or browser support is claimed yet.
+
+Protected requirements from the packet remain: classify privacy BEFORE value,
+length or selection getters; never expose sensitive derived offsets/lengths;
+preserve native constraint Invalid separately from app aria-invalid; infer no
+active option, visible caret, IME/composition or applied business state. Native
+output.value is a source value, not proof of application success. Focus/Type
+delivery, Core lifecycle support and app-state verification remain separate work.
+
+Exact next step after explicit continuation: settle selection mapping against the
+full pinned closure and primary native API evidence, resolve only the necessary
+DomRead initializer scope dependency, then declare the actual source write subset
+before editing. Reuse nearest existing collector/script checks for ranges/caret,
+units, unsupported/null, private no-read, invalid bounds, empty/nonempty output and
+unchanged unrelated fields. No new check ran or capability shipped in this drain.
+No current-operation build/temp/image/runtime resources were created or held;
+older retained evidence is untouched. Checkpoint is a restart record, not W02/B02
+acceptance. Git lease readiness is reported separately after documentation checks.
