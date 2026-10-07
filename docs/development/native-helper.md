@@ -212,3 +212,37 @@ PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/acquisition/check.py \
 The sample is the existing D05 Native returned-wire.ndjson identified in its receipt.
 The runner proves unchanged canonical data through a bounded codec and the existing
 validator; it does not pretend to reacquire that old UI or prove live AX node output.
+
+## Focused actual-owner flow proof
+
+The follow-up to the acquisition review exercises only its three missing boundaries.
+WindowAX's internal NativeAXAccess substitutes exact AX calls with bounded synthetic
+CF handles/pages; live callers use the same public APIs and validate element types
+before casts. No config/CLI selector or production fault mode exists. The tests
+run actual collectWindowAX traversal, Collector.resolveWindow and the actual batch
+schedule, including failed/oversized identity with zero AXValue dispatch.
+
+Collector.finishChannel is the production terminal path: construction/codec/evidence
+failure can encode the pre-reserved whole failure, while final FD send stays outside
+those catches. Tests inspect actual owned socketpair receivers for whole/zero output,
+and close one receiver after a real prefix to prove a failed send has no second reply.
+Cyclic synthetic raw AX relationships prove bounded traversal, not canonical graph
+acceptance or real SDK behavior. Earlier137 numeric/codec and33 protocol tests are
+not rerun as an unchanged broad suite for this focused proof.
+
+```sh
+xcrun swiftc -parse-as-library -swift-version 6 -D CAPTURE_LIBRARY -D HOST_HELPER \
+  -target arm64-apple-macos14.0 plugins/macos/NativeAcquisition.swift \
+  plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift \
+  fixtures/native/Observe.swift tests/bridges/native/Collector.swift \
+  tests/bridges/native/WindowAX.swift tests/bridges/native/acquisition/FlowChecks.swift \
+  -o "$NATIVE_TASK_TMP/flow-checks"
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/acquisition/flow_check.py \
+  --checks "$NATIVE_TASK_TMP/flow-checks" --validator "$VERIFIED_VALIDATOR" \
+  --sample "$RETAINED_NATIVE_SAMPLE" --output "$NATIVE_TASK_TMP"
+```
+
+The old saved canonical sample supplies a bounded large codec/FD input only; this
+is not another sample-replay acceptance claim. Live AX/SCK/UI and SDK/H01/pixel/
+latency qualification remain separate. The same reviewer reconciles the saved
+focused result; author execution is not independent acceptance.

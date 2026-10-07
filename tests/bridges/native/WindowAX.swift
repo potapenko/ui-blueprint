@@ -7,38 +7,82 @@ struct WindowAXResult {
 }
 private enum AXReadIssue { case platform(AXError), shape, budget }
 
-@MainActor func nativeAXAttribute(_ element: AXUIElement, _ name: String,
-                                 admission: NativeAcquisition) throws -> CFTypeRef? {
+// Exact public AX call boundary. Tests provide bounded CF handles/pages; this
+// internal executable type has no runtime selector, configuration or fault mode.
+@MainActor struct NativeAXAccess {
+    let prepare: (CFTypeRef) -> Void
+    let attribute: (CFTypeRef, String) -> (AXError, CFTypeRef?)
+    let count: (CFTypeRef, String) -> (AXError, Int)
+    let page: (CFTypeRef, String, Int, Int) -> (AXError, CFArray?)
+    let batch: (CFTypeRef, [String]) -> (AXError, CFArray?)
+    let actions: (CFTypeRef) -> (AXError, CFArray?)
+    let isElement: (CFTypeRef) -> Bool
+
+    static var live: Self {
+        Self(prepare: { AXUIElementSetMessagingTimeout(unsafeDowncast($0, to: AXUIElement.self), 0.15) },
+            attribute: { raw, name in
+                var value: CFTypeRef?
+                let status = AXUIElementCopyAttributeValue(unsafeDowncast(raw, to: AXUIElement.self), name as CFString, &value)
+                return (status, value)
+            }, count: { raw, name in
+                var count: CFIndex = 0
+                let status = AXUIElementGetAttributeValueCount(unsafeDowncast(raw, to: AXUIElement.self), name as CFString, &count)
+                return (status, count)
+            }, page: { raw, name, index, amount in
+                var values: CFArray?
+                let status = AXUIElementCopyAttributeValues(unsafeDowncast(raw, to: AXUIElement.self), name as CFString, index, amount, &values)
+                return (status, values)
+            }, batch: { raw, names in
+                var values: CFArray?
+                let status = AXUIElementCopyMultipleAttributeValues(unsafeDowncast(raw, to: AXUIElement.self), names as CFArray, [], &values)
+                return (status, values)
+            }, actions: { raw in
+                var values: CFArray?
+                let status = AXUIElementCopyActionNames(unsafeDowncast(raw, to: AXUIElement.self), &values)
+                return (status, values)
+            }, isElement: { CFGetTypeID($0) == AXUIElementGetTypeID() })
+    }
+}
+
+@MainActor func nativeAXAttribute(_ element: CFTypeRef, _ name: String,
+    admission: NativeAcquisition, access: NativeAXAccess = .live) throws -> CFTypeRef? {
     try admission.check()
-    AXUIElementSetMessagingTimeout(element, 0.15)
-    var value: CFTypeRef?
-    return AXUIElementCopyAttributeValue(element, name as CFString, &value) == .success ? value : nil
+    guard access.isElement(element) else { throw NativeAcquisitionError.invalidValue }
+    access.prepare(element)
+    let (status, value) = access.attribute(element, name)
+    return status == .success ? value : nil
+}
+
+@MainActor func nativeAXElements(_ element: CFTypeRef, _ attribute: String,
+    windows: Bool, capacity: Int, admission: NativeAcquisition, access: NativeAXAccess,
+    visit: (CFTypeRef) throws -> Void) throws -> Int {
+    try admission.check()
+    guard access.isElement(element) else { throw NativeAcquisitionError.invalidValue }
+    access.prepare(element)
+    let (status, count) = access.count(element, attribute)
+    if status == .attributeUnsupported || status == .noValue { return 0 }
+    guard status == .success else { throw NativeAcquisitionError.invalidValue }
+    let omitted = try admission.array(count: count, windows: windows, capacity: capacity, read: { offset, amount in
+        let (status, page) = access.page(element, attribute, offset, amount)
+        guard status == .success, let page else { throw NativeAcquisitionError.invalidValue }
+        return page
+    }, visit: { raw in
+        guard access.isElement(raw) else { throw NativeAcquisitionError.invalidValue }
+        try visit(raw)
+    })
+    if windows {
+        let (status, after) = access.count(element, attribute)
+        guard status == .success, after == count else { throw NativeAcquisitionError.invalidValue }
+    }
+    return omitted
 }
 
 @MainActor func nativeAXArray(_ element: AXUIElement, _ attribute: String,
     windows: Bool, capacity: Int, admission: NativeAcquisition,
     visit: (AXUIElement) throws -> Void) throws -> Int {
-    try admission.check()
-    AXUIElementSetMessagingTimeout(element, 0.15)
-    var count: CFIndex = 0
-    let status = AXUIElementGetAttributeValueCount(element, attribute as CFString, &count)
-    if status == .attributeUnsupported || status == .noValue { return 0 }
-    guard status == .success else { throw NativeAcquisitionError.invalidValue }
-    let omitted = try admission.array(count: count, windows: windows, capacity: capacity, read: { offset, amount in
-        var page: CFArray?
-        guard AXUIElementCopyAttributeValues(element, attribute as CFString, offset, amount, &page) == .success,
-              let page else { throw NativeAcquisitionError.invalidValue }
-        return page
-    }, visit: { raw in
-        guard CFGetTypeID(raw) == AXUIElementGetTypeID() else { throw NativeAcquisitionError.invalidValue }
-        try visit(unsafeDowncast(raw, to: AXUIElement.self))
-    })
-    if windows {
-        var after: CFIndex = 0
-        guard AXUIElementGetAttributeValueCount(element, attribute as CFString, &after) == .success,
-              after == count else { throw NativeAcquisitionError.invalidValue }
+    try nativeAXElements(element, attribute, windows: windows, capacity: capacity, admission: admission, access: .live) {
+        try visit(unsafeDowncast($0, to: AXUIElement.self))
     }
-    return omitted
 }
 
 func nativeAXScalar(_ value: Any?, json: NativeJSON) throws -> [String: Any] {
@@ -103,9 +147,10 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
     }
 }
 
-@MainActor func collectWindowAX(_ root: AXUIElement, surface: [String: Any], observationID: String,
+@MainActor func collectWindowAX(_ root: CFTypeRef, surface: [String: Any], observationID: String,
     maxNodes: Int, maxDepth: Int, deadline: Double, admission: NativeAcquisition,
-    json: NativeJSON) throws -> WindowAXResult {
+    json: NativeJSON, access: NativeAXAccess = .live) throws -> WindowAXResult {
+    guard access.isElement(root) else { throw NativeAcquisitionError.invalidValue }
     var handles = [root], depths = [0]
     var nodes: [[String: Any]] = try json.array { [] }
     var edges: [[Int]] = []
@@ -116,13 +161,12 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
             ["namespace": try json.scalar("macos.ax"), "key": try json.scalar("\(observationID)-handle-\(index)")]
         }
     }
-    func batch(_ element: AXUIElement, _ names: [String]) throws -> [String: Any] {
+    func batch(_ element: CFTypeRef, _ names: [String]) throws -> [String: Any] {
         try admission.check()
         guard names.count <= admission.limits.batch_values else {
             return Dictionary(uniqueKeysWithValues: names.map { ($0, AXReadIssue.budget) })
         }
-        var values: CFArray?
-        let error = AXUIElementCopyMultipleAttributeValues(element, names as CFArray, [], &values)
+        let (error, values) = access.batch(element, names)
         guard error == .success, let values else {
             return Dictionary(uniqueKeysWithValues: names.map { ($0, error == .success ? AXReadIssue.shape : .platform(error)) })
         }
@@ -146,7 +190,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
     while nodes.count < handles.count && nodes.count < maxNodes && ProcessInfo.processInfo.systemUptime < deadline {
         try admission.check()
         let index = nodes.count, el = handles[nodes.count]
-        AXUIElementSetMessagingTimeout(el, 0.15)
+        access.prepare(el)
         let identity = try batch(el, [kAXRoleAttribute, kAXSubroleAttribute, kAXIdentifierAttribute])
         let role = identity[kAXRoleAttribute] as? String
         let subrole = identity[kAXSubroleAttribute] as? String
@@ -197,8 +241,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         try append("enabled") { try typed(values[kAXEnabledAttribute], expected: "flag") }
         try append("focused") { try typed(values[kAXFocusedAttribute], expected: "flag") }
         try admission.check()
-        var actions: CFArray?
-        let actionError = AXUIElementCopyActionNames(el, &actions)
+        let (actionError, actions) = access.actions(el)
         var actionNames: [String]?
         if actionError == .success, let actions { actionNames = try? admission.actions(actions) }
         try append("actions") {
@@ -229,8 +272,8 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         var childIndices: [Int] = []
         let capacity = depths[index] + 1 < maxDepth ? max(0, maxNodes - handles.count) : 0
         do {
-            omitted = try nativeAdd(omitted, nativeAXArray(el, kAXChildrenAttribute, windows: false,
-                capacity: capacity, admission: admission) { child in
+            omitted = try nativeAdd(omitted, nativeAXElements(el, kAXChildrenAttribute, windows: false,
+                capacity: capacity, admission: admission, access: access) { child in
                     if let existing = handles.firstIndex(where: { CFEqual($0, child) }) {
                         duplicateReferences += 1
                         if !childIndices.contains(existing) { childIndices.append(existing) }

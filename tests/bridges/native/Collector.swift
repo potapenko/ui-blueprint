@@ -141,19 +141,11 @@ struct Collector {
                 let oid = "\(requestID)-\(channel)"
                 if channel == "external_semantics" {
                     let root = AXUIElementCreateApplication(pid)
-                    var window: AXUIElement?
-                    var matches = 0
+                    let window: AXUIElement
                     do {
-                        _ = try nativeAXArray(root, kAXWindowsAttribute, windows: true, capacity: limits.ax_windows, admission: admission) { candidate in
-                            if let raw = try nativeAXAttribute(candidate, kAXIdentifierAttribute, admission: admission),
-                               try admission.text(raw) == identifier { matches += 1; window = candidate }
-                        }
+                        window = unsafeDowncast(try resolveWindow(root, identifier: identifier, admission: admission), to: AXUIElement.self)
                     } catch {
                         try frame.encode(unresolved); return
-                    }
-                    guard matches == 1, let window else {
-                        try frame.encode(envelope { try json.failure("target_unresolved", scope: scope, channel: channel) })
-                        return
                     }
                     if windowMode {
                         let collected = try collectWindowAX(window, surface: surface, observationID: oid,
@@ -213,14 +205,8 @@ struct Collector {
                 }
                 try admission.check(); try frame.encode(complete)
             }
-            do { try await prepare() } catch {
-                // Construction locals have left scope. Reuse reserved output; no
-                // prefix or graph is published after encoder/copy-budget refusal.
-                frame.reset()
-                try frame.encode(failure)
-            }
-            if evidence, let directory {
-                do {
+            func emitEvidence() throws {
+                if evidence, let directory {
                     let output: URL
                     if let proofDirectory { output = proofDirectory }
                     else { output = selectedChannel == nil ? directory : try nativeChannelDirectory(directory, channel: channel == "external_semantics" ? "ax" : "capture") }
@@ -231,14 +217,40 @@ struct Collector {
                     proof["publication_ack"] = "owned_by_parent_not_inferred"
                     _ = try writeNativeSidecar(proof, name: channel == "external_semantics" ? "acquisition.json" : "capture-metadata.json",
                         admission: admission, directory: output)
-                } catch { frame.reset(); try frame.encode(failure) }
+                }
             }
-            try send(frame)
+            try await finishChannel(frame: frame, failure: failure, prepare: prepare, evidence: emitEvidence, send: send)
+
         }
     }
 }
 
 extension Collector {
+    // Same production binding decision, with only the public AX calls replaceable
+    // by bounded synthetic CF objects in this executable's offline tests.
+    @MainActor static func resolveWindow(_ root: CFTypeRef, identifier: String,
+        admission: NativeAcquisition, access: NativeAXAccess = .live) throws -> CFTypeRef {
+        var window: CFTypeRef?
+        var matches = 0
+        _ = try nativeAXElements(root, kAXWindowsAttribute, windows: true,
+            capacity: admission.limits.ax_windows, admission: admission, access: access) { candidate in
+                if let raw = try nativeAXAttribute(candidate, kAXIdentifierAttribute, admission: admission, access: access),
+                   try admission.text(raw) == identifier { matches += 1; window = candidate }
+            }
+        guard matches == 1, let window else { throw NativeAcquisitionError.invalidValue }
+        return window
+    }
+
+    // Only construction/codec/evidence errors become the reserved whole failure.
+    // Final FD delivery is deliberately OUTSIDE both catches: no retry after a
+    // partial write. This is the production terminal path, not a test substitute.
+    @MainActor static func finishChannel(frame: NativeJSONFrame, failure: [String: Any],
+        prepare: @MainActor () async throws -> Void, evidence: @MainActor () throws -> Void,
+        send: @MainActor (NativeJSONFrame) throws -> Void) async throws {
+        do { try await prepare() } catch { frame.reset(); try frame.encode(failure) }
+        do { try evidence() } catch { frame.reset(); try frame.encode(failure) }
+        try send(frame)
+    }
     // Inspect only the requested numeric owner in the returned CF container; do
     // not bridge/copy an entire metadata dictionary containing unrequested titles.
     static func windowOwnedBy(pid: Int32, window: UInt32) -> Bool {

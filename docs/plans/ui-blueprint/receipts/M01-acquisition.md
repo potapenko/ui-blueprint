@@ -157,3 +157,73 @@ Independent source review, actual helper-through-H01 SDK resource/lifetime/ACK p
 production privacy/general-app identity and all unchanged positive F02/M01/D05/D06
 conditions remain open. Source bounds and synthetic results are not SDK qualification.
 No next runtime packet or additional agent was started.
+
+
+## Review follow-up729c97a — active
+
+Source review passed; three mandatory offline evidence gaps remain as recorded in
+M01-acquisition-review.md. Before edits, actual follow-up write subset declared:
+tests/bridges/native/WindowAX.swift and Collector.swift; new
+acquisition/FlowChecks.swift and flow_check.py under tests/bridges/native;
+docs/development/native-helper.md; this receipt. Only narrow private AX call and
+final-publication factoring; no public API/config/fault mode or generic framework.
+Source call semantics stay with the same owners. Run the three actual-owner suites
+and affected builds only; prior137 numeric/codec assertions and sample proof remain
+prior evidence, not rerun or relabelled live qualification. No live AX/SCK/UI.
+
+### Three focused gaps — checkpoint-ready result
+
+Exactly the declared six follow-up paths changed. Private NativeAXAccess now owns
+only the concrete public AX call boundary; live behavior stays on those APIs.
+CF element types are validated before production casts. Actual WindowAX traversal
+and batch/attribute schedule consume the same boundary; there is no duplicated
+collector, generic mock framework, runtime flag or public API. Collector.resolveWindow
+contains the actual unique-binding decision. Collector.finishChannel contains the
+same final construction/codec/evidence catches and the final send outside them.
+
+Three suites/46 assertions passed on current source:
+
+1. Actual traversal retained three distinct synthetic CF handles with duplicate/
+   cyclic references, two duplicate references and expected child edges. A smaller
+   node allowance retained two nodes and reported three unread entries. Wrong child
+   type retained no bad handle and reported an unknown list. Actual binding accepted
+   the valid control and refused bad root/type, changed counts, count/page errors,
+   candidate-cap excess and ambiguous matching. Deliberately cyclic raw AX relations
+   are bounded source data, not a claimed accepted canonical graph.
+2. The actual collectWindowAX identity acquisition/batch schedule dispatched AXValue
+   once for the ordinary control and zero times for known-secure, failed and oversized
+   identity controls. Output value states stayed known/redacted/unknown respectively;
+   the provider recorded the real requested attribute lists, not only a predicate.
+3. Actual Collector terminal path turned construction and codec refusal into one
+   complete failure each. Both actual socketpair-received frames passed the existing
+   canonical validator. With insufficient failure-frame space, send count and output
+   were zero. Closing a bounded receiver after256 real bytes forced partial FD failure:
+   error propagated and total send invocations stayed one; no second reply.
+
+Actual helper, affected legacy Collector and flow harness compiled without warnings/
+errors. An initial harness build used semaphore.wait from async context, rejected by
+Swift6; replaced with a bounded detached receiver task before execution. This was a
+harness compiler issue, not an observed production failure. No failing source outcome
+was found by the executed cases. Python syntax/links/scoped whitespace checked.
+No137/33 broad rerun, new raw-sample replay acceptance, live AX/SCK/UI, captures or
+permission changes. All owned sockets/receiver task and the check process completed.
+Standalone Observe and unchanged numeric/codec owners retain their earlier proof.
+
+Validator binary119842ca…14ddf15 and all16 compiled source/manifest inputs still match
+the previously saved proof; no Cargo rebuild. Source12 (production build closure,
+new checks and their explicit profile/request inputs) manifest SHA256:
+00946897c597742c860722028e6047f1da9b2b62d8d2fa27e1b5e3544a0d9bea.
+Binaries:
+
+- flow-checks:21b352d9a4952835a4e143d9716972eaf55524ecf28ee3834b351e2efd2f6448;
+- native-host-helper:c7302a6020db1ae9a05f94ae2b34c0d1ac90b630a3f0e5febb8483bde7495012;
+- legacy-collector:0260a61a771e25e7c0971e300862ae7b5d14d7086392bd441b0815e377f5879c.
+
+Named task-temp:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m01-flow-2ypays0u;
+actual run flow-hptf4vl9. Native retains source manifest, binaries and two bounded
+failure frames for immediate root/same-reviewer handoff until acceptance or explicit
+cleanup. Previous named evidence remains unchanged. No active process/resource lease.
+Awaiting exact-six-path checkpoint grant; then the same reviewer performs one focused
+reconciliation. This closes author execution of the three gaps, not independent
+acceptance or SDK/H01/pixel/D06 qualification. No next runtime packet was started.
