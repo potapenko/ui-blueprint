@@ -175,8 +175,13 @@ impl<'a> CanonicalSession<'a> {
             .map_err(|_| HostError::InvalidInput)?;
         let request = Document::from_json(tape.get(1)?, self.limits.input_bytes)
             .map_err(|_| HostError::InvalidInput)?;
-        let Artifact::Snapshot(snapshot) = source.artifact else {
-            return Err(HostError::InvalidInput);
+        let snapshot = match source.artifact {
+            Artifact::Snapshot(snapshot) => snapshot,
+            Artifact::ChannelResponse(response) => match response.result {
+                ChannelResult::Observed(snapshot) => snapshot,
+                ChannelResult::Failed(_) => return Err(HostError::ResyncRequired),
+            },
+            _ => return Err(HostError::InvalidInput),
         };
         let Artifact::Request(request) = request.artifact else {
             return Err(HostError::InvalidInput);

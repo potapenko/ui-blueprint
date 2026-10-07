@@ -22,224 +22,25 @@ pub(crate) use supported::execute;
 #[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
 mod supported {
     use super::*;
-    use serde::{Deserialize, Deserializer};
-    use std::{
-        fs,
-        path::Path,
-        thread,
-        time::{Duration, Instant},
-    };
+    use std::time::Duration;
     #[cfg(feature = "web")]
     use uiblueprint_host::worker_tape;
     use uiblueprint_host::{
-        HostError, HostLimits,
+        HostError,
         authority::TargetLease,
         domain::HostDomain,
         host_types::{HostCompletion, HostEvent, OutputRequest, Terminal},
         native_binding::NativeHelperBinding,
         process::DarwinPlatform,
-        process_api::SpawnSpec,
         supervisor::RuntimeHost,
     };
     use uiblueprint_schema::{SchemaVersion, model::*};
 
-    // Explicit trusted configuration only. This duplicates no canonical graph;
-    // HostLimits itself intentionally has no public serialized configuration.
-    #[derive(Deserialize)]
-    #[serde(deny_unknown_fields)]
-    struct Profile {
-        workers: usize,
-        worker_bytes: usize,
-        publication_reserve: usize,
-        bootstrap_bytes: usize,
-        parent_bytes: usize,
-        input_bytes: usize,
-        ingress_bytes: usize,
-        output_bytes: usize,
-        request_output_bytes: usize,
-        completion_groups: usize,
-        control_bytes: usize,
-        cleanup_ms: u64,
-        retained_domain_bytes: usize,
-        retained_per_worker: usize,
-        main_stack_bytes: usize,
-        watchdog_stack_bytes: usize,
-    }
-    impl Profile {
-        fn limits(self) -> Result<HostLimits, Failure> {
-            HostLimits {
-                workers: self.workers,
-                worker_bytes: self.worker_bytes,
-                publication_reserve: self.publication_reserve,
-                bootstrap_bytes: self.bootstrap_bytes,
-                parent_bytes: self.parent_bytes,
-                input_bytes: self.input_bytes,
-                ingress_bytes: self.ingress_bytes,
-                output_bytes: self.output_bytes,
-                request_output_bytes: self.request_output_bytes,
-                completion_groups: self.completion_groups,
-                control_bytes: self.control_bytes,
-                cleanup_ms: self.cleanup_ms,
-                retained_domain_bytes: self.retained_domain_bytes,
-                retained_per_worker: self.retained_per_worker,
-                main_stack_bytes: self.main_stack_bytes,
-                watchdog_stack_bytes: self.watchdog_stack_bytes,
-            }
-            .validate()
-            .map_err(host_error)
-        }
-    }
-    #[derive(Deserialize)]
-    #[serde(tag = "backend", rename_all = "snake_case", deny_unknown_fields)]
-    enum Provider {
-        NativeFixture {
-            helper_executable: std::path::PathBuf,
-            configuration: String,
-            channels: u8,
-        },
-        #[cfg(feature = "web")]
-        Web {
-            #[serde(deserialize_with = "object")]
-            setup: Box<uiblueprint_host::web_config::WebSetup>,
-            #[serde(deserialize_with = "object")]
-            selection: uiblueprint_host::web_config::WebSelection,
-        },
-        #[cfg(not(feature = "web"))]
-        Web {
-            setup: serde::de::IgnoredAny,
-            selection: serde::de::IgnoredAny,
-        },
-        #[serde(other)]
-        Unsupported,
-    }
-    #[derive(Deserialize)]
-    #[serde(deny_unknown_fields)]
-    struct Connection {
-        connection_version: String,
-        target: Identity,
-        session: SessionDescriptor,
-        #[serde(deserialize_with = "object")]
-        host_limits: Profile,
-        attach_deadline_ms: u64,
-        provider: Provider,
-    }
-    // serde derives can accept sequence-form structs; local connection records
-    // must remain objects just like the existing canonical records they embed.
-    fn object<'de, D: Deserializer<'de>, T: Deserialize<'de>>(d: D) -> Result<T, D::Error> {
-        struct Map<T>(std::marker::PhantomData<T>);
-        impl<'de, T: Deserialize<'de>> serde::de::Visitor<'de> for Map<T> {
-            type Value = T;
-            fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-                f.write_str("object")
-            }
-            fn visit_map<A: serde::de::MapAccess<'de>>(self, access: A) -> Result<T, A::Error> {
-                T::deserialize(serde::de::value::MapAccessDeserializer::new(access))
-            }
-        }
-        d.deserialize_map(Map(std::marker::PhantomData))
-    }
-    fn host_error(error: HostError) -> Failure {
-        use HostError::*;
-        match error {
-            InvalidLimits | ResourceLimit | Overflow | InvalidInput => {
-                Failure::invalid("observe_invalid_or_limit")
-            }
-            PermissionDenied | ResyncRequired | StaleOperation | Busy | DeadlineExpired => {
-                Failure {
-                    code: "observe_unavailable",
-                    exit: 4,
-                }
-            }
-            AllocationFailure
-            | SystemAllocationFailure
-            | Io
-            | WorkerFailed
-            | InvalidState
-            | InvalidControl
-            | CleanupPending => Failure {
-                code: "observe_worker_or_cleanup_failure",
-                exit: 1,
-            },
-        }
-    }
-    fn until(ms: u64) -> Result<Instant, Failure> {
-        if ms == 0 {
-            return Err(Failure::invalid("invalid_deadline"));
-        }
-        Instant::now()
-            .checked_add(Duration::from_millis(ms))
-            .ok_or(Failure::invalid("invalid_deadline"))
-    }
-    fn executable(path: &Path) -> Result<SpawnSpec, Failure> {
-        let spec = SpawnSpec::new(path).map_err(host_error)?;
-        if !fs::metadata(path).map_err(|_| Failure::io())?.is_file() {
-            return Err(Failure::io());
-        }
-        Ok(spec)
-    }
-    fn next<'a>(
-        host: &mut RuntimeHost<'a, DarwinPlatform>,
-        end: Instant,
-    ) -> Result<HostEvent<'a>, Failure> {
-        loop {
-            match host.next_event().map_err(host_error)? {
-                HostEvent::Pending
-                | HostEvent::HelperClosed { .. }
-                | HostEvent::HelperCleanupPending { .. } => (),
-                event => return Ok(event),
-            }
-            if Instant::now() >= end {
-                return Err(host_error(HostError::DeadlineExpired));
-            }
-            thread::sleep(Duration::from_millis(1));
-        }
-    }
-    fn shutdown<'a>(
-        host: &mut RuntimeHost<'a, DarwinPlatform>,
-        ms: u64,
-        completion: &mut Option<HostCompletion<'a>>,
-    ) -> Result<(), Failure> {
-        let end = until(ms)?;
-        loop {
-            match host.shutdown().map_err(host_error)? {
-                HostEvent::ShutdownComplete => return Ok(()),
-                HostEvent::Complete(c) => *completion = Some(c),
-                HostEvent::CleanupPending { .. } | HostEvent::HelperCleanupPending { .. } => {
-                    return Err(host_error(HostError::CleanupPending));
-                }
-                _ => (),
-            }
-            if Instant::now() >= end {
-                return Err(host_error(HostError::CleanupPending));
-            }
-            thread::sleep(Duration::from_millis(1));
-        }
-    }
-    fn encoded(document: &Document, limit: usize) -> Result<Vec<u8>, Failure> {
-        // Uses the existing CLI bounded writer, not an unbounded payload clone.
-        crate::output::trusted_input(document, limit)
-    }
-    #[cfg(feature = "web")]
-    fn tape_len(parts: &[&[u8]]) -> Result<usize, Failure> {
-        parts
-            .iter()
-            .try_fold(8 + worker_tape::SEGMENTS * 8, |n, part| {
-                n.checked_add(part.len())
-            })
-            .ok_or(Failure::invalid("input_limit"))
-    }
+    use crate::connection::*;
+
     pub(crate) fn execute(args: ObserveArguments, output: &mut impl Write) -> Result<u8, Failure> {
         let mut remaining = args.max_input;
-        let bytes = crate::input::read(&args.connection, &mut remaining)?;
-        if bytes.iter().find(|c| !c.is_ascii_whitespace()) != Some(&b'{') {
-            return Err(Failure::invalid("invalid_connection"));
-        }
-        let connection: Connection =
-            serde_json::from_slice(&bytes).map_err(|_| Failure::invalid("invalid_connection"))?;
-        drop(bytes);
-        if connection.connection_version != "1.0.0" {
-            return Err(Failure::invalid("invalid_connection_version"));
-        }
+        let connection = load(&args.connection, &mut remaining)?;
         let request_bytes = crate::input::read(&args.request, &mut remaining)?;
         let mut request = Document::from_json(&request_bytes, args.max_input)
             .map_err(|_| Failure::invalid("invalid_request"))?;

@@ -83,6 +83,11 @@ impl HostCompletion<'_> {
     pub fn incomplete_channels(&self) -> u8 {
         self.frames.as_ref().map_or(0, |f| f.incomplete)
     }
+    /// Producer outcome bound to a complete matching ACK; absent for legacy or
+    /// uncommitted bytes. Verified metadata alone does not prove terminal/cleanup.
+    pub fn action_status(&self) -> Option<crate::publication::ActionPublicationStatus> {
+        self.frames.as_ref().and_then(|f| f.action_status)
+    }
     pub fn bytes(&self, slot: usize) -> Option<&[u8]> {
         self.frames.as_ref().and_then(|f| f.frame(slot))
     }

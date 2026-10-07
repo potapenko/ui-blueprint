@@ -190,6 +190,7 @@ fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_
         (1, Outcome::Succeeded),
         (2, Outcome::Failed),
         (3, Outcome::Failed),
+        (4, Outcome::ActionOutcomeUnknown),
     ] {
         let peer = peer::Peer::new();
         peer.state.checkbox_native.store(true, Ordering::Release);
@@ -229,15 +230,23 @@ fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_
         let ChannelResult::Observed(snapshot) = response.result else {
             panic!("snapshot")
         };
-        let source = Document {
-            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
-            artifact: Artifact::Snapshot(snapshot.clone()),
+        let source = if mode % 2 == 0 {
+            Document::from_json(&first_bytes, 65536).unwrap()
+        } else {
+            Document {
+                schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+                artifact: Artifact::Snapshot(snapshot.clone()),
+            }
         };
         let seed = action_seed(&snapshot, &clock);
         assert!(Document::from_json(&serde_json::to_vec(&seed).unwrap(), 65536).is_ok());
         action_pair(&mut host, session, &source, &seed, OperationClass::Prepare);
         let prepared = complete(&mut host);
         assert_eq!(prepared.terminal, Terminal::Completed);
+        assert_eq!(
+            prepared.action_status(),
+            Some(uiblueprint_host::publication::ActionPublicationStatus::Prepared)
+        );
         assert_eq!(
             prepared.effect,
             uiblueprint_host::host_types::EffectReceipt::NotDispatched
@@ -271,6 +280,9 @@ fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_
         if mode == 3 {
             peer.state.wrong_post_checked.store(true, Ordering::Release);
         }
+        if mode == 4 {
+            peer.state.lost_post_binding.store(true, Ordering::Release);
+        }
         action_pair(
             &mut host,
             session,
@@ -285,6 +297,17 @@ fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_
             panic!("transition")
         };
         assert_eq!(report.transition.steps[0].outcome, expected);
+        use uiblueprint_host::publication::ActionPublicationStatus as Status;
+        assert_eq!(
+            result.action_status(),
+            Some(match mode {
+                0 | 1 => Status::VerifiedSuccess,
+                2 => Status::Refused,
+                3 => Status::VerifiedMismatch,
+                4 => Status::Uncertain,
+                _ => unreachable!(),
+            })
+        );
         if mode == 2 {
             assert!(matches!(result.terminal, Terminal::Failed(_)));
             assert_eq!(
@@ -328,7 +351,7 @@ fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_
 #[test]
 fn prepare_rejects_payload_ref_clock_and_small_budget_without_effect_authority() {
     let _serial = SERIAL.lock().unwrap();
-    for mode in 0..6 {
+    for mode in 0..7 {
         let peer = peer::Peer::new();
         peer.state.checkbox_native.store(true, Ordering::Release);
         peer.state.checkbox_enabled.store(true, Ordering::Release);
@@ -363,11 +386,24 @@ fn prepare_rejects_payload_ref_clock_and_small_budget_without_effect_authority()
         let ChannelResult::Observed(snapshot) = response.result else {
             panic!("snapshot")
         };
-        let source = Document {
+        let mut source = Document {
             schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
             artifact: Artifact::Snapshot(snapshot.clone()),
         };
         let mut seed = action_seed(&snapshot, &clock);
+        if mode == 6 {
+            source = Document::from_json(first.bytes(0).unwrap(), 65536).unwrap();
+            let Artifact::ChannelResponse(response) = &mut source.artifact else {
+                panic!("channel")
+            };
+            response.result = ChannelResult::Failed(Issue {
+                code: ErrorCode::Unsupported,
+                scope_id: snapshot.context.scope_id.clone(),
+                failed_step: None,
+                recovery_class: Id("reobserve_source".into()),
+            });
+            source.validate().unwrap();
+        }
         let Artifact::Request(request) = &mut seed.artifact else {
             panic!("seed")
         };

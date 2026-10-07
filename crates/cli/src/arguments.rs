@@ -62,6 +62,74 @@ pub(crate) struct ObserveArguments {
     pub max_input: usize,
     pub max_output: usize,
 }
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum ActionCommand {
+    Prepare,
+    Execute,
+}
+pub(crate) struct ActionArguments {
+    pub command: ActionCommand,
+    pub connection: PathBuf,
+    pub source: PathBuf,
+    pub request: PathBuf,
+    pub worker: PathBuf,
+    pub max_input: usize,
+    pub max_output: usize,
+    pub json: bool,
+}
+impl ActionArguments {
+    pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
+        let invalid = Failure::invalid("invalid_arguments");
+        let command = match args.next().as_deref().and_then(|s| s.to_str()) {
+            Some("prepare") => ActionCommand::Prepare,
+            Some("execute") => ActionCommand::Execute,
+            Some(_) => return Err(Failure::unsupported("unsupported_command")),
+            None => return Err(invalid),
+        };
+        let (mut connection, mut source, mut request, mut worker, mut max_input, mut max_output) =
+            (None, None, None, None, None, None);
+        let mut json = false;
+        while let Some(flag) = args.next() {
+            if flag == "--json" {
+                if json {
+                    return Err(invalid);
+                }
+                json = true;
+                continue;
+            }
+            let value = args.next().ok_or(invalid)?;
+            match flag.to_str() {
+                Some("--connection") if connection.is_none() => {
+                    connection = Some(PathBuf::from(value))
+                }
+                Some("--snapshot") if source.is_none() && command == ActionCommand::Prepare => {
+                    source = Some(PathBuf::from(value))
+                }
+                Some("--plan") if source.is_none() && command == ActionCommand::Execute => {
+                    source = Some(PathBuf::from(value))
+                }
+                Some("--request") if request.is_none() => request = Some(PathBuf::from(value)),
+                Some("--worker") if worker.is_none() => worker = Some(PathBuf::from(value)),
+                Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
+                Some("--max-output-bytes") if max_output.is_none() => {
+                    max_output = Some(limit(value)?)
+                }
+                _ => return Err(invalid),
+            }
+        }
+        Ok(Self {
+            command,
+            connection: connection.ok_or(invalid)?,
+            source: source.ok_or(invalid)?,
+            request: request.ok_or(invalid)?,
+            worker: worker.ok_or(invalid)?,
+            max_input: max_input.ok_or(invalid)?,
+            max_output: max_output.ok_or(invalid)?,
+            json,
+        })
+    }
+}
 impl ObserveArguments {
     pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
         let (mut connection, mut request, mut worker, mut max_input, mut max_output) =

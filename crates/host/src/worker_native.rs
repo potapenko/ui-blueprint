@@ -117,7 +117,7 @@ impl<'a> NativeExchange<'a> {
             self.operation,
             channel,
             &self.buffer[..size],
-            incomplete,
+            u8::from(incomplete),
         )?;
         self.total = total;
         self.pending = None;

@@ -138,7 +138,7 @@ fn main() {
                     kind: ControlKind::Frame,
                     class: operation.class,
                     slot: 0,
-                    flags: 0,
+                    flags: 2,
                     correlation: operation.correlation,
                     length: canonical.len() as u64,
                     value: 0,
@@ -158,6 +158,7 @@ fn main() {
                 }
                 io.write_control(Control {
                     kind: ControlKind::Terminal,
+                    flags: 0,
                     length: 0,
                     value: 0,
                     auxiliary: 0,

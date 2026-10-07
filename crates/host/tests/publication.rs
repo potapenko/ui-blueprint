@@ -37,6 +37,100 @@ fn header(slot: u8, length: u64) -> Control {
 }
 
 #[test]
+fn exact_action_status_is_class_specific_and_retained_only_with_matching_ack() {
+    use uiblueprint_host::publication::ActionPublicationStatus as Status;
+    let pool = ParentBuffers::new(limits(), 0).unwrap();
+    for (class, flags, expected) in [
+        (OperationClass::Prepare, 0, None),
+        (OperationClass::Prepare, 2, Some(Status::Prepared)),
+        (OperationClass::Mutation, 0, None),
+        (OperationClass::Mutation, 1, Some(Status::Refused)),
+        (OperationClass::Mutation, 2, Some(Status::VerifiedSuccess)),
+        (OperationClass::Mutation, 3, Some(Status::VerifiedMismatch)),
+        (OperationClass::Mutation, 4, Some(Status::Uncertain)),
+    ] {
+        for acked in [false, true] {
+            let mut stream = Publication::new(
+                pool.reserve_group(1).unwrap(),
+                header(0, 0).correlation,
+                class,
+                1,
+                10,
+            )
+            .unwrap();
+            let frame = Control {
+                class,
+                flags,
+                ..header(0, 2)
+            };
+            stream.begin(frame).unwrap();
+            stream.remaining_mut().unwrap().copy_from_slice(b"{}");
+            stream.advance(2).unwrap();
+            assert_eq!(
+                stream.commit(Control {
+                    kind: ControlKind::Commit,
+                    flags: flags ^ 1,
+                    ..frame
+                }),
+                Err(HostError::InvalidControl)
+            );
+            let ack = stream
+                .commit(Control {
+                    kind: ControlKind::Commit,
+                    ..frame
+                })
+                .unwrap();
+            assert_eq!(
+                stream.ack_sent(Control {
+                    flags: flags ^ 1,
+                    ..ack
+                }),
+                Err(HostError::InvalidControl)
+            );
+            if acked {
+                stream.ack_sent(ack).unwrap();
+            }
+            stream.terminalize();
+            assert!(stream.ack_sent(ack).is_err());
+            let result = stream.finish();
+            assert_eq!(result.action_status, if acked { expected } else { None });
+            assert_eq!(
+                result.frame(0),
+                if acked { Some(b"{}".as_slice()) } else { None }
+            );
+            assert_eq!(result.incomplete, 0);
+        }
+    }
+    for (class, flags) in [
+        (OperationClass::Prepare, 1),
+        (OperationClass::Prepare, 3),
+        (OperationClass::Prepare, 4),
+        (OperationClass::Mutation, 5),
+        (OperationClass::Observe, 2),
+        (OperationClass::Observe, 3),
+        (OperationClass::Validate, 2),
+    ] {
+        let mut stream = Publication::new(
+            pool.reserve_group(1).unwrap(),
+            header(0, 0).correlation,
+            class,
+            1,
+            10,
+        )
+        .unwrap();
+        assert_eq!(
+            stream.begin(Control {
+                class,
+                flags,
+                ..header(0, 2)
+            }),
+            Err(HostError::InvalidControl)
+        );
+        assert_eq!(stream.finish().action_status, None);
+    }
+}
+
+#[test]
 fn outcome_flags_must_match_through_ack_and_survive_later_failure() {
     let pool = ParentBuffers::new(limits(), 0).unwrap();
     let mut stream = Publication::new(

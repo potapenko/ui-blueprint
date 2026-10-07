@@ -71,15 +71,33 @@ impl ActionOperation<'_> {
             self.deadline,
         )?;
         let dispatched = kernel.dispatch(provider, &mut gate, &mut clock);
-        if kernel.step().outcome == Outcome::PendingVerification {
-            let _ = kernel.verify(provider, &mut clock);
-        }
+        let verification = if kernel.step().outcome == Outcome::PendingVerification {
+            kernel.verify(provider, &mut clock).ok()
+        } else {
+            None
+        };
         let delivery = kernel.step().delivery;
+        let outcome = kernel.step().outcome;
         let issue = kernel.issue().cloned();
         let requested = gate.requested();
         let nonce = gate.nonce();
         drop(gate);
         let case = kernel.finish().map_err(|_| HostError::InvalidInput)?;
+        let flags = if !requested {
+            1
+        } else if delivery == DeliveryStatus::Confirmed
+            && outcome == Outcome::Succeeded
+            && verification == Some(CheckStatus::Pass)
+        {
+            2
+        } else if delivery == DeliveryStatus::Confirmed
+            && outcome == Outcome::Failed
+            && verification == Some(CheckStatus::Fail)
+        {
+            3
+        } else {
+            4
+        };
         let document = Document {
             schema_version: SchemaVersion::CURRENT,
             artifact: Artifact::TransitionContext(Box::new(case)),
@@ -91,7 +109,7 @@ impl ActionOperation<'_> {
             self.publication,
             self.control,
             &document,
-            !requested,
+            flags,
             limits.max_output_bytes as usize,
         )?;
         if !requested {
@@ -149,7 +167,7 @@ pub(super) fn publish_refusal(
         publication,
         control,
         &document,
-        control.class == OperationClass::Mutation,
+        u8::from(control.class == OperationClass::Mutation),
         limit,
     )?;
     Err(error)
@@ -169,7 +187,7 @@ pub(super) fn publish_prepared(
         artifact: Artifact::Action(Box::new(case)),
     };
     document.validate().map_err(|_| HostError::InvalidInput)?;
-    encode_publish(io, publication, control, &document, false, limit)?;
+    encode_publish(io, publication, control, &document, 2, limit)?;
     Ok(0)
 }
 fn encode_publish(
@@ -177,7 +195,7 @@ fn encode_publish(
     publication: &mut [u8],
     control: Control,
     document: &Document,
-    refusal: bool,
+    flags: u8,
     limit: usize,
 ) -> Result<(), HostError> {
     let cap = (control.auxiliary as u32 as usize)
@@ -201,7 +219,7 @@ fn encode_publish(
         let _reserve = crate::quota_allocator::PublicationGuard::enter(
             crate::quota_allocator::Phase::Publication,
         );
-        crate::worker_main::publish(io, control, 0, &output.bytes[..output.used], refusal)?;
+        crate::worker_main::publish(io, control, 0, &output.bytes[..output.used], flags)?;
     }
     Ok(())
 }

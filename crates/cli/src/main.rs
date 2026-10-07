@@ -1,13 +1,18 @@
-//! Local saved-data analysis. Never attaches to a runtime or loads input URLs.
+//! Bounded local analysis and explicit guarded runtime callers.
 #![forbid(unsafe_code)]
 
+mod action;
 mod arguments;
+#[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
+mod connection;
 mod export;
 mod input;
 mod observe;
 mod output;
 
-use arguments::{Arguments, Command, DiffArguments, InspectArguments, ResultVersion};
+use arguments::{
+    ActionArguments, Arguments, Command, DiffArguments, InspectArguments, ResultVersion,
+};
 use std::{
     io::{self, Write},
     process::ExitCode,
@@ -20,6 +25,9 @@ Diff: uiblueprint diff --before FILE --after FILE --max-input-bytes N --max-outp
 Diff reports recorded node/property differences; missing records do not imply deletion. Entry cap0 is allowed; complete report0, truncated/context mismatch4.\n\
 Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N\n\
 Observe needs a selected macos/web build and explicit trusted connection; emits committed canonical NDJSON and cleans only owned workers/helpers.\n\
+Action: uiblueprint action prepare --connection FILE --snapshot FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--json]\n\
+Action: uiblueprint action execute --connection FILE --plan FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--json]\n\
+Actions support one Web SetChecked through a selected web build; saved plans are freshly revalidated, delivery and verified source state are separate.\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
@@ -188,6 +196,17 @@ fn execute_diff(args: DiffArguments) -> Result<(Vec<u8>, u8), Failure> {
 
 fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
+    if args.first().is_some_and(|arg| arg == "action") {
+        let result = ActionArguments::parse(args.into_iter().skip(1))
+            .and_then(|args| action::execute(args, &mut io::stdout().lock()));
+        return match result {
+            Ok(code) => ExitCode::from(code),
+            Err(error) => {
+                let _ = writeln!(io::stderr().lock(), "{}", error.code);
+                ExitCode::from(error.exit)
+            }
+        };
+    }
     if args.first().is_some_and(|arg| arg == "observe") {
         let result = arguments::ObserveArguments::parse(args.into_iter().skip(1))
             .and_then(|args| observe::execute(args, &mut io::stdout().lock()));

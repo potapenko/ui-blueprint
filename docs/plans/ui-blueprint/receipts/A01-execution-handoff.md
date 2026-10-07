@@ -397,3 +397,109 @@ line ceilings and git diff --check. CLI/source/runtime/metadata acceptance has n
 run and is not claimed; required scenarios are explicit pending in the new leaf.
 No image/task temp/persistent directory or resource created. Scoped checkpoint/push
 follows separate exact5 Git lease; actual Web live runs independently on c3967ca.
+
+## L01 action implementation — restart WIP, drain 2026-10-08
+
+Authority: [current finite implementation packet](../packets/L01-actions-implementation.md),
+including root's narrow worker_ops.rs::prepare_input grant. Selected CLI-ACTIONS@1 /
+CLI@6 registered at c4bc255; root reported registry17's Native-only acquisition@2
+delta as unrelated to these unchanged common contracts. Inherit/master/single chat;
+no nested worker, new goal, branch, Cargo/dependency/schema or collector edits.
+Root explicitly requested drain to a coherent saved WIP before Codex restart:
+finish current bounded checks, checkpoint/push, then wait for explicit root resume.
+This is not author/independent/live acceptance of the complete CLI packet.
+
+Exact20 checkpoint paths:
+- crates/cli/src/action.rs, connection.rs, arguments.rs, main.rs, observe.rs, output.rs;
+- crates/cli/tests/action_binary.rs;
+- crates/host/src/host_types.rs, publication.rs, supervisor.rs, worker_action.rs,
+  worker_main.rs, worker_native.rs, worker_ops.rs, worker_web.rs;
+- crates/host/tests/publication.rs, web_worker.rs;
+- crates/host/tests/support/effect_peer.rs, web_worker_peer.rs;
+- this existing receipt.
+Other Native/platform/root changes remain outside index/checkpoint.
+
+Implemented WIP: exact class-dependent flags0/1/2/3/4; fixed inline
+ActionPublicationStatus retained with matching ACKed bytes, no parent graph parse.
+Prepare2 is Prepared; Mutation2 VerifiedSuccess,3 VerifiedMismatch,4 Uncertain;
+Mutation1 retains pre-Possible refusal/lane closure. Producer3 requires actual
+verify() Fail plus Confirmed delivery and finished Failed case; arbitrary failure
+cannot become a mismatch. Typed2/3/4 require prior admission/current class/state;
+Mutation still requires Possible and real nonce. Legacy0 has no verified tag.
+Parent's existing sizeof RuntimeState inventory includes the publication status;
+no pools, quotas, effect, helper/capture/physical rights or deadline were widened.
+
+Guarded prepare_input now accepts canonical Snapshot OR observed ChannelResponse,
+moves out its unchanged embedded Snapshot after full canonical validation, and
+refuses Failed/wrong input without SDK/effect. No cloning graph or restamping.
+Existing publisher bool calls became exact flags0/1; Native/Web Observe semantics
+preserved, no Swift or Web collector changes. Kernel/provider signatures frozen.
+
+Public prepare/execute argument parsing/help and bounded compact/JSON callers exist.
+Connection/Profile/IO helpers moved into one shared connection.rs, preserving
+Observe behavior; one strict loader now serves both. Source bytes stay opaque in
+CLI; only existing canonical Request clock is rebound after actual Attached.
+Explicit Execute independently selects exact trusted TargetLease mutation request;
+Prepare does not. JSON writes original ACKed document/newline; compact is fixed
+preparation/delivery/verification/completeness/protocol/cleanup status, no UI text.
+Completion success requires semantic tag plus ACK/terminal/delivery/real cleanup.
+
+Checks actually passed, Cargo locked/offline, Rust1.96/aarch64-apple-darwin,
+unique system-temp target; no live browser/app or new runtime proof:
+- web host compilation and affected lib/bin/publication/runtime/web_worker/
+  effect_peer Clippy -D warnings; CLI web bin/action_binary Clippy -D warnings;
+- CLI default, macos and web checks; defaults remain unchanged;
+- publication test4 passed, including exact class/status combinations, mismatched
+  Commit/ACK, no status before ACK/after terminal, retained bytes and Observe flags;
+- actual guarded_prepare_then_act... passed5 cases: two verified successes,
+  fresh disabled refusal, known Checked mismatch, confirmed delivery with lost
+  post-state binding unknown. Direct observed ChannelResponse and Snapshot inputs,
+  typed status, one permit/setter where allowed, old bytes and owned reap verified;
+- prepare_rejects_payload_ref_clock_and_small_budget... passed7 cases including
+  failed ChannelResponse refusal before SDK, no effect and actual owned reap;
+- typed_action_admission... passed11 cases with Prepare flags2, authoritative
+  shorter/longer/start-anchored bounds, held late ACK/terminal, Possible timeout/reap;
+- marked_pre_dispatch_refusal... passed7 existing real-parent peer cases;
+- CLI semantic_status... passed15 focused exit cases: tag alone/missing ACK/lost
+  terminal/unknown delivery/cancel/timeout/cleanup cannot make0; known mismatch3;
+- action_binary2 tests passed: both command syntaxes, aggregate/output caps,
+  duplicate JSON/wrong input flag, strict connection/version and missing worker;
+  no SDK/worker spawned by these checks. Test-owned JSON temp removed/verified;
+- existing observe_cli_uses_real_guarded_peer... passed with web,macos, existing
+  host worker/native_peer: complete/partial/failed/late channel/reap paths preserved.
+The first compiler loop caught two internal old bool publisher calls and mechanical
+visibility edits from helper extraction; direct repairs compiled, no lint suppression.
+
+### Exact restart remainder — no dispatch until root explicitly resumes
+
+Known unresolved source defect for chosen exits: worker_action::issue_error and
+worker_web::action_issue_error map some valid fresh Unsupported/capability refusal
+to HostError::InvalidInput, just like malformed action input. Mutation uses the same
+refusal flags1; Prepare ordinary Error flags0 also lacks that distinction.
+Current CLI completion_exit maps that NotDispatched InvalidInput to2;
+the valid fresh refusal must be4, while genuinely malformed/limit input remains2.
+Do not silently relabel the canonical reason or parse parent graph bodies. Root
+must select the smallest private distinction/owner change before that repair;
+header2/3/4 work above does not itself solve the pre-Possible category ambiguity.
+The public CLI path therefore remains WIP and unaccepted despite compiling/checks.
+
+After explicit resume: resolve that dependency, finish parent metadata fault cases
+and affected exit/compact/budget cases, then save/check source for protected review.
+Actual public CLI Observe→Prepare→Execute proof follows review on exact saved
+worker/caller and established real Web target, preserving old evidence and reap.
+No full forms/Native delivery/multi-step/P5/P6 or release claim; host Web9d3a0a5's
+accepted finite proof remains separate. No source/review/runtime continuation after
+this drain checkpoint without explicit root resume.
+
+No images created/deleted. Own non-image build temp is removed/absence-verified
+after final use; all existing images/application-state evidence are untouched.
+No process, physical lane or runtime handle remains held. Git/index lease is requested
+only for exact20 checkpoint+bounded canonical push, then immediately released.
+
+Restart source SHA256 pins:
+- CLI action.rs:eb6e900aeff88225f26f64882d4fec1913762ef9ade330c5f386bba7fb7dd147
+- CLI connection.rs:62bc0ce3593add7d0581ffbfc807646847718f995c8dd23625c5530ad45483b5
+- host publication.rs:c15d18476c100d4031b8c28f6d8d2ac99a166f9becbb1ec2588f971bf6a295b6
+- host supervisor.rs:1b362b181277f2a09c0f287212e0e879aac6dc1f553237900eebef5f7d260bd3
+- host worker_action.rs:2d0dbdf57eb26808aa1a12ddd8dcf09814fc7c0dfbe19ed4946949f76a4a020d
+- host worker_ops.rs:bce0bfbada25881480de698249c35648fc17f76246d7a096d4f0dd9314669d83

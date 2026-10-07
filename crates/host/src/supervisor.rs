@@ -1123,6 +1123,17 @@ fn pump<'a, P: ProcessPlatform>(
             if active.live && active.ticket.is_none() {
                 return Err(HostError::InvalidControl);
             }
+            if control.flags >= 2
+                && (active.request.input_format != 1
+                    || active.live
+                    || active.ticket.is_none()
+                    || !matches!(
+                        active.class,
+                        OperationClass::Prepare | OperationClass::Mutation
+                    ))
+            {
+                return Err(HostError::InvalidControl);
+            }
             if active.class == OperationClass::Mutation {
                 if control.flags == 1 {
                     if active.effect != EffectReceipt::NotDispatched || active.refusal_started {

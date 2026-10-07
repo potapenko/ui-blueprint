@@ -336,7 +336,7 @@ impl WebSession {
                             control,
                             slot,
                             &encoded.bytes[..encoded.used],
-                            incomplete,
+                            u8::from(incomplete),
                         )?;
                     }
                     total = new_total;

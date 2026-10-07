@@ -78,6 +78,54 @@ pub(crate) fn observation_lines(
     Ok(())
 }
 
+#[cfg(all(target_os = "macos", feature = "web"))]
+pub(crate) fn action_compact(
+    command: crate::arguments::ActionCommand,
+    completion: &uiblueprint_host::host_types::HostCompletion<'_>,
+    cleaned: bool,
+    limit: usize,
+) -> Result<Vec<u8>, Failure> {
+    use crate::arguments::ActionCommand;
+    use uiblueprint_host::{
+        host_types::{EffectReceipt, Terminal},
+        publication::ActionPublicationStatus as Status,
+    };
+    let preparation = if completion.action_status() == Some(Status::Prepared) {
+        "prepared"
+    } else if command == ActionCommand::Prepare {
+        "unavailable"
+    } else {
+        "not_requested"
+    };
+    let delivery = match completion.effect {
+        EffectReceipt::NotDispatched => "not_dispatched",
+        EffectReceipt::Possible { .. } => "unknown",
+        EffectReceipt::Confirmed { .. } => "confirmed",
+    };
+    let verification = match completion.action_status() {
+        Some(Status::VerifiedSuccess) => "pass",
+        Some(Status::VerifiedMismatch) => "fail",
+        Some(Status::Refused) => "refused",
+        Some(Status::Prepared) => "not_requested",
+        _ => "unknown",
+    };
+    let terminal = match completion.terminal {
+        Terminal::Completed => "completed",
+        Terminal::Failed(_) => "failed",
+        Terminal::Cancelled => "cancelled",
+        Terminal::TimedOut => "timed_out",
+    };
+    let completeness = if completion.missing() == 0 {
+        "complete"
+    } else {
+        "incomplete"
+    };
+    let cleanup = if cleaned { "complete" } else { "pending" };
+    let mut output = Bounded::new(limit);
+    writeln!(output, "preparation={preparation} delivery={delivery} verification={verification} completeness={completeness} protocol={terminal} cleanup={cleanup}").map_err(|_| output.error())?;
+    Ok(output.bytes)
+}
+
 pub(crate) fn json(
     snapshot: Snapshot,
     expectation: Expectation,

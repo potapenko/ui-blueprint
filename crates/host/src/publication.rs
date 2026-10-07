@@ -1,6 +1,28 @@
 //! Parent-side byte publication; no graph/JSON decoding, allocation or DTO clone.
 use crate::{Control, ControlKind, Correlation, HostError, OperationClass, buffers::OutputGroup};
 
+/// Fixed producer result retained with ACKed canonical bytes, never inferred by
+/// parsing the body. This does not grant authority or confirm delivery.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(u8)]
+pub enum ActionPublicationStatus {
+    Prepared,
+    VerifiedSuccess,
+    VerifiedMismatch,
+    Uncertain,
+    Refused,
+}
+fn action_status(class: OperationClass, flags: u8) -> Option<ActionPublicationStatus> {
+    match (class, flags) {
+        (OperationClass::Prepare, 2) => Some(ActionPublicationStatus::Prepared),
+        (OperationClass::Mutation, 1) => Some(ActionPublicationStatus::Refused),
+        (OperationClass::Mutation, 2) => Some(ActionPublicationStatus::VerifiedSuccess),
+        (OperationClass::Mutation, 3) => Some(ActionPublicationStatus::VerifiedMismatch),
+        (OperationClass::Mutation, 4) => Some(ActionPublicationStatus::Uncertain),
+        _ => None,
+    }
+}
+
 pub struct Publication<'a> {
     group: OutputGroup<'a>,
     correlation: Correlation,
@@ -8,6 +30,7 @@ pub struct Publication<'a> {
     requested: u8,
     committed: u8,
     incomplete: u8,
+    action_status: Option<ActionPublicationStatus>,
     total: usize,
     limit: usize,
     active: Option<Control>,
@@ -20,6 +43,7 @@ pub struct CommittedFrames<'a> {
     pub committed: u8,
     pub missing: u8,
     pub incomplete: u8,
+    pub action_status: Option<ActionPublicationStatus>,
 }
 impl CommittedFrames<'_> {
     pub fn frame(&self, slot: usize) -> Option<&[u8]> {
@@ -49,6 +73,7 @@ impl<'a> Publication<'a> {
             requested,
             committed: 0,
             incomplete: 0,
+            action_status: None,
             total: 0,
             limit,
             active: None,
@@ -64,16 +89,13 @@ impl<'a> Publication<'a> {
         if control.correlation != self.correlation || control.class != self.class {
             return Err(HostError::StaleOperation);
         }
-        if control.flags > 1
-            || (control.flags != 0
-                && !matches!(
-                    self.class,
-                    OperationClass::Observe | OperationClass::Mutation
-                ))
-            || control.value != 0
-            || control.auxiliary != 0
-            || control.slot >= 3
-        {
+        let flags_valid = match self.class {
+            OperationClass::Observe => control.flags <= 1,
+            OperationClass::Prepare => matches!(control.flags, 0 | 2),
+            OperationClass::Mutation => control.flags <= 4,
+            _ => control.flags == 0,
+        };
+        if !flags_valid || control.value != 0 || control.auxiliary != 0 || control.slot >= 3 {
             return Err(HostError::InvalidControl);
         }
         Ok(())
@@ -156,6 +178,7 @@ impl<'a> Publication<'a> {
         if frame.flags == 1 && self.class == OperationClass::Observe {
             self.incomplete |= 1 << frame.slot;
         }
+        self.action_status = action_status(self.class, frame.flags);
         self.total += self.received;
         self.active = None;
         self.pending_ack = false;
@@ -178,6 +201,7 @@ impl<'a> Publication<'a> {
             committed: self.committed,
             missing: self.requested & !self.committed,
             incomplete: self.incomplete,
+            action_status: self.action_status,
         }
     }
     pub(crate) fn idle(&self) -> bool {

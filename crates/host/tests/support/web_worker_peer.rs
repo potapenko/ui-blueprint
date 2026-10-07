@@ -28,6 +28,7 @@ pub struct State {
     pub checkbox_indeterminate: AtomicBool,
     pub setter_calls: AtomicUsize,
     pub wrong_post_checked: AtomicBool,
+    pub lost_post_binding: AtomicBool,
     pub events_once: AtomicUsize,
 }
 pub struct Peer {
@@ -134,7 +135,10 @@ impl Peer {
                                             .load(Ordering::Acquire)
                                             && !(shared.wrong_post_checked.load(Ordering::Acquire)
                                                 && shared.setter_calls.load(Ordering::Acquire) > 0);
-                                        json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,
+                                        let connected =
+                                            !(shared.lost_post_binding.load(Ordering::Acquire)
+                                                && shared.setter_calls.load(Ordering::Acquire) > 0);
+                                        json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":true,
                                             "nativeCheckbox":shared.checkbox_native.load(Ordering::Acquire),
                                             "writable":shared.checkbox_writable.load(Ordering::Acquire),"sensitive":false,
                                             "enabled":shared.checkbox_enabled.load(Ordering::Acquire),"checked":checked,

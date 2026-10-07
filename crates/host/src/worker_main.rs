@@ -166,7 +166,7 @@ pub(super) fn publish(
     operation: Control,
     slot: u8,
     bytes: &[u8],
-    incomplete: bool,
+    flags: u8,
 ) -> Result<(), HostError> {
     if operation.flags & (1 << slot) == 0 || bytes.len() > (operation.auxiliary as u32) as usize {
         return Err(HostError::ResourceLimit);
@@ -175,7 +175,7 @@ pub(super) fn publish(
         kind: ControlKind::Frame,
         class: operation.class,
         slot,
-        flags: u8::from(incomplete),
+        flags,
         correlation: operation.correlation,
         length: bytes.len() as u64,
         value: 0,
@@ -466,7 +466,7 @@ pub fn run() -> Result<(), HostError> {
                         return Err(HostError::ResourceLimit);
                     }
                     publication[..bytes.len()].copy_from_slice(bytes);
-                    publish(&mut io, operation, slot, &publication[..bytes.len()], false)
+                    publish(&mut io, operation, slot, &publication[..bytes.len()], 0)
                 })
                 .map(|_| 0)
         } else {
@@ -484,7 +484,7 @@ pub fn run() -> Result<(), HostError> {
                     (operation.flags >> 4) & 7,
                 )
                 .and_then(|value| {
-                    publish(&mut io, operation, 0, &encoded.bytes[..encoded.used], false)?;
+                    publish(&mut io, operation, 0, &encoded.bytes[..encoded.used], 0)?;
                     Ok(value)
                 })
         };
