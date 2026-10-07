@@ -34,3 +34,38 @@ admission refusal is not dependency-allocation failure; injected null is not OS
 exhaustion. Full parent inventory/supervisor, live Web/Native and D06 stay outside
 this verdict. Accepted guard mechanism can be reused while its source/invariants
 remain unchanged; this receipt does not accept future caller revisions or full H01.
+
+## Rejection and direct-validation supplement
+
+New evidence justified finite same-reviewer reconciliation; unchanged production
+guard source was not re-audited. Initial source observations covered rejection
+testda6330e and validator/probe5639cba before author results at6230b74. No actionable
+findings. Earlier unproved-rejection/direct-validation notes above are superseded
+only by this bounded supplement, not a full H01 verdict.
+
+Rejection uses the real guarded worker, borrowed unescaped unknown key and actual
+unknown_field → Error::custom rejection-string path. The test demands matching
+quota fatal/Decode marker/large layout, no new frame, prior ACK bytes and confirmed
+shutdown/reap. Reviewer checked all five dependency hashes. Runtime1/1 and71-input
+digestfc155032…48c36 remain attributed author evidence on provider0c1bb44.
+
+Direct validation calls the canonical public validator under the unchanged real
+guard in a terminal test-only interception window. Pre-window System pointers and
+charged4096-byte ballast retain separate ownership; no charged pointer can escape
+globally. Callbacks add no allocation/formatting/log/lock/unwind. Positive validation
+and volatile ballast controls precede validate_context → unique → BTreeSet insertion.
+Tests require positive live0, negative quota/live4096/probe-phase2 and actual owned
+child reap. Runtime1/1 and67-input digestc34fc3b3…067f0 are author evidence on5f52cb5;
+prepared test sources stayed unchanged. No reviewer execution is claimed.
+
+D05-WORK.PROOF clarification: these support rejection pressure and direct semantic
+validator scratch refusal. Existing fixed-writer and retained-admission cases prove
+their bounded failure paths. “Force failures” does not require actual OS exhaustion
+or a separate allocator-OOM test in an allocation-free slice writer.
+
+Limits: probe phase2 is not integrated from_json attribution/ACK evidence or whole-
+worker accounting. Writer refusal alone does not prove all serializer/dependency
+scratch or the complete publication allowance. Replay, changed producers, parent
+inventory, integrated cleanup/publication, live and D06 have separate evidence/gates.
+No new source-review blocker. Concurrent Core/Native changes were excluded; no
+files/runtime/external state changed during review.
