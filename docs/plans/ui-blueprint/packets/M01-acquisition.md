@@ -96,3 +96,17 @@ fault semantics or historical evidence may change. No silent legacy defaults or
 second implementation. Compile/syntax and affected pure checks only here; this
 extension does not authorize executing those scripts' live AX/capture lifecycle
 scenarios. Return other actual dependencies before edits, not a broad directory lease.
+
+## Continue the three specific missing proofs
+
+Review9a5a8908 found no new source defect but the three evidence gaps in
+[review receipt](../receipts/M01-acquisition-review.md) are mandatory. Same Native
+owner continues them in this packet's existing paths: actual traversal/type/window
+enumeration, actual identity-to-AXValue schedule, and Collector/final-FD failure
+publication. Use bounded synthetic handles/data and owned pipes, no live AX/SCK/UI.
+Reuse actual owners; narrowly factor private call boundaries if needed, declaring
+paths before edits. No generic mock framework, duplicate collector, public API,
+production fault mode, new budget or altered expected result. Report any actual
+source failure separately. Run these cases and affected checks only; preserve the
+already accepted codec sample proof. Same reviewer handles the eventual focused
+reconciliation; no additional review wave before these cases exist.

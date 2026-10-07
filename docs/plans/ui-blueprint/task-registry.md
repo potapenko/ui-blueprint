@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Publicationf2af5a3 accepted; Web adds predeclared minimum evidence sink before final preparation save/activation. Native9a5a8908 pushed21paths,137synthetic/33protocol checks and5builds attributed, source review ready. Allocation worker archived after c3c653b closeout; Core retained for live consumer. No live/UI/Git/source holds |
+| Активные чаты/пакеты/ресурсы | First actual Chromium run on afba17cb failed at first guarded observe, zero canonical frames; Rust terminal error missing from sanitized report. Web owns bounded harness diagnostic repair; Core owns actual host integration diagnosis/necessary producer fix; Native continues three specific missing offline paths. All review subagents completed; no new reviews dispatched. Core hold released |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Save Web preparation, then activate finite owned Chromium proof with fixed parameters and durable minimum evidence. Save/review Native acquisition when its final source is ready. Do not reopen accepted unchanged publication/allocator checks; live/D06/full H01/RC05 still require their own evidence |
+| Следующий шаг | Obtain exact first-observe terminal cause and confirmed worker cleanup, repair owning path, then repeat only the changed failed real case with fixed limits. Native proof runs independently. User challenged serial coordination: prioritize usable live UI data, immediately resume ready owners, batch necessary review after concrete results. Full P0–P7 scope unchanged |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
