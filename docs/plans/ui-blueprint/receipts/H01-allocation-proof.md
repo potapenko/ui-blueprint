@@ -232,7 +232,7 @@ Root short Git grant pending. No other owner source/Cargo/fixture files are stag
 | Typed decode | Both2MiB data-before-kind families force real guarded quota exits; kind-first rejects InvalidInput | Covered named core0.1/analysis0.2 families; no universal all-input upper coefficient |
 | Rejection/error | Escaped string, long numeric and repeated-map cases reject normally; same worker then succeeds | OOM specifically while formatting rejection has not been isolated; do not infer it from ordinary InvalidInput |
 | Semantic validation | Validation executes inside Document::from_json while phase remains Decode; normal canonical cases pass | Need one bounded source case plus trustworthy attribution separating validator scratch failure from decode; current completion lacks raw phase, so no forced-validation claim |
-| Replay | Real retained base + canonical Delta/Tape produces the independent full result | Forced allocator failure during candidate clone/validation remains open; preserve old base and distinguish it from earlier decode failure |
+| Replay | Real normal replay plus the later predeclared480KiB case forces quota fatal with actual private Replay phase3; ACKed base bytes survive confirmed reap | Named Replay-pressure failure covered; do not promote it to every validation/all-input allocation path |
 | Encoding/publication | Earlier16-byte OutputRequest refused in publish AFTER encoding; subsequent phase wave forces FixedOutput::write refusal with valid512KiB+1 query against512KiB slice, no partial frame and prior lease intact | Both bounded refusal boundaries covered; neither is claimed as allocator OOM |
 | Encoding allocation | App-owned FixedOutput writes by checked slice copy; guarded_encode streams to_writer under PublicationGuard rather than constructing Value/Vec output | This source boundary is not a proof of all dependency allocations. No invented allocator OOM on an allocation-free writer; any claimed serde allocation failure requires an actual bounded reachable case |
 | Retained admission | Subsequent phase wave uses predeclared32KiB retained allowance, ACKs small base, refuses canonical64KiB text candidate, then successfully replays old base and preserves caller lease | Retained-resource refusal/atomicity covered; not a GlobalAlloc-failure claim |
@@ -322,3 +322,51 @@ Prepared-case checkpoint note: only own rustfmt and scoped whitespace checks ran
 for this new wrapper/case. No compiler or runtime pass is claimed against the
 changing producer composition. Saved WIP is not acceptance or closure of the
 remaining proof; wait for the exact new provider/ACK within this same packet.
+
+## Fixed Replay pressure case — executed on saved default provider
+
+Root explicitly continued the prepared eea3c9f case on coherent provider
+c0abcffed886d0f33b34ddf3008a902b8e024676 with a fresh short source ACK.
+No test/limit/shape edit occurred before this execution. Both worker build and
+test used --no-default-features; no Web producer/collector or Native helper ran.
+Existing host dev dependency tungstenite was compiled for the selected test target;
+this is not evidence that feature=web was enabled or its source executed.
+
+Executed in the same run-owned task-temp target, once:
+
+```sh
+cargo +1.96.0 build --locked --offline -p uiblueprint-host --no-default-features --bin session-worker --target-dir <task-temp>/target
+cargo +1.96.0 test --locked --offline -p uiblueprint-host --no-default-features --test hostile_worker replay_clone_quota_has_private_phase_and_keeps_acked_bytes --target-dir <task-temp>/target -- --exact --test-threads=1
+cargo +1.96.0 clippy --locked --offline -p uiblueprint-host --no-default-features --test hostile_worker --target-dir <task-temp>/target -- -D warnings
+```
+
+One exact test passed, zero failed/ignored, six unrelated tests filtered out;
+test runtime0.53s. Worker build, scoped Clippy and own rustfmt passed. The fixed
+480KiB base was retained/ACKed, the empty compatible delta reached an actual
+ResourceLimit fatal with Replay class, matching operation and private flags=3.
+No new result frame was committed. Original canonical bytes remained available
+after real shutdown/reap; session/grant/completion ownership returned as asserted.
+The wrapper copied only bytes already returned by the real read_fatal call; it
+did not inject/delay status, consume the descriptor twice or change HostCompletion.
+Thus this is observed Replay-phase allocation refusal under clone pressure,
+not an inferred Decode failure or a fitted cap. Ordinary4MiB−128KiB and all other
+predeclared sizes remained unchanged. It does not isolate an individual allocator
+call site or prove all semantic-validation/rejection failure paths.
+
+Before/after71-input hash, identical:
+`c71cfa89a1875cd5823f8320e023636d12fe86d5b180d697df3417a4bf7cff40`.
+All71 current inputs matched saved c0abcff BEFORE running, including the already
+saved test. Hash recipe is compact sorted JSON path->SHA256 then SHA256. Exact set:
+root Cargo.toml/Cargo.lock/rust-toolchain.toml; Cargo.toml and tracked src/**/*.rs
+for host/schema/engine/plugin-api atc0abcff, EXCLUDING cfg(web) host web_config.rs
+and worker_web.rs; host tests/hostile_worker.rs; the same six normal fixtures above;
+workspace resolution manifests plugins/web/Cargo.toml, crates/cli/Cargo.toml and
+crates/export/Cargo.toml. Newly connected native_binding/native_broker/worker_native/
+worker_observation modules are included; old unconnected-module exclusions are not
+silently reused. No Web production source or unrelated test source is claimed covered.
+
+Source hold was released immediately after result/hash comparison. No new runtime
+wave or source scope followed. This update only records completed proof: the test
+was already saved and is unchanged. Next checkpoint is this receipt alone.
+Separate validation/rejection attribution and full H01/source/live acceptance stay
+open according to the matrix; successful normal/refusal paths retain their scope.
