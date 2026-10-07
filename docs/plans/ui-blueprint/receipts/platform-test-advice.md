@@ -143,3 +143,39 @@ collector's CDP session is not demonstrated and must not be assumed. No executab
 trusted profile or live selection mechanism was established by consultation.
 Web's private rooted read-only seed connection is implementation work; actual
 caller-origin binding and real Director execution remain separate qualification.
+
+### Director action-state-result handoff, 2026-10-07
+
+Consumer: future W02/B02 and M02 form verification after the primitive action
+provider. Both original product advisors answered read-only; no runtime/action or
+source application changes were performed. Their evidence does not grant a live
+target, substitute actual field observations, or change the generic engine contract.
+
+Web advisor source1954c9cd6c11464cd9529699552178854764e0d1:
+draft query and keyboard-active option are distinct from applied membership.
+Click/Enter toggles the chosen Director and closes the popup; there is no Apply.
+For a positive add case choose a value absent from the original applied set and
+preserve other filters. Actual selected tag plus decoded filters.director URL,
+and aria-pressed on reopening, establish client filter membership; aria-selected
+only means keyboard-active. Escape before selection closes without changing the
+applied set; draft reset is not the acceptance condition. After possible delivery,
+do not retry Enter: a second toggle could undo the first. Reobserve actual state.
+Popup closure alone proves neither selection nor server search completion.
+Sources attributed by the advisor: suggestions/view.cljs lines867/1056,
+clip_search/ctrl.cljs lines328/397, filters/picker_view.cljs line405 under the
+existing PlayPhrase.me site source. Root did not inspect that other project.
+
+Mac advisor expectation is different: under macOS filter-popover@1/source r2,
+activating a real Director applies it immediately, leaves the popup OPEN, shows
+selected/checkmark and rail membership, and preserves existing multi-selection.
+Escape dismisses without undoing the applied value; reopen verifies membership.
+Search query preservation/reset is not established by this context. RC02 actually
+proved only open and Escape, not typing/results/selection/application/persistence.
+Sources supplied by advisor: native-clip-search/2026-08-26-macos-native-filter-popover-evolution.md
+and native-clip-search/user-visible-behavior-part-2.md in PlayPhrase.me Mac docs;
+local [RC02 observations](../../../../fixtures/real-world/mac-filters/observations.json)
+and [expected](../../../../fixtures/real-world/mac-filters/expected-answer.md).
+No popup geometry, AX-to-CG ownership, pointer mapping or server completion follows.
+
+The platform-specific close/stay-open behavior is intentional context, not a
+generic executor rule. This prevents inventing shared Apply/Cancel semantics.

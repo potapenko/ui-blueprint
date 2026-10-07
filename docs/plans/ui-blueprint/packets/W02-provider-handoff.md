@@ -37,3 +37,28 @@ Return concise handoff and exact missing Core dependency, no generic architectur
 report. Documentation links/whitespace only, checkpoint/push via short Git lease.
 Current result does not accept actions; runtime and independent protected review
 remain mandatory before live activation. No other chat messaging or nested agents.
+
+## Dependency-ready fixture step
+
+Root received the finite handoff: existing F01 has no checkbox; peer data is
+synthetic only. Under already-approved fixtures/P5/GOLDEN01, select a separate small
+owned action fixture, preserving existing F01 node counts/layout/performance inputs.
+Classification tooling; immediate consumer W02 single-step provider qualification.
+This is technical test setup, not new product semantics or a request for operator
+approval. Same Spec Basis and explicit user delegation apply; no nested work.
+
+After saving the handoff, write only fixtures/web/actions.html and its focused
+source-level expected-case documentation in fixtures/web/README.md; append the
+setup handoff to this packet's existing receipt. No new directory or full UI app.
+Keep synthetic data and ordinary native checkbox inputs: exact target, duplicate
+labels with distinct identities, disabled control and custom role negative.
+Existing page mechanics may permit an explicit setup action to replace/remount
+the target, never an automatic timer/collection loop. Native checked property true/
+false, already-equal and separate indeterminate state have independent expectations.
+Do not invent business-success semantics, simulate a user gesture or add input/change
+events as part of the provider's Setter. Minimal native HTML, no dependency/framework.
+
+No product Rust/host source or runtime launch/input in this step. Source sanity and
+documentation checks suffice for this setup; live checks follow real provider/host
+composition. Finish compact setup/selector/case handoff and exact-path checkpoint/push
+through Git lease. Do not wait idle for Core while this independent step is ready.
