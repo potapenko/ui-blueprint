@@ -198,3 +198,30 @@ fn injected_small_null_releases_its_precharge_without_erasing_live_ownership() {
     fatal(b'B', 1, 4097, 0, 1); // Failed precharge never invokes the callback.
     fatal(b'H', 1, 2048, 3072, 1); // Realloc reserves old+FULL new before callback.
 }
+
+#[test]
+fn direct_semantic_validator_allocation_is_refused_by_full_guard() {
+    let (state, record, ready) = run(b'V');
+    assert_eq!(
+        ready, 1,
+        "positive validator and real ballast control completed"
+    );
+    assert_eq!(state, ProcessState::Exited { code: 105 });
+    let record = record.expect("positive control's explicit reporting sentinel");
+    assert_eq!(
+        (record.value, record.length, record.auxiliary, record.flags),
+        (5, u64::from(b'V'), 0, 2)
+    );
+
+    let (state, record, ready) = run(b'W');
+    assert_eq!(ready, 1, "same positive prerequisite before interception");
+    assert_eq!(state, ProcessState::Exited { code: 101 });
+    let record = record.expect("actual allocator refusal during direct validation");
+    assert_eq!((record.value, record.auxiliary, record.flags), (1, 4096, 2));
+    assert!(
+        (1..=4096).contains(&record.length),
+        "predeclared small validator allocation, no fitted layout/cap"
+    );
+    // run proves actual owned-child reap. Probe-selected phase2 identifies this
+    // direct call only; no integrated worker phase or ACK-preservation claim.
+}

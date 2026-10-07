@@ -1,7 +1,8 @@
 //! Disposable method-level probe of the actual production allocator source.
-//! It intentionally does NOT install a global allocator: only explicit valid
-//! GlobalAlloc calls are charged, so their exact live layouts are observable.
-//! The real session-worker separately proves installed/global coverage.
+//! Normal global allocations forward unchanged to System. One terminal direct-
+//! validator window intercepts its first allocation through the full real guard.
+//! Explicit method probes retain their separate exact-layout accounting.
+//! The real session-worker separately proves installed/global worker coverage.
 #![cfg(target_os = "macos")]
 #[allow(dead_code)] // Include the complete unchanged owner, not a substitute guard.
 #[path = "../../src/quota_allocator.rs"]
@@ -16,6 +17,98 @@ use uiblueprint_host::{OperationClass, process::DarwinPlatform, process_api::Wor
 const ALLOCATOR: guard::GuardedAllocator = guard::GuardedAllocator;
 const CAP: usize = 4096;
 static INJECTED: AtomicBool = AtomicBool::new(false);
+static SEMANTIC_WINDOW: AtomicBool = AtomicBool::new(false);
+
+struct SemanticInterception;
+#[global_allocator]
+static GLOBAL: SemanticInterception = SemanticInterception;
+
+fn intercept(layout: Layout, zeroed: bool) -> ! {
+    // SAFETY: the global caller supplied this valid nonzero layout. The guard
+    // owns a live CAP-byte ballast and must refuse before forwarding to System.
+    // If it unexpectedly succeeds, the disposable child terminates without
+    // returning a charged pointer to the ordinary System allocation domain.
+    let pointer = unsafe {
+        if zeroed {
+            ALLOCATOR.alloc_zeroed(layout)
+        } else {
+            ALLOCATOR.alloc(layout)
+        }
+    };
+    std::hint::black_box(pointer);
+    guard::fatal(guard::FatalReason::Invariant, layout.size() as u64)
+}
+
+// SAFETY: outside the terminal window all global operations forward unchanged
+// to System. The window cannot return a new pointer: intercept always terminates.
+// Thus every globally returned pointer belongs to System, never to the guard's
+// counter. Pre-window deallocation remains System-owned. Realloc inside the
+// window reports an unexpected path without passing an uncharged old pointer to
+// the guard. No callback formats, logs, locks, allocates auxiliary data or unwinds.
+unsafe impl GlobalAlloc for SemanticInterception {
+    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+        if SEMANTIC_WINDOW.load(Ordering::Acquire) {
+            intercept(layout, false);
+        }
+        // SAFETY: unchanged valid global caller layout.
+        unsafe { System.alloc(layout) }
+    }
+    unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
+        if SEMANTIC_WINDOW.load(Ordering::Acquire) {
+            intercept(layout, true);
+        }
+        // SAFETY: unchanged valid layout; System supplies zeroing.
+        unsafe { System.alloc_zeroed(layout) }
+    }
+    unsafe fn dealloc(&self, pointer: *mut u8, layout: Layout) {
+        // SAFETY: every pointer returned globally was allocated by System with
+        // this exact layout. Explicit charged ballast never enters this method.
+        unsafe { System.dealloc(pointer, layout) }
+    }
+    unsafe fn realloc(&self, pointer: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+        if SEMANTIC_WINDOW.load(Ordering::Acquire) {
+            guard::fatal(guard::FatalReason::Invariant, new_size as u64);
+        }
+        // SAFETY: live System pointer, original layout and valid new size.
+        unsafe { System.realloc(pointer, layout, new_size) }
+    }
+}
+
+fn semantic_validation(refuse: bool) {
+    use uiblueprint_schema::{
+        model::{Artifact, Document},
+        validation::validate_snapshot,
+    };
+    const INPUT: &[u8] = include_bytes!("../../../../fixtures/golden/ENV-SNAPSHOT-VALID.json");
+    assert!(INPUT.len() < 64 * 1024);
+    let document = Document::from_json(INPUT, 64 * 1024).expect("small known valid fixture");
+    let Artifact::Snapshot(snapshot) = document.artifact else {
+        panic!("known Snapshot fixture");
+    };
+    validate_snapshot(&snapshot).expect("positive direct-validator control");
+    let ballast = allocate(CAP, 16, false);
+    observe(ballast, CAP, false);
+    // One fixed marker proves the positive control and real ballast accesses
+    // preceded the window. The probe is single-threaded in these two modes.
+    let ready = [0xa1_u8];
+    // SAFETY: inherited owned fd4, one initialized stack byte, no allocation.
+    if unsafe { libc::write(4, ready.as_ptr().cast(), ready.len()) } != 1 {
+        DarwinPlatform::fatal_exit(-1, &[0; 64], 84);
+    }
+    guard::phase(guard::Phase::Validate);
+    if refuse {
+        SEMANTIC_WINDOW.store(true, Ordering::Release);
+        // No decoding, formatting or other call intervenes. The canonical
+        // validate_context -> unique -> BTreeSet::insert needs fresh storage.
+        let result = validate_snapshot(&snapshot);
+        SEMANTIC_WINDOW.store(false, Ordering::Release);
+        let _ = std::hint::black_box(result);
+        release(ballast, CAP, 16);
+        guard::fatal(guard::FatalReason::Invariant, 0); // Unexpected validator return.
+    }
+    release(ballast, CAP, 16);
+    // Pre-window fixture ownership is ordinary System ownership on this path.
+}
 
 fn injected_null(size: usize) -> bool {
     // SAFETY: fd4 is the disposable probe's inherited owned output lane; one
@@ -147,6 +240,8 @@ fn main() {
         b'0' => (),
         b'A' => successful_allocations(),
         b'Q' => concurrent_allocations(),
+        b'V' => semantic_validation(false),
+        b'W' => semantic_validation(true),
         b'O' | b'M' => {
             allocate(CAP + 1, 16, false);
             unreachable!("quota must terminate before System");

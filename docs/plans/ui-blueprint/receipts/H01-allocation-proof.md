@@ -460,3 +460,58 @@ The default-production hold was released immediately after the passing checks an
 identity comparison, before this receipt update. No Web producer, Native helper,
 unchanged runtime suite, new build target or cleanup ran. Checkpoint scope is only
 hostile_worker.rs and this receipt under the next root Git lease.
+
+## Direct semantic validator — prepared, not executed
+
+Rejection checkpoint da6330ee68c640d4b3687bf9ac46a0577eef2f30 is saved/pushed;
+its saved71-input identity matches fc155032…48c36. Root selected the direct-call
+proposal in packet checkpoint2875f34. No production/Cargo/schema/API changes.
+
+Only existing allocator_probe.rs, allocator.rs and this receipt change. The probe
+now has a test-only global forwarder: ordinary allocations/deallocations/realloc
+go unchanged to System, leaving explicit guard-method ownership separate. In the
+single-threaded terminal semantic window, fresh alloc/alloc_zeroed enter the real
+GuardedAllocator. That path always terminates: a quota refusal is expected; any
+unexpected successful forwarding is followed by a distinct invariant fatal and
+never returns a charged pointer to the System domain. Existing System-owned
+pointers still deallocate through System. Unexpected realloc during the window
+reports an invariant fatal without mischarging the pre-window old allocation.
+The explicit ballast alone is guard-owned and uses its exact direct deallocator
+on the positive control/any unexpected validator-return path. Fatal termination
+reclaims child storage; no allocator callback formats, logs, locks or unwinds.
+
+Fixed inputs: the existing small ENV-SNAPSHOT-VALID.json, checked below64KiB;
+Document::from_json and a successful direct validate_snapshot run before the
+window; a real4096-byte aligned allocation filled/read through volatile accesses
+exhausts the unchanged CAP4096. A fixed marker follows those prerequisites. ModeV
+releases ballast and reports the existing explicit sentinel with live0. ModeW
+selects probe phase2, arms interception and immediately invokes validate_snapshot.
+Its validate_context → unique → BTreeSet::insert requires a fresh small allocation.
+Expect actual quota fatal, requested layout1..4096, live4096, no return and real
+owned-child reap. No cap/layout sweep; a different outcome remains a failure.
+
+The new exact test direct_semantic_validator_allocation_is_refused_by_full_guard
+runs only those two modes using the existing parent runner and3s bound. Phase2 is
+selected by this probe immediately before its direct call; it is not integrated
+worker from_json phase evidence or a same-session ACK-preservation scenario.
+Prior real-worker ACK/cleanup evidence retains its separate scope.
+
+Ready checks: build only the existing allocator_probe example; run that exact
+allocator test with one thread; Clippy for this example/test and own rustfmt.
+Use Rust1.96.0, --locked --offline --no-default-features and the existing owned
+task-temp target. Requested67-input set: root Cargo.toml/Cargo.lock/toolchain;
+Cargo.toml and tracked src/**/*.rs for host/schema/engine/plugin-api, excluding
+cfg(web) web_config.rs/worker_web.rs; workspace resolution manifests for
+plugins/web, crates/cli and crates/export; own allocator.rs/allocator_probe.rs;
+ENV-SNAPSHOT-VALID.json. Recompute on the short ACK's saved provider;65 provider
+inputs must match it, while the two owned tests remain explicit working inputs.
+Preparation ran only own rustfmt/whitespace checks. No compile/runtime pass yet;
+no source hold, unrelated runtime wave or cleanup occurred.
+
+Prepared WIP checkpoint: root granted only these three owned paths after3a49fbb.
+The case is uncompiled and unexecuted. Earlier own rustfmt/whitespace passed;
+no build, Clippy or runtime success is claimed for the new interceptor. Runtime
+is waiting_resource for Core's saved parent-death repair and a fresh provider ACK.
+The earlier requested hold is released; changed shared worker_io.rs belongs to
+Core and is excluded from this checkpoint. CAP4096 and the5361-byte fixture stay
+fixed. Saving this prepared step is not acceptance or closure of validation proof.
