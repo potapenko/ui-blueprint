@@ -516,3 +516,169 @@ fn selection_configuration_cannot_introduce_endpoint_or_unbounded_bytes() {
         Err(HostError::InvalidInput)
     ));
 }
+
+#[test]
+fn retained_history_survives_received_event_or_loss_and_other_session_progresses() {
+    let _serial = SERIAL.lock().expect("test ownership");
+    for lost in [false, true] {
+        let a_peer = peer::Peer::new();
+        let b_peer = peer::Peer::new();
+        let domain = HostDomain::new::<process::Platform>(data::limits()).unwrap();
+        let spec = SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap();
+        let mut host = RuntimeHost::new(
+            &domain,
+            spec,
+            process::Platform(Arc::new(process::Trace::default())),
+        )
+        .unwrap();
+        let (a, a_clock) = attach(&mut host, &a_peer);
+        // A distinct canonical session uses the same existing trusted attach path.
+        let mut b_descriptor = data::descriptor();
+        let Artifact::Session(descriptor) = &mut b_descriptor.artifact else {
+            unreachable!()
+        };
+        descriptor.session_id = Id("web-session-b".into());
+        let descriptor = serde_json::to_vec(&b_descriptor).unwrap();
+        let setup = serde_json::to_vec(&data::setup(b_peer.url.clone())).unwrap();
+        let parts = [descriptor.as_slice(), setup.as_slice()];
+        let length = tape_length(&parts);
+        let mut lease = host
+            .reserve_attach_input(
+                TargetLease::authorized(&data::target(), false).unwrap(),
+                length,
+            )
+            .unwrap();
+        worker_tape::encode(&parts, lease.bytes_mut()).unwrap();
+        let b = host.attach_web(lease, deadline()).unwrap();
+        let b_clock = match next(&mut host) {
+            HostEvent::Attached { session, clock } => {
+                assert_eq!(session, b);
+                clock.as_str().to_owned()
+            }
+            _ => panic!("second attached"),
+        };
+        let a_request = data::request(&a_clock, vec![Channel::ExternalSemantics]);
+        let mut b_request = data::request(&b_clock, vec![Channel::ExternalSemantics]);
+        let Artifact::Request(request) = &mut b_request.artifact else {
+            unreachable!()
+        };
+        request.context.session_id = Id("web-session-b".into());
+        submit(
+            &mut host,
+            a,
+            &a_request,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let first = complete(&mut host);
+        assert_eq!(first.terminal, Terminal::Completed);
+        let original = first.bytes(0).unwrap().to_vec();
+        let a_response = response(&original);
+        let a_snapshot = snapshot(&a_response).clone();
+        submit(
+            &mut host,
+            b,
+            &b_request,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let second = complete(&mut host);
+        assert_eq!(second.terminal, Terminal::Completed);
+        let b_response = response(second.bytes(0).unwrap());
+        let b_snapshot = snapshot(&b_response).clone();
+        drop(second);
+        let records = [(a, a_snapshot), (b, b_snapshot)];
+        let mut historical = Vec::new();
+        for (session, snapshot) in &records {
+            let bytes = serde_json::to_vec(&Document {
+                schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+                artifact: Artifact::Snapshot(Box::new(snapshot.clone())),
+            })
+            .unwrap();
+            let mut input = host.reserve_input(*session, bytes.len()).unwrap();
+            input.bytes_mut().copy_from_slice(&bytes);
+            let mut out = output(1);
+            out.retained_partition = 1;
+            host.submit(*session, OperationClass::Retain, input, out, deadline())
+                .unwrap();
+            let retained = complete(&mut host);
+            assert_eq!(retained.terminal, Terminal::Completed);
+            assert_eq!(retained.bytes(0), Some(bytes.as_slice()));
+            historical.push(bytes);
+            drop(retained);
+        }
+        let b_calls = b_peer.state.calls.load(Ordering::Acquire);
+        a_peer
+            .state
+            .events_once
+            .store(if lost { 5 } else { 1 }, Ordering::Release);
+        submit(
+            &mut host,
+            a,
+            &a_request,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let changed = complete(&mut host);
+        if lost {
+            assert_eq!(
+                changed.terminal,
+                Terminal::Failed(uiblueprint_host::HostError::ResyncRequired)
+            );
+            assert_eq!(changed.committed(), 0);
+        } else {
+            assert_eq!(changed.terminal, Terminal::Completed);
+            assert_eq!(changed.committed(), 1);
+        }
+        assert_eq!(a_peer.state.events_once.load(Ordering::Acquire), 0);
+        assert_eq!(b_peer.state.calls.load(Ordering::Acquire), b_calls);
+        drop(changed);
+        // Explicit duplicate Retain reads original recorded data. It cannot reveal
+        // invalidated/current-required state; direct Core cache tests own that proof.
+        let calls = [
+            a_peer.state.calls.load(Ordering::Acquire),
+            b_peer.state.calls.load(Ordering::Acquire),
+        ];
+        for ((session, _), bytes) in records.iter().zip(&historical) {
+            let mut input = host.reserve_input(*session, bytes.len()).unwrap();
+            input.bytes_mut().copy_from_slice(bytes);
+            let mut out = output(1);
+            out.retained_partition = 1;
+            host.submit(*session, OperationClass::Retain, input, out, deadline())
+                .unwrap();
+            let retained = complete(&mut host);
+            assert_eq!(retained.terminal, Terminal::Completed);
+            assert_eq!(retained.bytes(0), Some(bytes.as_slice()));
+            drop(retained);
+        }
+        assert_eq!(
+            [
+                a_peer.state.calls.load(Ordering::Acquire),
+                b_peer.state.calls.load(Ordering::Acquire)
+            ],
+            calls,
+            "Retain/invalidation does not collect UI"
+        );
+        submit(
+            &mut host,
+            b,
+            &b_request,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let independent = complete(&mut host);
+        assert_eq!(independent.terminal, Terminal::Completed);
+        drop(independent);
+        assert_eq!(first.bytes(0), Some(original.as_slice()));
+        stop(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(first.bytes(0), Some(original.as_slice()));
+        drop(first);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}

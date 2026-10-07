@@ -21,6 +21,7 @@ pub struct State {
     pub stall: AtomicBool,
     pub stalled: AtomicBool,
     pub secret: AtomicBool,
+    pub events_once: AtomicUsize,
 }
 pub struct Peer {
     pub url: String,
@@ -58,6 +59,13 @@ impl Peer {
                             shared.calls.fetch_add(1, Ordering::AcqRel);
                             let method = command["method"].as_str().expect("method");
                             let params = &command["params"];
+                            for _ in 0..shared.events_once.swap(0, Ordering::AcqRel) {
+                                let event =
+                                    json!({"method":"Accessibility.nodesUpdated","params":{}});
+                                if ws.send(Message::Text(event.to_string().into())).is_err() {
+                                    return;
+                                }
+                            }
                             if shared.stall.load(Ordering::Acquire)
                                 && method == "Runtime.callFunctionOn"
                             {
