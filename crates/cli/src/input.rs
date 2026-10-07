@@ -1,6 +1,6 @@
 use crate::{
     Failure,
-    arguments::{Arguments, QueryFile},
+    arguments::{Arguments, InspectArguments, QueryFile},
 };
 use std::{
     fs::{self, File},
@@ -42,6 +42,26 @@ pub(crate) struct Loaded {
     pub query: GeometryQuery,
     pub expectation: Option<Expectation>,
     pub evaluation: EvaluationInput,
+}
+
+pub(crate) fn load_inspect(args: &InspectArguments) -> Result<(Snapshot, SourceKey), Failure> {
+    let mut remaining = args
+        .max_input
+        .checked_sub(args.reference.len())
+        .ok_or(Failure::invalid("input_limit"))?;
+    let reference = serde_json::from_str::<SourceKey>(&args.reference)
+        .map_err(|_| Failure::invalid("invalid_input"))?;
+    let document = Document::from_json(&read(&args.snapshot, &mut remaining)?, args.max_input)
+        .map_err(|_| Failure::invalid("invalid_input"))?;
+    let snapshot = match document.artifact {
+        Artifact::Snapshot(snapshot) => snapshot,
+        Artifact::ChannelResponse(response) => match response.result {
+            ChannelResult::Observed(snapshot) => snapshot,
+            ChannelResult::Failed(_) => return Err(Failure::invalid("invalid_input")),
+        },
+        _ => return Err(Failure::invalid("invalid_input")),
+    };
+    Ok((*snapshot, reference))
 }
 pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
     let mut remaining = args.max_input;

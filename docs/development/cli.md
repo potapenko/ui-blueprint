@@ -42,6 +42,36 @@ cargo run --locked -p uiblueprint-cli -- measure --snapshot PRINTED_PATH --query
 
 Replace PRINTED_PATH with the printed path. Expected fact: gap8 css_px in local-form, analysis0.2/source Context0.1, no normative pass/fail. Remove only that temporary directory after use. Example byte bounds are not production defaults or process-memory promises.
 
+## Compact inspection of saved observations
+
+```text
+uiblueprint inspect --snapshot FILE --ref '{"namespace":"web.dom","key":"33"}' --view interaction|design --max-input-bytes N --max-output-bytes N
+```
+
+The selector is the existing strict canonical SourceKey JSON object, not a
+namespace:key grammar or BackendRef. Its UTF-8 bytes and the named input file
+share one aggregate input budget. View and positive byte limits are required.
+Input accepts a core0.1 Snapshot Document or an observed ChannelResponse containing
+its unchanged Snapshot; failed channels and other artifacts reject as invalid input.
+Selection uses full namespace/key equality, never labels, geometry or a live lookup.
+
+Compact output explicitly says saved observation/no live revalidation. It retains
+source Context, original projection/coverage/freshness/consistency/Observation,
+native role, selected properties with availability and Evidence, and explicit
+incident relations. Missing/unrequested fields stay not_requested; unknown,
+unsupported, redacted, false and empty remain distinct. Each geometry keeps its
+frame kind, Space and source. Snapshot focus is separate from node Focused.
+Interaction orders semantic facts first; design orders geometry first. Neither
+view creates inner parts, changes the graph, promotes AX bounds to layout bounds,
+or creates action refs. Strings are escaped as data. No external references load.
+
+Found node returns0 even with partial/unknown fields; missing exact SourceKey gives
+target_unresolved/4. Invalid/limit2, IO1 and unsupported mode5 remain distinct.
+The full result is bounded before stdout, including newline: overflow emits no
+partial result. `--json` explicitly returns unsupported_result_version/5 for this
+increment. Canonical JSON inspect remains separate required work; compact output
+does not claim to implement it. Existing measure/check/export paths are unchanged.
+
 ## Exits and scope
 
 | Exit | Meaning |

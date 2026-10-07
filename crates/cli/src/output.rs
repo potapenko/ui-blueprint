@@ -1,4 +1,7 @@
-use crate::{Failure, arguments::Arguments};
+use crate::{
+    Failure,
+    arguments::{Arguments, InspectArguments},
+};
 use std::io::{self, Write};
 use uiblueprint_engine::MeasurementResult;
 use uiblueprint_schema::{SchemaVersion, analysis::*, model::*};
@@ -221,4 +224,142 @@ pub(crate) fn export_receipt(
         ).map_err(|_| output.error())?;
     }
     Ok(output.bytes)
+}
+
+fn inspect_property(
+    output: &mut Bounded,
+    field: Field,
+    property: Option<&Property>,
+) -> io::Result<()> {
+    write!(output, "property={field:?} ")?;
+    let Some(Property::Requested {
+        state,
+        sensitivity,
+        evidence,
+        ..
+    }) = property
+    else {
+        return writeln!(output, "selection=not_requested");
+    };
+    write!(output, "selection=requested sensitivity={sensitivity:?} ")?;
+    match state {
+        Availability::Known { value } => write!(output, "availability=known value={value:?}"),
+        Availability::Unknown { reason } => {
+            write!(output, "availability=unknown reason={:?}", reason.0)
+        }
+        Availability::Unsupported { reason } => {
+            write!(output, "availability=unsupported reason={:?}", reason.0)
+        }
+        Availability::Redacted {} => write!(output, "availability=redacted"),
+    }?;
+    writeln!(output, " evidence={evidence:?}")
+}
+
+pub(crate) fn inspect(
+    args: &InspectArguments,
+    view: &uiblueprint_engine::scope::NeighborView<'_>,
+) -> Result<Vec<u8>, Failure> {
+    let mut buffer = Bounded::new(args.max_output);
+    let written = (|| -> io::Result<()> {
+        let snapshot = view.snapshot;
+        let node = view.seed;
+        let output = &mut buffer;
+        writeln!(
+            output,
+            "inspection=saved_observation live_revalidation=not_performed requested_view={:?} original_projection={:?}",
+            args.view, snapshot.context.projection
+        )?;
+        writeln!(
+            output,
+            "snapshot={:?} revision={} context={:?}",
+            snapshot.id.0, snapshot.revision, snapshot.context
+        )?;
+        writeln!(
+            output,
+            "coverage={:?} limits input_bytes={} output_bytes={}",
+            snapshot.coverage, args.max_input, args.max_output
+        )?;
+        for observation in &snapshot.observations {
+            writeln!(output, "recorded_observation={observation:?}")?;
+        }
+        writeln!(
+            output,
+            "node={:?} surface={:?} native_role={:?}",
+            node.key, node.surface, node.native_role
+        )?;
+        writeln!(output, "recorded_focus={:?}", snapshot.focus)?;
+        const FIELDS: &[Field] = &[
+            Field::Role,
+            Field::Name,
+            Field::AccessibilityName,
+            Field::VisibleText,
+            Field::Value,
+            Field::Placeholder,
+            Field::Focused,
+            Field::Enabled,
+            Field::LayoutBounds,
+            Field::AccessibilityBounds,
+            Field::HitRegion,
+            Field::VisibleRegion,
+            Field::PaintBounds,
+        ];
+        let geometry = |field| {
+            matches!(
+                field,
+                Field::LayoutBounds
+                    | Field::AccessibilityBounds
+                    | Field::HitRegion
+                    | Field::VisibleRegion
+                    | Field::PaintBounds
+                    | Field::Baseline
+            )
+        };
+        for geometry_first in [
+            args.view == Projection::Design,
+            args.view != Projection::Design,
+        ] {
+            for &field in FIELDS.iter().filter(|&&f| geometry(f) == geometry_first) {
+                inspect_property(
+                    output,
+                    field,
+                    node.properties.iter().find(|p| p.field() == field),
+                )?;
+            }
+            for property in node
+                .properties
+                .iter()
+                .filter(|p| !FIELDS.contains(&p.field()) && geometry(p.field()) == geometry_first)
+            {
+                inspect_property(output, property.field(), Some(property))?;
+            }
+        }
+        for extension in &node.extensions {
+            writeln!(
+                output,
+                "extension_namespace={:?} name={:?} property={:?}",
+                extension.namespace.0, extension.name.0, extension.property
+            )?;
+        }
+        for declaration in &node.source_declarations {
+            writeln!(output, "source_declaration={declaration:?}")?;
+        }
+        writeln!(output, "recorded_children={:?}", node.children)?;
+        for component in snapshot
+            .components
+            .iter()
+            .filter(|c| c.members.contains(&node.key))
+        {
+            writeln!(output, "declared_component={component:?}")?;
+        }
+        for neighbor in &view.neighbors {
+            writeln!(
+                output,
+                "relation_direction={:?} relation={:?} counterpart={:?}",
+                neighbor.direction, neighbor.relation, neighbor.counterpart.key
+            )?;
+        }
+        Ok(())
+    })();
+    written.map_err(|_| buffer.error())?;
+    Ok(buffer.bytes)
 }

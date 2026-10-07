@@ -1,5 +1,52 @@
 use crate::Failure;
 use std::{ffi::OsString, path::PathBuf};
+use uiblueprint_schema::model::Projection;
+
+pub(crate) struct InspectArguments {
+    pub snapshot: PathBuf,
+    pub reference: String,
+    pub view: Projection,
+    pub max_input: usize,
+    pub max_output: usize,
+}
+impl InspectArguments {
+    pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
+        let (mut snapshot, mut reference, mut view, mut max_input, mut max_output) =
+            (None, None, None, None, None);
+        let invalid = Failure::invalid("invalid_arguments");
+        while let Some(flag) = args.next() {
+            if flag == "--json" {
+                return Err(Failure::unsupported("unsupported_result_version"));
+            }
+            let value = args.next().ok_or(invalid)?;
+            match flag.to_str() {
+                Some("--snapshot") if snapshot.is_none() => snapshot = Some(PathBuf::from(value)),
+                Some("--ref") if reference.is_none() => {
+                    reference = Some(value.into_string().map_err(|_| invalid)?);
+                }
+                Some("--view") if view.is_none() => {
+                    view = Some(match value.to_str() {
+                        Some("interaction") => Projection::Interaction,
+                        Some("design") => Projection::Design,
+                        _ => return Err(Failure::unsupported("unsupported_view")),
+                    });
+                }
+                Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
+                Some("--max-output-bytes") if max_output.is_none() => {
+                    max_output = Some(limit(value)?)
+                }
+                _ => return Err(invalid),
+            }
+        }
+        Ok(Self {
+            snapshot: snapshot.ok_or(invalid)?,
+            reference: reference.ok_or(invalid)?,
+            view: view.ok_or(invalid)?,
+            max_input: max_input.ok_or(invalid)?,
+            max_output: max_output.ok_or(invalid)?,
+        })
+    }
+}
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Command {

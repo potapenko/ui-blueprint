@@ -99,16 +99,327 @@ impl Case {
         }
         child.output().expect("invoke CLI")
     }
+    fn inspect(
+        &self,
+        reference: &str,
+        view: &str,
+        input: usize,
+        output: usize,
+        extra: &[&str],
+    ) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .arg("inspect")
+            .arg("--snapshot")
+            .arg(self.directory.join("snapshot.json"))
+            .args([
+                "--ref",
+                reference,
+                "--view",
+                view,
+                "--max-input-bytes",
+                &input.to_string(),
+                "--max-output-bytes",
+                &output.to_string(),
+            ])
+            .args(extra)
+            .output()
+            .expect("inspect CLI")
+    }
 }
 impl Drop for Case {
     fn drop(&mut self) {
         fs::remove_dir_all(&self.directory).expect("remove only this case's temporary directory");
+        assert!(
+            !self.directory.exists(),
+            "verify task temporary directory removal"
+        );
     }
 }
 fn assert_error(output: Output, exit: i32, code: &str) {
     assert_eq!(output.status.code(), Some(exit));
     assert!(output.stdout.is_empty());
     assert_eq!(output.stderr, format!("{code}\n").as_bytes());
+}
+
+#[test]
+fn inspect_keeps_exact_identity_availability_evidence_and_escaped_text() {
+    let mut case = Case::new("GEO-GAP");
+    let Artifact::Snapshot(snapshot) = Document::from_json(
+        include_bytes!("../../../fixtures/golden/ENV-SNAPSHOT-VALID.json"),
+        65536,
+    )
+    .unwrap()
+    .artifact
+    else {
+        panic!("snapshot")
+    };
+    case.snapshot = *snapshot;
+    let Property::Requested {
+        evidence, state, ..
+    } = &mut case.snapshot.nodes[0].properties[1]
+    else {
+        panic!("name")
+    };
+    *state = Availability::Known {
+        value: Value::Text("Director\nFORGED_LINE".into()),
+    };
+    let evidence = evidence.clone();
+    for (field, sensitivity, state) in [
+        (
+            Field::Placeholder,
+            Sensitivity::Public,
+            Availability::Known {
+                value: Value::Text(String::new()),
+            },
+        ),
+        (
+            Field::Focused,
+            Sensitivity::Public,
+            Availability::Known {
+                value: Value::Flag(false),
+            },
+        ),
+        (
+            Field::Value,
+            Sensitivity::Sensitive,
+            Availability::Redacted {},
+        ),
+        (
+            Field::Description,
+            Sensitivity::Public,
+            Availability::Unknown {
+                reason: Id("not_observed".into()),
+            },
+        ),
+        (
+            Field::AccessibilityName,
+            Sensitivity::Public,
+            Availability::Unsupported {
+                reason: Id("not_exposed".into()),
+            },
+        ),
+    ] {
+        case.snapshot.context.fields.push(field);
+        case.snapshot.coverage.fields.push(field);
+        case.snapshot.observations[0].coverage.fields.push(field);
+        case.snapshot.nodes[0].properties.push(Property::Requested {
+            field,
+            sensitivity,
+            evidence: evidence.clone(),
+            state,
+        });
+    }
+    let mut duplicate_label = case.snapshot.nodes[0].clone();
+    duplicate_label.key.key = Id("check-2".into());
+    case.snapshot.nodes.push(duplicate_label);
+    case.snapshot.relations.push(Relation {
+        kind: RelationKind::LabelledBy,
+        from: case.snapshot.nodes[0].key.clone(),
+        to: case.snapshot.nodes[1].key.clone(),
+        evidence: evidence.clone(),
+    });
+    case.snapshot.coverage.status = CoverageStatus::Partial;
+    case.save();
+    let input_before = fs::read(case.directory.join("snapshot.json")).unwrap();
+    let reference = serde_json::to_string(&case.snapshot.nodes[0].key).unwrap();
+    let output = case.inspect(&reference, "interaction", 65536, 65536, &[]);
+    assert_eq!(output.status.code(), Some(0));
+    assert!(output.stderr.is_empty());
+    let text = String::from_utf8(output.stdout).unwrap();
+    for required in [
+        "inspection=saved_observation live_revalidation=not_performed",
+        "requested_view=Interaction original_projection=Interaction",
+        "snapshot=\"S10\" revision=10",
+        "status: Partial",
+        "clock_domain: Id(\"fixture-parent-monotonic\")",
+        "node=SourceKey { namespace: Id(\"macos.ax\"), key: Id(\"check-1\") }",
+        "property=Name selection=requested sensitivity=Public availability=known value=Text(\"Director\\nFORGED_LINE\")",
+        "property=Placeholder selection=requested sensitivity=Public availability=known value=Text(\"\")",
+        "property=Focused selection=requested sensitivity=Public availability=known value=Flag(false)",
+        "property=Enabled selection=requested sensitivity=Public availability=known value=Flag(true)",
+        "property=Checked selection=requested sensitivity=Public availability=known value=Flag(false)",
+        "property=Value selection=requested sensitivity=Sensitive availability=redacted",
+        "property=Description selection=requested sensitivity=Public availability=unknown",
+        "property=AccessibilityName selection=requested sensitivity=Public availability=unsupported",
+        "property=LayoutBounds selection=not_requested",
+        "method: Id(\"authored_fixture\")",
+        "relation_direction=Outgoing relation=Relation { kind: LabelledBy",
+    ] {
+        assert!(text.contains(required), "missing {required}: {text}");
+    }
+    assert!(!text.contains("\nFORGED_LINE"));
+    assert_eq!(
+        fs::read(case.directory.join("snapshot.json")).unwrap(),
+        input_before
+    );
+    assert_error(
+        case.inspect("Director", "interaction", 65536, 65536, &[]),
+        2,
+        "invalid_input",
+    );
+    let other = serde_json::to_string(&case.snapshot.nodes[1].key).unwrap();
+    let output = case.inspect(&other, "interaction", 65536, 65536, &[]);
+    assert_eq!(output.status.code(), Some(0));
+    assert!(
+        String::from_utf8(output.stdout)
+            .unwrap()
+            .contains("node=SourceKey { namespace: Id(\"macos.ax\"), key: Id(\"check-2\") }")
+    );
+}
+
+#[test]
+fn inspect_design_keeps_geometry_kinds_and_accepts_original_observed_channel() {
+    let mut case = Case::new("GEO-GAP");
+    case.snapshot
+        .context
+        .fields
+        .push(Field::AccessibilityBounds);
+    case.snapshot
+        .coverage
+        .fields
+        .push(Field::AccessibilityBounds);
+    for observation in &mut case.snapshot.observations {
+        observation.coverage.fields.push(Field::AccessibilityBounds);
+    }
+    for node in &mut case.snapshot.nodes {
+        let mut property = node.properties[0].clone();
+        let Property::Requested {
+            field,
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut property
+        else {
+            panic!("geometry")
+        };
+        *field = Field::AccessibilityBounds;
+        g.frame_kind = FrameKind::AccessibilityBounds;
+        let Shape::Rect(rect) = &mut g.shape else {
+            panic!("rect")
+        };
+        rect.width = 123.0;
+        node.properties.push(property);
+    }
+    case.save();
+    let reference = serde_json::to_string(&case.snapshot.nodes[0].key).unwrap();
+    let design = case.inspect(&reference, "design", 65536, 65536, &[]);
+    assert_eq!(design.status.code(), Some(0));
+    let text = String::from_utf8(design.stdout).unwrap();
+    assert!(text.contains("requested_view=Design original_projection=Interaction"));
+    assert!(text.contains("frame_kind: LayoutBounds"));
+    assert!(text.contains("frame_kind: AccessibilityBounds"));
+    assert!(text.contains("width: 123.0"));
+    assert!(text.contains("units: CssPx"));
+    assert!(text.find("property=LayoutBounds ").unwrap() < text.find("property=Role ").unwrap());
+    let response = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::ChannelResponse(Box::new(ChannelResponse {
+            request_id: Id("inspect-fixture".into()),
+            session_id: case.snapshot.context.session_id.clone(),
+            dispatch_sequence: 1,
+            target: case.snapshot.context.target.clone(),
+            channel: Channel::ExternalSemantics,
+            result: ChannelResult::Observed(Box::new(case.snapshot.clone())),
+        })),
+    };
+    let bytes = serde_json::to_vec(&response).unwrap();
+    fs::write(case.directory.join("snapshot.json"), &bytes).unwrap();
+    let output = case.inspect(&reference, "design", 65536, 65536, &[]);
+    assert_eq!(output.status.code(), Some(0));
+    assert_eq!(String::from_utf8(output.stdout).unwrap(), text);
+    assert_eq!(
+        fs::read(case.directory.join("snapshot.json")).unwrap(),
+        bytes
+    );
+}
+
+#[test]
+fn inspect_refusals_and_aggregate_bounds_never_publish_partial_or_private_input() {
+    let case = Case::new("GEO-GAP");
+    let reference = serde_json::to_string(&case.snapshot.nodes[0].key).unwrap();
+    for invalid in [
+        "PRIVATE_INSPECT_CANARY",
+        r#"["ns","key"]"#,
+        r#"{"namespace":"n","key":"a","key":"b"}"#,
+        r#"{"namespace":"n","key":"a","extra":"PRIVATE_INSPECT_CANARY"}"#,
+        r#"{"namespace":"n","key":""}"#,
+    ] {
+        assert_error(
+            case.inspect(invalid, "interaction", 65536, 65536, &[]),
+            2,
+            "invalid_input",
+        );
+    }
+    assert_error(
+        case.inspect(
+            r#"{"namespace":"absent","key":"A"}"#,
+            "interaction",
+            65536,
+            65536,
+            &[],
+        ),
+        4,
+        "target_unresolved",
+    );
+    assert_error(
+        case.inspect(&reference, "interaction", 65536, 1, &[]),
+        2,
+        "output_limit",
+    );
+    let needed = fs::metadata(case.directory.join("snapshot.json"))
+        .unwrap()
+        .len() as usize
+        + reference.len();
+    assert_error(
+        case.inspect(&reference, "interaction", needed - 1, 65536, &[]),
+        2,
+        "input_limit",
+    );
+    assert_eq!(
+        case.inspect(&reference, "interaction", needed, 65536, &[])
+            .status
+            .code(),
+        Some(0)
+    );
+    assert_error(
+        case.inspect(&reference, "interaction", 65536, 65536, &["--json"]),
+        5,
+        "unsupported_result_version",
+    );
+    assert_error(
+        case.inspect(&reference, "other", 65536, 65536, &[]),
+        5,
+        "unsupported_view",
+    );
+    assert_error(
+        case.inspect(
+            &reference,
+            "interaction",
+            65536,
+            65536,
+            &["--ref", &reference],
+        ),
+        2,
+        "invalid_arguments",
+    );
+    fs::write(
+        case.directory.join("snapshot.json"),
+        b"PRIVATE_INSPECT_CANARY",
+    )
+    .unwrap();
+    assert_error(
+        case.inspect(&reference, "interaction", 65536, 65536, &[]),
+        2,
+        "invalid_input",
+    );
+    let expectation = fs::read(case.directory.join("expectation.json")).unwrap();
+    fs::write(case.directory.join("snapshot.json"), expectation).unwrap();
+    assert_error(
+        case.inspect(&reference, "interaction", 65536, 65536, &[]),
+        2,
+        "invalid_input",
+    );
 }
 
 #[test]

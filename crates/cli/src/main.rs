@@ -6,7 +6,7 @@ mod export;
 mod input;
 mod output;
 
-use arguments::{Arguments, Command, ResultVersion};
+use arguments::{Arguments, Command, InspectArguments, ResultVersion};
 use std::{
     io::{self, Write},
     process::ExitCode,
@@ -18,6 +18,8 @@ const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering 
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
+Inspect: uiblueprint inspect --snapshot FILE --ref SOURCE_KEY_JSON --view interaction|design --max-input-bytes N --max-output-bytes N\n\
+Inspect accepts a saved Snapshot or observed ChannelResponse; selector is canonical {namespace,key} JSON. No live revalidation; compact only (--json unsupported).\n\
 Export: uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose MODE] [--profile blue-engineering] [--json]\n\
 Export requires a complete DrawingBrief with canonical Snapshot or explicit ProposedLayout, public document metadata and caller limits. No model or live collection.\n\
 Exits: 0 package written/pass/known; 1 IO/internal; 2 invalid/limit; 3 fail; 4 unknown; 5 unsupported/contract gap.\n";
@@ -139,12 +141,34 @@ fn execute(args: Arguments) -> Result<(Vec<u8>, u8), Failure> {
     }
 }
 
+fn execute_inspect(args: InspectArguments) -> Result<(Vec<u8>, u8), Failure> {
+    let (snapshot, reference) = input::load_inspect(&args)?;
+    let view = engine::scope::relation_neighbors(
+        &snapshot,
+        &reference,
+        engine::scope::NeighborLimits {
+            max_relations: snapshot.relations.len(),
+        },
+    )
+    .map_err(|error| match error {
+        engine::scope::ScopeError::MissingSeed => Failure {
+            code: "target_unresolved",
+            exit: 4,
+        },
+        engine::scope::ScopeError::InvalidSnapshot(_) => Failure::invalid("invalid_input"),
+        engine::scope::ScopeError::AllocationFailure => Failure::io(),
+    })?;
+    Ok((output::inspect(&args, &view)?, 0))
+}
+
 fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
     let result = if args.len() == 1 && args[0] == "--help" {
         Ok((HELP.as_bytes().to_vec(), 0))
     } else if args.first().is_some_and(|arg| arg == "imagegen-prompt") {
         export::execute(args.into_iter().skip(1).collect())
+    } else if args.first().is_some_and(|arg| arg == "inspect") {
+        InspectArguments::parse(args.into_iter().skip(1)).and_then(execute_inspect)
     } else {
         Arguments::parse(args).and_then(execute)
     };
