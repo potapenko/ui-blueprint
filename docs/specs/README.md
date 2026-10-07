@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 7.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 8.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -53,6 +53,10 @@ registration precedes implementation and does not accept runtime or new arithmet
 `ANALYSIS-FLOAT-001` records [D07@3](development/decisions/d07-reuse.md)'s verified
 need for the same pinned serde_json runtime float_roundtrip feature, preserving
 source-number fidelity without new dependencies, tolerance or core wire changes.
+
+`W01-TRANSPORT-001` records [D07@4](development/decisions/d07-reuse.md)'s narrow
+numeric-loopback ws codec/log-boundary adoption before Web transport source work.
+All source-audit guards apply; runtime float_roundtrip and open D05 gates remain.
 
 ## Select a route
 

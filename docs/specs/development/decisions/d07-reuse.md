@@ -1,9 +1,9 @@
 # D07 — initial dependencies and no-copy disposition
 
 - Domain: `uib.development.d07`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), ANALYSIS-FLOAT-001 below.
-- Node type: leaf; contract: `UIB.D07@3`; clause: `UIB.D07.CONTENT`; supersedes @2.
-- Authority: Active / Stability: Evolving; initial dependency intent, no installation.
+- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), ANALYSIS-FLOAT-001 and W01-TRANSPORT-001 below.
+- Node type: leaf; contract: `UIB.D07@4`; clause: `UIB.D07.CONTENT`; supersedes @3.
+- Authority: Active / Stability: Evolving; selected dependencies; runtime acceptance separate.
 - Read when: T01/S01 dependency resolution or later selected code/dependency adoption.
 - Do not read when: no dependency/source transfer is proposed.
 - Requires: [REUSE@1](../../reference/reuse.md),
@@ -20,16 +20,13 @@ engine. Reimplement selected identity/update/geometry rules against our contract
 Use public Apple frameworks only within native helper. Playwright/Node are fixture
 tools, not a mandatory product runtime. No model, daemon framework, persistence
 engine, async runtime or native SDK dependency in core by default.
-
 Exact initial root workspace dependencies when T01/S01 need serialization:
-
 | Package / version / features | Purpose / evidence |
 | --- | --- |
 | `serde = =1.0.229`, default std, `derive` | Typed envelope serialization; registry metadata Rust minimum1.56, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde/1.0.229/serde/) |
 | `serde_json = =1.0.151`, default std + runtime `float_roundtrip` | Exact finite-f64 JSON decoding; minimum1.71, MIT OR Apache-2.0; [versioned API](https://docs.rs/serde_json/1.0.151/serde_json/) |
 | `schemars = =1.2.2`, std/derive only | S01 schema generation from canonical types; minimum1.74, MIT (Graham Esau2019) |
 | dev-only `jsonschema = =0.58.5`, default-features=false | S01 structural validation/parity; minimum1.85, MIT (Dmitry Dygalo2020–2026); HTTP/file/TLS/async resolution disabled |
-
 S01 authorized delta `S01-DEP-001`, revision2: these two dependencies prevent
 handwritten schema drift and supply an independent structural checker. Exact crate
 archives/manifests/LICENSE and schemars JsonSchema API inspected2026-10-06; no
@@ -40,7 +37,6 @@ rejects nested array-shaped records without another JSON parser. jsonschema stay
 in tests, avoiding its large transitive runtime graph; generated schemas use local
 references only. float_roundtrip was test-only before ANALYSIS-FLOAT-001. No URL/file is loaded
 from input documents. Schema/parser parity is independently checked on the goldens.
-
 Crates.io version metadata checked 2026-10-06: both non-yanked stable releases.
 serde checksum `4148590afebada386688f18773da617792bf2ef03ffc1e4cbd2b1d45b023e0ba`;
 serde_json checksum `c841b55ecdae098c80dcae9cf767f6f8a0c2cdb3416bbef72181df4d0fe73f14`.
@@ -49,7 +45,6 @@ missing/mistyped paths. Semantic validation still required. Do not enable
 `unbounded_depth`, arbitrary_precision/preserve_order, rc or unrelated formats.
 Stable output comes from explicit deterministic representation, not source-map
 insertion order. There is no selected serde dependency on Apple/browser SDKs.
-
 T01 resolves and commits Cargo.lock, records transitive versions/features/license
 files, then uses `--locked`. Inspect actual resolved package LICENSE/NOTICE before
 distribution; metadata is not a blanket audit of all transitive material.
@@ -59,13 +54,19 @@ not an unnoticed version substitution. No `cargo update` as routine QA.
 
 ## Later dependencies and rejected alternatives
 
-Web CDP transport needs an owned bounded socket/protocol library before W01.
-`tungstenite 0.30.0` metadata was inspected (minimum1.85, MIT OR Apache-2.0,
-handshake feature), but **not adopted**: no scoped transport/timeout/source audit
-or shipping use yet. W01 must inspect exact selected API/source/license/NOTICE and
-set version/features before adding it; do not write a second WebSocket protocol
-implementation or pull an async framework merely to avoid that finite decision.
-
+`W01-TRANSPORT-001` (2026-10-07), under [packet](../../../plans/ui-blueprint/packets/W01-transport-implementation.md),
+adopts tungstenite EXACT0.30.0, default-features=false, handshake only (MSRV1.85,
+MIT OR Apache-2.0) from [source audit e5da7d6](../../../research/W01-transport.md).
+Use authorized numeric-loopback ws only: owned socket/deadline/cancel, no DNS/TLS/
+redirect/proxy connector; explicit finite payload/buffer/byte/work limits, bounded
+close/drop, outbound admission, queued-write preservation, no automatic resend.
+Reject unsolicited extensions/binary-as-CDP/zero writes; sanitized errors and
+mandatory upstream-log filtering. Preserve every audit guard; no live/D05 acceptance.
+Direct log EXACT0.4.29, default-features=false/no features (MSRV1.68, MIT OR Apache-2.0), supplies the same upstream
+logging facade for a narrow delegate filter, not another logging framework or
+compile-time global suppression. Its archive/API/license checked before use.
+Root manifest/lock resolution requires the separately granted Integration lane;
+existing versions, float_roundtrip, wire and retained policy stay unchanged.
 AccessKit full nodes are a reference, not our fields/provenance schema; Chromium
 notice applies to its schema source in addition to AccessKit licenses. Galen and
 Extras hidden tolerances/runner are rejected. Compose drawing padding/density and
@@ -73,7 +74,6 @@ Preview survivor cache/reflection are rejected as measurement/cache behavior.
 AXorcist private identity API and scope expansion are rejected; Peekaboo/agent
 stacks and unsafe fallback action policies are not adopted. [Source ledgers](evidence.md)
 retain each exact revision, selected paths, tests and conditions for reconsideration.
-
 Acceptance: T01/S01 locked package builds and semantic parser tests; I01 selected
 distribution inventory plus applicable licenses/notices; no claims that an
 upstream test was run, a license audit was universal, or a dependency was installed

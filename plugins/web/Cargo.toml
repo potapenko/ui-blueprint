@@ -1,0 +1,11 @@
+[package]
+name = "uiblueprint-web"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+description = "Owned bounded WebSocket transport for the UI Blueprint Web adapter"
+
+[dependencies]
+tungstenite.workspace = true
+log.workspace = true
