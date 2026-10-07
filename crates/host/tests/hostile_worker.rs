@@ -446,3 +446,143 @@ fn canonical_retain_replay_and_encoding_refusal_use_actual_worker_paths() {
     assert_eq!(domain.usage().reserved_sessions, 0);
     assert_eq!(domain.usage().completion_groups, 0);
 }
+
+#[test]
+fn phase_fixed_output_writer_refuses_valid_padded_query_without_partial_frame() {
+    let _serial = SERIAL.lock().unwrap();
+    let config = limits(64 * MIB);
+    let domain = HostDomain::new::<DarwinPlatform>(config).unwrap();
+    let mut host = RuntimeHost::new(&domain, spec(), DarwinPlatform).unwrap();
+    let (session, _) = attach(&mut host);
+    submit(
+        &mut host,
+        session,
+        QUERY,
+        OperationClass::Validate,
+        output(1, 1),
+    );
+    let held = complete(&mut host);
+    assert_eq!(held.terminal, Terminal::Completed);
+    let reserved = domain.usage().retained_reserved_bytes;
+    // Predeclared exact boundary: output slice512KiB, input512KiB+1. Whitespace
+    // does not alter the valid canonical query. No hostile DTO is parsed here.
+    let mut padded = QUERY.to_vec();
+    padded.resize(config.output_bytes + 1, b' ');
+    assert!(padded.len() <= config.input_bytes);
+    submit(
+        &mut host,
+        session,
+        &padded,
+        OperationClass::Validate,
+        output(1, 1),
+    );
+    let refused = complete(&mut host);
+    assert_eq!(refused.terminal, Terminal::Failed(HostError::ResourceLimit));
+    assert_eq!(refused.committed(), 0);
+    assert!(refused.bytes(0).is_none());
+    assert_eq!(held.bytes(0), Some(QUERY));
+    assert_eq!(domain.usage().retained_reserved_bytes, reserved);
+    assert_eq!(domain.usage().reserved_sessions, 1);
+    drop(refused);
+    submit(
+        &mut host,
+        session,
+        QUERY,
+        OperationClass::Validate,
+        output(1, 1),
+    );
+    let healthy = complete(&mut host);
+    assert_eq!(healthy.terminal, Terminal::Completed);
+    assert_eq!(healthy.bytes(0), Some(QUERY));
+    drop(healthy);
+    drop(held);
+    shutdown(&mut host);
+    assert_eq!(domain.usage().reserved_sessions, 0);
+    assert_eq!(domain.usage().completion_groups, 0);
+}
+
+#[test]
+fn phase_retained_quota_refusal_keeps_base_replayable_and_caller_lease_intact() {
+    let _serial = SERIAL.lock().unwrap();
+    // Fixed before execution:32KiB child retained domain; ordinary working heap
+    // remains63MiB. A64KiB property cannot fit even after evicting every old entry.
+    let mut config = limits(64 * MIB);
+    config.retained_per_worker = 32 * 1024;
+    let domain = HostDomain::new::<DarwinPlatform>(config).unwrap();
+    let mut host = RuntimeHost::new(&domain, spec(), DarwinPlatform).unwrap();
+    let (session, _) = attach(&mut host);
+    let delta = Document::from_json(DELTA, DELTA.len()).unwrap();
+    let Artifact::Delta(case) = delta.artifact else {
+        panic!("authored delta")
+    };
+    let base = serde_json::to_vec(&Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(Box::new(case.base.clone())),
+    })
+    .unwrap();
+    let mut request = output(0, 1);
+    request.retained_partition = 1;
+    submit(&mut host, session, &base, OperationClass::Retain, request);
+    let held = complete(&mut host);
+    assert_eq!(held.terminal, Terminal::Completed);
+    assert_eq!(held.bytes(0), Some(base.as_slice()));
+    let reserved = domain.usage().retained_reserved_bytes;
+    let mut large = case.base.clone();
+    large.id = Id("authored-retained-over-quota".into());
+    large.revision += 1;
+    large.source_state = Some(Id("authored-retained-large-state".into()));
+    let Property::Requested { state, .. } = large.nodes[0]
+        .properties
+        .iter_mut()
+        .find(|p| p.field() == Field::Name)
+        .unwrap()
+    else {
+        panic!("authored requested name")
+    };
+    *state = Availability::Known {
+        value: Value::Text("x".repeat(64 * 1024)),
+    };
+    assert!(uiblueprint_schema::owned_size::owned(&large).unwrap().2 > config.retained_per_worker);
+    let large = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(Box::new(large)),
+    };
+    large
+        .validate()
+        .expect("valid authored larger candidate; not a schema refusal");
+    let large = serde_json::to_vec(&large).unwrap();
+    assert!(large.len() < request.frame_bytes);
+    submit(&mut host, session, &large, OperationClass::Retain, request);
+    let refused = complete(&mut host);
+    assert_eq!(refused.terminal, Terminal::Failed(HostError::ResourceLimit));
+    assert_eq!(refused.committed(), 0);
+    assert_eq!(held.bytes(0), Some(base.as_slice()));
+    assert_eq!(domain.usage().retained_reserved_bytes, reserved);
+    assert_eq!(domain.usage().reserved_sessions, 1);
+    drop(refused);
+    // Replay is the actual existing lookup consumer: success proves the old base
+    // was not evicted by a candidate that could never fit, not just held wire bytes.
+    let id = b"\"retained-refusal-replay\"";
+    let mut input = host
+        .reserve_input(session, 40 + DELTA.len() + id.len())
+        .unwrap();
+    worker_tape::encode(&[DELTA, id], input.bytes_mut()).unwrap();
+    host.submit(session, OperationClass::Replay, input, request, deadline())
+        .unwrap();
+    let replayed = complete(&mut host);
+    assert_eq!(replayed.terminal, Terminal::Completed);
+    let mut expected = case.source_snapshot.expect("independent full source");
+    expected.id = Id("retained-refusal-replay".into());
+    let expected = serde_json::to_vec(&Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(Box::new(expected)),
+    })
+    .unwrap();
+    assert_eq!(replayed.bytes(0), Some(expected.as_slice()));
+    assert_eq!(held.bytes(0), Some(base.as_slice()));
+    drop(replayed);
+    drop(held);
+    shutdown(&mut host);
+    assert_eq!(domain.usage().reserved_sessions, 0);
+    assert_eq!(domain.usage().completion_groups, 0);
+}

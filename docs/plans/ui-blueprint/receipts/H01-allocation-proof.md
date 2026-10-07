@@ -1,7 +1,8 @@
 # H01 allocator and guarded-input proof
 
 Status: small proof saved731a524 and combined null proof saved2a712aa; four real
-guarded-worker cases now pass. Worker test/receipt checkpoint-ready. Remaining
+guarded-worker cases and two existing-API phase-refusal cases now pass. Worker
+test/receipt checkpoint-ready. Remaining
 phase-specific allocator-exhaustion coverage stays explicit below; no full H01 claim.
 No independent source acceptance, full H01 or live/SDK/RSS claim.
 
@@ -232,9 +233,9 @@ Root short Git grant pending. No other owner source/Cargo/fixture files are stag
 | Rejection/error | Escaped string, long numeric and repeated-map cases reject normally; same worker then succeeds | OOM specifically while formatting rejection has not been isolated; do not infer it from ordinary InvalidInput |
 | Semantic validation | Validation executes inside Document::from_json while phase remains Decode; normal canonical cases pass | Need one bounded source case plus trustworthy attribution separating validator scratch failure from decode; current completion lacks raw phase, so no forced-validation claim |
 | Replay | Real retained base + canonical Delta/Tape produces the independent full result | Forced allocator failure during candidate clone/validation remains open; preserve old base and distinguish it from earlier decode failure |
-| Encoding/publication | Existing test's16-byte OutputRequest is refused in worker_main::publish AFTER encoding, with no partial frame and an older ACKed lease intact | Next precise case: valid query plus bounded trailing whitespace larger than fixed publication slice, OperationClass::Validate, to exercise FixedOutput::write refusal itself |
+| Encoding/publication | Earlier16-byte OutputRequest refused in publish AFTER encoding; subsequent phase wave forces FixedOutput::write refusal with valid512KiB+1 query against512KiB slice, no partial frame and prior lease intact | Both bounded refusal boundaries covered; neither is claimed as allocator OOM |
 | Encoding allocation | App-owned FixedOutput writes by checked slice copy; guarded_encode streams to_writer under PublicationGuard rather than constructing Value/Vec output | This source boundary is not a proof of all dependency allocations. No invented allocator OOM on an allocation-free writer; any claimed serde allocation failure requires an actual bounded reachable case |
-| Retained admission | Normal Retain/Replay and cleanup are real; no K01 quota failure was forced in this wave | Next precise case: predeclare a small valid retained allowance, ACK a small base, refuse a larger canonical candidate without losing the base/lease; label retained-resource refusal separately from GlobalAlloc exhaustion |
+| Retained admission | Subsequent phase wave uses predeclared32KiB retained allowance, ACKs small base, refuses canonical64KiB text candidate, then successfully replays old base and preserves caller lease | Retained-resource refusal/atomicity covered; not a GlobalAlloc-failure claim |
 | System null | Bounded alloc/zeroed/realloc callbacks exercise true shared null branches and old/new charge preservation; exact status/reap | Injected-null handling closed; no claim of physical OS exhaustion |
 | Overflow/underflow | Existing unchanged safe QuotaCounter boundary tests reused; real publication/configuration invariant fatalities tested | No undefined invalid deallocation or enormous allocation introduced merely to hit impossible-under-profile corruption branches |
 
@@ -243,3 +244,45 @@ harness/public test command. Validation/replay-specific exhaustion needs only it
 exact attribution/case handoff if existing APIs cannot identify the phase; it does
 not reopen the whole mechanism or weaken expectations. Root coordinates the next
 short saved-input barrier after this completed two-path step is saved.
+
+## Existing-API phase refusal wave
+
+After bdeb87ef8ed0294e0aea14ad645159a7455b79ec was pushed, root explicitly assigned
+the two matrix cases above. Only hostile_worker.rs and this receipt changed.
+Limits were fixed BEFORE the run: publication512KiB/input512KiB+1; retained32KiB/
+candidate text64KiB; normal worker64MiB/ordinary63MiB. No post-failure adjustment.
+
+Root/Core ACKed saved provider64cbec90de0bd1b46c8faea4efe01b2f9b3204c5, including
+its separate fatal-lane race fix; supervisor pin
+fbf181f340d8540a287b50ba5c1459e4b8d7ba654cd3eab7de3af6f034581ee5 matched.
+All63 provider/manifest/fixture inputs matched that saved revision; own test was
+the sole working input. Same tracked-source/six-fixture recipe as the previous
+64-input wave, now pinned to64cbec9, before/after unchanged:
+`eccadde8478ea57fabb1fe6767620d546f15d03b4ba69391c0da59c20eb63aa1`.
+Unconnected native_binding.rs stayed excluded. The barrier was released immediately
+after test/hash result, not held for receipt or further development.
+
+Executed build session-worker, test hostile_worker filtered by phase_ with one test
+thread, scoped hostile_worker Clippy -D warnings and own rustfmt, in the same owned
+task-temp target.2 tests passed,0 failed/ignored;4 unchanged cases filtered out.
+All affected checks passed; no full suite or earlier runtime wave repeated.
+
+- Valid query plus trailing whitespace reaches the existing Validate path and its
+  FixedOutput::write_all.512KiB+1 exceeds the configured output slice, so the writer
+  refuses before copying/publishing; ResourceLimit, zero frames. Prior ACKed query
+  bytes/root reservation stay intact; the same worker subsequently handles the
+  ordinary query and cleans up. This differs from the earlier post-encode frame cap.
+- A small base is actually retained and ACKed within the32KiB child retained domain.
+  A new valid canonical candidate with64KiB name has measured owned size above that
+  fixed allowance but encoded size below the frame cap. It is refused with
+  ResourceLimit, zero frames and unchanged parent reservation/held bytes. Existing
+  Replay then finds the old base and matches its independent full source, proving
+  it was not evicted merely because the rejected candidate could not fit. Real
+  shutdown returns session/completion counts to zero.
+
+These are explicit quota/refusal outcomes, not System/GlobalAlloc exhaustion in
+encoding or K01 admission. Source-backed allocation-free slice-copy boundary is
+kept separate from unproved dependency scratch. Rejection/validation/replay-specific
+allocation-failure obligations remain as the matrix states; no claim of full H01
+or independent production source acceptance. Next save set: hostile_worker.rs and
+this receipt only, under a new short root Git grant.
