@@ -340,3 +340,46 @@ Collector.swift, PopupChecks.swift, native-helper.md, fixtures/native/README.md,
 this receipt (runner remained unchanged). Own links/whitespace/source pins checked,
 index untouched; request short exact6 Git lease. Live CLI popup/anchor/close-stale/
 reopen and positive capture/M03 remain open; no hidden next source/runtime work.
+
+## Accepted connector actual AX — positive observation, remaining chain timed out
+
+Same-reviewer source accepted21ac1d. Verified retained source/fixture ce28527b/helper
+45a812d3 and prepared only missing saved CLI/worker and metadata descriptor. Own A
+PID8448/canonical executable/run argument attributed, bounded finally launcher had
+300s UI deadline plus independent5s cleanup. No fixture/helper rebuild or prior suites.
+CUA Edge popup→fresh state→Snapshot shortcut created current bound popup while open.
+Actual parent10025, popup10036/current generation04AA3870-9EEF-4470-926D-82D7B465844D,
+direct visible attachment and parent-equalityfalse; popover AX identifier popup-a.
+No title/geometry/hardcoded ID or separate-AXWindows assumption.
+
+Actual product CLI AX-only mask1/form5 with explicit popup+parent context,160/depth9/
+512KiB/1s/cleanup1s returned observed partial/exit4 and a validated canonical line.
+Five actual nodes: correctly attributed popup content including f02.popup.owner.a,
+and one actual parent f02.popup trigger context. Surface10036/popup generation and
+10025/parent generation matched requested current identities. SurfaceRecord anchor
+and anchored_to reference that actual trigger; macos.fixture.binding provenance
+retains explicit own program association separately from AX semantic ancestry.
+No popup pixels, geometry gap/transform or action-provider claim.
+
+Actual inspect interaction compact and JSON both exited0; JSON retained the exact
+Snapshot. The before/after fixture SNAPSHOT FILE data compared equal during CLI,
+not a separately proven live UI-state invariance. Do not elevate that cached-file
+comparison into current state verification. Before any Confirm action, later CUA
+refresh displayed parent A without popup; Confirm was not sent. Current identity
+was CLOSED/new generation, last measurement file still recorded popup=true.
+
+The bounded launcher meanwhile reached its outer deadline: finally cleanup reported
+300.15s/timeout=true and exact fixture exit confirmed. The temporal cause of the late
+UI absence is unestablished and may coincide with watchdog cleanup; no dismissal,
+read-only side effect or source fault is inferred. Stop remaining explicit-close/
+old-stale/reopen steps, no stale-index action or unchanged retry. This is a verification-
+control timeout; the whole300s chain is not accepted. Initial observed AX/inspect
+positive remains its actual bounded data fact, not full M03/runtime completion.
+
+Finally cleaned exact own fixture before any outer assertion; LaunchServices owns
+reaping. Physical lane released. All current non-image response/config/source/build/
+cache/fixture files at uib-m03-connector-jbrpqha2 removed after facts/checks; absence
+verified. Images0, no image/containing-directory or older asset deletion. No capture,
+B/TCC/display/real app/pointer operation. No active process/resources/index or next
+runtime attempt. One-path human receipt ready for short Git lease; explicit close/
+stale/reopen live chain and positive popup capture remain required.
