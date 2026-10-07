@@ -56,3 +56,38 @@ and source hashes; commit/push scoped coherent step through short Git lease.
 This adds necessary identity evidence to own debug fixture only. It does not make
 arbitrary macOS applications identifiable, prove pointer mapping, change permissions,
 retry B capture or replace independent M01/pixel/action/performance gates.
+
+## Actual same-title and reopened-window verification
+
+Saved53e6e6ef0d8a291c92c340fe5ed217ccbfd965cb is pushed and source9 matches
+the author checks. Same Native owner now runs one finite productCLI verification
+with rebuilt matching off fixture/helper/descriptor and saved CLI/worker. Rebuild
+needed current sources only in system-temp; old9a88b12 fixture lacks this identity
+contract and must not be used to claim current behavior.
+
+Own F02 A/B, identical titles, fresh explicit Snapshot each. AX-only mask1/form5,
+exact trusted a/b-identity path,160/depth9/512KiB/1s request/1s cleanup and existing
+profile; accurate partial exit4 is expected. Assert actual Surface/field attribution
+for each selected window, not title uniqueness. Preserve original A connection/
+request in operation memory/temp. Close A, reopen A via existing control in B.
+Before new A Snapshot, old binding must return canonical stale_target/exit4 with
+no observed payload. Check last measurement manifest did not change on close,
+while identity rotated/closed. Then explicit fresh A Snapshot/new binding must
+return expected observed partial data. Record actual CG ID reuse/non-reuse honestly;
+do not force or presume it, and do not infer an unexecuted reuse case.
+
+Existing supported CUA AX setup is allowed for these lifecycle actions; no pointer
+hit proof inferred. No B capture, permissions/display/backend/source-app changes.
+Native owns setup lane and exact own PID/path/run-dir cleanup; same launch10s,
+per-setup120s, per-CLI120s outer and total operation≤300s/cleanup5s. No indefinite
+matching/retry or limit tuning. A failed source expectation stops with concrete
+cause; direct in-scope correction may follow its own saved checkpoint, not a
+changed oracle. Older accepted data cases retain their limited original revision.
+
+Validate real canonical lines/clock/binding and unchanged non-setup UI state;
+confirm worker/helper/fixture cleanup. All new results/build/cache/identity files
+only in current system-temp, facts inline, remove own unlinked files/empty dirs
+and verify. No permanent directories/images or old artifact deletion. Update
+existing identity receipt only and checkpoint/push through short Git lease.
+This establishes the executed M01 read-only identity cases; generic apps, pointer,
+pixels/B-permission and full M01–M06/D06 remain separate.

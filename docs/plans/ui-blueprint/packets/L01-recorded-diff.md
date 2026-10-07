@@ -55,3 +55,31 @@ No new live collection, actual snapshots altered to force stable IDs, broad suit
 framework or private data output. Current-operation temp only/removeverify.
 Checkpoint/push exact paths via short lease and verified canonical same repository;
 return actual examples/checks/residual full-diff/changes work.
+
+## Reconcile environment-only context changes
+
+The first selected implementation rejected the actual32x16→48x24 Web pair because
+environment_revision changed. Core and the original Web coauthor confirmed that
+this copied CACHE/Delta rule into the wrong domain: BOUNDARIES requires change→diff,
+and GEOMETRY includes resize/font environments as comparison context. CLI-DIFF@1
+registered that root-selected overconstraint; it must be reconciled BEFORE code,
+not silently bypassed or treated as independent authority over the original flow.
+
+Advance the affected recorded-diff contract/routes and state this correction.
+Keep same session/schema/plugin/target/surface generations/scope/projection/fields;
+allow distinct environment revisions for literal recorded comparison only. Both
+original contexts/Spaces/transforms/Evidence stay intact. No new common transform,
+arithmetic difference across incompatible spaces, normalization, deletion/source
+continuity or action authority. Other domain guards still reject mismatches.
+Schema contexts_compatible, CacheStore and Delta application remain strict and
+unchanged. Use the smallest local engine::diff compatibility correction, not a
+global helper relaxation or cloned/restamped source snapshots.
+
+Extra precise source/test scope: engine/src/diff.rs and engine/tests/diff.rs,
+affected existing CLI binary tests, recorded-diff contract/routes/docs/receipt.
+Independent focused evidence: environment-only difference accepted as records,
+target/generation/fields mismatch still refused, sources byte-identical; actual
+retained Web before/after reports recorded values32x16→48x24 with both contexts.
+No live collection or expected-value relaxation. Save the original coherent step
+first, then this bounded correction with truthful history; no new user approval
+cycle is needed to restore the already-approved comparison flow.

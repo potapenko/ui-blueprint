@@ -71,3 +71,13 @@ state the observable limits explicitly. No new private test seam or production
 metadata solely to duplicate the direct state test. Focused affected checks and
 saved input equality, then one checkpoint/push; no unrelated old suites or live
 browser run in this finite peer step. Full live cache lifecycle remains distinct.
+
+Saved peer proof3318662 passed event/loss flow. Next Web preparation may update
+only existing web_live.rs/guarded-live.cjs and W03 receipt for actual F01 B05:
+observe and explicit Retain mutation-child, separate parentWide stimulus/observe,
+then fontLarge stimulus/observe with actual original ref. Independent expected
+dimensions120x32→150x32→150x48css_px and unchanged earlier ACKed bytes, same scoped
+read-only invariance/cleanup. Do not promote fixture counter to actual CDP loss or
+internal cache-flag evidence. Existing caps and source binding stay; environment
+revisions remain original, not rewritten for cache/diff. Prepare/pin/save handoff
+before one finite runtime activation; no unrelated live scenarios or new framework.
