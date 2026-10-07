@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Web guarded module source active under transferred ownership; Core parent/Native dispatch active. Integration Replayeea3c9f ready for exact default/no-default-features test; provider drift sincea8e5c06 is helper_runtime/helpers/lib/publication/supervisor, so waits next coherent Core save/ACK. Web-only web_config excluded from that default proof. Allocator2f1bf278/worker_io stable; no barrier/Git grant/live grant active |
+| Активные чаты/пакеты/ресурсы | Web worker_web.rs exists with actual attach/observe and owned web_config decoders; signatures handed to Core for cfg module/caller wiring, no new publication API needed. Core Native parent service compiles, real begin/Ticket peer proof underway. Web prepares disjoint tests, Integration fixed default Replay waits coherent provider. Allocator2f1bf278/worker_io stable; no barrier/Git/live grants |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Core supplies next coherent default provider checkpoint/ACK for one fixed Replay test, naming the remaining hook if not ready. Web implements real guarded WebSession in its disjoint paths and returns actual module handoff; Core owns common hooks. Changed-caller review, validation attribution and full H01/live/D06/RC05 remain open |
+| Следующий шаг | Core connects existing Web module/attach/observe, real Web ObserveReady/Permit without requiring Native binding, and supplies compiling shared handoff. Web runs affected peer/guarded-publication proof after short input barrier. Core also saves coherent default provider for fixed Replay test. Changed-caller review/validation/full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
