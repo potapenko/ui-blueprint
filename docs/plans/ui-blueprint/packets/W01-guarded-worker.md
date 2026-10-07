@@ -10,9 +10,11 @@ no second client, parser, graph, host or general RPC framework.
 
 ## Activation and scope
 
-Activate only after root supplies Core's saved compiling shared-boundary revision,
-exact current API handoff and transfers the paths below. Until then this is a queued
-packet; Core remains owner of its current web_config draft. No competing edits.
+Activated on saved shared boundarya8e5c06f54af8c1c955b18f6d7431455622b4f7c, pushed.
+Core reports all98 inputs match6887caf014b1727a760acda7e44afd6db4a1d05a75cc8ab114e0235be4555006.
+The exact API handoff is docs/development/host.md's compiling worker producer section
+and receipts/H01-host.md at that revision. Root now transfers the exclusive paths
+below to Web; Core must not edit web_config after this transfer. No competing edits.
 This packet grants source work and owned synthetic protocol peers only, not a live
 browser/app/SDK/UI/capture or permission operation. Full H01/live gates remain open.
 
@@ -65,6 +67,14 @@ collector/transport/CDP source remains protected. Required changes outside the e
 set return as concrete signatures/paths/consumer dependencies before edits.
 Provide an early real module/signature handoff so Core can add its module hook;
 no dummy success or placeholder implementation to conceal missing wiring.
+
+Initial shared pins: worker_main59b664c86ee91cd0e37de87e798484f00ec70b34d6764d6d0e6dc22bd7564ac5;
+worker_ops45ae90c820542b7bf91475cb63df312e8cc52ad62f1247293b964845b88fc2bb;
+worker_observation12560324a5d5496a4c0ca33e183aaf86a7e7886a1f0b67a362d2a79acee92958;
+web_config94fd7bc43b126e25e0dd837daad74e2954320cf465ae940aec6fc723f87e9d2d.
+Allocator2f1bf278 and worker_io9700bfa remain unchanged. Core parent dispatch is still
+being implemented; source work proceeds in parallel and affected checks require a
+short actual shared-input handoff, not an assumption that every host file is frozen.
 
 ## Focused proof and saving
 
