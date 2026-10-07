@@ -368,3 +368,114 @@ extension Collector {
         }
     }
 }
+
+extension Collector {
+    // Explicit own-fixture snapshot import; its measurement clock/time are retained.
+    // No UI recollection, expected.json oracle or derived-gap calculation here.
+    @MainActor static func probe(data: Data, command: NativeCommand) throws -> NativeJSONFrame {
+        let config = command.configuration
+        let json = NativeJSON(config.acquisition_limits)
+        let frame = try NativeJSONFrame(capacity: command.replyCap, deadline: command.deadline)
+        guard let artifact = command.document["artifact"] as? [String: Any],
+              let request = artifact["data"] as? [String: Any],
+              let context = request["context"] as? [String: Any], let requestID = request["request_id"] as? String,
+              let scope = context["scope_id"] as? String, let target = context["target"] as? [String: Any],
+              let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
+              context["fields"] as? [String] == ["layout_bounds"],
+              let limits = request["limits"] as? [String: Any], let maxNodes = limits["max_elements"] as? Int,
+              data.count <= command.replyCap else { throw NativeProtocolError.request }
+        func failed(_ code: String) throws -> NativeJSONFrame {
+            try frame.encode(json.response(request: request, ticket: command.control.ticket, channel: "opt_in_layout_probe") {
+                try json.failure(code, scope: scope, channel: "opt_in_layout_probe")
+            })
+            return frame
+        }
+        guard let manifest = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let state = manifest["source_state"] as? [String: Any],
+              manifest["pid"] as? Int32 == config.binding.pid,
+              manifest["bundle_id"] as? String == config.binding.bundle_id,
+              manifest["launch_time"] as? Double == config.binding.launch_time,
+              manifest["window_id"] as? UInt32 == config.binding.window_id,
+              manifest["window_identifier"] as? String == config.binding.window_identifier,
+              manifest["target_generation"] as? String == config.binding.target_generation,
+              manifest["surface_generation"] as? String == config.binding.surface_generation,
+              manifest["snapshot_request"] as? Int == config.probe_snapshot_request,
+              state["revision"] as? Int == config.probe_source_revision,
+              manifest["uptime_seconds"] as? Double == config.probe_uptime,
+              manifest["collection_mode"] as? String == "explicit_request_only"
+        else { return try failed("stale_target") }
+        guard manifest["probe_enabled"] as? Bool == true else { return try failed("unsupported") }
+        // An imported explicit Snapshot is historical until an actual continuity
+        // consumer proves current state; PID/Snapshot equality alone is insufficient.
+        guard request["freshness_policy"] as? String == "cached_allowed" else { return try failed("stale_target") }
+        guard let measured = manifest["probe"] as? [String: Any],
+              measured["source"] as? String == "swiftui.anchorPreference.explicit_snapshot",
+              measured["provenance"] as? String == "reported", measured["units"] as? String == "pt",
+              measured["origin"] as? String == "top_left", measured["coordinate_space"] as? String == "fixture_local",
+              measured["screen_transform"] as? String == "unknown",
+              let bounds = measured["layout_bounds"] as? [String: Any], Set(bounds.keys) == Set(["icon", "text", "container"]),
+              let declarations = manifest["source_declarations"] as? [String: Any],
+              declarations["logical_component_key"] as? String == "f02.sample.\(config.binding.window_identifier)",
+              declarations["represents"] as? [String] == ["icon", "text", "container"], maxNodes >= 3,
+              let time = config.probe_uptime, time.isFinite
+        else { return try failed("incomplete_scope") }
+        let admission = try NativeAcquisition(config.acquisition_limits, deadline: command.deadline)
+        let source = "macos.swiftui.probe", oid = "\(requestID)-opt_in_layout_probe"
+        let surface = surfaces[0]
+        func key(_ marker: String) throws -> [String: Any] {
+            try json.object(["namespace", "key"]) { ["namespace": try json.scalar(source), "key": try json.scalar("f02.sample.\(config.binding.window_identifier).\(marker)")] }
+        }
+        let nodes = try json.array {
+            try ["icon", "text", "container"].map { marker -> [String: Any] in
+                try admission.check()
+                guard let rect = bounds[marker] as? [String: Any], Set(rect.keys) == Set(["x", "y", "width", "height"]),
+                      let x = rect["x"] as? Double, let y = rect["y"] as? Double,
+                      let width = rect["width"] as? Double, let height = rect["height"] as? Double,
+                      [x,y,width,height].allSatisfy({ $0.isFinite }), width >= 0, height >= 0 else { throw NativeAcquisitionError.invalidValue }
+                return try json.object(["key", "surface", "native_role", "properties", "children", "extensions", "source_declarations"]) {
+                    ["key": try key(marker), "surface": try json.borrowed(surface), "native_role": try json.unavailable("probe_not_ax", status: "unsupported"),
+                     "properties": try json.array { [try json.object(["selection", "field", "sensitivity", "evidence", "state"]) {
+                        ["selection": try json.scalar("requested"), "field": try json.scalar("layout_bounds"), "sensitivity": try json.scalar("public"),
+                         "evidence": try json.evidence(oid, source, "swiftui_anchorPreference_explicit_snapshot"),
+                         "state": try json.knownBuilt("geometry") {
+                            try json.object(["frame_kind", "coordinate_space", "shape", "transform"]) {
+                                ["frame_kind": try json.scalar("layout_bounds"),
+                                 "coordinate_space": try json.object(["id", "kind", "units", "origin"]) {
+                                    ["id": try json.scalar("f02-fixture-local"), "kind": try json.scalar("local"), "units": try json.scalar("pt"), "origin": try json.scalar("top_left")]
+                                 }, "shape": try json.object(["shape", "value"]) { ["shape": try json.scalar("rect"), "value": try json.borrowed(rect)] },
+                                 "transform": try json.object(["status", "reason"]) { ["status": try json.scalar("unknown"), "reason": try json.scalar("fixture_screen_transform_unverified")] }]
+                            }
+                         }]
+                     }] }, "children": try json.array { [Any]() }, "extensions": try json.array { [Any]() }, "source_declarations": try json.array { [Any]() }]
+                }
+            }
+        }
+        var snapshot = try self.snapshot(context: context, surface: surface, target: target, scope: scope,
+            fields: ["layout_bounds"], observation: oid, channel: "opt_in_layout_probe", started: time,
+            nodes: nodes, captures: try json.array { [] }, json: json)
+        // Replace generic helper observation with actual fixture clock/time/source.
+        var observation = (snapshot["observations"] as! [[String: Any]])[0]
+        for (name, value) in ["source_namespace": source, "clock_domain": "fixture-\(config.binding.pid)-monotonic",
+                              "freshness_basis": "unverified", "freshness": "unverified", "answer_source": "cache",
+                              "consistency_reason": "explicit_fixture_snapshot_not_atomic_os_state"] {
+            observation[name] = try json.scalar(value)
+        }
+        observation["end"] = try json.scalar(time); observation["last_verified"] = try json.scalar(NSNull())
+        snapshot["observations"] = try json.array { [observation] }
+        snapshot["surface_records"] = try json.array { [try json.object(["identity", "native_owner", "initiated_by", "anchor", "evidence"]) {
+            ["identity": try json.borrowed(surface), "native_owner": try json.known("identity", target),
+             "initiated_by": try json.scalar(NSNull()), "anchor": try json.scalar(NSNull()),
+             "evidence": try json.evidence(oid, source, "fixture_manifest_binding")]
+        }] }
+        snapshot["source_state"] = try json.scalar("fixture-source-revision-\(config.probe_source_revision!)")
+        snapshot["components"] = try json.array { [try json.object(["logical_component_key", "members", "declaration_source", "provenance"]) {
+            ["logical_component_key": try json.scalar("f02.sample.\(config.binding.window_identifier)"),
+             "members": try json.array { try ["icon","text","container"].map(key) },
+             "declaration_source": try json.scalar("f02_explicit_component_mapping"), "provenance": try json.scalar("reported")]
+        }] }
+        try frame.encode(json.response(request: request, ticket: command.control.ticket, channel: "opt_in_layout_probe") {
+            try json.object(["status", "data"]) { ["status": try json.scalar("observed"), "data": snapshot] }
+        })
+        return frame
+    }
+}

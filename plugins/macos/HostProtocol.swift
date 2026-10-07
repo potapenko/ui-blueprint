@@ -16,7 +16,7 @@ struct NativeControl {
 
     init(_ bytes: Data) throws {
         guard bytes.count == 64, Array(bytes.prefix(8)) == Array("UIBHST01".utf8),
-              bytes[9] == 8, bytes[10] <= 1, bytes[11] == 0,
+              bytes[9] == 8, bytes[10] <= 2, bytes[11] == 0,
               bytes[12..<16].allSatisfy({ $0 == 0 }), bytes[56..<64].allSatisfy({ $0 == 0 })
         else { throw NativeProtocolError.control }
         func integer(_ offset: Int) -> UInt64 {
@@ -51,10 +51,14 @@ struct NativeConfiguration: Decodable {
     let pixel_policy: String?
     let acquisition_limits: NativeAcquisitionLimits
     let acquisition_evidence: Bool?
+    let probe_manifest_path: String?
+    let probe_snapshot_request: Int?
+    let probe_source_revision: Int?
+    let probe_uptime: Double?
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "acquisition_limits", "acquisition_evidence"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
@@ -74,6 +78,15 @@ struct NativeConfiguration: Decodable {
                   config.pixel_policy == nil || config.pixel_policy == "owned_synthetic_fixture"
             else { throw NativeProtocolError.configuration }
         } else if config.pixel_policy != nil { throw NativeProtocolError.configuration }
+        if let path = config.probe_manifest_path {
+            guard path.hasPrefix("/"), !path.utf8.contains(0), !path.split(separator: "/").contains(".."),
+                  let request = config.probe_snapshot_request, request > 0,
+                  let revision = config.probe_source_revision, revision >= 0,
+                  let uptime = config.probe_uptime, uptime.isFinite, uptime > 0
+            else { throw NativeProtocolError.configuration }
+        } else if config.probe_snapshot_request != nil || config.probe_source_revision != nil || config.probe_uptime != nil {
+            throw NativeProtocolError.configuration
+        }
         return config
     }
 }
@@ -84,7 +97,7 @@ struct NativeCommand {
     let control: NativeControl
     let replyCap: Int
     let deadline: Double
-    var channel: String { control.channel == 0 ? "external_semantics" : "rendered_capture" }
+    var channel: String { ["external_semantics", "rendered_capture", "opt_in_layout_probe"][Int(control.channel)] }
 }
 
 // Short transfers and EINTR never restart the local duration. Parent remains
@@ -179,19 +192,22 @@ struct NativeDescriptorIO {
               let operation = data["operation"] as? [String: Any], operation["operation"] as? String == "observe",
               let channels = operation["channels"] as? [String], !channels.isEmpty,
               Set(channels).count == channels.count,
-              Set(channels).isSubset(of: ["external_semantics", "rendered_capture"]),
-              channels.contains(submit.channel == 0 ? "external_semantics" : "rendered_capture"),
+              Set(channels).isSubset(of: ["external_semantics", "rendered_capture", "opt_in_layout_probe"]),
+              channels.contains(["external_semantics", "rendered_capture", "opt_in_layout_probe"][Int(submit.channel)]),
               let limits = data["limits"] as? [String: Any],
               let duration = limits["deadline_ms"] as? Double, duration.isFinite && duration > 0,
               let output = limits["max_output_bytes"] as? Int, output > 0
         else { throw NativeProtocolError.request }
         guard let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
-              configuration.collection == "window-ax"
+              submit.channel == 2 ? fields == ["layout_bounds"] : configuration.collection == "window-ax"
                 ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"])
                 : fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"],
               let nodes = limits["max_elements"] as? Int, (1...160).contains(nodes),
               let depth = limits["max_depth"] as? Int, (1...9).contains(depth)
         else { throw NativeProtocolError.request }
+        if submit.channel == 2 {
+            guard configuration.probe_manifest_path != nil else { throw NativeProtocolError.configuration }
+        }
         if submit.channel == 1 {
             guard configuration.artifact_directory != nil, configuration.pixel_policy == "owned_synthetic_fixture"
             else { throw NativeProtocolError.configuration }

@@ -358,3 +358,40 @@ PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/acquisition/form_check.py
   --checks "$NATIVE_TASK_TMP/form-checks" --validator "$VERIFIED_VALIDATOR" \
   --output "$NATIVE_TASK_TMP"
 ```
+
+## Explicit measured probe connection
+
+Slot2/bit4 is opt_in_layout_probe, fields layout_bounds only. Native uses the same
+helper executable/Configure+Submit/Ticket/bounded builder and canonical frame.
+Core must admit channel2 as a non-capture helper; no capture resource is needed.
+The shared parent broker remains the only process/ingress/publication owner.
+
+Trusted opaque configuration adds probe_manifest_path, probe_snapshot_request,
+probe_source_revision and probe_uptime. Path is absolute caller-owned fixture input;
+no UI-request path or filesystem search. File is opened read-only/no-follow and
+bounded by the admitted reply cap before parse. Expected binding matches PID/bundle/
+launch/window/target+surface generations; exact snapshot request/source revision/
+uptime must also match. Fresh explicit Snapshot caller supplies these values;
+PID/title alone cannot authorize imported geometry. Existing4032-byte config cap
+and registered response-building/output/node/deadline limits still apply.
+
+Three icon/text/container layout_bounds come from the existing PROBE fixture's
+SwiftUI anchorPreference measurement, fixture-local pt with top-left origin.
+Source mapping uses the fixture's explicit component declaration; declarations
+are not substituted for measured rectangles. Screen/pixel transform stays unknown.
+Native does not calculate gap or read expectations.json. Rust consumes the actual
+canonical Geometry and derives gap; the independent test oracle remains8/18pt.
+
+Observation retains fixture uptime/clock provenance, answer_source cache and
+freshness unverified; current_required refuses stale_target instead of restamping
+an old Snapshot. Use cached_allowed for this explicit measured-record import.
+Off probe returns failed unsupported; missing markers returns incomplete_scope;
+stale binding/request/time returns stale_target. Malformed/oversized input refuses
+before publication. No invented off markers or known transform.
+
+Actual H01 measured-probe ACK and engine gap remain the next separately activated
+run: F02-on fresh Snapshot, trusted current manifest/config, real worker Ticket,
+then gap from canonical icon/text bounds. Full matched off/on invariance remains
+another required condition, holding/checking app_active/window_key/window_main and
+focus/content/size before and after acquisition. The historical mismatched pixel
+pair cannot prove invariance. No UI/pixel/probe run is implied by source checks.
