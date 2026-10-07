@@ -156,3 +156,20 @@ must distinguish tested facts, source-only claims and unverified cases. Finite d
 requires the assigned proof; missing mandatory cases remain waiting_evidence with
 the exact Core repair/consumer dependency and keep H01 incomplete. Do not begin adapters, CLI
 publication or another packet. No independent acceptance or full release claim.
+
+## Next predeclared Replay attribution case
+
+After saved refusal proofba3c372, Integration's bounded source handoff establishes
+that an existing ProcessPlatform/OwnedProcess wrapper can copy already returned
+read_fatal chunks into a fixed64-byte buffer and decode the existing Control flags.
+No second FD read, production/public HostCompletion change or new harness is needed.
+Use that observer only in owned tests; do not consume or alter the real fatal stream.
+
+One fixed case before execution: retained Snapshot with one unescaped480KiB text,
+empty Delta and ordinary heap cap4MiB−128KiB. Source-derived expectation is quota
+failure during Replay (phase3), preserved prior ACKed bytes and confirmed reap.
+Limits/shape are not tuned after the result. Earlier Decode/setup failure or normal
+success is recorded honestly and does not prove the expected Replay failure.
+Write only hostile_worker.rs and this packet's receipt, prepare commands before
+requesting a short saved-provider barrier. Validation inside from_json still shares
+Decode marking; this case does not claim to solve that separate attribution gap.

@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Fatal-race64cbec9 and refusal proofba3c372 saved/pushed; barriers/Git leases released. Integration's2/2 fixed-writer/retained-admission cases pass with unchanged limits and saved64 input identity; only bounded next attribution handoff underway. Core may proceed with approved producer/Cargo wiring, no source freeze active. Web8f77063 source accepted; desktop released/B pixels stopped |
+| Активные чаты/пакеты/ресурсы | Fatal-race64cbec9/refusal proofba3c372 saved; no barriers/Git grants. Integration now prepares one fixed Replay-phase quota case with existing read_fatal observation wrapper, no production/API edits. Core may continue approved producer/Cargo wiring. Web8f77063 source accepted; desktop released/B pixels stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Integration returns one exact remaining validation/replay failure attribution path using existing test-wrapper where sufficient, without a new public API/harness. Core implements real producer exchange from Native99c4c15/Web8f77063 and returns concrete interface/worker pins for disjoint owners; optional web wiring authorized by e856762. Full H01/live/D06/RC05 remain open |
+| Следующий шаг | Integration prepares predeclared480KiB-text/empty-delta Replay case at ordinary4MiB−128KiB and requests ready-to-run source barrier; unexpected earlier phase is evidence, not permission to tune cap. Core implements actual producer exchange and returns concrete interface/pins for disjoint owners; optional web wiring authorized. Validation attribution and full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
