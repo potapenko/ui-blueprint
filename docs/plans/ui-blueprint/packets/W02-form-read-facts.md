@@ -51,3 +51,16 @@ No delivery/preparation/action behavior change. Selection request gating/target
 binding/direction and bounded output getter proposals in f0d241e remain unaccepted
 choices until reconciled against this full Spec Basis and primary native evidence;
 record the selected mapping before edits, return genuine contract conflicts.
+
+Actual qualification follow-on, 2026-10-08: sourcec63b07a scoped review accepted
+with live residual. Exact harness write set tests/bridges/web/guarded-live.cjs,
+crates/host/tests/web_live.rs and existing W02 receipt; Core released host test
+after saveda53b750, preserve its mechanical ActionRefused mapping. Four actual
+guarded Observe cases on existing owned headless F01: A💡B UTF-16 range1..3 forward/
+backward, collapsed4, empty/nonempty native output and private-input canary. Explicit
+setup values/focus/range/output precede observation and are not product delivery,
+IME or business success. Compare independent before/after state, focus/scroll/value/
+selection/output/checkpoint; canary only oracle memory, absent canonical response.
+Existing32/depth8/64KiB/250ms and120s overall unchanged; no fixture/framework/new dirs.
+Build/check coherent harness and save/pin inputs before root activates actual run;
+no current unrelated WIP. Headless context isolated from Native desktop lane.

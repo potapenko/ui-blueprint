@@ -44,3 +44,15 @@ and rejects late publication/ACK/terminal independently of child scheduling. Obs
 Ticket and effect authority remain distinct. Author11 parent timing cases, remaining
 Prepare/permit/cancel cases and affected regressions reconcile the named gaps; no
 reviewer execution. Live browser and broader A01/P5 still separate, no goal completion.
+
+## Public action CLI and metadata — a53b750 / 138d7bc
+
+Same reviewer independently inspected union against basef0d241e before receipt,
+then reconciled both saved author sections; all12 recorded source pins match.
+Verdict reject pending one P2: action.rs177–188 emits compact status even when
+committed()==0. CLI-ACTIONS.OUTPUT55–60 requires no-commit stdout empty. Core owns
+direct output gating repair and focused no-commit check; same reviewer will recheck
+only delta. No other introduced findings; strict authority/bounds, canonical bytes,
+ACK-bound metadata/nonce/deadline, terminal9 refusal and cleanup criteria inspected.
+Author22parent/8public CLI synthetic-CDP/17exit/2syntax cases and affected Clippy
+remain attributed; reviewer ran no tests. Real browser/fullrelease acceptance open.
