@@ -197,3 +197,34 @@ Same owned hostile_worker.rs/receipt only; no production seam/parser/API edits.
 Prepare one exact command, request a short current saved-provider ACK, compare
 actual before/after inputs, execute only the ready case/affected checks, release
 immediately and checkpoint+push. No UI/SDK/broad hostile run or unchanged suite.
+
+## Direct semantic-validator proof in the disposable probe
+
+After rejection proofda6330e, Integration's concrete remaining proposal uses the
+existing allocator_probe and public validate_snapshot. Root selects this bounded
+test mechanism under the original validation-proof scope, not a production API
+or new memory policy. Preparation can proceed without a shared source hold.
+
+Inside the disposable child only, parse a small known valid Snapshot before the
+test interception window and establish that the public validator succeeds. Fill
+the existing real guard's4096-byte test allowance with a real owned allocation;
+then enable the test-only forwarding interception immediately around the direct
+validate_snapshot call. The identified validate_context → unique → BTreeSet::insert
+path needs an allocation. Expect actual quota fatal, live4096, no return and owned
+child reap. Predeclare cap/shape and do not tune after execution. No hostile input
+is parsed outside its proven guard; this is a small known fixture in a test child.
+
+Reuse the real quota allocator and canonical validator, not a substitute. The
+interceptor must preserve valid System pointers/layouts and charged versus
+pre-window ownership; no allocator callback allocation/log/lock/unwind. Keep any
+unsafe in the existing disposable probe, with a bounded positive control. Do not
+alter production/Cargo/schema/public APIs or host failure attribution.
+
+Probe-selected Validate phase2 identifies this direct call only. It does NOT prove
+that the integrated worker's from_json marks validation separately from Decode.
+Earlier ACK preservation has its separate real-worker evidence; this isolated
+probe does not generate an ACK or establish that same scenario by itself.
+Write only allocator_probe.rs, allocator.rs and this packet's receipt. Ready
+exact command plus current provider inputs precede a short ACK; release after
+result/hash and save exact paths with commit/push. Record any unmet expectation
+honestly. No extra framework, new seam in shipping code or unchanged broad wave.
