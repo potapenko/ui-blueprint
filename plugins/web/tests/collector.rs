@@ -1,0 +1,1167 @@
+use serde_json::{Value as Json, json};
+use std::{
+    net::{Shutdown, TcpListener, TcpStream},
+    sync::{
+        Arc, Mutex, Once,
+        atomic::{AtomicBool, Ordering},
+        mpsc,
+    },
+    thread::{self, JoinHandle},
+    time::{Duration, Instant},
+};
+use tungstenite::{Message, accept};
+use uiblueprint_schema::{SchemaVersion, model::*, validation};
+use uiblueprint_web::{
+    cdp,
+    collector::{self, Clock, Collector, ErrorKind, NodeRef, Publication, Scope},
+    transport,
+};
+
+const CANARY: &str = "PRIVATE_COLLECTOR_CANARY";
+struct Logger(AtomicBool);
+static LOGGER: Logger = Logger(AtomicBool::new(false));
+static INIT: Once = Once::new();
+impl log::Log for Logger {
+    fn enabled(&self, _: &log::Metadata<'_>) -> bool {
+        true
+    }
+    fn log(&self, r: &log::Record<'_>) {
+        if format!("{} {}", r.target(), r.args()).contains(CANARY) {
+            self.0.store(true, Ordering::Relaxed);
+        }
+    }
+    fn flush(&self) {}
+}
+fn logging() {
+    INIT.call_once(|| {
+        transport::install_log_boundary(&LOGGER).expect("filtered logging");
+        log::set_max_level(log::LevelFilter::Trace);
+    });
+}
+fn id(s: &str) -> Id {
+    Id(s.into())
+}
+fn target() -> Identity {
+    Identity {
+        id: id("target"),
+        generation: id("target-generation"),
+    }
+}
+fn surface() -> Identity {
+    Identity {
+        id: id("frame"),
+        generation: id("loader"),
+    }
+}
+fn plugin() -> PluginIdentity {
+    PluginIdentity {
+        id: id("web"),
+        version: id("0.1.0"),
+    }
+}
+fn limits() -> collector::Limits {
+    collector::Limits {
+        max_nodes: 16,
+        max_methods: 100,
+        max_reply_bytes: 8192,
+        max_total_reply_bytes: 65536,
+        max_text_bytes: 600,
+        max_handle_bytes: 256,
+        max_ax_properties: 32,
+        io_read_bytes: 16384,
+        io_write_bytes: 16384,
+        io_work: 2048,
+    }
+}
+fn op() -> transport::OperationLimits {
+    transport::OperationLimits {
+        deadline: Instant::now() + Duration::from_secs(2),
+        max_read_bytes: 16384,
+        max_write_bytes: 16384,
+        max_work: 2048,
+    }
+}
+fn request() -> Request {
+    Request {
+        clock_domain: id("worker-clock"),
+        request_id: id("request-1"),
+        context: Context {
+            schema_version: SchemaVersion::CURRENT,
+            session_id: id("session"),
+            target: target(),
+            surfaces: vec![surface()],
+            scope_id: id("scope"),
+            projection: Projection::Interaction,
+            fields: vec![
+                Field::Role,
+                Field::Name,
+                Field::AccessibilityName,
+                Field::LayoutBounds,
+                Field::Enabled,
+                Field::Checked,
+                Field::Value,
+            ],
+            plugin: plugin(),
+            environment_revision: id("environment"),
+        },
+        limits: Limits {
+            max_elements: 32,
+            max_depth: 8,
+            max_output_bytes: 65536,
+            deadline_ms: 1500,
+        },
+        freshness_policy: FreshnessPolicy::CurrentRequired,
+        operation: Operation::Observe {
+            channels: vec![Channel::ExternalSemantics],
+        },
+    }
+}
+fn scope(ids: &[u32]) -> Scope {
+    Scope {
+        scope_id: id("scope"),
+        nodes: ids
+            .iter()
+            .map(|n| NodeRef {
+                reference: BackendRef {
+                    session_id: id("session"),
+                    target: target(),
+                    surface: surface(),
+                    key: SourceKey {
+                        namespace: id("web.dom"),
+                        key: Id(n.to_string()),
+                    },
+                    snapshot_id: id("previous-observation-snapshot"),
+                    observation_id: id("previous-source-observation"),
+                },
+                sensitivity: Sensitivity::Public,
+            })
+            .collect(),
+    }
+}
+struct Peer {
+    url: String,
+    done: mpsc::Receiver<()>,
+    join: Option<JoinHandle<()>>,
+    stop: Arc<AtomicBool>,
+    socket: Arc<Mutex<Option<TcpStream>>>,
+}
+impl Peer {
+    fn new(f: impl FnOnce(TcpStream) + Send + 'static) -> Self {
+        let listener = TcpListener::bind("127.0.0.1:0").expect("owned listener");
+        let addr = listener.local_addr().expect("addr");
+        listener.set_nonblocking(true).expect("nonblocking accept");
+        let (tx, done) = mpsc::channel();
+        let stop = Arc::new(AtomicBool::new(false));
+        let cancelled = stop.clone();
+        let socket = Arc::new(Mutex::new(None));
+        let slot = socket.clone();
+        let join = thread::spawn(move || {
+            let end = Instant::now() + Duration::from_secs(2);
+            loop {
+                if cancelled.load(Ordering::Acquire) || Instant::now() >= end {
+                    break;
+                }
+                match listener.accept() {
+                    Ok((stream, _)) => {
+                        stream
+                            .set_nonblocking(false)
+                            .expect("blocking accepted socket");
+                        stream
+                            .set_read_timeout(Some(Duration::from_millis(500)))
+                            .expect("timeout");
+                        stream
+                            .set_write_timeout(Some(Duration::from_millis(500)))
+                            .expect("timeout");
+                        *slot.lock().expect("slot") =
+                            Some(stream.try_clone().expect("peer shutdown handle"));
+                        f(stream);
+                        break;
+                    }
+                    Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
+                        thread::sleep(Duration::from_millis(1))
+                    }
+                    Err(e) => panic!("accept: {e:?}"),
+                }
+            }
+            let _ = tx.send(());
+        });
+        Self {
+            url: format!("ws://{addr}/fixture"),
+            done,
+            join: Some(join),
+            stop,
+            socket,
+        }
+    }
+    fn finish(mut self) {
+        self.done
+            .recv_timeout(Duration::from_secs(3))
+            .expect("bounded peer completion");
+        self.join_owned().expect("peer assertions");
+    }
+    fn join_owned(&mut self) -> Result<(), &'static str> {
+        if let Some(join) = self.join.take() {
+            let end = Instant::now() + Duration::from_secs(3);
+            while !join.is_finished() && Instant::now() < end {
+                thread::sleep(Duration::from_millis(1));
+            }
+            if !join.is_finished() {
+                return Err("owned peer failed to stop");
+            }
+            join.join().map_err(|_| "peer assertion failed")?;
+        }
+        Ok(())
+    }
+}
+impl Drop for Peer {
+    fn drop(&mut self) {
+        self.stop.store(true, Ordering::Release);
+        if let Some(s) = self.socket.lock().expect("slot").take() {
+            let _ = s.shutdown(Shutdown::Both);
+        }
+        let result = self.join_owned();
+        if !thread::panicking() {
+            result.expect("peer cleanup");
+        }
+    }
+}
+struct Fixture {
+    peer: Peer,
+    calls: Arc<Mutex<Vec<String>>>,
+}
+impl Fixture {
+    fn new(mut change: impl FnMut(&str, &Json, usize) -> Option<Json> + Send + 'static) -> Self {
+        let calls = Arc::new(Mutex::new(Vec::new()));
+        let seen = calls.clone();
+        let peer = Peer::new(move |s| {
+            let mut ws = accept(s).expect("handshake");
+            let mut reads = 0;
+            while let Ok(message) = ws.read() {
+                let Message::Text(text) = message else { break };
+                let command: Json = serde_json::from_str(&text).expect("command");
+                let method = command["method"].as_str().expect("method");
+                seen.lock().expect("calls").push(method.into());
+                reads += 1;
+                let default = match method {
+                    "Target.getTargetInfo" => json!({"targetInfo":{"targetId":"target"}}),
+                    "Page.getFrameTree" => {
+                        json!({"frameTree":{"frame":{"id":"frame","loaderId":"loader"}}})
+                    }
+                    "DOM.getDocument" => {
+                        assert_eq!(command["params"]["depth"], 0);
+                        assert_eq!(command["params"]["pierce"], false);
+                        json!({"root":{"backendNodeId":1,"nodeType":9}})
+                    }
+                    "Page.createIsolatedWorld" => {
+                        assert_eq!(command["params"]["frameId"], "frame");
+                        assert_eq!(command["params"]["grantUniveralAccess"], false);
+                        json!({"executionContextId":3})
+                    }
+                    "Accessibility.enable" | "Runtime.releaseObjectGroup" => json!({}),
+                    "DOM.resolveNode" => {
+                        assert_eq!(command["params"]["executionContextId"], 3);
+                        json!({"object":{"type":"object","subtype":"node","objectId":"opaque-handle"}})
+                    }
+                    "Runtime.callFunctionOn" => {
+                        assert_eq!(command["params"]["returnByValue"], true);
+                        assert_eq!(command["params"]["userGesture"], false);
+                        assert_eq!(command["params"]["throwOnSideEffect"], true);
+                        serde_json::from_str(include_str!("fixtures/collector/dom.json"))
+                            .expect("DOM literal")
+                    }
+                    "Accessibility.getPartialAXTree" => {
+                        assert_eq!(command["params"]["fetchRelatives"], false);
+                        let mut ax: Json =
+                            serde_json::from_str(include_str!("fixtures/collector/ax.json"))
+                                .expect("AX literal");
+                        let backend = command["params"]["backendNodeId"]
+                            .as_u64()
+                            .expect("backend");
+                        ax["nodes"][0]["backendDOMNodeId"] = json!(backend);
+                        ax["nodes"][0]["nodeId"] = json!(format!("ax-{backend}"));
+                        ax
+                    }
+                    _ => panic!("unexpected method"),
+                };
+                let mut replacement = change(method, &command, reads);
+                // Test-only control: emit real CDP events before the ordinary method reply.
+                if let Some(events) = replacement
+                    .as_ref()
+                    .and_then(|v| v.get("fixtureEvents"))
+                    .and_then(Json::as_array)
+                {
+                    for event in events {
+                        if ws.send(Message::Text(event.to_string().into())).is_err() {
+                            return;
+                        }
+                    }
+                    replacement = None;
+                }
+                let envelope = if let Some(mut custom) = replacement {
+                    if custom.get("error").is_some() {
+                        custom["id"] = command["id"].clone();
+                        custom
+                    } else {
+                        json!({"id":command["id"],"result":custom})
+                    }
+                } else {
+                    json!({"id":command["id"],"result":default})
+                };
+                if ws.send(Message::Text(envelope.to_string().into())).is_err() {
+                    break;
+                }
+            }
+        });
+        Self { peer, calls }
+    }
+    fn attach(&self, caps: collector::Limits) -> Collector {
+        self.try_attach(caps)
+            .expect("verified synthetic attachment")
+    }
+    fn try_attach(&self, caps: collector::Limits) -> Result<Collector, collector::Failure> {
+        logging();
+        let transport = transport::Transport::connect(
+            &self.peer.url,
+            transport::Limits {
+                endpoint_bytes: 1024,
+                handshake_bytes: 2048,
+                read_buffer_bytes: 64,
+                write_buffer_bytes: 64,
+                write_buffer_max: 20000,
+                frame_bytes: 8192,
+                message_bytes: 8192,
+                outbound_bytes: 16000,
+            },
+            op(),
+        )
+        .expect("connect");
+        let client = cdp::Client::new(
+            transport,
+            cdp::Binding {
+                target: target(),
+                cdp_session_id: None,
+            },
+            cdp::Limits {
+                max_request_bytes: 16000,
+                max_message_bytes: 8192,
+                max_metadata_bytes: 256,
+                max_results: 1,
+                result_bytes: 8192,
+                max_events: 4,
+                event_bytes: 34000,
+            },
+        )
+        .expect("CDP");
+        Collector::attach(
+            client,
+            collector::Binding {
+                session_id: id("session"),
+                target: target(),
+                surface: surface(),
+                cdp_session_id: None,
+                clock: Clock {
+                    domain: id("worker-clock"),
+                    origin: Instant::now() - Duration::from_secs(1),
+                },
+                allowed_scopes: vec![id("scope")],
+                plugin: plugin(),
+            },
+            caps,
+            Instant::now() + Duration::from_secs(2),
+        )
+    }
+    fn methods(&self) -> Vec<String> {
+        self.calls.lock().expect("calls").clone()
+    }
+    fn finish(self) {
+        self.peer.finish();
+    }
+}
+fn collect(c: &mut Collector, r: &Request, s: &Scope) -> (collector::Report, Vec<Document>) {
+    let mut output = Vec::new();
+    let report = c
+        .observe(r, s, 41, Instant::now() + Duration::from_secs(2), |d| {
+            d.validate()
+                .expect("canonical Document roundtrip and semantics");
+            output.push(d);
+            Publication::Acknowledged
+        })
+        .expect("observed");
+    (report, output)
+}
+fn snapshot(doc: &Document) -> &Snapshot {
+    let Artifact::ChannelResponse(r) = &doc.artifact else {
+        panic!("channel envelope")
+    };
+    assert_eq!(r.dispatch_sequence, 41);
+    let ChannelResult::Observed(s) = &r.result else {
+        panic!("observed")
+    };
+    s
+}
+fn known(node: &Node, field: Field) -> &Value {
+    node.properties
+        .iter()
+        .find(|p| p.field() == field)
+        .and_then(Property::known)
+        .expect("known property")
+}
+
+#[test]
+fn canonical_dom_ax_literals_preserve_sources_geometry_false_empty_and_same_labels() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let (_, docs) = collect(&mut c, &request(), &scope(&[11, 12]));
+    let s = snapshot(&docs[0]);
+    validation::validate_snapshot(s).expect("canonical semantics");
+    let expected: Json = serde_json::from_str(include_str!("fixtures/collector/expected.json"))
+        .expect("independent expectation");
+    assert_eq!((s.nodes.len(), s.relations.len()), (4, 2));
+    assert_eq!(s.coverage.status, CoverageStatus::Partial);
+    assert!(s.source_state.is_none());
+    assert!(
+        s.observations.iter().all(|o| o.start >= 1000.0),
+        "must use provided worker clock origin"
+    );
+    let dom = &s.nodes[0];
+    let ax = &s.nodes[2];
+    assert_eq!(known(ax, Field::Name), known(ax, Field::AccessibilityName));
+    assert_ne!(dom.key, ax.key);
+    assert_eq!(dom.key.namespace.0, "web.dom");
+    assert_eq!(ax.key.namespace.0, "web.ax");
+    assert_eq!(known(ax, Field::Role), &Value::Role(Role::Checkbox));
+    assert_eq!(
+        known(ax, Field::AccessibilityName),
+        &Value::Text(
+            expected["accessibility_name"]
+                .as_str()
+                .expect("name")
+                .into()
+        )
+    );
+    assert_eq!(known(dom, Field::Checked), &Value::Flag(false));
+    assert_eq!(known(dom, Field::Value), &Value::Text(String::new()));
+    assert_eq!(known(ax, Field::Checked), &Value::Flag(false));
+    assert_eq!(known(ax, Field::Enabled), &Value::Flag(true));
+    let Value::Geometry(g) = known(dom, Field::LayoutBounds) else {
+        panic!("geometry")
+    };
+    assert_eq!(g.frame_kind, FrameKind::LayoutBounds);
+    assert_eq!(g.coordinate_space.units, Unit::CssPx);
+    assert_eq!(g.coordinate_space.origin, Origin::TopLeft);
+    assert!(matches!(g.transform, TransformState::LocalOnly {}));
+    let Shape::Rect(actual) = &g.shape else {
+        panic!("rect shape")
+    };
+    let expected_rect: Rect =
+        serde_json::from_value(expected["rect"].clone()).expect("independent rectangle");
+    assert_eq!(actual, &expected_rect);
+    assert!(
+        ax.properties
+            .iter()
+            .find(|p| p.field() == Field::LayoutBounds)
+            .expect("requested unknown")
+            .known()
+            .is_none()
+    );
+    assert!(
+        dom.properties
+            .iter()
+            .find(|p| p.field() == Field::AccessibilityName)
+            .expect("requested unknown")
+            .known()
+            .is_none()
+    );
+    assert_eq!(
+        known(&s.nodes[3], Field::AccessibilityName),
+        known(ax, Field::AccessibilityName)
+    );
+    assert!(
+        s.observations
+            .iter()
+            .all(|o| o.clock_domain.0 == "worker-clock"
+                && o.end >= o.start
+                && o.consistency == Consistency::Unknown)
+    );
+    assert!(
+        fixture
+            .methods()
+            .contains(&"Runtime.releaseObjectGroup".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn failed_ax_keeps_dom_and_publishes_canonical_partial_once() {
+    let fixture = Fixture::new(|m, _, _| {
+        (m == "Accessibility.getPartialAXTree")
+            .then(|| json!({"error":{"code":-32601,"message":CANARY}}))
+    });
+    let mut c = fixture.attach(limits());
+    let (report, docs) = collect(&mut c, &request(), &scope(&[11, 12]));
+    assert_eq!(
+        report.ax,
+        collector::SourceStatus::Failed(ErrorKind::Protocol(-32601))
+    );
+    let s = snapshot(&docs[0]);
+    assert_eq!(s.nodes.len(), 2);
+    assert!(s.nodes.iter().all(|n| n.key.namespace.0 == "web.dom"));
+    assert_eq!(
+        fixture
+            .methods()
+            .iter()
+            .filter(|m| *m == "Accessibility.getPartialAXTree")
+            .count(),
+        1
+    );
+    assert!(
+        !serde_json::to_string(&docs)
+            .expect("safe canonical")
+            .contains(CANARY)
+    );
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn sensitive_source_is_redacted_before_retention_and_ax_is_not_read() {
+    let fixture = Fixture::new(|m, _, _| {
+        if m == "Runtime.callFunctionOn" {
+            Some(
+                json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"tag":CANARY,"sensitive":true,"value":CANARY}}}),
+            )
+        } else {
+            None
+        }
+    });
+    let mut c = fixture.attach(limits());
+    let (_, docs) = collect(&mut c, &request(), &scope(&[11]));
+    let s = snapshot(&docs[0]);
+    assert_eq!(s.nodes.len(), 1);
+    assert!(matches!(s.nodes[0].native_role, Availability::Redacted {}));
+    assert!(matches!(
+        s.nodes[0]
+            .properties
+            .iter()
+            .find(|p| p.field() == Field::Value)
+            .expect("value"),
+        Property::Requested {
+            sensitivity: Sensitivity::Sensitive,
+            state: Availability::Redacted {},
+            ..
+        }
+    ));
+    assert!(
+        !serde_json::to_string(&docs)
+            .expect("canonical")
+            .contains(CANARY)
+    );
+    assert!(
+        !fixture
+            .methods()
+            .iter()
+            .any(|m| m == "Accessibility.getPartialAXTree")
+    );
+    assert!(!LOGGER.0.load(Ordering::Relaxed));
+    assert!(!format!("{c:?}").contains(CANARY));
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn canonical_ref_context_mismatch_refuses_before_any_method() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let before = fixture.methods().len();
+    for which in 0..5 {
+        let mut r = request();
+        let mut s = scope(&[11]);
+        match which {
+            0 => r.context.target.generation = id("other"),
+            1 => s.nodes[0].reference.session_id = id("other"),
+            2 => s.nodes[0].reference.surface.generation = id("other"),
+            3 => s.nodes[0].reference.target.id = id("other"),
+            _ => s.nodes[0].reference.key.namespace = id("web.ax"),
+        };
+        let e = c
+            .observe(&r, &s, 41, op().deadline, |_| panic!("no publication"))
+            .expect_err("wrong bound ref");
+        assert_eq!(e.kind, ErrorKind::StaleTarget);
+        assert_eq!(fixture.methods().len(), before);
+    }
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn wrong_actual_target_stops_before_dependent_frame_read() {
+    let fixture = Fixture::new(|m, _, _| {
+        (m == "Target.getTargetInfo").then(|| json!({"targetInfo":{"targetId":"other-tab"}}))
+    });
+    assert_eq!(
+        fixture.try_attach(limits()).expect_err("wrong target").kind,
+        ErrorKind::StaleTarget
+    );
+    assert_eq!(fixture.methods(), ["Target.getTargetInfo"]);
+    fixture.finish();
+}
+#[test]
+fn changed_loader_or_root_document_invalidates_before_node_reads() {
+    for root_change in [false, true] {
+        let mut seen = 0;
+        let fixture = Fixture::new(move |m, _, _| {
+            if m == if root_change {
+                "DOM.getDocument"
+            } else {
+                "Page.getFrameTree"
+            } {
+                seen += 1;
+                if seen == 3 {
+                    return Some(if root_change {
+                        json!({"root":{"backendNodeId":999,"nodeType":9}})
+                    } else {
+                        json!({"frameTree":{"frame":{"id":"frame","loaderId":"new-loader"}}})
+                    });
+                }
+            }
+            None
+        });
+        let mut c = fixture.attach(limits());
+        let e = c
+            .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+                panic!("stale cannot publish")
+            })
+            .expect_err("document replaced");
+        assert_eq!(e.kind, ErrorKind::StaleTarget);
+        assert!(!fixture.methods().iter().any(|m| m == "DOM.resolveNode"));
+        let before = fixture.methods().len();
+        assert!(
+            c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+                "stale"
+            ))
+            .is_err()
+        );
+        assert_eq!(fixture.methods().len(), before);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn detached_or_foreign_document_node_refuses_and_releases_group() {
+    for connected in [false, true] {
+        let fixture = Fixture::new(move |m, _, _| {
+            (m=="Runtime.callFunctionOn").then(||json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":false,"tag":"INPUT","sensitive":false}}}))
+        });
+        let mut c = fixture.attach(limits());
+        let e = c
+            .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+                panic!("no remount fallback")
+            })
+            .expect_err("stale source");
+        assert_eq!(e.kind, ErrorKind::StaleTarget);
+        let calls = fixture.methods();
+        assert!(calls.contains(&"Runtime.releaseObjectGroup".into()));
+        assert!(!calls.contains(&"Accessibility.getPartialAXTree".into()));
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn navigation_after_collection_does_not_publish_fresh_old_data() {
+    let mut frames = 0;
+    let fixture = Fixture::new(move |m, _, _| {
+        if m == "Page.getFrameTree" {
+            frames += 1;
+            if frames == 4 {
+                return Some(json!({"frameTree":{"frame":{"id":"frame","loaderId":"navigated"}}}));
+            }
+        }
+        None
+    });
+    let mut c = fixture.attach(limits());
+    assert_eq!(
+        c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+            "old doc"
+        ))
+        .expect_err("late navigation")
+        .kind,
+        ErrorKind::StaleTarget
+    );
+    assert!(
+        fixture
+            .methods()
+            .contains(&"Runtime.releaseObjectGroup".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn missing_ax_and_wrong_backend_are_not_invented_from_dom() {
+    for wrong in [false, true] {
+        let fixture = Fixture::new(move |m, _, _| {
+            if m == "Accessibility.getPartialAXTree" {
+                Some(if wrong {
+                    json!({"nodes":[{"nodeId":"foreign","ignored":false,"backendDOMNodeId":999,"frameId":"frame"}]})
+                } else {
+                    json!({"nodes":[]})
+                })
+            } else {
+                None
+            }
+        });
+        let mut c = fixture.attach(limits());
+        if wrong {
+            assert_eq!(
+                c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+                    "wrong mapping"
+                ))
+                .expect_err("wrong backend")
+                .kind,
+                ErrorKind::StaleTarget
+            );
+        } else {
+            let (r, d) = collect(&mut c, &request(), &scope(&[11]));
+            assert_eq!(r.ax, collector::SourceStatus::Partial);
+            assert_eq!(snapshot(&d[0]).nodes.len(), 1);
+            assert!(snapshot(&d[0]).relations.is_empty());
+        }
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn explicit_empty_scope_is_complete_and_does_not_resolve_any_node() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let (r, d) = collect(&mut c, &request(), &scope(&[]));
+    assert_eq!(r.dom, collector::SourceStatus::Complete);
+    let s = snapshot(&d[0]);
+    assert_eq!(s.coverage.status, CoverageStatus::Complete);
+    assert!(s.nodes.is_empty());
+    assert_eq!(s.coverage.unknown_count, Some(0));
+    assert!(!fixture.methods().contains(&"DOM.resolveNode".into()));
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn node_method_and_request_byte_limits_refuse_acquisition() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let before = fixture.methods().len();
+    let mut r = request();
+    r.limits.max_elements = 1;
+    assert_eq!(
+        c.observe(&r, &scope(&[11]), 41, op().deadline, |_| panic!("limit"))
+            .expect_err("source node admission")
+            .kind,
+        ErrorKind::Limit
+    );
+    assert_eq!(fixture.methods().len(), before);
+    let mut r = request();
+    r.limits.max_output_bytes = 16;
+    assert!(
+        c.observe(&r, &scope(&[11]), 41, op().deadline, |_| panic!(
+            "wire limit"
+        ))
+        .is_err()
+    );
+    assert!(!fixture.methods().contains(&"DOM.resolveNode".into()));
+    drop(c);
+    fixture.finish();
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut caps = limits();
+    caps.max_methods = 9;
+    let mut c = fixture.attach(caps);
+    let before = fixture.methods().len();
+    assert_eq!(
+        c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+            "method admission"
+        ))
+        .expect_err("method reserve includes cleanup")
+        .kind,
+        ErrorKind::Limit
+    );
+    assert_eq!(fixture.methods().len(), before);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn fields_gate_ax_and_preserve_unrequested_values() {
+    let fixture = Fixture::new(|m, c, _| {
+        if m == "Runtime.callFunctionOn" {
+            assert_eq!(
+                c["params"]["arguments"][0]["value"]["fields"],
+                json!(["layout_bounds"])
+            );
+        }
+        None
+    });
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.context.fields = vec![Field::LayoutBounds];
+    r.limits.max_elements = 1;
+    let (report, docs) = collect(&mut c, &r, &scope(&[11]));
+    assert_eq!(report.ax, collector::SourceStatus::NotRequested);
+    assert_eq!(snapshot(&docs[0]).nodes[0].properties.len(), 1);
+    assert!(
+        !fixture
+            .methods()
+            .contains(&"Accessibility.getPartialAXTree".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn callback_owns_first_completed_channel_when_cancel_stops_the_next() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let cancellation = c.cancellation().expect("owned cancel");
+    let mut r = request();
+    r.operation = Operation::Observe {
+        channels: vec![Channel::ExternalSemantics, Channel::RenderedCapture],
+    };
+    let mut owned = Vec::new();
+    let error = c
+        .observe(&r, &scope(&[11]), 41, op().deadline, |doc| {
+            owned.push(doc);
+            cancellation.cancel();
+            Publication::Acknowledged
+        })
+        .expect_err("stop after first publication");
+    assert!(matches!(
+        error.kind,
+        ErrorKind::Cdp(_) | ErrorKind::StaleTarget
+    ));
+    assert_eq!(owned.len(), 1);
+    assert_eq!(snapshot(&owned[0]).nodes.len(), 2);
+    drop(c);
+    validation::validate_snapshot(snapshot(&owned[0])).expect("owned completion survives teardown");
+    fixture.finish();
+}
+#[test]
+fn publication_stop_and_expired_request_do_not_dispatch_more() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let before = fixture.methods().len();
+    assert_eq!(
+        c.observe(&request(), &scope(&[11]), 41, Instant::now(), |_| panic!(
+            "expired"
+        ))
+        .expect_err("absolute deadline")
+        .kind,
+        ErrorKind::Timeout
+    );
+    assert_eq!(fixture.methods().len(), before);
+    drop(c);
+    fixture.finish();
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let e = c
+        .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+            Publication::Stop
+        })
+        .expect_err("publisher refusal");
+    assert_eq!(e.kind, ErrorKind::PublicationStopped);
+    let before = fixture.methods().len();
+    assert!(
+        c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+            "detached"
+        ))
+        .is_err()
+    );
+    assert_eq!(fixture.methods().len(), before);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn pixels_and_probe_are_explicit_failed_channels_not_claimed_dom_capabilities() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.operation = Operation::Observe {
+        channels: vec![Channel::RenderedCapture, Channel::OptInLayoutProbe],
+    };
+    let before = fixture.methods().len();
+    let (_, docs) = collect(&mut c, &r, &scope(&[]));
+    assert_eq!(docs.len(), 2);
+    assert_eq!(fixture.methods().len(), before);
+    for doc in docs {
+        let Artifact::ChannelResponse(response) = doc.artifact else {
+            panic!("channel")
+        };
+        assert!(matches!(
+            response.result,
+            ChannelResult::Failed(Issue {
+                code: ErrorCode::Unsupported,
+                ..
+            })
+        ));
+    }
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn lost_events_or_document_event_stop_current_refs_without_recollection() {
+    for overflow in [false, true] {
+        let fixture = Fixture::new(move |m, _, n| {
+            if m == "Target.getTargetInfo" && n > 8 {
+                Some(
+                    json!({"fixtureEvents":if overflow{vec![json!({"method":"Runtime.consoleAPICalled","params":{}});5]}else{vec![json!({"method":"DOM.documentUpdated","params":{}})]}}),
+                )
+            } else {
+                None
+            }
+        });
+        let mut c = fixture.attach(limits());
+        let before = fixture.methods().len();
+        let e = c
+            .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+                panic!("invalidated")
+            })
+            .expect_err("lost continuity");
+        assert_eq!(
+            e.kind,
+            if overflow {
+                ErrorKind::ResyncRequired
+            } else {
+                ErrorKind::StaleTarget
+            }
+        );
+        assert_eq!(fixture.methods().len(), before + 1);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn cancel_during_ax_stops_dispatch_and_reports_unconfirmed_remote_cleanup() {
+    let handle = Arc::new(Mutex::new(None::<transport::Cancellation>));
+    let cancel = handle.clone();
+    let fixture = Fixture::new(move |m, _, _| {
+        if m == "Accessibility.getPartialAXTree" {
+            cancel
+                .lock()
+                .expect("handle")
+                .as_ref()
+                .expect("set after attach")
+                .cancel();
+        }
+        None
+    });
+    let mut c = fixture.attach(limits());
+    *handle.lock().expect("handle") = c.cancellation();
+    let e = c
+        .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+            panic!("cancelled source not published")
+        })
+        .expect_err("cancelled read");
+    assert!(matches!(e.kind, ErrorKind::Cdp(cdp::ErrorKind::Cancelled)));
+    assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Unconfirmed);
+    let calls = fixture.methods();
+    assert_eq!(
+        calls.last().map(String::as_str),
+        Some("Accessibility.getPartialAXTree")
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn cleanup_failure_detaches_without_claiming_release() {
+    let fixture = Fixture::new(|m, _, _| {
+        (m == "Runtime.releaseObjectGroup")
+            .then(|| json!({"error":{"code":-32000,"message":CANARY}}))
+    });
+    let mut c = fixture.attach(limits());
+    let e = c
+        .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+            panic!("unreleased group")
+        })
+        .expect_err("cleanup refusal");
+    assert_eq!(e.kind, ErrorKind::CleanupUnconfirmed);
+    assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Unconfirmed);
+    assert!(!format!("{e:?} {e}").contains(CANARY));
+    let before = fixture.methods().len();
+    assert!(
+        c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+            "detached"
+        ))
+        .is_err()
+    );
+    assert_eq!(fixture.methods().len(), before);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn malformed_method_objects_and_wrong_ax_frame_do_not_publish() {
+    for mode in 0..3 {
+        let fixture = Fixture::new(move |m, _, _| match (m, mode) {
+            ("Runtime.callFunctionOn", 0) => Some(
+                json!({"result":{"type":"object","value":{"connected":null,"sameDocument":true,"tag":"INPUT","sensitive":false}}}),
+            ),
+            ("Runtime.callFunctionOn", 1) => {
+                Some(json!({"result":{"type":"object","value":[true,true,"INPUT",false]}}))
+            }
+            ("Accessibility.getPartialAXTree", 2) => Some(
+                json!({"nodes":[{"nodeId":"ax","ignored":false,"backendDOMNodeId":11,"frameId":"wrong"}]}),
+            ),
+            _ => None,
+        });
+        let mut c = fixture.attach(limits());
+        let e = c
+            .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+                panic!("malformed")
+            })
+            .expect_err("method refusal");
+        assert_eq!(
+            e.kind,
+            if mode == 2 {
+                ErrorKind::StaleTarget
+            } else {
+                ErrorKind::Malformed
+            }
+        );
+        assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Released);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn output_cap_and_late_ack_are_errors_but_acknowledged_data_stays_owned() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.limits.max_output_bytes = 3000;
+    let e = c
+        .observe(&r, &scope(&[11]), 41, op().deadline, |_| {
+            panic!("canonical output cap")
+        })
+        .expect_err("canonical cap");
+    assert_eq!(e.kind, ErrorKind::Limit);
+    assert!(
+        fixture
+            .methods()
+            .contains(&"Runtime.releaseObjectGroup".into())
+    );
+    drop(c);
+    fixture.finish();
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut owned = Vec::new();
+    let absolute = Instant::now() + Duration::from_millis(100);
+    let e = c
+        .observe(&request(), &scope(&[11]), 41, absolute, |doc| {
+            owned.push(doc);
+            thread::sleep(Duration::from_millis(110));
+            Publication::Acknowledged
+        })
+        .expect_err("original deadline remains authoritative");
+    assert_eq!(e.kind, ErrorKind::Timeout);
+    assert_eq!(owned.len(), 1);
+    assert_eq!(snapshot(&owned[0]).nodes.len(), 2);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn caller_sensitivity_cannot_be_downgraded_by_method_payload() {
+    let fixture = Fixture::new(|m, _, _| {
+        (m=="Runtime.callFunctionOn").then(||json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"tag":CANARY,"sensitive":false,"value":CANARY}}}))
+    });
+    let mut c = fixture.attach(limits());
+    let mut s = scope(&[11]);
+    s.nodes[0].sensitivity = Sensitivity::Sensitive;
+    let (_, docs) = collect(&mut c, &request(), &s);
+    assert!(
+        !serde_json::to_string(&docs)
+            .expect("canonical")
+            .contains(CANARY)
+    );
+    assert!(
+        !fixture
+            .methods()
+            .contains(&"Accessibility.getPartialAXTree".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn snapshot_and_observation_ids_do_not_alias_across_collectors() {
+    let mut saved = Vec::new();
+    for _ in 0..2 {
+        let fixture = Fixture::new(|_, _, _| None);
+        let mut c = fixture.attach(limits());
+        let (report, docs) = collect(&mut c, &request(), &scope(&[11]));
+        assert_eq!((report.visited_dom, report.queried_ax), (1, 1));
+        assert_eq!(report.omitted_nodes, None);
+        saved.extend(docs);
+        drop(c);
+        fixture.finish();
+    }
+    assert_ne!(snapshot(&saved[0]).id, snapshot(&saved[1]).id);
+    assert_ne!(
+        snapshot(&saved[0]).observations[0].id,
+        snapshot(&saved[1]).observations[0].id
+    );
+}
+#[test]
+fn ax_numeric_bool_values_and_mixed_checked_are_not_coerced_to_false() {
+    for value in [
+        json!({"type":"number","value":0.25}),
+        json!({"type":"integer","value":10000000000000000u64}),
+        json!({"type":"boolean","value":false}),
+    ] {
+        let expected = value.clone();
+        let fixture = Fixture::new(move |m, _, _| {
+            if m == "Accessibility.getPartialAXTree" {
+                Some(
+                    json!({"nodes":[{"nodeId":"ax","ignored":false,"backendDOMNodeId":11,"value":value,"properties":[{"name":"checked","value":{"type":"tristate","value":"mixed"}}]}]}),
+                )
+            } else {
+                None
+            }
+        });
+        let mut c = fixture.attach(limits());
+        let (_, docs) = collect(&mut c, &request(), &scope(&[11]));
+        let node = &snapshot(&docs[0]).nodes[1];
+        match expected["type"].as_str().expect("type") {
+            "boolean" => assert_eq!(known(node, Field::Value), &Value::Flag(false)),
+            _ => assert_eq!(
+                known(node, Field::Value),
+                &Value::Number(expected["value"].as_f64().expect("number"))
+            ),
+        }
+        assert!(
+            node.properties
+                .iter()
+                .find(|p| p.field() == Field::Checked)
+                .expect("checked")
+                .known()
+                .is_none()
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn request_output_budget_is_cumulative_across_canonical_channels() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.operation = Operation::Observe {
+        channels: vec![Channel::RenderedCapture, Channel::OptInLayoutProbe],
+    };
+    r.limits.max_output_bytes = 550;
+    let mut docs = Vec::new();
+    let e = c
+        .observe(&r, &scope(&[]), 41, op().deadline, |d| {
+            docs.push(d);
+            Publication::Acknowledged
+        })
+        .expect_err("second channel exceeds remaining budget");
+    assert_eq!(e.kind, ErrorKind::Limit);
+    assert_eq!(docs.len(), 1);
+    assert!(serde_json::to_vec(&docs[0]).expect("bytes").len() <= 550);
+    drop(c);
+    fixture.finish();
+}

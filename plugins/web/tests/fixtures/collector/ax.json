@@ -1,0 +1,1 @@
+{"nodes":[{"nodeId":"ax-11","ignored":false,"role":{"type":"role","value":"checkbox"},"name":{"type":"computedString","value":"Apply"},"value":{"type":"string","value":""},"properties":[{"name":"disabled","value":{"type":"boolean","value":false}},{"name":"checked","value":{"type":"tristate","value":"false"}}],"backendDOMNodeId":11,"frameId":"frame"}]}
