@@ -76,3 +76,13 @@ generic status framework. Canonical bytes, Commit/ACK and prior responses remain
 Web-owned web_config.rs/worker_web.rs stay protected; return an actual required
 consumer-callsite change to that owner. Focused success/Failed/partial/cleanup
 cases verify the new CLI exit distinction without another broad host audit.
+
+Core returned exact metadata owners: publication.rs, host_types.rs,
+worker_observation.rs, worker_native.rs, worker_main.rs, affected existing publication/
+native tests and publication_probe.rs compile callsite. HostCompletion exposes
+incomplete_channels for ACKed records only. Worker derives the flag from validated
+Failed or partial/unknown coverage and transmits it in existing flags storage;
+fixed parent inline metadata is charged, with no new pool/allocation. Frame/Commit/
+ACK must agree and preserve correlation. Web owner alone performs the one
+worker_web.rs receive-result→publish argument change; older immutable Web runtime
+proof does not depend on this unpublished change. No unrelated host source opens.
