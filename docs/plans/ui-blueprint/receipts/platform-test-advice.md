@@ -67,3 +67,45 @@ candidate, not measured F03c bounds evidence. F02 capture-concurrency gate stays
 Both platform owners received these bounded implications. Advisor chats remain
 available for the user-designated continuing product/test role; they are not
 running jobs merely because their historical context remains useful.
+
+## Renewed product priority — 2026-10-07
+
+After the user's direct criticism, root asked both named advisors for concrete
+next useful scenarios. Both returned read-only handoffs, no new runtime or source
+changes. Both select **Director popover in Clip Search first, Settings second**.
+This prioritizes already-approved B03/M03/form/projection work; it does not expand
+the goal or authorize arbitrary source-app changes. Advice is distinct from
+runtime proof. W03 infrastructure is an actual dependency only if source evidence
+shows it is needed for the next user capability, not a reason to defer that case.
+
+Mac consumer: “Where do I type the director name and what is currently open?”
+Existing [RC02 data](../../../../fixtures/real-world/mac-filters/observations.json)
+and [independent expected](../../../../fixtures/real-world/mac-filters/expected-answer.md)
+support one Director name field, Type a director placeholder, focused/settable
+state and disabled Clear; Search by director name is explanatory text. Results
+and exact anchor gap remain unobserved. Genre's AX button role without checked
+does not prove false. Require sourced Target/Surface/time/anchor and measured
+compatible bounds before geometry; parent pixels may omit a popup.
+
+Web consumer: “Where is the popup field, which suggestion is active, and how is
+it placed relative to its trigger and selected neighboring content?” Minimal
+scope: trigger/popover/input/few visible options, one explicit nearby card only
+as permitted context. Need roles/labels/expanded/focus/active_descendant/selected/
+draft, known layout bounds/space/coverage and sourced relation. Applied filter is
+separately observed through profile/URL; draft or active option never proves it.
+Unknown hit testing does not block a truthful first answer, but rectangles alone
+cannot prove hover accessibility. Advisor's example8/6css_px is illustrative,
+NOT a measurement or expected value. Existing F01 B03 literals test mechanism;
+they never define actual PlayPhrase.me dimensions or prove its DOM uses a portal.
+
+Web source context supplied by advisor: playphraseme-site's surface-controls.md,
+mobile-source-and-response.md, desktop-filter QA steps86–112 under the existing
+phrase-search-filters route; PROFILE W02/W05 and B02/B03. Settings uses existing
+settings/overview-and-behavior.md and persistence QA, PROFILE W07/W12. Root did
+not operate that other project or treat source references as fresh UI evidence.
+
+Settings follow-up distinguishes visible label/value, label→control and disabled
+background/Close targets. Mac [RC01 expected](../../../../fixtures/real-world/mac-settings/expected-answer.md)
+does not establish persistence or inner spacing. iPad filters/iPhone Reels remain
+existing reference data, not mobile implementation authority. Immediate next
+owners consume this handoff for useful scoped inspect/measure, not another audit.
