@@ -587,3 +587,81 @@ released, temporary non-image build/run roots already removed. All23 image paths
 containing directories in the four named system-temp roots remain; counts rechecked,
 no image deletion or relocation. Older evidence untouched. Git lease released after
 checkpoint/push outcome is reported in chat; no staging or work until explicit resume.
+
+
+## Resumed runtime preflight — exact per-channel deadline dependency
+
+User resumed P0–P7; root reported independent scoped source review23f22fb ACCEPT
+and activated one combined actual AX+popup capture with AX1s/capture2s, unchanged
+parent/cleanup/profile and300s outer runtime. Preparation used frozen Swift23f22fb
+and exact saved Rust138d7bc, never current Core/Web WIP. Matching binaries verified
+again from system-temp prepared.json; build preparation17.1665s, no SDK/UI launched.
+
+Before live, existing saved Native broker was inspected for budget enforcement:
+crates/host/src/native_broker.rs passes remaining_ms(active.deadline, now) into helper
+Submit; it has no channel-specific1s AX cap. HostProtocol.receive takes min of that
+remaining duration and Request.limits.deadline_ms. Collector.popup AX uses that
+command.deadline for its admission/traversal; it has no independent1s ceiling.
+CaptureLifecycle does cap capture to min(2s, remaining), but cannot cap earlier AX.
+Thus existing combined3s Request cannot guarantee the activated AX1s condition.
+Reducing overall Request to1s would tighten capture too and alter the selected
+combined budget; no hidden limit choice, source repair or live attempt performed.
+Exact source dependency returned: bound popup AX phase within existing1s profile
+while retaining combined parent/capture2s, then source review before live as required.
+This is source-backed orchestration/budget mismatch, not observed runtime failure.
+
+Prepared fixture8c82ed59/helperd32615ae, descriptor2b027460,
+worker40369841/CLI7c416f2e/validator7e488306; full hashes in prepared.json at
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m03-resume-prep-fmq1ri0z/.
+Retain only for immediate root disposition/next operation phase, not permanent archive.
+No own fixture/helper/worker launched, no physical input, Observe or new images.
+Empty new image destination and finite temp command removed; old image paths untouched.
+Native live lane released without use. Only existing receipt modified, no staging;
+short exact1 checkpoint lease required. Actual pixels/pre-post identities/reap gates
+remain unexecuted; do not claim whole M03/P7 acceptance or weaken source/caps.
+
+
+## Actual activation — tighter pre-run budget, popup setup stopped
+
+Root disposed the preceding budget handoff without source change: D05 ceilings allow
+smaller explicit caller budget, so choose combined Request1000ms/parent operation≤1s
+before any actual call. Existing saved broker passes only remaining shared active
+deadline to both helpers; AX≤1s/capture≤1s≤2s, cleanup1s unchanged. Prior3s preparation
+was never launched, not a runtime defect. No field/quality/cap reduction or retry tuning.
+Scoped independent source review23f22fb ACCEPT reported by root, not author acceptance.
+Current full closure remains acquisition@2/registry17 and preserved product/QA rules.
+
+Frozen prepared Swift23f22fb and Rust138d7bc hashes verified. Own PID30928 launched
+through bundle/exact run argument, parentCG10827/generation98A53999-2E6E-4C92-9153-35C10A84BC9A.
+CUA observed Window A, Edge popup action produced actual Popup A/Confirm subtree and
+focused Confirm. Existing super+shift+s shortcut then produced fresh AX with popup
+subtree absent, focus Open B, Result:none/Count:0. Snapshot1 manifest independently
+reported popup=false, popup_binding=null/status unresolved/current_content_attachment_unavailable;
+direct containing-window evidence unavailable. Current parent OPEN; current popup
+CLOSED/generation4FFE8972-D8BC-4094-B52C-C1D2F0FBAE9C/window_id-1. Values read before finally.
+
+This exact fresh setup condition failed before original binding/preidentity/Observe.
+No Observe, helper/worker, capture, channel validation or pixel output dispatched.
+No pre/post Observe identity proof exists in this run. Temporal cause of popup closing
+around shortcut is unestablished; no read-only effect, collector/source fault or
+foreground/coordinate inference. Stop-on-error: no second shortcut/reopen attempt,
+backend bypass, TCC/display or source changes; old Inspect/lifecycle loops not repeated.
+
+Launcher monotonic start272854.190378583/deadline273154.190378583; stop evidence
+272871.976955708. Finally cleanup before assertions: elapsed17.937588125s,
+cleanup0.118527000s, timeout=false, exact PID/path/run-argument fixture absence confirmed;
+no owned helper/worker remains. Native physical lane released. Images0 in this run;
+empty new image destination removed, all historical23 images/containing dirs untouched.
+All current preparation/source/cache/binaries/finite commands/non-image run files
+consumed and removed with directory absence verified; no persistent evidence archive.
+
+Prepared binary pins used: fixture8c82ed594c44495967aa674e69d002810494e85605c4e042ef31e1c26d2ed3df;
+helperd32615ae3b8c9b5291d756e1f4a027d06a8d9ae9a53c5b49161823ca507d73da;
+descriptor2b027460d119e1631fd4afa2f34b73d7dfa201caf61be6735a25cbd90779cf5d;
+worker40369841e7de77e37483aac98a76bc49e490d28973a0379efd0ed98933355caf;
+CLI7c416f2ef1951e9f0b8fa258e17f320f03c874ead0d7626bdea3c6b6c1f03001;
+validator7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828.
+Receipt-only outcome awaits exact1 Git lease. Actual popup capture and individually
+verified postidentity remain open; successful prior source/synthetic/AX/lifecycle
+facts preserved, no whole M03/P7 completion. Next setup investigation needs separate
+root selection; no hidden subsequent source/runtime attempt.
