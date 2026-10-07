@@ -1,6 +1,6 @@
 # W01 B03 selected popup relationships
 
-Status: implementation/preparation, no B03 runtime executed. Authority: root's
+Status: prepared B03 popup_relations runtime PASSED on saved d11c077. Authority: root's
 explicit dispatch under [packet](../packets/W01-popup-relations.md)/PLAN.UIB@1.
 Restore, current registry11 and same fully read W01-live Spec Basis: WEB-PILOTS@1
 B03, PROJECTIONS/FORMS/MODEL/IDENTITY/EXCHANGE/GEOMETRY/PRIVACY/BOUNDARIES/LIFECYCLE
@@ -98,3 +98,48 @@ No live claim; preserve all prior immutable W01 reports/frames/builds.
 
 Final97 fingerprint after transient-sink change: 04f045e17c36318609573d9a3abe14df1ed830b5cc103570f2f4bf6d0ec16adc.
 Launcher syntax PASS; no compiled input changed, so no rebuild repeated.
+
+## Activated B03 result and verified removal
+
+Root activated the one prepared run after confirming d11c077 was pushed. No rebuild,
+source hold, old-scenario rerun or new case. Before/after97 source fingerprint,
+eight consumed changed files, both executables and frozen fixture/driver bytes
+matched the pins above. Actual runtime2026-10-07T15:28:16.194Z–15:28:18.037Z:
+passed, popup-context completed, committed1/missing0, diagnostic=null, exit0,
+pending0. Canonical response32825 bytes; five selected DOM nodes plus addressed
+AX data. Existing schema validation, literal relation/rectangle oracles and
+read-only focus/scroll/checkpoint invariance passed.
+
+Reported relations: trigger Controls popup (dom-aria-controls); popup AnchoredTo
+trigger (fixture-data-anchor-attribute); City input Controls suggestions
+(dom-aria-controls). No inferred relation connects the City input inside popup.
+Actual AX popup role/name: dialog/Options; City input: combobox/City. Trigger
+expanded=true; Close focused=true; City input focused=false, expanded=false,
+value known empty. HitRegion/global keyboard focus/active_descendant stay Unknown.
+
+All rectangles below are observed layout bounds in the same viewport/css_px/
+top-left/local-only space, with non-atomic consistency unknown:
+
+| F01 selected node | x | y | width | height |
+| --- | ---: | ---: | ---: | ---: |
+| trigger |477.234375|111|97.296875|32|
+| popup |400|290|200|60|
+| Close |400|290|98.78125|32|
+| City input |380|42|188|21|
+| suggestions |380|67|360|22|
+
+Worker cleanup confirmed sessions0/groups0/abandonedfalse; fixture survived worker
+reap. Test/context/driver/browser/server/profile all confirmed closed. Compact
+facts were delivered inline in chat before cleanup; no temporary file link is
+used as delivery. The operation's report.json and popup-context.json were verified
+then removed, their exclusive UUID directory removed and absence verified. The
+owned uib-web-popup-relations-ua9v_zjx build/source temp was also removed and its
+absence verified. Older evidence/build directories were untouched. No archive or
+new persistent directory was created; no Git/source/runtime resource remains held.
+
+The diagnostic hashes identify the consumed, now-deleted files only, not available
+artifacts: report dd4efc8cddf850744fadc74689f02f8b320893eb8dbe7f65ad665cc144e74f69;
+frame0353edb30bffe665e44735f137c4878778cc75029dbe41f25848e9732ff407b2.
+This is the finite F01 B03 mechanism proof, not full hit/clip/frame/pixel B03,
+Director on actual PlayPhrase.me, B02 input or Q02/performance acceptance. No
+real site launched and no actual PlayPhrase.me dimensions inferred.
