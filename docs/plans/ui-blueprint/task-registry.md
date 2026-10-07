@@ -90,7 +90,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Web74ea8e1 bounded-peer proof and Native7c6e078 source review accepted within their scopes. Core parent-allocation proofff92c511 and Integration rejection proofda6330e pushed; holds/Git released. Core proceeds to actual parent-death/watchdog, Integration receives direct semantic-validator probe case. Native/Web retained for immediate consumers, no live/UI grants |
+| Активные чаты/пакеты/ресурсы | Web74ea8e1 peer proof and Native7c6e078 source review accepted within scope. Core parent-death/watchdog and Integration direct-validator cases active; no source/Git holds. Native identified concrete acquisition gaps and receives M01-acquisition-plan proposal; Web waits these mandatory H01 gates. No live/UI grants |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
 | Следующий шаг | Execute remaining finite H01 parent-death and direct-validator proofs on pinned inputs; reconcile their exact coverage before next live producer packet. Native source review does not qualify SDK/resource/privacy/positive pilots. Full H01/live/D06/RC05 remain open; no renewed approval inside existing scope |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -99,6 +99,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
+| [M01-acquisition-plan](packets/M01-acquisition-plan.md) | retained Native owner | current7c6e078; D05 copied strings/batches/JSON/pixels, same owners | ready finite engineering proposal before source/registration; no invented user-authority gap, SDK/runtime unchanged |
 | [M01-host-helper](packets/M01-host-helper.md) | Native `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | `7c6e0780ac085c2a024281c2f8b0196ce536bfa0`, pushed9paths | [source review](receipts/M01-host-helper-review.md) accepts bounded connection, no findings; independent19/7 manifest and3binary hash equality. Author4builds/31offline cases, no SDK/live. Retained owner for next consumer |
 | H01 parent allocation proof | Core same chat | `ff92c5111754c9a79b352a9207fd562325d69f97`, pushed3test/doc paths | [receipt](receipts/H01-host.md): actual setup backing+inline roots equals reported inventory; zero additional observed allocations on named paths, not OS/SDK/RSS or all-path runtime acceptance |
 | H01 rejection allocation proof | Integration same chat | `da6330ee68c640d4b3687bf9ac46a0577eef2f30`, pushed2paths | [receipt](receipts/H01-allocation-proof.md): fixed1MiB key/3MiB quota, actual Decode fatal and prior ACK/reap; saved71 digestfc155032…48c36. Direct semantic-validation proof remains separately assigned |
