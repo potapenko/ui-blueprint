@@ -746,6 +746,57 @@ fn guarded_live_f01() {
     let diagnostic =
         std::env::var("UIB_WEB_LIVE_CASE").is_ok_and(|v| v == "first_observe_diagnostic");
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("form_reads") {
+            let a = attach(&mut host, fixture.binding("a"), 1);
+            for case in [
+                "form-forward",
+                "form-backward",
+                "form-collapsed",
+                "form-private",
+            ] {
+                // Explicit fixture setup is outside the product observation and
+                // does not qualify Focus/Type delivery or application commit.
+                fixture.stimulus(case);
+                let mut selection = initial("draft");
+                let WebSelection::Initial { ids, .. } = &mut selection else {
+                    unreachable!("initial selection")
+                };
+                ids.push(WebId {
+                    id: Id("applied".into()),
+                    sensitivity: Sensitivity::Public,
+                });
+                fixture.before("a", case);
+                let response = observe(
+                    &mut host,
+                    &a,
+                    "draft",
+                    vec![Field::Focused, Field::Value],
+                    selection,
+                    case,
+                );
+                fixture.outcome(case, &response);
+                let document = decoded(&response);
+                document.validate().expect("canonical form observation");
+                assert_eq!(response.missing(), 0);
+                assert!(matches!(
+                    response.effect,
+                    uiblueprint_host::host_types::EffectReceipt::NotDispatched
+                ));
+                if case == "form-private" {
+                    fixture.check("a", case, "form_reads", Some(&document));
+                } else {
+                    fixture.check_frame(
+                        "a",
+                        case,
+                        "form_reads",
+                        &document,
+                        response.bytes(0).expect("ACKed form observation"),
+                    );
+                }
+                drop(response);
+            }
+            return;
+        }
         if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("actions") {
             checkbox_actions(&mut host, &mut fixture, &trace);
             return;

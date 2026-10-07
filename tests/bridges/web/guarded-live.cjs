@@ -12,9 +12,17 @@ const CANARY = 'W01_LIVE_PRIVATE_CANARY';
 const MAX_LINE = 262144;
 const PREFIX = '@UIB_LIVE ';
 const EVIDENCE_ROOT = require('node:fs').realpathSync(require('node:os').tmpdir());
-const CASES = new Set(['action-observe','action-prepare','action-success','action-prepare-stale','action-stale','action-readonly-observe','action-readonly-prepare','action-readonly-refused','action-unknown-observe','action-unknown-prepare','action-unknown','b05-initial','b05-retain-initial','b05-parent','b05-history-parent','b05-font','b05-history-font','rooted-current','rooted-wrong-binding','rooted-wrong-document','rooted-stale','popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
+// Authored read expectations, independent of the collector result. Stimuli below
+// create these states directly; they do not qualify product input delivery.
+const FORM_CASES = Object.freeze({
+  'form-forward': {start:1,end:3,direction:'forward',anchor:1,focus:3,output:'',private:false},
+  'form-backward': {start:1,end:3,direction:'backward',anchor:3,focus:1,output:'London',private:false},
+  'form-collapsed': {start:4,end:4,direction:'none',anchor:4,focus:4,output:'London',private:false},
+  'form-private': {start:1,end:3,direction:'forward',output:'London',private:true}
+});
+const CASES = new Set([...Object.keys(FORM_CASES),'action-observe','action-prepare','action-success','action-prepare-stale','action-stale','action-readonly-observe','action-readonly-prepare','action-readonly-refused','action-unknown-observe','action-unknown-prepare','action-unknown','b05-initial','b05-retain-initial','b05-parent','b05-history-parent','b05-font','b05-history-font','rooted-current','rooted-wrong-binding','rooted-wrong-document','rooted-stale','popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
 const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required']);
-const FRAME_FILES = Object.freeze({'action-observe':'action-observe.json','action-prepare':'action-prepared.json','action-success':'action-transition.json','b05-initial':'b05-initial.json','b05-parent':'b05-parent.json','b05-font':'b05-font.json','rooted-current':'rooted-context.json','popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
+const FRAME_FILES = Object.freeze({'form-forward':'form-forward.json','form-backward':'form-backward.json','form-collapsed':'form-collapsed.json','action-observe':'action-observe.json','action-prepare':'action-prepared.json','action-success':'action-transition.json','b05-initial':'b05-initial.json','b05-parent':'b05-parent.json','b05-font':'b05-font.json','rooted-current':'rooted-context.json','popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
 function bounded(promise, ms, code) {
   let timer; return Promise.race([promise, new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error(code)), ms);
@@ -50,10 +58,28 @@ function compareRect(actual, expected) {
   assert.equal(actual.length, 4);
   actual.forEach((value, i) => assert(Math.abs(value - expected[i]) <= r01.tolerance_css_px));
 }
-async function uiState(page) {
+async function uiState(page, forms = false) {
   // Private canary is compared in memory only; never serialize this checkpoint to evidence.
-  return page.evaluate(() => ({active: document.activeElement?.id || '',
-    scroll: [scrollX, scrollY], state: window.f01 ? window.f01.checkpoint() : {target:document.getElementById('action-target').checked,duplicate:document.getElementById('action-duplicate').checked,disabled:document.getElementById('action-disabled').checked,mixedChecked:document.getElementById('action-indeterminate').checked,mixed:document.getElementById('action-indeterminate').indeterminate,custom:document.getElementById('action-custom').getAttribute('aria-checked')}}));
+  return page.evaluate(forms => ({form: forms ? (() => {
+    const input=document.getElementById('draft'), output=document.getElementById('applied');
+    return {documentFocused:document.hasFocus(),value:input.value,start:input.selectionStart,end:input.selectionEnd,
+      direction:input.selectionDirection,autocomplete:input.autocomplete,output:output.value,
+      outputChildren:output.childNodes.length,outputChildType:output.firstChild?.nodeType??null};
+  })() : null,active: document.activeElement?.id || '',
+    scroll: [scrollX, scrollY], state: window.f01 ? window.f01.checkpoint() : {target:document.getElementById('action-target').checked,duplicate:document.getElementById('action-duplicate').checked,disabled:document.getElementById('action-disabled').checked,mixedChecked:document.getElementById('action-indeterminate').checked,mixed:document.getElementById('action-indeterminate').indeterminate,custom:document.getElementById('action-custom').getAttribute('aria-checked')}}), forms);
+}
+function assertFormState(state, expected) {
+  assert.equal(state.active,'draft');assert.equal(state.form.documentFocused,true);
+  assert.equal(state.form.value,expected.private?CANARY:'A💡B');
+  assert.deepEqual([state.form.start,state.form.end,state.form.direction],
+    [expected.start,expected.end,expected.direction]);
+  assert.equal(state.form.autocomplete,expected.private?'one-time-code':'');
+  assert.equal(state.form.output,expected.output);
+  assert.equal(state.form.outputChildren,expected.output?1:0);
+  assert.equal(state.form.outputChildType,expected.output?3:null);
+  // Direct setup never enters the fixture's input/commit controller. In
+  // particular native output London is NOT its application applied state.
+  assert.deepEqual([state.state.selected,state.state.applied,state.state.valid,state.state.delivered,state.state.revision],['','',false,0,0]);
 }
 async function run(evidence, report) {
   // Check BEFORE prepare/start/launch; ordinary node execution cannot start a live run.
@@ -161,7 +187,16 @@ async function run(evidence, report) {
             return {binding:await binding(page),document_backend_id:root.backendNodeId,backend_node_id:described.node.backendNodeId};
           } finally {await session.detach();}
         }
-        case 'before': assert(CASES.has(payload.case)); report.last_stage=payload.case; before.set(payload.case, await uiState(page)); return {};
+        case 'before': {
+          assert(CASES.has(payload.case)); report.last_stage=payload.case;
+          const state=await uiState(page, report.mode==='form_reads');
+          if(report.mode==='form_reads'){
+            assert(Object.hasOwn(FORM_CASES,payload.case));
+            assert.equal(report.form_setup?.at(-1),payload.case);
+            assertFormState(state,FORM_CASES[payload.case]);
+          }
+          before.set(payload.case,state);return {};
+        }
         case 'outcome': {
           assert(CASES.has(payload.stage)&&TERMINALS.has(payload.terminal));
           assert(Number.isSafeInteger(payload.operation)&&payload.operation>0);
@@ -213,15 +248,39 @@ async function run(evidence, report) {
         }
         case 'check': {
           assert(CASES.has(payload.case));
-          assert(before.has(payload.case)); assert.deepEqual(await uiState(page),before.get(payload.case)); before.delete(payload.case);
+          assert(before.has(payload.case)); assert.deepEqual(await uiState(page, report.mode==='form_reads'),before.get(payload.case)); before.delete(payload.case);
           if (payload.document !== null) {
             const doc = payload.document; assert.equal(doc.schema_version,'0.1.0');
             assert.equal(doc.artifact.kind,'channel_response'); const response = doc.artifact.data;
             assert.equal(response.result.status,'observed'); const s = response.result.data;
             assert.equal(s.coverage.status,'partial'); assert.equal(s.source_state,null);
             assert(s.nodes.length <= 32); const dom = s.nodes.filter(n=>n.key.namespace==='web.dom');
-            assert.equal(dom.length,payload.kind==='rooted'?9:payload.kind==='popup'?5:1); assert(s.observations.every(o=>o.freshness==='current'&&o.consistency==='unknown'));
-            if (payload.kind.startsWith('b05_')) {
+            assert.equal(dom.length,payload.kind==='form_reads'?2:payload.kind==='rooted'?9:payload.kind==='popup'?5:1); assert(s.observations.every(o=>o.freshness==='current'&&o.consistency==='unknown'));
+            if (payload.kind === 'form_reads') {
+              assert.equal(report.mode,'form_reads');assert(Object.hasOwn(FORM_CASES,payload.case));
+              const expected=FORM_CASES[payload.case], [input,output]=dom;
+              assert.deepEqual([...s.context.fields].sort(),['focused','value']);
+              assert.equal(property(input,'focused').value,true);assert.equal(property(output,'focused').value,false);
+              assert.deepEqual(property(output,'value'),{type:'text',value:expected.output});
+              assert.equal(s.focus.active_descendant.status,'unknown');
+              assert.equal(s.focus.composition_state.selection,'not_requested');
+              if(expected.private){
+                const value=input.properties.find(p=>p.field==='value');
+                assert.equal(value.state.availability,'redacted');assert.equal(value.sensitivity,'sensitive');
+                assert.equal(s.focus.text_selection,null);assert.equal(s.focus.keyboard.status,'unknown');
+                assert(!JSON.stringify(doc).includes(CANARY));
+              }else{
+                assert.deepEqual(property(input,'value'),{type:'text',value:'A💡B'});
+                assert.equal(s.focus.keyboard.status,'known');assert.deepEqual(s.focus.keyboard.target,input.key);
+                const selection=s.focus.text_selection;assert(selection);
+                assert.deepEqual([selection.anchor,selection.focus,selection.units],[expected.anchor,expected.focus,'utf16_code_units']);
+                for(const e of [selection.evidence,s.focus.keyboard.evidence]){
+                  assert.equal(e.source_namespace,'web.dom');assert.equal(e.provenance,'reported');
+                  assert(s.observations.some(o=>o.id===e.observation_id&&o.source_namespace==='web.dom'));
+                }
+                assert.equal(selection.evidence.observation_id,s.focus.keyboard.evidence.observation_id);
+              }
+            } else if (payload.kind.startsWith('b05_')) {
               const dimensions=payload.kind==='b05_initial'?f01.B05.child_before:payload.kind==='b05_parent'?f01.B05.child_after_parent:f01.B05.child_after_font;
               compareRect(rectangle(dom[0]),[40,550,...dimensions]);
               const current={key:dom[0].key,space:property(dom[0],'layout_bounds').value.coordinate_space,revision:s.revision,observation:s.observations[0].id,environment:s.context.environment_revision};
@@ -289,7 +348,23 @@ async function run(evidence, report) {
           checks.push({case:payload.case,readonly:true,oracle:payload.kind}); return {};
         }
         case 'stimulus': {
-          if (payload.action==='textLarge' || payload.action==='remount' || payload.action==='parentWide' || payload.action==='fontLarge')
+          if(Object.hasOwn(FORM_CASES,payload.action)){
+            assert.equal(report.mode,'form_reads');assert.equal(before.size,0);
+            report.form_setup??=[];
+            assert.equal(Object.keys(FORM_CASES)[report.form_setup.length],payload.action);
+            const expected=FORM_CASES[payload.action];
+            await page.bringToFront(); // addressed own headless page, no desktop input lane
+            await page.evaluate(({state,canary})=>{
+              const input=document.getElementById('draft'),output=document.getElementById('applied');
+              input.setAttribute('autocomplete',state.private?'one-time-code':'');
+              Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,'value').set.call(input,state.private?canary:'A💡B');
+              Object.getOwnPropertyDescriptor(HTMLOutputElement.prototype,'value').set.call(output,state.output);
+              HTMLElement.prototype.focus.call(input,{preventScroll:true});
+              HTMLInputElement.prototype.setSelectionRange.call(input,state.start,state.end,state.direction);
+            },{state:expected,canary:CANARY}); // setup only: no events, delivery or app commit
+            assertFormState(await uiState(page,true),expected);
+            report.form_setup.push(payload.action);
+          } else if (payload.action==='textLarge' || payload.action==='remount' || payload.action==='parentWide' || payload.action==='fontLarge')
             await page.evaluate(name=>window.f01.operate(name),payload.action);
           else if (payload.action==='action-remount'){assert.equal(report.mode,'actions');await page.locator('#remount-target').click();}
           else if (payload.action==='root-remount') {await page.evaluate(()=>{const root=document.getElementById('f01');root.replaceWith(root.cloneNode(true));});}
@@ -332,7 +407,14 @@ async function run(evidence, report) {
     });
     const exit = await bounded(exited,90000,'rust_consumer_timeout'); await chain; report.test_exit={code:exit.code,signal:exit.signal};
     assert.equal(exit.code,0); assert.equal(exit.signal,null); assert(!failed,'live_case_failed');
-    assert.equal(before.size,0); if(report.mode==='actions'){assert.equal(report.outcomes.length,10);assert(checks.some(c=>c.case==='action-unknown'));assert.equal(report.frames.length,3);}else if(report.mode==='b05'){assert.equal(report.outcomes.length,6);assert(checks.some(c=>c.case==='b05-history-font'));assert.equal(report.frames.length,3);}else if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
+    assert.equal(before.size,0);
+    if(report.mode==='form_reads'){
+      assert.deepEqual(report.form_setup,Object.keys(FORM_CASES));
+      assert.deepEqual(report.outcomes.map(o=>o.stage),Object.keys(FORM_CASES));
+      assert(report.outcomes.every(o=>o.terminal==='completed'&&o.effect==='not_dispatched'&&o.committed===1&&o.missing===0));
+      assert.deepEqual(checks.filter(c=>c.oracle==='form_reads').map(c=>c.case),Object.keys(FORM_CASES));
+      assert.equal(report.frames.length,3);
+    }else if(report.mode==='actions'){assert.equal(report.outcomes.length,10);assert(checks.some(c=>c.case==='action-unknown'));assert.equal(report.frames.length,3);}else if(report.mode==='b05'){assert.equal(report.outcomes.length,6);assert(checks.some(c=>c.case==='b05-history-font'));assert.equal(report.frames.length,3);}else if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
   } catch (_) {
     report.failure??={code:'live_run_failed',phase:report.phase}; throw new Error('live_run_failed');
   } finally {
@@ -358,14 +440,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:['B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}

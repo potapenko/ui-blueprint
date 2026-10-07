@@ -598,3 +598,80 @@ absent under partial scope. Rich output content remains unqualified. App invalid
 active suggestion, confirmed choice and business applied result still require
 their own evidence/profile; native Invalid=false does not establish app success.
 Checkpoint/push needs the short root lease; no W02/B02 completion claim is made.
+
+## Actual form-read qualification preparation (not activated)
+
+Read slice saved/pushed c63b07a10ad81c69b994ee05a064ea9cdd1ba108; root reports
+source-first review accept_with_residual with all seven saved hashes matched.
+Actual Chromium proof remains open. Root accepted the finite four-Observe handoff
+and granted two independent current writes: tests/bridges/web/guarded-live.cjs
+and this receipt. crates/host/tests/web_live.rs has Core-owned ActionRefused WIP;
+no Web edit there until Core saves/releases it and root grants the existing test.
+No new packet, fixture/framework, production or shared-source changes.
+
+Launcher now has form_reads mode with four authored cases: A💡B range1–3 forward
+and empty output; backward range1–3 and native output London; collapsed4–4 with
+London; then native text input with one-time-code autocomplete/private canary.
+Fixed native setters/focus/setSelectionRange establish states solely as explicit
+test setup on the own addressed headless page. No input/change events, commit,
+Mutation/Prepare, physical keyboard, visible caret or IME qualification. Setup
+requires actual document.hasFocus; it never enables focus emulation to manufacture
+the fact. F01 selected/applied remain empty, validfalse, delivered0/revision0 even
+when native output reads London: source value is not app/business success.
+
+Each before/after checkpoint compares input value/range/direction/autocomplete,
+native output value/child shape, document focus, active element, scroll and existing
+F01 controller state. Canonical oracles separately require requested Focused/Value,
+two source DOM nodes, actual keyboard source identity, UTF-16 anchor/focus/Evidence,
+known empty/nonempty output; private Value redacted and TextSelection absent.
+Raw private oracle data stays in memory, never report/errors/files. Three declared
+public canonical frames only; private canonical data is checked in memory for
+canary absence. All four host outcomes must be completed/not_dispatched with one
+committed channel, no missing channels; actual observation and invariance checks
+are required in addition to terminal metadata. Existing cleanup/worker-reap proof
+and browser survival checks remain in force.
+
+Same frozen F01, Chromium145/Node24.15/Playwright1.58.2,32nodes/depth8/64KiB/250ms,
+256traversal nodes,120s overall and own loopback process/profile/context. No desktop
+lane or browser run yet. Launcher syntax and scoped diff checks PASS; no no-run
+build until the host test source is available. Existing driver/helpers were read
+at saved c63b07a, not current Core WIP. Prepared host consumer needs only the four
+guarded Observe calls, existing draft scope and initial IDs draft/applied, same
+read-only TargetLease, canonical validation and cleanup. No host production or
+support/web_worker_process.rs edit is needed. Coherent harness saved inputs/build
+pins plus root activation precede any browser qualification.
+
+Core saved/released a53b750f079104db0928e527d1a09e1bd2e1eec5; root subsequently
+granted web_live.rs for exactly these four Observe cases. Exact three-path harness
+write set is now guarded-live.cjs, web_live.rs and this receipt. The saved mechanical
+HostError::ActionRefused mapping remains unchanged. The test reuses read-only attach,
+existing f01-draft scope and Initial selection for draft/applied, requests only
+Focused/Value, validates each actual canonical document and requires no missing
+channel/no dispatched effect. Shared host/action implementation is not modified.
+Pinned build uses saved a53 (which contains c63 form-read source) plus only the two
+harness overlays; no current Core WIP. This is source preparation, not activation.
+
+Prepared-candidate checks PASS on saved a53 plus two overlays:
+`cargo test --locked --offline -p uiblueprint-host --features web --test web_live --no-run`,
+matching scoped Clippy `-- -D warnings`, launcher `node --check`, owned rustfmt,
+changed-link consistency and scoped diff check. No browser/test execution occurred.
+All199exported inputs and current two harness files matched after checks; compact
+sorted path→SHA256 fingerprint f18b2d152bc51ccbdce3dcaadf28cc2fa6b50961ac510cf114452951fdbc8d95.
+guarded-live.cjs SHA256efa1337cdda2431a0759e033b9d2697b58f92520d519c4958fe17a621b6eb340;
+web_live.rs SHA2562bf82d2b7a2a5f41e9d19f080636f4360a18b85fdc148ba811f7de65e81217e5.
+Existing support/web_worker_process.rs remains saved input, unchanged by this slice.
+
+Build retained only for immediate finite qualification after coherent checkpoint
+and ROOT ACTIVATION: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-form-live-j5lfvqw9/target/debug.
+Test deps/web_live-bb05baebd9300679 SHA256
+f0a4ddd77cc4dbbe0eb516ad6e4478e43ceebc5db09e017c293c1bb04b9a322f;
+session-worker SHA2567df29e91a710b7875b6b09d6252d918e943b21d66807e673fe870761f7a8a6d1.
+Future existing launcher command uses --run-authorized, UIB_WEB_LIVE_ALLOW=1,
+UIB_WEB_LIVE_CASE=form_reads, UIB_WEB_LIVE_TEST/WORKER and their *_SHA256 values
+above; S01_WEB_PLAYWRIGHT_CORE=/Users/eugenepotapenko/.npm/_npx/f88013d20c39cb98/node_modules/playwright-core.
+UIB_WEB_LIVE_EVIDENCE=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/3b20dd91-62da-461c-963d-076a0e4c5d46
+is a planned fresh UUID path, still absent. Consumer/owner: current Web finite
+qualification; after result consumption remove only run-owned non-image source/
+build/frames/report and verify absence. No images requested; any created images
+and their containing directories must remain. Older retained evidence untouched.
+Actual UTF-16/output/privacy/invariance and teardown proof are still unexecuted.
