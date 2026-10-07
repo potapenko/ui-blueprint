@@ -37,7 +37,8 @@ The launcher checks canonical correlation/known required sample fields/partial
 coverage and unchanged fixture state, with confirmed host cleanup. It persists only
 selected canonical output, submitted request and bounded receipts. Own stdio readers
 are capped and every created process is reaped, including early IO failure paths.
-It does not launch/kill the fixture; root owns fixture setup and exact cleanup.
+It does not launch/kill the fixture; the assigned Native runtime worker owns
+fixture setup and exact cleanup under root's activation.
 B denial/capture/permission changes are outside this AX-only scenario.
 
 ## Checks actually performed
@@ -73,8 +74,9 @@ Existing retained fixture verified by metadata/hash only:
 /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-s01-native-vmy829z0/build/F02-off.app;
 executable SHA256c35f0be7d4ef941914783c479d1676278aaada72b587991d180c46387230c516
 matches its preparation.json and pinned9a88b12b5855bac54bf04ba7b64d233df719ddec.
-It was not launched. Root's next runtime packet provides new own run directory,
-physical setup/Snapshot lane, fresh A manifest and exact fixture cleanup ownership.
+It was not launched. After root activates the next finite runtime packet, the
+assigned Native worker creates the own run directory, performs setup/Snapshot,
+uses the fresh A manifest and owns exact fixture cleanup.
 Use the documented run command with prepared.json, that manifest, verified validator
 and a new output beneath system task-temp or application-state P2/M01-H01.
 

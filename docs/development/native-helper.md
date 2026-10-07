@@ -267,8 +267,8 @@ First runtime setup, when assigned: reuse the prepared F02 off bundle9a88b12, la
 it with a new run-owned directory using the existing fixture mechanism. Select A,
 normal stimulus/no popup, then explicitly Snapshot. Keep the exact manifest PID,
 launch time, window ID and generations; shared titles are not binding. The launcher
-never launches or closes a user app/fixture itself. Root retains fixture ownership
-and performs its existing exact-PID/path cleanup after the run.
+never launches or closes a user app/fixture itself. The assigned Native runtime
+worker owns fixture setup and exact-PID/path cleanup under root's activation.
 
 The descriptor-only `describe-window` call supplies the existing eight-field metadata
 request, with no tree/pixels or Ticket. SessionDescriptor has no field projection.
