@@ -280,3 +280,63 @@ The own explicit content-window evidence supplies its independent native associa
 That connector must be assigned separately and qualified through CLI. Positive popup
 capture remains open, never parent-image substitution. One-path outcome receipt ready
 for short Git lease; no silent implementation of this next step.
+
+
+## Direct-window/scoped AX connector — declared subset
+
+M03-popup-connector Restore; before edits exact7: Fixture.swift, Collector.swift,
+PopupChecks.swift, popup_check.py, native-helper.md, fixtures/native/README.md,
+this receipt. Direct weak current content attachment selects physical owner; no
+legacy scanner/title/rectangle selection. Distinct own visible window binding only;
+shared parent never renamed and yields explicit private representation gap.
+AX root is reported AXPopover ancestor of unique exact owner marker below authorized
+parent, independent of physical window placement/AXWindows enumeration. Retain
+current records/public binding, budgets and accepted incomplete_scope classification.
+No helper/Core/schema/capture/runtime changes in this source grant.
+
+
+### Connector coherent source readiness
+
+Snapshot now uses direct weak current own visible containing-window identity, no
+legacy marker scan as physical ownership. Parent is untouched. Attachment loss/change
+invalidates current identity metadata without measurement/UI-model publication.
+Distinct native-window case is bound dynamically, no hardcoded diagnostic IDs.
+Shared-parent case remains unresolved with private reason: current config/Suface IDs
+are derived from window numbers and require a dedicated logical Surface representation
+for shared physical window. No canonical wire change was silently made; this remains
+an exact Native-private representation dependency if that presentation is observed.
+
+AX semantic root resolves unique exact marker in reported AXPopover under authorized
+parent, not a separate AXWindows lookup. Public kAXPopoverRole declaration verified.
+Role/identifier read failure, duplicate, truncated child/depth budget or wrong marker
+cannot establish uniqueness and refuses. Physical native owner remains separately
+sourced by direct own content attachment/current files/CG owner checks. Parent trigger
+alone is required context; no unrelated window content, geometry/name matching or
+source/capture assumption. Existing incomplete_scope/stale/target errors preserved.
+
+Focused source suite46 checks/eight canonical validations passed. Synthetic physical
+popup is absent from AXWindows while its actual AXPopover/marker is nested under parent;
+actual collector produces current popup/root/anchor and refuses duplicate/truncated/
+wrong markers. Existing open/closed/reopened/current file checks, parent unaffected
+identity, low slot/string/output budget incomplete_scope and no returned partial
+frame remain covered. These are synthetic proof, not actual SDK tree/weak attachment
+lifetime qualification. Helper, fixture and checker compiled cleanly; no broad suite,
+UI/input/capture or runtime. Current saved-source validator, no moving Core owner.
+
+Final source3 digest: ec66513a53723f07c0827b72b8a1a170592f86a2c56499760a476a570e4da64e.
+Binaries before operation finish:
+
+- fixture: ce28527bd68ca5e5493850ce347677955dac25ff953f78fd6be5e5ab32c29f2e;
+- helper: 45a812d37a6fd4eeb29c29b8887de0472bb7db9605eb08f4bb4f12e92e752e81;
+- popup-checks: dc242a8df399282096a4e1204a2e370956250d421503c39e29f6806f9bdb7d36;
+- target/debug/uiblueprint-validate: 7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828;
+
+Consumed non-image synthetic responses removed. Useful matching compiled helper/fixture/
+validator/source at uib-m03-connector-jbrpqha2 retained only for immediate same-reviewer
+reconciliation and next M03 qualification within this operation, not an archive.
+Images0; no image or containing directory deletion. Remove owned non-image files at
+operation finish; old evidence untouched. Exact6 actual paths: Fixture.swift,
+Collector.swift, PopupChecks.swift, native-helper.md, fixtures/native/README.md,
+this receipt (runner remained unchanged). Own links/whitespace/source pins checked,
+index untouched; request short exact6 Git lease. Live CLI popup/anchor/close-stale/
+reopen and positive capture/M03 remain open; no hidden next source/runtime work.

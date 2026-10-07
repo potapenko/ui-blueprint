@@ -458,13 +458,14 @@ This source step runs only synthetic lifecycle/reader checks, no UI/live proof.
 
 ## Own popup scope and anchor
 
-Current fixture Snapshot attempts to attribute an open own popover window through
-bounded public NSAccessibility identifier/children, matching explicit
-f02.popup.owner.a/b. It excludes the parent A/B windows as popup candidates. A unique
-marker-bearing own NSWindow supplies its actual windowNumber; title/rect/order do
-not select it. Missing/ambiguous public mapping publishes popup_binding_status
-unresolved and no binding. This mechanism still needs actual SwiftUI popup qualification.
-Nonvisual explicit popup window identifier is assigned only after that attribution.
+Current fixture Snapshot uses the weak current public NSView.window attachment
+from own popover content, requiring a visible positive own NSWindow. It publishes
+that real physical window ID and independent popup generation; parent is never
+renamed. Legacy NSApp marker scanning is not the binding authority. Missing weak
+attachment/current owner remains unresolved. Shared native parent yields explicit
+shared_native_window_requires_logical_surface_identity: current private IDs are
+window-number based and cannot represent that case without a dedicated logical
+Surface binding. It is refused, not assumed separate or silently broadened.
 
 A/b popup presentation and close invalidate an independent popup-a/b identity receipt;
 willClose also invalidates the attributed popup window. No measurements are collected
@@ -482,6 +483,12 @@ program source, not a measured gap/arrowEdge or geometric equality. Parent trigg
 is authorized dependent context; unrelated window/process content is not returned.
 
 The same bounded WindowAX/property owners collect popup nodes and one parent trigger.
+AX resolver is rooted in the authorized parent's actual AX window, and requires a
+unique exact owner marker within a reported AXPopover ancestor. That semantic tree
+placement is not physical-window evidence. The separate own direct content attachment
+and live identity/CG owner checks supply physical attribution. Popup need not appear
+as another AXWindows item. Duplicate/truncated/error/other-role markers refuse, with
+no name/geometry/first-match fallback or unrelated-window content.
 Actual SDK AX window/marker binding failure yields target_unresolved, closed/mismatched
 current identities yield stale_target. Coverage remains partial; every requested
 property retains known/unknown/unsupported states. Global focus/transform/layout gaps

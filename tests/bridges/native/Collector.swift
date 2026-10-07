@@ -562,8 +562,11 @@ extension Collector {
         do {
             let started=ProcessInfo.processInfo.systemUptime
             let app=application(parent.pid)
-            let popupWindow=try resolveWindow(app,identifier:config.binding.window_identifier,admission:admission,access:access)
             let parentWindow=try resolveWindow(app,identifier:parent.window_identifier,admission:admission,access:access)
+            // Semantic AX ancestry is separate from the direct physical native
+            // window binding supplied by the own fixture's content attachment.
+            let popupWindow=try resolvePopover(parentWindow,ownerIdentifier:"f02.popup.owner.\(parent.window_identifier)",
+                maxNodes:maxNodes,maxDepth:maxDepth,admission:admission,access:access)
             let trigger=try resolveElement(parentWindow,identifier:"f02.popup",maxNodes:maxNodes,maxDepth:maxDepth,admission:admission,access:access)
             bindingResolved=true
             let oid="\(requestID)-external_semantics"
@@ -612,6 +615,37 @@ extension Collector {
             } else { try frame.encode(failure) }
         }
         return frame
+    }
+    @MainActor static func resolvePopover(_ root:CFTypeRef,ownerIdentifier:String,maxNodes:Int,maxDepth:Int,
+        admission:NativeAcquisition,access:NativeAXAccess = .live)throws->CFTypeRef{
+        var queue:[(CFTypeRef,Int,CFTypeRef?)]=[(root,0,nil)],seen:[CFTypeRef]=[],matches:[CFTypeRef]=[]
+        func attribute(_ element:CFTypeRef,_ name:String)throws->String?{
+            try admission.check();access.prepare(element)
+            let (status,value)=access.attribute(element,name)
+            if status == .attributeUnsupported || status == .noValue {return nil}
+            guard status == .success,let value else{throw NativeAcquisitionError.invalidValue}
+            return try admission.text(value)
+        }
+        while !queue.isEmpty && seen.count<maxNodes {
+            try admission.check();let (element,depth,ancestor)=queue.removeFirst()
+            guard access.isElement(element) else{throw NativeAcquisitionError.invalidValue}
+            if seen.contains(where:{CFEqual($0,element)}){continue};seen.append(element)
+            let role=try attribute(element,kAXRoleAttribute)
+            let container=role==kAXPopoverRole ? element:ancestor
+            if try attribute(element,kAXIdentifierAttribute)==ownerIdentifier {
+                guard let container else{throw NativeAcquisitionError.invalidValue};matches.append(container)
+            }
+            if depth<maxDepth {
+                let omitted=try nativeAXElements(element,kAXChildrenAttribute,windows:false,
+                    capacity:max(0,maxNodes-seen.count-queue.count),admission:admission,access:access){queue.append(($0,depth+1,container))}
+                guard omitted==0 else{throw NativeAcquisitionError.limit}
+            } else {
+                // A depth ceiling cannot prove no duplicate marker in omitted children.
+                let omitted=try nativeAXElements(element,kAXChildrenAttribute,windows:false,capacity:0,admission:admission,access:access){_ in}
+                guard omitted==0 else{throw NativeAcquisitionError.limit}
+            }
+        }
+        guard queue.isEmpty,matches.count==1 else{throw NativeAcquisitionError.invalidValue};return matches[0]
     }
     @MainActor static func resolveElement(_ root:CFTypeRef,identifier:String,maxNodes:Int,maxDepth:Int,
         admission:NativeAcquisition,access:NativeAXAccess = .live)throws->CFTypeRef{

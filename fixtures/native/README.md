@@ -116,3 +116,10 @@ weakly in Measurements. Attachment/detachment only updates identity metadata, no
 UI/probe measurement or publication. Explicit Snapshot reports actual windowNumber,
 visibility and whether it equals parent A/B, or unavailable. It does not assume a
 separate popup CG window, rename a shared parent or qualify a canonical connector.
+
+Snapshot binding now uses the direct weak current containing-window owner rather
+than legacy NSApp marker scanning. A visible positive own distinct NSWindow yields
+its actual ID/current generation. Missing/closed attachment refuses; shared-parent
+case is explicitly unresolved until private logical-Surface representation exists,
+without parent rename. Attachment loss/change invalidates identity only. Semantic
+AXPopover ancestry under parent remains separate from this physical window source.

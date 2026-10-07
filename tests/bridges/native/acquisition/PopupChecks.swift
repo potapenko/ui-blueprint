@@ -38,9 +38,10 @@ import Darwin
             return NativeCommand(configuration:try config(generation,budgets:budgets),document:["schema_version":"0.1.0","artifact":["kind":"request","data":req]],control:try NativeControl(header),replyCap:cap,deadline:ProcessInfo.processInfo.systemUptime+5)
         }
         let ids=[1:"a",2:"popup-a",3:"f02.popup",4:"f02.popup.owner.a",5:"f02.popup.confirm"]
-        let children=[0:[1,2],1:[3],2:[4,5],3:[],4:[],5:[]]
+        let children=[0:[1],1:[3,2],2:[4,5],3:[],4:[],5:[]]
         let access=NativeAXAccess(prepare:{_ in},attribute:{raw,name in
             let i=(raw as! NSNumber).intValue
+            if name==kAXRoleAttribute{return (.success,(i==2 ? "AXPopover":"AXGroup") as CFString)}
             return name==kAXIdentifierAttribute ? (.success,ids[i]! as CFString):(.noValue,nil)
         },count:{raw,name in (.success,children[(raw as! NSNumber).intValue]!.count)},page:{raw,name,index,amount in
             let c=children[(raw as! NSNumber).intValue]!;return (.success,c[index..<min(c.count,index+amount)].map{NSNumber(value:$0)} as CFArray)
@@ -48,7 +49,7 @@ import Darwin
             let i=(raw as! NSNumber).intValue
             return (.success,names.map{name->Any in
                 switch name{
-                case kAXRoleAttribute:return i==3 || i==5 ? "AXButton":"AXGroup"
+                case kAXRoleAttribute:return i==2 ? "AXPopover":(i==3 || i==5 ? "AXButton":"AXGroup")
                 case kAXIdentifierAttribute:return ids[i]!
                 case kAXSubroleAttribute:return ""
                 case kAXDescriptionAttribute:return i==3 ? "Edge popup":"own popup content"
@@ -89,6 +90,29 @@ import Darwin
             expect(result["nodes"]==nil && (result["data"] as! [String:Any])["nodes"]==nil)
             try bytes.write(to:out.appendingPathComponent(name+".json"),options:.withoutOverwriting)
         }
+        // Physical popup789 is intentionally absent from AXWindows. Its reported
+        // AXPopover lives under parent456; actual scoped resolver must not infer
+        // physical ownership from that semantic ancestry.
+        let scoped=try Collector.resolvePopover(NSNumber(value:1),ownerIdentifier:"f02.popup.owner.a",maxNodes:160,maxDepth:9,
+            admission:NativeAcquisition(try config(popupGen).acquisition_limits,deadline:ProcessInfo.processInfo.systemUptime+5),access:access)
+        expect(CFEqual(scoped,NSNumber(value:2)))
+        let duplicate=NativeAXAccess(prepare:access.prepare,attribute:{raw,name in
+            if (raw as! NSNumber).intValue==5 && name==kAXIdentifierAttribute{return (.success,"f02.popup.owner.a" as CFString)}
+            return access.attribute(raw,name)
+        },count:access.count,page:access.page,batch:access.batch,actions:access.actions,isElement:access.isElement)
+        for (name,provider,nodes) in [("duplicate_marker",duplicate,160),("truncated_lookup",access,2)]{
+            do{
+                _=try Collector.resolvePopover(NSNumber(value:1),ownerIdentifier:"f02.popup.owner.a",maxNodes:nodes,maxDepth:9,
+                    admission:NativeAcquisition(try config(popupGen).acquisition_limits,deadline:ProcessInfo.processInfo.systemUptime+5),access:provider)
+                preconditionFailure("ambiguous/partial lookup cannot resolve")
+            }catch{checks+=1}
+            _=name
+        }
+        do{
+            _=try Collector.resolvePopover(NSNumber(value:1),ownerIdentifier:"f02.popup.owner.b",maxNodes:160,maxDepth:9,
+                admission:NativeAcquisition(try config(popupGen).acquisition_limits,deadline:ProcessInfo.processInfo.systemUptime+5),access:access)
+            preconditionFailure("wrong popup cannot resolve")
+        }catch{checks+=1}
         let missingTrigger=NativeAXAccess(prepare:access.prepare,attribute:{ raw,name in
             if (raw as! NSNumber).intValue==3 && name==kAXIdentifierAttribute{return (.success,"different-trigger" as CFString)}
             return access.attribute(raw,name)

@@ -79,6 +79,19 @@ struct RectRecord: Codable, Equatable {
 @MainActor final class Measurements {
     var frames: [String: RectRecord] = [:]
     weak var popupContainingWindow: NSWindow?
+    weak var popupCurrentIdentity: FixtureIdentity?
+    func updatePopupWindow(_ value: NSWindow?) {
+        if value == nil || popupContainingWindow !== value, let owner = popupCurrentIdentity {
+            let app = NSRunningApplication.current
+            do {
+                // Attachment loss/change invalidates identity only, never publishes
+                // measurement or changes visible UI state.
+                try owner.close(pid:app.processIdentifier,bundle:app.bundleIdentifier ?? "unknown",
+                    launch:app.launchDate?.timeIntervalSince1970 ?? 0,window:popupContainingWindow?.windowNumber ?? -1)
+            } catch { _exit(2) }
+        }
+        popupContainingWindow = value
+    }
     var callbackCount = 0
     var callbackNanoseconds: UInt64 = 0
     var windowID = -1
@@ -102,14 +115,14 @@ struct RectRecord: Codable, Equatable {
     }
     func updateNSView(_ view: ReaderView, context: Context) { view.metadata = metadata }
     static func dismantleNSView(_ view: ReaderView, coordinator: ()) {
-        if view.metadata?.popupContainingWindow === view.window { view.metadata?.popupContainingWindow = nil }
+        if view.metadata?.popupContainingWindow === view.window { view.metadata?.updatePopupWindow(nil) }
         view.metadata = nil
     }
     final class ReaderView: NSView {
         weak var metadata: Measurements?
         override func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
-            metadata?.popupContainingWindow = window
+            metadata?.updatePopupWindow(window)
         }
         override func hitTest(_ point: NSPoint) -> NSView? { nil }
         override var acceptsFirstResponder: Bool { false }
@@ -295,6 +308,7 @@ private struct PilotView: View {
             let app = NSRunningApplication.current
             let owner = popupIdentity ?? FixtureIdentity(directory:runDirectory,windowKey:"popup-\(role)")
             popupIdentity = owner
+            measurements.popupCurrentIdentity = owner
             do {
                 // Both close and a new presentation invalidate previous binding.
                 // Only explicit Snapshot can establish a new measured/current record.
@@ -365,11 +379,15 @@ private struct PilotView: View {
         let probeEnabled = false
         #endif
         var popupBinding: [String: Any]?
-        if popup, let popupWindow = FixturePopupAttribution.window(NSApp.windows,parent:window,role:role) {
+        if popup, let popupWindow = measurements.popupContainingWindow,
+           popupWindow !== window, popupWindow.isVisible, popupWindow.windowNumber > 0,
+           NSApp.windows.contains(where: { $0 === popupWindow }) {
             let popupOwner = popupIdentity ?? FixtureIdentity(directory:runDirectory,windowKey:"popup-\(role)")
             popupIdentity = popupOwner
+            measurements.popupCurrentIdentity = popupOwner
             let popupKey = "popup-\(role)"
-            // Public nonvisual identity on our own attributable window only.
+            // Direct own content attachment is the physical owner evidence.
+            // A shared parent is never renamed or silently treated as separate.
             popupWindow.identifier = NSUserInterfaceItemIdentifier(popupKey)
             popupWindow.setAccessibilityIdentifier(popupKey)
             if let generation = try? popupOwner.snapshot(pid:app.processIdentifier,
@@ -402,6 +420,8 @@ private struct PilotView: View {
             "live_manifest_path": runDirectory.appendingPathComponent("\(role).json").path,
             "popup_containing_window": containingEvidence,
             "popup_binding": popupBinding ?? NSNull(), "popup_binding_status": popupBinding == nil ? "unresolved" : "bound",
+            "popup_binding_reason": popupBinding != nil ? "direct_content_attachment" :
+                (popup && measurements.popupContainingWindow === window ? "shared_native_window_requires_logical_surface_identity" : "current_content_attachment_unavailable"),
             "popup_generation": popupGeneration, "popup_anchor_declared": role,
             "window_identifier": role, "windows": windows,
             "app_active": app.isActive, "window_key": window.isKeyWindow, "window_main": window.isMainWindow,
