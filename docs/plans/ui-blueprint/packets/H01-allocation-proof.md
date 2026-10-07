@@ -69,6 +69,15 @@ The old allocator pin applies until that handoff. Recheck affected real guard ca
 on the new saved input; injected-null proof must remain labelled fault injection,
 never evidence of actual OS exhaustion. No huge real or virtual allocations.
 
+Saved seam handoff:5e5da61004eb9d12b520e9e4b2181cbf5147b8a7, pushed. Effective
+quota_allocator SHA256 is now bfa9a61d97668849b412a4649b3a76806b6788d6c23ca4da394c8cd7a859d9aa,
+replacing the initial pin below; the other three worker pins remain unchanged.
+The real private entry is `pub(super) unsafe fn allocate_with(Layout,
+unsafe fn(Layout) -> *mut u8) -> *mut u8`. Production alloc/alloc_zeroed use fixed
+System forwarders. Core's focused installed-quota/reap regression and compile checks
+pass as author evidence; injected-null execution belongs to Integration and remains
+open. See the precise safety/invariant handoff in the saved H01-host receipt.
+
 Reuse session-worker/SpawnSpec and real HostDomain/RuntimeHost entrypoints listed
 in Core's handoff, OutputRequest and Tape::encode for canonical documents. A small
 test-only executable may include the existing allocator source to exercise its
