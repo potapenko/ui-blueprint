@@ -99,3 +99,16 @@ consumer review remains pending; Native-only acceptance is not full H01 acceptan
 Hostile parser families, full realloc/System/invariant/fault-phase proofs, deadline/
 late-frame/cancel matrix, helpers, nonce and complete D06/live gates remain open.
 No unchanged Native tests were rerun; see the current [receipt](../plans/ui-blueprint/receipts/H01-host.md).
+
+## Lifecycle follow-up
+
+A previously reserved AttachInput is now refused after shutdown before spawn; its
+unused reservation drops normally. Focused real-worker tests also saturate both
+completion groups and preserve both caller-held results on admission refusal.
+A narrow process wrapper withholds configuration writes for A and later withholds
+reap confirmation for100ms, while still using real owned Darwin children. B attaches
+and validates canonical bytes independently; cancelling A reports CleanupPending at
+the explicit1ms test cleanup allowance and retains its root grant until actual reap
+is forwarded. A separate10ms parent-deadline case refuses later dispatch and stale
+handles after cleanup. These are deterministic injected supervision conditions,
+not claims that Darwin termination itself stalled or production deadlines changed.

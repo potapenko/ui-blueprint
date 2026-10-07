@@ -115,6 +115,9 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         deadline: Instant,
     ) -> Result<SessionHandle<'a>, HostError> {
         self.domain.check_reaping()?;
+        if self.state[0].shutting_down {
+            return Err(HostError::InvalidState);
+        }
         remaining_ms(deadline, Instant::now())?;
         let AttachInput {
             input,

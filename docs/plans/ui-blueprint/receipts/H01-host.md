@@ -218,3 +218,46 @@ Full H01 remains incomplete: helper/capture ownership, fake action nonce/effect,
 late/cancel/quarantine matrix, operation-specific canonical/replay/observe proof,
 full allocator/failure-phase/hostile evidence and independent review. No live/SDK/
 RSS/positive D06 acceptance. This coherent save must not be labelled final delivery.
+
+## Connected stage D — shutdown admission and lifecycle proof
+
+Stage C is saved/pushed50c0c95f273c51120a088f68d556b27f57bd4195; saved63-input
+digest equals its checked bytes. Git grant consumed/index released. Four pinned
+allocator/worker inputs remain byte-identical for Integration's disjoint proof.
+Core continues only existing lifecycle ownership under D02.LIFECYCLE/D05-MEMORY.
+
+Found/reproduced an implementation defect: an AttachInput reserved before shutdown
+could still launch a worker after ShutdownComplete. New focused regression failed
+on50c0c95; attach now rejects shutting_down before spawn, dropping unused reservation.
+No contract/API/dependency or worker-source change. Completion saturation proof
+also establishes two held results refuse a third dispatch without losing bytes.
+
+New lifecycle_host test wrapper uses actual Darwin predicate/spawn/children, with
+finite withheld input and reap confirmation. A stalls before configuration while B
+attaches/validates. Cancel A enters CleanupPending after explicit1ms test allowance,
+holds its grant/slot, then releases only after forwarding actual reap100ms later.
+A separate10ms parent deadline terminates the stalled attach, prevents new dispatch
+and rejects the old handle after reap. Test wrapper's withheld confirmation is not
+an OS inability-to-kill measurement; no global signal changes or fake canonical
+success. Each test has5s outer bound and owns/cleans its spawned children.
+
+```sh
+cargo test --locked -p uiblueprint-host --test runtime -- --test-threads=1
+cargo clippy --locked -p uiblueprint-host --lib --bin session-worker --test runtime -- -D warnings
+rustfmt --edition 2024 --check crates/host/src/supervisor.rs crates/host/tests/runtime.rs
+cargo check --locked -p uiblueprint-host --lib --bin session-worker --test runtime
+```
+
+All pass:6 regular runtime cases plus explicitly executed isolated R1 peer (the
+outer runner's ignored marker prevents unisolated signal mutation). Unchanged
+foundation/Native/engine suites are not rerun. Local document links/diff check pass.
+Final64-input digest `7ba21b6ddc3ff2079a8b12753d805bdde2f6cb1e1e8cbaa449454e8b4b8453ef`:
+exact saved stage-C63 path set at50c0c95, current bytes, plus
+crates/host/tests/support/lifecycle_host.rs; same compact sorted JSON hash method.
+Concurrent Integration tests are not included in Core's proof claim.
+
+Exact5-path checkpoint: crates/host/src/supervisor.rs; crates/host/tests/runtime.rs;
+crates/host/tests/support/lifecycle_host.rs; docs/development/host.md; this receipt.
+No changes to allocator/worker pins, Cargo/lock, Native or Web. Full H01 remains open
+for registered helpers/capture, fake-delivery nonce, remaining malformed/late and
+operation-specific canonical proof, allocation families and independent acceptance.

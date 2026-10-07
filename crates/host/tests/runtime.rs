@@ -50,7 +50,9 @@ fn target() -> TargetLease {
 fn deadline() -> Instant {
     Instant::now() + Duration::from_secs(5)
 }
-fn next<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostEvent<'a> {
+fn next<'a, P: uiblueprint_host::process_api::ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'a, P>,
+) -> HostEvent<'a> {
     let stop = deadline();
     loop {
         assert!(Instant::now() < stop, "bounded host event");
@@ -60,7 +62,9 @@ fn next<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostEvent<'a> {
         }
     }
 }
-fn complete<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostCompletion<'a> {
+fn complete<'a, P: uiblueprint_host::process_api::ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'a, P>,
+) -> HostCompletion<'a> {
     match next(host) {
         HostEvent::Complete(c) => c,
         _ => panic!("completion"),
@@ -115,6 +119,19 @@ fn real_worker_reuses_session_and_keeps_caller_completion_during_other_session()
     let second_result = complete(&mut host);
     assert_eq!(second_result.terminal, Terminal::Completed);
     assert_eq!(held.bytes(0), Some(QUERY));
+    let full_input = host.reserve_input(first, 1).unwrap();
+    assert!(matches!(
+        host.submit(
+            first,
+            OperationClass::Validate,
+            full_input,
+            request,
+            deadline()
+        ),
+        Err(HostError::ResourceLimit)
+    ));
+    assert_eq!(held.bytes(0), Some(QUERY));
+    assert_eq!(second_result.bytes(0), Some(QUERY));
     drop(second_result);
     let mut input = host.reserve_input(first, 1).unwrap();
     input.bytes_mut()[0] = b'!';
@@ -172,3 +189,27 @@ fn real_quota_fatal_during_fixed_buffer_setup_keeps_parent_alive_and_reaps() {
     );
     assert!(!domain.usage().abandoned);
 }
+
+#[test]
+fn shutdown_rejects_a_previously_reserved_attach_without_spawning() {
+    let _serial = RUNTIME_TEST.lock().unwrap();
+    let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
+    let spec = SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap();
+    let mut host = RuntimeHost::new(&domain, spec, DarwinPlatform).unwrap();
+    let mut input = host
+        .reserve_attach_input(target(), DESCRIPTOR.len())
+        .unwrap();
+    input.bytes_mut().copy_from_slice(DESCRIPTOR);
+    assert!(matches!(
+        host.shutdown().unwrap(),
+        HostEvent::ShutdownComplete
+    ));
+    assert!(matches!(
+        host.attach(input, deadline()),
+        Err(HostError::InvalidState)
+    ));
+    assert_eq!(domain.usage().reserved_sessions, 0);
+}
+
+#[path = "support/lifecycle_host.rs"]
+mod lifecycle;
