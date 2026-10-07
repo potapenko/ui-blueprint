@@ -11,6 +11,7 @@ use std::{
     time::{Duration, Instant},
 };
 use uiblueprint_host::{
+    OperationClass,
     authority::TargetLease,
     domain::{HostDomain, SessionHandle},
     host_types::{HostCompletion, HostEvent, OutputRequest, Terminal},
@@ -166,9 +167,16 @@ fn attach<'a>(
     session.session_id = session_id.clone();
     session.target = binding.target.clone();
     session.surfaces = vec![binding.surface.clone()];
-    session.allowed_scopes = ["left", "sized", "draft", "popup", "rooted"]
-        .map(|s| Id(format!("f01-{s}")))
-        .into();
+    session.allowed_scopes = [
+        "left",
+        "sized",
+        "draft",
+        "popup",
+        "rooted",
+        "mutation-child",
+    ]
+    .map(|s| Id(format!("f01-{s}")))
+    .into();
     session.capabilities[0].reason = Some(Id("bounded-live-source-under-verification".into()));
     let mut setup = baseline::setup(binding.endpoint.clone());
     setup.surface = binding.surface.clone();
@@ -272,6 +280,49 @@ fn observe<'a>(
     )
     .expect("explicit current observe");
     complete(host)
+}
+fn retain_snapshot<'a>(
+    host: &mut RuntimeHost<'a, DarwinPlatform>,
+    attached: &Attached<'a>,
+    document: &Document,
+) -> HostCompletion<'a> {
+    let Artifact::ChannelResponse(response) = &document.artifact else {
+        panic!("observed channel")
+    };
+    let ChannelResult::Observed(snapshot) = &response.result else {
+        panic!("observed Snapshot")
+    };
+    let bytes = serde_json::to_vec(&Document {
+        schema_version: document.schema_version,
+        artifact: Artifact::Snapshot(snapshot.clone()),
+    })
+    .expect("original Snapshot bytes");
+    let mut input = host
+        .reserve_input(attached.handle, bytes.len())
+        .expect("retained input");
+    input.bytes_mut().copy_from_slice(&bytes);
+    host.submit(
+        attached.handle,
+        OperationClass::Retain,
+        input,
+        OutputRequest {
+            channels: 1,
+            frame_bytes: 65536,
+            total_bytes: 65536,
+            input_format: 0,
+            retained_partition: 1,
+        },
+        deadline(),
+    )
+    .expect("explicit Retain");
+    let completion = complete(host);
+    assert_eq!(completion.terminal, Terminal::Completed);
+    assert_eq!(
+        completion.bytes(0),
+        Some(bytes.as_slice()),
+        "original Snapshot/context/time remain byte-equal"
+    );
+    completion
 }
 fn terminal_code(terminal: Terminal) -> &'static str {
     use uiblueprint_host::HostError as E;
@@ -395,6 +446,72 @@ fn guarded_live_f01() {
     let diagnostic =
         std::env::var("UIB_WEB_LIVE_CASE").is_ok_and(|v| v == "first_observe_diagnostic");
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("b05") {
+            let a = attach(&mut host, fixture.binding("a"), 1);
+            fixture.before("a", "b05-initial");
+            let first = observe(
+                &mut host,
+                &a,
+                "mutation-child",
+                vec![Field::LayoutBounds],
+                initial("mutation-child"),
+                "b05-initial",
+            );
+            fixture.outcome("b05-initial", &first);
+            let original = decoded(&first);
+            let original_ref = dom_ref(&original);
+            fixture.check_frame(
+                "a",
+                "b05-initial",
+                "b05_initial",
+                &original,
+                first.bytes(0).expect("ACKed original"),
+            );
+            let first_bytes = first.bytes(0).unwrap().to_vec();
+            fixture.before("a", "b05-retain-initial");
+            let retained = retain_snapshot(&mut host, &a, &original);
+            fixture.outcome("b05-retain-initial", &retained);
+            fixture.check("a", "b05-retain-initial", "recorded_history", None);
+            drop(retained);
+            for (action, case, kind, history) in [
+                (
+                    "parentWide",
+                    "b05-parent",
+                    "b05_parent",
+                    "b05-history-parent",
+                ),
+                ("fontLarge", "b05-font", "b05_font", "b05-history-font"),
+            ] {
+                fixture.stimulus(action);
+                fixture.before("a", case);
+                let current = observe(
+                    &mut host,
+                    &a,
+                    "mutation-child",
+                    vec![Field::LayoutBounds],
+                    reference(&original_ref),
+                    case,
+                );
+                fixture.outcome(case, &current);
+                let document = decoded(&current);
+                fixture.check_frame(
+                    "a",
+                    case,
+                    kind,
+                    &document,
+                    current.bytes(0).expect("ACKed current"),
+                );
+                drop(current);
+                fixture.before("a", history);
+                let retained = retain_snapshot(&mut host, &a, &original);
+                fixture.outcome(history, &retained);
+                fixture.check("a", history, "recorded_history", None);
+                drop(retained);
+                assert_eq!(first.bytes(0).unwrap(), first_bytes);
+            }
+            drop(first);
+            return;
+        }
         if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("rooted") {
             fixture.stimulus("popup");
             let discovery: RootDiscovery =

@@ -115,3 +115,54 @@ worker executable SHA2564bda8248dd99ab8bf4f46d5131c0f7a3fa83e0705209553c7ef9ccc9
 Current uib-w03-worker-ra6gx5zj source/build temp removed and absence verified.
 No raw run logs/canonical records persisted; previous evidence untouched. Exact
 checkpoint set: the two host test files plus this human outcome receipt.
+
+## Prepared finite F01 B05 current-geometry/history sequence
+
+Root opened exactly crates/host/tests/web_live.rs, tests/bridges/web/guarded-live.cjs
+and this receipt for preparation; no new browser activation yet. Mode b05 adds
+only mutation-child scope and existing fixture parentWide/fontLarge stimuli.
+Initial explicit Observe requests LayoutBounds, then explicit Retain stores its
+actual Snapshot. ParentWide and fontLarge run as separate fixture actions; each
+is followed by CurrentRequired Observe using the ORIGINAL canonical DOM ref.
+Independent F01 B05 literals:120×32→150×32→150×48css_px; authored location40,550.
+Same DOM source key/viewport Space required; revision/Observation change, each
+request's actual environment_revision stays unchanged in its own result. No
+rewriting old environment/context to satisfy cache or recorded comparison.
+
+After each change, explicit duplicate Retain of the ORIGINAL Snapshot must return
+its exact original canonical bytes/time/context. First ACKed channel lease remains
+byte-equal throughout. Six reported outcomes:3observe+3Retain, with read-only
+focus/scroll/checkpoint checks for each. Actual host shutdown/worker reap while
+browser alive plus independent owned launcher cleanup remain mandatory.
+
+This proves fresh geometry and recorded-history preservation only. No assertion
+reads an internal invalidated flag or treats fixture revision/event counters as
+actual CDP loss. Core direct-state tests/source hookup and previous peer loss flow
+remain separate evidence. No new cache/API/fixture/product source or old sequence.
+Same32/depth8/64KiB/250ms/source16/100methods/256visits, existing byte/IO limits,
+800×600/DPR1/Chromium145 and120s whole-run bound remain fixed.
+
+Prepared immutable source base3318662b1e70621060ba6162ffb6a3bfbb092c03 includes
+saved W03 Web/Core and host peer integration. git archive of Cargo manifests/lock/
+toolchain,crates,plugins/web,fixtures/web,experiments/web,tests/bridges/web plus
+only two candidate harness overlays.188exported input fingerprint (compact sorted
+JSON path→SHA256):33ed278d952652b580556b1c1c2f91c6f740da71626feb5e6380cac4c89e785c.
+Current-operation build/source root:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-b05-o551kaii.
+No source hold or current Core recorded-diff WIP consumed.
+
+Scoped web_live no-run PASS. Test build/debug/deps/web_live-5d88e78afab66360 SHA256
+224ad5579b4e6ff229246c196e25cf048f8ced4d2b8ff83594c9940b02ff6255;
+worker build/debug/session-worker SHA256
+ef2e5873c87a513b79383a297cfccd08aadafe6310dc0fa6573719feb4d259cd.
+Both harness inputs match prepared source. Consumer Clippy -D warnings and
+launcher syntax PASS; no runtime performed.
+
+After saved handoff and runtime activation: existing S01_WEB_PLAYWRIGHT_CORE path,
+UIB_WEB_LIVE_ALLOW=1, UIB_WEB_LIVE_CASE=b05, exact test/worker paths and SHA256 above,
+UIB_WEB_LIVE_EVIDENCE=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/579204b1-4d1a-4efe-864c-0a0c25e4f076,
+node tests/bridges/web/guarded-live.cjs --run-authorized. Fresh output path remains
+absent during preparation. Three unchanged ACKed frames b05-initial/parent/font.json
+and compact report may exist only during this operation. Deliver factual outcome
+inline, consume then remove own output/files/emptydir and build/source temp, verify
+absence. Older evidence untouched; no persistent archive or screenshot links.
