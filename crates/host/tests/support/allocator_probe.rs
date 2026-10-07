@@ -7,11 +7,57 @@
 #[path = "../../src/quota_allocator.rs"]
 mod guard;
 
-use std::alloc::{GlobalAlloc, Layout};
+use std::{
+    alloc::{GlobalAlloc, Layout, System},
+    sync::atomic::{AtomicBool, Ordering},
+};
 use uiblueprint_host::{OperationClass, process::DarwinPlatform, process_api::WorkerPlatform};
 
 const ALLOCATOR: guard::GuardedAllocator = guard::GuardedAllocator;
 const CAP: usize = 4096;
+static INJECTED: AtomicBool = AtomicBool::new(false);
+
+fn injected_null(size: usize) -> bool {
+    // SAFETY: fd4 is the disposable probe's inherited owned output lane; one
+    // fixed stack byte is written without formatting, allocation or recursion.
+    let marker = [0xa1_u8];
+    if unsafe { libc::write(4, marker.as_ptr().cast(), marker.len()) } != 1 {
+        DarwinPlatform::fatal_exit(-1, &[0; 64], 82);
+    }
+    size == 64 && !INJECTED.swap(true, Ordering::SeqCst)
+}
+unsafe fn fail_one_alloc(layout: Layout) -> *mut u8 {
+    if injected_null(layout.size()) {
+        std::ptr::null_mut()
+    } else {
+        // SAFETY: caller supplies valid nonzero layout; fallback is unchanged System.
+        unsafe { System.alloc(layout) }
+    }
+}
+unsafe fn fail_one_zeroed(layout: Layout) -> *mut u8 {
+    if injected_null(layout.size()) {
+        std::ptr::null_mut()
+    } else {
+        // SAFETY: same layout contract, including zeroing on nonnull success.
+        unsafe { System.alloc_zeroed(layout) }
+    }
+}
+unsafe fn fail_one_realloc(pointer: *mut u8, layout: Layout, new_size: usize) -> *mut u8 {
+    // SAFETY: the caller owns this exact initialized old layout. Inspecting it
+    // before returning null does not free, resize or transfer the old allocation.
+    for offset in 0..layout.size() {
+        if unsafe { pointer.add(offset).read_volatile() } != 0xa5 {
+            DarwinPlatform::fatal_exit(-1, &[0; 64], 83);
+        }
+    }
+    if injected_null(new_size) {
+        std::ptr::null_mut()
+    } else {
+        // SAFETY: original live pointer/layout and valid new size; System owns
+        // the same backend. Null preserves old ownership under its contract.
+        unsafe { System.realloc(pointer, layout, new_size) }
+    }
+}
 
 fn mode() -> u8 {
     let mut mode = [0_u8];
@@ -145,6 +191,53 @@ fn main() {
         }
         b'C' => guard::configure(77, CAP, 2 * CAP, 1_048_576, 5),
         b'S' => guard::fatal(guard::FatalReason::System, 64), // Encoding only, not System-null proof.
+        b'F' | b'Z' => {
+            let old = allocate(32, 16, false);
+            observe(old, 32, false);
+            let forward = if command == b'F' {
+                fail_one_alloc
+            } else {
+                fail_one_zeroed
+            };
+            // SAFETY: valid64-byte layout; callback returns null exactly once,
+            // otherwise System with the required semantics, without unwind or
+            // guard recursion. Old32 stays owned until the deliberate fatal exit.
+            unsafe {
+                guard::allocate_with(Layout::from_size_align(64, 16).unwrap(), forward);
+            }
+            unreachable!("injected null must terminate after releasing only its charge")
+        }
+        b'B' => {
+            // SAFETY: valid bounded layout/callback. Precharge must refuse before
+            // calling the forwarder, so its fixed marker must never be written.
+            unsafe {
+                guard::allocate_with(
+                    Layout::from_size_align(CAP + 1, 16).unwrap(),
+                    fail_one_alloc,
+                );
+            }
+            unreachable!("quota must precede the forwarding callback")
+        }
+        b'G' | b'H' => {
+            let (old_size, new_size) = if command == b'G' {
+                (32, 64)
+            } else {
+                (3072, 2048)
+            };
+            let old = allocate(old_size, 16, false);
+            observe(old, old_size, false);
+            // SAFETY: owned initialized old layout, valid bounded new size and
+            // a non-unwinding callback that preserves old storage on injected null.
+            unsafe {
+                guard::reallocate_with(
+                    old,
+                    Layout::from_size_align(old_size, 16).unwrap(),
+                    new_size,
+                    fail_one_realloc,
+                );
+            }
+            unreachable!("injected null or old+new precharge must terminate")
+        }
         _ => DarwinPlatform::fatal_exit(-1, &[0; 64], 81),
     }
     // A deliberately invoked existing fatal hook reports its private live counter.

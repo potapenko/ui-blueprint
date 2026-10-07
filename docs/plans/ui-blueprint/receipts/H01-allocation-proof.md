@@ -1,7 +1,8 @@
 # H01 allocator and guarded-input proof
 
-Status: first four small allocator cases passed; coherent three-path test checkpoint
-ready. Hostile/RuntimeHost execution and controlled System-null branch remain open.
+Status: first four cases saved731a524; combined private-seam wave now passes five
+cases, including controlled alloc/zeroed/realloc null handling. Three-path follow-up
+checkpoint-ready. Hostile/RuntimeHost/remaining phase execution stays open.
 No independent source acceptance, full H01 or live/SDK/RSS claim.
 
 ## Authority and source basis
@@ -108,3 +109,43 @@ hook separately; do not stage prepared hostile tests or another owner's files.
 Root short Git grant pending. Return SHA/push/input identity/release; then continue
 the same finite packet after the next exact provider/barrier handoff. H01 remains
 waiting_evidence for the named remaining proof; no new task is implied.
+
+## Saved combined seam / bounded injected-null proof
+
+Root amendments a6c1209/d9188b8 authorize Core's private factoring; no public test
+API/command or allocator replacement. Alloc/zeroed seam saved5e5da61, combined
+realloc seam saved00e282e36f509375bd33cc84b2e9a4997d6b6c57. Current source pin:
+`2f1bf278b9265855ececed61ccb5b3f2e1904f17b1855adb6d659782b241e50e`.
+Shipping calls still pass fixed System forwarders. Actual private signatures:
+allocate_with(Layout, unsafe fn(Layout)->*mut u8), and
+reallocate_with(pointer, Layout, new_size, unsafe fn(pointer,Layout,usize)->*mut u8).
+No Integration production edit. The alloc-only bfa9 pin is superseded, not reused
+as proof of realloc. Other worker pins remain unchanged.
+
+Probe callbacks return null once for a64-byte request and delegate other calls
+to System with valid layouts/ownership and zeroing where required. Fixed one-byte
+markers prove exactly one forwarding call; no heap allocation, logging or unwind
+occurs in a callback. Realloc callback inspects initialized old storage without
+freeing/transferring it. Successful precharge then null returns System fatal102,
+requested64/live32: only the new charge released, existing32 retained through fatal.
+Separate over-cap alloc and old+new realloc cases prove zero forwarding calls.
+No huge real/VM allocation or OS pressure. Direct fatal(System) remains separately
+labelled reporting-only; injected callbacks prove real null-handling branches, not
+an exhausted OS allocator.
+
+After root's explicit short ACK, provider inputs matched saved helper checkpoint
+e11b44bd8840e443b6bf46f9f956ca0e5f585b38. Same16 exercised input recipe above,
+before/after identical:
+`4d717bc422445f92b9efa482f32c6d85d658817658c22c45eaf35f54b2c21c53`.
+Only the two Integration test/probe files were working inputs; all14 provider/
+manifest/toolchain files matched e11b44b. Build/example, the affected allocator
+test target (5 passed/0 failed/0 ignored), scoped Clippy -D warnings and own fmt
+all passed once in the existing run-owned task-temp target. All children reaped.
+The named barrier was released immediately after the before/after comparison;
+no hostile execution/preparation was included in its duration.
+
+This closes the identified bounded forwarding-null branch gap. Guarded worker
+input/phase/ACK survival proof still awaits its exact current provider handoff;
+prepared hostile_worker.rs remains unexecuted and excluded from this checkpoint.
+Follow-up save set remains allocator.rs, support/allocator_probe.rs and this receipt
+only. Core controls production/lifecycle changes; root grants the short Git lease.

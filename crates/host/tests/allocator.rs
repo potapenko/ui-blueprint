@@ -47,7 +47,7 @@ fn executable() -> PathBuf {
                 .join("examples/allocator_probe")
         })
 }
-fn run(mode: u8) -> (ProcessState, Option<Control>) {
+fn run(mode: u8) -> (ProcessState, Option<Control>, usize) {
     let path = executable();
     assert!(
         path.is_file(),
@@ -72,7 +72,25 @@ fn run(mode: u8) -> (ProcessState, Option<Control>) {
     let mut used = 0;
     let mut state = ProcessState::Running;
     let mut closed = false;
+    let mut callbacks = [0_u8; 4];
+    let mut calls = 0;
+    let mut output_closed = false;
     while Instant::now() < deadline {
+        if !output_closed {
+            assert!(
+                calls < callbacks.len(),
+                "bounded one-call forwarding marker"
+            );
+            match probe
+                .child
+                .read_output(&mut callbacks[calls..])
+                .expect("probe marker lane")
+            {
+                Transfer::Bytes(n) => calls += n,
+                Transfer::WouldBlock => (),
+                Transfer::Closed => output_closed = true,
+            }
+        }
         if used < bytes.len() && !closed {
             match probe
                 .child
@@ -88,7 +106,7 @@ fn run(mode: u8) -> (ProcessState, Option<Control>) {
             state = probe.child.try_reap().expect("exclusive owned reap");
             probe.reaped = state != ProcessState::Running;
         }
-        if probe.reaped && (closed || used == bytes.len()) {
+        if probe.reaped && (closed || used == bytes.len()) && output_closed {
             break;
         }
         thread::sleep(Duration::from_millis(1));
@@ -112,10 +130,13 @@ fn run(mode: u8) -> (ProcessState, Option<Control>) {
         assert_eq!(record.correlation.session_epoch, 77);
         assert_eq!(record.correlation.operation, 41);
     }
-    (state, record)
+    assert!(output_closed);
+    assert!(callbacks[..calls].iter().all(|b| *b == 0xa1));
+    (state, record, calls)
 }
 fn fatal(mode: u8, reason: u64, requested: u64, live: u64, phase: u8) {
-    let (exit, record) = run(mode);
+    let (exit, record, calls) = run(mode);
+    assert_eq!(calls, 0);
     assert_eq!(
         exit,
         ProcessState::Exited {
@@ -153,10 +174,27 @@ fn publication_allowance_is_thread_owned_and_cannot_escape() {
 fn fatal_encoding_and_absence_have_distinct_attribution() {
     fatal(b'S', 2, 64, 0, 1); // Direct fatal reporting, NOT a System-null-path test.
     fatal(b'C', 7, 0, 0, 1);
-    let (state, status) = run(b'M');
+    let (state, status, calls) = run(b'M');
+    assert_eq!(calls, 0);
     assert_eq!(state, ProcessState::Exited { code: 101 });
     assert!(
         status.is_none(),
         "exit code alone must not invent a fatal record"
     );
+}
+
+#[test]
+fn injected_small_null_releases_its_precharge_without_erasing_live_ownership() {
+    for mode in [b'F', b'Z', b'G'] {
+        let (state, record, calls) = run(mode);
+        assert_eq!(state, ProcessState::Exited { code: 102 });
+        let record = record.expect("actual shared System-null fatal path");
+        assert_eq!(
+            (record.value, record.length, record.auxiliary, record.flags),
+            (2, 64, 32, 1)
+        );
+        assert_eq!(calls, 1, "one forwarding call after successful precharge");
+    }
+    fatal(b'B', 1, 4097, 0, 1); // Failed precharge never invokes the callback.
+    fatal(b'H', 1, 2048, 3072, 1); // Realloc reserves old+FULL new before callback.
 }
