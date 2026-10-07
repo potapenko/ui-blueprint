@@ -557,3 +557,23 @@ path->SHA256 then SHA256. The default-provider hold was released immediately
 after checks and identity comparison, before this receipt update. No preceding
 guard/Replay/rejection wave, Web producer, Native helper or cleanup was repeated.
 Test sources are already saved and unchanged; next checkpoint is this receipt only.
+
+## Scoped packet closeout — 2026-10-07
+
+Root reports this packet's finite allocation evidence scoped accepted, including
+the same reviewer's rejection/direct-validator supplement recorded in6a20b36 and
+the publication allowance supplementf2af5a3. No assigned proof/runtime remains in
+this packet. These scoped acceptances do not establish full H01, SDK/live-platform
+or D06 acceptance; those retain their own owners and gates.
+
+Root released the immediate consumers' retention of the run-owned temporary
+directory /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-h01-allocation-07xaavuw.
+Before removal, its owner matched the current uid501, the directory itself was
+not a symlink, and its sole top-level entry was target. macOS resolves /var through
+/private/var. No process command referenced the task path and lsof found no open
+files within it. Only this named directory was removed; absence was confirmed.
+No own process, source hold or Git lease remains from earlier runtime work.
+Saved sources/receipts are retained; no other temporary directory, Cargo registry,
+Codex configuration or durable application evidence was touched. No new probes,
+builds or runtime verification ran for closeout. This one-file receipt update is
+checkpoint-ready for root's final Git lease and subsequent archive handoff.
