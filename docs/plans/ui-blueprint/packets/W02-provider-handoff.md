@@ -62,3 +62,52 @@ No product Rust/host source or runtime launch/input in this step. Source sanity 
 documentation checks suffice for this setup; live checks follow real provider/host
 composition. Finish compact setup/selector/case handoff and exact-path checkpoint/push
 through Git lease. Do not wait idle for Core while this independent step is ready.
+
+
+## W02 concrete provider implementation grant
+
+Root received Core's first compiling actual interface: SetCheckedExecution
+prepare/dispatch/verify/finish over existing ActionCase/TransitionCase;
+SetCheckedProvider::{resolve_exact,deliver,observe_after}, EffectGate::authorize
+and move-only DeliveryPermit from parent nonce, monotonic control. This is source
+handoff, not accepted host/live behavior. Existing fixture9bd9f66 is saved/pushed.
+
+Classification shipping_product; Restore established ACTIONS/FORMS/IDENTITY,
+no semantic change. Same selected full Spec Basis and user delegation above.
+Immediate outcome: native HTML checkbox Setter provider implementing this actual
+Core interface with exact current resolution and fresh checked verification.
+Economy basis: parallel independent Web source with Core host composition; expand
+only for a demonstrated required shared API gap. No second executor or graph.
+
+Bounded write set: plugins/web/src/collector/mod.rs, action.rs (new in existing
+collector directory), io.rs/acquire.rs for reuse of binding/budget primitives only,
+a narrow fixed setter JS file in that same existing directory when required,
+plugins/web/tests/collector.rs and nearest existing peer fixture files,
+and this existing W02 receipt. Declare concrete subset before edits. No host/
+worker_web.rs, schema, Cargo, Core plugin-api, Native or root-doc changes. If actual
+paths/API differ, return exact dependency; do not invent another adapter layer.
+
+Implement the source handoff's native type=checkbox/actual setter/disabled/identity
+checks; same held object, same Target/Surface/document/scope, canonical fresh
+Resolution evidence. Reject uncertain/stale/ambiguous/custom role/indeterminate
+before permit. Direct Setter means no pointer/keyboard/hidden input-change events
+and no applied-business claim. Delivery accepts actual one-use token supplied by
+Core; never mint a nonce or let read-only observe grant mutation authority. Recheck
+binding/state in dispatch, set requested boolean once even when already equal,
+then observe exact checked result. Missing/mismatch/changed binding cannot succeed;
+possible effect cannot be retried or rolled back implicitly. Existing read-only
+collector and all bounds/privacy/lifetime semantics stay protected.
+
+Core owns final shared API and host gate. Web may implement against the coordinated
+compiling API handoff now; acceptance checks must pin saved Core input before result
+is accepted. Notify root of any signature drift; no silent shared edits. Use bounded
+synthetic protocol peers for focused provider/control/negative checks, affected
+package check/Clippy/format. No live browser/action or source app operation yet.
+Source review and real guarded composition precede separate runtime activation.
+
+Return concrete provider API integration handoff, exact source identities/checks,
+residuals and ready source checkpoint; request short Git lease. Current instructions
+replace image cleanup: ALL newly created images remain in system temp without
+agent deletion, including containing directories; fixed-output tools get temp COPY
+and unchanged originals. Non-image current-operation build temp remains removable.
+Do not create persistent directories or generate images for this source packet.
