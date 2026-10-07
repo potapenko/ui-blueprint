@@ -1,8 +1,8 @@
 # H01 allocator and guarded-input proof
 
-Status: first four cases saved731a524; combined private-seam wave now passes five
-cases, including controlled alloc/zeroed/realloc null handling. Three-path follow-up
-checkpoint-ready. Hostile/RuntimeHost/remaining phase execution stays open.
+Status: small proof saved731a524 and combined null proof saved2a712aa; four real
+guarded-worker cases now pass. Worker test/receipt checkpoint-ready. Remaining
+phase-specific allocator-exhaustion coverage stays explicit below; no full H01 claim.
 No independent source acceptance, full H01 or live/SDK/RSS claim.
 
 ## Authority and source basis
@@ -149,3 +149,97 @@ input/phase/ACK survival proof still awaits its exact current provider handoff;
 prepared hostile_worker.rs remains unexecuted and excluded from this checkpoint.
 Follow-up save set remains allocator.rs, support/allocator_probe.rs and this receipt
 only. Core controls production/lifecycle changes; root grants the short Git lease.
+
+## Saved combined proof and actual guarded-worker wave
+
+Combined checkpoint2a712aa36b826a772aa4ce6665daee912dfb8cb4 was pushed; its exercised
+hash4d717bc4…21c53 matched and the short Git lease was released. Root then explicitly
+continued this packet on saved provider8edf546103430f02595441b303850a886134b0dd,
+after Core fixed its separate held-ingress admission issue. No Integration production
+repair or new parser/harness was introduced. Unconnected native_binding.rs was excluded.
+
+Root/Core ACKed only the finite worker-run inputs. Before execution, every provider/
+manifest/fixture matched saved8edf546. Full64-input before/after digest, unchanged:
+`3ab2314a51bd92c0023991a2f5bf5ccc2a1ed247f56e9c6a7d166b4e1c78360a`.
+Recipe remains sorted compact JSON path->SHA256 then SHA256. Set: root Cargo.toml,
+Cargo.lock,rust-toolchain.toml; Cargo.toml and all TRACKED src/**/*.rs at8edf546 in
+crates/{host,schema,engine,plugin-api}; own tests/hostile_worker.rs; six normal inputs:
+fixtures/golden/{ENV-CAPABILITY-VALID,ENV-SNAPSHOT-VALID,ENV-REQUEST-VALID,ENV-DELTA-VALID}.json
+and fixtures/analysis/{query-gap,measurement-gap}.json. New test was a working input;
+provider was saved. No broader workspace/integration input claim is made.
+
+Executed once in the existing uniquely owned task-temp target:
+
+```sh
+cargo +1.96.0 build --locked --offline -p uiblueprint-host --bin session-worker --target-dir <task-temp>/target
+cargo +1.96.0 test --locked --offline -p uiblueprint-host --test hostile_worker --target-dir <task-temp>/target -- --test-threads=1
+```
+
+All4 passed, zero ignored,2.42s test runtime. Each entry first requires a OnceLock
+prerequisite: an actual2MiB worker/1MiB ordinary quota refuses its fixed2MiB input
+allocation, parent receives ResourceLimit without committed data, then actual Closed/
+reap restores the reservation to QuotaLedger::backing_bytes(). No hostile body is
+constructed/executed until this check passes. It was necessary for the changed real
+supervisor baseline, not a reuse of a mock or unconfirmed old provider.
+
+1. Core0.1 and analysis0.2 depth120 array families bounded by2MiB: kind-first rejects
+   InvalidInput without quota loss; data-before-kind reaches real guarded quota
+   refusal. Actual worker closure/reap releases session/root reservation. Parent
+   only constructs/copies bytes, never deserializes hostile JSON/Value/Content.
+2. Three malformed <64KiB inputs exercise escaped strings, long decimal digits and
+   repeated map keys. All reject InvalidInput without output; the SAME worker then
+   validates/publishes the unchanged normal query. No raw canary payload is published.
+3. Real Observe/Tape path on a16MiB worker: first canonical external-semantics response
+   is correlated/ACKed, then a512KiB data-before-kind malformed channel causes quota
+   failure. Parent returns exact original first-frame bytes, committed mask1/missing2,
+   no second frame/no possible effect. The caller's first bytes survive actual worker
+   reap; releasing the result returns its completion group. No live AX/capture ran.
+4. Real Retain/Replay path preserves the authored base and matches the independent
+   full-source Snapshot at the new supplied ID. A subsequent Measure with16-byte
+   output allowance returns ResourceLimit and zero partial frames, retaining the
+   previously ACKed base lease. This is bounded encoding/publication refusal, NOT
+   an allocator-OOM claim. All owned sessions/completion groups clean up.
+
+The short source barrier was released immediately after result/hash comparison,
+not held for receipt writing or further cases. Focused hostile_worker Clippy with
+-D warnings and own rustfmt passed afterward; no runtime suite repeated. No process,
+UI/browser/SDK/permission or operator signal policy was changed beyond owned children.
+
+## Exact remaining phase-evidence boundary
+
+Real guard/null behavior and decode-family quota exits are proved above. Retain/
+Replay success and output quota refusal do not establish forced allocator exhaustion
+inside every semantic phase. Current Document::from_json combines decode+semantic
+validation while worker's phase marker is Decode; existing HostCompletion also does
+not expose raw fatal phase. Guarded encoding streams into a preallocated buffer,
+so output exhaustion is not evidence of System allocation failure there.
+No fitted multiplier or arbitrary limit-tuning sweep was used to manufacture phase
+coverage. Further validation/replay/admission allocation-failure claims require a
+bounded actual source case plus trustworthy phase attribution (or a narrowly approved
+private seam); Core/root must pin that exact additional scope. Unreachable cases
+remain waiting_evidence, not passed or an environmental/tool failure. This does not
+block saving the concrete completed checks or imply full H01/source acceptance.
+
+Next coherent save set: crates/host/tests/hostile_worker.rs and this receipt only.
+Root short Git grant pending. No other owner source/Cargo/fixture files are staged.
+
+### Mandatory failure-obligation matrix
+
+| Phase / obligation | Executed fact versus source boundary | Exact remaining consumer/case |
+| --- | --- | --- |
+| Installed setup guard | Forced2MiB fixed-input allocation against1MiB ordinary cap; ResourceLimit, no frame, confirmed reap and grant release | Closed bounded prerequisite on8edf546; not general setup/RSS acceptance |
+| Typed decode | Both2MiB data-before-kind families force real guarded quota exits; kind-first rejects InvalidInput | Covered named core0.1/analysis0.2 families; no universal all-input upper coefficient |
+| Rejection/error | Escaped string, long numeric and repeated-map cases reject normally; same worker then succeeds | OOM specifically while formatting rejection has not been isolated; do not infer it from ordinary InvalidInput |
+| Semantic validation | Validation executes inside Document::from_json while phase remains Decode; normal canonical cases pass | Need one bounded source case plus trustworthy attribution separating validator scratch failure from decode; current completion lacks raw phase, so no forced-validation claim |
+| Replay | Real retained base + canonical Delta/Tape produces the independent full result | Forced allocator failure during candidate clone/validation remains open; preserve old base and distinguish it from earlier decode failure |
+| Encoding/publication | Existing test's16-byte OutputRequest is refused in worker_main::publish AFTER encoding, with no partial frame and an older ACKed lease intact | Next precise case: valid query plus bounded trailing whitespace larger than fixed publication slice, OperationClass::Validate, to exercise FixedOutput::write refusal itself |
+| Encoding allocation | App-owned FixedOutput writes by checked slice copy; guarded_encode streams to_writer under PublicationGuard rather than constructing Value/Vec output | This source boundary is not a proof of all dependency allocations. No invented allocator OOM on an allocation-free writer; any claimed serde allocation failure requires an actual bounded reachable case |
+| Retained admission | Normal Retain/Replay and cleanup are real; no K01 quota failure was forced in this wave | Next precise case: predeclare a small valid retained allowance, ACK a small base, refuse a larger canonical candidate without losing the base/lease; label retained-resource refusal separately from GlobalAlloc exhaustion |
+| System null | Bounded alloc/zeroed/realloc callbacks exercise true shared null branches and old/new charge preservation; exact status/reap | Injected-null handling closed; no claim of physical OS exhaustion |
+| Overflow/underflow | Existing unchanged safe QuotaCounter boundary tests reused; real publication/configuration invariant fatalities tested | No undefined invalid deallocation or enormous allocation introduced merely to hit impossible-under-profile corruption branches |
+
+The next writer/admission cases use existing API and bounded bytes, not a new
+harness/public test command. Validation/replay-specific exhaustion needs only its
+exact attribution/case handoff if existing APIs cannot identify the phase; it does
+not reopen the whole mechanism or weaken expectations. Root coordinates the next
+short saved-input barrier after this completed two-path step is saved.
