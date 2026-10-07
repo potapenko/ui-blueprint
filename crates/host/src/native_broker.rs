@@ -100,14 +100,17 @@ impl<'a> NativeBroker<'a> {
         }
         match self.stage {
             Stage::Admit => {
-                if self.channel > 1 || binding.channels & (1 << self.channel) == 0 {
+                if self.channel > 2 || binding.channels & (1 << self.channel) == 0 {
                     self.failure(w, HostError::PermissionDenied);
                     return Ok(false);
                 }
-                let kind = if self.channel == 0 {
-                    HelperKind::ExternalSemantics
-                } else {
+                let kind = if self.channel == 1 {
                     HelperKind::Capture
+                } else {
+                    // AX and probe use the existing non-capture resource lane.
+                    // The canonical channel remains in self.channel, not a third
+                    // helper entitlement: spawn_registered owns two fixed slots.
+                    HelperKind::ExternalSemantics
                 };
                 match helper_runtime::spawn_registered(
                     w,

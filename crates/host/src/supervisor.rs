@@ -428,7 +428,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         deadline: Instant,
     ) -> Result<OperationHandle<'a>, HostError> {
         self.domain.check(session)?;
-        if request.channels & !3 != 0
+        if request.channels & !7 != 0
             || self.state[0].native_bindings[session.slot]
                 .as_ref()
                 .is_none_or(|(epoch, _)| *epoch != session.epoch)

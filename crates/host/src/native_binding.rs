@@ -10,7 +10,7 @@ pub struct NativeHelperBinding {
     pub(crate) channels: u8,
 }
 impl NativeHelperBinding {
-    /// Only existing Native AX/capture channels are selectable. The caller owns
+    /// Existing Native AX/capture/probe channels are selectable. The caller owns
     /// actual authority and the configured output destination; helper/UI payloads
     /// cannot construct or replace this parent-owned binding.
     pub fn authorized(
@@ -19,7 +19,7 @@ impl NativeHelperBinding {
         configuration: &[u8],
     ) -> Result<Self, HostError> {
         if channels == 0
-            || channels & !3 != 0
+            || channels & !7 != 0
             || configuration.is_empty()
             || configuration.len() > NATIVE_CONFIG_BYTES
         {

@@ -478,3 +478,22 @@ RemoteCleanup reports the collector object group, separately from worker process
 This is a private paired-host/worker development record, with no canonical/public CLI
 schema or version change. Old controls without metadata retain their previous meaning;
 an old supervisor rejects the new marker, so diagnostic runs must pin rebuilt pairs.
+
+## Native probe channel admission
+
+NativeHelperBinding and submit_native_observe accept the existing three-channel
+mask1/2/4 (AX/capture/opt-in layout probe), with no new configuration format.
+Canonical channel2 uses the same Configure/Submit.slot2 and Ticket/response/ACK
+exchange already supported by WorkerNative. The parent keeps configuration opaque
+within4032 bytes; the Native producer owns manifest/snapshot-request/revision/uptime
+validation and canonical CachedAllowed/unverified measured-probe semantics.
+
+Broker channel1 alone acquires HelperKind::Capture. AX/channel0 and probe/channel2
+reuse the existing ExternalSemantics non-capture resource classification; canonical
+channel identity remains in the controls and response. There are still only two
+concurrent registered helper/process/ingress slots per session. A channel index
+does not allocate a third slot or enlarge a pool. Existing saturation, correlation,
+publication, deadline/cancel and actual-reap rules apply unchanged. Prior ACKed AX
+survives a failed probe; no synthetic success or reacquisition occurs on failure.
+[P01 provider receipt](../plans/ui-blueprint/receipts/P01-host-channel.md) records
+actual non-UI peer checks; actual Swift/probe qualification stays Native-owned.

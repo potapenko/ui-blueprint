@@ -52,13 +52,40 @@ fn main() {
     if config.slot == 1 && mode[0] == b'X' {
         return;
     }
-    let channel = if config.slot == 0 {
-        Channel::ExternalSemantics
-    } else {
-        assert_eq!(config.slot, 1);
-        Channel::RenderedCapture
+    if config.slot == 2 && mode[0] == b'E' {
+        return;
+    }
+    let channel = match config.slot {
+        0 => Channel::ExternalSemantics,
+        1 => Channel::RenderedCapture,
+        2 => Channel::OptInLayoutProbe,
+        _ => panic!("unsupported channel"),
     };
-    let result = if config.slot == 0 {
+    let result = if matches!(mode[0], b'P' | b'T' | b'E' | b'C') {
+        let Artifact::Finding(case) = Document::from_json(
+            include_bytes!("../../../../fixtures/golden/GEO-SIZE-RATIO__width.json"),
+            65536,
+        )
+        .unwrap()
+        .artifact
+        else {
+            panic!("geometry fixture")
+        };
+        let mut snapshot = case.snapshot;
+        snapshot.context = request.context.clone();
+        snapshot.coverage.scope_id = request.context.scope_id.clone();
+        for observation in &mut snapshot.observations {
+            observation.channel = channel;
+            observation.coverage.scope_id = request.context.scope_id.clone();
+            if channel == Channel::OptInLayoutProbe {
+                observation.answer_source = AnswerSource::Cache;
+                observation.freshness = Freshness::Unverified;
+                observation.freshness_basis = FreshnessBasis::Unverified;
+                observation.last_verified = None;
+            }
+        }
+        ChannelResult::Observed(Box::new(snapshot))
+    } else if config.slot == 0 {
         let Artifact::Snapshot(mut snapshot) = Document::from_json(
             include_bytes!("../../../../fixtures/golden/ENV-SNAPSHOT-VALID.json"),
             65536,
@@ -83,7 +110,7 @@ fn main() {
         artifact: Artifact::ChannelResponse(Box::new(ChannelResponse {
             request_id: request.request_id.clone(),
             session_id: request.context.session_id.clone(),
-            dispatch_sequence: if mode[0] == b'W' {
+            dispatch_sequence: if mode[0] == b'W' || (config.slot == 2 && mode[0] == b'T') {
                 submit.correlation.operation
             } else {
                 config.value
