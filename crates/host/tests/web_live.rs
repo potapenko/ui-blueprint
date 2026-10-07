@@ -17,7 +17,7 @@ use uiblueprint_host::{
     process::DarwinPlatform,
     process_api::SpawnSpec,
     supervisor::RuntimeHost,
-    web_config::{WebId, WebRef, WebSelection},
+    web_config::{WebId, WebRef, WebRootSeed, WebSelection},
     worker_tape,
 };
 use uiblueprint_schema::model::*;
@@ -103,6 +103,28 @@ struct Binding {
     target: Identity,
     surface: Identity,
 }
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct RootDiscovery {
+    binding: Binding,
+    document_backend_id: u32,
+    backend_node_id: u32,
+}
+fn rooted_selection(attached: &Attached<'_>, discovery: &RootDiscovery) -> WebSelection {
+    assert_eq!(attached.binding.target, discovery.binding.target);
+    assert_eq!(attached.binding.surface, discovery.binding.surface);
+    WebSelection::Rooted {
+        root: WebRootSeed {
+            session_id: attached.session_id.clone(),
+            target: discovery.binding.target.clone(),
+            surface: discovery.binding.surface.clone(),
+            document_backend_id: discovery.document_backend_id,
+            backend_node_id: discovery.backend_node_id,
+            sensitivity: Sensitivity::Public,
+        },
+        max_visited_nodes: 256,
+    }
+}
 struct Attached<'a> {
     handle: SessionHandle<'a>,
     binding: Binding,
@@ -144,7 +166,7 @@ fn attach<'a>(
     session.session_id = session_id.clone();
     session.target = binding.target.clone();
     session.surfaces = vec![binding.surface.clone()];
-    session.allowed_scopes = ["left", "sized", "draft", "popup"]
+    session.allowed_scopes = ["left", "sized", "draft", "popup", "rooted"]
         .map(|s| Id(format!("f01-{s}")))
         .into();
     session.capabilities[0].reason = Some(Id("bounded-live-source-under-verification".into()));
@@ -373,6 +395,78 @@ fn guarded_live_f01() {
     let diagnostic =
         std::env::var("UIB_WEB_LIVE_CASE").is_ok_and(|v| v == "first_observe_diagnostic");
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("rooted") {
+            fixture.stimulus("popup");
+            let discovery: RootDiscovery =
+                serde_json::from_value(fixture.call("root", json!({"page":"a"})))
+                    .expect("actual fixture root");
+            let a = attach(&mut host, fixture.binding("a"), 1);
+            fixture.before("a", "rooted-current");
+            let first = observe(
+                &mut host,
+                &a,
+                "rooted",
+                vec![
+                    Field::Role,
+                    Field::AccessibilityName,
+                    Field::LayoutBounds,
+                    Field::Focused,
+                    Field::Expanded,
+                ],
+                rooted_selection(&a, &discovery),
+                "rooted-current",
+            );
+            fixture.outcome("rooted-current", &first);
+            let document = decoded(&first);
+            let issued = dom_ref(&document);
+            assert_eq!(issued.key.key.0, discovery.backend_node_id.to_string());
+            assert_eq!(issued.session_id, a.session_id);
+            assert_eq!(issued.surface, discovery.binding.surface);
+            fixture.check_frame(
+                "a",
+                "rooted-current",
+                "rooted",
+                &document,
+                first.bytes(0).expect("ACKed rooted frame"),
+            );
+            let preserved = first.bytes(0).unwrap().to_vec();
+            for case in ["rooted-wrong-binding", "rooted-wrong-document"] {
+                let mut selected = rooted_selection(&a, &discovery);
+                let WebSelection::Rooted { root, .. } = &mut selected else {
+                    unreachable!()
+                };
+                if case == "rooted-wrong-binding" {
+                    root.surface.generation = Id("wrong-fixture-generation".into());
+                } else {
+                    root.document_backend_id = if root.document_backend_id == 1 { 2 } else { 1 };
+                }
+                fixture.before("a", case);
+                let response = observe(&mut host, &a, "rooted", left_fields(), selected, case);
+                fixture.outcome(case, &response);
+                assert_eq!(terminal_code(response.terminal), "resync_required");
+                assert_eq!(response.committed(), 0);
+                fixture.check("a", case, "refused", None);
+                drop(response);
+            }
+            fixture.stimulus("root-remount");
+            fixture.before("a", "rooted-stale");
+            let response = observe(
+                &mut host,
+                &a,
+                "rooted",
+                left_fields(),
+                rooted_selection(&a, &discovery),
+                "rooted-stale",
+            );
+            fixture.outcome("rooted-stale", &response);
+            assert_eq!(terminal_code(response.terminal), "resync_required");
+            assert_eq!(response.committed(), 0);
+            fixture.check("a", "rooted-stale", "refused", None);
+            drop(response);
+            assert_eq!(first.bytes(0).unwrap(), preserved);
+            drop(first);
+            return;
+        }
         if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("popup_relations") {
             fixture.stimulus("popup");
             let a = attach(&mut host, fixture.binding("a"), 1);

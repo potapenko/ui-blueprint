@@ -12,9 +12,9 @@ const CANARY = 'W01_LIVE_PRIVATE_CANARY';
 const MAX_LINE = 262144;
 const PREFIX = '@UIB_LIVE ';
 const EVIDENCE_ROOT = require('node:fs').realpathSync(require('node:os').tmpdir());
-const CASES = new Set(['popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
+const CASES = new Set(['rooted-current','rooted-wrong-binding','rooted-wrong-document','rooted-stale','popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
 const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required']);
-const FRAME_FILES = Object.freeze({'popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
+const FRAME_FILES = Object.freeze({'rooted-current':'rooted-context.json','popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
 function bounded(promise, ms, code) {
   let timer; return Promise.race([promise, new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error(code)), ms);
@@ -126,10 +126,27 @@ async function run(evidence, report) {
           surface:{id:frameTree.frame.id,generation:frameTree.frame.loaderId}};
       } finally { await session.detach(); }
     }
+    let rootMembers;
     async function command(message) {
       const payload = message.payload; const page = pages[payload.page]; assert(page, 'owned page only');
       switch (message.command) {
         case 'binding': return binding(page);
+        case 'root': {
+          const session=await context.newCDPSession(page);
+          try {
+            const {root}=await session.send('DOM.getDocument',{depth:0,pierce:false});
+            const {nodeIds}=await session.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:'#f01'});assert.equal(nodeIds.length,1);
+            const described=await session.send('DOM.describeNode',{nodeId:nodeIds[0],depth:0,pierce:false});
+            const children=await session.send('DOM.querySelectorAll',{nodeId:nodeIds[0],selector:'*'});assert.equal(children.nodeIds.length,8);
+            rootMembers=new Map();
+            for(const nodeId of [nodeIds[0],...children.nodeIds]){
+              const {node}=await session.send('DOM.describeNode',{nodeId,depth:0,pierce:false});
+              const attrs=node.attributes||[];const at=attrs.indexOf('id');rootMembers.set(String(node.backendNodeId),at<0?'label':attrs[at+1]);
+            }
+            assert.deepEqual([...rootMembers.values()],['f01','label','draft','suggestions','validation','commit','applied','open-popup','surprise']);
+            return {binding:await binding(page),document_backend_id:root.backendNodeId,backend_node_id:described.node.backendNodeId};
+          } finally {await session.detach();}
+        }
         case 'before': assert(CASES.has(payload.case)); report.last_stage=payload.case; before.set(payload.case, await uiState(page)); return {};
         case 'outcome': {
           assert(CASES.has(payload.stage)&&TERMINALS.has(payload.terminal));
@@ -154,8 +171,21 @@ async function run(evidence, report) {
             assert.equal(response.result.status,'observed'); const s = response.result.data;
             assert.equal(s.coverage.status,'partial'); assert.equal(s.source_state,null);
             assert(s.nodes.length <= 32); const dom = s.nodes.filter(n=>n.key.namespace==='web.dom');
-            assert.equal(dom.length,payload.kind==='popup'?5:1); assert(s.observations.every(o=>o.freshness==='current'&&o.consistency==='unknown'));
-            if (payload.kind === 'popup') {
+            assert.equal(dom.length,payload.kind==='rooted'?9:payload.kind==='popup'?5:1); assert(s.observations.every(o=>o.freshness==='current'&&o.consistency==='unknown'));
+            if (payload.kind === 'rooted') {
+              assert(rootMembers);assert.deepEqual(new Set(dom.map(n=>n.key.key)),new Set(rootMembers.keys()));
+              const named=id=>dom.find(n=>rootMembers.get(n.key.key)===id);
+              const root=rectangle(named('f01'));[380,20,360].forEach((expected,i)=>assert(Math.abs(root[i]-expected)<=f01.geometry_tolerance_css_px));assert(root[3]>0);
+              const input=named('draft'), trigger=named('open-popup'), suggestions=named('suggestions');
+              assert.equal(property(trigger,'expanded').value,true);assert.equal(property(input,'focused').value,false);
+              const same=(a,b)=>a.namespace===b.namespace&&a.key===b.key;
+              assert(s.relations.some(r=>r.kind==='controls'&&same(r.from,input.key)&&same(r.to,suggestions.key)));
+              assert(!s.relations.some(r=>r.kind==='anchored_to'||(r.kind==='controls'&&same(r.from,trigger.key))));
+              const relation=s.relations.find(r=>r.kind==='corresponds_to'&&same(r.from,input.key));assert(relation);
+              const ax=s.nodes.find(n=>same(n.key,relation.to));assert.equal(property(ax,'role').value,'combobox');assert.equal(property(ax,'accessibility_name').value,'City');
+              assert.equal(property(input,'layout_bounds').value.coordinate_space.id,s.context.surfaces[0].id);
+              assert.equal(s.focus.keyboard.status,'unknown');assert.equal(s.focus.active_descendant.status,'unknown');
+            } else if (payload.kind === 'popup') {
               const [trigger,popup,close,input,suggestions]=dom;
               const same=(a,b)=>a.namespace===b.namespace&&a.key===b.key;
               const relation=(kind,from,to,method)=>assert(s.relations.some(r=>r.kind===kind&&same(r.from,from.key)&&same(r.to,to.key)&&r.evidence.method===method&&r.evidence.provenance==='reported'&&r.evidence.source_namespace==='web.dom'));
@@ -205,6 +235,7 @@ async function run(evidence, report) {
         case 'stimulus': {
           if (payload.action==='textLarge' || payload.action==='remount')
             await page.evaluate(name=>window.f01.operate(name),payload.action);
+          else if (payload.action==='root-remount') {await page.evaluate(()=>{const root=document.getElementById('f01');root.replaceWith(root.cloneNode(true));});}
           else if (payload.action==='popup') {
             await page.locator('#open-popup').click();
             const declared=await page.evaluate(()=>({parent:document.getElementById('portal').parentElement.tagName,anchor:document.getElementById('portal').dataset.anchor,inputInside:document.getElementById('portal').contains(document.getElementById('draft'))}));
@@ -244,7 +275,7 @@ async function run(evidence, report) {
     });
     const exit = await bounded(exited,90000,'rust_consumer_timeout'); await chain; report.test_exit={code:exit.code,signal:exit.signal};
     assert.equal(exit.code,0); assert.equal(exit.signal,null); assert(!failed,'live_case_failed');
-    assert.equal(before.size,0); if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
+    assert.equal(before.size,0); if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
   } catch (_) {
     report.failure??={code:'live_run_failed',phase:report.phase}; throw new Error('live_run_failed');
   } finally {
@@ -270,7 +301,7 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');

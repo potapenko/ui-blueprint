@@ -103,3 +103,45 @@ Immediate consumer: existing private host caller can construct Rooted only from
 a real selected backend object and matching runtime binding; no fabricated refs.
 Next activation must separately implement the finite actual-root fixture harness,
 then pin its build and run; this source checkpoint alone claims no live acceptance.
+
+## Prepared rooted live sequence
+
+Root opened exactly existing crates/host/tests/web_live.rs,
+tests/bridges/web/guarded-live.cjs and this receipt for the actual-root sequence.
+Mode rooted uses existing popup setup; a fixture-only CDP session obtains actual
+#f01 node/backend and document identity, with one unique root and8descendants
+verified against literal fixture membership. Target/frame/loader comes from actual
+page binding; seed session_id comes from actual host Attached. No fake prior refs.
+
+One current rooted request asks Role/AccessibilityName/LayoutBounds/Focused/Expanded.
+Expected9DOM nodes are section,label,draft,suggestions,validation,commit,applied,
+open-popup,surprise; BODY portal and all siblings excluded. Check section authored
+x380/y20/width360, actual input City/combobox and compatible viewport bounds,
+trigger expanded, input not focused, input Controls suggestions. No false trigger
+Controls unobserved popup or AnchoredTo. Scope/focus/coverage remain honest.
+Then wrong seed surface generation and wrong document ID refuse; separate clone
+remount makes original seed stale. All3refusals commit0; original ACKed bytes stay
+equal. Invariance applies to each observation/refusal; setup/remount is separate.
+Current32/depth8/64KiB/250ms/source16/256visited/100methods and all byte/cleanup/
+whole120s bounds remain unchanged. No extra scenario, site or physical input.
+
+Build root: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-rooted-live-v8km8tuc.
+Exact export: saved providercadd345 Cargo/lock/toolchain/crates/plugins-web/fixture/
+driver files, overlay source1d83dc8 eight changed production files and current two
+harness files.98inputs use prior97 recipe plus saved provider's new engine source.
+Final compact sorted JSON path→SHA256 fingerprint: 1a5eabf6789ccb55d7c41c5890bbf979e913d0ed11199353d84889e30b806e4e.
+Test build/debug/deps/web_live-5d88e78afab66360 SHA256
+c83d2557d958bf884620c9b8e6ac07cfc47fd03b9bc632a444817d575d6332f6;
+worker build/debug/session-worker SHA256
+03919847d82fde5be8ce38148ddbea849d47bb3a3d84bd1d732ca850ffca2c22.
+No-run and affected consumer Clippy -D warnings PASS; launcher syntax PASS. Before runtime require saved
+harness equality and these exact pins. Root auto-activated one sequence after
+checkpoint/push and matching pins; no extra approval or shared-source hold.
+
+Runtime command uses existing Node/Playwright path and guarded-live.cjs
+--run-authorized with UIB_WEB_LIVE_ALLOW=1, UIB_WEB_LIVE_CASE=rooted,
+UIB_WEB_LIVE_TEST/WORKER at these build paths, matching *_SHA256 and
+UIB_WEB_LIVE_EVIDENCE=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/0b406b15-a58f-4593-8bc6-783a08a3d939.
+This exclusive fresh temp pathname is not created yet. Inline result delivery,
+then remove only its report/rooted-context.json/emptydir and current build/source
+temp and verify absence; no persistent archive or changes to earlier evidence.
