@@ -1,15 +1,15 @@
 # D05 — limits, tolerances and unresolved calibration
 
 - Domain: `uib.development.d05`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [D05-RET-002](d05-memory.md#change-record).
-- Node type: leaf; contract: `UIB.D05@2`; clause: `UIB.D05.CONTENT`; supersedes @1.
+- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [D05-RET-002 / PARTITION-001](d05-memory.md#change-record), [D05-WORK-001](d05-working-memory.md).
+- Node type: leaf; contract: `UIB.D05@3`; clause: `UIB.D05.CONTENT`; supersedes @2.
 - Authority: Active / Stability: Evolving; policy selected, numeric coverage bounded.
 - Read when: S01 limits/validator or a platform/geometry acceptance test is prepared.
 - Do not read when: no limits/precision/deadline choice is affected.
 - Requires: [GEOMETRY@1](../../product/geometry.md), [PROJECTIONS@1](../../product/projections.md),
   [LIFECYCLE@1](../../product/lifecycle.md), [CACHE@1](../../product/cache.md),
   [PERFORMANCE@1](../../acceptance/performance.md), [evidence](evidence.md),
-  [D05-MEMORY@1](d05-memory.md) for retained storage/admission.
+  [D05-MEMORY@2](d05-memory.md), [D05-WORK@1](d05-working-memory.md) for host ownership/enforcement.
 - Owner/deadline: S01 sizing before W01/M01; W01/M01/P01 calibration before
   corresponding tests; K01 implements the established retention bounds.
 
@@ -70,16 +70,17 @@ pilots and privacy requirements remain unchanged.
 distinguish owned capacities from wire bytes, parser/encoding/framing work and RSS.
 Larger actual32-node Web/76-node Native inputs remain partial; configured synthetic
 trees/list payloads are labelled synthetic. No universal decoder bound is claimed.
-`D05-RET-002` now selects explicit finite retained limits, quota ownership,
-admission/eviction and lifetime in D05-MEMORY@1, before K01 storage source work.
-This closes the retained-policy decision only; implementation/proof remain open.
-It does not change scenario scope/deadlines/tolerances, D02 packaging or wire schema.
-Independent P1-R1 identifies unbounded path expansion in the current plugin depth
-check. Its assigned repair is separate; small memory samples do not close bounded-
-work/deadline acceptance or justify reducing limits to hide it.
+`D05-RET-002` selected retained limits/admission/lifetime before K01. Reviewed
+designdb629fc now supplies D05-WORK-001/D05-PARTITION-001: actual worker allocation
+guard, fixed parent pools and supervised retained partitions, through D05-WORK@1,
+D05-MEMORY@2 and D02@2. This registers technical choices, not runtime acceptance.
+Scenario scopes/deadlines/tolerances, core0.1/analysis0.2 shapes and product authority
+are unchanged. Accepted shared repairs remain protected; small memory examples
+cannot independently prove bounded work or justify easier request limits.
 
 Full D05-RES remains open before live W01/M01: decoder/replay/encoding allocation
 enforcement, framing and completed-channel owners, aggregate working-memory quotas,
 actual cleanup and bounded resync proof. A host permit or retained counter alone
-does not enforce transient allocations. The subprocess proposal is not adopted;
-any D02 owner/lifecycle delta requires its own bounded decision before source work.
+does not enforce transient allocations. The reviewed reusable-worker design is now
+adopted under [registration authority](../../../plans/ui-blueprint/packets/D05-runtime-registration.md),
+before source work; platform/allocator/publication and unchanged D06 gates stay open.

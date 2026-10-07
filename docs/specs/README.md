@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 8.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 9.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -41,9 +41,9 @@ policy (`DEV.RUST@2`) and initial candidate interfaces/gates; it does not accept
 product runtime or alter existing CONTENT@1 requirements. The linked direct user
 clarification preserves explicit request-driven collection, without periodic polling.
 
-`D05-RET-002` selects [D05@2 retained memory policy](development/decisions/d05-memory.md)
-under ROADMAP's delegated engineering authority before K01 storage implementation.
-Working-memory enforcement and live acceptance remain open; D02/wire contracts unchanged.
+`D05-RET-002` originally selected [retained memory policy](development/decisions/d05-memory.md)
+under D05@2/ROADMAP before K01 storage; that decision left D02/wire unchanged.
+Working-memory implementation and live acceptance remain open.
 
 `L01-ANALYSIS-001` registers [D03@2](development/decisions/d03-data.md) and
 [ANALYSIS@1](product/analysis.md) under delegated ROADMAP representation authority,
@@ -57,6 +57,12 @@ source-number fidelity without new dependencies, tolerance or core wire changes.
 `W01-TRANSPORT-001` records [D07@4](development/decisions/d07-reuse.md)'s narrow
 numeric-loopback ws codec/log-boundary adoption before Web transport source work.
 All source-audit guards apply; runtime float_roundtrip and open D05 gates remain.
+
+`D02-WORKER-001` / `D05-WORK-001` / `D05-PARTITION-001` register reviewed designdb629fc:
+[D02@2](development/decisions/d02-boundaries.md), [D05@3](development/decisions/d05-limits.md),
+[D05-MEMORY@2](development/decisions/d05-memory.md), [D05-WORK@1](development/decisions/d05-working-memory.md).
+Delegated technical registration is not runtime acceptance; D07@4, wire meanings
+and all implementation/platform/positive D06 gates remain protected.
 
 ## Select a route
 

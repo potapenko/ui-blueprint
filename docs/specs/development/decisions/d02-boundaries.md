@@ -1,73 +1,96 @@
 # D02 — packaging and request-owned sessions
 
-- Domain: `uib.development.d02`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence).
-- Node type: leaf; contract: `UIB.D02@1`; clause: `UIB.D02.CONTENT`.
-- Authority: Active / Stability: Evolving; chosen design, interface proof pending.
-- Read when: S01 plugin boundary, W01/M01 adapters or lifecycle integration.
-- Do not read when: only pure geometry is affected.
-- Requires: [BOUNDARIES@1](../../product/boundaries.md),
-  [EXCHANGE@1](../../product/exchange.md), [LIFECYCLE@1](../../product/lifecycle.md),
-  [NATIVE@1](../../product/native.md), [PRIVACY@1](../../product/privacy.md),
-  [D01](d01-support.md), [D03](d03-data.md), [D05](d05-limits.md), [evidence](evidence.md).
-- Owner/deadline: S01 common interface proof before P1 freeze; W01/M01 realization.
+- Domain: `uib.development.d02`; accepted/released implementation: none.
+- Node type: leaf; contract: `UIB.D02@2`; clauses: `UIB.D02.CONTENT`, `UIB.D02.WORKER`, `UIB.D02.PUBLICATION`, `UIB.D02.LIFECYCLE`; supersedes @1.
+- Authority: Active / Evolving; C01-DEC-001 and D02-WORKER-001 below.
+- Read when: plugin/host boundary, adapter or lifecycle integration.
+- Do not read when: only unchanged pure geometry is affected.
+- Requires: [BOUNDARIES@1](../../product/boundaries.md), [EXCHANGE@1](../../product/exchange.md), [LIFECYCLE@1](../../product/lifecycle.md), [NATIVE@1](../../product/native.md), [PRIVACY@1](../../product/privacy.md), [D01](d01-support.md), [D03](d03-data.md), [D05](d05-limits.md), [evidence](evidence.md).
+- Owner/deadline: assigned host owner before bounded live use; W01/M01 own adapters.
 
-## Requirement and evidence
+## UIB.D02.CONTENT — preserved boundaries
 
-Rust owns analytics and state; collectors are narrow and bounded. R01 demonstrates
-direct addressed CDP operations; R02/F02 demonstrate a thin public-API Swift helper.
-Neither prototype proves one shared plugin interface. F02 concurrent capture
-actually failed and withheld AX results, so independent-session progress is open.
+Rust owns analytics/state; collectors remain narrow and bounded. Statically link
+schema/engine/plugin API and selected adapters; no dynamic ABI, network daemon,
+service framework, mandatory model or Apple SDK in core. Default CLI can own a
+short session; reusable APIs support multiple explicit requests and no idle UI
+collection. Optional events invalidate only; no polling to manufacture freshness.
+Web uses owned CDP plus scoped DOM/CSSOM and separately addressed AX. No whole
+DOMSnapshot then filtering; unsupported boundaries remain partial. D07 governs
+transport adoption. Do not copy another accessibility engine or full CLI chain.
+Native uses owned thin public-API Swift helpers and bounded UTF-8 NDJSON; escaped
+newlines are data. Framing precedes parse; diagnostics never share machine output.
+Own handles/process lifetime by session. Capture admission/serialization is limited
+to capture resource/deadline, never unrelated AX/Rust work. No global native-call
+queue or lock across AX/capture waits. Async cancellation does not prove OS cleanup.
+Attach negotiates plugin/version/schema, exact target/generations and per-channel
+capabilities; observe carries scope/fields/limits/freshness. Detach invalidates
+handles/subscriptions and cleans owned helpers, never closes user applications.
 
-## Chosen approach
+## UIB.D02.WORKER — adopted reusable failure boundary
 
-- Statically linked Rust schema/engine/plugin API/CLI and selected Rust adapters;
-  no dynamic ABI, network daemon, service framework or mandatory model process.
-- Web adapter: Rust session owns CDP connection and a small scoped DOM/CSSOM
-  collector; protocol library approval belongs to D07 before W01 adoption.
-  Addressed AX is a separate source. Full DOMSnapshot then filtering is excluded
-  from the normal scoped path; unsupported boundaries stay partial/explicit.
-- Native adapter: own thin Swift helper over bounded newline-delimited UTF-8 JSON
-  pipes; not a foreign CLI invocation per measurement. Session may retain its
-  helper between explicit requests, idle without collecting. One target/session
-  owns its handles and process lifetime. Use length-limited framing before parsing;
-  escaped JSON newlines are data; diagnostics never share machine stdout.
-- Emit each completed channel result with request/session ID before waiting for
-  another channel. Parent owns final aggregation/deadline, preserves completed
-  sanitized data on capture timeout and rejects late success after cancellation.
-  A hung native call has an owned-process termination boundary; async cancellation
-  alone is not proof the OS call stopped. No shared lock across AX/capture waits.
-- Capture serialization, if needed after diagnosis, is scoped to capture resource
-  with bounded admission/deadline; it must not serialize unrelated AX or Rust work.
-  This is a repair direction, not evidence that serializing fixes the continuation
-  failure or that capture concurrency works.
-- Attach negotiates plugin ID/version/schema range, target/generations and
-  per-channel capabilities; observe carries scope/fields/limits/freshness policy.
-  Detach clears subscriptions/handles and owned helpers, never closes user apps.
-  Subscription remains optional; events only invalidate, never recollect.
-- Request deadline uses parent monotonic time; transfer remaining budget to a
-  helper with its own monotonic clock and keep parent deadline authoritative.
-  Do not pretend independent process clock readings share a clock domain.
-- Default CLI invocation can own a short session; reusable session API permits
-  multiple explicit requests in an existing host. Snapshot-file analysis is local;
-  no auto-started background service is needed to implement that path.
+Use one reusable allocation-guarded Rust worker per attached session, supervised
+outside its failure boundary. The real host owner is crates/host, with statically
+linked canonical libraries; no second graph/parser/engine. Attach may launch the
+worker; measurements on that session reuse it. Guard/profile: [D05-WORK@1](d05-working-memory.md).
+HostDomain owns root retained ledger and parent buffers; RuntimeHost borrows it.
+Caller authority is a trusted TargetLease, not UI data/discovery. Fixed slot/epoch/
+sequence handles bind attach, reserve_input, submit, next_event, cancel/detach/shutdown.
+OperationClass must agree with canonical payload; read-only denies mutation intents.
+Only worker executes typed decode/validation, ObservationSession, K01 and engine.
+HostCompletion owns terminal metadata, committed canonical byte leases, missing
+channels and effect receipt. It is not a new graph DTO. No new public completion
+JSON/ErrorCode/CLI syntax is implied; publication requires its consumer contract.
+Legacy in-process APIs/file CLI are not silently relabelled memory-enforced.
+Bounded operations, including analysis0.2 decode, use the worker path. The new
+local failure boundary does not claim a same-user native-code security sandbox.
 
-Rejected: linking Apple SDK into core; own accessibility-name engine copied from
-Playwright; invoking a foreign full CLI chain per request; network daemon or
-dynamic plugin ABI without a consumer; globally queued native calls; polling to
-manufacture freshness. Alternatives add dependencies or contradict observed risks.
+## UIB.D02.PUBLICATION — completion outside the worker
 
-## Proof obligation, not marked passed
+Reserve parent channel slots and worker publication buffer before work; refuse
+capacity exhaustion before collection, preserving earlier leases. Validate
+correlation/context and adapter redaction, then stream unchanged canonical bytes
+without cloning retained snapshots or building unbounded Value. Publication
+allowance covers wrappers/errors/control; code must prove this bounded path.
+Private fixed headers carry protocol version/session epoch/operation/channel/length,
+then payload and commit record. Parent copies directly into reserved slot; only
+complete matching payload+commit before terminalization is committed and ACKed.
+Worker waits for ACK before next risky channel/work. Do not advertise completion
+before that boundary. Oversize/failed channels remain incomplete, never empty success.
+Earlier ACKed channels survive later worker/capture failure, timeout and cancellation.
+Parent never reparses bodies; payload UI text cannot forge length-framed controls.
+Typed reuse occurs in an admitted worker. Caller-held completion stays charged
+until real release, independently of Store teardown or pending_encoded_bytes=0;
+its lease must not block another host slot. Logs contain bounded codes/counts only.
 
-S01 owns `D02-PROOF` before P1 interface freeze: one common request/response envelope
-round-trips **both** the F01 Web and current F02 native fixtures through narrow
-test bridges. Exact target, requested fields, channel evidence, capabilities and
-partial coverage must survive the same Rust validator. Check incompatible version,
-oversize frame, malformed frame, timeout after AX completion, cancellation, detach
-and late response rejection. Run explicit requests only; native lane needs root's
-reservation. Existing scripts need a bounded integration packet from root if the
-S01 write set lacks those bridges; mocks alone do not close the two-platform proof.
+## UIB.D02.LIFECYCLE — deadline and truthful effects
 
-This obligation does not block starting T01 or S01's candidate schema. It **does**
-block freezing P1 interface as verified. W01/M01 remain responsible for real
-collector/input correctness; K02/V01 separately test lifecycle/privacy/isolation.
+Parent monotonic deadline is authoritative; pass remaining duration, with local
+worker/helper clock domains/watchdogs rather than serialized shared Instant claims.
+Worker owns the adapter ObservationSession clock; attach returns that domain for
+canonical requests. Reject every late commit/ACK after parent terminalization.
+Cancel/expiry stops new dispatch and kills only registered owned workers/helpers;
+no unregistered grandchildren. Capture lease remains held until helper exit/reap;
+AX stays independent. Liveness/cleanup watchdogs never collect UI.
+Before future external mutation, parent holds a minimal redacted effect_possible
+receipt outside worker, then issues a one-use nonce under Target mutation ownership
+and global physical-input lane where needed. No nonce after cancel/expiry.
+Before any permit report not_dispatched; after possible delivery, loss/timeout gives
+action_outcome_unknown, stops dependent steps and never retries automatically.
+At cleanup deadline without confirmed reap return CleanupPending; quarantine slot,
+capture lease and root grant. Never replace/reuse early or infer release from ID
+loss. Keep bounded cleanup ownership; failed destructor cleanup fails closed,
+retaining reservation. HostDomain outlives all leases; shutdown is incomplete while
+owned children remain. OS inability to terminate is explicit failure, not success.
+
+## Proof and change record
+
+D02-PROOF still requires real F01/current F02 common-wire evidence with identity,
+coverage, versions/oversize/malformed frames, AX completion plus capture failure,
+cancel/detach/late replies. Mocks alone do not freeze P1. Historical R01/R02/F02
+and later fault work do not prove this new host. Platform owner/lane gates remain;
+W01/M01 prove collection/input, K02/V01 lifecycle/privacy/isolation. New allocator/
+publication/quarantine/action-nonce proof and unchanged D06 positives stay open.
+D02-WORKER-001 adopts reviewed designdb629fc under ROADMAP/PLAN.UIB@1 through
+[registration packet](../../../plans/ui-blueprint/packets/D05-runtime-registration.md).
+Core0.1/analysis0.2 shapes, product authority/privacy/deadlines remain unchanged.

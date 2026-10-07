@@ -2,16 +2,19 @@
 
 **Selected implementation direction: one reusable, allocation-guarded Rust worker
 per attached session, with a bounded supervisor outside its failure boundary.**
-This is a concrete proposal for root's D02/D05 registration, not current policy,
-implemented enforcement or live acceptance. It closes the mechanism choice; no
-further general profiling or universal-multiplier search is proposed.
+This reviewed design is now registered as a technical contract, not implemented
+enforcement or live acceptance. The body below preserves exact design revision
+db629fc0e342ff567f5560344dffa4104d8fb8ef; its future implementation/proof duties remain.
 
 Authority: approved PLAN.UIB@1 and ROADMAP's delegated D02/D05 choices through the
-[finite packet](../plans/ui-blueprint/packets/D05-runtime-decision.md). Preserve
-[D02@1](../specs/development/decisions/d02-boundaries.md),
-[D05@2](../specs/development/decisions/d05-limits.md),
-[retained policy@1](../specs/development/decisions/d05-memory.md) and D07@3 until
-the deltas below are reviewed/registered. Existing core0.1 and analysis0.2 remain.
+[finite decision](../plans/ui-blueprint/packets/D05-runtime-decision.md),
+[independent review](../plans/ui-blueprint/receipts/D05-runtime-review.md) and
+[registration](../plans/ui-blueprint/packets/D05-runtime-registration.md).
+Current norms: [D02@2](../specs/development/decisions/d02-boundaries.md),
+[D05@3](../specs/development/decisions/d05-limits.md),
+[D05-MEMORY@2](../specs/development/decisions/d05-memory.md),
+[D05-WORK@1](../specs/development/decisions/d05-working-memory.md).
+D07@4, existing core0.1/analysis0.2 and unchanged D06 gates remain protected.
 
 ## Why this mechanism
 
