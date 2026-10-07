@@ -72,6 +72,9 @@ impl DiagnosticRecord {
             HostError::SystemAllocationFailure => 14,
             HostError::CleanupPending => 15,
             HostError::ResyncRequired => 16,
+            // This record is Observe-only; retain its existing coarse code set.
+            // Typed action terminals carry their own refusal category instead.
+            HostError::ActionRefused => 6,
         };
         Self {
             stage,

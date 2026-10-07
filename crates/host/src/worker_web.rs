@@ -87,12 +87,12 @@ impl WebSession {
                 Ok(case) => {
                     crate::worker_action::publish_prepared(io, publication, control, case, limit)
                 }
-                Err(issue) => crate::worker_action::publish_refusal(
+                Err(issue) => crate::worker_action::publish_issue(
                     io,
                     publication,
                     control,
-                    issue.scope_id,
-                    action_issue_error(issue.code),
+                    issue,
+                    HostError::ActionRefused,
                     limit,
                 ),
             }
@@ -426,17 +426,6 @@ impl WebSession {
             self.collector.acknowledge_invalidation();
         }
         result
-    }
-}
-fn action_issue_error(code: uiblueprint_schema::model::ErrorCode) -> HostError {
-    use uiblueprint_schema::model::ErrorCode::*;
-    match code {
-        PermissionRequired => HostError::PermissionDenied,
-        StaleTarget | TargetUnresolved | AmbiguousTarget | ResyncRequired => {
-            HostError::ResyncRequired
-        }
-        Timeout => HostError::DeadlineExpired,
-        _ => HostError::InvalidInput,
     }
 }
 fn collector_error(error: collector::Failure) -> HostError {

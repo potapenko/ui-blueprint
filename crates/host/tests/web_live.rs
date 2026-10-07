@@ -644,6 +644,7 @@ fn terminal_code(terminal: Terminal) -> &'static str {
             E::SystemAllocationFailure => "system_allocation_failure",
             E::CleanupPending => "cleanup_pending",
             E::ResyncRequired => "resync_required",
+            E::ActionRefused => "action_refused",
         },
     }
 }

@@ -510,3 +510,192 @@ fn physical_lane_is_shared_across_targets_and_cancel_after_permit_is_unknown() {
     finish(&mut host);
     assert_eq!(domain.usage().reserved_sessions, 0);
 }
+
+#[test]
+fn action_metadata_requires_typed_admission_effect_state_and_exact_commit_and_survives_loss() {
+    use uiblueprint_host::publication::ActionPublicationStatus as Status;
+    let _serial = RUNTIME_TEST.lock().unwrap();
+    for (mode, class, format, expected) in [
+        (b'a', OperationClass::Prepare, 1, Some(Status::Prepared)),
+        (
+            b'b',
+            OperationClass::Mutation,
+            1,
+            Some(Status::VerifiedSuccess),
+        ),
+        (
+            b'c',
+            OperationClass::Mutation,
+            1,
+            Some(Status::VerifiedMismatch),
+        ),
+        (b'd', OperationClass::Mutation, 1, Some(Status::Uncertain)),
+        (b'e', OperationClass::Prepare, 1, None),
+        (b'f', OperationClass::Mutation, 1, None),
+        (b'g', OperationClass::Mutation, 1, None),
+        (b'h', OperationClass::Mutation, 1, None),
+        (b'i', OperationClass::Prepare, 1, None),
+        (b'j', OperationClass::Mutation, 0, None),
+        (
+            b'k',
+            OperationClass::Mutation,
+            1,
+            Some(Status::VerifiedSuccess),
+        ),
+        (
+            b'l',
+            OperationClass::Mutation,
+            1,
+            Some(Status::VerifiedSuccess),
+        ),
+    ] {
+        let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
+        let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
+        let session = attach(&mut host, true);
+        let mut input = host.reserve_input(session, ACTION.len() + 1).unwrap();
+        input.bytes_mut()[0] = mode;
+        input.bytes_mut()[1..].copy_from_slice(ACTION);
+        host.submit(
+            session,
+            class,
+            input,
+            OutputRequest {
+                channels: 1,
+                frame_bytes: 65536,
+                total_bytes: 65536,
+                input_format: format,
+                retained_partition: 0,
+            },
+            deadline(),
+        )
+        .unwrap();
+        let c = complete(&mut host);
+        assert_eq!(c.action_status(), expected, "mode {}", mode as char);
+        if mode <= b'd' {
+            assert_eq!(c.terminal, Terminal::Completed);
+        } else {
+            assert!(matches!(c.terminal, Terminal::Failed(_)));
+        }
+        if expected.is_some() {
+            assert_eq!(c.bytes(0), Some(ACTION));
+        } else {
+            assert_eq!(c.committed(), 0);
+        }
+        if matches!(mode, b'k' | b'l') {
+            assert!(
+                c.effect_unknown(),
+                "tag cannot confirm missing/wrong nonce terminal"
+            );
+        }
+        drop(c);
+        finish(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}
+
+#[test]
+fn action_refused_terminal_requires_typed_admitted_ack_and_never_follows_possible() {
+    use uiblueprint_host::publication::ActionPublicationStatus as Status;
+    let _serial = RUNTIME_TEST.lock().unwrap();
+    for (mode, class, format, status, accepted) in [
+        (
+            b'm',
+            OperationClass::Mutation,
+            1,
+            Some(Status::Refused),
+            true,
+        ),
+        (b'n', OperationClass::Prepare, 1, None, true),
+        (b'o', OperationClass::Mutation, 1, None, false),
+        (b'p', OperationClass::Prepare, 0, None, false),
+        (
+            b'q',
+            OperationClass::Mutation,
+            1,
+            Some(Status::Uncertain),
+            false,
+        ),
+        (
+            b'r',
+            OperationClass::Prepare,
+            1,
+            Some(Status::Prepared),
+            false,
+        ),
+        (
+            b's',
+            OperationClass::Mutation,
+            1,
+            Some(Status::Refused),
+            false,
+        ),
+        (b'u', OperationClass::Validate, 0, None, false),
+        (b'v', OperationClass::Prepare, 1, None, false),
+        (
+            b'w',
+            OperationClass::Mutation,
+            1,
+            Some(Status::Refused),
+            false,
+        ),
+    ] {
+        let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
+        let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
+        let session = attach(&mut host, true);
+        let mut input = host.reserve_input(session, ACTION.len() + 1).unwrap();
+        input.bytes_mut()[0] = mode;
+        input.bytes_mut()[1..].copy_from_slice(ACTION);
+        host.submit(
+            session,
+            class,
+            input,
+            OutputRequest {
+                channels: 1,
+                frame_bytes: 65536,
+                total_bytes: 65536,
+                input_format: format,
+                retained_partition: 0,
+            },
+            if matches!(mode, b'v' | b'w') {
+                Instant::now() + Duration::from_millis(200)
+            } else {
+                deadline()
+            },
+        )
+        .unwrap();
+        let c = complete(&mut host);
+        assert_eq!(
+            c.terminal,
+            if matches!(mode, b'v' | b'w') {
+                Terminal::TimedOut
+            } else {
+                Terminal::Failed(if accepted {
+                    HostError::ActionRefused
+                } else {
+                    HostError::InvalidControl
+                })
+            },
+            "mode {}",
+            mode as char
+        );
+        assert_eq!(c.action_status(), status);
+        if accepted {
+            assert_eq!(c.bytes(0), Some(ACTION));
+            assert_eq!(c.effect, EffectReceipt::NotDispatched);
+        }
+        if mode == b'q' {
+            assert!(c.effect_unknown());
+            assert_eq!(c.bytes(0), Some(ACTION));
+        }
+        if mode == b'o' {
+            assert_eq!(c.committed(), 0);
+        }
+        drop(c);
+        finish(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}

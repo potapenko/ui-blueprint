@@ -29,6 +29,7 @@ pub struct State {
     pub setter_calls: AtomicUsize,
     pub wrong_post_checked: AtomicBool,
     pub lost_post_binding: AtomicBool,
+    pub stale_node: AtomicBool,
     pub events_once: AtomicUsize,
 }
 pub struct Peer {
@@ -128,7 +129,7 @@ impl Peer {
                                         );
                                         json!({"result":{"type":"object","objectId":"selection-result"}})
                                     } else if function.starts_with("function verifyNodes(") {
-                                        json!({"result":{"type":"object","value":{"current":true}}})
+                                        json!({"result":{"type":"object","value":{"current":!shared.stale_node.load(Ordering::Acquire)}}})
                                     } else if function.starts_with("function checkboxState(") {
                                         let checked = shared
                                             .checkbox_checked
@@ -179,7 +180,6 @@ impl Peer {
                                 break;
                             }
                         }
-                        break;
                     }
                     Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                         thread::sleep(Duration::from_millis(1))

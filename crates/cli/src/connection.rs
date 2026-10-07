@@ -131,7 +131,8 @@ pub(crate) fn host_error(error: HostError) -> Failure {
         InvalidLimits | ResourceLimit | Overflow | InvalidInput => {
             Failure::invalid("observe_invalid_or_limit")
         }
-        PermissionDenied | ResyncRequired | StaleOperation | Busy | DeadlineExpired => Failure {
+        PermissionDenied | ResyncRequired | StaleOperation | Busy | DeadlineExpired
+        | ActionRefused => Failure {
             code: "observe_unavailable",
             exit: 4,
         },

@@ -207,6 +207,7 @@ fn control_error(error: HostError) -> u64 {
         HostError::Io | HostError::WorkerFailed => 6,
         HostError::InvalidControl => 7,
         HostError::CleanupPending => 8,
+        HostError::ActionRefused => 9,
         _ => 5,
     }
 }

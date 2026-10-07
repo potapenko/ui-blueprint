@@ -135,6 +135,7 @@ fn action_cli_rejects_wrong_syntax_and_aggregate_bounds_before_worker_spawn() {
         for (input, output, extra) in [
             (case.input - 1, 65536, vec![]),
             (case.input, 1, vec![]),
+            (case.input, 136, vec![]),
             (case.input, 65536, vec!["--json", "--json"]),
             (
                 case.input,

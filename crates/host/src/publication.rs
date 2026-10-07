@@ -213,4 +213,7 @@ impl<'a> Publication<'a> {
     pub fn committed(&self) -> u8 {
         self.committed
     }
+    pub(crate) fn action_status(&self) -> Option<ActionPublicationStatus> {
+        self.action_status
+    }
 }

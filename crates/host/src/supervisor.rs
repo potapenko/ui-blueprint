@@ -1169,6 +1169,32 @@ fn pump<'a, P: ProcessPlatform>(
             Ok(None)
         }
         ControlKind::Terminal => {
+            if control.value == 9
+                && (active.request.input_format != 1
+                    || active.live
+                    || active.ticket.is_none()
+                    || active.effect != EffectReceipt::NotDispatched
+                    || control.auxiliary != 0
+                    || !matches!(
+                        active.class,
+                        OperationClass::Prepare | OperationClass::Mutation
+                    )
+                    || active.publish.as_ref().is_none_or(|p| {
+                        !p.idle()
+                            || p.committed() != 1
+                            || match active.class {
+                                OperationClass::Prepare => p.action_status().is_some(),
+                                OperationClass::Mutation => !active.refusal_started
+                                    || p.action_status()
+                                        != Some(
+                                            crate::publication::ActionPublicationStatus::Refused,
+                                        ),
+                                _ => true,
+                            }
+                    }))
+            {
+                return Err(HostError::InvalidControl);
+            }
             let diagnostic = crate::diagnostic::DiagnosticRecord::from_terminal(
                 control,
                 worker.web && active.live && active.request.input_format == 1,
@@ -1193,6 +1219,7 @@ fn pump<'a, P: ProcessPlatform>(
                 6 => Terminal::Failed(HostError::WorkerFailed),
                 7 => Terminal::Failed(HostError::InvalidControl),
                 8 => Terminal::Failed(HostError::CleanupPending),
+                9 => Terminal::Failed(HostError::ActionRefused),
                 _ => return Err(HostError::InvalidControl),
             };
             if active.class == OperationClass::Mutation {

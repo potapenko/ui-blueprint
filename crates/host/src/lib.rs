@@ -56,6 +56,8 @@ pub enum HostError {
     SystemAllocationFailure,
     CleanupPending,
     ResyncRequired,
+    /// Valid typed action refused by current provider facts, not malformed input.
+    ActionRefused,
 }
 impl std::fmt::Display for HostError {
     fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

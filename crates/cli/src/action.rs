@@ -38,6 +38,11 @@ mod supported {
     use uiblueprint_schema::{SchemaVersion, model::*};
 
     pub(crate) fn execute(args: ActionArguments, output: &mut impl Write) -> Result<u8, Failure> {
+        // All fixed status strings, including newline, fit this bound. Refuse
+        // insufficient compact output before any attachment or possible effect.
+        if !args.json && args.max_output < crate::output::ACTION_COMPACT_BYTES {
+            return Err(Failure::invalid("output_limit"));
+        }
         let mut remaining = args.max_input;
         let connection = load(&args.connection, &mut remaining)?;
         let Provider::Web { setup, .. } = &connection.provider else {
@@ -122,6 +127,15 @@ mod supported {
                 .ok_or(Failure::invalid("invalid_deadline"))?;
             let clock = match next(&mut host, event_end)? {
                 HostEvent::Attached { session, clock } if session == attached => clock,
+                HostEvent::Complete(c) => {
+                    return Err(match c.terminal {
+                        Terminal::Failed(error) => host_error(error),
+                        Terminal::Cancelled | Terminal::TimedOut => {
+                            host_error(HostError::DeadlineExpired)
+                        }
+                        Terminal::Completed => Failure::io(),
+                    });
+                }
                 _ => return Err(Failure::io()),
             };
             let Artifact::Request(r) = &mut request.artifact else {
@@ -247,6 +261,22 @@ mod supported {
             let confirmed = EffectReceipt::Confirmed { nonce: 7 };
             let possible = EffectReceipt::Possible { nonce: 7 };
             for (command, terminal, effect, status, missing, expected) in [
+                (
+                    ActionCommand::Prepare,
+                    Terminal::Failed(HostError::ActionRefused),
+                    EffectReceipt::NotDispatched,
+                    None,
+                    0,
+                    4,
+                ),
+                (
+                    ActionCommand::Execute,
+                    Terminal::Failed(HostError::ActionRefused),
+                    EffectReceipt::NotDispatched,
+                    Some(Status::Refused),
+                    0,
+                    4,
+                ),
                 (
                     ActionCommand::Prepare,
                     Terminal::Completed,

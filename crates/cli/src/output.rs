@@ -79,6 +79,9 @@ pub(crate) fn observation_lines(
 }
 
 #[cfg(all(target_os = "macos", feature = "web"))]
+pub(crate) const ACTION_COMPACT_BYTES: usize = 137;
+
+#[cfg(all(target_os = "macos", feature = "web"))]
 pub(crate) fn action_compact(
     command: crate::arguments::ActionCommand,
     completion: &uiblueprint_host::host_types::HostCompletion<'_>,

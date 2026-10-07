@@ -71,10 +71,12 @@ fn main() {
         let input = body(&mut io, operation, &mut buffer);
         assert!(input.len() > 1);
         let mode = input[0];
+        let metadata_mode = (b'a'..=b'w').contains(&mode);
         let budget_mode = mode.is_ascii_digit();
         assert!(
             operation.class == OperationClass::Mutation
-                || (budget_mode && operation.class == OperationClass::Prepare)
+                || (metadata_mode && operation.class == OperationClass::Validate)
+                || ((budget_mode || metadata_mode) && operation.class == OperationClass::Prepare)
         );
         let canonical = &input[1..];
         let Artifact::Action(action) = Document::from_json(canonical, 65536).unwrap().artifact
@@ -82,6 +84,121 @@ fn main() {
             panic!("action")
         };
         assert!(config.target.matches(&action.snapshot.context.target));
+        if metadata_mode {
+            let ready = Control {
+                kind: ControlKind::ObserveReady,
+                class: operation.class,
+                slot: 0,
+                flags: 1,
+                correlation: operation.correlation,
+                length: 0,
+                value: operation.correlation.operation,
+                auxiliary: 2000,
+            };
+            if !matches!(mode, b'e' | b'j' | b'p' | b'u') {
+                io.write_control(ready).unwrap();
+                assert_eq!(io.control().unwrap().kind, ControlKind::ObservePermit);
+            }
+            if matches!(mode, b'm' | b'n' | b'o' | b'p' | b's' | b'u' | b'v' | b'w') {
+                let frame = Control {
+                    kind: ControlKind::Frame,
+                    class: operation.class,
+                    slot: 0,
+                    flags: u8::from(operation.class == OperationClass::Mutation),
+                    correlation: operation.correlation,
+                    length: canonical.len() as u64,
+                    value: 0,
+                    auxiliary: 0,
+                };
+                if mode != b'o' {
+                    io.write_control(frame).unwrap();
+                    io.write(canonical).unwrap();
+                    io.write_control(Control {
+                        kind: ControlKind::Commit,
+                        ..frame
+                    })
+                    .unwrap();
+                    assert_eq!(io.control().unwrap().kind, ControlKind::Ack);
+                }
+                if matches!(mode, b'v' | b'w') {
+                    std::thread::sleep(Duration::from_millis(300));
+                }
+                io.write_control(Control {
+                    kind: ControlKind::Terminal,
+                    flags: 0,
+                    length: 0,
+                    value: if mode == b's' { 10 } else { 9 },
+                    auxiliary: 0,
+                    ..frame
+                })
+                .unwrap();
+                continue;
+            }
+            let nonce = if operation.class == OperationClass::Mutation && mode != b'f' {
+                let clock = Id(uiblueprint_host::host_types::clock_id(
+                    operation.correlation.session_epoch,
+                )
+                .unwrap()
+                .as_str()
+                .into());
+                let mut timing = worker_effect::WorkerActionControl::new(clock.clone(), origin);
+                let mut gate = worker_effect::WorkerEffectGate::new(
+                    &mut io,
+                    operation,
+                    config.target,
+                    clock,
+                    deadline,
+                )
+                .unwrap();
+                gate.authorize(&action.action, &timing.now())
+                    .unwrap_or_else(|_| panic!("parent permit"))
+                    .nonce()
+            } else {
+                0
+            };
+            let frame = Control {
+                kind: ControlKind::Frame,
+                class: operation.class,
+                slot: 0,
+                flags: match mode {
+                    b'c' | b'i' => 3,
+                    b'd' | b'q' => 4,
+                    b'g' => 5,
+                    _ => 2,
+                },
+                correlation: operation.correlation,
+                length: canonical.len() as u64,
+                value: 0,
+                auxiliary: 0,
+            };
+            io.write_control(frame).unwrap();
+            io.write(canonical).unwrap();
+            io.write_control(Control {
+                kind: ControlKind::Commit,
+                flags: if mode == b'h' { 3 } else { frame.flags },
+                ..frame
+            })
+            .unwrap();
+            let ack = io.control().unwrap();
+            assert_eq!(ack.flags, frame.flags);
+            if mode == b'k' {
+                return;
+            }
+            io.write_control(Control {
+                kind: ControlKind::Terminal,
+                flags: 0,
+                length: 0,
+                value: if matches!(mode, b'q' | b'r') { 9 } else { 0 },
+                auxiliary: if matches!(mode, b'q' | b'r') {
+                    0
+                } else {
+                    nonce + u64::from(mode == b'l')
+                },
+                ..frame
+            })
+            .unwrap();
+            continue;
+        }
         if budget_mode {
             if mode == b'5' {
                 std::thread::sleep(Duration::from_millis(300));

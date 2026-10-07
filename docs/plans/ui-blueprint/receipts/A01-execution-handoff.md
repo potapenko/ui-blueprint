@@ -503,3 +503,104 @@ Restart source SHA256 pins:
 - host supervisor.rs:1b362b181277f2a09c0f287212e0e879aac6dc1f553237900eebef5f7d260bd3
 - host worker_action.rs:2d0dbdf57eb26808aa1a12ddd8dcf09814fc7c0dfbe19ed4946949f76a4a020d
 - host worker_ops.rs:bce0bfbada25881480de698249c35648fc17f76246d7a096d4f0dd9314669d83
+
+## Resumed L01 source slice — selected refusal distinction
+
+Root relayed explicit user “Продолжай работу” on 2026-10-08; same packet resumes
+from saved138d7bc. CLI-ACTIONS.EXITS requires malformed/limit2 versus valid fresh
+refusal4; source conflation is an implementation defect, not a contract change.
+Root selected Core's source-backed minimum: internal HostError::ActionRefused and
+private Terminal.value9. Add only host/src/lib.rs enum variant and diagnostic.rs
+bounded exhaustive mapping to current owned worker/supervisor/CLI/test owners.
+No public canonical ErrorCode/schema/version, flags0..4, connection, limits or
+Observe/legacy meaning changes. Canonical provider Issue is published unchanged.
+Parent admits9 only typed Prepare/Mutation before Possible after full matching
+ACKed refusal/Error, with prior typed admission;9 gives no nonce/authority/success.
+Malformed/limit retains existing category2; afterPossible unresolved4, IO/cleanup1.
+Independent current test subset: support/effect_peer.rs, effects_host.rs; add nearest
+host tests/action_cli.rs to run actual public binaries on existing synthetic CDP
+peer (no live UI), plus affected worker/CLI exit cases and this receipt. Existing
+kernel/provider APIs, Web collector/Swift and other-owner changes remain protected.
+
+### Coherent resumed source checkpoint — refusal and public caller evidence
+
+The saved138d7bc restart refusal conflation is now repaired within the selected
+internal category. Prepare publishes provider Issue unchanged rather than mapping
+Unsupported to a different canonical cause; typed valid kernel refusal returns
+ActionRefused after complete canonical refusal. Malformed/limit paths retain
+InvalidInput/ResourceLimit and category2. Terminal9 requires typed admission, exact
+class/correlation, NotDispatched, full ACKed idle publication and Mutation refusal
+latch (or Prepare ordinary Error flags0). Prepared2/afterPossible/legacy/wrong class/
+unknown value/late terminal cannot claim refusal. No nonce/authority or success.
+DiagnosticRecord's original Observe-only code bounds/encoding remain unchanged;
+new exhaustive ActionRefused mapping uses its existing coarse invalid code6, while
+action semantics travel through their separate terminal9. No pool or quota change.
+
+Exact17 writes in this resumed checkpoint:
+- CLI src/action.rs, connection.rs, output.rs; tests/action_binary.rs;
+- host src/lib.rs, diagnostic.rs, publication.rs, supervisor.rs, worker_action.rs,
+  worker_main.rs, worker_web.rs;
+- host tests/action_cli.rs, web_live.rs;
+- host tests/support/effect_peer.rs, effects_host.rs, web_worker_peer.rs;
+- this receipt.
+Root explicitly granted web_live.rs::terminal_code's one exhaustive ActionRefused
+mapping only. Release that file to Web after this save; no scenario/limit/live run
+changed. Other Native/Web/root changes excluded. Web dependency now savedc63b07a
+is independently source-reviewed; no collector code included in this checkpoint.
+
+CLI also reserves the complete fixed compact-status bound before any attachment/
+dispatch; insufficient compact cap returns2 safely before possible effect. Setup
+completion preserves available terminal categories rather than discarding them.
+An attempted stale-document-at-attach case exposed existing common attach's fatal
+WorkerFailed/IO1 boundary, not a typed ResyncRequired receipt. That common boundary
+is unchanged and not relabelled. Required stale-plan coverage instead establishes
+node remount/currentness refusal inside the unchanged document before permit.
+
+Actual focused evidence, Cargo locked/offline/Rust1.96/aarch64-apple-darwin, owned
+system-temp target, no browser/live UI:
+- effects::action_metadata_requires_typed_admission_effect_state_and_exact_commit_and_survives_loss:
+  12 actual-parent/owned-peer cases. Tags2/3/4 require typed admission and Possible;
+  wrong class/value/Commit, absent permit/admission and legacy forged tag rejected;
+  ACKed status/bytes survive worker loss and wrong nonce, without confirming effect.
+- effects::action_refused_terminal_requires_typed_admitted_ack_and_never_follows_possible:
+  10 cases. Valid Prepare/Mutation9 accepted only after ACK; before ACK, legacy,
+  Validate, Prepared tag, afterPossible and unknown10 rejected.300ms-late9 versus
+  authoritative200ms parent deadline times out; prior ACKed bytes/status preserved.
+  All22 cases actual owned reap, sessions0/groups0/abandonedfalse.
+- host action_cli::public_action_cli_keeps_delivery_verification_exits_and_original_evidence_separate:
+  8 cases run the actual public CLI and production worker against the existing
+  synthetic CDP peer: Observe ChannelResponse→Prepare→Execute verified0, mismatch3,
+  confirmed delivery/lost post binding4, fresh unsupported Execute4 and Prepare4,
+  malformed plan2, compact verified status and remounted/stale node4. Fresh Issue
+  code Unsupported preserved. Refusals dispatch zero setters; successful/verified
+  attempts exactly one setter; original observed source file remains byte-equal.
+  Each actual CLI uses its real bounded shutdown path; no actual browser proof.
+- CLI semantic_status...17 focused cases and action_binary2 tests passed, adding
+  fresh-refusal category4 and compact137-byte preflight (136 refuses before spawn).
+- Affected host lib/bin/runtime/action_cli/web_live/effect_peer and CLI web bin/
+  action_binary Clippy -D warnings passed. web_live compiled only, never ran.
+  Affected macos-only CLI check passed, preserving shared exhaustive consumers.
+Test peer now accepts sequential reconnects within its unchanged5s bounded window
+so separate public invocations can reuse the exact configured synthetic document.
+Test-only currentness flag supplies remount refusal; no production fallback added.
+The terminal9 peer first sent Completed in two intended fault modes; corrected
+its explicit control, then the10-case check passed. No acceptance expectation changed.
+
+No unchanged broad suite repeated. Prior saved deadline/Observe/refusal checks remain
+their earlier evidence; this slice does not self-label independent acceptance.
+Protected review of saved CLI/metadata source precedes actual public CLI vertical
+Web proof. Full forms/Native delivery/multi-step/P5/P6/release gates remain separate.
+No remaining known refusal-exit failure in this slice; common attach fatal category
+is an explicit existing limit. Root consumes saved source/test handoff for review.
+Own non-image target is removed/absence-verified after final use. Test JSON temps
+were removed by exact file/empty-directory cleanup; no images created or deleted.
+No process, runtime handle or physical lane held. Short exact17 Git lease requested;
+checkpoint+bounded exact-SHA canonical push, then release index and web_live.rs.
+
+Resumed source SHA256 pins:
+- CLI action.rs:e55d81095c61d8efe9d44171aa0b027a9a494496694d64338067439d61a0f7a4
+- host lib.rs:7b23663d772a2cab34ec68bddb024ab38998268ad6fc91ce43bfc8633ad70af1
+- host supervisor.rs:61ccfbc1d74e771fd79fdabfc2c209277df60af88e219135e7afb5cc64578212
+- host worker_action.rs:d3df17181e8216ef56481e6e9c5f78a7093c883c75716e8ea641c6c10aca38f2
+- host worker_web.rs:13c80ea449b0857901f6353cd38f0a1dd89c3f1597af3d21521f8bdd0479dc30
+- action_cli test:6cccd3f6f04babff7c1221095c9fbf3ad3f56aeecc196ecbbefc44983fc4e181

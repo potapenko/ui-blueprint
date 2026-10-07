@@ -78,7 +78,6 @@ impl ActionOperation<'_> {
         };
         let delivery = kernel.step().delivery;
         let outcome = kernel.step().outcome;
-        let issue = kernel.issue().cloned();
         let requested = gate.requested();
         let nonce = gate.nonce();
         drop(gate);
@@ -113,10 +112,7 @@ impl ActionOperation<'_> {
             limits.max_output_bytes as usize,
         )?;
         if !requested {
-            return Err(issue
-                .as_ref()
-                .map(issue_error)
-                .unwrap_or(HostError::InvalidInput));
+            return Err(HostError::ActionRefused);
         }
         if delivery == DeliveryStatus::Confirmed {
             return nonce.ok_or(HostError::InvalidControl);
@@ -125,17 +121,6 @@ impl ActionOperation<'_> {
             Err(uiblueprint_plugin_api::Error::DeadlineExpired) => HostError::DeadlineExpired,
             _ => HostError::WorkerFailed,
         })
-    }
-}
-fn issue_error(issue: &Issue) -> HostError {
-    match issue.code {
-        ErrorCode::PermissionRequired => HostError::PermissionDenied,
-        ErrorCode::StaleTarget
-        | ErrorCode::TargetUnresolved
-        | ErrorCode::AmbiguousTarget
-        | ErrorCode::ResyncRequired => HostError::ResyncRequired,
-        ErrorCode::Timeout => HostError::DeadlineExpired,
-        _ => HostError::InvalidInput,
     }
 }
 pub(super) fn publish_refusal(
@@ -152,14 +137,31 @@ pub(super) fn publish_refusal(
         HostError::ResyncRequired => ErrorCode::ResyncRequired,
         _ => ErrorCode::Unsupported,
     };
-    let document = Document {
-        schema_version: SchemaVersion::CURRENT,
-        artifact: Artifact::Error(Box::new(Issue {
+    publish_issue(
+        io,
+        publication,
+        control,
+        Issue {
             code,
             scope_id: scope,
             failed_step: Some(Id("action-input".into())),
             recovery_class: Id("review_action_input".into()),
-        })),
+        },
+        error,
+        limit,
+    )
+}
+pub(super) fn publish_issue(
+    io: &mut WorkerIo,
+    publication: &mut [u8],
+    control: Control,
+    issue: Issue,
+    error: HostError,
+    limit: usize,
+) -> Result<u64, HostError> {
+    let document = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Error(Box::new(issue)),
     };
     document.validate().map_err(|_| HostError::InvalidInput)?;
     encode_publish(
