@@ -106,3 +106,52 @@ descriptor48f7c41b195a0daac27ccc098bf5c9eb0ec5d0d08ef89f78f1e0c21e1af00871.
 All non-owned build inputs equal that saved provider; compiled owned inputs match
 current caller/Collector. Remove all current-operation files after inline runtime
 facts and cleanup. Old evidence/linked images untouched; no new persistent location.
+
+### First activated baseline probe run — stopped failure
+
+Caller checkpointdb0154fccc1c8570a86546d41754d404162d10af pushed, exact5/index
+released. Saved Core a1ad9143/source74/binary pins matched. Native launched retained
+F02-on by canonical executable and unique current run-dir, exact new PID11795.
+CUA showed A/normal; one explicit Snapshot1 produced actual icon/text/container
+measured markers, probe_enabled=true, expanded=false. No layout-change/expanded
+step occurred because the first baseline operation failed.
+
+Existing launcher executed one prepared baseline H01 consumer. Fixed report:
+attached_clock uib-worker-1-clock; caller_error InvalidInput; caller_ok=false;
+terminal not_completed; committed0/missing4; diagnostic absent; cleanup_confirmed
+true, reserved_sessions0, abandoned=false. No canonical probe ACK or Rust measurement
+was produced. This is an actual caller/host failure, not tool unavailability,
+permission refusal or accepted partial success. Caps/fields were not tuned and no
+unchanged retry was performed. Exact originating call requires bounded stage
+attribution before another attempt; the fixed receipt does not establish it.
+
+Source inspection also identified a separate caller serialization slot mismatch:
+completion.bytes(slot) checks probe2 but completion.write_channel(0) still targets
+AX0. This cannot explain the recorded pre-completion failure because committed=0;
+it must be corrected before a future successful probe response is written.
+No shared-owner code was changed during failure diagnosis.
+
+Native verified exact PID/canonical executable/unique-run-dir and terminated only
+that F02-on instance, confirming absence within5s; LaunchServices parent owns reaping.
+Current operation uib-p01-caller-lj2d5i6g (build/source/cache/fixture/input/output)
+was removed after inline failure facts; directory absence verified. No persistent
+output/image, permission/display/backend change, real app or B retry. All physical/
+process resources released. Next readiness is stopped pending bounded caller repair/
+stage attribution; actual8→18/off-on/P01 acceptance remain open. One-path human
+receipt checkpoint awaits root Git lease.
+
+### Bounded caller correction after the stopped attempt
+
+Within existing caller ownership, changed only native_fixture.rs and this receipt.
+Direct fix: committed response uses write_channel(slot), matching its bytes(slot)
+check. Added a fixed caller_stage string to the existing bounded host report at
+existing attach/configure/reserve/submit/await/write/Measure boundaries. No raw
+payload, shared diagnostic API/framework/flag or cap change. This preserves the
+original failure above and permits exact attribution in the separately saved
+changed attempt; it does not assert the slot fix caused the earlier InvalidInput.
+Focused caller no-run preparation is in progress on saved source, with current
+operation-only temp. No unchanged runtime retry or expanded setup occurred.
+
+Corrected caller no-run passed; compiled source matches current input f40895afb51466a6e87d9865410365b1995d01402240697def888ab0718fceef.
+Saved source 664b4f2758bbcc1619f548042e5828582e2ab032; consumer df97728d77355d098629c1404be2734321d1d5fa3f7feccf0c7ad1d00d2528bd.
+Exact2 ready, index untouched; runtime waits checkpoint per activation.

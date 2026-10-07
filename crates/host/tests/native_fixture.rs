@@ -146,6 +146,7 @@ fn actual_owned_f02_ax_observation() {
     let mut missing = mask;
     let mut terminal = "not_completed";
     let mut diagnostic = None;
+    let mut caller_stage = "attach";
     let outcome = (|| -> Result<(), HostError> {
         let mut lease = host.reserve_attach_input(target, descriptor.len())?;
         lease.bytes_mut().copy_from_slice(&descriptor);
@@ -164,12 +165,15 @@ fn actual_owned_f02_ax_observation() {
         new_file(&output_dir.join("submitted-request.json"))
             .and_then(|mut file| file.write_all(&bytes))
             .map_err(|_| HostError::Io)?;
+        caller_stage = "configure_native";
         host.configure_native_helpers(
             session,
             NativeHelperBinding::authorized(SpawnSpec::new(&helper)?, mask, &configuration)?,
         )?;
+        caller_stage = "reserve_observe_input";
         let mut lease = host.reserve_input(session, bytes.len())?;
         lease.bytes_mut().copy_from_slice(&bytes);
+        caller_stage = "submit_native_observe";
         host.submit_native_observe(
             session,
             lease,
@@ -182,6 +186,7 @@ fn actual_owned_f02_ax_observation() {
             },
             Instant::now() + Duration::from_millis(1000),
         )?;
+        caller_stage = "await_observe_completion";
         let HostEvent::Complete(completion) =
             next(&mut host, Instant::now() + Duration::from_secs(2))?
         else {
@@ -199,16 +204,18 @@ fn actual_owned_f02_ax_observation() {
             Terminal::Cancelled => "cancelled",
             Terminal::TimedOut => "timed_out",
         };
+        caller_stage = "write_committed_channel";
         if completion.bytes(slot).is_some() {
             let mut file =
                 new_file(&output_dir.join("channel-0.json")).map_err(|_| HostError::Io)?;
             completion
-                .write_channel(0, &mut file)
+                .write_channel(slot, &mut file)
                 .map_err(|_| HostError::Io)?;
         }
         if completion.terminal != Terminal::Completed || committed != mask || missing != 0 {
             return Err(HostError::WorkerFailed);
         }
+        caller_stage = "measure_input";
         if requested_channel == Channel::OptInLayoutProbe {
             let bytes = completion.bytes(slot).ok_or(HostError::WorkerFailed)?;
             let source = Document::from_json(bytes, FRAME).map_err(|_| HostError::InvalidInput)?;
@@ -243,6 +250,7 @@ fn actual_owned_f02_ax_observation() {
             let size = 40 + parts.iter().map(|p| p.len()).sum::<usize>();
             let mut input = host.reserve_input(session, size)?;
             worker_tape::encode(&parts, input.bytes_mut())?;
+            caller_stage = "submit_measure";
             host.submit(
                 session,
                 OperationClass::Measure,
@@ -256,6 +264,7 @@ fn actual_owned_f02_ax_observation() {
                 },
                 Instant::now() + Duration::from_millis(1000),
             )?;
+            caller_stage = "await_measure_completion";
             let HostEvent::Complete(measured) =
                 next(&mut host, Instant::now() + Duration::from_secs(2))?
             else {
@@ -299,7 +308,7 @@ fn actual_owned_f02_ax_observation() {
     let cleanup_confirmed = cleanup_confirmed && usage.reserved_sessions == 0 && !usage.abandoned;
     let caller_ok = outcome.is_ok();
     let report = serde_json::json!({
-        "terminal": terminal, "committed": committed, "missing": missing,
+        "caller_stage": caller_stage, "terminal": terminal, "committed": committed, "missing": missing,
         "attached_clock": clock_id, "cleanup_confirmed": cleanup_confirmed,
         "reserved_sessions": usage.reserved_sessions, "abandoned": usage.abandoned,
         "diagnostic": diagnostic, "caller_ok": caller_ok, "caller_error": outcome.err().map(|e| format!("{e:?}")),
