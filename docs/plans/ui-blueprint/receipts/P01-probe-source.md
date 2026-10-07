@@ -155,3 +155,32 @@ operation-only temp. No unchanged runtime retry or expanded setup occurred.
 Corrected caller no-run passed; compiled source matches current input f40895afb51466a6e87d9865410365b1995d01402240697def888ab0718fceef.
 Saved source 664b4f2758bbcc1619f548042e5828582e2ab032; consumer df97728d77355d098629c1404be2734321d1d5fa3f7feccf0c7ad1d00d2528bd.
 Exact2 ready, index untouched; runtime waits checkpoint per activation.
+
+
+### Changed baseline attribution — probe ACK passed, Measure admission refused
+
+Saved correction b1b0ff2cf0aeba072c9a8761ead8140fcf671c29 plus saved provider664b4f2
+was built/pinned for one changed baseline attempt, own fresh F02-on PID13199/A
+Snapshot1. H01 probe completed, committed4/missing0; original imported measurement
+was not restamped. Fixed stage identified caller ResourceLimit at submit_measure.
+Caller was holding the previous HostCompletion's sole completion-group lease during
+next Measure publication admission. This is a local lifetime defect, not a need to
+enlarge the profile or a shared host defect. The earlier precompletion InvalidInput
+was not causally attributed by this later result; do not rewrite its evidence.
+
+Direct correction in existing caller: after canonical ChannelResponse decode gives
+its typed Snapshot, drop the acknowledged byte completion before Measure dispatch.
+Retain typed source/identity/time; do not grow completion_groups or change input/
+output limits. Original lease accounting stays truthful. Prior fixed write_channel
+slot correction stays in place. No new abstraction/flags/framework.
+
+This changed attempt stopped before expanded setup. Host helper/worker cleanup
+confirmed, zero sessions/abandoned=false. Exact own fixture PID/path/run-dir exited
+within5s; current uib-p01-stage-4ca9x9qq build/outputs/working files removed and
+absence verified. No persistent results/images, permission/capture/display change
+or real app. Next changed attempt waits the minimal caller save/checkpoint.
+
+Lease-release correction focused no-run passed. Saved source e44f39614ad356ff98786433f34cafdd26d6fb6d;
+caller 4d4424a2612e5b3e478c7e31cd97e146fa166407a0a862ab3c9c405c9dedf510; consumer bfdacd16d03cab9631990120b0320f8db971aec9985ee44242f59dd86151a50d.
+Current operation-only build awaits exact2 save and the already authorized changed
+sequence; index not held. No unchanged runtime retry or cap change.

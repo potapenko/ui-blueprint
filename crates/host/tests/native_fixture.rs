@@ -225,6 +225,10 @@ fn actual_owned_f02_ax_observation() {
             let ChannelResult::Observed(snapshot) = response.result else {
                 return Err(HostError::WorkerFailed);
             };
+            // The single parent completion group remains charged until actual
+            // drop. Typed Snapshot now owns the acknowledged source for Measure;
+            // release the previous byte lease before reserving the next output.
+            drop(completion);
             let query = read(&input_dir.join("query.json"), FRAME).map_err(|_| HostError::Io)?;
             let query =
                 AnalysisDocument::from_json(&query, FRAME).map_err(|_| HostError::InvalidInput)?;
