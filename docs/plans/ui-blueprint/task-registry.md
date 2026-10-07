@@ -90,17 +90,18 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Product CLI24ffcb saved/pushed, source/peer scoped review accepted; next actual Web/Native observe→inspect checks assigned. Corrected rooted Chromium sequence passed9DOM+9AX with3negative refusals and cleanup. Native off/on matched76AX records and1100x1050pixels exactly, sampled pointerhit still open. Owners checkpoint outcomes then continue own CLI runs; no shared source hold |
+| Активные чаты/пакеты/ресурсы | Actual productCLI observe→inspect passed on both platforms (Nativebc2a264, Web57883cd); Web Measure120css_px passed. Commits pushed via verified canonical same-repo URL; old origin redirect500 avoided without config/key/history change. Diff5476c28 saved; Core/W03 provider resumes same chat on gpt-6.1-sol/high after model-capacity error. Web event invalidation work active. Native pointerhit waiting exact provider mapping evidence; other Native capture handoff proceeds. Goal active |
 | Последний принятый результат продукта | local analysis and G02 explicit stored-relation neighbors accepted in their finite scope. First actual guarded Chromium response passes author oracle/invariance/cleanup; narrow source review reconciliation pending. No full Web/Native/release acceptance |
-| Следующий шаг | Verify actual product CLI on both owned platforms, address concrete caller failures only; close remaining sampled pointerhit invariance and later cache/actions/remaining pilots. No repeat of passed probe8→18 or root sequence solely for artifacts. Preserve full P0–P7, current temp/image policy and exact acceptance residuals |
+| Следующий шаг | Connect Web pending invalidation to actual session-wide retained-cache hook, verify same/other session semantics; continue Native actual AX+capture caller handoff independently of unresolved pointer mapping. Current diff/CLI successes stay closed; preserve full P0–P7 and temp/image rules |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [G02-recorded-diff](packets/G02-recorded-diff.md) | retained Core owner | existing CACHE/IDENTITY and exact before/after source handoff | running borrowed recorded comparison, value changes distinct from evidence-only; no removal inference or cache/replay mutation |
-| [L01-platform-cli](packets/L01-platform-cli.md) | Web/Native existing owners, separate fixture resources | saved productCLI24ffcb and existing platform contracts | Native actual productCLI passed expectedpartial4→inspect0/0, savedbc2a264 push_pending; Web actual same user path running. Transient outputs removed, no arbitrary-app/release claim |
+| [W03-session-invalidation](packets/W03-session-invalidation.md) | retained Web/Core disjoint owners | concrete existing CDP event→cache source gap | running bounded pending event signal/queue cleanup and same-session retained invalidation hook; no autonomous observe or data/time mutation |
+| [G02-recorded-diff](packets/G02-recorded-diff.md) | retained Core owner | 5476c2836748d156719a5d8c97155140a685b466 pushed5paths | borrowed exact-node/property comparison, content vs evidence-only and missing-side states;5focused tests/check/Clippy pass per author. No inferred deletion/Delta/cache mutation or full graph/CLI diff claim |
+| [L01-platform-cli](packets/L01-platform-cli.md) | Web/Native existing owners | saved productCLI24ffcb, Nativebc2a264/Web57883cd outcomes pushed | actual own-platform observe partial4→inspect compact/JSON0 on both; Web known120css_px Measure0, complete Snapshot/evidence retained. Cleanup/temp removal confirmed. General targets/allpilots/distribution/P7 open |
 | [P01-invariance](packets/P01-invariance.md) | retained Native owner | corrected equal-held-state F02 off/on pair | author actual76AX records/geometry/focus and1100x1050RGBA equality under matched inactive state; no-hit proof yet, fullM05 stays open. Cleanup/tempremoval confirmed; result checkpoint next. Old true-only root overconstraint explicitly corrected |
 | [L01-live-observe](packets/L01-live-observe.md) | retained Core owner | 24ffcb7972fed6e22f868db54c22ce599725ede8 pushed22paths; CLI@3/registry13 | scoped independent accept: explicit authority, actualclock/budgets/ACKedNDJSON/outcome/cleanup;21digest matched. Actual peer/source checks passed per author. Separate platform actualCLI checks now required, no general/arbitrary-target/release claim |
 | [P01-host-channel](packets/P01-host-channel.md) | retained Core owner | a1ad9143e4cc137535ef476b366e91795e524190 pushed7paths | scoped independent accept: same Ticket/ACK/reap, channel2 non-capture,2helper cap/quotas unchanged;5source-test hashes matched. Actual peer5cases/legacy regression author evidence, Native probe/SDK/off-on separate |
@@ -291,9 +292,10 @@ Web live-preparation owners remain retained for their immediate next work.
 
 ## Current remote save condition
 
-GitHub returned Internal Server Error on bounded ordinary pushes; local5614cfa
-(rooted result) andbc2a264 (Native productCLI result) remain saved, push_pending.
-Index is released; do not repeat rapid pushes or alter remote/keys/history. Root
-rechecks after independent work or three minutes (last confirmed16:55UTC attempt;
-subsequent Native attempt reported same condition). Continue scoped ready work;
-this external resource does not imply goal completion or lost local work.
+Ordinary pushes through the old origin redirect returned GitHub500. Root verified
+origin and the GitHub-reported canonical git@github.com:potapenko/ui-blueprint.git
+had identical remote HEAD/master, then pushed exact saved master SHA to that same
+canonical repository. Pending commits through11fe45b and later worker checkpoints
+were confirmed remotely. Git configuration, keys and history were not changed.
+Use bounded same-master canonical pushes when the redirect fails; no force or new
+branch. The earlier push_pending condition is resolved, not hidden work loss.
