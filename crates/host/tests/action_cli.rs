@@ -273,3 +273,66 @@ fn public_action_cli_keeps_delivery_verification_exits_and_original_evidence_sep
         }
     }
 }
+
+#[test]
+fn public_prepare_compact_without_committed_frame_leaves_stdout_empty() {
+    let worker = Path::new(env!("CARGO_BIN_EXE_session-worker"));
+    let peer = peer::Peer::new();
+    peer.state.checkbox_native.store(true, Ordering::Release);
+    peer.state.checkbox_enabled.store(true, Ordering::Release);
+    peer.state.checkbox_writable.store(true, Ordering::Release);
+    let files = Files(
+        std::env::temp_dir().join(format!("uib-action-cli-no-commit-{}", std::process::id())),
+    );
+    fs::create_dir(&files.0).unwrap();
+    fs::write(
+        files.0.join("connection.json"),
+        serde_json::to_vec(&connection(&peer)).unwrap(),
+    )
+    .unwrap();
+    let mut observed = data::request("placeholder", vec![Channel::ExternalSemantics]);
+    let Artifact::Request(request) = &mut observed.artifact else {
+        panic!("request")
+    };
+    request.context.fields = vec![Field::Enabled, Field::Checked];
+    save(&files, "request.json", &observed);
+    let original = run(&files, worker, "observe", false, 65536);
+    assert!(matches!(original.status.code(), Some(0 | 4)));
+    let document = Document::from_json(&original.stdout, 65536).unwrap();
+    let Artifact::ChannelResponse(response) = &document.artifact else {
+        panic!("channel")
+    };
+    let ChannelResult::Observed(snapshot) = &response.result else {
+        panic!("observed")
+    };
+    let mut seed = action_seed(snapshot, "saved-request-clock");
+    let Artifact::Request(request) = &mut seed.artifact else {
+        panic!("request")
+    };
+    // Enough public compact budget, but canonical publication cannot fit. The
+    // valid request reaches the provider and returns ResourceLimit without ACK.
+    request.limits.max_output_bytes = 64;
+    save(&files, "request.json", &seed);
+    fs::write(files.0.join("source.json"), &original.stdout).unwrap();
+    let calls = peer.state.calls.load(Ordering::Acquire);
+    let result = run(&files, worker, "prepare", false, 65536);
+    assert_eq!(
+        result.status.code(),
+        Some(2),
+        "{}",
+        String::from_utf8_lossy(&result.stderr)
+    );
+    assert!(
+        result.stdout.is_empty(),
+        "no ACKed result means no compact stdout"
+    );
+    assert!(
+        peer.state.calls.load(Ordering::Acquire) > calls,
+        "actual fresh provider path reached"
+    );
+    assert_eq!(peer.state.setter_calls.load(Ordering::Acquire), 0);
+    assert_eq!(
+        fs::read(files.0.join("source.json")).unwrap(),
+        original.stdout
+    );
+}

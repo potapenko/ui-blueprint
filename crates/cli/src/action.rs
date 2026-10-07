@@ -177,7 +177,7 @@ mod supported {
         if let Some(c) = &completion {
             if args.json {
                 crate::output::observation_lines(c, args.max_output, output)?;
-            } else {
+            } else if c.committed() != 0 {
                 output
                     .write_all(&crate::output::action_compact(
                         args.command,

@@ -604,3 +604,32 @@ Resumed source SHA256 pins:
 - host worker_action.rs:d3df17181e8216ef56481e6e9c5f78a7093c883c75716e8ea641c6c10aca38f2
 - host worker_web.rs:13c80ea449b0857901f6353cd38f0a1dd89c3f1597af3d21521f8bdd0479dc30
 - action_cli test:6cccd3f6f04babff7c1221095c9fbf3ad3f56aeecc196ecbbefc44983fc4e181
+
+### Protected review P2 — no-commit compact output repair
+
+Reviewer source-first found one P2 on saveda53b750: CLI action.rs emitted compact
+status for any HostCompletion even when no frame was ACKed. This violated
+CLI-ACTIONS.OUTPUT setup/no-commit stdout-empty requirement. Root directly selected
+repair in the same packet; exact3 writes: CLI src/action.rs, host tests/action_cli.rs,
+this receipt. Host source unchanged; web_live.rs remains Web-owned and excluded.
+
+Direct edit gates compact emission on c.committed()!=0. JSON/exit mapping/cleanup
+and retained ACKed output after later loss remain their existing paths; no wrapper,
+new flag/refactor/graph parse or public format/error. No-commit failure still returns
+its selected exit, without advertising compact result bytes.
+
+Focused actual public binary check passed (locked/offline Rust1.96 macOS):
+public_prepare_compact_without_committed_frame_leaves_stdout_empty. Actual CLI
+Observe→Prepare runs against existing synthetic CDP peer/production worker; valid
+Prepare Request canonical max_output_bytes64 cannot publish a complete frame,
+with ample public compact budget65536. Exit2, empty stdout, zero setters and
+byte-equal saved Observe source verified; real CLI owned shutdown path completes.
+This is synthetic protocol integration, not live browser proof. Existing positive/
+later-loss checks were not repeated because their committed branch is unchanged.
+Affected binaries compiled; scoped rustfmt and diff-check passed. No new warning.
+Own non-image build temp removed/absence-verified after use; test JSON temp removed
+by its exact-file/empty-directory owner. No images/runtime/physical resources held.
+Short exact3 Git checkpoint+bounded canonical push follows, then reviewer rechecks
+only this delta. Protected acceptance/live public CLI proof remain root-owned.
+CLI source SHA25665732f95f88b2e41680270fe9cfb24d4e7f49cc51e54777a12288eaa148c16a1;
+test SHA256066835423a1daa10033eab1f2a5ef66f6ed48f1c195d7c85a23509f5b1753ae1.
