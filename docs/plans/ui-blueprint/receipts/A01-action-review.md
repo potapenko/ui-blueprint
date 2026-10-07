@@ -34,3 +34,13 @@ New concrete source gap supersedes treating that as final acceptance: canonical
 shorter Request duration clamps child only, not parent Active. Root selected existing
 13/14 typed admission with parent-start clamp; Core repairs separately. Same reviewer
 will recheck that changed deadline boundary and reconcile final evidence. Live closed.
+
+
+Repaired composition c3967ca50a4bd380c006677cc36a39b48ed43f95, with edge evidence
+2f5c5eb: same reviewer accepted the composed source/peer boundary, resolving prior
+not_verified. New source-first admission inspection preceded repaired receipt.
+Five repair hashes match; parent uses min(outer,operation start+canonical duration)
+and rejects late publication/ACK/terminal independently of child scheduling. Observe
+Ticket and effect authority remain distinct. Author11 parent timing cases, remaining
+Prepare/permit/cancel cases and affected regressions reconcile the named gaps; no
+reviewer execution. Live browser and broader A01/P5 still separate, no goal completion.

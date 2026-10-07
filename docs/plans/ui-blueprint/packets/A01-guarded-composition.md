@@ -168,3 +168,15 @@ request rejects late ACK/terminal/dispatch, longer duration cannot extend parent
 and pre/post-Possible uncertainty/earlier committed output/reap remain truthful.
 Save source fix separately from earlier verification-only checkpoint; same reviewer
 rechecks changed deadline boundary plus new evidence before live activation.
+
+
+After c3967ca save, Core has a finite read-only CLI integration handoff: inspect
+existing CLI connection/observe and host completion owners to identify the smallest
+public action prepare/execute caller and necessary output/exit contract. Reuse actual
+canonical Request/ActionCase/Transition and frozen composed APIs. Protocol Completed
+or Confirmed delivery cannot become CLI user success; identify exact fixed metadata
+needed without parent graph parsing. No code/spec/public syntax changes or runtime
+in this handoff. Classification diagnostic; immediate consumer next CLI release-path
+packet under CLI@5 CONTENT/EXCHANGE/ACTIONS and current full closure. Return actual
+owners and concrete engineering proposal, not a new graph/plan framework. Kernel/
+host source remains frozen unless a concrete review repair is required.

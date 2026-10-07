@@ -74,3 +74,26 @@ interval, no other backend/CUA stop bypass. Only existing receipt written. Sourc
 repair, if necessary, is separately identified/saved before another run. All images
 remain system-temp/no-delete; non-image operation outputs cleaned after consumption.
 Positive popup capture stays the next required capability, not accepted by AX alone.
+
+
+## Remaining lifecycle only, after b4a965e
+
+Root selects Native's bounded orchestration handoff; no product/fixture/helper edit
+or cap change. Prebuild and pin every needed binary/command before live timer. One
+fresh own popup Snapshot creates the original binding; do NOT repeat initial Observe
+or either inspect already proved. Fresh actual CUA state confirms popup/Confirm,
+then existing Confirm and fresh state prove explicit close; record action/check times.
+One non-UI batch checks identity CLOSED/rotated and old-binding Observe, validates
+canonical stale_target with no observed payload and actual owned helper cleanup.
+Reopen→Snapshot→one fresh Observe/validation batch. Current CUA subtree/focus/count
+before/after that fresh Observe plus current identity OPEN/same generation support
+only the actual measured invariance dimensions; cached manifest equality is not proof.
+
+Native owns the setup lane for this one sequence; existing300s runtime/5s fixture
+cleanup and1s request/cleanup profile unchanged. Check remaining time before each
+phase and keep finally before assertions. Batch existing non-UI CLI/validation work
+instead of agent roundtrips; no new daemon/monitor/general runner, hidden input or
+Cua state/stop bypass. Tool interruption invalidates only its affected sequence;
+report exact completed/not-run phases. No capture/B permissions/real app/source change.
+Write only existing M03 receipt; image retention/current non-image cleanup unchanged.
+This changed orchestration addresses watchdog delay, not a claimed collector defect.
