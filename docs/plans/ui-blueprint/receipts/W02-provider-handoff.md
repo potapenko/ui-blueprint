@@ -1,7 +1,8 @@
 # W02 single SetChecked provider handoff
 
-Status: separate fixture saved9bd9f66; native-checkbox provider source implemented
-and focused source/peer checks passed. No live action or guarded host composition.
+Status: finite actual guarded actions sequence PASSED on corrected Corec3967ca
+and saved harness25bf999; source preparation and live native Checked verification
+are established for the owned fixture only, not full B02/public CLI actions.
 Authority: [W02 packet](../packets/W02-provider-handoff.md), approved PLAN.UIB@1/P5.
 One writable file: this receipt in the existing directory; no new directories.
 Basis registry15 → ACTIONS/IDENTITY/FORMS/LIFECYCLE/CACHE and full already-read
@@ -363,3 +364,55 @@ it was removed and absence verified once its source checks were consumed. Planne
 runtime output UUID was never created. Old evidence/images untouched. Corrected
 composition needs new current-operation build pins; no obsolete binary is retained
 for accidental activation.
+
+## Corrected composition repin and activated actual actions result
+
+Root accepted corrected compositionc3967ca50a4bd380c006677cc36a39b48ed43f95 with
+edge evidence2f5c5eb and activated ONE finite actions sequence. Saved harness
+25bf9996a0dc73ed11cdcfcfb09d5a50f8bbb4c2 is unchanged.195exported input fingerprint
+2c0370393cc35317bb591d0e640c3f3e6e914973623ef07c2cc39d693490f033;
+actual matching helperdf02ee82...83ae94. Affected corrected web_live no-run PASS;
+no unchanged provider tests or old suite rerun. Current operation build was
+uib-actions-deadline-wgup1viw, system-temp outputb5a96f4d-f917-49f3-bf2b-3a40dd1cc5b5.
+Test deps/web_live-bb05baebd9300679 SHA256
+9aa286d47d7bb1df38c1db0c2ae2fe9f121f865b6cba57b6ea08541d0e3045a3;
+worker142537bbd791a750e588e78c154ebe1a9fa9b26b77a1ff1e181790f466927750.
+
+Actual runtime2026-10-07T21:51:09.457Z–21:51:11.440Z: passed, exit0, pending0,
+10host outcomes and12checks. Same32/depth8/64KiB/250ms and120s bounds, no adjustment,
+retry or source/oracle change. Separate owned headless process/profile/context and
+actions-only loopback server; no desktop lane, real site or source-app action.
+
+| Actual step | Canonical / independent result | Parent effect |
+| --- | --- | --- |
+| Observe | actual target Snapshot/ref, committed1 | NotDispatched |
+| Prepare10 | valid ActionCase, writable/value_allowed knowntrue, unique_matchtrue, reported native-checkbox-setter-capability evidence | NotDispatched |
+| Act SetChecked(true) | confirmed delivery, Succeeded, fresh after.Checked knowntrue; before Snapshot1:5 → after1:6, verification web.dom:1:6 | Confirmed |
+| Remount after another real Prepare | resync_required plus committed canonical failed/not_dispatched transition; no replacement search | NotDispatched |
+| Readonly attachment | Observe/Prepare succeed; Mutation submit PermissionDenied before dispatch, no fabricated completion | no permit |
+| Controlled cancellation | Cancelled, committed0/missing1, effect_unknowntrue; genuine EffectPermit held before forwarding, no retry | Possible |
+
+Independent fixture oracle saw target false→true, duplicate unchangedtrue; disabled/
+mixed/custom values and focus/scroll unchanged except explicit remount setup.
+Successful transition is NOT inferred from Completed/API acceptance: delivery,
+outcome, distinct actual after Snapshot and Checked property were checked. Only
+one genuine effect permit was forwarded. Unknown negative is possible-before-
+delivery, not delivered-then-lost proof; it produced no canonical mutation frame.
+This verifies native Setter state, not keyboard/pointer events or application business
+applied state. No public CLI action command or arbitrary-site capability is implied.
+
+All scopes/operations completed expected checks. Actual shutdown/reap confirmed
+sessions0/groups0/abandonedfalse; fixture browser survived workers. Test/context/
+driver/browser/server/profile all confirmed closed. Post-run195source, both binaries,
+current harness/helper/fixture and all4output hashes matched.
+
+Consumed temporary canonical frames: Observe5388B SHA256
+20ae978b3edbcca72f744a1f1f8bb69b38fd7c60da556a923aa1b4739e7f3e67;
+Prepared4600B1f7383967d6ba6efa57b6930caaef42d8c45737ff2ea9c4af771ff08f50c5db6;
+Transition7192Bd122020658dad60bf166e2ec3e992e307f0fc3b49f1edbee0b794bbcfe5b2b22.
+Report e937fb0cfd7aa3f4ff01f7a9905cbb3bb9d66e69acec18009cba8d0e6e6bf2f2.
+These identify checked/deleted files, not available retained artifacts. Facts were
+delivered inline; four current non-image output files/empty directory removed and
+absence verified. Current source/build temp contained no image files and was
+removed with absence verified. No images generated/deleted, older evidence intact.
+No source/Git/runtime resource held. This result changes only the existing receipt.
