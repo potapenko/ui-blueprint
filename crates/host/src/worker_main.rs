@@ -351,6 +351,8 @@ pub fn run() -> Result<(), HostError> {
             return Err(HostError::InvalidControl);
         }
         sequence = operation.correlation.operation;
+        // No failure metadata survives reuse, including a successful prior call.
+        let _ = io.take_diagnostic();
         guard::operation(sequence, operation.class, guard::Phase::Decode);
         DEADLINE.store(
             now()
@@ -428,7 +430,7 @@ pub fn run() -> Result<(), HostError> {
             Ok(value) => (0, value),
             Err(error) => (control_error(error), 0),
         };
-        io.write_control(Control {
+        let mut terminal = Control {
             kind: ControlKind::Terminal,
             class: operation.class,
             slot: 0,
@@ -437,7 +439,15 @@ pub fn run() -> Result<(), HostError> {
             length: 0,
             value: code,
             auxiliary: value,
-        })?;
+        };
+        if let Some(record) = io.take_diagnostic()
+            && code != 0
+            && operation.class == OperationClass::Observe
+            && operation.flags & 136 == 136
+        {
+            record.apply(&mut terminal)?;
+        }
+        io.write_control(terminal)?;
         DEADLINE.store(u64::MAX, Ordering::Release);
         input[..size].fill(0);
     }

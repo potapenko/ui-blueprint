@@ -449,3 +449,32 @@ minimum/default is implied. New custom serializers, buffering features, arbitrar
 writers, dependency revisions or output paths require affected requalification.
 This is author source/runtime closure submitted for scoped acceptance, not a waiver
 of ordinary parser/SDK memory or live/D06 requirements.
+
+## Bounded Web failure handoff
+
+The actual first-observe diagnostic returned InvalidInput with committed0/missing1;
+the previous collector-to-HostError mapping could not identify the failing stage.
+[Private diagnostic metadata](../../crates/host/src/diagnostic.rs) now preserves
+only a closed trusted stage/cause, signed protocol code, visited-node count and
+existing cleanup/send-progress enums. No UI text, endpoint or CDP payload enters it.
+Web owns mapping at the loss boundary; this common plumbing alone is not a diagnosis
+of the acquisition failure or proof of positive live collection.
+
+WorkerIo holds one12-byte Option inline on the operation thread's existing bounded
+stack. It clears that value before each request and takes it before terminal write;
+success discards it. A failed live Web Observe uses flag1 and the existing length/
+auxiliary numbers in its unchanged64-byte Terminal control. No body, additional
+message, global store or allocation is introduced. HostError/terminal value,
+correlation and canonical frame/commit/ACK semantics remain unchanged. Parent
+accepts metadata only for the matching current live Web Observe before its deadline;
+unknown enums, reserved bits, invalid counts/codes or success metadata refuse.
+
+HostCompletion.diagnostic() returns the12-byte Option inline. Existing parent rx/tx
+buffers, RuntimeState heap and charged output leases are unchanged; caller completion
+metadata remains bounded stack-owned data, with no new retained heap owner. Absence
+means no diagnostic terminal was received, including parent timeout, fatal exit,
+cancel or cleanup quarantine; it never implies a successful producer or remote cleanup.
+RemoteCleanup reports the collector object group, separately from worker process reap.
+This is a private paired-host/worker development record, with no canonical/public CLI
+schema or version change. Old controls without metadata retain their previous meaning;
+an old supervisor rejects the new marker, so diagnostic runs must pin rebuilt pairs.

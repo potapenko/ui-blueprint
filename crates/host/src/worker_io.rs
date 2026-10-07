@@ -13,6 +13,7 @@ use uiblueprint_host::{
 pub struct WorkerIo {
     input: File,
     output: File,
+    diagnostic: Option<uiblueprint_host::diagnostic::DiagnosticRecord>,
 }
 impl WorkerIo {
     pub fn inherited() -> Result<Self, HostError> {
@@ -28,7 +29,21 @@ impl WorkerIo {
         Ok(Self {
             input: unsafe { File::from_raw_fd(CHILD_INPUT_FD) },
             output: unsafe { File::from_raw_fd(CHILD_OUTPUT_FD) },
+            diagnostic: None,
         })
+    }
+    /// Operation-thread-only inline metadata, with no allocation or logging.
+    #[cfg(feature = "web")]
+    pub(super) fn set_diagnostic(
+        &mut self,
+        record: uiblueprint_host::diagnostic::DiagnosticRecord,
+    ) {
+        self.diagnostic = Some(record);
+    }
+    pub(super) fn take_diagnostic(
+        &mut self,
+    ) -> Option<uiblueprint_host::diagnostic::DiagnosticRecord> {
+        self.diagnostic.take()
     }
     pub fn control(&mut self) -> Result<Control, HostError> {
         let mut bytes = [0; CONTROL_BYTES];

@@ -698,6 +698,7 @@ fn take_completion<'a, C: OwnedProcess>(
         class: active.class,
         terminal,
         effect: active.effect,
+        diagnostic: None,
         frames: active.publish.map(Publication::finish),
     }
 }
@@ -719,6 +720,7 @@ fn quarantine_active<'a, C: OwnedProcess>(worker: &mut Worker<'a, C>) -> HostCom
         class: active.class,
         terminal: Terminal::Failed(HostError::CleanupPending),
         effect: active.effect,
+        diagnostic: None,
         frames: active.publish.map(Publication::finish),
     }
 }
@@ -738,6 +740,7 @@ fn terminalize<'a, C: OwnedProcess>(
         class: active.class,
         terminal,
         effect: active.effect,
+        diagnostic: None,
         frames: active.publish.map(Publication::finish),
     }
 }
@@ -1126,9 +1129,11 @@ fn pump<'a, P: ProcessPlatform>(
             Ok(None)
         }
         ControlKind::Terminal => {
+            let diagnostic = crate::diagnostic::DiagnosticRecord::from_terminal(
+                control,
+                worker.web && active.live && active.request.input_format == 1,
+            )?;
             if control.slot != 0
-                || control.flags != 0
-                || control.length != 0
                 || (control.value == 0
                     && active
                         .publish
@@ -1178,6 +1183,7 @@ fn pump<'a, P: ProcessPlatform>(
                 class: active.class,
                 terminal,
                 effect: active.effect,
+                diagnostic,
                 frames: active.publish.map(Publication::finish),
             })))
         }

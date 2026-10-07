@@ -63,9 +63,15 @@ pub struct HostCompletion<'a> {
     pub class: OperationClass,
     pub terminal: Terminal,
     pub effect: EffectReceipt,
+    pub(crate) diagnostic: Option<crate::diagnostic::DiagnosticRecord>,
     pub(crate) frames: Option<CommittedFrames<'a>>,
 }
 impl HostCompletion<'_> {
+    /// Private bounded producer failure metadata; absent on success or when no
+    /// diagnostic terminal arrived (for example parent timeout or worker death).
+    pub fn diagnostic(&self) -> Option<crate::diagnostic::DiagnosticRecord> {
+        self.diagnostic
+    }
     pub fn committed(&self) -> u8 {
         self.frames.as_ref().map_or(0, |f| f.committed)
     }

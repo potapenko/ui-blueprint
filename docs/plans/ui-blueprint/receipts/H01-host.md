@@ -1008,3 +1008,64 @@ publication/protocol/buffers; schema model/lib/analysis/types; two new tests;
 ENV-SNAPSHOT-VALID/measurement-gap/check-converted fixtures. Dependency pins above
 were unchanged; serde_core primitive implementations also inspected:
 serde_core-1.0.229/src/ser/impls.rs `5ee7efc439345e8665da0bd79bc06c02a0506e5fd0f3a4cf11af0c7197eaa643`.
+
+## W01 observed failure visibility — common plumbing
+
+Root's finite continuation after actual first-observe InvalidInput/committed0/
+missing1/operation1 authorizes bounded private stage/cause preservation. Worker
+cleanup was confirmed by Web. This resolves missing diagnostic visibility only;
+the underlying acquisition cause and positive live result remain Web follow-up.
+Basis retained: registry11, D02@2 PUBLICATION/LIFECYCLE, D05@4/MEMORY@2/WORK@1,
+PRIVACY/EXCHANGE/LIFECYCLE@1, RUST.md/DEV.RUST@2 and their established closure.
+No contract delta, canonical/public CLI change, new dependency or cap adjustment.
+
+Exact Core write set: src/{diagnostic,host_types,lib,supervisor,worker_io,
+worker_main}.rs under crates/host, docs/development/host.md and this receipt.
+Web owns worker_web.rs and its caller/tests/docs; Native changes are disjoint.
+Common API is DiagnosticRecord/DiagnosticStage/DiagnosticCause,
+WorkerIo::set_diagnostic and HostCompletion::diagnostic(). See host.md for fixed
+owner and paired-version compatibility; diagnostic.rs defines every numeric code.
+DiagnosticRecord and Option each12 bytes; existing Terminal remains64 bytes.
+Operation-thread stack holds the sole pending record; success discards it and
+next request resets it. Parent uses existing rx/tx arrays with no added heap or
+RuntimeState field. Only failed matching live Web Observe accepts the marker;
+canonical payload bytes and terminal/error semantics remain unchanged.
+Diagnostic source SHA256:
+`0f284e6d6825ef42f167ce46daaaa5bfd8ac109a15b888d238ebd9278b72a42b`.
+
+Affected checks, Rust1.96.0/ac68faa20c58cbccd01ee7208bf3b6e93a7d7f96,
+aarch64-apple-darwin, Darwin27.0.0 arm64; all Cargo commands locked/offline:
+
+- `cargo check -p uiblueprint-host --lib --bin session-worker --features web`
+  compiled common handoff before Web hookup; then-unused setter warning was
+  expected at that intermediate state, not claimed final clean Web acceptance.
+- `cargo test -p uiblueprint-host --lib diagnostic::tests`:2 passed; signed
+  protocol extremes/counts, fixed sizes, unchanged status/correlation, legacy
+  terminal, wrong operation/success marker and malformed fields checked.
+- `cargo test -p uiblueprint-host --no-default-features --test parent_allocations`:
+  parent allocation proof passed (executed together with runtime target initially).
+- Default `cargo clippy -p uiblueprint-host --no-default-features --lib
+  --bin session-worker -- -D warnings`: passed.
+- Exact runtime case `real_worker_reuses_session_and_keeps_caller_completion_during_other_session`:
+  passed; ordinary success/refusal, session reuse, caller lease and cleanup.
+- Exact runtime case `effects::readonly_cancel_and_deadline_refuse_before_fake_dispatch`:
+  standalone passed with unchanged2ms admission deadline/3ms test sleep.
+
+Do not label the full runtime target passed: first run lacked effect_peer and
+poisoned its test mutex. Existing effect_peer/process_peer/native_peer examples
+were built, then rerun reached6 passed/14 failed/1 ignored: the first real failure
+was DeadlineExpired at effects_host.rs:146 submit unwrap, followed by mutex poison.
+Source trace places expiry in submit_mode::remaining_ms BEFORE sequence/publication/
+active assignment/Submit dispatch; the wrapper reserves/copies input after the
+caller starts2ms. Diagnostic path is Web-only and was not entered by this Mutation
+peer. Later isolated case passed; no threshold/source change or success substitution.
+Ambient scheduling was not controlled; no exact delay attribution is claimed.
+Timing inputs SHA256: effects_host.rs
+`719a70c8c7a4ffb26494821996184a17b09448b7e60f72919f207e768e959451`;
+ENV-ACTION-VALID.json `dc31fd0d9681cb47572eb15cd5458839e00d38115ffe251db209d4f160752af0`;
+effect_peer `ab2d26de7778431c566f19522e4d085788d287bcbde8f0ccaf4050ad34c0574e`;
+runtime test `c8de4fbd67892d2025d3fb1e627ab23fec7eb1303effe7c9d57ba05c88220194`.
+
+No browser/SDK/input run or generic audit performed by Core. New Web producer
+mapping plus one diagnostic live outcome require Web's affected checks and root's
+activation. Common checkpoint-ready handoff does not self-accept those outcomes.

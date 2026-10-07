@@ -4,6 +4,8 @@
 
 pub mod authority;
 pub mod buffers;
+#[doc(hidden)]
+pub mod diagnostic;
 #[cfg(unix)]
 pub mod domain;
 #[cfg(unix)]
