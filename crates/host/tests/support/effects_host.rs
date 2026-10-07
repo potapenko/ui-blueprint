@@ -85,6 +85,56 @@ fn fake_delivery_confirms_one_nonce_per_operation_and_reuses_worker() {
     assert_eq!(domain.usage().reserved_sessions, 1);
     finish(&mut host);
 }
+
+#[test]
+fn marked_pre_dispatch_refusal_cannot_gain_effect_authority_or_false_success() {
+    let _serial = RUNTIME_TEST.lock().unwrap();
+    for mode in [b'R', b'S', b'N', b'G', b'M', b'U', b'O'] {
+        let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
+        let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
+        let session = attach(&mut host, true);
+        let owned = domain.usage().parent_owned_bytes;
+        submit(&mut host, session, mode, deadline()).unwrap();
+        let c = complete(&mut host);
+        assert!(
+            matches!(c.terminal, Terminal::Failed(_)),
+            "refusal never completes mutation"
+        );
+        if mode == b'O' {
+            assert!(c.effect_unknown());
+        } else {
+            assert_eq!(c.effect, EffectReceipt::NotDispatched);
+        }
+        if matches!(mode, b'R' | b'S' | b'N' | b'G') {
+            assert_eq!(c.committed(), 1);
+            assert_eq!(
+                c.bytes(0),
+                Some(include_bytes!("../../../../fixtures/golden/G01-READONLY.json").as_slice())
+            );
+        } else {
+            assert_eq!(c.committed(), 0);
+        }
+        assert_eq!(domain.usage().parent_owned_bytes, owned);
+        if mode == b'R' {
+            let original = c.bytes(0).unwrap().to_vec();
+            submit(&mut host, session, b'C', deadline()).unwrap();
+            let success = complete(&mut host);
+            assert_eq!(success.terminal, Terminal::Completed);
+            assert!(matches!(success.effect, EffectReceipt::Confirmed { .. }));
+            assert_eq!(
+                c.bytes(0),
+                Some(original.as_slice()),
+                "refusal latch belongs only to its operation"
+            );
+            drop(success);
+        }
+        drop(c);
+        finish(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}
 #[test]
 fn fake_loss_or_duplicate_permit_request_is_unknown_and_never_retried() {
     let _serial = RUNTIME_TEST.lock().unwrap();

@@ -39,6 +39,115 @@ pub(super) struct WebSession {
     limits: HostLimits,
 }
 impl WebSession {
+    /// Existing read-only Prepare Tape. Input capability claims are unresolved;
+    /// only the actual provider's independently acquired facts create ActionCase.
+    pub(super) fn prepare_action(
+        &mut self,
+        session: &mut CanonicalSession<'_>,
+        io: &mut WorkerIo,
+        publication: &mut [u8],
+        control: Control,
+        input: &[u8],
+    ) -> Result<u64, HostError> {
+        let result = (|| {
+            if control.class != OperationClass::Prepare || control.flags & 8 == 0 {
+                return Err(HostError::InvalidControl);
+            }
+            let (snapshot, request, clock) = match session.prepare_input(input) {
+                Ok(input) => input,
+                Err(error) => {
+                    return crate::worker_action::publish_refusal(
+                        io,
+                        publication,
+                        control,
+                        Id("prepare-input".into()),
+                        error,
+                        publication.len(),
+                    );
+                }
+            };
+            let limit = request.limits.max_output_bytes as usize;
+            let deadline = worker_main::tighten_deadline(request.limits.deadline_ms)?;
+            let mut timing =
+                crate::worker_effect::WorkerActionControl::new(clock, worker_main::clock_origin());
+            use uiblueprint_plugin_api::actions::ActionControl;
+            let now = timing.now();
+            let remaining = u64::try_from(
+                deadline
+                    .saturating_duration_since(Instant::now())
+                    .as_millis(),
+            )
+            .map_err(|_| HostError::Overflow)?;
+            if remaining == 0 {
+                return Err(HostError::DeadlineExpired);
+            }
+            let provider =
+                collector::CheckboxProvider::new(&mut self.collector, request.limits.clone());
+            match provider.prepare_exact(&snapshot, &request, &now, remaining) {
+                Ok(case) => {
+                    crate::worker_action::publish_prepared(io, publication, control, case, limit)
+                }
+                Err(issue) => crate::worker_action::publish_refusal(
+                    io,
+                    publication,
+                    control,
+                    issue.scope_id,
+                    action_issue_error(issue.code),
+                    limit,
+                ),
+            }
+        })();
+        if self.collector.pending_invalidation() {
+            session.invalidate_retained_session()?;
+            self.collector.acknowledge_invalidation();
+        }
+        result
+    }
+    pub(super) fn act(
+        &mut self,
+        session: &mut CanonicalSession<'_>,
+        io: &mut WorkerIo,
+        publication: &mut [u8],
+        control: Control,
+        input: &[u8],
+    ) -> Result<u64, HostError> {
+        let result = (|| {
+            if control.class != OperationClass::Mutation || control.flags & 8 == 0 {
+                return Err(HostError::InvalidControl);
+            }
+            let (case, limits, target, clock) = match session.action_input(input) {
+                Ok(input) => input,
+                Err(error) => {
+                    return crate::worker_action::publish_refusal(
+                        io,
+                        publication,
+                        control,
+                        Id("action-input".into()),
+                        error,
+                        publication.len(),
+                    );
+                }
+            };
+            let deadline = worker_main::tighten_deadline(limits.deadline_ms)?;
+            let mut provider =
+                collector::CheckboxProvider::new(&mut self.collector, limits.clone());
+            crate::worker_action::ActionOperation {
+                io,
+                publication,
+                control,
+                target,
+                clock,
+                origin: worker_main::clock_origin(),
+                deadline,
+            }
+            .execute(case, limits, &mut provider)
+        })();
+        if self.collector.pending_invalidation() {
+            session.invalidate_retained_session()?;
+            self.collector.acknowledge_invalidation();
+        }
+        result
+    }
     /// setup is immutable TRUSTED attachment configuration, never an observation
     /// body/UI-provided endpoint. Core owns transport/selection of that authority.
     pub(super) fn attach(
@@ -317,6 +426,17 @@ impl WebSession {
             self.collector.acknowledge_invalidation();
         }
         result
+    }
+}
+fn action_issue_error(code: uiblueprint_schema::model::ErrorCode) -> HostError {
+    use uiblueprint_schema::model::ErrorCode::*;
+    match code {
+        PermissionRequired => HostError::PermissionDenied,
+        StaleTarget | TargetUnresolved | AmbiguousTarget | ResyncRequired => {
+            HostError::ResyncRequired
+        }
+        Timeout => HostError::DeadlineExpired,
+        _ => HostError::InvalidInput,
     }
 }
 fn collector_error(error: collector::Failure) -> HostError {

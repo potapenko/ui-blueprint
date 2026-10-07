@@ -363,7 +363,35 @@ pub fn run() -> Result<(), HostError> {
         );
         let size = usize::try_from(operation.length).map_err(|_| HostError::Overflow)?;
         io.read(&mut input[..size])?;
-        let result = if operation.class == OperationClass::Observe
+        let result = if matches!(
+            operation.class,
+            OperationClass::Prepare | OperationClass::Mutation
+        ) {
+            #[cfg(feature = "web")]
+            {
+                match web_session.as_mut() {
+                    Some(web) if operation.class == OperationClass::Prepare => web.prepare_action(
+                        &mut session,
+                        &mut io,
+                        &mut publication,
+                        operation,
+                        &input[..size],
+                    ),
+                    Some(web) => web.act(
+                        &mut session,
+                        &mut io,
+                        &mut publication,
+                        operation,
+                        &input[..size],
+                    ),
+                    None => Err(HostError::PermissionDenied),
+                }
+            }
+            #[cfg(not(feature = "web"))]
+            {
+                Err(HostError::PermissionDenied)
+            }
+        } else if operation.class == OperationClass::Observe
             && operation.flags & 128 != 0
             && operation.flags & 8 != 0
         {

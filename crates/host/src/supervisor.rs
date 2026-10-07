@@ -44,6 +44,7 @@ struct Active<'a> {
     ticket: Option<u64>,
     native_requested: u8,
     native_failed: u8,
+    refusal_started: bool,
 }
 struct Worker<'a, C: OwnedProcess> {
     child: C,
@@ -234,6 +235,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 ticket: None,
                 native_requested: 0,
                 native_failed: 0,
+                refusal_started: false,
                 request: OutputRequest {
                     channels: 0,
                     frame_bytes: self.domain.limits.output_bytes,
@@ -388,6 +390,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             ticket: None,
             native_requested: 0,
             native_failed: 0,
+            refusal_started: false,
         });
         slot.sequence = sequence;
         slot.phase = SlotPhase::Running;
@@ -1072,6 +1075,7 @@ fn pump<'a, P: ProcessPlatform>(
         ControlKind::EffectReady => {
             if active.class != OperationClass::Mutation
                 || active.effect != EffectReceipt::NotDispatched
+                || active.refusal_started
                 || control.slot != 0
                 || control.flags & !1 != 0
                 || control.length != 0
@@ -1101,10 +1105,17 @@ fn pump<'a, P: ProcessPlatform>(
             if active.live && active.ticket.is_none() {
                 return Err(HostError::InvalidControl);
             }
-            if active.class == OperationClass::Mutation
-                && active.effect == EffectReceipt::NotDispatched
-            {
-                return Err(HostError::InvalidControl);
+            if active.class == OperationClass::Mutation {
+                if control.flags == 1 {
+                    if active.effect != EffectReceipt::NotDispatched || active.refusal_started {
+                        return Err(HostError::InvalidControl);
+                    }
+                    // Fixed correlated refusal header permanently closes this
+                    // operation's delivery lane before any body is accepted.
+                    active.refusal_started = true;
+                } else if active.effect == EffectReceipt::NotDispatched {
+                    return Err(HostError::InvalidControl);
+                }
             }
             if control.length > active.request.frame_bytes as u64 {
                 return Err(HostError::ResourceLimit);
@@ -1134,6 +1145,7 @@ fn pump<'a, P: ProcessPlatform>(
                 worker.web && active.live && active.request.input_format == 1,
             )?;
             if control.slot != 0
+                || (active.refusal_started && (control.value == 0 || control.auxiliary != 0))
                 || (control.value == 0
                     && active
                         .publish

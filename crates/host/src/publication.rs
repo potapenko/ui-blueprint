@@ -65,7 +65,11 @@ impl<'a> Publication<'a> {
             return Err(HostError::StaleOperation);
         }
         if control.flags > 1
-            || (control.flags != 0 && self.class != OperationClass::Observe)
+            || (control.flags != 0
+                && !matches!(
+                    self.class,
+                    OperationClass::Observe | OperationClass::Mutation
+                ))
             || control.value != 0
             || control.auxiliary != 0
             || control.slot >= 3
@@ -149,7 +153,7 @@ impl<'a> Publication<'a> {
             return Err(HostError::InvalidControl);
         }
         self.committed |= 1 << frame.slot;
-        if frame.flags == 1 {
+        if frame.flags == 1 && self.class == OperationClass::Observe {
             self.incomplete |= 1 << frame.slot;
         }
         self.total += self.received;

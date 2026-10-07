@@ -114,6 +114,105 @@ impl<'a> CanonicalSession<'a> {
             .invalidate_session(self.cache_session)
             .map_err(|_| HostError::InvalidState)
     }
+    /// Existing Tape(ActionCase Document, Act Request Document); typed decoding
+    /// stays inside the admitted worker. The provider separately enforces its
+    /// trusted attachment's plugin/surface/scope before fresh acquisition.
+    #[cfg(feature = "web")]
+    pub(crate) fn action_input(
+        &self,
+        bytes: &[u8],
+    ) -> Result<(ActionCase, Limits, TargetLease, Id), HostError> {
+        if !self.target.permits(OperationClass::Mutation) {
+            return Err(HostError::PermissionDenied);
+        }
+        if bytes.len() > self.limits.input_bytes {
+            return Err(HostError::ResourceLimit);
+        }
+        guard::phase(guard::Phase::Decode);
+        let tape = Tape::decode(bytes)?;
+        if tape.count() != 2 {
+            return Err(HostError::InvalidInput);
+        }
+        let source = Document::from_json(tape.get(0)?, self.limits.input_bytes)
+            .map_err(|_| HostError::InvalidInput)?;
+        let request = Document::from_json(tape.get(1)?, self.limits.input_bytes)
+            .map_err(|_| HostError::InvalidInput)?;
+        let Artifact::Action(case) = source.artifact else {
+            return Err(HostError::InvalidInput);
+        };
+        let Artifact::Request(request) = request.artifact else {
+            return Err(HostError::InvalidInput);
+        };
+        let Operation::Act { action } = request.operation else {
+            return Err(HostError::PermissionDenied);
+        };
+        self.target(&case.snapshot.context)?;
+        if request.clock_domain != self.clock
+            || request.context.session_id != self.session_id
+            || !uiblueprint_schema::validation::contexts_compatible(
+                &request.context,
+                &case.snapshot.context,
+            )
+            || action != case.action
+        {
+            return Err(HostError::InvalidInput);
+        }
+        Ok((*case, request.limits, self.target, self.clock.clone()))
+    }
+    /// Read-only preparation has no effect authority. Only actual provider
+    /// acquisition may replace the input's unknown Resolution facts.
+    #[cfg(feature = "web")]
+    pub(crate) fn prepare_input(&self, bytes: &[u8]) -> Result<(Snapshot, Request, Id), HostError> {
+        if bytes.len() > self.limits.input_bytes {
+            return Err(HostError::ResourceLimit);
+        }
+        guard::phase(guard::Phase::Decode);
+        let tape = Tape::decode(bytes)?;
+        if tape.count() != 2 {
+            return Err(HostError::InvalidInput);
+        }
+        let source = Document::from_json(tape.get(0)?, self.limits.input_bytes)
+            .map_err(|_| HostError::InvalidInput)?;
+        let request = Document::from_json(tape.get(1)?, self.limits.input_bytes)
+            .map_err(|_| HostError::InvalidInput)?;
+        let Artifact::Snapshot(snapshot) = source.artifact else {
+            return Err(HostError::InvalidInput);
+        };
+        let Artifact::Request(request) = request.artifact else {
+            return Err(HostError::InvalidInput);
+        };
+        let Operation::Prepare { action } = &request.operation else {
+            return Err(HostError::PermissionDenied);
+        };
+        self.target(&snapshot.context)?;
+        let reference = &action.backend_ref;
+        if request.clock_domain != self.clock
+            || request.context.session_id != self.session_id
+            || !uiblueprint_schema::validation::contexts_compatible(
+                &request.context,
+                &snapshot.context,
+            )
+            || reference.session_id != self.session_id
+            || reference.target != snapshot.context.target
+            || reference.snapshot_id != snapshot.id
+            || action.authorized_scope != snapshot.context.scope_id
+            || !matches!(action.intent, Intent::SetChecked { .. })
+            || action.modality != InputModality::Setter
+            || snapshot
+                .nodes
+                .iter()
+                .find(|node| node.key == reference.key)
+                .is_none_or(|node| node.surface != reference.surface)
+            || snapshot
+                .observations
+                .iter()
+                .find(|o| o.id == reference.observation_id)
+                .is_none_or(|o| o.source_namespace != reference.key.namespace)
+        {
+            return Err(HostError::InvalidInput);
+        }
+        Ok((*snapshot, *request, self.clock.clone()))
+    }
     pub fn execute(
         &mut self,
         class: OperationClass,

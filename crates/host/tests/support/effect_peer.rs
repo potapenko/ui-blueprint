@@ -1,55 +1,39 @@
 //! Finite fake delivery endpoint. No platform input, SDK, side effects or retries.
 //! All successful publication is an unchanged canonical Action fixture; the fake
 //! delivery is a local counter, never a claim that an application's state changed.
-use std::{
-    fs::File,
-    io::{Read, Write},
-    os::fd::FromRawFd,
-};
+use std::time::{Duration, Instant};
+#[path = "../../src/worker_effect.rs"]
+mod worker_effect;
+#[path = "../../src/worker_io.rs"]
+#[allow(dead_code)] // This actual-I/O peer exercises effect controls, not diagnostics.
+mod worker_io;
 use uiblueprint_host::{
     process::DarwinPlatform,
-    process_api::{CHILD_INPUT_FD, CHILD_OUTPUT_FD, WorkerPlatform},
+    process_api::WorkerPlatform,
     worker_config::{MAX_CONFIG_BYTES, WorkerConfig},
     *,
 };
-use uiblueprint_schema::model::{Artifact, Document};
-struct Io {
-    input: File,
-    output: File,
-}
-impl Io {
-    fn control(&mut self) -> Control {
-        let mut b = [0; CONTROL_BYTES];
-        self.input.read_exact(&mut b).unwrap();
-        Control::decode(&b).unwrap()
-    }
-    fn send(&mut self, c: Control) {
-        self.output.write_all(&c.encode()).unwrap();
-    }
-    fn body<'a>(&mut self, c: Control, b: &'a mut [u8]) -> &'a [u8] {
-        let n = usize::try_from(c.length).unwrap();
-        assert!(n <= b.len());
-        self.input.read_exact(&mut b[..n]).unwrap();
-        &b[..n]
-    }
+use uiblueprint_plugin_api::{
+    ClockReading,
+    actions::{ActionControl, EffectGate},
+};
+use uiblueprint_schema::model::{Artifact, Document, Id, InputModality};
+fn body<'a>(io: &mut worker_io::WorkerIo, c: Control, b: &'a mut [u8]) -> &'a [u8] {
+    let n = usize::try_from(c.length).unwrap();
+    assert!(n <= b.len());
+    io.read(&mut b[..n]).unwrap();
+    &b[..n]
 }
 fn main() {
     DarwinPlatform::setup_main(8 * 1_048_576).unwrap();
-    // SAFETY: Native's exact-path test spawn supplies these two live descriptors.
-    // This entrypoint adopts them once; no other owners or threads access them.
-    let mut io = unsafe {
-        Io {
-            input: File::from_raw_fd(CHILD_INPUT_FD),
-            output: File::from_raw_fd(CHILD_OUTPUT_FD),
-        }
-    };
-    let config = io.control();
+    let mut io = worker_io::WorkerIo::inherited().unwrap();
+    let config = io.control().unwrap();
     assert_eq!(config.kind, ControlKind::Configure);
     let mut cb = [0; MAX_CONFIG_BYTES];
-    let config = WorkerConfig::decode(io.body(config, &mut cb)).unwrap();
-    let attach = io.control();
+    let config = WorkerConfig::decode(body(&mut io, config, &mut cb)).unwrap();
+    let attach = io.control().unwrap();
     let mut buffer = [0; 65536];
-    let Artifact::Session(session) = Document::from_json(io.body(attach, &mut buffer), 65536)
+    let Artifact::Session(session) = Document::from_json(body(&mut io, attach, &mut buffer), 65536)
         .unwrap()
         .artifact
     else {
@@ -66,21 +50,26 @@ fn main() {
         .unwrap();
     // This short-lived probe verifies handshake metadata only. This fake peer is
     // not the production worker/watchdog or an allocation enforcement proof.
-    io.send(Control {
+    io.write_control(Control {
         kind: ControlKind::Ready,
         length: 0,
         value: 0,
         auxiliary: stack as u64,
         ..attach
-    });
+    })
+    .unwrap();
     let mut sequence = 0;
     loop {
-        let operation = io.control();
+        let operation = io.control().unwrap();
+        let origin = Instant::now();
+        let deadline = origin
+            .checked_add(Duration::from_millis(operation.value))
+            .unwrap();
         assert_eq!(operation.kind, ControlKind::Submit);
         assert_eq!(operation.class, OperationClass::Mutation);
         assert!(operation.correlation.operation > sequence);
         sequence = operation.correlation.operation;
-        let input = io.body(operation, &mut buffer);
+        let input = body(&mut io, operation, &mut buffer);
         assert!(input.len() > 1);
         let mode = input[0];
         let canonical = &input[1..];
@@ -89,6 +78,54 @@ fn main() {
             panic!("action")
         };
         assert!(config.target.matches(&action.snapshot.context.target));
+        if matches!(mode, b'R' | b'S' | b'N' | b'G' | b'M' | b'U') {
+            let refusal = include_bytes!("../../../../fixtures/golden/G01-READONLY.json");
+            Document::from_json(refusal, 65536).unwrap();
+            let frame = Control {
+                kind: ControlKind::Frame,
+                class: operation.class,
+                slot: 0,
+                flags: u8::from(mode != b'U'),
+                correlation: operation.correlation,
+                length: refusal.len() as u64,
+                value: 0,
+                auxiliary: 0,
+            };
+            io.write_control(frame).unwrap();
+            io.write(refusal).unwrap();
+            io.write_control(Control {
+                kind: ControlKind::Commit,
+                flags: if mode == b'M' { 0 } else { frame.flags },
+                ..frame
+            })
+            .unwrap();
+            let ack = io.control().unwrap();
+            assert_eq!(ack.kind, ControlKind::Ack);
+            assert_eq!(ack.flags, frame.flags);
+            if mode == b'G' {
+                io.write_control(Control {
+                    kind: ControlKind::EffectReady,
+                    length: 0,
+                    flags: 0,
+                    value: 0,
+                    auxiliary: 0,
+                    ..frame
+                })
+                .unwrap();
+                let _ = io.control();
+                return;
+            }
+            io.write_control(Control {
+                kind: ControlKind::Terminal,
+                flags: 0,
+                length: 0,
+                value: if mode == b'S' { 0 } else { 2 },
+                auxiliary: if mode == b'N' { 7 } else { 0 },
+                ..frame
+            })
+            .unwrap();
+            continue;
+        }
         let ready = Control {
             kind: ControlKind::EffectReady,
             class: operation.class,
@@ -99,18 +136,41 @@ fn main() {
             value: 0,
             auxiliary: 0,
         };
-        io.send(ready);
-        let permit = io.control();
-        assert_eq!(permit.kind, ControlKind::EffectPermit);
-        assert_eq!(permit.correlation, ready.correlation);
-        assert_ne!(permit.value, 0);
+        let mut selected = action.action.clone();
+        if mode == b'P' {
+            selected.modality = InputModality::Pointer;
+        } // existing fake physical-lane case
+        let clock = Id(
+            uiblueprint_host::host_types::clock_id(operation.correlation.session_epoch)
+                .unwrap()
+                .as_str()
+                .into(),
+        );
+        let mut control = worker_effect::WorkerActionControl::new(clock.clone(), origin);
+        let reading: ClockReading = control.now();
+        let mut gate = worker_effect::WorkerEffectGate::new(
+            &mut io,
+            operation,
+            config.target,
+            clock,
+            deadline,
+        )
+        .unwrap();
+        let permit = gate
+            .authorize(&selected, &reading)
+            .unwrap_or_else(|_| panic!("actual parent permit required"));
+        let nonce = permit.nonce();
+        assert_eq!(gate.nonce(), Some(nonce));
+        assert!(gate.requested());
+        assert!(!control.cancelled());
+        drop(gate);
         let mut deliveries = 0; // Deliberately finite fake endpoint: exactly one consume.
         deliveries += 1;
         assert_eq!(deliveries, 1);
         match mode {
             b'L' => return, // Lost acknowledgement after possible fake delivery.
             b'D' => {
-                io.send(ready);
+                io.write_control(ready).unwrap();
                 let _ = io.control();
                 panic!("duplicate permit accepted");
             }
@@ -119,7 +179,22 @@ fn main() {
                 // closes input. The outer test/RuntimeHost owns the finite deadline
                 // and kill/reap bound; no sleep is used as readiness evidence.
                 let mut unexpected = [0];
-                assert_eq!(io.input.read(&mut unexpected).unwrap(), 0);
+                assert!(io.read(&mut unexpected).is_err());
+                return;
+            }
+            b'O' => {
+                io.write_control(Control {
+                    kind: ControlKind::Frame,
+                    class: operation.class,
+                    slot: 0,
+                    flags: 1,
+                    correlation: operation.correlation,
+                    length: canonical.len() as u64,
+                    value: 0,
+                    auxiliary: 0,
+                })
+                .unwrap();
+                let _ = io.control();
                 return;
             }
             b'C' => (),
@@ -135,21 +210,23 @@ fn main() {
             value: 0,
             auxiliary: 0,
         };
-        io.send(frame);
-        io.output.write_all(canonical).unwrap();
-        io.send(Control {
+        io.write_control(frame).unwrap();
+        io.write(canonical).unwrap();
+        io.write_control(Control {
             kind: ControlKind::Commit,
             ..frame
-        });
-        let ack = io.control();
+        })
+        .unwrap();
+        let ack = io.control().unwrap();
         assert_eq!(ack.kind, ControlKind::Ack);
         assert!(ack.matches(frame));
-        io.send(Control {
+        io.write_control(Control {
             kind: ControlKind::Terminal,
             length: 0,
             value: 0,
-            auxiliary: permit.value,
+            auxiliary: nonce,
             ..frame
-        });
+        })
+        .unwrap();
     }
 }

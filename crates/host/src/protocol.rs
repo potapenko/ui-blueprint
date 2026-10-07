@@ -15,6 +15,7 @@ pub enum OperationClass {
     Replay = 7,
     Observe = 8,
     Mutation = 9,
+    Prepare = 10,
 }
 impl TryFrom<u8> for OperationClass {
     type Error = HostError;
@@ -29,6 +30,7 @@ impl TryFrom<u8> for OperationClass {
             7 => Self::Replay,
             8 => Self::Observe,
             9 => Self::Mutation,
+            10 => Self::Prepare,
             _ => return Err(HostError::InvalidControl),
         })
     }

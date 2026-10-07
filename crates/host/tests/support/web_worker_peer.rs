@@ -21,6 +21,13 @@ pub struct State {
     pub stall: AtomicBool,
     pub stalled: AtomicBool,
     pub secret: AtomicBool,
+    pub checkbox_native: AtomicBool,
+    pub checkbox_enabled: AtomicBool,
+    pub checkbox_writable: AtomicBool,
+    pub checkbox_checked: AtomicBool,
+    pub checkbox_indeterminate: AtomicBool,
+    pub setter_calls: AtomicUsize,
+    pub wrong_post_checked: AtomicBool,
     pub events_once: AtomicUsize,
 }
 pub struct Peer {
@@ -109,7 +116,8 @@ impl Peer {
                                         .expect("fixed function");
                                     assert_eq!(
                                         params["throwOnSideEffect"],
-                                        !function.starts_with("function readNode(")
+                                        function.starts_with("function selectIds(")
+                                            || function.starts_with("function verifyNodes(")
                                     );
                                     if function.starts_with("function selectIds(") {
                                         shared.selections.fetch_add(1, Ordering::AcqRel);
@@ -120,11 +128,31 @@ impl Peer {
                                         json!({"result":{"type":"object","objectId":"selection-result"}})
                                     } else if function.starts_with("function verifyNodes(") {
                                         json!({"result":{"type":"object","value":{"current":true}}})
+                                    } else if function.starts_with("function checkboxState(") {
+                                        let checked = shared
+                                            .checkbox_checked
+                                            .load(Ordering::Acquire)
+                                            && !(shared.wrong_post_checked.load(Ordering::Acquire)
+                                                && shared.setter_calls.load(Ordering::Acquire) > 0);
+                                        json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,
+                                            "nativeCheckbox":shared.checkbox_native.load(Ordering::Acquire),
+                                            "writable":shared.checkbox_writable.load(Ordering::Acquire),"sensitive":false,
+                                            "enabled":shared.checkbox_enabled.load(Ordering::Acquire),"checked":checked,
+                                            "indeterminate":shared.checkbox_indeterminate.load(Ordering::Acquire)}}})
+                                    } else if function.starts_with("function setChecked(") {
+                                        assert_eq!(params["objectId"], "node-11");
+                                        assert!(params["arguments"][1]["value"].is_boolean());
+                                        shared.setter_calls.fetch_add(1, Ordering::AcqRel);
+                                        shared.checkbox_checked.store(
+                                            params["arguments"][1]["value"].as_bool().unwrap(),
+                                            Ordering::Release,
+                                        );
+                                        json!({"result":{"type":"object","value":{"status":"applied"}}})
                                     } else {
                                         shared.reads.fetch_add(1, Ordering::AcqRel);
                                         let connected = params["objectId"] == "node-11";
                                         let private = shared.secret.load(Ordering::Acquire);
-                                        json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":true,"tag":"INPUT","sensitive":private,"rect":{"x":40,"y":60,"width":120,"height":40},"value":if private{CANARY}else{""},"checked":false,"enabled":true}}})
+                                        json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":true,"tag":"INPUT","sensitive":private,"rect":{"x":40,"y":60,"width":120,"height":40},"value":if private{CANARY}else{""},"checked":shared.checkbox_checked.load(Ordering::Acquire),"enabled":true}}})
                                     }
                                 }
                                 "Runtime.getProperties" => {

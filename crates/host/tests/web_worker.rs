@@ -64,13 +64,20 @@ fn attach<'a>(
     host: &mut RuntimeHost<'a, process::Platform>,
     peer: &peer::Peer,
 ) -> (SessionHandle<'a>, String) {
+    attach_authorized(host, peer, false)
+}
+fn attach_authorized<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    peer: &peer::Peer,
+    mutation: bool,
+) -> (SessionHandle<'a>, String) {
     let descriptor = serde_json::to_vec(&data::descriptor()).expect("fixture descriptor");
     let setup = serde_json::to_vec(&data::setup(peer.url.clone())).expect("trusted fixture config");
     let parts = [descriptor.as_slice(), setup.as_slice()];
     let length = tape_length(&parts);
     let mut input = host
         .reserve_attach_input(
-            TargetLease::authorized(&data::target(), false).expect("fixture authority"),
+            TargetLease::authorized(&data::target(), mutation).expect("fixture authority"),
             length,
         )
         .expect("real attach lease");
@@ -98,6 +105,223 @@ fn output(channels: u8) -> OutputRequest {
         total_bytes: 65536,
         input_format: 0,
         retained_partition: 0,
+    }
+}
+
+fn action_pair<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    session: SessionHandle<'a>,
+    first: &Document,
+    request: &Document,
+    class: OperationClass,
+) -> uiblueprint_host::host_types::OperationHandle<'a> {
+    let first = serde_json::to_vec(first).unwrap();
+    let second = serde_json::to_vec(request).unwrap();
+    let parts = [first.as_slice(), second.as_slice()];
+    let length = tape_length(&parts);
+    let mut input = host.reserve_input(session, length).unwrap();
+    worker_tape::encode(&parts, input.bytes_mut()).unwrap();
+    let mut outputs = output(1);
+    outputs.input_format = 1;
+    host.submit(session, class, input, outputs, deadline())
+        .unwrap()
+}
+fn action_seed(snapshot: &Snapshot, clock: &str) -> Document {
+    let node = &snapshot.nodes[0];
+    let observation = &snapshot.observations[0];
+    let evidence = Evidence {
+        observation_id: observation.id.clone(),
+        source_namespace: node.key.namespace.clone(),
+        provenance: Provenance::Reported,
+        method: Id("unresolved-preparation".into()),
+        uncertainty: None,
+    };
+    let action = Action {
+        id: Id("set-checkbox".into()),
+        context: snapshot.context.clone(),
+        backend_ref: BackendRef {
+            session_id: snapshot.context.session_id.clone(),
+            key: node.key.clone(),
+            snapshot_id: snapshot.id.clone(),
+            observation_id: observation.id.clone(),
+            target: snapshot.context.target.clone(),
+            surface: node.surface.clone(),
+        },
+        intent: Intent::SetChecked { value: true },
+        modality: InputModality::Setter,
+        input_space: None,
+        required_enabled: true,
+        authorized_scope: snapshot.context.scope_id.clone(),
+        unique_match: false,
+        resolution: Resolution {
+            evidence,
+            writable: Availability::Unknown {
+                reason: Id("not_observed".into()),
+            },
+            value_allowed: Availability::Unknown {
+                reason: Id("not_observed".into()),
+            },
+            available_intents: vec![],
+        },
+    };
+    Document {
+        schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+        artifact: Artifact::Request(Box::new(Request {
+            clock_domain: Id(clock.into()),
+            request_id: Id("prepare-checkbox".into()),
+            context: snapshot.context.clone(),
+            limits: Limits {
+                max_elements: 32,
+                max_depth: 8,
+                max_output_bytes: 65536,
+                deadline_ms: 2000,
+            },
+            freshness_policy: FreshnessPolicy::CurrentRequired,
+            operation: Operation::Prepare { action },
+        })),
+    }
+}
+
+#[test]
+fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_outcomes() {
+    let _serial = SERIAL.lock().unwrap();
+    for (mode, expected) in [
+        (0, Outcome::Succeeded),
+        (1, Outcome::Succeeded),
+        (2, Outcome::Failed),
+        (3, Outcome::Failed),
+    ] {
+        let peer = peer::Peer::new();
+        peer.state.checkbox_native.store(true, Ordering::Release);
+        peer.state.checkbox_enabled.store(true, Ordering::Release);
+        peer.state.checkbox_writable.store(true, Ordering::Release);
+        peer.state
+            .checkbox_checked
+            .store(mode == 1, Ordering::Release);
+        let trace = Arc::new(process::Trace::default());
+        let domain = HostDomain::new::<process::Platform>(data::limits()).unwrap();
+        let mut host = RuntimeHost::new(
+            &domain,
+            SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap(),
+            process::Platform(trace.clone()),
+        )
+        .unwrap();
+        let (session, clock) = attach_authorized(&mut host, &peer, true);
+        let mut observed = data::request(&clock, vec![Channel::ExternalSemantics]);
+        let Artifact::Request(request) = &mut observed.artifact else {
+            panic!("request")
+        };
+        request.context.fields = vec![Field::Enabled, Field::Checked];
+        submit(
+            &mut host,
+            session,
+            &observed,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let first = complete(&mut host);
+        let first_bytes = first.bytes(0).unwrap().to_vec();
+        let doc = Document::from_json(&first_bytes, 65536).unwrap();
+        let Artifact::ChannelResponse(response) = doc.artifact else {
+            panic!("channel")
+        };
+        let ChannelResult::Observed(snapshot) = response.result else {
+            panic!("snapshot")
+        };
+        let source = Document {
+            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+            artifact: Artifact::Snapshot(snapshot.clone()),
+        };
+        let seed = action_seed(&snapshot, &clock);
+        assert!(Document::from_json(&serde_json::to_vec(&seed).unwrap(), 65536).is_ok());
+        action_pair(&mut host, session, &source, &seed, OperationClass::Prepare);
+        let prepared = complete(&mut host);
+        assert_eq!(prepared.terminal, Terminal::Completed);
+        assert_eq!(
+            prepared.effect,
+            uiblueprint_host::host_types::EffectReceipt::NotDispatched
+        );
+        assert_eq!(trace.effect_permits.load(Ordering::Acquire), 0);
+        assert_eq!(peer.state.setter_calls.load(Ordering::Acquire), 0);
+        assert_eq!(trace.prepare_acks.load(Ordering::Acquire), 1);
+        let prepared_doc = Document::from_json(prepared.bytes(0).unwrap(), 65536).unwrap();
+        let Artifact::Action(case) = &prepared_doc.artifact else {
+            panic!("prepared case")
+        };
+        assert!(matches!(
+            case.action.resolution.writable,
+            Availability::Known {
+                value: Value::Flag(true)
+            }
+        ));
+        assert!(case.action.unique_match);
+        let mut act = seed.clone();
+        let Artifact::Request(request) = &mut act.artifact else {
+            panic!("request")
+        };
+        request.context = case.snapshot.context.clone();
+        request.operation = Operation::Act {
+            action: case.action.clone(),
+        };
+        drop(prepared); // Keep old Observe lease; free the second group for Act.
+        if mode == 2 {
+            peer.state.checkbox_enabled.store(false, Ordering::Release);
+        }
+        if mode == 3 {
+            peer.state.wrong_post_checked.store(true, Ordering::Release);
+        }
+        action_pair(
+            &mut host,
+            session,
+            &prepared_doc,
+            &act,
+            OperationClass::Mutation,
+        );
+        let result = complete(&mut host);
+        assert_eq!(result.committed(), 1);
+        let report = Document::from_json(result.bytes(0).unwrap(), 65536).unwrap();
+        let Artifact::TransitionContext(report) = report.artifact else {
+            panic!("transition")
+        };
+        assert_eq!(report.transition.steps[0].outcome, expected);
+        if mode == 2 {
+            assert!(matches!(result.terminal, Terminal::Failed(_)));
+            assert_eq!(
+                result.effect,
+                uiblueprint_host::host_types::EffectReceipt::NotDispatched
+            );
+            assert_eq!(trace.effect_permits.load(Ordering::Acquire), 0);
+            assert_eq!(peer.state.setter_calls.load(Ordering::Acquire), 0);
+            assert_eq!(
+                report.transition.steps[0].delivery,
+                DeliveryStatus::NotDispatched
+            );
+        } else {
+            assert_eq!(result.terminal, Terminal::Completed);
+            assert!(matches!(
+                result.effect,
+                uiblueprint_host::host_types::EffectReceipt::Confirmed { .. }
+            ));
+            assert_eq!(trace.effect_permits.load(Ordering::Acquire), 1);
+            assert_eq!(peer.state.setter_calls.load(Ordering::Acquire), 1);
+            assert_eq!(
+                report.transition.steps[0].delivery,
+                DeliveryStatus::Confirmed
+            );
+        }
+        assert_eq!(trace.mutation_acks.load(Ordering::Acquire), 1);
+        assert_eq!(
+            first.bytes(0).unwrap(),
+            first_bytes.as_slice(),
+            "old ACK survives new action"
+        );
+        drop(result);
+        drop(first);
+        stop(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
     }
 }
 fn submit<'a>(

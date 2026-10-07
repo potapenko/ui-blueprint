@@ -136,3 +136,81 @@ Final checkpoint6 set is the4 implementation paths above plus those2 edge files.
 API/source SHA25608a271f311ce3de0abaa2d31c05f7225f6d8694ccd7d296d9287cef51c70bccc;
 lib.rs294da1c5df850ac890bfb55d109e6f8e8c11b702b33edb0bb9e156615bd472ac;
 action testsbb0947ec285c56b92ba19e4ae284747d0eb70ba00dd1acbb03fe6eb39f4a0d27.
+
+## Guarded composition — coherent WIP checkpoint
+
+Authority: [next finite host packet](../packets/A01-guarded-composition.md) plus
+its selected Tape/refusal/Prepare amendments. Kernelffe1166 remains unchanged.
+Actual Web preparation source is saved1a8a6023249fcbabd6921b2390efe4782aef085c,
+action.rs d2b3dca7c21cccb5a6e919458384c7e089b514203e12d3a81dd7cd42b3f80089.
+No live activation. Source work is a real composed path, with remaining checks
+explicit below; this checkpoint is not acceptance or a replacement SDK backend.
+
+Exact15 host checkpoint paths: src/main.rs, protocol.rs, publication.rs,
+supervisor.rs, worker_main.rs, worker_ops.rs, worker_web.rs, worker_action.rs,
+worker_effect.rs; tests/web_worker.rs; tests/support/{effect_peer,effects_host,
+web_worker_peer,web_worker_process}.rs; this receipt. No Web collector/kernel/schema/
+Cargo/Native/CLI/fixture or live harness edits. Web live files stay separately owned.
+
+WorkerEffectGate uses real WorkerIo with existing EffectReady/EffectPermit and
+trusted TargetLease/clock/deadline. It checks class/epoch/operation/slot/flags/length/
+nonzero nonce, permits one request, preserves uncertainty after request transport
+loss, and polls actual parent EOF/cancel before dispatch. No nonce mint/claims copy.
+Caller passes the same local origin and parent-clamped watchdog deadline. Separate
+worker_action owns canonical kernel/output composition; no serialized new owner.
+
+Private OperationClass::Prepare=10 maps existing Tape(Snapshot, Prepare Request)
+to actual CheckboxProvider::prepare_exact. Request already carries ref and bool in
+action.backend_ref/intent; unresolved Resolution remains unknown until actual fresh
+native probe creates a validated ActionCase. It uses no MutationLease/EffectReady/
+physical claim/setter. Later Mutation maps Tape(ActionCase, Act Request), requires
+matching existing action/request fields, actual Attached clock/session/Target and
+provider scope/generation binding. Root generic submit uses input_format1/channel1;
+no new public wire or CLI. Tighter Request deadline and output cap are enforced
+alongside existing aggregate2MiB input/control/publication caps.
+
+Mutation pre-Possible Frame.flags1 is only refusal marker. Parent's one inline
+refusal_started bit permanently forbids EffectReady and Completed/nonce terminal
+for that operation; normal pre-permit Frame remains forbidden. Matching marker
+through Frame/Commit/ACK is enforced. Post-Possible refusal marker rejects. Existing
+fixed RuntimeState size accounting includes the bit; pools/ceilings unchanged.
+Observe incomplete flags retain their original meaning; Mutation refusal does not
+add a false incomplete-channel classification. Worker publishes validated existing
+Error/Transition refusal and failure terminal; parent never parses its body.
+
+After actual permit, one SetChecked delivery and separate verification produce
+validated TransitionCase through existing buffer/reserve/commit/ACK. Terminal nonce
+confirms reported delivery only; canonical Failed/Unknown verification is not UI
+success. Pending W03 invalidation is applied after provider borrow ends, on success
+and failure. No typed-step survival claim before outside-worker commit.
+
+Targeted checks passed with locked/offline Cargo in the operation's system-temp
+target directory, Rust1.96/aarch64-apple-darwin:
+- actual default effect_peer build now uses the production WorkerIo/effect gate;
+- web host bin/example check compiled real saved preparation/provider;
+- web_worker exact guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_outcomes:
+  4 cases passed: real guarded Observe→unknown-seed Prepare (zero effect permits/
+  setters)→Act, fresh capability success/already-equal once, later disabled refusal
+  before permit, and known Checked mismatch without Succeeded. Real ACK counters,
+  original earlier bytes and sessions0/groups0/abandonedfalse verified.
+- runtime exact effects::marked_pre_dispatch_refusal_cannot_gain_effect_authority_or_false_success:
+  7 cases passed: marked canonical refusal, prohibited Completed/nonce/EffectReady,
+  mismatched marker, ordinary unmarked pre-permit Frame, post-Possible marker;
+  refusal latch resets only on new operation, prior bytes survive, actual reap.
+- affected web lib/bin/web_worker/runtime/effect_peer Clippy -D warnings passed.
+First composition test held3 completions against the existing2-group test cap;
+released only prepared lease before Act, retaining old Observe lease, then passed.
+No cap increase or source-budget relaxation.
+
+Test backend replies are bounded synthetic protocol responses, not browser/SDK
+dispatch. Existing effect_peer's local fake counter remains test-only; it reuses
+the real fixed I/O gate rather than duplicating nonce authority. No images or new
+persistent directory. Owned non-image system-temp build remains only for immediate
+remaining checks in this same operation, then will be removed/absence-verified.
+
+Remaining before author completion: further Prepare class/payload/budget/cancel
+edges, mismatched permit correlation/nonce, and exact before/after-Possible failure
+checks. Independent changed-boundary review and live harness activation remain
+root/platform-owned. No full A01/P5 acceptance claimed by this WIP checkpoint.
+web_worker_process.rs current Core hunk is actual permit/ACK counters and a held
+effect-permit barrier; Web receives its ownership only after this saved handoff.

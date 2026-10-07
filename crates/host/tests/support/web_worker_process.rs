@@ -16,6 +16,11 @@ pub struct Trace {
     pub observe_acks: AtomicUsize,
     pub hold_second_ack: AtomicBool,
     pub second_ack_waiting: AtomicBool,
+    pub effect_permits: AtomicUsize,
+    pub mutation_acks: AtomicUsize,
+    pub prepare_acks: AtomicUsize,
+    pub hold_effect_permit: AtomicBool,
+    pub effect_waiting: AtomicBool,
 }
 pub struct Platform(pub Arc<Trace>);
 pub struct Child {
@@ -51,6 +56,23 @@ impl OwnedProcess for Child {
                         return Ok(Transfer::WouldBlock);
                     }
                     self.pending = Some((control.kind, control.value, CONTROL_BYTES));
+                } else if control.kind == ControlKind::EffectPermit {
+                    if self.trace.hold_effect_permit.load(Ordering::Acquire) {
+                        self.trace.effect_waiting.store(true, Ordering::Release);
+                        return Ok(Transfer::WouldBlock);
+                    }
+                    self.pending = Some((control.kind, control.value, CONTROL_BYTES));
+                } else if control.kind == ControlKind::Ack
+                    && matches!(
+                        control.class,
+                        OperationClass::Mutation | OperationClass::Prepare
+                    )
+                {
+                    self.pending = Some((
+                        control.kind,
+                        u64::from(control.class == OperationClass::Mutation) + 1,
+                        CONTROL_BYTES,
+                    ));
                 } else if control.kind == ControlKind::Ack
                     && control.class == OperationClass::Observe
                 {
@@ -106,8 +128,19 @@ impl Child {
                         self.trace.ticket.store(ticket, Ordering::Release);
                         self.trace.permits.fetch_add(1, Ordering::AcqRel);
                     }
-                    ControlKind::Ack => {
-                        self.trace.observe_acks.fetch_add(1, Ordering::AcqRel);
+                    ControlKind::Ack => match ticket {
+                        1 => {
+                            self.trace.prepare_acks.fetch_add(1, Ordering::AcqRel);
+                        }
+                        2 => {
+                            self.trace.mutation_acks.fetch_add(1, Ordering::AcqRel);
+                        }
+                        _ => {
+                            self.trace.observe_acks.fetch_add(1, Ordering::AcqRel);
+                        }
+                    },
+                    ControlKind::EffectPermit => {
+                        self.trace.effect_permits.fetch_add(1, Ordering::AcqRel);
                     }
                     _ => (),
                 };
