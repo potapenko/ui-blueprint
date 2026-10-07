@@ -85,3 +85,56 @@ proposal that admits only correlated pre-Possible refusal, prohibits all subsequ
 EffectReady/dispatch for that operation, and preserves after-Possible nonce/ACK/
 expiry/cleanup without parsing payload in parent. Root selects that missing
 protected boundary before source mutation. Independent bridge work continues.
+
+
+## Selected bounded pre-dispatch refusal publication
+
+Core returned the concrete existing-header proposal. Root selects it under the
+same D02/ACTIONS technical envelope: Mutation Frame.flags=1 is a correlated
+pre-Possible refusal marker ONLY; ordinary Mutation Frame before permit remains
+forbidden. Parent sets one accounted inline refusal_started bit before admitting
+body. Once set, EffectReady/permit/dispatch and Completed-or-nonce terminal are
+forbidden for this operation; only failure termination is allowed. Frame/Commit/ACK
+flags must match. Late, wrong-correlation and post-Possible refusal markers reject.
+No parent body parsing, new control kind/public wire/CLI, or broader quota follows.
+Worker may publish only validated existing canonical refusal, never a success body
+through this route. Existing after-Possible ordinary publication/uncertainty remains.
+
+Exact additional protected owner grant: supervisor.rs Active state and this guard,
+publication.rs matching marker and nearest publication/effect tests. No unrelated
+parent behavior change. New bit remains in actual fixed control inventory under
+unchanged D05 pools; account any layout size change rather than increasing caps.
+Tests must cover unmarked pre-permit Frame rejection, marked complete refusal,
+marker/correlation mismatches, EffectReady after refusal rejection, post-Possible
+refusal rejection, no false Completed/nonce and normal next-operation reuse with
+old controls rejected. Preserve existing post-permit ACK/loss/cancel/reap and
+read-only incomplete flags; do not turn a final typed unknown outcome into success.
+Independent source/peer review of this changed boundary remains mandatory before
+live activation. This choice is scoped output protocol behavior under existing
+canonical error/permission contracts, not authority inferred from worker payload.
+
+
+## Truthful read-only bootstrap route
+
+Actual Core source handoff confirms Request::Prepare already carries SetChecked bool
+in action.intent and the exact backend_ref; its request validator permits unresolved
+capability facts while checking Context agreement. Select existing Tape(Snapshot,
+Prepare Request) → actual Web preparation → validated existing ActionCase. No new
+canonical graph/envelope, relaxed ActionCase validation or synthetic initial facts.
+Previously selected ActionCase+Act Tape is the execution route for a prepared case.
+
+Select a dedicated nonmutating private Prepare operation mapping in the existing
+fixed header (reuse existing exact mapping if available, otherwise narrowly add
+private Prepare tag/class). Core records actual tag/owners before edits; no new
+message framing or public core schema. Strict type/count/order/context/ref/scope/
+clock/limit matching, no authority gained from action fields or UI. Prepare cannot
+request EffectReady/nonce/physical-input ownership or dispatch a setter. Existing
+TargetLease checks retain independent trusted policy; output is fresh validated
+ActionCase or canonical refusal through admitted publication/ACK. Later Act repeats
+fresh resolution and uses actual parent permit. Missing preparation facts refuse.
+The exact operation-tag/dispatcher owners and nearest no-effect/mismatched payload/
+limit/cancel tests are within Core's host scope. Preserve all other operation kinds,
+private unsupported/version rejection and fixed parent inventory. No CLI syntax,
+new action DSL/graph or generalized protocol framework. Web owns the actual fresh
+preparation API and returns a compiling handoff; final integration pins its saved
+source before acceptance.

@@ -128,3 +128,33 @@ Exact symbols are recorded in final receipt and included in independent source
 review before acceptance. Source constructor handoff: CheckboxProvider::new(&mut
 Collector, schema::model::Limits), one provider per attempt; host consumes existing
 pending invalidation after setter. Core owns worker_web composition exclusively.
+
+
+## Truthful initial preparation, required before live invocation
+
+Source-only handoff confirmed an actual end-to-end gap: ordinary Observe reports
+Actions unavailable; both kernel prepare and provider resolve_exact expect an already
+valid Resolution. Synthetic test ActionCase facts cannot bootstrap real execution.
+Restore ACTIONS prepare semantics without weakening schema/kernel validation.
+
+Web may add one read-only preparation entry in existing collector/action.rs/export
+and focused collector tests, plus existing receipt. Inputs: actually observed
+canonical Snapshot, exact BackendRef and explicitly requested SetChecked(bool),
+existing limits/clock through current collector. Reuse same exact binding/current
+native checkbox/disabled/indeterminate/privacy/actual setter checks. Build fresh
+ActionCase and Resolution Evidence from THAT actual read; no inferred facts from
+HTML/role, old Current flags or fixture-only authority. Preparation receives no
+permit, calls no setter or hidden event, and releases owned handles; uncertainty
+refuses. Actual later dispatch still repeats fresh resolve before parent permit.
+No duplicated checker/graph/decoder, no new handler framework or lower validation.
+
+This finite source addition immediately enables Core's real caller. Host's truthful
+preparation input is a Core dependency, not permission for Web to change host/wire/
+Cargo or fabricate a valid input. Existing ActionCase+Act tape is only for a case
+already prepared from real evidence. Core returns exact existing carrier or minimal
+technical input proposal before that host route changes. Test missing/stale/private/
+unsupported capability refusal and valid fresh preparation with zero effect calls;
+focused affected checks only, no live browser. Preserve current Setter/source and
+image retention rules; report compiling method signature promptly and save scoped
+source via Git lease. Same reviewer rechecks changed preparation boundary before
+live acceptance; prior provider review remains valid for its original scope.
