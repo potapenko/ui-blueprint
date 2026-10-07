@@ -185,10 +185,10 @@ struct NativeDescriptorIO {
               let duration = limits["deadline_ms"] as? Double, duration.isFinite && duration > 0,
               let output = limits["max_output_bytes"] as? Int, output > 0
         else { throw NativeProtocolError.request }
-        let fields = configuration.collection == "window-ax"
-            ? ["role", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]
-            : ["role", "accessibility_name", "enabled", "accessibility_bounds"]
-        guard context["fields"] as? [String] == fields,
+        guard let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
+              configuration.collection == "window-ax"
+                ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"])
+                : fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"],
               let nodes = limits["max_elements"] as? Int, (1...160).contains(nodes),
               let depth = limits["max_depth"] as? Int, (1...9).contains(depth)
         else { throw NativeProtocolError.request }

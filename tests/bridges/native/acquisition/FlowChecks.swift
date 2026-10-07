@@ -89,6 +89,7 @@ import Darwin
             let quota = try admission()
             return try collectWindowAX(SyntheticAX.handle(1), surface: surface, observationID: "synthetic-observation",
                 maxNodes: nodes, maxDepth: 4, deadline: quota.deadline, admission: quota,
+                fields: ["role", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"],
                 json: NativeJSON(quota.limits), access: source.access())
         }
         func children(_ result: WindowAXResult, node: Int) -> [[String: Any]] { result.nodes[node]["children"] as! [[String: Any]] }

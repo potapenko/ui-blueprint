@@ -149,8 +149,11 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
 
 @MainActor func collectWindowAX(_ root: CFTypeRef, surface: [String: Any], observationID: String,
     maxNodes: Int, maxDepth: Int, deadline: Double, admission: NativeAcquisition,
-    json: NativeJSON, access: NativeAXAccess = .live) throws -> WindowAXResult {
-    guard access.isElement(root) else { throw NativeAcquisitionError.invalidValue }
+    fields: [String], json: NativeJSON, access: NativeAXAccess = .live) throws -> WindowAXResult {
+    let selected = Set(fields)
+    guard !fields.isEmpty, selected.count == fields.count,
+          selected.isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]),
+          access.isElement(root) else { throw NativeAcquisitionError.invalidValue }
     var handles = [root], depths = [0]
     var nodes: [[String: Any]] = try json.array { [] }
     var edges: [[Int]] = []
@@ -212,10 +215,14 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
             return false
         }
         let safeIdentity = [kAXRoleAttribute, kAXSubroleAttribute, kAXIdentifierAttribute].allSatisfy(admittedIdentity)
-        var names = [kAXDescriptionAttribute, kAXPlaceholderValueAttribute, kAXEnabledAttribute,
-                     kAXFocusedAttribute, kAXPositionAttribute, kAXSizeAttribute]
-        if nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { names.append(kAXValueAttribute) }
-        let values = try batch(el, names)
+        var names: [String] = []
+        if selected.contains("description") || selected.contains("accessibility_name") { names.append(kAXDescriptionAttribute) }
+        if selected.contains("placeholder") { names.append(kAXPlaceholderValueAttribute) }
+        if selected.contains("enabled") { names.append(kAXEnabledAttribute) }
+        if selected.contains("focused") { names.append(kAXFocusedAttribute) }
+        if selected.contains("accessibility_bounds") { names += [kAXPositionAttribute, kAXSizeAttribute] }
+        if selected.contains("value") && nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { names.append(kAXValueAttribute) }
+        let values = names.isEmpty ? [:] : try batch(el, names)
         let roles = ["AXButton": "button", "AXCheckBox": "checkbox", "AXTextField": "textbox",
                      "AXStaticText": "text", "AXGroup": "group", "AXScrollArea": "scrollarea", "AXSlider": "slider"]
         let normalized = role.flatMap { roles[$0] }
@@ -230,26 +237,34 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
             availabilityCounts[status, default: 0] += 1
             properties.append(property)
         }
-        try append("role") { try normalized.map { try json.known("role", $0) } ?? json.unavailable("raw_role_has_no_selected_mapping") }
-        try append("description") { try typed(values[kAXDescriptionAttribute], expected: "text") }
-        try append("value", sensitive: secure) {
-            if secure { return try json.redacted() }
-            if !nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { return try json.unavailable("identity_classification_unavailable") }
-            return try nativeAXScalar(values[kAXValueAttribute], json: json)
+        for field in fields {
+            switch field {
+            case "role":
+                try append(field) { try normalized.map { try json.known("role", $0) } ?? json.unavailable("raw_role_has_no_selected_mapping") }
+            case "description", "accessibility_name":
+                try append(field) { try typed(values[kAXDescriptionAttribute], expected: "text") }
+            case "value":
+                try append(field, sensitive: secure) {
+                    if secure { return try json.redacted() }
+                    if !nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { return try json.unavailable("identity_classification_unavailable") }
+                    return try nativeAXScalar(values[kAXValueAttribute], json: json)
+                }
+            case "placeholder": try append(field) { try typed(values[kAXPlaceholderValueAttribute], expected: "text") }
+            case "enabled": try append(field) { try typed(values[kAXEnabledAttribute], expected: "flag") }
+            case "focused": try append(field) { try typed(values[kAXFocusedAttribute], expected: "flag") }
+            case "actions":
+                try admission.check()
+                let (status, raw) = access.actions(el)
+                let names = status == .success ? raw.flatMap { try? admission.actions($0) } : nil
+                try append(field) {
+                    if status != .success { return try nativeAXScalar(AXReadIssue.platform(status), json: json) }
+                    if let names { return try json.known("text_list", names) }
+                    return try json.unavailable("native_acquisition_limit")
+                }
+            case "accessibility_bounds": try append(field) { try nativeAXGeometry(values[kAXPositionAttribute], values[kAXSizeAttribute], json: json) }
+            default: throw NativeAcquisitionError.invalidValue
+            }
         }
-        try append("placeholder") { try typed(values[kAXPlaceholderValueAttribute], expected: "text") }
-        try append("enabled") { try typed(values[kAXEnabledAttribute], expected: "flag") }
-        try append("focused") { try typed(values[kAXFocusedAttribute], expected: "flag") }
-        try admission.check()
-        let (actionError, actions) = access.actions(el)
-        var actionNames: [String]?
-        if actionError == .success, let actions { actionNames = try? admission.actions(actions) }
-        try append("actions") {
-            if actionError != .success { return try nativeAXScalar(AXReadIssue.platform(actionError), json: json) }
-            if let actionNames { return try json.known("text_list", actionNames) }
-            return try json.unavailable("native_acquisition_limit")
-        }
-        try append("accessibility_bounds") { try nativeAXGeometry(values[kAXPositionAttribute], values[kAXSizeAttribute], json: json) }
         let extensions = try json.array {
             try [kAXIdentifierAttribute, kAXSubroleAttribute].map { name in
                 try json.object(["namespace", "name", "property"]) {

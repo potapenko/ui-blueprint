@@ -45,15 +45,15 @@ struct Collector {
         nativeEmit: ((NativeJSONFrame) throws -> Void)? = nil) async throws {
         try limits.validate()
         let windowMode = ["window-ax", "describe-window"].contains(mode)
-        let fields = windowMode
-            ? ["role", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]
-            : ["role", "accessibility_name", "enabled", "accessibility_bounds"]
+        let sampleFields = ["role", "accessibility_name", "enabled", "accessibility_bounds"]
         let expectedChannels = windowMode ? ["external_semantics"] : ["external_semantics", "rendered_capture"]
         guard doc["schema_version"] as? String == "0.1.0",
               let artifact = doc["artifact"] as? [String: Any], artifact["kind"] as? String == "request",
               let request = artifact["data"] as? [String: Any], let context = request["context"] as? [String: Any],
               let target = context["target"] as? [String: Any], let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
-              context["fields"] as? [String] == fields, let scope = context["scope_id"] as? String,
+              let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
+              windowMode ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]) : fields == sampleFields,
+              let scope = context["scope_id"] as? String,
               let session = context["session_id"] as? String, let requestID = request["request_id"] as? String,
               let operation = request["operation"] as? [String: Any], operation["operation"] as? String == "observe",
               let channels = operation["channels"] as? [String],
@@ -149,7 +149,7 @@ struct Collector {
                     }
                     if windowMode {
                         let collected = try collectWindowAX(window, surface: surface, observationID: oid,
-                            maxNodes: maxNodes, maxDepth: maxDepth, deadline: min(end, started + min(0.9, deadlineMS / 1000)), admission: admission, json: json)
+                            maxNodes: maxNodes, maxDepth: maxDepth, deadline: min(end, started + min(0.9, deadlineMS / 1000)), admission: admission, fields: fields, json: json)
                         nodes = collected.nodes
                         if evidence { proof = collected.metrics }
                     } else {

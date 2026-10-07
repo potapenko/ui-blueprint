@@ -54,9 +54,12 @@ the shared collector; AX additionally requires one exact window AXIdentifier.
 Read-only collection does not focus/resize/change the target or request permissions.
 
 `collection` is `sample` (the existing four-field sample control) or `window-ax`
-(the existing eight-field whole-window AX collection). The original request must
-supply the corresponding exact field list; there are no implicit defaults or
-new arbitrary-subtree capability. A selected capture channel uses the original
+(bounded whole-window AX using an explicit canonical requested subset). Original
+sample requests still supply their exact four fields; original eight-field window
+requests keep that order/semantics. Window requests can select existing role,
+accessibility_name/description, placeholder, focused, enabled, value, actions or
+accessibility_bounds. Only selected attributes are read; no implicit field defaults
+or arbitrary-subtree capability is introduced. A selected capture channel uses the original
 Context even when AX's selected collection is window-ax. Canonical channel sets
 can contain AX, capture or both; each helper performs only its selected channel.
 
@@ -310,3 +313,48 @@ requested, and B−3801 remains stopped. The dedicated host/worker/helper proces
 and directories are independent of Web's own headless Chromium/profile/port. Only
 brief F02 setup/Snapshot needs the shared physical-input lane; AX-only uses no capture
 lane. Actual SDK/H01 observation, teardown and latency remain unverified by preparation.
+
+## Native input context subset
+
+Director's real reference question is where to type a name, distinct from explanatory
+text. The same WindowAX owner now supports the explicit subset:
+`role, accessibility_name, placeholder, focused, enabled`. `accessibility_name` uses
+the existing public AXDescription mapping; placeholder uses AXPlaceholderValue;
+focused uses AXFocused; enabled uses AXEnabled. Unknown/unsupported values remain
+explicit, known false/empty remain known, and no missing name is filled from placeholder.
+Per-node focused does not populate global keyboard/accessibility focus or active
+descendant. No value/draft, anchor, relations or input delivery are added.
+
+Runtime-ready own-F02 case, for a separately assigned run: fresh A normal Snapshot,
+exact manifest binding, `collection: window-ax`, those five fields,160/depth9,
+512KiB including LF, parent/AX1s and cleanup1s, same explicit acquisition limits.
+Find the actual textbox by the reported AXIdentifier extension f02.name; expect
+placeholder Name and enabled=true, report the actual per-node focused bool (typically
+false after Snapshot) and actual name availability. Do not derive focus from selection
+or text. No old node count, anchor gap, image transform or Director UI equality is
+claimed. The F02 form is a mechanism/oracle case, not the real PlayPhrase.me popup.
+
+Reuse the existing ignored Rust consumer: it already consumes caller-supplied
+Session/Request/configuration files and replaces Request.clock_domain from Attached.
+Generate those existing inputs in system task-temp using the existing descriptor-only
+`describe-window` with the five-field Request, then run the same consumer with the
+existing owned_f02_a opt-in marker and a new form-context helper binary. No new caller
+flag/API is required; the sample-specific host_observe.py oracle remains unchanged.
+The next assigned runtime worker checks returned form properties with the same Rust
+validator and confirms exact helper/worker/fixture cleanup. Temporary inputs/results
+are removed after use; any new persistent destination needs explicit user authorization
+for that location and purpose. Source preparation here performs no live run.
+
+Focused offline command:
+
+```sh
+xcrun swiftc -parse-as-library -swift-version 6 -D CAPTURE_LIBRARY -D HOST_HELPER \
+  -target arm64-apple-macos14.0 plugins/macos/NativeAcquisition.swift \
+  plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift \
+  fixtures/native/Observe.swift tests/bridges/native/Collector.swift \
+  tests/bridges/native/WindowAX.swift tests/bridges/native/acquisition/FormChecks.swift \
+  -o "$NATIVE_TASK_TMP/form-checks"
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/acquisition/form_check.py \
+  --checks "$NATIVE_TASK_TMP/form-checks" --validator "$VERIFIED_VALIDATOR" \
+  --output "$NATIVE_TASK_TMP"
+```
