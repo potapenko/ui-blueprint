@@ -3,7 +3,7 @@
 use crate::limits::{CHANNELS, HELPERS, MAX_GROUPS, MAX_WORKERS};
 use crate::{HostError, HostLimits, add, mul};
 use std::{
-    cell::{RefCell, RefMut},
+    cell::{Cell, RefCell, RefMut},
     mem::size_of,
 };
 const SLOT_COUNT: usize = MAX_WORKERS + MAX_WORKERS * HELPERS + MAX_GROUPS * CHANNELS;
@@ -22,10 +22,12 @@ pub struct PoolUsage {
     pub owned_bytes: usize,
     pub slot_count: usize,
     pub leased_slots: usize,
+    pub leased_groups: usize,
 }
 pub struct ParentBuffers {
     limits: HostLimits,
     slots: [RefCell<Vec<u8>>; SLOT_COUNT],
+    groups: [Cell<bool>; MAX_GROUPS],
     owned: usize,
 }
 impl ParentBuffers {
@@ -40,6 +42,7 @@ impl ParentBuffers {
         let mut result = Self {
             limits,
             slots: std::array::from_fn(|_| RefCell::new(Vec::new())),
+            groups: std::array::from_fn(|_| Cell::new(false)),
             owned: roots,
         };
         for worker in 0..limits.workers {
@@ -107,6 +110,26 @@ impl ParentBuffers {
             length: declared,
         })
     }
+    /// Reserve the entire completion group before dispatch. Returned frames may
+    /// outlive the worker; the group is unavailable until its actual owner drops.
+    pub fn reserve_group(&self, requested: u8) -> Result<OutputGroup<'_>, HostError> {
+        if requested == 0 || requested & !7 != 0 {
+            return Err(HostError::InvalidInput);
+        }
+        let group = self.groups[..self.limits.completion_groups]
+            .iter()
+            .position(|occupied| !occupied.get())
+            .ok_or(HostError::ResourceLimit)?;
+        self.groups[group].set(true);
+        let guard = GroupGuard(&self.groups[group]);
+        let mut frames = std::array::from_fn(|_| None);
+        for (channel, frame) in frames.iter_mut().enumerate() {
+            if requested & (1 << channel) != 0 {
+                *frame = Some(self.reserve(BufferClass::Output { group, channel }, 0)?);
+            }
+        }
+        Ok(OutputGroup { frames, guard })
+    }
     pub fn usage(&self) -> PoolUsage {
         PoolUsage {
             owned_bytes: self.owned,
@@ -117,6 +140,7 @@ impl ParentBuffers {
                 .iter()
                 .filter(|slot| slot.try_borrow_mut().is_err())
                 .count(),
+            leased_groups: self.groups.iter().filter(|group| group.get()).count(),
         }
     }
     pub const fn root_bytes() -> usize {
@@ -157,5 +181,28 @@ impl ByteLease<'_> {
 impl Drop for ByteLease<'_> {
     fn drop(&mut self) {
         self.buffer.fill(0);
+    }
+}
+
+struct GroupGuard<'a>(&'a Cell<bool>);
+impl Drop for GroupGuard<'_> {
+    fn drop(&mut self) {
+        self.0.set(false);
+    }
+}
+/// The guard is last so frame borrows/payload clearing finish before group reuse.
+pub struct OutputGroup<'a> {
+    pub(crate) frames: [Option<ByteLease<'a>>; CHANNELS],
+    guard: GroupGuard<'a>,
+}
+impl OutputGroup<'_> {
+    pub fn frame(&self, channel: usize) -> Option<&[u8]> {
+        self.frames
+            .get(channel)
+            .and_then(|frame| frame.as_ref())
+            .map(ByteLease::as_slice)
+    }
+    pub fn reserved(&self) -> bool {
+        self.guard.0.get()
     }
 }

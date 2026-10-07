@@ -33,3 +33,23 @@ Read only posix_spawn/file-actions/flags, socketpair/fcntl/poll/read/write/close
 
 Core: actual HostDomain/RuntimeHost and input/completion group lifecycle; trusted target/operation binding; parent fixed-frame publication/ACK; reusable worker invoking canonical APIs/K01; executable-only quota GlobalAlloc; deadlines, nonce, quarantine and failure handling. Platform process slice is disjoint only after root assigns its exact files.
 First prove guard/fatal/owned cleanup on small deterministic processes. Only then run hostile2MiB/tag-order/array/numeric source-audit families inside that guard. No unguarded adversarial parsing, echo-only canonical-processing claim, caller-lease early release, SDK/pixel or full D06 assertion. Current checks/checkpoints live in [H01 receipt](../plans/ui-blueprint/receipts/H01-host.md).
+
+## Connected publication/counter stage
+
+ParentBuffers now reserves whole completion groups before dispatch. Group capacity
+remains occupied while caller-held committed frames exist, even after worker teardown.
+Publication copies directly into reserved slices, distinguishes body/commit/ACK,
+rejects wrong/duplicate/partial/late/oversized controls, and retains only fully ACKed
+channels on terminalization. Other worker/group slots remain usable. This is the
+actual safe byte state machine, not yet a complete supervisor/canonical worker.
+QuotaCounter provides checked atomic precharge/release/peak accounting, including
+full-new-layout realloc reservations while old bytes remain live and no wraparound.
+It does not install GlobalAlloc or prove real System/fatal enforcement by itself.
+
+Native's actual Darwin process module and process_peer target are now linked.
+The approved WorkerPlatform::watchdog_stack_request extension computes a checked
+creation request only. Native measured main8,372,224 and watchdog1,044,480 bytes
+below unchanged8MiB/1MiB ceilings in its peer; real Core watchdog must independently
+query its created thread before untrusted work. See [process handoff](host-process.md).
+Core's authority/domain/worker/allocator sources remain unconnected WIP; they are
+not included in this stage's compile/runtime proof. Full H01 remains unfinished.

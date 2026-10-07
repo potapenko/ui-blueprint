@@ -4,9 +4,13 @@
 
 pub mod buffers;
 pub mod limits;
+#[cfg(target_os = "macos")]
+pub mod process;
 #[cfg(unix)]
 pub mod process_api;
 pub mod protocol;
+pub mod publication;
+pub mod quota;
 
 pub use buffers::{BufferClass, ByteLease, ParentBuffers, PoolUsage};
 pub use limits::HostLimits;

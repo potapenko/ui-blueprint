@@ -112,6 +112,11 @@ pub struct StackProof {
 /// the actual watchdog thread; no placeholder stack-proof values are acceptable.
 pub trait WorkerPlatform {
     fn setup_main(main_stack_bytes: usize) -> Result<usize, HostError>;
+    /// Compute a supported creation request with checked validation/arithmetic,
+    /// without raising the caller's ceiling. This is NOT actual extent proof:
+    /// caller MUST check current_stack_bytes on the created watchdog and refuse
+    /// untrusted work unless that actual extent is within the original ceiling.
+    fn watchdog_stack_request(ceiling: usize) -> Result<usize, HostError>;
     fn current_stack_bytes() -> Result<usize, HostError>;
     /// Best-effort one fixed write to the configured nonblocking private status FD,
     /// then _exit. fd<0 skips the write (bootstrap status unavailable); the parent

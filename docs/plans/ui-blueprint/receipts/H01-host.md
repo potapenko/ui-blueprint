@@ -42,44 +42,67 @@ ce5d3ddc6d3fa000eb1536d85e147bfe31aacaba692ed6a876f95cb7c855be78 matched lock;
 selected installed files matched archive. Full MIT, no NOTICE, MSRV1.65, no copy.
 Actual unsafe/FD/stack/core-dump/fatal/cleanup testing remains a mandatory next stage.
 
-## Checks and checkpoint scope
+## Saved foundation / manifest handoff
 
-Rust1.96.0: scoped host all-target check, host fmt check and Clippy -D warnings
-passed for the foundation; fixed_owners4 tests passed. No other package suite or
-hostile parser input ran. Before the CDP handoff, the only added lock package was
-uiblueprint-host and all existing package records were unchanged. The final lock
-ALSO updates the existing uiblueprint-web dependency list with exactly serde,
-serde_json and uiblueprint-schema; no other existing record/version changed.
-Foundation source/root-input digest before CDP handoff:
-`9ddbcc3ff96e578ee1b7b0422dabde1b912a17a89279630e9095b7f820f69a69`.
-Process API SHA256 `cf2ba1f7abfa4d100f067efc428cb8f45e3ad991cf8057b67faeb109dc9cf72a`.
-
-After those checks, root amendment3231928 authorized exactly three existing Web
-dependencies. Core added `serde.workspace = true`, `serde_json.workspace = true`
-and `uiblueprint-schema = { path = "../../crates/schema" }` to
-plugins/web/Cargo.toml, updated lock and returned that manifest to Web. No other
-Web source or dependency/feature/version edits. Current stable hashes:
+Foundation checkpoint3abd8e5f9c054c12e910d4c8defc2f8a64a8b268 was pushed after
+host check/fmt/Clippy and4 fixed-owner tests. Root amendment3231928 also authorized
+exact Web manifest serde/serde_json/schema edges. No registry versions/features
+changed; Web manifest was returned to its owner. Current root hashes remain:
 Cargo.toml `299c8a44d63290ecf126fda4c0bfc6170883a2c5164d0657b1f198c0448758f0`;
-Cargo.lock `af468c06f884e8fa07996bdcbc39785d0c005004fb59f1a9f7e74a40cb6c8623`;
-Web manifest `cae7689cc6e75e706cbb675629ea57523b7504cdbd90a5defb65410eac0e1273`.
-Only corresponding host/Web dependency edges changed; old registry records exact.
-No repeated host logic suite for Web-only dependency edges; scoped locked host
-check confirms resolution on this final shared lock. Final10-file source/manifest
-digest (root Cargo/lock, Web manifest, host Cargo, five src files, one test):
+Cargo.lock `af468c06f884e8fa07996bdcbc39785d0c005004fb59f1a9f7e74a40cb6c8623`.
+Foundation saved10-file digest was
 `a1f6e56a22956d4a65d655078c2788045fb7561a2187710a9666ec373196f459`.
-Digest format is compact sorted JSON path→SHA256, then SHA256 of that JSON.
 
-Pending stage paths: root Cargo.toml/Cargo.lock; crates/host/Cargo.toml;
-src/{lib,limits,buffers,protocol,process_api}.rs; tests/fixed_owners.rs;
-docs/development/host.md; this receipt; the separately granted Web Cargo manifest
-handoff (12 paths total). Root granted exactly these paths for foundation save;
-terminal chat returns SHA/push and Git release. No other source is staged; new Web
-CDP files belong to Web. Source/process_api stays frozen for Native handoff, with
-Core supervisor/worker continuing only as the next coherent H01 stage.
+## Connected stage B — publication/counter + Native wiring
 
-Remaining H01 is substantial and authorized: actual allocator before allocation,
-worker executable using existing canonical analysis/ObservationSession/K01, full
-closed parent inventory/group/result leases, process supervision/cancel/deadlines,
-committed bytes/ACK survival, effect nonce/no retry, quarantine and real release.
-Do not label parent pools as total Rust/RSS protection or claim source/host acceptance.
-Preserve completed-result ownership and all unchanged live/quality/platform gates.
+Core added real completion-group ownership and Publication body→commit→ACK state.
+Only ACKed complete correlated bytes survive terminalization; missing/partial/late/
+duplicate/malformed input cannot become successful empty data. Caller-held output
+retains its group; independent slots proceed. Counter checks cover precharge,
+old+new realloc reservation, overflow/underflow and concurrent charge/release.
+These are actual safe owners/counters, **not yet GlobalAlloc or a full host**.
+
+At root's exact handoff Core added cfg(macos) process module and the test-only
+process_peer example hook. Native's disjoint provider is savedbb69d4c; its
+[receipt](H01-process.md) records9 pre-extension cases,2 affected extension cases,
+actual FD/stack/core/fatal/reap proof and exact shared hashes. Core did not rerun
+its process suite or edit its files. The approved API extensiona126783 adds only
+watchdog_stack_request; Core's actual watchdog still needs its own extent proof.
+
+Rust1.96.0 on saved Nativebb69d4c plus current connected Core candidate:
+
+```sh
+cargo check --locked -p uiblueprint-host --lib --test fixed_owners --test publication --test quota_counter
+cargo fmt -p uiblueprint-host -- --check
+cargo clippy --locked -p uiblueprint-host --lib --test fixed_owners --test publication --test quota_counter -- -D warnings
+cargo test --locked -p uiblueprint-host --test fixed_owners --test publication --test quota_counter
+```
+
+All passed:4 changed-buffer/foundation cases,2 publication cases,2 counter cases.
+46 actual connected/shared inputs unchanged before/after; compact sorted JSON
+path→SHA256 digest:
+`c12acc03d30e38dab36c02c7f54678afc1e1e76aa5a49ef98a9d3d6c01943b04`.
+Set: root Cargo/lock/toolchain; host Cargo, lib/limits/buffers/protocol/process_api/
+publication/quota/process.rs and process/**; fixed_owners/publication/quota_counter/
+process tests and process_peer; schema/engine/plugin-api Cargo and source .rs.
+Unconnected Core WIP and Web WIP were excluded, not silently called tested.
+Core additionally compared Native's exact38-file shared-extension-before manifest
+(file SHA256564beff7b5dbebf3735dbf1853e079b7144f41ce89c488daf36374eaa04e6a7f)
+against current shared bytes: all38 match. No raw logs read or tests repeated.
+Saved-input reconciliation still awaits this connected-support checkpoint.
+
+Pending coherent10 paths: host Cargo; src/{lib,buffers,process_api,publication,
+quota}.rs; tests/{publication,quota_counter}.rs; docs/development/host.md; this receipt.
+Process API SHA `da5e278829b2b6b0d0d62c62b208cf838c8076bea117ee7b806fe49949878b56`;
+host Cargo `cbd51a8e013013b9a1b70b922d14de21674ecc1b0f486de3fda62de7897ccd01`;
+host lib `0ec828b36f1e22fe5e93cafd5ee2ef53b16fefebcc727a58a44f79230f4faaa9`.
+Root granted exactly the10 connected paths. Terminal chat records SHA/push,
+saved46-input equality and Git release; no unchanged tests are repeated.
+No unconnected WIP, Native or Web files enter this checkpoint.
+
+Unconnected authority/domain/host_types/quota_allocator/worker_config/worker_io/
+worker_ops/worker_tape remain unfinished development, not staged or accepted here.
+Full H01 still requires actual worker GlobalAlloc/System/fatal enforcement, complete
+RuntimeHost inventory and worker canonical execution, watchdog, deadline/cancel,
+nonce/no-retry, quarantine/grant lifetime and hostile guarded-input proof. No hostile
+parser family has run. No actual adapter/SDK/peak/RSS/live/D06 acceptance claim.
