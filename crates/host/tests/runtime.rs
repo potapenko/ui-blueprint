@@ -219,3 +219,6 @@ mod effects;
 
 #[path = "support/helpers_host.rs"]
 mod helpers;
+
+#[path = "support/fatal_race.rs"]
+mod fatal_race;

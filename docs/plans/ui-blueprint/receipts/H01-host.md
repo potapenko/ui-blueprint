@@ -525,3 +525,40 @@ crates/host/tests/support/helpers_host.rs and this receipt. Native binding remai
 unconnected WIP, excluded. No allocator/Cargo/protocol/worker pin/Integration file
 changes. After save these tracked sources can be held for the requested4-case
 Integration worker run; no other consumed-provider drift is present.
+
+## Reliable fatal status after normal IO closure
+
+Finite Core-owned test source: tests/support/fatal_race.rs, not an Integration path.
+Source inspection identified a concrete two-FD ordering gap: pump checked fatal FD
+before normal IO, then terminalized a normal-IO close without checking a newly ready
+fatal record. Deterministic wrapper regression uses a real Darwin child and real
+installed worker quota failure, delaying only fatal-lane visibility until normal IO
+closure. Saved supervisor returned WorkerFailed instead of the available matching
+ResourceLimit record, reproducing the defect without fabricated status or hostile
+parent decoding.
+
+Supervisor now drains at most one fixed64-byte fatal record again before attributing
+an IO failure. Reads are nonblocking and stop on WouldBlock/closed/zero; incomplete
+or invalid status never becomes inferred quota. Correlation/class remain checked;
+parent deadline keeps precedence. The same fixed reader serves the initial check,
+and status absence still yields generic failure. No raw stderr, wait, allocation,
+new timeout or worker/allocator change is introduced.
+
+The regression exercises both readable delayed status and deliberately unavailable
+status with identical real quota-caused worker exits. Expected outcomes are respectively
+ResourceLimit and WorkerFailed; the process exit code alone is not used for attribution.
+The initial second-control assertion accidentally retained the positive expectation;
+corrected the test to require generic failure for missing status, with no production
+change to fit it. Both cases now pass and both actual children are reaped.
+
+Full affected runtime set passes17 outer tests plus2 explicitly executed isolated
+R1 peer cases; focused Clippy/format/diff checks pass. Commands: cargo test --locked
+-p uiblueprint-host --test runtime -- --test-threads=1; cargo clippy --locked
+-p uiblueprint-host --lib --test runtime -- -D warnings; rustfmt --edition 2024
+--check crates/host/src/supervisor.rs crates/host/tests/runtime.rs. The isolated marker
+still prevents operator-process signal changes and skips no required peer execution.
+
+Exact4-path checkpoint: crates/host/src/supervisor.rs, crates/host/tests/runtime.rs,
+crates/host/tests/support/fatal_race.rs and this receipt. No Cargo/worker/allocator/
+Web/Native/Integration change. Unconnected native_binding remains excluded. After
+save Core can hold the new saved provider for Integration's two ready refusal cases.

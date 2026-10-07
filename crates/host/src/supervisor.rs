@@ -430,13 +430,20 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 Ok(None) => (),
                 Err(error) => {
                     if worker.active.is_some() {
+                        // Fatal and normal IO use different descriptors. A record
+                        // may arrive after pump's first check but before IO closes.
+                        // Drain it once more before assigning a generic failure.
+                        let terminal = if error == HostError::DeadlineExpired {
+                            Terminal::TimedOut
+                        } else {
+                            read_fatal_status(worker)
+                                .ok()
+                                .flatten()
+                                .unwrap_or(Terminal::Failed(error))
+                        };
                         return Ok(HostEvent::Complete(terminalize(
                             worker,
-                            if error == HostError::DeadlineExpired {
-                                Terminal::TimedOut
-                            } else {
-                                Terminal::Failed(error)
-                            },
+                            terminal,
                             self.domain.limits.cleanup_ms,
                             now,
                         )));
@@ -612,48 +619,52 @@ fn written<C: OwnedProcess>(worker: &mut Worker<'_, C>, bytes: &[u8]) -> Result<
         Transfer::WouldBlock => Ok(0),
     }
 }
+// Read at most one fixed record. No waits, retries after WouldBlock, allocation,
+// stderr interpretation or quota inference from a missing/partial status.
+fn read_fatal_status<C: OwnedProcess>(
+    worker: &mut Worker<'_, C>,
+) -> Result<Option<Terminal>, HostError> {
+    while worker.fatal_offset < CONTROL_BYTES {
+        match worker
+            .child
+            .read_fatal(&mut worker.fatal[worker.fatal_offset..])?
+        {
+            Transfer::Bytes(0) | Transfer::WouldBlock | Transfer::Closed => return Ok(None),
+            Transfer::Bytes(n) if n <= CONTROL_BYTES - worker.fatal_offset => {
+                worker.fatal_offset += n
+            }
+            Transfer::Bytes(_) => return Err(HostError::WorkerFailed),
+        }
+    }
+    let fatal = Control::decode(&worker.fatal).map_err(|_| HostError::WorkerFailed)?;
+    let active = worker.active.as_ref().ok_or(HostError::WorkerFailed)?;
+    if fatal.kind != ControlKind::Fatal
+        || fatal.correlation
+            != (Correlation {
+                session_epoch: active.handle.session.epoch,
+                operation: active.handle.sequence,
+            })
+        || fatal.class != active.class
+    {
+        return Err(HostError::WorkerFailed);
+    }
+    Ok(Some(match fatal.value {
+        1 => Terminal::Failed(HostError::ResourceLimit),
+        2 => Terminal::Failed(HostError::SystemAllocationFailure),
+        6 => Terminal::TimedOut,
+        _ => Terminal::Failed(HostError::WorkerFailed),
+    }))
+}
 fn pump<'a, C: OwnedProcess>(
     worker: &mut Worker<'a, C>,
     now: Instant,
     cleanup_ms: u64,
 ) -> Result<Option<HostEvent<'a>>, HostError> {
     // The authoritative deadline was checked before this bounded nonblocking step.
-    if worker.fatal_offset < CONTROL_BYTES {
-        if let Transfer::Bytes(n) = worker
-            .child
-            .read_fatal(&mut worker.fatal[worker.fatal_offset..])?
-        {
-            worker.fatal_offset += n;
-        }
-        if worker.fatal_offset == CONTROL_BYTES {
-            let fatal = Control::decode(&worker.fatal)?;
-            let active = worker.active.as_ref().ok_or(HostError::WorkerFailed)?;
-            if fatal.kind != ControlKind::Fatal
-                || fatal.correlation
-                    != (Correlation {
-                        session_epoch: active.handle.session.epoch,
-                        operation: active.handle.sequence,
-                    })
-                || fatal.class != active.class
-            {
-                return Err(HostError::WorkerFailed);
-            }
-            let error = match fatal.value {
-                1 => HostError::ResourceLimit,
-                2 => HostError::SystemAllocationFailure,
-                _ => HostError::WorkerFailed,
-            };
-            return Ok(Some(HostEvent::Complete(terminalize(
-                worker,
-                if fatal.value == 6 {
-                    Terminal::TimedOut
-                } else {
-                    Terminal::Failed(error)
-                },
-                cleanup_ms,
-                now,
-            ))));
-        }
+    if let Some(terminal) = read_fatal_status(worker)? {
+        return Ok(Some(HostEvent::Complete(terminalize(
+            worker, terminal, cleanup_ms, now,
+        ))));
     }
     match worker.stage {
         TxStage::ConfigHeader | TxStage::SubmitHeader | TxStage::Ack | TxStage::Permit => {
