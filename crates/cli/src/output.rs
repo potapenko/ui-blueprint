@@ -260,6 +260,23 @@ pub(crate) fn inspect(
     view: &uiblueprint_engine::scope::NeighborView<'_>,
 ) -> Result<Vec<u8>, Failure> {
     let mut buffer = Bounded::new(args.max_output);
+    if args.json {
+        // CLI-owned envelope; stream borrowed canonical fields directly. No
+        // unbounded Value, cloned Snapshot or new core/analysis artifact owner.
+        buffer.write_all(b"{\"output_version\":\"1.0.0\",\"kind\":\"inspection\",\"source\":\"saved\",\"live_revalidated\":false,\"selector\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, &view.seed.key).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"requested_view\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, &args.view).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"snapshot\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, view.snapshot).map_err(|_| buffer.error())?;
+        buffer.write_all(b"}\n").map_err(|_| buffer.error())?;
+        return Ok(buffer.bytes);
+    }
     let written = (|| -> io::Result<()> {
         let snapshot = view.snapshot;
         let node = view.seed;

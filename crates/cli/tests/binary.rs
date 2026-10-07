@@ -248,6 +248,17 @@ fn inspect_keeps_exact_identity_availability_evidence_and_escaped_text() {
         assert!(text.contains(required), "missing {required}: {text}");
     }
     assert!(!text.contains("\nFORGED_LINE"));
+    let json = case.inspect(&reference, "interaction", 65536, 65536, &["--json"]);
+    assert_eq!(json.status.code(), Some(0));
+    let parsed: serde_json::Value = serde_json::from_slice(&json.stdout).unwrap();
+    assert_eq!(
+        parsed["snapshot"],
+        serde_json::to_value(&case.snapshot).unwrap()
+    );
+    assert_eq!(
+        parsed["selector"],
+        serde_json::to_value(&case.snapshot.nodes[0].key).unwrap()
+    );
     assert_eq!(
         fs::read(case.directory.join("snapshot.json")).unwrap(),
         input_before
@@ -328,9 +339,84 @@ fn inspect_design_keeps_geometry_kinds_and_accepts_original_observed_channel() {
     let output = case.inspect(&reference, "design", 65536, 65536, &[]);
     assert_eq!(output.status.code(), Some(0));
     assert_eq!(String::from_utf8(output.stdout).unwrap(), text);
+    let output = case.inspect(&reference, "design", 65536, 65536, &["--json"]);
+    assert_eq!(output.status.code(), Some(0));
+    let parsed: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(
+        parsed["snapshot"],
+        serde_json::to_value(&case.snapshot).unwrap()
+    );
+    assert_eq!(parsed["requested_view"], "design");
     assert_eq!(
         fs::read(case.directory.join("snapshot.json")).unwrap(),
         bytes
+    );
+}
+
+#[test]
+fn inspect_json_envelope_keeps_uncertainty_and_exact_output_boundary() {
+    let mut case = Case::new("GEO-GAP");
+    case.snapshot.observations[0].consistency = Consistency::Unknown;
+    case.snapshot.observations[0].consistency_reason = Some(Id("not_atomic".into()));
+    case.save();
+    let reference = serde_json::to_string(&case.snapshot.nodes[0].key).unwrap();
+    for view in ["interaction", "design"] {
+        let output = case.inspect(&reference, view, 65536, 65536, &["--json"]);
+        assert_eq!(output.status.code(), Some(0));
+        assert!(output.stderr.is_empty());
+        assert!(output.stdout.ends_with(b"\n"));
+        let result: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(result.as_object().unwrap().len(), 7);
+        assert_eq!(result["output_version"], "1.0.0");
+        assert_eq!(result["kind"], "inspection");
+        assert_eq!(result["source"], "saved");
+        assert_eq!(result["live_revalidated"], false);
+        assert_eq!(
+            result["selector"],
+            serde_json::to_value(&case.snapshot.nodes[0].key).unwrap()
+        );
+        assert_eq!(result["requested_view"], view);
+        assert_eq!(
+            result["snapshot"],
+            serde_json::to_value(&case.snapshot).unwrap()
+        );
+        assert_eq!(result["snapshot"]["context"]["schema_version"], "0.1.0");
+        let exact = case.inspect(&reference, view, 65536, output.stdout.len(), &["--json"]);
+        assert_eq!(exact.status.code(), Some(0));
+        assert_eq!(exact.stdout, output.stdout);
+        assert_error(
+            case.inspect(
+                &reference,
+                view,
+                65536,
+                output.stdout.len() - 1,
+                &["--json"],
+            ),
+            2,
+            "output_limit",
+        );
+    }
+    assert_error(
+        case.inspect(
+            r#"{"namespace":"absent","key":"A"}"#,
+            "interaction",
+            65536,
+            65536,
+            &["--json"],
+        ),
+        4,
+        "target_unresolved",
+    );
+    assert_error(
+        case.inspect(
+            "PRIVATE_JSON_CANARY",
+            "interaction",
+            65536,
+            65536,
+            &["--json"],
+        ),
+        2,
+        "invalid_input",
     );
 }
 
@@ -383,9 +469,15 @@ fn inspect_refusals_and_aggregate_bounds_never_publish_partial_or_private_input(
         Some(0)
     );
     assert_error(
-        case.inspect(&reference, "interaction", 65536, 65536, &["--json"]),
-        5,
-        "unsupported_result_version",
+        case.inspect(
+            &reference,
+            "interaction",
+            65536,
+            65536,
+            &["--json", "--json"],
+        ),
+        2,
+        "invalid_arguments",
     );
     assert_error(
         case.inspect(&reference, "other", 65536, 65536, &[]),

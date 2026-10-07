@@ -42,10 +42,10 @@ cargo run --locked -p uiblueprint-cli -- measure --snapshot PRINTED_PATH --query
 
 Replace PRINTED_PATH with the printed path. Expected fact: gap8 css_px in local-form, analysis0.2/source Context0.1, no normative pass/fail. Remove only that temporary directory after use. Example byte bounds are not production defaults or process-memory promises.
 
-## Compact inspection of saved observations
+## Inspection of saved observations
 
 ```text
-uiblueprint inspect --snapshot FILE --ref '{"namespace":"web.dom","key":"33"}' --view interaction|design --max-input-bytes N --max-output-bytes N
+uiblueprint inspect --snapshot FILE --ref '{"namespace":"web.dom","key":"33"}' --view interaction|design --max-input-bytes N --max-output-bytes N [--json]
 ```
 
 The selector is the existing strict canonical SourceKey JSON object, not a
@@ -68,9 +68,13 @@ or creates action refs. Strings are escaped as data. No external references load
 Found node returns0 even with partial/unknown fields; missing exact SourceKey gives
 target_unresolved/4. Invalid/limit2, IO1 and unsupported mode5 remain distinct.
 The full result is bounded before stdout, including newline: overflow emits no
-partial result. `--json` explicitly returns unsupported_result_version/5 for this
-increment. Canonical JSON inspect remains separate required work; compact output
-does not claim to implement it. Existing measure/check/export paths are unchanged.
+partial result. `--json` emits the [CLI@2 INSPECT](../specs/product/cli.md) envelope:
+`output_version="1.0.0"`, `kind="inspection"`, `source="saved"`,
+`live_revalidated=false`, canonical `selector` and `requested_view`, and the full
+unchanged canonical `snapshot`. One JSON object plus newline; borrowed canonical
+fields serialize directly through the bounded writer. No second graph or inferred
+action ref. Version1.0.0 belongs to this CLI envelope, not core0.1 or analysis0.2;
+the product does not import it. Existing measure/check/export paths are unchanged.
 
 ## Exits and scope
 

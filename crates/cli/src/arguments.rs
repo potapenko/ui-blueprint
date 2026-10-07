@@ -8,15 +8,21 @@ pub(crate) struct InspectArguments {
     pub view: Projection,
     pub max_input: usize,
     pub max_output: usize,
+    pub json: bool,
 }
 impl InspectArguments {
     pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
         let (mut snapshot, mut reference, mut view, mut max_input, mut max_output) =
             (None, None, None, None, None);
         let invalid = Failure::invalid("invalid_arguments");
+        let mut json = false;
         while let Some(flag) = args.next() {
             if flag == "--json" {
-                return Err(Failure::unsupported("unsupported_result_version"));
+                if json {
+                    return Err(invalid);
+                }
+                json = true;
+                continue;
             }
             let value = args.next().ok_or(invalid)?;
             match flag.to_str() {
@@ -44,6 +50,7 @@ impl InspectArguments {
             view: view.ok_or(invalid)?,
             max_input: max_input.ok_or(invalid)?,
             max_output: max_output.ok_or(invalid)?,
+            json,
         })
     }
 }
