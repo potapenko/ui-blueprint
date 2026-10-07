@@ -98,3 +98,34 @@ are not browser CPU/RSS bounds; parser/normalizer/clone overlap still needs H01/
 Next: source review, real guarded admission/ACK composition, fixed F01 first/current-ref
 identity, limits, privacy and read-only-invariance cases under a separate runtime grant.
 Broader locator/projection/frame/shadow modes, pixels, B01–B06 and D06 remain open.
+
+## Selected popup/form relations
+
+The fixed isolated reader receives the original selected DOM objects as CDP
+arguments. Bounded aria-controls IDREFs and the explicit fixture data-anchor
+convention resolve only to those objects: selected ID uniqueness plus the native
+document ID lookup must agree. Missing, out-of-scope, duplicate selected IDs and
+foreign/disconnected endpoints create no relation. This is partial relationship
+coverage, not proof that no unreturned relation exists. No UI-derived expression,
+selector, extra tree scan, raw IDREF string or unobserved endpoint is serialized.
+
+Canonical DOM relations preserve direction: aria-controls → Controls;
+fixture-declared data-anchor → AnchoredTo with separate reported Evidence methods.
+They do not merge DOM/AX source IDs or generate action refs. Sensitive source or
+endpoint suppresses the relationship before canonical retention. The original
+handle/document verification still runs before publication, and the same method/
+reply/output/working-memory budgets apply. Native ID lookup is opaque browser work;
+selected-handle loops and bounded attribute splitting remain explicitly finite.
+
+When Focused is requested, exactly one observed focused public selected node may
+report an active descendant only if its aria-activedescendant resolves to another
+observed public selected object. Otherwise active_descendant remains Unknown;
+global keyboard focus remains Unknown. An active descendant is not selected or
+applied filter state. Requested fields and privacy behavior are unchanged.
+
+The opt-in popup_relations live case selects F01 open-popup, portal, close-popup,
+draft and suggestions after the existing popup trigger. The City field is outside
+the popup. It checks explicit controls/declared-anchor, compatible CSS viewport
+geometry, Close focus and honest unknown hit testing/active descendant. This
+fixture does not establish actual PlayPhrase.me structure or dimensions.
+[Preparation and exact evidence](../plans/ui-blueprint/receipts/W01-popup-relations.md).

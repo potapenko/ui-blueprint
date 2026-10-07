@@ -144,7 +144,7 @@ fn attach<'a>(
     session.session_id = session_id.clone();
     session.target = binding.target.clone();
     session.surfaces = vec![binding.surface.clone()];
-    session.allowed_scopes = ["left", "sized", "draft"]
+    session.allowed_scopes = ["left", "sized", "draft", "popup"]
         .map(|s| Id(format!("f01-{s}")))
         .into();
     session.capabilities[0].reason = Some(Id("bounded-live-source-under-verification".into()));
@@ -373,6 +373,55 @@ fn guarded_live_f01() {
     let diagnostic =
         std::env::var("UIB_WEB_LIVE_CASE").is_ok_and(|v| v == "first_observe_diagnostic");
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("popup_relations") {
+            fixture.stimulus("popup");
+            let a = attach(&mut host, fixture.binding("a"), 1);
+            let selection = WebSelection::Initial {
+                ids: [
+                    "open-popup",
+                    "portal",
+                    "close-popup",
+                    "draft",
+                    "suggestions",
+                ]
+                .into_iter()
+                .map(|id| WebId {
+                    id: Id(id.into()),
+                    sensitivity: Sensitivity::Public,
+                })
+                .collect(),
+                max_visited_nodes: 256,
+            };
+            fixture.before("a", "popup-context");
+            let response = observe(
+                &mut host,
+                &a,
+                "popup",
+                vec![
+                    Field::Role,
+                    Field::AccessibilityName,
+                    Field::LayoutBounds,
+                    Field::Focused,
+                    Field::Expanded,
+                    Field::Value,
+                    Field::InputKind,
+                    Field::HitRegion,
+                ],
+                selection,
+                "popup-context",
+            );
+            fixture.outcome("popup-context", &response);
+            let document = decoded(&response);
+            fixture.check_frame(
+                "a",
+                "popup-context",
+                "popup",
+                &document,
+                response.bytes(0).expect("ACKed popup context"),
+            );
+            drop(response);
+            return;
+        }
         let a = attach(&mut host, fixture.binding("a"), 1);
         fixture.before("a", "left-initial");
         let first = observe(

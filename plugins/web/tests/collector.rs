@@ -1761,3 +1761,125 @@ fn malformed_acquisition_sites_preserve_refusal_and_cleanup() {
         fixture.finish();
     }
 }
+
+#[test]
+fn selected_dom_relations_preserve_binding_direction_and_privacy() {
+    for sensitive in [false, true] {
+        let fixture = Fixture::new(move |method, command, _| {
+            if method != "Runtime.callFunctionOn"
+                || !command["params"]["functionDeclaration"]
+                    .as_str()
+                    .unwrap_or("")
+                    .starts_with("function readNode(")
+            {
+                return None;
+            }
+            assert_eq!(command["params"]["arguments"][2]["objectId"], "node-11");
+            assert_eq!(command["params"]["arguments"][3]["objectId"], "node-12");
+            let first = command["params"]["objectId"] == "node-11";
+            let mut reply: Json =
+                serde_json::from_str(include_str!("fixtures/collector/dom.json")).unwrap();
+            let value = &mut reply["result"]["value"];
+            value["focused"] = json!(first);
+            if first {
+                value["controls"] = json!([1]);
+                value["activeDescendant"] = json!(1);
+            } else {
+                value["declaredAnchor"] = json!(0);
+            }
+            Some(reply)
+        });
+        let mut c = fixture.attach(limits());
+        let mut selected = initial(&["left", "right"]);
+        if sensitive {
+            selected.ids[1].sensitivity = Sensitivity::Sensitive;
+        }
+        let mut r = request();
+        r.context.fields.push(Field::Focused);
+        let mut docs = Vec::new();
+        c.observe_initial(&r, &selected, 41, op().deadline, |d| {
+            d.validate().unwrap();
+            docs.push(d);
+            Publication::Acknowledged
+        })
+        .unwrap();
+        let s = snapshot(&docs[0]);
+        let relations: Vec<_> = s
+            .relations
+            .iter()
+            .filter(|r| r.kind != RelationKind::CorrespondsTo)
+            .collect();
+        if sensitive {
+            assert!(relations.is_empty());
+            assert!(matches!(
+                s.focus.active_descendant,
+                FocusRef::Unknown { .. }
+            ));
+        } else {
+            assert_eq!(relations.len(), 2);
+            assert_eq!(
+                (
+                    relations[0].kind,
+                    relations[0].from.key.0.as_str(),
+                    relations[0].to.key.0.as_str()
+                ),
+                (RelationKind::Controls, "11", "12")
+            );
+            assert_eq!(
+                (
+                    relations[1].kind,
+                    relations[1].from.key.0.as_str(),
+                    relations[1].to.key.0.as_str()
+                ),
+                (RelationKind::AnchoredTo, "12", "11")
+            );
+            assert_eq!(relations[0].evidence.method.0, "dom-aria-controls");
+            assert_eq!(
+                relations[1].evidence.method.0,
+                "fixture-data-anchor-attribute"
+            );
+            assert!(relations.iter().all(|r| r.from.namespace.0 == "web.dom"
+                && r.to.namespace.0 == "web.dom"
+                && r.evidence.observation_id == s.observations[0].id));
+            assert!(
+                matches!(&s.focus.active_descendant, FocusRef::Known { target, .. } if target.key.0 == "12" && target.namespace.0 == "web.dom")
+            );
+        }
+        assert!(matches!(s.focus.keyboard, FocusRef::Unknown { .. }));
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn invalid_relation_index_or_duplicate_refuses_before_publication() {
+    for indexes in [json!([2]), json!([1, 1])] {
+        let fixture = Fixture::new(move |method, command, _| {
+            if method != "Runtime.callFunctionOn"
+                || !command["params"]["functionDeclaration"]
+                    .as_str()
+                    .unwrap_or("")
+                    .starts_with("function readNode(")
+            {
+                return None;
+            }
+            let mut reply: Json =
+                serde_json::from_str(include_str!("fixtures/collector/dom.json")).unwrap();
+            reply["result"]["value"]["controls"] = indexes.clone();
+            Some(reply)
+        });
+        let mut c = fixture.attach(limits());
+        let error = c
+            .observe_initial(
+                &request(),
+                &initial(&["left", "right"]),
+                41,
+                op().deadline,
+                |_| panic!("invalid endpoint cannot publish"),
+            )
+            .unwrap_err();
+        assert_eq!(error.kind, ErrorKind::Malformed);
+        assert_eq!(error.remote_cleanup, collector::RemoteCleanup::Released);
+        drop(c);
+        fixture.finish();
+    }
+}

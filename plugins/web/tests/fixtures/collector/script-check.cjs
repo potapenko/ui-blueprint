@@ -65,3 +65,24 @@ assert.equal(search(['left'],20,8,1000,{}).status,'stale');
 children(document,[left,right]);let tick=0;context.performance={now:()=>tick++};assert.equal(search(['left'],20,8,2).status,'timeout');context.performance={now:()=>0};
 valueReads=0;rectReads=0;assert.equal(search(['left']).status,'selected');assert.deepEqual([valueReads,rectReads],[0,0],'selection never reads values or layout');
 console.log('10 offline bootstrap scenarios passed; bounded light-DOM selection only, no browser qualification.');
+
+class Document { getElementById(id) { return this.idNodes.find(n=>n.attrs.id===id)??null; } }
+context.Document=Document;
+function relationRead(n, selected, sensitive=false) {
+  context.node=n;context.selected=selected;context.options={fields:['focused','layout_bounds'],maxChars:100,sensitive};context.expected=document;
+  return vm.runInContext('readNode.call(node, options, expected, ...selected)',context,{timeout:100});
+}
+const trigger=identified('trigger'), popup=identified('popup'), external=identified('external');
+trigger.attrs['aria-controls']='popup external';popup.attrs['data-anchor']='trigger';
+trigger.attrs['aria-activedescendant']='popup';document.activeElement=trigger;document.idNodes=[trigger,popup,external];
+const state=JSON.stringify([trigger.attrs,popup.attrs,trigger.state,popup.state]);
+let linked=relationRead(trigger,[trigger,popup]);assert.deepEqual(Array.from(linked.controls),[1]);assert.equal(linked.activeDescendant,1);
+assert.equal(relationRead(popup,[trigger,popup]).declaredAnchor,0);
+assert.equal(JSON.stringify([trigger.attrs,popup.attrs,trigger.state,popup.state]),state);
+const duplicatePopup=identified('popup');assert.deepEqual(Array.from(relationRead(trigger,[trigger,popup,duplicatePopup]).controls),[]);
+document.idNodes=[duplicatePopup,trigger,popup];assert.deepEqual(Array.from(relationRead(trigger,[trigger,popup]).controls),[],'unselected browser endpoint cannot be replaced by same ID');
+document.idNodes=[trigger,popup,external];trigger.attrs['aria-controls']='missing';assert.deepEqual(Array.from(relationRead(trigger,[trigger,popup]).controls),[]);
+trigger.attrs['aria-controls']='x'.repeat(101);assert.equal(relationRead(trigger,[trigger,popup]).controls,undefined);
+const redacted=relationRead(trigger,[trigger,popup],true);assert.equal(redacted.controls,undefined);assert.equal(redacted.declaredAnchor,undefined);assert.equal(redacted.activeDescendant,undefined);
+document.activeElement=popup;assert.equal(relationRead(trigger,[trigger,popup]).activeDescendant,undefined);
+console.log('8 offline relation scenarios passed; actual browser proof remains separate.');

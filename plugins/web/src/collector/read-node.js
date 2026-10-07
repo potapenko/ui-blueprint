@@ -21,6 +21,33 @@ function readNode(options, expectedDocument) {
     /(?:^|\s)(?:current-password|new-password|one-time-code|cc-number|cc-csc)(?:\s|$)/i.test(autocomplete));
   const sensitive = options.sensitive || type === 'password' || privateAutocomplete;
   const out = { connected, sameDocument: owns, tag: sensitive ? null : text(this.tagName), sensitive };
+  if (!sensitive) {
+    // Resolve IDREFs only to the original, explicitly selected objects. Browser
+    // ID lookup confirms the endpoint; a matching string alone is not identity.
+    const selected = Array.prototype.slice.call(arguments, 2);
+    const endpoint = id => {
+      if (!id || id.length > options.maxChars || /[\t\n\f\r ]/.test(id)) return null;
+      let index = null;
+      for (let i = 0; i < selected.length; i++) {
+        const node = selected[i];
+        if (!(node instanceof Element) || !node.isConnected || node.ownerDocument !== expectedDocument) continue;
+        if (Element.prototype.getAttribute.call(node, 'id') === id) {
+          if (index !== null) return null;
+          index = i;
+        }
+      }
+      return index !== null && Document.prototype.getElementById.call(expectedDocument, id) === selected[index] ? index : null;
+    };
+    const controls = text(attr('aria-controls'));
+    if (controls !== null) {
+      const ids = controls.trim().split(/[\t\n\f\r ]+/);
+      if (ids.length <= selected.length) out.controls = [...new Set(ids.map(endpoint).filter(index => index !== null))];
+    }
+    // data-anchor is the explicit fixture declaration, not an ARIA synonym.
+    out.declaredAnchor = endpoint(text(attr('data-anchor')));
+    if (fields.has('focused') && document.activeElement === this)
+      out.activeDescendant = endpoint(text(attr('aria-activedescendant')));
+  }
   if (fields.has('layout_bounds')) {
     // CSSOM's native layout/fragments computation is opaque browser work.
     // Empty fragment list is unavailable layout, never a fabricated zero rectangle.

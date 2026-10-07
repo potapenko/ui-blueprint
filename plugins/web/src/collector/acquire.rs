@@ -153,25 +153,54 @@ impl Collector {
             }
         };
         for index in 0..plan.len() {
-            let (backend, sensitivity, object) = match plan {
+            handles.push(match plan {
                 Plan::References(scope) => {
-                    let node = &scope.nodes[index];
-                    let backend = node.backend_id()?;
-                    (
-                        backend,
-                        node.sensitivity,
-                        self.resolve(backend, group, budget)?,
-                    )
+                    self.resolve(scope.nodes[index].backend_id()?, group, budget)?
                 }
+                Plan::Initial(_) => selected
+                    .as_ref()
+                    .ok_or(Failure::new(ErrorKind::Malformed))?[index]
+                    .object
+                    .clone(),
+            });
+        }
+        for index in 0..plan.len() {
+            let (backend, sensitivity) = match plan {
+                Plan::References(scope) => (
+                    scope.nodes[index].backend_id()?,
+                    scope.nodes[index].sensitivity,
+                ),
                 Plan::Initial(_) => {
                     let node = &selected
                         .as_ref()
                         .ok_or(Failure::new(ErrorKind::Malformed))?[index];
-                    (node.backend, node.sensitivity, node.object.clone())
+                    (node.backend, node.sensitivity)
                 }
             };
+            let object = &handles[index];
+            let mut arguments = Vec::new();
+            arguments
+                .try_reserve_exact(handles.len() + 2)
+                .map_err(|_| Failure::new(ErrorKind::Limit))?;
+            arguments.push(Argument::Options {
+                value: ReadOptions {
+                    fields: &request.context.fields,
+                    max_chars: self.limits.max_text_bytes / 6,
+                    sensitive: sensitivity == Sensitivity::Sensitive,
+                },
+            });
+            arguments.push(Argument::Object {
+                object_id: document
+                    .as_deref()
+                    .ok_or(Failure::new(ErrorKind::Malformed))?,
+            });
+            arguments.extend(
+                handles
+                    .iter()
+                    .map(|handle| Argument::Object { object_id: handle }),
+            );
             let params = Read {
-                object_id: &object,
+                object_id: object,
                 function_declaration: READ_NODE,
                 return_by_value: true,
                 silent: true,
@@ -182,20 +211,7 @@ impl Collector {
                 // Only this fixed isolated-world reader uses ordinary evaluation;
                 // arguments remain data and it never invokes application callbacks.
                 throw_on_side_effect: false,
-                arguments: [
-                    Argument::Options {
-                        value: ReadOptions {
-                            fields: &request.context.fields,
-                            max_chars: self.limits.max_text_bytes / 6,
-                            sensitive: sensitivity == Sensitivity::Sensitive,
-                        },
-                    },
-                    Argument::Object {
-                        object_id: document
-                            .as_deref()
-                            .ok_or(Failure::new(ErrorKind::Malformed))?,
-                    },
-                ],
+                arguments,
             };
             let read: wire::ReadResult = self
                 .send("Runtime.callFunctionOn", &params, budget)
@@ -206,7 +222,6 @@ impl Collector {
             if read.result.r#type != "object" {
                 return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::ReadShape));
             }
-            handles.push(object);
             let mut read = read
                 .result
                 .value
@@ -222,8 +237,11 @@ impl Collector {
                 read.placeholder = None;
                 read.input_kind = None;
                 read.tag = None;
+                read.controls = None;
+                read.declared_anchor = None;
+                read.active_descendant = None;
             }
-            validate_dom(&read, self.limits.max_text_bytes)
+            validate_dom(&read, self.limits.max_text_bytes, plan.len())
                 .map_err(|e| e.at(MalformedSite::ReadData))?;
             records.dom.push((backend, read));
             records.dom_end = self.time();
@@ -411,7 +429,9 @@ impl Collector {
             });
             nodes.push(node);
         }
-        let snapshot = normalize::snapshot(
+        normalize::dom_relations(&records.dom, &dom, &mut relations);
+        let active_descendant = normalize::active_descendant(&records.dom, &dom, &request.context);
+        let mut snapshot = normalize::snapshot(
             request,
             (self.owner, self.sequence),
             if records.ax_queries > 0 {
@@ -423,11 +443,24 @@ impl Collector {
             relations,
             empty,
         );
+        snapshot.focus.active_descendant = active_descendant;
         validation::validate_snapshot(&snapshot).map_err(|_| Failure::new(ErrorKind::Malformed))?;
         Ok(snapshot)
     }
 }
-fn validate_dom(read: &wire::DomRead, cap: usize) -> Result<(), Failure> {
+fn validate_dom(read: &wire::DomRead, cap: usize, selected: usize) -> Result<(), Failure> {
+    if read.controls.as_ref().is_some_and(|v| {
+        v.len() > selected
+            || v.iter()
+                .enumerate()
+                .any(|(i, n)| *n >= selected || v[..i].contains(n))
+    }) || [read.declared_anchor, read.active_descendant]
+        .into_iter()
+        .flatten()
+        .any(|i| i >= selected)
+    {
+        return Err(Failure::new(ErrorKind::Malformed));
+    }
     if read.tag.as_ref().is_some_and(|tag| tag.len() > cap)
         || read.rect.as_ref().is_some_and(|r| {
             ![r.x, r.y, r.width, r.height].iter().all(|v| v.is_finite())

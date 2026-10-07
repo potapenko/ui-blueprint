@@ -29,7 +29,8 @@ object_record!(DomRead {
  connected:bool, same_document:bool, tag:Option<String>, sensitive:bool,
  rect:Option<Rect>, input_kind:Option<String>, value:Option<String>, placeholder:Option<String>,
  required:Option<bool>, enabled:Option<bool>, readonly:Option<bool>, checked:Option<bool>,
- selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>
+ selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>,
+ controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>
 });
 object_record!(AxValue { r#type:String, value:Option<Scalar> });
 object_record!(AxProperty {

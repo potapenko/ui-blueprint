@@ -366,3 +366,72 @@ pub(crate) fn snapshot(
         coverage,
     }
 }
+
+/// Endpoints are indices into the same request's original selected DOM objects.
+pub(crate) fn dom_relations(
+    records: &[(u32, DomRead)],
+    observation: &Observation,
+    result: &mut Vec<Relation>,
+) {
+    for (backend, read) in records {
+        if read.sensitive {
+            continue;
+        }
+        let controls = read
+            .controls
+            .as_deref()
+            .unwrap_or(&[])
+            .iter()
+            .copied()
+            .map(|index| (index, RelationKind::Controls, "dom-aria-controls"));
+        let anchor = read.declared_anchor.into_iter().map(|index| {
+            (
+                index,
+                RelationKind::AnchoredTo,
+                "fixture-data-anchor-attribute",
+            )
+        });
+        for (index, kind, method) in controls.chain(anchor) {
+            if let Some((target, _)) = records.get(index).filter(|(_, r)| !r.sensitive) {
+                result.push(Relation {
+                    kind,
+                    from: dom_key(*backend),
+                    to: dom_key(*target),
+                    evidence: evidence(observation, method),
+                });
+            }
+        }
+    }
+}
+fn dom_key(backend: u32) -> SourceKey {
+    SourceKey {
+        namespace: id("web.dom"),
+        key: Id(backend.to_string()),
+    }
+}
+pub(crate) fn active_descendant(
+    records: &[(u32, DomRead)],
+    observation: &Observation,
+    context: &Context,
+) -> FocusRef {
+    if !context.fields.contains(&Field::Focused) {
+        return FocusRef::NotRequested {};
+    }
+    let mut focused = records.iter().filter(|(_, r)| r.focused == Some(true));
+    if let Some((_, read)) = focused.next()
+        && focused.next().is_none()
+        && !read.sensitive
+        && let Some((backend, _)) = read
+            .active_descendant
+            .and_then(|i| records.get(i))
+            .filter(|(_, r)| !r.sensitive)
+    {
+        return FocusRef::Known {
+            target: dom_key(*backend),
+            evidence: evidence(observation, "dom-focused-aria-activedescendant"),
+        };
+    }
+    FocusRef::Unknown {
+        reason: id("selected-scope-has-no-confirmed-active-descendant"),
+    }
+}

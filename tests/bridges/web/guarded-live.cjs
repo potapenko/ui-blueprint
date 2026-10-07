@@ -11,10 +11,10 @@ const f01 = require('../../../fixtures/web/expected.json');
 const CANARY = 'W01_LIVE_PRIVATE_CANARY';
 const MAX_LINE = 262144;
 const PREFIX = '@UIB_LIVE ';
-const EVIDENCE_ROOT = '/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/W01-guarded-live';
-const CASES = new Set(['left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
+const EVIDENCE_ROOT = require('node:fs').realpathSync(require('node:os').tmpdir());
+const CASES = new Set(['popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
 const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required']);
-const FRAME_FILES = Object.freeze({'left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
+const FRAME_FILES = Object.freeze({'popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
 function bounded(promise, ms, code) {
   let timer; return Promise.race([promise, new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error(code)), ms);
@@ -154,8 +154,29 @@ async function run(evidence, report) {
             assert.equal(response.result.status,'observed'); const s = response.result.data;
             assert.equal(s.coverage.status,'partial'); assert.equal(s.source_state,null);
             assert(s.nodes.length <= 32); const dom = s.nodes.filter(n=>n.key.namespace==='web.dom');
-            assert.equal(dom.length,1); assert(s.observations.every(o=>o.freshness==='current'&&o.consistency==='unknown'));
-            if (payload.kind === 'left') {
+            assert.equal(dom.length,payload.kind==='popup'?5:1); assert(s.observations.every(o=>o.freshness==='current'&&o.consistency==='unknown'));
+            if (payload.kind === 'popup') {
+              const [trigger,popup,close,input,suggestions]=dom;
+              const same=(a,b)=>a.namespace===b.namespace&&a.key===b.key;
+              const relation=(kind,from,to,method)=>assert(s.relations.some(r=>r.kind===kind&&same(r.from,from.key)&&same(r.to,to.key)&&r.evidence.method===method&&r.evidence.provenance==='reported'&&r.evidence.source_namespace==='web.dom'));
+              relation('controls',trigger,popup,'dom-aria-controls');
+              relation('controls',input,suggestions,'dom-aria-controls');
+              relation('anchored_to',popup,trigger,'fixture-data-anchor-attribute');
+              assert.equal(s.relations.filter(r=>r.kind!=='corresponds_to').length,3);
+              // Literal CSS rectangle from frozen fixtures/web/extension.html; no runtime-derived oracle.
+              compareRect(rectangle(popup),[400,290,200,60]);
+              for(const node of dom){rectangle(node);assert.equal(property(node,'layout_bounds').value.coordinate_space.id,s.context.surfaces[0].id);assert.equal(node.properties.find(p=>p.field==='hit_region').state.availability,'unknown');}
+              assert.equal(property(trigger,'expanded').value,true);
+              assert.equal(property(close,'focused').value,true);
+              assert.equal(property(input,'focused').value,false);
+              assert.equal(property(input,'value').value,f01.initial.draft);
+              const axFor=node=>{const r=s.relations.find(r=>r.kind==='corresponds_to'&&same(r.from,node.key));assert(r);return s.nodes.find(n=>same(n.key,r.to));};
+              assert.equal(property(axFor(popup),'role').value,'dialog');
+              assert.equal(property(axFor(popup),'accessibility_name').value,'Options');
+              assert.equal(property(axFor(input),'role').value,'combobox');
+              assert.equal(property(axFor(input),'accessibility_name').value,'City');
+              assert.equal(s.focus.keyboard.status,'unknown');assert.equal(s.focus.active_descendant.status,'unknown');
+            } else if (payload.kind === 'left') {
               compareRect(rectangle(dom[0]),r01.initial.left.bounds);
               const ax = s.nodes.filter(n=>n.key.namespace==='web.ax'); assert.equal(ax.length,1);
               assert.equal(property(ax[0],'role').value,f01.B06.ax_role);
@@ -178,13 +199,17 @@ async function run(evidence, report) {
             const file=FRAME_FILES[payload.case];
             await writeExclusive(path.join(evidence,file),bytes);
             report.frames.push({case:payload.case,file,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
-          } else assert(!Object.hasOwn(payload,'canonical'),'only three declared positive frames may be persisted');
+          } else assert(!Object.hasOwn(payload,'canonical'),'only declared positive frames may be persisted');
           checks.push({case:payload.case,readonly:true,oracle:payload.kind}); return {};
         }
         case 'stimulus': {
           if (payload.action==='textLarge' || payload.action==='remount')
             await page.evaluate(name=>window.f01.operate(name),payload.action);
-          else if (payload.action==='navigate') {
+          else if (payload.action==='popup') {
+            await page.locator('#open-popup').click();
+            const declared=await page.evaluate(()=>({parent:document.getElementById('portal').parentElement.tagName,anchor:document.getElementById('portal').dataset.anchor,inputInside:document.getElementById('portal').contains(document.getElementById('draft'))}));
+            assert.equal(declared.parent,f01.B03.portal_parent);assert.equal(declared.anchor,f01.B03.anchor);assert.equal(declared.inputInside,false);
+          } else if (payload.action==='navigate') {
             await page.goto(`${fixture.url}/?generation=2`); await page.waitForFunction(()=>!!window.f01);
           } else if (payload.action==='private') {
             await page.evaluate(value=>{const input=document.getElementById('draft');input.type='password';
@@ -219,7 +244,7 @@ async function run(evidence, report) {
     });
     const exit = await bounded(exited,90000,'rust_consumer_timeout'); await chain; report.test_exit={code:exit.code,signal:exit.signal};
     assert.equal(exit.code,0); assert.equal(exit.signal,null); assert(!failed,'live_case_failed');
-    assert.equal(before.size,0); if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
+    assert.equal(before.size,0); if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
   } catch (_) {
     report.failure??={code:'live_run_failed',phase:report.phase}; throw new Error('live_run_failed');
   } finally {
@@ -245,15 +270,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
-  await fs.mkdir(EVIDENCE_ROOT,{recursive:true,mode:0o700});
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'root',consumers:['W01-review','G02','P7'],until:'P7 acceptance or explicit discard/replacement'},
+    retention:{owner:'Web-current-operation',consumers:['B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}
