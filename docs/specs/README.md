@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 9.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 10.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -63,6 +63,10 @@ All source-audit guards apply; runtime float_roundtrip and open D05 gates remain
 [D05-MEMORY@2](development/decisions/d05-memory.md), [D05-WORK@1](development/decisions/d05-working-memory.md).
 Delegated technical registration is not runtime acceptance; D07@4, wire meanings
 and all implementation/platform/positive D06 gates remain protected.
+
+`H01-PROCESS-001` registers [D07@5](development/decisions/d07-reuse.md)'s exact libc
+OS-binding use at the host boundary from Core's root-accepted source/license request.
+Existing locked version/policies remain; registration does not accept unsafe/runtime proof.
 
 ## Select a route
 

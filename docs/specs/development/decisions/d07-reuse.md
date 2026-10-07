@@ -1,15 +1,13 @@
 # D07 — initial dependencies and no-copy disposition
 
 - Domain: `uib.development.d07`; accepted/released baseline: none.
-- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), ANALYSIS-FLOAT-001 and W01-TRANSPORT-001 below.
-- Node type: leaf; contract: `UIB.D07@4`; clause: `UIB.D07.CONTENT`; supersedes @3.
+- Authority source: [C01-DEC-001](README.md#meaning-and-precedence), ANALYSIS-FLOAT-001, W01-TRANSPORT-001 and H01-PROCESS-001 below.
+- Node type: leaf; contract: `UIB.D07@5`; clause: `UIB.D07.CONTENT`; supersedes @4.
 - Authority: Active / Stability: Evolving; selected dependencies; runtime acceptance separate.
 - Read when: T01/S01 dependency resolution or later selected code/dependency adoption.
 - Do not read when: no dependency/source transfer is proposed.
-- Requires: [REUSE@1](../../reference/reuse.md),
-  [RUST-BOUNDARIES@1](../../product/rust-boundaries.md), [evidence](evidence.md).
-- Owner/deadline: T01/S01 before initial resolution; each adapter owner before
-  importing its selected library/code; I01 verifies final distribution notices.
+- Requires: [REUSE@1](../../reference/reuse.md), [RUST-BOUNDARIES@1](../../product/rust-boundaries.md), [evidence](evidence.md).
+- Owner/deadline: T01/S01 before initial resolution; each adapter owner before importing its selected library/code; I01 verifies final distribution notices.
 
 ## Requirement and decisions
 
@@ -92,3 +90,10 @@ I01 retains that upstream attribution with the existing dependency license mater
 No source copy, new dependency, geometric epsilon, wire promotion or fixture change.
 Configured production22-case core0.1/analysis0.2 regression must also pass; dev-feature
 tests alone are insufficient. [Receipt](../../../plans/ui-blueprint/receipts/S01-analysis.md) retains exact failures/proof; broad runtime/D05 peak acceptance remains open.
+
+## H01-PROCESS-001 — exact host OS bindings
+
+Under [accepted dependency packet](../../../plans/ui-blueprint/packets/H01-process-dependency.md)50f3b8f, adopt libc EXACT0.2.190, default-features=false, solely for host/process/worker-fatal boundaries; reuse existing locked version, no framework/update.
+Core reports archive/installed-source equality, MSRV1.65, MIT OR Apache-2.0, full MIT read and no NOTICE; [attributed receipt](../../../plans/ui-blueprint/receipts/H01-process-dependency.md) preserves exact checksum/scope, not independent verification.
+Use public posix_spawn/file-actions/flags, socketpair/fcntl/poll/read/write/close, kill/waitpid, getrlimit/setrlimit, _exit and stack-query bindings rather than mandating copied/raw ABI declarations.
+Core alone adopts manifests/source after this registration. Existing versions/features/Web log guards/float fidelity/wire/retained policy and library unsafe prohibitions remain; narrow host unsafe, FD/stack/core-dump/cleanup proof is still required, not accepted here.
