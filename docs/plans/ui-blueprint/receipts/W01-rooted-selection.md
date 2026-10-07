@@ -1,7 +1,7 @@
 # W01 rooted selection source handoff
 
-Status: source slice saved; first rooted browser run FAILED at ContinuityException.
-No canonical frames; owned cleanup and temporary removal confirmed.
+Status: corrected rooted sequence PASSED:9DOM+9AX within selected section;
+wrong-binding/document/remount refusals passed; cleanup/temp removal confirmed.
 Authority: root's explicit implementation dispatch and [packet](../packets/W01-rooted-selection.md),
 within user-approved PLAN.UIB@1. Restore bounded PROJECTIONS/IDENTITY requirement;
 registry11 Web contract closure remains applicable; unrelated CLI routing additions
@@ -212,3 +212,42 @@ fresh system-temp pathname /private/var/folders/px/srfnff157mg33175_4y8yrnr0000g
 After saved correction and matching pins, root already authorizes this changed run.
 No new host metadata dependencies consumed. Same inline delivery and verified
 current-operation output/build removal apply; prior evidence untouched.
+
+## Corrected rooted sequence — actual result
+
+Correction1568af3cc19878c68c99902f290d4efb03c93c1b saved/pushed; exact unchanged
+harness40f4567 and prior providercadd345/source1d83dc8 ran once with correction
+overlay2026-10-07T16:46:04.791Z–16:46:06.990Z. Matching98source/binary pins above,
+no rebuild/retry of unchanged acceptance or unrelated liveCLI metadata adoption.
+
+Actual status passed, exit0, pending0: rooted-current completed committed1/missing0,
+9DOM+9AX nodes and partial coverage. Exact fixture section membership excludes
+BODY popup and all siblings. Observed City/combobox/input-controls-suggestions,
+trigger expanded, compatible viewport geometry, authored sectionx380/y20/width360,
+unknown global focus/active descendant and no unobserved popup relation passed.
+Published root identity matches actual discovered backend/session/surface and
+actual Snapshot/Observation provenance; no fabricated seed refs were used.
+
+Wrong seed surface binding and document backend each returned resync_required,
+collector StaleTarget, committed0/missing1 with no remote acquisition. Separate
+fixture clone-remount made original seed stale; it returned resync_required with
+remote Released, no replacement search or publication. First ACKed bytes remained
+equal through all three refusals. All4read-only invariance checks and the browser-
+survives-worker-reap check passed. No cap/oracle/continuity/body-check relaxation.
+
+Worker cleanup confirmed sessions0/groups0/abandonedfalse; test/context/driver/
+browser/server/profile all closed. Post-run98source/binary/harness/fixture hashes
+match. Temporary canonical frame39606B SHA256
+c3b16b471ebeb42e7f949588f932cd668936eb28f691296dfcb474c8b67b9494;
+report dd18c7e427caf1a39be87e2ebaaaa524e5eca1035098b5e7110d40f57fc65604.
+These are consumed/deleted-file identities, not retained download artifacts.
+After inline factual delivery, report/rooted-context.json and exclusive c214febd...
+directory were removed, absence verified. Current uib-web-rooted-repair-vq71eal1
+source/build temp also removed and absence verified. Old evidence untouched;
+no persistent output directory, source/Git/runtime hold or raw diagnostics retained.
+
+This closes the finite actual-root fixture sequence, not general product root
+selection, live PlayPhrase.me Director, full B01/B03, reparenting live timing,
+performance/Q02 or current integrated liveCLI acceptance. Reparenting/limits/privacy
+remain backed by the focused source/peer cases recorded above; do not relabel them
+as additional browser scenarios. Caller selection origin remains separate work.
