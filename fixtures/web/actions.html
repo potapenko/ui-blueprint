@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>UI Blueprint owned checkbox action fixture</title>
+<main>
+  <h1>Checkbox action fixture</h1>
+  <p>Independent native controls for exact-target SetChecked checks.</p>
+  <p><label for="action-target">Enabled</label>
+    <input id="action-target" type="checkbox"></p>
+  <p><label for="action-duplicate">Enabled</label>
+    <input id="action-duplicate" type="checkbox" checked></p>
+  <p><label for="action-disabled">Disabled checkbox</label>
+    <input id="action-disabled" type="checkbox" disabled></p>
+  <p><label for="action-indeterminate">Mixed checkbox</label>
+    <input id="action-indeterminate" type="checkbox"></p>
+  <div id="action-custom" role="checkbox" aria-checked="false" tabindex="0">Custom checkbox role</div>
+  <p><button id="remount-target" type="button">Remount target (fixture setup)</button></p>
+</main>
+<script>
+'use strict';
+// Initial synthetic state. Mixed state is independent of the native checked bit.
+document.getElementById('action-indeterminate').indeterminate = true;
+// Explicit setup only: no timer, observation loop, toggle or synthesized input.
+document.getElementById('remount-target').addEventListener('click', () => {
+  const original = document.getElementById('action-target');
+  const replacement = original.cloneNode(true);
+  replacement.checked = original.checked;
+  replacement.indeterminate = original.indeterminate;
+  original.replaceWith(replacement);
+});
+</script>
+</html>

@@ -95,3 +95,37 @@ artifacts. Repeats can use a new filename beside that same retained harness.
 The mode verifies identical runtime metadata and unchanged fixture inputs, records
 new harness hashes and the frozen report hash, and preserves the original report.
 Five Hz is a retired experimental hypothesis, not a candidate gate or product policy.
+
+## Separate owned checkbox actions fixture
+
+[actions.html](actions.html) is a separate small P5/W02 input fixture. It is not
+composed into frozen F01, and changes no observation/performance oracle or node
+count. The current server still serves only the original routes; it does not yet
+serve this file. A later finite runtime packet must select its own loading/setup
+path. No browser run or provider qualification is implied by this source fixture.
+
+Independently declared initial facts:
+
+| Exact ID | Native kind / checked | Other state / expected use |
+| --- | --- | --- |
+| action-target | checkbox / false | enabled; label Enabled |
+| action-duplicate | checkbox / true | enabled; same label Enabled, distinct object |
+| action-disabled | checkbox / false | disabled; pre-dispatch refusal |
+| action-indeterminate | checkbox / false | indeterminate=true; checked observation remains unknown in current collector |
+| action-custom | div, role=checkbox | aria-checked=false; native-checkbox Setter unsupported |
+
+On a freshly loaded fixture, SetChecked(false) on action-target and SetChecked(true)
+on action-duplicate are already-equal cases; never toggle them. On the exact
+permitted native target, explicit true/false requests are verified by a separate
+native checked read. The other checkbox must remain unchanged. These are native
+state expectations, not a claim that a framework/application accepted a setting.
+Provider modality/cancel/effect semantics come from A01, not from this page.
+
+Clicking remount-target is an explicitly authorized fixture setup action: it clones
+only action-target, preserves its checked/indeterminate values and replaces the
+original object. The old handle becomes disconnected even though ID/label match;
+a provider must refuse it rather than search for the replacement. The setup does
+not synthesize input/change events or perform periodic work. There are no form
+submission handlers, business-result counters or secret values. Frozen F01 scripts
+and expected.json are not imported or changed. Source sanity is separate from
+later actual delivery/verification and protected action-boundary acceptance.

@@ -1,6 +1,7 @@
 # W02 single SetChecked provider handoff
 
-Status: finite read-only source handoff, no provider implementation/action/runtime.
+Status: provider source handoff and separate actions fixture prepared; no provider
+implementation, live action or browser runtime.
 Authority: [W02 packet](../packets/W02-provider-handoff.md), approved PLAN.UIB@1/P5.
 One writable file: this receipt in the existing directory; no new directories.
 Basis registry15 → ACTIONS/IDENTITY/FORMS/LIFECYCLE/CACHE and full already-read
@@ -91,3 +92,29 @@ remount/disabled/custom role/indeterminate or missing capability refusal; two sa
 labels never redirect; accepted setter with missing/mismatch after-state; cancellation
 before/after possible effect and owned cleanup. Runtime/live action activation and
 protected action-boundary review remain required, no actions ran in this handoff.
+
+## Dependency-ready separate actions fixture
+
+Root granted existing-directory tooling under already-approved F01/B02/P5; no new
+user permission needed. Exact3writes: fixtures/web/actions.html, fixtures/web/README.md
+and this receipt. No server/Rust/Core/schema/host/Cargo/frozenF01 changes or runtime.
+
+Native action-target unchecked and action-duplicate checked share label Enabled but
+have distinct IDs. Separate disabled and indeterminate(false native checked bit)
+controls plus a div role=checkbox negative exercise real capability distinctions.
+Already-equal true/false cases derive independently from declared initial states.
+Explicit remount-target button replaces only the target object, preserving its
+checked/indeterminate state; old refs must fail despite matching ID/label. No timer,
+provider code, synthetic input/change events, submit or invented business outcome.
+
+README contains exact selectors/expected facts and modality/verification limits.
+The existing frozen server does not serve actions.html; a later finite runtime
+packet must select the actual owned loading path. This is a source setup handoff,
+not a live-action or arbitrary-app capability claim. Root/Core stable lifecycle
+API and guarded effect/provider composition remain the next source dependency.
+
+Fixture source sanity PASS: unique exact IDs, four native checkbox types, declared
+checked/unchecked/disabled attributes and duplicate Enabled labels; inline script
+Node syntax PASS (no DOM execution), changed local links and git diff --check PASS.
+actions.html SHA2566b88ef45a73da8e4e24a5a753603dec58ab4c3fca51713d599c8dad1264bca26.
+No browser/build/test runtime or temporary output created by these source checks.
