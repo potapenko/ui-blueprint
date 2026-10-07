@@ -124,3 +124,16 @@ serializer guarantee. New serializers/features/dependencies/publication paths
 require affected requalification. The probe excludes whole-worker DTO accounting,
 watchdog concurrency and OS/SDK memory. Native acquisition, actual live platforms,
 D06 and broader H01 acceptance remain separate; no release completion is claimed.
+# Live CLI and ACKed outcome metadata — 24ffcb7
+
+Retained reviewer source-first inspected24ffcb7972fed6e22f868db54c22ce599725ede8
+against parent before the author receipt, then reconciled it. Scoped verdict:
+accept, no actionable findings. Strict explicit operator connection, actual attach
+clock, budgets, unchanged canonical NDJSON and cleanup are preserved. Incomplete
+metadata is fixed, validated and retained only through matching Frame/Commit/ACK;
+prior canonical bytes survive late failure. Parent does not parse the graph.
+
+Reviewer independently matched21-file digestbbfbf407bbc7843eb85abea29d4f0107099ac10bf29c5c2826d2197db3316b57.
+Managed-peer scenarios, selected builds/tests/Clippy remain author execution;
+reviewer ran none. Actual platform CLI calls are assigned separately. This is
+not arbitrary-target, distribution or full release acceptance.

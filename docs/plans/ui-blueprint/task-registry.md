@@ -90,21 +90,23 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Goal active. Actual measured probe→H01→Rust gap8→18 passed and savedb685a8c; Native now matched off/on verification. Core implements product live observe CLI and fixed ACKed incomplete metadata; managed-peer exit/partial-preservation cases pass, source uncommitted. Web rooted source/harness saved but actual continuity code15 failed; targeted exact-function diagnostic assigned, no cap change/general diagnostic framework. No shared source hold |
+| Активные чаты/пакеты/ресурсы | Product CLI24ffcb saved/pushed, source/peer scoped review accepted; next actual Web/Native observe→inspect checks assigned. Corrected rooted Chromium sequence passed9DOM+9AX with3negative refusals and cleanup. Native off/on matched76AX records and1100x1050pixels exactly, sampled pointerhit still open. Owners checkpoint outcomes then continue own CLI runs; no shared source hold |
 | Последний принятый результат продукта | local analysis and G02 explicit stored-relation neighbors accepted in their finite scope. First actual guarded Chromium response passes author oracle/invariance/cleanup; narrow source review reconciliation pending. No full Web/Native/release acceptance |
-| Следующий шаг | Finish live observe CLI save and actual own-platform caller verification; prove matched Native off/on dimensions without false full acceptance; repair concrete rooted continuity exception and verify bounded subtree in Chromium. Preserve full P0–P7, temp/image rules and distinct source/runtime evidence |
+| Следующий шаг | Verify actual product CLI on both owned platforms, address concrete caller failures only; close remaining sampled pointerhit invariance and later cache/actions/remaining pilots. No repeat of passed probe8→18 or root sequence solely for artifacts. Preserve full P0–P7, current temp/image policy and exact acceptance residuals |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [P01-invariance](packets/P01-invariance.md) | retained Native owner | existing matched own F02 off/on; NATIVE M05 | running one bounded equivalent-state comparison of AX/layout/focus/sampled hits and supported pixels; no historical mismatched-pair acceptance or new tolerance |
-| [L01-live-observe](packets/L01-live-observe.md) | retained Core owner | CLI observe/D02 pipeline; concrete ready host API | running operator connection/request caller, bounded NDJSON and accurate terminal exit; minimal fixed incomplete-channel metadata, Web callsite saved e44f396. No new daemon/discovery or arbitrary-app claim |
+| [G02-recorded-diff](packets/G02-recorded-diff.md) | retained Core owner | existing CACHE/IDENTITY and exact before/after source handoff | running borrowed recorded comparison, value changes distinct from evidence-only; no removal inference or cache/replay mutation |
+| [L01-platform-cli](packets/L01-platform-cli.md) | Web/Native existing owners, separate fixture resources | saved productCLI24ffcb and existing platform contracts | Native actual productCLI passed expectedpartial4→inspect0/0, savedbc2a264 push_pending; Web actual same user path running. Transient outputs removed, no arbitrary-app/release claim |
+| [P01-invariance](packets/P01-invariance.md) | retained Native owner | corrected equal-held-state F02 off/on pair | author actual76AX records/geometry/focus and1100x1050RGBA equality under matched inactive state; no-hit proof yet, fullM05 stays open. Cleanup/tempremoval confirmed; result checkpoint next. Old true-only root overconstraint explicitly corrected |
+| [L01-live-observe](packets/L01-live-observe.md) | retained Core owner | 24ffcb7972fed6e22f868db54c22ce599725ede8 pushed22paths; CLI@3/registry13 | scoped independent accept: explicit authority, actualclock/budgets/ACKedNDJSON/outcome/cleanup;21digest matched. Actual peer/source checks passed per author. Separate platform actualCLI checks now required, no general/arbitrary-target/release claim |
 | [P01-host-channel](packets/P01-host-channel.md) | retained Core owner | a1ad9143e4cc137535ef476b366e91795e524190 pushed7paths | scoped independent accept: same Ticket/ACK/reap, channel2 non-capture,2helper cap/quotas unchanged;5source-test hashes matched. Actual peer5cases/legacy regression author evidence, Native probe/SDK/off-on separate |
 | [P01-probe-source](packets/P01-probe-source.md) | retained Native owner | source79a4853/db0154f; lifetime5223011; outcome b685a8c pushed | actual own explicit snapshots→H01 ACK→guarded Rust8→18pt passed with original cache/unverified time and unknown screen transform. Current validator replaced stale pre2491dec binary without recollecting baseline. Scoped source review accepts integration,5inputs matched; all temp/owned cleanup confirmed. Full off/on/M05 remains open |
 | [L01-inspect-json](packets/L01-inspect-json.md) | retained Core owner | 8669ef339e37740b536d640019733d781f9c0dd4 pushed9paths | CLI@2/registry12 faithful chosen envelope registered before code; root read full leaf/routes. Four inspect tests/Clippy and actual Web/Native views pass per receipt, exact embedded Snapshot preserved. Compact/schema/analysis unchanged; no live revalidation claim |
-| [W01-rooted-selection](packets/W01-rooted-selection.md) | retained Web owner | source1d83dc8+harness40f4567; shared metadata calle44f396 | actual first rooted request failed ContinuityException15 before publication, cleanup confirmed. Exact current function/real-handle bounded CDP diagnosis assigned; no unchanged acceptance retry, limits/expected unchanged; real-site caller still unverified |
+| [W01-rooted-selection](packets/W01-rooted-selection.md) | retained Web owner | source1d83dc8+correction1568af3, harness40f4567 | actual corrected ownF01 rooted sequence passed9DOM+9AX/one39606B ACK/3binding-stale refusals/invariance/cleanup. Scoped source+receipt review accepted_with_residual; runtime/removal attributed. Real Director/foreignbackendseed/live-reparenting/fullpilot separate |
 | [L01-inspect-compact](packets/L01-inspect-compact.md) | retained Core owner | 507383d946ebd2b42ea3aa6851f9b005a9ac602f pushed7paths | compact interaction/design passed3new+3existing CLI cases/check/Clippy and four actual retained Web/Native calls, source unchanged. Saved source hashes match author receipt; required JSON assigned next |
 | [M01-form-context](packets/M01-form-context.md) | retained Native owner | source83247b9 and actual outcome b6811cb3fd76fe11b4d3544595192cc1b96c0c29 pushed | actual H01 field observation passed:76nodes/5fields, f02.name textbox, placeholder Name, enabledtrue/focusedfalse, name unsupported without fallback; ACK/validation/state invariance and own cleanup. Current temp removed/verified, no broader Director/pixels claim |
 | [G02-live-data-measure](packets/G02-live-data-measure.md) | retained Core owner | correction2491dec9176ebe79e66f03ba4e13c4aa6ad133ff pushed5paths; earlier failure685651c | Scoped independent accept from retained h01_producer_review: source-first then receipt reconciliation,44input/source-test hashes match. Five focused checks and actual CLI32/16/48/24css_px exit0 remain author execution. Unknown consistency/Evidence intact; other refusals preserved. No full G02/fresh UI/import-recompute claim |
@@ -286,3 +288,12 @@ all saved source/receipts remain. No assigned immediate consumer requires that
 worker now; history is recoverable if a later concrete task needs it. This archive
 does not declare full H01/live/D06 complete. Core producer, Native acquisition and
 Web live-preparation owners remain retained for their immediate next work.
+
+## Current remote save condition
+
+GitHub returned Internal Server Error on bounded ordinary pushes; local5614cfa
+(rooted result) andbc2a264 (Native productCLI result) remain saved, push_pending.
+Index is released; do not repeat rapid pushes or alter remote/keys/history. Root
+rechecks after independent work or three minutes (last confirmed16:55UTC attempt;
+subsequent Native attempt reported same condition). Continue scoped ready work;
+this external resource does not imply goal completion or lost local work.

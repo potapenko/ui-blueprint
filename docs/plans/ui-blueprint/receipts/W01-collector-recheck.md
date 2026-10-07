@@ -44,3 +44,18 @@ cleanup. Runtime execution and Chromium source diagnosis remain author-attribute
 reviewer performed no execution. This accepts the changed source boundary and
 reconciled first-response evidence only. Size-change/privacy/wrong-target/remount/
 navigation, full W01, Native, input and D06 remain separate qualification.
+# Rooted seed and subtree — finite acceptance
+
+Retained reviewer inspected1d83dc8710f7370a84e7ea2455176884bb890f88 plus
+1568af3cc19878c68c99902f290d4efb03c93c1b source before author receipt, then
+reconciled the actual changed rooted result. Scoped verdict accept_with_residual;
+no actionable findings. Bound read-only seed contains no fake Snapshot provenance;
+subtree limits, original root/parent/descendant continuity and sensitivity remain.
+Correction changes only the fixed verifier debugger flag, not its check body.
+
+Author's actual own-F01 sequence:9DOM+9AX, one committed response, three expected
+binding/stale refusals, priorACK preservation, read-only invariance and cleanup.
+Runtime, source/binary fingerprints and required temporary-file removal remain
+author-attributed; reviewer did not execute or recreate removed artifacts.
+Production caller→seed binding, live reparenting, actual Director, full B01/B03,
+performance and integrated product CLI remain separate qualification.

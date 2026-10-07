@@ -66,3 +66,26 @@ Return equal/mismatch/not-comparable separately for geometry, semantics, focus,
 sampled hits and pixels; no overall claim while a required dimension is absent.
 Commit/push compact outcome through short Git lease. This closes only demonstrated
 M05 dimensions, not all Native/probe/transform/performance/release requirements.
+
+## Remaining finite sampled-hit check
+
+Corrected matched pair proved AX/layout/focus/pixel equality but deliberately did
+not execute pointer hits; no missing API/code was found. Same Native owner now
+performs only the missing sampled-hit case in one new current operation, not a
+repeat of AX/pixel/probe8→18 acceptance. Own off/on A sequentially; current CUA
+screen/target coordinates and ordinary titlebar activation, then existing Compare/
+Snapshot and observed active/key/main/focus. No stale coordinate or assumed mapping.
+Check one confirmed inside sample point and one inert outside point at equivalent
+local positions in each build, with actual source count +1/0 and explicit fresh
+state after each. Verify targeting/foreground before physical delivery; no background
+API press substituted for a pointer hit. If precondition fails, stop with exact
+evidence; no indefinite activation retries or permissive fallback.
+
+Keep original operation≤300s, per-build setup≤120s and exact cleanup bounds. No
+source changes, capture/permission/display changes or B retry. CUA observations
+prefer inline byte images, no local-file image link; follow current independent
+retention rule. Outputs/current working dirs only system-temp, remove/verify after
+inline facts. Update only this existing outcome receipt and save checkpoint through
+short Git lease; transient GitHub500 leaves push_pending, not lost results.
+This checks the declared sampled locations, not a continuous arbitrary hit-region
+proof or unrelated native inputs. Equal prior AX/pixels need not be remeasured.
