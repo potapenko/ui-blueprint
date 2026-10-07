@@ -813,8 +813,10 @@ reproduced real worker failure support this diagnosis; it was not assumed from A
 convention. Core changes only worker_io::parent_alive's requested events to POLLIN,
 keeping existing HUP/ERR handling, bounded wait, descriptors and no protocol reads.
 
-Repaired parent-death test passes: worker exits within1s while peer is still open,
-before peer3s and request10s timeouts. Nested parent_actor is explicitly launched
+Repaired parent-death test passes while the peer is still open. The polling loop's
+nominal deadline is1s; bounded process queries can finish beyond that deadline.
+The actual explicit elapsed assertion is<2s from observing the stalled peer,
+before peer3s and request10s timeouts; no precise exit latency is claimed. Nested parent_actor is explicitly launched
 with its isolation marker; it is not a skipped test. Affected checks passed:
 
 ```sh
@@ -845,3 +847,40 @@ src for host/schema/engine/plugin-api/Web; parent_death.rs and its borrowed
 web_worker_data.rs/web_worker_peer.rs. Compact sorted path→SHA256 JSON uses the
 same recorded method. This primary-case input snapshot is not a claim that its set
 includes every earlier runtime regression fixture. Saved equality follows commit.
+
+## Guarded local analysis dispatch proof
+
+After restoring the ANALYSIS/TYPES/VALIDATION@1 → CLI/GEOMETRY/MODEL/EXCHANGE/
+PRIVACY/IDENTITY closure already selected by H01, Core added one bounded host-path
+scenario. No engine/schema/math change or suite rerun. Immediate consumer is H01's
+actual canonical processing boundary, beyond the earlier Validate byte path.
+
+The real reusable guarded worker receives Tape of existing core Snapshot plus
+analysis Query/Evaluation. Measure returns the unchanged independent measurement-gap
+fixture, including literal8 css_px, full Space/evidence/source binding. The returned
+result is sent through real Verify and ACK. Check uses the actual canonical
+Expectation and preserves Snapshot/Expectation/Evaluation/measurement with pass.
+The existing tampered-check-contract-only fixture passes its schema contract but
+real worker Verify rejects recomputation, publishes no frame and leaves the channel
+missing. Confirmed shutdown releases the session. Parent production never decodes
+these graphs; bounded fixture construction/assertions are test-only.
+
+Passed: cargo test --locked -p uiblueprint-host --no-default-features --test runtime
+analysis::guarded_measure_check_and_recomputation_preserve_canonical_binding -- --exact;
+cargo clippy --locked -p uiblueprint-host --no-default-features --test runtime --
+-D warnings; scoped formatting/link/diff checks. One initial test pattern used a
+tuple form for the existing struct-style Quantity variant; corrected only that
+compile-time test pattern, with no contract or production alteration.
+
+Exact3 checkpoint paths: crates/host/tests/runtime.rs,
+crates/host/tests/support/analysis_host.rs and this receipt. Existing fixed analysis
+fixtures are read-only; new source/output/reference IO is not introduced. Production
+remains5f52cb5 (worker_io46990ede); Integration's default provider hold remains intact.
+This proof does not close semantic-phase allocator exhaustion or full H01/live gates.
+
+Same producer reviewer accepted5f52cb5 with residual/no findings and independently
+matched the89-input identity. Per that review, the two timing sentences above now
+distinguish polling deadline from the explicit<2s elapsed assertion; no source/test
+change, rerun, tighter timing claim or orphan-reap claim accompanies this correction.
+Registry11/D05@4 was refreshed: common Rust limits/clauses are unchanged; its new
+Native-only acquisition route does not enlarge this Core pure Rust proof scope.

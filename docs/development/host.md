@@ -406,8 +406,10 @@ retaining the same bounded poll and HUP/ERR checks. It never reads or consumes
 protocol bytes, introduces no new syscall/API/dependency, and leaves deadlines,
 limits and FD/protocol ownership unchanged.
 
-The repaired actual-death case passes while the CDP peer remains open, within the
-1s exit check and before peer3s/request10s timeouts. Existing reusable-worker,
+The repaired actual-death case passes while the CDP peer remains open. Its polling
+loop has a1s deadline, but a bounded process query may finish after that deadline;
+the explicit elapsed assertion is<2s from observing the stalled peer, before the
+peer3s/request10s timeouts. No precise measured exit latency is claimed. Existing reusable-worker,
 Native begin/helper/ACK/cancel/deadline and real guarded Web initial/reference
 flows pass the affected checks. This is narrow actual supervisor-death/liveness
 proof, not SDK/browser/live or whole-process RSS qualification.

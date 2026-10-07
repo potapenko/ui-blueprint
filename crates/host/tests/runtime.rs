@@ -228,3 +228,6 @@ mod native;
 
 #[path = "support/native_deadline.rs"]
 mod native_deadline;
+
+#[path = "support/analysis_host.rs"]
+mod analysis;
