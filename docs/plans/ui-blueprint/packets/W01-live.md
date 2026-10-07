@@ -185,3 +185,26 @@ fixed limits, fresh UUID and saved-input/cleanup conditions. Coordinate a short
 Core hold only when ready. Missing required known fields remain failures; do not
 change expected results to make a response pass. Return actual result and release
 holds immediately; broader W01 positive cases follow a successful first response.
+
+Actual follow-up dependency: Web source inspection reports that the saved private
+DiagnosticRecord validator requires code=0 for CollectorMalformed, collapsing
+all acquisition refusal branches. Core may narrowly edit diagnostic.rs and its
+H01-host receipt to allow static CollectorMalformed branch codes0..=255 (0 means
+unspecified, existing meaning). Preserve all other code validation, record/control
+sizes, ownership, canonical errors and CLI/schema behavior. This is a private
+encoding choice to identify the observed failure, not product telemetry or a new
+public error taxonomy. Run focused codec/validation checks only and save/push.
+Web owns the finite static branch map in its declared collector/{mod,io,bootstrap,
+acquire}.rs, existing collector tests, worker_web.rs and live harness/receipt.
+Never derive branch codes from UI contents or raw error strings. Use the same
+fixed field; no new record, allocation, enum redesign or framework.
+
+To avoid serializing unrelated G02 work, Web may build from an immutable task-temp
+export of the exact saved current-branch provider containing that carrier and its
+own saved candidate. Record the exact source recipe/revisions/hashes and run those
+binaries. No new Git branch/worktree, shared checkout mutation or second product
+owner. Such proof applies to that pinned composition, not unsaved G02 or final
+integrated acceptance. No hold on unrelated engine edits is then necessary;
+otherwise the original short source hold still applies. Build exports are temporary
+and owned by Web through this immediate proof, never committed or stored as raw
+permanent evidence. Numeric limits, cases, outcomes and runtime authority unchanged.
