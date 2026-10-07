@@ -184,3 +184,52 @@ Lease-release correction focused no-run passed. Saved source e44f39614ad356ff987
 caller 4d4424a2612e5b3e478c7e31cd97e146fa166407a0a862ab3c9c405c9dedf510; consumer bfdacd16d03cab9631990120b0320f8db971aec9985ee44242f59dd86151a50d.
 Current operation-only build awaits exact2 save and the already authorized changed
 sequence; index not held. No unchanged runtime retry or cap change.
+
+### Actual measured baseline→expanded sequence — completed
+
+Saved lifetime correction52230112b1ea1393909df571ae68391471213d8f, same fixed profile/
+one completion group, saved Core provider and matching prepared inputs. Fresh own
+F02-on PID14063 attributed by canonical executable/unique run-dir. CUA normal A
+Snapshot1 measured three markers; actual H01 probe ACK committed4/missing0, then
+existing guarded Measure produced known8pt in exact fixture-local Space. Dropping
+prior completion after typed Snapshot ownership allowed the single group to be
+reused honestly; no cap increase or helper failure reinterpretation.
+
+Initial validation of that already-produced baseline used stale retained validator
+119842ca from before schema consistency correction2491dec and returned unknown_measurement.
+Identity comparison found exactly schema/src/analysis/results.rs drift: old validator
+required Stable, current saved schema rejects only Unstable for this known result.
+No Snapshot/consistency/freshness was changed. Built only schema validator from the
+same pinned saved source as worker, validated the existing baseline successfully,
+without repeating collection or Measure. Current-operation validator SHA256:
+7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828.
+This disposes stale verification evidence; it does not weaken the contract.
+
+Then one explicit CUA Change layout plus fresh Snapshot2, same own A and normal
+stimulus, produced actual expanded marker bounds. One H01 probe/guarded Measure
+operation returned known18pt and passed the current validator. Both source snapshots
+retained fixture clock/time, cache/unverified, unknown screen transform and explicit
+mapping; neither became a fabricated current OS observation. Independent F02 oracle
+8/18 matched Rust amounts, no Swift or Python gap arithmetic. Fixture state/source
+state were unchanged during each read-only collection. No capture/permissions/B retry.
+
+Both cases: host terminal completed/caller_ok=true, probe committed4/missing0;
+helper/worker cleanup_confirmed=true, reserved_sessions0/abandoned=false; source
+inputs unchanged. Baseline source/measurement hashes:
+3740c243509f63b93f010f56c9de67bad516eb6d5dd2d29924105706d6487c2d /
+d49f9ec7da41d766d162aee510db2c3b9d240471521bbdac46fbc1157f736e0c.
+Expanded source/measurement hashes:
+ebcedc4490cd41324c6aa42242f8882ec8486b617b4a9270471e4e8f4555adf4 /
+4e9c8607469f2dd09cbcc12d7404c526a563d1b821d2006a5e953fa42d2877ec.
+
+Native exact PID/path/unique-run-dir cleanup confirmed fixture exit within5s;
+LaunchServices owns reaping. Physical lane released. All current operation files,
+source/build/module caches, manifests and baseline/expanded outputs beneath
+uib-p01-lease-fix-609vpm_l were removed after inline facts and checks; root absence
+verified. No persistent directory/archive/image or old artifact removal.
+
+Finite actual F02 measured-probe→H01 ACK→guarded Rust gap8→18 outcome now exists.
+Matched off/on invariance, general probe/AX-to-pixel transforms, positive pixels,
+SDK saturation and D06/full P01 remain open. Prior failures stay recorded, not
+rewritten as successes. Exact-one-path result receipt ready for next short Git
+lease; no further runtime attempt, process, input/capture lane or index is held.
