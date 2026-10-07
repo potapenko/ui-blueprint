@@ -84,6 +84,9 @@ impl Fixture {
             json!({"page":page,"case":case,"kind":kind,"document":document,"canonical":canonical}),
         );
     }
+    fn outcome(&mut self, stage: &str, completion: &HostCompletion<'_>) {
+        self.call("outcome",json!({"page":"a","stage":stage,"terminal":terminal_code(completion.terminal),"committed":completion.committed(),"missing":completion.missing(),"operation":completion.operation.sequence}));
+    }
     fn stimulus(&mut self, action: &str) {
         self.call("stimulus", json!({"page":"a","action":action}));
     }
@@ -247,6 +250,32 @@ fn observe<'a>(
     .expect("explicit current observe");
     complete(host)
 }
+fn terminal_code(terminal: Terminal) -> &'static str {
+    use uiblueprint_host::HostError as E;
+    match terminal {
+        Terminal::Completed => "completed",
+        Terminal::Cancelled => "cancelled",
+        Terminal::TimedOut => "timed_out",
+        Terminal::Failed(error) => match error {
+            E::InvalidLimits => "invalid_limits",
+            E::ResourceLimit => "resource_limit",
+            E::AllocationFailure => "allocation_failure",
+            E::Overflow => "overflow",
+            E::Busy => "busy",
+            E::InvalidInput => "invalid_input",
+            E::InvalidState => "invalid_state",
+            E::InvalidControl => "invalid_control",
+            E::StaleOperation => "stale_operation",
+            E::DeadlineExpired => "deadline_expired",
+            E::PermissionDenied => "permission_denied",
+            E::Io => "io",
+            E::WorkerFailed => "worker_failed",
+            E::SystemAllocationFailure => "system_allocation_failure",
+            E::CleanupPending => "cleanup_pending",
+            E::ResyncRequired => "resync_required",
+        },
+    }
+}
 fn decoded(c: &HostCompletion<'_>) -> Document {
     assert_eq!(
         c.terminal,
@@ -340,173 +369,202 @@ fn guarded_live_f01() {
         DarwinPlatform,
     )
     .expect("real RuntimeHost");
-    let a = attach(&mut host, fixture.binding("a"), 1);
-    fixture.before("a", "left-initial");
-    let first = observe(
-        &mut host,
-        &a,
-        "left",
-        left_fields(),
-        initial("left"),
-        "left-initial",
-    );
-    let first_doc = decoded(&first);
-    let left = dom_ref(&first_doc);
-    fixture.check_frame(
-        "a",
-        "left-initial",
-        "left",
-        &first_doc,
-        first.bytes(0).expect("ACKed first bytes"),
-    );
-    let first_bytes = first.bytes(0).expect("held first").to_vec();
-    fixture.before("a", "sized-before");
-    let sized = observe(
-        &mut host,
-        &a,
-        "sized",
-        vec![Field::LayoutBounds],
-        initial("sized"),
-        "sized-before",
-    );
-    let sized_doc = decoded(&sized);
-    let sized_ref = dom_ref(&sized_doc);
-    fixture.check_frame(
-        "a",
-        "sized-before",
-        "sized_before",
-        &sized_doc,
-        sized.bytes(0).expect("ACKed sized bytes"),
-    );
-    drop(sized);
-    fixture.stimulus("textLarge");
-    fixture.before("a", "sized-after");
-    let sized = observe(
-        &mut host,
-        &a,
-        "sized",
-        vec![Field::LayoutBounds],
-        reference(&sized_ref),
-        "sized-after",
-    );
-    let doc = decoded(&sized);
-    fixture.check_frame(
-        "a",
-        "sized-after",
-        "sized_after",
-        &doc,
-        sized.bytes(0).expect("ACKed changed bytes"),
-    );
-    assert_ne!(dom_ref(&doc).snapshot_id, sized_ref.snapshot_id);
-    drop(sized);
-    fixture.stimulus("private");
-    fixture.before("a", "private");
-    let private = observe(
-        &mut host,
-        &a,
-        "draft",
-        vec![Field::Value, Field::AccessibilityName],
-        initial("draft"),
-        "private",
-    );
-    let doc = decoded(&private);
-    assert!(
-        !std::str::from_utf8(private.bytes(0).expect("bytes"))
-            .expect("JSON")
-            .contains("W01_LIVE_PRIVATE_CANARY"),
-        "privacy canary escaped"
-    );
-    fixture.check("a", "private", "private", Some(&doc));
-    drop(private);
-    let b = attach(&mut host, fixture.binding("b"), 2);
-    assert_ne!(a.binding.target.id, b.binding.target.id);
-    fixture.before("b", "cross-target");
-    let wrong = observe(
-        &mut host,
-        &b,
-        "left",
-        left_fields(),
-        reference(&left),
-        "cross-target",
-    );
-    refused(&wrong);
-    fixture.check("b", "cross-target", "refused", None);
-    drop(wrong);
-    detach(&mut host, &b);
-    fixture.call(
-        "browser_alive",
-        json!({"page":"b","case":"other-tab-survives-worker-detach"}),
-    );
-    fixture.stimulus("remount");
-    fixture.before("a", "old-remount-ref");
-    let stale = observe(
-        &mut host,
-        &a,
-        "left",
-        left_fields(),
-        reference(&left),
-        "old-remount-ref",
-    );
-    refused(&stale);
-    fixture.check("a", "old-remount-ref", "refused", None);
-    drop(stale);
-    assert_eq!(first.bytes(0), Some(first_bytes.as_slice()));
-    detach(&mut host, &a);
-    let a = attach(&mut host, fixture.binding("a"), 3);
-    fixture.before("a", "new-remount-binding");
-    let fresh = observe(
-        &mut host,
-        &a,
-        "left",
-        left_fields(),
-        initial("left"),
-        "new-remount-binding",
-    );
-    let fresh_doc = decoded(&fresh);
-    let fresh_ref = dom_ref(&fresh_doc);
-    assert_ne!(
-        fresh_ref.key, left.key,
-        "actual remount must change backend identity"
-    );
-    fixture.check("a", "new-remount-binding", "left", Some(&fresh_doc));
-    drop(fresh);
-    fixture.stimulus("navigate");
-    fixture.before("a", "old-navigation-ref");
-    let stale = observe(
-        &mut host,
-        &a,
-        "left",
-        left_fields(),
-        reference(&fresh_ref),
-        "old-navigation-ref",
-    );
-    refused(&stale);
-    fixture.check("a", "old-navigation-ref", "refused", None);
-    drop(stale);
-    detach(&mut host, &a);
-    let binding = fixture.binding("a");
-    assert_ne!(binding.surface.generation, fresh_ref.surface.generation);
-    let a = attach(&mut host, binding, 4);
-    fixture.before("a", "new-document-binding");
-    let fresh = observe(
-        &mut host,
-        &a,
-        "left",
-        left_fields(),
-        initial("left"),
-        "new-document-binding",
-    );
-    let doc = decoded(&fresh);
-    fixture.check("a", "new-document-binding", "left", Some(&doc));
-    drop(fresh);
-    shutdown(&mut host);
-    assert_eq!(domain.usage().reserved_sessions, 0);
-    assert!(!domain.usage().abandoned);
-    assert_eq!(first.bytes(0), Some(first_bytes.as_slice()));
-    drop(first);
-    assert_eq!(domain.usage().completion_groups, 0);
-    fixture.call(
-        "browser_alive",
-        json!({"page":"a","case":"fixture-survives-all-worker-reaps"}),
-    );
+    let diagnostic =
+        std::env::var("UIB_WEB_LIVE_CASE").is_ok_and(|v| v == "first_observe_diagnostic");
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        let a = attach(&mut host, fixture.binding("a"), 1);
+        fixture.before("a", "left-initial");
+        let first = observe(
+            &mut host,
+            &a,
+            "left",
+            left_fields(),
+            initial("left"),
+            "left-initial",
+        );
+        fixture.outcome("left-initial", &first);
+        let first_doc = decoded(&first);
+        let left = dom_ref(&first_doc);
+        fixture.check_frame(
+            "a",
+            "left-initial",
+            "left",
+            &first_doc,
+            first.bytes(0).expect("ACKed first bytes"),
+        );
+        let first_bytes = first.bytes(0).expect("held first").to_vec();
+        if diagnostic {
+            drop(first);
+            return;
+        }
+        fixture.before("a", "sized-before");
+        let sized = observe(
+            &mut host,
+            &a,
+            "sized",
+            vec![Field::LayoutBounds],
+            initial("sized"),
+            "sized-before",
+        );
+        fixture.outcome("sized-before", &sized);
+        let sized_doc = decoded(&sized);
+        let sized_ref = dom_ref(&sized_doc);
+        fixture.check_frame(
+            "a",
+            "sized-before",
+            "sized_before",
+            &sized_doc,
+            sized.bytes(0).expect("ACKed sized bytes"),
+        );
+        drop(sized);
+        fixture.stimulus("textLarge");
+        fixture.before("a", "sized-after");
+        let sized = observe(
+            &mut host,
+            &a,
+            "sized",
+            vec![Field::LayoutBounds],
+            reference(&sized_ref),
+            "sized-after",
+        );
+        fixture.outcome("sized-after", &sized);
+        let doc = decoded(&sized);
+        fixture.check_frame(
+            "a",
+            "sized-after",
+            "sized_after",
+            &doc,
+            sized.bytes(0).expect("ACKed changed bytes"),
+        );
+        assert_ne!(dom_ref(&doc).snapshot_id, sized_ref.snapshot_id);
+        drop(sized);
+        fixture.stimulus("private");
+        fixture.before("a", "private");
+        let private = observe(
+            &mut host,
+            &a,
+            "draft",
+            vec![Field::Value, Field::AccessibilityName],
+            initial("draft"),
+            "private",
+        );
+        fixture.outcome("private", &private);
+        let doc = decoded(&private);
+        assert!(
+            !std::str::from_utf8(private.bytes(0).expect("bytes"))
+                .expect("JSON")
+                .contains("W01_LIVE_PRIVATE_CANARY"),
+            "privacy canary escaped"
+        );
+        fixture.check("a", "private", "private", Some(&doc));
+        drop(private);
+        let b = attach(&mut host, fixture.binding("b"), 2);
+        assert_ne!(a.binding.target.id, b.binding.target.id);
+        fixture.before("b", "cross-target");
+        let wrong = observe(
+            &mut host,
+            &b,
+            "left",
+            left_fields(),
+            reference(&left),
+            "cross-target",
+        );
+        fixture.outcome("cross-target", &wrong);
+        refused(&wrong);
+        fixture.check("b", "cross-target", "refused", None);
+        drop(wrong);
+        detach(&mut host, &b);
+        fixture.call(
+            "browser_alive",
+            json!({"page":"b","case":"other-tab-survives-worker-detach"}),
+        );
+        fixture.stimulus("remount");
+        fixture.before("a", "old-remount-ref");
+        let stale = observe(
+            &mut host,
+            &a,
+            "left",
+            left_fields(),
+            reference(&left),
+            "old-remount-ref",
+        );
+        fixture.outcome("old-remount-ref", &stale);
+        refused(&stale);
+        fixture.check("a", "old-remount-ref", "refused", None);
+        drop(stale);
+        assert_eq!(first.bytes(0), Some(first_bytes.as_slice()));
+        detach(&mut host, &a);
+        let a = attach(&mut host, fixture.binding("a"), 3);
+        fixture.before("a", "new-remount-binding");
+        let fresh = observe(
+            &mut host,
+            &a,
+            "left",
+            left_fields(),
+            initial("left"),
+            "new-remount-binding",
+        );
+        fixture.outcome("new-remount-binding", &fresh);
+        let fresh_doc = decoded(&fresh);
+        let fresh_ref = dom_ref(&fresh_doc);
+        assert_ne!(
+            fresh_ref.key, left.key,
+            "actual remount must change backend identity"
+        );
+        fixture.check("a", "new-remount-binding", "left", Some(&fresh_doc));
+        drop(fresh);
+        fixture.stimulus("navigate");
+        fixture.before("a", "old-navigation-ref");
+        let stale = observe(
+            &mut host,
+            &a,
+            "left",
+            left_fields(),
+            reference(&fresh_ref),
+            "old-navigation-ref",
+        );
+        fixture.outcome("old-navigation-ref", &stale);
+        refused(&stale);
+        fixture.check("a", "old-navigation-ref", "refused", None);
+        drop(stale);
+        detach(&mut host, &a);
+        let binding = fixture.binding("a");
+        assert_ne!(binding.surface.generation, fresh_ref.surface.generation);
+        let a = attach(&mut host, binding, 4);
+        fixture.before("a", "new-document-binding");
+        let fresh = observe(
+            &mut host,
+            &a,
+            "left",
+            left_fields(),
+            initial("left"),
+            "new-document-binding",
+        );
+        fixture.outcome("new-document-binding", &fresh);
+        let doc = decoded(&fresh);
+        fixture.check("a", "new-document-binding", "left", Some(&doc));
+        drop(fresh);
+        shutdown(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert!(!domain.usage().abandoned);
+        assert_eq!(first.bytes(0), Some(first_bytes.as_slice()));
+        drop(first);
+        assert_eq!(domain.usage().completion_groups, 0);
+    }));
+    // Keep the actual host alive outside the case's unwind, so even a failed
+    // assertion explicitly drives shutdown/reap and reports real domain state.
+    let cleanup = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| shutdown(&mut host)));
+    let usage = domain.usage();
+    let confirmed = cleanup.is_ok() && usage.reserved_sessions == 0 && !usage.abandoned;
+    fixture.call("worker_cleanup",json!({"page":"a","confirmed":confirmed,"reserved_sessions":usage.reserved_sessions,"completion_groups":usage.completion_groups,"abandoned":usage.abandoned}));
+    if confirmed {
+        fixture.call(
+            "browser_alive",
+            json!({"page":"a","case":"fixture-survives-all-worker-reaps"}),
+        );
+    }
+    assert!(confirmed, "actual worker cleanup unconfirmed");
+    if let Err(panic) = result {
+        std::panic::resume_unwind(panic);
+    }
 }

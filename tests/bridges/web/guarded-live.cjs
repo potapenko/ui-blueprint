@@ -12,6 +12,8 @@ const CANARY = 'W01_LIVE_PRIVATE_CANARY';
 const MAX_LINE = 262144;
 const PREFIX = '@UIB_LIVE ';
 const EVIDENCE_ROOT = '/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/W01-guarded-live';
+const CASES = new Set(['left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
+const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required']);
 const FRAME_FILES = Object.freeze({'left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
 function bounded(promise, ms, code) {
   let timer; return Promise.race([promise, new Promise((_, reject) => {
@@ -128,8 +130,21 @@ async function run(evidence, report) {
       const payload = message.payload; const page = pages[payload.page]; assert(page, 'owned page only');
       switch (message.command) {
         case 'binding': return binding(page);
-        case 'before': before.set(payload.case, await uiState(page)); return {};
+        case 'before': assert(CASES.has(payload.case)); report.last_stage=payload.case; before.set(payload.case, await uiState(page)); return {};
+        case 'outcome': {
+          assert(CASES.has(payload.stage)&&TERMINALS.has(payload.terminal));
+          assert(Number.isSafeInteger(payload.operation)&&payload.operation>0);
+          assert([payload.committed,payload.missing].every(n=>Number.isInteger(n)&&n>=0&&n<=7));
+          assert(report.outcomes.length<16);report.outcomes.push({stage:payload.stage,terminal:payload.terminal,committed:payload.committed,missing:payload.missing,operation:payload.operation});return {};
+        }
+        case 'worker_cleanup': {
+          assert(typeof payload.confirmed==='boolean'&&typeof payload.abandoned==='boolean');
+          assert(Number.isInteger(payload.reserved_sessions)&&payload.reserved_sessions>=0&&payload.reserved_sessions<=4);
+          assert(Number.isInteger(payload.completion_groups)&&payload.completion_groups>=0&&payload.completion_groups<=8);
+          report.worker_cleanup={confirmed:payload.confirmed,reserved_sessions:payload.reserved_sessions,completion_groups:payload.completion_groups,abandoned:payload.abandoned};return {};
+        }
         case 'check': {
+          assert(CASES.has(payload.case));
           assert(before.has(payload.case)); assert.deepEqual(await uiState(page),before.get(payload.case)); before.delete(payload.case);
           if (payload.document !== null) {
             const doc = payload.document; assert.equal(doc.schema_version,'0.1.0');
@@ -200,10 +215,9 @@ async function run(evidence, report) {
         });
       }
     });
-    const exit = await bounded(exited,90000,'rust_consumer_timeout'); await chain;
+    const exit = await bounded(exited,90000,'rust_consumer_timeout'); await chain; report.test_exit={code:exit.code,signal:exit.signal};
     assert.equal(exit.code,0); assert.equal(exit.signal,null); assert(!failed,'live_case_failed');
-    assert.equal(before.size,0); assert(checks.length>=10,'all finite cases completed');
-    assert.equal(report.frames.length,3,'all declared positive evidence captured');
+    assert.equal(before.size,0); if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
   } catch (_) {
     report.failure??={code:'live_run_failed',phase:report.phase}; throw new Error('live_run_failed');
   } finally {
@@ -222,23 +236,24 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=checks.some(c=>c.case==='fixture-survives-all-worker-reaps'&&c.browser_alive_after_worker_reap)?'confirmed_closed':child?'unconfirmed':'not_created';
+    report.cleanup.worker_sessions=report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
     if(errors.length){report.failure={code:'owned_cleanup_unconfirmed',count:errors.length};throw new Error('cleanup_failed');}
   }
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   await fs.mkdir(EVIDENCE_ROOT,{recursive:true,mode:0o700});
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
-  const report={status:'failed',kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
+  const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
     retention:{owner:'root',consumers:['W01-review','G02','P7'],until:'P7 acceptance or explicit discard/replacement'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
-  try {await run(evidence,report);report.status='passed';report.phase='complete';}
+  try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}
   report.finished_utc=new Date().toISOString();
   report.record_use={historical:true,live_ref_reuse:false,closed_sessions:report.cleanup.worker_sessions==='confirmed_closed'};

@@ -96,4 +96,4 @@ backend memory/cost, pixels or B01–B06/D06. No full H01/live acceptance is cla
 
 ## Live preparation only
 
-[W01-live preparation](../plans/ui-blueprint/receipts/W01-live.md) adds a separately ignored, opt-in actual-Chromium consumer with frozen F01 oracles. Syntax/no-run compilation and the exclusive three-frame evidence sink are prepared; server/browser/fixture/test execution awaits saved preparation and explicit root activation. It does not extend the synthetic runtime acceptance above.
+[W01-live preparation](../plans/ui-blueprint/receipts/W01-live.md) has one failed first-observe run with no canonical frames. The four-file harness now exposes bounded terminal codes and explicit failure shutdown/reap; one changed-case diagnostic run is authorized after its checkpoint. Source/backend/limits remain fixed; no live success is claimed.
