@@ -90,16 +90,17 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core c0abcff saved/pushed16paths, saved81/105 equality reported, Git released. Integration resumes the prepared exact Replay case on that saved default provider under Core's short source hold; Web continues disjoint cfg(web)/peer tests. Native gets M01-host-helper source/build packet. No live/UI grants; root owns only this registry and packets |
+| Активные чаты/пакеты/ресурсы | Core c0abcff saved/pushed16paths, saved81/105 equality reported, Git released. Integration exact Replay passed and source hold released; receipt save pending. Core resumes deadline proof; Web cfg(web)/peer tests and Native M01-host-helper source/build run in disjoint paths. H01-producer-review ready on saved c0abcff. No live/UI grants; root owns only this registry and packets |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Receive exact Replay result and release hold immediately; Core resumes deadline proof, Web proves actual guarded producer, Native connects same-source Swift helper to saved FD contract. Changed-caller independent review/validation/full H01/live/D06/RC05 remain open; no renewed user approval is required inside the existing scope |
+| Следующий шаг | Save Replay receipt after exact Git grant; source-review changed producer composition while owners continue. Web proves actual guarded producer; Native connects same-source Swift helper to saved FD contract. Validation/full H01/live/D06/RC05 remain open; no renewed user approval is required inside the existing scope |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [M01-host-helper](packets/M01-host-helper.md) | Native `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | Handoff99c4c159 + actual Core c0abcff; source/build only, disjoint Swift/helper paths | ready for dispatch; no SDK/live/permission grant; preserve one collector, canonical schema and legacy fixture consumers |
+| [M01-host-helper](packets/M01-host-helper.md) | Native `01a110ac-2da3-73d1-9bb2-273d4ff99e7a` / local | Handoff99c4c159 + actual Core c0abcff; source/build only, disjoint Swift/helper paths | dispatched f378334; no SDK/live/permission grant; preserve one collector, canonical schema and legacy fixture consumers |
+| [H01-producer-review](packets/H01-producer-review.md) | one fresh collaboration reviewer | saved64cbec9 → c0abcff; read-only current-checkout metadata and saved source | ready for source-first observation; author receipts withheld until initial observations; no runtime or full H01 verdict implied |
 | H01 connected producer provider | Core `01a111a7-9887-7983-9aa0-c08dfa2d46bc` / local | `c0abcffed886d0f33b34ddf3008a902b8e024676`, pushed16paths | [receipt](receipts/H01-host.md): Native broker/non-UI peer evidence; Web hooks compile. Author saved81 digest3b5d4412…c5a9e6 and105 digest68632cf4…ec4a363 match;18runtime+2isolated peers/default-web checks. Consumers and independent changed-caller acceptance remain open |
 | [C00](packets/C00.md) | `01a1109a-5d6e-7792-b926-e767c7f63642` / local | candidate `92d2bf89ea9acab091fd166eef4432408e353744`; `UIB.ROUTING@1` | accepted; [receipt](receipts/C00.md) |
 | [C00-review](packets/C00-review.md) | `01a110a5-8af7-7ef1-8fb6-fd989e78e666` / local | initial `f8d63cb`; final `9bedeccbf4c5a92206d24d0794b299e54a2b22e1` | accepted; [verdict](receipts/C00-review.md) |
