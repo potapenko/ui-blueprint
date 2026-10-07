@@ -18,14 +18,15 @@ import Darwin
         let parentGen=try parent.snapshot(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:456)
         var popupGen=try popup.snapshot(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:789)
         func binding(window:Int,key:String,generation:String)->[String:Any]{["pid":123,"bundle_id":"local.uiblueprint.f02.off","launch_time":100.0,"window_id":window,"window_identifier":key,"target_generation":"123:100.0","surface_generation":generation]}
-        func config(_ generation:String)throws->NativeConfiguration{
+        func config(_ generation:String, budgets:[String:Int]=[:])throws->NativeConfiguration{
+            let admitted=(profile as! [String:Int]).merging(budgets,uniquingKeysWith:{_,b in b})
             let data:[String:Any]=["binding":binding(window:789,key:"popup-a",generation:generation),"parent_binding":binding(window:456,key:"a",generation:parentGen),
                 "identity_path":dir.appendingPathComponent("popup-a-identity.json").path,"parent_identity_path":dir.appendingPathComponent("a-identity.json").path,
-                "scope_id":"popup-scope","collection":"popup-ax","acquisition_limits":profile]
+                "scope_id":"popup-scope","collection":"popup-ax","acquisition_limits":admitted]
             let bytes=try JSONSerialization.data(withJSONObject:data);expect(bytes.count<=4032);return try NativeConfiguration.decode(bytes)
         }
         let fields=["role","accessibility_name","placeholder","focused","enabled"]
-        func command(_ generation:String)throws->NativeCommand{
+        func command(_ generation:String,budgets:[String:Int]=[:],cap:Int=524288)throws->NativeCommand{
             let context:[String:Any]=["schema_version":"0.1.0","session_id":"popup-session","target":["id":"f02-pid-123","generation":"123:100.0"],
                 "surfaces":[["id":"window-789","generation":generation],["id":"window-456","generation":parentGen]],"scope_id":"popup-scope","projection":"interaction","fields":fields,
                 "plugin":["id":"macos","version":"0.1.0"],"environment_revision":"e1"]
@@ -34,7 +35,7 @@ import Darwin
                 "operation":["operation":"observe","channels":["external_semantics"]]]
             var header=Data(repeating:0,count:64);header.replaceSubrange(0..<8,with:Data("UIBHST01".utf8));header[8]=3;header[9]=8
             for (offset,value) in [(16,UInt64(1)),(24,1),(32,1),(40,1),(48,1000)]{for i in 0..<8{header[offset+i]=UInt8(truncatingIfNeeded:value>>(i*8))}}
-            return NativeCommand(configuration:try config(generation),document:["schema_version":"0.1.0","artifact":["kind":"request","data":req]],control:try NativeControl(header),replyCap:524288,deadline:ProcessInfo.processInfo.systemUptime+5)
+            return NativeCommand(configuration:try config(generation,budgets:budgets),document:["schema_version":"0.1.0","artifact":["kind":"request","data":req]],control:try NativeControl(header),replyCap:cap,deadline:ProcessInfo.processInfo.systemUptime+5)
         }
         let ids=[1:"a",2:"popup-a",3:"f02.popup",4:"f02.popup.owner.a",5:"f02.popup.confirm"]
         let children=[0:[1,2],1:[3],2:[4,5],3:[],4:[],5:[]]
@@ -74,6 +75,35 @@ import Darwin
         expect(popupGen != oldGen)
         let stale=try await run(oldGen,"stale");expect((stale["result"] as! [String:Any])["status"] as? String=="failed")
         let reopened=try await run(popupGen,"reopened");expect((reopened["result"] as! [String:Any])["status"] as? String=="observed")
+        for (name,budgets,cap) in [("low_slots",["response_slots":512],524288),
+                                    ("low_strings",["response_string_utf8_bytes":2048],524288),
+                                    ("low_output",[String:Int](),512)] {
+            let frame=try await Collector.popup(command:command(popupGen,budgets:budgets,cap:cap),access:access,
+                publicBinding:{b in [456,789].contains(b.window_id)},application:{_ in NSNumber(value:0)})
+            let bytes=frame.bytes{Data($0)}
+            expect(bytes.count<=cap && bytes.last==10 && bytes.filter{$0==10}.count==1)
+            let response=((try JSONSerialization.jsonObject(with:bytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any]
+            let result=response["result"] as! [String:Any]
+            expect(result["status"] as? String=="failed")
+            expect((result["data"] as! [String:Any])["code"] as? String=="incomplete_scope")
+            expect(result["nodes"]==nil && (result["data"] as! [String:Any])["nodes"]==nil)
+            try bytes.write(to:out.appendingPathComponent(name+".json"),options:.withoutOverwriting)
+        }
+        let missingTrigger=NativeAXAccess(prepare:access.prepare,attribute:{ raw,name in
+            if (raw as! NSNumber).intValue==3 && name==kAXIdentifierAttribute{return (.success,"different-trigger" as CFString)}
+            return access.attribute(raw,name)
+        },count:access.count,page:access.page,batch:access.batch,actions:access.actions,isElement:access.isElement)
+        let missingFrame=try await Collector.popup(command:command(popupGen),access:missingTrigger,
+            publicBinding:{b in [456,789].contains(b.window_id)},application:{_ in NSNumber(value:0)})
+        let missingBytes=missingFrame.bytes{Data($0)}
+        let missingResponse=((try JSONSerialization.jsonObject(with:missingBytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any]
+        expect(((missingResponse["result"] as! [String:Any])["data"] as! [String:Any])["code"] as? String=="target_unresolved")
+        try missingBytes.write(to:out.appendingPathComponent("missing_trigger.json"),options:.withoutOverwriting)
+        do {
+            _=try await Collector.popup(command:command(popupGen,cap:2),access:access,
+                publicBinding:{b in [456,789].contains(b.window_id)},application:{_ in NSNumber(value:0)})
+            preconditionFailure("unencodable fallback must not return a frame")
+        } catch {checks+=1}
         let aOwner=FixtureIdentity(directory:dir,windowKey:"b")
         let aGeneration=try aOwner.snapshot(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:457)
         try NativeCurrentIdentity.verify(path:dir.appendingPathComponent("b-identity.json").path,

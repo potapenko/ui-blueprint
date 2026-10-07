@@ -75,3 +75,48 @@ then existing Confirm closes→old popup stale refusal→reopen/new Snapshot/new
 No user-app/B capture, changed tolerance or stale repair. Source review/live popup
 mapping/positive capture and M03/global acceptance remain separate. Short Git lease
 pending; no hidden next runtime started.
+
+
+## Focused P2 classification repair — active
+
+Independent c8d5287 review found construction/codec limit incorrectly target_unresolved.
+Before edits exact subset declared: Collector.swift, PopupChecks.swift, popup_check.py,
+this receipt. Separate reserved incomplete_scope and actual binding-resolved boundary;
+identity change remains stale_target, unresolved mapping remains target_unresolved.
+Fallback encoding errors propagate without a frame, not recaught as identity failure.
+Actual low slot/string/output regressions added, preserving complete-only result.
+No runtime/broad refactor/new public error or fixture/source behavior change.
+
+
+### Focused repair result — checkpoint-ready
+
+Collector now separates unresolved window/trigger binding from construction/codec
+budget refusal after binding. Reserved incomplete_scope response is built before
+risky work; whole fallback is encoded after reset. Current identities rechecked:
+stale_target keeps precedence for actual invalidation. Fallback encoding failure
+propagates with no returned frame, never reclassified as stale. No observed/prefix
+payload is published after resource refusal; ordinary mappings unchanged.
+
+Actual valid-identity low-budget controls: response_slots512, repeated-string bytes
+2048 and output512 each returned complete canonical failed incomplete_scope with LF
+within cap and no observed data. Missing-trigger control still target_unresolved;
+closed/old-generation controls still fail; unencodable2-byte cap returned no frame.
+Focused owner suite38 checks/eight canonical documents passed the current saved
+validator. Actual helper/checker compiled cleanly. No runtime or old broad suites.
+
+Final changed source3 digest: 42733d9a5e1cc2a935f341641fe8a0e1ba7047e827f0428b58fd5af0c42d204f.
+Binary hashes:
+
+- helper: a0b43bddacb54effd3204cd5aeab5444aec219180ef350d487d07d7096a2f1ad;
+- popup-checks: 178282ff11c57b3c76ba89a5b695b19182353c83185f4c0c5e64f56983ab001c;
+- target/debug/uiblueprint-validate: 7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828;
+
+Exact4 paths: Collector.swift, PopupChecks.swift, popup_check.py and this receipt.
+Python syntax/links/scoped whitespace pass; index untouched. Current operation temp
+uib-m03-repair-azfmpl29 retains only useful compiled helper/validator/tester and matching
+saved-source plus exact owned changes for immediate same-reviewer reconciliation/
+M03 qualification. Consumed synthetic responses removed; no images were generated
+or deleted. Retention is through this immediate operation, not persistent archive;
+remove owned non-image outputs at its finish, preserve all image paths/dirs if created.
+Live public popover binding/positive capture and independent repair acceptance remain
+open. Request short exact4 Git lease; no next runtime is authorized by this receipt.

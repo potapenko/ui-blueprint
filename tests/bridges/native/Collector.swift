@@ -557,12 +557,15 @@ extension Collector {
             return frame
         }
         let failure=try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("target_unresolved",scope:scope,channel:command.channel)}
+        let incomplete=try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("incomplete_scope",scope:scope,channel:command.channel)}
+        var bindingResolved=false
         do {
             let started=ProcessInfo.processInfo.systemUptime
             let app=application(parent.pid)
             let popupWindow=try resolveWindow(app,identifier:config.binding.window_identifier,admission:admission,access:access)
             let parentWindow=try resolveWindow(app,identifier:parent.window_identifier,admission:admission,access:access)
             let trigger=try resolveElement(parentWindow,identifier:"f02.popup",maxNodes:maxNodes,maxDepth:maxDepth,admission:admission,access:access)
+            bindingResolved=true
             let oid="\(requestID)-external_semantics"
             let collected=try collectWindowAX(popupWindow,surface:popupSurface,observationID:oid+"-popup",maxNodes:maxNodes-1,maxDepth:maxDepth,
                 deadline:command.deadline,admission:admission,fields:fields,json:json,access:access)
@@ -599,7 +602,14 @@ extension Collector {
             do{try valid()}catch{frame.reset();try frame.encode(stale)}
         } catch {
             frame.reset()
-            do{try valid();try frame.encode(failure)}catch{try frame.encode(stale)}
+            do{try valid()}catch{try frame.encode(stale);return frame}
+            // Keep actual identity/lookup failures separate from construction or
+            // codec budget refusal after binding has been established. Encoding
+            // errors are not identity changes; an unencodable fallback propagates
+            // with no returned/published frame.
+            if bindingResolved, let refusal=error as? NativeAcquisitionError, refusal == .limit {
+                try frame.encode(incomplete)
+            } else { try frame.encode(failure) }
         }
         return frame
     }
