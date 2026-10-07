@@ -78,16 +78,18 @@ impl Collector {
                 6
             } else {
                 plan.len()
-                    .checked_mul(if needs_ax(&request.context.fields) {
-                        3
-                    } else {
-                        2
-                    })
-                    .and_then(|n| {
-                        n.checked_add(if matches!(plan, Plan::Initial(_)) {
-                            11
+                    .checked_mul(
+                        if needs_ax(&request.context.fields) {
+                            3
                         } else {
-                            9
+                            2
+                        } + usize::from(matches!(plan, Plan::Rooted(_, _))),
+                    )
+                    .and_then(|n| {
+                        n.checked_add(match plan {
+                            Plan::Initial(_) => 11,
+                            Plan::Rooted(_, _) => 13,
+                            Plan::References(_) => 9,
                         })
                     })
                     .ok_or(Failure::new(ErrorKind::Limit))?
@@ -108,7 +110,7 @@ impl Collector {
             report.ax = records.ax_status;
             selection = records.selection;
             let snapshot = self.normalize(request, plan, records)?;
-            if matches!(plan, Plan::Initial(_)) {
+            if matches!(plan, Plan::Initial(_) | Plan::Rooted(_, _)) {
                 references = current_references(&snapshot)?;
             }
             let response = document(

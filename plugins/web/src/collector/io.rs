@@ -294,6 +294,24 @@ impl Collector {
         }
         Ok(())
     }
+    pub(super) fn validate_root(&self, scope: &RootedScope) -> Result<(), Failure> {
+        let root = &scope.root;
+        if root.backend_node_id == 0
+            || root.backend_node_id > i32::MAX as u32
+            || root.document_backend_id == 0
+            || root.document_backend_id > i32::MAX as u32
+        {
+            return Err(Failure::new(ErrorKind::InvalidInput));
+        }
+        if root.session_id != self.binding.session_id
+            || root.target != self.binding.target
+            || root.surface != self.binding.surface
+            || root.document_backend_id != self.document
+        {
+            return Err(Failure::new(ErrorKind::StaleTarget));
+        }
+        Ok(())
+    }
     pub(super) fn validate_request(&self, request: &Request, scope: &Scope) -> Result<(), Failure> {
         self.validate_plan(request, &scope.scope_id, scope.nodes.len())?;
         for (i, node) in scope.nodes.iter().enumerate() {

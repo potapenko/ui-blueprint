@@ -233,6 +233,26 @@ impl WebSession {
         };
         guard::phase(guard::Phase::Admission);
         let collected = match selection {
+            WebSelection::Rooted {
+                root,
+                max_visited_nodes,
+            } => {
+                let scope = collector::RootedScope {
+                    scope_id: request.context.scope_id.clone(),
+                    root: collector::RootSeed {
+                        session_id: root.session_id,
+                        target: root.target,
+                        surface: root.surface,
+                        document_backend_id: root.document_backend_id,
+                        backend_node_id: root.backend_node_id,
+                        sensitivity: root.sensitivity,
+                    },
+                    max_visited_nodes,
+                };
+                self.collector
+                    .observe_rooted(&request, &scope, sequence, deadline, &mut callback)
+                    .map(|_| ())
+            }
             WebSelection::Initial {
                 ids,
                 max_visited_nodes,

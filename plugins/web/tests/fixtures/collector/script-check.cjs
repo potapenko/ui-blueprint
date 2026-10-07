@@ -86,3 +86,22 @@ trigger.attrs['aria-controls']='x'.repeat(101);assert.equal(relationRead(trigger
 const redacted=relationRead(trigger,[trigger,popup],true);assert.equal(redacted.controls,undefined);assert.equal(redacted.declaredAnchor,undefined);assert.equal(redacted.activeDescendant,undefined);
 document.activeElement=popup;assert.equal(relationRead(trigger,[trigger,popup]).activeDescendant,undefined);
 console.log('8 offline relation scenarios passed; actual browser proof remains separate.');
+
+function rootedSearch(root,maxVisited=256,maxDepth=8,maxSelected=16) {
+  context.searchRoot=root;context.selectionOptions={ids:[],rooted:true,maxVisited,maxDepth,maxSelected,remainingMs:1000};
+  return vm.runInContext('selectIds.call(searchRoot, selectionOptions)',context,{timeout:100});
+}
+const rootNode=identified('wrapper'), rootChild=identified('duplicate-id'), rootSibling=identified('duplicate-id');
+children(rootNode,[rootChild]);children(document,[rootNode,rootSibling]);
+const rootResult=rootedSearch(rootNode);assert.equal(rootResult.status,'selected');assert.equal(rootResult.visited,2);assert.equal(rootResult.node_0,rootNode);assert.equal(rootResult.node_1,rootChild);assert.equal(rootResult.node_2,undefined);assert.equal(rootResult.parent,document);
+assert.equal(rootedSearch(rootNode,1).status,'incomplete');assert.equal(rootedSearch(rootNode,256,0).status,'incomplete');assert.equal(rootedSearch(rootNode,256,8,1).status,'incomplete');
+rootChild.localName='iframe';assert.equal(rootedSearch(rootNode).status,'unsupported');rootChild.localName='input';rootChild.shadowRoot={};assert.equal(rootedSearch(rootNode).status,'unsupported');rootChild.shadowRoot=null;
+rootNode.isConnected=false;assert.equal(rootedSearch(rootNode).status,'stale');rootNode.isConnected=true;
+const bootstrapSource=fs.readFileSync(require('node:path').join(__dirname,'../../../src/collector/bootstrap.rs'),'utf8');
+const verifier=bootstrapSource.match(/const VERIFY: &str = r#"([\s\S]*?)"#;/)[1];context.rootedVerifier=vm.runInContext('('+verifier+')',context);context.rootResult=rootResult;
+const verifyRoot=()=>vm.runInContext('rootedVerifier.call(rootResult, document, 2, 8)',context,{timeout:100}).current;
+assert.equal(verifyRoot(),true);rootChild.parentNode=rootSibling;assert.equal(verifyRoot(),false);rootChild.parentNode=rootNode;
+rootNode.parentNode=rootSibling;assert.equal(verifyRoot(),false);rootNode.parentNode=document;
+rootChild.isConnected=false;assert.equal(verifyRoot(),false);rootChild.isConnected=true;
+const replacementRoot=identified('wrapper');children(replacementRoot,[identified('duplicate-id')]);rootNode.isConnected=false;assert.equal(verifyRoot(),false,'no re-query of same-ID replacement');rootNode.isConnected=true;
+console.log('11 offline rooted scenarios passed; subtree identity/limits/continuity, no browser qualification.');

@@ -105,9 +105,24 @@ pub struct WebRef {
     pub reference: BackendRef,
     pub sensitivity: Sensitivity,
 }
+/// Private caller-observed read-only seed, never a fabricated canonical ref.
+#[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct WebRootSeed {
+    pub session_id: Id,
+    pub target: Identity,
+    pub surface: Identity,
+    pub document_backend_id: u32,
+    pub backend_node_id: u32,
+    pub sensitivity: Sensitivity,
+}
 #[derive(Serialize, Deserialize)]
 #[serde(tag = "selection", rename_all = "snake_case", deny_unknown_fields)]
 pub enum WebSelection {
+    Rooted {
+        root: WebRootSeed,
+        max_visited_nodes: u32,
+    },
     Initial {
         ids: Vec<WebId>,
         max_visited_nodes: u32,
@@ -126,7 +141,29 @@ impl WebSetup {
 impl WebSelection {
     /// Explicit bounded per-operation selection; no endpoint/authority fields.
     pub fn decode(bytes: &[u8], limit: usize) -> Result<Self, crate::HostError> {
-        decode(bytes, limit)
+        let selection = decode(bytes, limit)?;
+        if let Self::Rooted {
+            root,
+            max_visited_nodes,
+        } = &selection
+            && (*max_visited_nodes == 0
+                || root.backend_node_id == 0
+                || root.backend_node_id > i32::MAX as u32
+                || root.document_backend_id == 0
+                || root.document_backend_id > i32::MAX as u32
+                || [
+                    &root.session_id,
+                    &root.target.id,
+                    &root.target.generation,
+                    &root.surface.id,
+                    &root.surface.generation,
+                ]
+                .iter()
+                .any(|id| id.0.is_empty() || id.0.chars().count() > 256))
+        {
+            return Err(crate::HostError::InvalidInput);
+        }
+        Ok(selection)
     }
 }
 fn decode<T: serde::de::DeserializeOwned>(
@@ -140,4 +177,32 @@ fn decode<T: serde::de::DeserializeOwned>(
         return Err(crate::HostError::InvalidInput);
     }
     serde_json::from_slice(bytes).map_err(|_| crate::HostError::InvalidInput)
+}
+
+#[cfg(test)]
+mod rooted_tests {
+    use super::*;
+    #[test]
+    fn rooted_seed_is_bounded_private_configuration_not_a_backend_ref() {
+        let valid = serde_json::json!({"selection":"rooted","root":{
+            "session_id":"s","target":{"id":"t","generation":"g"},"surface":{"id":"f","generation":"d"},
+            "document_backend_id":1,"backend_node_id":11,"sensitivity":"public"},"max_visited_nodes":256});
+        let bytes = serde_json::to_vec(&valid).unwrap();
+        assert!(matches!(
+            WebSelection::decode(&bytes, 4096),
+            Ok(WebSelection::Rooted { .. })
+        ));
+        assert!(WebSelection::decode(&bytes, bytes.len() - 1).is_err());
+        for mode in 0..5 {
+            let mut invalid = valid.clone();
+            match mode {
+                0 => invalid["root"]["backend_node_id"] = 0.into(),
+                1 => invalid["root"]["document_backend_id"] = 0.into(),
+                2 => invalid["root"]["snapshot_id"] = "fake".into(),
+                3 => invalid["root"]["session_id"] = "".into(),
+                _ => invalid["max_visited_nodes"] = 0.into(),
+            };
+            assert!(WebSelection::decode(&serde_json::to_vec(&invalid).unwrap(), 4096).is_err());
+        }
+    }
 }

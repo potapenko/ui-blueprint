@@ -137,46 +137,67 @@ impl Collector {
         handles
             .try_reserve_exact(plan.len())
             .map_err(|_| Failure::new(ErrorKind::Limit))?;
+        let mut rooted_container = None;
         let selected = match plan {
             Plan::References(_) => None,
-            Plan::Initial(scope) => {
-                let (nodes, progress) = self.select_initial(
-                    scope,
-                    request,
+            Plan::Initial(_) | Plan::Rooted(_, _) => {
+                let document = document
+                    .as_deref()
+                    .ok_or(Failure::new(ErrorKind::Malformed))?;
+                let root;
+                let object = if let Plan::Rooted(scope, _) = plan {
+                    self.validate_root(scope)?;
+                    root = self.resolve(scope.root.backend_node_id, group, budget)?;
+                    &root
+                } else {
                     document
-                        .as_deref()
-                        .ok_or(Failure::new(ErrorKind::Malformed))?,
-                    budget,
-                )?;
+                };
+                let (nodes, progress, container) =
+                    self.select_nodes(plan, request, object, budget)?;
                 records.selection = Some(progress);
+                if matches!(plan, Plan::Rooted(_, _)) {
+                    rooted_container = Some(container);
+                }
                 Some(nodes)
             }
         };
-        for index in 0..plan.len() {
+        let node_count = selected.as_ref().map_or(plan.len(), Vec::len);
+        for index in 0..node_count {
             handles.push(match plan {
                 Plan::References(scope) => {
                     self.resolve(scope.nodes[index].backend_id()?, group, budget)?
                 }
-                Plan::Initial(_) => selected
+                Plan::Initial(_) | Plan::Rooted(_, _) => selected
                     .as_ref()
                     .ok_or(Failure::new(ErrorKind::Malformed))?[index]
                     .object
                     .clone(),
             });
         }
-        for index in 0..plan.len() {
+        for index in 0..node_count {
             let (backend, sensitivity) = match plan {
                 Plan::References(scope) => (
                     scope.nodes[index].backend_id()?,
                     scope.nodes[index].sensitivity,
                 ),
-                Plan::Initial(_) => {
+                Plan::Initial(_) | Plan::Rooted(_, _) => {
                     let node = &selected
                         .as_ref()
                         .ok_or(Failure::new(ErrorKind::Malformed))?[index];
                     (node.backend, node.sensitivity)
                 }
             };
+            if let Some(container) = rooted_container.as_deref() {
+                self.verify_rooted(
+                    container,
+                    document
+                        .as_deref()
+                        .ok_or(Failure::new(ErrorKind::Malformed))?,
+                    node_count,
+                    request.limits.max_depth,
+                    budget,
+                )?;
+            }
             let object = &handles[index];
             let mut arguments = Vec::new();
             arguments
@@ -241,7 +262,7 @@ impl Collector {
                 read.declared_anchor = None;
                 read.active_descendant = None;
             }
-            validate_dom(&read, self.limits.max_text_bytes, plan.len())
+            validate_dom(&read, self.limits.max_text_bytes, node_count)
                 .map_err(|e| e.at(MalformedSite::ReadData))?;
             records.dom.push((backend, read));
             records.dom_end = self.time();
@@ -296,6 +317,15 @@ impl Collector {
         self.verify_document(budget)?;
         if let Some(document) = document.as_deref() {
             self.verify_nodes(document, &handles, budget)?;
+            if let Some(container) = rooted_container.as_deref() {
+                self.verify_rooted(
+                    container,
+                    document,
+                    node_count,
+                    request.limits.max_depth,
+                    budget,
+                )?;
+            }
         }
         Ok(())
     }

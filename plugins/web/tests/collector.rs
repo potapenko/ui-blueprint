@@ -246,6 +246,7 @@ impl Fixture {
             let mut ws = accept(s).expect("handshake");
             let mut reads = 0;
             let mut initial_ids = Vec::<String>::new();
+            let mut rooted = false;
             while let Ok(message) = ws.read() {
                 let Message::Text(text) = message else { break };
                 let command: Json = serde_json::from_str(&text).expect("command");
@@ -255,7 +256,10 @@ impl Fixture {
                 let is_verification = method == "Runtime.callFunctionOn"
                     && command["params"]["functionDeclaration"]
                         .as_str()
-                        .is_some_and(|s| s.starts_with("function verifyNodes("));
+                        .is_some_and(|s| {
+                            s.starts_with("function verifyNodes(")
+                                || s.starts_with("function verifyRooted(")
+                        });
                 let is_selection = method == "Runtime.callFunctionOn"
                     && command["params"]["functionDeclaration"]
                         .as_str()
@@ -289,10 +293,17 @@ impl Fixture {
                             "only the fixed native reader uses ordinary evaluation"
                         );
                         if is_selection {
+                            rooted = command["params"]["arguments"][0]["value"]["rooted"] == true;
+                            if rooted {
+                                assert_eq!(command["params"]["objectId"], "node-11");
+                            }
                             initial_ids = serde_json::from_value(
                                 command["params"]["arguments"][0]["value"]["ids"].clone(),
                             )
                             .expect("ID arguments are data");
+                            if rooted {
+                                initial_ids = vec!["left".into(), "right".into()];
+                            }
                             json!({"result":{"type":"object","objectId":"selection-container"}})
                         } else if is_verification {
                             verify(&command)
@@ -317,6 +328,9 @@ impl Fixture {
                                 let backend = if id == "left" { 11 } else { 12 };
                                 properties.push(json!({"name":format!("node_{i}"),"value":{"type":"object","subtype":"node","objectId":format!("node-{backend}")}}));
                             }
+                        }
+                        if rooted {
+                            properties.push(json!({"name":"parent","value":{"type":"object","subtype":"node","objectId":"node-1"}}));
                         }
                         json!({"result":properties})
                     }
@@ -346,7 +360,12 @@ impl Fixture {
                     }
                     _ => panic!("unexpected method"),
                 };
-                let mut replacement = if is_verification {
+                let mut replacement = if is_verification
+                    && !command["params"]["functionDeclaration"]
+                        .as_str()
+                        .unwrap_or("")
+                        .starts_with("function verifyRooted(")
+                {
                     None
                 } else {
                     change(method, &command, reads)
@@ -1882,4 +1901,151 @@ fn invalid_relation_index_or_duplicate_refuses_before_publication() {
         drop(c);
         fixture.finish();
     }
+}
+
+fn rooted() -> collector::RootedScope {
+    collector::RootedScope {
+        scope_id: id("scope"),
+        max_visited_nodes: 256,
+        root: collector::RootSeed {
+            session_id: id("session"),
+            target: target(),
+            surface: surface(),
+            document_backend_id: 1,
+            backend_node_id: 11,
+            sensitivity: Sensitivity::Public,
+        },
+    }
+}
+#[test]
+fn rooted_seed_publishes_actual_refs_without_initial_ids_or_fake_provenance() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut docs = Vec::new();
+    let result = c
+        .observe_rooted(&request(), &rooted(), 41, op().deadline, |d| {
+            d.validate().unwrap();
+            docs.push(d);
+            Publication::Acknowledged
+        })
+        .unwrap();
+    assert_eq!(result.references.len(), 2);
+    assert_eq!(result.selection.selected_nodes, 2);
+    for reference in result.references {
+        assert_eq!(reference.snapshot_id, snapshot(&docs[0]).id);
+        assert_eq!(
+            reference.observation_id,
+            snapshot(&docs[0]).observations[0].id
+        );
+    }
+    assert_eq!(snapshot(&docs[0]).coverage.status, CoverageStatus::Partial);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn rooted_seed_wrong_binding_or_document_refuses_before_any_collection() {
+    for mode in 0..6 {
+        let fixture = Fixture::new(|_, _, _| None);
+        let mut c = fixture.attach(limits());
+        let before = fixture.methods().len();
+        let mut scope = rooted();
+        match mode {
+            0 => scope.root.session_id = id("wrong"),
+            1 => scope.root.target.generation = id("wrong"),
+            2 => scope.root.surface.generation = id("wrong"),
+            3 => scope.root.document_backend_id = 2,
+            4 => scope.root.backend_node_id = 0,
+            _ => scope.max_visited_nodes = 0,
+        }
+        assert!(
+            c.observe_rooted(&request(), &scope, 41, op().deadline, |_| panic!(
+                "invalid root"
+            ))
+            .is_err()
+        );
+        assert_eq!(fixture.methods().len(), before);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn rooted_removal_or_reparenting_and_limited_search_never_publish() {
+    for mode in 0..4 {
+        let mut verified = 0;
+        let fixture = Fixture::new(move |method, command, _| {
+            if mode == 0 && method == "Runtime.getProperties" {
+                return Some(
+                    json!({"result":[{"name":"status","value":{"type":"string","value":"incomplete"}},{"name":"visited","value":{"type":"number","value":256}}]}),
+                );
+            }
+            if method == "Runtime.callFunctionOn"
+                && command["params"]["functionDeclaration"]
+                    .as_str()
+                    .unwrap_or("")
+                    .starts_with("function verifyRooted(")
+            {
+                verified += 1;
+                if (mode == 1 && verified == 1) || (mode == 2 && verified == 3) {
+                    return Some(json!({"result":{"type":"object","value":{"current":false}}}));
+                }
+            }
+            None
+        });
+        let mut c = fixture.attach(limits());
+        let publication = if mode == 3 {
+            Publication::Stop
+        } else {
+            Publication::Acknowledged
+        };
+        let error = c
+            .observe_rooted(&request(), &rooted(), 41, op().deadline, |_| {
+                assert_eq!(mode, 3);
+                publication
+            })
+            .unwrap_err();
+        assert_eq!(
+            error.kind,
+            match mode {
+                0 => ErrorKind::Selection {
+                    status: collector::SelectionStatus::Incomplete,
+                    visited_nodes: 256
+                },
+                3 => ErrorKind::PublicationStopped,
+                _ => ErrorKind::StaleTarget,
+            }
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn rooted_sensitive_seed_redacts_all_descendants() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut scope = rooted();
+    scope.root.sensitivity = Sensitivity::Sensitive;
+    c.observe_rooted(&request(), &scope, 41, op().deadline, |d| {
+        let s = snapshot(&d);
+        assert_eq!(s.nodes.len(), 2);
+        assert!(s.relations.is_empty());
+        for n in &s.nodes {
+            assert!(n.properties.iter().any(|p| matches!(
+                p,
+                Property::Requested {
+                    field: Field::Value,
+                    state: Availability::Redacted { .. },
+                    ..
+                }
+            )));
+        }
+        Publication::Acknowledged
+    })
+    .unwrap();
+    assert!(
+        !fixture
+            .methods()
+            .contains(&"Accessibility.getPartialAXTree".into())
+    );
+    drop(c);
+    fixture.finish();
 }

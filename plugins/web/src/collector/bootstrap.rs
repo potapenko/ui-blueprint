@@ -15,6 +15,8 @@ struct Options<'a> {
     max_visited: u32,
     max_depth: u32,
     remaining_ms: f64,
+    rooted: bool,
+    max_selected: usize,
 }
 #[derive(Serialize)]
 struct OptionsArgument<'a> {
@@ -59,33 +61,79 @@ impl Collector {
             selection: result.selection.ok_or(Failure::new(ErrorKind::Malformed))?,
         })
     }
-    pub(super) fn select_initial(
+    /// Collect only an actual caller-selected root and its bounded light subtree.
+    pub fn observe_rooted(
         &mut self,
-        scope: &InitialScope,
         request: &Request,
-        document: &str,
+        scope: &RootedScope,
+        dispatch_sequence: u64,
+        deadline: Instant,
+        publish: impl FnMut(Document) -> Publication,
+    ) -> Result<BootstrapReport, Failure> {
+        self.validate_root(scope)?;
+        let divisor = if needs_ax(&request.context.fields) {
+            2
+        } else {
+            1
+        };
+        let cap = self
+            .limits
+            .max_nodes
+            .min(request.limits.max_elements as usize / divisor);
+        self.validate_plan(request, &scope.scope_id, cap)?;
+        if cap == 0
+            || scope.max_visited_nodes == 0
+            || !matches!(&request.operation,Operation::Observe{channels} if channels.contains(&Channel::ExternalSemantics))
+        {
+            return Err(Failure::new(ErrorKind::InvalidInput));
+        }
+        let result = self.observe_plan(
+            request,
+            Plan::Rooted(scope, cap),
+            dispatch_sequence,
+            deadline,
+            publish,
+        )?;
+        Ok(BootstrapReport {
+            report: result.report,
+            references: result.references,
+            selection: result.selection.ok_or(Failure::new(ErrorKind::Malformed))?,
+        })
+    }
+    pub(super) fn select_nodes(
+        &mut self,
+        plan: Plan<'_>,
+        request: &Request,
+        object: &str,
         budget: &mut Budget,
-    ) -> Result<(Vec<SelectedNode>, SelectionReport), Failure> {
+    ) -> Result<(Vec<SelectedNode>, SelectionReport, String), Failure> {
         self.check(budget)?;
-        let mut ids = Vec::new();
-        ids.try_reserve_exact(scope.ids.len())
-            .map_err(|_| Failure::new(ErrorKind::Limit))?;
-        ids.extend(scope.ids.iter().map(|entry| entry.id.0.as_str()));
+        let (ids, max_visited, rooted) = match plan {
+            Plan::Initial(scope) => (
+                scope.ids.iter().map(|v| v.id.0.as_str()).collect(),
+                scope.max_visited_nodes,
+                false,
+            ),
+            Plan::Rooted(scope, _) => (Vec::new(), scope.max_visited_nodes, true),
+            Plan::References(_) => return Err(Failure::new(ErrorKind::InvalidInput)),
+        };
         let options = Options {
             ids,
-            max_visited: scope.max_visited_nodes,
+            max_visited,
             max_depth: request.limits.max_depth,
             remaining_ms: budget
                 .deadline
                 .saturating_duration_since(Instant::now())
                 .as_secs_f64()
                 * 1000.0,
+            rooted,
+            max_selected: plan.len(),
         };
         let selected: wire::SelectedCall = self
             .send(
                 "Runtime.callFunctionOn",
                 &Read {
-                    object_id: document,
+                    object_id: object,
                     function_declaration: SELECT_IDS,
                     return_by_value: false,
                     silent: true,
@@ -110,9 +158,14 @@ impl Collector {
         self.valid_handle(&object)?;
         // Inspect our flat null-prototype container only, never an application's properties.
         let properties:wire::Properties=self.send("Runtime.getProperties",&serde_json::json!({"objectId":object,"ownProperties":true,"accessorPropertiesOnly":false,"generatePreview":false}),budget).map_err(|e| e.at(MalformedSite::PropertiesReply))?;
-        let (handles, progress) =
-            selected_properties(properties, scope, self.limits.max_handle_bytes)
-                .map_err(|e| e.at(MalformedSite::PropertiesShape))?;
+        let (handles, progress) = selected_properties(
+            properties,
+            plan.len(),
+            max_visited,
+            rooted,
+            self.limits.max_handle_bytes,
+        )
+        .map_err(|e| e.at(MalformedSite::PropertiesShape))?;
         let mut nodes = Vec::new();
         nodes
             .try_reserve_exact(handles.len())
@@ -138,10 +191,76 @@ impl Collector {
             nodes.push(SelectedNode {
                 backend,
                 object: handle,
-                sensitivity: scope.ids[index].sensitivity,
+                sensitivity: match plan {
+                    Plan::Initial(s) => s.ids[index].sensitivity,
+                    Plan::Rooted(s, _) => s.root.sensitivity,
+                    Plan::References(_) => unreachable!(),
+                },
             });
         }
-        Ok((nodes, progress))
+        if let Plan::Rooted(scope, _) = plan
+            && nodes
+                .first()
+                .is_none_or(|n| n.backend != scope.root.backend_node_id)
+        {
+            return Err(Failure::new(ErrorKind::StaleTarget));
+        }
+        Ok((nodes, progress, object))
+    }
+    pub(super) fn verify_rooted(
+        &mut self,
+        container: &str,
+        document: &str,
+        count: usize,
+        depth: u32,
+        budget: &mut Budget,
+    ) -> Result<(), Failure> {
+        // Original parent/root/children only. Parent-chain bound excludes shadow
+        // traversal and detects removal or reparenting outside the authorized root.
+        const VERIFY: &str = r#"function verifyRooted(expectedDocument, count, maxDepth) {
+          'use strict';
+          const root = this.node_0;
+          if (expectedDocument !== document || !(root instanceof Element) || !root.isConnected ||
+              root.ownerDocument !== expectedDocument || root.parentNode !== this.parent) return {current:false};
+          for (let i=0; i<count; i++) {
+            const node = this['node_'+i];
+            if (!(node instanceof Element) || !node.isConnected || node.ownerDocument !== expectedDocument) return {current:false};
+            let current=node, steps=0;
+            while (current!==root && current && steps<maxDepth) { current=current.parentNode; steps++; }
+            if (current!==root) return {current:false};
+          }
+          return {current:true};
+        }"#;
+        let result: wire::VerifyResult = self.send(
+            "Runtime.callFunctionOn",
+            &Read {
+                object_id: container,
+                function_declaration: VERIFY,
+                return_by_value: true,
+                silent: true,
+                user_gesture: false,
+                await_promise: false,
+                throw_on_side_effect: true,
+                arguments: [
+                    serde_json::json!({"objectId":document}),
+                    serde_json::json!({"value":count}),
+                    serde_json::json!({"value":depth}),
+                ],
+            },
+            budget,
+        )?;
+        if result.exception_details.is_some() || result.result.r#type != "object" {
+            return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::ContinuityException));
+        }
+        if !result
+            .result
+            .value
+            .ok_or(Failure::new(ErrorKind::Malformed))?
+            .current
+        {
+            return Err(Failure::new(ErrorKind::StaleTarget));
+        }
+        Ok(())
     }
     fn valid_handle(&self, handle: &str) -> Result<(), Failure> {
         if handle.is_empty() || handle.len() > self.limits.max_handle_bytes {
@@ -153,19 +272,24 @@ impl Collector {
 }
 fn selected_properties(
     properties: wire::Properties,
-    scope: &InitialScope,
+    cap: usize,
+    max_visited: u32,
+    rooted: bool,
     handle_cap: usize,
 ) -> Result<(Vec<String>, SelectionReport), Failure> {
-    if properties.exception_details.is_some() || properties.result.len() > scope.ids.len() + 2 {
+    if properties.exception_details.is_some()
+        || properties.result.len() > cap + if rooted { 3 } else { 2 }
+    {
         return Err(Failure::new(ErrorKind::Malformed));
     }
     let mut status = None;
     let mut visited = None;
+    let mut parent = false;
     let mut handles = Vec::new();
     handles
-        .try_reserve_exact(scope.ids.len())
+        .try_reserve_exact(cap)
         .map_err(|_| Failure::new(ErrorKind::Limit))?;
-    handles.resize_with(scope.ids.len(), || None);
+    handles.resize_with(cap, || None);
     for property in properties.result {
         if property.get.is_some()
             || property.set.is_some()
@@ -176,6 +300,18 @@ fn selected_properties(
         }
         let value = property.value.ok_or(Failure::new(ErrorKind::Malformed))?;
         match property.name.as_str() {
+            "parent" if rooted && !parent => {
+                if value.r#type != "object"
+                    || value.subtype.as_deref() != Some("node")
+                    || value
+                        .object_id
+                        .as_ref()
+                        .is_none_or(|s| s.is_empty() || s.len() > handle_cap)
+                {
+                    return Err(Failure::new(ErrorKind::Malformed));
+                }
+                parent = true;
+            }
             "status" if status.is_none() => {
                 if value.r#type != "string" {
                     return Err(Failure::new(ErrorKind::Malformed));
@@ -192,11 +328,7 @@ fn selected_properties(
                 let Some(wire::Scalar::Number(n)) = value.value else {
                     return Err(Failure::new(ErrorKind::Malformed));
                 };
-                if !n.is_finite()
-                    || n < 0.0
-                    || n.fract() != 0.0
-                    || n > f64::from(scope.max_visited_nodes)
-                {
+                if !n.is_finite() || n < 0.0 || n.fract() != 0.0 || n > f64::from(max_visited) {
                     return Err(Failure::new(ErrorKind::Malformed));
                 }
                 visited = Some(n as u32);
@@ -245,15 +377,27 @@ fn selected_properties(
     if visited == 0 {
         return Err(Failure::new(ErrorKind::Malformed));
     }
+    if rooted {
+        if !parent {
+            return Err(Failure::new(ErrorKind::Malformed));
+        }
+        while handles.last().is_some_and(Option::is_none) {
+            handles.pop();
+        }
+        if handles.is_empty() || handles.len() > visited as usize {
+            return Err(Failure::new(ErrorKind::Malformed));
+        }
+    }
     let handles = handles
         .into_iter()
         .collect::<Option<Vec<_>>>()
         .ok_or(Failure::new(ErrorKind::Malformed))?;
+    let selected_nodes = handles.len();
     Ok((
         handles,
         SelectionReport {
             visited_nodes: visited,
-            selected_nodes: scope.ids.len(),
+            selected_nodes,
         },
     ))
 }

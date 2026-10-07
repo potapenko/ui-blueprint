@@ -76,6 +76,20 @@ pub struct InitialScope {
     pub ids: Vec<DomId>,
     pub max_visited_nodes: u32,
 }
+/// Actual caller-observed read-only identity. Never a BackendRef/action permit.
+pub struct RootSeed {
+    pub session_id: Id,
+    pub target: Identity,
+    pub surface: Identity,
+    pub document_backend_id: u32,
+    pub backend_node_id: u32,
+    pub sensitivity: Sensitivity,
+}
+pub struct RootedScope {
+    pub scope_id: Id,
+    pub root: RootSeed,
+    pub max_visited_nodes: u32,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum SelectionStatus {
     Missing,
@@ -107,12 +121,14 @@ impl fmt::Debug for BootstrapReport {
 enum Plan<'a> {
     References(&'a Scope),
     Initial(&'a InitialScope),
+    Rooted(&'a RootedScope, usize),
 }
 impl Plan<'_> {
     fn len(self) -> usize {
         match self {
             Self::References(s) => s.nodes.len(),
             Self::Initial(s) => s.ids.len(),
+            Self::Rooted(_, cap) => cap,
         }
     }
 }

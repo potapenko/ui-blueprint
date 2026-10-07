@@ -129,3 +129,38 @@ the popup. It checks explicit controls/declared-anchor, compatible CSS viewport
 geometry, Close focus and honest unknown hit testing/active descendant. This
 fixture does not establish actual PlayPhrase.me structure or dimensions.
 [Preparation and exact evidence](../plans/ui-blueprint/receipts/W01-popup-relations.md).
+
+## Rooted read-only bootstrap
+
+`Collector::observe_rooted(request, &RootedScope, real_sequence, deadline, publish)`
+uses `RootedScope { scope_id, root: RootSeed, max_visited_nodes }`. RootSeed holds
+actual session/target/surface identities, document_backend_id, backend_node_id and
+sensitivity. It is caller-observed input, not a BackendRef, action authority or a
+claim of locator uniqueness. The seed must come from an actual selected browser
+object under trusted caller authority; no Snapshot/Observation IDs are invented.
+The existing host Tape carries `WebSelection::Rooted { root: WebRootSeed,
+max_visited_nodes }` through `submit_web_observe`; no new public wire/operation.
+
+The worker validates seed IDs/ranges and exact attached document/binding, resolves
+the original root, then runs the existing bounded light-DOM traversal from that
+object. IDs/labels are not consulted in this mode. Root is depth0, every traversed
+DOM node consumes visit allowance; only Elements are source records. Source count
+is at most min(collector.max_nodes, request.max_elements/source multiplier), with
+two output sources reserved when AX is requested. Exceeding count/depth/visits
+refuses Incomplete with no canonical publication; frame/shadow/template/slot
+boundaries refuse Unsupported. Coverage stays Partial; no full-document claim.
+
+Before each field read and again before publication, the original selection
+container proves root/document/connectivity, unchanged root parent, and each
+selected node's parent chain reaches root within max_depth. This prevents an
+unannounced move outside the chosen root from becoming fresh scoped data. No
+locator re-query repairs handles. Parent is identity-only remote metadata, never
+a selected/serialized ancestor. Owned object-group cleanup includes the container.
+Root sensitivity applies to all descendants; existing per-node private-value
+classification and final original-handle checks remain. Method/reply/output/time
+limits cover every added check, without resets or new default ceilings.
+
+Only successful publication returns BootstrapReport references tied to the actual
+Snapshot/Observation. Existing InitialIds and References retain their distinct
+semantics. [Finite source checks and actual-root fixture preparation](../plans/ui-blueprint/receipts/W01-rooted-selection.md)
+are not live Director or general browser-selection qualification.
