@@ -77,3 +77,7 @@ terminal refuses. Observe/legacy behavior, nonce, quotas and wire schema unchang
 This is a delegated private implementation choice under D02 and CLI-ACTIONS, not
 a new public product requirement. Prove actual caller fresh-refusal4 vs malformed2
 and invalid terminal-state cases, then independent source review before live use.
+
+Mechanical affected-consumer grant: crates/host/tests/web_live.rs::outcome only
+exhaustive fixed mapping for HostError::ActionRefused. Assigned to Core; Web notified
+and owns no concurrent host-test writes. Do not change or run live scenarios here.

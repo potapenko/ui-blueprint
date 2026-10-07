@@ -179,3 +179,21 @@ No popup geometry, AX-to-CG ownership, pointer mapping or server completion foll
 
 The platform-specific close/stay-open behavior is intentional context, not a
 generic executor rule. This prevents inventing shared Apply/Cancel semantics.
+
+## Mac own-fixture Snapshot setup — 2026-10-08
+
+Same Mac advisor, finite read-only response after current failed shortcut setup
+e698dd7. Source read: existing Fixture.swift f02.snapshot increments snapshotRequest
+and off-build publish(), without explicit popup dismissal. Confirm/Compare-reset
+do dismiss and are unsuitable. Parent-owned shortcut route does not establish
+why popup vanished; foreground/key routing remains unknown.
+
+Proposed smallest alternate: fresh exact own-app AX after popup open; if existing
+f02.snapshot is actually present/enabled, semantic click its fresh index, no
+coordinates/Compare/parent Raise. Require snapshot_request increase plus fresh AX
+popup and manifest popup=true/current binding before Observe. This is setup, not
+physical-hit/product delivery proof. If unavailable/closing, no guaranteed workaround;
+fresh routing evidence required, not blind shortcut repetition. A new popup-local
+Snapshot button would be a separate fixture change, not assumed existing behavior.
+Advisor ran no app or edits. Root activated one alternate bounded attempt using
+this evidence; actual outcome pending, source expectation is not runtime acceptance.
