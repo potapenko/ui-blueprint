@@ -81,52 +81,59 @@ impl Collector {
                 .as_secs_f64()
                 * 1000.0,
         };
-        let selected: wire::SelectedCall = self.send(
-            "Runtime.callFunctionOn",
-            &Read {
-                object_id: document,
-                function_declaration: SELECT_IDS,
-                return_by_value: false,
-                silent: true,
-                user_gesture: false,
-                await_promise: false,
-                throw_on_side_effect: true,
-                arguments: [OptionsArgument { value: options }],
-            },
-            budget,
-        )?;
-        if selected.exception_details.is_some()
-            || selected.result.r#type != "object"
-            || selected.result.subtype.is_some()
-        {
-            return Err(Failure::new(ErrorKind::Malformed));
+        let selected: wire::SelectedCall = self
+            .send(
+                "Runtime.callFunctionOn",
+                &Read {
+                    object_id: document,
+                    function_declaration: SELECT_IDS,
+                    return_by_value: false,
+                    silent: true,
+                    user_gesture: false,
+                    await_promise: false,
+                    throw_on_side_effect: true,
+                    arguments: [OptionsArgument { value: options }],
+                },
+                budget,
+            )
+            .map_err(|e| e.at(MalformedSite::SelectionReply))?;
+        if selected.exception_details.is_some() {
+            return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::SelectionException));
+        }
+        if selected.result.r#type != "object" || selected.result.subtype.is_some() {
+            return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::SelectionShape));
         }
         let object = selected
             .result
             .object_id
-            .ok_or(Failure::new(ErrorKind::Malformed))?;
+            .ok_or(Failure::new(ErrorKind::Malformed).at(MalformedSite::SelectionShape))?;
         self.valid_handle(&object)?;
         // Inspect our flat null-prototype container only, never an application's properties.
-        let properties:wire::Properties=self.send("Runtime.getProperties",&serde_json::json!({"objectId":object,"ownProperties":true,"accessorPropertiesOnly":false,"generatePreview":false}),budget)?;
+        let properties:wire::Properties=self.send("Runtime.getProperties",&serde_json::json!({"objectId":object,"ownProperties":true,"accessorPropertiesOnly":false,"generatePreview":false}),budget).map_err(|e| e.at(MalformedSite::PropertiesReply))?;
         let (handles, progress) =
-            selected_properties(properties, scope, self.limits.max_handle_bytes)?;
+            selected_properties(properties, scope, self.limits.max_handle_bytes)
+                .map_err(|e| e.at(MalformedSite::PropertiesShape))?;
         let mut nodes = Vec::new();
         nodes
             .try_reserve_exact(handles.len())
             .map_err(|_| Failure::new(ErrorKind::Limit))?;
         for (index, handle) in handles.into_iter().enumerate() {
-            let description: wire::Described = self.send(
-                "DOM.describeNode",
-                &serde_json::json!({"objectId":handle,"depth":0,"pierce":false}),
-                budget,
-            )?;
+            let description: wire::Described = self
+                .send(
+                    "DOM.describeNode",
+                    &serde_json::json!({"objectId":handle,"depth":0,"pierce":false}),
+                    budget,
+                )
+                .map_err(|e| e.at(MalformedSite::SelectedDescription))?;
             let backend = description.node.backend_node_id;
             if description.node.node_type != 1
                 || backend == 0
                 || backend > i32::MAX as u32
                 || nodes.iter().any(|n: &SelectedNode| n.backend == backend)
             {
-                return Err(Failure::new(ErrorKind::Malformed));
+                return Err(
+                    Failure::new(ErrorKind::Malformed).at(MalformedSite::SelectedDescription)
+                );
             }
             nodes.push(SelectedNode {
                 backend,

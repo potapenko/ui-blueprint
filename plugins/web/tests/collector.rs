@@ -1710,3 +1710,50 @@ fn initial_malformed_container_or_overshoot_cannot_create_refs() {
         fixture.finish();
     }
 }
+
+#[test]
+fn malformed_acquisition_sites_preserve_refusal_and_cleanup() {
+    use collector::MalformedSite as Site;
+    for (mode, site) in [
+        (0, Site::SelectionReply),
+        (1, Site::SelectionException),
+        (2, Site::PropertiesShape),
+        (3, Site::ReadException),
+    ] {
+        let fixture = Fixture::new(move |method, command, _| {
+            let function = command["params"]["functionDeclaration"]
+                .as_str()
+                .unwrap_or("");
+            let selected = function.starts_with("function selectIds(");
+            let reading = function.starts_with("function readNode(");
+            if method == "Runtime.callFunctionOn" && selected && mode == 0 {
+                Some(json!({"result":[]}))
+            } else if method == "Runtime.callFunctionOn"
+                && ((selected && mode == 1) || (reading && mode == 3))
+            {
+                Some(json!({"result":{"type":"object","subtype":"error"},
+                    "exceptionDetails":{"text":CANARY}}))
+            } else if method == "Runtime.getProperties" && mode == 2 {
+                Some(json!({"result":[]}))
+            } else {
+                None
+            }
+        });
+        let mut c = fixture.attach(limits());
+        let error = c
+            .observe_initial(&request(), &initial(&["left"]), 41, op().deadline, |_| {
+                panic!("malformed response cannot publish")
+            })
+            .expect_err("malformed acquisition");
+        assert_eq!(error.kind, ErrorKind::Malformed);
+        assert_eq!(error.malformed_site, Some(site));
+        assert_eq!(error.remote_cleanup, collector::RemoteCleanup::Released);
+        assert!(!format!("{error:?}").contains(CANARY));
+        assert_eq!(
+            fixture.methods().last().map(String::as_str),
+            Some("Runtime.releaseObjectGroup")
+        );
+        drop(c);
+        fixture.finish();
+    }
+}

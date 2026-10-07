@@ -158,9 +158,31 @@ pub enum RemoteCleanup {
     Released,
     Unconfirmed,
 }
+/// Static acquisition refusal location; never contains remote text or data.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(u8)]
+pub enum MalformedSite {
+    ResolveReply = 1,
+    SelectionReply = 2,
+    SelectionException = 3,
+    SelectionShape = 4,
+    PropertiesReply = 5,
+    PropertiesShape = 6,
+    SelectedDescription = 7,
+    ReadReply = 8,
+    ReadException = 9,
+    ReadShape = 10,
+    ReadData = 11,
+    AxReply = 12,
+    AxData = 13,
+    ContinuityReply = 14,
+    ContinuityException = 15,
+    ContinuityShape = 16,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Failure {
     pub kind: ErrorKind,
+    pub malformed_site: Option<MalformedSite>,
     pub send_progress: transport::SendProgress,
     pub remote_cleanup: RemoteCleanup,
 }
@@ -171,6 +193,12 @@ impl fmt::Display for Failure {
 }
 impl std::error::Error for Failure {}
 impl Failure {
+    fn at(mut self, site: MalformedSite) -> Self {
+        if self.kind == ErrorKind::Malformed && self.malformed_site.is_none() {
+            self.malformed_site = Some(site);
+        }
+        self
+    }
     fn with_cleanup(mut self, cleanup: RemoteCleanup) -> Self {
         self.remote_cleanup = cleanup;
         self
@@ -178,6 +206,7 @@ impl Failure {
     fn new(kind: ErrorKind) -> Self {
         Self {
             kind,
+            malformed_site: None,
             send_progress: transport::SendProgress::NotQueued,
             remote_cleanup: RemoteCleanup::NotRequired,
         }

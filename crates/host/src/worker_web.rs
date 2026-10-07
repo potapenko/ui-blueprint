@@ -363,7 +363,10 @@ fn collector_diagnostic(error: collector::Failure) -> DiagnosticRecord {
         E::Limit => Cause::CollectorLimit,
         E::StaleTarget => Cause::CollectorStaleTarget,
         E::ResyncRequired => Cause::CollectorResyncRequired,
-        E::Malformed => Cause::CollectorMalformed,
+        E::Malformed => {
+            record.code = error.malformed_site.map_or(0, |site| i32::from(site as u8));
+            Cause::CollectorMalformed
+        }
         E::Protocol(code) => {
             record.code = code;
             Cause::CollectorProtocol

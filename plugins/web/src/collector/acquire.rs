@@ -193,15 +193,20 @@ impl Collector {
                     },
                 ],
             };
-            let read: wire::ReadResult = self.send("Runtime.callFunctionOn", &params, budget)?;
-            if read.exception_details.is_some() || read.result.r#type != "object" {
-                return Err(Failure::new(ErrorKind::Malformed));
+            let read: wire::ReadResult = self
+                .send("Runtime.callFunctionOn", &params, budget)
+                .map_err(|e| e.at(MalformedSite::ReadReply))?;
+            if read.exception_details.is_some() {
+                return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::ReadException));
+            }
+            if read.result.r#type != "object" {
+                return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::ReadShape));
             }
             handles.push(object);
             let mut read = read
                 .result
                 .value
-                .ok_or(Failure::new(ErrorKind::Malformed))?;
+                .ok_or(Failure::new(ErrorKind::Malformed).at(MalformedSite::ReadShape))?;
             if !read.connected || !read.same_document {
                 return Err(Failure::new(ErrorKind::StaleTarget));
             }
@@ -214,7 +219,8 @@ impl Collector {
                 read.input_kind = None;
                 read.tag = None;
             }
-            validate_dom(&read, self.limits.max_text_bytes)?;
+            validate_dom(&read, self.limits.max_text_bytes)
+                .map_err(|e| e.at(MalformedSite::ReadData))?;
             records.dom.push((backend, read));
             records.dom_end = self.time();
             if !need_ax {
@@ -246,7 +252,7 @@ impl Collector {
                     records.ax_status = SourceStatus::Failed(error.kind);
                     continue;
                 }
-                Err(error) => return Err(error),
+                Err(error) => return Err(error.at(MalformedSite::AxReply)),
             };
             if result.nodes.is_empty() {
                 records.ax_status = SourceStatus::Partial;
@@ -259,7 +265,8 @@ impl Collector {
                 .nodes
                 .pop()
                 .ok_or(Failure::new(ErrorKind::Malformed))?;
-            validate_ax(&ax, backend, &self.binding.surface, self.limits)?;
+            validate_ax(&ax, backend, &self.binding.surface, self.limits)
+                .map_err(|e| e.at(MalformedSite::AxData))?;
             records.ax.push((backend, ax));
         }
         // Final target/document check and one bounded pass over the ORIGINAL handles.
@@ -298,14 +305,19 @@ impl Collector {
             throw_on_side_effect: true,
             arguments,
         };
-        let checked: wire::VerifyResult = self.send("Runtime.callFunctionOn", &params, budget)?;
-        if checked.exception_details.is_some() || checked.result.r#type != "object" {
-            return Err(Failure::new(ErrorKind::Malformed));
+        let checked: wire::VerifyResult = self
+            .send("Runtime.callFunctionOn", &params, budget)
+            .map_err(|e| e.at(MalformedSite::ContinuityReply))?;
+        if checked.exception_details.is_some() {
+            return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::ContinuityException));
+        }
+        if checked.result.r#type != "object" {
+            return Err(Failure::new(ErrorKind::Malformed).at(MalformedSite::ContinuityShape));
         }
         let current = checked
             .result
             .value
-            .ok_or(Failure::new(ErrorKind::Malformed))?;
+            .ok_or(Failure::new(ErrorKind::Malformed).at(MalformedSite::ContinuityShape))?;
         if !current.current {
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
@@ -317,20 +329,24 @@ impl Collector {
         group: &str,
         budget: &mut Budget,
     ) -> Result<String, Failure> {
-        let resolved: wire::ResolveResult = self.send(
-            "DOM.resolveNode",
-            &Resolve {
-                backend_node_id: backend,
-                execution_context_id: self.world,
-                object_group: group,
-            },
-            budget,
-        )?;
+        let resolved: wire::ResolveResult = self
+            .send(
+                "DOM.resolveNode",
+                &Resolve {
+                    backend_node_id: backend,
+                    execution_context_id: self.world,
+                    object_group: group,
+                },
+                budget,
+            )
+            .map_err(|e| e.at(MalformedSite::ResolveReply))?;
         let remote = resolved.object;
         if remote.r#type != "object" || remote.subtype.as_deref() != Some("node") {
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
-        let object = remote.object_id.ok_or(Failure::new(ErrorKind::Malformed))?;
+        let object = remote
+            .object_id
+            .ok_or(Failure::new(ErrorKind::Malformed).at(MalformedSite::ResolveReply))?;
         if object.is_empty() || object.len() > self.limits.max_handle_bytes {
             return Err(Failure::new(ErrorKind::Limit));
         }

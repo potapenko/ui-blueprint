@@ -120,3 +120,37 @@ worker reap. Test/context/driver/browser/server/profile cleanup all confirmed.
 All97 inputs matched saved bytes and904568cc digest after runtime; both exact
 executables and prior two reports matched. Core runtime/source hold released.
 No unchanged retry, limit/oracle change, or broader positive acceptance claimed.
+
+## Acquisition-site diagnostic follow-up
+
+Root accepted the concrete private-carrier gap: CollectorMalformed previously
+required code0, so distinct acquisition branches were indistinguishable. Web's
+exact subset is collector/{mod,io,bootstrap,acquire}.rs, tests/collector.rs,
+host/src/worker_web.rs and this receipt. Core alone owns carrier validation.
+No normalize/CDP/transport/fixture/oracle/limit change; no defect cause guessed.
+
+MalformedSite is static inline metadata attached only to existing Malformed
+failures; cleanup and original error mapping are preserved. Codes:1 resolve
+reply;2 selection reply;3 selection exception;4 selection shape;5 properties
+reply;6 properties shape;7 selected description;8 node-read reply;9 node-read
+exception;10 node-read shape;11 node-read data;12 AX reply;13 AX data;14 continuity
+reply;15 continuity exception;16 continuity shape. Zero remains unspecified.
+No code is derived from UI or remote error text. Existing fixed host record carries
+it in code; canonical output/schema and all other cause/code semantics stay fixed.
+
+Three focused malformed collector tests PASS, including the added four-case
+acquisition test: no publication, original Malformed, exact static site, Released
+cleanup and no synthetic backend canary in error Debug. Affected Web Clippy
+-D warnings PASS; guarded-host build uses saved Core9b881e6. Existing positive first-request ACK/ref
+regression also PASS. No live result inferred from these peer tests.
+Offline Node inspector reproduced a Node-clock side-effect rejection, but Chromium
+Performance.now is a separate implementation; this is NOT the live cause and does
+not justify removing throwOnSideEffect, changing the clock or weakening guards.
+
+Root authorized an isolated temporary source snapshot instead of waiting for
+unrelated G02 work. Build source is saved current-branch provider9b881e6 plus
+this saved Web candidate, copied without a branch/worktree or shared-source edit.
+Temporary owner: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-malformed-site-__cqtyk2;
+retain only through immediate proof acceptance. Runtime still uses the same saved
+launcher/frozen F01 files after byte comparison. No G02/latest-integrated claim.
+Fresh run UUID3b3ba49d-d74e-4aa4-b075-35101fe1145a is reserved as a pathname only.

@@ -246,6 +246,7 @@ impl Collector {
         if let cdp::ReplyKind::Error { code } = reply.kind() {
             return Err(Failure {
                 kind: ErrorKind::Protocol(code),
+                malformed_site: None,
                 send_progress: transport::SendProgress::Flushed,
                 remote_cleanup: RemoteCleanup::NotRequired,
             });
@@ -317,6 +318,7 @@ impl Collector {
 fn cdp_failure(f: cdp::Failure) -> Failure {
     Failure {
         kind: ErrorKind::Cdp(f.kind),
+        malformed_site: None,
         send_progress: f.send_progress,
         remote_cleanup: RemoteCleanup::NotRequired,
     }
