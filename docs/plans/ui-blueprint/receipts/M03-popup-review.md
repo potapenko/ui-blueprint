@@ -19,3 +19,11 @@ excluded. Author19 checks/four canonical validations/two A controls/builds are
 attributed execution, not reviewer execution or live proof. Deleted temp not
 recreated. Actual SDK popup mapping, CLI acquisition, lifecycle and positive
 capture remain open. No full M03 or whole-goal acceptance.
+
+
+Repair71c82f479e0458fca3eb950161ba76c9f20ce98a: same reviewer accepted, P2 closed.
+Three saved source inputs match; budget refusal now reserves/encodes incomplete_scope,
+missing binding stays target_unresolved and stale identity keeps precedence. A too-small
+fallback yields no partial frame. Author38 checks/eight canonical validations and
+helper/checker builds remain attributed. No remaining scoped source findings; actual
+SDK/CLI popup, lifecycle and positive capture gates remain separate.

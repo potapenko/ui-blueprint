@@ -71,3 +71,53 @@ may stay in current operation's system temp through this review/run, then clean 
 this is not a persistent archive. Latest all-images retention rule overrides every
 older cleanup phrase: system-temp images and containing directories are never
 agent-deleted, tool-managed originals stay when a temp copy is required.
+
+
+## Actual own-popup AX qualification
+
+Same reviewer accepted saved71c82f47 resource repair after source-first observation
+and receipt reconciliation. Source-only acceptance enables this finite verification
+on c8d5287+71c82f47, not a prior runtime pass. Native owns the sole fixture setup
+lane; Web source/Core tests use no shared desktop input. Root has read current
+QA/Computer Use/Apple/operational rules and CLI@5 OBSERVE/INSPECT with its closure.
+
+Prepare matching saved fixture/helper/CLI/worker in this current operation's system
+temp; reuse retained verified repair helper/validator where matching. Exclude other
+owners' moving source with saved-input composition. Each build/setup command has
+explicit timeout, preparation is bounded separately from the actual UI sequence;
+no repeated source suites. Record preparation and runtime durations separately,
+never as D06 latency. This new popup scenario does not relabel the earlier M01
+300s/387.6s control failure or change its acceptance.
+
+One actual UI sequence, max300s plus owned cleanup5s: launch own F02 off instance
+and attribute exact PID/executable/run directory (10s). Use supported current CUA
+AX controls to open A Edge popup and explicitly Snapshot. If the actual public
+window mapping is missing/ambiguous, stop with that precise source boundary; do not
+invent a popup ID or substitute parent capture. No blind screen coordinate input.
+For actual bound popup, use trusted exact popup+parent config/identity files and
+existing CLI observe AX-only mask1 → saved inspect interaction. Preserve selected
+fields and existing160/depth9/512KiB/channel/1s request/1s cleanup profile, aggregate
+explicit CLI output budget. Return actual nodes/anchor provenance/Surface IDs and
+honest partial coverage, not hardcoded expected counts or guessed geometry.
+
+Use existing Confirm popup setup action to close. Before a new binding, the old
+popup request must refuse stale_target without observed payload. Reopen and explicit
+Snapshot permit a fresh binding and one new positive Observe if remaining deadline
+allows; otherwise record exactly which chain was not run. No action-provider claim:
+CUA setup is ordinary fixture manipulation, not UI Blueprint delivery proof.
+
+No B capture, permission prompt/change, display change, real application operation,
+automatic observation, retry or changed oracle/cap. Positive popup pixels remain a
+separate missing capability; no screenshot substitute for provider capture. Preserve
+unrelated A state during each read-only Observe; validate actual canonical outputs
+and own cleanup. Cleanup executes in finally BEFORE deadline assertions, including
+failure/timeout; test remaining time before every next setup/call. Never abandon
+owned processes to enforce an assertion. Runtime outer bound failure stays failure.
+
+Write only existing M03 receipt with compact actual facts/source identities, failures
+and cleanup, then checkpoint/push via lease. Non-image response/build output is
+removed only after this operation consumer finishes. All created images/screenshots
+are retained in system temp with their containing directories; never delete them or
+recursively clean that directory. Prefer a separate image temp directory to keep
+non-image cleanup precise. Fixed tool originals remain and get temp copies for embeds.
+No image is required just for this AX boundary; old evidence/assets remain untouched.
