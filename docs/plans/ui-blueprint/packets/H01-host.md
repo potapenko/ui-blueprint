@@ -41,6 +41,16 @@ docs/plans/ui-blueprint/receipts/H01-host.md. No engine/schema/plugin-api/CLI/We
 native/old-fixture/spec modifications. Return exact shared API needs before editing.
 No empty owner, dummy API success or skipped mandatory failure tests for compilation.
 
+Narrow coordination amendment: while Core owns the manifest/lock lane, Core may
+also add exactly three requested existing dependencies to plugins/web/Cargo.toml:
+serde.workspace=true, serde_json.workspace=true and
+uiblueprint-schema={path="../../crates/schema"}. Web explicitly requested these
+for W01-cdp-session and must not concurrently edit that manifest. No Web source,
+other dependency, version or feature change is opened. Finish the current Cargo
+operation before this edit, update the shared lock once, report stable hashes and
+then return the member manifest to Web. This directly enables the parallel CDP
+consumer; it is not permission to adopt libc before its separate D07 registration.
+
 Root manifest/lock remain frozen until a separate grant after Web's final checks;
 start own API/source work first if necessary. No dependency-resolving build while
 that lane is held. Existing package versions/features remain pinned. If OS bindings

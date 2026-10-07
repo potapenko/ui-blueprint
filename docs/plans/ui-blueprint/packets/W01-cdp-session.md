@@ -49,6 +49,14 @@ Core owns root Cargo/lock. Propose exact needed dependency additions to root bef
 the member-manifest edit/resolution; no versions/features/new libraries/runtime.
 Own source design/writes can progress meanwhile. Checkpoint grants are separate.
 
+Resolved dependency handoff: Web requested exactly serde.workspace=true,
+serde_json.workspace=true and uiblueprint-schema={path="../../crates/schema"};
+no plugin-api/raw_value/new library is needed. Root assigned Core the one-time
+plugins/web/Cargo.toml edit plus existing root lock ownership, after Core's active
+Cargo operation finishes. Web does not edit its manifest until Core returns it;
+source/fixtures may proceed, dependency-resolving checks wait the stable handoff.
+Versions/features inherit current workspace pins, including float_roundtrip.
+
 ## Required state behavior
 
 - Keep one transport IO owner and original absolute deadline/limits per operation;
