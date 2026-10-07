@@ -231,7 +231,7 @@ Root short Git grant pending. No other owner source/Cargo/fixture files are stag
 | Installed setup guard | Forced2MiB fixed-input allocation against1MiB ordinary cap; ResourceLimit, no frame, confirmed reap and grant release | Closed bounded prerequisite on8edf546; not general setup/RSS acceptance |
 | Typed decode | Both2MiB data-before-kind families force real guarded quota exits; kind-first rejects InvalidInput | Covered named core0.1/analysis0.2 families; no universal all-input upper coefficient |
 | Rejection/error | Ordinary malformed cases reject normally; later fixed1MiB unknown-root-key case forces quota fatal with requested layout≥1MiB, intact prior ACK and actual reap | Source-backed rejection-message pressure covered; Decode marker alone does not identify a call site or prove semantic-validation failure |
-| Semantic validation | Validation executes inside Document::from_json while phase remains Decode; normal canonical cases pass | Need one bounded source case plus trustworthy attribution separating validator scratch failure from decode; current completion lacks raw phase, so no forced-validation claim |
+| Semantic validation | Later direct validate_snapshot probe passes its positive control, then hits actual quota fatal with full4096 guard and confirmed child reap | Isolated direct-call allocation proof; probe-selected phase2 is not integrated worker from_json phase attribution or same-session ACK evidence |
 | Replay | Real normal replay plus the later predeclared480KiB case forces quota fatal with actual private Replay phase3; ACKed base bytes survive confirmed reap | Named Replay-pressure failure covered; do not promote it to every validation/all-input allocation path |
 | Encoding/publication | Earlier16-byte OutputRequest refused in publish AFTER encoding; subsequent phase wave forces FixedOutput::write refusal with valid512KiB+1 query against512KiB slice, no partial frame and prior lease intact | Both bounded refusal boundaries covered; neither is claimed as allocator OOM |
 | Encoding allocation | App-owned FixedOutput writes by checked slice copy; guarded_encode streams to_writer under PublicationGuard rather than constructing Value/Vec output | This source boundary is not a proof of all dependency allocations. No invented allocator OOM on an allocation-free writer; any claimed serde allocation failure requires an actual bounded reachable case |
@@ -515,3 +515,45 @@ is waiting_resource for Core's saved parent-death repair and a fresh provider AC
 The earlier requested hold is released; changed shared worker_io.rs belongs to
 Core and is excluded from this checkpoint. CAP4096 and the5361-byte fixture stay
 fixed. Saving this prepared step is not acceptance or closure of validation proof.
+
+## Direct semantic validator — executed on saved provider
+
+Prepared test/probe checkpoint5639cba was executed unchanged after the fresh Core
+ACK on5f52cb5abd39fc088543b5bc3bd9504e05795386. All67 inputs matched that saved
+revision before running, including both already-saved test files. Core's repaired
+worker_io.rs SHA256 was46990ede3d9d4c443151befb11919078ffb73cec20fcda108823f97bc4a31266.
+This run does not independently retest or accept that parent-death repair.
+
+Executed exactly once in the existing owned task-temp target:
+
+```sh
+cargo +1.96.0 build --locked --offline -p uiblueprint-host --no-default-features --example allocator_probe --target-dir <task-temp>/target
+cargo +1.96.0 test --locked --offline -p uiblueprint-host --no-default-features --test allocator direct_semantic_validator_allocation_is_refused_by_full_guard --target-dir <task-temp>/target -- --exact --test-threads=1
+cargo +1.96.0 clippy --locked --offline -p uiblueprint-host --no-default-features --example allocator_probe --test allocator --target-dir <task-temp>/target -- -D warnings
+rustfmt +1.96.0 --edition 2024 --config skip_children=true --check crates/host/tests/allocator.rs crates/host/tests/support/allocator_probe.rs
+```
+
+One exact test passed, zero failed/ignored, five unchanged tests filtered out;
+runtime0.01s. Example build, scoped Clippy and own formatting passed. ModeV
+successfully validated the known5361-byte fixture, performed real4096-byte
+ballast writes/reads and released it; its explicit reporting sentinel had live0.
+ModeW independently passed the same positive prerequisite and ballast checks,
+then its direct validator call triggered actual quota fatal: reason1, live4096,
+requested layout within the predeclared1..4096 range, phase2 and exit101. Both
+fixed readiness markers and actual owned-child reaps were observed. No cap,
+fixture, expected outcome or interception-source adjustment occurred after run.
+
+This establishes a real allocator refusal reached from the canonical public
+semantic validator under test-only interception. No decoder runs inside that
+terminal window. The phase is explicitly selected by the probe and does not
+establish integrated from_json phase attribution. The probe has no ACK; earlier
+canonical ACK preservation remains separate real-worker evidence. Neither full
+H01 acceptance nor independent source acceptance follows from this focused pass.
+
+Before/after67-input digest, identical:
+`c34fc3b33f33d1742a3e88a278fc9318297a89267a84de4bc7f5ea8e27c067f0`.
+Use the exact preceding67-input recipe enumerated at5f52cb5; compact sorted JSON
+path->SHA256 then SHA256. The default-provider hold was released immediately
+after checks and identity comparison, before this receipt update. No preceding
+guard/Replay/rejection wave, Web producer, Native helper or cleanup was repeated.
+Test sources are already saved and unchanged; next checkpoint is this receipt only.
