@@ -54,3 +54,30 @@ origin/binding and operation boundaries. No real-site/user browser/input or new
 runtime activation in this step. Temps current-operation only, remove/verify after
 use. Checkpoint+push coherent source paths through short Git lease; actual caller
 integration/real Director and full B01/B03 remain separate qualification.
+
+## Prepared actual-root fixture continuation
+
+Source1d83dc8 saved/pushed; source/peer checks passed and operation temp removed.
+Same Web owner may change only existing web_live.rs, guarded-live.cjs and this
+task receipt for one finite rooted runtime sequence. Existing own F01 popup setup;
+test caller gets unique #f01 using actual page CDP querySelectorAll/describeNode,
+document backend ID from getDocument(depth0), existing target/frame/loader binding
+and actual Attached session ID. This is explicit fixture setup, not a product
+algorithm claiming bounded global ID search. No foreign browser token or fake ref.
+
+Expected current fixture section:9 DOM elements; BODY popup and siblings excluded.
+Check actual current properties/geometry, canonical partial coverage and published
+refs; wrong binding/document refuses before collection; separate fixture remount
+makes prior seed stale without replacement search. Keep unchanged256 visits/depth8/
+source16/output32/64KiB/250ms and all existing method/byte/whole120s/cleanup caps.
+Setup/remount stays separate from read-only collection and invariance checks.
+
+Compile from exact saved provider and own source/harness, using existing build/
+launcher, current-operation temp only. After own harness checkpoint/push and
+matching source/binary pins, one rooted sequence is automatically activated within
+this packet; no additional user/root approval stop. Native operates separate own
+Mac fixture; Web headless uses no physical-input lane or current source hold.
+No real site/user browser, other modes or cap tuning. Stop concrete failure without
+unchanged retry. Return facts and cleanup inline; consume then remove only own temp
+outputs/builds/empty dirs and verify. Save compact result through next Git lease.
+General product root-selection origin and actual Director remain later work.
