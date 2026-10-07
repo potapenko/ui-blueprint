@@ -675,3 +675,58 @@ qualification; after result consumption remove only run-owned non-image source/
 build/frames/report and verify absence. No images requested; any created images
 and their containing directories must remain. Older retained evidence untouched.
 Actual UTF-16/output/privacy/invariance and teardown proof are still unexecuted.
+
+## Activated actual form-read result — 2026-10-08
+
+Root activated ONE form_reads sequence after saved harness
+4281c18082cd5acc6a06c5913971de7f6e079a3d and accepted read-source c63b07a.
+Saved host a53b750,199-input fingerprint f18b2d15...bc8d95 and both binaries above
+matched before and after the run. No rebuild, retries, scenario omissions, timeout/
+tolerance/fixture changes or current Core WIP consumption. Actual report interval
+2026-10-07T23:57:37.201Z–23:57:39.031Z (2026-10-08 local Europe/Podgorica).
+Node24.15.0/Playwright1.58.2/Chromium145.0.7632.6, darwin arm64, OS release27.0.0.
+Original32/depth8/64KiB/250ms,256traversal-node and120s overall bounds held.
+
+Actual outcome: passed/exit0,4host outcomes,4read oracle checks plus browser-survival
+check, pending0. Each operation1–4 completed with committed1/missing0, diagnosticnull,
+effect not_dispatched. Canonical documents validated before independent oracles.
+
+| Actual selected state | Canonical observation |
+| --- | --- |
+| A💡B, forward native range1–3, empty output | Snapshot1:1; keyboard web.dom:4; TextSelection anchor1/focus3, utf16_code_units; Value A💡B and known empty output |
+| Same text, backward native range1–3, output London | Snapshot1:2; same actual keyboard source; anchor3/focus1, utf16_code_units; known London output |
+| Collapsed native range4–4 | Snapshot1:3; same source; anchor4/focus4, utf16_code_units; London unchanged |
+| Native text input with one-time-code autocomplete and private canary | Actual Value redacted/sensitive; TextSelection absent, keyboard unknown; canary absent from canonical document; output London still known |
+
+The three public selection records carry reported web.dom Evidence linked to
+their distinct actual observations and the corresponding keyboard owner. Actual
+document.hasFocus and selected range/direction were independently checked before
+Observe. Every before/after input/output shape/value/selection/focus/scroll and
+controller-state comparison passed. Fixture selected/applied stayed empty,
+validfalse/delivered0/revision0, including when DOM output was London. These were
+explicit setup setters/focus/setSelectionRange, NOT product Focus/Type delivery,
+IME, visible-caret, autocomplete choice, form commit or business success evidence.
+All snapshots remain partial/sequential consistency unknown; active descendant
+unknown and composition not_requested are preserved rather than guessed.
+
+Cleanup is actual: worker shutdown/reap confirmed, reserved_sessions0,
+completion_groups0, abandonedfalse; fixture browser remained usable after workers.
+Test process, own context/driver/browser/server/profile confirmed closed. No desktop
+OS focus/input lane or other app/browser profile used. Post-run source hashes,
+all199compiled inputs, both binaries and current saved harness bytes matched.
+No canary was present in any of the four persisted temporary outputs.
+
+Consumed/deleted output pins (not links to retained files):
+- form-forward.json7134B SHA2563aa7580617433a985b389380e118a0a4fd922890a0170d3dcfa779cfa5438ce3.
+- form-backward.json7129B SHA256448cacad8b142509e7b7e48328801069d9a1f0a4faa2384b06f70ada6e5f2c39.
+- form-collapsed.json7159B SHA256fd05ad297f85546aee48ed789f33ac726c27d8d1ae2d004d7b3299126f2bdecb.
+- report.json3678B SHA256397f0b6489cfb34208e84078a6c909a32a9a0a1f8784ae0f3cef308d6d7c6cdf.
+
+After inline result delivery and evidence consumption, these exact four non-image
+files/empty directory were removed and absence verified. Current source/build temp
+uib-form-live-j5lfvqw9 contained no images by suffix/signature inspection; removed
+and absence verified. No images created/deleted, older retained evidence untouched.
+Only this existing receipt changes for the result checkpoint; no runtime/Git lease
+held. Full B02, richer output shapes, selection absence-reason/schema gap,
+Focus/Type/Execute and application-result acceptance remain separate. No broader
+CLI action/host semantic review is accepted by this finite Observe qualification.
