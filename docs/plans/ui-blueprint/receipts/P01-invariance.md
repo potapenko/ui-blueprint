@@ -51,3 +51,55 @@ root-overconstraint/precondition, not a product failure. Equal stable inactive s
 may support AX/layout comparison; they do not by themselves prove active hit behavior.
 Root authorized one corrected matched pair after exact cleanup; no fixture or system
 permission change. Preserve the original observed false/false/false facts.
+
+## Corrected matched-state pair — demonstrated equality, hit gate remains open
+
+Root authorized one corrected comparison after the saved79e4fb8 stopped precondition.
+Current operation reused exact off/on9a88b12 retained binaries and saved current
+Observe/shared capture sources, compiled only needed helper in system-temp. Existing
+Compare→Snapshot setup in each own A produced expanded/count1,550×525@40,465,
+normal/no popup, focus=name and active/key/main=false. These states were equal across
+the pair and stable in fresh explicit snapshots before/after each acquisition.
+No forceforeground, coordinate/tolerance/fixture/permission changes or extra matching
+attempts. Total operation completed inside300s.
+
+Actual existing invocation per build: Observe(fresh a.json, new observation directory,
+explicit profile.json,1), with own run capture.lock and legacy AX1s/capture2s plus
+outer8s/cleanup. Both helpers exited0/stderr0. Both actual AX responses contained76
+nodes and their complete existing reported node records compared exactly equal:
+role/name/selected attribute states/outer AX bounds and reported focus included.
+Off manifest had no measured bounds; on held exactly icon/text/container markers.
+This checks the final explicit-Snapshot fixture pair, not the historical reactive probe.
+
+A-only isolated captures both succeeded under existing permissions:1100×1050px,
+matched filter/window metadata, audio/children off, no B capture or permission prompt.
+The images were inspected and emitted inline as embedded image bytes through view_image;
+no local-file Markdown link was sent. Exact decoded RGBA pixel buffers were byte-equal
+(RGB diff bounding box none). No AX→pixel transform or pixel-coordinate tolerance was
+invented; known capture identity and matched window metadata support this visual pair.
+
+Dimension outcomes:
+
+- reported AX geometry: equal within the same matched state, exact values;
+- semantics: equal76-node records and honest partial external coverage;
+- focus: equal source focus=name and stable inactive/nonkey/nonmain conditions;
+- pixels: exact1100×1050 RGBA equality for this synthetic A pair;
+- sampled pointer hits: not_verified. No active-target/pointer mapping proof was
+  established before sequential fixture retirement, so no +1/0 hit comparison was
+  executed or inferred from inactive AX/pixel equality. This is remaining required
+  evidence, not a claim Computer Use is unavailable or a proven mismatch.
+
+Own off PID18887 and on PID19170 were attributed by exact canonical executable plus
+unique run arguments. Each was terminated by only its exact PID after source/path
+revalidation, exit confirmed within5s; LaunchServices parent owns reaping. Source/UI
+state stayed unchanged during acquisition. No user instance, Web headless process,
+real PlayPhrase.me, display/backend setting or B−3801 path was operated. Physical lane
+released and no helper/fixture remains active.
+
+All current run-owned build/source/cache/manifests/AX/image outputs under system-temp
+uib-p01-matched-jrnx791y were removed after inline image bytes/facts and immediate checks;
+directory absence verified. Existing evidence and linked images untouched. No persistent
+output/archive. This closes the demonstrated AX/layout/focus/pixel pair only; overall
+M05/P01 invariance is not complete while sampled-hit proof remains absent. Previous
+mismatched active/key/main and historical hit records remain excluded. Exact-one-path
+outcome receipt ready for short Git lease; no next runtime attempt started.
