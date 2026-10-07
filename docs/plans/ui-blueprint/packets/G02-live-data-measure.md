@@ -39,3 +39,31 @@ Return actual commands, source/build identity, four factual values/units/evidenc
 recomputation outcome and exact residuals. Preserve historical-data distinction.
 Save/push receipt after short root Git lease; remove only owned temporary files
 after accepted handoff. No fresh audit or source edit unless assigned separately.
+
+## Restore distinct Unknown and Unstable handling
+
+Actual CLI returned four unstable_state/exit4 results despite known expected DOM
+rects. Saved receipt685651c preserves that evidence. Core found the engine and
+schema::analysis::results::validate_sources both requiring Consistency::Stable.
+Web coauthor confirms existing MODEL separates property availability from global
+consistency and ANALYSIS-VALIDATION refuses explicitly unstable source; global
+atomicity is not promised. This supports factual dimensions of a known recorded
+rect, not invented UI stability or blanket permission for incoherent comparisons.
+
+Core may make the directly necessary consistency-condition correction in the
+actual engine owner and crates/schema/src/analysis/results.rs, plus their nearest
+focused tests and this task's receipt. Before changing shared validation, reconcile
+the protected G01/accepted-analysis contract and actual tests: a test alone does
+not create contrary product intent. State the exact conclusion. If a normative
+conflict remains, return it before crossing that semantic boundary. No new flags,
+parameters, wrapper, wire version, source restamping or validator weakening beyond
+this proven condition. Genuine unstable, unavailable/redacted properties, incomplete
+scope, invalid Space/binding and unsupported cases retain their existing refusals.
+Recorded original consistency/Evidence remains intact in every result.
+
+Run the smallest affected engine/schema tests that distinguish unknown consistency
+with known geometry from actual unstable/unavailable data, then the same four
+changed CLI measurements. No new verification CLI or separate caller just to satisfy
+root's earlier extra recomputation step: report that interface boundary truthfully;
+existing import verification requirements remain unchanged. Shared correction
+receives only a focused changed-boundary review when saved, not a general audit.
