@@ -1069,3 +1069,19 @@ runtime test `c8de4fbd67892d2025d3fb1e627ab23fec7eb1303effe7c9d57ba05c88220194`.
 No browser/SDK/input run or generic audit performed by Core. New Web producer
 mapping plus one diagnostic live outcome require Web's affected checks and root's
 activation. Common checkpoint-ready handoff does not self-accept those outcomes.
+
+## CollectorMalformed static branch carrier
+
+Root's amended W01-live packet authorizes one private encoding correction after
+actual Collect/CollectorMalformed: allow code0..=255 only for that cause;0 retains
+unspecified meaning. Web owns static branch assignment. No remote text-derived
+code, enum/control change or added allocation. Other causes/count rules,12-byte
+record/Option,64-byte control and HostError/canonical/CLI meanings are unchanged.
+Exact2 paths: diagnostic.rs and this receipt. Diagnostic SHA256
+`8cca1fdff539b490e962b983ac61dc35aed5ae27ed284153c267548d1730471e`.
+Focused `cargo test --locked --offline -p uiblueprint-host --lib diagnostic::tests`
+passed2/2 on the existing Rust1.96/Darwin arm64 environment. It checks0/255 roundtrip,
+rejects-1/256 and nonzero code on CollectorInvalidInput, retaining size, malformed
+marker and ordinary terminal checks. No live retry or unrelated suite performed.
+Core G02 work remains separate from this checkpoint; source equality for Web's
+next run requires its separately saved engine inputs as coordinated by root.

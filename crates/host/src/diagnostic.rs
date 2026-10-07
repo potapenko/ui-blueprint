@@ -47,7 +47,8 @@ pub struct DiagnosticRecord {
     pub remote_cleanup: u8,
     /// Existing SendProgress: NotQueued=0, Queued=1, PossiblyWritten=2, Flushed=3.
     pub send_progress: u8,
-    /// Existing protocol error number, or fixed HostError code from `host`.
+    /// Existing protocol error number, fixed HostError code from `host`, or a
+    /// trusted CollectorMalformed branch code 0..=255 (zero means unspecified).
     pub code: i32,
     /// Existing Selection.visited_nodes; zero for non-selection causes.
     pub count: u32,
@@ -96,6 +97,7 @@ impl DiagnosticRecord {
             || (!selection && self.count != 0)
             || match self.cause {
                 Host => !(1..=16).contains(&self.code),
+                CollectorMalformed => !(0..=255).contains(&self.code),
                 CollectorProtocol | CdpUncorrelatedError => false,
                 _ => self.code != 0,
             }
@@ -204,6 +206,7 @@ mod tests {
             record(DiagnosticCause::CdpUncorrelatedError, i32::MAX, 0),
             record(DiagnosticCause::SelectionIncomplete, 0, u32::MAX),
             record(DiagnosticCause::CollectorMalformed, 0, 0),
+            record(DiagnosticCause::CollectorMalformed, 255, 0),
             DiagnosticRecord::host(DiagnosticStage::Receive, HostError::InvalidInput),
         ];
         for expected in cases {
@@ -267,7 +270,7 @@ mod tests {
                 ..valid
             },
             Control {
-                auxiliary: 1,
+                auxiliary: 256,
                 ..valid
             },
             Control {
@@ -280,6 +283,19 @@ mod tests {
                 Err(HostError::InvalidControl)
             );
         }
+        for code in [-1, 256] {
+            let mut unchanged = terminal();
+            assert_eq!(
+                record(DiagnosticCause::CollectorMalformed, code, 0).apply(&mut unchanged),
+                Err(HostError::InvalidControl)
+            );
+            assert_eq!(unchanged, terminal());
+        }
+        let mut other_cause = terminal();
+        assert_eq!(
+            record(DiagnosticCause::CollectorInvalidInput, 1, 0).apply(&mut other_cause),
+            Err(HostError::InvalidControl)
+        );
         for mut bad in [
             Control {
                 value: 0,
