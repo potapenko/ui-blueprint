@@ -211,3 +211,29 @@ no images/containing dirs or old assets/evidence deleted. No active processes/in
 Actual shortcut setup is now demonstrated; popup binding/canonical AX and positive
 capture/M03 remain waiting_evidence. One-path outcome checkpoint awaits short Git
 lease; no extra runtime attempt or source correction started automatically.
+
+
+## Selected direct-window diagnostic source — declared subset
+
+M03-direct-window packet selects public NSView.window/viewDidMoveToWindow metadata.
+Before edits exact3 paths: Fixture.swift, fixtures/native/README.md, this receipt.
+Local supported SwiftUI popover signature exposes View, not NSWindow/windowNumber;
+NSViewRepresentable/public AppKit handle supplies necessary platform-only behavior.
+Existing Measurements owner gains a weak popupContainingWindow reference; zero-size
+AX-hidden/non-hit background updates weak metadata only, no geometry/UI model/publish.
+Explicit Snapshot reports current windowNumber/parent-equality/visibility or unavailable.
+No forced separate window ID, shared-parent rename or helper/collector/capture change.
+Actual native attachment facts and broader reader invariance remain to be observed;
+no full M05 claim from source. Affected fixture compile before checkpoint/runtime.
+
+
+Affected off fixture compile passed Swift6/macOS14.0 without diagnostics. Source
+sanity: NSView and metadata references are weak; detach/close clears metadata;
+reader has zero intrinsic size/frame, no first responder, hitTest=nil and explicit
+AX hidden/non-element. No observer callback calls publish or changes measured frames;
+Snapshot alone records values. Source sanity is not full rendered/AX/hit invariance.
+Source 56680081142ef2dd080b555c18463ba3f8ef29f899e307ce86c043d3a3121306; fixture 5426fe1346212dce5a157742b85e484eb5caea18183cd022a753385dcfd292d6.
+Current operation temp uib-m03-direct-zj70a_xu retains the immediately needed fixture/
+cache for the authorized fresh diagnostic, then non-image cleanup. No image generated.
+Exact3 ready (Fixture.swift/fixtures README/this receipt); own whitespace/diff checked,
+index untouched. Helper/collector/capture unchanged; next runtime waits saved source.

@@ -78,6 +78,7 @@ struct RectRecord: Codable, Equatable {
 }
 @MainActor final class Measurements {
     var frames: [String: RectRecord] = [:]
+    weak var popupContainingWindow: NSWindow?
     var callbackCount = 0
     var callbackNanoseconds: UInt64 = 0
     var windowID = -1
@@ -89,6 +90,33 @@ struct RectRecord: Codable, Equatable {
         callbackNanoseconds += DispatchTime.now().uptimeNanoseconds - start
     }
 }
+// SwiftUI popover content has no public native handle. This nonvisual bridge
+// records only its actual NSView.window; it measures/updates no UI or probe state.
+@MainActor private struct PopupContainingWindowReader: NSViewRepresentable {
+    let metadata: Measurements
+    func makeNSView(context: Context) -> ReaderView {
+        let view = ReaderView(frame: .zero)
+        view.metadata = metadata
+        view.setAccessibilityElement(false)
+        return view
+    }
+    func updateNSView(_ view: ReaderView, context: Context) { view.metadata = metadata }
+    static func dismantleNSView(_ view: ReaderView, coordinator: ()) {
+        if view.metadata?.popupContainingWindow === view.window { view.metadata?.popupContainingWindow = nil }
+        view.metadata = nil
+    }
+    final class ReaderView: NSView {
+        weak var metadata: Measurements?
+        override func viewDidMoveToWindow() {
+            super.viewDidMoveToWindow()
+            metadata?.popupContainingWindow = window
+        }
+        override func hitTest(_ point: NSPoint) -> NSView? { nil }
+        override var acceptsFirstResponder: Bool { false }
+        override var intrinsicContentSize: NSSize { .zero }
+    }
+}
+
 private struct MarkerAnchors: PreferenceKey {
     static var defaultValue: [String: Anchor<CGRect>] { [:] }
     static func reduce(value: inout [String: Anchor<CGRect>], nextValue: () -> [String: Anchor<CGRect>]) {
@@ -211,6 +239,12 @@ private struct PilotView: View {
                             Button("Confirm popup") { applied = "popup-\(role)"; popup = false; changed() }
                                 .accessibilityIdentifier("f02.popup.confirm")
                         }.padding(20)
+                        .background {
+                            PopupContainingWindowReader(metadata: measurements)
+                                .frame(width: 0, height: 0)
+                                .allowsHitTesting(false)
+                                .accessibilityHidden(true)
+                        }
                     }
             }
             Divider()
@@ -257,6 +291,7 @@ private struct PilotView: View {
         .coordinateSpace(name: "fixture")
         .defaultFocus($focus, .name)
         .onChange(of: popup) { _, _ in
+            if !popup { measurements.popupContainingWindow = nil }
             let app = NSRunningApplication.current
             let owner = popupIdentity ?? FixtureIdentity(directory:runDirectory,windowKey:"popup-\(role)")
             popupIdentity = owner
@@ -352,6 +387,12 @@ private struct PilotView: View {
             ["window_id": $0.windowNumber, "identifier": $0.identifier?.rawValue ?? "unknown",
              "frame_appkit_screen_pt": ["x": $0.frame.minX, "y": $0.frame.minY, "width": $0.frame.width, "height": $0.frame.height]] as [String: Any]
         }
+        let containingEvidence: [String: Any]
+        if popup, let containing = measurements.popupContainingWindow, containing.windowNumber > 0 {
+            containingEvidence = ["status": "known", "window_id": containing.windowNumber,
+                "equals_parent": containing === window, "is_visible": containing.isVisible,
+                "source": "public_NSView_window_viewDidMoveToWindow", "ownership": "own_fixture_content_attachment"]
+        } else { containingEvidence = ["status": "unavailable", "source": "public_NSView_window_viewDidMoveToWindow"] }
         let value: [String: Any] = [
             "environment": "task_owned_synthetic_debug", "role": role,
             "pid": app.processIdentifier, "bundle_id": app.bundleIdentifier ?? "unknown", "launch_time": processStart,
@@ -359,6 +400,7 @@ private struct PilotView: View {
             "surface_generation": measurements.surfaceGeneration, "window_id": window.windowNumber,
             "identity_path": runDirectory.appendingPathComponent("\(role)-identity.json").path,
             "live_manifest_path": runDirectory.appendingPathComponent("\(role).json").path,
+            "popup_containing_window": containingEvidence,
             "popup_binding": popupBinding ?? NSNull(), "popup_binding_status": popupBinding == nil ? "unresolved" : "bound",
             "popup_generation": popupGeneration, "popup_anchor_declared": role,
             "window_identifier": role, "windows": windows,

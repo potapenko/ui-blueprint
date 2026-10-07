@@ -109,3 +109,10 @@ public bounded accessibility traversal. Unresolved mapping remains unresolved.
 The resulting actual window ID and generation are in popup_binding, with parent
 anchor declaration separately sourced. No title/rectangle/arrowEdge establishes
 ownership or measured geometry. Popup content, layout and independent oracle unchanged.
+
+Direct containing-window diagnostic: a zero-size, AX-hidden/non-hit public
+NSViewRepresentable background in existing popover content records NSView.window
+weakly in Measurements. Attachment/detachment only updates identity metadata, not
+UI/probe measurement or publication. Explicit Snapshot reports actual windowNumber,
+visibility and whether it equals parent A/B, or unavailable. It does not assume a
+separate popup CG window, rename a shared parent or qualify a canonical connector.
