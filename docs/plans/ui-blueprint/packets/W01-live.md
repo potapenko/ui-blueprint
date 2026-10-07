@@ -9,20 +9,27 @@ only, no new framework, alternate engine or Node implementation of product colle
 
 ## Activation boundary
 
-PREPARATION IS ACTIVE: write the finite files below, syntax-check, and compile
---no-run only on a coherent saved provider. Actual browser/server launch, fixture
-runtime setup and test execution remain waiting_evidence until root explicitly
-activates this same packet after H01 publication-allowance reconciliation. Do not
-run live tests indirectly from ordinary Cargo tests or compile-time code. Runtime
-entry is explicitly opt-in. No runtime permission is inferred from this document.
+Preparation is saved in afba17cb0f2bc4c82f5d6169f62d4f8be6800936. RUNTIME IS NOW
+ACTIVATED by root under the existing user-approved goal for one finite run of the
+exact command in that saved receipt. Publication gapf2af5a3 has scoped independent
+acceptance; Core freshly ACKed its consumed source/manifests/frozen fixtures for
+this120s run plus bounded cleanup. Both executable hashes and all96 source inputs
+must still match before launch. No ordinary Cargo/compile-time automatic runtime
+is allowed; explicit opt-in remains mandatory.
 Source preparation does not hold/freeze Core; agree a short ready compile window
 only if shared consumed inputs are changing. Return exact missing Core dependencies.
 
-Publication dependency update: source/runtime evidence f2af5a3 received scoped
-independent acceptance in [H01 review](../receipts/H01-producer-review.md), closing
-that current pinned Rust allowance gap. Runtime still waits for the saved Web
-preparation/build handoff and root's concrete activation with owned targets,
-predeclared limits and evidence retention. This is no new user-approval request.
+Use test hash e4d0c58f1d095f4d5eeb1a4b9b3751a28fe38c800618689ee3cb1b5c3b8a4ad4,
+worker hash e0ffd4b5993ff47b0ee0e0479f1daa8d581eec25cc689955100178352b5b5fba and
+source96 digest10a407e42be854e4ec9a2e1852462b59da8e31a5e2a0ed9e7626e8613c641a4f.
+Exact fresh evidence directory:
+/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/W01-guarded-live/4fc1c266-67b4-4b2a-85f7-60c959468c6b.
+Only owned headless fixture server/browser/profile/targets and saved binaries may
+run. No user browser/profile, real site, physical input, Native SDK or permissions.
+Preserve fixed cases/limits. After result and before/after identity, release Core
+hold immediately. Preserve sanitized failure/cleanup evidence on failure and return
+the concrete cause; no cap tuning, alternate backend or unchanged retry.
+This grants no whole-pilot/H01/D06 acceptance and requires no new user reply.
 
 ## Spec Basis and saved realization
 
