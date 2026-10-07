@@ -89,8 +89,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core R1/R2 saved372aebb, same analysis reviewer rechecking source before new author receipts; saved278-input equality waits Web manifest checkpoint. D05 design accepted for registration; Integration owns its leaves, shared README metadata waits Web release. Web transport tests ongoing, manifests frozen on hashes below. Git index free. Desktop released; B pixels remain stopped |
-| Последний принятый результат продукта | нет |
+| Активные чаты/пакеты/ресурсы | Local analysis migration/R1/R2 accepted by same reviewer at saved4106e04; Core idle for next ready packet. Integration completing D05 registration after Web2README release. Web transport WIP4106e04 saved, final own checks/docs ongoing; manifests frozen. Git index free. Desktop released; B pixels remain stopped |
+| Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
 | Следующий шаг | Закрыть ANALYSIS-R1/R2 через Core и same-reviewer recheck; принять конечный D05 decision от Integration; Web завершает offline transport. Retained K01 и bounded Native prerequisite уже scoped accepted; live D05 enforcement и RC05 остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
@@ -147,20 +147,20 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [E01-analysis-adaptation](packets/E01-analysis-adaptation.md) | Export `01a11286-a187-7720-a452-41b6ea7b228b` / local | `264a838d440e687aa1eca988aeb7cd54ccc18083`, pushed | [receipt](receipts/E01-analysis.md): factual query caller replaces placeholder Expectation; saved packages unchanged,21 distinct tests/check/fmt/Clippy on recorded working provider; final saved migration proof pending |
 | ANALYSIS-FLOAT-001 | Integration same chat | saved in b68b5b7; D07@3, registry7, same serde_json1.0.151 | default production204/2054 bit failures corrected to0/2054, production22-case proof passes; same17-package versions/unchanged lock, manifest1df267dd…cc821b. No epsilon or wire promotion; independent migration review pending |
 | [L01-analysis-review](packets/L01-analysis-review.md) | collaboration `/root/analysis_integration_review` | packet259f6ff; base8bb5c02 → candidatec30aa20 | completed two-stage reject; [receipt](receipts/L01-analysis-review.md), R1 array decoding and R2 redacted oracle/manifest coverage; same reviewer retained; independent281-inputhash match |
-| [L01-analysis-repair](packets/L01-analysis-repair.md) | Core sole decoder/fixture/test owner | testcffd8d3 + repair372aebb601fee5d02bc08153e94907e1ee63d36c pushed | [repair receipt](receipts/S01-analysis-repair.md):49 affected tests/59manifest cases; exact20paths saved, index released. Source frozen; same reviewer rechecks R1/R2 before new author proof.278-inputhashbc410094…6c8e724 matches checked working set; saved equality waits Web checkpoint, no full workspace/live acceptance |
+| [L01-analysis-repair](packets/L01-analysis-repair.md) | Core sole decoder/fixture/test owner | testcffd8d3 + repair372aebb pushed; saved input4106e04 | [independent recheck](receipts/L01-analysis-recheck.md) accepts R1/R2 and scoped migration.49 affected tests/59manifest cases; reviewer reproduced exact278-inputhashbc410094…6c8e724 from saved inputs. No remaining scoped gaps; live/Web/D05/P1/P6/P7 unchanged |
 | [D05-runtime-decision](packets/D05-runtime-decision.md) | Integration same chat | db629fc0e342ff567f5560344dffa4104d8fb8ef pushed | [receipt](receipts/D05-runtime-decision.md): concrete reusable guarded worker, parent completion pool and root Grant ownership selected as proposal; exact2docs saved/checked, index released. No source/runtime/normative acceptance; finite design review before registration |
 | [D05-runtime-review](packets/D05-runtime-review.md) | collaboration `/root/d05_runtime_review` | proposed designdb629fc; D02@1/D05@2/D05-MEMORY@1 preservation | accepted design-registration scope; [receipt](receipts/D05-runtime-review.md), two-stage review/actual K01 source, no findings. Runtime/allocation/cleanup/D06 gates still open |
-| [D05-runtime-registration](packets/D05-runtime-registration.md) | existing Integration owner | adopted reviewed designdb629fc under ROADMAP; D07@4 protected | ready exact D02@2/D05@3/D05-MEMORY@2/WORK@1 registration; own leaves first, shared README metadata waits Web handoff; no source/Cargo/runtime |
-| [W01-transport-implementation](packets/W01-transport-implementation.md) | existing Web owner | packeta21b69a + logging clarificationcb90b7e; D02@1/D07@3 → narrow D07@4 adoption | active actual transport implementation; package check passed per owner, manifest/lock stable and frozen, Core check barrier released.20 new registry packages, no existing-version drift; exact inventory/transport proof/checkpoint pending. Live adapter still gated by D05 |
+| [D05-runtime-registration](packets/D05-runtime-registration.md) | existing Integration owner | adopted reviewed designdb629fc under ROADMAP; D07@4 protected | four leaves prepared/read by root; Web4106e04 released2README, Integration explicitly continued to complete registry9/header/receipt/checkpoint; no source/Cargo/runtime |
+| [W01-transport-implementation](packets/W01-transport-implementation.md) | existing Web owner | WIP4106e04a91e141158dc46590778fb5fd2ee300a9 pushed, exact14paths; D07@4/registry8 | actual transport code/membership saved,16 preliminary checks and current compile per [receipt](receipts/W01-transport-implementation.md); later operation-limit/zero-write changes need final tests/review.2README/Git lease released; own source/tests/docs continue.20new packages/no prior drift, manifests frozen; no live/D05 acceptance |
 
-Current Web manifest handoff (working identity, not yet a saved acceptance):
+Current Web manifest handoff (saved in4106e04; transport itself remains WIP):
 Cargo.toml SHA256 `a87adec8d6b011a88b1ccbb40191eeae0dc2964b52bc50e01a1d9b2a073a36c2`;
 Cargo.lock `a3f321614b4551712fa44ee402f697f159dc43d0a613fb85e1e8ecae371d6173`.
-Root independently matched these bytes. Web reports coherent package check,
+Root independently matched these bytes; analysis reviewer verified saved equality. Web reports coherent package check,
 tungstenite0.30.0 handshake-only, log0.4.29 no features, existing float_roundtrip
 preserved. Core may check only affected schema/engine/CLI and pin hashes before/
-after; new Web runtime/tests remain separately unverified. Save corresponding
-manifest/source checkpoint before claiming integrated saved evidence.
+after; new Web runtime/tests remain separately unverified. The saved checkpoint
+closes the analysis278-input identity gap, not transport acceptance.
 
 Saved integration barrier: at `9ca645a`, all211 checked inputs are committed and
 match `db7792faeea43667960657a53560c90fd47aa4f947cf1b62daec896dc5d35afe`.
