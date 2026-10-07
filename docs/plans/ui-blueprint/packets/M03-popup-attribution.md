@@ -121,3 +121,42 @@ are retained in system temp with their containing directories; never delete them
 recursively clean that directory. Prefer a separate image temp directory to keep
 non-image cleanup precise. Fixed tool originals remain and get temp copies for embeds.
 No image is required just for this AX boundary; old evidence/assets remain untouched.
+
+
+First actual interval interrupted before Snapshot; fresh same-provider AX had no
+popup, a.json absent/identity CLOSED. No mapping conclusion follows. Finally cleanup
+completed153.39s/within300s, own process exited, non-image temp removed, zero images.
+Save this exact outcome, no unchanged runtime retry in the same interrupted chain.
+Next finite diagnostic is read-only: existing Snapshot Button/command plus current
+CUA keyboard API, to establish whether the SAME explicit Snapshot action can have
+an ordinary SwiftUI shortcut invoked without clicking parent content. Return exact
+owner/property and supported evidence, no source change or real keys yet. This
+proposal is fixture setup capability, not an inferred cause of the interruption or
+permission to bypass a stop/confirmation. Consumer is one later fresh complete M03
+sequence; no automatic measurement callback/other backend/new framework.
+
+
+## Selected minimal Snapshot shortcut setup
+
+Read-only Native handoff after ab353f8: existing Fixture.swift Snapshot Button owns
+snapshotRequest += 1 and the same explicit publisher; no shortcut exists. SwiftUI
+SDK supports keyboardShortcut and current CUA documents App.pressKey. Root selects
+one property `.keyboardShortcut("s", modifiers: [.command, .shift])` on that SAME
+Button, under approved own-fixture setup scope. This is a new explicit invocation
+path for the existing measurement action, not an inferred fix for unknown dismissal.
+No new handler/flag/overlay/measurement timing/lifecycle publication/UI layout/oracle.
+Only Fixture.swift that modifier and existing M03 receipt writable for this step.
+Direct-edit rule: compile affected fixture, check own diff/links; no new tests that
+mirror the property or unrelated suites. Save/push via short Git lease before run.
+
+After saved matching fixture, the already-defined finite actual qualification may
+start a fresh complete interval using same CUA backend: attribute own A, open Edge
+popup, fresh AX state confirms popup, explicit App.pressKey("super+shift+s"), then
+fresh source/AX checks. Only actual manifest+matching A+still-open current popup
+can qualify attribution and enable existing CLI steps. Shortcut delivery/routing
+from the popover is NOT pre-proved. Missing Snapshot, closed popup, wrong target or
+CUA stop/changed-state requires truthful termination/re-query under tool policy;
+never another backend or fabricated binding. Subsequent canonical AX/inspect/close/
+stale/reopen steps,300s runtime/cleanup5s, all fixed caps and image retention stay
+as above. No physical-pointer or product action-provider claim. This input setup
+changed, so the earlier interrupted interval is not reused as successful evidence.
