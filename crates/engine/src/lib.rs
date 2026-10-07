@@ -6,6 +6,7 @@ mod arithmetic;
 pub mod cache;
 pub mod replay;
 mod resolve;
+pub mod scope;
 
 pub use analysis::{VerificationError, check_bound, measure_query_bound, verify_analysis_result};
 use uiblueprint_schema::{model::*, validation};
