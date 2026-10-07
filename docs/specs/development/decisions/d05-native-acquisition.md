@@ -1,8 +1,8 @@
 # D05 Native acquisition profile
-- Node type: leaf; domain: `uib.development.d05-native-acquisition`; contract: `UIB.D05-NATIVE-ACQUISITION@1`.
+- Node type: leaf; domain: `uib.development.d05-native-acquisition`; contract: `UIB.D05-NATIVE-ACQUISITION@2`; supersedes @1 image ownership only.
 - Clauses: `.METRICS`, `.CEILINGS`, `.ADMISSION`, `.OWNERSHIP`, `.OUTCOMES`, `.PROOF` (prefix `UIB.D05-NATIVE-ACQUISITION`).
 - Authority: Active / Evolving; accepted/released implementation: none.
-- Authority source: ROADMAP D05/PLAN.UIB@1, root selection of45c2667649c347202dfc64b6d5d978c3e47271f0 through [registration packet](../../../plans/ui-blueprint/packets/M01-acquisition-registration.md).
+- Authority source: ROADMAP D05/PLAN.UIB@1, root selection of45c2667649c347202dfc64b6d5d978c3e47271f0 through [registration packet](../../../plans/ui-blueprint/packets/M01-acquisition-registration.md); @2 reconciles the explicit user all-task-images rule via [M03 packet](../../../plans/ui-blueprint/packets/M03-popup-capture.md), delta D05-NATIVE-IMAGE-002.
 - Read when: Native AX/capture acquisition, copied values, response construction or Native helper qualification.
 - Do not read when: pure Rust H01/retained/allocator work without a Native acquisition dependency.
 - Requires: [D02@2](d02-boundaries.md), [D04@1](d04-identity.md), [NATIVE-PILOTS@1](../../acceptance/native-pilots.md), [NATIVE@1](../../product/native.md), [PRIVACY@1](../../product/privacy.md), [D06@1](d06-performance.md) and their explicit closure.
@@ -69,10 +69,10 @@ Foundation/ImageIO scratch is opaque even with stream sinks. No global Swift/SDK
 cap follows; Native limits neither enlarge nor substitute for common Rust quotas.
 Preserve parent capture lease until confirmed helper reap, independent AX/capture,
 local duration/watchdog and authoritative parent deadline/cleanup. One channel/helper.
-Artifacts require trusted caller-owned destination/retention, existing synthetic pixel
-policy, new0700 directory and exclusive/no-follow partial-file creation; promote only
-complete output without overwrite. Remove only own partial files on handled failure;
-parent owns leftovers after helper death. No real-user unmasked export permission.
+Artifacts require trusted caller-owned destination, existing synthetic pixel policy, new0700 directory and exclusive/no-follow creation.
+All task image staging/partial/final paths and containing directories remain in system temp, never agent-deleted, including failure/stale/helper death.
+Close descriptors/reap helpers; exclusively link only complete output without overwrite while retaining its original image path. Never advertise incomplete or stale image payload_ref.
+Non-image own partial cleanup remains; no unmasked real-user export.
 Private acquisition_limits config remains within the existing4032-byte Core envelope;
 no Control/schema/API change. Optional private acquisition_evidence permits bounded
 counter/code sidecars only when explicitly requested with trusted artifact_directory

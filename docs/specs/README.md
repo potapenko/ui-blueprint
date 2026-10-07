@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 16.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 17.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -66,9 +66,9 @@ and all implementation/platform/positive D06 gates remain protected.
 `H01-PROCESS-001` registers [D07@5](development/decisions/d07-reuse.md)'s exact libc
 OS-binding use at the host boundary from Core's root-accepted source/license request.
 Existing locked version/policies remain; registration does not accept unsafe/runtime proof.
-`D05-NATIVE-ACQUISITION-001` registers [D05@4](development/decisions/d05-limits.md) and
-[Native acquisition@1](development/decisions/d05-native-acquisition.md) under [root's ROADMAP/D05 selection](../plans/ui-blueprint/packets/M01-acquisition-registration.md) of45c2667.
+`D05-NATIVE-ACQUISITION-001` registers [D05@4](development/decisions/d05-limits.md) and [Native acquisition@1](development/decisions/d05-native-acquisition.md) under [root's ROADMAP/D05 selection](../plans/ui-blueprint/packets/M01-acquisition-registration.md) of45c2667.
 Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; common quotas/wire/permissions/F02/D06 and implementation/live gates remain unchanged.
+`D05-NATIVE-IMAGE-002`: [Native acquisition@2](development/decisions/d05-native-acquisition.md) reconciles explicit user system-temp/no-image-deletion authority via [M03 packet](../plans/ui-blueprint/packets/M03-popup-capture.md); staging/partial/final images remain, descriptors/helpers retire, incomplete/stale payloads stay unpublished. Non-image cleanup, quotas/privacy/wire/positive gates unchanged.
 
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.

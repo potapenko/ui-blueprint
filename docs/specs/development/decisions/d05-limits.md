@@ -10,7 +10,7 @@
   [LIFECYCLE@1](../../product/lifecycle.md), [CACHE@1](../../product/cache.md),
   [PERFORMANCE@1](../../acceptance/performance.md), [evidence](evidence.md),
   [D05-MEMORY@2](d05-memory.md), [D05-WORK@1](d05-working-memory.md) for host ownership/enforcement.
-- Conditional requires, Native acquisition only: [D05-NATIVE-ACQUISITION@1](d05-native-acquisition.md); pure Rust H01 does not inherit Swift scope.
+- Conditional requires, Native acquisition only: [D05-NATIVE-ACQUISITION@2](d05-native-acquisition.md); pure Rust H01 does not inherit Swift scope.
 - Owner/deadline: S01 sizing before W01/M01; W01/M01/P01 calibration before
   corresponding tests; K01 implements the established retention bounds.
 

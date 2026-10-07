@@ -1,7 +1,8 @@
 # Native acquisition limits — engineering proposal
 
-Status: **selected45c2667; profile registered as [UIB.D05-NATIVE-ACQUISITION@1](../specs/development/decisions/d05-native-acquisition.md)**
+Status: **selected45c2667; profile registered as [UIB.D05-NATIVE-ACQUISITION@2](../specs/development/decisions/d05-native-acquisition.md)**
 under [root's registration authority](../plans/ui-blueprint/packets/M01-acquisition-registration.md).
+Image ownership reconciled by explicit user all-task-images rule/[M03 packet](../plans/ui-blueprint/packets/M03-popup-capture.md); numerical profile unchanged.
 This document preserves the selected engineering proposal/provenance; the leaf is
 normative. Source implementation, SDK/H01 proof and live acceptance remain open.
 Original proposal packet: [M01-acquisition-plan](../plans/ui-blueprint/packets/M01-acquisition-plan.md),
@@ -118,9 +119,11 @@ Rust64MiB guard and must never be presented as a Swift/SDK/RSS cap.
    that checks `written + count` overflow/cap/deadline BEFORE copying/writing. Return0
    on refusal, latch failure and require successful Finalize plus unfailed writer.
    Promote only the finished owned file to capture.png without replacing an existing
-   destination; do not publish payload_ref to partial bytes. Remove only own partial
-   file on handled failure; parent owns leftovers after abrupt helper death. Metadata
-   uses a bounded codec sink within the sidecar cap. Encoder scratch is opaque.
+   destination via exclusive link while retaining the original image path. All task
+   staging/partial/final images and containing directories stay in system temp without
+   agent deletion, including failure/stale/helper death; never advertise incomplete or
+   stale payload_ref. Close descriptors/reap helpers; retain non-image own partial
+   cleanup. Metadata uses a bounded codec sink within the sidecar cap; scratch is opaque.
 
 Budget-limited attribute/action data becomes unknown with a bounded reason and
 partial coverage, not unsupported, redacted, empty or a misleading prefix. Node/
@@ -179,7 +182,8 @@ copy, batch/action refusal without truncation, unknown secure classification wit
 zero AXValue dispatch, duplicate/cyclic child budget and no prefix window binding,
 bounded stream failure with no emitted prefix, nonfinite/huge dimensions before
 capture callback, oversized returned image before encoder, PNG callback failure/
-short write/finalize refusal/no partial publication and own-file-only cleanup.
+short write/finalize refusal/no partial publication, retained staging/final images,
+non-image own-file-only cleanup and descriptor release.
 Use existing recorded canonical sample to check zero new unknown/lost properties,
 no changes to values/edges/coverage and the same Rust validator. Boundary inputs
 are synthetic, not SDK acquisition or new worst-case runtime measurements.

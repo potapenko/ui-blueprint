@@ -461,3 +461,31 @@ Operation non-image files/build/source removed after facts consumed; removal ver
 Historical evidence untouched. Lifecycle close/stale/fresh-positive facts established;
 post-Observe current identity residual and positive popup capture/full M03 remain open.
 Receipt-only checkpoint requires next short exact1 Git lease; no staging before grant.
+
+
+## D05-NATIVE-IMAGE-002 — image ownership reconciliation before capture source
+
+Mode Reconcile; explicit user all-task-images/system-temp/no-agent-deletion rule
+supersedes acquisition@1 partial-image removal. Root selected M03-popup-capture
+registration after saved CLI routingc4bc255, before any capture/writer source edit.
+Traversal: current AGENTS/product-truth change/routing → registry16 → previously
+read Native product/acceptance/D02/D04/D05 closure → acquisition@1. Current leaf,
+D05 conditional route/decisions registry and developer instructions read completely.
+CLI@6 changes the separate action route only; this packet preserves Observe behavior.
+
+Exact6 docs write set: d05-native-acquisition.md, spec README, decisions README,
+d05-limits.md, docs/development/native-acquisition.md and this receipt.
+Acquisition@2 changes only OWNERSHIP; registry17 records legitimate external authority.
+Retain system-temp image staging/partial/final paths and containing directories on
+success/failure/stale/helper death. Close descriptors/reap helpers; exclusive completed
+final link retains original image path. Never advertise incomplete/stale payload_ref.
+Non-image own partial cleanup remains. Unchanged: every numeric table/admission,
+Rust/common D05@4 policy, privacy/pixel policy, control/wire, complete-only publication,
+Native positive/D06 gates and unknown SDK costs. Historical @1 registration evidence
+remains historical. Compatibility: unreleased scoped image-artifact lifecycle delta,
+no canonical API/schema change or broader image export permission.
+
+Only docs registration now. Required root delta review before source implementation;
+no writer/capture/runtime changes, no images/generated evidence or source consumer
+acceptance claimed. Changed links, routing references,100-line leaves and whitespace
+checked. Docs-only checkpoint/push awaits short exact6 Git lease; staging untouched.
