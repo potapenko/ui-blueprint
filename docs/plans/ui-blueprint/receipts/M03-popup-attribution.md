@@ -237,3 +237,46 @@ Current operation temp uib-m03-direct-zj70a_xu retains the immediately needed fi
 cache for the authorized fresh diagnostic, then non-image cleanup. No image generated.
 Exact3 ready (Fixture.swift/fixtures README/this receipt); own whitespace/diff checked,
 index untouched. Helper/collector/capture unchanged; next runtime waits saved source.
+
+## Saved direct-window actual diagnostic — separate containing window observed
+
+Saved source d5fd03f1838b68e1e27d91e45e957557e3e7fd45 matched source56680081 and
+retained fixture5426fe13; reused binary, no additional compile/suite or helper/
+collector/capture changes. Own new PID18849/canonical bundle/run argument attributed
+within10s. Same current CUA A→Edge popup→fresh AX→explicit Snapshot shortcut.
+Fresh AX still showed Popup A/Confirm; a.json Snapshot1/state.popup=true.
+
+Actual popup_containing_window:
+status known, window_id9437, equals_parent=false, is_visible=true,
+source public_NSView_window_viewDidMoveToWindow,
+ownership own_fixture_content_attachment. Parent A window9430. Own public inventory
+was9430/a,9437/unknown,9440/_NS:8. Direct public attachment selects9437 by actual
+content ancestry, not inventory order/title/rectangle. Legacy scanner still unresolved.
+No separate-window assumption or shared-parent rename was needed for this diagnostic.
+
+Current AX showed exactly the existing popup owner/Confirm subtree, no exposed
+reader node. Source zero-size/non-hit/no first responder and weak/detach ownership
+sanity remains; no independent full layout/paint/hit/M05 invariance claim. Reader
+lifecycle did not publish UI data; only explicit Snapshot serialized the metadata.
+No automatic observation, source app, B capture, permission/display or pointer claim.
+No canonical popup binding/AX/positive capture was represented as accepted.
+
+Finally exact own fixture cleanup confirmed, elapsed51.7s/timeout=false within300s;
+LaunchServices parent owns reaping. Physical lane released. All current non-image
+cache/build/bundle/working files at uib-m03-direct-zj70a_xu removed after inline facts,
+absence verified. Image count0; images/containing dirs and old artifacts untouched.
+No active processes/index or next runtime/connector change.
+
+Exact next source adjustment: explicit Snapshot should use the weak current containing
+window, requiring popup still open/visible/current own attachment, to publish its real
+window ID and independent popup generation/current receipt. Distinct9437 may get
+nonvisual popup identifier; parent9430/a must remain unchanged. Remove title/marker
+window guessing as the authority. Keep current public process/CG owner checks and
+before/after generation guards. The current helper assumes popup in AXWindows; direct
+native attachment does not prove that enumeration. If actual AX source lists the
+popover under parent A (as current CUA shows), address the bounded exact AXPopover
+subtree/owner marker beneath the authorized parent instead of inventing AX→CG linkage.
+The own explicit content-window evidence supplies its independent native association.
+That connector must be assigned separately and qualified through CLI. Positive popup
+capture remains open, never parent-image substitution. One-path outcome receipt ready
+for short Git lease; no silent implementation of this next step.
