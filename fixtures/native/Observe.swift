@@ -50,6 +50,7 @@ struct OwnedCapture {
     let scale: Float
     let admissionWait: Double
 }
+enum CaptureAdmission { case legacyRun, parentOwned }
 @MainActor enum CaptureLifecycle {
     static func callback<Value>(stage: String, deadline: Double,
         begin: (@escaping @Sendable (Value?, (any Error)?) -> Void) -> Void) async throws -> Value {
@@ -80,34 +81,38 @@ struct OwnedCapture {
         guard fault == nil || fault == "stall" || fault == "failure" else { throw OwnedCaptureError.resourceUnavailable }
         return fault
     }
-    static func capture(windowID: UInt32, pid: Int32, budget: Double = 2) async throws -> OwnedCapture {
+    static func capture(windowID: UInt32, pid: Int32, budget: Double = 2,
+                        admission: CaptureAdmission = .legacyRun) async throws -> OwnedCapture {
         guard budget.isFinite && budget > 0 && budget <= 2 else { throw OwnedCaptureError.resourceUnavailable }
-        let fault = try validatedFault(ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"])
+        let fault = admission == .legacyRun ? try validatedFault(ProcessInfo.processInfo.environment["UIB_CAPTURE_FAULT"]) : nil
         if fault == nil { guard CGPreflightScreenCaptureAccess() else { throw OwnedCaptureError.permissionRequired } }
-        guard let path = ProcessInfo.processInfo.environment["UIB_CAPTURE_LOCK_PATH"], path.hasPrefix("/") else {
-            throw OwnedCaptureError.resourceUnavailable
-        }
         let begin = ProcessInfo.processInfo.systemUptime
         let deadline = begin + budget
-        let fd = open(path, O_RDWR | O_CREAT | O_CLOEXEC | O_NOFOLLOW, mode_t(0o600))
-        guard fd >= 0 else { throw OwnedCaptureError.resourceUnavailable }
-        var admitted = false
-        do {
-            while flock(fd, LOCK_EX | LOCK_NB) != 0 {
-                guard errno == EWOULDBLOCK else { throw OwnedCaptureError.resourceUnavailable }
-                try Task.checkCancellation()
-                guard ProcessInfo.processInfo.systemUptime < deadline else { throw OwnedCaptureError.timeout("capture_admission") }
-                try await Task.sleep(for: .milliseconds(5)) // bounded resource wait, no UI recollection
+        var fd: Int32 = -1
+        if admission == .legacyRun {
+            guard let path = ProcessInfo.processInfo.environment["UIB_CAPTURE_LOCK_PATH"], path.hasPrefix("/") else {
+                throw OwnedCaptureError.resourceUnavailable
             }
-            admitted = true
-            try Task.checkCancellation()
-        } catch { close(fd); throw error }
+            fd = open(path, O_RDWR | O_CREAT | O_CLOEXEC | O_NOFOLLOW, mode_t(0o600))
+            guard fd >= 0 else { throw OwnedCaptureError.resourceUnavailable }
+            do {
+                while flock(fd, LOCK_EX | LOCK_NB) != 0 {
+                    guard errno == EWOULDBLOCK else { throw OwnedCaptureError.resourceUnavailable }
+                    try Task.checkCancellation()
+                    guard ProcessInfo.processInfo.systemUptime < deadline else { throw OwnedCaptureError.timeout("capture_admission") }
+                    try await Task.sleep(for: .milliseconds(5)) // bounded resource wait, no UI recollection
+                }
+                try Task.checkCancellation()
+            } catch { close(fd); throw error }
+        }
         let admissionWait = ProcessInfo.processInfo.systemUptime - begin
         var completedPlatformCall = false
         defer {
             // On timeout/cancel the OS call may still run: keep the FD until this
             // owned one-shot helper exits/reaps. Never admit a replacement early.
-            if !admitted || completedPlatformCall { flock(fd, LOCK_UN); close(fd) }
+            if fd >= 0 && completedPlatformCall { flock(fd, LOCK_UN); close(fd) }
+            // parentOwned has no local lease/FD to release. The parent keeps its
+            // CaptureLease until this exact helper is confirmed reaped.
         }
         if fault == "stall" {
             let _: Int = try await callback(stage: "injected_capture_stall", deadline: deadline) { _ in }
