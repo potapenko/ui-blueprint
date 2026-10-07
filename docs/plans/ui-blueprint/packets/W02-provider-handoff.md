@@ -158,3 +158,12 @@ focused affected checks only, no live browser. Preserve current Setter/source an
 image retention rules; report compiling method signature promptly and save scoped
 source via Git lease. Same reviewer rechecks changed preparation boundary before
 live acceptance; prior provider review remains valid for its original scope.
+
+
+After saved preparation, finite source-only live-harness handoff is assigned to Web:
+reuse existing guarded-live.cjs/web_live patterns, identify exact disjoint harness
+paths to serve owned actions.html and exercise Observe→Prepare→Act→fresh checked
+verification plus stale/read-only/unknown/no-retry cases under existing caps.
+Classification diagnostic, same contracts; no edits/runtime/new framework/CLI/dirs
+in this handoff. Immediate consumer is actual guarded checkbox qualification after
+Core source and protected review. Core retains all production host/effect peer paths.

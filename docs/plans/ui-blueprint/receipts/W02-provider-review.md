@@ -18,3 +18,12 @@ facts and the existing entrypoints demand an already valid Resolution. Synthetic
 test inputs cannot establish those facts. Web/Core finite preparation follow-on
 addresses this explicit gap without lowering schema/kernel validation. Prior verdict
 accepts only the provider's canonical-valid input boundary; no live/fullB02 claim.
+
+
+Preparation1a8a6023249fcbabd6921b2390efe4782aef085c: same reviewer performed new
+source-first observation then receipt reconciliation; accept_with_residual, no
+findings. Fresh exact-ref capability evidence replaces untrusted Resolution, full
+ActionCase is validated/bounded and handles released; no permit/setter path exists.
+Later dispatch still re-resolves. Source hash matches;8 tests/Clippy/temp cleanup
+remain author-attributed. Actual host Prepare dispatch, aggregate deadline/output
+bounds, parent effect integration and live qualification remain separate.
