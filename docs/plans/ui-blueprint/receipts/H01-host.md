@@ -434,3 +434,69 @@ that earlier run is not attributed to the new pin. Helper source remains outside
 this two-path checkpoint. New source pin is returned in the terminal handoff.
 Exact2 paths: quota_allocator.rs and this H01-host receipt. No Integration source
 or other worker pins changed; saved-source recheck belongs to the affected proof.
+
+## Registered helper lifecycle stage — connected owner, composition still open
+
+Nonce6523052 and realloc forwarding00e282e are saved/pushed with their reported pins;
+Git leases released. Current helper source is connected, compiled and author-tested
+under D02.LIFECYCLE/PUBLICATION, D05-WORK.SUPERVISOR and MEMORY.LIFETIME. No product
+meaning/numeric limit/wire revision changed. Domain/helper/runtime modules own fixed
+slots and actual direct children, using unchanged Native process APIs.
+
+Registered helpers reserve one of two ingress/child slots before spawn; capture
+uses an independent domain-wide move-only claim. The returned child is checked
+before any I/O and Lost is retained/quarantined, not rolled back as spawn failure.
+Raw input/output stays in precharged bounded leases and is never parent-decoded.
+Taking raw bytes starts cleanup but does not release capture early. Runtime now
+tracks worker reap separately: session Grant/slot survives while any helper remains.
+Cancel/detach/shutdown close and terminate only registered owned processes; failed
+cleanup keeps owners/backing/claim. Known helper policy loss closes admission and
+preserves already ACKed worker frames. Worker deadline fatal attribution retains
+TimedOut rather than converting a valid deadline status into generic failure.
+
+Four new helper cases use the actual Darwin provider with non-UI Rust process_peer children:
+
+1. A capture owner and B AX owner coexist; second capture refuses, capture remains
+   reserved after terminate request until actual reap, held raw ingress survives
+   helper closure while independent slots progress; fixed parent inventory unchanged.
+2. An8-byte test ingress refuses a larger peer frame before growth; wrong-session
+   writes reject and truncated ingress cannot be taken as completed raw output.
+3. A wrapper delays helper reap confirmation100ms with explicit1ms cleanup bound;
+   actual worker reap occurs first, but root Grant/session remain until helper reap
+   is forwarded. This is injected confirmation delay, not an OS kill-failure claim.
+4. A10ms helper deadline cleans only that owned child; the Rust worker then completes
+   another canonical Validate request. No Native SDK, app, pixel or input operation.
+
+On the final allocator pin2f1bf278b9265855ececed61ccb5b3f2e1904f17b1855adb6d659782b241e50e,
+all16 outer runtime tests plus2 explicitly executed isolated R1 peer cases pass.
+Earlier helper proof on bfa9a61d is superseded by this affected final run, not silently
+attributed to a later source. Installed-worker fatal/reap, nonce, old R1 and lifecycle
+cases remain green. No unchanged Native process suite or Integration tests rerun.
+
+```sh
+cargo build --locked -p uiblueprint-host --example process_peer --example effect_peer
+cargo test --locked -p uiblueprint-host --test runtime -- --test-threads=1
+cargo clippy --locked -p uiblueprint-host --lib --bin session-worker --test runtime -- -D warnings
+cargo check --locked -p uiblueprint-host --lib --bin session-worker --test runtime
+rustfmt --edition 2024 --check --config skip_children=true crates/host/src/lib.rs crates/host/src/domain.rs crates/host/src/host_types.rs crates/host/src/supervisor.rs crates/host/src/helpers.rs crates/host/src/helper_runtime.rs crates/host/tests/runtime.rs crates/host/tests/support/helpers_host.rs
+```
+
+Consumer-ready ownership calls and limits are in docs/development/host.md. The
+specific remaining composition gap is preserved: parent reserve_input is Attached-
+only; worker_main::run and CanonicalSession::observe require preassembled Tape, and
+take_helper_bytes ends the helper. Active worker→parent request/reply and streaming
+AX-before-capture composition remain absent. Root has assigned Native a read-only
+source-grounded handoff for the actual framing/Target/scope/clock/redaction shape;
+Core will integrate that shape with guarded parsing and parent executable authority.
+These single-frame ownership tests are not proof of the later streaming composition.
+
+Exact10 paths for this helper checkpoint: crates/host/src/{lib,domain,host_types,
+supervisor,helpers,helper_runtime}.rs; crates/host/tests/runtime.rs;
+crates/host/tests/support/helpers_host.rs; docs/development/host.md; this receipt.
+No Cargo/allocator/other worker pins, Native/Web/Integration files staged. Hash set
+is nonce68 paths (the exact9424759 base64 plus its four named additions), plus
+helpers.rs/helper_runtime.rs/tests/support/helpers_host.rs; current bytes and same
+compact sorted JSON method. Source hash and saved equality follow the checkpoint
+handoff. Full H01/allocator/streaming/live/D06 acceptance remains open.
+
+Helper71 digest: `dc0be5f4a660193a381419d96c9d01014f943ba775e4462b0bfbf80c57d3df57`.

@@ -155,3 +155,53 @@ read-only/pre-permit cancel/deadline, same-Target exclusion, distinct-Target phy
 lane contention and post-permit cancellation with unknown effect. The unresolved
 fake physical call waits for parent cancellation/EOF; host/test deadlines own its
 bounded cleanup. No stability sleep or real input claim is used.
+
+## Registered helper owner and Native consumer handoff
+
+Current connected ownership API in src/helper_runtime.rs/host RuntimeHost:
+
+- spawn_helper(session, HelperKind::{ExternalSemantics,Capture}, trusted SpawnSpec,
+  parent Instant deadline) reserves one of two fixed ingress/child slots before
+  direct owned spawn. Parent owns executable authority; raw helper/UI data cannot
+  select a program/PID. Capture acquisition is exclusive across the domain; AX
+  admission is independent. This grants no platform permission or SDK capability.
+- write_helper(handle, &InputLease, offset) borrows already charged input from that
+  exact session and returns a bounded nonblocking Transfer. read_helper(handle)
+  reads only into that helper's fixed ingress up to the caller profile cap512KiB.
+  Stale session/helper generations and expired deadlines refuse further I/O.
+- take_helper_bytes moves the raw ingress lease to the caller and starts helper
+  termination. Bytes remain charged, may outlive helper/session cleanup and do not
+  borrow the whole RuntimeHost. They are unvalidated raw bytes, not a committed
+  canonical channel. close_helper starts owned cleanup without producing data.
+- next_event/shutdown drive HelperClosed/HelperCleanupPending and worker cleanup.
+  Capture lease survives terminate requests until actual helper reap. Session root
+  Grant survives Rust worker reap while any helper remains; final Closed/reuse waits
+  for all children. Lost owners quarantine, retain backing and stop admission.
+
+Domain holds the helper serial/capture claim; RuntimeState's precharged fixed worker
+inventory contains both helper owners. No parent growable request queue, JSON/graph
+parser or SDK allocation was added. Native ingress uses the already allocated
+separate slots; copied SDK strings, pixels and helper stacks remain an explicit
+external owner category for Native's later proof, not counted as free Rust memory.
+The existing process_peer used in tests is a non-UI resource stand-in; its use does
+not establish real Native SDK/capture behavior or helper RSS bounds.
+
+Current composition limit is exact: reserve_input requires Attached, and
+worker_main::run/CanonicalSession::observe consume a preassembled Tape of existing
+canonical documents. take_helper_bytes closes a helper, so it cannot yet transfer
+the first AX frame while the same AX+capture process remains active. No active-worker
+helper request/reply path exists, and this API is not ready-made live M01 composition.
+TargetLease binds trusted Target/generation; the actual guarded session validates
+SessionDescriptor scope/capabilities and owns the local clock returned by Attached.
+Parent does not infer that scope/clock from raw helper bytes. The future bounded
+broker must carry that validated worker context and original deadline, and return
+raw bounded frames to guarded parsing/normalization before canonical publication.
+Earlier AX must reach full parent commit/ACK before capture's next risky step.
+Native's source-grounded handoff supplies existing framing/binding/redaction shape;
+no replacement generic graph protocol or new public completion JSON is selected.
+
+Core owns helpers.rs/helper_runtime.rs, domain/host_types/supervisor wiring, private
+worker composition and its tests. Native process.rs/process/**, process tests/peer
+remain protected; Integration owns allocator/hostile proof files. Current allocator
+pin is2f1bf278…41e50e; other three worker pins remain unchanged pending the exact
+broker handoff. No UI/SDK/input or live acceptance is claimed by this stage.

@@ -88,6 +88,12 @@ impl HostCompletion<'_> {
 pub enum HostEvent<'a> {
     Pending,
     ShutdownComplete,
+    HelperClosed {
+        helper: crate::helpers::HelperHandle<'a>,
+    },
+    HelperCleanupPending {
+        helper: crate::helpers::HelperHandle<'a>,
+    },
     Attached {
         session: SessionHandle<'a>,
         clock: FixedId,

@@ -9,6 +9,8 @@ pub mod domain;
 #[cfg(unix)]
 mod effects;
 #[cfg(unix)]
+pub mod helpers;
+#[cfg(unix)]
 pub mod host_types;
 pub mod limits;
 #[cfg(target_os = "macos")]

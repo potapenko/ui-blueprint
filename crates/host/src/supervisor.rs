@@ -10,6 +10,9 @@ use crate::{
     worker_config::{MAX_CONFIG_BYTES, WorkerConfig},
     *,
 };
+#[path = "helper_runtime.rs"]
+mod helper_runtime;
+
 use std::{
     mem::{forget, size_of},
     time::{Duration, Instant},
@@ -55,6 +58,8 @@ struct Worker<'a, C: OwnedProcess> {
     ready: bool,
     ownership_lost: bool,
     mutation: Option<MutationLease<'a>>,
+    helpers: [Option<crate::helpers::Helper<'a, C>>; crate::limits::HELPERS],
+    worker_reaped: bool,
 }
 struct RuntimeState<'a, P: ProcessPlatform> {
     platform: P,
@@ -207,6 +212,8 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             ready: false,
             ownership_lost,
             mutation: None,
+            helpers: std::array::from_fn(|_| None),
+            worker_reaped: false,
         });
         if ownership_lost {
             let worker = state.workers[session.slot]
@@ -337,6 +344,9 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             for worker in self.state[0].workers.iter_mut().flatten() {
                 worker.child.close_input();
                 worker.reservation.quarantine();
+                for helper in worker.helpers.iter_mut().flatten() {
+                    helper.policy_lost();
+                }
             }
             for worker in self.state[0].workers.iter_mut().flatten() {
                 if worker.active.is_some() {
@@ -356,6 +366,12 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             let Some(worker) = self.state[0].workers[index].as_mut() else {
                 continue;
             };
+            if let Some(terminal) = worker.pending_terminal.take() {
+                return Ok(HostEvent::Complete(take_completion(worker, terminal)));
+            }
+            if let Some(event) = helper_runtime::poll_helpers(worker, now) {
+                return Ok(event);
+            }
             if worker.ownership_lost {
                 if !worker.quarantine_reported {
                     worker.quarantine_reported = true;
@@ -364,9 +380,6 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                     });
                 }
                 continue;
-            }
-            if let Some(terminal) = worker.pending_terminal.take() {
-                return Ok(HostEvent::Complete(take_completion(worker, terminal)));
             }
             if let Some(active) = &worker.active
                 && now >= active.deadline
@@ -380,15 +393,24 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 return Ok(HostEvent::Complete(event));
             }
             if worker.cleanup_deadline.is_some() {
-                match worker.child.try_reap() {
-                    Ok(ProcessState::Exited { .. } | ProcessState::Signaled { .. }) => {
-                        let handle = worker.reservation.handle();
-                        worker.reservation.child_reaped();
-                        self.state[0].workers[index] = None;
-                        return Ok(HostEvent::Closed { session: handle });
+                if !worker.worker_reaped {
+                    match worker.child.try_reap() {
+                        Ok(ProcessState::Exited { .. } | ProcessState::Signaled { .. }) => {
+                            worker.worker_reaped = true
+                        }
+                        Err(_) => {
+                            worker.ownership_lost = true;
+                            worker.reservation.quarantine();
+                            self.domain.abandoned.set(true);
+                        }
+                        _ => (),
                     }
-                    Err(_) => worker.reservation.quarantine(),
-                    _ => (),
+                }
+                if worker.worker_reaped && worker.helpers.iter().all(Option::is_none) {
+                    let handle = worker.reservation.handle();
+                    worker.reservation.child_reaped();
+                    self.state[0].workers[index] = None;
+                    return Ok(HostEvent::Closed { session: handle });
                 }
                 if worker
                     .cleanup_deadline
@@ -419,10 +441,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                             now,
                         )));
                     }
-                    worker.child.close_input();
-                    let _ = worker.child.terminate();
-                    worker.cleanup_deadline =
-                        now.checked_add(Duration::from_millis(self.domain.limits.cleanup_ms));
+                    begin_cleanup(worker, self.domain.limits.cleanup_ms, now);
                 }
             }
         }
@@ -464,10 +483,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 Instant::now(),
             )));
         }
-        worker.child.close_input();
-        worker.child.terminate()?;
-        worker.cleanup_deadline =
-            Instant::now().checked_add(Duration::from_millis(self.domain.limits.cleanup_ms));
+        begin_cleanup(worker, self.domain.limits.cleanup_ms, Instant::now());
         Ok(None)
     }
     /// Initiate bounded cleanup and return terminal results one at a time.
@@ -480,12 +496,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         let now = Instant::now();
         for worker in self.state[0].workers.iter_mut().flatten() {
             if worker.cleanup_deadline.is_none() {
-                worker.input = None;
-                worker.stage = TxStage::Idle;
-                worker.child.close_input();
-                let _ = worker.child.terminate();
-                worker.cleanup_deadline =
-                    now.checked_add(Duration::from_millis(self.domain.limits.cleanup_ms));
+                begin_cleanup(worker, self.domain.limits.cleanup_ms, now);
                 if worker.active.is_some() {
                     worker.pending_terminal = Some(Terminal::Cancelled);
                 }
@@ -510,6 +521,9 @@ impl<P: ProcessPlatform + 'static> Drop for RuntimeHost<'_, P> {
         }
         for worker in self.state[0].workers.iter_mut().flatten() {
             worker.child.close_input();
+            for helper in worker.helpers.iter_mut().flatten() {
+                helper.policy_lost();
+            }
         }
         if self.state[0].workers.iter().any(Option::is_some) {
             self.domain.abandoned.set(true);
@@ -563,17 +577,32 @@ fn terminalize<'a, C: OwnedProcess>(
         .active
         .take()
         .expect("terminalize called only for an active operation");
-    worker.input = None;
-    worker.stage = TxStage::Idle;
-    worker.child.close_input();
-    let _ = worker.child.terminate();
-    worker.cleanup_deadline = now.checked_add(Duration::from_millis(cleanup_ms));
+    begin_cleanup(worker, cleanup_ms, now);
     HostCompletion {
         operation: active.handle,
         class: active.class,
         terminal,
         effect: active.effect,
         frames: active.publish.map(Publication::finish),
+    }
+}
+fn begin_cleanup<C: OwnedProcess>(worker: &mut Worker<'_, C>, cleanup_ms: u64, now: Instant) {
+    worker.input = None;
+    worker.stage = TxStage::Idle;
+    worker.child.close_input();
+    for helper in worker.helpers.iter_mut().flatten() {
+        helper.stop(now);
+    }
+    if worker.cleanup_deadline.is_none() {
+        if !worker.worker_reaped
+            && !worker.ownership_lost
+            && worker.child.terminate() == Err(HostError::CleanupPending)
+        {
+            worker.ownership_lost = true;
+            worker.reservation.quarantine();
+            worker.reservation.domain.abandoned.set(true);
+        }
+        worker.cleanup_deadline = now.checked_add(Duration::from_millis(cleanup_ms));
     }
 }
 fn written<C: OwnedProcess>(worker: &mut Worker<'_, C>, bytes: &[u8]) -> Result<usize, HostError> {
@@ -616,7 +645,11 @@ fn pump<'a, C: OwnedProcess>(
             };
             return Ok(Some(HostEvent::Complete(terminalize(
                 worker,
-                Terminal::Failed(error),
+                if fatal.value == 6 {
+                    Terminal::TimedOut
+                } else {
+                    Terminal::Failed(error)
+                },
                 cleanup_ms,
                 now,
             ))));

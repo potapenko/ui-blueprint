@@ -216,3 +216,6 @@ mod lifecycle;
 
 #[path = "support/effects_host.rs"]
 mod effects;
+
+#[path = "support/helpers_host.rs"]
+mod helpers;
