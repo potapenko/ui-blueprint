@@ -735,3 +735,49 @@ Existing broad suites are not repeated for this proof-only addition.
 Exact3 checkpoint paths: crates/host/tests/runtime.rs,
 crates/host/tests/support/native_deadline.rs and this receipt. Native's c0abcff protocol
 and Web/Integration ownership remain protected. Full provider/live acceptance stays open.
+
+## Parent setup inventory and steady-path allocation observation
+
+Root explicitly continued the original H01 proof scope after Web hold release and
+producer source acceptance419b75c. That review is attributed only to its scoped
+source connection/precharge observation; it is not full inventory/runtime acceptance.
+Immediate consumer of this new evidence is D05-WORK.SUPERVISOR before live producer
+qualification. Source/contracts remain c0abcff for the measured production path.
+
+New standalone test target parent_allocations.rs uses an allocation observer only
+in its own integration-test executable. It forwards valid unchanged pointers/layouts
+to System and records fixed atomics for the selected parent thread; other harness
+threads/worker processes are excluded. It does not enforce quotas or replace the
+production worker guard. A real64-byte positive control is observable through
+black_box. No callback allocates, formats, locks or unwinds.
+
+The concrete owner map in host.md covers reported HostDomain/DomainInner/pools,
+RuntimeHost/RuntimeState/Worker/helper/native-binding storage and borrowed/moved
+leases. Actual setup observation:14 allocation requests,9,497,696 requested bytes,
+plus56 inline root bytes =9,497,752 reported parent bytes. Payload backing9,437,184,
+heap control backing60,512. These are the explicit two-worker/two-group fixture
+values, not new defaults or universal amplification/RSS bounds. Distinct retained
+reservation accounting is not added a second time.
+
+Zero subsequent Rust allocation requests/bytes observed on each measured parent
+path: attach/clock framing; ordinary query + ACK/release; registered Native request/
+reply + canonical ACK; B attach/query with A completion retained; full-group admission
+refusal; lease release and confirmed child/helper shutdown. Host owned bytes stayed
+unchanged. The native helper is the existing finite non-UI peer, not SDK/live proof.
+
+First attempt stopped before the measured paths because the required native_peer
+binary was absent in the current target directory. Built that real prerequisite,
+then the test passed; no production failure or hidden skipped case is claimed.
+Commands passed: cargo build --locked -p uiblueprint-host --example native_peer
+--bin session-worker; cargo test --locked -p uiblueprint-host --test parent_allocations
+-- --test-threads=1 --nocapture; cargo clippy --locked -p uiblueprint-host --test
+parent_allocations -- -D warnings; scoped rustfmt/link/diff checks. Raw output was
+not persisted. Setup comparison and finite no-growth observation complement, never
+replace, source owner accounting. Static image/transient stack/C/OS/SDK/RSS and
+unexercised paths are outside this observer claim.
+
+Exact3-path checkpoint: crates/host/tests/parent_allocations.rs,
+docs/development/host.md and this receipt. No production/shared provider, Native,
+Web or Integration source changes. The parallel rejection-proof source hold remains
+intact. Parent-death/watchdog remains a separately named proof requirement; existing
+input-EOF/owned-reap cases are not relabelled as actual parent-process death.

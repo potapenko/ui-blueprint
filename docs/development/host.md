@@ -343,3 +343,44 @@ no Native binding or pre-collected replies are required. Caller sets Request clo
 from Attached. Defaults do not enable Web, and no source/provider code is duplicated.
 These shared hooks compile; Web's owned peer/runtime proof and later browser/live
 qualification remain separate. The module/config/tests belong to the Web owner.
+
+## Parent inventory map and finite allocation observation
+
+D05's managed parent inventory is the explicit owner graph below. It is not a
+measurement-derived multiplier or a cap on the containing application's RSS.
+
+| Owner | Accounted storage / lifetime |
+| --- | --- |
+| HostDomain | Inline Vec handle once + actual Vec<DomainInner> backing capacity; retained on uncertain teardown |
+| DomainInner | Inline limits/platform identity, real fixed QuotaLedger, ParentBuffers headers, four slot/target records, epochs/effect lanes/helper serial/capture claim/reaping state |
+| ParentBuffers | Fixed36 Vec headers and8 group cells inside DomainInner; actual configured input/ingress/output Vec capacities added once, including vacant backing |
+| RuntimeHost | Inline domain reference/Vec handle once + actual Vec<RuntimeState> backing capacity |
+| RuntimeState | Stateless Darwin provider, fixed SpawnSpec, four Worker records, shutdown state, four fixed native bindings and RuntimeRoot charge |
+| Worker and Helper records | All fixed config/control/fatal headers, offsets, deadlines, correlated handles, direct Darwin child/FD owners, two helper owners and bounded NativeBroker state inline in RuntimeState |
+| Native bindings | Fixed executable/configuration arrays inline, even while vacant; no argv/env/JSON owner grows during dispatch |
+| Input/ingress/result leases | Borrow/move existing pool backing. Helper raw bytes and published canonical bytes occupy distinct already charged slots; returned leases keep their owners live |
+
+The ledger's192-byte root appears in both parent layout accounting and the distinct
+retained-reservation metric; those metrics must not be summed as independent memory.
+Static process ownership flags have fixed binary storage with no data-dependent
+backing. The allocation observation does not measure binary/static image, transient
+stack beyond reported inline roots, System-internal rounding/bookkeeping, C/OS spawn
+or socket storage, helper/SDK/pixel memory, or another caller's allocations.
+
+A separate test executable installs a transparent System-forwarding allocation
+OBSERVER, never the production quota guard. Fixed atomics count only the selected
+parent test thread; worker processes retain their real independent GlobalAlloc.
+An observable64-byte positive control confirms the observer detects real storage.
+On the declared two-worker/two-completion-group profile, setup reports9,497,752 bytes:
+9,437,184 payload backing +60,512 heap control backing +56 inline root bytes. The
+observer independently saw14 requests totalling9,497,696 bytes, exactly matching
+reported inventory after adding those inline roots.
+
+With setup complete, attach/clock framing, a normal request/ACK/release, actual
+Native private exchange, a held completion while B advances, saturation refusal
+and confirmed shutdown each produced zero additional Rust allocation requests on
+that parent thread. Source ownership establishes the bound; this finite runtime
+observation tests those named paths only. It does not prove every future path or
+close platform/live/SDK/D06 gates. The independent producer review419b75c accepted
+its scoped source connection and RuntimeState/native-binding precharge participation;
+it was not a standalone complete inventory/steady-state/runtime H01 verdict.
