@@ -14,8 +14,12 @@ No source-app/fixture modification, new backend, schema or expected-value change
 One finite operation, own A windows only, sequential off and on runs. Native owns
 physical input/focus during setup/actions. Use existing Compare→Snapshot to match
 expanded content/count/window size/position and focus. Establish and check actual
-app_active/key/main=true before and after each acquisition; unmatched intervals
-are not-comparable, not accepted. Do not retry indefinitely to hunt a matching pair.
+app_active/key/main states before and after each acquisition and require equal
+stable states across the pair; they need not all be true for AX/layout comparison.
+The original true-only precondition was root's overconstraint, not D05/NATIVE intent.
+Unmatched intervals are not-comparable, not accepted. Do not retry indefinitely
+to hunt a matching pair. Hit actions separately need confirmed actual target/input
+ownership; inactive geometry evidence alone is not hit proof.
 Fresh identity/manifest each request; no reuse of historical live refs.
 
 Use current bounded AX/fixture measures to compare roles/names/requested states,
