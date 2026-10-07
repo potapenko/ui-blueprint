@@ -372,3 +372,37 @@ tests/runtime.rs; tests/support/{effects_host,effect_peer}.rs; docs/development/
 this receipt. No Integration test/probe, Native, Web or root coordination files stage.
 Next Core dependency-ready work is registered helper/capture ownership and remaining
 strict lifecycle/late-control proof. Full H01/allocator/live/D06 acceptance remains open.
+
+## Private System-forwarding seam handoff
+
+Both prerequisite saves completed: Integration731a5248c6f43adf8f990d346fa321d861a402d7
+and Core6523052114a92c7262c29353ca2e6ce3311082a6 (saved68 matched checked bytes;
+index/Git lease released). Root's a6c1209 amendment now authorizes the private seam
+needed by Integration's controlled-null proof of D05-WORK.GUARD. No public API,
+runtime request flag, dependency, limits, existing pointer/layout or fatal semantics
+change. Source change is confined to quota_allocator.rs.
+
+The actual production alloc/alloc_zeroed methods share executable-private
+`pub(super) unsafe fn allocate_with(layout: Layout, forward: unsafe fn(Layout) -> *mut u8) -> *mut u8`.
+Shipping always passes the fixed System alloc/alloc_zeroed forwarding functions.
+The shared path precharges, calls the forwarder once, releases charge on null and
+uses the existing fixed System fatal. Dealloc/realloc remain unchanged. Safety
+contract requires a valid nonzero layout and matching GlobalAlloc backend behavior,
+no unwind/guard recursion or added logging/locks. No library/public test API exists.
+
+The test-only probe includes this same source and may call allocate_with with its
+bounded null-on-one-small-request callback, otherwise forwarding to System. That is
+controlled fault injection, not actual OS-memory exhaustion. Integration owns the
+callback/test edits and new runtime evidence; Core has not claimed a null test ran.
+New source SHA256 bfa9a61d97668849b412a4649b3a76806b6788d6c23ca4da394c8cd7a859d9aa.
+The other three worker pins and host Cargo9a3f1409…5854d9 remain unchanged.
+
+Core checks passed: cargo check --locked -p uiblueprint-host --bin session-worker
+--example allocator_probe; cargo clippy --locked -p uiblueprint-host --bin
+session-worker -- -D warnings; cargo test --locked -p uiblueprint-host --test runtime
+real_quota_fatal_during_fixed_buffer_setup_keeps_parent_alive_and_reaps -- --exact.
+The last command proves the installed worker's existing real quota/fatal/reap path
+on this change. Integration rechecks only affected method-level cases and new null
+case after saved-input handoff. Scoped rustfmt/diff check pass. Helper WIP remains
+unconnected/unverified and excluded; no Integration source is staged by Core.
+Exact2-path checkpoint: crates/host/src/quota_allocator.rs and this receipt.

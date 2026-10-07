@@ -73,29 +73,49 @@ fn release(bytes: usize) {
         fatal(FatalReason::Invariant, bytes as u64);
     }
 }
+// Exact System forwarding is fixed by the shipping GlobalAlloc methods below.
+unsafe fn system_alloc(layout: Layout) -> *mut u8 {
+    // SAFETY: forwarded caller layout satisfies GlobalAlloc::alloc requirements.
+    unsafe { System.alloc(layout) }
+}
+unsafe fn system_alloc_zeroed(layout: Layout) -> *mut u8 {
+    // SAFETY: same valid layout, with zeroing supplied by System.
+    unsafe { System.alloc_zeroed(layout) }
+}
+/// Shared allocation/zeroed charging and null handling, private to the executable.
+/// The disposable probe may supply a bounded null-returning forwarder; shipping
+/// callers always select one of the two exact System functions above.
+///
+/// # Safety
+/// Layout is valid and nonzero. The forwarder must obey the corresponding
+/// GlobalAlloc contract (including zeroing when required), return null or valid
+/// storage of this exact layout, and never unwind, log, lock or recursively call
+/// the global allocator. A nonnull result is owned by the caller exactly once.
+pub(super) unsafe fn allocate_with(
+    layout: Layout,
+    forward: unsafe fn(Layout) -> *mut u8,
+) -> *mut u8 {
+    reserve(layout.size());
+    // SAFETY: callback contract and original valid layout are the caller's
+    // obligations. Charging occurs before this single forwarding operation.
+    let pointer = unsafe { forward(layout) };
+    if pointer.is_null() {
+        release(layout.size());
+        fatal(FatalReason::System, layout.size() as u64);
+    }
+    pointer
+}
 // SAFETY: each operation receives valid GlobalAlloc inputs from Rust. The exact
 // pointer/alignment/layout goes unchanged to System. Failed reservations never
 // reach System; counters are atomic and no callback unwinds or allocates.
 unsafe impl GlobalAlloc for GuardedAllocator {
     unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        reserve(layout.size());
-        // SAFETY: forwarding the caller's valid allocation layout unchanged.
-        let pointer = unsafe { System.alloc(layout) };
-        if pointer.is_null() {
-            release(layout.size());
-            fatal(FatalReason::System, layout.size() as u64);
-        }
-        pointer
+        // SAFETY: valid caller layout and fixed non-recursive System forwarder.
+        unsafe { allocate_with(layout, system_alloc) }
     }
     unsafe fn alloc_zeroed(&self, layout: Layout) -> *mut u8 {
-        reserve(layout.size());
-        // SAFETY: same valid layout; System supplies the requested zeroing.
-        let pointer = unsafe { System.alloc_zeroed(layout) };
-        if pointer.is_null() {
-            release(layout.size());
-            fatal(FatalReason::System, layout.size() as u64);
-        }
-        pointer
+        // SAFETY: valid caller layout and fixed zeroing System forwarder.
+        unsafe { allocate_with(layout, system_alloc_zeroed) }
     }
     unsafe fn dealloc(&self, pointer: *mut u8, layout: Layout) {
         // SAFETY: caller owns this allocation and provides its original layout.
