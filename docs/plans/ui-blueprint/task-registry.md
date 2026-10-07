@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | H01-PROCESS-R1 accepted atbf67c98. Core confirmed short allocator-proof input barrier: host Cargo/lib/quota/limits/protocol/process API/provider sources and quota_allocator.rs stable; Integration runs four small probes then releases, recheck within3min. Host Cargo working hash9a3f1409…5854d9 includes actual allocator_probe and compiling effect_peer hooks. Core disjoint docs/helper preparation and Web bootstrap continue. No worker Git grants; desktop released, B pixels stopped |
+| Активные чаты/пакеты/ресурсы | H01-PROCESS-R1 accepted atbf67c98. Integration reports4/4 small probes,0 skipped, children reaped and16 input equalityb17be48b…53bd5b; named barrier explicitly released. Initial probe/test checkpoint precedes Core ready10-path nonce/Cargo save; helper files stay outside that checked set. Host Cargo working9a3f1409…5854d9. Web bootstrap active. No worker Git grants; desktop released, B pixels stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Receive four small-probe results and release short barrier; save Integration tests and coherent Core hook/source via serialized checkpoints. System-null private seam proposal remains unimplemented and distinct from direct fatal(System) status test. Then guarded hostile/RuntimeHost cases on agreed saved inputs; Core helper/nonce and Web bootstrap continue. Full H01/live/D06/RC05 and delivery remain open |
+| Следующий шаг | Save initial Integration probe/test result and Core nonce/Cargo stage in order. After those checkpoints, Core may add the narrowly authorized private controlled-null seam; Integration verifies its true null-handling branch with updated pins. Guarded hostile/RuntimeHost cases need agreed saved inputs; Core helpers and Web bootstrap continue. Full H01/live/D06/RC05 and delivery remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение

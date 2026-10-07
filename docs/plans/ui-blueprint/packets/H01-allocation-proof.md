@@ -56,6 +56,19 @@ probe and affected compilation/execution. A direct fatal(System) invocation prov
 only status/exit, not actual System allocation failure; that distinct gap remains
 open unless a safe bounded failure mechanism is demonstrated.
 
+After the initial four-case checkpoint and Core's coherent nonce/Cargo checkpoint,
+root authorizes Core's narrow private System-forwarding factoring in quota_allocator.rs
+for a test-only bounded backend that returns null on one explicit small allocation
+and otherwise delegates to System. This selects Integration's concrete proposal to
+prove the existing D05-WORK.GUARD null-handling branch; no product behavior changes.
+Shipping always forwards to System with the same valid pointer/layout and accounting
+invariants. No public test API, runtime request mode, dependency, global handler or
+allocation/logging/lock in fatal handling may be introduced. Core returns the exact
+private test seam and new source hash; Integration updates only its owned probe/tests.
+The old allocator pin applies until that handoff. Recheck affected real guard cases
+on the new saved input; injected-null proof must remain labelled fault injection,
+never evidence of actual OS exhaustion. No huge real or virtual allocations.
+
 Reuse session-worker/SpawnSpec and real HostDomain/RuntimeHost entrypoints listed
 in Core's handoff, OutputRequest and Tape::encode for canonical documents. A small
 test-only executable may include the existing allocator source to exercise its
