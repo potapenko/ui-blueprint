@@ -1,13 +1,13 @@
 # H01 bounded host — implementation in progress
 
-Norms: [D02@2](../specs/development/decisions/d02-boundaries.md), [D05@3](../specs/development/decisions/d05-limits.md), [D05-MEMORY@2](../specs/development/decisions/d05-memory.md), [D05-WORK@1](../specs/development/decisions/d05-working-memory.md). Source handoff: [reviewed working-memory design](working-memory.md). This foundation is real code, but is not a completed host/worker, allocation guard or live acceptance.
+Norms: [D02@2](../specs/development/decisions/d02-boundaries.md), [D05@3](../specs/development/decisions/d05-limits.md), [D05-MEMORY@2](../specs/development/decisions/d05-memory.md), [D05-WORK@1](../specs/development/decisions/d05-working-memory.md). Source handoff: [reviewed working-memory design](working-memory.md). The connected runtime and guarded worker now execute canonical requests. H01 failure coverage and live acceptance remain incomplete.
 
 ## Working foundation
 
 `uiblueprint-host` statically depends on the existing schema/engine/plugin API and approved serde/json. No dependency versions/features changed. The narrow approved libc0.2.190 binding is available on Unix; no framework or new registry version was introduced.
 `HostLimits` requires explicit values within D05 ceilings, including ordinary/publication split, root retained partition, fixed parent/input/ingress/result/control budgets and stack/cleanup bounds. No Default or measured amplification multiplier. Worker ordinary admission cannot exceed63MiB even when a caller selects a smaller publication reserve.
 `ParentBuffers::new(limits, other_fixed_roots)` uses fallible fixed setup, counts actual root/backing capacities and drops partial construction on failure. Inputs, two separate ingress slots per worker and three output slots per completion group are disjoint fixed owners. ByteLease exposes only bounded slices/length and cannot grow a Vec. Exclusive borrows cover individual slots, not the entire host: a held output lease leaves another worker's input available. Logical bytes are cleared on release/reuse; this is not a forensic zeroization/RSS claim.
-`other_fixed_roots` is an explicit inventory charge, NOT evidence that unimplemented supervisor/process owners are already closed. RuntimeHost must supply its actual complete control/spawn/lifecycle inventory before children. Completion-group admission, publication state machine and process ownership are still being implemented.
+`other_fixed_roots` is an explicit inventory charge, NOT evidence that unimplemented supervisor/process owners are already closed. RuntimeHost must supply its actual complete control/spawn/lifecycle inventory before children. RuntimeHost now charges its fixed Vec root, SpawnSpec, worker/config/control/input/publication handles and actual platform owner inline layout before spawning; helper ownership is still pending.
 `Control` is a fixed64-byte private record: magic/version, closed kind/class, result slot, flags, epoch/operation and three numeric values. Encoding/decoding allocates nothing; invalid magic/reserved bytes/tags/slot reject. Body bytes are opaque. Message-specific state/flags, partial frame/commit/ACK and terminal/late checks belong to the supervisor; `matches` alone is not publication proof.
 
 ## Compiling platform API handoff
@@ -51,5 +51,51 @@ The approved WorkerPlatform::watchdog_stack_request extension computes a checked
 creation request only. Native measured main8,372,224 and watchdog1,044,480 bytes
 below unchanged8MiB/1MiB ceilings in its peer; real Core watchdog must independently
 query its created thread before untrusted work. See [process handoff](host-process.md).
-Core's authority/domain/worker/allocator sources remain unconnected WIP; they are
-not included in this stage's compile/runtime proof. Full H01 remains unfinished.
+The next connected stage below supersedes the unconnected-WIP status. The stage-B
+checks above still establish only their original safe publication/counter scope.
+
+## Connected runtime and parent lifetime integration
+
+HostDomain acquires one process-wide, non-cloneable ParentReapingLease through the
+actual ProcessPlatform::validate_parent_reaping predicate. RuntimeHost uses the same
+platform type. No signal handler is installed or changed. Detected policy drift
+permanently closes admission, quarantines live slots, transfers already ACKed bytes
+to callers and retains the real parent grants. Failed destruction intentionally
+retains the stable domain/runtime backing and the global claim. It never declares
+uncertain resources released. Normal shutdown returns completions and reaps before
+reusing slots; callers should drain it explicitly. Dropping the host discards any
+uncollected completions as part of owner destruction, while caller-held completions
+remain valid and charged. Retained reservation includes the root ledger's192 bytes.
+
+Embedding callers must continuously preserve default SIGCHLD without auto-reap or
+custom handlers and exclusive managed-child reaping until complete cleanup. Local
+checks cannot atomically defend against arbitrary racing same-process native code.
+Native's own boundary checks remain necessary. No same-user security sandbox claim.
+
+The macOS session-worker executable alone installs GuardedAllocator. It precharges
+requested layouts, keeps old+full-new realloc layouts charged across System, and
+uses fixed fatal status/_exit. The actual watchdog checks its measured stack extent
+before canonical input and joins before inherited FD owners drop on normal/error
+unwind. Watchdog EOF/deadline work never collects UI. Main and watchdog ceilings
+remain8MiB/1MiB; initial bootstrap guard1MiB, then trusted configured limits.
+
+Worker code calls canonical core0.1/analysis0.2 decoders, engine computation/result
+verification, CacheStore/replay and ObservationSession. The private Tape codec only
+segments existing canonical documents into bounded input bytes. Parent code never
+parses graph/JSON. Actual adapter collection, helper registration/capture ownership
+and fake action delivery/nonce remain incomplete; Mutation currently refuses, and
+no external input is delivered. Connected Validate and malformed-input paths have
+runtime proof; other canonical paths are compiled but await operation-specific proof.
+
+Scoped tests prove two reusable sessions, a held completion during independent
+progress, invalid-input refusal, real small setup quota fatal and confirmed reap.
+An isolated signal-policy peer forwards to real Darwin process/predicate code,
+pauses output reads after ACK solely for deterministic drift injection, and verifies
+quarantine, retained grants, preserved bytes, stopped admission and no further
+kill/wait. It restores only its own policy and independently reaps its sole worker
+after EOF. The operator/test-runner signal policy is untouched. Independent R1
+consumer review remains pending; Native-only acceptance is not full H01 acceptance.
+
+Hostile parser families, full realloc/System/invariant/fault-phase proofs, deadline/
+late-frame/cancel matrix, helpers, nonce and complete D06/live gates remain open.
+No unchanged Native tests were rerun; see the current [receipt](../plans/ui-blueprint/receipts/H01-host.md).

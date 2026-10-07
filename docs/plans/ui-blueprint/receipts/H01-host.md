@@ -120,3 +120,101 @@ HostDomain/RuntimeHost policy lease, poison/quarantine and ACKed-result propagat
 remain Core's next connected proof; this handoff alone does not close R1/full H01.
 Embedding must continuously preserve supported SIGCHLD/exclusive reaping; the query
 is not atomic protection against arbitrary same-process native interference.
+
+## Connected stage C — actual runtime/worker and R1 consumer candidate
+
+Restore basis retained: registry10 → product/decision routes → D02@2 CONTENT/
+WORKER/PUBLICATION/LIFECYCLE, D05@3, MEMORY@2, WORK@1 and the H01 packet's full
+pinned closure; RUST/DEV.RUST@2. Recovery reread current instructions, H01 and reaping
+repair amendment, critical D02/D05 ownership clauses. No semantic revision delta.
+Root's latest explicit continuation released the shared-input barrier; Native
+source remains frozen. Native54da088/APIb22b05a source-only recheck4e76832 accepts
+that scoped provider with residual; it does not accept this new consumer.
+
+Connected12 new source modules plus lib/Cargo wiring, two test files and host docs.
+HostDomain/RuntimeHost now own real root grants, process-wide reaping claim, fixed
+buffers/controls and actual Darwin children. session-worker installs the guarded
+GlobalAlloc, actual verified-stack watchdog and canonical library consumers.
+A normal request preserves exact validated canonical bytes through frame/commit/ACK;
+malformed input returns failure without worker replacement. Two sessions advance
+while the caller retains a completion. Root grant is released only after reap.
+No Web/Native implementation, core/analysis schema or dependency version changed.
+
+R1 proof uses an isolated test process, not the operator/test-runner signal policy.
+Constructor refusal and lifetime drift invoke the real Native predicate. An audit
+wrapper forwards actual Darwin IO and pauses reads after complete ACK to inject the
+policy change deterministically. Host closes admission, retains grants/root backing,
+quarantines and returns exact ACKed bytes; recorded kill/wait calls stay zero after
+drift. Failed host/domain destruction preserves the claim and reservation. The test
+then restores only its own policy and independently reaps its sole EOF-exiting child.
+This is author runtime evidence with the continuous caller invariant still required;
+independent consumer acceptance has not occurred.
+
+Small guard prerequisite: configured worker total2MiB/ordinary1MiB cannot admit its
+fixed2MiB input allocation. Actual guard emits quota fatal, parent survives with no
+committed bytes, and the retained reservation returns to ledger backing only after
+confirmed reap. This is not a hostile parser run or System-allocation failure proof.
+The first test assertion mistakenly expected zero after reap; established K01
+ledger API counts its192-byte root. Corrected to QuotaLedger::backing_bytes(), with
+no production or specification change to fit the test.
+
+Final Rust1.96 scoped commands all pass:
+
+```sh
+cargo check --locked -p uiblueprint-host --lib --bin session-worker --test runtime --test fixed_owners --test publication --test quota_counter
+cargo clippy --locked -p uiblueprint-host --lib --bin session-worker --test runtime --test fixed_owners --test publication --test quota_counter -- -D warnings
+cargo fmt -p uiblueprint-host -- --check
+cargo test --locked -p uiblueprint-host --test runtime --test fixed_owners --test publication --test quota_counter -- --test-threads=1
+```
+
+11 regular cases pass (4owners+2publication+2counter+3runtime), plus the actual
+isolated reaping peer passes once. That peer is marked ignored in the outer runner
+only to prevent in-process policy mutation; its mandatory wrapper explicitly runs
+it and checks successful exit within5s. No failure scenario is skipped.
+All-target fast compile also passed during wiring; final scope intentionally avoids
+repeating unchanged Native process tests or unrelated engine/schema/Web suites.
+
+Final63-input compact sorted JSON path→SHA256 digest:
+`7c192040f86531c1bba2117fe860039b3fdfcf892b0f8013c1a82a2bad17bdcb`.
+Exact set: Cargo.toml/Cargo.lock/rust-toolchain.toml; Cargo.toml and all recursive
+src/**/*.rs in crates/{host,schema,engine,plugin-api}; all crates/host/tests/**/*.rs;
+fixtures/golden/ENV-CAPABILITY-VALID.json and fixtures/analysis/query-gap.json.
+Digest uses Python json.dumps(manifest,sort_keys=True,separators=(',',':')), UTF-8,
+then SHA256. Raw build/test logs are not persisted. Saved equality follows checkpoint.
+
+Checkpoint write set18: crates/host/Cargo.toml; src/{lib,authority,domain,host_types,
+main,quota_allocator,reaping,supervisor,worker_config,worker_io,worker_main,worker_ops,
+worker_tape}.rs; tests/runtime.rs; tests/support/reaping_host.rs; docs/development/
+host.md; this receipt. No root Cargo/lock, Native or Web changes staged.
+
+### Finite independent proof handoff for root assignment
+
+Actual worker entrypoints are stable for a disjoint proof owner after this save.
+Existing production interfaces: executable session-worker via SpawnSpec and
+HostDomain::new::<DarwinPlatform>, RuntimeHost::{reserve_attach_input,attach,
+reserve_input,submit,next_event,cancel,detach,shutdown}; OutputRequest selects
+existing input format/partition; Tape::encode segments existing canonical documents.
+Allocator module exports GuardedAllocator (GlobalAlloc), configure, operation,
+phase, PublicationGuard and fixed fatal path; a test-only example may include that
+same source module to exercise raw valid layouts with no new production test API.
+No fake success or test-only public command is needed. Keep unsafe raw allocation
+proof in the disposable probe and never allocate hostile families in the host.
+
+Suggested disjoint paths for root to assign: crates/host/tests/allocator.rs,
+crates/host/tests/hostile_worker.rs and tests/support/allocator_probe.rs (new exact
+Cargo example hook remains Core-owned and requires a compiling handoff). Root must
+assign the packet; Core creates no agents. First prove observable alloc/zeroed/
+full-new realloc/fatal/System/invariant/cap behavior and cleanup using small owned
+probes, then the audited2MiB families only inside the actual guarded worker.
+Core retains supervisor/lifecycle/helpers/nonce and integration fixes. Source issues
+in allocator/worker files return to Core before editing; coordinate exact input
+changes, not a blanket freeze on independent source work.
+
+Current pins: quota_allocator45e49d42603e98f7ee76ab6305e61903edc3ffde7e63bde0d0cd632811f19a5d;
+worker_maina65e4e77461751fb6bc6dc25c629afcff5f16e45ef14477e506d6c7f874c23c1;
+worker_ops6e649c31d632b1e07baec5e4c7f1e9f03bccc66b0b46b1414849395f4d349584;
+worker_io9700bfa16676d0d80f9abb7b9079bd3688d5e9275965d4f6adb9141e4428dc6f.
+Full H01 remains incomplete: helper/capture ownership, fake action nonce/effect,
+late/cancel/quarantine matrix, operation-specific canonical/replay/observe proof,
+full allocator/failure-phase/hostile evidence and independent review. No live/SDK/
+RSS/positive D06 acceptance. This coherent save must not be labelled final delivery.

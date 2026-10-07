@@ -16,6 +16,11 @@ serde_json.workspace = true
 [target.'cfg(unix)'.dependencies]
 libc.workspace = true
 
+[[bin]]
+name = "session-worker"
+path = "src/main.rs"
+test = false
+
 [[example]]
 name = "process_peer"
 path = "tests/support/process_peer.rs"

@@ -2,7 +2,12 @@
 //! fixed limits, leases and control records; buffers alone are not a memory guard.
 #![deny(unsafe_code)]
 
+pub mod authority;
 pub mod buffers;
+#[cfg(unix)]
+pub mod domain;
+#[cfg(unix)]
+pub mod host_types;
 pub mod limits;
 #[cfg(target_os = "macos")]
 pub mod process;
@@ -11,6 +16,12 @@ pub mod process_api;
 pub mod protocol;
 pub mod publication;
 pub mod quota;
+#[cfg(unix)]
+mod reaping;
+#[cfg(unix)]
+pub mod supervisor;
+pub mod worker_config;
+pub mod worker_tape;
 
 pub use buffers::{BufferClass, ByteLease, ParentBuffers, PoolUsage};
 pub use limits::HostLimits;
