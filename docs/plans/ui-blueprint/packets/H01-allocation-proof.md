@@ -78,6 +78,18 @@ System forwarders. Core's focused installed-quota/reap regression and compile ch
 pass as author evidence; injected-null execution belongs to Integration and remains
 open. See the precise safety/invariant handoff in the saved H01-host receipt.
 
+Integration's actual source handoff identifies a remaining concrete branch:
+realloc still calls System directly, so5e5da61 cannot inject its null result.
+Before the pending null-test run, Core may extend the same private forwarding
+boundary to realloc, with a bounded null callback and unchanged fixed System
+shipping path. This realizes D05-WORK.GUARD's required full-new reservation,
+new-charge release on failure and retained old-layout charge; no new product API
+or altered quota. Core owns the exact private signature/safety contract and returns
+the saved source/hash. Integration then tests all affected null cases together,
+using valid small owned layouts/pointers and no huge allocation/VM pressure.
+Do not count alloc-null proof as realloc-null proof or run duplicate waves solely
+because the narrower seam was saved first. No input barrier is held during preparation.
+
 Reuse session-worker/SpawnSpec and real HostDomain/RuntimeHost entrypoints listed
 in Core's handoff, OutputRequest and Tape::encode for canonical documents. A small
 test-only executable may include the existing allocator source to exercise its

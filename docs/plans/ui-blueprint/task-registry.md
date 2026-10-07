@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | H01-PROCESS-R1 accepted atbf67c98. Allocator731a524/nonce6523052 saved, first16 inputs independently matched. Core seam5e5da61 saved/pushed and passed to resumed Integration with new allocator pin bfa9a61d…59d9aa; Core helper owner now connected/compiling, proof underway. Web bootstrap first peer path passes, further affected proof underway. No worker Git grants/barrier; desktop released, B pixels stopped |
+| Активные чаты/пакеты/ресурсы | H01-PROCESS-R1 accepted atbf67c98. Core seam5e5da61 covers alloc/zeroed; Integration prepared null cases but identified direct System realloc as exact remaining seam gap. Root authorizes narrow private realloc forwarding before one combined affected run; no barrier held meanwhile. Core helper proof and Web bootstrap continue. No worker Git grants; desktop released, B pixels stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Integration prepares injected-null case then requests precise short run barrier; hostile/RuntimeHost follows on saved inputs. Core proves helpers and returns concrete Native adapter authority/ingress/clock handoff with actual remaining composition gaps. Web completes bounded bootstrap. Full H01 source review/allocation phases/live/D06/RC05 and delivery remain open |
+| Следующий шаг | Core saves private realloc seam/signature/hash; Integration adapts its prepared cases and requests precise ready-to-run barrier for combined null proof, then hostile/RuntimeHost cases. Core helper consumer handoff and Web bootstrap continue. Full H01 source review/allocation phases/live/D06/RC05 and delivery remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
