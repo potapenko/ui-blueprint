@@ -9,3 +9,6 @@ description = "Owned bounded WebSocket transport for the UI Blueprint Web adapte
 [dependencies]
 tungstenite.workspace = true
 log.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+uiblueprint-schema = { path = "../../crates/schema" }

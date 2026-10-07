@@ -841,6 +841,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "uiblueprint-host"
+version = "0.1.0"
+dependencies = [
+ "libc",
+ "serde",
+ "serde_json",
+ "uiblueprint-engine",
+ "uiblueprint-plugin-api",
+ "uiblueprint-schema",
+]
+
+[[package]]
 name = "uiblueprint-plugin-api"
 version = "0.1.0"
 dependencies = [
@@ -863,7 +875,10 @@ name = "uiblueprint-web"
 version = "0.1.0"
 dependencies = [
  "log",
+ "serde",
+ "serde_json",
  "tungstenite",
+ "uiblueprint-schema",
 ]
 
 [[package]]
