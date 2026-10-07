@@ -37,6 +37,7 @@
 | S01 / P1 | S / Integration | T01 | Schema/plugin-api candidate, parser/serializer, validator и GOLDEN01 с valid/invalid envelopes; вход всех модулей |
 | G01 / P1 | S / Core | S01,R03 | Типизированные пространства, transforms и geometry checks pass/fail/unknown; детерминированные fixtures |
 | L01 / P1 | S / Integration | S01,G01 | Минимальный CLI вход в engine: bounded JSON/compact и выходы validator; первый проверяемый путь |
+| H01 / P1–P2 | S / Core | accepted local analysis/K01; D05 registrationf9ff423 | Реальный bounded Rust host/worker, allocator/publication/cleanup proof; prerequisite live W01/M01 under adopted D02/D05 |
 | W01 / P2 | S / Web | L01,F01 | Живой Web observe/inspect/measure, точные target/surface, channels/coverage, redaction до выхода |
 | M01 / P2 | S / Native | L01,F02 | Живой Mac observe/inspect/measure, window matching, AX/capture provenance и redaction |
 | P01 / P3 | S / Native | M01 | M05 measured probe и comparison off/on; никакого влияния на geometry/focus/hit/AX |
@@ -89,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Local analysis migration/R1/R2 accepted by same reviewer at saved4106e04; Core idle for next ready packet. Integration completing D05 registration after Web2README release. Web transport WIP4106e04 saved, final own checks/docs ongoing; manifests frozen. Git index free. Desktop released; B pixels remain stopped |
+| Активные чаты/пакеты/ресурсы | Local analysis accepted at4106e04; D05 registrationf9ff423 saved/accepted as faithful contracts. Core receives H01 actual host source; root Cargo/lock mutation waits separate grant after Web final checks. Web WIP4106e04 saved, final own checks/docs ongoing. Integration idle after release; Git index free. Desktop released; B pixels remain stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Закрыть ANALYSIS-R1/R2 через Core и same-reviewer recheck; принять конечный D05 decision от Integration; Web завершает offline transport. Retained K01 и bounded Native prerequisite уже scoped accepted; live D05 enforcement и RC05 остаются открытыми |
+| Следующий шаг | H01 реализует registered D02/D05 host boundary и конечные proof cases; Web завершает transport для independent review. При concrete API handoff выделить disjoint platform-process work Native owner. Live adapters/D06/RC05 и полная поставка остаются открытыми |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -150,7 +151,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [L01-analysis-repair](packets/L01-analysis-repair.md) | Core sole decoder/fixture/test owner | testcffd8d3 + repair372aebb pushed; saved input4106e04 | [independent recheck](receipts/L01-analysis-recheck.md) accepts R1/R2 and scoped migration.49 affected tests/59manifest cases; reviewer reproduced exact278-inputhashbc410094…6c8e724 from saved inputs. No remaining scoped gaps; live/Web/D05/P1/P6/P7 unchanged |
 | [D05-runtime-decision](packets/D05-runtime-decision.md) | Integration same chat | db629fc0e342ff567f5560344dffa4104d8fb8ef pushed | [receipt](receipts/D05-runtime-decision.md): concrete reusable guarded worker, parent completion pool and root Grant ownership selected as proposal; exact2docs saved/checked, index released. No source/runtime/normative acceptance; finite design review before registration |
 | [D05-runtime-review](packets/D05-runtime-review.md) | collaboration `/root/d05_runtime_review` | proposed designdb629fc; D02@1/D05@2/D05-MEMORY@1 preservation | accepted design-registration scope; [receipt](receipts/D05-runtime-review.md), two-stage review/actual K01 source, no findings. Runtime/allocation/cleanup/D06 gates still open |
-| [D05-runtime-registration](packets/D05-runtime-registration.md) | existing Integration owner | adopted reviewed designdb629fc under ROADMAP; D07@4 protected | four leaves prepared/read by root; Web4106e04 released2README, Integration explicitly continued to complete registry9/header/receipt/checkpoint; no source/Cargo/runtime |
+| [D05-runtime-registration](packets/D05-runtime-registration.md) | existing Integration owner | f9ff423a48952bc90078cc65682652b089fe4a8d pushed; registry9 | faithful D02@2/D05@3/D05-MEMORY@2/WORK@1 registration accepted by root after fullleaf/metadata/header review; exact8paths saved/checked, index released; D07@4 and all runtime/D06 gates preserved |
+| [H01-host](packets/H01-host.md) | existing Core owner | registeredf9ff423; D02@2/D05@3/MEMORY@2/WORK@1, analysis accepted4106e04 | ready actual host/worker implementation in crates/host; own source first, root Cargo/lock mutation waits Web final-check release. OS dependency requires narrow evidence/D07 before adoption; no live adapters/CLI publication |
 | [W01-transport-implementation](packets/W01-transport-implementation.md) | existing Web owner | WIP4106e04a91e141158dc46590778fb5fd2ee300a9 pushed, exact14paths; D07@4/registry8 | actual transport code/membership saved,16 preliminary checks and current compile per [receipt](receipts/W01-transport-implementation.md); later operation-limit/zero-write changes need final tests/review.2README/Git lease released; own source/tests/docs continue.20new packages/no prior drift, manifests frozen; no live/D05 acceptance |
 
 Current Web manifest handoff (saved in4106e04; transport itself remains WIP):
