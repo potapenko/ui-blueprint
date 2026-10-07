@@ -93,3 +93,7 @@ Default/web scoped checks, Web target Clippy and owned formatting pass. Exact in
 binary hashes, commands and cleanup ownership are in the [receipt](../plans/ui-blueprint/receipts/W01-guarded-worker.md).
 Synthetic peers do not execute Chromium scripts or qualify browser invariance, opaque
 backend memory/cost, pixels or B01–B06/D06. No full H01/live acceptance is claimed.
+
+## Live preparation only
+
+[W01-live preparation](../plans/ui-blueprint/receipts/W01-live.md) adds a separately ignored, opt-in actual-Chromium consumer with frozen F01 oracles. Syntax/no-run compilation and the exclusive three-frame evidence sink are prepared; server/browser/fixture/test execution awaits saved preparation and explicit root activation. It does not extend the synthetic runtime acceptance above.
