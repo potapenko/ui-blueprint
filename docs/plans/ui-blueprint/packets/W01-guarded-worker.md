@@ -93,3 +93,13 @@ and confirm cleanup. Save source and compact proof/limits, no raw logs in Git.
 Each coherent step gets scoped checkpoint+push through root Git lease. Return exact
 source/API, saved pins/checks, required Core gaps, resource release and next consumer.
 Independent integration review and live B01–B06/D06 remain separate acceptance.
+
+## Owned WebSocket peer dependency
+
+Web's actual peer-test handoff requires the already adopted codec. Root authorizes
+Core alone to add host `[dev-dependencies] tungstenite.workspace = true` and only
+the corresponding existing-package lock edge. Keep the same pinned version and
+features; no new registry package, codec implementation, framework or shipping
+dependency. This is for bounded owned CDP peers in host tests, not a browser launch.
+Web still does not edit Cargo/lock. Core returns the stable manifest handoff before
+the affected test build; production default/web feature boundaries remain unchanged.
