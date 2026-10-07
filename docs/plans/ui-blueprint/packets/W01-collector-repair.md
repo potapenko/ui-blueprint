@@ -39,3 +39,25 @@ checkpoint-ready handoff. Root grants short Git lease, then exact-path commit an
 push. Same reviewer checks saved affected source before new author receipts.
 No whole W01/live/D06 acceptance claim or next packet. Waiting is an exact resource
 or shared-API dependency; no repeat user permission within this approved repair.
+
+## R2 shared configuration handoff
+
+Observed author evidence: an I/O byte-budget minimum alone includes framing and
+does not constrain codec read-ahead. Web proposes reading the already fixed codec
+configuration and rejecting incompatible frame/message caps before first dispatch.
+Root approves that implementation under the existing acquisition-limit requirement,
+without weakening limits or changing transport runtime behavior.
+
+The same Web owner may add exactly `Transport::limits(&self) -> transport::Limits`
+and `Client::transport_limits(&self) -> Option<transport::Limits>` in their existing
+defining modules under plugins/web/src/transport and plugins/web/src/cdp. These are
+read-only accessors for actual configuration; no setter, duplicate state, default
+cap or second client. Record the exact defining file paths in the receipt. Existing
+collector limits must be validated against both effective inbound caps before any
+prepare/dispatch; disconnected state must not manufacture known configuration.
+
+Focused tests must establish refusal before the first CDP command and preservation
+of compatible positive operation. The collector's smaller cap must not be silently
+raised to the transport cap. Preserve framing/work/cumulative limits and all
+accepted transport/CDP semantics; recheck only affected consumers. The same retained
+collector reviewer covers these accessor changes as part of the R2 remedy.
