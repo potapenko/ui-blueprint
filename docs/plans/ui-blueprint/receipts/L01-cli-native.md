@@ -66,3 +66,53 @@ old evidence/linked images untouched. This closes one actual own-fixture Native
 product observe→inspect scenario only. General apps, all pilots, distribution/P7,
 probe sampled-hit invariance and D06 remain separate. One-path whitespace checked;
 checkpoint/push pending root short Git lease. No active process/resource/index held.
+
+## Actual Native two-channel product CLI continuation
+
+New final packet section authorized one own A AX+capture product integration,
+not a repeat of pure AX/legacy capture. Same exact saved24ffcb7972fed6e22f868db54c22ce599725ede8
+archive; default worker/current validator and macos CLI built locked/offline in
+current system-temp. Matching saved Swift helper/descriptor compiled with temp
+module caches. No moving W03/other source, new harness/mode/flags or source edits.
+
+Fresh own F02-off PID91619/canonical executable/unique run-dir matched retained
+9a88b12 hash; CUA A/normal/no-popup Snapshot1. Metadata-only describe used existing
+sample4/twochannels; actual request was form5/window-ax, channels3,160/depth9,
+overall3s AX≤1s/capture≤2s,1s cleanup,512KiB/channel+LF/1MiB stdout, unchanged explicit
+acquisition image/PNG profile. Trusted current-temp artifact destination and
+owned_synthetic_fixture policy/evidence=false; no UI path/discovery/permissions.
+
+Actual uiblueprint observe with connection/request/worker and aggregate2MiB input/
+1MiB output exited4, producing exactly two canonical NDJSON lines in AX/capture order.
+Both validated with current saved schema validator and matched fresh Target/Surface/
+request identity. AX contains76 actual nodes/form5, f02.name textbox/Name/enabledtrue/
+focusedfalse and unsupported accessibility_name without fallback, partial coverage.
+Capture is real ScreenCaptureKit window_isolated A,1100×1022px,119068-byte owned PNG,
+audio off, unknown crop transform and relative payload_ref capture/capture.png.
+No reduced-size tuning: this normal (not expanded D06) own window has its natural
+current dimensions. Artifact remained within registered pixel/byte/PNG caps.
+
+The actual successful pair exercised existing source-enforced AX receive/publication/
+ACK before capture dispatch; output stayed canonical and parent-owned. No independent
+new ACK timestamp instrumentation is claimed. Parent held capture reservation until
+reap; observe's cleanup rules completed, exact helper/worker processes were absent
+before fixture termination. Source/UI state unchanged during collection. There was
+no natural late capture failure, so this positive run does not claim a new actual
+failure-survival scenario; existing peer/legacy evidence retains its earlier scope.
+
+Synthetic own PNG was inspected and delivered inline as embedded tool image bytes,
+with no local-file Markdown link. Fixed CLI diagnostics19 bytes stayed in memory.
+No screenshot archive, extra sidecars, persistent output dirs, B−3801/TCC/backend/
+display change, real PlayPhrase.me or physical pointer-hit attempt.
+
+Runtime completed≤120s after build. Exact own fixture PID/path/unique run-dir were
+revalidated before SIGTERM and absence confirmed≤5s; LaunchServices owns reaping.
+Physical lane released. All current run-owned source/build/module-cache/fixture/
+connection/request/NDJSON/PNG files under system-temp uib-l01-twochannel-r0s5r2pj
+were removed after inline consumption and checks; directory absence verified.
+Old evidence/linked images untouched; no active process/resources/index held.
+
+This closes one actual product CLI/H01 AX+rendered_capture A positive integration.
+General apps/pixels/mapping, actual late-failure cases, sampled pointer-hit/provider
+contract and D06/fullP2/P7 remain separate. Existing receipt is the only durable
+write; scoped whitespace checked. One-path checkpoint/push waits root Git lease.
