@@ -57,3 +57,9 @@ Save coherent source checkpoint+push via short lease, return exact identities/ch
 and runtime handoff. Existing Web host proof stays closed unless relevant change
 requires an affected check; do not repeat it simply for another report.
 All current image-retention/non-image temp cleanup and no-new-directory rules apply.
+
+
+Narrow discovered owner grant: worker_ops.rs::prepare_input only, for registered
+Snapshot/observed ChannelResponse validation and unchanged Snapshot extraction in
+worker. Failed/no-snapshot/wrong input refuses; no parent parse, graph clone or
+unrelated operation semantics. Existing strict quotas and canonical validation hold.
