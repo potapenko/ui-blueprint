@@ -7,6 +7,7 @@ pub struct Publication<'a> {
     class: OperationClass,
     requested: u8,
     committed: u8,
+    incomplete: u8,
     total: usize,
     limit: usize,
     active: Option<Control>,
@@ -18,6 +19,7 @@ pub struct CommittedFrames<'a> {
     group: OutputGroup<'a>,
     pub committed: u8,
     pub missing: u8,
+    pub incomplete: u8,
 }
 impl CommittedFrames<'_> {
     pub fn frame(&self, slot: usize) -> Option<&[u8]> {
@@ -46,6 +48,7 @@ impl<'a> Publication<'a> {
             class,
             requested,
             committed: 0,
+            incomplete: 0,
             total: 0,
             limit,
             active: None,
@@ -61,7 +64,12 @@ impl<'a> Publication<'a> {
         if control.correlation != self.correlation || control.class != self.class {
             return Err(HostError::StaleOperation);
         }
-        if control.flags != 0 || control.value != 0 || control.auxiliary != 0 || control.slot >= 3 {
+        if control.flags > 1
+            || (control.flags != 0 && self.class != OperationClass::Observe)
+            || control.value != 0
+            || control.auxiliary != 0
+            || control.slot >= 3
+        {
             return Err(HostError::InvalidControl);
         }
         Ok(())
@@ -117,6 +125,7 @@ impl<'a> Publication<'a> {
         let frame = self.active.ok_or(HostError::InvalidState)?;
         if control.kind != ControlKind::Commit
             || !control.matches(frame)
+            || control.flags != frame.flags
             || self.pending_ack
             || self.received as u64 != frame.length
         {
@@ -132,10 +141,17 @@ impl<'a> Publication<'a> {
     pub fn ack_sent(&mut self, ack: Control) -> Result<(), HostError> {
         self.envelope(ack)?;
         let frame = self.active.ok_or(HostError::InvalidState)?;
-        if !self.pending_ack || ack.kind != ControlKind::Ack || !ack.matches(frame) {
+        if !self.pending_ack
+            || ack.kind != ControlKind::Ack
+            || !ack.matches(frame)
+            || ack.flags != frame.flags
+        {
             return Err(HostError::InvalidControl);
         }
         self.committed |= 1 << frame.slot;
+        if frame.flags == 1 {
+            self.incomplete |= 1 << frame.slot;
+        }
         self.total += self.received;
         self.active = None;
         self.pending_ack = false;
@@ -157,6 +173,7 @@ impl<'a> Publication<'a> {
             group: self.group,
             committed: self.committed,
             missing: self.requested & !self.committed,
+            incomplete: self.incomplete,
         }
     }
     pub(crate) fn idle(&self) -> bool {

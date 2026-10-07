@@ -4,6 +4,7 @@
 mod arguments;
 mod export;
 mod input;
+mod observe;
 mod output;
 
 use arguments::{Arguments, Command, InspectArguments, ResultVersion};
@@ -15,6 +16,8 @@ use uiblueprint_engine::{self as engine, MeasurementResult};
 use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
+Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N\n\
+Observe needs a selected macos/web build and explicit trusted connection; emits committed canonical NDJSON and cleans only owned workers/helpers.\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
@@ -163,6 +166,17 @@ fn execute_inspect(args: InspectArguments) -> Result<(Vec<u8>, u8), Failure> {
 
 fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
+    if args.first().is_some_and(|arg| arg == "observe") {
+        let result = arguments::ObserveArguments::parse(args.into_iter().skip(1))
+            .and_then(|args| observe::execute(args, &mut io::stdout().lock()));
+        return match result {
+            Ok(code) => ExitCode::from(code),
+            Err(error) => {
+                let _ = writeln!(io::stderr().lock(), "{}", error.code);
+                ExitCode::from(error.exit)
+            }
+        };
+    }
     let result = if args.len() == 1 && args[0] == "--help" {
         Ok((HELP.as_bytes().to_vec(), 0))
     } else if args.first().is_some_and(|arg| arg == "imagegen-prompt") {

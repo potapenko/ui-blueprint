@@ -35,6 +35,88 @@ fn header(slot: u8, length: u64) -> Control {
         auxiliary: 0,
     }
 }
+
+#[test]
+fn outcome_flags_must_match_through_ack_and_survive_later_failure() {
+    let pool = ParentBuffers::new(limits(), 0).unwrap();
+    let mut stream = Publication::new(
+        pool.reserve_group(3).unwrap(),
+        header(0, 0).correlation,
+        OperationClass::Observe,
+        3,
+        4096,
+    )
+    .unwrap();
+    let first = Control {
+        flags: 1,
+        ..header(0, 2)
+    };
+    stream.begin(first).unwrap();
+    stream.remaining_mut().unwrap().copy_from_slice(b"{}");
+    stream.advance(2).unwrap();
+    assert_eq!(
+        stream.commit(Control {
+            kind: ControlKind::Commit,
+            flags: 0,
+            ..first
+        }),
+        Err(HostError::InvalidControl)
+    );
+    let ack = stream
+        .commit(Control {
+            kind: ControlKind::Commit,
+            ..first
+        })
+        .unwrap();
+    assert_eq!(
+        stream.ack_sent(Control { flags: 0, ..ack }),
+        Err(HostError::InvalidControl)
+    );
+    stream.ack_sent(ack).unwrap();
+    stream
+        .begin(Control {
+            flags: 1,
+            ..header(1, 4)
+        })
+        .unwrap();
+    stream.remaining_mut().unwrap()[..1].copy_from_slice(b"x");
+    stream.advance(1).unwrap();
+    let result = stream.finish();
+    assert_eq!(
+        (result.committed, result.missing, result.incomplete),
+        (1, 2, 1)
+    );
+    assert_eq!(result.frame(0), Some(b"{}".as_slice()));
+    assert!(result.frame(1).is_none());
+    drop(result);
+    let mut non_observe = Publication::new(
+        pool.reserve_group(1).unwrap(),
+        first.correlation,
+        OperationClass::Validate,
+        1,
+        10,
+    )
+    .unwrap();
+    assert_eq!(
+        non_observe.begin(Control {
+            class: OperationClass::Validate,
+            ..first
+        }),
+        Err(HostError::InvalidControl)
+    );
+    let mut observed = Publication::new(
+        pool.reserve_group(1).unwrap(),
+        first.correlation,
+        OperationClass::Observe,
+        1,
+        10,
+    )
+    .unwrap();
+    assert_eq!(
+        observed.begin(Control { flags: 2, ..first }),
+        Err(HostError::InvalidControl)
+    );
+}
 #[test]
 fn bytes_commit_ack_and_terminal_are_distinct_and_prior_results_survive() {
     let pool = ParentBuffers::new(limits(), 0).expect("pool");

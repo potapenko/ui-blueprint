@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 12.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 13.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -71,7 +71,7 @@ Existing locked version/policies remain; registration does not accept unsafe/run
 Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; common quotas/wire/permissions/F02/D06 and implementation/live gates remain unchanged.
 
 ## Select a route
-`L01-INSPECT-001`: [CLI@2 INSPECT](product/cli.md) registers the [selected CLI-owned saved-inspection JSON envelope](../plans/ui-blueprint/packets/L01-inspect-json.md); CONTENT/core0.1/analysis0.2 and live gates remain unchanged.
+`L01-INSPECT-001` / `L01-OBSERVE-001`: [CLI@3](product/cli.md) preserves the [saved-inspection envelope](../plans/ui-blueprint/packets/L01-inspect-json.md) and registers the [explicit guarded acquisition caller](../plans/ui-blueprint/packets/L01-live-observe.md); CONTENT/core0.1/analysis0.2 and live gates remain unchanged.
 
 | Task | Entry | Authority / selection |
 | --- | --- | --- |

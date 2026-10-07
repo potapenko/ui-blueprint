@@ -205,7 +205,7 @@ fn main() {
     let mut io_failed = false;
     if !writer_failed {
         io_failed =
-            worker_main::publish(&mut io, operation, 0, &fixed.bytes[..fixed.used]).is_err();
+            worker_main::publish(&mut io, operation, 0, &fixed.bytes[..fixed.used], false).is_err();
     }
     let used = fixed.used;
     drop(reserve); // Must return to the already-full ordinary level.

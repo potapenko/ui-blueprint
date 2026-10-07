@@ -52,6 +52,9 @@ fn main() {
     if config.slot == 1 && mode[0] == b'X' {
         return;
     }
+    if config.slot == 1 && mode[0] == b'D' {
+        std::thread::sleep(std::time::Duration::from_secs(2));
+    }
     if config.slot == 2 && mode[0] == b'E' {
         return;
     }
@@ -96,6 +99,10 @@ fn main() {
             panic!("snapshot")
         };
         snapshot.context = request.context.clone();
+        if mode[0] == b'J' {
+            snapshot.coverage.status = CoverageStatus::Partial;
+            snapshot.coverage.omitted_count = None;
+        }
         ChannelResult::Observed(snapshot)
     } else {
         ChannelResult::Failed(Issue {

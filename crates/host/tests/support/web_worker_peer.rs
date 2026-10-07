@@ -95,11 +95,14 @@ impl Peer {
                                     json!({"node":{"backendNodeId":11,"nodeType":1,"attributes":["value",CANARY]}})
                                 }
                                 "Runtime.callFunctionOn" => {
-                                    assert_eq!(params["throwOnSideEffect"], true);
                                     assert_eq!(params["userGesture"], false);
                                     let function = params["functionDeclaration"]
                                         .as_str()
                                         .expect("fixed function");
+                                    assert_eq!(
+                                        params["throwOnSideEffect"],
+                                        !function.starts_with("function readNode(")
+                                    );
                                     if function.starts_with("function selectIds(") {
                                         shared.selections.fetch_add(1, Ordering::AcqRel);
                                         assert_eq!(

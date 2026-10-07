@@ -78,6 +78,11 @@ impl HostCompletion<'_> {
     pub fn missing(&self) -> u8 {
         self.frames.as_ref().map_or(0, |f| f.missing)
     }
+    /// ACKed live channels whose validated canonical result was Failed or whose
+    /// Snapshot declared incomplete coverage. No parent payload parsing occurs.
+    pub fn incomplete_channels(&self) -> u8 {
+        self.frames.as_ref().map_or(0, |f| f.incomplete)
+    }
     pub fn bytes(&self, slot: usize) -> Option<&[u8]> {
         self.frames.as_ref().and_then(|f| f.frame(slot))
     }

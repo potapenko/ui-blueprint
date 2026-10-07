@@ -15,3 +15,10 @@ uiblueprint-schema = { path = "../schema" }
 uiblueprint-engine = { path = "../engine" }
 serde_json.workspace = true
 uiblueprint-export = { path = "../export" }
+serde = { workspace = true, optional = true }
+uiblueprint-host = { path = "../host", optional = true }
+
+[features]
+default = []
+macos = ["dep:uiblueprint-host", "dep:serde"]
+web = ["dep:uiblueprint-host", "dep:serde", "uiblueprint-host/web"]

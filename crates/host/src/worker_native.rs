@@ -104,7 +104,7 @@ impl<'a> NativeExchange<'a> {
     pub fn bytes(&self, size: usize) -> &[u8] {
         &self.buffer[..size]
     }
-    pub fn publish(&mut self, channel: u8, size: usize) -> Result<(), HostError> {
+    pub fn publish(&mut self, channel: u8, size: usize, incomplete: bool) -> Result<(), HostError> {
         if self.pending != Some(channel) {
             return Err(HostError::InvalidState);
         }
@@ -112,7 +112,13 @@ impl<'a> NativeExchange<'a> {
         if total > (self.operation.auxiliary >> 32) as usize {
             return Err(HostError::ResourceLimit);
         }
-        worker_main::publish(self.io, self.operation, channel, &self.buffer[..size])?;
+        worker_main::publish(
+            self.io,
+            self.operation,
+            channel,
+            &self.buffer[..size],
+            incomplete,
+        )?;
         self.total = total;
         self.pending = None;
         Ok(())

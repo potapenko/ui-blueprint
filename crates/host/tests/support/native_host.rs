@@ -377,6 +377,11 @@ fn native_requests_are_collected_after_real_begin_and_ax_ack_precedes_capture() 
                 assert_eq!(completed.terminal, Terminal::Completed);
                 assert_eq!(completed.committed(), 3);
                 assert_eq!(completed.missing(), 0);
+                assert_eq!(
+                    completed.incomplete_channels(),
+                    2,
+                    "canonical Failed capture is delivered but unavailable"
+                );
                 let doc = Document::from_json(completed.bytes(1).unwrap(), 65536).unwrap();
                 assert_eq!(doc.schema_version, SchemaVersion::CURRENT);
                 let Artifact::ChannelResponse(c) = doc.artifact else {
@@ -394,6 +399,11 @@ fn native_requests_are_collected_after_real_begin_and_ax_ack_precedes_capture() 
                 );
                 assert_eq!(completed.committed(), 1);
                 assert_eq!(completed.missing(), 2);
+                assert_eq!(
+                    completed.incomplete_channels(),
+                    0,
+                    "successful AX remains complete after helper failure"
+                );
                 assert!(completed.bytes(0).is_some());
             }
             b'W' => {

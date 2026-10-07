@@ -19,7 +19,7 @@ fn error(value: ObservationError) -> HostError {
     }
 }
 impl ObservationRun<'_> {
-    pub fn receive_channel(&mut self, bytes: &[u8], expected: Channel) -> Result<(), HostError> {
+    pub fn receive_channel(&mut self, bytes: &[u8], expected: Channel) -> Result<bool, HostError> {
         guard::phase(guard::Phase::Validate);
         let doc =
             Document::from_json(bytes, self.max_frame).map_err(|_| HostError::InvalidInput)?;
@@ -29,6 +29,20 @@ impl ObservationRun<'_> {
         if response.channel != expected {
             return Err(HostError::InvalidControl);
         }
+        let incomplete = match &response.result {
+            ChannelResult::Failed(_) => true,
+            ChannelResult::Observed(snapshot) => {
+                snapshot.coverage.status != CoverageStatus::Complete
+                    || snapshot
+                        .coverage
+                        .omitted_count
+                        .is_some_and(|count| count > 0)
+                    || snapshot
+                        .coverage
+                        .unknown_count
+                        .is_some_and(|count| count > 0)
+            }
+        };
         drop(response);
         self.session
             .receive(
@@ -39,7 +53,8 @@ impl ObservationRun<'_> {
                     milliseconds: (self.now)(),
                 },
             )
-            .map_err(error)
+            .map_err(error)?;
+        Ok(incomplete)
     }
     pub fn finish(mut self) -> Result<(), HostError> {
         self.session
@@ -146,10 +161,10 @@ impl CanonicalSession<'_> {
                     continue;
                 }
             };
-            operation.receive_channel(exchange.bytes(length), channel)?;
+            let incomplete = operation.receive_channel(exchange.bytes(length), channel)?;
             // Failed canonical responses are also complete, validated channel
             // records. Their Issue is preserved instead of empty success.
-            exchange.publish(slot as u8, length)?;
+            exchange.publish(slot as u8, length, incomplete)?;
         }
         if let Some(error) = failure {
             return Err(error);

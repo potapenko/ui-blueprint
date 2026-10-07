@@ -2,7 +2,60 @@
 
 Local commands use the existing engine and registered [ANALYSIS@1](../specs/product/analysis.md), reusing core0.1 source records. No model, live collection or reference IO. Export remains the separate unchanged command below.
 
-## Syntax and inputs
+## Guarded live observation
+
+```text
+cargo build --locked -p uiblueprint-cli --features macos
+cargo build --locked -p uiblueprint-host --bin session-worker
+uiblueprint observe --connection CONNECTION.json --request REQUEST.json --worker /absolute/path/session-worker --max-input-bytes 65536 --max-output-bytes 65536
+```
+
+For Web select CLI `--features web` and host `--features web`; combined callers
+use CLI `--features macos,web`. Default CLI features stay empty and saved-data
+commands never launch workers. Live host is macOS-only; Web does not invoke Swift.
+Use the matching freshly built private host/worker pair, not an arbitrary older
+worker; installable placement/packaging remains I01. There is no automatic install.
+
+[CLI@3 OBSERVE](../specs/product/cli.md) defines connection_version1.0.0 and exits.
+Connection is an explicit trusted operator JSON file containing target Identity,
+canonical session SessionDescriptor, positive attach_deadline_ms, all16 explicit
+host_limits fields and provider. It is never loaded from UI or observation output.
+Provider `{backend:"native_fixture",helper_executable:"/absolute/path/helper",
+configuration:"opaque UTF-8 configuration",channels:MASK}` reuses current4032-byte
+trusted helper configuration and exact own-fixture identity; arbitrary application
+PID/title discovery is not supported. Provider `{backend:"web",setup:WebSetup,
+selection:WebSelection}` reuses the existing strict host config types for an already
+established numeric-loopback CDP target/document. No browser/app bootstrap occurs.
+Field shapes/caps are [host Web config](../../crates/host/src/web_config.rs) and
+[host limits](../../crates/host/src/limits.rs); each limit is supplied explicitly.
+The connection parser rejects unknown/duplicate fields and invalid versions;
+selector/config records are not another canonical graph or private memory layout.
+
+REQUEST.json is an existing core0.1 Request Document with operation Observe.
+Target/session/plugin/surfaces/scope and channel authority must match connection.
+Only clock_domain is replaced in the owned request after actual Attached; the
+file, identities, fields, limits and freshness policy stay unchanged. Aggregate
+input cap covers connection plus Request bytes. Worker/helper executable paths
+are explicit and validated; no configuration secrets enter argv or diagnostics.
+
+Output is committed canonical ChannelResponse NDJSON, channel0/1/2 order, with one
+newline per unchanged frame. No combined Snapshot or response graph parse occurs
+in parent. Reserve newline budget before dispatch; reject an oversized line before
+any part of that line. Earlier ACKed channels survive later worker/probe/capture
+failure. Complete canonical Failed and declared partial/unknown source coverage
+are carried by fixed ACKed metadata, not inferred from delivery alone.
+Leases survive bounded shutdown and publication. Cleanup is attempted on all
+paths and must confirm worker/helper reap; user target app/browser is never closed.
+
+Exit0 means all requested channels delivered with no incomplete metadata;4 means
+unavailable/partial/cancel/timeout. Invalid/limit2; IO/worker/unconfirmed cleanup1;
+unsupported backend/platform/feature5. Fixed error codes use stderr, never UI/config
+payload. A partial NDJSON result can accompany a nonzero exit; consumers must use
+both status and canonical records. Cleanup or physical write failure returns1.
+Actual arbitrary-app support, target discovery, persistent session CLI, distribution
+and positive platform qualification remain separate; no live input/action is added.
+
+## Saved-data syntax and inputs
 
 ```text
 uiblueprint measure --snapshot S --query Q --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json]

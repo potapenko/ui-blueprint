@@ -2,6 +2,43 @@ use crate::Failure;
 use std::{ffi::OsString, path::PathBuf};
 use uiblueprint_schema::model::Projection;
 
+pub(crate) struct ObserveArguments {
+    pub connection: PathBuf,
+    pub request: PathBuf,
+    pub worker: PathBuf,
+    pub max_input: usize,
+    pub max_output: usize,
+}
+impl ObserveArguments {
+    pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
+        let (mut connection, mut request, mut worker, mut max_input, mut max_output) =
+            (None, None, None, None, None);
+        let invalid = Failure::invalid("invalid_arguments");
+        while let Some(flag) = args.next() {
+            let value = args.next().ok_or(invalid)?;
+            match flag.to_str() {
+                Some("--connection") if connection.is_none() => {
+                    connection = Some(PathBuf::from(value))
+                }
+                Some("--request") if request.is_none() => request = Some(PathBuf::from(value)),
+                Some("--worker") if worker.is_none() => worker = Some(PathBuf::from(value)),
+                Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
+                Some("--max-output-bytes") if max_output.is_none() => {
+                    max_output = Some(limit(value)?)
+                }
+                _ => return Err(invalid),
+            }
+        }
+        Ok(Self {
+            connection: connection.ok_or(invalid)?,
+            request: request.ok_or(invalid)?,
+            worker: worker.ok_or(invalid)?,
+            max_input: max_input.ok_or(invalid)?,
+            max_output: max_output.ok_or(invalid)?,
+        })
+    }
+}
+
 pub(crate) struct InspectArguments {
     pub snapshot: PathBuf,
     pub reference: String,

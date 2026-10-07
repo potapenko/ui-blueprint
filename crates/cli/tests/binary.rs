@@ -141,6 +141,174 @@ fn assert_error(output: Output, exit: i32, code: &str) {
     assert_eq!(output.stderr, format!("{code}\n").as_bytes());
 }
 
+#[cfg(all(target_os = "macos", feature = "macos"))]
+#[test]
+fn observe_cli_uses_real_guarded_peer_and_preserves_failed_partial_and_timed_out_channels() {
+    use serde_json::json;
+    let case = Case::new("GEO-GAP");
+    let directory = PathBuf::from(env!("CARGO_BIN_EXE_uiblueprint"))
+        .parent()
+        .unwrap()
+        .to_path_buf();
+    let worker = directory.join("session-worker");
+    let helper = directory.join("examples/native_peer");
+    assert!(
+        worker.is_file() && helper.is_file(),
+        "build existing host worker/native_peer before live caller tests"
+    );
+    let descriptor: serde_json::Value = serde_json::from_slice(include_bytes!(
+        "../../../fixtures/golden/ENV-CAPABILITY-VALID.json"
+    ))
+    .unwrap();
+    let base_request: serde_json::Value = serde_json::from_slice(include_bytes!(
+        "../../../fixtures/golden/ENV-REQUEST-VALID.json"
+    ))
+    .unwrap();
+    let base_connection = json!({"connection_version":"1.0.0", "target":descriptor["artifact"]["data"]["target"],
+        "session":descriptor["artifact"]["data"],"attach_deadline_ms":2000,
+        "host_limits":{"workers":1,"worker_bytes":67108864,"publication_reserve":1048576,"bootstrap_bytes":1048576,
+            "parent_bytes":33554432,"input_bytes":2097152,"ingress_bytes":524288,"output_bytes":524288,
+            "request_output_bytes":2097152,"completion_groups":2,"control_bytes":4096,"cleanup_ms":1000,
+            "retained_domain_bytes":67108864,"retained_per_worker":15728640,"main_stack_bytes":8388608,"watchdog_stack_bytes":1048576},
+        "provider":{"backend":"native_fixture","helper_executable":helper,"configuration":"F","channels":3}});
+    let connection_file = case.directory.join("connection.json");
+    let request_file = case.directory.join("request.json");
+    let run = |worker: &std::path::Path, cap: usize| {
+        Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .arg("observe")
+            .arg("--connection")
+            .arg(&connection_file)
+            .arg("--request")
+            .arg(&request_file)
+            .arg("--worker")
+            .arg(worker)
+            .args([
+                "--max-input-bytes",
+                "65536",
+                "--max-output-bytes",
+                &cap.to_string(),
+            ])
+            .output()
+            .unwrap()
+    };
+    for (mode, channels, exit, lines) in [
+        ("F", 1, 0, 1),
+        ("F", 3, 4, 2),
+        ("J", 1, 4, 1),
+        ("X", 3, 1, 1),
+        ("D", 3, 4, 1),
+    ] {
+        let mut connection = base_connection.clone();
+        connection["provider"]["configuration"] = json!(mode);
+        let mut request = base_request.clone();
+        request["artifact"]["data"]["limits"]["deadline_ms"] =
+            json!(if mode == "D" { 500 } else { 2000 });
+        request["artifact"]["data"]["limits"]["max_output_bytes"] = json!(65536);
+        request["artifact"]["data"]["operation"]["channels"] = if channels == 1 {
+            json!(["external_semantics"])
+        } else {
+            json!(["external_semantics", "rendered_capture"])
+        };
+        fs::write(&connection_file, serde_json::to_vec(&connection).unwrap()).unwrap();
+        fs::write(&request_file, serde_json::to_vec(&request).unwrap()).unwrap();
+        let before_request = fs::read(&request_file).unwrap();
+        let output = run(&worker, 65536);
+        assert_eq!(
+            output.status.code(),
+            Some(exit),
+            "{mode}: {:?}",
+            output.stderr
+        );
+        assert!(output.stdout.ends_with(b"\n"));
+        let records: Vec<_> = output
+            .stdout
+            .split(|b| *b == b'\n')
+            .filter(|b| !b.is_empty())
+            .collect();
+        assert_eq!(records.len(), lines, "{mode}");
+        for (i, bytes) in records.iter().enumerate() {
+            let doc = Document::from_json(bytes, 65536).unwrap();
+            let Artifact::ChannelResponse(response) = doc.artifact else {
+                panic!("canonical response")
+            };
+            assert_eq!(response.dispatch_sequence, 1);
+            assert_eq!(
+                response.channel,
+                if i == 0 {
+                    Channel::ExternalSemantics
+                } else {
+                    Channel::RenderedCapture
+                }
+            );
+            assert_eq!(matches!(response.result, ChannelResult::Failed(_)), i == 1);
+            // Exact payloads are the existing peer's canonical source records,
+            // not a CLI wrapper or reparsed/rewritten graph.
+            assert_eq!(
+                serde_json::to_vec(&Document {
+                    schema_version: doc.schema_version,
+                    artifact: Artifact::ChannelResponse(response)
+                })
+                .unwrap(),
+                *bytes
+            );
+        }
+        assert_eq!(
+            fs::read(&request_file).unwrap(),
+            before_request,
+            "clock bound only in owned request copy"
+        );
+        if exit == 0 {
+            assert!(output.stderr.is_empty());
+        }
+    }
+    fs::write(
+        &connection_file,
+        serde_json::to_vec(&base_connection).unwrap(),
+    )
+    .unwrap();
+    assert_error(run(&worker, 1), 2, "output_limit");
+    assert_error(
+        run(&case.directory.join("missing-worker"), 65536),
+        1,
+        "io_error",
+    );
+    for mutation in ["version", "identity", "unknown", "array"] {
+        let mut bad = base_connection.clone();
+        match mutation {
+            "version" => bad["connection_version"] = json!("9"),
+            "identity" => bad["target"]["generation"] = json!("wrong"),
+            "unknown" => bad["private_unknown"] = json!("CANARY_CONNECTION"),
+            _ => bad["host_limits"] = json!([1, 2, 3]),
+        }
+        fs::write(&connection_file, serde_json::to_vec(&bad).unwrap()).unwrap();
+        let output = run(&case.directory.join("must-not-spawn"), 65536);
+        assert_eq!(output.status.code(), Some(2));
+        assert!(output.stdout.is_empty());
+        assert!(
+            !String::from_utf8(output.stderr)
+                .unwrap()
+                .contains("CANARY_CONNECTION")
+        );
+    }
+    let duplicate = serde_json::to_string(&base_connection).unwrap().replacen(
+        "{",
+        "{\"connection_version\":\"1.0.0\",",
+        1,
+    );
+    fs::write(&connection_file, duplicate).unwrap();
+    assert_error(run(&worker, 65536), 2, "invalid_connection");
+    let mut unsupported = base_connection.clone();
+    unsupported["provider"] = json!({"backend":"other"});
+    fs::write(&connection_file, serde_json::to_vec(&unsupported).unwrap()).unwrap();
+    assert_error(run(&worker, 65536), 5, "unsupported_observe_backend");
+    #[cfg(not(feature = "web"))]
+    {
+        unsupported["provider"] = json!({"backend":"web","setup":{},"selection":{}});
+        fs::write(&connection_file, serde_json::to_vec(&unsupported).unwrap()).unwrap();
+        assert_error(run(&worker, 65536), 5, "unsupported_observe_backend");
+    }
+}
+
 #[test]
 fn inspect_keeps_exact_identity_availability_evidence_and_escaped_text() {
     let mut case = Case::new("GEO-GAP");
@@ -669,8 +837,8 @@ fn finite_command_and_argument_contract() {
     for (args, exit, code) in [
         (
             vec!["observe", "PRIVATE_CANARY_L01"],
-            5,
-            "unsupported_command",
+            2,
+            "invalid_arguments",
         ),
         (vec!["check"], 2, "invalid_arguments"),
         (

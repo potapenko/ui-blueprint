@@ -44,6 +44,40 @@ impl Write for Bounded {
     }
 }
 
+#[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
+pub(crate) fn trusted_input<T: serde::Serialize>(
+    value: &T,
+    limit: usize,
+) -> Result<Vec<u8>, Failure> {
+    let mut buffer = Bounded::new(limit);
+    serde_json::to_writer(&mut buffer, value).map_err(|_| buffer.error())?;
+    Ok(buffer.bytes)
+}
+
+#[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
+pub(crate) fn observation_lines(
+    completion: &uiblueprint_host::host_types::HostCompletion<'_>,
+    limit: usize,
+    output: &mut impl Write,
+) -> Result<(), Failure> {
+    let mut remaining = limit;
+    for slot in 0..3 {
+        if let Some(bytes) = completion.bytes(slot) {
+            let line = bytes
+                .len()
+                .checked_add(1)
+                .filter(|n| *n <= remaining)
+                .ok_or(Failure::invalid("output_limit"))?;
+            output
+                .write_all(bytes)
+                .and_then(|_| output.write_all(b"\n"))
+                .map_err(|_| Failure::io())?;
+            remaining -= line;
+        }
+    }
+    Ok(())
+}
+
 pub(crate) fn json(
     snapshot: Snapshot,
     expectation: Expectation,
