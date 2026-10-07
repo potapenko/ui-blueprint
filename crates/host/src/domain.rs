@@ -31,6 +31,7 @@ pub(crate) struct DomainInner {
     pub buffers: ParentBuffers,
     pub slots: [Cell<Slot>; MAX_WORKERS],
     pub epoch: Cell<u64>,
+    pub effects: crate::effects::EffectLanes,
     pub runtime_bytes: Cell<usize>,
     pub runtime_active: Cell<bool>,
     pub abandoned: Cell<bool>,
@@ -118,6 +119,7 @@ impl HostDomain {
                 })
             }),
             epoch: Cell::new(0),
+            effects: crate::effects::EffectLanes::new(),
             runtime_bytes: Cell::new(0),
             runtime_active: Cell::new(false),
             abandoned: Cell::new(false),

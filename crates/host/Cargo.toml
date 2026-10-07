@@ -25,3 +25,13 @@ test = false
 name = "process_peer"
 path = "tests/support/process_peer.rs"
 test = false
+
+[[example]]
+name = "effect_peer"
+path = "tests/support/effect_peer.rs"
+test = false
+
+[[example]]
+name = "allocator_probe"
+path = "tests/support/allocator_probe.rs"
+test = false

@@ -307,3 +307,68 @@ new tests are outside this set and proof. Exact4 checkpoint paths: supervisor.rs
 tests/support/reaping_host.rs under crates/host; docs/development/host.md; this receipt.
 The begun nonce draft was removed before this repair; no nonce change or new Cargo
 hook is included. Independent R1 acceptance and full H01 remain open.
+
+## Parent nonce/effect stage — actual supervisor, explicitly fake delivery
+
+R1 savedbf67c98 was independently accepted by same reviewer in d37c98c; this new
+slice does not replace that acceptance or repeat Native tests. Restore D02.LIFECYCLE,
+WORK.SUPERVISOR and ACTIONS/LIFECYCLE/PRIVACY@1. Selected action route read ACTIONS →
+EXCHANGE/FORMS/LIFECYCLE plus D04@1 → IDENTITY/NATIVE/CACHE/PRIVACY and existing closure.
+One-use parent permit and unknown-effect/no-retry are contract requirements. The fixed
+MutationLease/EffectLanes implementation is Core's engineering choice within that
+basis; no new public graph/CLI schema, user authority or actual platform backend.
+
+Parent reserves per-Target mutation ownership before work. EffectReady checks active
+class/correlation/current deadline and optional global physical-lane availability;
+parent stores Possible before any permit bytes. Nonce serial is checked and single-use.
+Duplicate/wrong permit requests fail; claims survive uncertain cleanup/quarantine.
+Confirmed terminal acknowledgement must echo the exact nonce and follow complete
+canonical frame/commit/ACK. Read-only refuses before dispatch; cancel/expiry never
+issues another permit. Pending control writes finish before additional peer controls
+are interpreted, with a fresh parent deadline check before sends. No automatic retry.
+Actual session-worker still rejects Mutation; its pinned sources are unchanged.
+
+The explicit test-only effect_peer owns Native-created process/FDs and checks trusted
+Target plus a bounded canonical Action fixture. Fake delivery is a local counter,
+not UI input or application success. Post-permit loss/duplicate request reports
+unknown; successful fake delivery publishes the unchanged fixture and nonce. A fake
+physical delivery waits for cancellation/EOF under the outer5s/host cleanup bounds,
+not a timing sleep for readiness. No SDK/permission/capture/live operation ran.
+
+Five new effect scenarios pass: reusable worker/distinct confirmed nonces; post-permit
+loss/duplicate request with unknown/no retry; read-only and pre-permit cancel/deadline;
+same-Target exclusion; global physical contention across distinct Target identities
+and cancellation after the winning permit preserving Possible. Full runtime suite
+passes12 outer tests plus2 explicitly executed isolated R1 peer cases. The isolation
+marker is not a skipped mandatory case. This is author proof, not independent nonce
+acceptance. Real input and outcome verification remain separately gated.
+
+```sh
+cargo build --locked -p uiblueprint-host --example effect_peer
+cargo test --locked -p uiblueprint-host --test runtime -- --test-threads=1
+cargo clippy --locked -p uiblueprint-host --lib --bin session-worker --example effect_peer --test runtime -- -D warnings
+cargo check --locked -p uiblueprint-host --lib --bin session-worker --example effect_peer --test runtime
+rustfmt --edition 2024 --check --config skip_children=true crates/host/src/lib.rs crates/host/src/domain.rs crates/host/src/effects.rs crates/host/src/supervisor.rs crates/host/tests/runtime.rs crates/host/tests/support/effects_host.rs crates/host/tests/support/effect_peer.rs
+```
+
+All pass; document local links and git diff --check pass. No unaffected suites rerun.
+Final68-input digest `31e9bfd012edd3f0393ee37b01d0ee49c2cc7c701456466b0e57cfd8077d788d`:
+stage-D64 path set at9424759, current bytes, plus effects.rs, tests/support/
+effects_host.rs, tests/support/effect_peer.rs under crates/host and
+fixtures/golden/ENV-ACTION-VALID.json. Same compact sorted JSON method. Four pinned
+allocator/worker inputs match saved50c0c95; no dependency/feature/root-lock changes.
+
+Host Cargo adds two concrete compiling examples: Core effect_peer and root-authorized
+Integration allocator_probe exact hook. Host Cargo SHA256
+9a3f14090f6a5e1ed26eb19357d6ae07959a64d845e1fe30e3ed3676935854d9.
+Core's cargo check --locked -p uiblueprint-host --example allocator_probe passed the
+handed-off source. Probe/tests belong solely to Integration; their runtime claims
+and source checkpoint are separate, and its source is excluded from Core's68 set.
+Root coordinates saving that prerequisite before the shared manifest checkpoint.
+Named probe input barrier acknowledged; no named inputs/interfaces change during it.
+
+Exact10 checkpoint paths: crates/host/Cargo.toml; src/{lib,domain,effects,supervisor}.rs;
+tests/runtime.rs; tests/support/{effects_host,effect_peer}.rs; docs/development/host.md;
+this receipt. No Integration test/probe, Native, Web or root coordination files stage.
+Next Core dependency-ready work is registered helper/capture ownership and remaining
+strict lifecycle/late-control proof. Full H01/allocator/live/D06 acceptance remains open.

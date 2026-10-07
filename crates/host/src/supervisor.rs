@@ -3,6 +3,7 @@
 use crate::{
     authority::TargetLease,
     domain::{DomainInner, HostDomain, RuntimeRoot, SessionHandle, SessionReservation, SlotPhase},
+    effects::MutationLease,
     host_types::*,
     process_api::{OwnedProcess, ProcessPlatform, ProcessState, SpawnSpec, Transfer},
     publication::Publication,
@@ -21,6 +22,7 @@ enum TxStage {
     SubmitHeader,
     Input,
     Ack,
+    Permit,
     Idle,
 }
 struct Active<'a> {
@@ -52,6 +54,7 @@ struct Worker<'a, C: OwnedProcess> {
     pending_terminal: Option<Terminal>,
     ready: bool,
     ownership_lost: bool,
+    mutation: Option<MutationLease<'a>>,
 }
 struct RuntimeState<'a, P: ProcessPlatform> {
     platform: P,
@@ -203,6 +206,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             pending_terminal: None,
             ready: false,
             ownership_lost,
+            mutation: None,
         });
         if ownership_lost {
             let worker = state.workers[session.slot]
@@ -272,6 +276,11 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         {
             return Err(HostError::InvalidLimits);
         }
+        let mutation = if class == OperationClass::Mutation {
+            Some(MutationLease::acquire(self.domain, session.slot)?)
+        } else {
+            None
+        };
         let remaining = remaining_ms(deadline, Instant::now())?;
         let sequence = slot.sequence.checked_add(1).ok_or(HostError::Overflow)?;
         let handle = OperationHandle { session, sequence };
@@ -304,6 +313,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             value: remaining,
             auxiliary: request.frame_bytes as u64 | ((request.total_bytes as u64) << 32),
         };
+        worker.mutation = mutation;
         worker.tx = control.encode();
         worker.tx_offset = 0;
         worker.body_offset = 0;
@@ -400,7 +410,11 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                     if worker.active.is_some() {
                         return Ok(HostEvent::Complete(terminalize(
                             worker,
-                            Terminal::Failed(error),
+                            if error == HostError::DeadlineExpired {
+                                Terminal::TimedOut
+                            } else {
+                                Terminal::Failed(error)
+                            },
                             self.domain.limits.cleanup_ms,
                             now,
                         )));
@@ -609,7 +623,14 @@ fn pump<'a, C: OwnedProcess>(
         }
     }
     match worker.stage {
-        TxStage::ConfigHeader | TxStage::SubmitHeader | TxStage::Ack => {
+        TxStage::ConfigHeader | TxStage::SubmitHeader | TxStage::Ack | TxStage::Permit => {
+            if worker
+                .active
+                .as_ref()
+                .is_some_and(|a| Instant::now() >= a.deadline)
+            {
+                return Err(HostError::DeadlineExpired);
+            }
             let bytes = worker.tx;
             let count = written(worker, &bytes[worker.tx_offset..])?;
             worker.tx_offset += count;
@@ -619,6 +640,7 @@ fn pump<'a, C: OwnedProcess>(
                 worker.stage = match worker.stage {
                     TxStage::ConfigHeader => TxStage::ConfigBody,
                     TxStage::SubmitHeader => TxStage::Input,
+                    TxStage::Permit => TxStage::Idle,
                     TxStage::Ack => {
                         let ack = Control::decode(&worker.tx)?;
                         worker
@@ -692,6 +714,9 @@ fn pump<'a, C: OwnedProcess>(
         }
         TxStage::Idle => (),
     }
+    if !matches!(worker.stage, TxStage::Idle) {
+        return Ok(None);
+    }
     if worker.reading_body {
         let publication = worker
             .active
@@ -753,7 +778,40 @@ fn pump<'a, C: OwnedProcess>(
                 clock: clock_id(handle.epoch)?,
             }))
         }
+        ControlKind::EffectReady => {
+            if active.class != OperationClass::Mutation
+                || active.effect != EffectReceipt::NotDispatched
+                || control.slot != 0
+                || control.flags & !1 != 0
+                || control.length != 0
+                || control.value != 0
+                || control.auxiliary != 0
+            {
+                return Err(HostError::InvalidControl);
+            }
+            let nonce = worker
+                .mutation
+                .as_ref()
+                .ok_or(HostError::PermissionDenied)?
+                .permit(control.flags & 1 != 0)?;
+            // Receipt and lane ownership precede every byte of the permit.
+            active.effect = EffectReceipt::Possible { nonce };
+            worker.tx = Control {
+                kind: ControlKind::EffectPermit,
+                value: nonce,
+                ..control
+            }
+            .encode();
+            worker.tx_offset = 0;
+            worker.stage = TxStage::Permit;
+            Ok(None)
+        }
         ControlKind::Frame => {
+            if active.class == OperationClass::Mutation
+                && active.effect == EffectReceipt::NotDispatched
+            {
+                return Err(HostError::InvalidControl);
+            }
             if control.length > active.request.frame_bytes as u64 {
                 return Err(HostError::ResourceLimit);
             }
@@ -797,6 +855,25 @@ fn pump<'a, C: OwnedProcess>(
                 5 => Terminal::Failed(HostError::InvalidInput),
                 _ => return Err(HostError::InvalidControl),
             };
+            if active.class == OperationClass::Mutation {
+                if terminal != Terminal::Completed
+                    && matches!(active.effect, EffectReceipt::Possible { .. })
+                {
+                    return Ok(Some(HostEvent::Complete(terminalize(
+                        worker, terminal, cleanup_ms, now,
+                    ))));
+                }
+                if terminal == Terminal::Completed {
+                    let EffectReceipt::Possible { nonce } = active.effect else {
+                        return Err(HostError::InvalidControl);
+                    };
+                    if control.auxiliary != nonce {
+                        return Err(HostError::InvalidControl);
+                    }
+                    active.effect = EffectReceipt::Confirmed { nonce };
+                }
+            }
+            worker.mutation = None;
             let active = worker.active.take().ok_or(HostError::InvalidState)?;
             let mut slot = worker.reservation.domain.slots[active.handle.session.slot].get();
             slot.phase = SlotPhase::Attached;

@@ -126,3 +126,32 @@ admission closes; existing independent slots remain separately owned. A disposab
 regression uses the real Native lost-state transition while restoring current policy,
 proves zero config/readiness I/O and reservation retention, then independently reaps
 its sole EOF-exiting child for test teardown. Independent R1 recheck remains required.
+
+## Parent effect permit and finite fake endpoint
+
+The parent now reserves a fixed per-Target mutation claim before dispatch. A second
+mutation on the same trusted Target/generation refuses; reads and distinct Targets
+remain independent. The private EffectReady message may request the single physical
+lane. Parent validates active correlation/class/deadline, holds that lane if needed,
+records Possible outside the worker and only then sends a fresh one-use nonce.
+Repeated permit requests fail. The claim/lane remains held through uncertain worker
+cleanup, including quarantine, and releases after confirmed terminal delivery or reap.
+No permit is sent after parent cancel/expiry. Control reading waits until pending
+configuration/input/ACK/permit writes finish, with a fresh deadline check before
+control dispatch. Output remains opaque and uses the same commit/ACK boundary.
+
+A successful fake endpoint echoes its issued nonce in terminal metadata; Confirmed
+means delivery acknowledgement, not verification that an application outcome
+succeeded. Loss, cancel or failure after issuance retains Possible/unknown and never
+retries automatically. Production session-worker still refuses Mutation: real
+resolve/precondition checks, platform input/SDK integration and application outcome
+verification are not enabled by this host state machine.
+
+Only the explicitly selected test example effect_peer performs fake delivery, a
+local counter consuming one permit. It publishes an unchanged existing canonical
+Action fixture, requests no platform permission, touches no UI and never performs
+real input. Five proof scenarios cover reuse/distinct nonces, loss/duplicate request,
+read-only/pre-permit cancel/deadline, same-Target exclusion, distinct-Target physical
+lane contention and post-permit cancellation with unknown effect. The unresolved
+fake physical call waits for parent cancellation/EOF; host/test deadlines own its
+bounded cleanup. No stability sleep or real input claim is used.

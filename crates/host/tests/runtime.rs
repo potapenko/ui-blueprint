@@ -213,3 +213,6 @@ fn shutdown_rejects_a_previously_reserved_attach_without_spawning() {
 
 #[path = "support/lifecycle_host.rs"]
 mod lifecycle;
+
+#[path = "support/effects_host.rs"]
+mod effects;
