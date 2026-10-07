@@ -69,9 +69,10 @@ The old allocator pin applies until that handoff. Recheck affected real guard ca
 on the new saved input; injected-null proof must remain labelled fault injection,
 never evidence of actual OS exhaustion. No huge real or virtual allocations.
 
-Saved seam handoff:5e5da61004eb9d12b520e9e4b2181cbf5147b8a7, pushed. Effective
-quota_allocator SHA256 is now bfa9a61d97668849b412a4649b3a76806b6788d6c23ca4da394c8cd7a859d9aa,
-replacing the initial pin below; the other three worker pins remain unchanged.
+Initial alloc/zeroed seam:5e5da61004eb9d12b520e9e4b2181cbf5147b8a7, pushed.
+The effective combined seam is now saved00e282e36f509375bd33cc84b2e9a4997d6b6c57;
+quota_allocator SHA2562f1bf278b9265855ececed61ccb5b3f2e1904f17b1855adb6d659782b241e50e
+replaces both earlier allocator pins. The other three worker pins remain unchanged.
 The real private entry is `pub(super) unsafe fn allocate_with(Layout,
 unsafe fn(Layout) -> *mut u8) -> *mut u8`. Production alloc/alloc_zeroed use fixed
 System forwarders. Core's focused installed-quota/reap regression and compile checks
@@ -89,6 +90,11 @@ the saved source/hash. Integration then tests all affected null cases together,
 using valid small owned layouts/pointers and no huge allocation/VM pressure.
 Do not count alloc-null proof as realloc-null proof or run duplicate waves solely
 because the narrower seam was saved first. No input barrier is held during preparation.
+The implemented private realloc entry is `reallocate_with(pointer, Layout, new_size,
+unsafe fn(*mut u8, Layout, usize) -> *mut u8)`. Old pointer/layout must be valid and
+charged; callback preserves the old block on null. The common path releases only
+new charge before the existing fatal; shipping forwarding remains System. Source
+compile/Clippy/format passed as Core evidence, not injected-null execution.
 
 Reuse session-worker/SpawnSpec and real HostDomain/RuntimeHost entrypoints listed
 in Core's handoff, OutputRequest and Tape::encode for canonical documents. A small
