@@ -46,6 +46,35 @@ process_api/lib/Cargo remain Core-owned, with a root-approved short handoff.
 Each owner returns its actual behavior and interface assumption promptly so they
 do not wait on each other's unimplemented guarantee. No broad adjacent refactor.
 
+## Coordinated API amendment
+
+Core's concrete consumer handoff requests
+`ProcessPlatform::validate_parent_reaping() -> Result<(), HostError>` in
+`crates/host/src/process_api.rs`. Root authorizes this narrow required trait method
+and its contract documentation: Core owns declaration and actual HostDomain/
+RuntimeHost use; Native implements it by forwarding to its existing OS predicate.
+Core publishes the declaration first, then Native supplies the real implementation;
+no default success or duplicated OS policy implementation. Native's current checks
+remain necessary at the OS boundary; this method supplies the actual host's
+precondition and subsequent validation without changing global handlers.
+
+Basis: D02.LIFECYCLE requires ownership and truthful quarantine; the independent
+R1 finding and Core's absent host guarantee establish an implementation defect.
+This exact signature is Core's engineering proposal selected to connect existing
+owners, not new product intent or a claim of atomic protection against arbitrary
+same-process native code. Preserve the continuously stable supported SIGCHLD and
+exclusive-reaper caller invariant. Core's lease/poison/quarantine/grant retention
+and already ACKed results must use the real predicate before acceptance.
+
+The selected recovery route is specs/README registry10 → product/README and
+development/decisions/README → D02@2, D05@3, MEMORY@2, WORK@1, with their full
+explicit dependencies (D01/D03/D07, product CONTENT@1 and performance/pilots/golden),
+RUST/DEV.RUST@2 and the existing H01 packets. No revision drift found. Analysis
+serialization, export, mobile and live UI remain protected and outside this repair.
+Both owners retain existing write sets; only Core's process_api.rs addition opens.
+Focused affected checks follow the real declaration/provider handoff; checkpoint
+and push are serialized through root. Full H01 and independent R1 acceptance remain open.
+
 ## Focused proof and checkpoint
 
 Use disposable owned peers to set the incompatible SIGCHLD/SA_NOCLDWAIT state and
