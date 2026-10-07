@@ -61,3 +61,68 @@ old evidence or linked images changed. Exact12 paths (source9 plus native-helper
 fixtures/native/README.md and this receipt) ready for short Git lease. No active
 process/resources/index. Source step only; live rebuilt-fixture CLI A/B stale test,
 arbitrary-app identity, pointer provider contract and other acceptance remain open.
+
+## Actual product CLI same-title/close-reopen proof
+
+Runtime activated on saved53e6e6ef source. Built matching current off fixture bundle,
+helper/descriptor and CLI/worker/validator from immutable saved747579117ae81b7c2e754b17feb59d673e8b2c7d
+composition in current system-temp; no moving other-owner source. Old fixture9a88b12
+was NOT reused as if it provided current identity evidence. No source/UI/oracle change.
+
+Own new PID93452/canonical executable/unique run-dir attributed within10s; CUA
+existing controls performed A Snapshot, Open B/B Snapshot, select A/close, reopen
+via B, then fresh A Snapshot. Both windows visibly shared F02 Synthetic title.
+No pointer-hit claims, B capture, permission/display/backend or real app actions.
+
+Actual product CLI form5/AXmask1 at160/depth9/512KiB/1s/cleanup1s and explicit profile:
+
+- original A: observed partial/exit4,76 nodes, window8681, generation48390DA2-50F7-4583-AD4B-4BDD7324D609;
+- B: observed partial/exit4,76 nodes, window8682, generationFC430EBA-E462-428D-9087-74AD77E45BE6;
+- A close: last a.json measurement bytes unchanged while a-identity.json changed
+  to rotated generation71D1A88B-DAF3-4EE0-92BE-CC04E2593A29/closed, no UI publication;
+- reopened A BEFORE Snapshot: exact old saved connection/request yielded canonical
+  failed stale_target/exit4, validated, no observed payload; identity remained closed;
+- new A Snapshot/open identity: fresh binding observed partial/exit4,75 actual nodes,
+  window8681 and new generation71D1A88B-DAF3-4EE0-92BE-CC04E2593A29.
+
+CGWindowID8681 was actually reused; no forced recreation or assumed reuse. This
+executes the concrete reuse case previously missing. All observed node Surfaces
+matched their exact request; f02.name form node appeared only under the selected
+A/B Surface. Canonical validation passed and source state stayed unchanged during
+each read-only collection. Setup lifecycle/focus may differ after reopen; actual75
+rather than76 nodes is preserved as partial evidence, never padded/forced.
+
+Real helper current-file checks, not echoed operator generations, caused the stale
+refusal. No Snapshot restamping/legacy bypass. Existing CLI connection/request command
+used actual clock rebound/guarded worker/Ticket/ACK, no new committed harness. A small
+operation-local command reused existing bounded launcher functions; deleted afterwards.
+Prior freshSnapshot proofs remain truthful under their original revisions.
+
+The overall300s operation bound was exceeded:387.6s before completed cleanup.
+The first final cleanup command stopped at its outer-deadline assertion; exact
+cleanup then ran immediately without another collection/observation. This is a
+verification-control failure and prevents claiming the whole bounded sequence
+accepted. Each reported canonical case remains its actual observed result; no
+cap/deadline was relaxed to manufacture those results. Helpers/workers were
+absent before fixture termination. Native revalidated PID/path/unique-run-dir, terminated
+only own PID93452 and confirmed absence≤5s; LaunchServices parent owns reaping. Physical
+lane released. Current system-temp uib-m01-reopen-4do6ewma source/build/cache/fixture/
+identity/request/response files removed after inline facts and immediate checks;
+directory absence verified. No persistent outputs/images or older artifact removal.
+
+The actual cases demonstrate own-debug-fixture A/B identity and same-ID stale
+refusal/new positive, but the required total-operation bound did not pass. Arbitrary apps, pointer coordinate contract,
+B pixels/permissions, other pilots/D06/P7 remain separate. Existing human receipt only
+is durable; whitespace checked, one-path checkpoint waits next root Git lease. No active
+resources/index or further runtime attempt remains.
+
+
+Current matching binary hashes for the recorded cases:
+
+- fixture-off:55b998850903304e7ba000cb59ad5c25a28a7bff5156fca64874ff35ace642ba;
+- helper:526cbd532aa5bb1bbba6fa8a4387d0316ffaa3ed115f39b6d4f59ede2425e68a;
+- descriptor:7b756e511f0bc488a2134a3ac06ee125b84c9003fffc640735fa606dd813c1d0;
+- actual CLI:e4e83dfd5f3be5a67f32340545c5142b7001dce3151297e0ce18563fc30d4222.
+
+All current temp removal/own exit claims above were verified after the actual cleanup,
+not inferred from the failed first cleanup command. No further attempt was started.
