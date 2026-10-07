@@ -89,3 +89,36 @@ Native/root retains named build/source/binaries for immediate M01 use until acce
 or explicit cleanup. Canonical runtime evidence retention is root/M01 through the
 milestone or explicit discard. No active helper/worker/fixture/input/capture lane or
 Git lease is held; other owners' source/index remain untouched.
+
+## First runtime activation — launch attribution failure, no AX attempt
+
+Activation was read and exact retained fixture/prepared73/binary/validator pins
+matched before launch. Current CUA discovery succeeded; current documentation read.
+No permission/tool handoff occurred. Existing own macOS bundle workflow was reused,
+without new script/config/build; UI actions were reserved for CUA only.
+
+One /usr/bin/open -n launch used fresh task-temp
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m01-live-f02-d46dvyhf.
+The launch command completed, but the initial exact-PID probe failed its10s bound:
+ps reports the canonical /private/var executable while the probe used /var alias.
+This is a launch-attribution check failure, not missing Computer Use or an SDK/host
+failure. No restart/retry, Snapshot, AX/SCK acquisition or H01 consumer execution.
+
+Recovery inspection established one exact new fixture PID51874, canonical retained
+executable and unique --run-dir argument. Hash still matched c35f0be7…230c516.
+Only that instance received SIGTERM; process absence was confirmed within5s. Its
+LaunchServices parent owns OS reaping; no waitpid/reap claim was invented. No user
+instance, other app, Web headless process, display or permissions changed. Native
+physical-input/focus lane released immediately after cleanup.
+
+Minimal negative/cleanup evidence:
+/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/M01-H01/20cb5a64-18e9-4f35-b4f0-df8b6ef0703b/cleanup.json.
+Owner root/M01, consumer runtime/P7; retain through P7 acceptance or explicit discard.
+No raw manifest/stdio/UI log/image or extra sidecar was persisted. Fixture directory
+remains task-temp. Prepared73/binary identities rechecked unchanged after the attempt.
+
+First real AX success remains waiting_evidence. The concrete prerequisite for any
+subsequent assigned attempt is comparing resolved executable paths in the PID probe;
+no cap/field/source/binary change or rebuild is needed. This receipt records a stopped
+negative attempt and does not activate another launch. Exact-one-path doc checkpoint
+awaits root Git lease; actual SDK/H01/pixel/D06 acceptance remains open.
