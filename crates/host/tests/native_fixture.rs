@@ -11,7 +11,7 @@ use std::{
     time::{Duration, Instant},
 };
 use uiblueprint_host::{
-    HostError, HostLimits,
+    HostError, HostLimits, OperationClass,
     authority::TargetLease,
     domain::HostDomain,
     host_types::{HostEvent, OutputRequest, Terminal},
@@ -19,8 +19,13 @@ use uiblueprint_host::{
     process::DarwinPlatform,
     process_api::SpawnSpec,
     supervisor::RuntimeHost,
+    worker_tape,
 };
-use uiblueprint_schema::model::{Artifact, Channel, Document, Id, Operation};
+use uiblueprint_schema::{
+    SchemaVersion,
+    analysis::{AnalysisArtifact, AnalysisDocument, MeasurementResult},
+    model::{Artifact, Channel, ChannelResult, Document, Id, Operation},
+};
 
 const FRAME: usize = 512 * 1024;
 const MIB: usize = 1_048_576;
@@ -114,12 +119,15 @@ fn actual_owned_f02_ax_observation() {
         panic!("fixture Request artifact");
     };
     assert_eq!(r.context.target, session_descriptor.target);
-    assert_eq!(
-        r.operation,
-        Operation::Observe {
-            channels: vec![Channel::ExternalSemantics]
-        }
-    );
+    let requested_channel = match &r.operation {
+        Operation::Observe { channels } if channels.len() == 1 => channels[0],
+        _ => panic!("one Native observation channel"),
+    };
+    let (mask, slot) = match requested_channel {
+        Channel::ExternalSemantics => (1, 0),
+        Channel::OptInLayoutProbe => (4, 2),
+        _ => panic!("capture outside this fixture caller"),
+    };
     assert_eq!(r.limits.max_elements, 160);
     assert_eq!(r.limits.max_depth, 9);
     assert_eq!(r.limits.deadline_ms, 1000);
@@ -135,7 +143,7 @@ fn actual_owned_f02_ax_observation() {
     .expect("runtime host");
     let mut clock_id = String::new();
     let mut committed = 0_u8;
-    let mut missing = 1_u8;
+    let mut missing = mask;
     let mut terminal = "not_completed";
     let mut diagnostic = None;
     let outcome = (|| -> Result<(), HostError> {
@@ -158,7 +166,7 @@ fn actual_owned_f02_ax_observation() {
             .map_err(|_| HostError::Io)?;
         host.configure_native_helpers(
             session,
-            NativeHelperBinding::authorized(SpawnSpec::new(&helper)?, 1, &configuration)?,
+            NativeHelperBinding::authorized(SpawnSpec::new(&helper)?, mask, &configuration)?,
         )?;
         let mut lease = host.reserve_input(session, bytes.len())?;
         lease.bytes_mut().copy_from_slice(&bytes);
@@ -166,7 +174,7 @@ fn actual_owned_f02_ax_observation() {
             session,
             lease,
             OutputRequest {
-                channels: 1,
+                channels: mask,
                 frame_bytes: FRAME,
                 total_bytes: FRAME,
                 input_format: 0,
@@ -191,15 +199,85 @@ fn actual_owned_f02_ax_observation() {
             Terminal::Cancelled => "cancelled",
             Terminal::TimedOut => "timed_out",
         };
-        if completion.bytes(0).is_some() {
+        if completion.bytes(slot).is_some() {
             let mut file =
                 new_file(&output_dir.join("channel-0.json")).map_err(|_| HostError::Io)?;
             completion
                 .write_channel(0, &mut file)
                 .map_err(|_| HostError::Io)?;
         }
-        if completion.terminal != Terminal::Completed || committed != 1 || missing != 0 {
+        if completion.terminal != Terminal::Completed || committed != mask || missing != 0 {
             return Err(HostError::WorkerFailed);
+        }
+        if requested_channel == Channel::OptInLayoutProbe {
+            let bytes = completion.bytes(slot).ok_or(HostError::WorkerFailed)?;
+            let source = Document::from_json(bytes, FRAME).map_err(|_| HostError::InvalidInput)?;
+            let Artifact::ChannelResponse(response) = source.artifact else {
+                return Err(HostError::InvalidInput);
+            };
+            let ChannelResult::Observed(snapshot) = response.result else {
+                return Err(HostError::WorkerFailed);
+            };
+            let query = read(&input_dir.join("query.json"), FRAME).map_err(|_| HostError::Io)?;
+            let query =
+                AnalysisDocument::from_json(&query, FRAME).map_err(|_| HostError::InvalidInput)?;
+            let snapshot_bytes = serde_json::to_vec(&Document {
+                schema_version: SchemaVersion::CURRENT,
+                artifact: Artifact::Snapshot(snapshot.clone()),
+            })
+            .map_err(|_| HostError::InvalidInput)?;
+            // Evaluation binds the unchanged real Snapshot. No added transform,
+            // conditions, expected amount or caller geometry arithmetic.
+            let evaluation = serde_json::json!({"schema_version":"0.2.0","artifact":{"kind":"evaluation_input","data":{
+                "snapshot_id":snapshot.id,"revision":snapshot.revision,"context":snapshot.context,
+                "result_space":{"id":"f02-fixture-local","kind":"local","units":"pt","origin":"top_left"},
+                "transforms":[],"conditions":null}}});
+            let query_bytes = serde_json::to_vec(&query).map_err(|_| HostError::InvalidInput)?;
+            let evaluation_bytes =
+                serde_json::to_vec(&evaluation).map_err(|_| HostError::InvalidInput)?;
+            let parts = [
+                snapshot_bytes.as_slice(),
+                query_bytes.as_slice(),
+                evaluation_bytes.as_slice(),
+            ];
+            let size = 40 + parts.iter().map(|p| p.len()).sum::<usize>();
+            let mut input = host.reserve_input(session, size)?;
+            worker_tape::encode(&parts, input.bytes_mut())?;
+            host.submit(
+                session,
+                OperationClass::Measure,
+                input,
+                OutputRequest {
+                    channels: 1,
+                    frame_bytes: FRAME,
+                    total_bytes: FRAME,
+                    input_format: 1,
+                    retained_partition: 0,
+                },
+                Instant::now() + Duration::from_millis(1000),
+            )?;
+            let HostEvent::Complete(measured) =
+                next(&mut host, Instant::now() + Duration::from_secs(2))?
+            else {
+                return Err(HostError::WorkerFailed);
+            };
+            if measured.terminal != Terminal::Completed || measured.committed() != 1 {
+                return Err(HostError::WorkerFailed);
+            }
+            let data = measured.bytes(0).ok_or(HostError::WorkerFailed)?;
+            let artifact =
+                AnalysisDocument::from_json(data, FRAME).map_err(|_| HostError::InvalidInput)?;
+            let AnalysisArtifact::Measurement(case) = artifact.artifact else {
+                return Err(HostError::InvalidInput);
+            };
+            if !matches!(case.result, MeasurementResult::Known { .. }) {
+                return Err(HostError::InvalidInput);
+            }
+            let mut file =
+                new_file(&output_dir.join("measurement.json")).map_err(|_| HostError::Io)?;
+            measured
+                .write_channel(0, &mut file)
+                .map_err(|_| HostError::Io)?;
         }
         Ok(())
     })();
@@ -237,7 +315,7 @@ fn actual_owned_f02_ax_observation() {
         terminal, "completed",
         "Native terminal result; see bounded report"
     );
-    assert_eq!(committed, 1, "canonical AX ACK missing");
+    assert_eq!(committed, mask, "canonical Native ACK missing");
     assert!(
         cleanup_confirmed,
         "owned cleanup unconfirmed; no false release"

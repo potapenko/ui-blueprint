@@ -114,7 +114,7 @@ def prepare(args):
     for target, flags, extra in [(helper, ['-D', 'HOST_HELPER'], ['plugins/macos/HostProtocol.swift', 'plugins/macos/HostHelper.swift']),
                                  (descriptor, [], [])]:
         command = ['xcrun', 'swiftc', '-parse-as-library', '-swift-version', '6', '-D', 'CAPTURE_LIBRARY',
-                   '-target', 'arm64-apple-macos14.0', *flags, *[str(source / p) for p in common + extra], '-o', str(target)]
+                   '-target', 'arm64-apple-macos14.0', '-module-cache-path', str(output / 'module-cache'), *flags, *[str(source / p) for p in common + extra], '-o', str(target)]
         code, _, error = run_bounded(command, 120, cap=2 * 1024 * 1024)
         if code:
             raise RuntimeError('focused Swift build failed: ' + error.decode(errors='replace')[-2000:])
@@ -160,7 +160,7 @@ def live(args):
     if len(manifest_bytes) > FRAME:
         raise ValueError('manifest bound')
     manifest = json.loads(manifest_bytes)
-    if not (manifest['bundle_id'] == 'local.uiblueprint.f02.off' and manifest['window_identifier'] == 'a'
+    if not (manifest['bundle_id'] in ('local.uiblueprint.f02.off', 'local.uiblueprint.f02.on') and manifest['window_identifier'] == 'a'
             and manifest['role'] == 'a' and manifest['source_state']['stimulus'] == 'normal'
             and manifest['snapshot_request'] > 0 and manifest['collection_mode'] == 'explicit_request_only'
             and manifest['state']['popup'] is False):
@@ -168,29 +168,49 @@ def live(args):
     output = new_output(args.output)
     inputs = output / 'input'
     inputs.mkdir(mode=0o700)
+    probe = manifest.get('probe_enabled') is True
+    fields = ['layout_bounds'] if probe else FIELDS
+    channel = 'opt_in_layout_probe' if probe else 'external_semantics'
     nonce = str(uuid.uuid4())
     context = {'schema_version': '0.1.0', 'session_id': f'native-host-{nonce}',
                'target': {'id': f"f02-pid-{manifest['pid']}", 'generation': manifest['target_generation']},
                'surfaces': [{'id': f"window-{manifest['window_id']}", 'generation': manifest['surface_generation']}],
-               'scope_id': f"fixture-window-{manifest['window_id']}-sample", 'projection': 'interaction', 'fields': FIELDS,
+               'scope_id': f"fixture-window-{manifest['window_id']}-sample", 'projection': 'design' if probe else 'interaction', 'fields': fields,
                'plugin': {'id': 'macos', 'version': '0.1.0'}, 'environment_revision': f'fixture-environment-{nonce}'}
     request = {'schema_version': '0.1.0', 'artifact': {'kind': 'request', 'data': {
         'clock_domain': 'metadata_only_not_an_observation_clock', 'request_id': f'host-request-{nonce}', 'context': context,
         'limits': {'max_elements': 160, 'max_depth': 9, 'max_output_bytes': FRAME, 'deadline_ms': 1000},
-        'freshness_policy': 'current_required', 'operation': {'operation': 'observe', 'channels': ['external_semantics']}}}}
+        'freshness_policy': 'cached_allowed' if probe else 'current_required', 'operation': {'operation': 'observe', 'channels': [channel]}}}}
     descriptor_request = json.loads(encode(request))
     descriptor_request['artifact']['data']['context']['fields'] = WINDOW_FIELDS
+    descriptor_request['artifact']['data']['operation']['channels'] = ['external_semantics']
     # Metadata only: no tree/pixels or Ticket. SessionDescriptor has no fields;
     # the real four-field Request gets actual Attached clock inside the Rust caller.
     code, descriptor, _ = run_bounded([prepared['descriptor_collector'], str(args.manifest.resolve()), str(output),
                                        'describe-window', prepared['profile']], 2, data=encode(descriptor_request) + b'\n')
     if code:
         raise RuntimeError('descriptor-only target/permission metadata failed; no raw diagnostics saved')
+    if probe:
+        session = json.loads(descriptor)
+        session['artifact']['data']['capabilities'] = [{'channel':'opt_in_layout_probe','operation':'observe',
+            'status':'partial','reason':'explicit_measured_fixture_snapshot_import'}]
+        descriptor = encode(session)
     (inputs / 'session.json').write_bytes(descriptor)
     (inputs / 'request.json').write_bytes(encode(request))
     binding = {k: manifest[k] for k in ('pid', 'bundle_id', 'launch_time', 'window_id', 'window_identifier', 'target_generation', 'surface_generation')}
     config = {'binding': binding, 'scope_id': context['scope_id'], 'collection': 'sample',
               'acquisition_limits': json.loads(Path(prepared['profile']).read_text()), 'acquisition_evidence': False}
+    if probe:
+        config.update(probe_manifest_path=str(args.manifest.resolve()), probe_snapshot_request=manifest['snapshot_request'],
+                      probe_source_revision=manifest['source_state']['revision'], probe_uptime=manifest['uptime_seconds'])
+        query = json.loads((ROOT / 'fixtures/analysis/query-gap.json').read_text())
+        q = query['artifact']['data']; q['scope_id'] = context['scope_id']
+        keys = [{'namespace':'macos.swiftui.probe','key':f'f02.sample.a.{name}'} for name in ('icon','text')]
+        q['targets'] = keys; q['units'] = 'pt'
+        for anchor, key in zip(q['anchors'], keys):
+            anchor['element'] = key
+            anchor['coordinate_space'] = {'id':'f02-fixture-local','kind':'local','units':'pt','origin':'top_left'}
+        (inputs / 'query.json').write_bytes(encode(query))
     config_bytes = encode(config)
     if len(config_bytes) > 4032:
         raise ValueError('Native config envelope')
@@ -214,13 +234,34 @@ def live(args):
         raise RuntimeError('committed canonical response invalid')
     response = json.loads(response_bytes)['artifact']['data']
     assert response['request_id'] == request['artifact']['data']['request_id'] and response['session_id'] == context['session_id']
-    assert response['target'] == context['target'] and response['channel'] == 'external_semantics' and response['dispatch_sequence'] > 0
+    assert response['target'] == context['target'] and response['channel'] == channel and response['dispatch_sequence'] > 0
     if response['result']['status'] == 'failed':
         code = response['result']['data']['code']
         print(json.dumps({'result': code, 'canonical_ack': True, 'cleanup_confirmed': True, 'retry': False}))
         return 3  # negative permission/partial result never closes the positive gate
     snapshot = response['result']['data']
     assert snapshot['context'] == json.loads((output / 'host/submitted-request.json').read_bytes())['artifact']['data']['context']
+    if probe:
+        assert snapshot['coverage']['status'] == 'partial' and len(snapshot['nodes']) == 3
+        assert snapshot['observations'][0]['freshness'] == 'unverified'
+        assert snapshot['observations'][0]['start'] == manifest['uptime_seconds']
+        assert snapshot['components'][0]['logical_component_key'] == 'f02.sample.a'
+        measurement_path = output / 'host/measurement.json'
+        valid, _, _ = run_bounded([str(args.validator.resolve()), '--max-bytes', str(FRAME), str(measurement_path)], 3, cap=4096)
+        if valid: raise RuntimeError('guarded measurement contract invalid')
+        measured = json.loads(measurement_path.read_bytes())['artifact']['data']['result']
+        assert measured['status'] == 'known'
+        value = measured['measurement']['value']['value']
+        oracle = json.loads((ROOT / 'fixtures/native/expectations.json').read_text())['gap_pt']
+        expected = oracle['expanded' if manifest['state']['expanded'] else 'baseline']
+        assert value['amount'] == expected and value['source_units'] == 'pt'
+        after = json.loads(args.manifest.read_bytes())
+        assert after['state'] == manifest['state'] and after['source_state'] == manifest['source_state']
+        report = {'result':'acknowledged_measured_probe_and_guarded_gap','gap_pt':value['amount'],
+                  'freshness':'unverified','canonical_ack':True,'cleanup_confirmed':True,
+                  'fixture_state_unchanged':True,'capture_requested':False,'off_on_invariance':False}
+        (output / 'result.json').write_text(json.dumps(report,indent=2)+'\n')
+        print(json.dumps(report)); return 0
     assert snapshot['coverage']['status'] == 'partial' and len(snapshot['nodes']) == 1
     node = snapshot['nodes'][0]
     assert node['key'] == {'namespace': 'macos.ax', 'key': 'f02.sample.a'} and node['surface'] == context['surfaces'][0]

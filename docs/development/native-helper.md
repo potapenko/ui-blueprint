@@ -395,3 +395,29 @@ then gap from canonical icon/text bounds. Full matched off/on invariance remains
 another required condition, holding/checking app_active/window_key/window_main and
 focus/content/size before and after acquisition. The historical mismatched pixel
 pair cannot prove invariance. No UI/pixel/probe run is implied by source checks.
+
+## Actual probe and guarded Measure caller
+
+The existing fixture caller now accepts its supplied single AX or probe request;
+request channel determines bit/slot without an added public flag. Existing launcher
+uses own manifest probe_enabled to select the measured path. Probe requests use
+layout_bounds/design/cached_allowed and opt_in_layout_probe, with exact expected
+Snapshot request/source revision/uptime. Metadata-only descriptor reads the existing
+AX window metadata path; caller-owned Session capability declares the connected
+probe import, not a claim of general Native layout support. Current app/Surface
+binding is still verified by the helper and trusted fixture manifest.
+
+After a canonical probe ACK, that same guarded session executes existing Measure:
+Tape(core Snapshot, analysis query, bound evaluation). Caller derives no arithmetic;
+the worker runs the sole Rust engine in fixture-local pt, preserving the imported
+source observations and unknown transform. The independent launcher checks known
+Rust gap against fixtures/native/expectations.json's baseline8/expanded18. This is
+not an Expectation copied into the collector or a schema migration.
+
+Next one-operation setup: fresh F02-on A normal Snapshot, run the existing launcher;
+then explicit Change layout and a fresh Snapshot, run again against the new exact
+manifest, with unchanged160/depth9/512KiB/profile/parent1s/cleanup1s. Matched off/on
+invariance is not this sequence. All current builds/module caches/inputs/results
+belong in operation system-temp and are removed after inline facts; no persistent
+archive/destination. Runtime begins only on saved matching Core channel2 provider
+and this saved caller, with exact owned setup and cleanup as the activation states.

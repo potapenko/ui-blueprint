@@ -369,6 +369,7 @@ extension Collector {
     }
 }
 
+#if HOST_HELPER
 extension Collector {
     // Explicit own-fixture snapshot import; its measurement clock/time are retained.
     // No UI recollection, expected.json oracle or derived-gap calculation here.
@@ -479,3 +480,5 @@ extension Collector {
         return frame
     }
 }
+
+#endif

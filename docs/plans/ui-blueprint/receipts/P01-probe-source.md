@@ -64,3 +64,45 @@ Binary hashes (before required cleanup):
 - protocol-peer: 1736cf58a55207585dbbc8d2f2830aa6c75ecf3b113d88b5bc6e9236724fce94;
 
 Exact7 syntax/local-links/whitespace checks pass; current temp absent. Index untouched.
+
+
+## Actual caller continuation — declared subset
+
+Before edits: native_fixture.rs and host_observe.py, native-helper.md and this receipt.
+Existing manifest probe_enabled selects existing channel/fields; no new public flag/
+mode. Extend guarded test to channel2 ACK and existing Measure(Tape Snapshot/query/
+evaluation); query/evaluation preserve exact local pt Space and unchanged imported
+Snapshot. Only Rust worker derives gap. Analysis@1/TYPES@1/VALIDATION@1 and current
+CLI@2 complete applicable closure read for this consumer. No semantic delta.
+Core compiling provider has unchanged API; runtime waits saved matching pins.
+
+### Caller compiling readiness on saved Core provider
+
+Exact continuation set is five paths: native_fixture.rs, host_observe.py, helper docs,
+this receipt, and Collector.swift's necessary helper-only compile condition. Original
+write authority includes Collector; exact-five Git lease requested instead of four.
+The first prepare exposed NativeCommand unavailable in descriptor-only compile;
+one #if HOST_HELPER around the probe extension fixed that existing-source dependency.
+A direct retry initially mixed /var and /private/var aliases in the same Clang module
+cache and failed loading a duplicate module; canonical cache path fixed the invocation.
+No product limit/protocol change or old suite rerun was used to resolve either issue.
+
+Saved Core a1ad9143e4cc137535ef476b366e91795e524190 plus exact owned caller/Collector
+edits now compile: Rust native_fixture --no-run and scoped Clippy -D warnings passed;
+actual helper and descriptor Swift targets passed. Original AX request uses slot0;
+probe request slot2/bit4. Existing Measure receives acknowledged real Snapshot,
+geometry query and exact bound EvaluationInput; no caller/Swift gap arithmetic.
+Launcher generates existing canonical query from query-gap fixture selectors/local pt,
+checks the worker's result against independent8/18pt expectation. New caller flag/mode
+was not added; own on-manifest probe_enabled selects the path. Source/UI state checks
+and explicit cleanup remain. Runtime has not begun pending this saved checkpoint.
+
+Current operation temp uib-p01-caller-lj2d5i6g contains saved source/builds for the
+already authorized imminent finite sequence, not a future archive. Prepared input74
+digest35eaf79de83de559d35e4d95c87e8e0ac0ea22370676dd0dd3f2b3497308aed6.
+Binaries: consumer f9601b1937339a7bb7ef71bc0d493c6ffdd53dfa8a6694cf4106c5a934ae5efc;
+helper87315b8ed948136fca2cd24f3783f9945f342a796cc807faa4e79f99b40c94cb;
+descriptor48f7c41b195a0daac27ccc098bf5c9eb0ec5d0d08ef89f78f1e0c21e1af00871.
+All non-owned build inputs equal that saved provider; compiled owned inputs match
+current caller/Collector. Remove all current-operation files after inline runtime
+facts and cleanup. Old evidence/linked images untouched; no new persistent location.
