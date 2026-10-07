@@ -132,3 +132,24 @@ object_record!(PropertyValue { r#type:String, subtype:Option<String>,object_id:O
 object_record!(Descriptor { name:String,value:Option<PropertyValue>,get:Option<de::IgnoredAny>,set:Option<de::IgnoredAny>,was_thrown:Option<bool>,symbol:Option<de::IgnoredAny> });
 object_record!(Properties { result:Vec<Descriptor>,exception_details:Option<de::IgnoredAny> });
 object_record!(Described { node: DomNode });
+
+object_record!(CheckboxState {
+    connected:bool, same_document:bool, native_checkbox:bool, writable:bool, sensitive:bool,
+    enabled:Option<bool>, checked:Option<bool>, indeterminate:Option<bool>
+});
+object_record!(CheckboxRemote { r#type:String, value:Option<CheckboxState> });
+object_record!(CheckboxResult { result:CheckboxRemote, exception_details:Option<de::IgnoredAny> });
+#[derive(Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) enum SetterStatus {
+    Applied,
+    Stale,
+    Unsupported,
+    Disabled,
+    Indeterminate,
+}
+object_record!(SetterState {
+    status: SetterStatus
+});
+object_record!(SetterRemote { r#type:String, value:Option<SetterState> });
+object_record!(SetterResult { result:SetterRemote, exception_details:Option<de::IgnoredAny> });

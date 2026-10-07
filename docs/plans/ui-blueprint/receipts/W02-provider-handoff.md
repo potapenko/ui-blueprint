@@ -1,7 +1,7 @@
 # W02 single SetChecked provider handoff
 
-Status: provider source handoff and separate actions fixture prepared; no provider
-implementation, live action or browser runtime.
+Status: separate fixture saved9bd9f66; native-checkbox provider source implemented
+and focused source/peer checks passed. No live action or guarded host composition.
 Authority: [W02 packet](../packets/W02-provider-handoff.md), approved PLAN.UIB@1/P5.
 One writable file: this receipt in the existing directory; no new directories.
 Basis registry15 → ACTIONS/IDENTITY/FORMS/LIFECYCLE/CACHE and full already-read
@@ -118,3 +118,95 @@ checked/unchecked/disabled attributes and duplicate Enabled labels; inline scrip
 Node syntax PASS (no DOM execution), changed local links and git diff --check PASS.
 actions.html SHA2566b88ef45a73da8e4e24a5a753603dec58ab4c3fca51713d599c8dad1264bca26.
 No browser/build/test runtime or temporary output created by these source checks.
+
+## Concrete native-checkbox provider source
+
+Root granted provider against actual saved Core API/dependency edge
+ffe1166580b633db36cfdbc0128a220c3c332f2c; actions.rs SHA256
+08a271f311ce3de0abaa2d31c05f7225f6d8694ccd7d296d9287cef51c70bccc.
+Core owns Cargo.toml/lock and kernel; Web changed neither. Additional observe.rs
+bounded_document pub(super)-ONLY grant recorded8827532; body/signature/cap unchanged.
+Root separately reconciled wire.rs exact private DTO addition, no existing DTO delta.
+
+Actual9-path subset: collector/{mod.rs,action.rs,set-checked.js,acquire.rs,observe.rs,
+wire.rs} under plugins/web/src; plugins/web/tests/collector.rs and existing
+tests/fixtures/collector/script-check.cjs; this receipt. acquire.rs changes only
+resolve/verify_nodes visibility to pub(super). No io.rs/host/worker/schema/fixture
+changes in this source slice. New files are in the existing collector directory.
+
+Public CheckboxProvider::new(&mut Collector, schema::model::Limits) implements
+actual plugin-api::actions::SetCheckedProvider. One provider owns one attempt and
+borrows its existing Collector through resolve/deliver/observe_after. Constructor
+grants no mutation authority. Core EffectGate alone supplies the move-only parent
+DeliveryPermit; production provider never constructs a nonce or interprets UI as
+authority. Fixed scripts accept original object/document and bool data only.
+
+Resolve validates canonical input/context/ref and actual binding, keeps original
+remote document/node in an owned action group, reads native type/checked/disabled/
+indeterminate/setter availability and private-autocomplete hints. Missing requested
+Enabled/Checked, wrong modality/type, sensitive/disabled/mixed/missing setter or
+uncertain identity refuses before gate. No IDs/labels/nth/geometry fallback. Native
+getter uses ordinary evaluation for fixed :disabled/native reads, as existing
+read-node; selection/original verifyNodes guards remain unchanged.
+
+Fresh before/after use existing canonical Snapshot/Observation/DOM normalizer,
+with same Context and actual one-control evidence. Only native facts read are
+known; other requested fields remain unavailable under partial coverage, never
+filled from the old snapshot/AX/geometry. Resolution Evidence binds the fresh DOM
+Observation; ref refresh preserves exact backend identity. Existing bounded_document
+checks serialized Snapshot size without another writer/graph/parser. Request node/
+byte/time caps and one shared cumulative method/reply/deadline budget govern all
+phases; remaining deadline tightens, never resets. Resource refusal is IncompleteScope.
+
+Deliver requires the exact freshly resolved Action and a passed Core permit, makes
+one attempt and marks pending invalidation. It rechecks document then the SAME held
+object's type/connectivity/enabled/indeterminate/privacy/setter in the dispatch
+turn. One native checked setter is called with the requested bool, even already
+equal; no toggle/click/keyboard/focus/scroll/input/change events or app callback.
+Applied means confirmed native setter delivery, not checked verification or business
+success. Exception/transport uncertainty remains Unknown; no automatic retry.
+
+Observe_after separately reads that original object, checks document/continuity,
+normalizes actual checked and releases its remote group within the same budget.
+Core decides Pass/Fail/Unknown and produces validated TransitionCase. Successful
+verification returns only after explicit group release. If an attempt is abandoned
+or cannot finish, Drop closes only the owned collector connection (no cleanup RPC
+after cancellation/deadline); it does not claim an acknowledged group release.
+A failed/abandoned provider may therefore require reattachment. Host caller must
+apply pending invalidation and own parent effect/watchdog/cleanup composition.
+
+Private wire symbols: CheckboxState/CheckboxRemote/CheckboxResult, SetterStatus/
+SetterState/SetterRemote/SetterResult. Same map-only macro; bounded bool/optionalbool
+state and closed status. Existing wire records unchanged; remote exception content
+is ignored, never logged/retained. No canonical schema/error vocabulary addition.
+
+## Focused provider evidence and remaining gate
+
+On saved ffe1166 with exact eight Web source/test overlays: five focused
+checkbox_provider_ tests PASS, including true/false/already-equal, fresh source
+capability refusals before gate, cancelled/expired-before-dispatch, changed binding
+after delivery, accepted-but-mismatched/missing verification, uncertain delivery
+without retry, and resource refusal before gate. They use synthetic CDP facts and
+a TEST-ONLY gate/nonce/clock with actual Core SetCheckedExecution; not a real parent
+effect authorization or browser action. Returned transitions validate canonically.
+Fixed script checks PASS:8setter +6capability mock scenarios (57existing+new script
+scenarios in total), including no value read/canary output, no event/click fallback
+and preserved one-setter invocation/negative no-write. These are offline mocks.
+Affected Web package/tests check and Clippy -D warnings PASS, owned rustfmt/diff.
+
+Current-operation export/build uib-web-checkbox-y9w8t3fx uses git archive saved
+ffe1166 Cargo/lock/toolchain/crates/plugins-web/fixtures-golden/analysis plus eight
+owned source/test overlays.367exported files match saved base or exact candidate;
+compact sorted JSON path→SHA256 fingerprint 175561ddab2de7cc0c8d4a8dd8c3356e86b60e28d19ad7b0370cd56bcc393850.
+No external package/version/feature update; no host/current WIP input consumed.
+After checks, current source/build temp was confirmed to contain no image files,
+removed and absence verified. No images generated or deleted; older evidence
+untouched. Saved-candidate checkpoint confirmation remains the next step.
+
+Immediate Core composition: instantiate CheckboxProvider with actual guarded
+Collector and explicit Request limits; give it to saved SetCheckedExecution with
+actual monotonic ActionControl and parent EffectGate, retain TransitionCase through
+real bounded publication, then handle pending invalidation after provider borrow
+ends. Host gate/nonce/cancel/ACK bridge and protected review precede live action.
+Fixture9bd9f66 is ready but not served or executed. No real PlayPhrase.me, new
+selector framework, pointer/business outcome, full B02 or live acceptance claimed.

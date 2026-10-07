@@ -182,7 +182,7 @@ fn document(request: &Request, sequence: u64, channel: Channel, result: ChannelR
         })),
     }
 }
-fn bounded_document(document: &Document, cap: u64) -> Result<u64, Failure> {
+pub(super) fn bounded_document(document: &Document, cap: u64) -> Result<u64, Failure> {
     struct Count {
         written: u64,
         cap: u64,

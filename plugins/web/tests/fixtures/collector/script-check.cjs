@@ -18,7 +18,7 @@ class HTMLSelectElement extends Element {}
 class HTMLOptionElement extends Element {}
 class HTMLButtonElement extends Element {}
 for (const [key, sourceKey] of Object.entries({type:'kind',value:'data',placeholder:'placeholder',required:'required',readOnly:'readOnly',checked:'checked',indeterminate:'indeterminate',validity:'validity'})) {
-  Object.defineProperty(HTMLInputElement.prototype, key, { get() { if (key === 'value') valueReads++; return this.state[sourceKey]; } });
+  Object.defineProperty(HTMLInputElement.prototype, key, { configurable:true, get() { if (key === 'value') valueReads++; return this.state[sourceKey]; } });
 }
 const document = { activeElement: null };
 const context = vm.createContext({Element,HTMLInputElement,HTMLTextAreaElement,HTMLSelectElement,HTMLOptionElement,HTMLButtonElement,document});
@@ -105,3 +105,32 @@ rootNode.parentNode=rootSibling;assert.equal(verifyRoot(),false);rootNode.parent
 rootChild.isConnected=false;assert.equal(verifyRoot(),false);rootChild.isConnected=true;
 const replacementRoot=identified('wrapper');children(replacementRoot,[identified('duplicate-id')]);rootNode.isConnected=false;assert.equal(verifyRoot(),false,'no re-query of same-ID replacement');rootNode.isConnected=true;
 console.log('11 offline rooted scenarios passed; subtree identity/limits/continuity, no browser qualification.');
+
+const setterSource=fs.readFileSync(require('node:path').join(__dirname,'../../../src/collector/set-checked.js'),'utf8');
+vm.runInContext(setterSource,context,{timeout:100});let setterCalls=0;
+Object.defineProperty(HTMLInputElement.prototype,'checked',{configurable:true,get(){return this.state.checked;},set(value){setterCalls++;this.state.checked=value;}});
+const setterTarget=node(),setterOther=node();setterOther.state.checked=false;
+setterTarget.click=()=>{throw Error('pointer fallback forbidden');};setterTarget.dispatchEvent=()=>{throw Error('event synthesis forbidden');};
+function setCheckedFixture(target,value,doc=document){context.setterTarget=target;context.setterValue=value;context.setterDoc=doc;return vm.runInContext('setChecked.call(setterTarget,setterDoc,setterValue)',context,{timeout:100});}
+assert.equal(setCheckedFixture(setterTarget,true).status,'applied');assert.equal(setterTarget.state.checked,true);assert.equal(setterOther.state.checked,false);
+assert.equal(setCheckedFixture(setterTarget,true).status,'applied');assert.equal(setterCalls,2,'already-equal invokes one setter rather than toggle');
+assert.equal(setCheckedFixture(setterTarget,false).status,'applied');assert.equal(setterTarget.state.checked,false);
+setterTarget.disabled=true;assert.equal(setCheckedFixture(setterTarget,true).status,'disabled');setterTarget.disabled=false;
+setterTarget.state.indeterminate=true;assert.equal(setCheckedFixture(setterTarget,true).status,'indeterminate');setterTarget.state.indeterminate=false;
+setterTarget.isConnected=false;assert.equal(setCheckedFixture(setterTarget,true).status,'stale');setterTarget.isConnected=true;
+assert.equal(setCheckedFixture(setterTarget,true,{}).status,'stale');setterTarget.state.kind='radio';assert.equal(setCheckedFixture(setterTarget,true).status,'unsupported');setterTarget.state.kind='checkbox';
+setterTarget.attrs.autocomplete='one-time-code';assert.equal(setCheckedFixture(setterTarget,true).status,'unsupported');delete setterTarget.attrs.autocomplete;
+assert.equal(setterCalls,3,'negative cases never call native setter');
+console.log('8 offline native-setter scenarios passed; mocks only, no real input/parent permit.');
+
+const actionSource=fs.readFileSync(require('node:path').join(__dirname,'../../../src/collector/action.rs'),'utf8');
+const checkboxStateSource=actionSource.match(/const STATE: &str = r#"([\s\S]*?)"#;/)[1];vm.runInContext(checkboxStateSource,context,{timeout:100});
+function checkboxStateFixture(target,doc=document){context.stateTarget=target;context.stateDoc=doc;return vm.runInContext('checkboxState.call(stateTarget,stateDoc)',context,{timeout:100});}
+const stateTarget=node();stateTarget.state.data='PRIVATE_STATE_CANARY';valueReads=0;
+let currentState=checkboxStateFixture(stateTarget);assert.equal(currentState.nativeCheckbox,true);assert.equal(currentState.enabled,true);assert.equal(currentState.checked,false);assert.equal(currentState.indeterminate,false);assert.equal(currentState.writable,true);assert.equal(valueReads,0);assert(!JSON.stringify(currentState).includes('PRIVATE_STATE_CANARY'));
+stateTarget.disabled=true;assert.equal(checkboxStateFixture(stateTarget).enabled,false);stateTarget.disabled=false;
+stateTarget.state.indeterminate=true;assert.equal(checkboxStateFixture(stateTarget).indeterminate,true);stateTarget.state.indeterminate=false;
+stateTarget.attrs.autocomplete='one-time-code';assert.equal(checkboxStateFixture(stateTarget).sensitive,true);delete stateTarget.attrs.autocomplete;
+assert.equal(checkboxStateFixture(stateTarget,{}).connected,false);
+stateTarget.state.kind='radio';assert.equal(checkboxStateFixture(stateTarget).nativeCheckbox,false);
+console.log('6 offline checkbox-capability scenarios passed; no saved-state freshness or mutation authority inferred.');

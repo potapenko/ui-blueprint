@@ -329,7 +329,7 @@ impl Collector {
         }
         Ok(())
     }
-    fn verify_nodes(
+    pub(super) fn verify_nodes(
         &mut self,
         document: &str,
         handles: &[String],
@@ -375,7 +375,7 @@ impl Collector {
         }
         Ok(())
     }
-    fn resolve(
+    pub(super) fn resolve(
         &mut self,
         backend: u32,
         group: &str,

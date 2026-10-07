@@ -2134,3 +2134,347 @@ fn changed_document_and_cancelled_connection_leave_pending_invalidation() {
         fixture.finish();
     }
 }
+
+// Synthetic action ports/peer facts only: no browser input or real parent nonce.
+fn checkbox_case(c: &mut Collector, wanted: bool) -> ActionCase {
+    let mut docs = Vec::new();
+    c.observe(&request(), &scope(&[11]), 41, op().deadline, |d| {
+        docs.push(d);
+        Publication::Acknowledged
+    })
+    .unwrap();
+    let snapshot = snapshot(&docs[0]).clone();
+    let source = snapshot
+        .observations
+        .iter()
+        .find(|o| o.source_namespace.0 == "web.dom")
+        .unwrap();
+    let action = Action {
+        id: id("set-checkbox"),
+        context: snapshot.context.clone(),
+        backend_ref: BackendRef {
+            session_id: snapshot.context.session_id.clone(),
+            key: SourceKey {
+                namespace: id("web.dom"),
+                key: id("11"),
+            },
+            snapshot_id: snapshot.id.clone(),
+            observation_id: source.id.clone(),
+            target: target(),
+            surface: surface(),
+        },
+        intent: Intent::SetChecked { value: wanted },
+        modality: InputModality::Setter,
+        input_space: None,
+        required_enabled: true,
+        authorized_scope: id("scope"),
+        unique_match: true,
+        resolution: Resolution {
+            evidence: Evidence {
+                observation_id: source.id.clone(),
+                source_namespace: id("web.dom"),
+                provenance: Provenance::Reported,
+                method: id("synthetic-initial-capability"),
+                uncertainty: None,
+            },
+            writable: Availability::Known {
+                value: Value::Flag(true),
+            },
+            value_allowed: Availability::Known {
+                value: Value::Flag(true),
+            },
+            available_intents: vec![id("set_checked")],
+        },
+    };
+    validation::validate_action(&snapshot, &action).unwrap();
+    ActionCase { snapshot, action }
+}
+struct ActionClock {
+    tick: u64,
+    cancelled: bool,
+}
+impl uiblueprint_plugin_api::actions::ActionControl for ActionClock {
+    fn now(&mut self) -> uiblueprint_plugin_api::ClockReading {
+        self.tick += 1;
+        uiblueprint_plugin_api::ClockReading {
+            domain: id("worker-clock"),
+            milliseconds: self.tick,
+        }
+    }
+    fn cancelled(&self) -> bool {
+        self.cancelled
+    }
+}
+#[derive(Default)]
+struct ActionGate {
+    calls: usize,
+}
+impl uiblueprint_plugin_api::actions::EffectGate for ActionGate {
+    fn authorize(
+        &mut self,
+        _: &Action,
+        _: &uiblueprint_plugin_api::ClockReading,
+    ) -> Result<
+        uiblueprint_plugin_api::actions::DeliveryPermit,
+        uiblueprint_plugin_api::actions::GateFailure,
+    > {
+        self.calls += 1;
+        Ok(uiblueprint_plugin_api::actions::DeliveryPermit::from_parent_nonce(7).unwrap())
+    }
+}
+fn checkbox_peer(mode: u8) -> (Fixture, Arc<std::sync::atomic::AtomicUsize>) {
+    let writes = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let count = writes.clone();
+    let mut checked = false;
+    let fixture = Fixture::new(move |method, command, _| {
+        if mode == 11 && method == "Page.getFrameTree" && count.load(Ordering::Acquire) > 0 {
+            return Some(
+                json!({"frameTree":{"frame":{"id":"frame","loaderId":"changed-after-delivery"}}}),
+            );
+        }
+        if method != "Runtime.callFunctionOn" {
+            return None;
+        }
+        let function = command["params"]["functionDeclaration"]
+            .as_str()
+            .unwrap_or("");
+        if function.starts_with("function checkboxState(") {
+            assert_eq!(command["params"]["objectId"], "node-11");
+            return Some(json!({"result":{"type":"object","value":{
+                "connected":mode!=5,"sameDocument":true,"nativeCheckbox":mode!=2,"sensitive":mode==10,
+                "writable":mode!=4,"enabled":mode!=1,"checked":if mode==9&&count.load(Ordering::Acquire)>0{Json::Null}else{json!(checked)},"indeterminate":mode==3
+            }}}));
+        }
+        if function.starts_with("function setChecked(") {
+            assert_eq!(command["params"]["objectId"], "node-11");
+            assert_eq!(command["params"]["arguments"][0]["objectId"], "node-1");
+            count.fetch_add(1, Ordering::AcqRel);
+            if mode == 7 {
+                return Some(json!({"error":{"code":-32000,"message":CANARY}}));
+            }
+            if mode != 6 {
+                checked = command["params"]["arguments"][1]["value"]
+                    .as_bool()
+                    .unwrap();
+            }
+            return Some(json!({"result":{"type":"object","value":{"status":"applied"}}}));
+        }
+        None
+    });
+    (fixture, writes)
+}
+#[test]
+fn checkbox_provider_sets_boolean_once_and_verifies_actual_state() {
+    use uiblueprint_plugin_api::actions::*;
+    for wanted in [true, false] {
+        let (fixture, writes) = checkbox_peer(0);
+        let mut c = fixture.attach(limits());
+        let case = checkbox_case(&mut c, wanted);
+        let old_id = case.snapshot.id.clone();
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = ActionControl::now(&mut control);
+        let mut execution =
+            SetCheckedExecution::prepare(case, id("transition"), id("step"), start, 1500).unwrap();
+        let mut gate = ActionGate::default();
+        {
+            let mut provider = collector::CheckboxProvider::new(&mut c, request().limits);
+            assert_eq!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .unwrap(),
+                DeliveryStatus::Confirmed
+            );
+            assert_eq!(
+                execution.verify(&mut provider, &mut control).unwrap(),
+                CheckStatus::Pass
+            );
+            assert!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .is_err()
+            );
+        }
+        let result = execution.finish().unwrap();
+        assert_ne!(result.before.id, old_id);
+        assert_eq!(result.transition.steps[0].outcome, Outcome::Succeeded);
+        assert_eq!(
+            writes.load(Ordering::Acquire),
+            1,
+            "already-equal still sets, never toggles/retries"
+        );
+        assert_eq!(gate.calls, 1);
+        assert!(c.pending_invalidation());
+        assert_eq!(
+            fixture.methods().last().map(String::as_str),
+            Some("Runtime.releaseObjectGroup")
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn checkbox_provider_rejects_ineligible_current_source_before_gate() {
+    use uiblueprint_plugin_api::actions::*;
+    for mode in [1, 2, 3, 4, 5, 10] {
+        let (fixture, writes) = checkbox_peer(mode);
+        let mut c = fixture.attach(limits());
+        let case = checkbox_case(&mut c, true);
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = ActionControl::now(&mut control);
+        let mut execution =
+            SetCheckedExecution::prepare(case, id("transition"), id("step"), start, 1500).unwrap();
+        let mut gate = ActionGate::default();
+        {
+            let mut provider = collector::CheckboxProvider::new(&mut c, request().limits);
+            assert_eq!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .unwrap(),
+                DeliveryStatus::NotDispatched
+            );
+        }
+        assert_eq!(gate.calls, 0);
+        assert_eq!(writes.load(Ordering::Acquire), 0);
+        assert_eq!(
+            execution.finish().unwrap().transition.steps[0].outcome,
+            Outcome::Failed
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn checkbox_provider_does_not_turn_accepted_or_uncertain_delivery_into_success() {
+    use uiblueprint_plugin_api::actions::*;
+    for mode in [6, 7, 9, 11] {
+        let (fixture, writes) = checkbox_peer(mode);
+        let mut c = fixture.attach(limits());
+        let case = checkbox_case(&mut c, true);
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = ActionControl::now(&mut control);
+        let mut gate = ActionGate::default();
+        let mut execution =
+            SetCheckedExecution::prepare(case, id("transition"), id("step"), start, 1500).unwrap();
+        {
+            let mut provider = collector::CheckboxProvider::new(&mut c, request().limits);
+            let delivered = execution
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap();
+            if mode == 7 {
+                assert_eq!(delivered, DeliveryStatus::Unknown);
+                assert!(execution.verify(&mut provider, &mut control).is_err());
+            } else {
+                assert_eq!(delivered, DeliveryStatus::Confirmed);
+                assert_eq!(
+                    execution.verify(&mut provider, &mut control).unwrap(),
+                    if mode == 6 {
+                        CheckStatus::Fail
+                    } else {
+                        CheckStatus::Unknown
+                    }
+                );
+            }
+        }
+        assert_eq!(writes.load(Ordering::Acquire), 1);
+        let result = execution.finish().unwrap();
+        assert_eq!(
+            result.transition.steps[0].outcome,
+            if mode == 6 {
+                Outcome::Failed
+            } else {
+                Outcome::ActionOutcomeUnknown
+            }
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn checkbox_provider_cancel_before_dispatch_and_expired_budget_do_not_write() {
+    use uiblueprint_plugin_api::actions::*;
+    let (fixture, writes) = checkbox_peer(0);
+    let mut c = fixture.attach(limits());
+    let case = checkbox_case(&mut c, true);
+    let before = fixture.methods().len();
+    let mut control = ActionClock {
+        tick: 0,
+        cancelled: true,
+    };
+    let start = ActionControl::now(&mut control);
+    let mut gate = ActionGate::default();
+    let mut execution =
+        SetCheckedExecution::prepare(case.clone(), id("transition"), id("step"), start, 1500)
+            .unwrap();
+    {
+        let mut provider = collector::CheckboxProvider::new(&mut c, request().limits);
+        assert!(
+            execution
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .is_err()
+        );
+    }
+    assert_eq!(fixture.methods().len(), before);
+    assert_eq!(gate.calls, 0);
+    assert_eq!(writes.load(Ordering::Acquire), 0);
+    {
+        let mut provider = collector::CheckboxProvider::new(&mut c, request().limits);
+        assert!(
+            provider
+                .resolve_exact(
+                    &case,
+                    &uiblueprint_plugin_api::ClockReading {
+                        domain: id("worker-clock"),
+                        milliseconds: 1
+                    },
+                    0
+                )
+                .is_err()
+        );
+    }
+    assert_eq!(writes.load(Ordering::Acquire), 0);
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn checkbox_provider_preserves_resource_refusal_before_gate() {
+    use uiblueprint_plugin_api::actions::*;
+    let (fixture, writes) = checkbox_peer(0);
+    let mut c = fixture.attach(limits());
+    let case = checkbox_case(&mut c, true);
+    let before = fixture.methods().len();
+    let mut control = ActionClock {
+        tick: 0,
+        cancelled: false,
+    };
+    let start = ActionControl::now(&mut control);
+    let mut gate = ActionGate::default();
+    let mut execution =
+        SetCheckedExecution::prepare(case, id("transition"), id("step"), start, 1500).unwrap();
+    let mut bounded = request().limits;
+    bounded.max_output_bytes = 32;
+    {
+        let mut provider = collector::CheckboxProvider::new(&mut c, bounded);
+        assert_eq!(
+            execution
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap(),
+            DeliveryStatus::NotDispatched
+        );
+    }
+    assert_eq!(execution.issue().unwrap().code, ErrorCode::IncompleteScope);
+    assert_eq!(gate.calls, 0);
+    assert_eq!(writes.load(Ordering::Acquire), 0);
+    assert_eq!(fixture.methods().len(), before);
+    drop(c);
+    fixture.finish();
+}
