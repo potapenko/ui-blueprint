@@ -455,3 +455,43 @@ A/B AX-only cases use each fresh Snapshot's own identity_path. Keep A's old trus
 binding, close/reopen (even if CG ID reused), attempt old binding and require refusal;
 then explicit Snapshot and fresh binding must succeed. B capture remains stopped.
 This source step runs only synthetic lifecycle/reader checks, no UI/live proof.
+
+## Own popup scope and anchor
+
+Current fixture Snapshot attempts to attribute an open own popover window through
+bounded public NSAccessibility identifier/children, matching explicit
+f02.popup.owner.a/b. It excludes the parent A/B windows as popup candidates. A unique
+marker-bearing own NSWindow supplies its actual windowNumber; title/rect/order do
+not select it. Missing/ambiguous public mapping publishes popup_binding_status
+unresolved and no binding. This mechanism still needs actual SwiftUI popup qualification.
+Nonvisual explicit popup window identifier is assigned only after that attribution.
+
+A/b popup presentation and close invalidate an independent popup-a/b identity receipt;
+willClose also invalidates the attributed popup window. No measurements are collected
+on lifecycle events. Explicit Snapshot alone can publish OPEN/current popup binding.
+Existing parent A/B identity, measured probe semantics and UI layout remain unchanged.
+
+Trusted `collection: popup-ax` config supplies binding for actual popup window,
+identity_path, plus parent_binding and parent_identity_path. Both live records must
+match before and after acquisition, with independent public process/window checks.
+Context surfaces explicitly contain popup first and parent second; target stays the
+same known fixture incarnation. Canonical popup Surface gets actual native owner,
+initiated_by parent and anchored_to the actual collected f02.popup trigger node.
+A separate fixture-binding Observation/Evidence marks the relationship's explicit
+program source, not a measured gap/arrowEdge or geometric equality. Parent trigger
+is authorized dependent context; unrelated window/process content is not returned.
+
+The same bounded WindowAX/property owners collect popup nodes and one parent trigger.
+Actual SDK AX window/marker binding failure yields target_unresolved, closed/mismatched
+current identities yield stale_target. Coverage remains partial; every requested
+property retains known/unknown/unsupported states. Global focus/transform/layout gaps
+are not inferred. Popup capture consumer is not connected in this first source slice:
+it returns explicit unsupported rather than substituting parent isolated pixels.
+That exact remaining Native capture connection can reuse current CaptureLifecycle
+only after attributable popup-window live proof; no new backend is needed.
+
+Next finite setup is own F02 A Edge popup→explicit Snapshot, using the reported
+popup_binding only if status bound; actual CLI connection names popup/parent surfaces
+and exact identity paths. Observe/inspect popup and trigger; then close via existing
+Confirm and require old popup binding refusal, reopen/new Snapshot/new binding positive.
+No B capture, source-app permission changes or stale-generation repair in place.

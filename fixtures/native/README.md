@@ -101,3 +101,11 @@ exact trusted path. Old fixture builds lack this capability and current helper m
 refuse them. Rebuild matching fixtures for current close/reopen qualification.
 Identity storage failure at close terminates only this owned debug fixture fail-closed.
 No visible UI/oracle/layout or capture permission behavior was changed.
+
+Own popup identity is additional metadata only. Presentation/close invalidates
+popup-a/b-identity.json independently; Snapshot publishes a bound popup only when a
+unique visible own NSWindow contains the explicit popup owner identifier through
+public bounded accessibility traversal. Unresolved mapping remains unresolved.
+The resulting actual window ID and generation are in popup_binding, with parent
+anchor declaration separately sourced. No title/rectangle/arrowEdge establishes
+ownership or measured geometry. Popup content, layout and independent oracle unchanged.

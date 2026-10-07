@@ -14,6 +14,11 @@ import Darwin
             DispatchQueue.global().asyncAfter(deadline: .now() + remaining) { _exit(124) }
             var bindingManifest = command.configuration.binding.manifest
             bindingManifest["identity_path"] = command.configuration.identity_path
+            if command.configuration.collection == "popup-ax" {
+                let frame = try await Collector.popup(command:command)
+                try io.reply(frame,cap:command.replyCap,deadline:command.deadline)
+                return
+            }
             if command.control.channel == 2 {
                 func identityFailure() throws -> NativeJSONFrame {
                     let request = (command.document["artifact"] as! [String: Any])["data"] as! [String: Any]

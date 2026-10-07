@@ -49,6 +49,8 @@ struct NativeConfiguration: Decodable {
     let collection: String
     let artifact_directory: String?
     let pixel_policy: String?
+    let parent_binding: Binding?
+    let parent_identity_path: String?
     let identity_path: String
     let acquisition_limits: NativeAcquisitionLimits
     let acquisition_evidence: Bool?
@@ -59,10 +61,14 @@ struct NativeConfiguration: Decodable {
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
+        if let parent = object["parent_binding"] as? [String:Any] {
+            guard Set(parent.keys)==Set(["pid","bundle_id","launch_time","window_id","window_identifier","target_generation","surface_generation"])
+            else { throw NativeProtocolError.configuration }
+        }
         let config = try JSONDecoder().decode(Self.self, from: bytes)
         try config.acquisition_limits.validate()
         guard config.identity_path.hasPrefix("/"), !config.identity_path.utf8.contains(0),
@@ -71,10 +77,21 @@ struct NativeConfiguration: Decodable {
         guard config.binding.pid > 0, config.binding.window_id > 0,
               config.binding.launch_time.isFinite && config.binding.launch_time > 0,
               ["local.uiblueprint.f02.on", "local.uiblueprint.f02.off"].contains(config.binding.bundle_id),
-              ["a", "b"].contains(config.binding.window_identifier),
+              ["a", "b", "popup-a", "popup-b"].contains(config.binding.window_identifier),
               !config.binding.target_generation.isEmpty, !config.binding.surface_generation.isEmpty,
-              !config.scope_id.isEmpty, ["sample", "window-ax"].contains(config.collection)
+              !config.scope_id.isEmpty, ["sample", "window-ax", "popup-ax"].contains(config.collection)
         else { throw NativeProtocolError.configuration }
+        if config.collection == "popup-ax" {
+            guard let parent = config.parent_binding, let path = config.parent_identity_path,
+                  ["a","b"].contains(parent.window_identifier),
+                  config.binding.window_identifier == "popup-\(parent.window_identifier)",
+                  parent.pid == config.binding.pid, parent.bundle_id == config.binding.bundle_id,
+                  parent.launch_time == config.binding.launch_time, parent.target_generation == config.binding.target_generation,
+                  parent.window_id != config.binding.window_id, path.hasPrefix("/"), !path.utf8.contains(0),
+                  !path.split(separator:"/").contains("..") else { throw NativeProtocolError.configuration }
+        } else if config.parent_binding != nil || config.parent_identity_path != nil || config.binding.window_identifier.hasPrefix("popup-") {
+            throw NativeProtocolError.configuration
+        }
         if let directory = config.artifact_directory {
             guard directory.hasPrefix("/"), !directory.utf8.contains(0),
                   !directory.split(separator: "/").contains(".."),
@@ -189,7 +206,7 @@ struct NativeDescriptorIO {
               let target = context["target"] as? [String: Any],
               target["id"] as? String == "f02-pid-\(configuration.binding.pid)",
               target["generation"] as? String == configuration.binding.target_generation,
-              let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
+              let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == (configuration.collection == "popup-ax" ? 2 : 1),
               surfaces[0]["id"] as? String == "window-\(configuration.binding.window_id)",
               surfaces[0]["generation"] as? String == configuration.binding.surface_generation,
               let operation = data["operation"] as? [String: Any], operation["operation"] as? String == "observe",
@@ -202,7 +219,7 @@ struct NativeDescriptorIO {
               let output = limits["max_output_bytes"] as? Int, output > 0
         else { throw NativeProtocolError.request }
         guard let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
-              submit.channel == 2 ? fields == ["layout_bounds"] : configuration.collection == "window-ax"
+              submit.channel == 2 ? fields == ["layout_bounds"] : configuration.collection != "sample"
                 ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"])
                 : fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"],
               let nodes = limits["max_elements"] as? Int, (1...160).contains(nodes),

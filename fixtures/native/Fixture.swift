@@ -29,6 +29,39 @@ final class FixtureIdentity {
     }
 }
 
+// Minimal own-fixture window attribution. Only explicit marker presence chooses
+// a candidate; same title/rectangle/order are not evidence. Synthetic tests use
+// the same unique-candidate decision, while live public tree scanning is separate.
+enum FixturePopupAttribution {
+    static func unique(_ rows: [(window: Int, identifiers: [String])], role: String) -> Int? {
+        guard rows.count <= 32 else { return nil }
+        let matches = rows.filter { $0.identifiers.contains("f02.popup.owner.\(role)") }
+        return matches.count == 1 && matches[0].window > 0 ? matches[0].window : nil
+    }
+    @MainActor static func window(_ windows: [NSWindow], parent: NSWindow, role: String) -> NSWindow? {
+        guard windows.count <= 32 else { return nil }
+        var rows: [(window: Int, identifiers: [String])] = []
+        for window in windows where window !== parent && window.isVisible && !["a","b"].contains(window.identifier?.rawValue ?? "") {
+            var queue: [(Any,Int)] = [(window,0)], seen: Set<ObjectIdentifier> = [], identifiers: [String] = []
+            while !queue.isEmpty && seen.count < 160 {
+                let (value, depth) = queue.removeFirst()
+                let object = value as AnyObject
+                guard seen.insert(ObjectIdentifier(object)).inserted, let accessible = value as? NSAccessibilityProtocol else { continue }
+                if let key = accessible.accessibilityIdentifier(), key.utf8.count <= 4096 { identifiers.append(key) }
+                if depth < 9, let children = accessible.accessibilityChildren() {
+                    // The initial public AppKit return remains opaque; no second
+                    // unbounded traversal/copy is retained by this fixture owner.
+                    guard children.count <= 1280 else { continue }
+                    queue.append(contentsOf: children.prefix(max(0,160-seen.count-queue.count)).map { ($0,depth+1) })
+                }
+            }
+            rows.append((window.windowNumber,identifiers))
+        }
+        guard let id = unique(rows,role:role) else { return nil }
+        return windows.first { $0.windowNumber == id }
+    }
+}
+
 #if !IDENTITY_TEST
 // Reusable synthetic pilot only. All visible content/windows/state are SwiftUI.
 @main struct F02Fixture: App {
@@ -105,6 +138,8 @@ private struct PilotView: View {
     @State private var eventRevision = 0
     @State private var measurements = Measurements()
     @State private var identity: FixtureIdentity?
+    @State private var popupIdentity: FixtureIdentity?
+    @State private var popupWindowID = -1
     @State private var snapshotRequest = 0
     @FocusState private var focus: Field?
     @Environment(\.openWindow) private var openWindow
@@ -220,9 +255,30 @@ private struct PilotView: View {
         .padding(20).frame(width: wide ? 650 : 550)
         .coordinateSpace(name: "fixture")
         .defaultFocus($focus, .name)
-        .onChange(of: popup) { _, _ in popupGeneration = UUID().uuidString }
+        .onChange(of: popup) { _, _ in
+            let app = NSRunningApplication.current
+            let owner = popupIdentity ?? FixtureIdentity(directory:runDirectory,windowKey:"popup-\(role)")
+            popupIdentity = owner
+            do {
+                // Both close and a new presentation invalidate previous binding.
+                // Only explicit Snapshot can establish a new measured/current record.
+                try owner.close(pid:app.processIdentifier,bundle:app.bundleIdentifier ?? "unknown",
+                    launch:app.launchDate?.timeIntervalSince1970 ?? 0,window:popupWindowID)
+                popupGeneration = owner.generation
+            } catch { _exit(2) }
+        }
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { notification in
-            guard let window = notification.object as? NSWindow, window.identifier?.rawValue == role else { return }
+            guard let window = notification.object as? NSWindow else { return }
+            if window.identifier?.rawValue == "popup-\(role)", let popupOwner = popupIdentity {
+                let app = NSRunningApplication.current
+                do {
+                    try popupOwner.close(pid:app.processIdentifier,bundle:app.bundleIdentifier ?? "unknown",
+                        launch:app.launchDate?.timeIntervalSince1970 ?? 0,window:window.windowNumber)
+                    popupGeneration = popupOwner.generation
+                } catch { _exit(2) }
+                return
+            }
+            guard window.identifier?.rawValue == role else { return }
             // SwiftUI Window may reopen the same NSWindow/CGWindowID with retained state.
             let app = NSRunningApplication.current
             let owner = identity ?? FixtureIdentity(directory: runDirectory, windowKey: role)
@@ -272,6 +328,23 @@ private struct PilotView: View {
         #else
         let probeEnabled = false
         #endif
+        var popupBinding: [String: Any]?
+        if popup, let popupWindow = FixturePopupAttribution.window(NSApp.windows,parent:window,role:role) {
+            let popupOwner = popupIdentity ?? FixtureIdentity(directory:runDirectory,windowKey:"popup-\(role)")
+            popupIdentity = popupOwner
+            let popupKey = "popup-\(role)"
+            // Public nonvisual identity on our own attributable window only.
+            popupWindow.identifier = NSUserInterfaceItemIdentifier(popupKey)
+            popupWindow.setAccessibilityIdentifier(popupKey)
+            if let generation = try? popupOwner.snapshot(pid:app.processIdentifier,
+                bundle:app.bundleIdentifier ?? "unknown",launch:app.launchDate?.timeIntervalSince1970 ?? 0,window:popupWindow.windowNumber) {
+                popupGeneration = generation; popupWindowID = popupWindow.windowNumber
+                popupBinding = ["pid":app.processIdentifier,"bundle_id":app.bundleIdentifier ?? "unknown",
+                    "launch_time":app.launchDate?.timeIntervalSince1970 ?? 0,"window_id":popupWindow.windowNumber,
+                    "window_identifier":popupKey,"target_generation":"\(app.processIdentifier):\(app.launchDate?.timeIntervalSince1970 ?? 0)",
+                    "surface_generation":generation,"identity_path":runDirectory.appendingPathComponent("\(popupKey)-identity.json").path]
+            }
+        }
         let frames = (try? JSONSerialization.jsonObject(with: JSONEncoder().encode(measurements.frames))) ?? [:]
         let processStart = app.launchDate?.timeIntervalSince1970 ?? 0
         let windows = NSApp.windows.filter { $0.isVisible }.map {
@@ -285,6 +358,7 @@ private struct PilotView: View {
             "surface_generation": measurements.surfaceGeneration, "window_id": window.windowNumber,
             "identity_path": runDirectory.appendingPathComponent("\(role)-identity.json").path,
             "live_manifest_path": runDirectory.appendingPathComponent("\(role).json").path,
+            "popup_binding": popupBinding ?? NSNull(), "popup_binding_status": popupBinding == nil ? "unresolved" : "bound",
             "popup_generation": popupGeneration, "popup_anchor_declared": role,
             "window_identifier": role, "windows": windows,
             "app_active": app.isActive, "window_key": window.isKeyWindow, "window_main": window.isMainWindow,

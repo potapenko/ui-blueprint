@@ -521,3 +521,101 @@ extension Collector {
 }
 
 #endif
+
+#if HOST_HELPER
+extension Collector {
+    @MainActor static func popup(command: NativeCommand, access: NativeAXAccess = .live,
+        publicBinding: (NativeConfiguration.Binding) -> Bool = { binding in
+            NSRunningApplication(processIdentifier: binding.pid)?.launchDate?.timeIntervalSince1970 == binding.launch_time
+                && Collector.windowOwnedBy(pid:binding.pid,window:binding.window_id)
+        }, application: (Int32) -> CFTypeRef = { AXUIElementCreateApplication($0) }) async throws -> NativeJSONFrame {
+        let config=command.configuration
+        guard let parent=config.parent_binding,let parentPath=config.parent_identity_path,
+              let artifact=command.document["artifact"] as? [String:Any],let request=artifact["data"] as? [String:Any],
+              let context=request["context"] as? [String:Any],let target=context["target"] as? [String:Any],
+              let surfaces=context["surfaces"] as? [[String:Any]],surfaces.count==2,
+              let scope=context["scope_id"] as? String,let requestID=request["request_id"] as? String,
+              let fields=context["fields"] as? [String],let limits=request["limits"] as? [String:Any],
+              let maxNodes=limits["max_elements"] as? Int,maxNodes>1,let maxDepth=limits["max_depth"] as? Int
+        else{throw NativeProtocolError.configuration}
+        let popupSurface=surfaces[0],parentSurface=surfaces[1]
+        guard parentSurface["id"] as? String=="window-\(parent.window_id)",parentSurface["generation"] as? String==parent.surface_generation else{throw NativeProtocolError.request}
+        let admission=try NativeAcquisition(config.acquisition_limits,deadline:command.deadline)
+        let json=NativeJSON(config.acquisition_limits),frame=try NativeJSONFrame(capacity:command.replyCap,deadline:command.deadline)
+        let stale=try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("stale_target",scope:scope,channel:command.channel)}
+        func valid() throws {
+            try admission.check()
+            try NativeCurrentIdentity.verify(path:config.identity_path,expected:config.binding.manifest)
+            try NativeCurrentIdentity.verify(path:parentPath,expected:parent.manifest)
+            guard publicBinding(parent),publicBinding(config.binding) else{throw NativeAcquisitionError.invalidValue}
+        }
+        do{try valid()}catch{try frame.encode(stale);return frame}
+        // Parent isolated capture cannot be called popup pixels. Until the actual
+        // capture consumer is separately qualified, return an explicit channel issue.
+        if command.control.channel != 0 {
+            try frame.encode(json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("unsupported",scope:scope,channel:command.channel)})
+            return frame
+        }
+        let failure=try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("target_unresolved",scope:scope,channel:command.channel)}
+        do {
+            let started=ProcessInfo.processInfo.systemUptime
+            let app=application(parent.pid)
+            let popupWindow=try resolveWindow(app,identifier:config.binding.window_identifier,admission:admission,access:access)
+            let parentWindow=try resolveWindow(app,identifier:parent.window_identifier,admission:admission,access:access)
+            let trigger=try resolveElement(parentWindow,identifier:"f02.popup",maxNodes:maxNodes,maxDepth:maxDepth,admission:admission,access:access)
+            let oid="\(requestID)-external_semantics"
+            let collected=try collectWindowAX(popupWindow,surface:popupSurface,observationID:oid+"-popup",maxNodes:maxNodes-1,maxDepth:maxDepth,
+                deadline:command.deadline,admission:admission,fields:fields,json:json,access:access)
+            let anchorNode=try collectWindowAX(trigger,surface:parentSurface,observationID:oid+"-anchor",maxNodes:1,maxDepth:1,
+                deadline:command.deadline,admission:admission,fields:fields,json:json,access:access).nodes
+            guard anchorNode.count==1 else{throw NativeAcquisitionError.invalidValue}
+            let anchor=anchorNode[0]["key"] as! [String:Any]
+            // Each source owner has an actual observation; no cross-observation
+            // node evidence is falsely merged. Helpers collect no other windows.
+            var result=try snapshot(context:context,surface:popupSurface,target:target,scope:scope,fields:fields,observation:oid+"-popup",
+                channel:command.channel,started:started,nodes:collected.nodes,captures:try json.array{[]},json:json)
+            let parentSnapshot=try snapshot(context:context,surface:parentSurface,target:target,scope:scope,fields:fields,observation:oid+"-anchor",
+                channel:command.channel,started:started,nodes:anchorNode,captures:try json.array{[]},json:json)
+            result["nodes"]=try json.array{collected.nodes+anchorNode}
+            result["observations"]=try json.array{(result["observations"] as! [[String:Any]])+(parentSnapshot["observations"] as! [[String:Any]])}
+            let bindingObservation=oid+"-binding"
+            var binding=(parentSnapshot["observations"] as! [[String:Any]])[0]
+            binding["id"]=try json.scalar(bindingObservation);binding["source_namespace"]=try json.scalar("macos.fixture.binding")
+            result["observations"]=try json.array{(result["observations"] as! [[String:Any]])+[try json.borrowed(binding)]}
+            let relationEvidence=try json.evidence(bindingObservation,"macos.fixture.binding","explicit_fixture_popover_trigger_binding")
+            result["surface_records"]=try json.array{[
+                try json.object(["identity","native_owner","initiated_by","anchor","evidence"]){
+                    ["identity":try json.borrowed(popupSurface),"native_owner":try json.known("identity",target),"initiated_by":try json.borrowed(parentSurface),
+                     "anchor":try json.borrowed(anchor),"evidence":try json.borrowed(relationEvidence)]
+                },try json.borrowed((parentSnapshot["surface_records"] as! [[String:Any]])[0])
+            ]}
+            if let popupRoot=collected.nodes.first?["key"] as? [String:Any] {
+                result["relations"]=try json.array{[try json.object(["kind","from","to","evidence"]){
+                    ["kind":try json.scalar("anchored_to"),"from":try json.borrowed(popupRoot),"to":try json.borrowed(anchor),"evidence":try json.borrowed(relationEvidence)]
+                }]}
+            }
+            try valid()
+            try frame.encode(json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.object(["status","data"]){["status":try json.scalar("observed"),"data":result]}})
+            do{try valid()}catch{frame.reset();try frame.encode(stale)}
+        } catch {
+            frame.reset()
+            do{try valid();try frame.encode(failure)}catch{try frame.encode(stale)}
+        }
+        return frame
+    }
+    @MainActor static func resolveElement(_ root:CFTypeRef,identifier:String,maxNodes:Int,maxDepth:Int,
+        admission:NativeAcquisition,access:NativeAXAccess = .live)throws->CFTypeRef{
+        var queue:[(CFTypeRef,Int)]=[(root,0)],seen:[CFTypeRef]=[],matches:[CFTypeRef]=[]
+        while !queue.isEmpty && seen.count<maxNodes {
+            try admission.check();let (element,depth)=queue.removeFirst()
+            if seen.contains(where:{CFEqual($0,element)}){continue};seen.append(element)
+            if let raw=try nativeAXAttribute(element,kAXIdentifierAttribute,admission:admission,access:access),try admission.text(raw)==identifier{matches.append(element)}
+            if depth<maxDepth {
+                let omitted=try nativeAXElements(element,kAXChildrenAttribute,windows:false,capacity:max(0,maxNodes-seen.count-queue.count),admission:admission,access:access){queue.append(($0,depth+1))}
+                guard omitted==0 else{throw NativeAcquisitionError.limit}
+            }
+        }
+        guard queue.isEmpty,matches.count==1 else{throw NativeAcquisitionError.invalidValue};return matches[0]
+    }
+}
+#endif
