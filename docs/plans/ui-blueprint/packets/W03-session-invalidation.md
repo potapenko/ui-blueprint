@@ -53,3 +53,21 @@ owner change checkpoint/push exact paths under short Git lease. Current canonica
 repo URL may be used after proven same identity; no remote/key/history alteration.
 Full K02/live lifecycle, notifications outside explicit calls and performance stay
 separate qualification, not implied by this source integration.
+
+## Finite worker integration on saved provider
+
+Saved Web24ed0e8 and Core74d2e3b now supply the real hook. Web may additionally
+edit only existing crates/host/tests/web_worker.rs and support/web_worker_peer.rs:
+explicit Retain, relevant event/loss during the next explicit observe, original
+ACKed bytes retained, independent second session and confirmed cleanup. Reuse
+existing peer drift/stall/request machinery; minimal one-shot event stimulus only,
+no framework or production event/inspection protocol.
+
+Current host API exposes Recorded Retain/Replay, not StoredRead.invalidated or a
+CurrentRequired cache-read operation. Do not misuse fresh Observe as proof of that
+flag, or claim RevalidationRequired is unique to this invalidation. Combine worker
+flow proof with existing direct Core cache-state tests and reviewed actual callsite;
+state the observable limits explicitly. No new private test seam or production
+metadata solely to duplicate the direct state test. Focused affected checks and
+saved input equality, then one checkpoint/push; no unrelated old suites or live
+browser run in this finite peer step. Full live cache lifecycle remains distinct.

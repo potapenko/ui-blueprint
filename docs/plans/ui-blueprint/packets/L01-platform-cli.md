@@ -55,3 +55,38 @@ dirs and verify; preserve old artifacts and local-image-linked files. No screens
 required by these data cases. Exact-path checkpoint/push after root Git lease.
 Completion is actual observe→inspect(/measure) on one supported target per platform,
 not arbitrary-app support, all pilots, full installable distribution or P7.
+
+## Native two-channel product continuation
+
+Actual form-only CLI resultbc2a264 passed. Native source handoff confirms no missing
+code/API for AX+rendered_capture. Same Native owner now executes one own F02-off A
+normal/fresh-Snapshot case through actual saved CLI/host with channels mask3.
+Source24ffcb or equivalent exactly pinned saved composition; no moving W03 owner.
+Actual Request form5/window-ax, external_semantics+rendered_capture,160/depth9;
+existing metadata-only descriptor setup may use sample4/twochannels because its
+Session contains no projection fields. Do not collect substitute AX in that stage.
+
+Before execution: fixed overall3s, AX≤1s/capture≤2s, existing1s host cleanup,
+512KiB/channel including LF and1MiB cumulative CLI stdout; explicit registered
+image dimensions4096/area8388608/image+PNG64MiB and all other profile ceilings.
+This is the existing two-channel workload, not a raised budget after failure.
+Connection native_fixture/channels3, exact fresh own binding, collection window-ax,
+trusted artifact_directory under THIS operation's system-temp, pixel_policy
+owned_synthetic_fixture, evidence=false. A-only isolated capture/audio off;
+unknown screen/AX-to-pixel transform remains unknown. No B retry or permissions.
+
+Invoke actual observe with explicit2MiB aggregate input/1MiB output. Consume two
+unchanged NDJSON lines, validate identities/channels/current pixel metadata and
+own synthetic PNG via its trusted artifact owner. AX must be committed before
+capture; parent retains capture lease through confirmed reap. On natural late
+capture failure preserve AX/accurate exit without retry or injected production
+fault mode. Positive SDK two-channel proof is required, not assumed from peers.
+
+Observe/cleanup≤120s runtime, launch/setup/owned-process bounds unchanged. Native
+owns physical setup only; Web headless independent. Inspect capture via inline
+image bytes/current tool route if useful, not disposable local-file links. No
+new persistent output dirs, logs/archive or screenshot delivery shortcut. Consume
+then remove own temp files/builds/empty dirs and verify; older linked images intact.
+Update only existing receipts/L01-cli-native.md; no source/harness edits needed.
+Pointer hit remains waiting_evidence for actual provider coordinate/foreground
+contract, per Mac advisor; do not block this independent supported data case.
