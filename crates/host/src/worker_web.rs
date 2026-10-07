@@ -121,190 +121,202 @@ impl WebSession {
         input: &[u8],
         now: fn() -> u64,
     ) -> Result<(), HostError> {
-        if control.class != OperationClass::Observe {
-            return Err(host_diagnostic(
-                io,
-                Stage::Decode,
-                HostError::PermissionDenied,
-            ));
-        }
-        if input.len() > self.limits.input_bytes {
-            return Err(host_diagnostic(
-                io,
-                Stage::Capacity,
-                HostError::ResourceLimit,
-            ));
-        }
-        guard::phase(guard::Phase::Decode);
-        let tape = Tape::decode(input).map_err(|e| host_diagnostic(io, Stage::Decode, e))?;
-        if tape.count() != 2 {
-            return Err(host_diagnostic(io, Stage::Decode, HostError::InvalidInput));
-        }
-        let selection = WebSelection::decode(
-            tape.get(1)
-                .map_err(|e| host_diagnostic(io, Stage::Decode, e))?,
-            self.limits.input_bytes,
-        )
-        .map_err(|e| host_diagnostic(io, Stage::Decode, e))?;
-        let channels = control.flags & 7;
-        let (request, mut run) = session
-            .begin_observation(
-                tape.get(0)
+        // Keep the ObservationRun borrow inside this operation. Its success or
+        // failure cleanup ends before the retained cache is invalidated below.
+        let result = (|| {
+            if control.class != OperationClass::Observe {
+                return Err(host_diagnostic(
+                    io,
+                    Stage::Decode,
+                    HostError::PermissionDenied,
+                ));
+            }
+            if input.len() > self.limits.input_bytes {
+                return Err(host_diagnostic(
+                    io,
+                    Stage::Capacity,
+                    HostError::ResourceLimit,
+                ));
+            }
+            guard::phase(guard::Phase::Decode);
+            let tape = Tape::decode(input).map_err(|e| host_diagnostic(io, Stage::Decode, e))?;
+            if tape.count() != 2 {
+                return Err(host_diagnostic(io, Stage::Decode, HostError::InvalidInput));
+            }
+            let selection = WebSelection::decode(
+                tape.get(1)
                     .map_err(|e| host_diagnostic(io, Stage::Decode, e))?,
-                now,
+                self.limits.input_bytes,
+            )
+            .map_err(|e| host_diagnostic(io, Stage::Decode, e))?;
+            let channels = control.flags & 7;
+            let (request, mut run) = session
+                .begin_observation(
+                    tape.get(0)
+                        .map_err(|e| host_diagnostic(io, Stage::Decode, e))?,
+                    now,
+                    channels,
+                )
+                .map_err(|e| host_diagnostic(io, Stage::Begin, e))?;
+            let sequence = run.ticket.sequence;
+            // No collection before both real begin and the authoritative parent permit.
+            let deadline = worker_main::admit_observation(
+                io,
+                control,
+                sequence,
+                request.limits.deadline_ms,
                 channels,
             )
-            .map_err(|e| host_diagnostic(io, Stage::Begin, e))?;
-        let sequence = run.ticket.sequence;
-        // No collection before both real begin and the authoritative parent permit.
-        let deadline = worker_main::admit_observation(
-            io,
-            control,
-            sequence,
-            request.limits.deadline_ms,
-            channels,
-        )
-        .map_err(|e| host_diagnostic(io, Stage::Permit, e))?;
-        let frame_cap = (control.auxiliary as u32) as usize;
-        let total_cap = usize::try_from(control.auxiliary >> 32)
-            .map_err(|_| host_diagnostic(io, Stage::Capacity, HostError::Overflow))?;
-        if frame_cap == 0
-            || frame_cap > self.limits.output_bytes
-            || frame_cap > publication.len()
-            || total_cap == 0
-            || total_cap > self.limits.request_output_bytes
-        {
-            return Err(host_diagnostic(
-                io,
-                Stage::Capacity,
-                HostError::ResourceLimit,
-            ));
-        }
-        let mut total = 0usize;
-        let mut callback_error = None;
-        let mut callback = |document: Document| {
-            let mut stage = Stage::Encode;
-            let result = (|| -> Result<(), HostError> {
-                let Artifact::ChannelResponse(response) = &document.artifact else {
-                    return Err(HostError::InvalidInput);
-                };
-                let channel = response.channel;
-                let slot = match channel {
-                    Channel::ExternalSemantics => 0,
-                    Channel::RenderedCapture => 1,
-                    Channel::OptInLayoutProbe => 2,
-                };
-                if channels & (1 << slot) == 0 {
-                    return Err(HostError::InvalidControl);
-                }
-                let mut encoded = FixedOutput {
-                    bytes: &mut publication[..frame_cap],
-                    used: 0,
-                };
-                stage = Stage::Encode;
-                {
-                    let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
-                    let result = serde_json::to_writer(&mut encoded, &document);
-                    result.map_err(|_| HostError::ResourceLimit)?;
-                }
-                // Avoid retaining this original graph alongside receive's canonical decode.
-                drop(document);
-                let new_total = total.checked_add(encoded.used).ok_or(HostError::Overflow)?;
-                if new_total > total_cap {
-                    return Err(HostError::ResourceLimit);
-                }
-                stage = Stage::Receive;
-                let incomplete = run.receive_channel(&encoded.bytes[..encoded.used], channel)?;
-                stage = Stage::Publish;
-                {
-                    let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
-                    worker_main::publish(
-                        io,
-                        control,
-                        slot,
-                        &encoded.bytes[..encoded.used],
-                        incomplete,
-                    )?;
-                }
-                total = new_total;
-                Ok(())
-            })();
-            match result {
-                Ok(()) => collector::Publication::Acknowledged,
-                Err(error) => {
-                    callback_error = Some((stage, error));
-                    collector::Publication::Stop
-                }
+            .map_err(|e| host_diagnostic(io, Stage::Permit, e))?;
+            let frame_cap = (control.auxiliary as u32) as usize;
+            let total_cap = usize::try_from(control.auxiliary >> 32)
+                .map_err(|_| host_diagnostic(io, Stage::Capacity, HostError::Overflow))?;
+            if frame_cap == 0
+                || frame_cap > self.limits.output_bytes
+                || frame_cap > publication.len()
+                || total_cap == 0
+                || total_cap > self.limits.request_output_bytes
+            {
+                return Err(host_diagnostic(
+                    io,
+                    Stage::Capacity,
+                    HostError::ResourceLimit,
+                ));
             }
-        };
-        guard::phase(guard::Phase::Admission);
-        let collected = match selection {
-            WebSelection::Rooted {
-                root,
-                max_visited_nodes,
-            } => {
-                let scope = collector::RootedScope {
-                    scope_id: request.context.scope_id.clone(),
-                    root: collector::RootSeed {
-                        session_id: root.session_id,
-                        target: root.target,
-                        surface: root.surface,
-                        document_backend_id: root.document_backend_id,
-                        backend_node_id: root.backend_node_id,
-                        sensitivity: root.sensitivity,
-                    },
+            let mut total = 0usize;
+            let mut callback_error = None;
+            let mut callback = |document: Document| {
+                let mut stage = Stage::Encode;
+                let result = (|| -> Result<(), HostError> {
+                    let Artifact::ChannelResponse(response) = &document.artifact else {
+                        return Err(HostError::InvalidInput);
+                    };
+                    let channel = response.channel;
+                    let slot = match channel {
+                        Channel::ExternalSemantics => 0,
+                        Channel::RenderedCapture => 1,
+                        Channel::OptInLayoutProbe => 2,
+                    };
+                    if channels & (1 << slot) == 0 {
+                        return Err(HostError::InvalidControl);
+                    }
+                    let mut encoded = FixedOutput {
+                        bytes: &mut publication[..frame_cap],
+                        used: 0,
+                    };
+                    stage = Stage::Encode;
+                    {
+                        let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
+                        let result = serde_json::to_writer(&mut encoded, &document);
+                        result.map_err(|_| HostError::ResourceLimit)?;
+                    }
+                    // Avoid retaining this original graph alongside receive's canonical decode.
+                    drop(document);
+                    let new_total = total.checked_add(encoded.used).ok_or(HostError::Overflow)?;
+                    if new_total > total_cap {
+                        return Err(HostError::ResourceLimit);
+                    }
+                    stage = Stage::Receive;
+                    let incomplete =
+                        run.receive_channel(&encoded.bytes[..encoded.used], channel)?;
+                    stage = Stage::Publish;
+                    {
+                        let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
+                        worker_main::publish(
+                            io,
+                            control,
+                            slot,
+                            &encoded.bytes[..encoded.used],
+                            incomplete,
+                        )?;
+                    }
+                    total = new_total;
+                    Ok(())
+                })();
+                match result {
+                    Ok(()) => collector::Publication::Acknowledged,
+                    Err(error) => {
+                        callback_error = Some((stage, error));
+                        collector::Publication::Stop
+                    }
+                }
+            };
+            guard::phase(guard::Phase::Admission);
+            let collected = match selection {
+                WebSelection::Rooted {
+                    root,
                     max_visited_nodes,
-                };
-                self.collector
-                    .observe_rooted(&request, &scope, sequence, deadline, &mut callback)
-                    .map(|_| ())
-            }
-            WebSelection::Initial {
-                ids,
-                max_visited_nodes,
-            } => {
-                let scope = collector::InitialScope {
-                    scope_id: request.context.scope_id.clone(),
-                    ids: ids
-                        .into_iter()
-                        .map(|v| collector::DomId {
-                            id: v.id,
-                            sensitivity: v.sensitivity,
-                        })
-                        .collect(),
+                } => {
+                    let scope = collector::RootedScope {
+                        scope_id: request.context.scope_id.clone(),
+                        root: collector::RootSeed {
+                            session_id: root.session_id,
+                            target: root.target,
+                            surface: root.surface,
+                            document_backend_id: root.document_backend_id,
+                            backend_node_id: root.backend_node_id,
+                            sensitivity: root.sensitivity,
+                        },
+                        max_visited_nodes,
+                    };
+                    self.collector
+                        .observe_rooted(&request, &scope, sequence, deadline, &mut callback)
+                        .map(|_| ())
+                }
+                WebSelection::Initial {
+                    ids,
                     max_visited_nodes,
-                };
-                // Ref metadata is already represented by the canonical Snapshot/Observation.
-                // Do not add a convenience response or an uncharged retained-ref cache.
-                self.collector
-                    .observe_initial(&request, &scope, sequence, deadline, &mut callback)
-                    .map(|_| ())
+                } => {
+                    let scope = collector::InitialScope {
+                        scope_id: request.context.scope_id.clone(),
+                        ids: ids
+                            .into_iter()
+                            .map(|v| collector::DomId {
+                                id: v.id,
+                                sensitivity: v.sensitivity,
+                            })
+                            .collect(),
+                        max_visited_nodes,
+                    };
+                    // Ref metadata is already represented by the canonical Snapshot/Observation.
+                    // Do not add a convenience response or an uncharged retained-ref cache.
+                    self.collector
+                        .observe_initial(&request, &scope, sequence, deadline, &mut callback)
+                        .map(|_| ())
+                }
+                WebSelection::References { nodes } => {
+                    let scope = collector::Scope {
+                        scope_id: request.context.scope_id.clone(),
+                        nodes: nodes
+                            .into_iter()
+                            .map(|v| collector::NodeRef {
+                                reference: v.reference,
+                                sensitivity: v.sensitivity,
+                            })
+                            .collect(),
+                    };
+                    self.collector
+                        .observe(&request, &scope, sequence, deadline, &mut callback)
+                        .map(|_| ())
+                }
+            };
+            if let Some((stage, error)) = callback_error {
+                return Err(host_diagnostic(io, stage, error));
             }
-            WebSelection::References { nodes } => {
-                let scope = collector::Scope {
-                    scope_id: request.context.scope_id.clone(),
-                    nodes: nodes
-                        .into_iter()
-                        .map(|v| collector::NodeRef {
-                            reference: v.reference,
-                            sensitivity: v.sensitivity,
-                        })
-                        .collect(),
-                };
-                self.collector
-                    .observe(&request, &scope, sequence, deadline, &mut callback)
-                    .map(|_| ())
+            if let Err(error) = collected {
+                io.set_diagnostic(collector_diagnostic(error));
+                return Err(collector_error(error));
             }
-        };
-        if let Some((stage, error)) = callback_error {
-            return Err(host_diagnostic(io, stage, error));
+            run.finish()
+                .map_err(|e| host_diagnostic(io, Stage::Finish, e))
+        })();
+        if self.collector.pending_invalidation() {
+            session
+                .invalidate_retained_session()
+                .map_err(|error| host_diagnostic(io, Stage::Finish, error))?;
+            self.collector.acknowledge_invalidation();
         }
-        if let Err(error) = collected {
-            io.set_diagnostic(collector_diagnostic(error));
-            return Err(collector_error(error));
-        }
-        run.finish()
-            .map_err(|e| host_diagnostic(io, Stage::Finish, e))
+        result
     }
 }
 fn collector_error(error: collector::Failure) -> HostError {

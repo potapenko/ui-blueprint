@@ -293,6 +293,7 @@ pub struct Collector {
     owner: u64,
     sequence: u64,
     loss_generation: u64,
+    pending_invalidation: bool,
 }
 impl fmt::Debug for Collector {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -307,7 +308,16 @@ impl Collector {
     pub fn cancellation(&self) -> Option<transport::Cancellation> {
         self.client.cancellation()
     }
+    /// Events never collect data; the owner clears this only after cache apply.
+    pub fn pending_invalidation(&self) -> bool {
+        self.pending_invalidation
+    }
+    /// Call only after the retained-session owner successfully applied invalidation.
+    pub fn acknowledge_invalidation(&mut self) {
+        self.pending_invalidation = false;
+    }
     pub fn detach(&mut self) {
+        self.pending_invalidation = true;
         self.invalid = true;
         self.client.detach();
     }

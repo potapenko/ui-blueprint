@@ -91,6 +91,7 @@ impl Collector {
             owner: next_owner()?,
             sequence: 0,
             loss_generation,
+            pending_invalidation: false,
         };
         let mut budget = Budget {
             deadline,
@@ -133,6 +134,7 @@ impl Collector {
         if frame.frame_tree.frame.id != self.binding.surface.id.0
             || frame.frame_tree.frame.loader_id != self.binding.surface.generation.0
         {
+            self.pending_invalidation = true;
             self.invalid = true;
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
@@ -146,6 +148,7 @@ impl Collector {
             budget,
         )?;
         if doc.root.node_type != 9 || doc.root.backend_node_id != self.document {
+            self.pending_invalidation = true;
             self.invalid = true;
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
@@ -153,6 +156,7 @@ impl Collector {
     }
     pub(super) fn check(&mut self, budget: &Budget) -> Result<(), Failure> {
         if self.invalid {
+            self.pending_invalidation = true;
             self.client.detach();
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
@@ -212,10 +216,19 @@ impl Collector {
             || binding.cdp_session_id != self.binding.cdp_session_id
         {
             pending.cancel();
+            self.pending_invalidation = true;
             self.invalid = true;
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
-        let reply = pending.run().map_err(cdp_failure)?;
+        let reply = match pending.run() {
+            Ok(reply) => reply,
+            Err(error) => {
+                // CDP closes on failed exchange and may discard queued events.
+                // Lost continuity conservatively invalidates saved session data.
+                self.pending_invalidation = true;
+                return Err(cdp_failure(error));
+            }
+        };
         budget.reply_bytes = budget
             .reply_bytes
             .checked_add(reply.wire().len())
@@ -235,7 +248,24 @@ impl Collector {
                     | "Runtime.executionContextsCleared"
                     | "Inspector.detached"
             ) {
+                self.pending_invalidation = true;
                 self.invalid = true;
+            } else if matches!(
+                event.method(),
+                "Accessibility.nodesUpdated"
+                    | "Accessibility.loadComplete"
+                    | "DOM.attributeModified"
+                    | "DOM.attributeRemoved"
+                    | "DOM.characterDataModified"
+                    | "DOM.childNodeInserted"
+                    | "DOM.inlineStyleInvalidated"
+                    | "CSS.styleSheetChanged"
+                    | "CSS.styleSheetAdded"
+                    | "CSS.styleSheetRemoved"
+                    | "CSS.mediaQueryResultChanged"
+                    | "Page.frameResized"
+            ) {
+                self.pending_invalidation = true;
             }
         }
         if self.client.event_loss_generation() != self.loss_generation {

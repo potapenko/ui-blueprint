@@ -164,3 +164,27 @@ Only successful publication returns BootstrapReport references tied to the actua
 Snapshot/Observation. Existing InitialIds and References retain their distinct
 semantics. [Finite source checks and actual-root fixture preparation](../plans/ui-blueprint/receipts/W01-rooted-selection.md)
 are not live Director or general browser-selection qualification.
+
+## Pending retained-session invalidation
+
+`Collector::pending_invalidation()` reports one coalesced boolean, without IO or
+consumption. `acknowledge_invalidation()` clears it only after the retained-session
+owner successfully invalidates its contexts. No event text/node graph is exported.
+Already received AX updates/loadComplete, DOM attribute/text/insert/style and CSS/
+frame-resize notifications set the signal. Existing navigation/document/removal/
+context-loss events still invalidate refs; document mismatch, event loss, detach,
+cancel/expiry and failed CDP exchange leave the signal pending on failure paths.
+
+Events are read only inside explicit CDP commands, with existing queue/byte/work
+limits. No subscription expansion, event-pump thread, polling, autoobserve or new
+freshness guarantee. Missing CSS/layout events remain possible; current data still
+requires explicit observation. A cache owner must conservatively invalidate its
+session's retained contexts without altering historical data/time or other sessions.
+The worker ends the ObservationRun borrow on success/failure, calls actual
+CanonicalSession::invalidate_retained_session, then acknowledges only successful
+apply. Cache-apply failure remains explicit and leaves the signal pending.
+Source/peer checks do not by themselves prove live retained-cache behavior. See [W03 handoff](../plans/ui-blueprint/receipts/W03-session-invalidation.md).
+
+CDP detach now drops undelivered queued event buffers/permits immediately and
+resets ring positions. Caller-held events and replies retain their independent
+permits/data; no disappearance of an owner is treated as release of those borrows.

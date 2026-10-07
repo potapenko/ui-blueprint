@@ -1033,6 +1033,18 @@ fn lost_events_or_document_event_stop_current_refs_without_recollection() {
             }
         );
         assert_eq!(fixture.methods().len(), before + 1);
+        assert!(c.pending_invalidation());
+        assert!(
+            c.pending_invalidation(),
+            "reading never consumes the signal"
+        );
+        c.acknowledge_invalidation();
+        assert!(!c.pending_invalidation());
+        assert_eq!(
+            fixture.methods().len(),
+            before + 1,
+            "signal processing never dispatches"
+        );
         drop(c);
         fixture.finish();
     }
@@ -1061,6 +1073,10 @@ fn cancel_during_ax_stops_dispatch_and_reports_unconfirmed_remote_cleanup() {
         .expect_err("cancelled read");
     assert!(matches!(e.kind, ErrorKind::Cdp(cdp::ErrorKind::Cancelled)));
     assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Unconfirmed);
+    assert!(
+        c.pending_invalidation(),
+        "exchange failure must survive cleanup"
+    );
     let calls = fixture.methods();
     assert_eq!(
         calls.last().map(String::as_str),
@@ -2053,4 +2069,68 @@ fn rooted_sensitive_seed_redacts_all_descendants() {
     );
     drop(c);
     fixture.finish();
+}
+
+#[test]
+fn received_content_events_coalesce_until_cache_owner_acknowledges() {
+    for failure in [false, true] {
+        let mut emitted = false;
+        let fixture = Fixture::new(move |method, _, n| {
+            if method == "Target.getTargetInfo" && n > 8 && !emitted {
+                emitted = true;
+                return Some(json!({"fixtureEvents":[
+                    {"method":"Accessibility.nodesUpdated","params":{"private":CANARY}},
+                    {"method":"DOM.attributeModified","params":{}},
+                    {"method":"CSS.styleSheetChanged","params":{}}
+                ]}));
+            }
+            if failure && method == "Runtime.callFunctionOn" {
+                return Some(json!({"error":{"code":-32000,"message":CANARY}}));
+            }
+            None
+        });
+        let mut c = fixture.attach(limits());
+        assert!(!c.pending_invalidation());
+        let result = c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+            Publication::Acknowledged
+        });
+        assert_eq!(result.is_err(), failure);
+        assert!(c.pending_invalidation());
+        let count = fixture.methods().len();
+        assert!(c.pending_invalidation());
+        assert_eq!(fixture.methods().len(), count);
+        c.acknowledge_invalidation();
+        assert!(!c.pending_invalidation());
+        assert_eq!(fixture.methods().len(), count);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn changed_document_and_cancelled_connection_leave_pending_invalidation() {
+    for failure in [false, true] {
+        let fixture = Fixture::new(move |method, _, n| {
+            if n > 8 && method == "Page.getFrameTree" {
+                return Some(json!({"frameTree":{"frame":{"id":"frame","loaderId":"different"}}}));
+            }
+            None
+        });
+        let mut c = fixture.attach(limits());
+        if failure {
+            c.cancellation().unwrap().cancel();
+        }
+        assert!(
+            c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
+                "no publication"
+            ))
+            .is_err()
+        );
+        assert!(c.pending_invalidation());
+        let count = fixture.methods().len();
+        c.acknowledge_invalidation();
+        assert!(!c.pending_invalidation());
+        assert_eq!(fixture.methods().len(), count);
+        drop(c);
+        fixture.finish();
+    }
 }

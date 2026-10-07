@@ -186,6 +186,11 @@ impl Client {
     pub fn detach(&mut self) {
         self.state.active = None;
         self.transport.take();
+        for slot in &mut self.state.events {
+            slot.take();
+        }
+        self.state.head = 0;
+        self.state.queued = 0;
     }
     /// Reserve a result slot and register a non-reusable ticket before dispatch.
     /// One outstanding request only; Rust borrowing prevents concurrent prepares.

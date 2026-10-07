@@ -168,3 +168,40 @@ fn queued_event_byte_pressure_and_loss_overflow_are_explicit() {
     assert_eq!((state.queued, state.loss_generation), (0, 1));
     assert_eq!(state.event_pool.usage(), Usage::default());
 }
+
+#[test]
+fn detach_releases_only_queued_event_ownership_without_waiting_for_client_drop() {
+    let (mut state, ticket) = state();
+    state.events = vec![None, None];
+    state.event_pool = quota::Pool::new(2, 4096);
+    let caps = super::super::tests::limits();
+    for _ in 0..2 {
+        handle_wire(
+            &mut state,
+            caps,
+            &ticket,
+            r#"{"method":"Accessibility.nodesUpdated","params":{}}"#.into(),
+        )
+        .unwrap();
+    }
+    let mut client = Client {
+        transport: None,
+        state,
+        limits: caps,
+        result_pool: quota::Pool::new(caps.max_results, caps.result_bytes),
+    };
+    let held = client.pop_event().unwrap();
+    assert_eq!(client.event_usage().slots, 2);
+    let reserved_before = client.event_usage().reserved_bytes;
+    client.detach();
+    assert_eq!(client.event_usage().slots, 1);
+    assert!(client.event_usage().reserved_bytes > 0);
+    assert!(client.event_usage().reserved_bytes < reserved_before);
+    assert!(client.pop_event().is_none());
+    assert_eq!(held.method(), "Accessibility.nodesUpdated");
+    assert!(!held.wire().is_empty());
+    client.detach();
+    assert_eq!(client.event_usage().slots, 1);
+    drop(held);
+    assert_eq!(client.event_usage(), Usage::default());
+}
