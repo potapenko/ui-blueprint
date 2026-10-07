@@ -14,9 +14,28 @@ impl Collector {
         scope: &Scope,
         dispatch_sequence: u64,
         deadline: Instant,
-        mut publish: impl FnMut(Document) -> Publication,
+        publish: impl FnMut(Document) -> Publication,
     ) -> Result<Report, Failure> {
         self.validate_request(request, scope)?;
+        self.observe_plan(
+            request,
+            Plan::References(scope),
+            dispatch_sequence,
+            deadline,
+            publish,
+        )
+        .map(|result| result.report)
+    }
+    pub(super) fn observe_plan(
+        &mut self,
+        request: &Request,
+        plan: Plan<'_>,
+        dispatch_sequence: u64,
+        deadline: Instant,
+        mut publish: impl FnMut(Document) -> Publication,
+    ) -> Result<Observed, Failure> {
+        let mut references = Vec::new();
+        let mut selection = None;
         if dispatch_sequence == 0 {
             return Err(Failure::new(ErrorKind::InvalidInput));
         }
@@ -47,11 +66,7 @@ impl Collector {
             ax_nodes: 0,
             visited_dom: 0,
             queried_ax: 0,
-            omitted_nodes: if scope.nodes.is_empty() {
-                Some(0)
-            } else {
-                None
-            },
+            omitted_nodes: if plan.len() == 0 { Some(0) } else { None },
             methods: 0,
             reply_bytes: 0,
             published_channels: 0,
@@ -59,35 +74,43 @@ impl Collector {
         };
         // Canonical channel order is explicit. DOM and AX are sources of ONE external channel.
         if channels.contains(&Channel::ExternalSemantics) {
-            let needed = if scope.nodes.is_empty() {
+            let needed = if plan.len() == 0 {
                 6
             } else {
-                scope
-                    .nodes
-                    .len()
+                plan.len()
                     .checked_mul(if needs_ax(&request.context.fields) {
                         3
                     } else {
                         2
                     })
-                    .and_then(|n| n.checked_add(9))
+                    .and_then(|n| {
+                        n.checked_add(if matches!(plan, Plan::Initial(_)) {
+                            11
+                        } else {
+                            9
+                        })
+                    })
                     .ok_or(Failure::new(ErrorKind::Limit))?
             };
             if needed > self.limits.max_methods as usize {
                 return Err(Failure::new(ErrorKind::Limit));
             }
-            let records = self.collect(scope, request, &mut budget)?;
+            let records = self.collect(plan, request, &mut budget)?;
             report.dom_nodes = records.dom.len();
             report.ax_nodes = records.ax.len();
             report.visited_dom = records.dom.len();
             report.queried_ax = records.ax_queries;
-            report.dom = if scope.nodes.is_empty() {
+            report.dom = if plan.len() == 0 {
                 SourceStatus::Complete
             } else {
                 SourceStatus::Partial
             };
             report.ax = records.ax_status;
-            let snapshot = self.normalize(request, scope, records)?;
+            selection = records.selection;
+            let snapshot = self.normalize(request, plan, records)?;
+            if matches!(plan, Plan::Initial(_)) {
+                references = current_references(&snapshot)?;
+            }
             let response = document(
                 request,
                 dispatch_sequence,
@@ -136,7 +159,11 @@ impl Collector {
         self.check(&budget)?;
         report.methods = budget.methods;
         report.reply_bytes = budget.reply_bytes;
-        Ok(report)
+        Ok(Observed {
+            report,
+            references,
+            selection,
+        })
     }
 }
 
@@ -176,4 +203,28 @@ fn bounded_document(document: &Document, cap: u64) -> Result<u64, Failure> {
         .serialize(&mut serde_json::Serializer::new(&mut count))
         .map_err(|_| Failure::new(ErrorKind::Limit))?;
     Ok(count.written)
+}
+
+fn current_references(snapshot: &Snapshot) -> Result<Vec<BackendRef>, Failure> {
+    let dom = snapshot
+        .observations
+        .iter()
+        .find(|o| o.source_namespace.0 == "web.dom")
+        .ok_or(Failure::new(ErrorKind::Malformed))?;
+    let mut refs = Vec::new();
+    refs.try_reserve_exact(snapshot.nodes.len())
+        .map_err(|_| Failure::new(ErrorKind::Limit))?;
+    for node in &snapshot.nodes {
+        if node.key.namespace.0 == "web.dom" {
+            refs.push(BackendRef {
+                session_id: snapshot.context.session_id.clone(),
+                key: node.key.clone(),
+                snapshot_id: snapshot.id.clone(),
+                observation_id: dom.id.clone(),
+                target: snapshot.context.target.clone(),
+                surface: node.surface.clone(),
+            });
+        }
+    }
+    Ok(refs)
 }

@@ -48,3 +48,20 @@ const beforeVerify=[valueReads,rectReads];assert.equal(verify([earlier,later]).c
 earlier.isConnected=false;const replacement=node();replacement.attrs.id='same-label-or-id';assert.equal(verify([earlier,later]).current,false);assert.equal(verify([replacement,later]).current,true);
 assert.equal(verify([later],{}).current,false);const foreignNode=node();foreignNode.ownerDocument={};assert.equal(verify([foreignNode]).current,false);
 console.log('3 offline continuity scenarios passed; original handles, no field recollection or browser qualification.');
+const selectSource = fs.readFileSync(require('node:path').join(__dirname, '../../../src/collector/select-ids.js'), 'utf8');
+context.performance={now:()=>0};vm.runInContext(selectSource,context,{timeout:100});
+function children(parent,nodes){parent.firstChild=nodes[0]??null;nodes.forEach((n,i)=>{n.parentNode=parent;n.nextSibling=nodes[i+1]??null;n.firstChild=n.firstChild??null;});}
+function identified(id){const n=node();n.attrs.id=id;n.localName='input';n.shadowRoot=null;return n;}
+function search(ids,maxVisited=20,maxDepth=8,remainingMs=1000,root=document){context.selectionOptions={ids,maxVisited,maxDepth,remainingMs};context.searchRoot=root;return vm.runInContext('selectIds.call(searchRoot, selectionOptions)',context,{timeout:100});}
+const left=identified('left'),right=identified('right'),textNode={firstChild:null};children(document,[left,textNode,right]);
+const selected=search(['right','left']);assert.equal(selected.status,'selected');assert.equal(selected.visited,4);assert.equal(selected.node_0,right);assert.equal(selected.node_1,left);assert.equal(Object.getPrototypeOf(selected),null);
+const duplicate=identified('left');children(document,[left,right,duplicate]);assert.equal(search(['left']).status,'ambiguous');
+assert.equal(search(['left'],2).status,'incomplete','a found candidate is not unique when traversal truncates');
+children(document,[left,right]);assert.equal(search(['missing']).status,'missing');assert.equal(search(['left'],3).status,'selected','exact cap can finish the full bounded search');
+const nested=identified('deep');children(left,[nested]);assert.equal(search(['left'],20,1).status,'incomplete','depth cap cannot certify a convenient earlier match');children(left,[]);
+for(const boundary of ['iframe','frame','template','slot']){left.localName=boundary;assert.equal(search(['left']).status,'unsupported');}left.localName='input';left.shadowRoot={};assert.equal(search(['left']).status,'unsupported');left.shadowRoot=null;
+const hostile=identified("x'); throw new Error('PRIVATE_SELECTOR_CANARY'); //");children(document,[hostile]);assert.equal(search([hostile.attrs.id]).node_0,hostile,'identifier text is only data');
+assert.equal(search(['left'],20,8,1000,{}).status,'stale');
+children(document,[left,right]);let tick=0;context.performance={now:()=>tick++};assert.equal(search(['left'],20,8,2).status,'timeout');context.performance={now:()=>0};
+valueReads=0;rectReads=0;assert.equal(search(['left']).status,'selected');assert.deepEqual([valueReads,rectReads],[0,0],'selection never reads values or layout');
+console.log('10 offline bootstrap scenarios passed; bounded light-DOM selection only, no browser qualification.');

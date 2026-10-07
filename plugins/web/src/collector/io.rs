@@ -259,7 +259,12 @@ impl Collector {
         self.check(budget)?;
         Ok(parsed.result)
     }
-    pub(super) fn validate_request(&self, request: &Request, scope: &Scope) -> Result<(), Failure> {
+    pub(super) fn validate_plan(
+        &self,
+        request: &Request,
+        scope_id: &Id,
+        node_count: usize,
+    ) -> Result<(), Failure> {
         if !valid_id(&request.request_id) || !valid_id(&request.context.environment_revision) {
             return Err(Failure::new(ErrorKind::InvalidInput));
         }
@@ -269,16 +274,14 @@ impl Collector {
             || request.context.surfaces != [self.binding.surface.clone()]
             || request.context.plugin != self.binding.plugin
             || request.clock_domain != self.binding.clock.domain
-            || request.context.scope_id != scope.scope_id
-            || !self.binding.allowed_scopes.contains(&scope.scope_id)
+            || request.context.scope_id != *scope_id
+            || !self.binding.allowed_scopes.contains(scope_id)
         {
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
         if !matches!(request.operation, Operation::Observe { .. })
-            || scope.nodes.len() > self.limits.max_nodes
-            || scope
-                .nodes
-                .len()
+            || node_count > self.limits.max_nodes
+            || node_count
                 .checked_mul(if needs_ax(&request.context.fields) {
                     2
                 } else {
@@ -288,6 +291,10 @@ impl Collector {
         {
             return Err(Failure::new(ErrorKind::Limit));
         }
+        Ok(())
+    }
+    pub(super) fn validate_request(&self, request: &Request, scope: &Scope) -> Result<(), Failure> {
+        self.validate_plan(request, &scope.scope_id, scope.nodes.len())?;
         for (i, node) in scope.nodes.iter().enumerate() {
             let backend = node.backend_id()?;
             let reference = &node.reference;

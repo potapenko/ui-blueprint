@@ -14,6 +14,7 @@ pub(super) struct Records {
     ax_end: f64,
     pub(super) ax_status: SourceStatus,
     pub(super) ax_queries: usize,
+    pub(super) selection: Option<SelectionReport>,
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -42,20 +43,20 @@ enum Argument<'a> {
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct Read<'a, A> {
-    object_id: &'a str,
-    function_declaration: &'static str,
-    return_by_value: bool,
-    silent: bool,
-    user_gesture: bool,
-    await_promise: bool,
-    throw_on_side_effect: bool,
-    arguments: A,
+pub(super) struct Read<'a, A> {
+    pub(super) object_id: &'a str,
+    pub(super) function_declaration: &'static str,
+    pub(super) return_by_value: bool,
+    pub(super) silent: bool,
+    pub(super) user_gesture: bool,
+    pub(super) await_promise: bool,
+    pub(super) throw_on_side_effect: bool,
+    pub(super) arguments: A,
 }
 impl Collector {
     pub(super) fn collect(
         &mut self,
-        scope: &Scope,
+        plan: Plan<'_>,
         request: &Request,
         budget: &mut Budget,
     ) -> Result<Records, Failure> {
@@ -69,25 +70,26 @@ impl Collector {
             dom_end: start,
             ax_start: start,
             ax_end: start,
-            ax_status: if scope.nodes.is_empty() {
+            ax_status: if plan.len() == 0 {
                 SourceStatus::Complete
             } else {
                 SourceStatus::Partial
             },
             ax_queries: 0,
+            selection: None,
         };
         records
             .dom
-            .try_reserve_exact(scope.nodes.len())
+            .try_reserve_exact(plan.len())
             .map_err(|_| Failure::new(ErrorKind::Limit))?;
         records
             .ax
-            .try_reserve_exact(scope.nodes.len())
+            .try_reserve_exact(plan.len())
             .map_err(|_| Failure::new(ErrorKind::Limit))?;
-        let outcome = self.collect_nodes(scope, request, &group, budget, &mut records);
+        let outcome = self.collect_nodes(plan, request, &group, budget, &mut records);
         // No new protocol command after cancel/expiry or a failed connection. Dropping the
         // owned connection stops reuse; explicit remote release then remains unconfirmed.
-        let cleanup = if scope.nodes.is_empty() {
+        let cleanup = if plan.len() == 0 {
             Ok(())
         } else {
             self.send::<wire::Empty, _>(
@@ -116,13 +118,13 @@ impl Collector {
     }
     fn collect_nodes(
         &mut self,
-        scope: &Scope,
+        plan: Plan<'_>,
         request: &Request,
         group: &str,
         budget: &mut Budget,
         records: &mut Records,
     ) -> Result<(), Failure> {
-        let document = if scope.nodes.is_empty() {
+        let document = if plan.len() == 0 {
             None
         } else {
             Some(self.resolve(self.document, group, budget)?)
@@ -133,11 +135,41 @@ impl Collector {
         }
         let mut handles = Vec::new();
         handles
-            .try_reserve_exact(scope.nodes.len())
+            .try_reserve_exact(plan.len())
             .map_err(|_| Failure::new(ErrorKind::Limit))?;
-        for node in &scope.nodes {
-            let backend = node.backend_id()?;
-            let object = self.resolve(backend, group, budget)?;
+        let selected = match plan {
+            Plan::References(_) => None,
+            Plan::Initial(scope) => {
+                let (nodes, progress) = self.select_initial(
+                    scope,
+                    request,
+                    document
+                        .as_deref()
+                        .ok_or(Failure::new(ErrorKind::Malformed))?,
+                    budget,
+                )?;
+                records.selection = Some(progress);
+                Some(nodes)
+            }
+        };
+        for index in 0..plan.len() {
+            let (backend, sensitivity, object) = match plan {
+                Plan::References(scope) => {
+                    let node = &scope.nodes[index];
+                    let backend = node.backend_id()?;
+                    (
+                        backend,
+                        node.sensitivity,
+                        self.resolve(backend, group, budget)?,
+                    )
+                }
+                Plan::Initial(_) => {
+                    let node = &selected
+                        .as_ref()
+                        .ok_or(Failure::new(ErrorKind::Malformed))?[index];
+                    (node.backend, node.sensitivity, node.object.clone())
+                }
+            };
             let params = Read {
                 object_id: &object,
                 function_declaration: READ_NODE,
@@ -151,7 +183,7 @@ impl Collector {
                         value: ReadOptions {
                             fields: &request.context.fields,
                             max_chars: self.limits.max_text_bytes / 6,
-                            sensitive: node.sensitivity == Sensitivity::Sensitive,
+                            sensitive: sensitivity == Sensitivity::Sensitive,
                         },
                     },
                     Argument::Object {
@@ -174,7 +206,7 @@ impl Collector {
                 return Err(Failure::new(ErrorKind::StaleTarget));
             }
             // Caller sensitivity cannot be downgraded by page/protocol data.
-            read.sensitive |= node.sensitivity == Sensitivity::Sensitive;
+            read.sensitive |= sensitivity == Sensitivity::Sensitive;
             let sensitive = read.sensitive;
             if sensitive {
                 read.value = None;
@@ -307,10 +339,10 @@ impl Collector {
     pub(super) fn normalize(
         &self,
         request: &Request,
-        scope: &Scope,
+        plan: Plan<'_>,
         records: Records,
     ) -> Result<Snapshot, Failure> {
-        let empty = scope.nodes.is_empty();
+        let empty = plan.len() == 0;
         let dom = normalize::observation(
             &request.context,
             &self.binding.clock.domain,

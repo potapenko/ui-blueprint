@@ -1,5 +1,6 @@
 //! Addressed read-only collection. Live qualification and host authority are separate.
 mod acquire;
+mod bootstrap;
 mod io;
 mod observe;
 pub(crate) mod wire;
@@ -64,6 +65,62 @@ pub struct Scope {
     pub scope_id: Id,
     pub nodes: Vec<NodeRef>,
 }
+/// Exact, case-sensitive id in the attached root document's light DOM.
+pub struct DomId {
+    pub id: Id,
+    pub sensitivity: Sensitivity,
+}
+/// Explicit search allowance; max_depth also comes from the canonical request.
+pub struct InitialScope {
+    pub scope_id: Id,
+    pub ids: Vec<DomId>,
+    pub max_visited_nodes: u32,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum SelectionStatus {
+    Missing,
+    Ambiguous,
+    Incomplete,
+    Unsupported,
+    TimedOut,
+}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct SelectionReport {
+    pub visited_nodes: u32,
+    pub selected_nodes: usize,
+}
+pub struct BootstrapReport {
+    pub report: Report,
+    pub references: Vec<BackendRef>,
+    pub selection: SelectionReport,
+}
+impl fmt::Debug for BootstrapReport {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("BootstrapReport")
+            .field("report", &self.report)
+            .field("references", &self.references.len())
+            .field("selection", &self.selection)
+            .finish()
+    }
+}
+#[derive(Clone, Copy)]
+enum Plan<'a> {
+    References(&'a Scope),
+    Initial(&'a InitialScope),
+}
+impl Plan<'_> {
+    fn len(self) -> usize {
+        match self {
+            Self::References(s) => s.nodes.len(),
+            Self::Initial(s) => s.ids.len(),
+        }
+    }
+}
+struct Observed {
+    report: Report,
+    references: Vec<BackendRef>,
+    selection: Option<SelectionReport>,
+}
 #[derive(Clone, Copy, Debug)]
 pub struct Limits {
     pub max_nodes: usize,
@@ -89,6 +146,10 @@ pub enum ErrorKind {
     Timeout,
     PublicationStopped,
     CleanupUnconfirmed,
+    Selection {
+        status: SelectionStatus,
+        visited_nodes: u32,
+    },
 }
 /// No remote group remains tracked, release was acknowledged, or release could not be confirmed.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

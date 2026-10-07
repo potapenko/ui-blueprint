@@ -245,6 +245,7 @@ impl Fixture {
         let peer = Peer::new(move |s| {
             let mut ws = accept(s).expect("handshake");
             let mut reads = 0;
+            let mut initial_ids = Vec::<String>::new();
             while let Ok(message) = ws.read() {
                 let Message::Text(text) = message else { break };
                 let command: Json = serde_json::from_str(&text).expect("command");
@@ -255,6 +256,10 @@ impl Fixture {
                     && command["params"]["functionDeclaration"]
                         .as_str()
                         .is_some_and(|s| s.starts_with("function verifyNodes("));
+                let is_selection = method == "Runtime.callFunctionOn"
+                    && command["params"]["functionDeclaration"]
+                        .as_str()
+                        .is_some_and(|s| s.starts_with("function selectIds("));
                 let default = match method {
                     "Target.getTargetInfo" => json!({"targetInfo":{"targetId":"target"}}),
                     "Page.getFrameTree" => {
@@ -276,15 +281,52 @@ impl Fixture {
                         json!({"object":{"type":"object","subtype":"node","objectId":format!("node-{}",command["params"]["backendNodeId"])}})
                     }
                     "Runtime.callFunctionOn" => {
-                        assert_eq!(command["params"]["returnByValue"], true);
+                        assert_eq!(command["params"]["returnByValue"], !is_selection);
                         assert_eq!(command["params"]["userGesture"], false);
                         assert_eq!(command["params"]["throwOnSideEffect"], true);
-                        if is_verification {
+                        if is_selection {
+                            initial_ids = serde_json::from_value(
+                                command["params"]["arguments"][0]["value"]["ids"].clone(),
+                            )
+                            .expect("ID arguments are data");
+                            json!({"result":{"type":"object","objectId":"selection-container"}})
+                        } else if is_verification {
                             verify(&command)
                         } else {
                             serde_json::from_str(include_str!("fixtures/collector/dom.json"))
                                 .expect("DOM literal")
                         }
+                    }
+                    "Runtime.getProperties" => {
+                        assert_eq!(command["params"]["objectId"], "selection-container");
+                        assert_eq!(command["params"]["ownProperties"], true);
+                        assert_eq!(command["params"]["generatePreview"], false);
+                        let missing = initial_ids
+                            .iter()
+                            .any(|id| !matches!(id.as_str(), "left" | "right"));
+                        let mut properties = vec![
+                            json!({"name":"status","value":{"type":"string","value":if missing{"missing"}else{"selected"}}}),
+                            json!({"name":"visited","value":{"type":"number","value":20}}),
+                        ];
+                        if !missing {
+                            for (i, id) in initial_ids.iter().enumerate() {
+                                let backend = if id == "left" { 11 } else { 12 };
+                                properties.push(json!({"name":format!("node_{i}"),"value":{"type":"object","subtype":"node","objectId":format!("node-{backend}")}}));
+                            }
+                        }
+                        json!({"result":properties})
+                    }
+                    "DOM.describeNode" => {
+                        assert_eq!(command["params"]["depth"], 0);
+                        assert_eq!(command["params"]["pierce"], false);
+                        let backend = command["params"]["objectId"]
+                            .as_str()
+                            .expect("object")
+                            .strip_prefix("node-")
+                            .expect("selected original handle")
+                            .parse::<u32>()
+                            .expect("backend");
+                        json!({"node":{"backendNodeId":backend,"nodeType":1}})
                     }
                     "Accessibility.getPartialAXTree" => {
                         assert_eq!(command["params"]["fetchRelatives"], false);
@@ -1330,6 +1372,341 @@ fn actual_transport_caps_are_read_only_and_absent_after_detach_or_cancel() {
         assert!(client.transport_limits().is_none());
         drop(client);
         assert!(fixture.methods().is_empty());
+        fixture.finish();
+    }
+}
+
+fn initial(ids: &[&str]) -> collector::InitialScope {
+    collector::InitialScope {
+        scope_id: id("scope"),
+        ids: ids
+            .iter()
+            .map(|value| collector::DomId {
+                id: id(value),
+                sensitivity: Sensitivity::Public,
+            })
+            .collect(),
+        max_visited_nodes: 64,
+    }
+}
+#[test]
+fn first_request_issues_refs_only_for_actual_acknowledged_snapshot() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let mut docs = Vec::new();
+    let result = c
+        .observe_initial(
+            &request(),
+            &initial(&["left", "right"]),
+            41,
+            op().deadline,
+            |doc| {
+                doc.validate().expect("canonical first observation");
+                docs.push(doc);
+                Publication::Acknowledged
+            },
+        )
+        .expect("first request without prior refs");
+    let s = snapshot(&docs[0]);
+    assert_eq!(result.references.len(), 2);
+    assert_eq!(
+        result.selection,
+        collector::SelectionReport {
+            visited_nodes: 20,
+            selected_nodes: 2
+        }
+    );
+    assert_eq!(s.nodes.len(), 4);
+    for (r, backend) in result.references.iter().zip([11, 12]) {
+        assert_eq!(r.key.key.0, backend.to_string());
+        assert_eq!(r.key.namespace.0, "web.dom");
+        assert_eq!(r.snapshot_id, s.id);
+        assert_eq!(r.observation_id, s.observations[0].id);
+        assert_eq!(r.target, s.context.target);
+        assert_eq!(r.surface, s.context.surfaces[0]);
+        assert_eq!(r.session_id, s.context.session_id);
+    }
+    assert_eq!(
+        fixture
+            .methods()
+            .iter()
+            .filter(|m| m.as_str() == "DOM.resolveNode")
+            .count(),
+        1,
+        "bootstrap uses original objects, not invented refs"
+    );
+    let before = fixture
+        .methods()
+        .iter()
+        .filter(|m| m.as_str() == "Runtime.getProperties")
+        .count();
+    let refs = Scope {
+        scope_id: id("scope"),
+        nodes: result
+            .references
+            .into_iter()
+            .map(|reference| NodeRef {
+                reference,
+                sensitivity: Sensitivity::Public,
+            })
+            .collect(),
+    };
+    let (_, later) = collect(&mut c, &request(), &refs);
+    assert_ne!(snapshot(&later[0]).id, s.id);
+    assert_eq!(
+        fixture
+            .methods()
+            .iter()
+            .filter(|m| m.as_str() == "Runtime.getProperties")
+            .count(),
+        before,
+        "existing-ref path never falls back to search"
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn initial_missing_ambiguous_incomplete_and_boundary_never_choose_a_node() {
+    for (status, kind) in [
+        ("missing", collector::SelectionStatus::Missing),
+        ("ambiguous", collector::SelectionStatus::Ambiguous),
+        ("incomplete", collector::SelectionStatus::Incomplete),
+        ("unsupported", collector::SelectionStatus::Unsupported),
+        ("timeout", collector::SelectionStatus::TimedOut),
+    ] {
+        let fixture = Fixture::new(move |m, _, _| {
+            (m=="Runtime.getProperties").then(||json!({"result":[{"name":"status","value":{"type":"string","value":status}},{"name":"visited","value":{"type":"number","value":5}}]}))
+        });
+        let mut c = fixture.attach(limits());
+        let e = c
+            .observe_initial(&request(), &initial(&["left"]), 41, op().deadline, |_| {
+                panic!("no fabricated observation")
+            })
+            .expect_err("selection refusal");
+        assert_eq!(
+            e.kind,
+            ErrorKind::Selection {
+                status: kind,
+                visited_nodes: 5
+            }
+        );
+        assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Released);
+        assert!(!fixture.methods().contains(&"DOM.describeNode".into()));
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn initial_ref_input_and_method_allowance_are_checked_before_selection() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut caps = limits();
+    caps.max_methods = 12;
+    let mut c = fixture.attach(caps);
+    let before = fixture.methods().len();
+    let e = c
+        .observe_initial(&request(), &initial(&["left"]), 41, op().deadline, |_| {
+            panic!("not admitted")
+        })
+        .expect_err("bootstrap method reserve");
+    assert_eq!(e.kind, ErrorKind::Limit);
+    assert_eq!(fixture.methods().len(), before);
+    let mut duplicate = initial(&["left", "left"]);
+    duplicate.max_visited_nodes = 0;
+    assert_eq!(
+        c.observe_initial(&request(), &duplicate, 41, op().deadline, |_| panic!(
+            "invalid"
+        ))
+        .expect_err("zero traversal allowance")
+        .kind,
+        ErrorKind::InvalidInput
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn initial_original_object_remount_and_document_drift_refuse_publication() {
+    for drift in [false, true] {
+        let mut frames = 0;
+        let fixture = Fixture::new(move |method, command, _| {
+            if method == "Page.getFrameTree" {
+                frames += 1;
+                if drift && frames == 4 {
+                    return Some(
+                        json!({"frameTree":{"frame":{"id":"frame","loaderId":"new-document"}}}),
+                    );
+                }
+            }
+            if !drift
+                && method == "Runtime.callFunctionOn"
+                && command["params"]["functionDeclaration"]
+                    .as_str()
+                    .is_some_and(|s| s.starts_with("function readNode("))
+            {
+                return Some(
+                    json!({"result":{"type":"object","value":{"connected":false,"sameDocument":true,"sensitive":false}}}),
+                );
+            }
+            None
+        });
+        let mut c = fixture.attach(limits());
+        assert_eq!(
+            c.observe_initial(
+                &request(),
+                &initial(&["left"]),
+                41,
+                op().deadline,
+                |_| panic!("no current data on drift/remount")
+            )
+            .expect_err("original identity lost")
+            .kind,
+            ErrorKind::StaleTarget
+        );
+        assert_eq!(
+            fixture
+                .methods()
+                .iter()
+                .filter(|m| m.as_str() == "Runtime.getProperties")
+                .count(),
+            1,
+            "no automatic selector retry"
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn initial_publication_refusal_cannot_return_refs() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture.attach(limits());
+    let e = c
+        .observe_initial(&request(), &initial(&["left"]), 41, op().deadline, |_| {
+            Publication::Stop
+        })
+        .expect_err("no confirmed publication");
+    assert_eq!(e.kind, ErrorKind::PublicationStopped);
+    assert!(
+        fixture
+            .methods()
+            .contains(&"Runtime.releaseObjectGroup".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn initial_selection_keeps_redaction_and_never_retains_description_attributes() {
+    let fixture = Fixture::new(|method, command, _| match method {
+        "DOM.describeNode" => {
+            Some(json!({"node":{"backendNodeId":11,"nodeType":1,"attributes":["value",CANARY]}}))
+        }
+        "Runtime.callFunctionOn"
+            if command["params"]["functionDeclaration"]
+                .as_str()
+                .is_some_and(|s| s.starts_with("function readNode(")) =>
+        {
+            Some(
+                json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"sensitive":false,"tag":CANARY,"value":CANARY}}}),
+            )
+        }
+        _ => None,
+    });
+    let mut c = fixture.attach(limits());
+    let mut scope = initial(&["left"]);
+    scope.ids[0].sensitivity = Sensitivity::Sensitive;
+    let mut docs = Vec::new();
+    let report = c
+        .observe_initial(&request(), &scope, 41, op().deadline, |d| {
+            docs.push(d);
+            Publication::Acknowledged
+        })
+        .expect("classified first result");
+    assert_eq!(report.references.len(), 1);
+    assert!(
+        !serde_json::to_string(&docs)
+            .expect("safe data")
+            .contains(CANARY)
+    );
+    assert!(!format!("{report:?}").contains(CANARY));
+    assert!(
+        !fixture
+            .methods()
+            .contains(&"Accessibility.getPartialAXTree".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn initial_lookup_and_later_reads_share_reply_budget_without_reset() {
+    let fixture = Fixture::new(|_, _, _| None);
+    let mut c = fixture
+        .try_attach_limits(limits(), 1024, 1024)
+        .expect("small compatible codec");
+    let mut r = request();
+    r.limits.max_output_bytes = 1400;
+    let e = c
+        .observe_initial(&r, &initial(&["left"]), 41, op().deadline, |_| {
+            panic!("no reset budget")
+        })
+        .expect_err("cumulative admission fails between selection and later reads");
+    assert_eq!(e.kind, ErrorKind::Limit);
+    assert!(
+        !fixture
+            .methods()
+            .contains(&"Accessibility.getPartialAXTree".into())
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn initial_final_original_handle_check_still_catches_unannounced_removal() {
+    let fixture = Fixture::with_verification(
+        |_, _, _| None,
+        |command| {
+            assert_eq!(
+                command["params"]["arguments"],
+                json!([{"objectId":"node-1"},{"objectId":"node-11"},{"objectId":"node-12"}])
+            );
+            json!({"result":{"type":"object","value":{"current":false}}})
+        },
+    );
+    let mut c = fixture.attach(limits());
+    let e = c
+        .observe_initial(
+            &request(),
+            &initial(&["left", "right"]),
+            41,
+            op().deadline,
+            |_| panic!("no removed refs"),
+        )
+        .expect_err("R1 applies to initial path");
+    assert_eq!(e.kind, ErrorKind::StaleTarget);
+    assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Released);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn initial_malformed_container_or_overshoot_cannot_create_refs() {
+    for mode in 0..3 {
+        let fixture = Fixture::new(move |method, _, _| {
+            if method == "Runtime.getProperties" {
+                Some(
+                    json!({"result":[{"name":"status","value":{"type":"string","value":"selected"}},{"name":"visited","value":{"type":"number","value":if mode==0{65}else{20}}},{"name":"node_0","value":{"type":"object","subtype":if mode==1{"array"}else{"node"},"objectId":"node-11"},"get":if mode==2{json!({"type":"function","objectId":"untrusted-getter"})}else{Json::Null}}]}),
+                )
+            } else {
+                None
+            }
+        });
+        let mut c = fixture.attach(limits());
+        let e = c
+            .observe_initial(&request(), &initial(&["left"]), 41, op().deadline, |_| {
+                panic!("malformed")
+            })
+            .expect_err("strict result owner");
+        assert_eq!(e.kind, ErrorKind::Malformed);
+        assert_eq!(e.remote_cleanup, collector::RemoteCleanup::Released);
+        assert!(!fixture.methods().contains(&"DOM.describeNode".into()));
+        drop(c);
         fixture.finish();
     }
 }

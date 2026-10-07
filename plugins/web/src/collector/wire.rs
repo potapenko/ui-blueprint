@@ -125,3 +125,9 @@ object_record!(Empty {});
 object_record!(Continuity { current: bool });
 object_record!(VerifyRemote { r#type:String, value:Option<Continuity> });
 object_record!(VerifyResult { result:VerifyRemote, exception_details:Option<de::IgnoredAny> });
+
+object_record!(SelectedCall { result:RemoteNode, exception_details:Option<de::IgnoredAny> });
+object_record!(PropertyValue { r#type:String, subtype:Option<String>,object_id:Option<String>,value:Option<Scalar> });
+object_record!(Descriptor { name:String,value:Option<PropertyValue>,get:Option<de::IgnoredAny>,set:Option<de::IgnoredAny>,was_thrown:Option<bool>,symbol:Option<de::IgnoredAny> });
+object_record!(Properties { result:Vec<Descriptor>,exception_details:Option<de::IgnoredAny> });
+object_record!(Described { node: DomNode });
