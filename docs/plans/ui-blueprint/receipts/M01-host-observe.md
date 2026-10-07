@@ -122,3 +122,61 @@ subsequent assigned attempt is comparing resolved executable paths in the PID pr
 no cap/field/source/binary change or rebuild is needed. This receipt records a stopped
 negative attempt and does not activate another launch. Exact-one-path doc checkpoint
 awaits root Git lease; actual SDK/H01/pixel/D06 acceptance remains open.
+
+## Corrected first A/AX runtime — successful bounded observation
+
+Root explicitly continued one corrected setup attempt after saved negative receipt
+b21a0b10531731c9d9ed4550901b1b8e8e889054. Only the existing executable comparison
+used resolved/canonical paths; no flags/wrappers/configuration, limits or rebuild.
+Fresh own fixture run:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m01-live-f02-cp_ayxfj.
+Within10s, exact retained executable/new PID80684/unique run-dir were attributed.
+Current CUA bound the exact retained bundle and showed Window A, normal stimulus,
+no popup and f02.sample.a. One CUA Snapshot action produced snapshot_request1 and
+fresh A manifest with matching PID/incarnation, window6887 and generation binding.
+Native physical-input/focus lane released immediately after verified setup.
+
+Exactly one prepared host_observe.py run --allow-live then exited0. It reused the
+same source73 snapshot9b881e64, compiled consumer/helper/descriptor and verified
+validator. Descriptor-only stage read metadata, not tree/pixels; actual four-field
+request used the real returned Attached clock and real H01 begin/helper/receive/ACK.
+No completed response was supplied in advance. Host terminal completed, committed1,
+missing0, caller_ok=true, reserved_sessions0, abandoned=false, cleanup_confirmed=true.
+Private diagnostic was absent, bounded stderr0 bytes; no raw diagnostics persisted.
+
+User-visible selected canonical result: f02.sample.a, role button, accessibility
+name Activate sample, enabled=true, known accessibility_bounds in screen pt, matching
+Target/Surface/request context and partial coverage. All four requested properties
+present. Same retained Rust canonical validator accepted the committed bytes. Fixture
+state/source_state comparison was unchanged; read-only observation caused no stimulus/
+value/layout change. One result is not a full-window76-node, pixel or D06 claim.
+Canonical channel SHA256:
+6db1e93bfd8a13ecaf3c0a2c5d7f4963c3e1298a7d0a60e2d631c351f3749f0a.
+
+After host cleanup, Native rechecked exact fixture PID/canonical executable/unique
+run-dir and sent only that own instance SIGTERM. Process absence confirmed within5s;
+LaunchServices parent owns reaping. No name-wide/user-instance termination or Web
+headless interference. Prepared73 source/binary identities verified unchanged after
+execution. No capture/SCK request, B−3801 retry, permission/settings/backend change,
+probe, screenshot, display change or further observation was performed.
+
+Minimal durable evidence under
+/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/M01-H01/68057b99-aebd-4529-ac95-d68ea8d2800a:
+
+- host/channel-0.json — real committed canonical response;
+- host/submitted-request.json — actual post-Attached-clock request;
+- host/host-report.json — fixed terminal/ACK/cleanup receipt;
+- result.json — compact oracle/unchanged-state result;
+- cleanup.json — exact own fixture exit and resource release.
+
+Launcher-only input/session/request/helper staging was removed after verification;
+no raw manifest/stdio/UI log/image or unrelated sidecar remains in that evidence tree.
+Root/M01 owns retention through P7 acceptance or explicit replacement/discard;
+immediate consumers are M01 qualification and G02/P7 selected canonical-data reuse.
+Fixture working directory remains task-temp; no existing evidence was removed.
+
+The finite first A/AX outcome now exists with canonical validation and helper/worker/
+fixture cleanup. Broader M01/native field coverage, general identity/privacy, capture/
+SDK resource saturation and positive pixel/D06 gates remain separate. Exact-one-path
+receipt checkpoint pending root Git lease. No active fixture/helper/worker/input/
+capture lane or additional runtime attempt is held or started.
