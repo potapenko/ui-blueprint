@@ -23,6 +23,17 @@ and fixed descriptor semantics. Core owns this API; do not change it or infer an
 alternative from the broad goal. Return an exact source/API dependency if necessary.
 Mode Restore registered boundaries; no product/spec/number/permission changes.
 
+Authorized narrow API amendment after actual stack evidence: Core adds
+WorkerPlatform::watchdog_stack_request(ceiling: usize) -> Result<usize,HostError>;
+Native implements it and consumes it in its peer. Core owns the signature and real
+worker integration; no other frozen API change is opened. Builder request1,048,576
+yielded actual1,060,864 on the pinned host; one16,384-byte host-page headroom yielded
+actual1,044,480 within the unchanged1MiB ceiling (main8,372,224 within8MiB).
+The method returns a checked creation request, NOT a universal stack guarantee.
+Actual thread extent must still be queried/validated before untrusted work; caller
+failure is explicit rather than a larger hidden cap.9 original process tests passed
+with the peer mechanism; final API/production integration proof remains separate.
+
 Required facts: fixed absolute SpawnSpec (4096-byte root), no shell/inherited
 environment/arbitrary argv collection; exact owned child and descriptors; at most36
 poll interests with a bounded relative wait and no hidden EINTR deadline renewal;

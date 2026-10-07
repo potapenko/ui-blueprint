@@ -74,6 +74,14 @@ minimal peer-target hook only after Native returns its exact compiling handoff;
 no dummy implementation solely to make an absent module compile. Short shared
 build-input barriers are coordinated by root; disjoint implementation continues.
 
+Stack proof amendment: Native measured std Builder1MiB → actual1,060,864 bytes;
+one16,384-byte page of headroom yielded actual1,044,480 (main8,372,224), within the
+unchanged1MiB/8MiB ceilings. Core may extend only WorkerPlatform with
+watchdog_stack_request(ceiling: usize) -> Result<usize,HostError>; Native supplies
+Darwin implementation/peer use. Core uses it in the real watchdog, then checks
+actual current_stack_bytes before untrusted work. A creation request alone is not
+proof; no new numeric policy, schema/wire change or larger cap is authorized.
+
 ## Required implemented boundary
 
 Implement the real HostDomain/RuntimeHost/session/input/result lease lifecycle,
