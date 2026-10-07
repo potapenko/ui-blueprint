@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core provider c0abcff and test-only231882a saved/pushed, Git released; Core waiting_resource on Web shared-production hold. Replay receipt1595a877 pushed; Integration prepares remaining assigned failure attribution. Web runtime passed per owner, remaining checks recovering after no-space. Native resumed same M01-host-helper after disk changed from117MiB to9.6Gi available. No live/UI grants; root owns registry/packets/review receipt |
+| Активные чаты/пакеты/ресурсы | Core provider c0abcff and test-only231882a saved/pushed; Web released shared-production hold and Core continuation dispatched. Replay receipt1595a877 pushed; Integration prepares remaining assigned failure attribution. Web6runtime/default-web compile/Clippy PASS,91-input digest8156d3ef…21265d; receipt/checkpoint pending, no cleanup performed. Native M01-host-helper source/build resumed after disk recovered. No live/UI/Git grants; root owns registry/packets/review receipt |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Web returns before/after hash and immediately releases shared-production hold; resume same Core owner on remaining H01 work, recheck within3min. Web finishes only missing checks and saves scoped proof. Native connects same-source Swift helper; Integration returns next concrete failure-attribution case/dependency. No new approval inside existing scope; full H01/live/D06/RC05 remain open |
+| Следующий шаг | Web returns exact proof checkpoint paths for short Git lease; Core returns next mandatory H01 gap/case and continues existing scope. Native connects same-source Swift helper; Integration prepares bounded rejection attribution without cap sweep. Scope/source review419b75c accepted; full H01/live/D06/RC05 remain open. No renewed user approval inside existing scope |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
