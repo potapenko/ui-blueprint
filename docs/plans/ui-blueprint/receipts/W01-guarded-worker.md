@@ -1,61 +1,95 @@
-# W01 guarded worker composition receipt
+# W01 guarded Web composition receipt
 
-Status: real worker_web module written; Core hooks/shared-input barrier and runtime
-proof pending. Authority [packet](../packets/W01-guarded-worker.md), transfer25bdae2,
-shared Core boundarya8e5c06 under approved parallel PLAN.UIB@1. No live browser/SDK/UI.
-No nested agent or branch/worktree; master only. Web owns only the transferred paths.
+Status: real guarded synthetic-peer proof ready for checkpoint/review; not full
+H01/live acceptance. Authority [packet](../packets/W01-guarded-worker.md), transfer25bdae2,
+dependency amendment9183eb0 and approved PLAN.UIB@1. No browser/SDK/UI grant.
+Prepared module/config d9de0a60a22b0551768e96474547548bb04ca4e3 was explicitly uncompiled
+then; the evidence below supersedes that pending state, not unrelated acceptance.
 
-## Basis and concrete consumer
+## Basis and actual boundary
 
-Reuse current registry10 → product/development D02@2/D03@2/D04@1/D05@3/MEMORY@2/
-WORK@1/D06@1/D07@5 and full existing Web/H01 closure, identity/scope/exchange/model/
-privacy/lifecycle/publication, WEB-PILOTS/PILOTS, RUST/DEV.RUST@2/QA governance.
-Guard acceptance64cbec9 is supporting evidence, not a reason to rerun its general
-audit. Read only actual affected CanonicalSession/ObservationRun, worker admission/
-clock/encoding/publication, TargetLease, Tape/config and existing runtime test setup.
-Mode Restore; no spec, canonical wire0.1/analysis0.2, quota or feature-default delta.
+Reuse registry10 → product/development D02@2/D03@2/D04@1/D05@3/MEMORY@2/WORK@1/
+D06@1/D07@5 and full current Web/H01 identity/scope/exchange/model/privacy/lifecycle/
+publication closure, WEB-PILOTS/PILOTS, RUST/DEV.RUST@2/QA. Mode Restore; no contract,
+wire0.1/analysis0.2, quota or feature-default delta. Guard review64cbec9 and Core
+source review support this work but do not replace its actual caller proof.
 
-Immediate implementation: executable-private WebSession::attach/observe in
-crates/host/src/worker_web.rs; exact signatures/ownership in
-[handoff](../../../development/host-web.md). Actual file exists for Core's module hook.
-Attach consumes explicit trusted WebSetup and actual worker clock/TargetLease,
-installs required log filtering and owns the existing Transport→CDP→Collector.
-Observe decodes only Request+selection config, gets real begin/Ticket, waits for
-actual parent permission, performs guarded collection, bounded encoding, real receive,
-then actual Frame/Commit/ACK. No dummy success, pre-collected response or fake refs.
+WebSession uses real begin_observation/ObservationRun Ticket, worker clock/origin,
+admit_observation, FixedOutput, receive_channel and publish. Core supplied actual
+attach_web/submit_web_observe and parent ObserveReady/Permit; no Native binding,
+prerecorded response or fake ACK. Request+selection configuration enters the
+producer; immutable trusted setup fixes endpoint/binding. Existing Transport→CDP→
+Collector and log filter execute inside the installed GuardedAllocator/watchdog.
 
-Encoding uses fixed preallocated output and publication allowance; canonical receive
-runs under ordinary quota after original Document drop. Shared borrow/API boundary
-is sufficient; no new publish/receive API needed. Source callback failure preserves
-the specific HostError and unfinished ObservationRun Drop-cancels. No second graph,
-client, JSON parser, parent decode or ref-cache/JSON envelope was introduced.
-Bootstrap canonical refs remain represented by real emitted Snapshot/Observation IDs.
+Callback encodes into fixed output under publication allowance, drops original
+Document before ordinary-quota canonical receive, then waits for actual parent
+Frame/Commit/ACK. Acknowledged follows publish success. Callback errors preserve
+HostError; unfinished ObservationRun Drop-cancels. No second graph/parser/host,
+parent decode, new refs JSON or uncharged ref cache. API in [handoff](../../../development/host-web.md).
+Default Web feature remains off; actual source IDs stay in canonical Snapshot data.
 
-## Exact shared dependencies returned before crossing ownership
+## Actual scope — six PASS
 
-Core owns main/module/worker dispatcher and parent admission/ObserveReady/Permit;
-those hooks were absent at the saved input. No synthetic substitute is used for a
-runtime completion claim. Core must provide the actual Web attach/submit service and
-a short ready-to-compile/run input handoff. Source preparation proceeds independently.
-For real bounded test peers, requested Core add existing approved tungstenite.workspace
-as host dev dependency; no new version/features/library or handwritten WS codec.
-This Web worker has not edited any Cargo/module/common worker/parent/Native files.
+Five tests spawn the real guarded worker through RuntimeHost/DarwinPlatform; the
+sixth tests the pure private-configuration decoder.
 
-## Current write set, checks and retention
+| Scope | Executed result |
+| --- | --- |
+| Begin/Permit/Ticket/ACK/reuse | Actual Permit delayed by forwarding wrapper: no new CDP commands before forwarding. Prior Validate is host operation1; Observe operation2 uses real Ticket1. Response/permit Ticket match and actual ACK commits. Returned Snapshot IDs drive a later ref request without another search; both held results stay charged/readable through shutdown. |
+| Later cancel | First Observe ACK forwarded; second withheld. Parent cancellation retains only channel0 after reap, channel1 missing. Second channel was an unsupported-capture response, not actual capture. |
+| Admission/privacy | Wrong request target denied before Permit/source IO; subsequent sensitive first request yields redacted canonical bytes without source/attribute canaries. |
+| Ref/document refusal | Wrong ref generation and source-loader drift yield ResyncRequired/no new frame; prior held Snapshot remains unchanged. |
+| Deadline | CDP peer stalls after real admission. Original parent120ms bound yields TimedOut/no frame and owned cleanup/reap. |
+| Configuration | Selection rejects endpoint injection, excessive byte length and non-object data. |
 
-Owned now: crates/host/src/worker_web.rs, crates/host/src/web_config.rs;
-future tests/web_worker.rs and only support/web_worker_*; docs/development/host-web.md
-and this receipt. web_config adds bounded config decoding; source signatures are
-real implementation, not placeholder modules. Scoped rustfmt applied to owned files.
-No Cargo or runtime success claimed before module hook and input barrier.
+Wrappers call the real platform/predicate/owned child and only delay forwarding
+actual controls; they do not manufacture controls or change signal policy. Known
+small output is decoded by the test CLIENT for assertions; production parent stays
+opaque. All five runtime cases reach reserved_sessions=0 through actual shutdown/
+reap. Every peer socket closes/thread joins under finite accept/IO/cleanup bounds.
+No process outside returned owned handles is operated/signalled.
 
-Initial shared pins from root: worker_main59b664c8…564ac5;
-worker_ops45ae90c8…fc2bb; worker_observation12560324…92958;
-web_config94fd7bc4…9d2d before Web-owned edits. Allocator2f1bf278/worker_io9700bfa
-remain protected. Exact final inputs/checks/source hash follow the actual barrier.
-No raw logs stored, no outside app/process operated. Existing primary temp remains
-owned by Web for the immediate consuming source work; new runtime test artifacts
-will use a named task temp, with cleanup after accepted evidence.
+Synthetic parameters:2 workers,64MiB child/1MiB publication,32MiB parent,2MiB input,
+512KiB channel,2 completion groups,1s cleanup,8MiB/1MiB stacks. Source16 refs/
+100 methods/8192 reply/65536 total reply,600 text/256 handle bytes,32 AX properties;
+request32 nodes/depth8/65536 output/2s. These are not D06 performance measurements.
 
-No full H01, live Web/B01–B06/D06 or independent acceptance. Root grants an exact-path
-checkpoint+push once a coherent source/proof stage is ready; no autonomous next packet.
+## Checks and pinned input wave
+
+Provider c0abcffed886d0f33b34ddf3008a902b8e024676; Web module/config unchanged from
+d9de0a6. Before/after production equality to c0abcff passed. Shared hold RELEASED
+after checks/hash, not held for documentation/checkpoint.
+
+~~~sh
+cargo +1.96.0 test --locked --offline -p uiblueprint-host --features web --test web_worker -- --test-threads=1
+cargo +1.96.0 check --locked --offline -p uiblueprint-host --bin session-worker
+cargo +1.96.0 check --locked --offline -p uiblueprint-host --features web --bin session-worker --test web_worker
+cargo +1.96.0 clippy --locked --offline -p uiblueprint-host --features web --bin session-worker --test web_worker -- -D warnings
+~~~
+
+All pass; owned six .rs files pass rustfmt --check --config skip_children=true.
+No unrelated/general guard suites rerun. A shell heredoc hit no-space BEFORE later
+Cargo checks; direct-command retry passed when space was available. Nothing was
+deleted and no recovery of free disk space is attributed to this worker.
+
+Checked91-input digest: 8156d3ef87a01acf4ba0bef887f72c5d8ac0e0ad35faf1a7e0bb35604221265d.
+Recipe: SHA256 of compact sorted JSON {repository-relative path: SHA256(bytes)},
+UTF-8/ASCII keys. Paths: every tracked file at c0abcff under
+crates/{host,schema,engine,plugin-api}/src and plugins/web/src; Cargo.toml/Cargo.lock/
+rust-toolchain.toml; those five crates' Cargo.toml; own tests/web_worker.rs and
+support/web_worker_{data,peer,process}.rs under crates/host; fixtures/analysis/query-gap.json.
+Docs excluded. Pinned c0abcff production plus saved own tests reconstruct this wave,
+even when later Core work advances; no retroactive attribution to newer inputs.
+Tested worker SHA256 e14516e7ae576137bfc87585e81058d5220aabfc6f838d59f0b55e6a3e2105cb.
+Host Cargo9db7f79f2a67d94fbf9d84d38fa3a3a5535c354c56db306ed6434b5e3d628eef;
+lockb2b39be77e62da78baffcb34afb21e9592373a301a5e99ad8bac8965ee788332 match handoff.
+
+## Saving, retention and open gates
+
+Next exact6 paths: four own test/helper files above, host-web.md and this receipt.
+Module/config already saved; no Core/Native/Cargo/source edits staged by this save.
+Runtime temp: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-guarded-web-r4nkr9vn.
+Primary temp uib-web-collector-cfh50npl stays retained as directed. Owner=this Web
+worker; cleanup only own artifacts after accepted handoff. No raw command logs saved.
+Independent integration review, actual Chromium/read-only invariance, opaque browser
+memory/cleanup, broader projections/pixels and W01/B01–B06/D06 remain open.
