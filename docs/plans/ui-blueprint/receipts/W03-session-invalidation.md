@@ -1,7 +1,7 @@
 # W03 explicit-request invalidation signal
 
-Status: Web source/hook saved24ed0e8; finite reusable-worker event/loss integration
-on saved provider74d2e3b passed. Direct cache-state proof remains separately attributed.
+Status: Web source/hook and finite peer integration saved; actual F01 B05
+current geometry/history sequence PASSED. Direct cache-state proof stays separate.
 Authority: root implementation dispatch/[packet](../packets/W03-session-invalidation.md)
 under approved P4/W03. Existing CACHE/LIFECYCLE/IDENTITY/EXCHANGE/PRIVACY/PROJECTIONS,
 D02/D04/D05 MEMORY/WORK closure already read and current; CLI additions do not alter
@@ -166,3 +166,44 @@ absent during preparation. Three unchanged ACKed frames b05-initial/parent/font.
 and compact report may exist only during this operation. Deliver factual outcome
 inline, consume then remove own output/files/emptydir and build/source temp, verify
 absence. Older evidence untouched; no persistent archive or screenshot links.
+
+## Activated actual B05 result
+
+Saved harness9f03d52e89a13ae84540ab8b83adfffb79d93380 on saved base3318662 ran once
+2026-10-07T18:08:19.709Z–18:08:21.249Z with matching188source/test/worker pins
+above. Actual status passed, exit0, pending0. All6operations completed with
+committed1/missing0 and no failure diagnostic:3explicit Observe and3explicit Retain.
+No old acceptance sequence, extra browser scenario or cap/oracle adjustment.
+
+| Actual observation | Layout rect css_px | Snapshot revision | Original environment revision |
+| --- | --- | ---: | --- |
+| initial |40,550,120,32|1|f01-800x600-dpr1-b05-initial|
+| after parentWide |40,550,150,32|2|f01-800x600-dpr1-b05-parent|
+| after fontLarge |40,550,150,48|3|f01-800x600-dpr1-b05-font|
+
+All use the same original DOM ref/source key and viewport Space (css_px/top-left/
+local-only); Observation identities advance, coverage remains partial and source
+consistency unknown. The independent F01 B05 dimension literals passed. No source
+environment revision was rewritten to permit retention/comparison. After both
+fixture changes, duplicate Retain returned the exact ORIGINAL Snapshot bytes with
+original properties/context/time; original ACKed channel lease also remained equal.
+
+All6focus/scroll/checkpoint invariance checks passed; fixture browser survived
+worker reap. Worker cleanup confirmed sessions0/groups0/abandonedfalse; test,
+context, driver, browser, server and profile all confirmed closed. Seven total
+checks, no pending case. This proves current geometry/history preservation, not
+internal cache invalidated flags, actual CDP-loss delivery, global atomicity or
+full live cache lifecycle. Existing Core direct-state and worker peer/source
+evidence remain separately attributed; fixture counters are not CDP evidence.
+
+Consumed temporary ACKed frames: initial3100B SHA256
+d3902d3f9a6aa2a2550054dfe368a0e248a0788576fcaf4a0473af9882a58973;
+parent3107B363947cf39959debd99f25cc0b3d1b5692dab19c3c5152abd4666dcc1a7ffea6;
+font3093B822ea11d4635930a85cdbf0e34841723ca72dcb60615b1e521f201f2968d8ba3.
+Report SHA256a2489c825ce45efb974a36756a9af640d12e6a44ded8ba7d8fa24462426843d7.
+These identify checked/deleted temporary records, not retained artifacts.
+Post-run188source/binary/harness/fixture pins and all4output hashes matched.
+Facts delivered inline; all4run-owned files and579204b1...empty directory removed,
+absence verified. Current uib-web-b05-o551kaii source/build temp also removed and
+absence verified. Older evidence untouched. No persistent output, raw logs or
+screenshots; no source/runtime/Git hold. Result checkpoint is this one receipt.
