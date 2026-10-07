@@ -49,3 +49,23 @@ Git state, external services, applications or runtime resources were modified.
 
 Root accepts only the scoped source verdict and preserves all named gates. The
 same reviewer is retained for a concrete affected repair, not an unchanged re-audit.
+
+## Saved Web execution supplement
+
+New mandatory evidence became available at74ea8e1ad9ea95eae6d0e491cae674f472095717.
+The same reviewer first inspected the four new test/helper sources without new
+author receipts; production worker_web/config remained identical to c0abcff.
+Initial coverage confirmed actual parent Permit/Ticket/ACK, reuse, cancellation
+preserving only ACKed output, canonical-output redaction, target/ref/document
+refusal, deadline and bounded owned cleanup. The synthetic CDP peer does not run
+browser JS. The cancelled second channel is an unsupported-capture reply, not
+real capture. Only then root supplied the saved Web receipt/docs.
+
+Supplemental verdict: **accept_with_residual for bounded synthetic-peer proof**,
+no actionable findings; earlier source verdict unchanged. Reviewer independently
+reconstructed all91 saved inputs and matched
+`8156d3ef87a01acf4ba0bef887f72c5d8ac0e0ad35faf1a7e0bb35604221265d`.
+Six passing tests and scoped default/Web compile, Clippy and formatting remain
+author-attributed execution. No reviewer tests or runtime operation occurred.
+Live Chromium/JavaScript, broader privacy channels, SDK/pixels/backend resources
+and D06/full H01 stay open. Working Core/Native/Integration deltas were excluded.
