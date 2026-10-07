@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Fatal-race64cbec9/refusal proofba3c372 saved; no barriers/Git grants. Integration now prepares one fixed Replay-phase quota case with existing read_fatal observation wrapper, no production/API edits. Core may continue approved producer/Cargo wiring. Web8f77063 source accepted; desktop released/B pixels stopped |
+| Активные чаты/пакеты/ресурсы | No barriers/Git grants. Core now changes approved producer inputs: host Cargo/lock edges, protocol/supervisor/config, worker_main/worker_ops; worker_io/allocator2f1bf278 and Web/Native source protected. Integration prepares fixed Replay-phase quota case only, awaiting new saved-provider handoff before run. Prior evidence stays pinned to prior revisions. Web8f77063 source accepted; desktop released/B pixels stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Integration prepares predeclared480KiB-text/empty-delta Replay case at ordinary4MiB−128KiB and requests ready-to-run source barrier; unexpected earlier phase is evidence, not permission to tune cap. Core implements actual producer exchange and returns concrete interface/pins for disjoint owners; optional web wiring authorized. Validation attribution and full H01/live/D06/RC05 remain open |
+| Следующий шаг | Core supplies minimum compiling shared producer boundary and concrete saved Web-module handoff for retained Web owner while implementing Native/common lifecycle. Integration's predeclared480KiB/empty-delta case runs only after new source handoff/ACK; earlier failure stays truthful. Validation attribution and full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
