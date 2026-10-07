@@ -27,3 +27,20 @@ invariance/cleanup and B01–B06/D06 remain open. No tests, browser/network oper
 source mutation or external post occurred during review. Retain exact primary
 source evidence while the same Web owner needs it for the immediate bootstrap work;
 cleanup stays with that owner after the consuming handoff is accepted.
+
+## Native reader flag — d19d130 scoped recheck
+
+Same reviewer inspected d19d13018fb74c604ef9d7c2666a10ada3e0d270 against53c6f74
+before the author narrative, then reconciled saved receipt1acc4b8. Verdict:
+accept_with_residual; no actionable introduced defect. Ordinary evaluation is
+limited to the fixed isolated-world READ_NODE; serialized data arguments, native
+reads, privacy/scope bounds and original-handle checks remain. Selection and
+continuity retain the debugger guard; no page callback/input/mutation was added.
+
+Reviewer matched the reported first-response frame and report hashes. Frame
+contains DOM[40,60,120,40], AX Apply/button, distinct source identities and explicit
+unknowns. Report records actual first-case read-only invariance and confirmed
+cleanup. Runtime execution and Chromium source diagnosis remain author-attributed;
+reviewer performed no execution. This accepts the changed source boundary and
+reconciled first-response evidence only. Size-change/privacy/wrong-target/remount/
+navigation, full W01, Native, input and D06 remain separate qualification.

@@ -74,3 +74,56 @@ Return compact receipt with changed paths, saved identity, affected checks,
 actual gaps and resource release. Root activates the ready runtime separately
 after its target/input ownership conditions; no renewed user product approval.
 Build success is preparation, not live or D06 acceptance.
+
+## First AX runtime activation
+
+Prepared candidatefd559df3b0a0c6296cddd7460040af80ff1e9808 is saved/pushed;
+author confirmed73 saved inputs and compiled caller equality. After its pending
+documentation-only ownership correction checkpoint, the same Native worker is
+authorized to execute one first A/AX run using the exact prepared handoff. No
+new user approval or further root activation round-trip is required.
+
+Root coordinates; Native performs setup, observation and exact owned cleanup.
+Global QA/Computer Use/Apple routes were read by root and apply to the worker.
+Use current callable Computer Use instructions for visible fixture actions and
+the existing permitted macOS build/run workflow; no replacement backend to bypass
+a tool stop. Native owns this project's physical-input/focus lane for the brief
+F02 setup/Snapshot only. Web's separate headless fixture has no physical input;
+release the lane immediately after setup, or on interruption/permission handoff.
+If an actual outside resource owner appears, preserve waiting_resource and do
+independent work; do not steal a session. No global reservation helper is exposed.
+
+Reuse F02-off.app at the exact retained path/hash from the preparation receipt,
+9a88b12 fixture source. Confirm it is the task-owned instance; launch with a new
+system-temp run directory, own PID/incarnation, select A with normal stimulus/no
+popup and explicitly Snapshot. Bound launch to10s and UI setup to120s. Do not
+rebuild/reconfigure fixture, alter display/TCC or operate real PlayPhrase.me.
+No capture/probe/input scenario or B-3801 retry. Native may terminate/reap only
+the exact fixture instance it launched, with a bounded5s owned cleanup after the
+host result; never use a name-wide kill. Existing user instances remain untouched.
+
+Use prepared.json at uib-m01-host-observe-rwhasm39/build and saved binaries/pins
+from the receipt, plus the retained verified validator. Run the documented
+host_observe.py run --allow-live once against fresh A manifest. Keep all fixed
+node/depth/field/acquisition/512KiB/AX1s/parent1s/cleanup1s limits; attach5s,
+terminal/cleanup poll2s, launcher15s, descriptor2s and validator3s as prepared.
+Do not tune caps, force the old node count, retry denial or use stale manifests.
+
+Create a fresh exclusive UUID output under
+/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/M01-H01/.
+Persist only the prepared selected canonical response/submitted bounded request,
+fixed host/cleanup receipt and compact result. No raw manifest, stdio, UI logs,
+screenshots or extra sidecars. Root/M01 owns this evidence through P7 acceptance
+or explicit replacement/discard; immediate consumer is M01 runtime qualification
+and G02/P7 canonical-data reuse. Fixture working directory remains temporary.
+
+Actual success requires current ACKed AX response, canonical validation, expected
+sample role/name/enabled/pt bounds, identity/partial coverage, unchanged fixture
+state and confirmed owned helper/worker/fixture cleanup. Read-only scope and
+request context must remain exact. Permission_required/timeout/partial failure
+is preserved as negative evidence and stops this attempt. On a product failure,
+return exact stage/cause and cleanup; do not reinterpret it as unavailable tooling.
+No unchanged retry. Check the small consumed source/binary input set before/after;
+immutable builds require no shared G02/Web hold. Save the compact receipt after
+execution through the next short Git lease. Broader Native/SDK/pixels/D06 and
+full M01 remain separate; no additional general review wave in this activation.
