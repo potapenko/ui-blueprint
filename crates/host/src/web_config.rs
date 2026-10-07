@@ -116,3 +116,28 @@ pub enum WebSelection {
         nodes: Vec<WebRef>,
     },
 }
+
+impl WebSetup {
+    /// Only trusted attach configuration calls this under the worker guard.
+    pub fn decode(bytes: &[u8], limit: usize) -> Result<Self, crate::HostError> {
+        decode(bytes, limit)
+    }
+}
+impl WebSelection {
+    /// Explicit bounded per-operation selection; no endpoint/authority fields.
+    pub fn decode(bytes: &[u8], limit: usize) -> Result<Self, crate::HostError> {
+        decode(bytes, limit)
+    }
+}
+fn decode<T: serde::de::DeserializeOwned>(
+    bytes: &[u8],
+    limit: usize,
+) -> Result<T, crate::HostError> {
+    if bytes.len() > limit {
+        return Err(crate::HostError::ResourceLimit);
+    }
+    if bytes.iter().copied().find(|b| !b" \t\r\n".contains(b)) != Some(b'{') {
+        return Err(crate::HostError::InvalidInput);
+    }
+    serde_json::from_slice(bytes).map_err(|_| crate::HostError::InvalidInput)
+}
