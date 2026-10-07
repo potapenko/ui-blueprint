@@ -384,6 +384,7 @@ fn make_snapshot(
         controls: None,
         declared_anchor: None,
         active_descendant: None,
+        selection: None,
     };
     let node = normalize::dom(
         backend,

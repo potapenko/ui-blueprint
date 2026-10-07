@@ -480,3 +480,121 @@ unchanged unrelated fields. No new check ran or capability shipped in this drain
 No current-operation build/temp/image/runtime resources were created or held;
 older retained evidence is untouched. Checkpoint is a restart record, not W02/B02
 acceptance. Git lease readiness is reported separately after documentation checks.
+
+## Resumed bounded form-read implementation basis — 2026-10-08
+
+Explicit root resume under the user's resumed PLAN.UIB@1 authorizes the same
+packet plus action.rs ONLY for None initialization of the new optional DomRead
+member. Restore; no schema/contract delta. Full selected product/development
+closure recovered from registry17, product/acceptance branches and decisions:
+FORMS/MODEL/EXCHANGE/IDENTITY/PROJECTIONS/PRIVACY/BOUNDARIES/ACTIONS/LIFECYCLE/CACHE,
+GEOMETRY/PILOTS/WEB-PILOTS and D02@2/D04@1/D05@4/MEMORY@2/WORK@1 dependencies;
+RUST and DEV.RUST@2 apply. Export/mobile/Native acquisition and action delivery
+are excluded. No applicable semantic revision drift found.
+
+Contract requirements are actual offsets with explicit units, independent focus/
+selection/composition, privacy before acquisition, selected fields and bounded
+work. Observed canonical owner model.rs has Option<TextSelection> with no target,
+direction, availability reason or separate Field selector. Current normalizer
+leaves it absent. The following is a limited adapter implementation choice, not
+a new universal request contract: acquire only with BOTH Focused and Value
+requested, so bounded value is available without a hidden unrequested value read.
+Only an actually focused public input/textarea in a document reporting hasFocus
+is eligible. A unique focused selected source supplies Focus.keyboard and its
+TextSelection together; ambiguity leaves both unestablished. No inferred target
+from string/geometry and no scope expansion. The existing optional shape cannot
+distinguish unrequested/unsupported/private/unknown selection; absence does NOT
+claim an empty selection or complete coverage. This schema limitation remains.
+
+[HTML selection API](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#textFieldSelection)
+reports code-unit offsets and forward/backward/none direction. Preserve UTF-16
+units; forward maps start→end, backward end→start. A collapsed range maps equal
+offsets for any valid direction, without asserting visible caret. Noncollapsed
+none stays absent because anchor/focus orientation is not established. Validate
+safe nonnegative ordered offsets against the actually read value; Rust rechecks
+bounds, privacy and selected fields. Unsupported/null/getter failure is no zero
+fallback; malformed typed transport may refuse the channel normally.
+
+[Chromium145 output owner](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/core/html/forms/html_output_element.cc)
+value() delegates to textContent(). Before invoking it, qualify native Node
+firstChild/nextSibling/nodeType: empty output, or exactly one Text child whose
+native CharacterData.length fits existing maxChars. No subtree traversal or
+unbounded convenience getter on rejected shapes. Read native output.value only
+after privacy and shape/length admission; retain known empty, otherwise truthful
+unknown. Browser implementation evidence guides our own bounded reader; no code
+copied, new library or output/applied semantic inference. Native API costs remain
+browser-owned, not Rust allocation-cap claims.
+
+Exact eight-path write set: plugins/web/src/collector/{read-node.js,wire.rs,
+acquire.rs,action.rs}, plugins/web/src/normalize/mod.rs,
+plugins/web/tests/collector.rs, plugins/web/tests/fixtures/collector/script-check.cjs,
+and this receipt. acquire.rs normalization hookup and mandatory clearing of the
+new selection DTO at its existing caller-sensitivity boundary; action.rs initializer only.
+Focused offline getter/collector peers, affected Web check/Clippy and owned fmt;
+no browser/runtime or shared host/kernel/CLI/Cargo/fixture edits. Actual proof and
+remaining dependencies will be recorded below; this basis does not claim delivery.
+
+## Form-read source result and focused evidence
+
+Implemented the eight-path slice above. Fixed native reader now admits bounded
+empty/single-Text output.value and reads native selectionStart/End/Direction for
+eligible input/textarea. Privacy and field gates precede selection/value/length
+acquisition. Getter failure preserves other facts without exporting exceptions.
+Private optional SelectionRead is object-only, with typed offsets/direction;
+unknown direction is not coerced. Caller-sensitive DTO clearing includes selection.
+Rust normalizer rechecks privacy, value bound, unique focus, native control tag,
+document focus, ordered/in-range UTF-16 offsets and direction before jointly
+publishing keyboard target plus selection evidence. Noncollapsed none stays absent.
+No visible caret, IME, active option or applied business interpretation was added.
+Missing admitted output value has an explicit bounded-read unknown reason.
+action.rs changed by exactly one `selection: None` initializer; no action behavior.
+
+Validation on immutable base ba364d89236c2728329d1f128377abecc30c93b1 plus only
+seven owned source/test overlays: five new `form_read_` collector tests PASS,
+covering forward/backward, UTF-16 astral text, collapsed zero/end, null/unsupported,
+bad direction/bounds, document/element focus, duplicate focused sources, caller/
+source privacy, fields/value cap, malformed object/negative/fractional offsets,
+and output empty/nonempty/unknown. Canonical document validation passed for every
+published peer result; malformed cases refused publication and released groups.
+Four affected existing tests PASS: canonical DOM/AX literals, fields gate,
+selected DOM relations/privacy and sensitive source redaction. These are synthetic
+transport peers, not real browser evidence. Existing checkbox tests were not rerun.
+
+Existing Node24.15 script harness PASS: prior57 scenarios plus selection/output
+checks for native getters, no sensitive/unrequested getter reads, unsupported/null/
+exception cases, UTF-16 range, collapsed textarea, bounded shape and exact text
+cap, rejected oversized/nested/multiple content without output getter, unchanged
+mock state, and native validity versus app aria-invalid. Initial new-test failure
+was a circular mock-object JSON comparison; comparing the owned state resolved it,
+without changing product behavior or weakening expectations. Offline mocks only.
+Affected `cargo check --locked --offline -p uiblueprint-web --all-targets` and
+matching Clippy `-- -D warnings` PASS; owned rustfmt and scoped diff/link checks PASS.
+
+372 exported inputs from saved base plus overlays have compact sorted JSON
+path→SHA256 fingerprint bb4973dbb5cf83ec4775511ba8185862f6f5db5e1fb72f573aca5a98e5aca029.
+All pinned inputs and current seven overlays matched after checks. Source pins:
+
+| Owned path under plugins/web | SHA256 |
+| --- | --- |
+| src/collector/read-node.js | 55dd968572908b0b683189d275c82e0b41b5709be182df015dc3322cadf5a03b |
+| src/collector/wire.rs | e7af77452f19d8a0ddc0678bf07ea7847e802644ce5a78b10f6b227d50a065fa |
+| src/collector/acquire.rs | 9114663ce700f6bc37c7dc8bdbd646bbc2b7d6aae4f3b16011072db5e38f82a2 |
+| src/collector/action.rs | 42d4069bffb5987f66373b16f9fa6f209a5f21806b000fa1ef405cef275ad4f0 |
+| src/normalize/mod.rs | cb91b6b03dd9e2d909b7b4b25f6a64294e1b3db8d6303ad6be34ce06b03d4c24 |
+| tests/collector.rs | 877f4c09e86d75f880ae6108cfa22d49e1fbdfd4d6f6888da630166cae0e5122 |
+| tests/fixtures/collector/script-check.cjs | f569c4f635ae58af050710323ae7c0d1f141c53276b0cdccfc5bbe688747a4d3 |
+
+Current-operation system temp uib-form-read-g9r5bkp7 contained no images by suffix/
+signature inspection; its run-owned source/build/pins were consumed, removed and
+absence verified. No images generated/deleted; older retained evidence unchanged.
+No browser/runtime/desktop lane was used, no hidden collection/event/action added.
+Core/host/kernel/CLI/Cargo/fixtures remain untouched by this slice.
+
+Residuals: actual browser qualification and independent source acceptance remain;
+Focus/Type delivery and lifecycle support are still separate Core/Web work. Current
+Option<TextSelection> cannot encode per-selection absence reasons or independent
+field selection; unsupported, unrequested, privacy and ambiguous orientation remain
+absent under partial scope. Rich output content remains unqualified. App invalid,
+active suggestion, confirmed choice and business applied result still require
+their own evidence/profile; native Invalid=false does not establish app success.
+Checkpoint/push needs the short root lease; no W02/B02 completion claim is made.

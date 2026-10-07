@@ -261,6 +261,7 @@ impl Collector {
                 read.controls = None;
                 read.declared_anchor = None;
                 read.active_descendant = None;
+                read.selection = None;
             }
             validate_dom(&read, self.limits.max_text_bytes, node_count)
                 .map_err(|e| e.at(MalformedSite::ReadData))?;
@@ -461,6 +462,12 @@ impl Collector {
         }
         normalize::dom_relations(&records.dom, &dom, &mut relations);
         let active_descendant = normalize::active_descendant(&records.dom, &dom, &request.context);
+        let selection = normalize::text_selection(
+            &records.dom,
+            &dom,
+            &request.context,
+            self.limits.max_text_bytes,
+        );
         let mut snapshot = normalize::snapshot(
             request,
             (self.owner, self.sequence),
@@ -474,6 +481,10 @@ impl Collector {
             empty,
         );
         snapshot.focus.active_descendant = active_descendant;
+        if let Some((keyboard, selection)) = selection {
+            snapshot.focus.keyboard = keyboard;
+            snapshot.focus.text_selection = Some(selection);
+        }
         validation::validate_snapshot(&snapshot).map_err(|_| Failure::new(ErrorKind::Malformed))?;
         Ok(snapshot)
     }

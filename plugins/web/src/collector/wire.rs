@@ -30,8 +30,24 @@ object_record!(DomRead {
  rect:Option<Rect>, input_kind:Option<String>, value:Option<String>, placeholder:Option<String>,
  required:Option<bool>, enabled:Option<bool>, readonly:Option<bool>, checked:Option<bool>,
  selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>,
- controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>
+ controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>,
+ selection:Option<SelectionRead>
 });
+object_record!(SelectionRead {
+    start: u64,
+    end: u64,
+    direction: SelectionDirection,
+    document_focused: bool
+});
+#[derive(Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub(crate) enum SelectionDirection {
+    Forward,
+    Backward,
+    None,
+    #[serde(other)]
+    Other,
+}
 object_record!(AxValue { r#type:String, value:Option<Scalar> });
 object_record!(AxProperty {
     name: String,

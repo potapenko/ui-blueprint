@@ -17,11 +17,12 @@ class HTMLTextAreaElement extends Element {}
 class HTMLSelectElement extends Element {}
 class HTMLOptionElement extends Element {}
 class HTMLButtonElement extends Element {}
+class HTMLOutputElement extends Element {}
 for (const [key, sourceKey] of Object.entries({type:'kind',value:'data',placeholder:'placeholder',required:'required',readOnly:'readOnly',checked:'checked',indeterminate:'indeterminate',validity:'validity'})) {
   Object.defineProperty(HTMLInputElement.prototype, key, { configurable:true, get() { if (key === 'value') valueReads++; return this.state[sourceKey]; } });
 }
 const document = { activeElement: null };
-const context = vm.createContext({Element,HTMLInputElement,HTMLTextAreaElement,HTMLSelectElement,HTMLOptionElement,HTMLButtonElement,document});
+const context = vm.createContext({Element,HTMLInputElement,HTMLTextAreaElement,HTMLSelectElement,HTMLOptionElement,HTMLButtonElement,HTMLOutputElement,document});
 vm.runInContext(source, context, {timeout:100});
 function node() { const n = new HTMLInputElement(); Object.assign(n,{attrs:{},box:{x:40,y:60,width:120,height:40},disabled:false,isConnected:true,ownerDocument:document,tagName:'INPUT',state:{kind:'checkbox',data:'',checked:false,indeterminate:false,required:false,readOnly:false,validity:{valid:true}}});return n; }
 function read(n,fields,sensitive=false,doc=document,maxChars=100) { context.node=n;context.options={fields,sensitive,maxChars};context.expected=doc;return vm.runInContext('readNode.call(node, options, expected)',context,{timeout:100}); }
@@ -66,7 +67,10 @@ children(document,[left,right]);let tick=0;context.performance={now:()=>tick++};
 valueReads=0;rectReads=0;assert.equal(search(['left']).status,'selected');assert.deepEqual([valueReads,rectReads],[0,0],'selection never reads values or layout');
 console.log('10 offline bootstrap scenarios passed; bounded light-DOM selection only, no browser qualification.');
 
-class Document { getElementById(id) { return this.idNodes.find(n=>n.attrs.id===id)??null; } }
+class Document {
+  getElementById(id) { return this.idNodes.find(n=>n.attrs.id===id)??null; }
+  hasFocus() { return this.hasFocusFlag === true; }
+}
 context.Document=Document;
 function relationRead(n, selected, sensitive=false) {
   context.node=n;context.selected=selected;context.options={fields:['focused','layout_bounds'],maxChars:100,sensitive};context.expected=document;
@@ -134,3 +138,58 @@ stateTarget.attrs.autocomplete='one-time-code';assert.equal(checkboxStateFixture
 assert.equal(checkboxStateFixture(stateTarget,{}).connected,false);
 stateTarget.state.kind='radio';assert.equal(checkboxStateFixture(stateTarget).nativeCheckbox,false);
 console.log('6 offline checkbox-capability scenarios passed; no saved-state freshness or mutation authority inferred.');
+
+let selectionReads=0;
+for (const prototype of [HTMLInputElement.prototype,HTMLTextAreaElement.prototype]) {
+  for (const key of ['selectionStart','selectionEnd','selectionDirection']) {
+    Object.defineProperty(prototype,key,{get(){selectionReads++;if(this.failSelection)throw Error('PRIVATE_GETTER_ERROR');return this.state[key];}});
+  }
+}
+Object.defineProperty(HTMLTextAreaElement.prototype,'value',{get(){valueReads++;return this.state.data;}});
+const textInput=node();Object.assign(textInput.state,{kind:'text',data:'A💡B',selectionStart:1,selectionEnd:3,selectionDirection:'forward'});
+document.activeElement=textInput;document.hasFocusFlag=true;
+const formFields=['focused','value','invalid'];
+const readSelection=()=>read(textInput,formFields).selection;
+assert.deepEqual(JSON.parse(JSON.stringify(readSelection())),{start:1,end:3,direction:'forward',documentFocused:true});
+textInput.state.selectionDirection='backward';assert.equal(readSelection().direction,'backward');
+Object.assign(textInput.state,{selectionStart:4,selectionEnd:4,selectionDirection:'none'});assert.equal(readSelection().start,4);
+for(const values of [[null,null,null],[-1,1,'forward'],[3,2,'forward'],[0,5,'forward'],[0.5,2,'forward'],[0,1,'invalid']]) {
+  [textInput.state.selectionStart,textInput.state.selectionEnd,textInput.state.selectionDirection]=values;
+  assert.equal(readSelection(),undefined);
+}
+Object.assign(textInput.state,{selectionStart:0,selectionEnd:1,selectionDirection:'none'});
+assert.equal(readSelection().direction,'none','source direction retained for Rust to withhold ambiguous orientation');
+textInput.failSelection=true;assert.equal(readSelection(),undefined);assert.equal(read(textInput,formFields).value,'A💡B');textInput.failSelection=false;
+for(const privacy of ['password','autocomplete','caller']) {
+  textInput.state.kind=privacy==='password'?'password':'text';textInput.attrs.autocomplete=privacy==='autocomplete'?'one-time-code':'';
+  valueReads=selectionReads=0;const privateRead=read(textInput,formFields,privacy==='caller');
+  assert.equal(privateRead.selection,undefined);assert.equal(privateRead.value,undefined);assert.deepEqual([valueReads,selectionReads],[0,0]);
+}
+textInput.state.kind='text';textInput.attrs={};
+valueReads=selectionReads=0;assert.equal(read(textInput,['focused']).selection,undefined);assert.deepEqual([valueReads,selectionReads],[0,0]);
+selectionReads=0;assert.equal(read(textInput,['value']).selection,undefined);assert.equal(selectionReads,0);
+document.hasFocusFlag=false;assert.equal(readSelection(),undefined);assert.equal(selectionReads,0);document.hasFocusFlag=true;
+document.activeElement=null;assert.equal(readSelection(),undefined);assert.equal(selectionReads,0);document.activeElement=textInput;
+assert.equal(read(textInput,formFields,false,document,3).selection,undefined);assert.equal(selectionReads,0);
+textInput.attrs['aria-invalid']='true';assert.equal(read(textInput,formFields).invalid,false,'native validity is independent of app aria-invalid');
+const textarea=new HTMLTextAreaElement();Object.assign(textarea,{attrs:{},isConnected:true,ownerDocument:document,tagName:'TEXTAREA',state:{data:'',selectionStart:0,selectionEnd:0,selectionDirection:'none'}});
+document.activeElement=textarea;const areaBefore=JSON.stringify([textarea.attrs,textarea.state]);assert.equal(read(textarea,['focused','value']).selection.start,0);assert.equal(JSON.stringify([textarea.attrs,textarea.state]),areaBefore);
+console.log('Selection getter checks passed: UTF-16 ranges/collapsed/null/malformed/private/gates/textarea; offline mocks only.');
+
+let outputReads=0,lengthReads=0,shapeReads=0;
+class NativeNode {}
+for(const key of ['firstChild','nextSibling','nodeType'])Object.defineProperty(NativeNode.prototype,key,{get(){shapeReads++;return this[key];}});
+class CharacterData {}
+Object.defineProperty(CharacterData.prototype,'length',{get(){lengthReads++;return this.data.length;}});
+context.Node=NativeNode;context.CharacterData=CharacterData;
+Object.defineProperty(HTMLOutputElement.prototype,'value',{get(){outputReads++;return this.outputValue;}});
+const output=new HTMLOutputElement();Object.assign(output,{attrs:{},isConnected:true,ownerDocument:document,tagName:'OUTPUT',firstChild:null,outputValue:''});
+assert.equal(read(output,['value']).value,'');assert.equal(outputReads,1);
+output.firstChild={nodeType:3,nextSibling:null,data:'London'};output.outputValue='London';const outputBefore=JSON.stringify([output.attrs,output.firstChild,output.outputValue]);assert.equal(read(output,['value']).value,'London');assert.equal(JSON.stringify([output.attrs,output.firstChild,output.outputValue]),outputBefore);
+for(const child of [{nodeType:1,nextSibling:null},{nodeType:3,nextSibling:{}},{nodeType:3,nextSibling:null,data:'x'.repeat(101)}]) {
+  output.firstChild=child;outputReads=0;assert.equal(read(output,['value']).value,undefined);assert.equal(outputReads,0);
+}
+output.firstChild={nodeType:3,nextSibling:null,data:'x'.repeat(100)};output.outputValue='x'.repeat(100);assert.equal(read(output,['value']).value.length,100);
+outputReads=lengthReads=shapeReads=0;assert.equal(read(output,['value'],true).value,undefined);assert.deepEqual([outputReads,lengthReads,shapeReads],[0,0,0]);
+read(output,['focused']);assert.deepEqual([outputReads,lengthReads,shapeReads],[0,0,0]);
+console.log('Output getter checks passed: empty/nonempty/exact bound/shape/oversize/private/fields; offline mocks only.');

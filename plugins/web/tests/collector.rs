@@ -1924,6 +1924,178 @@ fn invalid_relation_index_or_duplicate_refuses_before_publication() {
     }
 }
 
+// Synthetic transport evidence exercises the shipping decoder/normalizer. Native
+// getter behavior is separately checked by the existing offline script harness.
+fn form_read_peer(value: Json) -> Fixture {
+    Fixture::new(move |method, command, _| {
+        (method == "Runtime.callFunctionOn"
+            && command["params"]["functionDeclaration"]
+                .as_str()
+                .is_some_and(|s| s.starts_with("function readNode(")))
+        .then(|| json!({"result":{"type":"object","value":value}}))
+    })
+}
+fn form_read_value() -> Json {
+    json!({"connected":true,"sameDocument":true,"tag":"INPUT","sensitive":false,
+        "value":"A💡B","focused":true,"invalid":false,
+        "selection":{"start":1,"end":3,"direction":"forward","documentFocused":true}})
+}
+#[test]
+fn form_read_selection_maps_utf16_orientation_and_collapsed_offsets() {
+    for (tag, direction, start, end, expected) in [
+        ("INPUT", "forward", 1, 3, (1, 3)),
+        ("INPUT", "backward", 1, 3, (3, 1)),
+        ("TEXTAREA", "none", 4, 4, (4, 4)),
+        ("INPUT", "none", 0, 0, (0, 0)),
+    ] {
+        let mut value = form_read_value();
+        value["tag"] = json!(tag);
+        value["selection"]["direction"] = json!(direction);
+        value["selection"]["start"] = json!(start);
+        value["selection"]["end"] = json!(end);
+        let fixture = form_read_peer(value);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::Focused, Field::Value, Field::Invalid];
+        let (_, docs) = collect(&mut c, &r, &scope(&[11]));
+        let s = snapshot(&docs[0]);
+        let selection = s.focus.text_selection.as_ref().expect("actual selection");
+        assert_eq!((selection.anchor, selection.focus), expected);
+        assert_eq!(selection.units.0, "utf16_code_units");
+        assert_eq!(selection.evidence.observation_id, s.observations[0].id);
+        assert_eq!(selection.evidence.source_namespace.0, "web.dom");
+        assert!(
+            matches!(&s.focus.keyboard, FocusRef::Known { target, evidence }
+            if target.key.0 == "11" && target.namespace.0 == "web.dom"
+                && evidence.observation_id == selection.evidence.observation_id)
+        );
+        assert_eq!(
+            known(&s.nodes[0], Field::Value),
+            &Value::Text("A💡B".into())
+        );
+        assert_eq!(known(&s.nodes[0], Field::Invalid), &Value::Flag(false));
+        assert!(matches!(
+            s.focus.composition_state,
+            Property::NotRequested { .. }
+        ));
+        assert!(matches!(
+            s.focus.active_descendant,
+            FocusRef::Unknown { .. }
+        ));
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_read_selection_withholds_unestablished_private_or_unrequested_facts() {
+    for mode in 0..13 {
+        let mut value = form_read_value();
+        match mode {
+            0 => value["selection"] = Json::Null,
+            1 => value["selection"]["direction"] = json!("none"),
+            2 => value["selection"]["direction"] = json!("unknown"),
+            3 => value["selection"]["end"] = json!(5),
+            4 => value["selection"]["start"] = json!(4),
+            5 => value["selection"]["documentFocused"] = json!(false),
+            6 => value["focused"] = json!(false),
+            7 => value["sensitive"] = json!(true),
+            8 => value["value"] = Json::Null,
+            9 => value["value"] = json!("x".repeat(601)),
+            _ => {}
+        }
+        let fixture = form_read_peer(value);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = if mode == 10 {
+            vec![Field::Focused]
+        } else if mode == 11 {
+            vec![Field::Value]
+        } else {
+            vec![Field::Focused, Field::Value]
+        };
+        let selected = scope(if mode == 12 { &[11, 12] } else { &[11] });
+        let (_, docs) = collect(&mut c, &r, &selected);
+        let s = snapshot(&docs[0]);
+        assert!(s.focus.text_selection.is_none(), "mode {mode}");
+        assert!(!matches!(s.focus.keyboard, FocusRef::Known { .. }));
+        if mode == 7 {
+            assert!(matches!(
+                s.nodes[0].properties[1],
+                Property::Requested {
+                    state: Availability::Redacted { .. },
+                    ..
+                }
+            ));
+        }
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_read_caller_privacy_clears_selection_and_value() {
+    let fixture = form_read_peer(form_read_value());
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.context.fields = vec![Field::Focused, Field::Value];
+    let mut selected = scope(&[11]);
+    selected.nodes[0].sensitivity = Sensitivity::Sensitive;
+    let (_, docs) = collect(&mut c, &r, &selected);
+    assert!(snapshot(&docs[0]).focus.text_selection.is_none());
+    let encoded = serde_json::to_string(&docs[0]).unwrap();
+    assert!(!encoded.contains("A💡B"));
+    assert!(!encoded.contains("utf16_code_units"));
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn form_read_malformed_selection_refuses_without_publication() {
+    for selection in [
+        json!([]),
+        json!({"start":-1,"end":3,"direction":"forward","documentFocused":true}),
+        json!({"start":0.5,"end":3,"direction":"forward","documentFocused":true}),
+    ] {
+        let mut value = form_read_value();
+        value["selection"] = selection;
+        let fixture = form_read_peer(value);
+        let mut c = fixture.attach(limits());
+        let error = c
+            .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+                panic!("malformed selection cannot publish")
+            })
+            .unwrap_err();
+        assert_eq!(error.kind, ErrorKind::Malformed);
+        assert_eq!(error.remote_cleanup, collector::RemoteCleanup::Released);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_read_output_preserves_empty_value_and_bounded_unknown() {
+    for value in [json!(""), json!("London"), Json::Null] {
+        let mut read = form_read_value();
+        read["tag"] = json!("OUTPUT");
+        read["value"] = value.clone();
+        read["selection"] = Json::Null;
+        let fixture = form_read_peer(read);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::Value, Field::Invalid];
+        let (_, docs) = collect(&mut c, &r, &scope(&[11]));
+        let s = snapshot(&docs[0]);
+        if let Some(value) = value.as_str() {
+            assert_eq!(known(&s.nodes[0], Field::Value), &Value::Text(value.into()));
+        } else {
+            assert!(matches!(&s.nodes[0].properties[0], Property::Requested {
+                state: Availability::Unknown { reason }, ..
+            } if reason.0 == "output-value-not-qualified-within-read-bound"));
+        }
+        assert_eq!(known(&s.nodes[0], Field::Invalid), &Value::Flag(false));
+        assert!(s.focus.text_selection.is_none());
+        drop(c);
+        fixture.finish();
+    }
+}
+
 fn rooted() -> collector::RootedScope {
     collector::RootedScope {
         scope_id: id("scope"),

@@ -14,6 +14,7 @@ function readNode(options, expectedDocument) {
   const select = this instanceof HTMLSelectElement;
   const option = this instanceof HTMLOptionElement;
   const button = this instanceof HTMLButtonElement;
+  const output = this instanceof HTMLOutputElement;
   const native = (prototype, name) => Object.getOwnPropertyDescriptor(prototype, name).get.call(this);
   const type = input ? native(HTMLInputElement.prototype, 'type') : null;
   const autocomplete = attr('autocomplete');
@@ -62,6 +63,37 @@ function readNode(options, expectedDocument) {
     if (fields.has('value') && (input || area || select)) {
       const prototype = input ? HTMLInputElement.prototype : area ? HTMLTextAreaElement.prototype : HTMLSelectElement.prototype;
       out.value = text(native(prototype, 'value'));
+    }
+    if (fields.has('value') && output) {
+      // output.value uses textContent: admit only constant-shape, bounded text
+      // BEFORE invoking it. Rejected subtrees are not traversed or copied.
+      const get = (prototype, name, node) => Object.getOwnPropertyDescriptor(prototype, name).get.call(node);
+      const child = get(Node.prototype, 'firstChild', this);
+      if (child === null || (get(Node.prototype, 'nodeType', child) === 3 &&
+          get(Node.prototype, 'nextSibling', child) === null &&
+          get(CharacterData.prototype, 'length', child) <= options.maxChars)) {
+        out.value = text(native(HTMLOutputElement.prototype, 'value'));
+      }
+    }
+    // No separate selection field exists in the canonical request. Require
+    // explicit value acquisition and focus; never read a private derived length.
+    if (fields.has('focused') && fields.has('value') && (input || area) &&
+        typeof out.value === 'string' && document.activeElement === this) {
+      try {
+        if (Document.prototype.hasFocus.call(expectedDocument)) {
+          const prototype = input ? HTMLInputElement.prototype : HTMLTextAreaElement.prototype;
+          const start = native(prototype, 'selectionStart');
+          const end = native(prototype, 'selectionEnd');
+          const direction = native(prototype, 'selectionDirection');
+          if (Number.isSafeInteger(start) && Number.isSafeInteger(end) &&
+              start >= 0 && end >= start && end <= out.value.length &&
+              ['forward', 'backward', 'none'].includes(direction)) {
+            out.selection = { start, end, direction, documentFocused: true };
+          }
+        }
+      } catch (_) {
+        // Unsupported/failing native selection getters do not erase other facts.
+      }
     }
     if (fields.has('placeholder') && (input || area)) {
       out.placeholder = text(native(input ? HTMLInputElement.prototype : HTMLTextAreaElement.prototype, 'placeholder'));

@@ -1,5 +1,5 @@
 //! Source-owned normalization. No geometry/name/identity inference across sources.
-use crate::collector::wire::{AxNode, AxValue, DomRead, Scalar};
+use crate::collector::wire::{AxNode, AxValue, DomRead, Scalar, SelectionDirection};
 use uiblueprint_schema::model::*;
 
 pub(crate) fn id(value: &str) -> Id {
@@ -99,6 +99,11 @@ pub(crate) fn dom(
                             })))
                         })
                         .unwrap_or_else(|| unknown("no-layout-box-reported")),
+                    Field::Value
+                        if read.tag.as_deref() == Some("OUTPUT") && read.value.is_none() =>
+                    {
+                        unknown("output-value-not-qualified-within-read-bound")
+                    }
                     Field::Value => text(read.value.as_deref(), cap),
                     Field::Placeholder => text(read.placeholder.as_deref(), cap),
                     Field::InputKind => text(read.input_kind.as_deref(), cap),
@@ -408,6 +413,56 @@ fn dom_key(backend: u32) -> SourceKey {
         namespace: id("web.dom"),
         key: Id(backend.to_string()),
     }
+}
+/// The optional canonical selection has no target of its own: publish it only
+/// together with the unique, source-confirmed keyboard focus owner in this scope.
+pub(crate) fn text_selection(
+    records: &[(u32, DomRead)],
+    observation: &Observation,
+    context: &Context,
+    cap: usize,
+) -> Option<(FocusRef, TextSelection)> {
+    if !context.fields.contains(&Field::Focused) || !context.fields.contains(&Field::Value) {
+        return None;
+    }
+    let mut focused = records.iter().filter(|(_, r)| r.focused == Some(true));
+    let (backend, read) = focused.next()?;
+    if focused.next().is_some()
+        || read.sensitive
+        || !read.connected
+        || !read.same_document
+        || !matches!(read.tag.as_deref(), Some("INPUT" | "TEXTAREA"))
+    {
+        return None;
+    }
+    let value = read.value.as_ref().filter(|value| value.len() <= cap)?;
+    let selection = read.selection.as_ref()?;
+    if !selection.document_focused
+        || selection.start > selection.end
+        || selection.end > value.encode_utf16().count() as u64
+    {
+        return None;
+    }
+    let (anchor, focus) = match selection.direction {
+        SelectionDirection::Backward => (selection.end, selection.start),
+        SelectionDirection::Forward => (selection.start, selection.end),
+        SelectionDirection::None if selection.start == selection.end => {
+            (selection.start, selection.end)
+        }
+        _ => return None,
+    };
+    Some((
+        FocusRef::Known {
+            target: dom_key(*backend),
+            evidence: evidence(observation, "dom-active-element-document-has-focus"),
+        },
+        TextSelection {
+            anchor,
+            focus,
+            units: id("utf16_code_units"),
+            evidence: evidence(observation, "dom-native-text-control-selection"),
+        },
+    ))
 }
 pub(crate) fn active_descendant(
     records: &[(u32, DomRead)],
