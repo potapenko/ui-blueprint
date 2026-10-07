@@ -159,6 +159,12 @@ impl<'a> Publication<'a> {
             missing: self.requested & !self.committed,
         }
     }
+    pub(crate) fn idle(&self) -> bool {
+        !self.terminal && self.active.is_none() && !self.pending_ack
+    }
+    pub(crate) fn remaining_bytes(&self) -> usize {
+        self.limit - self.total
+    }
     pub fn committed(&self) -> u8 {
         self.committed
     }

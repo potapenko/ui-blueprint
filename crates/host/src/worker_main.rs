@@ -170,6 +170,9 @@ fn control_error(error: HostError) -> u64 {
         HostError::PermissionDenied => 2,
         HostError::ResyncRequired => 3,
         HostError::DeadlineExpired => 4,
+        HostError::Io | HostError::WorkerFailed => 6,
+        HostError::InvalidControl => 7,
+        HostError::CleanupPending => 8,
         _ => 5,
     }
 }
@@ -259,6 +262,9 @@ pub fn run() -> Result<(), HostError> {
         || attach.class != OperationClass::Attach
         || attach.correlation != configure.correlation
         || attach.length as usize > input.len()
+        || attach.flags & !128 != 0
+        || attach.slot != 0
+        || attach.auxiliary != 0
     {
         return Err(HostError::InvalidControl);
     }
@@ -270,14 +276,47 @@ pub fn run() -> Result<(), HostError> {
     let size = usize::try_from(attach.length).map_err(|_| HostError::Overflow)?;
     io.read(&mut input[..size])?;
     let clock = clock_id(configure.correlation.session_epoch)?;
+    let web_attach = attach.flags & 128 != 0;
+    #[cfg(not(feature = "web"))]
+    if web_attach {
+        return Err(HostError::PermissionDenied);
+    }
+    let tape = if web_attach {
+        Some(crate::worker_tape::Tape::decode(&input[..size])?)
+    } else {
+        None
+    };
+    if tape.as_ref().is_some_and(|t| t.count() != 2) {
+        return Err(HostError::InvalidInput);
+    }
+    let descriptor = if let Some(t) = &tape {
+        t.get(0)?
+    } else {
+        &input[..size]
+    };
     let mut session = CanonicalSession::attach(
-        &input[..size],
+        descriptor,
         configuration.target,
         uiblueprint_schema::model::Id(clock.as_str().into()),
         now(),
         &ledger,
         limits,
     )?;
+    #[cfg(feature = "web")]
+    let mut web_session = if let Some(t) = &tape {
+        let setup = uiblueprint_host::web_config::WebSetup::decode(t.get(1)?, limits.input_bytes)?;
+        Some(crate::worker_web::WebSession::attach(
+            descriptor,
+            setup,
+            configuration.target,
+            uiblueprint_schema::model::Id(clock.as_str().into()),
+            clock_origin(),
+            limits,
+            tighten_deadline(attach.value)?,
+        )?)
+    } else {
+        None
+    };
     io.write_control(Control {
         kind: ControlKind::Ready,
         class: OperationClass::Attach,
@@ -321,7 +360,31 @@ pub fn run() -> Result<(), HostError> {
         );
         let size = usize::try_from(operation.length).map_err(|_| HostError::Overflow)?;
         io.read(&mut input[..size])?;
-        let result = if operation.class == OperationClass::Observe && operation.flags & 128 != 0 {
+        let result = if operation.class == OperationClass::Observe
+            && operation.flags & 128 != 0
+            && operation.flags & 8 != 0
+        {
+            #[cfg(feature = "web")]
+            {
+                match web_session.as_mut() {
+                    Some(web) => web
+                        .observe(
+                            &mut session,
+                            &mut io,
+                            &mut publication,
+                            operation,
+                            &input[..size],
+                            now,
+                        )
+                        .map(|_| 0),
+                    None => Err(HostError::PermissionDenied),
+                }
+            }
+            #[cfg(not(feature = "web"))]
+            {
+                Err(HostError::PermissionDenied)
+            }
+        } else if operation.class == OperationClass::Observe && operation.flags & 128 != 0 {
             let mut exchange =
                 crate::worker_native::NativeExchange::new(&mut io, &mut publication, operation);
             session

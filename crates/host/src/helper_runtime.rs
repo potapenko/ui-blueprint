@@ -25,50 +25,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         if worker.cleanup_deadline.is_some() || worker.ownership_lost {
             return Err(HostError::CleanupPending);
         }
-        // A reaped helper's ingress may still belong to a caller-held frame.
-        // Search the two fixed slots rather than letting that lease hide the
-        // other free slot. Busy admission returns no child to discard/retry.
-        let mut admitted = None;
-        let mut busy = false;
-        for index in 0..worker.helpers.len() {
-            if worker.helpers[index].is_some() {
-                continue;
-            }
-            match Helper::spawn(
-                self.domain,
-                session,
-                index,
-                kind,
-                &spec,
-                deadline,
-                &mut state.platform,
-            ) {
-                Ok(helper) => {
-                    admitted = Some((index, helper));
-                    break;
-                }
-                Err(HostError::Busy) => busy = true,
-                Err(error) => return Err(error),
-            }
-        }
-        let (index, helper) = admitted.ok_or(if busy {
-            HostError::Busy
-        } else {
-            HostError::ResourceLimit
-        })?;
-        let handle = helper.handle;
-        let lost = helper.lost;
-        worker.helpers[index] = Some(helper);
-        if lost {
-            self.domain.abandoned.set(true);
-            worker.reservation.quarantine();
-            begin_cleanup(worker, self.domain.limits.cleanup_ms, Instant::now());
-            if worker.active.is_some() {
-                worker.pending_terminal = Some(Terminal::Failed(HostError::CleanupPending));
-            }
-            return Err(HostError::CleanupPending);
-        }
-        Ok(handle)
+        spawn_registered(worker, &mut state.platform, kind, &spec, deadline)
     }
     fn helper_mut(
         &mut self,
@@ -154,4 +111,52 @@ pub(super) fn poll_helpers<'a, C: OwnedProcess>(
         }
     }
     None
+}
+
+pub(super) fn spawn_registered<'a, P: ProcessPlatform>(
+    worker: &mut Worker<'a, P::Child>,
+    platform: &mut P,
+    kind: HelperKind,
+    spec: &SpawnSpec,
+    deadline: Instant,
+) -> Result<HelperHandle<'a>, HostError> {
+    let domain = worker.reservation.domain;
+    domain.check_reaping()?;
+    let session = worker.reservation.handle();
+    // A reaped helper's ingress may still belong to a caller-held frame.
+    // Search the two fixed slots rather than letting that lease hide the
+    // other free slot. Busy admission returns no child to discard/retry.
+    let mut admitted = None;
+    let mut busy = false;
+    for index in 0..worker.helpers.len() {
+        if worker.helpers[index].is_some() {
+            continue;
+        }
+        match Helper::spawn(domain, session, index, kind, spec, deadline, platform) {
+            Ok(helper) => {
+                admitted = Some((index, helper));
+                break;
+            }
+            Err(HostError::Busy) => busy = true,
+            Err(error) => return Err(error),
+        }
+    }
+    let (index, helper) = admitted.ok_or(if busy {
+        HostError::Busy
+    } else {
+        HostError::ResourceLimit
+    })?;
+    let handle = helper.handle;
+    let lost = helper.lost;
+    worker.helpers[index] = Some(helper);
+    if lost {
+        domain.abandoned.set(true);
+        worker.reservation.quarantine();
+        begin_cleanup(worker, domain.limits.cleanup_ms, Instant::now());
+        if worker.active.is_some() {
+            worker.pending_terminal = Some(Terminal::Failed(HostError::CleanupPending));
+        }
+        return Err(HostError::CleanupPending);
+    }
+    Ok(handle)
 }

@@ -263,3 +263,83 @@ No fabricated refs, parent graph decode, browser launch or live acceptance. Retu
 missing bounded representation/retained-ref consumer rather than inventing a new
 public graph or uncharged cache. Core wires the finished module after its concrete
 source handoff; it does not add an absent module or dummy implementation.
+
+## Connected Native parent exchange (finite-producer proof)
+
+The earlier missing-parent-service note is now superseded for the Native path.
+configure_native_helpers(session, NativeHelperBinding::authorized(executable,
+channels, opaque_trusted_configuration)) installs a parent-owned executable/binding
+while Attached; configuration fits control_bytes minus the64-byte header. Core does
+not parse that Native configuration. Native's entrypoint owns actual target/process
+incarnation/Surface/scope/redaction/artifact validation, using its grounded source.
+submit_native_observe takes ONLY a canonical Request in InputLease, OutputRequest
+and original parent deadline. No completed responses are supplied in advance.
+
+Worker validates Request and calls real begin before ObserveReady. Parent binds its
+Ticket, tightens the original deadline by the validated declared request budget
+measured from parent submit, then sends ObservePermit with remaining duration.
+The worker tightens its own watchdog/local deadline before acquisition. Parent
+retains the original charged input slot through the operation and reuses it for
+helper request writes; there is no second request Vec or Running reserve_input.
+Parent helpers are selected only from its registered binding, never a worker path.
+AX is received/validated and reaches real parent ACK before starting a capture
+helper. A genuine AX transport refusal may leave AX missing while independent
+capture proceeds. Failed canonical replies retain their Issue as committed responses;
+overall Completed then means responses completed, not successful pixel capture.
+
+Private worker/parent controls (all64-byte existing Control layout):
+
+| Kind | slot/flags | value / auxiliary | Body |
+| --- | --- | --- | --- |
+| ObserveReady13 |0 / requested channel mask |actual Ticket.sequence / request deadline ms |none |
+| ObservePermit14 |same |same Ticket / parent remaining ms |none |
+| HelperRequest15 |channel0 AX or1 capture /0 |Ticket /0 |none |
+| HelperReply16 |channel / status |helper serial (or0 if never spawned) / Ticket |one canonical JSON frame when status0 |
+
+All retain session epoch/operation correlation and Observe class. Reply status0
+is data;1 resource,2 deadline,3 generic failure,4 denied,5 cleanup pending. Failures
+carry no body; they never become successful empty data. The worker may preserve
+other completed channels. Whole-operation parent expiry stops dispatch/publication
+and starts owned cleanup; previous ACKed frames stay outside that failure boundary.
+
+Concrete Native entrypoint contract, for its separately assigned source owner:
+parent directly spawns the trusted executable with empty env/no extra argv; FD3
+input, FD4 output, FD5 private status;0/1/2 go to /dev/null. It sends Configure(kind1,
+class Observe, selected channel, correlation, length=config bytes, value=Ticket,
+auxiliary=reply cap INCLUDING LF), configuration bytes, then Submit(kind3, same
+class/channel/correlation, length=original Request bytes, value=Ticket,
+auxiliary=current remaining ms), then that unchanged Request. Input is length-framed,
+not line-scanned; JSON whitespace is valid. Reply is exactly one UTF-8 NDJSON canonical
+ChannelResponse plus LF. Parent admits LF too and strips only that delimiter before
+guarded parsing. No shell/env fault modes, copied helper implementation or graph DTO.
+
+The selected same-source Native adaptation must perform only the selected channel
+and return one response; today's combined legacy helper is not compatible by mere
+wrapping. Native retains its actual helper clock/provenance, real Target/Surface/
+scope/permission/redaction checks and output-artifact owner. Core only validates
+framing, correlation and budgets, then guarded schema/ObservationSession receive.
+Taking this channel starts helper cleanup; capture/session reservations remain held
+until actual reap. Source-level/current fixture proof is not SDK/live qualification.
+
+Actual runtime proof uses native_peer, a finite Rust non-UI producer following this
+contract. After an ordinary Validate operation, host operation2 produces real
+Observation Ticket1; the helper asserts that exact Ticket. A forwarding process
+wrapper observes AX ACK before spawning capture in valid-AX cases. Canonical capture
+permission failure is retained, capture EOF preserves AX, wrong Ticket refuses before
+publication, and a deliberately oversized NDJSON reply is bounded before parse/copy.
+No capture, UI, browser or SDK call was performed. Native entrypoint adaptation,
+Web module connection, remaining fault/phase proof and live/D06 gates remain open.
+
+## Web shared caller hooks
+
+With feature web, RuntimeHost::attach_web(AttachInput, deadline) consumes
+Tape(canonical SessionDescriptor, trusted WebSetup) and waits for the actual guarded
+WebSession::attach before Attached. Endpoint/configuration is trusted attachment
+authority, not observation/UI text. The existing logging boundary precedes transport.
+RuntimeHost::submit_web_observe(session, InputLease, OutputRequest, deadline) consumes
+Tape(canonical Request, WebSelection). It routes the real guarded WebSession observe,
+with actual begin/Ticket and the same parent ObserveReady/Permit deadline handshake;
+no Native binding or pre-collected replies are required. Caller sets Request clock
+from Attached. Defaults do not enable Web, and no source/provider code is duplicated.
+These shared hooks compile; Web's owned peer/runtime proof and later browser/live
+qualification remain separate. The module/config/tests belong to the Web owner.

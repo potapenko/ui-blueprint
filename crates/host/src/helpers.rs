@@ -146,16 +146,61 @@ impl<'a, C: OwnedProcess> Helper<'a, C> {
             value => Ok(value),
         }
     }
+    pub(crate) fn write_bytes(&mut self, bytes: &[u8]) -> Result<usize, HostError> {
+        self.io_ready()?;
+        if bytes.is_empty() {
+            return Ok(0);
+        }
+        match self.child.write_input(bytes)? {
+            Transfer::Bytes(0) | Transfer::Closed => Err(HostError::WorkerFailed),
+            Transfer::Bytes(n) => Ok(n),
+            Transfer::WouldBlock => Ok(0),
+        }
+    }
+    pub(crate) fn read_line(&mut self, cap: usize) -> Result<Option<usize>, HostError> {
+        let result = self.read_limit(cap)?;
+        let bytes = self
+            .ingress
+            .as_ref()
+            .ok_or(HostError::InvalidState)?
+            .as_slice();
+        if let Some(end) = bytes[..self.used].iter().position(|&b| b == b'\n') {
+            if end == 0 || end + 1 != self.used || self.used > cap {
+                return Err(HostError::InvalidControl);
+            }
+            return Ok(Some(end));
+        }
+        if self.used >= cap {
+            return Err(HostError::ResourceLimit);
+        }
+        if result == Transfer::Closed {
+            return Err(HostError::WorkerFailed);
+        }
+        Ok(None)
+    }
+    pub(crate) fn take_line(&mut self, length: usize) -> Result<HelperBytes<'a>, HostError> {
+        if length.checked_add(1) != Some(self.used) {
+            return Err(HostError::InvalidControl);
+        }
+        let mut frame = self.take()?;
+        frame.bytes.set_len(length)?;
+        Ok(frame)
+    }
     pub(crate) fn read(&mut self) -> Result<Transfer, HostError> {
+        let cap = self.ingress.as_ref().ok_or(HostError::InvalidState)?.len();
+        self.read_limit(cap)
+    }
+    fn read_limit(&mut self, cap: usize) -> Result<Transfer, HostError> {
         self.io_ready()?;
         let ingress = self.ingress.as_mut().ok_or(HostError::InvalidState)?;
-        if self.used == ingress.len() {
+        let cap = cap.min(ingress.len());
+        if self.used >= cap {
             self.stop(Instant::now());
             return Err(HostError::ResourceLimit);
         }
         let result = self
             .child
-            .read_output(&mut ingress.as_mut_slice()[self.used..])?;
+            .read_output(&mut ingress.as_mut_slice()[self.used..cap])?;
         if let Transfer::Bytes(n) = result {
             self.used = self.used.checked_add(n).ok_or(HostError::Overflow)?;
         }

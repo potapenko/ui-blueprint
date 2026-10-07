@@ -222,3 +222,6 @@ mod helpers;
 
 #[path = "support/fatal_race.rs"]
 mod fatal_race;
+
+#[path = "support/native_host.rs"]
+mod native;

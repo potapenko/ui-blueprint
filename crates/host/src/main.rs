@@ -11,6 +11,8 @@ mod worker_main;
 mod worker_native;
 #[cfg(target_os = "macos")]
 mod worker_ops;
+#[cfg(all(target_os = "macos", feature = "web"))]
+mod worker_web;
 #[cfg(target_os = "macos")]
 use uiblueprint_host::worker_tape;
 

@@ -13,6 +13,8 @@ pub mod helpers;
 #[cfg(unix)]
 pub mod host_types;
 pub mod limits;
+#[cfg(unix)]
+pub mod native_binding;
 
 #[cfg(target_os = "macos")]
 pub mod process;

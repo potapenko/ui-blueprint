@@ -848,6 +848,7 @@ dependencies = [
  "log",
  "serde",
  "serde_json",
+ "tungstenite",
  "uiblueprint-engine",
  "uiblueprint-plugin-api",
  "uiblueprint-schema",

@@ -625,3 +625,90 @@ Current exact changed source pins:
 | crates/host/src/worker_native.rs | 612d5e7f08ee10b7ac904e4a0e6ab8f2f4d1e0cf7fceccea177e1677623b0acc |
 | crates/host/src/worker_observation.rs | 12560324a5d5496a4c0ca33e183aaf86a7e7886a1f0b67a362d2a79acee92958 |
 | crates/host/src/web_config.rs | 94fd7bc43b126e25e0dd837daad74e2954320cf465ae940aec6fc723f87e9d2d |
+
+## Connected Native broker / finite guarded producer
+
+Shared boundarya8e5c06 saved/pushed with98-input equality; Git lease released.
+Web25bdae2 transfer excludes worker_web/web_config/web_worker/support web_worker_*
+from Core writes. This step changes only Core parent/Native composition paths.
+
+Implemented actual parent ObserveReady/Permit admission and HelperRequest/Reply
+service, using real Ticket.sequence after worker begin, immutable parent native
+binding, original InputLease retention/reuse and fixed helper/output pools. Parent
+clamps its authoritative deadline before permit; local worker watchdog tightens,
+then SDK stand-in acquisition begins. Registered helper lifecycle remains reused,
+including returned-Lost handling, capture lease and worker+all-helper reap before
+root Grant release. No parent graph/JSON parse or generic RPC framework.
+
+Helper request input is the original canonical Request, not Tape of completed
+responses. Existing Configure/Submit headers carry bounded trusted config and
+request/Ticket/remaining duration to FD3. One selected-channel NDJSON frame returns
+on FD4; the per-request cap INCLUDING LF is enforced before copying. Worker guarded
+validation/receive precedes canonical Frame/Commit/ACK; valid Failed responses are
+also published, preserving their Issue. Capture only starts after AX ACK or explicit
+AX transport failure disposition. Caller/worker paths cannot select an executable.
+The precise byte/header and ownership consumer handoff is in host.md for Native's
+same-source channel-specific entrypoint adaptation; no SDK source changes here.
+
+Finite native_peer is a Rust non-UI test producer using real direct children and
+actual headers/canonical Request. Four cases in one scenario pass:
+
+- local Validate first makes parent operation2 differ from real Observation Ticket1;
+  each helper asserts Ticket1, and the forwarding wrapper confirms valid AX ACK
+  before capture spawn. A canonical permission_required capture response is kept;
+- capture exits without a response after AX ACK: AX bytes survive, capture missing;
+- helper substitutes parent operation2 for Ticket1: no frame published;
+- peer ignores the advertised small cap: ingress refuses before parse/copy with
+  no partial output. Independent capture after AX transport refusal is permitted,
+  so the test does not demand a nonexistent AX ACK for that negative branch.
+
+Full default runtime18 tests +2 explicitly executed isolated R1 peers pass. Default
+Clippy (worker/runtime/native_peer), web-feature compile and scoped formatting pass.
+The final native_peer binary was rebuilt after lint-only source corrections and
+its four-case scenario rerun successfully; no new values/limits made a failure pass.
+No unchanged provider tests, independent allocator review or Integration cases rerun.
+
+Commands: cargo build --locked -p uiblueprint-host --example native_peer --bin
+session-worker; cargo test --locked -p uiblueprint-host --test runtime --
+--test-threads=1; cargo clippy --locked -p uiblueprint-host --bin session-worker
+--test runtime --example native_peer -- -D warnings; cargo check --locked
+-p uiblueprint-host --bin session-worker --features web; final native_peer build and
+exact native::native_requests_are_collected_after_real_begin_and_ax_ack_precedes_capture.
+
+Exact14 checkpoint paths: crates/host/Cargo.toml; src/{lib,helper_runtime,helpers,
+publication,supervisor,worker_main,native_binding,native_broker}.rs; tests/runtime.rs;
+tests/support/{native_host,native_peer}.rs; docs/development/host.md; this receipt.
+Do not stage Web-owned config/module or Integration/provider source. Allocator2f1bf278
+and worker_io9700bfa stay unchanged. Native producer protocol is working with the
+finite peer; real Native entrypoint/SDK and Web connection remain consumer work.
+This coherent default-provider save enables the ready fixed Replay proof without
+waiting for full adapter completion. No fullH01/live/D06 acceptance claim.
+
+Final coherent readiness after the approved Web shared hooks/dev edge:
+Core added cfg(web) worker_web module and actual attach_web/submit_web_observe
+callers after Web's real source handoff; Web-owned source remains untouched.
+attach_web consumes Tape(SessionDescriptor, trusted WebSetup), initializes the real
+Collector before Ready; submit_web_observe consumes Tape(Request, WebSelection),
+uses actual ObserveReady/Permit without requiring a Native binding. This is compiled
+wiring, not Web runtime proof; Web owns that next bounded-peer verification.
+
+Approved tungstenite dev edge uses the existing pinned package/features only.
+Final set is16 paths: the prior14 PLUS Cargo.lock and src/main.rs. No incompatible
+manifest/lock split; no Web/Integration source enters Core staging.
+Host Cargo9db7f79f2a67d94fbf9d84d38fa3a3a5535c354c56db306ed6434b5e3d628eef;
+lockb2b39be77e62da78baffcb34afb21e9592373a301a5e99ad8bac8965ee788332.
+
+Final default-provider runtime18 tests +2 isolated peers passed again on these
+shared hooks, as did default/web worker compile/Clippy and scoped formatting.
+No new Web test/browser run is claimed. Default81 digest `3b5d441247edf0b0d6ea72443216e61a8ff78adfd5c47b7069d3bc7e44c5a9e6`:
+shared-boundary base through worker_observation/native helper/runtime sources,
+excluding cfg(web) source, plus Native binding/broker/peer/test, Request/Snapshot
+fixtures and Web Cargo metadata. Equivalently9424759 base64 + effects and helpers
+source/test additions + fatal_race + worker_native/worker_observation + native
+binding/broker/native_host/native_peer + Action/Request/Snapshot fixtures + Web Cargo.
+Web compile set adds host web_config/worker_web plus all .rs/.js under Web src:
+105 digest `68632cf42bd822f1cee32eacf3ac6df8999f9736adbae2a5b85cc87dfec4a363`. Same compact sorted JSON method; saved equality follows
+checkpoint. Web-owned files in that compile set are already savedd9de0a6.
+
+Current main worker pin `4e03cf9f6ff4675a8c0e526a6f65aff388c16d6468e70c798931af243dc6814c`;
+worker_ops remains45ae90c8…fc2bb, worker_io9700bfa and allocator2f1bf278 unchanged.

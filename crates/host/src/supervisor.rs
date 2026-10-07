@@ -12,6 +12,9 @@ use crate::{
 };
 #[path = "helper_runtime.rs"]
 mod helper_runtime;
+#[path = "native_broker.rs"]
+mod native_broker;
+use crate::native_binding::NativeHelperBinding;
 
 use std::{
     mem::{forget, size_of},
@@ -26,6 +29,7 @@ enum TxStage {
     Input,
     Ack,
     Permit,
+    ObservePermit,
     Idle,
 }
 struct Active<'a> {
@@ -35,6 +39,11 @@ struct Active<'a> {
     publish: Option<Publication<'a>>,
     effect: EffectReceipt,
     request: OutputRequest,
+    live: bool,
+    started: Instant,
+    ticket: Option<u64>,
+    native_requested: u8,
+    native_failed: u8,
 }
 struct Worker<'a, C: OwnedProcess> {
     child: C,
@@ -60,12 +69,15 @@ struct Worker<'a, C: OwnedProcess> {
     mutation: Option<MutationLease<'a>>,
     helpers: [Option<crate::helpers::Helper<'a, C>>; crate::limits::HELPERS],
     worker_reaped: bool,
+    web: bool,
+    broker: Option<native_broker::NativeBroker<'a>>,
 }
 struct RuntimeState<'a, P: ProcessPlatform> {
     platform: P,
     spec: SpawnSpec,
     workers: [Option<Worker<'a, P::Child>>; 4],
     shutting_down: bool,
+    native_bindings: [Option<(u64, NativeHelperBinding)>; 4],
     _root: RuntimeRoot<'a>,
 }
 pub struct RuntimeHost<'a, P: ProcessPlatform + 'static> {
@@ -91,6 +103,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             spec,
             workers: std::array::from_fn(|_| None),
             shutting_down: false,
+            native_bindings: std::array::from_fn(|_| None),
             _root: root,
         });
         Ok(Self { domain, state })
@@ -122,6 +135,24 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         &mut self,
         lease: AttachInput<'a>,
         deadline: Instant,
+    ) -> Result<SessionHandle<'a>, HostError> {
+        self.attach_mode(lease, deadline, false)
+    }
+    /// Trusted attachment input is Tape(canonical SessionDescriptor, WebSetup).
+    /// Setup authority is supplied by the caller, never by an observation body.
+    #[cfg(feature = "web")]
+    pub fn attach_web(
+        &mut self,
+        lease: AttachInput<'a>,
+        deadline: Instant,
+    ) -> Result<SessionHandle<'a>, HostError> {
+        self.attach_mode(lease, deadline, true)
+    }
+    fn attach_mode(
+        &mut self,
+        lease: AttachInput<'a>,
+        deadline: Instant,
+        web: bool,
     ) -> Result<SessionHandle<'a>, HostError> {
         self.domain.check_reaping()?;
         if self.state[0].shutting_down {
@@ -198,6 +229,11 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 deadline,
                 publish: None,
                 effect: EffectReceipt::NotDispatched,
+                live: false,
+                started: Instant::now(),
+                ticket: None,
+                native_requested: 0,
+                native_failed: 0,
                 request: OutputRequest {
                     channels: 0,
                     frame_bytes: self.domain.limits.output_bytes,
@@ -214,6 +250,8 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             mutation: None,
             helpers: std::array::from_fn(|_| None),
             worker_reaped: false,
+            web,
+            broker: None,
         });
         if ownership_lost {
             let worker = state.workers[session.slot]
@@ -256,6 +294,17 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         input: InputLease<'a>,
         request: OutputRequest,
         deadline: Instant,
+    ) -> Result<OperationHandle<'a>, HostError> {
+        self.submit_mode(session, class, input, request, deadline, false)
+    }
+    fn submit_mode(
+        &mut self,
+        session: SessionHandle<'a>,
+        class: OperationClass,
+        input: InputLease<'a>,
+        request: OutputRequest,
+        deadline: Instant,
+        live: bool,
     ) -> Result<OperationHandle<'a>, HostError> {
         self.domain.check_reaping()?;
         if self.state[0].shutting_down {
@@ -314,7 +363,8 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             slot: 0,
             flags: request.channels
                 | (request.input_format << 3)
-                | (request.retained_partition << 4),
+                | (request.retained_partition << 4)
+                | if live { 128 } else { 0 },
             correlation,
             length: input.bytes.len() as u64,
             value: remaining,
@@ -333,11 +383,96 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             publish: Some(publish),
             effect: EffectReceipt::NotDispatched,
             request,
+            live,
+            started: Instant::now(),
+            ticket: None,
+            native_requested: 0,
+            native_failed: 0,
         });
         slot.sequence = sequence;
         slot.phase = SlotPhase::Running;
         self.domain.slots[session.slot].set(slot);
         Ok(handle)
+    }
+    pub fn configure_native_helpers(
+        &mut self,
+        session: SessionHandle<'a>,
+        binding: NativeHelperBinding,
+    ) -> Result<(), HostError> {
+        self.domain.check_reaping()?;
+        let slot = self.domain.check(session)?;
+        let state = &mut self.state[0];
+        let worker = state.workers[session.slot]
+            .as_ref()
+            .ok_or(HostError::StaleOperation)?;
+        if worker.web {
+            return Err(HostError::PermissionDenied);
+        }
+        if state.shutting_down
+            || slot.phase != SlotPhase::Attached
+            || worker.helpers.iter().any(Option::is_some)
+        {
+            return Err(HostError::Busy);
+        }
+        if binding.bytes().len() + CONTROL_BYTES > self.domain.limits.control_bytes {
+            return Err(HostError::ResourceLimit);
+        }
+        state.native_bindings[session.slot] = Some((session.epoch, binding));
+        Ok(())
+    }
+    pub fn submit_native_observe(
+        &mut self,
+        session: SessionHandle<'a>,
+        input: InputLease<'a>,
+        mut request: OutputRequest,
+        deadline: Instant,
+    ) -> Result<OperationHandle<'a>, HostError> {
+        self.domain.check(session)?;
+        if request.channels & !3 != 0
+            || self.state[0].native_bindings[session.slot]
+                .as_ref()
+                .is_none_or(|(epoch, _)| *epoch != session.epoch)
+        {
+            return Err(HostError::InvalidState);
+        }
+        request.input_format = 0;
+        request.retained_partition = 0;
+        self.submit_mode(
+            session,
+            OperationClass::Observe,
+            input,
+            request,
+            deadline,
+            true,
+        )
+    }
+    /// Request input is Tape(canonical Request, explicit WebSelection), never
+    /// preassembled responses. The collector remains inside the guarded worker.
+    #[cfg(feature = "web")]
+    pub fn submit_web_observe(
+        &mut self,
+        session: SessionHandle<'a>,
+        input: InputLease<'a>,
+        mut request: OutputRequest,
+        deadline: Instant,
+    ) -> Result<OperationHandle<'a>, HostError> {
+        self.domain.check(session)?;
+        if self.state[0].workers[session.slot]
+            .as_ref()
+            .is_none_or(|w| !w.web)
+        {
+            return Err(HostError::InvalidState);
+        }
+        request.input_format = 1;
+        request.retained_partition = 0;
+        self.submit_mode(
+            session,
+            OperationClass::Observe,
+            input,
+            request,
+            deadline,
+            true,
+        )
     }
     pub fn next_event(&mut self) -> Result<HostEvent<'a>, HostError> {
         if self.domain.check_reaping().is_err() {
@@ -363,7 +498,8 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         }
         let now = Instant::now();
         for index in 0..self.domain.limits.workers {
-            let Some(worker) = self.state[0].workers[index].as_mut() else {
+            let state = &mut self.state[0];
+            let Some(worker) = state.workers[index].as_mut() else {
                 continue;
             };
             if let Some(terminal) = worker.pending_terminal.take() {
@@ -409,7 +545,8 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 if worker.worker_reaped && worker.helpers.iter().all(Option::is_none) {
                     let handle = worker.reservation.handle();
                     worker.reservation.child_reaped();
-                    self.state[0].workers[index] = None;
+                    state.workers[index] = None;
+                    state.native_bindings[index] = None;
                     return Ok(HostEvent::Closed { session: handle });
                 }
                 if worker
@@ -425,7 +562,17 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 }
                 continue;
             }
-            match pump(worker, now, self.domain.limits.cleanup_ms) {
+            let binding = state.native_bindings[index]
+                .as_ref()
+                .filter(|(epoch, _)| *epoch == worker.reservation.epoch)
+                .map(|(_, b)| b);
+            match pump::<P>(
+                worker,
+                now,
+                self.domain.limits.cleanup_ms,
+                &mut state.platform,
+                binding,
+            ) {
                 Ok(Some(event)) => return Ok(event),
                 Ok(None) => (),
                 Err(error) => {
@@ -561,6 +708,7 @@ fn quarantine_active<'a, C: OwnedProcess>(worker: &mut Worker<'a, C>) -> HostCom
         .take()
         .expect("active checked before quarantine transfer");
     worker.input = None;
+    worker.broker = None;
     worker.stage = TxStage::Idle;
     worker.child.close_input();
     worker.reservation.quarantine();
@@ -595,6 +743,7 @@ fn terminalize<'a, C: OwnedProcess>(
 }
 fn begin_cleanup<C: OwnedProcess>(worker: &mut Worker<'_, C>, cleanup_ms: u64, now: Instant) {
     worker.input = None;
+    worker.broker = None;
     worker.stage = TxStage::Idle;
     worker.child.close_input();
     for helper in worker.helpers.iter_mut().flatten() {
@@ -655,10 +804,12 @@ fn read_fatal_status<C: OwnedProcess>(
         _ => Terminal::Failed(HostError::WorkerFailed),
     }))
 }
-fn pump<'a, C: OwnedProcess>(
-    worker: &mut Worker<'a, C>,
+fn pump<'a, P: ProcessPlatform>(
+    worker: &mut Worker<'a, P::Child>,
     now: Instant,
     cleanup_ms: u64,
+    platform: &mut P,
+    binding: Option<&NativeHelperBinding>,
 ) -> Result<Option<HostEvent<'a>>, HostError> {
     // The authoritative deadline was checked before this bounded nonblocking step.
     if let Some(terminal) = read_fatal_status(worker)? {
@@ -666,8 +817,24 @@ fn pump<'a, C: OwnedProcess>(
             worker, terminal, cleanup_ms, now,
         ))));
     }
+    if let Some(mut broker) = worker.broker.take() {
+        let done = broker.advance::<P>(
+            worker,
+            platform,
+            binding.ok_or(HostError::InvalidState)?,
+            now,
+        )?;
+        if !done {
+            worker.broker = Some(broker);
+        }
+        return Ok(None);
+    }
     match worker.stage {
-        TxStage::ConfigHeader | TxStage::SubmitHeader | TxStage::Ack | TxStage::Permit => {
+        TxStage::ConfigHeader
+        | TxStage::SubmitHeader
+        | TxStage::Ack
+        | TxStage::Permit
+        | TxStage::ObservePermit => {
             if worker
                 .active
                 .as_ref()
@@ -684,7 +851,7 @@ fn pump<'a, C: OwnedProcess>(
                 worker.stage = match worker.stage {
                     TxStage::ConfigHeader => TxStage::ConfigBody,
                     TxStage::SubmitHeader => TxStage::Input,
-                    TxStage::Permit => TxStage::Idle,
+                    TxStage::Permit | TxStage::ObservePermit => TxStage::Idle,
                     TxStage::Ack => {
                         let ack = Control::decode(&worker.tx)?;
                         worker
@@ -716,7 +883,7 @@ fn pump<'a, C: OwnedProcess>(
                     kind: ControlKind::Submit,
                     class: OperationClass::Attach,
                     slot: 0,
-                    flags: 0,
+                    flags: if worker.web { 128 } else { 0 },
                     correlation: Correlation {
                         session_epoch: active.handle.session.epoch,
                         operation: 0,
@@ -752,7 +919,9 @@ fn pump<'a, C: OwnedProcess>(
             };
             worker.body_offset += count;
             if worker.body_offset == input.bytes.len() {
-                worker.input = None;
+                if worker.active.as_ref().is_none_or(|a| !a.live) {
+                    worker.input = None;
+                }
                 worker.stage = TxStage::Idle;
             }
         }
@@ -822,6 +991,81 @@ fn pump<'a, C: OwnedProcess>(
                 clock: clock_id(handle.epoch)?,
             }))
         }
+        ControlKind::ObserveReady => {
+            if !active.live
+                || active.class != OperationClass::Observe
+                || active.ticket.is_some()
+                || control.slot != 0
+                || control.flags != active.request.channels
+                || control.length != 0
+                || control.value == 0
+                || control.auxiliary == 0
+            {
+                return Err(HostError::InvalidControl);
+            }
+            let declared = active
+                .started
+                .checked_add(Duration::from_millis(control.auxiliary))
+                .ok_or(HostError::Overflow)?;
+            active.deadline = active.deadline.min(declared);
+            let remaining = remaining_ms(active.deadline, Instant::now())?;
+            active.ticket = Some(control.value);
+            worker.tx = Control {
+                kind: ControlKind::ObservePermit,
+                auxiliary: remaining,
+                ..control
+            }
+            .encode();
+            worker.tx_offset = 0;
+            worker.stage = TxStage::ObservePermit;
+            Ok(None)
+        }
+        ControlKind::HelperRequest => {
+            let publication = active.publish.as_ref().ok_or(HostError::InvalidState)?;
+            let prior = publication.committed() | active.native_failed;
+            if !active.live
+                || active.request.input_format != 0
+                || active.class != OperationClass::Observe
+                || active.ticket != Some(control.value)
+                || control.flags != 0
+                || control.length != 0
+                || control.auxiliary != 0
+                || active.request.channels & (1 << control.slot) == 0
+                || active.native_requested & (1 << control.slot) != 0
+                || !publication.idle()
+                || (control.slot == 1 && active.request.channels & 1 != 0 && prior & 1 == 0)
+            {
+                return Err(HostError::InvalidControl);
+            }
+            let cap = worker
+                .reservation
+                .domain
+                .limits
+                .ingress_bytes
+                .min(
+                    active
+                        .request
+                        .frame_bytes
+                        .checked_add(1)
+                        .ok_or(HostError::Overflow)?,
+                )
+                .min(
+                    publication
+                        .remaining_bytes()
+                        .checked_add(1)
+                        .ok_or(HostError::Overflow)?,
+                );
+            if cap <= 1 {
+                return Err(HostError::ResourceLimit);
+            }
+            active.native_requested |= 1 << control.slot;
+            worker.broker = Some(native_broker::NativeBroker::new(
+                control.slot,
+                control.value,
+                cap,
+            ));
+            Ok(None)
+        }
         ControlKind::EffectReady => {
             if active.class != OperationClass::Mutation
                 || active.effect != EffectReceipt::NotDispatched
@@ -851,6 +1095,9 @@ fn pump<'a, C: OwnedProcess>(
             Ok(None)
         }
         ControlKind::Frame => {
+            if active.live && active.ticket.is_none() {
+                return Err(HostError::InvalidControl);
+            }
             if active.class == OperationClass::Mutation
                 && active.effect == EffectReceipt::NotDispatched
             {
@@ -897,6 +1144,9 @@ fn pump<'a, C: OwnedProcess>(
                 3 => Terminal::Failed(HostError::ResyncRequired),
                 4 => Terminal::TimedOut,
                 5 => Terminal::Failed(HostError::InvalidInput),
+                6 => Terminal::Failed(HostError::WorkerFailed),
+                7 => Terminal::Failed(HostError::InvalidControl),
+                8 => Terminal::Failed(HostError::CleanupPending),
                 _ => return Err(HostError::InvalidControl),
             };
             if active.class == OperationClass::Mutation {
@@ -918,6 +1168,7 @@ fn pump<'a, C: OwnedProcess>(
                 }
             }
             worker.mutation = None;
+            worker.input = None;
             let active = worker.active.take().ok_or(HostError::InvalidState)?;
             let mut slot = worker.reservation.domain.slots[active.handle.session.slot].get();
             slot.phase = SlotPhase::Attached;
