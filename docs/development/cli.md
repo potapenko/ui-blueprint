@@ -16,7 +16,7 @@ commands never launch workers. Live host is macOS-only; Web does not invoke Swif
 Use the matching freshly built private host/worker pair, not an arbitrary older
 worker; installable placement/packaging remains I01. There is no automatic install.
 
-[CLI@4 OBSERVE](../specs/product/cli.md) defines connection_version1.0.0 and exits.
+[CLI@5 OBSERVE](../specs/product/cli.md) defines connection_version1.0.0 and exits.
 Connection is an explicit trusted operator JSON file containing target Identity,
 canonical session SessionDescriptor, positive attach_deadline_ms, all16 explicit
 host_limits fields and provider. It is never loaded from UI or observation output.
@@ -121,7 +121,7 @@ or creates action refs. Strings are escaped as data. No external references load
 Found node returns0 even with partial/unknown fields; missing exact SourceKey gives
 target_unresolved/4. Invalid/limit2, IO1 and unsupported mode5 remain distinct.
 The full result is bounded before stdout, including newline: overflow emits no
-partial result. `--json` emits the [CLI@4 INSPECT](../specs/product/cli.md) envelope:
+partial result. `--json` emits the [CLI@5 INSPECT](../specs/product/cli.md) envelope:
 `output_version="1.0.0"`, `kind="inspection"`, `source="saved"`,
 `live_revalidated=false`, canonical `selector` and `requested_view`, and the full
 unchanged canonical `snapshot`. One JSON object plus newline; borrowed canonical
@@ -135,11 +135,12 @@ the product does not import it. Existing measure/check/export paths are unchange
 uiblueprint diff --before BEFORE.json --after AFTER.json --max-input-bytes 65536 --max-output-bytes 65536 --max-entries 100 [--json]
 ```
 
-[CLI-DIFF@1](../specs/product/cli-diff.md) uses the saved engine recorded comparison.
+[CLI-DIFF@2](../specs/product/cli-diff.md) uses the saved engine recorded comparison.
 Each file is a canonical Snapshot or observed ChannelResponse; one aggregate input
-budget covers both. Exact SourceKey/Field and compatible full Context are required,
-including environment revision/generations/fields/projection. No source ID is
-rewritten to force a match. Empty/malformed/unsupported records refuse explicitly.
+budget covers both. Exact SourceKey/Field and matching session/schema/plugin/Target/
+Surface generations, scope/projection/fields are required. Different environment
+revisions remain as two original records/Spaces, without conversion or common
+transform. No source ID is rewritten to force a match. Invalid records refuse.
 
 Compact identifies saved/not revalidated source and node_presence_and_properties
 scope, original coverage/Observations and before/after property availability. JSON
@@ -156,9 +157,9 @@ retains source coverage independently; incompatible valid contexts give
 context_mismatch/4 and empty stdout. Invalid/input/output limit2, IO/allocation1.
 Output is fully bounded including final newline before stdout; no partial result
 on overflow. Existing inspect/observe/measure/check/export behavior remains.
-Real Web sized-before/after records have different environment revisions and
-therefore refuse comparison; use their individual factual measurements without
-restamping them. Live changes/full graph comparison remain separate capabilities.
+Real Web sized-before/after records retain different environment revisions and
+report layout32×16→48×24 css_px with original Evidence, without restamping or an
+inferred arithmetic displacement. Live changes/full graph comparison remain separate.
 
 ## Exits and scope
 

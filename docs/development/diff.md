@@ -1,9 +1,11 @@
 # Recorded membership and property comparison
 
 `uiblueprint_engine::diff::compare_recorded(before, after, DiffLimits { max_entries })`
-validates both canonical Snapshots and requires existing contexts_compatible:
-session/target/surface generations, schema/plugin, scope/projection/fields and
-environment revision. It compares exact SourceKey then Field, without inference
+validates both canonical Snapshots and requires matching session/target/surface
+generations, schema/plugin and scope/projection/field sets. Distinct environment
+revisions remain attributed to their original records, as selected by
+[CLI-DIFF@2](../specs/product/cli-diff.md). CACHE/Delta contexts_compatible retains
+strict environment equality. It compares exact SourceKey then Field, without inference
 from labels, rectangles or source order. [CACHE@1](../specs/product/cache.md)
 governs the distinction between absence and justified removal.
 
@@ -34,6 +36,8 @@ InvalidSnapshot, IncompatibleContext and Capacity errors return no partial resul
 Source identity, timestamps, consistency, coverage, reasons and values remain
 unchanged. Revision order does not establish chronology or stable cross-snapshot
 identity. This comparison neither verifies atomic acquisition nor attributes causes.
+Different geometry units/kinds/Spaces stay separate recorded values; no conversion,
+common transform or normalized displacement is computed from an environment change.
 
 Scope is node presence and properties only. Relations, children, native_role,
 node surface placement, extensions, source declarations, component mappings, focus

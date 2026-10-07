@@ -1,13 +1,13 @@
 # CLI и bounded output
 
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@4`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; adds routed DIFF; supersedes @3.
+- Contract: `UIB.CLI@5`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2; supersedes @4.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md).
 - Read when: CLI commands, compact/JSON и публикация.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
-- Conditional requires, recorded diff only: [UIB.CLI-DIFF@1](cli-diff.md); existing clauses unchanged.
+- Conditional requires, recorded diff only: [UIB.CLI-DIFF@2](cli-diff.md); existing clauses unchanged.
 - Source mapping: TZ 372–398; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; INSPECT fixes only the local CLI representation below.
 

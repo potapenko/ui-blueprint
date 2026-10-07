@@ -371,6 +371,16 @@ fn diff_cli_entry_and_byte_limits_context_and_invalid_input_are_explicit() {
     }
     after.context.environment_revision = Id("another_environment".into());
     save(&after);
+    let environment = case.diff("100", 65536, 65536, true);
+    assert_eq!(environment.status.code(), Some(0));
+    let environment: serde_json::Value = serde_json::from_slice(&environment.stdout).unwrap();
+    assert_eq!(
+        environment["before"],
+        serde_json::to_value(&case.snapshot).unwrap()
+    );
+    assert_eq!(environment["after"], serde_json::to_value(&after).unwrap());
+    after.context.target.generation = Id("other-target-generation".into());
+    save(&after);
     assert_error(case.diff("100", 65536, 65536, true), 4, "context_mismatch");
     fs::write(case.directory.join("after.json"), b"PRIVATE_DIFF_CANARY").unwrap();
     assert_error(case.diff("100", 65536, 65536, true), 2, "invalid_input");

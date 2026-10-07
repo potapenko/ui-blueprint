@@ -89,4 +89,50 @@ conversion, implied common transform, normalized geometric delta, pass/fail,
 source continuity or replay/deletion applicability follows. Cache contexts_compatible
 must remain strict. Engine comparison needs its own narrow applicability condition
 and routed diff-contract reconciliation before that separate correction. This
-checkpoint preserves the originally selected guard; root/advisor decision is pending.
+checkpoint3d1c25e3a3d6028f2ef9e933c528106a3356f07e preserved the originally selected
+guard. Root/advisor then accepted the bounded correction recorded below.
+
+## Environment applicability reconciliation
+
+Root's amended packet explicitly adopts Core/original Web advisor's conclusion.
+Registered CLI-DIFF@2/CLI@5/registry15 BEFORE correction: the prior technical rule
+was an overconstraint on BOUNDARIES change→diff and GEOMETRY resize/font flow.
+Engine::diff now compares source-binding fields directly, requiring same session,
+schema/plugin, Target/Surface generations, scope/projection/field sets while
+allowing distinct environment revisions. No cloned/restamped Context or global
+schema helper change. CACHE/Delta strict contexts_compatible stays byte-unchanged.
+Different units/frame kinds remain original attributed records; no shared transform,
+normalization/arithmetic displacement, deletion or action ref is introduced.
+
+Exact correction10 paths: engine/src/diff.rs and tests/diff.rs under crates;
+crates/cli/tests/binary.rs; docs/specs/{README.md,product/README.md,product/cli.md,
+product/cli-diff.md}; docs/development/{diff,cli}.md; this receipt. No new directory.
+
+Affected Cargo --locked --offline checks passed:
+- engine --test diff:6/6, including environment-only acceptance, immutable source
+  bytes, separate recorded units/Space and unchanged strict Delta compatibility;
+  valid session/Target/Surface generations/plugin/scope/projection/fields mismatches
+  all refuse. Existing absence/unknown/evidence/cap behaviors remain covered.
+- Exact CLI diff_cli_entry_and_byte_limits_context_and_invalid_input_are_explicit:
+  passed; original both Snapshots retained on environment change; target generation
+  still gives context_mismatch/4. Entry/byte boundaries remain unchanged.
+- Engine/CLI affected lib/bin/diff-test/binary-test Clippy -D warnings passed.
+No broad suite or repeated unrelated tests. New behavior is read-only comparison;
+the test explicitly proves contexts_compatible still rejects environment mismatch.
+
+Same actual retained Web pair then invoked unchanged in JSON and compact,65536
+input/output cap, max-entries100,10s per process: both exit0/empty stderr. JSON5877
+bytes SHA256fee648910c6d2b3285fbe50b09a4a2e3c6aba5f58d3f965204671a9ffb37a4e1;
+compact3814 bytes SHA2569add5c0c939ecfa6662814698848b943a3b0dae822caf3c9b943f52c995d1250.
+One LayoutBounds entry for web.dom:33 reports content_changed=true and
+evidence_changed=true; original rects [40,480,32,16]→[40,480,48,24] css_px agree
+with authored F01. Full JSON before/after equals original decoded Snapshots.
+Both environments f01-800x600-dpr1-sized-before/-after and consistency=unknown
+remain exact. Original frame hashes/bytes unchanged; no output files created.
+This is reportcomplete0, not a pass/atomic/live/source-correspondence claim.
+
+Corrected binary SHA25608d9b880dcd83d7640857b3f4bd2d8d7f1be2b40d706c515b3055c6ceb4f4cba.
+Source hashes: diff.rs278f5fc9f232cef3d4e229647d826a614d25f64e82252f1ff4d0dcaaa6580444;
+engine diff test03450abd62ba0d036ed944fd7c230db8d191b15ac945e58b18d7d8156e496ada;
+CLI binary test85f4e22c4940504faa371832db776eaed304e92371d8e883c3762bd75e35c0da.
+Scoped formatting/whitespace/local links and spec≤100-line requirements checked.

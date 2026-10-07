@@ -1,13 +1,13 @@
 # Recorded comparison CLI output
 
 - Node type: leaf; domain: `uib.cli.recorded-diff`.
-- Contract: `UIB.CLI-DIFF@1`; clauses: `.BEHAVIOR`, `.DATA`, `.FAILURE`.
+- Contract: `UIB.CLI-DIFF@2`; clauses: `.BEHAVIOR`, `.DATA`, `.FAILURE`; supersedes @1.
 - Authority: Active; stability: Evolving; accepted/released baseline: none.
 - Authority source: approved PLAN.UIB@1/ROADMAP delegated representation, [selected L01 packet](../../plans/ui-blueprint/packets/L01-recorded-diff.md); no deletion or live-observation authority.
 - Read when: implementing/using bounded recorded CLI diff.
 - Do not read when: unchanged inspect/observe/analysis is sufficient.
-- Requires: [CLI@4](cli.md), [CACHE@1](cache.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@1](exchange.md), [PRIVACY@1](privacy.md).
-- Supersedes: none; original CLI CONTENT/INSPECT/OBSERVE and core/analysis wire protected.
+- Requires: [CLI@5](cli.md), [CACHE@1](cache.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@1](exchange.md), [PRIVACY@1](privacy.md), [GEOMETRY@1](geometry.md), [BOUNDARIES@1](boundaries.md).
+- Original CLI CONTENT/INSPECT/OBSERVE, strict CACHE/Delta compatibility and core/analysis wire protected.
 
 ## UIB.CLI-DIFF.BEHAVIOR
 
@@ -19,8 +19,12 @@ Both explicitly named files share one positive aggregate input-byte bound. Outpu
 bound is positive and includes newline. max-entries is required/nonnegative;0
 produces only omission information. Input accepts validated core0.1 Snapshot or
 observed ChannelResponse containing its unchanged Snapshot, without reference IO.
-Use existing engine compare_recorded, exact SourceKey/Field and full compatible
-Context including generations, environment, scope/projection/fields/version.
+Use existing engine compare_recorded, exact SourceKey/Field and matching session,
+schema/plugin/Target/Surface generations, scope/projection/field set. Environment
+revisions may differ for literal recorded comparison; preserve both environments,
+geometry kinds/units/Spaces/transforms. No common transform, coordinate arithmetic
+or normalized displacement is inferred. Different units/frame kinds remain two
+attributed records. Schema contexts_compatible/CACHE/Delta stay strict and unchanged.
 Preserve original source coverage/uncertainty/Evidence and both complete records.
 Content/value/availability and Evidence/Observation-only changes are separate.
 Missing-side classification means absent in that record, never deleted/created,
@@ -62,3 +66,10 @@ Acceptance: literal32→48 + partial absent B, Known→Unknown, evidence-only up
 namespace/context separation, explicit0/small entry cap, exact source Snapshot JSON
 equality, aggregate input/output boundaries and preserved existing CLI routing.
 Author runtime evidence is recorded separately; registration itself is not acceptance.
+
+Change record: @1 copied CACHE/Delta environment equality into read-only comparison
+and rejected the actual font-size change pair. Root/Core/original Web advisor
+reconciled this technical overconstraint under [packet amendment](../../plans/ui-blueprint/packets/L01-recorded-diff.md#reconcile-environment-only-context-changes):
+BOUNDARIES requires change→diff, GEOMETRY preserves resize/font contexts. @2 permits
+environment differences only for recorded comparison with the protected bindings
+above. No source restamping, deletion, cache/replay relaxation or wire migration.

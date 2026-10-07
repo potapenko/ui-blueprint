@@ -66,7 +66,7 @@ impl std::error::Error for DiffError {}
 /// removal Evidence or a replayable Delta. A zero omitted count is not live coverage.
 ///
 /// # Errors
-/// Rejects invalid snapshots, incompatible full Context or output allocation/count
+/// Rejects invalid snapshots, incompatible source bindings or output allocation/count
 /// failure. Existing canonical validation allocations are not an allocation-free
 /// guarantee. No partial result is returned on failure.
 pub fn compare_recorded<'a>(
@@ -76,7 +76,23 @@ pub fn compare_recorded<'a>(
 ) -> Result<RecordedDiff<'a>, DiffError> {
     validation::validate_snapshot(before).map_err(DiffError::InvalidSnapshot)?;
     validation::validate_snapshot(after).map_err(DiffError::InvalidSnapshot)?;
-    if !validation::contexts_compatible(&before.context, &after.context) {
+    // Recorded comparison spans layout/environment changes; Delta applicability
+    // remains stricter. Both original environments/spaces remain in the result.
+    let a = &before.context;
+    let b = &after.context;
+    if a.schema_version != b.schema_version
+        || a.session_id != b.session_id
+        || a.target != b.target
+        || a.scope_id != b.scope_id
+        || a.projection != b.projection
+        || a.plugin != b.plugin
+        || a.surfaces.len() != b.surfaces.len()
+        || a.surfaces
+            .iter()
+            .any(|surface| !b.surfaces.contains(surface))
+        || a.fields.len() != b.fields.len()
+        || a.fields.iter().any(|field| !b.fields.contains(field))
+    {
         return Err(DiffError::IncompatibleContext);
     }
     let mut total = Some(0usize);

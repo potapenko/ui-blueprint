@@ -237,12 +237,46 @@ fn exact_namespaces_context_and_cap_are_preserved() {
         assert_eq!(result.omitted_entries, 2 - cap.min(2));
     }
     assert!(diff(&before, &before, 0).entries.is_empty());
-    for mismatch in 0..3 {
+    for mismatch in 0..7 {
         let mut after = before.clone();
         match mismatch {
-            0 => after.context.environment_revision = Id("changed".into()),
+            0 => after.context.session_id = Id("other-session".into()),
             1 => after.context.target.generation = Id("new".into()),
-            _ => after.context.projection = Projection::Design,
+            2 => after.context.projection = Projection::Design,
+            3 => after.context.plugin.version = Id("other-version".into()),
+            4 => {
+                after.context.scope_id = Id("other-scope".into());
+                after.coverage.scope_id = after.context.scope_id.clone();
+                for observation in &mut after.observations {
+                    observation.coverage.scope_id = after.context.scope_id.clone();
+                }
+            }
+            5 => {
+                after.context.surfaces[0].generation = Id("other-surface-generation".into());
+                for node in &mut after.nodes {
+                    node.surface = after.context.surfaces[0].clone();
+                }
+            }
+            _ => {
+                after.context.fields.push(Field::Value);
+                after.coverage.fields.push(Field::Value);
+                for observation in &mut after.observations {
+                    observation.coverage.fields.push(Field::Value);
+                }
+                for node in &mut after.nodes {
+                    let Property::Requested { evidence, .. } = &node.properties[0] else {
+                        panic!("evidence")
+                    };
+                    node.properties.push(Property::Requested {
+                        field: Field::Value,
+                        sensitivity: Sensitivity::Public,
+                        evidence: evidence.clone(),
+                        state: Availability::Unknown {
+                            reason: Id("not_available".into()),
+                        },
+                    });
+                }
+            }
         }
         assert!(matches!(
             compare_recorded(&before, &after, DiffLimits { max_entries: 10 }),
@@ -255,4 +289,66 @@ fn exact_namespaces_context_and_cap_are_preserved() {
         compare_recorded(&before, &invalid, DiffLimits { max_entries: 0 }),
         Err(DiffError::InvalidSnapshot(_))
     ));
+}
+
+#[test]
+fn environment_changes_are_attributed_records_while_delta_compatibility_stays_strict() {
+    let mut before = source();
+    width(&mut before, 32.0);
+    let mut after = before.clone();
+    after.context.environment_revision = Id("font-size-after".into());
+    width(&mut after, 48.0);
+    let originals = (
+        serde_json::to_vec(&before).unwrap(),
+        serde_json::to_vec(&after).unwrap(),
+    );
+    assert!(
+        !validation::contexts_compatible(&before.context, &after.context),
+        "Delta/cache guard stays strict"
+    );
+    let result = diff(&before, &after, 10);
+    assert_eq!(result.entries.len(), 1);
+    assert_eq!(
+        result.before.context.environment_revision,
+        before.context.environment_revision
+    );
+    assert_eq!(
+        result.after.context.environment_revision,
+        after.context.environment_revision
+    );
+    assert!(matches!(
+        result.entries[0],
+        Difference::Property {
+            content_changed: true,
+            ..
+        }
+    ));
+    assert_eq!(
+        (
+            serde_json::to_vec(&before).unwrap(),
+            serde_json::to_vec(&after).unwrap()
+        ),
+        originals
+    );
+    geometry(&mut after).coordinate_space.units = Unit::Pt;
+    geometry(&mut after).coordinate_space.id = Id("other-recorded-space".into());
+    let result = diff(&before, &after, 10);
+    let Difference::Property {
+        before: Some(old),
+        after: Some(new),
+        ..
+    } = result.entries[0]
+    else {
+        panic!("property")
+    };
+    let Some(Value::Geometry(a)) = old.known() else {
+        panic!("before")
+    };
+    let Some(Value::Geometry(b)) = new.known() else {
+        panic!("after")
+    };
+    assert_eq!(a.coordinate_space.units, Unit::CssPx);
+    assert_eq!(b.coordinate_space.units, Unit::Pt);
+    // Only original records are returned; no converted value/displacement exists.
+    assert_eq!(b.coordinate_space.id.0, "other-recorded-space");
 }
