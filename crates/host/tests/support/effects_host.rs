@@ -17,7 +17,10 @@ fn fake_spec() -> SpawnSpec {
     );
     SpawnSpec::new(&peer).unwrap()
 }
-fn attach<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>, mutation: bool) -> SessionHandle<'a> {
+fn attach<'a, P: uiblueprint_host::process_api::ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'a, P>,
+    mutation: bool,
+) -> SessionHandle<'a> {
     let Artifact::Session(s) = Document::from_json(DESCRIPTOR, DESCRIPTOR.len())
         .unwrap()
         .artifact
@@ -31,8 +34,8 @@ fn attach<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>, mutation: bool) -> Ses
     assert!(matches!(next(host),HostEvent::Attached{session:s,..} if s==session));
     session
 }
-fn submit<'a>(
-    host: &mut RuntimeHost<'a, DarwinPlatform>,
+fn submit<'a, P: uiblueprint_host::process_api::ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'a, P>,
     session: SessionHandle<'a>,
     mode: u8,
     until: Instant,
@@ -54,7 +57,9 @@ fn submit<'a>(
         until,
     )
 }
-fn finish(host: &mut RuntimeHost<'_, DarwinPlatform>) {
+fn finish<P: uiblueprint_host::process_api::ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'_, P>,
+) {
     let stop = deadline();
     loop {
         assert!(Instant::now() < stop);
@@ -62,6 +67,128 @@ fn finish(host: &mut RuntimeHost<'_, DarwinPlatform>) {
             break;
         }
         thread::sleep(Duration::from_millis(1));
+    }
+}
+
+mod permit_fault {
+    use super::*;
+    use std::os::fd::BorrowedFd;
+    use uiblueprint_host::{process::DarwinChild, process_api::*};
+    pub(super) struct Platform(pub u8);
+    pub struct Child {
+        real: DarwinChild,
+        fault: u8,
+        altered: Option<[u8; CONTROL_BYTES]>,
+        offset: usize,
+    }
+    impl ProcessPlatform for Platform {
+        type Child = Child;
+        fn validate_parent_reaping() -> Result<(), HostError> {
+            DarwinPlatform::validate_parent_reaping()
+        }
+        fn spawn(&mut self, spec: &SpawnSpec) -> Result<Child, HostError> {
+            DarwinPlatform.spawn(spec).map(|real| Child {
+                real,
+                fault: self.0,
+                altered: None,
+                offset: 0,
+            })
+        }
+        fn poll(&mut self, interests: &mut [PollInterest<'_>], ms: u32) -> Result<(), HostError> {
+            DarwinPlatform.poll(interests, ms)
+        }
+    }
+    impl OwnedProcess for Child {
+        fn write_input(&mut self, bytes: &[u8]) -> Result<Transfer, HostError> {
+            if self.altered.is_none()
+                && bytes.len() == CONTROL_BYTES
+                && let Ok(mut c) = Control::decode(bytes.try_into().unwrap())
+                && c.kind == ControlKind::EffectPermit
+            {
+                match self.fault {
+                    1 => c.correlation.operation += 1,
+                    2 => c.value = 0,
+                    _ => c.value += 1,
+                }
+                self.altered = Some(c.encode());
+                self.offset = 0;
+            }
+            if let Some(altered) = &self.altered {
+                assert_eq!(
+                    bytes.len(),
+                    CONTROL_BYTES - self.offset,
+                    "same fixed parent write cursor"
+                );
+                let result = self.real.write_input(&altered[self.offset..])?;
+                if let Transfer::Bytes(n) = result {
+                    self.offset += n;
+                    if self.offset == CONTROL_BYTES {
+                        self.altered = None;
+                    }
+                }
+                Ok(result)
+            } else {
+                self.real.write_input(bytes)
+            }
+        }
+        fn read_output(&mut self, b: &mut [u8]) -> Result<Transfer, HostError> {
+            self.real.read_output(b)
+        }
+        fn read_fatal(&mut self, b: &mut [u8]) -> Result<Transfer, HostError> {
+            self.real.read_fatal(b)
+        }
+        fn close_input(&mut self) {
+            self.real.close_input()
+        }
+        fn terminate(&mut self) -> Result<(), HostError> {
+            self.real.terminate()
+        }
+        fn try_reap(&mut self) -> Result<ProcessState, HostError> {
+            self.real.try_reap()
+        }
+        fn input_fd(&self) -> Option<BorrowedFd<'_>> {
+            self.real.input_fd()
+        }
+        fn output_fd(&self) -> BorrowedFd<'_> {
+            self.real.output_fd()
+        }
+        fn fatal_fd(&self) -> BorrowedFd<'_> {
+            self.real.fatal_fd()
+        }
+    }
+}
+#[test]
+fn actual_worker_effect_bridge_refuses_corrupt_permit_and_parent_rejects_wrong_nonce() {
+    let _serial = RUNTIME_TEST.lock().unwrap();
+    for fault in 1..=3 {
+        let domain = HostDomain::new::<permit_fault::Platform>(limits()).unwrap();
+        let mut host =
+            RuntimeHost::new(&domain, fake_spec(), permit_fault::Platform(fault)).unwrap();
+        let session = attach(&mut host, true);
+        submit(&mut host, session, b'C', deadline()).unwrap();
+        let c = complete(&mut host);
+        assert!(matches!(
+            c.terminal,
+            Terminal::Failed(HostError::WorkerFailed | HostError::InvalidControl)
+        ));
+        assert!(c.effect_unknown());
+        if fault <= 2 {
+            assert_eq!(
+                c.committed(),
+                0,
+                "invalid correlation/zero nonce cannot obtain a delivery token"
+            );
+        } else {
+            assert_eq!(
+                c.bytes(0),
+                Some(ACTION),
+                "complete prior ACK survives nonce terminal mismatch"
+            );
+        }
+        drop(c);
+        finish(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert!(!domain.usage().abandoned);
     }
 }
 #[test]

@@ -214,3 +214,55 @@ checks. Independent changed-boundary review and live harness activation remain
 root/platform-owned. No full A01/P5 acceptance claimed by this WIP checkpoint.
 web_worker_process.rs current Core hunk is actual permit/ACK counters and a held
 effect-permit barrier; Web receives its ownership only after this saved handoff.
+
+## Remaining planned edge evidence after80b7449
+
+Production checkpoint80b7449dca32b9d9853d8aaaf353d26be69e9d4b remains unchanged.
+Core then wrote only tests/web_worker.rs and support/effects_host.rs plus this
+receipt. web_worker_process.rs is now Web-owned; no interleaved writes made there.
+In the same locked/offline temporary target, targeted cases passed:
+
+- prepare_rejects_payload_ref_clock_and_small_budget_without_effect_authority:
+  6 cases. Read-only TargetLease, Act payload under Prepare, wrong clock/ref,
+  reversed Tape,64-byte Request output cap and pre-source cancellation; no
+  EffectPermit/setter, canonical refusal when admitted, empty output on budget/cancel,
+  invalid seeds refused before SDK queries, sessions0/groups0/abandonedfalse.
+- actual_worker_effect_bridge_refuses_corrupt_permit_and_parent_rejects_wrong_nonce:
+  3 actual fixed-I/O faults. Wrong permit correlation/zero nonce cannot create
+  delivery token; mismatched positive nonce cannot confirm terminal success.
+  Parent preserves Possible/unknown and earlier complete ACK bytes; actual reap.
+  Fault wrapper buffers only the altered64-byte header and handles partial writes;
+  it is test-only and does not manufacture an accepted permit or new claims.
+- actual_action_cancel_before_ready_and_after_possible_never_dispatches_setter:
+  2 actual kernel/provider paths. Before Ready yields NotDispatched; after parent
+  queued EffectPermit yields Possible/unknown, no setter/ACK, confirmed owned reap.
+- Affected runtime/effect_peer and web_worker Clippy passed. New wrapper's nested
+  if was collapsed directly; no logic/threshold change or unchanged suite repeated.
+
+Additional required source discrepancy found: Prepare/Act currently tighten only
+the child watchdog to canonical Request duration. Parent Active deadline remains
+the explicit caller deadline; a shorter canonical duration has no fixed-control
+parent admission yet. Late ACK/terminal suppression against that tighter duration
+therefore relies on child scheduling. Before author completion, Core returned the
+minimum dependency: reuse fixed admission kinds13/14 for typed Prepare/Mutation,
+matching class/epoch/op/mask and clamping parent started+duration before any SDK/
+effect request; no EffectPermit/authority gained, Observe ticket semantics unchanged.
+This source repair awaits explicit selection; no production source changed on the
+strength of the proposal. Planned edge coverage is complete, but this newly exposed
+canonical-deadline guarantee and independent/live acceptance remain open.
+
+Exact proposed repair, not yet selected: existing control kinds13/14 retain their
+encoding. For Prepare/Mutation, after strict typed Tape/Request binding validation,
+worker sends kind13 with matching operation class, slot0, flags=request channel1,
+epoch/op correlation, length0, value=parent operation sequence (not an Observation
+Ticket), auxiliary=canonical deadline_ms. Parent permits this only for current
+non-live Prepare/Mutation before refusal/Possible/publication and once, clamps
+active.deadline=min(caller deadline,active.started+duration), then returns kind14
+with identical correlation/class/mask/value and remaining duration. Worker checks
+every fixed field/nonzero remaining and tightens its existing watchdog before SDK.
+Observe live path keeps its real Observation Ticket rules. This admission gives no
+nonce/EffectPermit and cannot bypass mutation permission/claims/refusal latch.
+Exact owners: supervisor.rs kind13/14 admission branch; worker_action.rs or
+worker_main.rs narrow helper; worker_web.rs after valid request before preparation/
+kernel; nearest existing held-control/late-ACK tests plus this receipt. No new
+control/framing/graph/public schema/CLI/pools or generalized status framework.

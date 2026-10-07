@@ -324,6 +324,209 @@ fn guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_
         assert!(!domain.usage().abandoned);
     }
 }
+
+#[test]
+fn prepare_rejects_payload_ref_clock_and_small_budget_without_effect_authority() {
+    let _serial = SERIAL.lock().unwrap();
+    for mode in 0..6 {
+        let peer = peer::Peer::new();
+        peer.state.checkbox_native.store(true, Ordering::Release);
+        peer.state.checkbox_enabled.store(true, Ordering::Release);
+        peer.state.checkbox_writable.store(true, Ordering::Release);
+        let trace = Arc::new(process::Trace::default());
+        let domain = HostDomain::new::<process::Platform>(data::limits()).unwrap();
+        let mut host = RuntimeHost::new(
+            &domain,
+            SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap(),
+            process::Platform(trace.clone()),
+        )
+        .unwrap();
+        let (session, clock) = attach(&mut host, &peer); // actual read-only TargetLease
+        let mut observed = data::request(&clock, vec![Channel::ExternalSemantics]);
+        let Artifact::Request(request) = &mut observed.artifact else {
+            panic!("request")
+        };
+        request.context.fields = vec![Field::Enabled, Field::Checked];
+        submit(
+            &mut host,
+            session,
+            &observed,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let first = complete(&mut host);
+        let doc = Document::from_json(first.bytes(0).unwrap(), 65536).unwrap();
+        let Artifact::ChannelResponse(response) = doc.artifact else {
+            panic!("channel")
+        };
+        let ChannelResult::Observed(snapshot) = response.result else {
+            panic!("snapshot")
+        };
+        let source = Document {
+            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+            artifact: Artifact::Snapshot(snapshot.clone()),
+        };
+        let mut seed = action_seed(&snapshot, &clock);
+        let Artifact::Request(request) = &mut seed.artifact else {
+            panic!("seed")
+        };
+        match mode {
+            0 => {
+                let Operation::Prepare { action } = &request.operation else {
+                    panic!("prepare")
+                };
+                request.operation = Operation::Act {
+                    action: action.clone(),
+                };
+            }
+            1 => request.clock_domain = Id("wrong-clock".into()),
+            2 => {
+                let Operation::Prepare { action } = &mut request.operation else {
+                    panic!("prepare")
+                };
+                action.backend_ref.snapshot_id = Id("wrong-snapshot".into());
+            }
+            4 => request.limits.max_output_bytes = 64,
+            _ => (),
+        }
+        let calls = peer.state.calls.load(Ordering::Acquire);
+        let operation = if mode == 3 {
+            action_pair(&mut host, session, &seed, &source, OperationClass::Prepare)
+        } else {
+            action_pair(&mut host, session, &source, &seed, OperationClass::Prepare)
+        };
+        let completed = if mode == 5 {
+            host.cancel(operation).unwrap()
+        } else {
+            complete(&mut host)
+        };
+        assert!(matches!(
+            completed.terminal,
+            Terminal::Failed(_) | Terminal::Cancelled
+        ));
+        assert_eq!(
+            completed.effect,
+            uiblueprint_host::host_types::EffectReceipt::NotDispatched
+        );
+        assert_eq!(trace.effect_permits.load(Ordering::Acquire), 0);
+        assert_eq!(peer.state.setter_calls.load(Ordering::Acquire), 0);
+        if mode != 4 {
+            assert_eq!(
+                peer.state.calls.load(Ordering::Acquire),
+                calls,
+                "invalid preparation refused before fresh SDK read"
+            );
+        }
+        if mode == 4 || mode == 5 {
+            assert_eq!(completed.committed(), 0);
+            assert!(completed.bytes(0).is_none());
+        } else {
+            assert_eq!(completed.committed(), 1);
+            Document::from_json(completed.bytes(0).unwrap(), 65536).unwrap();
+        }
+        drop(completed);
+        drop(first);
+        stop(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}
+
+#[test]
+fn actual_action_cancel_before_ready_and_after_possible_never_dispatches_setter() {
+    let _serial = SERIAL.lock().unwrap();
+    for before_ready in [true, false] {
+        let peer = peer::Peer::new();
+        peer.state.checkbox_native.store(true, Ordering::Release);
+        peer.state.checkbox_enabled.store(true, Ordering::Release);
+        peer.state.checkbox_writable.store(true, Ordering::Release);
+        let trace = Arc::new(process::Trace::default());
+        let domain = HostDomain::new::<process::Platform>(data::limits()).unwrap();
+        let mut host = RuntimeHost::new(
+            &domain,
+            SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap(),
+            process::Platform(trace.clone()),
+        )
+        .unwrap();
+        let (session, clock) = attach_authorized(&mut host, &peer, true);
+        let mut observed = data::request(&clock, vec![Channel::ExternalSemantics]);
+        let Artifact::Request(request) = &mut observed.artifact else {
+            panic!("request")
+        };
+        request.context.fields = vec![Field::Enabled, Field::Checked];
+        submit(
+            &mut host,
+            session,
+            &observed,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let result = complete(&mut host);
+        let doc = Document::from_json(result.bytes(0).unwrap(), 65536).unwrap();
+        drop(result);
+        let Artifact::ChannelResponse(response) = doc.artifact else {
+            panic!("channel")
+        };
+        let ChannelResult::Observed(snapshot) = response.result else {
+            panic!("snapshot")
+        };
+        let source = Document {
+            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+            artifact: Artifact::Snapshot(snapshot.clone()),
+        };
+        let mut request = action_seed(&snapshot, &clock);
+        action_pair(
+            &mut host,
+            session,
+            &source,
+            &request,
+            OperationClass::Prepare,
+        );
+        let ready = complete(&mut host);
+        let source = Document::from_json(ready.bytes(0).unwrap(), 65536).unwrap();
+        drop(ready);
+        let Artifact::Action(case) = &source.artifact else {
+            panic!("prepared")
+        };
+        let Artifact::Request(r) = &mut request.artifact else {
+            panic!("request")
+        };
+        r.context = case.snapshot.context.clone();
+        r.operation = Operation::Act {
+            action: case.action.clone(),
+        };
+        trace
+            .hold_effect_permit
+            .store(!before_ready, Ordering::Release);
+        let operation = action_pair(
+            &mut host,
+            session,
+            &source,
+            &request,
+            OperationClass::Mutation,
+        );
+        if !before_ready {
+            let end = deadline();
+            while !trace.effect_waiting.load(Ordering::Acquire) {
+                assert!(Instant::now() < end);
+                assert!(matches!(host.next_event().unwrap(), HostEvent::Pending));
+                thread::sleep(Duration::from_millis(1));
+            }
+        }
+        let cancelled = host.cancel(operation).unwrap();
+        assert_eq!(cancelled.terminal, Terminal::Cancelled);
+        assert_eq!(cancelled.committed(), 0);
+        assert_eq!(cancelled.effect_unknown(), !before_ready);
+        assert_eq!(peer.state.setter_calls.load(Ordering::Acquire), 0);
+        drop(cancelled);
+        stop(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}
 fn submit<'a>(
     host: &mut RuntimeHost<'a, process::Platform>,
     session: SessionHandle<'a>,
