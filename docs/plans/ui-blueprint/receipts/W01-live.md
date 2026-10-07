@@ -1,7 +1,7 @@
 # W01 live first-observe diagnosis
 
-Status: third changed diagnostic run FAILED at Collect/CollectorMalformed.
-Root opened the bounded collector repair; no unchanged runtime retry. Authority [packet](../packets/W01-live.md), preparatione02eeff,
+Status: changed first-observe repair PASSED on d19d130/provider9b881e6.
+One actual canonical response is saved; broader Web cases remain unverified. Authority [packet](../packets/W01-live.md), preparatione02eeff,
 sinkc3c28a3, activation2669384, and root's explicit finite diagnostic-repair dispatch.
 Current repair scope follows the packet; no fixture/oracle/Cargo/limits/backend edit.
 Current registry11/D05@4 and full prior Web/QA/operational Spec Basis remain applicable;
@@ -206,3 +206,36 @@ three-path repair is saved under task checkpoint authority, preserving unrelated
 root/Native edits. New repair build temp: uib-web-native-read-zsvz2e40 under the
 same task temporary parent; run UUIDf4276c1c-e3a8-4564-b7ec-52320314b69b remains
 a fresh pathname before runtime. Same provider9b881e6 + saved Web overlays.
+
+## First actual guarded response — repair verified
+
+Saved repaird19d13018fb74c604ef9d7c2666a10ada3e0d270 + provider9b881e6 compiled
+from immutable source in uib-web-native-read-zsvz2e40/source with its own build
+directory. Same archive+owned-overlay recipe excludes unrelated G02.97 inputs:
+8c4a8ed1bfaeb2f9cb09e843a9e492e01b0954f006038778f81f8cddc9a8f27e.
+Test deps/web_live-5d88e78afab66360 SHA256
+ae58c61768d80b130f6968d3fa69ef8451cdcf91ed2461359b9cec7b474a561c; worker
+30ddb2245f4ea78882e5dddba7d50ee391d99afd67e65e08ad861cdd597e13b3.
+Affected host no-run PASS. Same fixed activated command/first_observe_diagnostic,
+new UUIDf4276c1c-e3a8-4564-b7ec-52320314b69b, no source hold or limit/oracle change.
+
+Runtime2026-10-07T14:13:04.079Z–14:13:05.908Z: diagnostic_passed, left-initial
+completed, committed1/missing0/operation1, no failure diagnostic, test exit0.
+Actual first canonical response passes existing DOM[40,60,120,40]/AX Apply/button
+oracle, source separation/unknowns and read-only invariance. Original ACKed
+initial-left.json is5681 bytes, SHA256
+150020b2ac4f011421524cc7ad4a4cfb5ee399393eed619b49a53aa3f9ef8404.
+Report SHA25641989df46ea45e37367479640ad0a2135dd40e3913eb435d5617367002c358ff.
+Both files are under that UUID in the existing application-state evidence root.
+Historical-analysis-only; closed-session refs may not be reused live.
+
+Worker reap confirmed sessions0/groups0/abandonedfalse; fixture browser survived
+worker reap. Test/context/driver/browser/server/profile all confirmed closed.
+Post-run97-source/both-binary hashes match saved pins; all four prior reports are
+unchanged. Git/source/runtime holds released. Root retains evidence through P7 or
+explicit replacement/discard; immediate consumers W01/G02/P7. Temporary builds
+remain for the next finite consumer until acceptance permits cleanup.
+
+This is first-request repair proof, not full W01/B01–B06, input, Native, D06/Q02 or
+latest integrated G02 acceptance. Prepared size-change/privacy/wrong-target/remount/
+navigation cases remain next work; no successful case was repeated for evidence.
