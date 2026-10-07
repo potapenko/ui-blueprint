@@ -44,3 +44,10 @@ Reuse existing bounded script/collector peers; affected checks/Clippy/format onl
 No browser/runtime or new action-capability claim in this step. Return source pins,
 actual checks and exact remaining Focus/Type/app-state dependencies; scoped checkpoint
 and push via Git lease. Same current image retention/non-image cleanup applies.
+
+Resume scope amendment, 2026-10-08: permit plugins/web/src/collector/action.rs
+only for mechanical None initialization of newly optional private DomRead fields.
+No delivery/preparation/action behavior change. Selection request gating/target
+binding/direction and bounded output getter proposals in f0d241e remain unaccepted
+choices until reconciled against this full Spec Basis and primary native evidence;
+record the selected mapping before edits, return genuine contract conflicts.

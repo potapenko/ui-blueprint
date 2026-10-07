@@ -4,7 +4,7 @@
 - Правила исполнения и восстановления: [ранбук](execution.md); этот реестр хранит
   текущее состояние, а не вторую копию правил. Прямой запрос пользователя требует
   сохранять правила push, чатов/параллельности и архивирования в файлах.
-- Режим: `coordinated`, root coordination-only; цель поставлена на пользовательскую паузу перед рестартом в чате `01a11088-e608-7801-bdfb-db5c9383af9d`; автоматическое продолжение запрещено.
+- Режим: `coordinated`, root coordination-only; цель активна в чате `01a11088-e608-7801-bdfb-db5c9383af9d` после прямого resume пользователя 2026-10-08.
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
 - Объём: P0–P7, рабочие чаты и follow-up по плану; root не реализует и не проверяет продукт.
@@ -18,7 +18,7 @@
 - Пользователь 2026-10-07: «Продолжаю работу, я включаю цель.» Host confirms active; same approved scope and explicit parallel-chat authorization continue, without reapproval.
 - Начальный checkpoint `358c757`; код продукта отсутствует; строки `queued`, если статус ниже не уточнён.
 
-## Пауза перед рестартом — 2026-10-08
+## Историческая пауза перед рестартом — 2026-10-08
 
 Пользователь прямо запросил завершить текущие работы перед рестартом Codex,
 не запускать новые чаты и затем поставить цель на паузу. Dispatch остановлен:
@@ -47,6 +47,42 @@
   пользователя не возобновлять. После рестарта сначала проверить host state и
   текущую ветку, прочитать эти три restart receipts и применимые spec routes;
   продолжить незавершённые пакеты тех же владельцев, не повторять принятые проверки.
+
+## Возобновление — 2026-10-08
+
+Прямое сообщение пользователя: «Продолжай работу.» Host goal подтверждён active;
+временный запрет dispatch снят для прежней coordinated цели P0–P7. Ветка master,
+чистый restart checkpoint b67461c; все три сохранённых owner chats были idle.
+Новых чатов не создано; сохраняется исходное разрешение на parallel finite work.
+
+- Core продолжает L01-actions-implementation от138d7bc: исправить установленное
+  смешение malformed input2/fresh refusal4, закончить affected metadata checks.
+  Новый private encoding/shared path требует точного предложения до правки;
+  contract CLI-ACTIONS.EXITS и public schema остаются неизменны.
+- Web продолжает W02-form-read-facts от docs-only f0d241e. Разрешена только
+  механическая None initialization в collector/action.rs при расширении private
+  DomRead; action behavior защищено. Mapping proposals сверить с полным contract
+  и native API evidence до source; неизвестное не превращать в known.
+- Native23f22fb frozen для source review тем же m01_acquisition_review, сначала
+  source observations без author receipt. Native owner параллельно готовит
+  existing helper/fixture и ограниченный actual-run handoff; UI/capture пока не
+  запущены. Нельзя строить host/CLI с чужим WIP; нужен saved input identity.
+- Git lease выдаётся только checkpoint-ready владельцу; desktop/runtime свободен.
+  Следующий шаг: source-first review reconciliation → Native runtime activation;
+  Core/Web coherent source checkpoints и review затронутых protected boundaries.
+
+Traversal receipt: AGENTS/runbook/registry → spec registry17 → PRODUCT-ROUTES@1
+→ CLI@6/CLI-ACTIONS@1, FORMS@1, NATIVE@1; full explicit closure MODEL/EXCHANGE/
+IDENTITY/BOUNDARIES/GEOMETRY/PROJECTIONS/ACTIONS/LIFECYCLE/CACHE/PRIVACY@1,
+D01@1/D02@2/D03@2/D04@1/D05@4/MEMORY@2/WORK@1/Native acquisition@2/D06@1/
+D07@5/EVIDENCE@1, ROADMAP/RUST-BOUNDARIES/REUSE/GOLDEN/PILOTS/WEB-PILOTS/
+NATIVE-PILOTS/PERFORMANCE@1, RUST/DEV.RUST@2. QA/operational/Apple/CUA routes read.
+Selected contracts fully restored; no revision drift after pause. Current packets
+and three restart receipts are evidence/ownership handoffs, not product authority.
+Excluded: export/analysis serialization changes, mobile/future phases, real-app
+changes and broad performance/QA wave. Restore existing intended behavior;
+private mapping/encoding proposals remain proposals until source reconciliation.
+Root writes only this registry, execution runbook and W02 packet scope amendment.
 
 ## Очередь
 
@@ -121,9 +157,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | User pause: Core/Web/Native idle after saved+pushed checkpoints138d7bc/f0d241e/23f22fb. No worker write/Git/runtime lease; no new dispatch until explicit user resume. Reviewer sessions completed; needed chats retained |
+| Активные чаты/пакеты/ресурсы | Resumed: Core host/CLI; Web bounded collector/form facts; Native source frozen under same-reviewer review and owner pre-run preparation. Distinct write scopes, short Git leases only, no runtime lane yet |
 | Последний принятый результат продукта | Web actual native Setter pipeline9d3a0a5 passed10outcomes/12checks with real preparation/result and readonly/remount/cancel negatives. Native popup AX/inspect and explicit close→stale→reopen positive established; live AX equal, separate current-file post-assert unverified. Broader forms/physical/business/capture not inferred |
-| Следующий шаг | After explicit user resume: reconcile Core refusal exit distinction and remaining evidence; Native source review before actual capture with separate identity checks; Web mapping/scope reconciliation then read-facts implementation. Full K02/forms/pilots/performance/distribution/P0–P7 DoD remains open |
+| Следующий шаг | Reconcile Core refusal exit distinction and remaining evidence; Native source review before actual capture with separate identity checks; Web mapping/scope reconciliation then read-facts implementation. Full K02/forms/pilots/performance/distribution/P0–P7 DoD remains open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -134,10 +170,10 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [L01-actions-contract](packets/L01-actions-contract.md) | retained Core owner | CLI@5 CONTENT/ACTIONS + approved P5/P6; actual source handoff | registrationc4bc255 saved/pushed, root read full leaf and delta; CLI-ACTIONS@1/CLI@6/registry16. Direct observed response input and chosen exact private flags registered before code. Actual public CLI implementation separately active |
 | [A01-guarded-composition](packets/A01-guarded-composition.md) | retained Core owner | saved kernel ffe1166; Web provider in progress | coherent WIP80b7449 + remaining edge verification2f5c5eb saved/pushed. Declared6Prepare/3permit-fault/2cancel cases passed per author. Parent deadline repairc3967ca saved/pushed; same reviewer accepts composed source/peer boundary after11timing cases and affected regressions. Earlier not_verified resolved. Source/peer acceptance is not live action/P5 completion |
 | [W02-provider-handoff](packets/W02-provider-handoff.md) | Web01a110ac-2aae-7841-9c8b-12ff38c52d9d / local | source handoff9c0af1b; A01 consumer | Source-only handoff complete: native checkbox Setter proposal, current F01 lacks actual checkbox, exact current resolver/effect/verification API still needed. Separate small actions.html fixture/README/receipt saved/pushed9bd9f66 with source/syntax/doc checks; existing F01 performance/layout untouched. Core compiling SetCheckedProvider/DeliveryPermit API received; provider728fa5b saved/pushed exact9, five focused synthetic provider/Core tests plus offline JS/check/Clippy attributed. Same Web reviewer accepts_with_residual finite provider boundary; [review](receipts/W02-provider-review.md). Truthful preparation1a8a602 saved/pushed: consuming prepare_exact from Snapshot/Prepare Request,8 focused tests/Clippy attributed; changed preparation review accepted_with_residual, no findings; actual host/live gates open. Core now has saved API for Prepare/Act composition; Web returns smallest live harness handoff. No synthetic facts accepted for live, no live input yet |
-| [W02-form-read-facts](packets/W02-form-read-facts.md) | retained Web owner | FORMS/B02 and actual F01 action-state-result handoff | user-paused before source edits; docs-only restart handofff0d241e saved/pushed. Selection request/binding/direction mapping and private initializer scope remain proposals/dependency. Resume same bounded packet after explicit activation; no delivered form-read capability claimed |
+| [W02-form-read-facts](packets/W02-form-read-facts.md) | retained Web owner | FORMS/B02 and actual F01 action-state-result handoff | resumed from docs-only restart handofff0d241e; source scope includes narrow private initializer amendment. Selection request/binding/direction mapping and private initializer scope remain proposals/dependency. Resume same bounded packet after explicit activation; no delivered form-read capability claimed |
 | [W02-live-actions](packets/W02-live-actions.md) | retained Web owner | accepted provider/preparation; Core guarded composition in progress | harness25bf999 saved/pushed exact3 after old80b7449 no-run/Clippy. Existing real barrier now saved/released by Core, no duplicate changes. Corrected Corec3967ca accepted;195-input2c037039… pins current. ONE actual headless actions run activated,120s and fixed32/depth8/64KiB/250ms; own loopback context, no desktop input. actual9d3a0a5 saved: all10 outcomes/12checks passed, source-derived Prepare→confirmed Setter→fresh Checkedtrue; readonly/remount/possible-before-delivery cancel and independent state/cleanup verified. No physical/business/delivered-loss/fullB02 claim |
-| [L01-actions-implementation](packets/L01-actions-implementation.md) | retained Core owner | registered CLI-ACTIONS@1/c4bc255 + acceptedc3967ca/real Web9d3a0a5 | user-paused coherent WIP138d7bc saved/pushed exact20; author checks recorded in A01 receipt. Known malformed2/fresh-refusal4 ambiguity, metadata fault cases, source review and actual public CLI proof remain; not accepted |
-| [M03-popup-capture](packets/M03-popup-capture.md) | retained Native owner | own popup physical/AX/lifecycle facts; explicit all-image retention rule | acquisition@2/registry17 registeredaf8a1a4; exact7 writer/popup capture candidate23f22fb saved/pushed, author26writer/78popup checks and17canonical documents. Idle for user restart, no runtime; source review and separately recorded current identity proof pending |
+| [L01-actions-implementation](packets/L01-actions-implementation.md) | retained Core owner | registered CLI-ACTIONS@1/c4bc255 + acceptedc3967ca/real Web9d3a0a5 | resumed coherent WIP138d7bc saved/pushed exact20; author checks recorded in A01 receipt. Known malformed2/fresh-refusal4 ambiguity, metadata fault cases, source review and actual public CLI proof remain; not accepted |
+| [M03-popup-capture](packets/M03-popup-capture.md) | retained Native owner | own popup physical/AX/lifecycle facts; explicit all-image retention rule | acquisition@2/registry17 registeredaf8a1a4; exact7 writer/popup capture candidate23f22fb saved/pushed, author26writer/78popup checks and17canonical documents. Source frozen under retained reviewer; owner preparing saved-input runtime handoff, no UI run yet; separately recorded current identity proof pending |
 | [M03-direct-window](packets/M03-direct-window.md) | retained Native owner | actual unresolved mapper55a4ca81; supported nonvisual NSView.window candidate | source d5fd03f saved/pushed; actual open-popup Snapshot shows visible containing window9437 vs parent9430, equals_parent=false; operation51.7s with finally cleanup confirmed. No collector/capture acceptance; direct facts feed M03 connector, IDs are run-specific |
 | [M03-popup-connector](packets/M03-popup-connector.md) | retained Native owner | actual direct-window evidence; existing source/identity/resource fixes | source21ac1d accepted; actual CLI popup AX validated partial/exit4,5 nodes/exact Surfaces/sourced anchor, inspect compact+JSON0. Full lifecycle hit300.15s watchdog before Confirm/stale/reopen, not accepted; cleanup confirmed/lane released. Cached-file equality does not prove live invariance. Native outcome b4a965e saved, remaining lifecycle-only actual close/stale/no-data/reopen positive passed59.3998s, live CUA AX equal. Separate combined post-current-file assertion unverified; Native inspects exact expression and minimal popup capture connection, no entire-chain repeat. Positive capture/shared-parent remain open |
 | [M03-popup-attribution](packets/M03-popup-attribution.md) | Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a / local | current identity source53e6e6e; existing F02 popup handoff | sourcec8d5287 saved/pushed, 19 focused author checks plus canonical/A controls. Same reviewer accepted repair71c82f47: resource refusal incomplete_scope, missing/stale identity preserved, no partial fallback. Author38 checks/8canonical validations. First own-popup interval interrupted before Snapshot, no mapping/CLI claim; finally cleanup153.39s confirmed. Shortcut a466051f worked in actual fresh run: Snapshot1 with popup still open; actual mapper unresolved/null, identity CLOSED. No CLI/pixels run; finally cleanup141.86s. Native source-only exact owner-attribution diagnostic follows outcome checkpoint. Positive capture remains open, B capture/pointer gaps protected |
