@@ -81,3 +81,18 @@ ready checks. Each coherent step gets scoped checkpoint+push after root Git leas
 with honest partial status. Return changed paths, reuse map, checks/discrepancies,
 saved identity, residuals and resource release. Independent changed-source review
 follows saved work. Do not start live/next packet automatically.
+
+## Observed legacy caller dependency
+
+Native returned three actual callers/build owners outside the original set. Root
+authorizes the directly necessary supporting edits within this same source task:
+tests/bridges/native/sizing.py, tests/bridges/native/capture_lifecycle.py and
+fixtures/native/script/build.sh. Pass the required explicit acquisition limits
+and link the common admission/sink sources. The already-owned Observe.swift
+standalone caller may accept/pass the corresponding mandatory argument.
+
+No measurement meaning, fixture UI, expected outcomes, stimulus, permissions,
+fault semantics or historical evidence may change. No silent legacy defaults or
+second implementation. Compile/syntax and affected pure checks only here; this
+extension does not authorize executing those scripts' live AX/capture lifecycle
+scenarios. Return other actual dependencies before edits, not a broad directory lease.
