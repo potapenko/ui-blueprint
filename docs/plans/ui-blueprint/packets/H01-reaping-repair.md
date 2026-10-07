@@ -75,6 +75,28 @@ Both owners retain existing write sets; only Core's process_api.rs addition open
 Focused affected checks follow the real declaration/provider handoff; checkpoint
 and push are serialized through root. Full H01 and independent R1 acceptance remain open.
 
+## Remaining Core returned-owner path
+
+The [same reviewer](../receipts/H01-core-reaping-review.md) accepts the Native
+mechanism but rejects Core50c0c95 admission: a successful spawn can return an owner
+already latched Lost. A restored current signal policy does not restore that owner.
+Core must check returned ownership before configuration/input dispatch and retain/
+quarantine the child plus reservation/backing on CleanupPending. Do not drop it as
+an ordinary spawn error or signal it to discover whether authority was lost.
+
+This is a demonstrated D02.LIFECYCLE implementation defect, within existing Restore
+authority. Core owns supervisor.rs and the affected runtime/support tests/docs/
+receipt. Preserve stageD9424759's shutdown refusal, existing Native acceptance,
+the four allocator/worker pins and Integration's exclusive test files. Return any
+actually required shared API change before editing it; no new dependency/policy.
+
+Focused regression: returned child remains Lost while current policy validates;
+no configuration/input/readiness success or unsafe wait/kill; reservation remains
+charged/quarantined, while confirmed ordinary cleanup remains correct. Use bounded
+owned peers/wrappers with signal changes only in a disposable test process if needed.
+Save exact affected paths and checks, commit+push through root Git grant, then reuse
+the same reviewer. No repeated user approval or broad Native/proof rerun.
+
 ## Focused proof and checkpoint
 
 Use disposable owned peers to set the incompatible SIGCHLD/SA_NOCLDWAIT state and
