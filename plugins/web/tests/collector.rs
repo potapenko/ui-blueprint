@@ -283,7 +283,11 @@ impl Fixture {
                     "Runtime.callFunctionOn" => {
                         assert_eq!(command["params"]["returnByValue"], !is_selection);
                         assert_eq!(command["params"]["userGesture"], false);
-                        assert_eq!(command["params"]["throwOnSideEffect"], true);
+                        assert_eq!(
+                            command["params"]["throwOnSideEffect"],
+                            is_selection || is_verification,
+                            "only the fixed native reader uses ordinary evaluation"
+                        );
                         if is_selection {
                             initial_ids = serde_json::from_value(
                                 command["params"]["arguments"][0]["value"]["ids"].clone(),

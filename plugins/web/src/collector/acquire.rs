@@ -177,7 +177,11 @@ impl Collector {
                 silent: true,
                 user_gesture: false,
                 await_promise: false,
-                throw_on_side_effect: true,
+                // Chromium 145 marks getClientRects/matches as potentially effectful
+                // for debugger evaluation, despite these being native read APIs.
+                // Only this fixed isolated-world reader uses ordinary evaluation;
+                // arguments remain data and it never invokes application callbacks.
+                throw_on_side_effect: false,
                 arguments: [
                     Argument::Options {
                         value: ReadOptions {

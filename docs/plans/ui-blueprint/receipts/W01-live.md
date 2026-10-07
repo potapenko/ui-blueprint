@@ -154,3 +154,55 @@ Temporary owner: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-malfor
 retain only through immediate proof acceptance. Runtime still uses the same saved
 launcher/frozen F01 files after byte comparison. No G02/latest-integrated claim.
 Fresh run UUID3b3ba49d-d74e-4aa4-b075-35101fe1145a is reserved as a pathname only.
+
+## Actual acquisition site and narrow native-read repair
+
+Changed diagnostic0dee4d7 on provider9b881e6 ran2026-10-07T14:02:16.945Z–14:02:18.528Z
+under UUID3b3ba49d-d74e-4aa4-b075-35101fe1145a. Collect/CollectorMalformed code9
+ReadException: selection/description succeeded; the fixed read-node function returned
+exceptionDetails. committed0/missing1; no canonical frames. Report SHA256
+40edbcf9affc917520acdbf2602498b827a6ea4b338868561f52c39cfe8f9c48.
+Remote Released; worker sessions0/groups0/abandonedfalse, browser survives reap;
+all launcher resources closed. No shared-source hold was acquired or remains.
+
+Build/affected host Clippy PASS from immutable temporary provider9b881e6 plus
+Web0dee4d7: git archive of Cargo.toml, Cargo.lock, rust-toolchain.toml, crates and plugins/web,
+then exact seven owned blobs overlaid.
+Same97-path compact sorted JSON path→SHA256 recipe yielded
+61193d63fdba00d26104c57bc47f8da0bfd9246ebfec669a67528fab1276d1fd before/after.
+Executable deps/web_live-5d88e78afab66360 SHA256
+9e69a00069e2143eb248b904401ae11ba97880ad98c1d75eb15cc5b30689530a; session-worker
+ae776055409ecf9e9416409f29378fc97a2d48d7175bb117c769043dbc9fcc3c.
+Saved launcher/F01 bytes matched checkout. Prior reports remain immutable.
+
+Targeted primary source at Chromium145.0.7632.6 establishes an incompatible
+debugger flag: [element.idl](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/core/dom/element.idl)
+marks getBoundingClientRect Affects=Nothing, while getClientRects and matches are
+unmarked. [binding generator](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/bindings/scripts/bind_gen/interface.py)
+_make_property_entry_v8_side_effect marks unannotated operation groups as
+kHasSideEffect. [element.cc](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/core/dom/element.cc)
+getClientRects/GetClientRectsNoAdjustment reads current layout quads and adjusts
+scroll/zoom; no input, focus, scroll mutation or application callback is requested.
+Source hashes: element.cc8246d1d6996ce777b7f3d557551fe8321954fac953f7e50e3557b311b077c4a6,
+interface.py2fed5eedcce0f1f3796b94f880f42461a5b4b3d7aae01505758086c44dd6cd36.
+No upstream code copied; observed source corroborates the live refusal, while
+the next changed first-case run must establish repair success.
+
+Repair subset: collector/acquire.rs, tests/collector.rs and this receipt. Only
+READ_NODE uses throwOnSideEffect=false; selection and continuity retain true.
+READ_NODE remains the same fixed isolated-world code with native prototypes, data
+arguments, no page callbacks/eval/await/input/mutation. Preserve fragment-presence
+check (no fabricated zero layout), fields/privacy/identity, request limits and
+actual read-only invariance oracle. Peer asserts the per-function guard split.
+No alternate method/backend, scope expansion or cap/oracle change.
+
+Native-read repair checks: focused first-request peer test,24 existing offline JS
+scenarios and affected Web Clippy -D warnings PASS. Live repair proof pending.
+
+The coordinator/Core turns stopped with host model-capacity errors after Core
+committed/pushed53c6f74 and verified an empty index. Its final commands and current
+index were inspected; no active Git mutation remains. This existing Web-owned
+three-path repair is saved under task checkpoint authority, preserving unrelated
+root/Native edits. New repair build temp: uib-web-native-read-zsvz2e40 under the
+same task temporary parent; run UUIDf4276c1c-e3a8-4564-b7ec-52320314b69b remains
+a fresh pathname before runtime. Same provider9b881e6 + saved Web overlays.
