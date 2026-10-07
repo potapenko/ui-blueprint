@@ -489,3 +489,101 @@ Only docs registration now. Required root delta review before source implementat
 no writer/capture/runtime changes, no images/generated evidence or source consumer
 acceptance claimed. Changed links, routing references,100-line leaves and whitespace
 checked. Docs-only checkpoint/push awaits short exact6 Git lease; staging untouched.
+
+
+## Registered acquisition@2 — popup capture source ready for review
+
+Registrationaf8a1a4da11f4de4c6283484e510e94a994cc0c3 saved/pushed, root reviewed
+image-only delta before source; acquisition@2/registry17, common D05@4 unchanged.
+M03-popup-capture source stage, exact7 paths: NativeArtifacts.swift, Collector.swift,
+acquisition/Checks.swift, acquisition/PopupChecks.swift, new acquisition/ArtifactChecks.swift,
+native-helper.md and this receipt. Existing test directory only; no new persistent
+output directory. HostHelper/HostProtocol/Fixture/CaptureLifecycle/Core/Rust/schema/
+CLI/Cargo/Web sources protected and unchanged by Native; concurrent Core WIP untouched.
+
+PNG writer preserves staging/partial on failure/deinit and original staging after
+exclusive final link; descriptors still close. .png names/system-temp output checked
+before writeNativePNG creates a file. Non-image own-partial cleanup preserved.
+No overwrite, failed Finalize/deadline/byte admission or complete publication weakened.
+Source suffix convention is explicit PNG admission, no retention flag/config framework.
+
+Collector.popup channel1 uses exact popup windowID/PID through existing CaptureLifecycle
+.parentOwned, bounded PNG writer and canonical builders. Both current identities/public
+owner checks before/after capture, after encoding and before publication. Identity-only
+failure check does not misclassify capture timeout/cancel as stale. Existing permission,
+timeout, interrupted, target_unresolved, incomplete_scope/stale outcomes retained;
+complete failures pre-reserved before risky work, no partial canonical frame.
+Actual popup alone included; known parent excluded; unresolved established pair empty,
+surface coverage partial, crop transform unknown/audio off. Capture-only nodes/relations
+empty and anchor null; initiated_by has explicit fixture-binding Observation/Evidence.
+No parent pixel substitution or independent AX-window assumption. AX channel keeps
+existing marker/root/anchor path. Probe remains unsupported for this popup collection.
+
+Internal @MainActor platform-call substitution is only for synthetic owner tests,
+alongside existing AX/public-binding substitutions; no helper/CLI/runtime fault flag.
+Focused ArtifactChecks isolates changed writer behavior instead of repeating numeric/
+AX acquisition series. Existing Checks.swift updated retained PNG failure expectation
+and compile-checked, broad suite not run. Initial compiler actor annotation/type spacing
+errors corrected locally before proof; no shared owner/dependency expansion.
+Final writer/ImageIO26 checks passed: same-byte/same-inode retained staging+final,
+PNG byte overflow/failed Finalize/expired writer retained partial without final,
+existing final unchanged, .png/temp admission, actual bounded descriptor release,
+non-image partial cleanup. Popup78 checks/17 canonical documents validated with
+current saved-source Rust validator: exact window/PID dispatch/current identity,
+correct capture/Surface/context/initiated_by/availability, no fabricated AX anchor,
+stale-before-dispatch, permission/timeout/cancel/unresolved, low-output complete failure,
+identity race before PNG and stale after PNG with retained images/no captures payload.
+These are actual owner synthetic CGImage/ImageIO/CF/codec tests, not SDK/UI acceptance.
+
+Affected helper, popup-checks, artifact-checks, updated acquisition-checks and saved
+validator compiled cleanly. Final source5 map digest
+b559eaa2a580028960a0259de635dc962151ad804636520de6cd77ed1de07c78.
+NativeArtifacts19eb8083af3c93dadf315731ca7d9a461682424e3a89ff42d9b37dc8d4406222;
+Collector42df0df6af439cf94d7f9d321e3fd03aad070ea5b181cb64caf69166deffbc9c;
+Checks4de3a02b3bcb00efb57e0bd7a745ebcf2686235ab661a1ce8840f167a2c1a981;
+PopupChecksa5e722876a183ab689a5d3dccd817cdc5607a3ac2d517d83ba2bbc167f862e71;
+ArtifactChecks006dead648c3247b495e60ec93823685fc63dd0326092b1aa6ea43f5c8e87bd5.
+Helperd32615ae3b8c9b5291d756e1f4a027d06a8d9ae9a53c5b49161823ca507d73da;
+popup-checkse37cff2a666a0860141c5bcb3aa1050e59e92aea39b9daeb97577c47cba39767;
+artifact-checksa0f97c336ac5b0ecf88c280f55a6c22a18138df1506bbec83c382455f5d9363c;
+validator7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828.
+
+Synthetic image files retained in system temp, including earlier pre-final tests:
+uib-m03-artifact-images-z6s5kj_s (6 paths), uib-m03-popup-images-yr933k4r (4),
+uib-m03-artifact-final-images-k9wbjakv (7), uib-m03-popup-final-images-tvfdlzgc (6).
+All beneath /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/; containing directories
+also retained, lifecycle operator/OS, no promised cleanup time. Tiny complete synthetic
+PNG shown inline; these are test pixels, not popup runtime evidence. No old assets
+moved/deleted. Consumed non-image responses/identity/setup files and temporary build/
+source/module cache removed individually, absence checked; image paths/containing
+directories excluded from cleanup. No AX/SCK/UI/permission/fixture runtime launched.
+
+Exact7 source checkpoint awaits short Git lease. Changed source requires independent
+root-owned review before actual SDK run; author proof is not independent acceptance.
+Next finite actual AX+capture must separately preserve each pre/post current identity
+value/check (OPEN, expected/new popup generation, parent generation) before finally,
+show attributable retained popup PNG inline, validate real channel responses and reap.
+Earlier combined-assertion gap, shared-parent representation and full M03/P7 remain open.
+
+
+## Restart handoff — user-requested pause after source checkpoint
+
+User requested restart preparation: preserve current work and pause; no new dispatch.
+Root granted short exact7 save only. Source stage is ready with the focused results
+above; no subsequent source edits, independent review or actual SDK/UI run performed.
+Registrationaf8a1a4/acquisition@2/registry17 remains the contract basis. This checkpoint
+saves the existing Native source/docs set on master; acceptance stays pending.
+
+Resume only after explicit root activation. Next dependency is root-owned independent
+review of saved writer/capture/lifecycle/privacy source, then a separately activated
+actual AX+popup capture sequence. Preserve individual pre/post identity values and
+assertions before finally to close the earlier unconfirmed combined assertion; verify
+actual frame attribution/inline retained PNG/canonical channels and exact reap.
+Do not repeat already proved initial inspect or close/stale/reopen facts by default.
+Shared-parent representation and full M03/P7 remain open. No goal-complete claim.
+
+At restart handoff own fixture/helper/worker/check processes absent, Native input lane
+released, temporary non-image build/run roots already removed. All23 image paths and
+containing directories in the four named system-temp roots remain; counts rechecked,
+no image deletion or relocation. Older evidence untouched. Git lease released after
+checkpoint/push outcome is reported in chat; no staging or work until explicit resume.

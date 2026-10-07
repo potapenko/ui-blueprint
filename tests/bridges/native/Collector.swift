@@ -528,7 +528,11 @@ extension Collector {
         publicBinding: (NativeConfiguration.Binding) -> Bool = { binding in
             NSRunningApplication(processIdentifier: binding.pid)?.launchDate?.timeIntervalSince1970 == binding.launch_time
                 && Collector.windowOwnedBy(pid:binding.pid,window:binding.window_id)
-        }, application: (Int32) -> CFTypeRef = { AXUIElementCreateApplication($0) }) async throws -> NativeJSONFrame {
+        }, application: (Int32) -> CFTypeRef = { AXUIElementCreateApplication($0) },
+        capture: @MainActor (UInt32, Int32, Double, NativeAcquisition) async throws -> OwnedCapture = { window, pid, budget, admission in
+            try await CaptureLifecycle.capture(windowID: window, pid: pid, budget: budget,
+                admission: .parentOwned, acquisition: admission)
+        }) async throws -> NativeJSONFrame {
         let config=command.configuration
         guard let parent=config.parent_binding,let parentPath=config.parent_identity_path,
               let artifact=command.document["artifact"] as? [String:Any],let request=artifact["data"] as? [String:Any],
@@ -543,15 +547,57 @@ extension Collector {
         let admission=try NativeAcquisition(config.acquisition_limits,deadline:command.deadline)
         let json=NativeJSON(config.acquisition_limits),frame=try NativeJSONFrame(capacity:command.replyCap,deadline:command.deadline)
         let stale=try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("stale_target",scope:scope,channel:command.channel)}
-        func valid() throws {
-            try admission.check()
+        func validIdentity() throws {
             try NativeCurrentIdentity.verify(path:config.identity_path,expected:config.binding.manifest)
             try NativeCurrentIdentity.verify(path:parentPath,expected:parent.manifest)
             guard publicBinding(parent),publicBinding(config.binding) else{throw NativeAcquisitionError.invalidValue}
         }
+        func valid() throws { try admission.check(); try validIdentity() }
         do{try valid()}catch{try frame.encode(stale);return frame}
-        // Parent isolated capture cannot be called popup pixels. Until the actual
-        // capture consumer is separately qualified, return an explicit channel issue.
+        if command.control.channel == 1 {
+            let failure = try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("incomplete_scope",scope:scope,channel:command.channel)}
+            let unresolved = try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("target_unresolved",scope:scope,channel:command.channel)}
+            let permission = try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("permission_required",scope:scope,channel:command.channel)}
+            let interrupted = try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("interrupted",scope:scope,channel:command.channel)}
+            let timeout = try json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("timeout",scope:scope,channel:command.channel)}
+            do {
+                guard let path = config.artifact_directory, config.pixel_policy == "owned_synthetic_fixture" else { throw NativeAcquisitionError.invalidValue }
+                let root = URL(fileURLWithPath:path,isDirectory:true)
+                let temporaryRoot = FileManager.default.temporaryDirectory.resolvingSymlinksInPath().path
+                let resolvedRoot = root.resolvingSymlinksInPath().path
+                guard resolvedRoot == temporaryRoot || resolvedRoot.hasPrefix(temporaryRoot + "/") else { throw NativeAcquisitionError.invalidValue }
+                let directory = try nativeChannelDirectory(root,channel:"capture")
+                let started = ProcessInfo.processInfo.systemUptime
+                let image = try await capture(config.binding.window_id,config.binding.pid,
+                    min(2,command.deadline-started),admission)
+                try valid()
+                _ = try writeNativePNG(image.image,admission:admission,directory:directory,name:"capture.png")
+                try valid()
+                let oid = "\(requestID)-rendered_capture"
+                var record = try captureRecord(image,surface:popupSurface,observation:oid,payload:"capture/capture.png",json:json)
+                record["excluded_surfaces"] = try json.borrowed([parentSurface])
+                var result = try snapshot(context:context,surface:popupSurface,target:target,scope:scope,fields:fields,
+                    observation:oid,channel:command.channel,started:started,nodes:try json.array{[]},captures:try json.array{[record]},json:json)
+                let bindingObservation = oid + "-binding"
+                var binding = (result["observations"] as! [[String:Any]])[0]
+                binding["id"] = try json.scalar(bindingObservation)
+                binding["source_namespace"] = try json.scalar("macos.fixture.binding")
+                result["observations"] = try json.array{(result["observations"] as! [[String:Any]])+[try json.borrowed(binding)]}
+                result["surface_records"] = try json.array{[try json.object(["identity","native_owner","initiated_by","anchor","evidence"]){
+                    ["identity":try json.borrowed(popupSurface),"native_owner":try json.known("identity",target),
+                     "initiated_by":try json.borrowed(parentSurface),"anchor":try json.scalar(NSNull()),
+                     "evidence":try json.evidence(bindingObservation,"macos.fixture.binding","explicit_fixture_popover_window_binding")]
+                }]}
+                try frame.encode(json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.object(["status","data"]){["status":try json.scalar("observed"),"data":result]}})
+                try valid()
+            } catch {
+                frame.reset()
+                do { try validIdentity() } catch { try frame.encode(stale); return frame }
+                let issue = CaptureLifecycle.issue(error)
+                try frame.encode(issue.code == "permission_required" ? permission : issue.code == "timeout" ? timeout : issue.code == "interrupted" ? interrupted : issue.code == "target_unresolved" ? unresolved : failure)
+            }
+            return frame
+        }
         if command.control.channel != 0 {
             try frame.encode(json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.failure("unsupported",scope:scope,channel:command.channel)})
             return frame

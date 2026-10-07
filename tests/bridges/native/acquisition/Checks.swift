@@ -155,7 +155,8 @@ import Darwin
         expect(try autoreleasepool { try writeNativePNG(image, admission: owner(["png_bytes": pngSize]), directory: exactFolder, name: "capture.png") } == pngSize)
         let rejectedFolder = try folder("rejected")
         refuses { try autoreleasepool { _ = try writeNativePNG(image, admission: owner(["png_bytes": pngSize - 1]), directory: rejectedFolder, name: "capture.png") } }
-        expect(try FileManager.default.contentsOfDirectory(atPath: rejectedFolder.path).isEmpty)
+        expect(try FileManager.default.contentsOfDirectory(atPath: rejectedFolder.path).count == 1)
+        expect(!FileManager.default.fileExists(atPath: rejectedFolder.appendingPathComponent("capture.png").path))
         let oversizedFolder = try folder("oversized-return")
         refuses { _ = try writeNativePNG(image, admission: owner(["image_width": 2]), directory: oversizedFolder, name: "capture.png") }
         expect(try FileManager.default.contentsOfDirectory(atPath: oversizedFolder.path).isEmpty)

@@ -492,13 +492,48 @@ no name/geometry/first-match fallback or unrelated-window content.
 Actual SDK AX window/marker binding failure yields target_unresolved, closed/mismatched
 current identities yield stale_target. Coverage remains partial; every requested
 property retains known/unknown/unsupported states. Global focus/transform/layout gaps
-are not inferred. Popup capture consumer is not connected in this first source slice:
-it returns explicit unsupported rather than substituting parent isolated pixels.
-That exact remaining Native capture connection can reuse current CaptureLifecycle
-only after attributable popup-window live proof; no new backend is needed.
+are not inferred. Popup channel1 now uses the existing CaptureLifecycle with the exact
+current popup windowID/PID and parent-owned capture lease. Both current records/public
+bindings are verified before/after capture, PNG encoding and canonical publication.
+Capture-only returns no AX nodes/anchor; explicit fixture metadata sources initiated_by.
+Included Surface is popup, known parent is excluded, unresolved pair is empty; overall
+coverage remains partial, crop transform unknown and audio off. Parent pixels are
+never substituted. Source connection is not actual SDK/positive M03 acceptance.
 
 Next finite setup is own F02 A Edge popup→explicit Snapshot, using the reported
 popup_binding only if status bound; actual CLI connection names popup/parent surfaces
 and exact identity paths. Observe/inspect popup and trigger; then close via existing
 Confirm and require old popup binding refusal, reopen/new Snapshot/new binding positive.
 No B capture, source-app permission changes or stale-generation repair in place.
+
+
+## PNG image ownership — Native acquisition@2
+
+Explicit user direction retains every system-temp image staging/partial/final path
+and its containing directory on success/failure/stale/helper death. PNG writer requires
+.png destination and system-temp image directory; exclusive completed link keeps the
+original staging name. Failed Finalize/byte cap never produces an advertised final.
+Descriptors close and helpers reap normally; non-image sidecars retain own-partial
+cleanup. No retention flag, permission expansion or persistence directory is added.
+Use separate task-temp image and non-image build/input destinations, and exclude all
+image partials and containing directories from cleanup. Do not recursively remove
+an operation root containing images. Synthetic test images also remain.
+
+Focused writer check (real tiny CGImage/ImageIO, no AX/SCK): compile NativeAcquisition,
+NativeJSON, NativeArtifacts and tests/bridges/native/acquisition/ArtifactChecks.swift;
+run its binary with the existing profile.json and a new0700 system-temp image directory.
+It checks retained same-inode staging/final, overflow/failed Finalize without final,
+no overwrite, system-temp/name admission, descriptor release and non-image cleanup.
+The updated monolithic Checks.swift PNG failure expectation remains compile-checked;
+unchanged numeric/AX series need not be rerun for this source delta.
+
+PopupChecks substitutes only the existing platform capture call inside the actual
+Collector.popup path, alongside existing AX/public-binding test substitutions. It
+checks exact window/PID dispatch, canonical capture/context/provenance/coverage,
+stale-before-dispatch, identity race, permission/timeout/cancel/unresolved and low
+output refusal. Test substitution is not exposed through helper config/runtime flags.
+Compile with existing HOST_HELPER/CAPTURE_LIBRARY/IDENTITY_TEST source selection and
+validate every returned canonical document with the current saved-source Rust validator.
+Actual capture remains separately activated after source review: one fresh own popup
+AX+capture Observe with separate before/after OPEN/generation/parent identity values,
+inline retained PNG and exact worker/helper/fixture cleanup under fixed budgets.

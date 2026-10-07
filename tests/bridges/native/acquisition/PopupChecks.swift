@@ -1,5 +1,6 @@
 import Foundation
 import ApplicationServices
+import CoreGraphics
 import Darwin
 
 @main struct PopupChecks {
@@ -18,24 +19,25 @@ import Darwin
         let parentGen=try parent.snapshot(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:456)
         var popupGen=try popup.snapshot(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:789)
         func binding(window:Int,key:String,generation:String)->[String:Any]{["pid":123,"bundle_id":"local.uiblueprint.f02.off","launch_time":100.0,"window_id":window,"window_identifier":key,"target_generation":"123:100.0","surface_generation":generation]}
-        func config(_ generation:String, budgets:[String:Int]=[:])throws->NativeConfiguration{
+        func config(_ generation:String, budgets:[String:Int]=[:], artifact:String?=nil)throws->NativeConfiguration{
             let admitted=(profile as! [String:Int]).merging(budgets,uniquingKeysWith:{_,b in b})
-            let data:[String:Any]=["binding":binding(window:789,key:"popup-a",generation:generation),"parent_binding":binding(window:456,key:"a",generation:parentGen),
+            var data:[String:Any]=["binding":binding(window:789,key:"popup-a",generation:generation),"parent_binding":binding(window:456,key:"a",generation:parentGen),
                 "identity_path":dir.appendingPathComponent("popup-a-identity.json").path,"parent_identity_path":dir.appendingPathComponent("a-identity.json").path,
                 "scope_id":"popup-scope","collection":"popup-ax","acquisition_limits":admitted]
+            if let artifact { data["artifact_directory"]=artifact; data["pixel_policy"]="owned_synthetic_fixture" }
             let bytes=try JSONSerialization.data(withJSONObject:data);expect(bytes.count<=4032);return try NativeConfiguration.decode(bytes)
         }
         let fields=["role","accessibility_name","placeholder","focused","enabled"]
-        func command(_ generation:String,budgets:[String:Int]=[:],cap:Int=524288)throws->NativeCommand{
+        func command(_ generation:String,budgets:[String:Int]=[:],cap:Int=524288,channel:UInt8=0,artifact:String?=nil)throws->NativeCommand{
             let context:[String:Any]=["schema_version":"0.1.0","session_id":"popup-session","target":["id":"f02-pid-123","generation":"123:100.0"],
                 "surfaces":[["id":"window-789","generation":generation],["id":"window-456","generation":parentGen]],"scope_id":"popup-scope","projection":"interaction","fields":fields,
                 "plugin":["id":"macos","version":"0.1.0"],"environment_revision":"e1"]
             let req:[String:Any]=["clock_domain":"worker-clock","request_id":"popup-request","context":context,
                 "limits":["max_elements":160,"max_depth":9,"max_output_bytes":524288,"deadline_ms":1000],"freshness_policy":"current_required",
-                "operation":["operation":"observe","channels":["external_semantics"]]]
-            var header=Data(repeating:0,count:64);header.replaceSubrange(0..<8,with:Data("UIBHST01".utf8));header[8]=3;header[9]=8
+                "operation":["operation":"observe","channels":[channel==1 ? "rendered_capture":"external_semantics"]]]
+            var header=Data(repeating:0,count:64);header.replaceSubrange(0..<8,with:Data("UIBHST01".utf8));header[8]=3;header[9]=8;header[10]=channel
             for (offset,value) in [(16,UInt64(1)),(24,1),(32,1),(40,1),(48,1000)]{for i in 0..<8{header[offset+i]=UInt8(truncatingIfNeeded:value>>(i*8))}}
-            return NativeCommand(configuration:try config(generation,budgets:budgets),document:["schema_version":"0.1.0","artifact":["kind":"request","data":req]],control:try NativeControl(header),replyCap:cap,deadline:ProcessInfo.processInfo.systemUptime+5)
+            return NativeCommand(configuration:try config(generation,budgets:budgets,artifact:artifact),document:["schema_version":"0.1.0","artifact":["kind":"request","data":req]],control:try NativeControl(header),replyCap:cap,deadline:ProcessInfo.processInfo.systemUptime+5)
         }
         let ids=[1:"a",2:"popup-a",3:"f02.popup",4:"f02.popup.owner.a",5:"f02.popup.confirm"]
         let children=[0:[1],1:[3,2],2:[4,5],3:[],4:[],5:[]]
@@ -134,6 +136,74 @@ import Darwin
             expected:binding(window:457,key:"b",generation:aGeneration));checks+=1
         let wrong=try await Collector.popup(command:command("wrong-generation"),access:access,publicBinding:{_ in true},application:{_ in NSNumber(value:0)})
         let wrongData=wrong.bytes{Data($0)};expect(((((try JSONSerialization.jsonObject(with:wrongData) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])["status"] as? String=="failed")
+        // Existing public capture call is substituted only inside this synthetic
+        // owner check. No helper configuration, runtime flag or backend is added.
+        let raw=Data(repeating:128,count:24)
+        let image=CGImage(width:3,height:2,bitsPerComponent:8,bitsPerPixel:32,bytesPerRow:12,
+            space:CGColorSpaceCreateDeviceRGB(),bitmapInfo:CGBitmapInfo(rawValue:CGImageAlphaInfo.premultipliedFirst.rawValue).union(.byteOrder32Little),
+            provider:CGDataProvider(data:raw as CFData)!,decode:nil,shouldInterpolate:false,intent:.defaultIntent)!
+        let captured=OwnedCapture(image:image,windowFrame:CGRect(x:0,y:0,width:3,height:2),filterRect:CGRect(x:0,y:0,width:3,height:2),scale:1,admissionWait:0)
+        var captureCalls=0
+        func runCapture(_ name:String,generation:String?=nil,cap:Int=524288,
+            provider: @MainActor (UInt32,Int32,Double,NativeAcquisition) async throws->OwnedCapture)async throws->[String:Any]{
+            let frame=try await Collector.popup(command:command(generation ?? popupGen,cap:cap,channel:1,artifact:dir.appendingPathComponent("images-"+name).path),
+                access:access,publicBinding:{b in [456,789].contains(b.window_id)},application:{_ in NSNumber(value:0)},capture:provider)
+            let bytes=frame.bytes{Data($0)}
+            try bytes.write(to:out.appendingPathComponent(name+".json"),options:.withoutOverwriting)
+            return (((try JSONSerialization.jsonObject(with:bytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any]
+        }
+        let pixelResult=try await runCapture("popup_capture"){window,pid,budget,admission in
+            expect(window==789 && pid==123 && budget>0 && budget<=2);captureCalls+=1;return captured
+        }
+        expect(pixelResult["status"] as? String=="observed")
+        let pixelSnapshot=pixelResult["data"] as! [String:Any],pixelRecord=(pixelSnapshot["captures"] as! [[String:Any]])[0]
+        let pixelContext=pixelSnapshot["context"] as! [String:Any],pixelSurfaces=pixelContext["surfaces"] as! [[String:Any]]
+        expect((pixelRecord["capture_target"] as! NSDictionary).isEqual(pixelSurfaces[0]))
+        expect((pixelRecord["included_surfaces"] as! NSArray).isEqual([pixelSurfaces[0]]))
+        expect((pixelRecord["excluded_surfaces"] as! NSArray).isEqual([pixelSurfaces[1]]))
+        expect((pixelRecord["unresolved_surfaces"] as! [Any]).isEmpty && pixelRecord["surface_coverage"] as? String=="partial")
+        expect(pixelRecord["capture_kind"] as? String=="window_isolated" && pixelRecord["captures_audio"] as? Bool==false)
+        expect((pixelRecord["crop_transform"] as! [String:Any])["status"] as? String=="unknown")
+        expect((pixelSnapshot["nodes"] as! [Any]).isEmpty && (pixelSnapshot["relations"] as! [Any]).isEmpty)
+        expect((pixelSnapshot["surface_records"] as! [[String:Any]])[0]["anchor"] is NSNull)
+        let retained=dir.appendingPathComponent("images-popup_capture/capture")
+        expect(try FileManager.default.contentsOfDirectory(atPath:retained.path).count==2)
+        try NativeCurrentIdentity.verify(path:dir.appendingPathComponent("popup-a-identity.json").path,
+            expected:binding(window:789,key:"popup-a",generation:popupGen));checks+=1
+        let stalePixel=try await runCapture("capture_stale",generation:"old-generation"){_,_,_,_ in captureCalls+=1;return captured}
+        expect((stalePixel["data"] as! [String:Any])["code"] as? String=="stale_target" && captureCalls==1)
+        for (name,error,code) in [("capture_permission",OwnedCaptureError.permissionRequired,"permission_required"),
+            ("capture_timeout",OwnedCaptureError.timeout("screenshot"),"timeout"),("capture_cancelled",OwnedCaptureError.cancelled,"interrupted"),("capture_unresolved",OwnedCaptureError.targetUnresolved,"target_unresolved")]{
+            let failed=try await runCapture(name){_,_,_,_ in throw error}
+            expect(failed["status"] as? String=="failed" && (failed["data"] as! [String:Any])["code"] as? String==code)
+        }
+        let limited=try await runCapture("capture_low_output",cap:512){_,_,_,_ in captured}
+        expect(limited["status"] as? String=="failed" && (limited["data"] as! [String:Any])["code"] as? String=="incomplete_scope")
+        var publicationChecks=0
+        let publicationRoot=dir.appendingPathComponent("images-capture_publication_race")
+        let publicationFrame=try await Collector.popup(command:command(popupGen,channel:1,artifact:publicationRoot.path),access:access,
+            publicBinding:{b in
+                if b.window_id==789 {
+                    publicationChecks+=1
+                    if publicationChecks==3 {
+                        try! popup.close(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:789)
+                        return false
+                    }
+                }
+                return [456,789].contains(b.window_id)
+            },application:{_ in NSNumber(value:0)},capture:{_,_,_,_ in captured})
+        let publicationBytes=publicationFrame.bytes{Data($0)}
+        let publicationResult=((((try JSONSerialization.jsonObject(with:publicationBytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
+        expect(publicationResult["status"] as? String=="failed" && (publicationResult["data"] as! [String:Any])["code"] as? String=="stale_target")
+        expect(try FileManager.default.contentsOfDirectory(atPath:publicationRoot.appendingPathComponent("capture").path).count==2)
+        expect((publicationResult["data"] as! [String:Any])["captures"]==nil)
+        try publicationBytes.write(to:out.appendingPathComponent("capture_publication_race.json"),options:.withoutOverwriting)
+        popupGen=try popup.snapshot(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:789)
+        let raced=try await runCapture("capture_identity_race"){_,_,_,_ in
+            try popup.close(pid:123,bundle:"local.uiblueprint.f02.off",launch:100,window:789);return captured
+        }
+        expect(raced["status"] as? String=="failed" && (raced["data"] as! [String:Any])["code"] as? String=="stale_target")
+        expect(!FileManager.default.fileExists(atPath:dir.appendingPathComponent("images-capture_identity_race/capture/capture.png").path))
         print("{\"checks\":\(checks),\"actual_popup_collector_owner\":true,\"live_sdk\":false}")
     }
 }

@@ -41,7 +41,7 @@ final class NativeArtifactWriter: @unchecked Sendable {
     }
     deinit {
         if file >= 0 { close(file) }
-        if !promoted { unlinkat(directory, temporary, 0) }
+        if !promoted && !destination.hasSuffix(".png") { unlinkat(directory, temporary, 0) }
         close(directory)
     }
     func put(_ bytes: UnsafeRawPointer, count: Int) -> Int {
@@ -80,10 +80,12 @@ final class NativeArtifactWriter: @unchecked Sendable {
         // linkat fails if destination exists. Unlike rename(), it cannot replace
         // a pre-existing user's file or symlink in a racing destination.
         guard linkat(directory, temporary, directory, destination, 0) == 0 else { throw NativeAcquisitionError.io }
-        guard unlinkat(directory, temporary, 0) == 0 else {
+        guard destination.hasSuffix(".png") || unlinkat(directory, temporary, 0) == 0 else {
             // Published link is ours; do not remove an unrelated destination.
             throw NativeAcquisitionError.io
         }
+        // Image staging/final names both remain, including partials on failure.
+        // Non-image sidecars keep their existing own-partial cleanup.
         promoted = true
         close(file); file = -1
         return written
@@ -91,6 +93,10 @@ final class NativeArtifactWriter: @unchecked Sendable {
 }
 
 func writeNativePNG(_ image: CGImage, admission: NativeAcquisition, directory: URL, name: String) throws -> Int {
+    let imageDirectory = directory.resolvingSymlinksInPath().path
+    let temporaryRoot = FileManager.default.temporaryDirectory.resolvingSymlinksInPath().path
+    guard name.hasSuffix(".png"), imageDirectory == temporaryRoot || imageDirectory.hasPrefix(temporaryRoot + "/")
+    else { throw NativeAcquisitionError.invalidValue }
     try admission.imageFootprint(width: image.width, height: image.height, rowBytes: image.bytesPerRow)
     guard image.bitsPerComponent == 8, image.bitsPerPixel == 32,
           image.colorSpace?.model == .rgb else { throw NativeAcquisitionError.invalidValue }
