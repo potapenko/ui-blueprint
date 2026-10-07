@@ -712,3 +712,26 @@ checkpoint. Web-owned files in that compile set are already savedd9de0a6.
 
 Current main worker pin `4e03cf9f6ff4675a8c0e526a6f65aff388c16d6468e70c798931af243dc6814c`;
 worker_ops remains45ae90c8…fc2bb, worker_io9700bfa and allocator2f1bf278 unchanged.
+
+## Native post-ACK cancel/deadline and late-reply proof
+
+After Integration released the fixed Replay window, Core connected its prepared
+native_deadline.rs. No production/protocol/allocator source changed from c0abcff.
+The finite test uses actual owned worker/helpers and a transparent Darwin wrapper
+which withholds the capture output until parent terminalization. It models reply
+delay, not a measured SDK stall. AX is actually validated and ACKed first.
+
+Both fixed cases pass: explicit cancel and the declared500ms Request deadline
+(stricter than the outer5s bound). Each returns the original AX bytes, capture missing,
+and the correct Cancelled/TimedOut terminal. Releasing the delayed output afterwards
+produces no second completion or late success; all owned helpers/worker are reaped
+and the session reservation releases. No native UI, capture or SDK work ran.
+
+Commands passed: cargo test --locked -p uiblueprint-host --test runtime
+native_deadline::capture_delay_cancel_or_deadline_preserves_ax_and_discards_late_reply
+-- --exact; cargo clippy --locked -p uiblueprint-host --test runtime -- -D warnings;
+scoped rustfmt/diff check. One test intentionally exercises both terminal variants.
+Existing broad suites are not repeated for this proof-only addition.
+Exact3 checkpoint paths: crates/host/tests/runtime.rs,
+crates/host/tests/support/native_deadline.rs and this receipt. Native's c0abcff protocol
+and Web/Integration ownership remain protected. Full provider/live acceptance stays open.

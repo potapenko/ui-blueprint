@@ -225,3 +225,6 @@ mod fatal_race;
 
 #[path = "support/native_host.rs"]
 mod native;
+
+#[path = "support/native_deadline.rs"]
+mod native_deadline;
