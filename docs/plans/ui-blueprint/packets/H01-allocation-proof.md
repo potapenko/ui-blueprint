@@ -173,3 +173,27 @@ success is recorded honestly and does not prove the expected Replay failure.
 Write only hostile_worker.rs and this packet's receipt, prepare commands before
 requesting a short saved-provider barrier. Validation inside from_json still shares
 Decode marking; this case does not claim to solve that separate attribution gap.
+
+## Next fixed rejection-allocation case
+
+Replay proof is saved in1595a877 and reconciled by H01-producer-review419b75c.
+Within the original step4, Integration now returns this concrete source path:
+SliceRead borrows an unescaped unknown top-level key; deny_unknown_fields calls
+unknown_field; serde_json Error::custom materializes msg.to_string(). This is
+source evidence for a rejection-message allocation, not a new product rule.
+
+Root selects that proposed bounded next case: one unescaped1MiB unknown key,
+ordinary quota3MiB, an earlier ACKed normal query on the same actual worker.
+Keep the existing input/publication limits and real fatal read-through observer.
+Predeclare these inputs before the first run; no cap sweep or post-failure tuning.
+Expected evidence is actual guarded quota refusal on the identified rejection
+path, intact prior canonical bytes and confirmed reap. Decode remains the private
+marker, so this cannot establish semantic-validation-phase allocation failure.
+An earlier prerequisite failure or ordinary invalid-input result is recorded as
+observed and does not become the expected proof. Do not claim an exact failing
+allocation site from the phase marker alone; reconcile it with the source path.
+
+Same owned hostile_worker.rs/receipt only; no production seam/parser/API edits.
+Prepare one exact command, request a short current saved-provider ACK, compare
+actual before/after inputs, execute only the ready case/affected checks, release
+immediately and checkpoint+push. No UI/SDK/broad hostile run or unchanged suite.
