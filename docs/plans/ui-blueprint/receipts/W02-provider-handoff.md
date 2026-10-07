@@ -210,3 +210,62 @@ real bounded publication, then handle pending invalidation after provider borrow
 ends. Host gate/nonce/cancel/ACK bridge and protected review precede live action.
 Fixture9bd9f66 is ready but not served or executed. No real PlayPhrase.me, new
 selector framework, pointer/business outcome, full B02 or live acceptance claimed.
+
+## Truthful initial read-only preparation
+
+Root confirmed bootstrap gap after728fa5b: kernel.prepare and provider.resolve_exact
+required an already-valid Resolution, while ordinary Observe did not supply one.
+Core selected EXISTING canonical Request::Prepare as input; its declaration can
+contain unknown writable/value_allowed/intent capability. No synthetic true facts
+are used as live input. Host carrier is Core-owned Tape(Snapshot, Prepare Request);
+no schema/kernel relaxation or new graph was introduced by Web.
+
+Exact3changed paths: collector/action.rs, existing tests/collector.rs and this
+receipt. Public consuming method now compiles:
+`CheckboxProvider::prepare_exact(self, &Snapshot, &Request, &ClockReading, remaining_ms)
+-> Result<ActionCase, Issue>`. Constructor still takes Collector and explicit
+Request Limits. Only Prepare/SetChecked/Setter with required-enabled constraint
+is supported. Request/action/Snapshot contexts and authorized scope must agree,
+request limits match constructor limits, and request clock matches actual supplied
+clock/collector. Original ref must belong to that validated observed Snapshot and
+its source/target/surface/session; missing/stale/private input refuses before IO.
+These are input identity checks, not capability assertions.
+
+Both initial preparation and later resolve_exact reuse ONE private native probe,
+existing normalization and actual capability checks. No placeholder Resolution is
+constructed: the new ActionCase is built only after fresh probe success, with actual
+Snapshot/Observation Evidence, exact-ref refresh, unique-match and native Setter
+capabilities. Full canonical ActionCase validation and existing bounded serializer
+run before return. Caller intent/modality/id remain as requested; unknown initial
+capability declarations are replaced only by the source-derived result.
+
+Preparation accepts no DeliveryPermit/gate and has no setter path. It explicitly
+releases its own remote group before returning and consumes its provider owner.
+Create a NEW provider for kernel dispatch, so fresh resolution repeats before the
+real parent permit. No prepared capability is mutation authority or permanent
+freshness. Core must pass actual remaining operation deadline through both phases
+without resetting the parent budget, and consume pending invalidation after the
+provider borrow ends on success/failure. Existing already-prepared ActionCase+Act
+path remains compatible and validates strictly.
+
+Focused proof: three new preparation tests PASS. Ordinary synthetic observed
+Snapshot/ref plus Prepare request has unknown capability and fails validate_action
+until the actual provider peer read; preparation then validates with zero writes,
+no pending mutation and confirmed group release. Subsequent actual Core lifecycle
+re-resolves to another fresh before Snapshot and performs exactly one test delivery.
+Current disabled/custom/mixed/missing setter/stale/private and cleanup failure
+return no prepared case/no writes; missing ref/stale provenance/private input or
+changed scope/modality refuses without source calls. These remain source/peer facts,
+not live UI evidence. Five existing provider tests also PASS after shared-probe
+refactor; eight checkbox_ tests total. Affected Web Clippy -D warnings PASS. Fixed
+JS bodies were not changed and their prior accepted offline checks were not rerun.
+
+Saved base728fa5b (including Coreffe1166 API/hash08a271f3 above) plus only two
+candidate source/test overlays exported into current system temp
+uib-checkbox-prepare-b93v5r6t.367input fingerprint
+13820bcc2e073b9892315bae5458e4c28b49d468dcea5ee3e2a0b30df7324e16
+matched after checks; current source/test bytes equal compiled inputs. Temp had
+no image files, was removed after use, and absence verified. No images generated/
+deleted, older evidence untouched. No host/Cargo/schema/fixture/runtime changes.
+Actual preparation host dispatch, effect composition/review and real checkbox
+qualification remain separate; Core has the compiling method signature.

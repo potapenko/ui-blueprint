@@ -2226,7 +2226,11 @@ fn checkbox_peer(mode: u8) -> (Fixture, Arc<std::sync::atomic::AtomicUsize>) {
     let writes = Arc::new(std::sync::atomic::AtomicUsize::new(0));
     let count = writes.clone();
     let mut checked = false;
+    let mut probed = false;
     let fixture = Fixture::new(move |method, command, _| {
+        if mode == 12 && method == "Runtime.releaseObjectGroup" && probed {
+            return Some(json!({"error":{"code":-32000,"message":CANARY}}));
+        }
         if mode == 11 && method == "Page.getFrameTree" && count.load(Ordering::Acquire) > 0 {
             return Some(
                 json!({"frameTree":{"frame":{"id":"frame","loaderId":"changed-after-delivery"}}}),
@@ -2239,6 +2243,7 @@ fn checkbox_peer(mode: u8) -> (Fixture, Arc<std::sync::atomic::AtomicUsize>) {
             .as_str()
             .unwrap_or("");
         if function.starts_with("function checkboxState(") {
+            probed = true;
             assert_eq!(command["params"]["objectId"], "node-11");
             return Some(json!({"result":{"type":"object","value":{
                 "connected":mode!=5,"sameDocument":true,"nativeCheckbox":mode!=2,"sensitive":mode==10,
@@ -2477,4 +2482,214 @@ fn checkbox_provider_preserves_resource_refusal_before_gate() {
     assert_eq!(fixture.methods().len(), before);
     drop(c);
     fixture.finish();
+}
+
+fn checkbox_prepare_request(c: &mut Collector) -> (Snapshot, Request) {
+    let mut docs = Vec::new();
+    let observed_request = request();
+    c.observe(&observed_request, &scope(&[11]), 41, op().deadline, |d| {
+        docs.push(d);
+        Publication::Acknowledged
+    })
+    .unwrap();
+    let snapshot = snapshot(&docs[0]).clone();
+    let node = snapshot
+        .nodes
+        .iter()
+        .find(|n| n.key.namespace.0 == "web.dom")
+        .unwrap();
+    let Property::Requested { evidence, .. } = node
+        .properties
+        .iter()
+        .find(|p| p.field() == Field::Enabled)
+        .unwrap()
+    else {
+        unreachable!()
+    };
+    let unknown = Availability::Unknown {
+        reason: id("not_prepared"),
+    };
+    let action = Action {
+        id: id("prepare-checkbox"),
+        context: snapshot.context.clone(),
+        backend_ref: BackendRef {
+            session_id: snapshot.context.session_id.clone(),
+            key: node.key.clone(),
+            snapshot_id: snapshot.id.clone(),
+            observation_id: evidence.observation_id.clone(),
+            target: snapshot.context.target.clone(),
+            surface: node.surface.clone(),
+        },
+        intent: Intent::SetChecked { value: true },
+        modality: InputModality::Setter,
+        input_space: None,
+        required_enabled: true,
+        authorized_scope: snapshot.context.scope_id.clone(),
+        unique_match: false,
+        resolution: Resolution {
+            evidence: evidence.clone(),
+            writable: unknown.clone(),
+            value_allowed: unknown,
+            available_intents: vec![],
+        },
+    };
+    let requested = Request {
+        request_id: id("prepare-request"),
+        clock_domain: id("worker-clock"),
+        context: snapshot.context.clone(),
+        limits: observed_request.limits,
+        freshness_policy: FreshnessPolicy::CurrentRequired,
+        operation: Operation::Prepare { action },
+    };
+    validation::validate_request(&requested).unwrap();
+    let Operation::Prepare { action } = &requested.operation else {
+        unreachable!()
+    };
+    assert!(
+        validation::validate_action(&snapshot, action).is_err(),
+        "input deliberately contains no capability proof"
+    );
+    (snapshot, requested)
+}
+#[test]
+fn checkbox_preparation_produces_real_resolution_without_permit_or_setter_then_resolves_again() {
+    use uiblueprint_plugin_api::actions::*;
+    let (fixture, writes) = checkbox_peer(0);
+    let mut c = fixture.attach(limits());
+    let (snapshot, request) = checkbox_prepare_request(&mut c);
+    let before = snapshot.clone();
+    let now = uiblueprint_plugin_api::ClockReading {
+        domain: id("worker-clock"),
+        milliseconds: 1,
+    };
+    let case = collector::CheckboxProvider::new(&mut c, request.limits.clone())
+        .prepare_exact(&snapshot, &request, &now, 1500)
+        .unwrap();
+    assert_eq!(snapshot, before);
+    assert_eq!(writes.load(Ordering::Acquire), 0);
+    assert!(!c.pending_invalidation());
+    assert_ne!(case.snapshot.id, snapshot.id);
+    validation::validate_action(&case.snapshot, &case.action).unwrap();
+    assert!(case.action.unique_match);
+    assert_eq!(
+        case.action.resolution.evidence.method.0,
+        "native-checkbox-setter-capability"
+    );
+    assert_eq!(
+        case.action.resolution.evidence.observation_id,
+        case.action.backend_ref.observation_id
+    );
+    assert_eq!(
+        fixture.methods().last().map(String::as_str),
+        Some("Runtime.releaseObjectGroup")
+    );
+    let prepared_id = case.snapshot.id.clone();
+    let mut control = ActionClock {
+        tick: 1,
+        cancelled: false,
+    };
+    let start = ActionControl::now(&mut control);
+    let mut gate = ActionGate::default();
+    let mut execution =
+        SetCheckedExecution::prepare(case, id("transition"), id("step"), start, 1400).unwrap();
+    {
+        let mut provider = collector::CheckboxProvider::new(&mut c, request.limits);
+        assert_eq!(
+            execution
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap(),
+            DeliveryStatus::Confirmed
+        );
+        assert_eq!(
+            execution.verify(&mut provider, &mut control).unwrap(),
+            CheckStatus::Pass
+        );
+    }
+    let transition = execution.finish().unwrap();
+    assert_ne!(
+        transition.before.id, prepared_id,
+        "dispatch repeats native resolution"
+    );
+    assert_eq!(gate.calls, 1);
+    assert_eq!(writes.load(Ordering::Acquire), 1);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn checkbox_preparation_refuses_current_capability_or_cleanup_failure_without_effect() {
+    for mode in [1, 2, 3, 4, 5, 10, 12] {
+        let (fixture, writes) = checkbox_peer(mode);
+        let mut c = fixture.attach(limits());
+        let (snapshot, request) = checkbox_prepare_request(&mut c);
+        let result = collector::CheckboxProvider::new(&mut c, request.limits.clone())
+            .prepare_exact(
+                &snapshot,
+                &request,
+                &uiblueprint_plugin_api::ClockReading {
+                    domain: id("worker-clock"),
+                    milliseconds: 1,
+                },
+                1500,
+            );
+        assert!(result.is_err());
+        assert_eq!(writes.load(Ordering::Acquire), 0);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn checkbox_preparation_rejects_missing_stale_private_or_changed_request_before_source() {
+    for mode in 0..6 {
+        let (fixture, writes) = checkbox_peer(0);
+        let mut c = fixture.attach(limits());
+        let (mut snapshot, mut request) = checkbox_prepare_request(&mut c);
+        let Operation::Prepare { action } = &mut request.operation else {
+            unreachable!()
+        };
+        match mode {
+            0 => action.backend_ref.key.key = id("missing"),
+            1 => action.backend_ref.snapshot_id = id("stale"),
+            2 => action.backend_ref.surface.generation = id("stale"),
+            3 => action.modality = InputModality::Pointer,
+            4 => request.context.scope_id = id("wrong"),
+            _ => {
+                let node = snapshot
+                    .nodes
+                    .iter_mut()
+                    .find(|n| n.key.namespace.0 == "web.dom")
+                    .unwrap();
+                let property = node
+                    .properties
+                    .iter_mut()
+                    .find(|p| p.field() == Field::Value)
+                    .unwrap();
+                let Property::Requested {
+                    sensitivity, state, ..
+                } = property
+                else {
+                    unreachable!()
+                };
+                *sensitivity = Sensitivity::Sensitive;
+                *state = Availability::Redacted {};
+            }
+        }
+        let calls = fixture.methods().len();
+        assert!(
+            collector::CheckboxProvider::new(&mut c, request.limits.clone())
+                .prepare_exact(
+                    &snapshot,
+                    &request,
+                    &uiblueprint_plugin_api::ClockReading {
+                        domain: id("worker-clock"),
+                        milliseconds: 1
+                    },
+                    1500
+                )
+                .is_err()
+        );
+        assert_eq!(fixture.methods().len(), calls);
+        assert_eq!(writes.load(Ordering::Acquire), 0);
+        drop(c);
+        fixture.finish();
+    }
 }
