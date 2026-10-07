@@ -4,6 +4,7 @@
 pub mod analysis;
 mod arithmetic;
 pub mod cache;
+pub mod diff;
 pub mod replay;
 mod resolve;
 pub mod scope;
