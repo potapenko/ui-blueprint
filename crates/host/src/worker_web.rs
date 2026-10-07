@@ -214,11 +214,17 @@ impl WebSession {
                     return Err(HostError::ResourceLimit);
                 }
                 stage = Stage::Receive;
-                run.receive_channel(&encoded.bytes[..encoded.used], channel)?;
+                let incomplete = run.receive_channel(&encoded.bytes[..encoded.used], channel)?;
                 stage = Stage::Publish;
                 {
                     let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
-                    worker_main::publish(io, control, slot, &encoded.bytes[..encoded.used])?;
+                    worker_main::publish(
+                        io,
+                        control,
+                        slot,
+                        &encoded.bytes[..encoded.used],
+                        incomplete,
+                    )?;
                 }
                 total = new_total;
                 Ok(())
