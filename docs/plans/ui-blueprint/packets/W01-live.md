@@ -95,3 +95,28 @@ lease. Return source/build handoff, compile result, inputs, readiness dependenci
 and exact proof scope; no live claim before activation. Stop at preparation-ready
 while runtime gate remains open. Independent source/evidence review and actual
 positive platform/D06 acceptance remain separate; do not start another packet.
+
+## Minimum durable live evidence
+
+Before activation, include the minimal sink in the same four owned files. Runtime
+will create a fresh exclusive run directory under
+/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/W01-guarded-live/.
+Root owns retention through P7 acceptance or an explicit discard/replacement
+decision; immediate consumers are W01 review and later G02/P7 canonical-data reuse.
+Return the concrete UUID path in the activation-ready handoff. No writes there
+occur during preparation; no existing directory or file may be overwritten.
+
+Persist only a compact report with source/build/fixture identities, fixed limits,
+actual environment, case outcomes/invariance and cleanup, plus the three bounded
+canonical success frames for initial-left and sized-before/after. Save unchanged
+validated bytes under fixed filenames, after privacy assertions; no synthetic
+expected record substituted for observation. Reports mark closed-session records
+historical, not reusable live refs. Privacy-case body, raw test/stdout/stderr, CDP
+traffic, private checkpoints, canary value and endpoint credentials are not saved.
+Failure reports use sanitized codes/counts and preserve owned cleanup evidence.
+
+This is the explicit non-repository evidence contract; it adds no new data scope,
+live authorization or canonical schema. Recheck syntax/no-run only where this
+small test/sink change affects inputs, then save the preparation checkpoint before
+requesting concrete runtime activation. No successful runtime is repeated merely
+to obtain artifacts that could have been declared before its first run.
