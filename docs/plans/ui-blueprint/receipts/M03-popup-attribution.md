@@ -665,3 +665,43 @@ Receipt-only outcome awaits exact1 Git lease. Actual popup capture and individua
 verified postidentity remain open; successful prior source/synthetic/AX/lifecycle
 facts preserved, no whole M03/P7 completion. Next setup investigation needs separate
 root selection; no hidden subsequent source/runtime attempt.
+
+
+## Advisor-selected semantic Snapshot attempt — CUA interruption before popup
+
+Root authorized one alternate finite setup based on Mac advisor's source reading:
+existing f02.snapshot handler increments/publishes, no authored popup close; use
+fresh enabled semantic AX Snapshot click only while popup remains open. No shortcut,
+Raise/Compare/coordinates/source changes or hidden retry. Frozen Swift23f22fb/Rust138d7bc
+prepared before live in22.3019s with unchanged binary hashes from preceding run.
+Combined Request/parent1000ms,160/depth9/512KiB,cleanup1s/outer300s selected unchanged.
+
+Own bundle/PID37890 exact path/run argument launched. CUA getApp returned Window A,
+Edge popup index12, Snapshot index4 enabled, no popup. click12 plus state request was
+interrupted by tool: “The user changed [exact own bundle]. Re-query the latest state
+with get_app_state before sending more actions.” Used current documented getAXState
+for required fresh full re-query: Window A/no popup/focus Open B. No more input sent.
+Popup open precondition unestablished; semantic Snapshot not attempted. Fixture run
+directory remained empty: no Snapshot/current binding/pre-post identity records.
+No Observe/helper/worker/capture/PNG or canonical validation. This is interrupted
+CUA setup, not missing tool capability or collector failure. Cause of change unknown;
+no alternate backend, inferred foreground or repeated full loop.
+
+Launcher start273104.89778525/deadline273404.89778525, stop273125.648635791.
+Finally exact own fixture cleanup before assertions: elapsed20.954320541s,
+cleanup0.159334125s,timeout=false,fixture absent; own helper/worker absent.
+Native desktop lane released. No images created, every older image/containing dir
+untouched. Current non-image preparation/source/binaries/cache/commands/run outputs
+removed after consumption and directory absence verified. Source remains frozen;
+receipt-only save awaits exact1 Git lease. Need restored exclusive input interval/
+root activation for any later attempt; semantic Snapshot feasibility and actual
+popup pixels/pre-post identity gates remain unverified, no M03/P7 acceptance claim.
+
+
+CUA exact guard for that attempt: "The user changed '/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m03-axsetup-rxxxmxki/F02-off.app'. Re-query the latest state with `get_app_state` before sending more actions."
+It requires a fresh state read before further input, not explicit user confirmation
+or handoff. Current documented getAXState full refresh was performed. Last successful
+CUA call before guarded input was getApp observation; no successful input outcome
+established in this attempt. After guard only that read occurred, no further input.
+No new attempt now; remaining packet work is actual scoped AX+popup capture with
+separate current identity proof after an authorized intact setup interval.
