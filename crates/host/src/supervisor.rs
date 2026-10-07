@@ -998,9 +998,23 @@ fn pump<'a, P: ProcessPlatform>(
             }))
         }
         ControlKind::ObserveReady => {
-            if !active.live
-                || active.class != OperationClass::Observe
+            let observe = active.live && active.class == OperationClass::Observe;
+            let action = !active.live
+                && matches!(
+                    active.class,
+                    OperationClass::Prepare | OperationClass::Mutation
+                )
+                && active.request.input_format == 1;
+            if (!observe && !action)
                 || active.ticket.is_some()
+                || active.refusal_started
+                || active.effect != EffectReceipt::NotDispatched
+                || (action
+                    && active
+                        .publish
+                        .as_ref()
+                        .is_none_or(|p| !p.idle() || p.committed() != 0))
+                || (action && control.value != active.handle.sequence)
                 || control.slot != 0
                 || control.flags != active.request.channels
                 || control.length != 0
@@ -1015,6 +1029,9 @@ fn pump<'a, P: ProcessPlatform>(
                 .ok_or(HostError::Overflow)?;
             active.deadline = active.deadline.min(declared);
             let remaining = remaining_ms(active.deadline, Instant::now())?;
+            if remaining == 0 {
+                return Err(HostError::DeadlineExpired);
+            }
             active.ticket = Some(control.value);
             worker.tx = Control {
                 kind: ControlKind::ObservePermit,
@@ -1076,6 +1093,7 @@ fn pump<'a, P: ProcessPlatform>(
             if active.class != OperationClass::Mutation
                 || active.effect != EffectReceipt::NotDispatched
                 || active.refusal_started
+                || (active.request.input_format == 1 && active.ticket.is_none())
                 || control.slot != 0
                 || control.flags & !1 != 0
                 || control.length != 0

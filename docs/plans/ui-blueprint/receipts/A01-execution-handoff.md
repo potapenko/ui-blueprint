@@ -266,3 +266,55 @@ Exact owners: supervisor.rs kind13/14 admission branch; worker_action.rs or
 worker_main.rs narrow helper; worker_web.rs after valid request before preparation/
 kernel; nearest existing held-control/late-ACK tests plus this receipt. No new
 control/framing/graph/public schema/CLI/pools or generalized status framework.
+
+## Selected parent canonical-deadline repair
+
+After verification-only2f5c5eb, root selected the preceding fixed-control proposal
+in [the same packet](../packets/A01-guarded-composition.md#required-authoritative-canonical-deadline-clamp).
+Exact6 changed paths: host src/supervisor.rs, worker_main.rs, worker_web.rs;
+host tests/support/effect_peer.rs, effects_host.rs; this receipt. No Web helper,
+kernel/protocol enum/schema/CLI/Cargo or quota changes. Previously admitted typed
+Prepare/Mutation header classes and original Observe Ticket remain distinct.
+
+Worker_main::admit_action sends existing kind13 after valid Action/Prepare Request
+binding and before any provider SDK/gate. Cookie is current operation sequence;
+class/channel1/correlation/length/nonzero duration checked. Parent admits only current
+typed non-live Prepare/Mutation before refusal/Possible/publication and once. It
+sets min(existing deadline,active.started+duration), computes remaining at current
+time and returns kind14. No root authority/nonce/helper/capture/physical permission
+is conferred. EffectReady on typed Mutation before admission now refuses; legacy
+non-typed nonce peer path is compatible. Child validates reply then tightens the
+existing watchdog. Invalid/unparseable binding keeps outer bound and refusal path.
+
+Source and meaningful timing evidence, all Cargo locked/offline in owned system temp:
+- effects::typed_action_admission_clamps_parent_from_start_and_refuses_late_ack_terminal_or_effect:
+  11 actual parent/owned-peer cases passed. Fake peer has no child watchdog, so
+  shorter200ms versus outer2s conclusively exercises parent rejection of300ms-late
+  payload/terminal, not child scheduling. A held ACK never commits received data
+  after parent bound; prior ACK survives late terminal. Mutation after Possible
+  times out unknown. Longer2s duration cannot extend outer200ms.300ms pre-admission
+  delay leaves≤1700ms of2s, proving start anchor instead of now+duration. Already-
+  expired/zero/wrong mask/wrong operation cookie/duplicate admission rejects with
+  no effects; all cases actual reap/sessions0/groups0/abandonedfalse.
+- Exact guarded_prepare_then_act_uses_actual_kernel_bridge_and_preserves_non_success_outcomes:
+  passed against real production worker/kernel/saved Web preparation with admission.
+- Exact real_begin_permit_ack_and_reusable_first_and_reference_requests: passed,
+  preserving admitted Observe Ticket/helper publication semantics.
+- Affected web host lib/bin/runtime/web_worker/effect_peer Clippy -D warnings passed;
+  bin check and scoped formatting/whitespace/local links passed.
+
+No unchanged broad suite or live action ran. Additional SDK/cleanup/pool rights are
+not introduced by control13/14. Parent continues rejecting late correlation/ACK/
+terminal against authoritative deadline. This closes the discovered source guarantee
+gap; protected review and actual live action acceptance remain root-owned. The fake
+timing/corruption wrapper is fixed64-byte test storage; new no-fault modes explicitly
+leave existing EffectPermit unmodified. No operator/user/source timestamps restamped.
+Owned temp target contains no images and is cleaned after final use/absence verified;
+all actual images/containing directories excluded. Save/push repair separately.
+
+Repair source SHA256 pins:
+- supervisor.rs:35f961876ffb61b09a856300631ceb1654377185eac7b0c2863693942aa2343e
+- worker_main.rs:6b30b8a5119d9169e4f8241f2560cc15fd63d29e7ac31bca24dcdc3ee6b1fbb5
+- worker_web.rs:7bf49b5c2586506d7574338dcd5f82673ccbd3e457fdd3a97ab82415dba3382f
+- effect_peer.rs:4a3509641fad60b4d2929d0214a8437e2d581960660d6a124bacb421741d99a8
+- effects_host.rs:a98c0ceeef0c936d998d4f7c13d12ae07e522aef2c2bf4619c768bce73432e6c

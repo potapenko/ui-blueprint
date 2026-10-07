@@ -70,12 +70,45 @@ pub(super) fn admit_observation(
     request_deadline: u64,
     channels: u8,
 ) -> Result<Instant, HostError> {
+    if operation.class != OperationClass::Observe {
+        return Err(HostError::InvalidInput);
+    }
+    admit_request(io, operation, ticket, request_deadline, channels)
+}
+#[cfg(feature = "web")]
+pub(super) fn admit_action(
+    io: &mut WorkerIo,
+    operation: Control,
+    request_deadline: u64,
+) -> Result<Instant, HostError> {
+    if !matches!(
+        operation.class,
+        OperationClass::Prepare | OperationClass::Mutation
+    ) || operation.flags & 8 == 0
+    {
+        return Err(HostError::InvalidInput);
+    }
+    admit_request(
+        io,
+        operation,
+        operation.correlation.operation,
+        request_deadline,
+        1,
+    )
+}
+fn admit_request(
+    io: &mut WorkerIo,
+    operation: Control,
+    ticket: u64,
+    request_deadline: u64,
+    channels: u8,
+) -> Result<Instant, HostError> {
     if ticket == 0 || request_deadline == 0 || channels != operation.flags & 7 {
         return Err(HostError::InvalidInput);
     }
     io.write_control(Control {
         kind: ControlKind::ObserveReady,
-        class: OperationClass::Observe,
+        class: operation.class,
         slot: 0,
         flags: channels,
         correlation: operation.correlation,
@@ -85,7 +118,7 @@ pub(super) fn admit_observation(
     })?;
     let permit = io.control()?;
     if permit.kind != ControlKind::ObservePermit
-        || permit.class != OperationClass::Observe
+        || permit.class != operation.class
         || permit.correlation != operation.correlation
         || permit.slot != 0
         || permit.flags != channels

@@ -80,6 +80,7 @@ mod permit_fault {
         fault: u8,
         altered: Option<[u8; CONTROL_BYTES]>,
         offset: usize,
+        ack_release: Option<Instant>,
     }
     impl ProcessPlatform for Platform {
         type Child = Child;
@@ -92,6 +93,7 @@ mod permit_fault {
                 fault: self.0,
                 altered: None,
                 offset: 0,
+                ack_release: None,
             })
         }
         fn poll(&mut self, interests: &mut [PollInterest<'_>], ms: u32) -> Result<(), HostError> {
@@ -100,7 +102,20 @@ mod permit_fault {
     }
     impl OwnedProcess for Child {
         fn write_input(&mut self, bytes: &[u8]) -> Result<Transfer, HostError> {
-            if self.altered.is_none()
+            if self.fault == 4
+                && bytes.len() == CONTROL_BYTES
+                && Control::decode(bytes.try_into().unwrap())
+                    .is_ok_and(|c| c.kind == ControlKind::Ack)
+            {
+                let release = *self
+                    .ack_release
+                    .get_or_insert_with(|| Instant::now() + Duration::from_millis(300));
+                if Instant::now() < release {
+                    return Ok(Transfer::WouldBlock);
+                }
+            }
+            if (1..=3).contains(&self.fault)
+                && self.altered.is_none()
                 && bytes.len() == CONTROL_BYTES
                 && let Ok(mut c) = Control::decode(bytes.try_into().unwrap())
                 && c.kind == ControlKind::EffectPermit
@@ -155,6 +170,86 @@ mod permit_fault {
         fn fatal_fd(&self) -> BorrowedFd<'_> {
             self.real.fatal_fd()
         }
+    }
+}
+
+#[test]
+fn typed_action_admission_clamps_parent_from_start_and_refuses_late_ack_terminal_or_effect() {
+    let _serial = RUNTIME_TEST.lock().unwrap();
+    for (mode, outer, ack_fault) in [
+        (b'1', 2000, 0),
+        (b'2', 2000, 0),
+        (b'2', 2000, 4),
+        (b'3', 2000, 0),
+        (b'4', 200, 0),
+        (b'5', 2000, 0),
+        (b'6', 2000, 0),
+        (b'7', 2000, 0),
+        (b'8', 2000, 0),
+        (b'0', 2000, 0),
+        (b'9', 3000, 0),
+    ] {
+        let domain = HostDomain::new::<permit_fault::Platform>(limits()).unwrap();
+        let mut host =
+            RuntimeHost::new(&domain, fake_spec(), permit_fault::Platform(ack_fault)).unwrap();
+        let session = attach(&mut host, true);
+        let mut input = host.reserve_input(session, ACTION.len() + 1).unwrap();
+        input.bytes_mut()[0] = mode;
+        input.bytes_mut()[1..].copy_from_slice(ACTION);
+        let request = OutputRequest {
+            channels: 1,
+            frame_bytes: 65536,
+            total_bytes: 65536,
+            input_format: 1,
+            retained_partition: 0,
+        };
+        let class = if mode == b'3' {
+            OperationClass::Mutation
+        } else {
+            OperationClass::Prepare
+        };
+        host.submit(
+            session,
+            class,
+            input,
+            request,
+            Instant::now() + Duration::from_millis(outer),
+        )
+        .unwrap();
+        let c = complete(&mut host);
+        if mode == b'9' {
+            assert_eq!(c.terminal, Terminal::Completed);
+            assert_eq!(c.committed(), 1);
+        } else if matches!(mode, b'6' | b'7' | b'8' | b'0') {
+            assert_eq!(c.terminal, Terminal::Failed(HostError::InvalidControl));
+            assert_eq!(c.committed(), 0);
+        } else {
+            assert_eq!(c.terminal, Terminal::TimedOut);
+        }
+        if mode == b'3' {
+            assert!(c.effect_unknown());
+        } else {
+            assert_eq!(c.effect, EffectReceipt::NotDispatched);
+        }
+        if mode == b'2' && ack_fault == 0 {
+            assert_eq!(
+                c.bytes(0),
+                Some(ACTION),
+                "ACKed body survives rejected late terminal"
+            );
+        }
+        if ack_fault == 4 {
+            assert_eq!(
+                c.committed(),
+                0,
+                "late ACK never commits full received payload"
+            );
+        }
+        drop(c);
+        finish(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
     }
 }
 #[test]

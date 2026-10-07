@@ -67,7 +67,7 @@ impl WebSession {
                 }
             };
             let limit = request.limits.max_output_bytes as usize;
-            let deadline = worker_main::tighten_deadline(request.limits.deadline_ms)?;
+            let deadline = worker_main::admit_action(io, control, request.limits.deadline_ms)?;
             let mut timing =
                 crate::worker_effect::WorkerActionControl::new(clock, worker_main::clock_origin());
             use uiblueprint_plugin_api::actions::ActionControl;
@@ -128,7 +128,7 @@ impl WebSession {
                     );
                 }
             };
-            let deadline = worker_main::tighten_deadline(limits.deadline_ms)?;
+            let deadline = worker_main::admit_action(io, control, limits.deadline_ms)?;
             let mut provider =
                 collector::CheckboxProvider::new(&mut self.collector, limits.clone());
             crate::worker_action::ActionOperation {

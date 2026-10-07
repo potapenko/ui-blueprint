@@ -62,22 +62,111 @@ fn main() {
     loop {
         let operation = io.control().unwrap();
         let origin = Instant::now();
-        let deadline = origin
+        let mut deadline = origin
             .checked_add(Duration::from_millis(operation.value))
             .unwrap();
         assert_eq!(operation.kind, ControlKind::Submit);
-        assert_eq!(operation.class, OperationClass::Mutation);
         assert!(operation.correlation.operation > sequence);
         sequence = operation.correlation.operation;
         let input = body(&mut io, operation, &mut buffer);
         assert!(input.len() > 1);
         let mode = input[0];
+        let budget_mode = mode.is_ascii_digit();
+        assert!(
+            operation.class == OperationClass::Mutation
+                || (budget_mode && operation.class == OperationClass::Prepare)
+        );
         let canonical = &input[1..];
         let Artifact::Action(action) = Document::from_json(canonical, 65536).unwrap().artifact
         else {
             panic!("action")
         };
         assert!(config.target.matches(&action.snapshot.context.target));
+        if budget_mode {
+            if mode == b'5' {
+                std::thread::sleep(Duration::from_millis(300));
+            }
+            if mode == b'9' {
+                std::thread::sleep(Duration::from_millis(300));
+            }
+            let ready = Control {
+                kind: ControlKind::ObserveReady,
+                class: operation.class,
+                slot: 0,
+                flags: if mode == b'7' { 0 } else { 1 },
+                correlation: operation.correlation,
+                length: 0,
+                value: operation.correlation.operation + u64::from(mode == b'6'),
+                auxiliary: match mode {
+                    b'0' => 0,
+                    b'4' | b'9' => 2000,
+                    _ => 200,
+                },
+            };
+            io.write_control(ready).unwrap();
+            let admitted = io.control().unwrap();
+            assert_eq!(admitted.kind, ControlKind::ObservePermit);
+            assert_eq!(admitted.class, operation.class);
+            assert_eq!(admitted.correlation, operation.correlation);
+            assert_eq!(admitted.value, operation.correlation.operation);
+            assert!(admitted.auxiliary > 0);
+            if mode == b'4' {
+                assert!(
+                    admitted.auxiliary <= 200,
+                    "long canonical duration cannot extend parent"
+                );
+            }
+            if mode == b'9' {
+                assert!(
+                    admitted.auxiliary <= 1700,
+                    "deadline anchored at operation start, not admission now"
+                );
+            }
+            deadline = Instant::now()
+                .checked_add(Duration::from_millis(admitted.auxiliary))
+                .unwrap();
+            if mode == b'8' {
+                io.write_control(ready).unwrap();
+                let _ = io.control();
+                return;
+            }
+            if operation.class == OperationClass::Prepare {
+                if mode == b'1' || mode == b'4' {
+                    std::thread::sleep(Duration::from_millis(300));
+                }
+                let frame = Control {
+                    kind: ControlKind::Frame,
+                    class: operation.class,
+                    slot: 0,
+                    flags: 0,
+                    correlation: operation.correlation,
+                    length: canonical.len() as u64,
+                    value: 0,
+                    auxiliary: 0,
+                };
+                io.write_control(frame).unwrap();
+                io.write(canonical).unwrap();
+                io.write_control(Control {
+                    kind: ControlKind::Commit,
+                    ..frame
+                })
+                .unwrap();
+                let ack = io.control().unwrap();
+                assert_eq!(ack.kind, ControlKind::Ack);
+                if mode == b'2' {
+                    std::thread::sleep(Duration::from_millis(300));
+                }
+                io.write_control(Control {
+                    kind: ControlKind::Terminal,
+                    length: 0,
+                    value: 0,
+                    auxiliary: 0,
+                    ..frame
+                })
+                .unwrap();
+                continue;
+            }
+        }
         if matches!(mode, b'R' | b'S' | b'N' | b'G' | b'M' | b'U') {
             let refusal = include_bytes!("../../../../fixtures/golden/G01-READONLY.json");
             Document::from_json(refusal, 65536).unwrap();
@@ -195,6 +284,10 @@ fn main() {
                 })
                 .unwrap();
                 let _ = io.control();
+                return;
+            }
+            b'3' => {
+                std::thread::sleep(Duration::from_millis(300));
                 return;
             }
             b'C' => (),
