@@ -123,3 +123,23 @@ The advisor cautioned that no universal unknown-consistency operation table exis
 Core separately checked protected G01/accepted-analysis clauses and tests before
 aligning the actual engine/schema guards. This records reconciliation of existing
 meaning, not a new blanket permission for incoherent comparisons.
+
+### Director selectors and addressed-root boundary
+
+Web advisor read site source1954c9cd6c11464cd9529699552178854764e0d1 without
+runtime/changes. Actual IDs: clip-search-filter-director-wrap, -trigger, -input,
+-options (same prefix); popup has data-testid only and is a child of that wrapper,
+not BODY portal or iframe. Options have source-generated IDs from canonical value.
+Trigger has expanded/haspopup but no aria-controls to popup; input controls options.
+aria-selected represents keyboard-active option; aria-pressed represents applied
+choice in this source. No site dimensions or live availability follow from it.
+
+Advisor recommends the already-supported conceptual Scope by observed ref: select
+the actual wrapper/trigger via browser/DevTools picker, establish same target/frame/
+document binding, then bounded child collection. ID/name/source structure checks
+that chosen node; it does not prove global unique ID. A click is not an inspection
+selection. Transfer of an opaque token from another browser backend into this
+collector's CDP session is not demonstrated and must not be assumed. No executable
+trusted profile or live selection mechanism was established by consultation.
+Web's private rooted read-only seed connection is implementation work; actual
+caller-origin binding and real Director execution remain separate qualification.
