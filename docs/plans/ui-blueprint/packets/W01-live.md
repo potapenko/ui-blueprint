@@ -18,6 +18,12 @@ entry is explicitly opt-in. No runtime permission is inferred from this document
 Source preparation does not hold/freeze Core; agree a short ready compile window
 only if shared consumed inputs are changing. Return exact missing Core dependencies.
 
+Publication dependency update: source/runtime evidence f2af5a3 received scoped
+independent acceptance in [H01 review](../receipts/H01-producer-review.md), closing
+that current pinned Rust allowance gap. Runtime still waits for the saved Web
+preparation/build handoff and root's concrete activation with owned targets,
+predeclared limits and evidence retention. This is no new user-approval request.
+
 ## Spec Basis and saved realization
 
 Restore, no spec/public-interface delta. Root read AGENTS → specs/README registry11

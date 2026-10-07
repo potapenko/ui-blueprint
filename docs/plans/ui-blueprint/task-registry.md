@@ -90,16 +90,17 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core traced canonical serialization/error allocation and prepares one bounded real publication-reserve case. Web read-only handoff returned; W01-live preparation packet ready, runtime remains waiting_evidence. Native admission/sink integration continues with exact3 legacy caller dependency grant. Integration retained after scoped proof. No live/UI/Git/source holds |
+| Активные чаты/пакеты/ресурсы | Core publication prooff2af5a3 saved/pushed and independently accepted, named current allowance gap closed. Web W01-live preparation dispatched e02eeff, no-run compile in progress on savedprovider; runtime awaits exact preparation handoff/activation. Native5targets/33protocol/122synthetic passes reported with final checks ongoing. No live/UI/Git/source holds |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Core returns concrete source owner→obligation→evidence→missing case or source-backed closure for publication, not another generic open label. Combine with Web's finite readiness handoff for next packet; Native source remains parallel. No repeated allocation-free-writer/OS-exhaustion proof; full H01/live/D06/RC05 remain open |
+| Следующий шаг | Save Web preparation, then activate finite owned Chromium proof with fixed parameters and durable minimum evidence. Save/review Native acquisition when its final source is ready. Do not reopen accepted unchanged publication/allocator checks; live/D06/full H01/RC05 still require their own evidence |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [W01-live](packets/W01-live.md) | retained Web owner | real RuntimeHost/collector on saved5f52cb5; frozen F01/R01 oracles | preparation-only ready:4test/doc paths, opt-in no-run compile. Actual owned Chromium/fixture execution requires explicit activation after publication gate; no source-app/input/Q02 expansion |
+| [W01-live](packets/W01-live.md) | retained Web owner | real RuntimeHost/collector on savedf2af5a3; frozen F01/R01 oracles | preparation running:4test/doc paths, opt-in/no-run only. Publication gate accepted; actual owned Chromium needs exact preparation handoff/activation, no source-app/input/Q02 expansion |
+| H01 publication allowance | Core / retained producer reviewer | f2af5a30226943412ae6c41dc7bb5c250a2f70c0, pushed5paths | [scoped accept](receipts/H01-producer-review.md):21inputs+7dependency hashes independently match; source closure and7predeclared modes close current pinned allowance gap, not whole-worker/live/SDK/D06 |
 | [M01-acquisition-plan](packets/M01-acquisition-plan.md) | retained Native owner | proposal45c2667649c347202dfc64b6d5d978c3e47271f0, pushed | selected engineering handoff under ROADMAP/D05; public-header/source/old-sample evidence, no SDK/runtime claim |
 | [M01-acquisition-registration](packets/M01-acquisition-registration.md) | retained Native owner | a0281dff74657b10baa4c7d137fb14572d88476f, pushed6docs | accepted faithful registration: D05@4/Native acquisition@1, registry11; all17ceilings/derived8192 preserve selection/common Rust/D06, no implementation acceptance |
 | [M01-acquisition](packets/M01-acquisition.md) | retained Native owner | registereda0281dff, helper7c6e078/provider5f52cb5 | running admission/sink integration; exact legacy dependencies sizing.py/capture_lifecycle.py/fixtures native build.sh added for explicit args/shared-source wiring only. No live AX/SDK capture or changed fixture expectations |

@@ -92,3 +92,35 @@ queries; explicit test assertion is under two seconds from observed stall.
 No exact measured exit latency was supplied. Author's within1s wording is not an
 independent strict bound; root returned that documentation correction to Core.
 This closes the scoped repair, not live browser/Native SDK, D06 or full H01.
+
+## Current serialization and publication allowance
+
+Same-reviewer source-first supplement atf2af5a30226943412ae6c41dc7bb5c250a2f70c0
+against its parent. Verdict: **accept**, no actionable findings. Root received
+initial source observations before supplying the new host/receipt narrative.
+The reviewer read the now-applicable ANALYSIS/TYPES/VALIDATION@1 and CLI closure,
+the two new probe/test sources, unchanged actual guard/PublicationGuard/FixedOutput/
+WorkerIo/publish, canonical serializers and relevant primary dependency source.
+
+The probe substitutes only a single-thread terminal allocation interception window.
+Prebuilt DTOs remain System-owned and do not drop there. Output524288+ballast4096
+are explicitly real-guard charged, filling ordinary528384; publication reserve is
+1048576. Scratch uses actual guard/layouts. The parent uses actual complete-frame/
+Commit/ACK state transitions; missing ACK is not a committed returned frame.
+Release checks cover scratch before reserve exit and charged backing before the
+reporting sentinel. No source/public API or production allocator change occurred.
+
+All seven predeclared passes remain author execution evidence: canonical/escaping/
+analysis/failure-record success scratch0, fixed-writer IO refusal one40-byte box
+released within reserve, ACK EOF scratch0/no commitment; all children reaped.
+The reviewer independently reconstructed21 saved inputs and matched
+e57bcc1ed8bfef2a5abe2960421651942af5da2f3bfb0500e99d4daedfa272aa and all seven
+recorded dependency-source hashes. No reviewer runtime/test execution occurred.
+
+Combined with separately accepted real-worker installation and ACK evidence, this
+closes the current pinned serializer/publication-allowance gap. The source trace
+supports bounded scratch independent of payload length; it is not a general
+serializer guarantee. New serializers/features/dependencies/publication paths
+require affected requalification. The probe excludes whole-worker DTO accounting,
+watchdog concurrency and OS/SDK memory. Native acquisition, actual live platforms,
+D06 and broader H01 acceptance remain separate; no release completion is claimed.
