@@ -64,6 +64,16 @@ early when it exists; identify a genuinely disjoint platform-process slice if it
 can be assigned to the retained Native owner in parallel. Root alone assigns that
 separate packet; no nested agents, implicit coauthor or unpinned placeholder API.
 
+After foundation3abd8e5, root assigns [H01-process](H01-process.md) to the retained
+Native owner: src/process.rs + src/process/**, tests/process.rs and
+tests/support/process_peer.rs, with its own host-process docs/receipt. Core must
+not write these paths. process_api.rs is frozen at3abd8e5; an actual API gap returns
+to root before a change. Core continues all other H01 supervisor/worker/allocator/
+integration source and owns lib/module/manifest wiring. Add the concrete module or
+minimal peer-target hook only after Native returns its exact compiling handoff;
+no dummy implementation solely to make an absent module compile. Short shared
+build-input barriers are coordinated by root; disjoint implementation continues.
+
 ## Required implemented boundary
 
 Implement the real HostDomain/RuntimeHost/session/input/result lease lifecycle,
