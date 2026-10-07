@@ -103,3 +103,29 @@ output/archive. This closes the demonstrated AX/layout/focus/pixel pair only; ov
 M05/P01 invariance is not complete while sampled-hit proof remains absent. Previous
 mismatched active/key/main and historical hit records remain excluded. Exact-one-path
 outcome receipt ready for short Git lease; no next runtime attempt started.
+
+## Required sampled-hit attempt — foreground precondition remains unproved
+
+Final sampled-hit section activated only the missing pointer dimension; no repeat
+AX/pixel/gap comparison. Fresh own F02-off PID44150/path/unique run-dir attributed;
+retained executable matched9a88b12 hash. Current CUA screenshot was returned inline
+without a local image file/link and used to select one titlebar coordinate. One
+ordinary coordinate pointer click, then existing Compare→fresh Snapshot, produced
+expanded/count1/window550×525@40,465/focus=name but app_active/key/main remained false.
+
+No inside/outside hit was delivered and no background AXPress substituted. The
+observed action sequence did not establish actual foreground/target mapping needed
+for physical hit proof. This is a precise unverified activation precondition, not
+proof of probe interference, missing Computer Use or a hit mismatch. No indefinite
+activation retry or fabricated mapping; on instance was not launched. The already
+matched inactive AX/geometry/focus/pixel equality remains valid in its stated scope.
+
+Native revalidated own PID/canonical executable/unique run-dir and terminated only
+PID44150; process absence confirmed within5s, LaunchServices parent owns reaping.
+Current-operation uib-p01-hit-i39f18eq working files were removed and absence verified;
+inline image was tool bytes with no local-file reference. Physical lane released,
+no user apps/permissions/display/capture/B paths touched. No source change or new
+dirs/framework. Remaining next dependency is confirmed supported CUA screen-to-target
+pointer mapping/foreground activation before +1/0 delivery; no new caller API was
+shown necessary. One-path human receipt ready, index untouched; sampled-hit evidence
+still open and no additional runtime attempt started.
