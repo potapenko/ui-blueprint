@@ -1,7 +1,8 @@
-# W01 live first-observe diagnosis
+# W01 guarded live fixture proof
 
-Status: changed first-observe repair PASSED on d19d130/provider9b881e6.
-One actual canonical response is saved; broader Web cases remain unverified. Authority [packet](../packets/W01-live.md), preparatione02eeff,
+Status: prepared full five-case sequence PASSED on d19d130/provider9b881e6.
+Three actual canonical frames are saved; this is bounded author runtime evidence,
+not full W01/B01–B06, input, Native, Q02 or final integrated acceptance. Authority [packet](../packets/W01-live.md), preparatione02eeff,
 sinkc3c28a3, activation2669384, and root's explicit finite diagnostic-repair dispatch.
 Current repair scope follows the packet; no fixture/oracle/Cargo/limits/backend edit.
 Current registry11/D05@4 and full prior Web/QA/operational Spec Basis remain applicable;
@@ -239,3 +240,46 @@ remain for the next finite consumer until acceptance permits cleanup.
 This is first-request repair proof, not full W01/B01–B06, input, Native, D06/Q02 or
 latest integrated G02 acceptance. Prepared size-change/privacy/wrong-target/remount/
 navigation cases remain next work; no successful case was repeated for evidence.
+
+## Prepared full five-case sequence — actual result
+
+Root's final W01-live continuation authorized one full prepared sequence. Reused
+exact saved harness/binaries above without rebuild, new exclusive evidence UUID
+e5b9cc4a-9262-4ac8-a508-0636dd750521. Same immutable provider9b881e6 + repaird19d130
+composition and97-source8c4a8ed1 digest; G02 is deliberately outside this build.
+UIB_WEB_LIVE_CASE=full, same explicit activation and fixed caps/oracles/120s bound.
+No Git/common-source/desktop hold during runtime; only owned headless fixtures.
+
+Runtime2026-10-07T14:18:44.491Z–14:18:46.685Z: passed, test exit0, pending0,
+nine observation outcomes and11 checks. Six completed responses each committed1/
+missing0: initial #left, #sized before/after, private, new-remount binding and
+new-document binding. Three expected refusals each committed0/missing1:
+cross-target, old-remount ref, old-navigation ref; all preserve actual collector
+StaleTarget diagnostic and outer resync_required. No old ref silently repaired.
+
+Existing oracles passed: #left DOM[40,60,120,40]/AX Apply/button/source separation;
+existing-ref #sized32×16→48×24 after authorized fixture textLarge; private value
+redaction/canary exclusion; wrong-target/remount/navigation refusals and explicit
+new binding positives. Every observation/refusal preserved focus/scroll/checkpoint.
+Fixture browser and second tab survived respective worker reaps. Original ACKed
+first bytes remained equal across later refusals and worker/session cleanup.
+
+Report SHA256e3b68d1baf9728db1ede0714f54b9fe3bf8bab61130f7aa7a511eb3e303328e9.
+Only three unchanged validated/ACKed positive frames were retained:
+
+- initial-left.json5680B, SHA2560ab7db2717f915deaaada2e4704f63e273ada00857dfc51dc729342d2c5d2f81;
+- sized-before.json3084B, SHA256aa19c4702e428b781b99fb10f4ec4602050aa5a5cbed06b3524a5959f1a57e7a;
+- sized-after.json3072B, SHA25619aee76822668c6b993a4a11a4fb206beef43c48824a3f36cb39bf0151c555fc.
+
+Worker cleanup confirmed sessions0/groups0/abandonedfalse. Test/context/driver/
+browser/server/profile and worker_sessions all confirmed closed. Post-run97 input
+and both binary hashes match; checkout driver/fixture bytes match saved source,
+all five previous reports unchanged and all three frame byte counts/hashes match.
+No retry or thresholds/oracles/caps changed. All Git/source/runtime holds released.
+Evidence retention remains root-owned through P7 or explicit discard/replacement;
+W01/G02/P7 may use these closed-session records for historical analysis only.
+No privacy-case body/checkpoint/raw logs/CDP/error text/canary retained.
+
+This completes the authorized finite full sequence, not all Web pilot cases or
+released qualification. Source-review acceptance, broader B01–B06/input/performance,
+Native parity and latest integrated build evidence remain separate.
