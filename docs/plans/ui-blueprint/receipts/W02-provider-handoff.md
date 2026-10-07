@@ -269,3 +269,97 @@ no image files, was removed after use, and absence verified. No images generated
 deleted, older evidence untouched. No host/Cargo/schema/fixture/runtime changes.
 Actual preparation host dispatch, effect composition/review and real checkbox
 qualification remain separate; Core has the compiling method signature.
+
+## Prepared guarded actions.html runtime harness (no activation)
+
+Root granted [finite tooling packet](../packets/W02-live-actions.md). Actual3changed
+paths: crates/host/tests/web_live.rs, tests/bridges/web/guarded-live.cjs and this
+receipt. Allowed support/web_worker_process.rs already had Core-owned WIP; Web
+did not edit/revert/stage it. Core saved/released it in composition80b7449dca32b9d9853d8aaaf353d26be69e9d4b,
+SHA256df02ee82a14c2f6c6c62b8a9352a9838e4f9bc4d05a8157439e05e964483ae94;
+current/helper build bytes match. Existing transparent Darwin wrapper and genuine
+EffectPermit/ACK counters/barrier are reused, no fake nonce/control or extra child.
+
+Mode actions reuses the original --run-authorized/UIB_WEB_LIVE_ALLOW gate, not a
+new approval mechanism. It serves ONLY saved actions.html9bd9f66 at its own numeric
+loopback root; every other path404. Fixed file/hash, no arbitrary path serving.
+Original frozen server/F01 files unchanged. Existing pinned Chromium145/Node24.15/
+Playwright1.58.2 launch/profile/target binding, two own pages and origin restriction
+remain. Action-page checkpoint reads only fixed synthetic checkbox/focus/scroll
+state; no raw private checkpoints/logs retained. Server cleanup owner is registered
+before bounded listen, including failure paths.
+
+Finite sequence (10host outcomes; readonly rejected submit has no fake completion):
+1. Writable session A Observe action-target Enabled/Checked/InputKind; actual
+   Snapshot/ref builds existing Prepare request with unknown writable/value_allowed,
+   empty capability list and no claimed unique resolution. Prepare10 uses existing
+   Tape(Snapshot,Prepare Request), input_format1. Real returned ActionCase validates.
+2. Mutation uses existing Tape(ActionCase,Act Request), input_format1. Require
+   parent EffectReceipt Confirmed AND canonical confirmed delivery/Succeeded/fresh
+   after.Checked=true. Fixture target false→true, duplicate stays true, all other
+   synthetic states/focus/scroll unchanged. Completed alone is insufficient.
+3. Prepare desiredfalse on original actual ref, then explicit fixture remount.
+   Old ref must produce canonical failed/not-dispatched refusal with parent
+   NotDispatched and no extra EffectPermit; no replacement search or UI effect.
+4. Readonly session B Observe/Prepare succeed as reads. submit Mutation must return
+   PermissionDenied before dispatch; no fabricated HostCompletion or token.
+5. New writable session on B observes/prepares actual ref. Test wrapper holds the
+   GENUINE EffectPermit before forwarding, after parent registered Possible. Cancel
+   that exact operation; require effect_unknown/Possible, no committed mutation
+   frame and unchanged permit-forward count/UI. No retry is issued. This is explicit
+   possible-before-delivery, NOT proof of a delivered setter with lost response.
+
+Three declared temporary positive frames only: action-observe.json,
+action-prepared.json,action-transition.json, plus compact report. Other checks keep
+metadata only. All owned worker sessions are shutdown/reaped with zero remaining
+sessions/groups and browser survival before independent launcher cleanup. A premature
+terminal before the unknown barrier is reported before failure, not discarded.
+
+Same32nodes/depth8/64KiB/250ms operation and source/method/byte/IO caps; whole120s,
+existing attach/cleanup bounds. Setter only; no physical input lane or business
+completion claim. Fixture remount is separate explicit setup. Initial preparation
+and later resolution use actual source; synthetic peer facts never become live input.
+
+Pinned build root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-actions-live-hxwnokt_.
+Export saved Core80b7449 Cargo manifests/lock/toolchain,crates,plugins/web,fixtures/web,
+experiments/web,tests/bridges/web; overlay ONLY two current harness files.195inputs
+compact sorted JSON path→SHA256 fingerprint:
+8bf4f092ee62c2f9a39e6e7e041ff10b0b5f96b64b9f598f5a63b624019edab0.
+Saved helper is unchanged; provider/kernel are saved inputs, not moving WIP.
+Scoped web_live no-run and consumer Clippy -D warnings PASS; launcher syntax/diff
+and local links pass. No browser, actual action or old runtime/test suite rerun.
+
+Test build/debug/deps/web_live-bb05baebd9300679 SHA256
+82156877e1e5467e1362c4f261570af473f0b391fa654a65eb0255759a9c9659;
+worker build/debug/session-worker SHA256
+42199a7f26ac9398620c5616308cca69bdedb8cf14bd1c0f54a7c6b6eecfcc7e.
+After saved harness equality/protected review and ROOT ACTIVATION ONLY, command is
+existing Node driver --run-authorized with UIB_WEB_LIVE_ALLOW=1,
+UIB_WEB_LIVE_CASE=actions, exact UIB_WEB_LIVE_TEST/WORKER and *_SHA256 above,
+S01_WEB_PLAYWRIGHT_CORE=/Users/eugenepotapenko/.npm/_npx/f88013d20c39cb98/node_modules/playwright-core,
+UIB_WEB_LIVE_EVIDENCE=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/d49297cd-dca6-481d-a096-d52d85ef93db.
+Fresh output path remains absent. Build temp is held only for the immediate finite
+qualification; after use consume/delete non-image files and empty directories,
+verify removal. All images/containing directories would be excluded from cleanup;
+none generated/requested. Prior evidence untouched. Runtime is still closed.
+
+## Superseding runtime dependency: parent deadline clamp
+
+Root reported a required Core repair after edge checks: a shorter canonical
+Request duration clamps the child but not yet the parent in saved80b7449. Core
+owns minimal existing admission13/14 parent-start clamping before SDK/effect work;
+Observe/effect rights must remain unchanged. The source-only harness/no-run/Clippy
+results above remain attributed to80b7449; those binary/runtime pins are NOT an
+activation-ready candidate anymore. No browser/action run occurred.
+
+Exact Web3paths remain ready independently: web_live.rs, guarded-live.cjs and this
+receipt. After corrected Core saved source and protected review arrive, repin and
+compile only the affected harness/worker composition. Do not repeat unchanged
+provider tests or launch the old pinned build. Runtime stays closed until corrected
+source/pins and root activation; no parent-deadline behavior is weakened by Web.
+
+The superseded80b7449 current-operation source/build temp contained no image files;
+it was removed and absence verified once its source checks were consumed. Planned
+runtime output UUID was never created. Old evidence/images untouched. Corrected
+composition needs new current-operation build pins; no obsolete binary is retained
+for accidental activation.

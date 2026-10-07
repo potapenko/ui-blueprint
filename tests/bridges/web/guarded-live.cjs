@@ -12,9 +12,9 @@ const CANARY = 'W01_LIVE_PRIVATE_CANARY';
 const MAX_LINE = 262144;
 const PREFIX = '@UIB_LIVE ';
 const EVIDENCE_ROOT = require('node:fs').realpathSync(require('node:os').tmpdir());
-const CASES = new Set(['b05-initial','b05-retain-initial','b05-parent','b05-history-parent','b05-font','b05-history-font','rooted-current','rooted-wrong-binding','rooted-wrong-document','rooted-stale','popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
+const CASES = new Set(['action-observe','action-prepare','action-success','action-prepare-stale','action-stale','action-readonly-observe','action-readonly-prepare','action-readonly-refused','action-unknown-observe','action-unknown-prepare','action-unknown','b05-initial','b05-retain-initial','b05-parent','b05-history-parent','b05-font','b05-history-font','rooted-current','rooted-wrong-binding','rooted-wrong-document','rooted-stale','popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
 const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required']);
-const FRAME_FILES = Object.freeze({'b05-initial':'b05-initial.json','b05-parent':'b05-parent.json','b05-font':'b05-font.json','rooted-current':'rooted-context.json','popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
+const FRAME_FILES = Object.freeze({'action-observe':'action-observe.json','action-prepare':'action-prepared.json','action-success':'action-transition.json','b05-initial':'b05-initial.json','b05-parent':'b05-parent.json','b05-font':'b05-font.json','rooted-current':'rooted-context.json','popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
 function bounded(promise, ms, code) {
   let timer; return Promise.race([promise, new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error(code)), ms);
@@ -53,7 +53,7 @@ function compareRect(actual, expected) {
 async function uiState(page) {
   // Private canary is compared in memory only; never serialize this checkpoint to evidence.
   return page.evaluate(() => ({active: document.activeElement?.id || '',
-    scroll: [scrollX, scrollY], state: window.f01.checkpoint()}));
+    scroll: [scrollX, scrollY], state: window.f01 ? window.f01.checkpoint() : {target:document.getElementById('action-target').checked,duplicate:document.getElementById('action-duplicate').checked,disabled:document.getElementById('action-disabled').checked,mixedChecked:document.getElementById('action-indeterminate').checked,mixed:document.getElementById('action-indeterminate').indeterminate,custom:document.getElementById('action-custom').getAttribute('aria-checked')}}));
 }
 async function run(evidence, report) {
   // Check BEFORE prepare/start/launch; ordinary node execution cannot start a live run.
@@ -73,13 +73,26 @@ async function run(evidence, report) {
   const sourceHashes = {};
   for (const name of [...setup.fixtureFiles,r01Oracle,'tests/bridges/web/guarded-live.cjs','crates/host/tests/web_live.rs'])
     sourceHashes[name]=crypto.createHash('sha256').update(await fs.readFile(path.join(setup.root,name))).digest('hex');
+  let actionsHtml;
+  if(report.mode==='actions'){
+    actionsHtml=await fs.readFile(path.join(setup.root,'fixtures/web/actions.html'));
+    const pinned=execFileSync('git',['show','9bd9f662d28cdb66f8b7b096fcd77a93ecf524e4:fixtures/web/actions.html'],{cwd:setup.root,timeout:5000,maxBuffer:65536});
+    assert(actionsHtml.equals(pinned));sourceHashes['fixtures/web/actions.html']=crypto.createHash('sha256').update(actionsHtml).digest('hex');
+  }
   let fixture, server, browser, context, child, exited, profile;
   const checks = report.checks; const before = new Map(); let failed = false;
   Object.assign(report,{sourceHashes,binaries:{test:process.env.UIB_WEB_LIVE_TEST_SHA256,worker:process.env.UIB_WEB_LIVE_WORKER_SHA256},environment:{node:process.version,playwright:setup.runtimeVersion,platform:process.platform,arch:process.arch,os_release:require('node:os').release()},fixture:setup.fixtureCommit});
   report.phase='fixture_setup';
   const whole = setTimeout(() => { failed = true; child?.kill('SIGKILL'); if(server) void server.kill().catch(()=>{}); }, 120000);
   try {
-    fixture = await start();
+    if(report.mode==='actions'){
+      const own=require('node:http').createServer((req,res)=>{res.setHeader('Cache-Control','no-store');if(new URL(req.url,'http://127.0.0.1').pathname==='/'){res.setHeader('Content-Type','text/html; charset=utf-8');res.end(actionsHtml);}else{res.statusCode=404;res.end('Not found');}});
+      own.requestTimeout=3000;own.headersTimeout=3000;
+      fixture={url:null,close:()=>new Promise(resolve=>own.close(resolve))};
+      await bounded(new Promise((resolve,reject)=>{own.once('error',reject);own.listen(0,'127.0.0.1',resolve);}),3000,'actions_server_timeout');
+      fixture.url=`http://127.0.0.1:${own.address().port}`;
+      report.fixture='9bd9f662d28cdb66f8b7b096fcd77a93ecf524e4:actions.html';
+    }else fixture = await start();
     // Keep pinned Playwright launch defaults and own its actual process/profile.
     // This is a Chromium TCP CDP endpoint in addition to the fixture driver's connection.
     server = await bounded(setup.chromium.launchServer({headless:true,timeout:8000,
@@ -109,7 +122,8 @@ async function run(evidence, report) {
     const pages = {};
     for (const name of ['a','b']) {
       const page = await context.newPage(); page.setDefaultTimeout(2000); page.setDefaultNavigationTimeout(3000);
-      await page.goto(`${fixture.url}/?generation=1`); await page.waitForFunction(() => !!window.f01);
+      await page.goto(`${fixture.url}/?generation=1`);
+      if(report.mode==='actions')await page.locator('#action-target').waitFor();else await page.waitForFunction(() => !!window.f01);
       pages[name] = page;
     }
     async function binding(page) {
@@ -154,13 +168,48 @@ async function run(evidence, report) {
           assert([payload.committed,payload.missing].every(n=>Number.isInteger(n)&&n>=0&&n<=7));
           const d=payload.diagnostic;
           if(d!==null){assert(d&&Object.keys(d).sort().join(',')==='cause,code,count,remote_cleanup,send_progress,stage');assert(Number.isInteger(d.stage)&&d.stage>=1&&d.stage<=9);assert(Number.isInteger(d.cause)&&d.cause>=1&&d.cause<=44);assert(Number.isInteger(d.remote_cleanup)&&d.remote_cleanup>=0&&d.remote_cleanup<=2);assert(Number.isInteger(d.send_progress)&&d.send_progress>=0&&d.send_progress<=3);assert(Number.isInteger(d.code)&&d.code>=-2147483648&&d.code<=2147483647);assert(Number.isInteger(d.count)&&d.count>=0&&d.count<=4294967295);}
-          assert(report.outcomes.length<16);report.outcomes.push({stage:payload.stage,terminal:payload.terminal,committed:payload.committed,missing:payload.missing,operation:payload.operation,diagnostic:d});return {};
+          assert(['not_dispatched','possible','confirmed'].includes(payload.effect));
+          assert(report.outcomes.length<16);report.outcomes.push({stage:payload.stage,terminal:payload.terminal,committed:payload.committed,missing:payload.missing,operation:payload.operation,diagnostic:d,effect:payload.effect});return {};
         }
         case 'worker_cleanup': {
           assert(typeof payload.confirmed==='boolean'&&typeof payload.abandoned==='boolean');
           assert(Number.isInteger(payload.reserved_sessions)&&payload.reserved_sessions>=0&&payload.reserved_sessions<=4);
           assert(Number.isInteger(payload.completion_groups)&&payload.completion_groups>=0&&payload.completion_groups<=8);
           report.worker_cleanup={confirmed:payload.confirmed,reserved_sessions:payload.reserved_sessions,completion_groups:payload.completion_groups,abandoned:payload.abandoned};return {};
+        }
+        case 'action_check': {
+          assert.equal(report.mode,'actions');assert(CASES.has(payload.case));assert(before.has(payload.case));
+          const prior=before.get(payload.case),after=await uiState(page);before.delete(payload.case);
+          if(payload.kind==='success'){
+            assert.equal(prior.state.target,false);assert.equal(after.state.target,true);
+            assert.deepEqual({...after,state:{...after.state,target:prior.state.target}},prior);
+          }else assert.deepEqual(after,prior);
+          const doc=payload.document;
+          if(doc){
+            assert.equal(doc.schema_version,'0.1.0');
+            if(payload.kind==='observe'){
+              assert.equal(doc.artifact.kind,'channel_response');assert.equal(doc.artifact.data.result.status,'observed');
+              const snapshot=doc.artifact.data.result.data;const dom=snapshot.nodes.find(n=>n.key.namespace==='web.dom');
+              assert.equal(property(dom,'checked').value,prior.state.target);assert.equal(property(dom,'enabled').value,true);assert.equal(property(dom,'input_kind').value,'checkbox');
+            }else if(payload.kind==='prepare'){
+              assert.equal(doc.artifact.kind,'action');const c=doc.artifact.data;
+              assert.equal(c.action.resolution.writable.availability,'known');assert.equal(c.action.resolution.writable.value.value,true);
+              assert.equal(c.action.resolution.value_allowed.value.value,true);assert(c.action.resolution.available_intents.includes('set_checked'));
+              assert.equal(c.action.backend_ref.snapshot_id,c.snapshot.id);assert.equal(c.action.modality,'setter');
+              assert.equal(property(c.snapshot.nodes.find(n=>n.key.namespace==='web.dom'),'checked').value,prior.state.target);
+            }else if(payload.kind==='success'||payload.kind==='refused'){
+              assert.equal(doc.artifact.kind,'transition_context');const c=doc.artifact.data;assert.equal(c.transition.steps.length,1);const step=c.transition.steps[0];
+              if(payload.kind==='success'){
+                assert.equal(step.delivery,'confirmed');assert.equal(step.outcome,'succeeded');assert(c.after);assert.notEqual(c.before.id,c.after.id);assert(step.verification_observation);
+                assert.equal(property(c.after.nodes.find(n=>n.key.namespace==='web.dom'),'checked').value,true);
+              }else{assert.equal(step.delivery,'not_dispatched');assert.equal(step.outcome,'failed');assert.equal(c.after,null);}
+            }else throw Error('unexpected_action_document');
+          }else assert(['readonly_refused','possible_before_delivery'].includes(payload.kind));
+          if(Object.hasOwn(FRAME_FILES,payload.case)){
+            assert(doc&&typeof payload.canonical==='string');const bytes=Buffer.from(payload.canonical);assert(bytes.length<=65536);assert.deepEqual(JSON.parse(payload.canonical),doc);
+            const file=FRAME_FILES[payload.case];await writeExclusive(path.join(evidence,file),bytes);report.frames.push({case:payload.case,file,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
+          }
+          checks.push({case:payload.case,readonly:payload.kind!=='success',oracle:payload.kind,non_target_state_unchanged:true});return {};
         }
         case 'check': {
           assert(CASES.has(payload.case));
@@ -242,6 +291,7 @@ async function run(evidence, report) {
         case 'stimulus': {
           if (payload.action==='textLarge' || payload.action==='remount' || payload.action==='parentWide' || payload.action==='fontLarge')
             await page.evaluate(name=>window.f01.operate(name),payload.action);
+          else if (payload.action==='action-remount'){assert.equal(report.mode,'actions');await page.locator('#remount-target').click();}
           else if (payload.action==='root-remount') {await page.evaluate(()=>{const root=document.getElementById('f01');root.replaceWith(root.cloneNode(true));});}
           else if (payload.action==='popup') {
             await page.locator('#open-popup').click();
@@ -282,7 +332,7 @@ async function run(evidence, report) {
     });
     const exit = await bounded(exited,90000,'rust_consumer_timeout'); await chain; report.test_exit={code:exit.code,signal:exit.signal};
     assert.equal(exit.code,0); assert.equal(exit.signal,null); assert(!failed,'live_case_failed');
-    assert.equal(before.size,0); if(report.mode==='b05'){assert.equal(report.outcomes.length,6);assert(checks.some(c=>c.case==='b05-history-font'));assert.equal(report.frames.length,3);}else if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
+    assert.equal(before.size,0); if(report.mode==='actions'){assert.equal(report.outcomes.length,10);assert(checks.some(c=>c.case==='action-unknown'));assert.equal(report.frames.length,3);}else if(report.mode==='b05'){assert.equal(report.outcomes.length,6);assert(checks.some(c=>c.case==='b05-history-font'));assert.equal(report.frames.length,3);}else if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
   } catch (_) {
     report.failure??={code:'live_run_failed',phase:report.phase}; throw new Error('live_run_failed');
   } finally {
@@ -308,7 +358,7 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');

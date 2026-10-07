@@ -2,11 +2,14 @@
 //! Explicit opt-in finite live fixture consumer. No compile/default-test side effects.
 #[path = "support/web_worker_data.rs"]
 mod baseline;
+#[path = "support/web_worker_process.rs"]
+mod process;
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::{
     io::{self, BufRead, BufReader, Read, Write},
     path::Path,
+    sync::{Arc, atomic::Ordering},
     thread,
     time::{Duration, Instant},
 };
@@ -15,7 +18,6 @@ use uiblueprint_host::{
     authority::TargetLease,
     domain::{HostDomain, SessionHandle},
     host_types::{HostCompletion, HostEvent, OutputRequest, Terminal},
-    process::DarwinPlatform,
     process_api::SpawnSpec,
     supervisor::RuntimeHost,
     web_config::{WebId, WebRef, WebRootSeed, WebSelection},
@@ -87,7 +89,30 @@ impl Fixture {
     }
     fn outcome(&mut self, stage: &str, completion: &HostCompletion<'_>) {
         let diagnostic=completion.diagnostic().map(|d|json!({"stage":d.stage as u8,"cause":d.cause as u8,"remote_cleanup":d.remote_cleanup,"send_progress":d.send_progress,"code":d.code,"count":d.count}));
-        self.call("outcome",json!({"page":"a","stage":stage,"terminal":terminal_code(completion.terminal),"committed":completion.committed(),"missing":completion.missing(),"operation":completion.operation.sequence,"diagnostic":diagnostic}));
+        let effect = match completion.effect {
+            uiblueprint_host::host_types::EffectReceipt::NotDispatched => "not_dispatched",
+            uiblueprint_host::host_types::EffectReceipt::Possible { .. } => "possible",
+            uiblueprint_host::host_types::EffectReceipt::Confirmed { .. } => "confirmed",
+        };
+        self.call("outcome",json!({"page":"a","stage":stage,"terminal":terminal_code(completion.terminal),"committed":completion.committed(),"missing":completion.missing(),"operation":completion.operation.sequence,"diagnostic":diagnostic,"effect":effect}));
+    }
+    fn action_check(
+        &mut self,
+        page: &str,
+        case: &str,
+        kind: &str,
+        completion: Option<&HostCompletion<'_>>,
+    ) {
+        let document = completion
+            .and_then(|c| c.bytes(0))
+            .map(|b| Document::from_json(b, 65536).expect("canonical action frame"));
+        let canonical = completion
+            .and_then(|c| c.bytes(0))
+            .map(|b| std::str::from_utf8(b).expect("canonical UTF8"));
+        self.call(
+            "action_check",
+            json!({"page":page,"case":case,"kind":kind,"document":document,"canonical":canonical}),
+        );
     }
     fn stimulus(&mut self, action: &str) {
         self.call("stimulus", json!({"page":"a","action":action}));
@@ -135,7 +160,7 @@ struct Attached<'a> {
 fn deadline() -> Instant {
     Instant::now() + Duration::from_secs(5)
 }
-fn next<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostEvent<'a> {
+fn next<'a>(host: &mut RuntimeHost<'a, process::Platform>) -> HostEvent<'a> {
     let end = deadline();
     loop {
         assert!(Instant::now() < end, "bounded real host progress");
@@ -145,7 +170,7 @@ fn next<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostEvent<'a> {
         }
     }
 }
-fn complete<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostCompletion<'a> {
+fn complete<'a>(host: &mut RuntimeHost<'a, process::Platform>) -> HostCompletion<'a> {
     match next(host) {
         HostEvent::Complete(c) => c,
         _ => panic!("expected canonical completion"),
@@ -155,9 +180,17 @@ fn tape_length(parts: &[&[u8]]) -> usize {
     8 + worker_tape::SEGMENTS * 8 + parts.iter().map(|p| p.len()).sum::<usize>()
 }
 fn attach<'a>(
-    host: &mut RuntimeHost<'a, DarwinPlatform>,
+    host: &mut RuntimeHost<'a, process::Platform>,
     binding: Binding,
     number: u32,
+) -> Attached<'a> {
+    attach_authorized(host, binding, number, false)
+}
+fn attach_authorized<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    binding: Binding,
+    number: u32,
+    mutation: bool,
 ) -> Attached<'a> {
     let session_id = Id(format!("live-session-{number}"));
     let mut descriptor = baseline::descriptor();
@@ -174,6 +207,7 @@ fn attach<'a>(
         "popup",
         "rooted",
         "mutation-child",
+        "action-target",
     ]
     .map(|s| Id(format!("f01-{s}")))
     .into();
@@ -186,7 +220,7 @@ fn attach<'a>(
     let length = tape_length(&parts);
     let mut lease = host
         .reserve_attach_input(
-            TargetLease::authorized(&binding.target, false).expect("owned fixture authority"),
+            TargetLease::authorized(&binding.target, mutation).expect("owned fixture authority"),
             length,
         )
         .expect("attach lease");
@@ -236,7 +270,7 @@ fn reference(value: &BackendRef) -> WebSelection {
     }
 }
 fn observe<'a>(
-    host: &mut RuntimeHost<'a, DarwinPlatform>,
+    host: &mut RuntimeHost<'a, process::Platform>,
     attached: &Attached<'a>,
     id: &str,
     fields: Vec<Field>,
@@ -282,7 +316,7 @@ fn observe<'a>(
     complete(host)
 }
 fn retain_snapshot<'a>(
-    host: &mut RuntimeHost<'a, DarwinPlatform>,
+    host: &mut RuntimeHost<'a, process::Platform>,
     attached: &Attached<'a>,
     document: &Document,
 ) -> HostCompletion<'a> {
@@ -323,6 +357,269 @@ fn retain_snapshot<'a>(
         "original Snapshot/context/time remain byte-equal"
     );
     completion
+}
+fn prepare_action<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    attached: &Attached<'a>,
+    source: &Document,
+    value: bool,
+) -> HostCompletion<'a> {
+    let (snapshot, reference) = match &source.artifact {
+        Artifact::ChannelResponse(response) => {
+            let ChannelResult::Observed(snapshot) = &response.result else {
+                panic!("observed")
+            };
+            (snapshot.as_ref().clone(), dom_ref(source))
+        }
+        Artifact::Action(case) => (case.snapshot.clone(), case.action.backend_ref.clone()),
+        _ => panic!("actual source Snapshot"),
+    };
+    let node = snapshot
+        .nodes
+        .iter()
+        .find(|n| n.key == reference.key)
+        .unwrap();
+    let Property::Requested { evidence, .. } = node
+        .properties
+        .iter()
+        .find(|p| p.field() == Field::Enabled)
+        .unwrap()
+    else {
+        unreachable!()
+    };
+    let unknown = Availability::Unknown {
+        reason: Id("not-prepared".into()),
+    };
+    let action = Action {
+        id: Id(format!("live-checked-{value}")),
+        context: snapshot.context.clone(),
+        backend_ref: reference,
+        intent: Intent::SetChecked { value },
+        modality: InputModality::Setter,
+        input_space: None,
+        required_enabled: true,
+        authorized_scope: snapshot.context.scope_id.clone(),
+        unique_match: false,
+        resolution: Resolution {
+            evidence: evidence.clone(),
+            writable: unknown.clone(),
+            value_allowed: unknown,
+            available_intents: vec![],
+        },
+    };
+    let request = Request {
+        request_id: Id("prepare-checkbox".into()),
+        clock_domain: Id(attached.clock.clone()),
+        context: snapshot.context.clone(),
+        limits: Limits {
+            max_elements: 32,
+            max_depth: 8,
+            max_output_bytes: 65536,
+            deadline_ms: 250,
+        },
+        freshness_policy: FreshnessPolicy::CurrentRequired,
+        operation: Operation::Prepare { action },
+    };
+    let source = Document {
+        schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(Box::new(snapshot)),
+    };
+    action_submit(host, attached, OperationClass::Prepare, &source, request)
+        .expect("read-only Prepare submit");
+    complete(host)
+}
+fn action_submit<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    attached: &Attached<'a>,
+    class: OperationClass,
+    source: &Document,
+    request: Request,
+) -> Result<uiblueprint_host::host_types::OperationHandle<'a>, uiblueprint_host::HostError> {
+    let source = serde_json::to_vec(source).unwrap();
+    let request = serde_json::to_vec(&Document {
+        schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+        artifact: Artifact::Request(Box::new(request)),
+    })
+    .unwrap();
+    let parts = [source.as_slice(), request.as_slice()];
+    let length = tape_length(&parts);
+    let mut input = host.reserve_input(attached.handle, length)?;
+    worker_tape::encode(&parts, input.bytes_mut())?;
+    host.submit(
+        attached.handle,
+        class,
+        input,
+        OutputRequest {
+            channels: 1,
+            frame_bytes: 65536,
+            total_bytes: 65536,
+            input_format: 1,
+            retained_partition: 0,
+        },
+        Instant::now() + Duration::from_millis(250),
+    )
+}
+fn submit_act<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    attached: &Attached<'a>,
+    prepared: &Document,
+) -> Result<uiblueprint_host::host_types::OperationHandle<'a>, uiblueprint_host::HostError> {
+    let Artifact::Action(case) = &prepared.artifact else {
+        panic!("real prepared ActionCase")
+    };
+    let request = Request {
+        request_id: Id("act-checkbox".into()),
+        clock_domain: Id(attached.clock.clone()),
+        context: case.snapshot.context.clone(),
+        limits: Limits {
+            max_elements: 32,
+            max_depth: 8,
+            max_output_bytes: 65536,
+            deadline_ms: 250,
+        },
+        freshness_policy: FreshnessPolicy::CurrentRequired,
+        operation: Operation::Act {
+            action: case.action.clone(),
+        },
+    };
+    action_submit(host, attached, OperationClass::Mutation, prepared, request)
+}
+fn action_fields() -> Vec<Field> {
+    vec![Field::Enabled, Field::Checked, Field::InputKind]
+}
+fn checkbox_actions(
+    host: &mut RuntimeHost<'_, process::Platform>,
+    fixture: &mut Fixture,
+    trace: &process::Trace,
+) {
+    use uiblueprint_host::host_types::EffectReceipt;
+    let a = attach_authorized(host, fixture.binding("a"), 1, true);
+    fixture.before("a", "action-observe");
+    let observed = observe(
+        host,
+        &a,
+        "action-target",
+        action_fields(),
+        initial("action-target"),
+        "action-observe",
+    );
+    fixture.outcome("action-observe", &observed);
+    fixture.action_check("a", "action-observe", "observe", Some(&observed));
+    let source = decoded(&observed);
+    drop(observed);
+    fixture.before("a", "action-prepare");
+    let prepared = prepare_action(host, &a, &source, true);
+    fixture.outcome("action-prepare", &prepared);
+    assert_eq!(prepared.effect, EffectReceipt::NotDispatched);
+    fixture.action_check("a", "action-prepare", "prepare", Some(&prepared));
+    let case = decoded(&prepared);
+    drop(prepared);
+    fixture.before("a", "action-success");
+    submit_act(host, &a, &case).unwrap();
+    let acted = complete(host);
+    fixture.outcome("action-success", &acted);
+    assert_eq!(acted.terminal, Terminal::Completed);
+    assert!(matches!(acted.effect, EffectReceipt::Confirmed { .. }));
+    fixture.action_check("a", "action-success", "success", Some(&acted));
+    drop(acted);
+    assert_eq!(trace.effect_permits.load(Ordering::Acquire), 1);
+    // Prepare the old exact node, then replace it in separate fixture setup.
+    fixture.before("a", "action-prepare-stale");
+    let stale = prepare_action(host, &a, &case, false);
+    fixture.outcome("action-prepare-stale", &stale);
+    fixture.action_check("a", "action-prepare-stale", "prepare", Some(&stale));
+    let stale_case = decoded(&stale);
+    drop(stale);
+    fixture.stimulus("action-remount");
+    fixture.before("a", "action-stale");
+    submit_act(host, &a, &stale_case).unwrap();
+    let refused = complete(host);
+    fixture.outcome("action-stale", &refused);
+    assert_eq!(refused.effect, EffectReceipt::NotDispatched);
+    assert_ne!(refused.terminal, Terminal::Completed);
+    fixture.action_check("a", "action-stale", "refused", Some(&refused));
+    drop(refused);
+    detach(host, &a);
+    let b = attach(host, fixture.binding("b"), 2);
+    fixture.before("b", "action-readonly-observe");
+    let observed = observe(
+        host,
+        &b,
+        "action-target",
+        action_fields(),
+        initial("action-target"),
+        "action-readonly-observe",
+    );
+    fixture.outcome("action-readonly-observe", &observed);
+    fixture.action_check("b", "action-readonly-observe", "observe", Some(&observed));
+    let source = decoded(&observed);
+    drop(observed);
+    fixture.before("b", "action-readonly-prepare");
+    let prepared = prepare_action(host, &b, &source, true);
+    fixture.outcome("action-readonly-prepare", &prepared);
+    fixture.action_check("b", "action-readonly-prepare", "prepare", Some(&prepared));
+    let case = decoded(&prepared);
+    drop(prepared);
+    fixture.before("b", "action-readonly-refused");
+    assert_eq!(
+        submit_act(host, &b, &case).unwrap_err(),
+        uiblueprint_host::HostError::PermissionDenied
+    );
+    fixture.action_check("b", "action-readonly-refused", "readonly_refused", None);
+    detach(host, &b);
+    let c = attach_authorized(host, fixture.binding("b"), 3, true);
+    fixture.before("b", "action-unknown-observe");
+    let observed = observe(
+        host,
+        &c,
+        "action-target",
+        action_fields(),
+        initial("action-target"),
+        "action-unknown-observe",
+    );
+    fixture.outcome("action-unknown-observe", &observed);
+    fixture.action_check("b", "action-unknown-observe", "observe", Some(&observed));
+    let source = decoded(&observed);
+    drop(observed);
+    fixture.before("b", "action-unknown-prepare");
+    let prepared = prepare_action(host, &c, &source, true);
+    fixture.outcome("action-unknown-prepare", &prepared);
+    fixture.action_check("b", "action-unknown-prepare", "prepare", Some(&prepared));
+    let case = decoded(&prepared);
+    drop(prepared);
+    let permits = trace.effect_permits.load(Ordering::Acquire);
+    assert_eq!(
+        permits, 1,
+        "readonly/stale cases never grant another permit"
+    );
+    trace.hold_effect_permit.store(true, Ordering::Release);
+    fixture.before("b", "action-unknown");
+    let operation = submit_act(host, &c, &case).unwrap();
+    let end = Instant::now() + Duration::from_millis(250);
+    while !trace.effect_waiting.load(Ordering::Acquire) {
+        assert!(Instant::now() < end, "actual permit barrier");
+        match host.next_event().unwrap() {
+            HostEvent::Pending => thread::yield_now(),
+            HostEvent::Complete(completion) => {
+                fixture.outcome("action-unknown", &completion);
+                panic!("action ended before the genuine effect permit barrier");
+            }
+            _ => panic!("unexpected event before effect permit"),
+        }
+    }
+    let completion = host.cancel(operation).unwrap();
+    fixture.outcome("action-unknown", &completion);
+    assert!(matches!(completion.effect, EffectReceipt::Possible { .. }));
+    assert!(completion.effect_unknown());
+    assert_eq!(completion.committed(), 0);
+    assert_eq!(
+        trace.effect_permits.load(Ordering::Acquire),
+        permits,
+        "permit never forwarded; no fabricated ACK or retry"
+    );
+    fixture.action_check("b", "action-unknown", "possible_before_delivery", None);
+    drop(completion);
+    trace.hold_effect_permit.store(false, Ordering::Release);
 }
 fn terminal_code(terminal: Terminal) -> &'static str {
     use uiblueprint_host::HostError as E;
@@ -395,7 +692,7 @@ fn refused(c: &HostCompletion<'_>) {
     assert_eq!(c.committed(), 0);
     assert!(c.bytes(0).is_none());
 }
-fn detach<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>, attached: &Attached<'a>) {
+fn detach<'a>(host: &mut RuntimeHost<'a, process::Platform>, attached: &Attached<'a>) {
     assert!(host.detach(attached.handle).expect("detach").is_none());
     loop {
         if let HostEvent::Closed { session } = next(host) {
@@ -404,7 +701,7 @@ fn detach<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>, attached: &Attached<'a
         }
     }
 }
-fn shutdown(host: &mut RuntimeHost<'_, DarwinPlatform>) {
+fn shutdown(host: &mut RuntimeHost<'_, process::Platform>) {
     let end = deadline();
     loop {
         assert!(Instant::now() < end, "owned worker cleanup");
@@ -436,16 +733,22 @@ fn guarded_live_f01() {
         "test must use the pinned worker artifact"
     );
     let mut fixture = Fixture::new();
-    let domain = HostDomain::new::<DarwinPlatform>(baseline::limits()).expect("real guard domain");
+    let trace = Arc::new(process::Trace::default());
+    let domain =
+        HostDomain::new::<process::Platform>(baseline::limits()).expect("real guard domain");
     let mut host = RuntimeHost::new(
         &domain,
         SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).expect("built worker"),
-        DarwinPlatform,
+        process::Platform(trace.clone()),
     )
     .expect("real RuntimeHost");
     let diagnostic =
         std::env::var("UIB_WEB_LIVE_CASE").is_ok_and(|v| v == "first_observe_diagnostic");
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("actions") {
+            checkbox_actions(&mut host, &mut fixture, &trace);
+            return;
+        }
         if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("b05") {
             let a = attach(&mut host, fixture.binding("a"), 1);
             fixture.before("a", "b05-initial");
