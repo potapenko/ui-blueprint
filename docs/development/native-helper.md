@@ -246,3 +246,67 @@ The old saved canonical sample supplies a bounded large codec/FD input only; thi
 is not another sample-replay acceptance claim. Live AX/SCK/UI and SDK/H01/pixel/
 latency qualification remain separate. The same reviewer reconciles the saved
 focused result; author execution is not independent acceptance.
+
+## First H01 fixture observation: prepared caller
+
+`crates/host/tests/native_fixture.rs` is ignored and requires the explicit owned-F02
+runtime marker. `tests/bridges/native/host_observe.py prepare` builds only saved
+helper/descriptor sources and that consumer from an immutable Git archive plus the
+owned new caller file. It creates no branch/worktree and consumes no moving G02/Web
+working changes. `run` requires `--allow-live` from the separately activated runtime
+packet; preparing or ordinarily running the test never launches AX/fixture work.
+
+Preparation (task-temp only):
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py prepare \
+  --output "$NEW_NATIVE_TASK_TMP/build"
+```
+
+First runtime setup, when assigned: reuse the prepared F02 off bundle9a88b12, launch
+it with a new run-owned directory using the existing fixture mechanism. Select A,
+normal stimulus/no popup, then explicitly Snapshot. Keep the exact manifest PID,
+launch time, window ID and generations; shared titles are not binding. The launcher
+never launches or closes a user app/fixture itself. Root retains fixture ownership
+and performs its existing exact-PID/path cleanup after the run.
+
+The descriptor-only `describe-window` call supplies the existing eight-field metadata
+request, with no tree/pixels or Ticket. SessionDescriptor has no field projection.
+The actual H01 request has only the four sample fields: role/accessibility_name/
+enabled/accessibility_bounds. Its clock is replaced with the real Attached clock
+inside the Rust caller. The parent then performs real begin→selected helper→guarded
+receive→Commit/ACK. Caller writes only committed bytes; graph assertions happen in
+the bounded launcher after completion. Setup DTO/test-tooling memory is outside the
+parent's steady-state inventory and is not claimed as a production memory proof.
+
+Fixed before evaluation: nodes160/depth9, explicit registered profile.json,
+512KiB reply including LF, AX/overall1s and host cleanup1s. Attach has a5s outer bound;
+caller observation polling allows2s to receive the authoritative terminal; shutdown
+polling allows2s and never upgrades CleanupPending. Launcher outer bound15s, descriptor
+2s and validator3s; bounded stdout/stderr stays in memory, raw diagnostics are not
+persisted. These are finite test controls, not new product defaults or D06 gates.
+
+Runtime command, only after activation:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py run --allow-live \
+  --prepared "$NATIVE_PREPARED/prepared.json" --manifest "$OWN_F02_RUN/a.json" \
+  --validator "$VERIFIED_VALIDATOR" --output "$NEW_M01_EVIDENCE_RUN"
+```
+
+`NEW_M01_EVIDENCE_RUN` must be new under system task-temp or the existing application
+state `~/Library/Application Support/UIBlueprint/development/P2/M01-H01/`; create
+its parent separately. Root/M01 owns retention through acceptance or explicit cleanup.
+Outputs are the selected canonical response, submitted request, fixed host/cleanup
+receipt and bounded result. No raw manifest/UI/error logs are copied. Successful
+oracle: f02.sample.a/button, known enabled=true, authored combined label containing
+“Activate sample”, known AX bounds in pt, matching context and honest partial scope.
+The launcher compares fixture state/source_state in memory to detect an observer
+side effect. No old76-node count or pixels are forced into this one-control scenario.
+
+AX denial is a canonical permission_required response with confirmed cleanup and a
+negative launcher result; no retry, settings or alternative backend. Capture is not
+requested, and B−3801 remains stopped. The dedicated host/worker/helper processes
+and directories are independent of Web's own headless Chromium/profile/port. Only
+brief F02 setup/Snapshot needs the shared physical-input lane; AX-only uses no capture
+lane. Actual SDK/H01 observation, teardown and latency remain unverified by preparation.
