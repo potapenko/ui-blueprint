@@ -1,7 +1,8 @@
-# H01-process implementation receipt
+# H01-process implementation and reaping repair receipt
 
-- status: `saved_candidate / finite process packet complete` for the concrete
-  process implementation. Real Core watchdog creation/integration remains separate.
+- status: `H01-PROCESS-R1 checkpoint_ready / waiting_resource: Git lease`.
+  Native author checks pass; same independent reviewer and real Core lifetime
+  integration remain required. This does not close the defect or full H01.
 - authority: H01-process packet7ffe5df under coordinated PLAN.UIB@1; frozen API
   `3abd8e5f9c054c12e910d4c8defc2f8a64a8b268`, then explicit stable Core build handoff.
 - basis: AGENTS → registry10 → D02@2 all clauses, D05@3/MEMORY@2/WORK@1/D07@5
@@ -17,11 +18,12 @@
   exact owned spawn/FD mapping/nonblocking IO/poll/reap/core-stack/fatal hooks.
   No UI, Swift, AX, capture, real apps or hostile JSON executed. B capture residual
   was neither operated nor bypassed. No independent/full-H01 acceptance claim.
-- checkpoint / push: commit containing this receipt on master; exact SHA and
-  origin/master push result returned in terminal handoff. Root granted only the
-  seven own paths; branch/index preflight confirmed master and empty index.
-  Core hooks/API/publication/quota and Web changes are excluded. Git lease released
-  after successful push; unchanged tests were not repeated.
+- previous checkpoint / push: bb69d4c1f9128975fcdce72a8329b0a637756037 saved and
+  pushed the original implementation; independent review rejected R1 afterward.
+- current repair paths: process.rs, process/reaping.rs, process/spawn.rs,
+  tests/process.rs, tests/support/process_peer.rs under crates/host;
+  docs/development/host-process.md and this receipt. worker.rs/stack behavior unchanged.
+- current repair checkpoint / push: pending root grant; index untouched.
 - acceptance basis: shared-input proof is tied to the fully hashed stable working
   Core bytes above, not a claimed saved Core implementation. Root will save that
   shared slice separately before acceptance. Own temp remains for review/acceptance.
@@ -121,3 +123,87 @@ Next: Core/root chooses watchdog creation/API handoff, integrates this OS owner
 with actual supervisor/grant/quarantine/worker/allocator, and performs independent
 lifecycle/unsafe review. Those are not accepted by the prior9/9 plus current2/2 scoped process evidence.
 This checkpoint saves only the finite Native-owned slice; no autonomous next packet.
+
+## H01-PROCESS-R1 finite repair
+
+Authority: [repair packet](../packets/H01-reaping-repair.md)ee5f95d, approved Restore
+under D02.LIFECYCLE, and [same reviewer's finding](H01-process-review.md). No new
+user approval, number/spec/API/dependency or operator signal change. Selected
+D02@2/D05@3/MEMORY@2/WORK@1/D07@5 closure and RUST/DEV.RUST remain applicable.
+
+Native now reads actual SIGCHLD disposition/flags before spawn-owned allocation,
+immediately before posix_spawn, after successful spawn, before wait and before
+signal. SIG_DFL without SA_NOCLDWAIT/SA_SIGINFO is the narrow supported profile.
+Explicit SIG_IGN also causes Darwin auto-reap (public XNU source inspected) and is
+refused, as are custom handlers. No library sigaction setter is used.
+
+Before spawn, unsupported state returns InvalidState and creates no child. After
+OS spawn, detected drift returns an owned wrapper latched Lost rather than a
+failure that could release a live reservation. Subsequent policy/ownership loss
+returns CleanupPending and prevents PID wait/signal; restoring policy cannot
+re-enable authority. Confirmed cached reap remains valid. No Darwin pidfd invented.
+
+Core/embedding must continuously retain compatible process-wide policy and exclusive
+wait ownership through all managed/quarantined child lifetimes. Checks do not catch
+an unsupported policy changed and restored wholly between calls; arbitrary same-
+process native code is outside this supported contract/security guarantee. Core
+owns actual HostDomain/RuntimeHost integration, refusal/quarantine/retained grants
+and prevention of further dispatch/reuse. Existing spawn/lifecycle checks carry these outcomes. Root's f499bec coordinated
+amendment now requires ProcessPlatform::validate_parent_reaping() for the actual
+Core consumer; Core declares it first, Native forwards to the same predicate.
+Core supplied the actual stable declaration; Native forwards to the real predicate
+and ran only affected provider checks. Native did not edit the shared signature/file. This is not a claim Core's
+lifetime guarantee has already been verified.
+
+### Focused executed checks
+
+On saved Core7b942ab1ddd5af334da18412c6b2d3ac7bd7a21b-compatible inputs:
+scoped check/lib+process-test+peer, peer build and Clippy -D warnings passed.
+Four focused process tests passed: incompatible SA_NOCLDWAIT/SIG_IGN/custom handler
+refusal (three disposable cases); detected drift/latching after restore; repeated
+owned terminate/reap with independent children; external-reaper lost ownership.
+The drift test initially failed its automatic-reap flag because EOF preceded kernel
+cleanup; its assertion was repaired to wait boundedly for actual ECHILD. Library
+refusal/latching already passed in that first run. No PID was signalled after loss.
+No mass PID-reuse stress, UI, apps, hostile JSON or operator/test-runner signal
+policy mutation. Existing FD/stack/fatal/headroom results remain prior evidence.
+
+Every unsupported-state test verifies no child, unchanged FD count and unchanged
+signal policy across the attempted library spawn. Signal changes/restoration occur
+only inside an owned test peer. The drift grandchild exits itself; the containing
+peer confirms kernel status, restores its own policy and exits. All peers are gone.
+
+All38 shared before/after hashes are identical and each also matches saved7b942ab.
+Full files in new task-temp:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-h01-reaping-kghf73oo`.
+Manifest SHA256 `564beff7b5dbebf3735dbf1853e079b7144f41ce89c488daf36374eaa04e6a7f`.
+Current peer SHA256 `2a0a04304a1937051d36dae1a6d559249dafb34e89f8c83c22170f7b9813f749`;
+compiled target reused the prior unique H01 process task-temp. Raw logs/downloaded
+source stay task-temp; no new persistent evidence system. Root/Native retains own
+run evidence until repair review/acceptance or explicit cleanup. No old evidence
+or other-owner file was removed. Exact source hashes and final document checks are
+recorded locally; root Git grant remains separate from independent acceptance.
+
+### Provider linkage on the agreed working API
+
+Root f499bec amendment and actual Core declaration:
+`ProcessPlatform::validate_parent_reaping() -> Result<(), HostError>`.
+API SHA256 `2f9a823aa14468a38ff40256ab20c259babda05465428e3c8fc34c767c00df91`.
+Provider forwards directly to existing read-only OS predicate, no duplicated/dummy
+policy. Existing spawn/wait/signal checks remain. Two affected peer regressions
+passed, explicitly testing public validation refusal and compatible-policy restore
+while child loss stays latched. Scoped check/peer build/Clippy -D warnings and own
+rustfmt passed. Previous four focused reaping results remain phase-specific; no
+unrelated FD/stack/fatal/workspace suite was repeated.
+
+All38 provider-phase shared hashes match before/after. Only the authorized API
+changed from saved7b942ab; current API is a hashed working input, not a claimed
+saved Core checkpoint. Full provider-shared-before.json/after.json are in the same
+repair task-temp; manifest SHA256:
+`da4837e06106e88d21f41f761d5d28dca49e12c64a30ac3d72da4f2ed7f4270a`.
+Provider peer SHA256 `661802a1b9ac5c55e05413571c48bc20df76c40138b5db60f5f30a5e58050c0e`.
+Owned peers are gone; index is empty. Native repair scope remains seven paths;
+Core shared declaration/host integration and other owners stay unstaged by Native.
+Core must bind supported policy/exclusive reaper lifetime, actual validation,
+poison/quarantine and grant/ACK preservation. No defect/full-H01 acceptance claim;
+same reviewer rechecks sequential saved Native/Core results after checkpoint grants.

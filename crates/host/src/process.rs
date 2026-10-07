@@ -3,6 +3,7 @@
 //! best-effort only and never grants permission to release host reservations.
 #![allow(unsafe_code)]
 
+mod reaping;
 mod spawn;
 mod worker;
 
@@ -20,7 +21,9 @@ enum Ownership {
 }
 
 /// The PID originates only from this module's successful posix_spawn. No other
-/// component may wait/reap these children (Darwin has no atomic pidfd kill).
+/// component may wait/reap these children or change the supported SIGCHLD policy
+/// during their lifetime (Darwin has no atomic pidfd kill). Core/embedding owns
+/// that stable process-wide invariant; local point checks detect violations.
 pub struct DarwinChild {
     input: Option<OwnedFd>,
     output: OwnedFd,
@@ -71,6 +74,9 @@ fn read(fd: BorrowedFd<'_>, bytes: &mut [u8]) -> Result<Transfer, HostError> {
 
 impl ProcessPlatform for DarwinPlatform {
     type Child = DarwinChild;
+    fn validate_parent_reaping() -> Result<(), HostError> {
+        reaping::supported()
+    }
     fn spawn(&mut self, spec: &SpawnSpec) -> Result<DarwinChild, HostError> {
         spawn::spawn(spec)
     }
@@ -168,6 +174,10 @@ impl OwnedProcess for DarwinChild {
             Ownership::Lost => return Err(HostError::CleanupPending),
             Ownership::Child(pid) => pid,
         };
+        if reaping::supported().is_err() {
+            self.ownership = Ownership::Lost;
+            return Err(HostError::CleanupPending);
+        }
         let mut status = 0;
         // SAFETY: pid is the exclusive unreaped child returned by our spawn;
         // status points to initialized writable storage, WNOHANG never blocks.
@@ -206,8 +216,17 @@ impl OwnedProcess for DarwinChild {
         let Ownership::Child(pid) = self.ownership else {
             return Err(HostError::CleanupPending);
         };
-        // SAFETY: only this owner reaps its child; &mut prevents concurrent owned
-        // reap. No externally supplied or already-reaped PID reaches kill.
+        // Recheck after wait before using the PID. A detected policy loss is
+        // irreversible even if another component subsequently restores SIG_DFL.
+        if reaping::supported().is_err() {
+            self.ownership = Ownership::Lost;
+            return Err(HostError::CleanupPending);
+        }
+        // SAFETY: Core/embedding maintains default/no-auto-reap SIGCHLD and
+        // exclusive wait ownership throughout this child's lifetime. Under that
+        // invariant, natural exit leaves a zombie reserving this PID until our
+        // wait. &mut excludes another owned reap. Checks above fail closed on
+        // detected drift; arbitrary unsynchronized native mutation is unsupported.
         if unsafe { libc::kill(pid, libc::SIGKILL) } == 0 {
             return Ok(());
         }

@@ -133,3 +133,77 @@ The exact set, full hashes, peer identity, commands and temp retention are in th
 [receipt](../plans/ui-blueprint/receipts/H01-process.md). Root-owned wire/API/library
 hooks were not altered by Native. H01 supervisor/worker integration and independent
 unsafe/allocator/lifecycle review remain mandatory.
+
+## H01-PROCESS-R1 repair: parent reaping policy
+
+Independent review rejected bb69d4c for kernel automatic reaping under
+SA_NOCLDWAIT: natural exit can invalidate the PID reservation between waitpid and
+kill even without another user-space waiter. This repair does not hide that finding.
+The installed Darwin sigaction manual documents no-zombie/ECHILD behavior; Apple's
+[public XNU signal implementation](https://github.com/apple-oss-distributions/xnu/blob/main/bsd/kern/kern_sig.c)
+also sets P_NOCLDWAIT for explicit SIG_IGN. SIG_DFL's discarded notification is
+not equivalent to explicitly installing SIG_IGN.
+
+The private reaping module only queries sigaction; it never installs/restores an
+operator signal action. Supported profile is SIG_DFL with neither SA_NOCLDWAIT nor
+SA_SIGINFO. Explicit SIG_IGN and custom handlers are refused conservatively.
+
+- Before any spawn-owned allocation/PID, incompatible state returns InvalidState.
+  A second check immediately precedes posix_spawn.
+- A detected policy violation after successful OS spawn returns a retained Child
+  in lost ownership state, not a spawn error that might release a live grant.
+- Before wait and again immediately before kill, failed policy verification latches
+  Lost and returns CleanupPending. No PID signal/reap follows that observed loss,
+  even after the caller restores a compatible policy.
+- Confirmed earlier Reaped facts remain cached; no reused PID is signalled.
+
+**Supported lifetime contract, not an atomic sandbox:** Core/embedding must keep
+this profile compatible continuously and reserve exclusive wait ownership until
+all managed children are actually reaped (including quarantined children). No
+competing waiter/handler, SIGCHLD policy mutation or auto-reap may occur in that
+interval. Point checks cannot detect incompatible state transiently installed and
+restored entirely between checks; they are not a substitute for that lifetime
+obligation and do not synchronize arbitrary same-process native code.
+
+Core owns the real HostDomain/RuntimeHost authority/lifetime integration. Its
+consumer must refuse unsupported initialization/spawn, check returned owners before
+dispatch, propagate CleanupPending, retain grants/quarantine on lost policy and
+never resume/release merely because signal policy was restored. Root's f499bec amendment adds the required shared trait method
+`ProcessPlatform::validate_parent_reaping() -> Result<(), HostError>` for actual
+HostDomain/RuntimeHost use. Core supplied the declaration; Native forwards it to
+the same OS predicate, without a second policy implementation.
+Existing spawn/try_reap/terminate checks still carry refusal/lost-state results. No documentation-only Core guarantee or full
+H01 acceptance is claimed by this Native source change.
+
+Focused regressions run only in disposable non-UI peers. SA_NOCLDWAIT, SIG_IGN and
+custom-handler cases prove refusal, unchanged policy, unchanged FD count and no
+child. A drift case changes policy around a known bounded self-exiting child;
+Native latches loss/refuses signal, the test observes actual ECHILD and verifies
+restoring SIG_DFL does not restore authority. The initial test wrongly equated
+output EOF with reap; it failed and was corrected to bounded actual wait evidence.
+No mass PID reuse stress or operator/test-runner signal mutation was performed.
+Repeated owned termination/reap and external-reaper loss regressions also pass.
+Unchanged FD/stack/fatal/headroom proof is preserved, not relabelled as a new run.
+
+Saved Core7b942ab's38 shared files match the tested before/after hashes exactly.
+Scoped check, peer build, four focused reaping tests, Clippy and own formatting pass.
+All owned peers exited. Same independent reviewer still must assess the saved
+Native repair and the actual Core lifetime integration before closing the defect.
+
+### Agreed provider linkage
+
+Core's actual declaration hash is
+`2f9a823aa14468a38ff40256ab20c259babda05465428e3c8fc34c767c00df91`.
+The Darwin trait provider directly calls the same read-only reaping predicate used
+by spawn/wait/signal. Two affected regressions verify the public provider under
+SA_NOCLDWAIT/SIG_IGN/custom-handler policy and across drift/restoration; refusal and
+latched child loss pass. Scoped check, peer build, Clippy and formatting also pass.
+All38 shared inputs were unchanged during this phase; only the explicitly agreed
+API differs from saved Core7b942ab. The working declaration is not mislabelled a
+saved/accepted API baseline; sequential Native/Core checkpoints establish that.
+
+Core must use the real provider for HostDomain/RuntimeHost lifetime validation,
+poison/quarantine and preservation of grants/ACKed channels. Supported policy and
+exclusive-reaper continuity remain caller invariants, not a one-time admission flag.
+Native's OS-boundary checks remain in place independently. Same-reviewer R1
+acceptance and actual Core integration proof are still separate.

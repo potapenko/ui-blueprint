@@ -1,4 +1,4 @@
-use super::{DarwinChild, HostError, Ownership, errno, os_error};
+use super::{DarwinChild, HostError, Ownership, errno, os_error, reaping};
 use crate::process_api::SpawnSpec;
 use std::{
     mem::MaybeUninit,
@@ -103,6 +103,8 @@ impl Drop for Attributes {
 }
 
 pub(super) fn spawn(spec: &SpawnSpec) -> Result<DarwinChild, HostError> {
+    // Refuse incompatible parent state before allocating lanes or creating a PID.
+    reaping::supported()?;
     let (input, child_input) = pair(false)?;
     let (output, child_output) = pair(false)?;
     let (fatal, child_fatal) = pair(true)?;
@@ -135,6 +137,7 @@ pub(super) fn spawn(spec: &SpawnSpec) -> Result<DarwinChild, HostError> {
     let argv = [spec.executable().as_ptr().cast_mut(), ptr::null_mut()];
     let env = [ptr::null_mut()];
     let mut pid = 0;
+    reaping::supported()?;
     // SAFETY: all C handles initialized; path/argv/env are terminated and live
     // through the call; spawn does not modify their strings. Empty env, no shell.
     check(unsafe {
@@ -154,6 +157,13 @@ pub(super) fn spawn(spec: &SpawnSpec) -> Result<DarwinChild, HostError> {
         input: Some(input),
         output,
         fatal,
-        ownership: Ownership::Child(pid),
+        // An OS child already exists: never return a spawn error that could let
+        // Core release its reservation. Detected post-spawn drift returns a lost
+        // owner which must remain quarantined; no PID signal/reap is attempted.
+        ownership: if reaping::supported().is_ok() {
+            Ownership::Child(pid)
+        } else {
+            Ownership::Lost
+        },
     })
 }

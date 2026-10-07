@@ -281,3 +281,25 @@ fn watchdog_request_rejects_invalid_ceilings_without_changing_process_limits() {
         assert!(requested.checked_add(page).expect("bounded sum") <= ceiling);
     }
 }
+
+#[test]
+fn incompatible_reaping_is_refused_before_spawn_without_mutating_parent_policy() {
+    for mode in [b'N', b'G', b'T'] {
+        let mut c = child(&[mode]);
+        let _ = output(&mut c, 64);
+        assert_eq!(
+            output(&mut c, 4),
+            [1, 1, 1, 1],
+            "disposable peer mode {}",
+            mode
+        );
+        assert_eq!(reaped(&mut c), ProcessState::Exited { code: 0 });
+    }
+}
+#[test]
+fn detected_reaping_policy_loss_latches_without_pid_signal_or_false_reap() {
+    let mut c = child(b"L");
+    let _ = output(&mut c, 64);
+    assert_eq!(output(&mut c, 4), [1, 1, 1, 1]);
+    assert_eq!(reaped(&mut c), ProcessState::Exited { code: 0 });
+}

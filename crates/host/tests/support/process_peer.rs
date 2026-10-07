@@ -172,6 +172,143 @@ fn interrupt_poll() {
     report[8..16].copy_from_slice(&elapsed.to_le_bytes());
     send(4, &report);
 }
+fn signal_action(handler: usize, flags: i32) -> libc::sigaction {
+    let mut action: libc::sigaction = unsafe { std::mem::zeroed() };
+    action.sa_sigaction = handler;
+    action.sa_flags = flags;
+    unsafe {
+        libc::sigemptyset(&mut action.sa_mask);
+    }
+    action
+}
+fn query_chld() -> libc::sigaction {
+    let mut action = std::mem::MaybeUninit::uninit();
+    if unsafe { libc::sigaction(libc::SIGCHLD, std::ptr::null(), action.as_mut_ptr()) } != 0 {
+        unsafe { libc::_exit(88) }
+    }
+    unsafe { action.assume_init() }
+}
+fn apply_chld(action: &libc::sigaction) {
+    if unsafe { libc::sigaction(libc::SIGCHLD, action, std::ptr::null_mut()) } != 0 {
+        unsafe { libc::_exit(89) }
+    }
+}
+fn policy_refusal(mode: u8) {
+    let original = query_chld();
+    let action = match mode {
+        b'N' => signal_action(libc::SIG_DFL, libc::SA_NOCLDWAIT),
+        b'G' => signal_action(libc::SIG_IGN, 0),
+        _ => signal_action(interrupted as *const () as usize, 0),
+    };
+    // Only this disposable peer changes policy; no managed child exists yet.
+    apply_chld(&action);
+    let before = query_chld();
+    let validation_refused =
+        DarwinPlatform::validate_parent_reaping() == Err(uiblueprint_host::HostError::InvalidState);
+    let fd_count = || {
+        (0..256)
+            .filter(|fd| unsafe { libc::fcntl(*fd, libc::F_GETFD) } >= 0)
+            .count()
+    };
+    let count = fd_count();
+    let spec = SpawnSpec::new(&std::env::current_exe().expect("own peer")).expect("spec");
+    let refused = match DarwinPlatform.spawn(&spec) {
+        Err(uiblueprint_host::HostError::InvalidState) => true,
+        Ok(mut unexpected) => {
+            // Safe regression failure: never invoke the potentially unsafe old
+            // termination path while auto-reap is enabled. EOF bounds the peer.
+            unexpected.close_input();
+            std::mem::forget(unexpected);
+            false
+        }
+        Err(_) => false,
+    };
+    let after = query_chld();
+    let unchanged = before.sa_sigaction == after.sa_sigaction
+        && before.sa_flags == after.sa_flags
+        && before.sa_mask == after.sa_mask;
+    let balanced = fd_count() == count;
+    let mut status = 0;
+    let no_child = refused
+        && unsafe { libc::waitpid(-1, &mut status, libc::WNOHANG) } == -1
+        && unsafe { *libc::__error() } == libc::ECHILD;
+    apply_chld(&original);
+    send(
+        4,
+        &[
+            u8::from(refused && validation_refused),
+            u8::from(unchanged),
+            u8::from(balanced),
+            u8::from(no_child),
+        ],
+    );
+}
+fn policy_drift() {
+    let original = query_chld();
+    let spec = SpawnSpec::new(&std::env::current_exe().expect("own peer")).expect("spec");
+    let mut child = DarwinPlatform.spawn(&spec).expect("supported spawn");
+    child.write_input(b"D").expect("bounded self-exiting peer");
+    let mut header = [0u8; 65];
+    let mut at = 0;
+    let end = Instant::now() + Duration::from_secs(1);
+    while at < header.len() && Instant::now() < end {
+        match child.read_output(&mut header[at..]).expect("read") {
+            Transfer::Bytes(n) => at += n,
+            Transfer::WouldBlock => std::thread::yield_now(),
+            Transfer::Closed => break,
+        }
+    }
+    if at != 65 {
+        unsafe { libc::_exit(90) }
+    }
+    let pid = i32::from_le_bytes(header[24..28].try_into().expect("owned pid"));
+    apply_chld(&signal_action(libc::SIG_DFL, libc::SA_NOCLDWAIT));
+    let lost = DarwinPlatform::validate_parent_reaping()
+        == Err(uiblueprint_host::HostError::InvalidState)
+        && child.try_reap() == Err(uiblueprint_host::HostError::CleanupPending);
+    let refused = child.terminate() == Err(uiblueprint_host::HostError::CleanupPending);
+    // Let the small peer exit itself; never chase PID reuse or send after loss.
+    let mut eof = false;
+    while Instant::now() < end {
+        match child
+            .read_output(&mut [0u8; 1])
+            .expect("bounded output EOF")
+        {
+            Transfer::Closed => {
+                eof = true;
+                break;
+            }
+            _ => std::thread::yield_now(),
+        }
+    }
+    let mut status = 0;
+    let mut auto_reaped = false;
+    // EOF may precede final kernel exit cleanup. It is not reap evidence.
+    while eof && Instant::now() < end {
+        let waited = unsafe { libc::waitpid(pid, &mut status, libc::WNOHANG) };
+        if waited == -1 && unsafe { *libc::__error() } == libc::ECHILD {
+            auto_reaped = true;
+            break;
+        }
+        if waited != 0 {
+            break;
+        }
+        std::thread::yield_now();
+    }
+    apply_chld(&original);
+    let latched = DarwinPlatform::validate_parent_reaping().is_ok()
+        && child.try_reap() == Err(uiblueprint_host::HostError::CleanupPending)
+        && child.terminate() == Err(uiblueprint_host::HostError::CleanupPending);
+    send(
+        4,
+        &[
+            u8::from(lost),
+            u8::from(refused),
+            u8::from(auto_reaped),
+            u8::from(latched),
+        ],
+    );
+}
 fn main() {
     let stack = match DarwinPlatform::setup_main(8 * 1024 * 1024) {
         Ok(n) => n,
@@ -201,7 +338,8 @@ fn main() {
         std::thread::yield_now();
     }
     send(4, &info(stack));
-    match byte() {
+    let mode = byte();
+    match mode {
         b'I' => {}
         b'E' => send(4, &[byte()]),
         b'X' => unsafe { libc::_exit(17) },
@@ -235,6 +373,8 @@ fn main() {
         b'P' => interrupt_poll(),
         b'R' => partial_setup(),
         b'S' => closed_sigpipe(),
+        b'N' | b'G' | b'T' => policy_refusal(mode),
+        b'L' => policy_drift(),
         _ => unsafe { libc::_exit(83) },
     }
 }
