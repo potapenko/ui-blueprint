@@ -781,3 +781,67 @@ docs/development/host.md and this receipt. No production/shared provider, Native
 Web or Integration source changes. The parallel rejection-proof source hold remains
 intact. Parent-death/watchdog remains a separately named proof requirement; existing
 input-EOF/owned-reap cases are not relabelled as actual parent-process death.
+
+## Actual supervisor death: observed defect, minimal watchdog repair
+
+Parent inventory checkpointff92c5111754c9a79b352a9207fd562325d69f97 is saved/pushed;
+its source/test identity matched and Git lease released. Next original H01 obligation
+was actual parent-process death while operation work cannot read parent input.
+Core reused accepted Web data/peer helpers read-only in a separate parent_death test;
+no provider file/public API/general harness was introduced.
+
+The real disposable supervisor launches the real guarded Web worker and drives
+begin/permit into a withheld Runtime.callFunctionOn reply. The outer test kills
+only its owned std::process::Child supervisor; this bypasses RuntimeHost Drop.
+Read-only pgrep -P on that live owned parent identifies its sole worker; exact
+ps PID/state queries observe exit without any worker-PID signal. Both observation
+commands have owned subprocess/time bounds. S is live, Z/absence establishes exit;
+the test does not claim to waitpid/reap an orphan. Peer stays open through the exit
+assertion, and is closed/joined afterwards or during bounded failure cleanup.
+
+Initial absence check failed. A second run explicitly checked process state and
+confirmed live S rather than a zombie/reap ambiguity. The worker exited only after
+peer teardown unblocked its network wait. Production remained unchanged during the
+then-active Integration hold; root released it before this corrective edit.
+
+Cause evidence: with a separate owned socketpair after peer closure, actual Darwin
+poll(events=0) returned0/revents0, while poll(POLLIN) returned1/revents17 and a
+non-consuming peek observed EOF. Peek/kqueue were diagnostic exploration only and
+are NOT added to production. Selected public SDK event/socket declarations were
+read; no new binding/dependency is adopted. The observed empty-mask behavior and
+reproduced real worker failure support this diagnosis; it was not assumed from API
+convention. Core changes only worker_io::parent_alive's requested events to POLLIN,
+keeping existing HUP/ERR handling, bounded wait, descriptors and no protocol reads.
+
+Repaired parent-death test passes: worker exits within1s while peer is still open,
+before peer3s and request10s timeouts. Nested parent_actor is explicitly launched
+with its isolation marker; it is not a skipped test. Affected checks passed:
+
+```sh
+cargo test --locked -p uiblueprint-host --features web --test parent_death actual_parent_death_stops_worker_during_network_acquisition -- --exact
+cargo clippy --locked -p uiblueprint-host --features web --bin session-worker --test parent_death -- -D warnings
+cargo test --locked -p uiblueprint-host --no-default-features --test runtime real_worker_reuses_session_and_keeps_caller_completion_during_other_session -- --exact
+cargo test --locked -p uiblueprint-host --no-default-features --test runtime native -- --test-threads=1
+cargo test --locked -p uiblueprint-host --features web --test web_worker real_begin_permit_ack_and_reusable_first_and_reference_requests -- --exact
+```
+
+The native filter covers active collection and post-ACK cancel/deadline. Ordinary
+and real guarded Web first/reference flows demonstrate the poll change does not
+consume queued protocol bytes. Scoped format/link/diff checks pass. No unchanged
+allocator, full provider or unrelated suite rerun; raw diagnostics not persisted.
+
+New worker_io pin46990ede3d9d4c443151befb11919078ffb73cec20fcda108823f97bc4a31266
+replaces9700bfa only for this saved repair. Test pin
+2d1b8ddcb2c1fcc64ad6529ba5be888eb91127460476dbdfb9fec6a676e59197.
+Other worker/allocator/protocol limits/contracts remain unchanged. Exact4 checkpoint
+paths: crates/host/src/worker_io.rs, crates/host/tests/parent_death.rs,
+docs/development/host.md and this receipt. Same-context independent repair review
+remains pending; no full H01/live/SDK/D06 acceptance is inferred.
+
+Parent-death proof input snapshot89 digest:
+`99894edd5086fbc5e9b398b22d343b5fb8f8e4c2a6899bf1f8da07b2068ea13e`.
+Set: root Cargo.toml/Cargo.lock/rust-toolchain.toml; Cargo.toml and all .rs/.js under
+src for host/schema/engine/plugin-api/Web; parent_death.rs and its borrowed
+web_worker_data.rs/web_worker_peer.rs. Compact sorted path→SHA256 JSON uses the
+same recorded method. This primary-case input snapshot is not a claim that its set
+includes every earlier runtime regression fixture. Saved equality follows commit.

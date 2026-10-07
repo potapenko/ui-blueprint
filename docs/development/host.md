@@ -384,3 +384,30 @@ observation tests those named paths only. It does not prove every future path or
 close platform/live/SDK/D06 gates. The independent producer review419b75c accepted
 its scoped source connection and RuntimeState/native-binding precharge participation;
 it was not a standalone complete inventory/steady-state/runtime H01 verdict.
+
+## Actual parent-death watchdog repair
+
+A disposable supervisor now exercises the real guarded Web worker against the
+existing owned CDP peer. The peer withholds Runtime.callFunctionOn after real
+admission, leaving the operation thread in its network wait rather than reading
+parent input. The outer test SIGKILLs only its owned supervisor Child; RuntimeHost
+Drop cannot run. Read-only pgrep scoped to that live parent establishes its sole
+worker, and exact ps PID/state queries observe worker exit. No numeric worker PID
+is signalled. Zombie is distinguished from running state; orphan reap is the OS's
+responsibility, not a claimed waitpid by this observer. Query subprocesses and peer
+teardown have explicit bounds and owned cleanup.
+
+The original test failed: worker remained live in state S until the CDP peer was
+closed during test teardown. A separate owned socketpair reproduced Darwin behavior:
+poll(events=0) after peer closure returned0/revents0; poll(POLLIN) returned readable
+and HUP (17). This observation established the empty-interest-mask defect in the
+watchdog's existing parent_alive path. The minimal repair requests POLLIN while
+retaining the same bounded poll and HUP/ERR checks. It never reads or consumes
+protocol bytes, introduces no new syscall/API/dependency, and leaves deadlines,
+limits and FD/protocol ownership unchanged.
+
+The repaired actual-death case passes while the CDP peer remains open, within the
+1s exit check and before peer3s/request10s timeouts. Existing reusable-worker,
+Native begin/helper/ACK/cancel/deadline and real guarded Web initial/reference
+flows pass the affected checks. This is narrow actual supervisor-death/liveness
+proof, not SDK/browser/live or whole-process RSS qualification.

@@ -55,7 +55,10 @@ impl WorkerIo {
 pub fn parent_alive(wait_ms: i32) -> bool {
     let mut fd = libc::pollfd {
         fd: CHILD_INPUT_FD,
-        events: 0,
+        // Darwin does not report socket EOF/HUP for an empty interest mask.
+        // Request readability so peer closure is reported; polling never reads
+        // or consumes the operation thread's protocol bytes.
+        events: libc::POLLIN,
         revents: 0,
     };
     // SAFETY: one initialized pollfd, inherited live input FD; wait is bounded.
