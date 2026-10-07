@@ -174,6 +174,7 @@ private struct PilotView: View {
                     publish()
                     #endif
                 }.accessibilityIdentifier("f02.snapshot")
+                .keyboardShortcut("s", modifiers: [.command, .shift])
                 Button("Reset") { reset() }.accessibilityIdentifier("f02.reset")
             }
             HStack(spacing: 12) {

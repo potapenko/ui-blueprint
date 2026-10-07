@@ -157,3 +157,21 @@ No new product-source defect or public-API impossibility inferred. Current sourc
 and synthetic acceptance remain intact; real public popup binding/canonical AX/positive
 capture/M03 remain waiting_evidence. One-path human outcome checkpoint pending root
 Git lease; no running process/resources/index or additional runtime attempt held.
+
+
+## Direct Snapshot shortcut setup candidate — selected
+
+Root selected one existing SwiftUI property after read-only evidence: add
+.keyboardShortcut("s", modifiers: [.command, .shift]) to the SAME Snapshot Button.
+Actual exact2 subset declared before edit: Fixture.swift and this receipt.
+Action/publisher/identity lifecycle, visible content/layout and all limits unchanged;
+no handler/flag/auto-observe or new mirrored tests. Routing while popup remains open
+is still a runtime hypothesis, not a demonstrated repair/dismissal cause. Affected
+fixture compile only before checkpoint; runtime waits saved matching source.
+
+Affected off fixture compile passed Swift6/macOS14.0, no diagnostics. Own diff is
+one modifier, whitespace checked; source 17630e872935f7ec704a86183486e4ff2cd608744c2c4599a7adf61c3c24bdb0;
+binary 511f0593fc55c311b952229f1f0a14da7647c0a1ad6cb1ad550466b921a77a01.
+Operation temp uib-m03-shortcut-75jf9o2s retains this immediate qualified build for
+next already authorized fresh run; no image produced or deleted. Exact2 ready,
+index untouched; no runtime/keyboard input or repeated source suites.
