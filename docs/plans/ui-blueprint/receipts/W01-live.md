@@ -1,9 +1,9 @@
 # W01 live first-observe diagnosis
 
-Status: first run and one changed-case diagnostic run FAILED. Producer diagnosis is
-now in preparation; no further runtime retry. Authority [packet](../packets/W01-live.md), preparatione02eeff,
+Status: third changed diagnostic run FAILED at Collect/CollectorMalformed.
+Root opened the bounded collector repair; no unchanged runtime retry. Authority [packet](../packets/W01-live.md), preparatione02eeff,
 sinkc3c28a3, activation2669384, and root's explicit finite diagnostic-repair dispatch.
-Only the same4 files change. No production/fixture/oracle/Cargo/limits/backend edit.
+Current repair scope follows the packet; no fixture/oracle/Cargo/limits/backend edit.
 Current registry11/D05@4 and full prior Web/QA/operational Spec Basis remain applicable;
 Native-only acquisition delta adds no Swift scope. No B02/input/Q02/real PlayPhrase.me.
 
@@ -64,8 +64,8 @@ methods/8192 reply/65536 cumulative/600 text/256 handle/32 AX properties;16384 r
 action2s/phase8s, host attach/cleanup5s, consumer90s/whole120s and close/kill3–4s.
 No threshold tuning, backend substitution, different source data or weakened oracle.
 
-New diagnostic UUID495ecfe4-e5ab-49b5-8769-f9013645caa2 under the same evidence root
-is a pathname ONLY, not created yet. Runtime uses exclusive mkdir/files. Root retains
+Diagnostic UUID495ecfe4-e5ab-49b5-8769-f9013645caa2 under the same evidence root
+contains the immutable second report described above. Runtime uses exclusive mkdir/files. Root retains
 evidence through P7 acceptance or explicit discard/replacement for W01/G02/P7.
 Only compact report and unchanged validated/ACKed positive frame bytes may be saved;
 this diagnostic case can save initial-left.json only. Other approved full-run frames
@@ -85,7 +85,7 @@ Existing HostError/terminal semantics, limits, collector and canonical wire unch
 Harness accepts only bounded fixed fields; cleanup remains explicit on failure.
 
 Affected no-run and web worker/test Clippy -D warnings PASS on1810b1d; syntax/fmt pass.
-No runtime rerun yet. Source97 digest
+Saved producer-diagnostic build source97 digest
 904568cc7593b554544da2b54ac7860f0fe3dab9f953ce012af53629e294b88d:
 same compact sorted JSON path→SHA256 recipe as prior96, now includes diagnostic.rs;
 Core source/manifests pinned1810b1d, own worker_web/web_live/guarded-live bytes override.
@@ -96,7 +96,7 @@ Test deps/web_live-f02c419e3beec6bc SHA256
 8afa8d22c37c22701aa8389f1338fb5f6264e292b5a52d8453766b6c0a6e5e56;
 worker session-worker SHA256
 5627ac6b02a94882f2d004073bde332382c1a937e5247a460ec3e86f2aa2c7ab.
-Fresh evidence UUID5263b74d-e4f7-4396-84cc-562cce874d2c is not created yet.
+Evidence UUID5263b74d-e4f7-4396-84cc-562cce874d2c contains the third report below.
 
 After exact5-path save, use the same fixed command with this build's test/worker
 paths/hashes, new evidence UUID and UIB_WEB_LIVE_CASE=first_observe_diagnostic.
@@ -104,3 +104,19 @@ One changed first-observe run is already authorized; no unchanged retry or cap c
 Core hold covers only ready compilation/run and releases after result/pin comparison.
 First and second reports/older binaries remain immutable. Root retains evidence
 through P7. Full real UI success and broader cases remain unproven.
+
+## Actual producer diagnostic result
+
+Saved Web2cc47531108bb7cf03f0445c2521ddc20347bbba/Core1810b1d ran the changed
+first-observe case2026-10-07T13:38:49.304Z–13:38:53.887Z. Actual stage5 Collect,
+cause6 CollectorMalformed, code0/count0, remote_cleanup1 Released and
+send_progress0 NotQueued. Outer terminal invalid_input, committed0/missing1,
+operation1, zero canonical frames. This does not identify the failing collector
+method or field; bounded owning-source diagnosis is the immediate next consumer.
+
+Report SHA25658a3b8d7d0899200cd4926723baaeb8956f1b7030647ccf77bf5bb7a72e27e87.
+Actual worker cleanup confirmed sessions0/groups0/abandonedfalse; browser survived
+worker reap. Test/context/driver/browser/server/profile cleanup all confirmed.
+All97 inputs matched saved bytes and904568cc digest after runtime; both exact
+executables and prior two reports matched. Core runtime/source hold released.
+No unchanged retry, limit/oracle change, or broader positive acceptance claimed.
