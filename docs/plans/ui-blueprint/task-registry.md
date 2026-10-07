@@ -57,17 +57,20 @@
 
 - Core продолжает L01-actions-implementation от138d7bc: исправить установленное
   смешение malformed input2/fresh refusal4, закончить affected metadata checks.
-  Новый private encoding/shared path требует точного предложения до правки;
-  contract CLI-ACTIONS.EXITS и public schema остаются неизменны.
+  Source-backed proposal принят: internal ActionRefused/private terminal9, narrow
+  lib.rs/diagnostic.rs additions; typed pre-Possible ACKed refusal only. Amendment
+  в L01 packet; CLI-ACTIONS.EXITS/public schema/flags0..4 неизменны.
 - Web продолжает W02-form-read-facts от docs-only f0d241e. Разрешена только
   механическая None initialization в collector/action.rs при расширении private
   DomRead; action behavior защищено. Mapping proposals сверить с полным contract
   и native API evidence до source; неизвестное не превращать в known.
-- Native23f22fb frozen для source review тем же m01_acquisition_review, сначала
-  source observations без author receipt. Native owner параллельно готовит
-  existing helper/fixture и ограниченный actual-run handoff; UI/capture пока не
-  запущены. Нельзя строить host/CLI с чужим WIP; нужен saved input identity.
-- Git lease выдаётся только checkpoint-ready владельцу; desktop/runtime свободен.
+- Native23f22fb accepted scoped source review тем же m01_acquisition_review:
+  сначала source observations, затем author receipt и5source hashes matched.
+  Prepared Swift23f22fb/Rust138d7bc без WIP. Активирован один actual AX+popup
+  capture run с individual identity values,300s/unchanged D05; Native owns desktop
+  lane до finally/reap, images retained. [Review](receipts/M01-acquisition-review.md).
+- Git lease выдаётся только checkpoint-ready владельцу; desktop/runtime: Native
+  current combined popup run, release after finally/reap.
   Следующий шаг: source-first review reconciliation → Native runtime activation;
   Core/Web coherent source checkpoints и review затронутых protected boundaries.
 
@@ -157,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Resumed: Core host/CLI; Web bounded collector/form facts; Native source frozen under same-reviewer review and owner pre-run preparation. Distinct write scopes, short Git leases only, no runtime lane yet |
+| Активные чаты/пакеты/ресурсы | Resumed: Core host/CLI; Web bounded collector/form facts; Native source23f22fb accepted scoped review; one actual popup AX/capture run on saved binaries, desktop owned until finally. Distinct write scopes and short Git leases |
 | Последний принятый результат продукта | Web actual native Setter pipeline9d3a0a5 passed10outcomes/12checks with real preparation/result and readonly/remount/cancel negatives. Native popup AX/inspect and explicit close→stale→reopen positive established; live AX equal, separate current-file post-assert unverified. Broader forms/physical/business/capture not inferred |
 | Следующий шаг | Reconcile Core refusal exit distinction and remaining evidence; Native source review before actual capture with separate identity checks; Web mapping/scope reconciliation then read-facts implementation. Full K02/forms/pilots/performance/distribution/P0–P7 DoD remains open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -173,7 +176,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 | [W02-form-read-facts](packets/W02-form-read-facts.md) | retained Web owner | FORMS/B02 and actual F01 action-state-result handoff | resumed from docs-only restart handofff0d241e; source scope includes narrow private initializer amendment. Selection request/binding/direction mapping and private initializer scope remain proposals/dependency. Resume same bounded packet after explicit activation; no delivered form-read capability claimed |
 | [W02-live-actions](packets/W02-live-actions.md) | retained Web owner | accepted provider/preparation; Core guarded composition in progress | harness25bf999 saved/pushed exact3 after old80b7449 no-run/Clippy. Existing real barrier now saved/released by Core, no duplicate changes. Corrected Corec3967ca accepted;195-input2c037039… pins current. ONE actual headless actions run activated,120s and fixed32/depth8/64KiB/250ms; own loopback context, no desktop input. actual9d3a0a5 saved: all10 outcomes/12checks passed, source-derived Prepare→confirmed Setter→fresh Checkedtrue; readonly/remount/possible-before-delivery cancel and independent state/cleanup verified. No physical/business/delivered-loss/fullB02 claim |
 | [L01-actions-implementation](packets/L01-actions-implementation.md) | retained Core owner | registered CLI-ACTIONS@1/c4bc255 + acceptedc3967ca/real Web9d3a0a5 | resumed coherent WIP138d7bc saved/pushed exact20; author checks recorded in A01 receipt. Known malformed2/fresh-refusal4 ambiguity, metadata fault cases, source review and actual public CLI proof remain; not accepted |
-| [M03-popup-capture](packets/M03-popup-capture.md) | retained Native owner | own popup physical/AX/lifecycle facts; explicit all-image retention rule | acquisition@2/registry17 registeredaf8a1a4; exact7 writer/popup capture candidate23f22fb saved/pushed, author26writer/78popup checks and17canonical documents. Source frozen under retained reviewer; owner preparing saved-input runtime handoff, no UI run yet; separately recorded current identity proof pending |
+| [M03-popup-capture](packets/M03-popup-capture.md) | retained Native owner | own popup physical/AX/lifecycle facts; explicit all-image retention rule | acquisition@2/registry17 registeredaf8a1a4; exact7 writer/popup capture candidate23f22fb saved/pushed, author26writer/78popup checks and17canonical documents. Scoped source review accepted after source-first/receipt reconciliation and5hash match; prepared saved Swift23f22fb/Rust138d7bc. One actual AX+popup capture activated with separate current identity values and retained PNG; outcome pending |
 | [M03-direct-window](packets/M03-direct-window.md) | retained Native owner | actual unresolved mapper55a4ca81; supported nonvisual NSView.window candidate | source d5fd03f saved/pushed; actual open-popup Snapshot shows visible containing window9437 vs parent9430, equals_parent=false; operation51.7s with finally cleanup confirmed. No collector/capture acceptance; direct facts feed M03 connector, IDs are run-specific |
 | [M03-popup-connector](packets/M03-popup-connector.md) | retained Native owner | actual direct-window evidence; existing source/identity/resource fixes | source21ac1d accepted; actual CLI popup AX validated partial/exit4,5 nodes/exact Surfaces/sourced anchor, inspect compact+JSON0. Full lifecycle hit300.15s watchdog before Confirm/stale/reopen, not accepted; cleanup confirmed/lane released. Cached-file equality does not prove live invariance. Native outcome b4a965e saved, remaining lifecycle-only actual close/stale/no-data/reopen positive passed59.3998s, live CUA AX equal. Separate combined post-current-file assertion unverified; Native inspects exact expression and minimal popup capture connection, no entire-chain repeat. Positive capture/shared-parent remain open |
 | [M03-popup-attribution](packets/M03-popup-attribution.md) | Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a / local | current identity source53e6e6e; existing F02 popup handoff | sourcec8d5287 saved/pushed, 19 focused author checks plus canonical/A controls. Same reviewer accepted repair71c82f47: resource refusal incomplete_scope, missing/stale identity preserved, no partial fallback. Author38 checks/8canonical validations. First own-popup interval interrupted before Snapshot, no mapping/CLI claim; finally cleanup153.39s confirmed. Shortcut a466051f worked in actual fresh run: Snapshot1 with popup still open; actual mapper unresolved/null, identity CLOSED. No CLI/pixels run; finally cleanup141.86s. Native source-only exact owner-attribution diagnostic follows outcome checkpoint. Positive capture remains open, B capture/pointer gaps protected |

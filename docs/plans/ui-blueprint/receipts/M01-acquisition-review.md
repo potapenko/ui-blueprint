@@ -49,3 +49,24 @@ acceptance. Actual SDK/H01 acquisition, lifetime/reap, ACK survival, current
 pixels, positive Native pilots and D06 remain separate qualification. Native
 now supplies the concrete first H01/F02 observation preparation handoff; no
 additional offline audit is assigned.
+
+## Retained popup capture source — 2026-10-08
+
+Same non-author reviewer m01_acquisition_review inspected23f22fb74487d11ad6a04ca991837a3e7ff08081
+against actual parent92411e17 before author receipt, then reconciled the saved
+M03-popup-attribution receipt. Verdict **accept** for this changed source scope;
+no actionable findings. All5 saved source SHA256 values independently matched.
+
+PNG staging/partial/final retention preserves byte admission/failure latch/Finalize,
+exclusive no-overwrite publication and descriptor release; non-image cleanup stays.
+Popup uses exact configured physical window, both identities rechecked before/after
+capture and publication; stale image retained without payload. Parent excluded,
+coverage partial, unknown transform, no invented capture-only AX anchor.
+
+Author reports26writer/78popup checks,17canonical validations and affected builds;
+execution and retention of23image paths remain attributed. Removed binaries were
+not recreated. Reviewer ran no tests/runtime and changed no files. Actual SDK/PNG/
+individual pre-post identity assertions/reap still required; shared-parent/fullM03
+remain open. Native prepared saved23f22fb Swift +138d7bc Rust inputs without current
+WIP; root activated one bounded own-fixture combined AX/capture run,300s existing
+bound, unchanged D05 per-channel/cleanup caps, all images retained in system temp.

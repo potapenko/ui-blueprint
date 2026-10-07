@@ -63,3 +63,17 @@ Narrow discovered owner grant: worker_ops.rs::prepare_input only, for registered
 Snapshot/observed ChannelResponse validation and unchanged Snapshot extraction in
 worker. Failed/no-snapshot/wrong input refuses; no parent parse, graph clone or
 unrelated operation semantics. Existing strict quotas and canonical validation hold.
+
+Resume dependency selection, 2026-10-08: CLI-ACTIONS.EXITS requires fresh refusal4
+versus malformed input2. Core's source handoff identifies their existing InvalidInput
+conflation. Select internal HostError::ActionRefused/private terminal9, preserving
+Frame flags0..4 and canonical Issue/ErrorCode unchanged. Additional bounded paths:
+crates/host/src/lib.rs only the HostError variant and diagnostic.rs only its exhaustive
+bounded mapping; existing worker/supervisor/CLI owners and nearest tests remain scoped.
+Parent accepts9 only typed Prepare/Mutation before Possible with matching ACKed
+refusal/Error publication. No status/rights from uncommitted bytes; afterPossible
+uncertainty4 and IO/cleanup1 precedence preserved. Incompatible class/state/late
+terminal refuses. Observe/legacy behavior, nonce, quotas and wire schema unchanged.
+This is a delegated private implementation choice under D02 and CLI-ACTIONS, not
+a new public product requirement. Prove actual caller fresh-refusal4 vs malformed2
+and invalid terminal-state cases, then independent source review before live use.
