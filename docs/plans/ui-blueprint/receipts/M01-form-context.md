@@ -77,3 +77,53 @@ Status: checkpoint_ready, exact8 paths declared above. Python syntax/local links
 scoped whitespace checked; index untouched. No active build/helper/process/input
 lane or temp artifact remains. Next runtime/review activation is separate; successful
 first A/AX proof33eecdb is preserved, not reopened by this source connection.
+
+## Activated current-operation form run — actual H01 success
+
+Root activated one form-context run after saved83247b9678e8372948994d7858996f50cfb7f0ce.
+Needed saved helper/descriptor Swift owners were compiled only for this operation
+under fresh system-temp, with compiler module-cache paths inside that temp. Reused
+verified ignored Rust consumer7d41c126…6b188e2 and canonical validator119842ca…14ddf15;
+no Rust rebuild, new wrapper/mode/flag or old suite. Saved source8 and consumer
+identities checked before/after; no moving Core/Web inputs consumed.
+
+Canonical-path PID attribution within10s identified only newly launched F02-off
+PID88080 with its unique current run-dir. CUA showed Window A, normal/no-popup and
+existing Name input. One Snapshot produced the fresh own manifest/snapshot_request1.
+No input was delivered to manufacture focus. Native physical lane released immediately
+after setup; Web's isolated headless operation was unaffected.
+
+One actual window-ax observation requested only role/accessibility_name/placeholder/
+focused/enabled at160/depth9/512KiB and unchanged AX/parent1s/cleanup1s/profile limits.
+Existing descriptor-only mechanism and Rust consumer's real Attached clock/native
+submit were reused. Host terminal completed, committed1/missing0, caller_ok=true;
+reserved_sessions0/abandoned=false and helper/worker cleanup_confirmed=true.
+Canonical response passed the existing validator. State/source_state stayed unchanged;
+bounded raw diagnostic bytes0. No capture/value/draft/global focus requested.
+
+Observed76 nodes (actual count, not a forced target), every node with exactly those
+five requested properties, honest partial coverage. Actual reported AXIdentifier
+f02.name identified one textbox:
+
+- role known textbox;
+- placeholder known Name;
+- enabled known true;
+- per-node focused known false, as observed rather than preferred;
+- accessibility_name unsupported, reason ax_error_-25205, without placeholder fallback.
+
+Global keyboard/accessibility focus remained not_requested. No anchor, relation,
+pixels/layout or real Director-UI inference was added. Canonical channel hash:
+8d33fe94cc8c0fd5c5ba72933f5cc79872990de359f3b3e9dd9ce7f6722c557b.
+This proves the requested form-property connection through actual H01, not broader
+Director/general-app behavior, global focus, SDK saturation, pixels or D06 acceptance.
+
+Native rechecked exact PID/canonical executable/unique-run-dir, sent SIGTERM only
+to this own fixture and confirmed process absence within5s. LaunchServices parent
+owns reaping. No other/user instance, permission/display/backend change or B retry.
+All source8/reused-consumer identities remained unchanged. All current-operation
+outputs/builds/module caches/fixture working files at system-temp
+uib-m01-form-live-c_kf0afn were removed and directory absence verified after inline
+facts were returned. No local image link, persistent output directory or archive;
+old evidence/linked images untouched. No active process, input/capture lane or Git
+lease remains. Exact-one-path human receipt checkpoint pending root lease; no further
+runtime case or retry was started.
