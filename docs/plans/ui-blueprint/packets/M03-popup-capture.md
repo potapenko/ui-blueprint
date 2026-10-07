@@ -56,3 +56,11 @@ runtime yet. Next actual AX+capture run must show valid distinct channel respons
 correct frame/inline retained system-temp PNG, separate OPEN/generation/parent identity
 checks immediately before/after Observe with actual values preserved, and real reap.
 Shared-parent representation, unrelated B/TCC and full M03/P7 remain open.
+
+Actual-run selection, 2026-10-08: prepared combined3s Request was never launched;
+helper inherits remaining overall budget, so it would not enforce AX1s maximum.
+Use explicit combined Request and parent operation ceiling1000ms before actual
+launch. Both channels then fit AX≤1s and capture≤2s maxima; no per-channel source
+change, field/quality reduction or timeout increase. Setup/attach stay separate,
+overall300s and owned cleanup bounds unchanged. If deadline expires, record failure
+without tuning or automatic retry. No product defect inferred from unrun config.
