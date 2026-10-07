@@ -150,3 +150,31 @@ commands/results, exact ownership inventory and API handoff, commit/push/release
 known discrepancies and next dependency. Do not self-accept memory/live capability.
 Mandatory independent allocator/lifecycle/privacy review follows the saved result.
 Stop at this finite host outcome; no autonomous adapter/CLI or next-goal expansion.
+
+## Real producer composition handoff
+
+The approved H01/W01/M01 consumer boundary now has concrete inputs: Native handoff
+99c4c15 and accepted Web bootstrap8f77063. Core may connect these existing producer
+APIs inside the guarded worker and implement the required active worker→parent
+helper exchange, within host ownership. No browser/SDK/UI runtime grant follows.
+Preserve core0.1/analysis0.2 and canonical owners; real ObservationSession::begin
+precedes collection and its Ticket.sequence is not the parent operation sequence.
+Validate received channels in the worker and publish through actual commit/ACK.
+Parent executable/configuration authority and no graph/JSON parsing remain strict.
+Source/helper entrypoint changes outside Core's paths require separate owner handoff.
+
+For the concrete Web consumer, Core may add an optional `web` host feature with
+`dep:uiblueprint-web` and `dep:log`, default features unchanged/empty, using only
+the existing path `../../plugins/web` and pinned workspace log with no new features
+or versions. This applies D01's selected-adapter boundary and D07's existing codec/
+log adoption; it does not add another framework or make Web mandatory for core/
+Native builds. Cargo.lock may record these workspace edges only; no update/version
+drift. Mandatory existing Web logging filter must be installed before transport use.
+Check affected default/web feature configurations and return the exact manifest
+handoff before shared-input proof; no live qualification from compilation.
+
+No old source barrier remains active merely because it appeared in chat: root
+explicitly releases each finite run. Coordinate actual changed worker/API pins with
+Integration's next ready-to-run proof, preserving all unaffected evidence. Return
+the concrete compiling producer boundary early so Web/Native owners can implement
+their disjoint glue; do not broaden this into a generic RPC/protocol project.
