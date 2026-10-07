@@ -65,3 +65,23 @@ Short exact-path commit+canonical push at coherent steps; parent/index lease sep
 from editing. System-temp non-image build output may stay only for immediate operation
 consumers then be removed; ALL images and containing directories stay, without agent
 cleanup, under latest user rule. No new persistent directory or runtime app action.
+
+
+## Canonical input composition choice
+
+Source handoff establishes ActionCase has no acquisition Limits, while existing
+Request::Act carries caller request limits and clock. Under ROADMAP/D03 technical
+choice authority, reuse existing Tape with exactly ActionCase Document then Act
+Request Document, not a new graph/envelope/CLI. Core identifies existing encoding/
+validation owners and rejects extra/wrong records or mismatched Target/session/scope/
+shared ref fields before effect; require Act operation and SetChecked ActionCase intent.
+Do not invent duplicate request fields. Host aggregate input caps and tighter caller limits hold.
+Any actual canonical incompatibility is an explicit dependency, not silent coercion.
+
+Existing parent guard forbids Mutation Frame before permit. Canonical pre-dispatch
+refusal is required; HostCompletion-only is not the final user path. Do not relax
+that guard unconditionally. Core returns a concise exact private control/state
+proposal that admits only correlated pre-Possible refusal, prohibits all subsequent
+EffectReady/dispatch for that operation, and preserves after-Possible nonce/ACK/
+expiry/cleanup without parsing payload in parent. Root selects that missing
+protected boundary before source mutation. Independent bridge work continues.
