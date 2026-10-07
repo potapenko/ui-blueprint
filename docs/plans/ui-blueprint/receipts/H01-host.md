@@ -884,3 +884,127 @@ distinguish polling deadline from the explicit<2s elapsed assertion; no source/t
 change, rerun, tighter timing claim or orphan-reap claim accompanies this correction.
 Registry11/D05@4 was refreshed: common Rust limits/clauses are unchanged; its new
 Native-only acquisition route does not enlarge this Core pure Rust proof scope.
+
+## Publication allowance — predeclared terminal probe (not run yet)
+
+Root's finite coverage continuation targets serializer/dependency scratch, not a new
+OOM requirement for allocation-free writers. Before the first run, fixed budgets:
+output backing524288 bytes and ordinary ballast4096, both explicitly charged by the
+existing guard; ordinary528384 fully occupied, final publication reserve1048576,
+total1576960. Old decoded DTOs are System-owned outside the terminal interception
+window and never dropped there; this is not whole-worker accounting. Source guard,
+PublicationGuard, FixedOutput and publish are included unchanged; no public/private
+production API or substitute serializer. Parent uses actual Publication commit/ACK.
+
+Seven fixed cases: (0) ENV-SNAPSHOT-VALID; (1) same validated Snapshot with first
+known Text replaced by literal NUL/LF/quote/backslash/é sequence repeated10000;
+(2) measurement-gap analysis0.2; (3) check-converted analysis0.2; (4) canonical
+permission_required ChannelResponse built from that Snapshot context; (5) original
+Snapshot into16-byte FixedOutput; (6) original Snapshot with parent ACK input closed
+after real Commit. All normal output caps512KiB; parent complete-frame cap2MiB.
+Expected before execution: modes0–4 success, scratch allocation count/peak0; mode5
+one40-byte serde_json ErrorImpl allocation on this aarch64 pin, no publication;
+mode6 fixed/static EOF path, scratch0 and no ACK/committed result. Scratch must be
+fully released before PublicationGuard Drop. After explicit output/ballast dealloc,
+existing fatal ParentGone is ONLY a reporting sentinel with live0, exit105. All
+owned probes must reap. No limits/expected outcomes will be fitted after failure.
+
+Source trace: canonical model/analysis types derive Serialize with records, struct
+internal tags and adjacent newtypes; no flatten/custom Serialize or arbitrary
+map keys. Compact serde_json::to_writer borrows them, with fixed Compound state,
+string slices/six-byte escapes and stack itoa/zmij buffers (40/24 maximum bytes).
+No runtime Content collection path is selected by these shapes. IO failure creates
+one boxed ErrorImpl and propagates it, rather than formatting UI data. Rust1.96
+ErrorKind conversion and READ_EXACT_EOF use simple/static error representations.
+Primary std sources: https://raw.githubusercontent.com/rust-lang/rust/1.96.0/library/std/src/io/mod.rs
+and https://raw.githubusercontent.com/rust-lang/rust/1.96.0/library/std/src/io/error.rs.
+Current Cargo tree confirms serde_json std/alloc/float_roundtrip; arbitrary_precision
+and raw_value serializers are not selected. Native/legacy raw-byte paths bypass
+serialization; Web uses the same canonical Document + FixedOutput serializer, then
+ordinary guarded receive and a separate ACK reserve. Decoder/validator/source work
+is not charged to publication merely because it precedes a channel.
+
+Core owns only new tests/publication_scratch.rs, tests/support/publication_probe.rs
+and the exact host Cargo example hook, plus host.md/this receipt. Integration probe
+and Web/Native provider sources remain protected. Scope is fixed source + bounded
+publication execution, not a profiler/framework or live qualification.
+
+Pinned files at predeclared preparation:
+
+| Source | SHA256 |
+| --- | --- |
+| Cargo.lock | b2b39be77e62da78baffcb34afb21e9592373a301a5e99ad8bac8965ee788332 |
+| crates/host/src/quota_allocator.rs | 2f1bf278b9265855ececed61ccb5b3f2e1904f17b1855adb6d659782b241e50e |
+| crates/host/src/worker_main.rs | 4e03cf9f6ff4675a8c0e526a6f65aff388c16d6468e70c798931af243dc6814c |
+| crates/host/src/worker_io.rs | 46990ede3d9d4c443151befb11919078ffb73cec20fcda108823f97bc4a31266 |
+| crates/host/src/worker_ops.rs | 45ae90c820542b7bf91475cb63df312e8cc52ad62f1247293b964845b88fc2bb |
+| crates/host/src/worker_web.rs | 3f31a1951c47ee2335d11426491cc8213adfa6fa89d950a98f7e8714bb53847f |
+| crates/schema/src/model.rs | d42de64fcebbf7ecf4f98b9665d0215a6b52f7d7392bb324af9bcf3551742d49 |
+| crates/schema/src/analysis/types.rs | 4d2a65181905543c54650bdb8402f45d3071af4989b788d09b89c1a1ab12a104 |
+| serde_json-1.0.151/src/ser.rs | f2b8cc0b97e30c49dbc58698fa22c14a7d56ea616cdb57b067835a59af49a75f |
+| serde_json-1.0.151/src/error.rs | a13add05a63adf53d89e37effa03221d897a60486cfe360a5a958c0dd2a7e90d |
+| serde_derive-1.0.229/src/ser.rs | 18b3a4d06cd721c402835b17f008a63fdbaad379734f0fd4132aa28d8ea5c1de |
+| serde-1.0.229/src/private/ser.rs | bea364a6199b57c2aa5a96a6bb0530176850dbeaaee908a6307fe610c873c8e3 |
+| itoa-1.0.18/src/lib.rs | e962338e1886873aa7c3399ec89aa5378ccbfed712b9690f043628079390a34f |
+| zmij-1.0.23/src/lib.rs | 0bdb8cd6a8835af08b5ca60956df283732f1b5aa940c750b1ec5dc78bf245b61 |
+
+## Publication probe executed — exact predeclared result
+
+All seven modes passed on their original declared budgets/input set/outcomes.
+Output backing524288 and ballast4096 were charged by the unchanged actual guard,
+so ordinary528384 was full before PublicationGuard. Reserve remained1048576.
+Parent used actual Publication copy/Commit/ACK for successful frames, not a dummy
+acknowledgement. The negative ACK case received complete bytes/Commit but withheld
+ACK; its group correctly finished missing/uncommitted.
+
+| Mode | Encoded/prefix bytes | Scratch allocation calls / peak | Outcome |
+| --- | ---: | --- | --- |
+|0 core Snapshot|2762|0 /0|actual committed frame |
+|1 validated escaped-text Snapshot|142750|0 /0|actual committed frame |
+|2 analysis Measurement|6076|0 /0|actual committed frame |
+|3 analysis converted GeometryCheck|9502|0 /0|actual committed frame |
+|4 canonical permission failure|367|0 /0|actual committed failed-response record |
+|5 FixedOutput16 IO refusal|16 prefix|1 /40|no frame; error released before reserve exit |
+|6 ACK input EOF|2762|0 /0|no ACK/committed frame; static IO failure |
+
+Every window ended scratch-live0. PublicationGuard exited with no borrowed reserve;
+after explicit charged backing/ballast deallocation, real guard sentinel reports
+live0 and exit105. All seven owned children were actually reaped. ParentGone here is
+explicit counter-reporting sentinel only, not new parent-death proof. Pre-window
+System DTOs never deallocate through the intercepted guard; terminal _exit ends
+that isolated lifetime. The unchanged real installed-worker/ACK-survival evidence
+retains its separate role; no whole-worker or SDK/RSS claim is made by this probe.
+
+Commands passed: cargo build --locked -p uiblueprint-host --no-default-features
+--example publication_probe; cargo test --locked -p uiblueprint-host
+--no-default-features --test publication_scratch -- --test-threads=1 --nocapture;
+cargo clippy --locked -p uiblueprint-host --no-default-features --example
+publication_probe --test publication_scratch -- -D warnings; cargo check --locked
+-p uiblueprint-host --features web --example publication_probe --test publication_scratch;
+scoped rustfmt/diff/local-link checks. A Clippy-only collapsed-if edit changed no
+case/budget/outcome; final binary was rebuilt and the exact same seven modes passed.
+No production source, Integration probe, provider or dependency version changed.
+
+Source→obligation→evidence mapping and exact exclusions are in host.md. Current
+canonical derives do not select runtime Content buffering/custom Serialize/flatten;
+compact serializer strings/numbers/containers use borrowed data and stack storage.
+The reachable writer-error Box is fixed40 bytes on the pinned target and freed
+inside reserve. Default and web feature trees both show only serde_json std/alloc/
+float_roundtrip. Native/legacy copies and concrete File/control/ACK paths introduce
+no graph-proportional scratch. Fixed state/errors therefore fit the initial1MiB
+publication reserve independently of input text length; no multiplier or fitted
+budget is substituted. This supplies source-backed author closure of the named
+publication allowance gap, pending root/same-reviewer acceptance. New serialization
+features/callers/versions require affected checks, not an unconditional future claim.
+
+Exact5-path checkpoint: crates/host/Cargo.toml, tests/publication_scratch.rs and
+tests/support/publication_probe.rs under crates/host, docs/development/host.md and
+this receipt. No production code/private API/seam change was necessary; the example
+hook has a concrete implementation and uses the existing dependencies only.
+
+Publication21 source/input digest `e57bcc1ed8bfef2a5abe2960421651942af5da2f3bfb0500e99d4daedfa272aa`: root Cargo/lock/toolchain; host Cargo;
+host src quota_allocator/worker_main/worker_ops/worker_io/worker_web/worker_native/
+publication/protocol/buffers; schema model/lib/analysis/types; two new tests;
+ENV-SNAPSHOT-VALID/measurement-gap/check-converted fixtures. Dependency pins above
+were unchanged; serde_core primitive implementations also inspected:
+serde_core-1.0.229/src/ser/impls.rs `5ee7efc439345e8665da0bd79bc06c02a0506e5fd0f3a4cf11af0c7197eaa643`.

@@ -49,3 +49,8 @@ test = false
 name = "native_peer"
 path = "tests/support/native_peer.rs"
 test = false
+
+[[example]]
+name = "publication_probe"
+path = "tests/support/publication_probe.rs"
+test = false

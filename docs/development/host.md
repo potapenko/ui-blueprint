@@ -413,3 +413,39 @@ peer3s/request10s timeouts. No precise measured exit latency is claimed. Existin
 Native begin/helper/ACK/cancel/deadline and real guarded Web initial/reference
 flows pass the affected checks. This is narrow actual supervisor-death/liveness
 proof, not SDK/browser/live or whole-process RSS qualification.
+
+## Pinned publication allowance closure
+
+The current publication closure is finite: core0.1 Document/borrowed Snapshot,
+analysis0.2 Measurement/GeometryCheck, canonical Web ChannelResponse, and validated
+Native/legacy bytes. It is not an arbitrary user-defined Serialize surface.
+
+| Source owner | Obligation and bounded storage | Evidence / boundary |
+| --- | --- | --- |
+| worker_main input/publication setup |512KiB reusable output backing is allocated under ordinary quota before decode | Existing installed-guard proof; terminal publication probe also charges this backing explicitly, separately from reserve |
+| model/analysis Serialize derives + serde_core | Records, struct tags, adjacent variants, strings, Vec/arrays/Option/Box traverse borrowed data; no flatten/custom Serialize/map-key error or Content-buffering variant | Pinned type/derive/primitive source closure; proc-macro construction Vecs are compiler allocations, not runtime scratch |
+| serde_json compact Serializer | Stack Compound state; string slices and at most six-byte escape fragments; itoa40/zmij24-byte stack buffers | Actual std/alloc/float_roundtrip feature graph, no arbitrary_precision/raw_value; success modes observe zero scratch heap |
+| FixedOutput error → serde_json::Error::io | Slice overflow returns a simple ErrorKind; serializer owns one boxed ErrorImpl40 bytes on pinned arm64; propagation does not format UI text or make one box per ancestor | Source trace + exact predeclared IO-refusal measurement: one40-byte peak, then live scratch0 before reserve exit |
+| guarded_encode / Web callback | PublicationGuard encloses encoding/error lifetime; Web drops original Document before ordinary receive, then separately guards publication | No decoder/normalizer scratch is silently charged to publication; those remain ordinary working allocations |
+| Native/legacy copy + publish / WorkerIo | Existing bounded bytes; stack64-byte controls, concrete File IO and matching ACK, no graph/Vec clone | Source trace and real publish/Publication ACK; healthy and ACK-EOF probe paths observe zero scratch |
+| guard/fatal/terminal | Real precharge and publication ownership remain enforced; failure uses fixed status/control, not formatted payload | Accepted guard source/null/fatal evidence reused; probe verifies full release, no reserve escape and actual owned-child reap |
+
+With ordinary already fully occupied, the terminal probe charges524288 output bytes
+plus4096 ballast, then permits the unchanged final1048576 reserve. Canonical success
+(including60KB raw mixed escapes), analysis result variants and Failed ChannelResponse
+use zero additional heap; writer IO error peaks at40 bytes; ACK EOF uses zero and
+commits nothing. Success encoding sizes were2762/142750/6076/9502/367 bytes. Error
+prefix16 bytes was never published. All scratch frees before PublicationGuard exits;
+backing/ballast then free and actual guard reports live0. Seven modes were declared
+before execution, with no fitted limits. This terminal window deliberately excludes
+pre-existing System-owned DTOs: it closes publication scratch, not whole-worker peak.
+
+For these pinned types/features/writer/IO owners, successful scratch is input-size
+independent and the reachable serializer IO allocation is fixed40 bytes. Thus the
+initial1MiB publication allowance covers the named path even when ordinary capacity
+is full; existing earlier-ACK/failure/parent ownership proof supplies the integrated
+lifetime boundary. A smaller explicit reserve can still truthfully refuse; no new
+minimum/default is implied. New custom serializers, buffering features, arbitrary
+writers, dependency revisions or output paths require affected requalification.
+This is author source/runtime closure submitted for scoped acceptance, not a waiver
+of ordinary parser/SDK memory or live/D06 requirements.
