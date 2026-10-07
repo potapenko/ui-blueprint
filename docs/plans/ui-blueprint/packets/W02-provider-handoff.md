@@ -111,3 +111,10 @@ replace image cleanup: ALL newly created images remain in system temp without
 agent deletion, including containing directories; fixed-output tools get temp COPY
 and unchanged originals. Non-image current-operation build temp remains removable.
 Do not create persistent directories or generate images for this source packet.
+
+
+Narrow implementation dependency granted: collector/observe.rs existing
+bounded_document visibility only becomes pub(super), so the action sibling reuses
+the same bounded pre/post serializer. Body/limits/signature behavior protected;
+no additional serializer/wrapper. This is within the same authorized provider
+outcome, not a product or architecture delta.
