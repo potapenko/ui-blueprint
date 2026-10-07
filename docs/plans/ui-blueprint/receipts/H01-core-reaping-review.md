@@ -29,3 +29,21 @@ The11 regular tests and isolated R1 peer remain attributed author execution.
 Concurrent stage-D lifecycle work was excluded except locating its line shift;
 it does not implement this remedy. No reviewer tests/runtime/mutations. Full H01
 allocator/helper/nonce/live acceptance remains outside scope.
+
+## Repair recheck — R1 accepted
+
+Same reviewer inspected bf67c98b72ab73e3abb7babc20f8adfb98110391 source before new
+author proof and accepted H01-PROCESS-R1 under its supported embedding contract.
+Returned-Lost children cannot reach configuration, input or readiness; uncertain
+owners retain quarantine, grants/backing and the parent claim. Confirmed exits
+permit normal release, and ACKed-result preservation remains intact. No remaining
+actionable R1 finding. Native's accepted boundary was not reopened.
+
+Stage2 independently reproduced all64 saved inputs and digest
+9b5a0e03f919b7b2288026675eb95c2e81ee140e7b1bbfb14929eebc14e9a414.
+Seven runtime tests and two explicitly executed isolated peer scenarios remain
+author execution evidence; the focused source regression uses actual Native lost
+state followed by restored policy. Reviewer ran no tests or runtime operations.
+The caller must continuously preserve compatible SIGCHLD and exclusive reaping;
+this is not protection from arbitrary same-process native interference. Full H01,
+allocator/helper/nonce and live acceptance remain separate unfinished gates.

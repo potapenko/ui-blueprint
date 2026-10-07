@@ -48,6 +48,14 @@ Core owns production fixes, existing host tests and host Cargo example hook.
 Return the exact minimal compiling hook before Core installs it; do not edit Cargo.
 No new production test API or command merely to ease testing.
 
+Integration's actual probe handoff supplies the existing-source test executable.
+Root authorizes Core's exact host Cargo hook: `[[example]]`, name `allocator_probe`,
+path `tests/support/allocator_probe.rs`, `test = false`. Existing dependencies only;
+no root manifest/lock/dependency changes. Core writes the hook, Integration owns the
+probe and affected compilation/execution. A direct fatal(System) invocation proves
+only status/exit, not actual System allocation failure; that distinct gap remains
+open unless a safe bounded failure mechanism is demonstrated.
+
 Reuse session-worker/SpawnSpec and real HostDomain/RuntimeHost entrypoints listed
 in Core's handoff, OutputRequest and Tape::encode for canonical documents. A small
 test-only executable may include the existing allocator source to exercise its
