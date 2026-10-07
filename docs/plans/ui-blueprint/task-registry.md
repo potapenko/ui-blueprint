@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core repair5f52cb5 reviewed; timing correction/guarded-analysis proof3cba199 pushed. Integration validator receipt6230b74 pushed and rejection/direct-validation supplement accepted in scope. Native M01-acquisition dispatched69d1e63 against registereda0281dff. Core returns exact remaining H01 gate map; Web retained for next live consumer. No live/UI/Git/source holds |
+| Активные чаты/пакеты/ресурсы | Core traces the specific remaining serializer/dependency scratch and full publication-allowance coverage in existing H01 scope. Web prepares read-only existing F01/launcher/oracle/API handoff for first guarded live consumer; no launch yet. Native implements registered admission/JSON/artifact owners. Integration retained after scoped accepted proof. No live/UI/Git/source holds |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Reconcile Core's remaining H01 gates against actual requirements/evidence, without extra OS-exhaustion criteria. Continue Native bounded acquisition/offline checks and assign next dependency-ready Web proof. Full H01/live/D06/RC05 remain open; source/probe/integrated/live claims remain distinct |
+| Следующий шаг | Core returns concrete source owner→obligation→evidence→missing case or source-backed closure for publication, not another generic open label. Combine with Web's finite readiness handoff for next packet; Native source remains parallel. No repeated allocation-free-writer/OS-exhaustion proof; full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
