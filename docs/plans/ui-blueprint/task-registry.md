@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Guarded-worker proofbdeb87e saved/pushed:4/4 with small installed-guard/reap prerequisite,64 input identity matched per author; barrier and Git lease released. Integration explicitly continued two bounded existing-API writer/retained-admission refusal cases, preparation only until new short ACK. Core chooses active producer composition; fatal_race.rs ownership/consumer requested. Web8f77063 accepted source; desktop released/B pixels stopped |
+| Активные чаты/пакеты/ресурсы | Integration's2 bounded writer/retained-admission cases ready, no barrier active. Core owns fatal_race.rs and reproduced WorkerFailed instead of available ResourceLimit on normal-EOF/fatal timing; bounded final fatal read repairs it, missing-status control/checkpoint underway. Exact provider drift supervisor/runtime/support test; Cargo/Web feature not yet changed. Core retains producer composition, Web8f77063 accepted source; desktop released/B pixels stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Integration prepares FixedOutput writer refusal and retained-admission refusal preserving acknowledged base, then requests precise ready-to-run barrier. Semantic-phase allocation failures remain distinct gaps, not normal-pass claims. Core returns concrete producer exchange/signature/affected pins from Native99c4c15/Web8f77063. Full H01/live/D06/RC05 and delivery remain open |
+| Следующий шаг | Save Core fatal-attribution repair/control, then ACK Integration's already prepared2-case barrier; execute and release immediately. Core returns actual producer exchange/signature/affected pins from Native99c4c15/Web8f77063; optional web dependency wiring authorized by H01-host amendmente856762, no live grant. Semantic-phase allocation failures and full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
