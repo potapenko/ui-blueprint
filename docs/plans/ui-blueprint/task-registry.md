@@ -90,9 +90,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Shared producer boundarya8e5c06 saved/pushed,98-input equality reported, Core Git lease released. Root transfers worker_web/web_config and named Web tests/docs to existing Web owner; Core retains common/module/parent/Native. Core parent dispatch continues; Integration Replayeea3c9f awaits current source ACK. Allocator2f1bf278/worker_io stable; no live grant or source barrier active |
+| Активные чаты/пакеты/ресурсы | Web guarded module source active under transferred ownership; Core parent/Native dispatch active. Integration Replayeea3c9f ready for exact default/no-default-features test; provider drift sincea8e5c06 is helper_runtime/helpers/lib/publication/supervisor, so waits next coherent Core save/ACK. Web-only web_config excluded from that default proof. Allocator2f1bf278/worker_io stable; no barrier/Git grant/live grant active |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
-| Следующий шаг | Web implements actual guarded WebSession using saved ObservationRun/publisher APIs; Core wires real parent admission/Native broker and module hooks after concrete Web handoff. Coordinate short current-provider run for Integration's fixed Replay case without halting preparation. Changed-caller review, validation attribution and full H01/live/D06/RC05 remain open |
+| Следующий шаг | Core supplies next coherent default provider checkpoint/ACK for one fixed Replay test, naming the remaining hook if not ready. Web implements real guarded WebSession in its disjoint paths and returns actual module handoff; Core owns common hooks. Changed-caller review, validation attribution and full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
