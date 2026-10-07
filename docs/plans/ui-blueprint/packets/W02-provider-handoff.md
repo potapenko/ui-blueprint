@@ -118,3 +118,13 @@ bounded_document visibility only becomes pub(super), so the action sibling reuse
 the same bounded pre/post serializer. Body/limits/signature behavior protected;
 no additional serializer/wrapper. This is within the same authorized provider
 outcome, not a product or architecture delta.
+
+
+Reconciled private wire dependency: collector/wire.rs may add only typed checkbox/
+status DTOs needed by the fixed setter/current-resolution response. The actual Web
+source handoff identified this missing owner. Preserve existing observation wire,
+strict parsing, canonical schema/privacy; no parallel graph or unrelated fields.
+Exact symbols are recorded in final receipt and included in independent source
+review before acceptance. Source constructor handoff: CheckboxProvider::new(&mut
+Collector, schema::model::Limits), one provider per attempt; host consumes existing
+pending invalidation after setter. Core owns worker_web composition exclusively.
