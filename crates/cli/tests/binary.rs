@@ -125,6 +125,27 @@ impl Case {
             .output()
             .expect("inspect CLI")
     }
+    fn diff(&self, entries: &str, input: usize, output: usize, json: bool) -> Output {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_uiblueprint"));
+        command
+            .arg("diff")
+            .arg("--before")
+            .arg(self.directory.join("snapshot.json"))
+            .arg("--after")
+            .arg(self.directory.join("after.json"))
+            .args([
+                "--max-input-bytes",
+                &input.to_string(),
+                "--max-output-bytes",
+                &output.to_string(),
+                "--max-entries",
+                entries,
+            ]);
+        if json {
+            command.arg("--json");
+        }
+        command.output().expect("diff CLI")
+    }
 }
 impl Drop for Case {
     fn drop(&mut self) {
@@ -139,6 +160,220 @@ fn assert_error(output: Output, exit: i32, code: &str) {
     assert_eq!(output.status.code(), Some(exit));
     assert!(output.stdout.is_empty());
     assert_eq!(output.stderr, format!("{code}\n").as_bytes());
+}
+
+#[test]
+fn diff_cli_preserves_originals_and_distinguishes_content_evidence_and_absence() {
+    let mut case = Case::new("GEO-SIZE-RATIO__width");
+    let mut second = case.snapshot.nodes[0].clone();
+    second.key.key = Id("recorded-B".into());
+    case.snapshot.nodes.push(second);
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut case.snapshot.nodes[0].properties[0]
+    else {
+        panic!("geometry")
+    };
+    let Shape::Rect(rect) = &mut g.shape else {
+        panic!("rect")
+    };
+    rect.width = 32.0;
+    case.save();
+    let mut after = case.snapshot.clone();
+    after.nodes.pop();
+    after.coverage.status = CoverageStatus::Partial;
+    after.coverage.omitted_count = None;
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut after.nodes[0].properties[0]
+    else {
+        panic!("geometry")
+    };
+    let Shape::Rect(rect) = &mut g.shape else {
+        panic!("rect")
+    };
+    rect.width = 48.0;
+    let save_after = |snapshot: &Snapshot| {
+        fs::write(
+            case.directory.join("after.json"),
+            serde_json::to_vec(&Document {
+                schema_version: SchemaVersion::CURRENT,
+                artifact: Artifact::Snapshot(Box::new(snapshot.clone())),
+            })
+            .unwrap(),
+        )
+        .unwrap()
+    };
+    save_after(&after);
+    let before_bytes = fs::read(case.directory.join("snapshot.json")).unwrap();
+    let after_bytes = fs::read(case.directory.join("after.json")).unwrap();
+    let output = case.diff("10", 65536, 65536, true);
+    assert_eq!(output.status.code(), Some(0));
+    assert!(output.stderr.is_empty());
+    let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(value.as_object().unwrap().len(), 9);
+    assert_eq!(value["output_version"], "1.0.0");
+    assert_eq!(value["kind"], "recorded_difference");
+    assert_eq!(value["source"], "saved");
+    assert_eq!(value["live_revalidated"], false);
+    assert_eq!(value["comparison_scope"], "node_presence_and_properties");
+    assert_eq!(
+        value["before"],
+        serde_json::to_value(&case.snapshot).unwrap()
+    );
+    assert_eq!(value["after"], serde_json::to_value(&after).unwrap());
+    assert_eq!(value["omitted_entries"], 0);
+    assert_eq!(value["entries"].as_array().unwrap().len(), 2);
+    let property = &value["entries"][0];
+    assert_eq!(property["kind"], "property");
+    assert_eq!(property["field"], "layout_bounds");
+    assert_eq!(property["content_changed"], true);
+    assert_eq!(property["evidence_changed"], false);
+    assert_eq!(property["before_present"], true);
+    assert_eq!(property["after_present"], true);
+    let absence = &value["entries"][1];
+    assert_eq!(absence["kind"], "node_presence");
+    assert!(absence["field"].is_null());
+    assert_eq!(absence["key"]["key"], "recorded-B");
+    assert_eq!(absence["before_present"], true);
+    assert_eq!(absence["after_present"], false);
+    for entry in value["entries"].as_array().unwrap() {
+        assert_eq!(entry.as_object().unwrap().len(), 7);
+        assert!(entry.get("deleted").is_none() && entry.get("removed").is_none());
+    }
+    let compact = case.diff("10", 65536, 65536, false);
+    assert_eq!(compact.status.code(), Some(0));
+    let compact = String::from_utf8(compact.stdout).unwrap();
+    assert!(compact.contains("comparison=saved_observations"));
+    assert!(compact.contains("width: 32.0") && compact.contains("width: 48.0"));
+    assert!(compact.contains("presence=BeforeOnly"));
+    assert!(compact.contains("status: Partial"));
+    assert_eq!(
+        fs::read(case.directory.join("snapshot.json")).unwrap(),
+        before_bytes
+    );
+    assert_eq!(
+        fs::read(case.directory.join("after.json")).unwrap(),
+        after_bytes
+    );
+    let response = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::ChannelResponse(Box::new(ChannelResponse {
+            request_id: Id("after-request".into()),
+            session_id: after.context.session_id.clone(),
+            dispatch_sequence: 1,
+            target: after.context.target.clone(),
+            channel: Channel::ExternalSemantics,
+            result: ChannelResult::Observed(Box::new(after.clone())),
+        })),
+    };
+    fs::write(
+        case.directory.join("after.json"),
+        serde_json::to_vec(&response).unwrap(),
+    )
+    .unwrap();
+    let channel = case.diff("10", 65536, 65536, true);
+    assert_eq!(channel.stdout, output.stdout);
+    let mut evidence = case.snapshot.clone();
+    evidence.observations[0].end += 1.0;
+    save_after(&evidence);
+    let output = case.diff("10", 65536, 65536, true);
+    assert_eq!(output.status.code(), Some(0));
+    let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert!(
+        value["entries"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|e| e["content_changed"] == false && e["evidence_changed"] == true)
+    );
+    let mut unavailable = case.snapshot.clone();
+    let Property::Requested { state, .. } = &mut unavailable.nodes[0].properties[0] else {
+        panic!("property")
+    };
+    *state = Availability::Unknown {
+        reason: Id("missing_current_measurement".into()),
+    };
+    save_after(&unavailable);
+    let output = case.diff("10", 65536, 65536, true);
+    let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    assert_eq!(value["entries"][0]["content_changed"], true);
+    assert_eq!(
+        value["after"]["nodes"][0]["properties"][0]["state"]["availability"],
+        "unknown"
+    );
+    assert!(
+        value["after"]["nodes"][0]["properties"][0]["state"]
+            .get("value")
+            .is_none()
+    );
+}
+
+#[test]
+fn diff_cli_entry_and_byte_limits_context_and_invalid_input_are_explicit() {
+    let case = Case::new("GEO-GAP");
+    let mut after = case.snapshot.clone();
+    after.observations[0].end += 1.0;
+    let save = |s: &Snapshot| {
+        fs::write(
+            case.directory.join("after.json"),
+            serde_json::to_vec(&Document {
+                schema_version: SchemaVersion::CURRENT,
+                artifact: Artifact::Snapshot(Box::new(s.clone())),
+            })
+            .unwrap(),
+        )
+        .unwrap()
+    };
+    save(&after);
+    let complete = case.diff("100", 65536, 65536, true);
+    assert_eq!(complete.status.code(), Some(0));
+    let full: serde_json::Value = serde_json::from_slice(&complete.stdout).unwrap();
+    let count = full["entries"].as_array().unwrap().len();
+    assert!(count > 1);
+    for (cap, returned) in [("0", 0), ("1", 1)] {
+        let output = case.diff(cap, 65536, 65536, true);
+        assert_eq!(output.status.code(), Some(4));
+        assert!(output.stderr.is_empty());
+        let value: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(value["entries"].as_array().unwrap().len(), returned);
+        assert_eq!(value["omitted_entries"], count - returned);
+        assert_eq!(value["after"], serde_json::to_value(&after).unwrap());
+    }
+    let exact = case.diff("100", 65536, complete.stdout.len(), true);
+    assert_eq!(exact.stdout, complete.stdout);
+    assert_eq!(exact.status.code(), Some(0));
+    assert_error(
+        case.diff("100", 65536, complete.stdout.len() - 1, true),
+        2,
+        "output_limit",
+    );
+    let input = fs::metadata(case.directory.join("snapshot.json"))
+        .unwrap()
+        .len() as usize
+        + fs::metadata(case.directory.join("after.json"))
+            .unwrap()
+            .len() as usize;
+    assert_eq!(case.diff("100", input, 65536, true).status.code(), Some(0));
+    assert_error(case.diff("100", input - 1, 65536, true), 2, "input_limit");
+    for invalid in ["-1", "x", ""] {
+        assert_error(
+            case.diff(invalid, 65536, 65536, true),
+            2,
+            "invalid_arguments",
+        );
+    }
+    after.context.environment_revision = Id("another_environment".into());
+    save(&after);
+    assert_error(case.diff("100", 65536, 65536, true), 4, "context_mismatch");
+    fs::write(case.directory.join("after.json"), b"PRIVATE_DIFF_CANARY").unwrap();
+    assert_error(case.diff("100", 65536, 65536, true), 2, "invalid_input");
 }
 
 #[cfg(all(target_os = "macos", feature = "macos"))]

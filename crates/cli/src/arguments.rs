@@ -2,6 +2,59 @@ use crate::Failure;
 use std::{ffi::OsString, path::PathBuf};
 use uiblueprint_schema::model::Projection;
 
+pub(crate) struct DiffArguments {
+    pub before: PathBuf,
+    pub after: PathBuf,
+    pub max_input: usize,
+    pub max_output: usize,
+    pub max_entries: usize,
+    pub json: bool,
+}
+impl DiffArguments {
+    pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
+        let (mut before, mut after, mut max_input, mut max_output, mut max_entries) =
+            (None, None, None, None, None);
+        let mut json = false;
+        let invalid = Failure::invalid("invalid_arguments");
+        while let Some(flag) = args.next() {
+            if flag == "--json" {
+                if json {
+                    return Err(invalid);
+                }
+                json = true;
+                continue;
+            }
+            let value = args.next().ok_or(invalid)?;
+            match flag.to_str() {
+                Some("--before") if before.is_none() => before = Some(PathBuf::from(value)),
+                Some("--after") if after.is_none() => after = Some(PathBuf::from(value)),
+                Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
+                Some("--max-output-bytes") if max_output.is_none() => {
+                    max_output = Some(limit(value)?)
+                }
+                Some("--max-entries") if max_entries.is_none() => {
+                    max_entries = Some(
+                        value
+                            .to_str()
+                            .filter(|s| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit()))
+                            .and_then(|s| s.parse::<usize>().ok())
+                            .ok_or(invalid)?,
+                    )
+                }
+                _ => return Err(invalid),
+            }
+        }
+        Ok(Self {
+            before: before.ok_or(invalid)?,
+            after: after.ok_or(invalid)?,
+            max_input: max_input.ok_or(invalid)?,
+            max_output: max_output.ok_or(invalid)?,
+            max_entries: max_entries.ok_or(invalid)?,
+            json,
+        })
+    }
+}
+
 pub(crate) struct ObserveArguments {
     pub connection: PathBuf,
     pub request: PathBuf,

@@ -7,7 +7,7 @@ mod input;
 mod observe;
 mod output;
 
-use arguments::{Arguments, Command, InspectArguments, ResultVersion};
+use arguments::{Arguments, Command, DiffArguments, InspectArguments, ResultVersion};
 use std::{
     io::{self, Write},
     process::ExitCode,
@@ -16,6 +16,8 @@ use uiblueprint_engine::{self as engine, MeasurementResult};
 use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
+Diff: uiblueprint diff --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
+Diff reports recorded node/property differences; missing records do not imply deletion. Entry cap0 is allowed; complete report0, truncated/context mismatch4.\n\
 Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N\n\
 Observe needs a selected macos/web build and explicit trusted connection; emits committed canonical NDJSON and cleans only owned workers/helpers.\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
@@ -163,6 +165,26 @@ fn execute_inspect(args: InspectArguments) -> Result<(Vec<u8>, u8), Failure> {
     })?;
     Ok((output::inspect(&args, &view)?, 0))
 }
+fn execute_diff(args: DiffArguments) -> Result<(Vec<u8>, u8), Failure> {
+    let (before, after) = input::load_diff(&args)?;
+    let result = engine::diff::compare_recorded(
+        &before,
+        &after,
+        engine::diff::DiffLimits {
+            max_entries: args.max_entries,
+        },
+    )
+    .map_err(|error| match error {
+        engine::diff::DiffError::InvalidSnapshot(_) => Failure::invalid("invalid_input"),
+        engine::diff::DiffError::IncompatibleContext => Failure {
+            code: "context_mismatch",
+            exit: 4,
+        },
+        engine::diff::DiffError::Capacity => Failure::io(),
+    })?;
+    let exit = if result.omitted_entries == 0 { 0 } else { 4 };
+    Ok((output::recorded_diff(&args, &result)?, exit))
+}
 
 fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
@@ -183,6 +205,8 @@ fn main() -> ExitCode {
         export::execute(args.into_iter().skip(1).collect())
     } else if args.first().is_some_and(|arg| arg == "inspect") {
         InspectArguments::parse(args.into_iter().skip(1)).and_then(execute_inspect)
+    } else if args.first().is_some_and(|arg| arg == "diff") {
+        DiffArguments::parse(args.into_iter().skip(1)).and_then(execute_diff)
     } else {
         Arguments::parse(args).and_then(execute)
     };

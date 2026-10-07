@@ -1,6 +1,6 @@
 use crate::{
     Failure,
-    arguments::{Arguments, InspectArguments, QueryFile},
+    arguments::{Arguments, DiffArguments, InspectArguments, QueryFile},
 };
 use std::{
     fs::{self, File},
@@ -51,7 +51,13 @@ pub(crate) fn load_inspect(args: &InspectArguments) -> Result<(Snapshot, SourceK
         .ok_or(Failure::invalid("input_limit"))?;
     let reference = serde_json::from_str::<SourceKey>(&args.reference)
         .map_err(|_| Failure::invalid("invalid_input"))?;
-    let document = Document::from_json(&read(&args.snapshot, &mut remaining)?, args.max_input)
+    Ok((
+        read_snapshot(&args.snapshot, &mut remaining, args.max_input)?,
+        reference,
+    ))
+}
+fn read_snapshot(path: &Path, remaining: &mut usize, limit: usize) -> Result<Snapshot, Failure> {
+    let document = Document::from_json(&read(path, remaining)?, limit)
         .map_err(|_| Failure::invalid("invalid_input"))?;
     let snapshot = match document.artifact {
         Artifact::Snapshot(snapshot) => snapshot,
@@ -61,7 +67,13 @@ pub(crate) fn load_inspect(args: &InspectArguments) -> Result<(Snapshot, SourceK
         },
         _ => return Err(Failure::invalid("invalid_input")),
     };
-    Ok((*snapshot, reference))
+    Ok(*snapshot)
+}
+pub(crate) fn load_diff(args: &DiffArguments) -> Result<(Snapshot, Snapshot), Failure> {
+    let mut remaining = args.max_input;
+    let before = read_snapshot(&args.before, &mut remaining, args.max_input)?;
+    let after = read_snapshot(&args.after, &mut remaining, args.max_input)?;
+    Ok((before, after))
 }
 pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
     let mut remaining = args.max_input;

@@ -1,6 +1,6 @@
 use crate::{
     Failure,
-    arguments::{Arguments, InspectArguments},
+    arguments::{Arguments, DiffArguments, InspectArguments},
 };
 use std::io::{self, Write};
 use uiblueprint_engine::MeasurementResult;
@@ -412,5 +412,110 @@ pub(crate) fn inspect(
         Ok(())
     })();
     written.map_err(|_| buffer.error())?;
+    Ok(buffer.bytes)
+}
+
+pub(crate) fn recorded_diff(
+    args: &DiffArguments,
+    result: &uiblueprint_engine::diff::RecordedDiff<'_>,
+) -> Result<Vec<u8>, Failure> {
+    use uiblueprint_engine::diff::{Difference, Presence};
+    let mut buffer = Bounded::new(args.max_output);
+    if args.json {
+        buffer.write_all(b"{\"output_version\":\"1.0.0\",\"kind\":\"recorded_difference\",\"source\":\"saved\",\"live_revalidated\":false,\"comparison_scope\":\"node_presence_and_properties\",\"before\":").map_err(|_|buffer.error())?;
+        serde_json::to_writer(&mut buffer, result.before).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"after\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, result.after).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"entries\":[")
+            .map_err(|_| buffer.error())?;
+        for (index, entry) in result.entries.iter().enumerate() {
+            let (kind, key, field, presence, content, evidence) = match *entry {
+                Difference::NodePresence {
+                    presence,
+                    before,
+                    after,
+                } => {
+                    let node = match (before, after) {
+                        (Some(n), _) | (_, Some(n)) => n,
+                        _ => {
+                            return Err(Failure {
+                                code: "internal_error",
+                                exit: 1,
+                            });
+                        }
+                    };
+                    ("node_presence", &node.key, None, presence, true, false)
+                }
+                Difference::Property {
+                    before_node,
+                    field,
+                    presence,
+                    content_changed,
+                    evidence_changed,
+                    ..
+                } => (
+                    "property",
+                    &before_node.key,
+                    Some(field),
+                    presence,
+                    content_changed,
+                    evidence_changed,
+                ),
+            };
+            if index > 0 {
+                buffer.write_all(b",").map_err(|_| buffer.error())?;
+            }
+            write!(buffer, "{{\"kind\":\"{kind}\",\"key\":").map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, key).map_err(|_| buffer.error())?;
+            buffer
+                .write_all(b",\"field\":")
+                .map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, &field).map_err(|_| buffer.error())?;
+            write!(buffer,",\"before_present\":{},\"after_present\":{},\"content_changed\":{content},\"evidence_changed\":{evidence}}}",
+                presence!=Presence::AfterOnly,presence!=Presence::BeforeOnly).map_err(|_|buffer.error())?;
+        }
+        writeln!(buffer, "],\"omitted_entries\":{}}}", result.omitted_entries)
+            .map_err(|_| buffer.error())?;
+    } else {
+        writeln!(buffer,"comparison=saved_observations live_revalidation=not_performed comparison_scope=node_presence_and_properties omitted_entries={}",result.omitted_entries).map_err(|_|buffer.error())?;
+        for (side, snapshot) in [("before", result.before), ("after", result.after)] {
+            writeln!(
+                buffer,
+                "{side} snapshot={:?} revision={} context={:?} coverage={:?}",
+                snapshot.id.0, snapshot.revision, snapshot.context, snapshot.coverage
+            )
+            .map_err(|_| buffer.error())?;
+            for observation in &snapshot.observations {
+                writeln!(buffer, "{side}_observation={observation:?}")
+                    .map_err(|_| buffer.error())?;
+            }
+        }
+        for entry in &result.entries {
+            match entry {
+                Difference::NodePresence {
+                    presence,
+                    before,
+                    after,
+                } => {
+                    writeln!(buffer,"difference=node_presence presence={presence:?} before_key={:?} after_key={:?} deletion_claim=not_made",before.map(|n|&n.key),after.map(|n|&n.key)).map_err(|_|buffer.error())?;
+                }
+                Difference::Property {
+                    before_node,
+                    field,
+                    presence,
+                    before,
+                    after,
+                    content_changed,
+                    evidence_changed,
+                    ..
+                } => {
+                    writeln!(buffer,"difference=property key={:?} field={field:?} presence={presence:?} content_changed={content_changed} evidence_changed={evidence_changed} before={before:?} after={after:?}",before_node.key).map_err(|_|buffer.error())?;
+                }
+            }
+        }
+    }
     Ok(buffer.bytes)
 }
