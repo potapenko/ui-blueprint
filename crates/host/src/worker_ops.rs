@@ -1,5 +1,9 @@
 //! Canonical worker-only operations. This module is never linked into the
 //! supervisor path; all decode/validation/analysis/cache work runs under its guard.
+#[path = "worker_observation.rs"]
+mod observation;
+pub(crate) use observation::ObservationRun;
+
 use crate::{quota_allocator as guard, worker_tape::Tape};
 use std::io::Write;
 use uiblueprint_engine::{

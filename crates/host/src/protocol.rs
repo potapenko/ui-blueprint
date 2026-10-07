@@ -48,6 +48,10 @@ pub enum ControlKind {
     EffectPermit = 10,
     Fatal = 11,
     Shutdown = 12,
+    ObserveReady = 13,
+    ObservePermit = 14,
+    HelperRequest = 15,
+    HelperReply = 16,
 }
 impl TryFrom<u8> for ControlKind {
     type Error = HostError;
@@ -65,6 +69,10 @@ impl TryFrom<u8> for ControlKind {
             10 => Self::EffectPermit,
             11 => Self::Fatal,
             12 => Self::Shutdown,
+            13 => Self::ObserveReady,
+            14 => Self::ObservePermit,
+            15 => Self::HelperRequest,
+            16 => Self::HelperReply,
             _ => return Err(HostError::InvalidControl),
         })
     }

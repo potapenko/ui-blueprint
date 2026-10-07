@@ -562,3 +562,66 @@ Exact4-path checkpoint: crates/host/src/supervisor.rs, crates/host/tests/runtime
 crates/host/tests/support/fatal_race.rs and this receipt. No Cargo/worker/allocator/
 Web/Native/Integration change. Unconnected native_binding remains excluded. After
 save Core can hold the new saved provider for Integration's two ready refusal cases.
+
+## Compiling shared producer boundary / Web owner handoff
+
+Root H01-host amendmente856762 authorizes actual existing Web/Native composition.
+Read Native99c4c15 and Web collector/bootstrap handoff after registry10 → product
+BOUNDARIES/EXCHANGE/LIFECYCLE/PRIVACY/IDENTITY plus PILOTS and existing H01 closure.
+Source facts require actual begin/Ticket before acquisition, immutable parent
+executable authority, guarded normalization/receive and per-channel real ACK.
+Channel-specific same-source Native invocation is the chosen technical fit, not a
+new requirement or relaxed D06/coverage/SDK gate. No SDK/browser/UI operation ran.
+
+Added optional web=[dep:uiblueprint-web,dep:log], defaults empty; existing path and
+workspace log only. Lock changed just those two host dependency edges. Actual
+worker-private ObservationRun and admission/deadline/publication functions compile,
+with the precise interface/ownership handoff in docs/development/host.md. Native
+worker exchange now calls those real primitives; parent broker service/public live
+submission and the delegated Web module are still missing, not dummy successes.
+Private control kinds13..16 carry ObserveReady/Permit and HelperRequest/Reply.
+Legacy request paths remain; core0.1/analysis0.2 and provider sources are unchanged.
+
+Passed: cargo check --locked -p uiblueprint-host --bin session-worker (default and
+--features web); cargo clippy --locked -p uiblueprint-host --bin session-worker
+--features web -- -D warnings. Existing runtime regression/default Clippy and scoped
+formatting are recorded in the final readiness handoff; these do not establish the
+not-yet-connected producer runtime. No independent allocator review is reopened:
+allocator2f1bf278 and worker_io9700bfa remain unchanged.
+
+Root may transfer exactly src/worker_web.rs + src/web_config.rs, tests/web_worker.rs
+and tests/support/web_worker_* to the existing Web owner. Core created no agents and
+retains all shared hooks/Core observation/parent broker/Cargo files. Web gets real
+Collector APIs plus the compiling Core boundary, not a generic trait or fake Ticket.
+Source parent hook remains Core's next concrete implementation, in parallel with
+that module. A proposed file is not an import until the actual source exists.
+
+Exact12-path shared checkpoint candidate: Cargo.lock; crates/host/Cargo.toml;
+src/{lib,main,protocol,worker_main,worker_ops,worker_native,worker_observation,
+web_config}.rs under crates/host; docs/development/host.md; this receipt. Unconnected
+native_binding and all Integration/provider files are excluded. New worker pins and
+saved source identity follow checkpoint; prior proof stays attributed to its older
+pins. No actual producer/live/fullH01 acceptance is claimed by this API handoff.
+
+Shared boundary final readiness: default runtime17 tests +2 isolated peer executions
+passed; default and web Clippy passed, scoped formatting/link/diff checks passed.
+This preserves existing paths; new producer runtime remains unverified until parent
+service/module connection. Final98-input digest `6887caf014b1727a760acda7e44afd6db4a1d05a75cc8ab114e0235be4555006`: helper71 path set,
+plus fatal_race.rs/worker_native.rs/worker_observation.rs/web_config.rs, Web Cargo
+and all .rs/.js files under plugins/web/src; same compact sorted JSON method.
+Unconnected native_binding and Integration test files excluded.
+
+Current exact changed source pins:
+
+| Path | SHA256 |
+| --- | --- |
+| Cargo.lock | 225628bbcf1d3660029cab9f03e1efaf81b3f89f9fb82835ce6c723adc422a30 |
+| crates/host/Cargo.toml | 8619c4c6514b093ee8aa7d372ec8867b0381950fe303d4e184395d89b375298f |
+| crates/host/src/lib.rs | 8984d6b1f56deefdeedf5d00eb846268052baabd8b46b9f546c04ec8b2c25d2d |
+| crates/host/src/main.rs | f099ba19f32cc7699ecc6c5931b13e7b443031039bf8f5bf775fb26cc3c27a67 |
+| crates/host/src/protocol.rs | 6f15af73f5d0824aa5a1ef6a326984733c4c83cf9daebc1db03520b8a181df69 |
+| crates/host/src/worker_main.rs | 59b664c86ee91cd0e37de87e798484f00ec70b34d6764d6d0e6dc22bd7564ac5 |
+| crates/host/src/worker_ops.rs | 45ae90c820542b7bf91475cb63df312e8cc52ad62f1247293b964845b88fc2bb |
+| crates/host/src/worker_native.rs | 612d5e7f08ee10b7ac904e4a0e6ab8f2f4d1e0cf7fceccea177e1677623b0acc |
+| crates/host/src/worker_observation.rs | 12560324a5d5496a4c0ca33e183aaf86a7e7886a1f0b67a362d2a79acee92958 |
+| crates/host/src/web_config.rs | 94fd7bc43b126e25e0dd837daad74e2954320cf465ae940aec6fc723f87e9d2d |

@@ -45,9 +45,60 @@ fn now() -> u64 {
     )
     .unwrap_or(u64::MAX)
 }
-struct FixedOutput<'a> {
-    bytes: &'a mut [u8],
-    used: usize,
+pub(super) fn clock_origin() -> Instant {
+    *ORIGIN
+        .get()
+        .expect("origin installed before producer attach")
+}
+pub(super) fn tighten_deadline(remaining: u64) -> Result<Instant, HostError> {
+    if remaining == 0 {
+        return Err(HostError::DeadlineExpired);
+    }
+    let end = now()
+        .checked_add(remaining)
+        .ok_or(HostError::Overflow)?
+        .min(DEADLINE.load(Ordering::Acquire));
+    DEADLINE.store(end, Ordering::Release);
+    clock_origin()
+        .checked_add(std::time::Duration::from_millis(end))
+        .ok_or(HostError::Overflow)
+}
+pub(super) fn admit_observation(
+    io: &mut WorkerIo,
+    operation: Control,
+    ticket: u64,
+    request_deadline: u64,
+    channels: u8,
+) -> Result<Instant, HostError> {
+    if ticket == 0 || request_deadline == 0 || channels != operation.flags & 7 {
+        return Err(HostError::InvalidInput);
+    }
+    io.write_control(Control {
+        kind: ControlKind::ObserveReady,
+        class: OperationClass::Observe,
+        slot: 0,
+        flags: channels,
+        correlation: operation.correlation,
+        length: 0,
+        value: ticket,
+        auxiliary: request_deadline,
+    })?;
+    let permit = io.control()?;
+    if permit.kind != ControlKind::ObservePermit
+        || permit.class != OperationClass::Observe
+        || permit.correlation != operation.correlation
+        || permit.slot != 0
+        || permit.flags != channels
+        || permit.length != 0
+        || permit.value != ticket
+    {
+        return Err(HostError::InvalidControl);
+    }
+    tighten_deadline(permit.auxiliary)
+}
+pub(super) struct FixedOutput<'a> {
+    pub bytes: &'a mut [u8],
+    pub used: usize,
 }
 impl Write for FixedOutput<'_> {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
@@ -77,7 +128,12 @@ fn fatal(error: HostError) -> ! {
         0,
     )
 }
-fn publish(io: &mut WorkerIo, operation: Control, slot: u8, bytes: &[u8]) -> Result<(), HostError> {
+pub(super) fn publish(
+    io: &mut WorkerIo,
+    operation: Control,
+    slot: u8,
+    bytes: &[u8],
+) -> Result<(), HostError> {
     if operation.flags & (1 << slot) == 0 || bytes.len() > (operation.auxiliary as u32) as usize {
         return Err(HostError::ResourceLimit);
     }
@@ -245,7 +301,7 @@ pub fn run() -> Result<(), HostError> {
             || operation.correlation.operation <= sequence
             || operation.length as usize > input.len()
             || operation.slot != 0
-            || operation.flags & 128 != 0
+            || (operation.flags & 128 != 0 && operation.class != OperationClass::Observe)
             || operation.flags & 7 == 0
             || (operation.class != OperationClass::Observe && operation.flags & 7 != 1)
             || operation.auxiliary as u32 == 0
@@ -265,7 +321,13 @@ pub fn run() -> Result<(), HostError> {
         );
         let size = usize::try_from(operation.length).map_err(|_| HostError::Overflow)?;
         io.read(&mut input[..size])?;
-        let result = if operation.class == OperationClass::Observe {
+        let result = if operation.class == OperationClass::Observe && operation.flags & 128 != 0 {
+            let mut exchange =
+                crate::worker_native::NativeExchange::new(&mut io, &mut publication, operation);
+            session
+                .observe_native(&input[..size], now, operation.flags & 7, &mut exchange)
+                .map(|_| 0)
+        } else if operation.class == OperationClass::Observe {
             let mut total = 0usize;
             session
                 .observe(&input[..size], now, operation.flags & 7, |slot, bytes| {

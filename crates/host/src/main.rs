@@ -8,6 +8,8 @@ mod worker_io;
 #[cfg(target_os = "macos")]
 mod worker_main;
 #[cfg(target_os = "macos")]
+mod worker_native;
+#[cfg(target_os = "macos")]
 mod worker_ops;
 #[cfg(target_os = "macos")]
 use uiblueprint_host::worker_tape;

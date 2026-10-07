@@ -845,11 +845,13 @@ name = "uiblueprint-host"
 version = "0.1.0"
 dependencies = [
  "libc",
+ "log",
  "serde",
  "serde_json",
  "uiblueprint-engine",
  "uiblueprint-plugin-api",
  "uiblueprint-schema",
+ "uiblueprint-web",
 ]
 
 [[package]]

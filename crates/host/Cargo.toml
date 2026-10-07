@@ -6,12 +6,18 @@ rust-version.workspace = true
 publish = false
 description = "Bounded parent leases and supervised canonical worker processing"
 
+[features]
+default = []
+web = ["dep:uiblueprint-web", "dep:log"]
+
 [dependencies]
 uiblueprint-schema = { path = "../schema" }
 uiblueprint-engine = { path = "../engine" }
 uiblueprint-plugin-api = { path = "../plugin-api" }
 serde.workspace = true
 serde_json.workspace = true
+uiblueprint-web = { path = "../../plugins/web", optional = true }
+log = { workspace = true, optional = true }
 
 [target.'cfg(unix)'.dependencies]
 libc.workspace = true

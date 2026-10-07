@@ -205,3 +205,61 @@ worker composition and its tests. Native process.rs/process/**, process tests/pe
 remain protected; Integration owns allocator/hostile proof files. Current allocator
 pin is2f1bf278…41e50e; other three worker pins remain unchanged pending the exact
 broker handoff. No UI/SDK/input or live acceptance is claimed by this stage.
+
+## Compiling worker producer boundary for disjoint Web ownership
+
+The optional host feature `web` selects only the existing uiblueprint-web path and
+workspace log; defaults remain empty. Cargo.lock adds those two host edges only.
+Default and web worker configurations compile; provider logging/connection remains
+an explicit future WebSession attach step, not an implicit library startup effect.
+
+Core's actual binary-private boundary is now:
+
+- CanonicalSession::begin_observation(input, now, requested_mask) returns the decoded
+  existing Request and ObservationRun with the real ObservationSession Ticket. It
+  validates Observe/mask and performs actual begin before acquisition.
+- ObservationRun::receive_channel(bytes, expected_channel) validates the canonical
+  envelope/channel and invokes real receive with the worker clock. finish performs
+  complete; Drop cancels unfinished work. Failed canonical ChannelResponse records
+  remain records, not invented empty success.
+- worker_main::admit_observation(io, operation, ticket_sequence, request_deadline_ms,
+  channels) sends fixed ObserveReady and validates ObservePermit, tightening the
+  actual worker watchdog and returning a worker-local Instant deadline.
+- worker_main::clock_origin supplies the real origin. FixedOutput writes only into
+  the preallocated publication slice. publish(io, operation, slot, bytes) performs
+  the existing Frame/Commit/matching ACK exchange; it grants no fake acknowledgement.
+
+NativeExchange uses those primitives and the existing publication buffer for a
+single HelperReply, enforcing correlation/Ticket/serial/channel/length and an ACK
+before another native collection. Its dispatcher is compiled in the worker, but
+parent ObserveReady/HelperRequest service and public live submission wiring are
+still incomplete. New private Control kinds13..16 are not a public graph/CLI format.
+This is a compiling internal handoff, not an already connected Native/Web producer.
+
+Proposed finite Web owner write transfer (only after root assigns it):
+src/worker_web.rs, src/web_config.rs, tests/web_worker.rs and its own
+ tests/support/web_worker_* under crates/host. Core keeps worker_main/ops/
+worker_observation, main/module hooks, Cargo, protocol, parent broker/lifecycle.
+The current web_config provides explicit setup caps plus Initial/References selection;
+these are private configuration, reusing canonical Id/Identity/BackendRef types.
+
+Concrete module entrypoints for that consumer:
+
+```text
+WebSession::attach(raw_descriptor, setup, TargetLease, clock_id, origin,
+                   HostLimits, deadline) -> Result<WebSession, HostError>
+WebSession::observe(&mut self, &mut CanonicalSession, &mut WorkerIo,
+                    &mut publication_buffer, Control, input, now)
+                    -> Result<(), HostError>
+```
+
+Attach must use the existing mandatory logging filter before Transport/Client/
+Collector construction, authorized endpoint/binding and actual worker clock. Observe
+uses Tape only to segment Request plus explicit selection CONFIGURATION, never
+pre-collected responses: real begin/admission precedes Collector::observe_initial
+or observe, with actual Ticket.sequence. Callback moves the real Document, guarded
+encoding and receive precede publish, and Acknowledged follows only full parent ACK.
+No fabricated refs, parent graph decode, browser launch or live acceptance. Return any
+missing bounded representation/retained-ref consumer rather than inventing a new
+public graph or uncharged cache. Core wires the finished module after its concrete
+source handoff; it does not add an absent module or dummy implementation.

@@ -13,6 +13,7 @@ pub mod helpers;
 #[cfg(unix)]
 pub mod host_types;
 pub mod limits;
+
 #[cfg(target_os = "macos")]
 pub mod process;
 #[cfg(unix)]
@@ -24,6 +25,8 @@ pub mod quota;
 mod reaping;
 #[cfg(unix)]
 pub mod supervisor;
+#[cfg(feature = "web")]
+pub mod web_config;
 pub mod worker_config;
 pub mod worker_tape;
 
