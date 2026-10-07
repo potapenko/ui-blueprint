@@ -138,3 +138,33 @@ private unsupported/version rejection and fixed parent inventory. No CLI syntax,
 new action DSL/graph or generalized protocol framework. Web owns the actual fresh
 preparation API and returns a compiling handoff; final integration pins its saved
 source before acceptance.
+
+
+## Required authoritative canonical deadline clamp
+
+New source discrepancy after remaining edge checks: child watchdog honors shorter
+canonical Request duration, parent Active deadline still uses only outer caller
+limit. D02 authoritative parent deadline/late ACK suppression therefore remains
+unproven for the shorter valid request. Restore this requirement; do not accept
+child scheduling as parent enforcement or silently widen the request deadline.
+
+Select Core's minimal reuse of existing fixed admission controls13/14 for typed
+Prepare/Mutation, preserving Observe semantics. Validate exact class/epoch/operation/
+mask and nonzero bounded duration, clamp parent deadline to min(existing deadline,
+parent operation start + canonical duration), never now+duration or an extension.
+Reject expired/overflow/duplicate/mismatched admission and late results. The typed
+admission must precede provider SDK/effect and applicable canonical publication once
+a usable validated Request is available. Unparseable input remains subject to the
+explicit outer caller bound, never an invented canonical duration.
+
+This grants only required admission/control/supervisor/worker-action owners and
+nearest focused tests within Core's existing host scope. Controls confer no new
+mutation/effect/physical/helper/capture permission; keep actual EffectPermit one-use
+and nonmutating Prepare. Existing Observe ticket/ACK/helper rights remain unchanged.
+No parent JSON parse, new message framework/graph/schema/CLI/dependencies or quota
+change. Core declares exact changed subset before edit; Web helper file remains
+released unless an explicit sequential handoff is needed. Verify shorter valid
+request rejects late ACK/terminal/dispatch, longer duration cannot extend parent,
+and pre/post-Possible uncertainty/earlier committed output/reap remain truthful.
+Save source fix separately from earlier verification-only checkpoint; same reviewer
+rechecks changed deadline boundary plus new evidence before live activation.

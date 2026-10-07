@@ -26,3 +26,11 @@ before/after-Possible failures remain unexecuted in this checkpoint. Four compos
 peer cases/seven refusal cases/Clippy are attributed. Core continues these checks;
 same reviewer consumes final evidence without repeating unchanged source inspection.
 Actual live browser and full P5 remain separate. Not a source repair or goal block.
+
+
+Follow-up verification2f5c5eb saved by Core: declared6 Prepare edge cases,3 permit
+faults and2 before/after-Possible cancel cases pass per author on unchanged80b7449.
+New concrete source gap supersedes treating that as final acceptance: canonical
+shorter Request duration clamps child only, not parent Active. Root selected existing
+13/14 typed admission with parent-start clamp; Core repairs separately. Same reviewer
+will recheck that changed deadline boundary and reconcile final evidence. Live closed.
