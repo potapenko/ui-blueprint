@@ -90,7 +90,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Native repair54da088/APIb22b05a finite boundary accepted_with_residual by same reviewer; full R1 waits for connected Core lifetime/quarantine proof. Core/Web active, no worker Git grants. Native retained for next platform consumer; own evidence retention unchanged until cleanup handoff. Root coordination checkpoint then index free. Desktop released; B pixels remain stopped |
+| Активные чаты/пакеты/ресурсы | Native repair54da088/APIb22b05a finite boundary accepted_with_residual by same reviewer; full R1 waits for connected Core lifetime/quarantine proof. Core/Web active, no worker Git grants. Native cleaned both accepted process/reaping task-temp trees, resources released, retained for next platform consumer. Root coordination checkpoint then index free. Desktop released; B pixels remain stopped |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
 | Следующий шаг | Core connects/proves actual host lifetime/quarantine and full worker boundary; same reviewer checks the R1 consumer after saved implementation. Web completes two collector repairs and focused proof, then checkpoint+push and same reviewer recheck. Full H01 worker/allocator, live adapters/D06/RC05 and full delivery remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |

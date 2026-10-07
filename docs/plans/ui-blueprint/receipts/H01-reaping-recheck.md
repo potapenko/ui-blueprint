@@ -34,3 +34,10 @@ grants while preserving ACKed results under D02.LIFECYCLE. This is a concrete Co
 integration dependency, not an unchanged Native defect. Full R1 and H01 are not
 closed by this receipt; the same reviewer remains available for affected consumer
 recheck after saved Core implementation and evidence exist.
+
+After acceptance, Native confirmed cleanup of its two explicit run-owned temporary
+trees uib-h01-process-v2hfxco_ and uib-h01-reaping-kghf73oo under the recorded system
+temporary directory. Before removal it found no active consumers/open files; both
+trees are absent afterward. No source/docs/Git/other evidence or user process was
+changed. Saved-source identity reconciliation above remains the durable evidence;
+temporary manifest/log/binary paths in historical author receipts are now cleaned.
