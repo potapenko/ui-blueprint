@@ -383,3 +383,81 @@ verified. Images0, no image/containing-directory or older asset deletion. No cap
 B/TCC/display/real app/pointer operation. No active process/resources/index or next
 runtime attempt. One-path human receipt ready for short Git lease; explicit close/
 stale/reopen live chain and positive popup capture remain required.
+
+
+## Remaining lifecycle run after b4a965e
+
+Root activation: remaining-lifecycle-only M03-popup-connector section. Traversal
+AGENTS→registry15→PRODUCT-ROUTES/ACCEPTANCE-ROUTES→Native/identity/lifecycle/
+exchange/model/projections/forms/privacy/geometry/boundaries/cache/actions CONTENT@1,
+CLI@5 Observe, Native/Pilots/GOLDEN/PERFORMANCE@1, D02@2/D04@1/D05@4 acquisition@1
+and their established development closure. Same active requirements/epochs; no new
+product choice. Root-selected batching/control refinement is test orchestration.
+Only this receipt is writable. Capture, product input, B/TCC, real app, source,
+new framework/monitor and backend bypass excluded.
+
+Prebuilt immutable saved c3967ca source in system-temp, with fixture/helper owners
+unchanged against accepted21ac1d. Preparation corrected Cargo target selection to
+existing session-worker/uiblueprint before starting the live timer; no source edit.
+Pinned actual binaries: fixture8c82ed594c44495967aa674e69d002810494e85605c4e042ef31e1c26d2ed3df,
+helper42ec805d7c99b24511982438bfb4627a3fcd0d1215e2d9d4d15d9d856042a781,
+CLI e11b5a74fd9fcc14ba421f49673534f7b501f4b3daa7ce437713765f049867b7,
+worker857f0d808dec0342bdbf11168fe4164321b61af224356eaff93877f27e26a294,
+validator7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828.
+Same form5/160nodes/depth9/512KiB/AX1s/cleanup1s, explicit CLI host profile.
+No initial Observe or inspect repetition; exactly old-stale and fresh-positive calls.
+
+Own fixture PID27869, parent CG10165/generation17D66E1D-C1C3-4E15-ABB0-3760AFA14F0E.
+Edge popup→Snapshot shortcut: original popupCG10170/generation
+DE4DE044-EBE5-4F79-B2A9-B4EBA0E2FBF3, visible own direct attachment/distinct parent.
+Fresh full CUA precondition showed Popup A/Confirm and focus on Confirm. Actual
+CUA AX-index Confirm removed popup subtree and showed Result: popup-a. This proves
+the existing fixture setup action/outcome, not physical hit or product action provider.
+Current identity independently checked CLOSED/rotated554E8740-B973-453C-AC05-8D4C5321743A.
+Old exact connection/request CLI returned4, validator0, canonical failed stale_target
+with no observed payload. Exact owned worker/helper absence checked after completion.
+
+Reopen→Snapshot shortcut: popupCG10180/new generation
+0ABC9EBF-B30F-4552-A2E9-58D7ABF6821F; parent Snapshot generation unchanged.
+One fresh CLI Observe returned4/observed partial, validator0. Actual five nodes
+include exact owner f02.popup.owner.a, Confirm and parent trigger f02.popup; their
+Surface identities match requested popup/parent generations and full Context.
+Reported AXPopover retained; sourced anchored_to references actual parent trigger,
+macos.fixture.binding explicit program association, not geometry/AX ancestry owner.
+All source observations live/current, separate API reads/consistency unknown.
+No missing name/property inferred or scope/cap quality reduced.
+
+Fresh full CUA AX strings before/after fresh Observe were exactly equal: popup
+subtree, focused Confirm, Count:0, Result:popup-a, form/scroll exposed state unchanged.
+This is live exposed-AX/focus/content evidence, not cached Snapshot equality, pixels,
+layout/hit or universal reader invariance. Helper source enforces current identities
+before/after collection. A separate operator post-Observe current-file assertion
+failed among its combined OPEN/same-generation/parent checks before finally;
+intermediate values were not preserved, so the exact failed subcondition/cause is
+unestablished. Do not claim independent post-Observe OPEN/same-generation verification
+or complete current-identity invariance. Later cleanup records CLOSED, which cannot
+reconstruct the failed pre-cleanup read. Current parent after cleanup still matched
+fresh parent generation. This exact verification residual remains for root disposition.
+
+An earlier temporary result assertion assumed extensions were a dictionary; canonical
+extensions are a list. Saved canonical outputs/marker/context/Surface/anchor checks
+were completed offline without another Observe or weakened oracle. No collector
+fault or read-only side effect is inferred from these test-side assertions.
+
+Recorded timing: launcher monotonic start264570.993554166, deadline264870.993554166.
+Original prepared264588.011228/remaining282.98s; closed check264598.852697/272.14s;
+stale Observe264598.852915→264598.920763/272.07s remaining; fresh preparation
+264612.675220→264612.727070; fresh Observe264612.727242→264612.885013/258.11s remaining.
+CUA UTC milliseconds: original Snapshot1791408478726→1791408479176;
+Confirm precheck1791408485331; Confirm action1791408489084→close checked1791408489539;
+reopen1791408497137→1791408497590; fresh Snapshot1791408502695→precheck1791408503119;
+post-Observe live AX1791408513377. UI remaining checks were conservative local timer;
+launcher monotonic remaining authoritative. No cross-process duration inferred.
+
+Finally exact PID/path/run-argument fixture cleanup completed before timing assertions:
+59.3998s total,0.1163s cleanup, timeout=false, exact fixture absence confirmed;
+worker/helper absent. Native input lane released. No new image/screenshot/capture.
+Operation non-image files/build/source removed after facts consumed; removal verified.
+Historical evidence untouched. Lifecycle close/stale/fresh-positive facts established;
+post-Observe current identity residual and positive popup capture/full M03 remain open.
+Receipt-only checkpoint requires next short exact1 Git lease; no staging before grant.
