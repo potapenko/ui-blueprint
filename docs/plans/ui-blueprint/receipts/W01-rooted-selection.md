@@ -1,6 +1,7 @@
 # W01 rooted selection source handoff
 
-Status: source slice implemented; source/peer checks only, no rooted browser run.
+Status: source slice saved; first rooted browser run FAILED at ContinuityException.
+No canonical frames; owned cleanup and temporary removal confirmed.
 Authority: root's explicit implementation dispatch and [packet](../packets/W01-rooted-selection.md),
 within user-approved PLAN.UIB@1. Restore bounded PROJECTIONS/IDENTITY requirement;
 registry11 Web contract closure remains applicable; unrelated CLI routing additions
@@ -145,3 +146,69 @@ UIB_WEB_LIVE_EVIDENCE=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/0
 This exclusive fresh temp pathname is not created yet. Inline result delivery,
 then remove only its report/rooted-context.json/emptydir and current build/source
 temp and verify absence; no persistent archive or changes to earlier evidence.
+
+## First activated rooted runtime result
+
+Harness40f45673660ba185717637fdf5a27a0ea7c8322c saved/pushed; existing source1d83dc8
+and providercadd345 composition ran once2026-10-07T16:32:43.789Z–16:32:45.305Z.
+Separate worker_web callsite e44f396 for new Core incomplete metadata is NOT in
+this immutable build; its integrated compile belongs to the current Core handoff.
+
+Actual rooted-current terminal invalid_input, committed0/missing1/operation1;
+Collect/CollectorMalformed code15 ContinuityException, count0, remote_cleanup1
+Released, send_progress0 NotQueued. No canonical frame, pendingcase1, test exit101.
+The first positive request stopped the sequence; wrong-binding/document/remount
+cases did not execute. This identifies the new rooted verifier refusal, not an
+assumed JavaScript/native cause. No unchanged retry, threshold or oracle adjustment.
+
+Actual host cleanup sessions0/groups0/abandonedfalse, fixture survives worker reap;
+test/context/driver/browser/server/profile/worker_sessions all confirmed closed.
+After-run98-source/both-binary pins and checkout harness/fixture bytes matched.
+Temporary report SHA256b2a2f62a4211c9ca903572758fe42af5a6450858c9fa0702f41e7385769af10c
+was checked then removed along with its exclusive0b406b15...directory; absence
+verified. Current uib-web-rooted-live-v8km8tuc source/build temp removed and absence
+verified. No other evidence/build removed, no raw exception text retained. Compact
+facts delivered inline in chat. No Git/source/runtime resource is held.
+
+Next concrete owner is Web collector/bootstrap.rs::verify_rooted: distinguish and
+repair its actual runtime exception without weakening original-root membership/
+parent/document continuity. Positive rooted API remains unqualified despite passing
+source/peer tests; actual Director/caller selection remains separate work.
+
+## Exact verifier diagnosis and minimal correction
+
+Root authorized one diagnostic on owned headless F01, using existing fixture-host
+launcher/CDP and EXACT selectIds/verifyRooted source bytes, actual9root/child objects
+and same side-effect/bounds. No alternative product collection or whole acceptance
+rerun. Result: debugger_side_effect, lineNumber=-1/columnNumber=-1 (Chromium did
+not locate an expression). No raw text/stack/UI data persisted or printed; only
+static classifier/numeric location. Focus/scroll/checkpoint unchanged; remote group
+released and fixture browser/server cleanup completed; zero output files created.
+Node inspector with plain mock objects passed, so it was not Chromium proof.
+Chromium145 Node.idl readonly parentNode and prior selector behavior did not justify
+a guessed getter cause; exact live verifier rejection is the actual repair basis.
+
+Correction changes ONLY verify_rooted's throwOnSideEffect true→false. The fixed
+function text, all document/root/parent/membership checks and bounded parent chains
+are unchanged; no app callback, DOM mutation, eval or locator is introduced.
+Initial selection and original verifyNodes retain true. Peer assertion recognizes
+this exact per-function guard split. No general diagnostic/API/protocol changes.
+Changed retry is authorized after saved correction/harness/pins; no unchanged retry.
+Repair writes: collector/bootstrap.rs, existing tests/collector.rs and this receipt.
+
+Correction checks PASS:4rooted peer cases,43offline JS cases, affected Web Clippy
+-D warnings and guarded live consumer no-run. Verifier function body is byte-equal
+to1d83dc8, SHA256d2575539ad3bd93d5e53d86649c27afed6345f781afb4921752bcf3f48be21a0.
+Changed build uses same providercadd345 + source1d83dc8 + harness40f4567, overlay
+only bootstrap.rs correction (collector.rs peer change is check-only). Temporary
+root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-rooted-repair-vq71eal1.
+Same98 runtime-input fingerprint e844887b453f33a3765cb8a53169f44bcf1ca067b4d6d0a21af49d73ae986c0f.
+Test deps/web_live-5d88e78afab66360 SHA256
+5faf368033ce9e1bfbe4774d4679aec0d9399662e6ae1ee9bc75e5f956806664;
+worker session-worker SHA256
+403e81262ed3ba5ff27b3fe8a7f565b061214e08b9d436af7ad16e7f7ba1cf33.
+One changed rooted retry uses same command/mode/caps with these paths/pins and
+fresh system-temp pathname /private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/c214febd-28a7-47f8-be6e-de4b42470bb3.
+After saved correction and matching pins, root already authorizes this changed run.
+No new host metadata dependencies consumed. Same inline delivery and verified
+current-operation output/build removal apply; prior evidence untouched.

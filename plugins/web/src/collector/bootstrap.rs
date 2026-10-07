@@ -240,7 +240,10 @@ impl Collector {
                 silent: true,
                 user_gesture: false,
                 await_promise: false,
-                throw_on_side_effect: true,
+                // Chromium 145 rejects this exact fixed reader in debugger side-effect
+                // mode (owned F01 reproduced). Keep all original identity checks;
+                // ordinary evaluation still performs only bounded native getters.
+                throw_on_side_effect: false,
                 arguments: [
                     serde_json::json!({"objectId":document}),
                     serde_json::json!({"value":count}),
