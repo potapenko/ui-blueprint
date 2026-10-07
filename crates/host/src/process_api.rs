@@ -87,6 +87,12 @@ pub struct PollInterest<'a> {
 }
 pub trait ProcessPlatform {
     type Child: OwnedProcess;
+    /// Read-only validation of the supported parent SIGCHLD/reaping policy.
+    /// Never reset a handler or enable automatic reaping. The embedding caller
+    /// must continuously preserve this policy and exclusive wait ownership while
+    /// managed children exist; a query is not atomic protection against arbitrary
+    /// racing same-process native code. Failure closes admission/quarantines.
+    fn validate_parent_reaping() -> Result<(), HostError>;
     /// Implement exact-path posix_spawn with bounded argv/env/file actions;
     /// returned PID/FDs are owned and tied to this spawn until wait/reap.
     fn spawn(&mut self, spec: &SpawnSpec) -> Result<Self::Child, HostError>;

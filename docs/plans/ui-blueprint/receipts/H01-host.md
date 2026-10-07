@@ -106,3 +106,17 @@ Full H01 still requires actual worker GlobalAlloc/System/fatal enforcement, comp
 RuntimeHost inventory and worker canonical execution, watchdog, deadline/cancel,
 nonce/no-retry, quarantine/grant lifetime and hostile guarded-input proof. No hostile
 parser family has run. No actual adapter/SDK/peak/RSS/live/D06 acceptance claim.
+
+## H01-PROCESS-R1 shared reaping predicate handoff
+
+Root amendmentf499bec authorizes static ProcessPlatform::validate_parent_reaping()
+with no default success, handler reset or copied OS predicate. Declaration/docs
+SHA256 `2f9a823aa14468a38ff40256ab20c259babda05465428e3c8fc34c767c00df91`.
+Native provider54da088807e08b977562842b9095cf164accc310 is pushed; root reports2
+focused tests plus scoped check/build/Clippy/fmt on38 unchanged shared inputs.
+That is Native evidence, not a repeated Core run. Root grants only this declaration
+and factual receipt for API save; no unconnected Core WIP is staged. The real
+HostDomain/RuntimeHost policy lease, poison/quarantine and ACKed-result propagation
+remain Core's next connected proof; this handoff alone does not close R1/full H01.
+Embedding must continuously preserve supported SIGCHLD/exclusive reaping; the query
+is not atomic protection against arbitrary same-process native interference.
