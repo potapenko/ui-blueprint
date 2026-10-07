@@ -27,3 +27,25 @@ requirements, not demonstrated source defects. No fourth offline raw-sample repl
 is required here: field/edge preservation through actual collectors, Swift/H01
 acquisition/ACK/cleanup, SDK lifetime, pixels and D06 remain live qualification.
 Root returns the three finite gaps to Native; no new reviewer or broad audit.
+
+## Focused follow-up accepted — 8d4f5016
+
+Same reviewer inspected the six-path follow-up
+`8d4f5016da767a5fa7b6497d350c6abbf37a232d` before receiving its author receipt,
+then reconciled the receipt and retained evidence. Verdict: **accept** for all
+three offline gaps; no actionable findings. Actual traversal/window binding,
+identity-to-attribute scheduling and Collector terminal publication owners are
+exercised. No new general review or unchanged test wave is required.
+
+Reviewer independently matched all12 source inputs and manifest
+`00946897c597742c860722028e6047f1da9b2b62d8d2fa27e1b5e3544a0d9bea`,
+three binary hashes, reused validator and its16 inputs. Both retained failure
+frames are complete377-byte NDJSON responses. Concurrent Core/Web edits were
+excluded; no reviewed-source drift. Three suites/46 assertions and three builds
+remain author-executed evidence; reviewer ran no checks and changed no files.
+
+This closes the three listed offline proof gaps and preserves prior codec/sample
+acceptance. Actual SDK/H01 acquisition, lifetime/reap, ACK survival, current
+pixels, positive Native pilots and D06 remain separate qualification. Native
+now supplies the concrete first H01/F02 observation preparation handoff; no
+additional offline audit is assigned.
