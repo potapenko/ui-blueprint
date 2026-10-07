@@ -798,3 +798,105 @@ fn replay_clone_quota_has_private_phase_and_keeps_acked_bytes() {
         "Replay expected; earlier Decode is an attribution gap, not a pass"
     );
 }
+
+#[test]
+fn rejection_message_allocation_is_guarded_without_publishing_private_key() {
+    let _serial = SERIAL.lock().unwrap();
+    const KEY_BYTES: usize = MIB;
+    const ORDINARY: usize = 3 * MIB;
+    let config = limits(ORDINARY + MIB);
+    assert_eq!(config.ordinary_bytes().unwrap(), ORDINARY);
+    assert!(config.input_bytes + config.output_bytes + KEY_BYTES > ORDINARY);
+    let record = Rc::new(Cell::new(None));
+    let domain = HostDomain::new::<FatalAudit>(config).unwrap();
+    let mut host = RuntimeHost::new(
+        &domain,
+        spec(),
+        FatalAudit {
+            record: record.clone(),
+        },
+    )
+    .unwrap();
+    let (session, _) = attach(&mut host);
+    submit(
+        &mut host,
+        session,
+        QUERY,
+        OperationClass::Validate,
+        output(1, 1),
+    );
+    let held = complete(&mut host);
+    if held.terminal != Terminal::Completed {
+        let terminal = held.terminal;
+        drop(held);
+        shutdown(&mut host);
+        panic!("predeclared normal prerequisite failed: {terminal:?}; do not tune cap");
+    }
+    assert_eq!(held.bytes(0), Some(QUERY));
+    assert!(record.get().is_none());
+    // Direct root map: no Artifact/Content buffering precedes this unknown key.
+    // With no escapes SliceRead borrows it; serde's unknown_field -> custom ->
+    // msg.to_string rejection message must own >=KEY_BYTES before sanitization.
+    // No hostile JSON/Value/DTO is decoded by this parent.
+    let prefix = b"{\"schema_version\":\"0.1.0\",\"";
+    let suffix = b"\":null}";
+    let mut input = host
+        .reserve_input(session, prefix.len() + KEY_BYTES + suffix.len())
+        .unwrap();
+    let bytes = input.bytes_mut();
+    bytes[..prefix.len()].copy_from_slice(prefix);
+    bytes[prefix.len()..prefix.len() + KEY_BYTES].fill(b'x');
+    let canary = b"PRIVATE_REJECTION_CANARY_";
+    bytes[prefix.len()..prefix.len() + canary.len()].copy_from_slice(canary);
+    bytes[prefix.len() + KEY_BYTES..].copy_from_slice(suffix);
+    assert!(bytes.len() < config.input_bytes);
+    let operation = host
+        .submit(
+            session,
+            OperationClass::Validate,
+            input,
+            output(0, 1),
+            deadline(),
+        )
+        .unwrap();
+    let refused = complete(&mut host);
+    let terminal = refused.terminal;
+    let committed = refused.committed();
+    drop(refused);
+    shutdown(&mut host);
+    assert_eq!(domain.usage().reserved_sessions, 0);
+    assert_eq!(
+        domain.usage().retained_reserved_bytes,
+        uiblueprint_engine::cache::QuotaLedger::backing_bytes()
+    );
+    assert_eq!(
+        held.bytes(0),
+        Some(QUERY),
+        "earlier canonical bytes survive rejection/quota/reap"
+    );
+    let observed = record.get();
+    drop(held);
+    assert_eq!(domain.usage().completion_groups, 0);
+    assert_eq!(
+        terminal,
+        Terminal::Failed(HostError::ResourceLimit),
+        "fatal={observed:?}"
+    );
+    assert_eq!(
+        committed, 0,
+        "no private-key/error-payload frame may be committed"
+    );
+    let fatal = observed.expect("actual fixed fatal record required");
+    assert_eq!(fatal.kind, ControlKind::Fatal);
+    assert_eq!(fatal.class, OperationClass::Validate);
+    assert_eq!(fatal.correlation.operation, operation.sequence);
+    assert_eq!(fatal.value, 1);
+    assert_eq!(
+        fatal.flags, 1,
+        "rejection occurs inside the existing Decode-marked boundary"
+    );
+    assert!(
+        fatal.length >= KEY_BYTES as u64,
+        "large rejection message request must be observed"
+    );
+}

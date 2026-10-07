@@ -230,7 +230,7 @@ Root short Git grant pending. No other owner source/Cargo/fixture files are stag
 | --- | --- | --- |
 | Installed setup guard | Forced2MiB fixed-input allocation against1MiB ordinary cap; ResourceLimit, no frame, confirmed reap and grant release | Closed bounded prerequisite on8edf546; not general setup/RSS acceptance |
 | Typed decode | Both2MiB data-before-kind families force real guarded quota exits; kind-first rejects InvalidInput | Covered named core0.1/analysis0.2 families; no universal all-input upper coefficient |
-| Rejection/error | Escaped string, long numeric and repeated-map cases reject normally; same worker then succeeds | OOM specifically while formatting rejection has not been isolated; do not infer it from ordinary InvalidInput |
+| Rejection/error | Ordinary malformed cases reject normally; later fixed1MiB unknown-root-key case forces quota fatal with requested layout≥1MiB, intact prior ACK and actual reap | Source-backed rejection-message pressure covered; Decode marker alone does not identify a call site or prove semantic-validation failure |
 | Semantic validation | Validation executes inside Document::from_json while phase remains Decode; normal canonical cases pass | Need one bounded source case plus trustworthy attribution separating validator scratch failure from decode; current completion lacks raw phase, so no forced-validation claim |
 | Replay | Real normal replay plus the later predeclared480KiB case forces quota fatal with actual private Replay phase3; ACKed base bytes survive confirmed reap | Named Replay-pressure failure covered; do not promote it to every validation/all-input allocation path |
 | Encoding/publication | Earlier16-byte OutputRequest refused in publish AFTER encoding; subsequent phase wave forces FixedOutput::write refusal with valid512KiB+1 query against512KiB slice, no partial frame and prior lease intact | Both bounded refusal boundaries covered; neither is claimed as allocator OOM |
@@ -370,3 +370,93 @@ wave or source scope followed. This update only records completed proof: the tes
 was already saved and is unchanged. Next checkpoint is this receipt alone.
 Separate validation/rejection attribution and full H01/source/live acceptance stay
 open according to the matrix; successful normal/refusal paths retain their scope.
+
+## Next rejection-message case — prepared, unexecuted
+
+Replay receipt1595a877 is saved; root continued only the remaining rejection/
+semantic-validation proof scope. No new infrastructure, public test API or production
+edit. No cleanup was performed during the reported temporary disk pressure; the
+existing run-owned target remains available and shared/foreign paths were untouched.
+
+Selected one source-backed rejection case: direct core0.1 Document map containing
+an unescaped unknown ROOT key of exactly1MiB, before any Artifact payload. Fixed
+ordinary budget3MiB (total4MiB/publication reserve1MiB), existing2MiB input and512KiB
+publication buffers. A normal query must first be ACKed. No cap/shape sweep.
+The parent fills only bounded raw bytes with a canary prefix; it never decodes the
+hostile body. Expected quota fatal: Validate operation, existing Decode marker1,
+large requested layout at least1MiB, no committed error/private-key output, prior
+query bytes preserved through actual shutdown/reap. Any different outcome remains
+an explicit bounded result, not a reason to retune the case.
+
+Narrow inspected dependency path (same pinned versions, not a broad re-audit):
+serde_json1.0.151 de.rs MapAccess::next_key_seed uses MapKey; MapKey delegates an
+unescaped SliceRead string to visit_borrowed_str. read.rs parse_str_bytes returns
+the raw slice when scratch is empty. serde_derive1.0.229 identifier.rs selects
+unknown_field for deny_unknown_fields; serde_core1.0.229 de/mod.rs formats the field
+into Error::custom; serde_json error.rs custom calls msg.to_string before make_error
+boxes it. The core map-only record visitor passes the actual map through this path.
+Thus this case avoids generic Artifact Content buffering/key unescaping, while
+the rejection message must request owned storage before public error sanitization.
+Actual fatal evidence is still required; source reasoning alone is not a passed test.
+
+Prepared exact test:
+rejection_message_allocation_is_guarded_without_publishing_private_key.
+Ready command builds default session-worker, runs only that exact hostile_worker
+test with --no-default-features/one test thread, then affected Clippy/fmt. Input
+recipe follows the latest default-provider tracked source/manifests/toolchain and
+six normal fixtures plus own test, with the narrow dependency source pins recorded
+for attribution. Root/Core short saved-input ACK remains required before runtime.
+Own rustfmt/whitespace only so far. Semantic validation inside from_json remains
+separately unproved; this Decode-labelled rejection case will not close that gap.
+
+## Fixed rejection-message case — executed
+
+Fresh root/Core ACK authorized the exact prepared case on saved
+0c1bb44fd51d39d054137d20de604c12164bded0; default production remains c0abcff.
+All70 provider/manifest/fixture inputs matched0c1bb44 before running. The owned
+hostile_worker.rs test was the sole working source input. No cap, shape, expectation
+or production edit occurred: unknown unescaped root key1MiB, ordinary3MiB,
+publication reserve1MiB, input2MiB and output512KiB stayed fixed.
+
+Executed once in the existing owned task-temp target:
+
+```sh
+cargo +1.96.0 build --locked --offline -p uiblueprint-host --no-default-features --bin session-worker --target-dir <task-temp>/target
+cargo +1.96.0 test --locked --offline -p uiblueprint-host --no-default-features --test hostile_worker rejection_message_allocation_is_guarded_without_publishing_private_key --target-dir <task-temp>/target -- --exact --test-threads=1
+cargo +1.96.0 clippy --locked --offline -p uiblueprint-host --no-default-features --test hostile_worker --target-dir <task-temp>/target -- -D warnings
+rustfmt +1.96.0 --edition 2024 --config skip_children=true --check crates/host/tests/hostile_worker.rs
+```
+
+One test passed, zero failed/ignored, seven unrelated tests filtered out; runtime
+0.23s. Worker build, scoped Clippy and formatting passed. A normal analysis query
+was first ACKed on the same actual worker. The hostile core root key then caused
+ResourceLimit with an actual private Fatal record: Validate class, matching
+operation, quota value1, Decode flags1 and requested layout≥1MiB. No result/error
+frame was committed. Earlier canonical query bytes survived confirmed shutdown/
+reap; session/completion counts returned to zero and retained reservation to the
+QuotaLedger root. No hostile JSON/DTO/Value was decoded by the parent.
+
+Together with the inspected borrowed-key → unknown_field → custom/msg.to_string
+source path, this proves guarded rejection-message allocation pressure for this
+case. The phase marker alone does not isolate a particular allocator call. This
+does not prove semantic-validation scratch failure, all rejection paths, actual
+System exhaustion, independent source acceptance or full H01 completion.
+
+Before/after71-input digest, identical:
+`fc15503222ab876876fe2f7ee5a02798678237f82660789338eb31468ec48c36`.
+Use the preceding71-input recipe, enumerated at0c1bb44, with this changed owned
+test. Five read-only cached dependency files were separately SHA256-pinned and
+also unchanged before/after (paths relative to Cargo registry source root):
+
+| Dependency source | SHA256 |
+| --- | --- |
+| serde_json-1.0.151/src/de.rs | 4998d7e252eb513be85b298e287048b4fb283882e9ba7df905f572f07200f3f3 |
+| serde_json-1.0.151/src/read.rs | 17a2efe49e5a6937c8d7d4a5c0b9eac84453de0f86bf8e7ee421387e82341bb3 |
+| serde_json-1.0.151/src/error.rs | a13add05a63adf53d89e37effa03221d897a60486cfe360a5a958c0dd2a7e90d |
+| serde_core-1.0.229/src/de/mod.rs | 5ec8602d593915e0cf480b0ce67b02f6ab066dac34725237d2c7b4a6ef12a845 |
+| serde_derive-1.0.229/src/de/identifier.rs | b653c26f4274e5c323e3f893c6f9a2b21bd5c873abdc2a801f0289a5e56a9f6c |
+
+The default-production hold was released immediately after the passing checks and
+identity comparison, before this receipt update. No Web producer, Native helper,
+unchanged runtime suite, new build target or cleanup ran. Checkpoint scope is only
+hostile_worker.rs and this receipt under the next root Git lease.
