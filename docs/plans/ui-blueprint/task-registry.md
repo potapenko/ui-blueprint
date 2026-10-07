@@ -258,3 +258,14 @@ C00 author `01a1109a-5d6e-7792-b926-e767c7f63642`, C00 reviewer
 `01a11126-55ad-7d03-bd05-30e9feff0818`, F03c-build
 `01a11145-9a6a-7913-86d5-d9f0d483d961`. History and artifacts are preserved.
 R01/F01 and R02/F02 chats remain for their next dependency-ready platform proof.
+
+Allocation worker «UI Blueprint — Core R03»
+`01a110ac-30da-7ab0-bed1-8d7a8e4de45e` archived after terminal completed/idle
+confirmation and scoped accepted proof handoff. Closeout
+`c3c653b9f349488d2cd4478d002387dedce210ca` pushed; index/owned paths clean and no
+process/source/Git lease remains. Only its owned uib-h01-allocation-07xaavuw target
+directory was removed after retention release; durable application evidence and
+all saved source/receipts remain. No assigned immediate consumer requires that
+worker now; history is recoverable if a later concrete task needs it. This archive
+does not declare full H01/live/D06 complete. Core producer, Native acquisition and
+Web live-preparation owners remain retained for their immediate next work.
