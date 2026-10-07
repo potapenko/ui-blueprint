@@ -261,3 +261,49 @@ crates/host/tests/support/lifecycle_host.rs; docs/development/host.md; this rece
 No changes to allocator/worker pins, Cargo/lock, Native or Web. Full H01 remains open
 for registered helpers/capture, fake-delivery nonce, remaining malformed/late and
 operation-specific canonical proof, allocation families and independent acceptance.
+
+## R1 returned-Lost consumer repair
+
+Stage D saved/pushed9424759e83296b5c3c622e92c5443a1d0cb8369c; saved64 digest matched.
+Same reviewer rejected one remaining R1 consumer path in
+[the source-first review](H01-core-reaping-review.md), assigned by root's96bf1c8
+amendment: successful spawn may return Native's permanently Lost owner. Checking
+only current parent policy lets later restoration conceal that already detected loss.
+Restore D02.LIFECYCLE and existing ProcessPlatform fail-closed contract; no spec delta.
+
+RuntimeHost::attach now calls the returned child's existing try_reap before any
+configuration/input. Native Lost returns CleanupPending without waitpid/kill.
+Running proceeds; already confirmed exit marks the reservation reaped and refuses
+attachment. Any uncertain result closes input, retains the real child/grant/backing,
+marks the domain abandoned and installs a permanently quarantined owner. No later
+protocol I/O or PID operations run on it, even if the current predicate succeeds.
+The failure is not an ordinary spawn-error rollback. Uncertain destruction retains
+root backing/parent claim; existing independent owners remain separately supervised.
+No shared API/Native/worker-pin change was needed.
+
+Focused test uses a disposable process and a real DarwinChild: after its spawn the
+wrapper installs an unsupported custom SIGCHLD handler, calls real try_reap to latch
+Lost, then restores the prior supported policy before returning the owner to Core.
+It asserts actual current-policy success, attach CleanupPending, zero configuration/
+input/readiness reads, one owner-state query (Native Lost does no waitpid), zero
+terminate calls, retained session/grant after host Drop and retained root claim after
+domain Drop. Test teardown independently reaps its sole worker after EOF. Signal
+changes never occur in the operator/outer test runner. Existing post-ACK drift proof
+now compares reap-call count to its pre-drift baseline because safe attach includes
+one ownership query. No test assertion promises zero ordinary pre-admission queries.
+
+Commands: cargo test --locked -p uiblueprint-host --test runtime -- --test-threads=1;
+cargo clippy --locked -p uiblueprint-host --lib --bin session-worker --test runtime -- -D warnings;
+rustfmt --edition 2024 --check crates/host/src/supervisor.rs crates/host/tests/runtime.rs;
+cargo check --locked -p uiblueprint-host --lib --bin session-worker --test runtime.
+All pass:7 outer runtime tests plus2 explicitly executed isolated peer cases. The
+outer ignored marker is isolation routing, not a skipped required case. Local links
+and git diff --check pass. No unchanged Native or unrelated suites rerun.
+
+Final64 input digest `9b5a0e03f919b7b2288026675eb95c2e81ee140e7b1bbfb14929eebc14e9a414`,
+exact stage-D64 path set at9424759, current bytes, same compact sorted JSON method.
+All four allocator/worker pins match saved50c0c95/9424759. Integration's exclusive
+new tests are outside this set and proof. Exact4 checkpoint paths: supervisor.rs,
+tests/support/reaping_host.rs under crates/host; docs/development/host.md; this receipt.
+The begun nonce draft was removed before this repair; no nonce change or new Cargo
+hook is included. Independent R1 acceptance and full H01 remain open.

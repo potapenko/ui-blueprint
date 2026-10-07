@@ -51,6 +51,7 @@ struct Worker<'a, C: OwnedProcess> {
     quarantine_reported: bool,
     pending_terminal: Option<Terminal>,
     ready: bool,
+    ownership_lost: bool,
 }
 struct RuntimeState<'a, P: ProcessPlatform> {
     platform: P,
@@ -147,8 +148,24 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             auxiliary: 0,
         };
         let state = &mut self.state[0];
-        let child = state.platform.spawn(&state.spec)?;
+        let mut child = state.platform.spawn(&state.spec)?;
         reservation.child_started();
+        // Spawn success can carry an already-latched Lost owner. Query the
+        // returned owner itself before any configuration/input, not just the
+        // current signal policy (which may have been restored in the meantime).
+        let ownership_lost = match child.try_reap() {
+            Ok(ProcessState::Running) => false,
+            Ok(ProcessState::Exited { .. } | ProcessState::Signaled { .. }) => {
+                reservation.child_reaped();
+                return Err(HostError::WorkerFailed);
+            }
+            Err(_) => {
+                child.close_input();
+                reservation.quarantine();
+                self.domain.abandoned.set(true);
+                true
+            }
+        };
         state.workers[session.slot] = Some(Worker {
             child,
             reservation,
@@ -185,7 +202,20 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             quarantine_reported: false,
             pending_terminal: None,
             ready: false,
+            ownership_lost,
         });
+        if ownership_lost {
+            let worker = state.workers[session.slot]
+                .as_mut()
+                .expect("just installed owner");
+            worker.active = None;
+            worker.input = None;
+            worker.stage = TxStage::Idle;
+            worker.cleanup_deadline = Some(Instant::now());
+            // Keep child, grant and roots. An error here is not ordinary
+            // spawn failure and cannot roll back a possibly-live reservation.
+            return Err(HostError::CleanupPending);
+        }
         Ok(session)
     }
     pub fn reserve_input(
@@ -316,6 +346,15 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             let Some(worker) = self.state[0].workers[index].as_mut() else {
                 continue;
             };
+            if worker.ownership_lost {
+                if !worker.quarantine_reported {
+                    worker.quarantine_reported = true;
+                    return Ok(HostEvent::CleanupPending {
+                        session: worker.reservation.handle(),
+                    });
+                }
+                continue;
+            }
             if let Some(terminal) = worker.pending_terminal.take() {
                 return Ok(HostEvent::Complete(take_completion(worker, terminal)));
             }

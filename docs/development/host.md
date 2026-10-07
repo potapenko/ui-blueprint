@@ -112,3 +112,17 @@ the explicit1ms test cleanup allowance and retains its root grant until actual r
 is forwarded. A separate10ms parent-deadline case refuses later dispatch and stale
 handles after cleanup. These are deterministic injected supervision conditions,
 not claims that Darwin termination itself stalled or production deadlines changed.
+
+## Returned ownership loss before configuration
+
+Spawn success is not sufficient for admission: Native can return an owned wrapper
+already latched Lost after a detected post-spawn policy violation. RuntimeHost now
+queries that returned owner with try_reap before any configuration/input. Running
+continues; confirmed exit releases normally; an uncertain/lost result closes input
+and retains the actual child, reservation and roots in a permanently quarantined
+slot. Current policy recovery does not restore that owner's authority. The host
+performs no later I/O, termination or reaping on that latched-lost owner. New session
+admission closes; existing independent slots remain separately owned. A disposable
+regression uses the real Native lost-state transition while restoring current policy,
+proves zero config/readiness I/O and reservation retention, then independently reaps
+its sole EOF-exiting child for test teardown. Independent R1 recheck remains required.

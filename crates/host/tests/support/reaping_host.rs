@@ -11,6 +11,9 @@ use uiblueprint_host::{
     process::DarwinChild,
     process_api::{OwnedProcess, PollInterest, ProcessPlatform, ProcessState, Transfer},
 };
+static LOSE_ON_SPAWN: AtomicBool = AtomicBool::new(false);
+static WRITES: AtomicUsize = AtomicUsize::new(0);
+static READS: AtomicUsize = AtomicUsize::new(0);
 static ACK: AtomicBool = AtomicBool::new(false);
 static KILLS: AtomicUsize = AtomicUsize::new(0);
 static WAITS: AtomicUsize = AtomicUsize::new(0);
@@ -22,7 +25,21 @@ impl ProcessPlatform for Audit {
         DarwinPlatform::validate_parent_reaping()
     }
     fn spawn(&mut self, spec: &SpawnSpec) -> Result<Child, HostError> {
-        DarwinPlatform.spawn(spec).map(Child)
+        let mut child = DarwinPlatform.spawn(spec)?;
+        if LOSE_ON_SPAWN.load(Ordering::SeqCst) {
+            let original = set_policy(changed_policy as *const () as usize);
+            // Actual Native owner latches Lost before any PID wait under this
+            // unsupported policy. Restore policy, but not the lost owner.
+            assert_eq!(child.try_reap(), Err(HostError::CleanupPending));
+            unsafe {
+                assert_eq!(
+                    libc::sigaction(libc::SIGCHLD, &original, std::ptr::null_mut()),
+                    0
+                );
+            }
+            assert_eq!(DarwinPlatform::validate_parent_reaping(), Ok(()));
+        }
+        Ok(Child(child))
     }
     fn poll(&mut self, interests: &mut [PollInterest<'_>], wait_ms: u32) -> Result<(), HostError> {
         DarwinPlatform.poll(interests, wait_ms)
@@ -30,6 +47,7 @@ impl ProcessPlatform for Audit {
 }
 impl OwnedProcess for Child {
     fn write_input(&mut self, b: &[u8]) -> Result<Transfer, HostError> {
+        WRITES.fetch_add(1, Ordering::SeqCst);
         let result = self.0.write_input(b)?;
         if b.len() == CONTROL_BYTES && matches!(result, Transfer::Bytes(CONTROL_BYTES)) {
             let bytes: &[u8; CONTROL_BYTES] = b.try_into().unwrap();
@@ -40,6 +58,7 @@ impl OwnedProcess for Child {
         Ok(result)
     }
     fn read_output(&mut self, b: &mut [u8]) -> Result<Transfer, HostError> {
+        READS.fetch_add(1, Ordering::SeqCst);
         if ACK.load(Ordering::SeqCst) {
             Ok(Transfer::WouldBlock)
         } else {
@@ -47,6 +66,7 @@ impl OwnedProcess for Child {
         }
     }
     fn read_fatal(&mut self, b: &mut [u8]) -> Result<Transfer, HostError> {
+        READS.fetch_add(1, Ordering::SeqCst);
         self.0.read_fatal(b)
     }
     fn close_input(&mut self) {
@@ -85,6 +105,13 @@ fn set_policy(handler: usize) -> libc::sigaction {
 }
 #[test]
 fn actual_policy_drift_quarantines_without_losing_acked_bytes() {
+    disposable("1");
+}
+#[test]
+fn returned_lost_owner_is_not_admitted_after_current_policy_recovers() {
+    disposable("lost");
+}
+fn disposable(mode: &str) {
     let mut child = Command::new(std::env::current_exe().unwrap())
         .args([
             "--exact",
@@ -92,7 +119,7 @@ fn actual_policy_drift_quarantines_without_losing_acked_bytes() {
             "--ignored",
             "--test-threads=1",
         ])
-        .env("UIB_REAPING_PEER", "1")
+        .env("UIB_REAPING_PEER", mode)
         .spawn()
         .unwrap();
     let stop = deadline();
@@ -112,7 +139,12 @@ fn actual_policy_drift_quarantines_without_losing_acked_bytes() {
 #[test]
 #[ignore = "only the bounded outer test may run this disposable signal-policy peer"]
 fn disposable_parent() {
-    assert_eq!(std::env::var("UIB_REAPING_PEER").unwrap(), "1");
+    let mode = std::env::var("UIB_REAPING_PEER").unwrap();
+    if mode == "lost" {
+        returned_lost();
+        return;
+    }
+    assert_eq!(mode, "1");
     let original = set_policy(changed_policy as *const () as usize);
     assert!(matches!(
         HostDomain::new::<DarwinPlatform>(limits()),
@@ -164,6 +196,7 @@ fn disposable_parent() {
         thread::sleep(Duration::from_millis(1));
     }
     let reserved = domain.usage().retained_reserved_bytes;
+    let waits_before_loss = WAITS.load(Ordering::SeqCst);
     set_policy(changed_policy as *const () as usize);
     let HostEvent::Complete(completion) = host.next_event().unwrap() else {
         panic!("preserved result")
@@ -189,7 +222,7 @@ fn disposable_parent() {
         HostEvent::CleanupPending { .. }
     ));
     assert_eq!(KILLS.load(Ordering::SeqCst), 0);
-    assert_eq!(WAITS.load(Ordering::SeqCst), 0);
+    assert_eq!(WAITS.load(Ordering::SeqCst), waits_before_loss);
     drop(host);
     assert_eq!(completion.bytes(0), Some(QUERY));
     assert_eq!(domain.usage().retained_reserved_bytes, reserved);
@@ -222,6 +255,73 @@ fn disposable_parent() {
             Instant::now() < stop,
             "worker watchdog must exit on parent EOF"
         );
+        thread::sleep(Duration::from_millis(1));
+    }
+}
+
+fn returned_lost() {
+    LOSE_ON_SPAWN.store(true, Ordering::SeqCst);
+    let domain = HostDomain::new::<Audit>(limits()).unwrap();
+    let spec = SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap();
+    let mut host = RuntimeHost::new(&domain, spec, Audit).unwrap();
+    let mut input = host
+        .reserve_attach_input(target(), DESCRIPTOR.len())
+        .unwrap();
+    input.bytes_mut().copy_from_slice(DESCRIPTOR);
+    let reserved = domain.usage().retained_reserved_bytes;
+    assert!(matches!(
+        host.attach(input, deadline()),
+        Err(HostError::CleanupPending)
+    ));
+    assert_eq!(DarwinPlatform::validate_parent_reaping(), Ok(()));
+    assert!(matches!(
+        host.next_event().unwrap(),
+        HostEvent::CleanupPending { .. }
+    ));
+    assert!(matches!(
+        host.reserve_attach_input(target(), 1),
+        Err(HostError::CleanupPending)
+    ));
+    assert_eq!(
+        WRITES.load(Ordering::SeqCst),
+        0,
+        "no configuration or input"
+    );
+    assert_eq!(
+        READS.load(Ordering::SeqCst),
+        0,
+        "no readiness or payload reads"
+    );
+    assert_eq!(KILLS.load(Ordering::SeqCst), 0);
+    assert_eq!(
+        WAITS.load(Ordering::SeqCst),
+        1,
+        "one Native Lost query, no waitpid"
+    );
+    assert_eq!(domain.usage().retained_reserved_bytes, reserved);
+    assert_eq!(domain.usage().reserved_sessions, 1);
+    assert!(domain.usage().abandoned);
+    drop(host);
+    assert_eq!(domain.usage().retained_reserved_bytes, reserved);
+    assert_eq!(WAITS.load(Ordering::SeqCst), 1);
+    assert_eq!(KILLS.load(Ordering::SeqCst), 0);
+    drop(domain);
+    assert!(matches!(
+        HostDomain::new::<Audit>(limits()),
+        Err(HostError::Busy)
+    ));
+    // This isolated test's sole child exits on closed input even before worker
+    // configuration. Explicit test teardown reaps it outside the poisoned host.
+    let stop = deadline();
+    loop {
+        let mut status = 0;
+        // SAFETY: sole child in this disposable peer, bounded nonblocking wait.
+        let pid = unsafe { libc::waitpid(-1, &mut status, libc::WNOHANG) };
+        if pid > 0 {
+            break;
+        }
+        assert_eq!(pid, 0);
+        assert!(Instant::now() < stop);
         thread::sleep(Duration::from_millis(1));
     }
 }
