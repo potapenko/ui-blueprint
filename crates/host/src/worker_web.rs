@@ -10,6 +10,7 @@ use std::{sync::OnceLock, time::Instant};
 use uiblueprint_host::{
     Control, HostError, HostLimits, OperationClass,
     authority::TargetLease,
+    diagnostic::{DiagnosticCause as Cause, DiagnosticRecord, DiagnosticStage as Stage},
     web_config::{WebSelection, WebSetup},
     worker_tape::Tape,
 };
@@ -121,19 +122,39 @@ impl WebSession {
         now: fn() -> u64,
     ) -> Result<(), HostError> {
         if control.class != OperationClass::Observe {
-            return Err(HostError::PermissionDenied);
+            return Err(host_diagnostic(
+                io,
+                Stage::Decode,
+                HostError::PermissionDenied,
+            ));
         }
         if input.len() > self.limits.input_bytes {
-            return Err(HostError::ResourceLimit);
+            return Err(host_diagnostic(
+                io,
+                Stage::Capacity,
+                HostError::ResourceLimit,
+            ));
         }
         guard::phase(guard::Phase::Decode);
-        let tape = Tape::decode(input)?;
+        let tape = Tape::decode(input).map_err(|e| host_diagnostic(io, Stage::Decode, e))?;
         if tape.count() != 2 {
-            return Err(HostError::InvalidInput);
+            return Err(host_diagnostic(io, Stage::Decode, HostError::InvalidInput));
         }
-        let selection = WebSelection::decode(tape.get(1)?, self.limits.input_bytes)?;
+        let selection = WebSelection::decode(
+            tape.get(1)
+                .map_err(|e| host_diagnostic(io, Stage::Decode, e))?,
+            self.limits.input_bytes,
+        )
+        .map_err(|e| host_diagnostic(io, Stage::Decode, e))?;
         let channels = control.flags & 7;
-        let (request, mut run) = session.begin_observation(tape.get(0)?, now, channels)?;
+        let (request, mut run) = session
+            .begin_observation(
+                tape.get(0)
+                    .map_err(|e| host_diagnostic(io, Stage::Decode, e))?,
+                now,
+                channels,
+            )
+            .map_err(|e| host_diagnostic(io, Stage::Begin, e))?;
         let sequence = run.ticket.sequence;
         // No collection before both real begin and the authoritative parent permit.
         let deadline = worker_main::admit_observation(
@@ -142,21 +163,27 @@ impl WebSession {
             sequence,
             request.limits.deadline_ms,
             channels,
-        )?;
+        )
+        .map_err(|e| host_diagnostic(io, Stage::Permit, e))?;
         let frame_cap = (control.auxiliary as u32) as usize;
-        let total_cap =
-            usize::try_from(control.auxiliary >> 32).map_err(|_| HostError::Overflow)?;
+        let total_cap = usize::try_from(control.auxiliary >> 32)
+            .map_err(|_| host_diagnostic(io, Stage::Capacity, HostError::Overflow))?;
         if frame_cap == 0
             || frame_cap > self.limits.output_bytes
             || frame_cap > publication.len()
             || total_cap == 0
             || total_cap > self.limits.request_output_bytes
         {
-            return Err(HostError::ResourceLimit);
+            return Err(host_diagnostic(
+                io,
+                Stage::Capacity,
+                HostError::ResourceLimit,
+            ));
         }
         let mut total = 0usize;
         let mut callback_error = None;
         let mut callback = |document: Document| {
+            let mut stage = Stage::Encode;
             let result = (|| -> Result<(), HostError> {
                 let Artifact::ChannelResponse(response) = &document.artifact else {
                     return Err(HostError::InvalidInput);
@@ -174,10 +201,11 @@ impl WebSession {
                     bytes: &mut publication[..frame_cap],
                     used: 0,
                 };
+                stage = Stage::Encode;
                 {
                     let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
-                    serde_json::to_writer(&mut encoded, &document)
-                        .map_err(|_| HostError::ResourceLimit)?;
+                    let result = serde_json::to_writer(&mut encoded, &document);
+                    result.map_err(|_| HostError::ResourceLimit)?;
                 }
                 // Avoid retaining this original graph alongside receive's canonical decode.
                 drop(document);
@@ -185,7 +213,9 @@ impl WebSession {
                 if new_total > total_cap {
                     return Err(HostError::ResourceLimit);
                 }
+                stage = Stage::Receive;
                 run.receive_channel(&encoded.bytes[..encoded.used], channel)?;
+                stage = Stage::Publish;
                 {
                     let _reserve = guard::PublicationGuard::enter(guard::Phase::Validate);
                     worker_main::publish(io, control, slot, &encoded.bytes[..encoded.used])?;
@@ -196,7 +226,7 @@ impl WebSession {
             match result {
                 Ok(()) => collector::Publication::Acknowledged,
                 Err(error) => {
-                    callback_error = Some(error);
+                    callback_error = Some((stage, error));
                     collector::Publication::Stop
                 }
             }
@@ -240,11 +270,15 @@ impl WebSession {
                     .map(|_| ())
             }
         };
-        if let Some(error) = callback_error {
-            return Err(error);
+        if let Some((stage, error)) = callback_error {
+            return Err(host_diagnostic(io, stage, error));
         }
-        collected.map_err(collector_error)?;
+        if let Err(error) = collected {
+            io.set_diagnostic(collector_diagnostic(error));
+            return Err(collector_error(error));
+        }
         run.finish()
+            .map_err(|e| host_diagnostic(io, Stage::Finish, e))
     }
 }
 fn collector_error(error: collector::Failure) -> HostError {
@@ -299,4 +333,93 @@ fn transport_error(error: transport::Failure) -> HostError {
         }
         _ => HostError::Io,
     }
+}
+
+fn host_diagnostic(io: &mut WorkerIo, stage: Stage, error: HostError) -> HostError {
+    io.set_diagnostic(DiagnosticRecord::host(stage, error));
+    error
+}
+fn collector_diagnostic(error: collector::Failure) -> DiagnosticRecord {
+    use collector::{ErrorKind as E, SelectionStatus as S};
+    let mut record = DiagnosticRecord {
+        stage: Stage::Collect,
+        cause: Cause::CollectorInvalidInput,
+        remote_cleanup: match error.remote_cleanup {
+            collector::RemoteCleanup::NotRequired => 0,
+            collector::RemoteCleanup::Released => 1,
+            collector::RemoteCleanup::Unconfirmed => 2,
+        },
+        send_progress: match error.send_progress {
+            transport::SendProgress::NotQueued => 0,
+            transport::SendProgress::Queued => 1,
+            transport::SendProgress::PossiblyWritten => 2,
+            transport::SendProgress::Flushed => 3,
+        },
+        code: 0,
+        count: 0,
+    };
+    record.cause = match error.kind {
+        E::InvalidInput => Cause::CollectorInvalidInput,
+        E::Limit => Cause::CollectorLimit,
+        E::StaleTarget => Cause::CollectorStaleTarget,
+        E::ResyncRequired => Cause::CollectorResyncRequired,
+        E::Malformed => Cause::CollectorMalformed,
+        E::Protocol(code) => {
+            record.code = code;
+            Cause::CollectorProtocol
+        }
+        E::Timeout => Cause::CollectorTimeout,
+        E::PublicationStopped => Cause::CollectorPublicationStopped,
+        E::CleanupUnconfirmed => Cause::CollectorCleanupUnconfirmed,
+        E::Selection {
+            status,
+            visited_nodes,
+        } => {
+            record.count = visited_nodes;
+            match status {
+                S::Missing => Cause::SelectionMissing,
+                S::Ambiguous => Cause::SelectionAmbiguous,
+                S::Incomplete => Cause::SelectionIncomplete,
+                S::Unsupported => Cause::SelectionUnsupported,
+                S::TimedOut => Cause::SelectionTimedOut,
+            }
+        }
+        E::Cdp(kind) => match kind {
+            cdp::ErrorKind::InvalidLimits => Cause::CdpInvalidLimits,
+            cdp::ErrorKind::InvalidBinding => Cause::CdpInvalidBinding,
+            cdp::ErrorKind::Encoding => Cause::CdpEncoding,
+            cdp::ErrorKind::Envelope => Cause::CdpEnvelope,
+            cdp::ErrorKind::Budget => Cause::CdpBudget,
+            cdp::ErrorKind::Detached => Cause::CdpDetached,
+            cdp::ErrorKind::Busy => Cause::CdpBusy,
+            cdp::ErrorKind::CounterExhausted => Cause::CdpCounterExhausted,
+            cdp::ErrorKind::WrongSession => Cause::CdpWrongSession,
+            cdp::ErrorKind::UnexpectedReply => Cause::CdpUnexpectedReply,
+            cdp::ErrorKind::UncorrelatedError(code) => {
+                record.code = code;
+                Cause::CdpUncorrelatedError
+            }
+            cdp::ErrorKind::Cancelled => Cause::CdpCancelled,
+            cdp::ErrorKind::Transport(kind) => match kind {
+                transport::ErrorKind::InvalidLimits => Cause::TransportInvalidLimits,
+                transport::ErrorKind::EndpointRejected => Cause::TransportEndpointRejected,
+                transport::ErrorKind::LoggingBoundary => Cause::TransportLoggingBoundary,
+                transport::ErrorKind::Connect => Cause::TransportConnect,
+                transport::ErrorKind::Handshake => Cause::TransportHandshake,
+                transport::ErrorKind::Extensions => Cause::TransportExtensions,
+                transport::ErrorKind::Timeout => Cause::TransportTimeout,
+                transport::ErrorKind::Cancelled => Cause::TransportCancelled,
+                transport::ErrorKind::ByteLimit => Cause::TransportByteLimit,
+                transport::ErrorKind::WorkLimit => Cause::TransportWorkLimit,
+                transport::ErrorKind::Io => Cause::TransportIo,
+                transport::ErrorKind::Protocol => Cause::TransportProtocol,
+                transport::ErrorKind::Capacity => Cause::TransportCapacity,
+                transport::ErrorKind::Binary => Cause::TransportBinary,
+                transport::ErrorKind::Closed => Cause::TransportClosed,
+                transport::ErrorKind::PendingWrite => Cause::TransportPendingWrite,
+                transport::ErrorKind::NoPendingWrite => Cause::TransportNoPendingWrite,
+            },
+        },
+    };
+    record
 }

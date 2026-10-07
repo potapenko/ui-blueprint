@@ -96,4 +96,4 @@ backend memory/cost, pixels or B01–B06/D06. No full H01/live acceptance is cla
 
 ## Live preparation only
 
-[W01-live preparation](../plans/ui-blueprint/receipts/W01-live.md) has one failed first-observe run with no canonical frames. The four-file harness now exposes bounded terminal codes and explicit failure shutdown/reap; one changed-case diagnostic run is authorized after its checkpoint. Source/backend/limits remain fixed; no live success is claimed.
+[W01-live preparation](../plans/ui-blueprint/receipts/W01-live.md) has one failed first-observe run with no canonical frames. The four-file harness now exposes bounded terminal codes and explicit failure shutdown/reap; the changed-case run returned invalid_input with confirmed zero-session cleanup. Core1810b1d now supplies the fixed private carrier; Web maps original producer failures and harness captures only bounded numeric fields. Changed producer compilation passes; next one-case run retains identical caps/oracles. Source/backend/limits remain fixed; no live success is claimed.

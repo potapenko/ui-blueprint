@@ -85,7 +85,8 @@ impl Fixture {
         );
     }
     fn outcome(&mut self, stage: &str, completion: &HostCompletion<'_>) {
-        self.call("outcome",json!({"page":"a","stage":stage,"terminal":terminal_code(completion.terminal),"committed":completion.committed(),"missing":completion.missing(),"operation":completion.operation.sequence}));
+        let diagnostic=completion.diagnostic().map(|d|json!({"stage":d.stage as u8,"cause":d.cause as u8,"remote_cleanup":d.remote_cleanup,"send_progress":d.send_progress,"code":d.code,"count":d.count}));
+        self.call("outcome",json!({"page":"a","stage":stage,"terminal":terminal_code(completion.terminal),"committed":completion.committed(),"missing":completion.missing(),"operation":completion.operation.sequence,"diagnostic":diagnostic}));
     }
     fn stimulus(&mut self, action: &str) {
         self.call("stimulus", json!({"page":"a","action":action}));

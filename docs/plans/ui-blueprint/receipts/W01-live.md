@@ -1,7 +1,7 @@
 # W01 live first-observe diagnosis
 
-Status: first activated run FAILED; changed diagnostic harness is checkpoint-ready.
-No retry yet. Authority [packet](../packets/W01-live.md), preparatione02eeff,
+Status: first run and one changed-case diagnostic run FAILED. Producer diagnosis is
+now in preparation; no further runtime retry. Authority [packet](../packets/W01-live.md), preparatione02eeff,
 sinkc3c28a3, activation2669384, and root's explicit finite diagnostic-repair dispatch.
 Only the same4 files change. No production/fixture/oracle/Cargo/limits/backend edit.
 Current registry11/D05@4 and full prior Web/QA/operational Spec Basis remain applicable;
@@ -24,6 +24,18 @@ Test process/context/browser/server/profile cleanup was confirmed; worker-sessio
 reap was not reported. Read-only pgrep of the exact own worker executable found no
 matches; no PID was signalled and that observation is NOT a waitpid/reap receipt.
 Shared hashes matched and Core hold was released immediately. No unchanged rerun.
+
+## Saved diagnostic result and next exact boundary
+
+Harness8705b4de7976fbba37fa492ca39b548307d29ffd ran only changed left-initial on UUID
+495ecfe4-e5ab-49b5-8769-f9013645caa2. Actual terminal invalid_input, operation1,
+committed0/missing1. Report SHA256350fe91bdb07ae3274ae3ab934bf47e60a34cc5475258420e2d4b10306fdc02d.
+Actual RuntimeHost cleanup: confirmed=true, reserved_sessions0, completion_groups0,
+abandoned=false; browser survived worker reap and all launcher resources closed.
+Before/after source8aeda319 and binaries matched; first report unchanged; hold released.
+This is the exact outer code, not a guessed collector/method cause. Root now opened
+worker_web.rs for bounded producer capture; Core owns the fixed metadata carrier.
+No new wire format/API or production behavior is invented by the Web side.
 
 ## Concrete diagnostic repair
 
@@ -60,38 +72,35 @@ this diagnostic case can save initial-left.json only. Other approved full-run fr
 remain sized-before/after. No expected data substitutes for observation. Reports mark
 records historical/non-live; private body/checkpoints/traffic/raw logs are excluded.
 
-## Relevant checks and pinned changed inputs
+## Changed producer and actual Core carrier
 
-Node --check and owned Rust fmt: PASS. Changed test compiled --no-run, without
-warnings, on saved f2af5a30226943412ae6c41dc7bb5c250a2f70c0. Shared equality passed;
-no runtime was repeated. No general guard audit or unrelated check wave.
+Root opened worker_web.rs in addition to the four harness/doc files. Shared Core
+1810b1dabd6a2d07d4931606f3859dd96f614d44 supplies DiagnosticRecord and inline
+WorkerIo::set_diagnostic/HostCompletion::diagnostic. Its diagnostic.rs SHA256 is
+0f284e6d6825ef42f167ce46daaaa5bfd8ac109a15b888d238ebd9278b72a42b; detail is absent.
+Web captures Decode/Begin/Permit/Capacity, callback Encode/Receive/Publish, original
+Collector failure and Finish before existing error mapping. Closed causes preserve
+protocol i32 code, selection count, RemoteCleanup and SendProgress; no payload/text.
+Existing HostError/terminal semantics, limits, collector and canonical wire unchanged.
+Harness accepts only bounded fixed fields; cleanup remains explicit on failure.
 
-~~~sh
-CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=<own-prep>/build cargo +1.96.0 test --locked --offline -p uiblueprint-host --features web --test web_live --no-run --message-format=json
-~~~
+Affected no-run and web worker/test Clippy -D warnings PASS on1810b1d; syntax/fmt pass.
+No runtime rerun yet. Source97 digest
+904568cc7593b554544da2b54ac7860f0fe3dab9f953ce012af53629e294b88d:
+same compact sorted JSON path→SHA256 recipe as prior96, now includes diagnostic.rs;
+Core source/manifests pinned1810b1d, own worker_web/web_live/guarded-live bytes override.
+All shared inputs matched around compile. No general guard audit or unrelated suite.
 
-Source96 8aeda3196578f514c5fd06be50b9e974b9acfc83012f129936d1a569061f474e:
-SHA256 compact sorted JSON path→SHA256; tracked f2af5a3 files under crates/{host,
-schema,engine,plugin-api}/src and plugins/web/src; root Cargo/lock/toolchain plus five
-crate Cargo; web_worker_data.rs, fixture-host.cjs, six frozen F01/R01 fixture/oracle
-files and the two owned code files. Docs excluded; prior recipe unchanged.
-Own prep /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-live-prep-4qyhni9l.
-Test build/debug/deps/web_live-f02c419e3beec6bc SHA256
-e6585803cebc182c08eb1e27aafa3e60ced9c31a5f98230f50e4f46ded385478.
-Worker build/debug/session-worker SHA256
-e0ffd4b5993ff47b0ee0e0479f1daa8d581eec25cc689955100178352b5b5fba (unchanged).
+New owned build: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-producer-diag-x7iqvye8/build/debug.
+Test deps/web_live-f02c419e3beec6bc SHA256
+8afa8d22c37c22701aa8389f1338fb5f6264e292b5a52d8453766b6c0a6e5e56;
+worker session-worker SHA256
+5627ac6b02a94882f2d004073bde332382c1a937e5247a460ec3e86f2aa2c7ab.
+Fresh evidence UUID5263b74d-e4f7-4396-84cc-562cce874d2c is not created yet.
 
-## Ready command — only after checkpoint and short ready-run hold
-
-~~~sh
-S01_WEB_PLAYWRIGHT_CORE=/Users/eugenepotapenko/.npm/_npx/f88013d20c39cb98/node_modules/playwright-core \
-UIB_WEB_LIVE_TEST=/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-live-prep-4qyhni9l/build/debug/deps/web_live-f02c419e3beec6bc \
-UIB_WEB_LIVE_TEST_SHA256=e6585803cebc182c08eb1e27aafa3e60ced9c31a5f98230f50e4f46ded385478 \
-UIB_WEB_LIVE_WORKER=/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-live-prep-4qyhni9l/build/debug/session-worker \
-UIB_WEB_LIVE_WORKER_SHA256=e0ffd4b5993ff47b0ee0e0479f1daa8d581eec25cc689955100178352b5b5fba \
-UIB_WEB_LIVE_EVIDENCE='/Users/eugenepotapenko/Library/Application Support/UIBlueprint/development/P2/W01-guarded-live/495ecfe4-e5ab-49b5-8769-f9013645caa2' \
-UIB_WEB_LIVE_CASE=first_observe_diagnostic UIB_WEB_LIVE_ALLOW=1 node tests/bridges/web/guarded-live.cjs --run-authorized
-~~~
-
-Exact4 checkpoint paths unchanged: guarded-live.cjs, web_live.rs, host-web.md, this
-receipt. First report remains immutable. Preserve earlier own primary/build temps.
+After exact5-path save, use the same fixed command with this build's test/worker
+paths/hashes, new evidence UUID and UIB_WEB_LIVE_CASE=first_observe_diagnostic.
+One changed first-observe run is already authorized; no unchanged retry or cap change.
+Core hold covers only ready compilation/run and releases after result/pin comparison.
+First and second reports/older binaries remain immutable. Root retains evidence
+through P7. Full real UI success and broader cases remain unproven.

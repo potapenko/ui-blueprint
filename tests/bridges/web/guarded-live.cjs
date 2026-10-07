@@ -135,7 +135,9 @@ async function run(evidence, report) {
           assert(CASES.has(payload.stage)&&TERMINALS.has(payload.terminal));
           assert(Number.isSafeInteger(payload.operation)&&payload.operation>0);
           assert([payload.committed,payload.missing].every(n=>Number.isInteger(n)&&n>=0&&n<=7));
-          assert(report.outcomes.length<16);report.outcomes.push({stage:payload.stage,terminal:payload.terminal,committed:payload.committed,missing:payload.missing,operation:payload.operation});return {};
+          const d=payload.diagnostic;
+          if(d!==null){assert(d&&Object.keys(d).sort().join(',')==='cause,code,count,remote_cleanup,send_progress,stage');assert(Number.isInteger(d.stage)&&d.stage>=1&&d.stage<=9);assert(Number.isInteger(d.cause)&&d.cause>=1&&d.cause<=44);assert(Number.isInteger(d.remote_cleanup)&&d.remote_cleanup>=0&&d.remote_cleanup<=2);assert(Number.isInteger(d.send_progress)&&d.send_progress>=0&&d.send_progress<=3);assert(Number.isInteger(d.code)&&d.code>=-2147483648&&d.code<=2147483647);assert(Number.isInteger(d.count)&&d.count>=0&&d.count<=4294967295);}
+          assert(report.outcomes.length<16);report.outcomes.push({stage:payload.stage,terminal:payload.terminal,committed:payload.committed,missing:payload.missing,operation:payload.operation,diagnostic:d});return {};
         }
         case 'worker_cleanup': {
           assert(typeof payload.confirmed==='boolean'&&typeof payload.abandoned==='boolean');
