@@ -230,7 +230,16 @@ struct Fixture {
     calls: Arc<Mutex<Vec<String>>>,
 }
 impl Fixture {
-    fn new(mut change: impl FnMut(&str, &Json, usize) -> Option<Json> + Send + 'static) -> Self {
+    fn new(change: impl FnMut(&str, &Json, usize) -> Option<Json> + Send + 'static) -> Self {
+        Self::with_verification(
+            change,
+            |_| json!({"result":{"type":"object","value":{"current":true}}}),
+        )
+    }
+    fn with_verification(
+        mut change: impl FnMut(&str, &Json, usize) -> Option<Json> + Send + 'static,
+        mut verify: impl FnMut(&Json) -> Json + Send + 'static,
+    ) -> Self {
         let calls = Arc::new(Mutex::new(Vec::new()));
         let seen = calls.clone();
         let peer = Peer::new(move |s| {
@@ -242,6 +251,10 @@ impl Fixture {
                 let method = command["method"].as_str().expect("method");
                 seen.lock().expect("calls").push(method.into());
                 reads += 1;
+                let is_verification = method == "Runtime.callFunctionOn"
+                    && command["params"]["functionDeclaration"]
+                        .as_str()
+                        .is_some_and(|s| s.starts_with("function verifyNodes("));
                 let default = match method {
                     "Target.getTargetInfo" => json!({"targetInfo":{"targetId":"target"}}),
                     "Page.getFrameTree" => {
@@ -260,14 +273,18 @@ impl Fixture {
                     "Accessibility.enable" | "Runtime.releaseObjectGroup" => json!({}),
                     "DOM.resolveNode" => {
                         assert_eq!(command["params"]["executionContextId"], 3);
-                        json!({"object":{"type":"object","subtype":"node","objectId":"opaque-handle"}})
+                        json!({"object":{"type":"object","subtype":"node","objectId":format!("node-{}",command["params"]["backendNodeId"])}})
                     }
                     "Runtime.callFunctionOn" => {
                         assert_eq!(command["params"]["returnByValue"], true);
                         assert_eq!(command["params"]["userGesture"], false);
                         assert_eq!(command["params"]["throwOnSideEffect"], true);
-                        serde_json::from_str(include_str!("fixtures/collector/dom.json"))
-                            .expect("DOM literal")
+                        if is_verification {
+                            verify(&command)
+                        } else {
+                            serde_json::from_str(include_str!("fixtures/collector/dom.json"))
+                                .expect("DOM literal")
+                        }
                     }
                     "Accessibility.getPartialAXTree" => {
                         assert_eq!(command["params"]["fetchRelatives"], false);
@@ -283,7 +300,11 @@ impl Fixture {
                     }
                     _ => panic!("unexpected method"),
                 };
-                let mut replacement = change(method, &command, reads);
+                let mut replacement = if is_verification {
+                    None
+                } else {
+                    change(method, &command, reads)
+                };
                 // Test-only control: emit real CDP events before the ordinary method reply.
                 if let Some(events) = replacement
                     .as_ref()
@@ -319,6 +340,9 @@ impl Fixture {
             .expect("verified synthetic attachment")
     }
     fn try_attach(&self, caps: collector::Limits) -> Result<Collector, collector::Failure> {
+        self.try_attach_limits(caps, 8192, 8192)
+    }
+    fn client(&self, frame_bytes: usize, message_bytes: usize) -> cdp::Client {
         logging();
         let transport = transport::Transport::connect(
             &self.peer.url,
@@ -328,14 +352,14 @@ impl Fixture {
                 read_buffer_bytes: 64,
                 write_buffer_bytes: 64,
                 write_buffer_max: 20000,
-                frame_bytes: 8192,
-                message_bytes: 8192,
+                frame_bytes,
+                message_bytes,
                 outbound_bytes: 16000,
             },
             op(),
         )
         .expect("connect");
-        let client = cdp::Client::new(
+        cdp::Client::new(
             transport,
             cdp::Binding {
                 target: target(),
@@ -351,9 +375,16 @@ impl Fixture {
                 event_bytes: 34000,
             },
         )
-        .expect("CDP");
+        .expect("CDP")
+    }
+    fn try_attach_limits(
+        &self,
+        caps: collector::Limits,
+        frame_bytes: usize,
+        message_bytes: usize,
+    ) -> Result<Collector, collector::Failure> {
         Collector::attach(
-            client,
+            self.client(frame_bytes, message_bytes),
             collector::Binding {
                 session_id: id("session"),
                 target: target(),
@@ -679,18 +710,21 @@ fn navigation_after_collection_does_not_publish_fresh_old_data() {
         None
     });
     let mut c = fixture.attach(limits());
+    let failure = c
+        .observe(&request(), &scope(&[11]), 41, op().deadline, |_| {
+            panic!("old doc")
+        })
+        .expect_err("late navigation");
+    assert_eq!(failure.kind, ErrorKind::StaleTarget);
     assert_eq!(
-        c.observe(&request(), &scope(&[11]), 41, op().deadline, |_| panic!(
-            "old doc"
-        ))
-        .expect_err("late navigation")
-        .kind,
-        ErrorKind::StaleTarget
+        failure.remote_cleanup,
+        collector::RemoteCleanup::Unconfirmed
     );
     assert!(
-        fixture
+        !fixture
             .methods()
-            .contains(&"Runtime.releaseObjectGroup".into())
+            .contains(&"Runtime.releaseObjectGroup".into()),
+        "no further RPC after invalidated binding"
     );
     drop(c);
     fixture.finish();
@@ -1028,7 +1062,9 @@ fn malformed_method_objects_and_wrong_ax_frame_do_not_publish() {
 #[test]
 fn output_cap_and_late_ack_are_errors_but_acknowledged_data_stays_owned() {
     let fixture = Fixture::new(|_, _, _| None);
-    let mut c = fixture.attach(limits());
+    let mut c = fixture
+        .try_attach_limits(limits(), 1024, 1024)
+        .expect("codec fits smaller request allowance");
     let mut r = request();
     r.limits.max_output_bytes = 3000;
     let e = c
@@ -1164,4 +1200,136 @@ fn request_output_budget_is_cumulative_across_canonical_channels() {
     assert!(serde_json::to_vec(&docs[0]).expect("bytes").len() <= 550);
     drop(c);
     fixture.finish();
+}
+
+#[test]
+fn removed_earlier_node_without_events_cannot_publish_current() {
+    let removed = Arc::new(AtomicBool::new(false));
+    let removal = removed.clone();
+    let seen = Arc::new(Mutex::new(Vec::<String>::new()));
+    let reads = seen.clone();
+    let retained = seen.clone();
+    let fixture = Fixture::with_verification(
+        move |method, command, _| {
+            if method == "Runtime.callFunctionOn" {
+                let object = command["params"]["objectId"]
+                    .as_str()
+                    .expect("read handle")
+                    .to_owned();
+                reads.lock().expect("read handles").push(object.clone());
+                if object == "node-12" {
+                    removal.store(true, Ordering::Release);
+                }
+            }
+            None
+        },
+        move |command| {
+            assert!(removed.load(Ordering::Acquire));
+            assert_eq!(
+                *retained.lock().expect("original reads"),
+                ["node-11", "node-12"]
+            );
+            assert_eq!(
+                command["params"]["arguments"],
+                json!([{"objectId":"node-1"},{"objectId":"node-11"},{"objectId":"node-12"}])
+            );
+            json!({"result":{"type":"object","value":{"current":false}}})
+        },
+    );
+    let mut c = fixture.attach(limits());
+    let error = c
+        .observe(&request(), &scope(&[11, 12]), 41, op().deadline, |_| {
+            panic!("removed node cannot publish Current")
+        })
+        .expect_err("late removal");
+    assert_eq!(error.kind, ErrorKind::StaleTarget);
+    assert_eq!(error.remote_cleanup, collector::RemoteCleanup::Released);
+    assert_eq!(*seen.lock().expect("reads"), ["node-11", "node-12"]);
+    assert_eq!(
+        fixture
+            .methods()
+            .iter()
+            .filter(|m| m.as_str() == "DOM.resolveNode")
+            .count(),
+        3,
+        "no locator/re-resolve fallback"
+    );
+    assert_eq!(
+        fixture.methods().last().map(String::as_str),
+        Some("Runtime.releaseObjectGroup")
+    );
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn compatible_codec_caps_and_original_handle_recheck_allow_publication() {
+    let checked = Arc::new(AtomicBool::new(false));
+    let observed = checked.clone();
+    let fixture = Fixture::with_verification(
+        |_, _, _| None,
+        move |command| {
+            assert_eq!(command["params"]["objectId"], "node-1");
+            assert_eq!(
+                command["params"]["arguments"],
+                json!([{"objectId":"node-1"},{"objectId":"node-11"}])
+            );
+            observed.store(true, Ordering::Release);
+            json!({"result":{"type":"object","value":{"current":true}}})
+        },
+    );
+    let mut caps = limits();
+    caps.max_reply_bytes = 1024;
+    let mut c = fixture
+        .try_attach_limits(caps, 1024, 1024)
+        .expect("compatible payload caps with larger wire budget and CDP cap");
+    let (_, docs) = collect(&mut c, &request(), &scope(&[11]));
+    assert!(checked.load(Ordering::Acquire));
+    assert_eq!(snapshot(&docs[0]).nodes.len(), 2);
+    drop(c);
+    fixture.finish();
+}
+#[test]
+fn incompatible_frame_or_message_cap_refuses_before_first_cdp_command() {
+    for (frame, message) in [(8192, 8192), (8192, 1024), (1024, 8192)] {
+        let fixture =
+            Fixture::new(|_, _, _| panic!("no command permitted under incompatible codec caps"));
+        let mut caps = limits();
+        caps.max_reply_bytes = 1024;
+        assert_eq!(
+            fixture
+                .try_attach_limits(caps, frame, message)
+                .expect_err("incompatible acquisition cap")
+                .kind,
+            ErrorKind::InvalidInput
+        );
+        assert!(fixture.methods().is_empty());
+        fixture.finish();
+    }
+}
+#[test]
+fn actual_transport_caps_are_read_only_and_absent_after_detach_or_cancel() {
+    for detached in [false, true] {
+        let fixture = Fixture::new(|_, _, _| panic!("getter has no IO"));
+        let mut client = fixture.client(1024, 2048);
+        let mut copy = client.transport_limits().expect("actual config");
+        assert_eq!((copy.frame_bytes, copy.message_bytes), (1024, 2048));
+        copy.frame_bytes = 1;
+        assert_eq!(copy.frame_bytes, 1);
+        assert_eq!(
+            client
+                .transport_limits()
+                .expect("immutable original")
+                .frame_bytes,
+            1024
+        );
+        if detached {
+            client.detach();
+        } else {
+            client.cancellation().expect("handle").cancel();
+        }
+        assert!(client.transport_limits().is_none());
+        drop(client);
+        assert!(fixture.methods().is_empty());
+        fixture.finish();
+    }
 }

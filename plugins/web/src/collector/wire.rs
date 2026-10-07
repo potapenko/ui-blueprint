@@ -121,3 +121,7 @@ object_record!(ReadRemote { r#type:String, value:Option<DomRead> });
 object_record!(ReadResult { result:ReadRemote, exception_details:Option<de::IgnoredAny> });
 object_record!(AxResult { nodes:Vec<AxNode> });
 object_record!(Empty {});
+
+object_record!(Continuity { current: bool });
+object_record!(VerifyRemote { r#type:String, value:Option<Continuity> });
+object_record!(VerifyResult { result:VerifyRemote, exception_details:Option<de::IgnoredAny> });

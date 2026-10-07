@@ -4,6 +4,7 @@ use serde::Serialize;
 use uiblueprint_schema::validation;
 
 const READ_NODE: &str = include_str!("read-node.js");
+const VERIFY_NODES: &str = include_str!("verify-nodes.js");
 pub(super) struct Records {
     pub(super) dom: Vec<(u32, wire::DomRead)>,
     pub(super) ax: Vec<(u32, wire::AxNode)>,
@@ -41,7 +42,7 @@ enum Argument<'a> {
 }
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
-struct Read<'a> {
+struct Read<'a, A> {
     object_id: &'a str,
     function_declaration: &'static str,
     return_by_value: bool,
@@ -49,7 +50,7 @@ struct Read<'a> {
     user_gesture: bool,
     await_promise: bool,
     throw_on_side_effect: bool,
-    arguments: [Argument<'a>; 2],
+    arguments: A,
 }
 impl Collector {
     pub(super) fn collect(
@@ -111,7 +112,6 @@ impl Collector {
             return Err(Failure::new(ErrorKind::CleanupUnconfirmed)
                 .with_cleanup(RemoteCleanup::Unconfirmed));
         }
-        self.verify_document(budget)?;
         Ok(records)
     }
     fn collect_nodes(
@@ -131,6 +131,10 @@ impl Collector {
         if !need_ax {
             records.ax_status = SourceStatus::NotRequested;
         }
+        let mut handles = Vec::new();
+        handles
+            .try_reserve_exact(scope.nodes.len())
+            .map_err(|_| Failure::new(ErrorKind::Limit))?;
         for node in &scope.nodes {
             let backend = node.backend_id()?;
             let object = self.resolve(backend, group, budget)?;
@@ -161,6 +165,7 @@ impl Collector {
             if read.exception_details.is_some() || read.result.r#type != "object" {
                 return Err(Failure::new(ErrorKind::Malformed));
             }
+            handles.push(object);
             let mut read = read
                 .result
                 .value
@@ -224,6 +229,53 @@ impl Collector {
                 .ok_or(Failure::new(ErrorKind::Malformed))?;
             validate_ax(&ax, backend, &self.binding.surface, self.limits)?;
             records.ax.push((backend, ax));
+        }
+        // Final target/document check and one bounded pass over the ORIGINAL handles.
+        // Do this after every source read, immediately before group release/publication.
+        self.verify_document(budget)?;
+        if let Some(document) = document.as_deref() {
+            self.verify_nodes(document, &handles, budget)?;
+        }
+        Ok(())
+    }
+    fn verify_nodes(
+        &mut self,
+        document: &str,
+        handles: &[String],
+        budget: &mut Budget,
+    ) -> Result<(), Failure> {
+        let mut arguments = Vec::new();
+        arguments
+            .try_reserve_exact(handles.len() + 1)
+            .map_err(|_| Failure::new(ErrorKind::Limit))?;
+        arguments.push(Argument::Object {
+            object_id: document,
+        });
+        arguments.extend(
+            handles
+                .iter()
+                .map(|handle| Argument::Object { object_id: handle }),
+        );
+        let params = Read {
+            object_id: document,
+            function_declaration: VERIFY_NODES,
+            return_by_value: true,
+            silent: true,
+            user_gesture: false,
+            await_promise: false,
+            throw_on_side_effect: true,
+            arguments,
+        };
+        let checked: wire::VerifyResult = self.send("Runtime.callFunctionOn", &params, budget)?;
+        if checked.exception_details.is_some() || checked.result.r#type != "object" {
+            return Err(Failure::new(ErrorKind::Malformed));
+        }
+        let current = checked
+            .result
+            .value
+            .ok_or(Failure::new(ErrorKind::Malformed))?;
+        if !current.current {
+            return Err(Failure::new(ErrorKind::StaleTarget));
         }
         Ok(())
     }

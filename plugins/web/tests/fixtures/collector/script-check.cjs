@@ -39,3 +39,12 @@ const detached=node();detached.isConnected=false;rectReads=0;assert.equal(read(d
 const long=node();long.state.data='abcd';assert.equal(read(long,['value'],false,document,3).value,null);
 const mixed=node();mixed.state.indeterminate=true;assert.equal(read(mixed,['checked']).checked,undefined);
 console.log('11 offline script scenarios passed; mock getters only, no browser qualification.');
+const verifySource = fs.readFileSync(require('node:path').join(__dirname, '../../../src/collector/verify-nodes.js'), 'utf8');
+vm.runInContext(verifySource, context, {timeout:100});
+function verify(nodes, expected=document) { context.selected=nodes;context.expected=expected;return vm.runInContext('verifyNodes(expected, ...selected)',context,{timeout:100}); }
+const earlier=node(), later=node();
+read(earlier,['value','layout_bounds']);read(later,['value','layout_bounds']);
+const beforeVerify=[valueReads,rectReads];assert.equal(verify([earlier,later]).current,true);assert.deepEqual([valueReads,rectReads],beforeVerify);
+earlier.isConnected=false;const replacement=node();replacement.attrs.id='same-label-or-id';assert.equal(verify([earlier,later]).current,false);assert.equal(verify([replacement,later]).current,true);
+assert.equal(verify([later],{}).current,false);const foreignNode=node();foreignNode.ownerDocument={};assert.equal(verify([foreignNode]).current,false);
+console.log('3 offline continuity scenarios passed; original handles, no field recollection or browser qualification.');

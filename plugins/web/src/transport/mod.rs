@@ -313,6 +313,11 @@ impl Transport {
             })),
         }
     }
+    /// The immutable configuration used to construct this transport's codec.
+    /// This copy does not establish connection liveness or change any limit.
+    pub fn limits(&self) -> Limits {
+        self.limits
+    }
     pub fn cancellation(&self) -> Cancellation {
         self.cancel.clone()
     }

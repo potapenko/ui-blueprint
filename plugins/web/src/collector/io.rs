@@ -46,6 +46,14 @@ impl Collector {
         deadline: Instant,
     ) -> Result<Self, Failure> {
         limits.validate()?;
+        let incoming = client
+            .transport_limits()
+            .ok_or(Failure::new(ErrorKind::Cdp(cdp::ErrorKind::Detached)))?;
+        if incoming.frame_bytes > limits.max_reply_bytes
+            || incoming.message_bytes > limits.max_reply_bytes
+        {
+            return Err(Failure::new(ErrorKind::InvalidInput));
+        }
         let ids = [
             &binding.session_id,
             &binding.target.id,
@@ -173,6 +181,16 @@ impl Collector {
             .checked_sub(budget.reply_bytes)
             .ok_or(Failure::new(ErrorKind::Limit))?;
         if remaining == 0 {
+            return Err(Failure::new(ErrorKind::Limit));
+        }
+        // Codec caps govern payload acquisition, including previously buffered bytes.
+        // Wire IO/work budgets remain separate: framing/control consume those budgets.
+        let incoming = self
+            .client
+            .transport_limits()
+            .ok_or(Failure::new(ErrorKind::Cdp(cdp::ErrorKind::Detached)))?;
+        let allowance = self.limits.max_reply_bytes.min(remaining);
+        if incoming.frame_bytes > allowance || incoming.message_bytes > allowance {
             return Err(Failure::new(ErrorKind::Limit));
         }
         budget.methods += 1;

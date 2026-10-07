@@ -139,6 +139,14 @@ impl Client {
             result_pool: quota::Pool::new(limits.max_results, limits.result_bytes),
         })
     }
+    /// Actual codec configuration while an owner remains and is not cancelled.
+    /// No default is returned for a detached or cancelled connection.
+    pub fn transport_limits(&self) -> Option<transport::Limits> {
+        self.transport
+            .as_ref()
+            .filter(|transport| !transport.cancellation().is_cancelled())
+            .map(Transport::limits)
+    }
     pub fn cancellation(&self) -> Option<Cancellation> {
         self.transport.as_ref().map(Transport::cancellation)
     }

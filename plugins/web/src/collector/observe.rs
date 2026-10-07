@@ -59,16 +59,20 @@ impl Collector {
         };
         // Canonical channel order is explicit. DOM and AX are sources of ONE external channel.
         if channels.contains(&Channel::ExternalSemantics) {
-            let needed = scope
-                .nodes
-                .len()
-                .checked_mul(if needs_ax(&request.context.fields) {
-                    3
-                } else {
-                    2
-                })
-                .and_then(|n| n.checked_add(8))
-                .ok_or(Failure::new(ErrorKind::Limit))?;
+            let needed = if scope.nodes.is_empty() {
+                6
+            } else {
+                scope
+                    .nodes
+                    .len()
+                    .checked_mul(if needs_ax(&request.context.fields) {
+                        3
+                    } else {
+                        2
+                    })
+                    .and_then(|n| n.checked_add(9))
+                    .ok_or(Failure::new(ErrorKind::Limit))?
+            };
             if needed > self.limits.max_methods as usize {
                 return Err(Failure::new(ErrorKind::Limit));
             }
