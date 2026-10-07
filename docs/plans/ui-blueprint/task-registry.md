@@ -99,6 +99,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
+| [P01-host-channel](packets/P01-host-channel.md) | retained Core owner | exact Native channel2/bit4 handoff; current D02/D05 | running minimal existing host admission/broker connection, non-capture with preserved2helper cap; no Swift/live acceptance |
 | [P01-probe-source](packets/P01-probe-source.md) | retained Native owner | existing explicit F02 measured markers and NATIVE/M05 | running canonical probe source connection in Native owners; exact Core channel2 broker dependency handed off early; no live/probe invariance claim |
 | [L01-inspect-json](packets/L01-inspect-json.md) | retained Core owner | 8669ef339e37740b536d640019733d781f9c0dd4 pushed9paths | CLI@2/registry12 faithful chosen envelope registered before code; root read full leaf/routes. Four inspect tests/Clippy and actual Web/Native views pass per receipt, exact embedded Snapshot preserved. Compact/schema/analysis unchanged; no live revalidation claim |
 | [W01-rooted-selection](packets/W01-rooted-selection.md) | retained Web owner | existing bounded scope/ref contract; concrete InitialIds limit and NodeRef provenance handoff | running private actual-root seed/subtree collection with existing budgets and no fabricated provenance; exact real-product caller selection remains unverified, advisor confirms ref flow only |
