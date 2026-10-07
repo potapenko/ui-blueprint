@@ -90,7 +90,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core traces the specific remaining serializer/dependency scratch and full publication-allowance coverage in existing H01 scope. Web prepares read-only existing F01/launcher/oracle/API handoff for first guarded live consumer; no launch yet. Native implements registered admission/JSON/artifact owners. Integration retained after scoped accepted proof. No live/UI/Git/source holds |
+| Активные чаты/пакеты/ресурсы | Core traced canonical serialization/error allocation and prepares one bounded real publication-reserve case. Web read-only handoff returned; W01-live preparation packet ready, runtime remains waiting_evidence. Native admission/sink integration continues with exact3 legacy caller dependency grant. Integration retained after scoped proof. No live/UI/Git/source holds |
 | Последний принятый результат продукта | scoped local analysis migration: factual measure/query JSON0.2, full check0.2 and recomputation with protected0.1 compatibility; no live adapter/full release acceptance |
 | Следующий шаг | Core returns concrete source owner→obligation→evidence→missing case or source-backed closure for publication, not another generic open label. Combine with Web's finite readiness handoff for next packet; Native source remains parallel. No repeated allocation-free-writer/OS-exhaustion proof; full H01/live/D06/RC05 remain open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -99,6 +99,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
+| [W01-live](packets/W01-live.md) | retained Web owner | real RuntimeHost/collector on saved5f52cb5; frozen F01/R01 oracles | preparation-only ready:4test/doc paths, opt-in no-run compile. Actual owned Chromium/fixture execution requires explicit activation after publication gate; no source-app/input/Q02 expansion |
 | [M01-acquisition-plan](packets/M01-acquisition-plan.md) | retained Native owner | proposal45c2667649c347202dfc64b6d5d978c3e47271f0, pushed | selected engineering handoff under ROADMAP/D05; public-header/source/old-sample evidence, no SDK/runtime claim |
 | [M01-acquisition-registration](packets/M01-acquisition-registration.md) | retained Native owner | a0281dff74657b10baa4c7d137fb14572d88476f, pushed6docs | accepted faithful registration: D05@4/Native acquisition@1, registry11; all17ceilings/derived8192 preserve selection/common Rust/D06, no implementation acceptance |
 | [M01-acquisition](packets/M01-acquisition.md) | retained Native owner | registereda0281dff, helper7c6e078/provider5f52cb5 | running admission/sink integration; exact legacy dependencies sizing.py/capture_lifecycle.py/fixtures native build.sh added for explicit args/shared-source wiring only. No live AX/SDK capture or changed fixture expectations |
