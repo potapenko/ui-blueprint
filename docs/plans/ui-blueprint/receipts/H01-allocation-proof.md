@@ -286,3 +286,39 @@ kept separate from unproved dependency scratch. Rejection/validation/replay-spec
 allocation-failure obligations remain as the matrix states; no claim of full H01
 or independent production source acceptance. Next save set: hostile_worker.rs and
 this receipt only, under a new short root Git grant.
+
+## Next predeclared Replay attribution case — prepared, not executed
+
+Phase-refusal checkpoint ba3c372a48b4c104e5e224f16368ad88113de3ef is saved/pushed;
+its saved64-input identity matches eccadde…63aa1 and the Git lease is released.
+Root then authorized exactly one existing-API Replay pressure case, without a cap
+sweep, new production seam or public HostCompletion change.
+
+The test-local ProcessPlatform/OwnedProcess wrapper forwards the actual Darwin
+predicate/spawn/poll/IO/termination/reap unchanged. read_fatal copies ONLY chunks
+already returned to the real supervisor into a fixed64-byte record, then decodes
+existing Control. It performs no second FD read, JSON parse, policy mutation or
+fake phase/result. This is sufficient for an existing Replay phase marker; it does
+not separate semantic validation hidden inside Document::from_json's Decode phase.
+
+Fixed inputs before execution:480KiB unescaped text in one normal retained Snapshot,
+compatible empty Delta, input2MiB/publication512KiB, ordinary quota4MiB−128KiB and
+publication reserve1MiB. The fixed buffers plus retained text, decoded base text
+and cloned candidate text exceed ordinary quota before other metadata. Actual
+private fatal evidence, not this lower-bound reasoning alone, must establish phase.
+Expected: successful base ACK, ResourceLimit with Replay class/phase3 and matching
+operation, zero new committed frame, held original bytes surviving actual reap.
+An earlier Decode failure or failed Retain prerequisite is reported unchanged;
+the test may not tune the cap to obtain the desired result.
+
+Ready command: build session-worker, then hostile_worker test filtered EXACTLY to
+replay_clone_quota_has_private_phase_and_keeps_acked_bytes with one test thread,
+plus affected Clippy/fmt. Before-run source recipe is the previous tracked-source/
+manifest/toolchain/six-fixture set, recomputed on root's current saved provider;
+new connected modules must be included. Runtime waits for a short Core ACK; no
+freeze is held during this preparation. Only own hostile_worker.rs/receipt changed.
+
+Prepared-case checkpoint note: only own rustfmt and scoped whitespace checks ran
+for this new wrapper/case. No compiler or runtime pass is claimed against the
+changing producer composition. Saved WIP is not acceptance or closure of the
+remaining proof; wait for the exact new provider/ACK within this same packet.

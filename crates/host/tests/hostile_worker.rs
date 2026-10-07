@@ -3,7 +3,10 @@
 #![cfg(target_os = "macos")]
 #![forbid(unsafe_code)]
 use std::{
+    cell::Cell,
+    os::fd::BorrowedFd,
     path::Path,
+    rc::Rc,
     sync::{Mutex, OnceLock},
     thread,
     time::{Duration, Instant},
@@ -12,8 +15,8 @@ use uiblueprint_host::{
     authority::TargetLease,
     domain::{HostDomain, SessionHandle},
     host_types::{HostCompletion, HostEvent, OutputRequest, Terminal},
-    process::DarwinPlatform,
-    process_api::SpawnSpec,
+    process::{DarwinChild, DarwinPlatform},
+    process_api::{OwnedProcess, PollInterest, ProcessPlatform, ProcessState, SpawnSpec, Transfer},
     supervisor::RuntimeHost,
     *,
 };
@@ -64,7 +67,7 @@ fn target() -> TargetLease {
 fn spec() -> SpawnSpec {
     SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap()
 }
-fn next<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostEvent<'a> {
+fn next<'a, P: ProcessPlatform + 'static>(host: &mut RuntimeHost<'a, P>) -> HostEvent<'a> {
     let stop = deadline();
     loop {
         assert!(Instant::now() < stop, "bounded actual host event");
@@ -74,13 +77,15 @@ fn next<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostEvent<'a> {
         }
     }
 }
-fn complete<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> HostCompletion<'a> {
+fn complete<'a, P: ProcessPlatform + 'static>(host: &mut RuntimeHost<'a, P>) -> HostCompletion<'a> {
     match next(host) {
         HostEvent::Complete(c) => c,
         _ => panic!("expected terminal completion"),
     }
 }
-fn attach<'a>(host: &mut RuntimeHost<'a, DarwinPlatform>) -> (SessionHandle<'a>, String) {
+fn attach<'a, P: ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'a, P>,
+) -> (SessionHandle<'a>, String) {
     let mut input = host
         .reserve_attach_input(target(), DESCRIPTOR.len())
         .unwrap();
@@ -106,8 +111,8 @@ fn output(format: u8, channels: u8) -> OutputRequest {
         retained_partition: 0,
     }
 }
-fn submit<'a>(
-    host: &mut RuntimeHost<'a, DarwinPlatform>,
+fn submit<'a, P: ProcessPlatform + 'static>(
+    host: &mut RuntimeHost<'a, P>,
     session: SessionHandle<'a>,
     bytes: &[u8],
     class: OperationClass,
@@ -119,7 +124,7 @@ fn submit<'a>(
     host.submit(session, class, input, request, deadline())
         .unwrap();
 }
-fn shutdown(host: &mut RuntimeHost<'_, DarwinPlatform>) {
+fn shutdown<P: ProcessPlatform + 'static>(host: &mut RuntimeHost<'_, P>) {
     let stop = deadline();
     while Instant::now() < stop {
         if matches!(host.shutdown().unwrap(), HostEvent::ShutdownComplete) {
@@ -128,6 +133,78 @@ fn shutdown(host: &mut RuntimeHost<'_, DarwinPlatform>) {
         thread::sleep(Duration::from_millis(1));
     }
     panic!("owned host cleanup must finish")
+}
+
+// Observe bytes already returned to the real supervisor. No second FD read,
+// altered result, delayed IO/reap, JSON parse or production API is introduced.
+struct FatalAudit {
+    record: Rc<Cell<Option<Control>>>,
+}
+struct FatalChild {
+    real: DarwinChild,
+    record: Rc<Cell<Option<Control>>>,
+    bytes: [u8; CONTROL_BYTES],
+    used: usize,
+}
+impl ProcessPlatform for FatalAudit {
+    type Child = FatalChild;
+    fn validate_parent_reaping() -> Result<(), HostError> {
+        DarwinPlatform::validate_parent_reaping()
+    }
+    fn spawn(&mut self, spec: &SpawnSpec) -> Result<Self::Child, HostError> {
+        Ok(FatalChild {
+            real: DarwinPlatform.spawn(spec)?,
+            record: self.record.clone(),
+            bytes: [0; CONTROL_BYTES],
+            used: 0,
+        })
+    }
+    fn poll(&mut self, interests: &mut [PollInterest<'_>], wait_ms: u32) -> Result<(), HostError> {
+        DarwinPlatform.poll(interests, wait_ms)
+    }
+}
+impl OwnedProcess for FatalChild {
+    fn write_input(&mut self, b: &[u8]) -> Result<Transfer, HostError> {
+        self.real.write_input(b)
+    }
+    fn read_output(&mut self, b: &mut [u8]) -> Result<Transfer, HostError> {
+        self.real.read_output(b)
+    }
+    fn read_fatal(&mut self, b: &mut [u8]) -> Result<Transfer, HostError> {
+        let result = self.real.read_fatal(b)?;
+        if let Transfer::Bytes(n) = result {
+            assert!(
+                n <= b.len() && n <= CONTROL_BYTES - self.used,
+                "one fixed actual fatal record"
+            );
+            self.bytes[self.used..self.used + n].copy_from_slice(&b[..n]);
+            self.used += n;
+            if self.used == CONTROL_BYTES {
+                self.record.set(Some(
+                    Control::decode(&self.bytes).expect("valid private control"),
+                ));
+            }
+        }
+        Ok(result)
+    }
+    fn close_input(&mut self) {
+        self.real.close_input()
+    }
+    fn terminate(&mut self) -> Result<(), HostError> {
+        self.real.terminate()
+    }
+    fn try_reap(&mut self) -> Result<ProcessState, HostError> {
+        self.real.try_reap()
+    }
+    fn input_fd(&self) -> Option<BorrowedFd<'_>> {
+        self.real.input_fd()
+    }
+    fn output_fd(&self) -> BorrowedFd<'_> {
+        self.real.output_fd()
+    }
+    fn fatal_fd(&self) -> BorrowedFd<'_> {
+        self.real.fatal_fd()
+    }
 }
 fn prove_guard_before_hostile() {
     GUARDED.get_or_init(|| {
@@ -585,4 +662,139 @@ fn phase_retained_quota_refusal_keeps_base_replayable_and_caller_lease_intact() 
     shutdown(&mut host);
     assert_eq!(domain.usage().reserved_sessions, 0);
     assert_eq!(domain.usage().completion_groups, 0);
+}
+
+#[test]
+fn replay_clone_quota_has_private_phase_and_keeps_acked_bytes() {
+    let _serial = SERIAL.lock().unwrap();
+    const TEXT: usize = 480 * 1024;
+    const ORDINARY: usize = 4 * MIB - 128 * 1024;
+    let config = limits(ORDINARY + MIB);
+    assert_eq!(config.ordinary_bytes().unwrap(), ORDINARY);
+    // Fixed buffers + retained text + decoded base text + cloned result text
+    // exceed ordinary quota before counting any other live metadata. This is
+    // one predeclared case, not a cap search; actual fatal phase decides proof.
+    assert!(config.input_bytes + config.output_bytes + 3 * TEXT > ORDINARY);
+    let record = Rc::new(Cell::new(None));
+    let domain = HostDomain::new::<FatalAudit>(config).unwrap();
+    let mut host = RuntimeHost::new(
+        &domain,
+        spec(),
+        FatalAudit {
+            record: record.clone(),
+        },
+    )
+    .unwrap();
+    let (session, _) = attach(&mut host);
+    let Artifact::Snapshot(mut base) = Document::from_json(SNAPSHOT, SNAPSHOT.len())
+        .unwrap()
+        .artifact
+    else {
+        panic!("normal source")
+    };
+    base.id = Id("replay-pressure-base".into());
+    base.source_state = Some(Id("authored-replay-pressure-base".into()));
+    let Property::Requested { state, .. } = base.nodes[0]
+        .properties
+        .iter_mut()
+        .find(|p| p.field() == Field::Name)
+        .unwrap()
+    else {
+        panic!("name")
+    };
+    *state = Availability::Known {
+        value: Value::Text("x".repeat(TEXT)),
+    };
+    let base_doc = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(base.clone()),
+    };
+    base_doc
+        .validate()
+        .expect("valid authored unescaped text source");
+    let bytes = serde_json::to_vec(&base_doc).unwrap();
+    assert!(
+        bytes.len() < config.output_bytes,
+        "normal Retain must fit publication cap"
+    );
+    let mut request = output(0, 1);
+    request.retained_partition = 1;
+    submit(&mut host, session, &bytes, OperationClass::Retain, request);
+    let held = complete(&mut host);
+    if held.terminal != Terminal::Completed {
+        let terminal = held.terminal;
+        drop(held);
+        shutdown(&mut host);
+        panic!(
+            "predeclared Retain prerequisite failed: {terminal:?}, fatal={:?}; do not tune cap",
+            record.get()
+        );
+    }
+    assert_eq!(held.bytes(0), Some(bytes.as_slice()));
+    assert!(record.get().is_none());
+    let delta = Delta {
+        base_revision: base.revision,
+        revision: base.revision + 1,
+        source_state: Some(Id("authored-replay-pressure-next".into())),
+        context: base.context.clone(),
+        observations: vec![],
+        upsert: vec![],
+        removed: vec![],
+        relations: base.relations.clone(),
+        focus: base.focus.clone(),
+        coverage: base.coverage.clone(),
+    };
+    let delta_doc = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Delta(Box::new(DeltaCase {
+            base: *base,
+            update: delta,
+            source_snapshot: None,
+        })),
+    };
+    delta_doc
+        .validate()
+        .expect("empty compatible delta, not malformed data");
+    let delta = serde_json::to_vec(&delta_doc).unwrap();
+    let id = b"\"replay-pressure-result\"";
+    let mut input = host
+        .reserve_input(session, 40 + delta.len() + id.len())
+        .unwrap();
+    worker_tape::encode(&[&delta, id], input.bytes_mut()).unwrap();
+    let operation = host
+        .submit(session, OperationClass::Replay, input, request, deadline())
+        .unwrap();
+    let result = complete(&mut host);
+    let terminal = result.terminal;
+    let committed = result.committed();
+    drop(result);
+    shutdown(&mut host); // Actual provider reap before any final assertion/receipt.
+    assert_eq!(domain.usage().reserved_sessions, 0);
+    assert_eq!(
+        domain.usage().retained_reserved_bytes,
+        uiblueprint_engine::cache::QuotaLedger::backing_bytes()
+    );
+    assert_eq!(
+        held.bytes(0),
+        Some(bytes.as_slice()),
+        "ACKed bytes survive quota death/reap"
+    );
+    let observed = record.get();
+    drop(held);
+    assert_eq!(domain.usage().completion_groups, 0);
+    assert_eq!(
+        terminal,
+        Terminal::Failed(HostError::ResourceLimit),
+        "fatal={observed:?}"
+    );
+    assert_eq!(committed, 0);
+    let fatal = observed.expect("actual private fatal bytes, not inferred phase");
+    assert_eq!(fatal.kind, ControlKind::Fatal);
+    assert_eq!(fatal.class, OperationClass::Replay);
+    assert_eq!(fatal.correlation.operation, operation.sequence);
+    assert_eq!(fatal.value, 1);
+    assert_eq!(
+        fatal.flags, 3,
+        "Replay expected; earlier Decode is an attribution gap, not a pass"
+    );
 }
