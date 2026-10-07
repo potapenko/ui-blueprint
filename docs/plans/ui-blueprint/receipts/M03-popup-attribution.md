@@ -175,3 +175,39 @@ binary 511f0593fc55c311b952229f1f0a14da7647c0a1ad6cb1ad550466b921a77a01.
 Operation temp uib-m03-shortcut-75jf9o2s retains this immediate qualified build for
 next already authorized fresh run; no image produced or deleted. Exact2 ready,
 index untouched; no runtime/keyboard input or repeated source suites.
+
+## Saved shortcut actual interval — Snapshot succeeded, public mapping unresolved
+
+Saved a466051f0c2a2c0b2817486ff08d4d525c343ad7 matched source17630e87 and retained
+compiled fixture511f0593; reused that binary without a fixture rebuild/source suite.
+Own bundled PID86644/canonical executable/unique run-dir attributed. Bounded finally
+launcher had300s UI deadline and independent5s exact cleanup before assertions.
+CUA bound A, opened Edge popup and fresh AX showed real Popup A/Confirm. Explicit
+same-provider pressKey(super+shift+s) acknowledged; subsequent AX still showed popup.
+No parent-content click or alternative backend/stop bypass.
+
+Actual a.json was created, snapshot_request1/state.popup=true. The selected shortcut
+therefore invoked the SAME explicit Snapshot action while this popup stayed open.
+It did not prove a general keyboard/action-provider or foreground/pointer contract.
+Fixture public window inventory in that Snapshot:9278/a,9287/unknown,9291/_NS:8.
+Actual popup_binding_status=unresolved, popup_binding=null; popup identity remained
+CLOSED. Native did not choose one unknown window by order/title/rectangle or fabricate
+an owner. This is the real FixturePopupAttribution.window attribution boundary:
+its bounded NSAccessibilityProtocol marker traversal/unique decision returned nil.
+The current facts do not distinguish missing marker exposure from ambiguity; neither
+is guessed. Unlike the prior interrupted interval, the Snapshot path actually ran.
+
+Per activation, stopped before CLI popup observe/inspect/close-stale/reopen, and before
+any capture. No permission/B retry, expected/cap tuning, arbitrary app or hidden input.
+The next source dependency is deterministic own popover content-to-NSWindow identity
+attribution (or independently proven public marker mapping), with the same fail-closed
+identity lifecycle. The live data establishes current scanner insufficiency in this
+case, not a platform-wide impossibility or license to synthesize popup mapping.
+
+Finally cleanup confirmed exact own fixture exit, elapsed141.86s/outer_timeout=false.
+Physical lane released. All current non-image build/cache/bundle/working files under
+uib-m03-shortcut-75jf9o2s removed after inline facts; absence verified. Image count0,
+no images/containing dirs or old assets/evidence deleted. No active processes/index.
+Actual shortcut setup is now demonstrated; popup binding/canonical AX and positive
+capture/M03 remain waiting_evidence. One-path outcome checkpoint awaits short Git
+lease; no extra runtime attempt or source correction started automatically.
