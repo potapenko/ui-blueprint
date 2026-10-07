@@ -50,3 +50,31 @@ via short commit+push lease. No browser or live action until root activates afte
 protected source/peer review; no broad suites or repeated unchanged checks.
 Non-image run output is system-temp and cleaned after consumption; all created
 images stay in system-temp, including containing directories, without agent deletion.
+
+
+## Activate pinned actual headless sequence
+
+Core c3967ca50a4bd380c006677cc36a39b48ed43f95 composed source/peer boundary is
+accepted by same reviewer; saved harness25bf9996a0dc73ed11cdcfcfb09d5a50f8bbb4c2
+has affected no-run/Clippy/syntax checks. Corrected195-input fingerprint
+2c0370393cc35317bb591d0e640c3f3e6e914973623ef07c2cc39d693490f033.
+Native setup does not conflict: harness headless:true, separate owned process/
+profile/context, loopback fixture only, no CUA/system pointer/keyboard/focus.
+
+Root activates ONE existing actions run using current retained build:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-actions-deadline-wgup1viw/build/debug
+Test deps/web_live-bb05baebd9300679 hash
+9aa286d47d7bb1df38c1db0c2ae2fe9f121f865b6cba57b6ea08541d0e3045a3;
+session-worker142537bbd791a750e588e78c154ebe1a9fa9b26b77a1ff1e181790f466927750.
+Use existing guarded-live.cjs --run-authorized, UIB_WEB_LIVE_CASE=actions and
+UIB_WEB_LIVE_ALLOW=1 with these exact executable/SHA256 env values and existing
+S01_WEB_PLAYWRIGHT_CORE path. Current operation output only:
+/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/b5a96f4d-f917-49f3-bf2b-3a40dd1cc5b5.
+
+All original120s/caps/scenarios/actual-counter/cleanup expectations above hold;
+no new oracle, timeout, retries or wider target. No full B02/physical input/business
+success inferred from Setter. Real readonly/remount/possible-before-delivery outcomes
+stay precisely labelled. Stop exact failure; no source repair on failed run without
+saved focused correction. Deliver compact actual evidence and remaining cases in
+existing W02 receipt, consume current non-image results then remove/verify own files;
+images and containing dirs remain untouched/system-temp. Checkpoint/push via lease.
