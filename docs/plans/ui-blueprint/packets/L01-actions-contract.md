@@ -67,3 +67,21 @@ not fabricated tests. Check only changed links/route/whitespace; checkpoint+push
 through short Git lease, return revisions/selected contract delta. Actual Web live
 qualification runs separately on already accepted c3967ca and is not delayed by this
 public caller registration. No images/runtime/source-app work or persistent dirs.
+
+
+Root registration review selects two precise clarifications before source work:
+--snapshot accepts Snapshot Document OR observed ChannelResponse containing the
+same Snapshot, matching existing Inspect and avoiding a manual unwrap after Web
+Observe. Failed/no-snapshot input refuses; full envelope validation/extraction occurs
+only in guarded worker and preserves embedded data/evidence. No parent graph parse.
+
+Selected private encoding proposal: exact Frame/Commit/ACK flags enum0 legacy opaque,
+1 existing pre-Possible Mutation refusal,2 Prepared under Prepare/VerifiedSuccess
+under Mutation,3 known verified mismatch under Mutation,4 uncertain post-Possible
+Mutation. All other class/value combinations reject; values are not interchangeable
+bit flags. Mutation2/3/4 require existing Possible state, never create authority or
+confirm nonce. Producer3 requires actual CheckStatus::Fail with confirmed delivery
+and matching Failed transition, not arbitrary failure. Parent retains status only
+with matching committed ACK; legacy0/missing metadata never proves success. All
+old Observe0/1, refusal, deadline, helper/capture/physical and pool contracts stay.
+Registration remains docs-only; exact host/CLI implementation grant follows save.

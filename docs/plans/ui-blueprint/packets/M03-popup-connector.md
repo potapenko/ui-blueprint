@@ -97,3 +97,17 @@ Cua state/stop bypass. Tool interruption invalidates only its affected sequence;
 report exact completed/not-run phases. No capture/B permissions/real app/source change.
 Write only existing M03 receipt; image retention/current non-image cleanup unchanged.
 This changed orchestration addresses watchdog delay, not a claimed collector defect.
+
+
+Remaining-lifecycle result: explicit Confirm→CLOSED/rotated→old stale_target/no data,
+reopen/new generation→fresh canonical popup succeeded within59.3998s; live CUA AX
+before/after equal. Independent combined post-Observe current-file assertion failed
+without intermediate values; do not infer its cause or claim that separate check.
+Native saves exact receipt and then performs read-only handoff only: inspect recorded
+assertion expression against actual identity keys/new binding, classify any provable
+test-expression/ordering mismatch or exact missing values; no runtime/code fix yet.
+Also identify minimal existing capture owner/config connection for known physical
+popup, truthful surfaces/identity/privacy/limits and current image-retention rule.
+Consumer is next positive popup capture plus the specific missing current-file proof,
+not a repeated full lifecycle or new capture framework. No source changes/new flags/
+backend/runtime in this handoff; original source/QA contracts remain.
