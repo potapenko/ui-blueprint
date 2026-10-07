@@ -81,3 +81,15 @@ No real site/user browser, other modes or cap tuning. Stop concrete failure with
 unchanged retry. Return facts and cleanup inline; consume then remove only own temp
 outputs/builds/empty dirs and verify. Save compact result through next Git lease.
 General product root-selection origin and actual Director remain later work.
+
+Actual first rooted run failed at Collect/ContinuityException code15 with cleanup
+confirmed; no canonical frame. To resolve the concrete source cause without a
+new host diagnostic protocol, Web may run one isolated owned-F01 CDP diagnostic
+using the exact current fixed verifyRooted source and actual root/child handles,
+same binding/bounds/debugger option. Inspect only numeric exception line/column
+and static failure class; no raw UI/error/stack persistence. This is a bounded
+source diagnosis, not a replacement collector or repeat of unchanged acceptance.
+Use existing launcher and operation temp/in-memory commands, remove/verify own
+outputs. No new wrappers/flags/telemetry. Repair only the proven condition, keeping
+scope/identity/continuity and all limits. Save correction before changed rooted
+sequence; no extra root/user permission step within this existing defect scope.
