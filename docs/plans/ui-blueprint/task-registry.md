@@ -655,3 +655,19 @@ Act Tape(ActionCase,Act Request,same Expectation), channels1/input_format1, lega
 SetChecked2records unchanged. Final check-ready revision pending. CLI reports
 worker_web prepare expectation validation as an exact protected-boundary test
 consumer; Core must settle it through own focused tests, not parent re-parsing.
+
+A04 coherent WIPc15ffb3dbaedbcd2a7e7e27f812533ab7d987163 saved/pushed exact9
+CLI/spec/developer paths. Root read full CLI-ACTIONS@2/CLI@10/registry22 additive
+contract; Expectation stays opaque to parent, worker validates rules/privacy/binding.
+Default CLI check/fmt/link/whitespace passed; Web-feature/worker-dependent checks
+remain waiting_evidence on Core check-ready SHA. Source is saved, not accepted.
+CLI owner will retain its resulting CLI/worker binaries for immediate Web copy/use,
+then cleanup after confirmation; no duplicate rebuild or permanent artifact cache.
+
+Core author reports actual-parent/production-worker with CDP peer Focus→Type
+pass/mismatch/lost-focus-unknown and true permits/ACK/reap; this is peer proof, not
+browser delivery. Remaining explicit record/privacy/stale boundaries and affected
+regression checks running. Web public form_actions harness ready (9calls, expected
+4/0/0/4/0/0/4/0/4); initial draftL + deliveredon + explicit expectedLon, applied/
+selected empty, one focus-loss refusal. No actual browser input started; waits
+for saved/check-ready Core+CLI and their binaries. All source owners remain distinct.
