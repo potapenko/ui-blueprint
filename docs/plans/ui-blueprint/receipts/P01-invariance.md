@@ -427,3 +427,65 @@ no oracle/cap tuning. Prior failure records kept intact. No full M05/P7 completi
 
 Frame bridge source SHA d1e1fd5a4fee39ecd03da9ff513141122fb265562eccf95d442119e2d2562d5e.
 Runner SHA 5a74583aeb24df0e3025ca4ef3cc108ac69cd8bc57713d0b116518a81efd87ec.
+
+
+## Actual changed AX→window bridge pair — sampled local routing equal
+
+Saved source3a521f979f4eeae4611bb830f0a4ed8c81c71c7e pushed/index released BEFORE
+runtime. One authorized changed pair on matched pins, no rebuild/cap/oracle/dispatch
+fallback or old full-suite repeat. Explicit OWN off→on A sequentially; external runner
+used exact current fixture one-node AX sample read and current identity checks, not
+on-only probe/screenshot/CUA coordinates. Both frame reads returned0/input ready;
+runner does not dispatch events. Complete trusted JSON published exclusively before
+fixture reads it. In-process unsuccessful subtree path no longer needed.
+
+Fresh live bindings: offPID64621/launch1791447705.409436/window11720/generation
+F430D2BD-7013-4E62-B77F-74C82FD44AE2; onPID64638/launch1791447707.301832/window11726/
+generation0110BDE1-224B-423B-B393-EE9238498B8A. Both identifiera/own bundle off/on.
+Exact AX sample frame both(60,178,231.5,62)screenpt. Own window frame both
+(40,465,550,525)AppKit screenpt; unchanged primary display id12/frame(0,0,1920,1080),
+backing scale2 recorded for identity only, never multiplied into points. Fixture
+checks exact generation/frame/display environment before/after dispatch and between
+samples, external reader process/CG own surface currentness before/after sample read.
+
+Documented conversion: AX center(175.75,209), primary screens[0].frame.maxY1080,
+AppKit screen(175.75,871), exact window convertPoint→base(135.75,406)pt. Outside
+content5,5→base(5,520)pt, within OWN window and outside AX sample box. Same candidate
+locations on both builds; no manual titlebar/Retina offset. Roundtrip only arithmetic
+check. Actual NSApplication.postEvent complete left down/up pairs, normal app loop;
+no direct NSWindow.sendEvent/Button closure/mouseDown/AXPress/hitTest/global CGEvent.
+
+Actual independent state/Count sequence:
+
+| Cohort | Before inside | After inside | After outside |
+| --- | --- | --- | --- |
+| Off |1|2|2|
+| On |1|2|2|
+
+All phases active/key/maintrue, same window/generation within each; these measured
+matched setup states are not a universal QA true-only condition. SwiftUI FocusState
+actualnone/declared controlnull in all6 phase records; equal state across pair/no change
+from input. SDK firstResponder/accessibility identifiers null/unknown; classKeyViewProxy
+recorded but NOT treated as same focused-control identity. This closes sampled OWN
+intrawindow synthetic hit response (+1/0) equality and reports actual logical focus
+state equivalence; exact SDK focused-control identity remains unestablished here.
+No claim about physical mouse/CUA/WindowServer/global focus/occlusion/hardware buttons
+or continuous full hit region. External CUA coordinate-contract gap remains separate.
+
+Off phase1.767862458s, own cleanup0.130156709s/absence; onphase1.577239167s,
+cleanup0.140749917s/absence. Total3.618635750s≤300; finally exact canonical executable/
+PID/unique run-dir cleanup before elapsed assertion, LaunchServices owns OS reaping.
+Own helper/worker/fixture absence checked after data consumption; lane released.
+No user app, display/permission/capture/pixel operation; images0. Prior accepted
+AX/layout/semantics/focus/pixel pair/probe8→18 facts preserved, not recollected merely
+for evidence. Only relevant new sampled local route/profile qualified, full M05/P7
+reconciliation belongs to root; no blanket goal-complete statement from Native.
+
+Current source/build/profile/frame inputs and nonimage outcomes consumed/removed,
+operation directory absence verified, all prior image/asset records untouched. Binary
+pins offaa8fc99a2d216c12ece315a99e7947064e18be473119c7e1fe131c22ced6cce6,
+onf31a29992d3580f7a1bb5483dfbc3708eb57f5e13a217995f8b61995e7f7020d.
+Actual comparison uses phases/count/FocusState/points/flags and window/display frame,
+without equating different process/surface identities or unknown identifiers. Receipt
+only exact1 whitespace checked; scoped checkpoint+push via short Git lease; stop/no
+new runtime or source activity after result.
