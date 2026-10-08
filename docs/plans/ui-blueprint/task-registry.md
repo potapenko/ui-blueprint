@@ -27,19 +27,26 @@ Root получает итог или конкретный блокер; про�
 Новая цель, переисполнение готовой работы и новые подагенты не нужны.
 
 - Host goal подтверждён `active`; approved P0–P7 и текущая `master` сохранены.
-- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: фактически `inProgress`,
-  выполняет приёмку W06 в прежнем задании. Native часть сохраняет ожидание
-  подтверждённого foreground своего fixture; нового ответа пользователя нет.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: фактически `inProgress`,
-  выполняет задачу производительности; W06 handoff получен. Изменённые timed
-  сценарии ждут применимой приёмки; доступная подготовка продолжается автономно.
-- W06 закончен и передан в Q01/Q02: production `139d202`, receipt `862572f`,
-  coordination checkpoint `0728ee6`. Повторная выдача этой реализации не нужна.
+- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: исходный владелец
+  разархивирован, turn `inProgress` подтверждён; получил полный repair outcome
+  по двум findings Q01; весь цикл
+  исправления/проверок/docs/commit/push входит в задание без микропоручений root.
+- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: terminal `completed`,
+  review `reject` для W06 `139d202`, receipt `8bcdaf4` pushed. Самостоятельно
+  воспроизведены утечка известного URL token через srcset/raw URL facts и mistyped
+  focusable→Known boolean. Авторская full baseline подтверждена, дефекты не
+  опровергнуты. Same reviewer сохранён для recheck исправленного результата.
+  Native часть сохраняет ожидание foreground своего fixture; ответа пока нет.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: адаптация full/semantic harness
+  сохранена/pushed `11186a4`, статус зависимости — `f26c201`; turn `completed`.
+  Новых timed samples
+  нет; нужен исправленный и принятый W06. Его исходники не принадлежат W06.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  текущих задач; промежуточные шаги не требуют управляющего follow-up.
+  W06; затем same Q01 recheck и Q02 measurements. Промежуточные шаги не требуют
+  управляющего follow-up.
 
 ## История предыдущей группы самостоятельных задач
 
@@ -76,6 +83,28 @@ active/inProgress через wait_threads:
 Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; root также
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
+
+## W06 repair after final independent findings
+
+Q01 completed the neutral source assessment and author-receipt reconciliation,
+then saved/pushed terminal review `8bcdaf4`. Exact defects/reproducers/acceptance:
+[Q01 receipt](receipts/Q01-integrated-acceptance.md#final-w06-changed-scope-review--reject-pending-repair).
+Original W06 owner was unarchived and assigned one complete repair task under its
+unchanged packet/WEB-DOCUMENTS@1: close known URL-token publication in preserved
+URL facts and reject mistyped focusable while preserving legacy Checked semantics,
+full baseline fidelity, ordinary scopes and all protected contracts. No new product
+choice, reviewer, subagent, benchmark threshold or task directory was introduced.
+
+Q02's offline adaptation is saved in11186a4/f26c201; positive retained replay and
+negative missing-field/node guards passed according to its receipt. No new runtime
+or timing acceptance is claimed. Review source/build processes exited; Q01 releases
+CPU/runtime resources. W06 may run its own bounded headless checks as part of the
+complete repair task; no root approval for each internal step is needed.
+
+Reviewer-owned minimal reproducers in system temp uib-q01-w06-source-r0o_1c_n stay
+for W06 and Q01 recheck. Shared uib-w06-proof-e020gN records stay retained; both
+consumers have read the baseline, but no cleanup is delegated during repair.
+Native/Q03 pending human-authority questions remain separate and unanswered.
 
 ## W06 delivered; Q02/Q01 handoff
 
