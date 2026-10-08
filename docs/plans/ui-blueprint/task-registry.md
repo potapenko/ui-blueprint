@@ -54,6 +54,22 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Активная итоговая группа
+
+На product94724df / task checkpointe0ce277 созданы отдельные local чаты:
+
+| Task | Название | ID | Scope |
+| --- | --- | --- | --- |
+| Q01/V01 | Q01 — Интегрированная приёмка и privacy | 01a11bdd-8a56-7f21-8435-953df4ce9185 | source-first M02/W04 assessment → same-chat reconciliation + полный functional/privacy gate |
+| I02 | I02 — Итоговая локальная поставка | 01a11bdd-8f38-7943-a91f-3621a70a994c | current packaging recipe/builds/checks, no UI/product source |
+
+Оба active/inProgress. Native M02-N чат archived после final94724df/cleanup/receipt.
+Q01 до initial observations не получает builder narratives. После первого этапа
+передать M02-native-workflow/W04-observation-pilots и relevant accepted review
+receipts в тот же чат, не создавать новую проверку. I02 может исправить только
+packaging recipe; product94724df сохраняется, если нет конкретного нового дефекта.
+Q02 statistical gates и Q03 usefulness ещё queued; goal active, не complete.
+
 ## M02-N завершён; integrated candidate готов к проверке
 
 M02-N6a5bec23b8d15e4cc825aaff6105ac001a9a17bb/final94724df pushed, terminal
