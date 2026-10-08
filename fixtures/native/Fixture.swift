@@ -137,10 +137,10 @@ private struct MarkerAnchors: PreferenceKey {
     }
 }
 private struct Marker: ViewModifier {
-    let key: String
+    let key: String?
     @ViewBuilder func body(content: Content) -> some View {
         #if PROBE
-        content.transformAnchorPreference(key: MarkerAnchors.self, value: .bounds) { values, anchor in values[key] = anchor }
+        content.transformAnchorPreference(key: MarkerAnchors.self, value: .bounds) { values, anchor in if let key { values[key] = anchor } }
         #else
         content
         #endif
@@ -244,7 +244,7 @@ private struct PilotView: View {
         }
         return URL(fileURLWithPath: args[index + 1], isDirectory: true)
     }
-    private func marker(_ key: String) -> Marker { Marker(key: key) }
+    private func marker(_ key: String?) -> Marker { Marker(key: key) }
     private func changed() {
         sourceRevision += 1
         if stimulus != "lost_event" { eventRevision = sourceRevision }
@@ -335,9 +335,11 @@ private struct PilotView: View {
                         ForEach(0..<40, id: \.self) { index in
                             Text("Row \(index)").frame(maxWidth: .infinity, alignment: .leading)
                                 .id(index).accessibilityIdentifier("f02.row.\(index)")
+                                .modifier(marker(index == 0 ? "scroll.row.0" : nil))
                         }
                     }.padding(6)
                 }.frame(height: 90).border(.secondary).accessibilityIdentifier("f02.scroll")
+                    .modifier(marker("scroll.viewport"))
                 Button(scrollEnd ? "Scroll start" : "Scroll end") {
                     scrollEnd.toggle(); proxy.scrollTo(scrollEnd ? 39 : 0, anchor: scrollEnd ? .bottom : .top); changed()
                 }.accessibilityIdentifier("f02.scroll_to")
@@ -546,7 +548,11 @@ private struct PilotView: View {
                     "surface_generation":generation,"identity_path":runDirectory.appendingPathComponent("\(popupKey)-identity.json").path]
             }
         }
-        let frames = (try? JSONSerialization.jsonObject(with: JSONEncoder().encode(measurements.frames))) ?? [:]
+        let allFrames = (try? JSONSerialization.jsonObject(with: JSONEncoder().encode(measurements.frames))) as? [String: Any] ?? [:]
+        let frames = allFrames.filter { ["icon", "text", "container"].contains($0.key) }
+        let scrollFrames = Dictionary(uniqueKeysWithValues: ["viewport", "row.0"].compactMap { key in
+            allFrames["scroll.\(key)"].map { (key, $0) }
+        })
         let processStart = app.launchDate?.timeIntervalSince1970 ?? 0
         let windows = NSApp.windows.filter { $0.isVisible }.map {
             ["window_id": $0.windowNumber, "identifier": $0.identifier?.rawValue ?? "unknown",
@@ -579,9 +585,10 @@ private struct PilotView: View {
             "snapshot_request": snapshotRequest, "collection_mode": "explicit_request_only",
             "probe_enabled": probeEnabled, "probe": ["source": "swiftui.anchorPreference.explicit_snapshot", "provenance": "reported",
                 "units": "pt", "origin": "top_left", "coordinate_space": "fixture_local",
-                "screen_transform": "unknown", "layout_bounds": frames,
+                "screen_transform": "unknown", "layout_bounds": frames, "scroll_layout_bounds": scrollFrames,
                 "callbacks": measurements.callbackCount, "callback_nanoseconds": measurements.callbackNanoseconds],
             "source_declarations": ["logical_component_key": "f02.sample.\(role)", "represents": ["icon", "text", "container"]],
+            "scroll_source_declarations": ["logical_component_key": "f02.scroll.\(role)", "represents": ["viewport", "row.0"]],
             "display_scale": displayScale, "observation_utc": ISO8601DateFormatter().string(from: Date()),
             "uptime_seconds": ProcessInfo.processInfo.systemUptime]
         if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) {

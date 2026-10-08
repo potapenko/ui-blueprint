@@ -448,25 +448,29 @@ extension Collector {
         // An imported explicit Snapshot is historical until an actual continuity
         // consumer proves current state; PID/Snapshot equality alone is insufficient.
         guard request["freshness_policy"] as? String == "cached_allowed" else { return try failed("stale_target") }
+        if scope.hasPrefix("f02.scroll."), scope != "f02.scroll.\(config.binding.window_identifier)" { return try failed("target_unresolved") }
+        let scroll = scope == "f02.scroll.\(config.binding.window_identifier)"
+        let component = scroll ? "scroll" : "sample"
+        let markers = scroll ? ["viewport", "row.0"] : ["icon", "text", "container"]
         guard let measured = manifest["probe"] as? [String: Any],
               measured["source"] as? String == "swiftui.anchorPreference.explicit_snapshot",
               measured["provenance"] as? String == "reported", measured["units"] as? String == "pt",
               measured["origin"] as? String == "top_left", measured["coordinate_space"] as? String == "fixture_local",
               measured["screen_transform"] as? String == "unknown",
-              let bounds = measured["layout_bounds"] as? [String: Any], Set(bounds.keys) == Set(["icon", "text", "container"]),
-              let declarations = manifest["source_declarations"] as? [String: Any],
-              declarations["logical_component_key"] as? String == "f02.sample.\(config.binding.window_identifier)",
-              declarations["represents"] as? [String] == ["icon", "text", "container"], maxNodes >= 3,
+              let bounds = measured[scroll ? "scroll_layout_bounds" : "layout_bounds"] as? [String: Any], Set(bounds.keys) == Set(markers),
+              let declarations = manifest[scroll ? "scroll_source_declarations" : "source_declarations"] as? [String: Any],
+              declarations["logical_component_key"] as? String == "f02.\(component).\(config.binding.window_identifier)",
+              declarations["represents"] as? [String] == markers, maxNodes >= markers.count,
               let time = config.probe_uptime, time.isFinite
         else { return try failed("incomplete_scope") }
         let admission = try NativeAcquisition(config.acquisition_limits, deadline: command.deadline)
         let source = "macos.swiftui.probe", oid = "\(requestID)-opt_in_layout_probe"
         let surface = surfaces[0]
         func key(_ marker: String) throws -> [String: Any] {
-            try json.object(["namespace", "key"]) { ["namespace": try json.scalar(source), "key": try json.scalar("f02.sample.\(config.binding.window_identifier).\(marker)")] }
+            try json.object(["namespace", "key"]) { ["namespace": try json.scalar(source), "key": try json.scalar("f02.\(component).\(config.binding.window_identifier).\(marker)")] }
         }
         let nodes = try json.array {
-            try ["icon", "text", "container"].map { marker -> [String: Any] in
+            try markers.map { marker -> [String: Any] in
                 try admission.check()
                 guard let rect = bounds[marker] as? [String: Any], Set(rect.keys) == Set(["x", "y", "width", "height"]),
                       let x = rect["x"] as? Double, let y = rect["y"] as? Double,
@@ -509,8 +513,8 @@ extension Collector {
         }] }
         snapshot["source_state"] = try json.scalar("fixture-source-revision-\(config.probe_source_revision!)")
         snapshot["components"] = try json.array { [try json.object(["logical_component_key", "members", "declaration_source", "provenance"]) {
-            ["logical_component_key": try json.scalar("f02.sample.\(config.binding.window_identifier)"),
-             "members": try json.array { try ["icon","text","container"].map(key) },
+            ["logical_component_key": try json.scalar("f02.\(component).\(config.binding.window_identifier)"),
+             "members": try json.array { try markers.map(key) },
              "declaration_source": try json.scalar("f02_explicit_component_mapping"), "provenance": try json.scalar("reported")]
         }] }
         try frame.encode(json.response(request: request, ticket: command.control.ticket, channel: "opt_in_layout_probe") {

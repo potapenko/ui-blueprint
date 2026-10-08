@@ -722,3 +722,23 @@ The browser and explicit authorized CDP endpoint/tab/document are external prere
 not discovered/installed by this build. No .npm cache executable path is embedded.
 This local distribution preparation delivers selected geometry executables; it is not
 full P5/P7/released-product, general OS compatibility or license/signing acceptance.
+
+
+## M04 measured scroll component
+
+Own F02-on Snapshot additionally records scroll viewport and authored row0 anchors
+through the same GeometryProxy in f02-fixture-local pt/top_left. To select only these
+two measured nodes, set existing trusted probe Request/config scope_id=f02.scroll.a
+(or .b for explicit own B). No new flag/config field/public CLI grammar. All other
+sample scopes retain the original icon/text/container map, keys and output. Private
+scroll_source_declarations names f02.scroll.a and viewport/row.0; measured rectangles
+live separately under probe.scroll_layout_bounds. Off/absent/stale import refuses.
+
+Use original opt_in_layout_probe/cached_allowed/layout_bounds response in public
+inspect/measure/diff. Keys macos.swiftui.probe:f02.scroll.a.viewport and .row.0 have
+stable fixture generation/authored identity. Existing Scroll end changes actual row
+layout position; Snapshot remains explicit. Rust inside/intersects compares measured
+rectangles in the same local space. A viewport rectangle is not claimed visible/paint
+clipping, glyph bounds or occlusion. Existing Move can compare the same local records
+without treating screen translation as changed local offsets; screen/pixel transform
+and cross-display qualification remain unknown. Old sample and P01 seam untouched.

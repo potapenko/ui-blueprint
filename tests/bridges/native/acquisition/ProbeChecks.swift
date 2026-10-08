@@ -69,6 +69,44 @@ import Darwin
         }
         do{_ = try Collector.probe(data:Data(repeating:32,count:100),command:command(cap:99));fatalError("oversize")}catch{assertions+=1}
         do{_ = try Collector.probe(data:Data("{".utf8),command:command());fatalError("malformed")}catch{assertions+=1}
-        print("{\"cases\":10,\"assertions\":\(assertions),\"live\":false}")
+        var scrollConfig=config;scrollConfig["scope_id"]="f02.scroll.a"
+        let scrollConfiguration=try NativeConfiguration.decode(JSONSerialization.data(withJSONObject:scrollConfig))
+        var scrollRequest=request;var scrollContext=context;scrollContext["scope_id"]="f02.scroll.a";scrollRequest["context"]=scrollContext
+        func scrollCommand()->NativeCommand{NativeCommand(configuration:scrollConfiguration,
+            document:["schema_version":"0.1.0","artifact":["kind":"request","data":scrollRequest]],control:control,
+            replyCap:524288,deadline:ProcessInfo.processInfo.systemUptime+5)}
+        var scroll=sample(8);var measured=scroll["probe"] as! [String:Any]
+        measured["scroll_layout_bounds"]=["viewport":["x":20.0,"y":30.0,"width":100.0,"height":90.0],
+            "row.0":["x":26.0,"y":36.0,"width":88.0,"height":18.0]]
+        scroll["probe"]=measured;scroll["scroll_source_declarations"]=["logical_component_key":"f02.scroll.a","represents":["viewport","row.0"]]
+        let scrollFrame=try Collector.probe(data:JSONSerialization.data(withJSONObject:scroll),command:scrollCommand())
+        let scrollBytes=scrollFrame.bytes{Data($0)};try scrollBytes.write(to:output.appendingPathComponent("scroll.json"),options:.withoutOverwriting)
+        let scrollResponse=(((try JSONSerialization.jsonObject(with:scrollBytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any]
+        check(scrollResponse["status"] as? String=="observed")
+        let scrollSnapshot=scrollResponse["data"] as! [String:Any];let scrollNodes=scrollSnapshot["nodes"] as! [[String:Any]]
+        check(scrollNodes.count==2 && (scrollNodes[0]["key"] as! [String:String])["key"]=="f02.scroll.a.viewport")
+        check((scrollSnapshot["components"] as! [[String:Any]])[0]["logical_component_key"] as? String=="f02.scroll.a")
+        // Same manifest must still export the legacy three-node sample scope.
+        let legacy=try emit(scroll,name:"legacy_with_scroll")
+        let baseline=(try JSONSerialization.jsonObject(with:Data(contentsOf:output.appendingPathComponent("baseline.json"))) as! [String:Any])["artifact"] as! [String:Any]
+        check((legacy as NSDictionary).isEqual(baseline))
+        for name in ["scroll_missing","scroll_wrong_declaration","scroll_stale","scroll_off"]{
+            var bad=scroll
+            if name=="scroll_missing"{var m=measured;m["scroll_layout_bounds"]=["viewport":["x":0]];bad["probe"]=m}
+            if name=="scroll_wrong_declaration"{bad["scroll_source_declarations"]=["logical_component_key":"f02.scroll.b","represents":["viewport","row.0"]]}
+            if name=="scroll_stale"{bad["snapshot_request"]=2}
+            if name=="scroll_off"{bad["probe_enabled"]=false}
+            let frame=try Collector.probe(data:JSONSerialization.data(withJSONObject:bad),command:scrollCommand());let bytes=frame.bytes{Data($0)}
+            try bytes.write(to:output.appendingPathComponent(name+".json"),options:.withoutOverwriting)
+            let result=((((try JSONSerialization.jsonObject(with:bytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
+            check(result["status"] as? String=="failed")
+        }
+        var wrongScopeRequest=scrollRequest;var wrongScopeContext=scrollContext;wrongScopeContext["scope_id"]="f02.scroll.b";wrongScopeRequest["context"]=wrongScopeContext
+        let wrongScopeCommand=NativeCommand(configuration:scrollConfiguration,document:["schema_version":"0.1.0","artifact":["kind":"request","data":wrongScopeRequest]],control:control,replyCap:524288,deadline:ProcessInfo.processInfo.systemUptime+5)
+        let wrongFrame=try Collector.probe(data:JSONSerialization.data(withJSONObject:scroll),command:wrongScopeCommand);let wrongBytes=wrongFrame.bytes{Data($0)}
+        try wrongBytes.write(to:output.appendingPathComponent("scroll_wrong_scope.json"),options:.withoutOverwriting)
+        let wrongResult=((((try JSONSerialization.jsonObject(with:wrongBytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
+        check((wrongResult["data"] as! [String:Any])["code"] as? String=="target_unresolved")
+        print("{\"cases\":17,\"assertions\":\(assertions),\"live\":false}")
     }
 }

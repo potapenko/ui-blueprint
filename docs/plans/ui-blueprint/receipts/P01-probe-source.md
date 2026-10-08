@@ -617,3 +617,49 @@ successful copies into Web's own task-temp; originals unmodified. Root explicitl
 released original products/output and handoff metadata. Removed only the3 own binary
 files and build-result.json, then empty containing dirs; absence verified. No images
 or Web copies touched, no new build/runtime/check. Exact3 coherent checkpoint follows.
+
+
+## M04 source candidate — measured scroll viewport + authored row0
+
+Root appended M04 packet under approved geometry P2/P3, no new input/UX/engine contract.
+Selected current registry23/Native@2/GEOMETRY/PROJECTIONS/MODEL/IDENTITY/PRIVACY/
+EXCHANGE/LIFECYCLE/Native-PILOTS M04 and existing D04/D05/acquisition closure reused;
+full appended packet read before edits. Engineering choice: same anchorPreference/
+GeometryProxy explicit Snapshot mechanism; no inferred screen/layout/pixel transform.
+
+Exact5: Fixture.swift anchors/manifest maps only, Collector.swift probe branch,
+existing acquisition/ProbeChecks.swift, native-helper.md, this receipt. P01 test seam/
+visible layout/input/collector other channels/Core/CLI/schema/Cargo/Web/spec unchanged.
+Current Core G11 WIP excluded; saved905dd061 Rust consumer built only for later run.
+
+Fixture optional Marker key contributes only viewport and selected existing row0,
+no new row/UI/flags/layout/input behavior. Separate scroll_layout_bounds and source
+mapping; legacy layout_bounds still exactly icon/text/container. Existing trusted
+scope_id=f02.scroll.a selects two nodes, validates exact marker/declaration set/current
+identity/request/time/budget, stable authored keys and fixture-local pt. Old sample
+scope/keys/output structurally equal including original provenance/time/source. No
+known clip visibility/paint/occlusion/glyph data fabricated; rectangular relations only.
+
+Focused existing17 cases/34 assertions passed,15 canonical documents validator0:
+legacy baseline/expanded and old off/stale/malformed errors preserved, extra measured
+scroll map does not alter full legacy response, correct scroll keys/space/component,
+missing/declaration mismatch/stale/off refusal. Changed fixture/helper/checker compile
+cleanly, no unrelated Rust/AX/capture/P01 suites. Binary/AST/raw-frame shape output
+checked through existing validator; source proof not a current UI measurement.
+
+Source literal acceptance basis before run: existing ScrollView outer layout height90pt
+unchanged by Scroll end; row0 exists in nonlazy40-rowVStack/padding6 and initially inside
+viewport, after explicit scrollTo(row39,.bottom) row0 displaced upward/outside geometric
+viewport. No exact unmeasured Y/row-height value asserted. Existing Move attempts +40,-20
+clamped to visibleFrame; actual window translation must be observed, local viewport/row
+rectangles and derived relations must stay equal. Rust computes inside/intersects and
+local distances, not source constants. Cache/unverified fixture measurement clocks and
+unknown screen transform retained; full M04/cross-display/paint/clipping/P7 remain open.
+
+Source candidate ready exact5 commit/push lease before one authorized bounded saved
+source Snapshot→Scrollend→Snapshot→Move→Snapshot public CLI comparison. Existing
+300s/own setup120s/cleanup5s/probe160/depth9/512KiB/parent1s/cleanup1s unchanged. No
+additional activation/review round, no direct input proof/permission/display/user app
+operation or cap tuning. Current binaries/temp inputs held only for this next operation.
+
+M04 source pins {"fixtures/native/Fixture.swift": "c2c359d71987ff3b704dd031aa3014ff70683864aea3c4329d41b4c8ada0af3f", "tests/bridges/native/Collector.swift": "490151964d62b53eb3edab50a8d5d726a3c003231d2965e97ddf825a7a6899b9", "tests/bridges/native/acquisition/ProbeChecks.swift": "a0efaa930e3e0edc9add142af910476e231c624a3abcd9951622e6e8f782c980"}.
