@@ -54,6 +54,16 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## N03 текущий writer
+
+«N03 — Native popup workflow и E2E», local01a11c53-168d-78e3-a2ff-08c985596e51,
+baseed601b6, owns Native production/offline integration. Desktop пока у Q01 для
+V02 verification; N03 notified, runtime ждёт release без остановки source work.
+Q01 получил ownership notice, не потребляет N03 WIP. A02-F completed/archived,
+Q03 recorded-data ещё выполняется. Native V02 author archived после передачи
+source01b5a58; current Q01 recheck source-first завершён без findings, выполняется
+reconciliation/actual. Новых подагентов или отдельных проверочных микрочатов нет.
+
 ## Следующая Native composition задача
 
 [N03 product popup E2E](packets/N03-native-popup-e2e.md) готов к source/offline
