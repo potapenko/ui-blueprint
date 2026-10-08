@@ -882,3 +882,82 @@ inspection; removed and absence verified. No images generated/deleted, older
 evidence unchanged. Only this receipt changes for result checkpoint; no runtime
 resource held. This finite public SetChecked caller path does not close fullB02,
 Focus/Type/Activate, IME, other apps or business-result acceptance.
+
+## Selected A02 Web Focus/Type boundary — source handoff only
+
+Root selected this engineering choice under existing ACTIONS/FORMS and
+[A02 single-step packet](../packets/A02-single-step-forms.md), after the finite
+source comparison. It is not a new schema, public CLI contract, release promise
+or runtime activation. This update changes ONLY this existing receipt.
+Core still owns collector/action.rs and tests/collector.rs through save/release,
+including its two provider &Expectation arguments and one expired-budget test
+adaptation. No provider/test/host source is changed by this handoff.
+
+First implement Focus/Semantic through `DOM.focus({objectId: held.object})` on the
+existing exact original isolated-world object. Reuse request-scoped document/node
+handles, target/session/frame/loader/document verification, connectivity checks,
+remaining deadline/method/byte budgets and parent-only one-use DeliveryPermit.
+Chromium's DOM owner resolves the exact object, checks Element/focusability and
+calls native Focus. API success is delivery evidence only; fresh requested
+Focused=true AND canonical keyboard owner matching the same source key are needed
+for success. No locator fallback, replacement ref or accessibility-focus substitute.
+Browser focus may have native scroll effects; no universal no-scroll promise is
+inferred from this method. Shared focus/input ownership precedes delivery.
+
+Root chose `Input.insertText` for the first Type provider, superseding the earlier
+proposal to use a char dispatch limited to three UTF-16 units. Do not carry that
+keyboard-event buffer limit into insertText or silently split/retry the text.
+Its supported address scope is the bound CDP target and CURRENT FOCUSED WIDGET,
+not an exact-node/atomic text API. Chromium selects a focused widget, internally
+calls widget Focus, then invokes native ImeCommitText. This internal focus effect
+must remain explicit and cannot bypass the shared focus/input lane. It does not
+prove physical key delivery, OS keyboard/IME composition or hardware behavior.
+The provider must never implement Type as value assignment plus dispatched events.
+
+Before Type dispatch: establish the exact target/frame/document, original held
+node continuity, actual document focus and current keyboard owner equal to that
+node; require supported public editable native text control, Enabled and not
+Readonly, and classify sensitivity before value/selection/length acquisition.
+Bound public Type.text before serialization by existing source/request/transport
+budgets. No DOM.focus, bringToFront, focus emulation, selection replacement or
+other implicit repair inside Type. An explicit earlier Focus is its own action.
+Root's final engineering selection retains existing Intent::Type / Keyboard with
+exact source method attribution cdp.Input.insertText / native ImeCommitText.
+Keyboard here does not imply hardware keydown/keyup or an IME composition sequence;
+no new modality/schema/public product revision, arbitrary three-character cap or
+chunk loop is introduced. Existing explicit text/request budgets remain.
+
+Type.text is the text to deliver, not the automatically expected complete value.
+Use the caller's explicit canonical PropertyEquals expectation independently.
+After possible delivery, freshly revalidate document/held-node/focus and read the
+expected public source state through the saved form-facts owner. Missing binding,
+changed/unestablished focus or unproved expected result is Unknown/no retry, even
+if the CDP callback succeeded. No old value/current label substitutes for a read.
+Input callbacks or application activity can change focus between validation and
+native dispatch. This is a disclosed focus-at-dispatch limitation, not an invented
+atomic-UI requirement or a proven wrong-target defect. First controlled F01
+qualification needs explicit source/runtime preconditions excluding competing
+focus changes; it cannot imply arbitrary-site support or general isolation.
+
+Primary evidence read at Chromium145.0.7632.6 and CDP d209a9a38897d2935a078a0bf00ca821811d21ed:
+[DOM focus implementation](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/core/inspector/inspector_dom_agent.cc),
+[Input insertText and nearest keyboard dispatch/injector](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/content/browser/devtools/protocol/input_handler.cc),
+[RenderWidgetHost focus](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/content/browser/renderer_host/render_widget_host_impl.cc),
+[Input protocol](https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/d209a9a38897d2935a078a0bf00ca821811d21ed/pdl/domains/Input.pdl).
+InsertText and DispatchKeyEvent both route via focused widget; the latter also
+calls Focus and has its own short text-buffer limit. RenderWidgetHost::Focus
+sets page focus; an isolated JS world alone does not prove host input isolation.
+No upstream code copied or new dependency introduced; existing R01/executor
+behavioral ledgers remain the broader source basis, not a new generic audit.
+
+Next implementation handoff must pin saved compiling ActionExecution/ActionProvider
+signatures and release the Core-owned paths first. Proposed minimal Web owners:
+collector/action.rs, necessary private wire.rs DTOs and collector/mod.rs export,
+nearest collector/script checks and this receipt. Reuse existing read/normalize
+owners; return any required visibility or missing keyboard-focus fact separately.
+No schema/host/CLI/fixture change is granted here. Focus is dependency-ready first;
+Type follows only inside the selected focus/identity/lane boundary. Focused checks:
+exact held target, stale/remount/wrong focus, private/disabled/readonly, bounded text,
+typed expected match/mismatch/unknown, lost focus/binding after Possible and no retry.
+Actual runtime remains gated on accepted Core input-lane claim and saved provider
+source. No browser/UI/input or new test run occurred in this documentation handoff.
