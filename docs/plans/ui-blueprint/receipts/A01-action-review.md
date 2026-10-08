@@ -63,3 +63,11 @@ committed()!=0 guards compact only, ACKed bytes/JSON/exits/cleanup unchanged.
 Author actual public binary regression reached provider, returned2 with empty
 stdout/zero setters/unchanged source. Reviewer ran nothing. P2 resolved; actual
 browser verification remains separate, assigned L01-live-actions to Web.
+
+A02 kernel9bd580944b40677269eff08185b6f5b2b85b5597: same reviewer performed
+source-first inspection then saved receipt reconciliation; scoped accept/no findings,
+all4source hashes matched. One executor/lifecycle, explicit caller expectation,
+fresh public result identity and separate delivery/check preserved. Author12kernel
+tests/5CheckboxProvider tests/scopedchecks remain attributed. Focus lane, host
+Expectation transport and actual Web/Native delivery remain implementation tasks.
+No repeated review of this unchanged kernel is scheduled.

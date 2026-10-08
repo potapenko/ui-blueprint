@@ -160,21 +160,21 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Resumed: Core pure A02 Focus/Type/Activate implementation after source-backed selection; Web prepares actual public CLI path after form-read4b12d7b; Native one bounded read-only capability observation after handoffec817e3. Desktop/runtime lane released; exact paths and short Git leases |
-| Последний принятый результат продукта | Web actual native Setter pipeline9d3a0a5 passed10outcomes/12checks with real preparation/result and readonly/remount/cancel negatives. Native popup AX/inspect and explicit close→stale→reopen positive established; live AX equal, separate current-file post-assert unverified. Broader forms/physical/business/capture not inferred |
-| Следующий шаг | Reconcile Core refusal exit distinction and remaining evidence; Native source review before actual capture with separate identity checks; Web mapping/scope reconciliation then read-facts implementation. Full K02/forms/pilots/performance/distribution/P0–P7 DoD remains open |
+| Активные чаты/пакеты/ресурсы | Core: Focus lane + host explicit Expectation composition. Web: Focus/Type provider и B02 integration. Native: bounded held AX owner, затем Activate после общего exchange. Disjoint source owners; короткий Git lease, runtime lane сейчас свободен |
+| Последний принятый результат продукта | Actual CLIec844f6: Observe→Prepare→SetChecked→verify и disabled/remount refusals passed. Web form facts4b12d7b passed. Native popup AX+capture8507aa4 passed с раздельными identity checks/retained PNG. A02 kernel9bd5809 accepted scoped source; full P5/P7 не завершены |
+| Следующий шаг | Закончить Web Focus→Type→fresh explicit verification и Native Semantic Activate→observed result. Обычные целевые тесты, одно ревью связной рискованной интеграции. Полные P3/P4 obligations, B02/M02, P6 integration и P7 gates сохраняются |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
-| [A02-single-step-forms](packets/A02-single-step-forms.md) | retained Core owner | existing ACTIONS/FORMS + source handoff; source3ebfafe accepted | running pure existing kernel extension Focus/Type/Activate with explicit canonical property expectation; mechanical consumers only, no schema/privateTape/CLI/runtime. Early compiling API handoff→provider owners |
+| [A02-single-step-forms](packets/A02-single-step-forms.md) | retained Core owner | existing ACTIONS/FORMS + source handoff; source3ebfafe accepted | candidate9bd5809 saved/pushed and scoped source review accepted;12kernel+5Web tests attributed,4hashes matched. Core continues Focus lane and host3-document Expectation composition; legacySetChecked2-document path preserved |
 | [A01-execution-handoff](packets/A01-execution-handoff.md) | Core01a111a7-9887-7983-9aa0-c08dfa2d46bc / local | c3241ed diagnostic saved/pushed; ACTIONS/GOLDEN01; follow-on source grant | single-step API/internal Web edge ffe1166 saved/pushed,7 focused author tests/check/Clippy; source08a271f…0bccc. Scoped independent kernel review accepted through retained h01_producer_review; [receipt](receipts/A01-action-review.md), exact3 hashes match. Real provider/host/live composition still unaccepted |
 | [L01-actions-contract](packets/L01-actions-contract.md) | retained Core owner | CLI@5 CONTENT/ACTIONS + approved P5/P6; actual source handoff | registrationc4bc255 saved/pushed, root read full leaf and delta; CLI-ACTIONS@1/CLI@6/registry16. Direct observed response input and chosen exact private flags registered before code. Actual public CLI implementation separately active |
 | [A01-guarded-composition](packets/A01-guarded-composition.md) | retained Core owner | saved kernel ffe1166; Web provider in progress | coherent WIP80b7449 + remaining edge verification2f5c5eb saved/pushed. Declared6Prepare/3permit-fault/2cancel cases passed per author. Parent deadline repairc3967ca saved/pushed; same reviewer accepts composed source/peer boundary after11timing cases and affected regressions. Earlier not_verified resolved. Source/peer acceptance is not live action/P5 completion |
 | [W02-provider-handoff](packets/W02-provider-handoff.md) | Web01a110ac-2aae-7841-9c8b-12ff38c52d9d / local | source handoff9c0af1b; A01 consumer | Source-only handoff complete: native checkbox Setter proposal, current F01 lacks actual checkbox, exact current resolver/effect/verification API still needed. Separate small actions.html fixture/README/receipt saved/pushed9bd9f66 with source/syntax/doc checks; existing F01 performance/layout untouched. Core compiling SetCheckedProvider/DeliveryPermit API received; provider728fa5b saved/pushed exact9, five focused synthetic provider/Core tests plus offline JS/check/Clippy attributed. Same Web reviewer accepts_with_residual finite provider boundary; [review](receipts/W02-provider-review.md). Truthful preparation1a8a602 saved/pushed: consuming prepare_exact from Snapshot/Prepare Request,8 focused tests/Clippy attributed; changed preparation review accepted_with_residual, no findings; actual host/live gates open. Core now has saved API for Prepare/Act composition; Web returns smallest live harness handoff. No synthetic facts accepted for live, no live input yet |
-| [W02-focus-type-provider](packets/W02-focus-type-provider.md) | retained Web owner | source-backed Chromium handoff; A02 compiling API/save | waiting_resource Core action.rs+collector.rs release. Selected exact DOM.focus and focus-at-dispatch Input.insertText with explicit lane/current focus/result bounds; no artificial3UTF16 cap, no atomic/hardware/IME claim. Source after release, runtime after host guard/composition |
+| [W02-focus-type-provider](packets/W02-focus-type-provider.md) | retained Web owner | source-backed Chromium handoff; A02 compiling API/save | running after Core explicitrelease9bd5809. DOM.focus/Input.insertText selected; Web owns plugins/web source/tests and JS live launcher. Necessary focus/selection normalization separated on real document focus. Runtime depends on realhostlane/Expectation composition, not a separate review of each file |
 | [W02-form-read-facts](packets/W02-form-read-facts.md) | retained Web owner | FORMS/B02 and actual F01 action-state-result handoff | sourcec63b07a saved/pushed exact8; same reviewer accepts_with_residual changed getter/privacy/normalization boundary,7hashes matched. Author5new+4affected tests/JS/check/Clippy. Actual4b12d7b saved/pushed:4/4 Observe pass, UTF16 forward/backward/collapsed, output empty/London, private canary redacted/absent, state invariance and owned cleanup confirmed. Focus/Type/IME/business/fullB02 not claimed |
 | [W02-live-actions](packets/W02-live-actions.md) | retained Web owner | accepted provider/preparation; Core guarded composition in progress | harness25bf999 saved/pushed exact3 after old80b7449 no-run/Clippy. Existing real barrier now saved/released by Core, no duplicate changes. Corrected Corec3967ca accepted;195-input2c037039… pins current. ONE actual headless actions run activated,120s and fixed32/depth8/64KiB/250ms; own loopback context, no desktop input. actual9d3a0a5 saved: all10 outcomes/12checks passed, source-derived Prepare→confirmed Setter→fresh Checkedtrue; readonly/remount/possible-before-delivery cancel and independent state/cleanup verified. No physical/business/delivered-loss/fullB02 claim |
 | [L01-live-actions](packets/L01-live-actions.md) | retained Web owner | scoped accepted3ebfafe CLI plus actualAPI9d3a0a5 | actualec844f6 saved/pushed:6CLIcalls passed exits4/0/0/4/4/4, real Prepare/Execute expectedstate,disabledfreshrefusal/remountno-dispatch, unchangedcanonicalbytes/unrelatedstate and actualowncleanup. Source3ebfafe independently accepted, execution attributed. ReadonlyAPIproof9d3a0a5 separate; no fullforms/businessclaim |
@@ -422,3 +422,21 @@ prepares primary-source Focus/Type delivery handoff (Input.insertText focused-wi
 and automatic-focus semantics must be explicit); no capability/atomicity invented.
 Native awaits concrete shared helper exchange/lifetime after saved0e7fa32 proposal.
 All prior runtime lanes released; no actual new Focus/Type/Activate input authorized.
+
+## Согласованный рабочий порядок после вопроса о задержке
+
+User2026-10-08 уточнил, что спрашивает о пользе ревью, а не требует безусловной
+отмены. Root отозвал blanket no-review message всем3owners. [Ранбук](execution.md)
+фиксирует обычные tests + законченный сценарий, risk-focused review интеграции
+и отсутствие микросогласований. Исторические review verdicts не переписаны.
+
+Current ownership envelope within approvedP5: Core task-wide crates/plugin-api и
+crates/host source/tests/common integration; Web task-wide plugins/web source/tests
+и tests/bridges/web launcher; Native plugins/macos и tests/bridges/native plus
+соответствующие native developer docs. Core не пишет Web/Swift owner, они не
+пишут Core. Existing schema/Cargo/public CLI/product fixture behavior остаются
+защищёнными: реальную новую необходимость разрешить по выбранному spec contract
+до affected edit. Каждый owner сохраняет source/tests и короткий result в своем
+existing receipt; root владеет только coordination. Межфайловые механические
+адаптации внутри owner не требуют повторного root grant; общий API синхронизируется
+одним concrete handoff. Пауза/goal completion не объявлены.
