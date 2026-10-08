@@ -65,6 +65,8 @@ function check(sample,context,kind,requestId,previous,raw) {
     assert.equal(focusable.property.selection,'requested');assert.equal(focusable.property.field,'value');
     assert.deepEqual(focusable.property.state,{availability:'known',value:{type:'flag',value:true}});
     assert.equal(focusable.property.evidence.source_namespace,'web.ax');
+    assert.equal(focusable.property.evidence.provenance,'reported');
+    assert(snapshot.observations.some(o=>o.id===focusable.property.evidence.observation_id&&o.source_namespace==='web.ax'));
   }
   return {snapshot,bytes:Buffer.byteLength(sample.frames[0].canonical),nodes:snapshot.nodes.length,
     source_intervals_ms:snapshot.observations.map(o=>({namespace:o.source_namespace,ms:o.end-o.start}))};

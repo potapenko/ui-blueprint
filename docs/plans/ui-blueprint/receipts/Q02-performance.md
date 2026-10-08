@@ -32,6 +32,12 @@ was read only and remains for Q01 reconciliation; nothing there was deleted.
 Next: accepted W06 source pin/release → saved optimized build → own preflight →
 all comparable frozen Web rows. Possible Q01 findings are not bypassed by author
 proof. Task remains active in scope, waiting_evidence/resource for that next step.
+Q01 subsequently reported two confirmed counterexamples on this source: URL
+metadata/srcset privacy leakage and nonboolean focusable coercion. It reconciled
+the retained positive baseline but is returning reject pending repair; no runtime
+release was received. Q02 therefore performed no build/timed campaign on139d202.
+Focusable quality additionally requires reported provenance tied to the actual
+AX Observation. Repair/review dependency remains with W06/Q01, not Q02 production.
 
 ## Web-only execution authorized after preparation
 
