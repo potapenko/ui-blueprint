@@ -747,3 +747,126 @@ uib-q01-srcset-final-hub1yjl_ build/source root is confirmed absent. Shared proo
 reviewer reproducers and every existing image remain untouched. Receipt links and
 whitespace pass. The one-path current-master checkpoint/push records this ACCEPT
 and resource release; its SHA is returned in the final chat.
+
+## N04 final source/recorded review — reject pending Title isolation repair
+
+Candidate17d3475 versus506d799; bounded review of WindowAX, FidelityChecks,
+fidelity_check.py, prepare_f02_fidelity.py and native-fidelity methodology only.
+Initial own source observations and recorded reproduction preceded reading the
+[N04 author receipt](N04-native-fidelity.md). Same Q01 context, no new reviewer,
+product/Q02 edit, Native app launch/input/foreground/capture/TCC or timed campaign.
+Current Q02 receipt explicitly reported Rust-stage completion and CPU release before
+this one focused compile/replay. All previous Web/M05/privacy/performance outcomes
+and pending Native/Q03 user questions remain protected.
+
+Basis reused with applicable revisions checked: NATIVE@2.CONTENT/AX-READ, Native
+acquisition@2 ADMISSION/OUTCOMES/PROOF, D05/D06 and the previously read full closure;
+[N04 packet](../packets/N04-native-fidelity.md) and
+[methodology](../../../development/native-fidelity.md). No new contract requirement.
+The source norm is NATIVE.CONTENT: an attribute error must not erase other attribute
+results. D05 separately requires preflight before copying and honest unknown for
+budget-limited values; neither permits raising caps or fabricating/truncating Title.
+
+### Confirmed positive facts and provenance
+
+The delta requests AXTitle only for selected accessibility_name and emits raw
+macos.ax/AXTitle with reported source evidence, using the existing extension owner.
+It does not fabricate canonical Name, replace AXDescription, alter identity/ref
+selection, request secure Value, or change schema/limits. Empty, unsupported,
+unknown and wrong-type Title cases remain distinguished; Title is absent when
+unselected. Fixed identity batch stays3, largest value batch becomes8.
+
+Independently compiled exact17d3475 collector/acquisition/JSON/codec sources with
+Swift6/macOS14 target and an inert NativeAXAccess boundary. No live AX queries or
+SDK capture occurred; CF scalar boxing/unboxing is not an application observation.
+Reused the existing Rust validator only after confirming crates/schema and root
+Cargo/toolchain dependency inputs unchanged from its saved source. The original
+baseline external-7.json SHA25642c2b55194136aec4560192ed5945bb3c2bf844f0417503c116219f52c7a651d
+was verified and left unchanged. Own seven-case run passed3246 existing assertions
+and7 canonical validations. Normal recorded mode preserves75 partial nodes,
+396 known attribute facts,75 action lists and74 edges, reconciling DFS input to BFS
+output through recorded topology, not label/rectangle matching. The omitted-Title
+negative is detected. These are real production-owner boundary tests with recorded
+values and synthetic index handles; NOT fresh AX/runtime/SDK lifetime/D06 evidence.
+
+Historical fixture provenance was independently checked:9a88b12 source hash
+3b7f764d131719af59b04fc22b5583e63a0dc248d7e735c9ca96376a332c3c91;
+53e6e6e source hash662c92db9fbf0b131e03c022053fc68ef8ab4126d39989da48b49da39f8c238d.
+Their source diff adds identity-only invalidation, not removed UI controls. The
+original timing-source hashd33eac88 is present in the retained run summary and is
+a different pre-Snapshot/reactive source. Prepared off/on files and source in
+system-temp uib-n04-787o_x0t/f02-handoff match their handoff hashes; runtime_launched
+is false and live_comparability pending. Bundles were read/hashed, never executed.
+Prepared input is a distinct historical explicit-request candidate, not a live
+baseline-equivalence finding or authority to launch while the foreground wait stands.
+
+### N04-Q01-P2 — one oversized Title invalidates unrelated known facts
+
+Owner on17d3475: tests/bridges/native/WindowAX.swift:219–226 adds Title to the same
+value batch as Description/Enabled/Focused/Value/geometry; batch():176–180 maps ANY
+admission failure to budget errors for every requested attribute. Existing
+NativeAcquisition.batch preflights all strings and rejects the4097-byte Title under
+the unchanged4096-byte per-value ceiling. This field-local refusal is correct; the
+new loss of the other otherwise admissible facts is not.
+
+Independent reproduction: run the committed recorded-fidelity recipe and compare
+generated recorded.json versus oversized.json by node and requested property state.
+The only injected difference is AXTitle=4097 bytes. Observed known→unknown losses:
+
+| Unaffected field | Previously known values lost |
+| --- | ---: |
+| description |14 |
+| accessibility_name (AXDescription mapping) |14 |
+| enabled |65 |
+| focused |26 |
+| value |4 |
+| accessibility_bounds |75 |
+
+Example: canonical node7 Description is known `Open B` in the recorded case, then
+unknown/native_acquisition_limit solely because of Title. This is not real aggregate
+memory exhaustion or a changed source value for Description. The added Title read
+creates a new failure dependency for fields that the old request already returned.
+The oversized-title checks only require Title unknown/no value, field-list fidelity
+and schema validity; they do not assert sibling preservation, so all author checks
+can pass while this production defect remains. A valid partial Snapshot does not
+establish per-attribute isolation or preservation of those known facts.
+
+**Disposition: implementation defect; N04 source acceptance REJECTED pending repair.**
+Normal recorded mapping is demonstrated, but it cannot substitute for this failed
+negative boundary. No source code was repaired by Q01 and no alternate writer began.
+
+Repair criteria under the EXISTING contracts:
+
+- Keep over-limit Title unavailable, never copied/truncated/relabelled known; retain
+  per-value, batch, aggregate, construction, deadline and output ceilings.
+- Prevent its local failure from erasing independently admissible Description/name,
+  state, value and geometry; retain secure non-acquisition and identity preflight.
+- Add an explicit production-owner regression comparing unaffected known states
+  across recorded/oversized Title, alongside existing availability/type/selection
+  cases and the original396-fact/75-node recorded case. Do not weaken the oracle,
+  reduce fields/nodes or raise limits to pass.
+- Recheck the bounded repair in this Q01 context. Actual SDK/live comparability and
+  off/on1100×1050/cold/warm qualification remain separate authorized Q01/Q02 work.
+
+Minimal independent assertion/reproduction instructions retained for the existing
+N04 repair owner and same Q01 recheck:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-n04-source-gm25z5c4/`
+contains check_title_isolation.py and REPRO.md only. It consumes the existing
+fidelity runner outputs and asserts no changed previously known sibling property.
+Remove these nonimages after repair/recheck consumption; no permanent archive.
+
+### Reconciliation and release
+
+N04's normal396-fact/7-case results agree with this own run. Its claim of Title
+oversize refusal is true for Title itself; it supplies no sibling-isolation proof
+and does not dispose the finding. Retained author report/pins and prepared source/
+binary hashes were inspected read-only. The entire uib-n04-787o_x0t handoff stays
+untouched for Q01/Q02 consumption. No author result was called independently live.
+
+Own143 compile/source/replay nonimages were removed and absence verified except
+the two minimal repro files. No image created, viewed, relocated or deleted. Compile/
+test processes ended; CPU released and no UI/headless lane acquired. Native foreground
+and Q03 waits remain unchanged. This terminal source/recorded verdict does not accept
+N04, live Native, D06 or P0–P7; it also does not reopen accepted unrelated domains.
+Only this existing Q01 receipt changes; checkpoint/push follows its link/whitespace
+checks on current master under the shared Git mutex.
