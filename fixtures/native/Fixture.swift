@@ -168,10 +168,21 @@ private struct Marker: ViewModifier {
         guard windows.count == 1, let window = windows.first, window.windowNumber > 0,
               let content = window.contentView else { throw NSError(domain: "p01_window", code: 1) }
         var queue: [(Any, Int)] = [(window, 0)], seen: Set<ObjectIdentifier> = [], frames: [NSRect] = []
+        var metadata: [[String: Any]] = []
         while !queue.isEmpty && seen.count < 160 {
             let (value, depth) = queue.removeFirst()
-            guard seen.insert(ObjectIdentifier(value as AnyObject)).inserted,
-                  let element = value as? NSAccessibilityProtocol else { continue }
+            guard seen.insert(ObjectIdentifier(value as AnyObject)).inserted else { continue }
+            let object = value as AnyObject
+            let full = value is NSAccessibilityProtocol
+            let elementProtocol = value is NSAccessibilityElementProtocol
+            var entry: [String: Any] = ["type": String(describing: type(of: object)), "depth": depth,
+                "full_protocol": full, "element_protocol": elementProtocol]
+            if let element = value as? NSAccessibilityProtocol {
+                entry["modern_children_count"] = element.accessibilityChildren()?.count ?? -1
+            }
+
+            metadata.append(entry)
+            guard let element = value as? NSAccessibilityProtocol else { continue }
             if element.accessibilityIdentifier() == "f02.sample.\(role)" { frames.append(element.accessibilityFrame()) }
             if depth < 9, let children = element.accessibilityChildren() {
                 guard children.count <= 1280, queue.count + children.count + seen.count <= 160
@@ -180,7 +191,9 @@ private struct Marker: ViewModifier {
             }
         }
         guard queue.isEmpty, frames.count == 1, let screenFrame = frames.first,
-              screenFrame.width > 0, screenFrame.height > 0 else { throw NSError(domain: "p01_sample", code: 3) }
+              screenFrame.width > 0, screenFrame.height > 0 else { throw NSError(domain: "p01_sample", code: 3, userInfo: [
+                "match_count": frames.count, "seen_count": seen.count, "remaining_queue": queue.count,
+                "object_metadata": metadata, "frames": frames.map { ["x": $0.minX, "y": $0.minY, "width": $0.width, "height": $0.height] }]) }
         let inside = window.convertPoint(fromScreen: NSPoint(x: screenFrame.midX, y: screenFrame.midY))
         let outside = content.convert(NSPoint(x: content.bounds.minX + 5, y: content.bounds.minY + 5), to: nil)
         let sampleInWindow = window.convertFromScreen(screenFrame)
@@ -430,10 +443,11 @@ private struct PilotView: View {
             if let point { value["point_window_base_pt"] = ["x": point.x, "y": point.y] }
             return value
         }
-        func save(_ status: String, error: String? = nil) {
+        func save(_ status: String, error: String? = nil, metadata: [String: Any]? = nil) {
             var value: [String: Any] = ["profile": "own_intrawindow_synthetic_mouse", "status": status,
                 "dispatch": "NSApplication.postEvent_normal_run_loop", "records": records]
             if let error { value["error"] = error }
+            if let metadata { value["failure_metadata"] = metadata }
             if let bytes = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) {
                 try? bytes.write(to: runDirectory.appendingPathComponent("sampled-mouse.json"), options: .atomic)
             }
@@ -445,6 +459,10 @@ private struct PilotView: View {
             try await Task.sleep(for: .milliseconds(200))
             publish()
             let (window, inside, outside) = try WindowSetup.sampledPoints(role: role)
+            #if P01_FRAME_DIAGNOSTIC
+            records.append(state("diagnostic_points", window: window, point: inside))
+            save("diagnostic_ready")
+            #else
             records.append(state("before_inside", window: window, point: inside))
             save("running")
             try WindowSetup.postMousePair(window: window, point: inside, number: 1)
@@ -460,8 +478,9 @@ private struct PilotView: View {
             publish()
             records.append(state("after_outside", window: window, point: outside))
             save(activations == 2 ? "complete" : "failed", error: activations == 2 ? nil : "outside_count_changed")
+            #endif
         } catch {
-            save("failed", error: String(describing: error))
+            save("failed", error: String(describing: error), metadata: (error as NSError).userInfo)
         }
     }
     #endif

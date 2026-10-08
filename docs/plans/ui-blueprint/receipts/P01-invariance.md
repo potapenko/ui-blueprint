@@ -332,3 +332,56 @@ with explicit failure detail, before any queue event. Current pointer route/sour
 plausibility alone does not supply this binding. Root disposition needed for any
 subsequent correction/new operation; this failed bounded attempt is saved honestly,
 not relabelled as M05 completion. Receipt-only exact1 checkpoint/push via short lease.
+
+
+## Bounded source/accessor diagnosis — virtual sample not exposed in-process
+
+Stopped Code3 result saved149fe6e91b7ae2d07d034d3558226700ea2c78c3, push/lease released.
+Root allowed minimal metadata diagnosis/cause-backed seam correction; no unchanged
+hit attempt. Added typed error metadata (match/seen/queue/frame/type/protocol/child
+counts) and P01_FRAME_DIAGNOSTIC compile-only branch which cannot post mouse events.
+Source subset still Fixture.swift + this receipt. No new backend/helper/framework.
+
+Actual bounded OWN A metadata with events disabled, exact PID/path/run-dir cleanup:
+PID58921 modern traversal visited7, queue exhausted, exact sample matches0/frames[].
+Window and hosting view conform full/element protocols; no cast rejection at hosting.
+PID59071 accessor comparison: own AppKitWindow children5 in both; own hosting view
+accessibilityChildren() count0, public informal accessibilityAttributeValue(children)
+count3. Header documents informal getter deprecated, public (compiler warning observed,
+not hidden). Thus modern accessor misses a provider branch; not a coordinate refusal.
+Public bounded accessibilityArrayAttributeCount/Values were then assessed because their
+SDK documented default bridges attribute values; actual PID59270 still visited7/
+matches0 (no assumed successful bridge). No events or points executed in any case.
+
+Cause boundary narrowed further with the explicit public informal getter, PID59465:
+visited16, exact sample matches0, frames[]. Hosting children3 exposed native text-field/
+secure-field cells and HostingScrollView/NSScroller, not the virtual SwiftUI Button.
+No name/order/coordinate/private-selector/hitTest fallback. No values/secret reads;
+types only diagnostically observed, no methods invoked merely by private class name.
+Initial readiness is not established as the cause: actual own window visible/current,
+fixture setup published expanded/count1, but these facts alone do not prove virtual
+AX tree readiness. Evidence establishes the in-process accessor/traversal boundary,
+not universal absence of a public frame (existing external AX consumer sees sample).
+
+Minimal attempted deprecated traversal did not solve binding, so removed it rather
+than ship a false fix/new warning. Final source retains preferred modern accessor,
+explicit diagnostic failure metadata and events-disabled branch; compiled cleanly.
+A compiler optional-method spelling issue during diagnostic comparison corrected;
+no lint suppression or new production AppKit UI. No changed pointer pair started,
+no Root oracle/cap changes; on cohort not used for this metadata-only diagnosis.
+
+Each diagnostic own fixture exited after read; cleanup<=0.124s/absence confirmed.
+No SDK event/action/input/capture/permission/display/user app operation; lane released.
+Images0. Owned diagnostic binaries/module cache/run records consumed/removed, absence
+verified; earlier images/evidence untouched. Old Code3 failure record kept intact.
+
+Exact next dependency: a documented frame bridge for virtual f02.sample.a equally
+on both own builds. Existing public external AX read returns that sample bounds; using
+it would require explicit proven AX screen→same owned NSWindow base conversion, not
+borrowed screenshots/on-only probe or global CUA assumptions. This is a proposal for
+root scope choice, not implemented or a promise of new synthetic-event proof. If no
+allowed bridge is chosen, sampled local hit/focus stays waiting_evidence; no M05/P7
+complete claim. Exact2 diagnostic WIP/source+receipt ready for scoped checkpoint;
+no new runtime/autonext. Source SHA256 follows.
+
+Diagnostic source 73d0a38f41369dad09802968b524fa8177795782302b709be34358187f674143.
