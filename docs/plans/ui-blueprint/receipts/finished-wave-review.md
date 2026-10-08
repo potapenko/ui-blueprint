@@ -51,3 +51,22 @@ focused test/Clippy/rustfmt pass, успешный Web runtime не повтор
 Тому же reviewer переданы точный correction commit и три author receipts только
 ПОСЛЕ initial observations. Second-stage reconciliation running; final verdict
 пока не получен. Ни нового reviewer, ни расширения на E03/B03/M03-C/I01 нет.
+
+## Final scoped verdict
+
+Тот же reviewer завершил reconciliation в turn01a11b6f-28d0-7b83-9503-0eeef3806684:
+**accept_with_residual** для7478af3,9046671,ffe33e4+85ea656. P2 resolved;
+других actionable findings нет. Полная validation сохранена, второй bounded
+canonical decode определяет лишь kind для recovery; invalid record не принимается.
+Reviewer проверил regression исходного контрпримера в replay_input.rs:130 и
+valid non-Delta/malformed/private/missing-property, lost base/context/revision,
+zero refusal publication, exact success и unchanged retained bytes.
+
+Авторские Native synthetic/F02 move-scroll-resize, Graph deterministic public
+CLI и Web actual TCP/recovery/controlled oracle receipts согласуются с source
+и прочитанными тестами. Это author execution evidence, не independently rerun:
+reviewer не запускал команды и не перепроверял удалённые temporary raw records.
+Screen/pixel/cross-display mapping вне Native7478 scope; Graph fixtures synthetic;
+два независимых live snapshots не названы full/delta oracle. Эти пределы остаются.
+Итог закрывает одну agreed source review, не весь M04/B05/P7. Root принял verdict
+в этих границах; завершённый reviewer archived, повтор без новых данных не нужен.

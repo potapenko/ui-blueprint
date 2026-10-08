@@ -54,6 +54,16 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Групповая source review закрыта
+
+[Final verdict](receipts/finished-wave-review.md): accept_with_residual для
+Native7478af3/Graph9046671/Webffe33e4+85ea656; единственный P2 resolved,
+новых actionable findings нет. Independent source/call-path/test inspection
+отделено от author runtime. M04/B05/P7 полностью не объявлены accepted.
+Reviewer01a11b64-7375-7160-b876-47068b8c29a7 archived после final reconciliation.
+Активные реализации E03/M03-C/B03-G продолжают свои полные задачи; root не
+открывает принятые исходники заново и не повторяет неизменённые проверки.
+
 ## Replay correction сохранён
 
 85ea656aeba7c0f93a7e230af84e14a487444aad pushed; исходный W03-R repair completed,
