@@ -492,3 +492,10 @@ minimal candidate is explicit read-only AXFocusedWindow binding with PID/incarna
 and before/after sameAXobject checks; CG mapping remains unknown, no title/rect/order
 substitute, ordinary AX cannot reveal hidden SwiftUI layout. Exact public binding/
 CLI extension needs selection before implementation; no realapp launch granted.
+
+Next Native implementation selected in [G04](packets/G04-native-ax-geometry.md):
+read-only native_ax ordinary-window binding via explicit PID/incarnation/public
+AXFocusedWindow, no fixture identity/probe dependency, no CG mapping/input claim.
+Native owns Swift/docs plus narrow CLI connection branch/tests; Core notified,
+engine/schema protected. Truthful per-observation identity must fit existing contract
+or return exact dependency; no invented continuity. Test only ownF02 genericroute.
