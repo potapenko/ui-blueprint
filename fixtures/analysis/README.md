@@ -12,6 +12,17 @@ The three tampered-*-contract-only records intentionally satisfy declarations
 while claiming wrong arithmetic/availability; the engine MUST reject them on
 recomputation. Schema validator valid/0 does not verify those claims.
 
+`unstable-source.json` and `unstable-conditions.json` retain their historical
+names and bytes. Their OG1/OC1 observations actually declare consistency `unknown`,
+not `unstable`; `authored_unstable` is a reason label, not a consistency override.
+Both saved `unstable_state` results are schema-valid declarations but fail engine
+recomputation: the known anchors give 48 − (10 + 30) = 8 css_px, and the supplied
+condition matches where required. Their manifest/generator expectations are
+therefore `mismatch`. No source observation or saved result is rewritten.
+The existing engine analysis tests retain independent known-gap8 checks and
+explicit `Unstable` → `unstable_state` checks for geometry and condition evidence,
+alongside `Unknown` consistency with known dimensions and partial named anchors.
+
 Positive numeric facts include GEO gap8, literal A.right40 with B.left40/30 ->0/-10,
 width30/height10/ratio3, inside insets10/20/80/30, overflow110/20/-10/30,
 intersection(35,25,5,5)/area25 and edge contact area0, ordered gaps[8,8]/spread0.

@@ -109,7 +109,7 @@ d = C(gap); geom(d,1)["coordinate_space"]["id"] = "other-local"
 d["query"]["anchors"][1]["coordinate_space"]["id"] = "other-local"
 save("missing-transform", unknown(d,"missing_transform",gap["result"]["measurement"]["evidence"]), engine="match")
 d = C(gap); d["snapshot"]["observations"][0].update(consistency="unknown",consistency_reason="authored_unstable")
-save("unstable-source", unknown(d,"unstable_state",gap["result"]["measurement"]["evidence"]), engine="match")
+save("unstable-source", unknown(d,"unstable_state",gap["result"]["measurement"]["evidence"]), engine="mismatch")
 
 d = C(gap); second = observation(d,"OG2","authored_second_geometry")
 d["snapshot"]["nodes"][1]["properties"][0]["evidence"] = second
@@ -149,7 +149,7 @@ save("missing-conditions", unknown(d,"applicability_unknown"), engine="match")
 d = C(conditional); d["evaluation"]["conditions"]["values"]["platform"] = "web"
 save("not-applicable", unknown(d,"not_applicable",[ce]), engine="match")
 d = C(conditional); d["snapshot"]["observations"][-1].update(consistency="unknown",consistency_reason="authored_unstable")
-save("unstable-conditions", unknown(d,"unstable_state",[ce]), engine="match")
+save("unstable-conditions", unknown(d,"unstable_state",[ce]), engine="mismatch")
 
 original = old("GEO-GAP")
 check = dict(snapshot=C(gap["snapshot"]),expectation=C(original["expectation"]),evaluation=C(gap["evaluation"]),

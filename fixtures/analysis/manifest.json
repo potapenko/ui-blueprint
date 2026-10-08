@@ -123,7 +123,7 @@
     "path": "unstable-source.json",
     "contract_valid": true,
     "structural_valid": true,
-    "engine_verification": "match"
+    "engine_verification": "mismatch"
   },
   {
     "path": "distinct-observations.json",
@@ -165,7 +165,7 @@
     "path": "unstable-conditions.json",
     "contract_valid": true,
     "structural_valid": true,
-    "engine_verification": "match"
+    "engine_verification": "mismatch"
   },
   {
     "path": "check-pass.json",
