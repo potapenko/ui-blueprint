@@ -140,3 +140,16 @@ extra per-step activation. Original300s/setup120s/cleanup5s limits and image/tem
 rules stand. Reuse unchanged prior AX/pixel/probe evidence, no old suites. If event
 injection does not exercise the required behavior, return failed/unverified scope;
 no fake M05 or physical-input success. No product adapter/public protocol changes.
+
+## Concrete frame-bridge continuation
+
+After exact sample matches stayed0 through public modern/array/legacy traversal,
+stop that unsuccessful path. Mac coauthor's primary-source bridge is recorded in
+platform-test-advice: existing public external AX sample frame, primary-screen Y
+conversion, exact owned NSWindow.convertPoint(fromScreen:). Native reconciles current
+APIs/source before edit. Minimal trusted own-run-dir frame input/runner is permitted
+inside this same test seam; no public schema/collector/service change. Prove sample
+membership and unchanged window/process/frame/display through dispatch, no stale
+coordinates/on-only probe/screenshot scale. Actual normal-queue count/focus outcome
+is still required; mapped centre is only a candidate. Source checkpoint before one
+changed bounded pair; no repeat of unrelated proof or implicit physical acceptance.

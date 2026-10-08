@@ -219,3 +219,24 @@ Source handoff refers to playphraseme-site picker_view.cljs127/468, suggestions/
 view.cljs1054 and qa/cases/regression/tc-clip-search-desktop-filters-and-suggestions-panel.md.
 No new runtime/source edits by either advisor; no actual Director inner measurements.
 Both cases are consumers for geometry utility, not an action-executor prerequisite.
+
+## M05 public external-AX to owned-window bridge — 2026-10-08
+
+Mac coauthor01a1102f-791c returned a read-only source answer after the in-process
+SwiftUI sample traversal gap. No runtime/files/real PlayPhrase.me operation.
+For an already identity-bound own window and fresh AX rectangle, candidate centre
+pAX=(x+w/2,y+h/2) maps to AppKit screen (pAX.x,H-pAX.y), with
+H=NSScreen.screens[0].frame.maxY, then exactWindow.convertPoint(fromScreen:).
+Use primary/menu-bar screen, not NSScreen.main/current window screen/visibleFrame;
+no Retina multiplier, titlebar correction or screenshot-derived scale.
+
+Primary basis: [AXPosition](https://developer.apple.com/documentation/applicationservices/kaxpositionattribute),
+[NSScreen.screens](https://developer.apple.com/documentation/appkit/nsscreen/screens),
+[screen conversion](https://developer.apple.com/documentation/appkit/nswindow/convertpoint%28fromscreen%3A%29),
+[event location](https://developer.apple.com/documentation/appkit/nsevent/locationinwindow).
+This is a source-based coordinate proposal, not a hit proof. Require actual sample
+membership in exact A, unchanged process/window generation/frame and display config
+through dispatch. Round-trip arithmetic and AX rectangle containment do not prove
+hit region; inside/outside Count outcomes remain necessary. No external CUA/global
+WindowServer/physical-device claim. Root selected minimal trusted frame input to
+existing own test seam, with Native source reconciliation and one changed pair.

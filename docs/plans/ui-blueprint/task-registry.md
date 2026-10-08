@@ -765,3 +765,17 @@ one integrated build/check and retained binaries; actual application chain pendi
 Native diagnosed exact sample lookup cause: modern children getter returned0 at
 hosting view while documented informal getter returned3; not a coordinate mismatch.
 Its bounded public-accessor correction stays inside the selected test-only seam.
+
+Native diagnosticc1631da78e6dc73adb1b361ce135fe315b7cf676 saved/pushed exact2;
+modern/array/informal own traversal did not expose virtual sample (16objects,
+0matches), no events. Nonworking deprecated path removed, bounded diagnostic only.
+Mac advisor returned public AX→AppKit primary-screen→exactWindow conversion under
+explicit identity/frame/display conditions, recorded in platform-test-advice and
+selected for minimal same-test bridge. Advice is not runtime/hit proof; Native
+reconciles source and performs only one changed pair after save. M05 still open.
+
+A05 CLI final saved-integration checks passed on0661359 (a9ad665+5605206): Web
+build,4affected binary tests,status/ACK,Clippy;172 Rust inputs unchanged. Products
+retained in system-temp uib-a05-products-rti2ca4z/debug; source/binary pins sent Web,
+which may copy for immediate single application chain. CLI docs exact2 save lease
+active; native/UI source owners remain disjoint. No duplicate builds/runtime.
