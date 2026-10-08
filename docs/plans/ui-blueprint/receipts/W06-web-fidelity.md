@@ -1,4 +1,4 @@
-# W06 Web fidelity — Q01 repair in progress
+# W06 Web fidelity — repaired candidate ready for Q01 recheck
 
 ## Q01 repair continuation — 2026-10-08
 
@@ -20,6 +20,83 @@ tests/bridges/web/fidelity.cjs and this author receipt. No Q01/Q02-owned files.
 Checks: repaired independent repros, source type/URL matrices, original full97-node
 headless workload plus safe/private srcset and existing binding/bound/cleanup cases.
 The shared e020gN records and reviewer r0o_1c_n reproducers are retained untouched.
+
+### Repaired result and evidence
+
+Coherent repaired pin `9d715ee7bd8e566ad2b955024a68a8c3804966a4` (production
+fixes05a25ff/f79eec7; later driver-only checkpoints). All204 saved crate/Web/Cargo/
+toolchain inputs were byte-compared with that pin before cleanup: zero mismatches.
+No spec meaning/threshold/API change and no protected-owner or frozen-fixture write.
+
+P1: preflight classifies every whitespace-delimited srcset token, conservatively
+including descriptors and preserving embedded data-URL commas. Observable native
+IMG currentSrc is also checked. Captured currentSourceURL/originURL rare values
+are classified after table validation and before canonical node construction;
+token-bearing values refuse even when no private attribute remains. Protocol-relative
+credential URLs are recognized by the same existing policy. Safe source strings,
+attributes and URL facts remain byte-for-byte native values. No sanitizing rewrite,
+new URL framework, general secret detector or canary-specific product rule.
+
+P2: only native boolean/booleanOrUndefined kinds WITH a Scalar::Flag value become
+known focusable. String/token/tristate/numeric/null/wrong-kind values remain unknown.
+Actual Chromium145 F01 reports `{type:"booleanOrUndefined",value:true}`. The first
+repair rejected that valid kind; the full live scenario exposed it and f79eec7
+restored the original known fact while retaining strict value typing. Legacy ax_bool,
+Checked tristate, Focused, field selection and evidence ownership remain unchanged.
+
+Verification on saved source (Rust1.96.0, locked/offline):
+
+* 77 collector tests +16 library tests pass. The focusability test now exercises15
+  type/value/absence cases and independently checks legacy Checked=true and
+  Focused=false. The URL table regression reproduces Q01's exact two-node input,
+  then isolates srcset/currentSourceURL/originURL with safe/private pairs.
+* Both original Q01 Rust counterexample modules ran with repaired assertions in
+  temporary test-only overlays:2/2 pass. Overlays were removed and original saved
+  production bytes restored before building the runtime. Exact JS check.cjs with
+  only repaired source/expectation substitution now returns private/count2. Reviewer
+  originals were neither changed nor deleted. The committed5-case JS matrix also
+  covers later candidates, credentials, safe query strings and data-URL commas.
+* Recorded original97-node replay +7 hostile table variants passes. Final Web
+  all-target Clippy with -D warnings, changed rustfmt/Node syntax/local links and
+  git diff whitespace checks pass. No unchanged Native/shared engine suite rerun.
+
+Final own headless quality run:21 explicit requests,7 positives/14 expected
+refusals,5 attachments/shutdowns. Original F01 remains2documents/97nodes,
+1,102 checked native facts/19 text boxes; raw baseline10,788bytes. Canonical full
+baseline/changed/restored443,379 /444,084 /443,381bytes; AX Apply→Changed→Apply
+preserves true focusable on reused observed refs. Original frame/binding/bound,
+password/token-URL, real extra-frame/navigation refusals remain zero-publication.
+New private first/second srcset candidates each give InvalidInput,0committed
+channels/0canonical bytes. Supplemental safe IMG scenario retains srcset and
+known currentSourceURL and passes raw/canonical parity (453,695bytes); it does not
+replace the original97-node workload. Canary absent from every response, bounded
+caller diagnostics and every retained proof file. No rejected Snapshot exists for
+downstream cache/history/export; those consumers were not separately reimplemented
+or rerun. Captured-only originURL and malformed AX-kind evidence is deterministic
+source/peer testing, not a claim Chromium emitted malformed protocol or that an
+originURL-specific live leak was independently exercised.
+
+All5 closures: cleanup_confirmed=true,0sessions/0completion groups,192bytes ledger
+backing, no abandoned/poisoned owner, caller exit0. Own browser/context/server closed;
+exact task worker process check empty. Profile ceilings/D06 gates unchanged; no
+timing campaign. Independent acceptance remains with the same Q01 reviewer.
+
+Minimal new public proof for Q01 recheck/Q02:
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-Ln5Cz7`.
+Includes original full and supplemental safe-URL raw/canonical pairs, semantic
+records, exact request/config and report. Retain until BOTH consumers finish.
+Report SHA256 `f6de920702477944cf95157f8683e17586048fc43b644ffdf7e8b756e4ff7eef`;
+canonical baseline `40f96c11c5a7ddbffd7543d700aaeaa52d5ba5ff9208f29112721159e890ecd2`.
+Host consumer `647acd9cd8bb3eb0f614e4341287f1e2cc67b442f7d5e22b4206009497020bdf`;
+worker `cc01ac31852335f5c6dbc48941269805bf7ad589ea18b7d8e2ab9b5ba2632b8e`;
+driver `be85ecf4981d05603fd78d03c3fcd7873c71995c9afa6ef13d5d14eafbd4fa0c`.
+Own failed-run nonimages and source/build temporary outputs are removed after
+verification. Older shared e020gN and reviewer r0o_1c_n remain intact. No images
+created/deleted; after-title-spacing.png untouched. Q02 harness/docs/receipt and
+Q01 acceptance receipt are unchanged. Q01 recheck, then Q02 measurements remain
+explicit acceptance gates; this author result does not self-accept them.
+
+## Historical candidate139d202 — rejected by Q01, retained provenance
 
 Authority: [packet](../packets/W06-web-fidelity.md), approved PLAN.UIB@1 original
 358c757 and user approval preserved in [registry](../task-registry.md). This chat
