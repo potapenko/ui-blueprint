@@ -1,5 +1,139 @@
 # Q02 performance — Web and Rust-stage results, Native pending
 
+## Native read-only preflight — 2026-10-09, mismatch retained
+
+Root's new packet section authorizes this complete bounded READ-ONLY preflight of
+only Q01's retained running F02, not launches/setup/input or Native timing. Read it
+fully. Reused the current complete Native/identity/privacy/D05/D06 closure after
+verifying no spec drift; reread Apple, Computer Use and QA routes. N04 current
+receipt/recipe and Q01 source/recorded ACCEPT7709067 + committed provenance handoff
+7a6b0b4 were read. Q01 terminal release was observed before builds/SDK work. No
+fresh user foreground response was inferred; N03/Q03/input waits stay separate.
+
+Outcome: **current AX source preservation and isolated pixels observed; original
+D06 workload not equivalent, no Native timing grant/pass.** Producer uses accepted
+source770906798e1326fed3dd0edec40dc59b13772b3a, immutable archive, optimized Swift6
+macOS14/arm64 helper and locked/offline Rust1.96 host. Protected production, schema,
+limits and existing Web/Rust-stage results unchanged. Own writes: read-only witness,
+Native performance driver, recipe/this receipt. No fixture/UI edit.
+
+### Exact target and permitted operation
+
+Trusted Q01 root uib-q01-final-5w3j1hkw source hashaaa1ca8f… and original form config/
+request hashes58bdffe2…/c2dbb25a… matched its receipt. They are provenance, not reused
+form commands/refs. Fresh NSRunningApplication/CG and identity checks established
+PID68614, bundle local.uiblueprint.f02.on, launch1791480213.409255, exact retained
+F02-on.app executable, own A window14982 and generation6EA93860-D822-4150-B0EB-C986EAFB5EC4.
+No title/rectangle target search or fallback. App active=false/hidden=false,
+window on_screen=false, CG frame{x40,y90,width550,height525}; frontmost PID unchanged.
+The Source/identity record was revalidated before and after every witness/producer
+step. Retained identity/manifest/config/request bytes remain unchanged.
+
+One planned chain only: fresh metadata witness; bounded raw AX before; ONE fresh
+read-only RuntimeHost window-ax Observe with AX+capture; bounded raw AX after.
+Request has original9 fields,160nodes/depth9/524288bytes and3000ms parent deadline,
+unchanged Native profile, owned_synthetic_fixture pixels. No Focus/Prepare/Execute,
+Compare/Snapshot, reset/resize/close, launch/activation, TCC/display change, B-window
+content, real application, historical off/on bundle or automatic retry.
+
+The nonvisual witness uses actual scalar AX reads independently of normalization,
+the existing bounded array/text/action admissions and exact window resolver.
+Role/Subrole/Identifier classification precedes Value; secure Value remains redacted
+and unrequested at the SDK boundary. No string-prefix salvage. Witness AX duration
+is bounded1s with its owned process watchdog; output uses the bounded Native codec.
+Current primary helper/host remains the shipping accepted producer, not this oracle.
+
+### Observed quality, invariance and comparability
+
+Both canonical channels returned Observed. AX has78 nodes, known AXTitle1 in the
+macos.ax extension, unchanged Description mapping and partial source coverage.
+The after-witness matches EVERY mapped current source state/value:627 known scalar
+components (including4 geometry scalars/node),387 unavailable/redacted entries,
+78 action lists and77 edges. This count is not relabelled as original396 facts.
+Missing-Title negative on the saved result is rejected. Canonical data/known empty,
+false, unknown, unsupported and redacted remain distinct; no stale values inferred.
+Every property/extension has reported macos.ax evidence linked to its Observation;
+every known bound remains accessibility_bounds/ax-screen/screen/pt/top_left. A
+wrong-units negative also refuses. These checks use saved bytes, not another read.
+
+Capture is window_isolated,1100×1050px of the exact A target; natural550×525pt.
+PNG was visually inspected: Count1, expanded sample, empty Name/secure placeholder,
+unchecked Enabled, Result none, rows0–3 visible and Protected input:empty. It is
+isolated-window evidence, not proof of desktop visibility/occlusion or input owner.
+The app remained inactive/off-screen; ordinary read/capture worked without activation.
+
+Raw AX before had77 nodes; canonical/after have78. Exact tree invariance therefore
+does NOT pass. Offline literal graph-edit reconciliation proves ALL pre-existing
+77 node properties/actions/edges unchanged under a single insertion: old anonymous
+AXGroup28 gains child72, another identifier-less AXGroup at{95,99,14,14} in the
+titlebar area. Cause is unestablished; it is not labelled a user/UI mutation or
+silently erased as noise. This graph comparison creates no stable identities/refs.
+Process/window/foreground metadata is identical throughout; all63 explicitly
+identified controls preserve properties, including focus/values/geometry. Retained
+manifest unchanged. Initial driver strict-tree assertion stopped its report at this
+mismatch; original report/failure is preserved. Reporting was completed OFFLINE
+from those same records, without another collection, setup or retry.
+
+Comparison against actual original ON warm external-7/frozen manifest:
+
+| Requirement / source | Original | Current | Disposition |
+| --- | --- | --- | --- |
+| Whole AX tree |75nodes|78 canonical/after,77 before|Incompatible; current tree never reduced |
+| Explicit added controls |none|f02.snapshot, f02.secret-status; current Result HStack also differs in source|Structural input difference, not resolved by Reset |
+| f02.open_other AXPosition.x |434.5pt|345pt|−89.5pt; all source values retained |
+| Window / pixels |550×525pt /1100×1050px|same|Matched sizes, natural isolated capture |
+| Common explicit identifier facts |340 known facts compared|339 equal,1position difference; no missing identifier|Exact reported-ID comparison only; anonymous historical nodes not heuristically joined |
+| Current value state |Count1,empty name,unchecked,Result none|Same actual AX/public pixel facts|No source-state flag fabricated from old manifest |
+| Context |historical inactive/nonkey/nonmain|inactive; current AXMain=true, own Name AXFocused=true|No accepted matched key/main or keyboard-owner context; APIs/times remain attributed |
+
+Thus current source fidelity is evidenced against its matching after-state, while
+full unchanged-tree invariance and original workload equivalence remain open. No
+fields/extra controls/outlier/unknown were omitted to force pass. No p50/p95 cohort
+or Native stage/latency qualification follows from this single preflight.
+
+### Exact next dependency, evidence and release
+
+Q01 must reconcile ordinary live-collection quality/AX representation change. Before
+Native timing, an explicitly authorized controlled off/on input/setup must satisfy
+the original fields/tree/placement/context or receive a legitimate D06 workload
+reconciliation BEFORE evaluation. This retained current fixture cannot lose its
+Snapshot/Protected-input/HStack controls through the allowed read-only operations;
+automatic Reset/Compare/resize would not repair that structural mismatch and were
+not attempted. N04's distinct53e6e6e request-only proposal remains source-only and
+itself includes Snapshot; no launch/equivalence permission is inferred. Current
+basic Count/name/check/result/window/pixel values already match; the precise problem
+is structure/placement and stable contextual comparison, not a blanket need for
+foreground to read AX/capture. N03 input authority/foreground remains separate.
+
+System-temp root `uib-q02-native-readonly-tuwbimc4` retains prepared.json and run/
+before.json,canonical.json,after.json, original report.json, reconciliation.json,
+invariance.json and final-analysis.json. Canonical SHA256f74d6e1ecc428690c5a01be3a4bf354b782312a53bba6ad21bc6e685c276de70;
+final analysis3231d0c79992c6c220aeda9170e98911fecb6d426b74c137b2552193619c2c3f.
+Helperc37063a664d94bcf1c857ddf69b06162cdb107e63a52865fd0c6a91635190afa;
+witnessee436dae605ef1eb2757f3bd57b46a74c4cc98a7843c9c2f9098db501d756425;
+caller43c88b44eed3323fd45898c3f8d77786a57844dbd7bf2a79d6d570e2be0d51cb;
+worker959b3e0e0978f152a9ad69f18e3c341808e95be004d21ce4cda901bb7929ad48.
+Executed driver hashfe678029ca07d5a6ad0f36a3df09cdebcf377dba1eaf59db106a932b7179a04f;
+subsequent driver edits only improve mismatch analysis, not a repeated runtime.
+
+PNG and identical native staging original under run/images/capture/ are116920bytes,
+SHA2565c0ced9ab00202b89b2d056e14b6b2b8b4b6c7923074f8668bc93dd4c131684b.
+Both images and ALL containing directories remain; neither is deleted/moved/renamed.
+No raw evidence/image committed. Q01/root consume minimal nonimages; shared Q01/N04
+roots and fixture are untouched. Swift helper/witness compile, Rust release compile,
+Node syntax, exact source-value reconciliation, missing-Title negative, graph-edit
+checks and link/whitespace checks pass. This scoped observed mismatch is not D06 pass.
+
+Actual host shutdown confirmed0sessions/0completion leases,192bytes ledger backing,
+no abandoned/poisoned owner. All task helper/witness/caller/worker process inventories
+empty. **CPU and all Q02 runtime resources released; retained Q01 fixture left
+untouched and open.** Web numeric and Rust-stage evidence reused without reruns.
+Consumed own source/target/module-cache trees and helper/witness products were
+removed after source/hash/result verification and confirmed absent. Image-bearing
+run tree, both PNG/staging originals and every containing directory remain intact;
+Q01's fixture/shared roots were excluded from cleanup. Product paths in prepared.json
+are historical hashes, not a claim the cleaned build products remain installed.
+
 ## Final current outcome — Rust-stage report completed
 
 Root explicitly extended the existing Q02 continuation through the packet section

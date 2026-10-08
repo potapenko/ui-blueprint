@@ -10,6 +10,11 @@ not relabelled as rerun. Required Web Rust normalization/formatting is separatel
 measured by exact-owner saved-input diagnostics below. Native remains open; opaque
 SDK/syscall/cache-peak counters remain unavailable without invented zeroes.
 **No overall D06/P7 acceptance.** Historical8e3dba2 geometry2.688ms remains recorded.
+2026-10-09 Native one-shot read-only preflight on accepted7709067 succeeded while
+the retained fixture stayed inactive/off-screen:78 canonical nodes and1100×1050
+pixels. Current source facts match the after witness, but original75-node workload
+does not: extra controls and Open B x displacement−89.5pt. Exact AX tree invariance
+also differs by one anonymous group; no Native timing or setup was performed.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
@@ -138,8 +143,27 @@ They are attributed reservations/owned layouts, not worker usage or SDK/RSS peak
 
 ## Native comparability before timing
 
-[Native preflight](../../tests/bridges/native/performance.cjs) takes a fresh own
-expanded-A manifest, baseline external JSON and saved helper, without starting,
+The current authorized continuation uses ONLY Q01's already-running retained F02
+after fresh process incarnation/executable/window/identity validation. Historical
+manifest state is provenance, never current authority. No launch, activation,
+Focus/Compare/Snapshot/reset/resize/close or historical bundle is allowed here.
+[ReadonlyFacts.swift](../../tests/bridges/native/ReadonlyFacts.swift) is a bounded
+nonvisual witness: same existing admissions/window resolution, independent scalar
+AX reads, protected Value exclusion,160/depth9/1s and fixed512KiB output. It reads
+process/CG metadata before and after; no setters or capture. The accepted shipping
+helper/host performs the single canonical AX/capture operation. Raw before/after
+properties/tree are compared offline with all canonical source properties.
+
+The driver additionally requires UIB_Q02_WITNESS(+_SHA256) and the trusted retained
+UIB_Q02_FIXTURE_EXECUTABLE. Context/report distinguishes current source fidelity,
+historical baseline differences and strict tree invariance. An exact structural
+insertion may explain index shifts for comparison only; it never creates persistent
+identity or action refs. Mismatches are retained, not repaired by app setup or retry.
+Current source quality/known fields can pass while the original workload remains
+incompatible. See the current receipt for the one actual run and scoped result.
+
+[Native preflight](../../tests/bridges/native/performance.cjs) takes the trusted
+retained A manifest as provenance, baseline external JSON and saved helper, without starting,
 activating or changing the app. `--baseline-only` is offline. `--preflight-runtime`
 requires the same explicit functional/resource activation as Web, plus
 UIB_Q02_MANIFEST, UIB_Q02_NATIVE_BASELINE, UIB_Q02_HELPER and its SHA256.
@@ -168,8 +192,9 @@ preflight does not implement or claim completed Native statistical series.
   or lower160/depth9/pixel/field coverage to force comparability.
 * Baseline75-node AX includes one known AXTitle. Current WindowAX explicitly reads
   AXDescription for accessibility_name/description and preserves AXIdentifier/
-  AXSubrole extensions, but does not request/publish AXTitle. The preflight reports
-  this source-fidelity gap separately; fast missing data is not success.
+  AXSubrole extensions, but did not request/publish AXTitle at that historical pin.
+  Accepted N04 repair7709067 and current actual preflight now preserve Title through
+  its own bounded batch/extension; fixture equivalence remains a separate question.
 
 These facts do not authorize new product collection features or revised D06 gates.
 After actual preflight, return the smallest necessary compatibility decision within
