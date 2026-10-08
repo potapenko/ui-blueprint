@@ -23,6 +23,7 @@ use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
 Diff: uiblueprint diff --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
+Graph diff: diff --graph --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Geometry diff: diff --geometry --before FILE --after FILE --ref SOURCE_KEY_JSON --frame-kind KIND --space ID --max-input-bytes N --max-output-bytes N [--before-evaluation FILE] [--after-evaluation FILE] [--json]\n\
 Diff reports recorded node/property differences; missing records do not imply deletion. Entry cap0 is allowed; complete report0, truncated/context mismatch4.\n\
 Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N\n\
@@ -228,6 +229,19 @@ fn execute_diff(args: DiffArguments) -> Result<(Vec<u8>, u8), Failure> {
             if result.displacement.is_some() { 0 } else { 4 },
         ));
     }
+    if let DiffMode::Graph { max_entries } = &args.mode {
+        let (before, after) = input::load_diff(&args)?;
+        let result = engine::diff::compare_graph(
+            &before,
+            &after,
+            engine::diff::DiffLimits {
+                max_entries: *max_entries,
+            },
+        )
+        .map_err(diff_failure)?;
+        let exit = if result.omitted_entries == 0 { 0 } else { 4 };
+        return Ok((output::graph_diff(&args, &result)?, exit));
+    }
     let DiffMode::Raw { max_entries } = &args.mode else {
         unreachable!("geometry handled above")
     };
@@ -239,16 +253,20 @@ fn execute_diff(args: DiffArguments) -> Result<(Vec<u8>, u8), Failure> {
             max_entries: *max_entries,
         },
     )
-    .map_err(|error| match error {
+    .map_err(diff_failure)?;
+    let exit = if result.omitted_entries == 0 { 0 } else { 4 };
+    Ok((output::recorded_diff(&args, &result)?, exit))
+}
+
+fn diff_failure(error: engine::diff::DiffError) -> Failure {
+    match error {
         engine::diff::DiffError::InvalidSnapshot(_) => Failure::invalid("invalid_input"),
         engine::diff::DiffError::IncompatibleContext => Failure {
             code: "context_mismatch",
             exit: 4,
         },
         engine::diff::DiffError::Capacity => Failure::io(),
-    })?;
-    let exit = if result.omitted_entries == 0 { 0 } else { 4 };
-    Ok((output::recorded_diff(&args, &result)?, exit))
+    }
 }
 
 fn main() -> ExitCode {

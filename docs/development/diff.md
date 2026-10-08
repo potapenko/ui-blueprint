@@ -1,4 +1,52 @@
-# Recorded membership and property comparison
+# Recorded graph, property and geometry comparison
+
+## Opt-in structure and focus comparison
+
+[CLI-GRAPH-DIFF@1](../specs/product/cli-graph-diff.md) adds `diff --graph` with
+exactly the raw mode's before/after, byte budgets and max-entries arguments.
+`uiblueprint_engine::diff::compare_graph` borrows the same validated Snapshots,
+reuses raw property comparison, then compares children, node metadata, relations,
+component mappings and keyboard/accessibility/active-descendant/text-selection/
+composition focus. No cache or second graph is created. JSON `graph_difference`
+1.0.0 references source-array indices and property fields; both full sources remain.
+Missing fields/nodes/relations/components are absent records, never deletion.
+
+Children/members/metadata arrays are literal ordered records. Relations match exact
+(kind, from, to) plus occurrence for duplicates; components match their reported key.
+Node metadata includes surface/native_role/extensions/declarations. Values and source
+Evidence/Observation changes have separate flags, including focus and extension data.
+Source coverage and entry omissions are separate; complete report0, truncated4,
+incompatible context4, invalid/bounds2, IO1. Raw JSON and G12 remain unchanged.
+An empty graph report does not compare standalone surface_records/captures/envelope
+metadata or prove atomicity/freshness. Full selected semantics and limitations are
+in the linked contract. [G13 receipt](../plans/ui-blueprint/receipts/G13-graph-diff.md)
+records author verification, not independent acceptance or live collection.
+
+Runnable synthetic example from the repository root with `uiblueprint` on PATH:
+
+```sh
+python3 - <<'PYEXAMPLE'
+import copy, json, pathlib, subprocess, tempfile
+source = json.loads(pathlib.Path('fixtures/golden/GEO-SIZE-RATIO__width.json').read_text())
+before = source['artifact']['data']['snapshot']
+evidence = before['nodes'][0]['properties'][0]['evidence']
+before['focus']['keyboard'] = {'status': 'known', 'target': before['nodes'][0]['key'], 'evidence': evidence}
+after = copy.deepcopy(before)
+after['focus']['keyboard'] = {'status': 'none', 'evidence': evidence}
+with tempfile.TemporaryDirectory(prefix='uib-graph-example-') as directory:
+    paths = [pathlib.Path(directory) / name for name in ('before.json', 'after.json')]
+    for path, snapshot in zip(paths, (before, after)):
+        path.write_text(json.dumps({'schema_version': '0.1.0', 'artifact': {'kind': 'snapshot', 'data': snapshot}}))
+    subprocess.run(['uiblueprint', 'diff', '--graph', '--before', str(paths[0]),
+                    '--after', str(paths[1]), '--max-input-bytes', '65536',
+                    '--max-output-bytes', '65536', '--max-entries', '10'], check=True)
+assert not pathlib.Path(directory).exists()
+PYEXAMPLE
+```
+
+Expected: one `focus_keyboard` content change from known target to known none,
+no evidence change, zero omissions and exit0. Add `--json` for the separate envelope.
+These generated records are synthetic; the example performs no UI action or capture.
 
 ## Opt-in geometry in a selected Space
 

@@ -770,3 +770,133 @@ pub(crate) fn geometry_diff(
     }
     Ok(buffer.bytes)
 }
+
+pub(crate) fn graph_diff(
+    args: &DiffArguments,
+    result: &uiblueprint_engine::diff::GraphDiff<'_>,
+) -> Result<Vec<u8>, Failure> {
+    let mut buffer = Bounded::new(args.max_output);
+    if args.json {
+        buffer.write_all(b"{\"output_version\":\"1.0.0\",\"kind\":\"graph_difference\",\"source\":\"saved\",\"live_revalidated\":false,\"comparison_scope\":\"nodes_properties_children_metadata_relations_components_focus\",\"before\":").map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, result.before).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"after\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, result.after).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"entries\":[")
+            .map_err(|_| buffer.error())?;
+        for (index, entry) in result.entries.iter().enumerate() {
+            if index != 0 {
+                buffer.write_all(b",").map_err(|_| buffer.error())?;
+            }
+            write!(
+                buffer,
+                "{{\"kind\":\"{}\",\"before_index\":",
+                graph_kind(entry.kind)
+            )
+            .map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, &entry.before_index).map_err(|_| buffer.error())?;
+            buffer
+                .write_all(b",\"after_index\":")
+                .map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, &entry.after_index).map_err(|_| buffer.error())?;
+            buffer
+                .write_all(b",\"field\":")
+                .map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, &entry.field).map_err(|_| buffer.error())?;
+            write!(buffer, ",\"before_present\":{},\"after_present\":{},\"content_changed\":{},\"evidence_changed\":{}}}", entry.before_present, entry.after_present, entry.content_changed, entry.evidence_changed).map_err(|_| buffer.error())?;
+        }
+        writeln!(buffer, "],\"omitted_entries\":{}}}", result.omitted_entries)
+            .map_err(|_| buffer.error())?;
+    } else {
+        writeln!(buffer, "comparison=saved_graph live_revalidation=not_performed comparison_scope=nodes_properties_children_metadata_relations_components_focus deletion_claim=not_made omitted_entries={}", result.omitted_entries).map_err(|_| buffer.error())?;
+        for (side, snapshot) in [("before", result.before), ("after", result.after)] {
+            writeln!(
+                buffer,
+                "{side} snapshot={:?} revision={} context={:?} coverage={:?}",
+                snapshot.id.0, snapshot.revision, snapshot.context, snapshot.coverage
+            )
+            .map_err(|_| buffer.error())?;
+            for observation in &snapshot.observations {
+                writeln!(buffer, "{side}_observation={observation:?}")
+                    .map_err(|_| buffer.error())?;
+            }
+        }
+        for entry in &result.entries {
+            writeln!(buffer, "difference={} field={:?} before_present={} after_present={} content_changed={} evidence_changed={}", graph_kind(entry.kind), entry.field, entry.before_present, entry.after_present, entry.content_changed, entry.evidence_changed).map_err(|_| buffer.error())?;
+            for (side, snapshot, index) in [
+                ("before", result.before, entry.before_index),
+                ("after", result.after, entry.after_index),
+            ] {
+                write!(buffer, "  {side}=").map_err(|_| buffer.error())?;
+                graph_fact(&mut buffer, snapshot, entry, index).map_err(|_| buffer.error())?;
+            }
+        }
+    }
+    Ok(buffer.bytes)
+}
+fn graph_kind(kind: uiblueprint_engine::diff::GraphKind) -> &'static str {
+    use uiblueprint_engine::diff::GraphKind::*;
+    match kind {
+        NodePresence => "node_presence",
+        Property => "property",
+        Children => "children",
+        NodeMetadata => "node_metadata",
+        Relation => "relation",
+        Component => "component",
+        FocusKeyboard => "focus_keyboard",
+        FocusAccessibility => "focus_accessibility",
+        FocusActiveDescendant => "focus_active_descendant",
+        FocusTextSelection => "focus_text_selection",
+        FocusComposition => "focus_composition",
+    }
+}
+fn graph_fact(
+    buffer: &mut Bounded,
+    snapshot: &Snapshot,
+    entry: &uiblueprint_engine::diff::GraphEntry,
+    index: Option<usize>,
+) -> io::Result<()> {
+    use uiblueprint_engine::diff::GraphKind::*;
+    let node = index.and_then(|i| snapshot.nodes.get(i));
+    // Debug formatting escapes untrusted strings rather than executing terminal controls.
+    match entry.kind {
+        NodePresence => writeln!(buffer, "{:?}", node.map(|n| &n.key)),
+        Property => writeln!(
+            buffer,
+            "{:?}",
+            node.map(|n| (
+                &n.key,
+                n.properties.iter().find(|p| Some(p.field()) == entry.field)
+            ))
+        ),
+        Children => writeln!(buffer, "{:?}", node.map(|n| (&n.key, &n.children))),
+        NodeMetadata => writeln!(
+            buffer,
+            "{:?}",
+            node.map(|n| (
+                &n.key,
+                &n.surface,
+                &n.native_role,
+                &n.extensions,
+                &n.source_declarations
+            ))
+        ),
+        Relation => writeln!(
+            buffer,
+            "{:?}",
+            index.and_then(|i| snapshot.relations.get(i))
+        ),
+        Component => writeln!(
+            buffer,
+            "{:?}",
+            index.and_then(|i| snapshot.components.get(i))
+        ),
+        FocusKeyboard => writeln!(buffer, "{:?}", snapshot.focus.keyboard),
+        FocusAccessibility => writeln!(buffer, "{:?}", snapshot.focus.accessibility),
+        FocusActiveDescendant => writeln!(buffer, "{:?}", snapshot.focus.active_descendant),
+        FocusTextSelection => writeln!(buffer, "{:?}", snapshot.focus.text_selection),
+        FocusComposition => writeln!(buffer, "{:?}", snapshot.focus.composition_state),
+    }
+}

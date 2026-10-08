@@ -401,3 +401,395 @@ fn resolve_geometry(
         Err(reason) => Ok(ResolvedRect::Unknown { reason, evidence }),
     }
 }
+
+/// The explicit graph slice; envelope/capture metadata is retained, not compared.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum GraphKind {
+    NodePresence,
+    Property,
+    Children,
+    NodeMetadata,
+    Relation,
+    Component,
+    FocusKeyboard,
+    FocusAccessibility,
+    FocusActiveDescendant,
+    FocusTextSelection,
+    FocusComposition,
+}
+/// Indices address immutable original arrays, not another graph owner.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct GraphEntry {
+    pub kind: GraphKind,
+    pub before_index: Option<usize>,
+    pub after_index: Option<usize>,
+    pub field: Option<Field>,
+    pub before_present: bool,
+    pub after_present: bool,
+    pub content_changed: bool,
+    pub evidence_changed: bool,
+}
+#[derive(Debug)]
+pub struct GraphDiff<'a> {
+    pub before: &'a Snapshot,
+    pub after: &'a Snapshot,
+    pub entries: Vec<GraphEntry>,
+    pub omitted_entries: usize,
+}
+/// Literal recorded node/property, children, metadata, relation, component and
+/// focus comparison. Missing sides never imply creation/deletion. Relation tuples
+/// with duplicates match by occurrence; no guessed relation identity is introduced.
+/// Allocation is bounded by actual entries and the explicit cap, not a copied graph.
+/// # Errors
+/// Invalid snapshots, incompatible source contexts and count/allocation failure
+/// return no partial result. Validation has its existing allocation/work behavior.
+pub fn compare_graph<'a>(
+    before: &'a Snapshot,
+    after: &'a Snapshot,
+    limits: DiffLimits,
+) -> Result<GraphDiff<'a>, DiffError> {
+    validation::validate_snapshot(before).map_err(DiffError::InvalidSnapshot)?;
+    validation::validate_snapshot(after).map_err(DiffError::InvalidSnapshot)?;
+    if !sources_compatible(&before.context, &after.context) {
+        return Err(DiffError::IncompatibleContext);
+    }
+    let mut total = Some(0usize);
+    visit_graph(before, after, |_| {
+        total = total.and_then(|n| n.checked_add(1))
+    });
+    let total = total.ok_or(DiffError::Capacity)?;
+    let count = total.min(limits.max_entries);
+    let mut entries = Vec::new();
+    entries
+        .try_reserve_exact(count)
+        .map_err(|_| DiffError::Capacity)?;
+    visit_graph(before, after, |entry| {
+        if entries.len() < count {
+            entries.push(entry);
+        }
+    });
+    Ok(GraphDiff {
+        before,
+        after,
+        entries,
+        omitted_entries: total - count,
+    })
+}
+fn graph_entry(
+    kind: GraphKind,
+    before_index: Option<usize>,
+    after_index: Option<usize>,
+    content_changed: bool,
+    evidence_changed: bool,
+) -> GraphEntry {
+    GraphEntry {
+        kind,
+        before_index,
+        after_index,
+        field: None,
+        before_present: before_index.is_some(),
+        after_present: after_index.is_some(),
+        content_changed,
+        evidence_changed,
+    }
+}
+fn visit_graph(before: &Snapshot, after: &Snapshot, mut emit: impl FnMut(GraphEntry)) {
+    // Reuse the raw comparator's classifications and stable ordering verbatim.
+    visit(before, after, |difference| {
+        let (kind, old, new, field, presence, content, evidence) = match difference {
+            Difference::NodePresence {
+                before,
+                after,
+                presence,
+            } => (
+                GraphKind::NodePresence,
+                before,
+                after,
+                None,
+                presence,
+                true,
+                false,
+            ),
+            Difference::Property {
+                before_node,
+                after_node,
+                field,
+                presence,
+                content_changed,
+                evidence_changed,
+                ..
+            } => (
+                GraphKind::Property,
+                Some(before_node),
+                Some(after_node),
+                Some(field),
+                presence,
+                content_changed,
+                evidence_changed,
+            ),
+        };
+        let mut entry = graph_entry(
+            kind,
+            old.and_then(|n| before.nodes.iter().position(|v| std::ptr::eq(v, n))),
+            new.and_then(|n| after.nodes.iter().position(|v| std::ptr::eq(v, n))),
+            content,
+            evidence,
+        );
+        entry.field = field;
+        entry.before_present = presence != Presence::AfterOnly;
+        entry.after_present = presence != Presence::BeforeOnly;
+        emit(entry);
+    });
+    for (i, old) in before.nodes.iter().enumerate() {
+        let Some((j, new)) = after
+            .nodes
+            .iter()
+            .enumerate()
+            .find(|(_, n)| n.key == old.key)
+        else {
+            continue;
+        };
+        if old.children != new.children {
+            emit(graph_entry(
+                GraphKind::Children,
+                Some(i),
+                Some(j),
+                true,
+                false,
+            ));
+        }
+        let (content, evidence) = metadata_changes(before, old, after, new);
+        if content || evidence {
+            emit(graph_entry(
+                GraphKind::NodeMetadata,
+                Some(i),
+                Some(j),
+                content,
+                evidence,
+            ));
+        }
+    }
+    for (i, old) in before.relations.iter().enumerate() {
+        let j = relation_match(&before.relations, i, &after.relations);
+        let evidence = !same_source(
+            before,
+            Some(&old.evidence),
+            after,
+            j.map(|j| &after.relations[j].evidence),
+        );
+        if j.is_none() || evidence {
+            emit(graph_entry(
+                GraphKind::Relation,
+                Some(i),
+                j,
+                j.is_none(),
+                evidence,
+            ));
+        }
+    }
+    for (j, _) in after.relations.iter().enumerate() {
+        if relation_match(&after.relations, j, &before.relations).is_none() {
+            emit(graph_entry(GraphKind::Relation, None, Some(j), true, true));
+        }
+    }
+    for (i, old) in before.components.iter().enumerate() {
+        let matched = after
+            .components
+            .iter()
+            .enumerate()
+            .find(|(_, c)| c.logical_component_key == old.logical_component_key);
+        let (content, evidence) = matched.map_or((true, true), |(_, new)| {
+            (
+                old.members != new.members,
+                old.declaration_source != new.declaration_source
+                    || old.provenance != new.provenance,
+            )
+        });
+        if content || evidence {
+            emit(graph_entry(
+                GraphKind::Component,
+                Some(i),
+                matched.map(|(j, _)| j),
+                content,
+                evidence,
+            ));
+        }
+    }
+    for (j, new) in after.components.iter().enumerate() {
+        if !before
+            .components
+            .iter()
+            .any(|c| c.logical_component_key == new.logical_component_key)
+        {
+            emit(graph_entry(GraphKind::Component, None, Some(j), true, true));
+        }
+    }
+    visit_focus(before, after, emit);
+}
+fn same_relation(a: &Relation, b: &Relation) -> bool {
+    a.kind == b.kind && a.from == b.from && a.to == b.to
+}
+fn relation_match(source: &[Relation], i: usize, other: &[Relation]) -> Option<usize> {
+    let occurrence = source[..i]
+        .iter()
+        .filter(|r| same_relation(r, &source[i]))
+        .count();
+    other
+        .iter()
+        .enumerate()
+        .filter(|(_, r)| same_relation(r, &source[i]))
+        .nth(occurrence)
+        .map(|(i, _)| i)
+}
+fn same_source(
+    before: &Snapshot,
+    a: Option<&Evidence>,
+    after: &Snapshot,
+    b: Option<&Evidence>,
+) -> bool {
+    match (a, b) {
+        (None, None) => true,
+        (Some(a), Some(b)) => {
+            a == b
+                && before
+                    .observations
+                    .iter()
+                    .find(|o| o.id == a.observation_id)
+                    == after.observations.iter().find(|o| o.id == b.observation_id)
+        }
+        _ => false,
+    }
+}
+fn state_transform_evidence(state: &Availability) -> Option<&Evidence> {
+    if let Availability::Known {
+        value: Value::Geometry(g),
+    } = state
+        && let TransformState::Known { transform } = &g.transform
+    {
+        Some(&transform.evidence)
+    } else {
+        None
+    }
+}
+fn metadata_changes(before: &Snapshot, a: &Node, after: &Snapshot, b: &Node) -> (bool, bool) {
+    let mut content = a.surface != b.surface
+        || a.native_role != b.native_role
+        || a.extensions.len() != b.extensions.len()
+        || a.source_declarations.len() != b.source_declarations.len();
+    let mut evidence = false;
+    // Arrays retain their literal source order, including declarations without IDs.
+    for i in 0..a.extensions.len().max(b.extensions.len()) {
+        let (a, b) = (a.extensions.get(i), b.extensions.get(i));
+        content |= match (a, b) {
+            (Some(a), Some(b)) => {
+                a.namespace != b.namespace
+                    || a.name != b.name
+                    || a.property.field() != b.property.field()
+                    || !same_content(Some(&a.property), Some(&b.property))
+            }
+            _ => true,
+        };
+        evidence |= !same_evidence(
+            before,
+            a.map(|e| &e.property),
+            after,
+            b.map(|e| &e.property),
+        );
+    }
+    for i in 0..a.source_declarations.len().max(b.source_declarations.len()) {
+        let (a, b) = (a.source_declarations.get(i), b.source_declarations.get(i));
+        content |= match (a, b) {
+            (Some(a), Some(b)) => {
+                a.namespace != b.namespace
+                    || a.name != b.name
+                    || a.sensitivity != b.sensitivity
+                    || !same_state(&a.state, &b.state)
+            }
+            _ => true,
+        };
+        evidence |= a.map(|d| &d.source) != b.map(|d| &d.source)
+            || !same_source(
+                before,
+                a.and_then(|d| state_transform_evidence(&d.state)),
+                after,
+                b.and_then(|d| state_transform_evidence(&d.state)),
+            );
+    }
+    (content, evidence)
+}
+fn focus_source(reference: &FocusRef) -> Option<&Evidence> {
+    match reference {
+        FocusRef::Known { evidence, .. } | FocusRef::None { evidence } => Some(evidence),
+        _ => None,
+    }
+}
+fn same_focus(a: &FocusRef, b: &FocusRef) -> bool {
+    match (a, b) {
+        (FocusRef::NotRequested {}, FocusRef::NotRequested {})
+        | (FocusRef::None { .. }, FocusRef::None { .. }) => true,
+        (FocusRef::Known { target: a, .. }, FocusRef::Known { target: b, .. }) => a == b,
+        (FocusRef::Unknown { reason: a }, FocusRef::Unknown { reason: b }) => a == b,
+        _ => false,
+    }
+}
+fn visit_focus(before: &Snapshot, after: &Snapshot, mut emit: impl FnMut(GraphEntry)) {
+    let mut focus_entry = |kind, present: (bool, bool), content, evidence| {
+        if content || evidence {
+            let mut entry = graph_entry(kind, None, None, content, evidence);
+            (entry.before_present, entry.after_present) = present;
+            emit(entry);
+        }
+    };
+    for (kind, a, b) in [
+        (
+            GraphKind::FocusKeyboard,
+            &before.focus.keyboard,
+            &after.focus.keyboard,
+        ),
+        (
+            GraphKind::FocusAccessibility,
+            &before.focus.accessibility,
+            &after.focus.accessibility,
+        ),
+        (
+            GraphKind::FocusActiveDescendant,
+            &before.focus.active_descendant,
+            &after.focus.active_descendant,
+        ),
+    ] {
+        focus_entry(
+            kind,
+            (true, true),
+            !same_focus(a, b),
+            !same_source(before, focus_source(a), after, focus_source(b)),
+        );
+    }
+    let (a, b) = (
+        before.focus.text_selection.as_ref(),
+        after.focus.text_selection.as_ref(),
+    );
+    let content =
+        a.map(|s| (s.anchor, s.focus, &s.units)) != b.map(|s| (s.anchor, s.focus, &s.units));
+    focus_entry(
+        GraphKind::FocusTextSelection,
+        (a.is_some(), b.is_some()),
+        content,
+        !same_source(
+            before,
+            a.map(|s| &s.evidence),
+            after,
+            b.map(|s| &s.evidence),
+        ),
+    );
+    let (a, b) = (
+        Some(&before.focus.composition_state),
+        Some(&after.focus.composition_state),
+    );
+    focus_entry(
+        GraphKind::FocusComposition,
+        (true, true),
+        before.focus.composition_state.field() != after.focus.composition_state.field()
+            || !same_content(a, b),
+        !same_evidence(before, a, after, b),
+    );
+}

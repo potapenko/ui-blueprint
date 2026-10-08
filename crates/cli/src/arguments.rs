@@ -3,6 +3,9 @@ use std::{ffi::OsString, path::PathBuf};
 use uiblueprint_schema::model::Projection;
 
 pub(crate) enum DiffMode {
+    Graph {
+        max_entries: usize,
+    },
     Raw {
         max_entries: usize,
     },
@@ -37,7 +40,7 @@ impl DiffArguments {
             mut before_evaluation,
             mut after_evaluation,
         ) = (None, None, None, None, None, None, None, None, None, None);
-        let (mut json, mut geometry) = (false, false);
+        let (mut json, mut geometry, mut graph) = (false, false, false);
         let invalid = Failure::invalid("invalid_arguments");
         while let Some(flag) = args.next() {
             if flag == "--json" {
@@ -45,6 +48,13 @@ impl DiffArguments {
                     return Err(invalid);
                 }
                 json = true;
+                continue;
+            }
+            if flag == "--graph" {
+                if graph {
+                    return Err(invalid);
+                }
+                graph = true;
                 continue;
             }
             if flag == "--geometry" {
@@ -95,7 +105,7 @@ impl DiffArguments {
             }
         }
         let mode = if geometry {
-            if entries.is_some() {
+            if entries.is_some() || graph {
                 return Err(invalid);
             }
             DiffMode::Geometry {
@@ -116,8 +126,11 @@ impl DiffArguments {
             {
                 return Err(invalid);
             }
-            DiffMode::Raw {
-                max_entries: entries.ok_or(invalid)?,
+            let max_entries = entries.ok_or(invalid)?;
+            if graph {
+                DiffMode::Graph { max_entries }
+            } else {
+                DiffMode::Raw { max_entries }
             }
         };
         Ok(Self {

@@ -135,6 +135,21 @@ fields serialize directly through the bounded writer. No second graph or inferre
 action ref. Version1.0.0 belongs to this CLI envelope, not core0.1 or analysis0.2;
 the product does not import it. Existing measure/check/export paths are unchanged.
 
+## Recorded graph differences
+
+Use [the runnable graph example](diff.md#opt-in-structure-and-focus-comparison) or:
+
+```text
+uiblueprint diff --graph --before BEFORE.json --after AFTER.json --max-input-bytes 65536 --max-output-bytes 65536 --max-entries 100 [--json]
+```
+
+[CLI-GRAPH-DIFF@1](../specs/product/cli-graph-diff.md) includes raw node/property
+comparison plus children, node metadata, relations, component mappings and focus.
+JSON1.0.0 kind `graph_difference` retains unchanged sources and indexed entries;
+content/evidence flags distinguish UI facts from source renewal. The cap bounds
+entries, not source coverage; missing records do not prove deletion. --graph and
+--geometry are mutually exclusive. Raw mode below remains exactly unchanged.
+
 ## Recorded node/property differences
 
 For an explicit sourced result Space, [geometry diff](diff.md#opt-in-geometry-in-a-selected-space)
@@ -170,7 +185,8 @@ Output is fully bounded including final newline before stdout; no partial result
 on overflow. Existing inspect/observe/measure/check/export behavior remains.
 Real Web sized-before/after records retain different environment revisions and
 report layout32×16→48×24 css_px with original Evidence, without restamping or an
-inferred arithmetic displacement. Live changes/full graph comparison remain separate.
+inferred arithmetic displacement. Live changes remain separate; the explicit graph
+mode above supplies the additional recorded structural/focus domains.
 
 ## Exits and scope
 
