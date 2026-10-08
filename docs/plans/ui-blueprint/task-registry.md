@@ -27,23 +27,24 @@ Root получает итог или конкретный блокер; про�
 Новая цель, переисполнение готовой работы и новые подагенты не нужны.
 
 - Host goal подтверждён `active`; approved P0–P7 и текущая `master` сохранены.
-- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: repair terminal completed;
-  coherent pin `9d715ee`, final `591aba9` pushed, receipt принят как авторский
-  результат, не independent acceptance. Контекст после handoff архивирован.
-- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: запущен на полный recheck
-  обоих findings и affected independent headless qualification исправленного W06.
-  Предыдущий reject `8bcdaf4` остаётся историческим verdict старого `139d202`.
-  Native часть сохраняет ожидание foreground своего fixture; ответа пока нет.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: получает repaired handoff;
-  harness `11186a4`/`f26c201` сохранён. Уже разрешено самостоятельно продолжить
-  весь Web build/preflight/frozen timing task после terminal Q01 acceptance именно
-  repaired Web scope и release CPU/runtime. Отдельного root grant больше не ждёт.
-  Reject/not_verified остаётся точной зависимостью, без обхода quality gate.
+- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: terminal recheck `88d0920`
+  pushed. На `9d715ee` semantic focusability/P2 приняты; own21-case headless подтвердил
+  full97-node positive facts. Documents privacy/P1 отклонён: comma-tight srcset с
+  безопасным выбранным currentSrc публикует private unselected credential URL.
+  CPU/runtime освобождены. Same reviewer сохранён для affected privacy recheck.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: turn `inProgress`; разрешено
+  самостоятельно измерить принятые single-control semantic/geometry на saved9d715ee.
+  Он владеет CPU/headless lane до terminal release. Full Documents и Native остаются
+  отдельными открытыми строками; ни fields/workload, ни D06 thresholds не меняются.
+- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: разархивирован, новый repair
+  turn `inProgress`. Полный remaining-P1 outcome у исходного владельца; source edits
+  независимы от Q02. Heavy checks/headless ждут Q02 terminal resource release,
+  после которого W06 сам продолжает весь цикл без root grant. P2 остаётся закрытым.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q01/Q02. Переход от принятого W06 к Web measurements уже разрешён по точному
+  Q02/W06. Переход W06 к heavy checks после Q02 release уже разрешён по точному
   условию; промежуточные шаги не требуют управляющего follow-up.
 
 ## История предыдущей группы самостоятельных задач
@@ -81,6 +82,29 @@ active/inProgress через wait_threads:
 Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; root также
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
+
+## Split W06 verdict; independent measurement and remaining privacy repair
+
+Q01 saved terminal `88d0920`: P2 accept, positive full2-document/97-node/
+1102-fact/19-text-box quality independently confirmed on9d715ee. One P1 remains:
+comma-tight srcset candidate with credential URL bypasses both whitespace-only
+classifiers. Actual own Chromium publication: Completed/1channel/452627bytes,
+synthetic canary present; sanitized evidence retained. All6 host closures confirmed,
+review CPU/headless resources released. Full Documents/P7 acceptance is not claimed.
+
+Root reread D06@1 and removed its overly broad dependency requiring Documents P1
+closure before independent ordinary single-control timings. Q02 now owns saved-pin
+release build/preflight and comparable semantic/geometry cohorts. Full workload and
+Native remain mandatory/open, not replaced by these measurements. Q02 returns its
+terminal resource release after the available series.
+
+Original W06 owner receives one full P1 repair outcome with exact Q01 reproduction:
+system-temp uib-q01-w06-recheck-_cy5phij, containing REPRO.md/comma-repro.cjs/
+comma-counterexample.rs/q01_srcset_negative.cjs. Read-only source reproduction and
+own code/test edits may proceed in parallel; heavy builds/tests/headless wait for
+Q02's terminal CPU/runtime release and then resume without another root message.
+Both tasks have disjoint write sets. Same Q01 will inspect only affected repair;
+P2/unchanged accepted domains stay closed. Native/Q03 human waits remain unanswered.
 
 ## W06 repaired delivery and autonomous dependency continuation
 
