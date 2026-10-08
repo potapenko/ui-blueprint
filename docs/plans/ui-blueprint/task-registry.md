@@ -27,26 +27,24 @@ Root получает итог или конкретный блокер; про�
 Новая цель, переисполнение готовой работы и новые подагенты не нужны.
 
 - Host goal подтверждён `active`; approved P0–P7 и текущая `master` сохранены.
-- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: исходный владелец
-  разархивирован, turn `inProgress` подтверждён; получил полный repair outcome
-  по двум findings Q01; весь цикл
-  исправления/проверок/docs/commit/push входит в задание без микропоручений root.
-- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: terminal `completed`,
-  review `reject` для W06 `139d202`, receipt `8bcdaf4` pushed. Самостоятельно
-  воспроизведены утечка известного URL token через srcset/raw URL facts и mistyped
-  focusable→Known boolean. Авторская full baseline подтверждена, дефекты не
-  опровергнуты. Same reviewer сохранён для recheck исправленного результата.
+- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: repair terminal completed;
+  coherent pin `9d715ee`, final `591aba9` pushed, receipt принят как авторский
+  результат, не independent acceptance. Контекст после handoff архивирован.
+- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: запущен на полный recheck
+  обоих findings и affected independent headless qualification исправленного W06.
+  Предыдущий reject `8bcdaf4` остаётся историческим verdict старого `139d202`.
   Native часть сохраняет ожидание foreground своего fixture; ответа пока нет.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: адаптация full/semantic harness
-  сохранена/pushed `11186a4`, статус зависимости — `f26c201`; turn `completed`.
-  Новых timed samples
-  нет; нужен исправленный и принятый W06. Его исходники не принадлежат W06.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: получает repaired handoff;
+  harness `11186a4`/`f26c201` сохранён. Уже разрешено самостоятельно продолжить
+  весь Web build/preflight/frozen timing task после terminal Q01 acceptance именно
+  repaired Web scope и release CPU/runtime. Отдельного root grant больше не ждёт.
+  Reject/not_verified остаётся точной зависимостью, без обхода quality gate.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  W06; затем same Q01 recheck и Q02 measurements. Промежуточные шаги не требуют
-  управляющего follow-up.
+  Q01/Q02. Переход от принятого W06 к Web measurements уже разрешён по точному
+  условию; промежуточные шаги не требуют управляющего follow-up.
 
 ## История предыдущей группы самостоятельных задач
 
@@ -83,6 +81,30 @@ active/inProgress через wait_threads:
 Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; root также
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
+
+## W06 repaired delivery and autonomous dependency continuation
+
+W06 author full-cycle repair finished on9d715ee, receipt/final591aba9 pushed.
+[Author receipt](receipts/W06-web-fidelity.md#q01-repair-continuation--2026-10-08)
+records strict native boolean values (including observed booleanOrUndefined),
+preflight/captured URL classification and unchanged legacy Checked. Author reports
+77collector/16library, both original Q01 reproductions,97-node replay and21owned
+headless cases;7positives/14refusals,5cleaned sessions. Full2-document/1102facts
+baseline remains; positive safe source URL parity and private srcset refusal checked.
+This is author evidence, not independent acceptance or D06 timing.
+
+Same Q01 received the saved repair delta, receipt and public proof; it owns the
+complete recheck/reconciliation/necessary headless qualification and final verdict.
+Q02 now has conditional authority to continue its whole Web measurement task once
+Q01's terminal committed receipt accepts this exact changed Web scope and releases
+CPU/runtime. It can resolve that dependency itself using compact wait/status and
+the saved receipt; no extra per-stage root approval is required. A rejected or
+unverified candidate must not enter timed acceptance. Native/Q03 human waits unchanged.
+
+New minimal proof `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-Ln5Cz7`
+is retained for BOTH Q01/Q02; old shared proof and reviewer reproducers are untouched.
+W06 confirmed no active resources, then was archived after handoff. No new chat or
+subagent was created. All product/QA execution remains with the existing task chats.
 
 ## W06 repair after final independent findings
 
