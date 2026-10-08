@@ -1,5 +1,71 @@
 # Addressed Web collector and first request
 
+## W06 explicit full documents and AX focusability
+
+[WEB-DOCUMENTS@1](../specs/product/web-documents.md) adds a separate explicit
+whole-document request. Existing initial/rooted/references collection keeps its
+original scope. `Focused` now also selects `web.ax` extension `focusable`, encoded
+as a requested `Value` boolean with reported AX evidence. It is not the Focused
+state or permission to act. Missing/nonboolean raw data is unknown; false remains
+known false. No canonical Field, schema, engine, wire or dependency change.
+
+The trusted SessionDescriptor lists BOTH actual Surface identities. WebSetup still
+names the root Surface/endpoint. Existing RuntimeHost `attach_web` and
+`submit_web_observe` accept the same Tape(Request, WebSelection), and the existing
+CLI Web connection deserializes that same selection:
+
+```json
+{"selection":"documents","documents":[
+  {"surface":{"id":"ACTUAL_MAIN_FRAME","generation":"ACTUAL_MAIN_LOADER"},"document_backend_id":1,"sensitivity":"public"},
+  {"surface":{"id":"ACTUAL_CHILD_FRAME","generation":"ACTUAL_CHILD_LOADER"},"document_backend_id":2,"sensitivity":"public"}
+],"max_visited_nodes":128}
+```
+
+IDs above illustrate the shape ONLY; all four frame/loader strings and both backend
+IDs must come from the exact currently authorized documents. No synthetic ref,
+Snapshot ID or Observation is needed. The canonical Request selects the exact
+same ordered Surface list, scope, fields `["value","layout_bounds"]`, and only
+external_semantics. The lower-level public API is
+`Collector::attach_with_surfaces(client,binding,surfaces,limits,deadline)` followed
+by `observe_documents(request,&DocumentsScope,dispatch_sequence,deadline,publish)`.
+Old `attach` remains root-only. Additional descriptor Surfaces alone do no collection.
+
+The F01 quality proof uses128 total node allowance/depth16,512KiB canonical output,
+32KiB per protocol message/256KiB aggregate replies,16KiB text,100 methods and2s
+failure deadline. These are explicit whole-fixture parameters within the unchanged
+D05 profile, not replacements for the32-node/64KiB/250ms single-control scenario
+or D06's50/500ms latency thresholds. Native capture internals are opaque browser
+SDK work; bounded preflight/transport/worker/output do not imply a browser RSS cap.
+
+Original97 source keys, children, frame `Owns` relation,97 native names/types/values,
+attributes and rare fields are retained. Layout bounds use document/css_px;
+native offset/client/scroll rectangles remain separate local-space extensions
+with unknown transforms. Text boxes retain source bounds and UTF-16 offsets.
+Empty native string index−1 maps to known empty, never unknown. Full known DOM
+coverage has zero omitted nodes, but overall coverage stays partial (no full AX,
+arbitrary visibility, paint or cross-frame transform claim).
+
+All current frame loaders and exact document objects are checked before/after
+bounded native-getter traversal and DOMSnapshot acquisition. Wrong/missing/extra/
+stale/unallowed bindings refuse without publishing data. Known private documents,
+password/private subtrees and credential-bearing or unclassifiable encoded URL
+queries refuse the whole channel; no unsafe alias filtering of raw srcdoc/string
+tables. Ordinary single-control redaction remains supported. Shadow/templates and
+OOPIF/third-party support are unqualified; this is positive F01 same-process srcdoc
+proof, not universal browser collection.
+
+Finite author verification lives in [fidelity.cjs](../../tests/bridges/web/fidelity.cjs).
+Build the unchanged Q02 generic host consumer from a coherent saved source revision:
+`cargo test --locked --offline -p uiblueprint-host --features web --test performance --no-run --message-format=json`.
+Use a system-temp CARGO_TARGET_DIR and the matching performance test executable;
+set `S01_WEB_PLAYWRIGHT_CORE` to the pinned1.58.2 tooling, `UIB_W06_EXECUTABLE`, its
+`UIB_W06_EXECUTABLE_SHA256`, `UIB_W06_PIN`, and `UIB_WEB_LIVE_ALLOW=1`, then run
+`node tests/bridges/web/fidelity.cjs --run-authorized`. It performs finite quality
+calls only, not D06 series, and saves public baseline/raw/canonical/report files
+to a new system-temp directory for Q02. No screenshots; own contexts/workers close.
+The [W06 receipt](../plans/ui-blueprint/receipts/W06-web-fidelity.md) pins actual
+results and retention. Q02 owns timing and independent comparison acceptance.
+
 ## Developer first use: an explicitly selected existing component
 
 The [geometry example](../../tests/bridges/web/geometry.cjs) is tooling, not a new

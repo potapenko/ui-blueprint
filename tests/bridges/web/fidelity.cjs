@@ -67,9 +67,10 @@ async function main(){
   assert(process.argv.includes('--run-authorized')&&process.env.UIB_WEB_LIVE_ALLOW==='1');
   const executable=process.env.UIB_W06_EXECUTABLE;assert(path.isAbsolute(executable||''));assert.equal(hash(executable),process.env.UIB_W06_EXECUTABLE_SHA256);
   const setup=prepare(),output=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'uib-w06-proof-'));
-  const report={source_pin:process.env.UIB_W06_PIN,executable_sha256:hash(executable),checks:[],output,retention:'Q02 consumes canonical baseline and report; run-owned nonimages retained until that review. No images.'};
+  const report={source_pin:process.env.UIB_W06_PIN,executable_sha256:hash(executable),driver_sha256:hash(__filename),checks:[],closures:[],output,retention:'Q02 consumes canonical baseline and report; run-owned nonimages retained until that review. No images.'};
   let fixture,server,browser,context,driver;let counter=0;
   const save=(name,data)=>{const file=path.join(output,name);fs.writeFileSync(file,typeof data==='string'?data:JSON.stringify(data),{flag:'wx',mode:0o600});return file;};
+  async function closeDriver(){const closed=await driver.close();report.closures.push(closed);driver=null;}
   try{
     fixture=await start();server=await setup.chromium.launchServer({headless:true,timeout:8000,args:['--remote-debugging-port=0','--remote-debugging-address=127.0.0.1']});
     const profile=server.process().spawnargs.find(v=>v.startsWith('--user-data-dir=')).slice(16);
@@ -108,6 +109,10 @@ async function main(){
     await attach();
     save('raw-baseline.json',raw);
     const baseline=await observe('full-baseline');save('request-baseline.json',baseline.request);assert(baseline.snapshot);report.coverage=compare(raw,baseline.snapshot);assert.equal(report.coverage.nodes,97);
+    for(const [id,expected]of [['left',[40,60,120,40]],['child-button',[12,18,90,30]]]){
+      const node=baseline.snapshot.nodes.find(n=>n.extensions.some((e,i)=>e.name.endsWith('.name')&&e.property.state.value?.value==='id'&&n.extensions[i+1]?.property.state.value?.value===id));
+      assert(node);assert.deepEqual(rect(known(property(node,'layout_bounds'))),expected);
+    }
     save('canonical-baseline.json',baseline.sample.frames[0].canonical);
     await page.evaluate(()=>document.getElementById('left').style.width='121px');
     const changedRaw=await cdp.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});const changed=await observe('full-changed');compare(changedRaw,changed.snapshot);
@@ -129,9 +134,9 @@ async function main(){
     await page.evaluate(()=>history.replaceState(null,'','?token=W06_PRIVATE_CANARY'));
     assert.equal((await observe('private-url-refusal')).snapshot,null);
     await page.evaluate(()=>history.replaceState(null,'','?generation=1'));
-    await driver.close();driver=null;
+    await closeDriver();
     await attach([frames[0]]);
-    assert.equal((await observe('unallowed-frame')).snapshot,null);await driver.close();driver=null;
+    assert.equal((await observe('unallowed-frame')).snapshot,null);await closeDriver();
     await attach([frames[0]]);
     const semFields=['role','accessibility_name','enabled','focused','invalid'];let selected={selection:'initial',ids:[{id:'left',sensitivity:'public'}],max_visited_nodes:256};
     for(const [name,value]of [['semantic-baseline','Apply'],['semantic-changed','Changed'],['semantic-restored','Apply']]){
@@ -145,20 +150,20 @@ async function main(){
       selected={selection:'references',nodes:[{sensitivity:'public',reference:{session_id:sessionId,target,surface:dom.surface,key:dom.key,snapshot_id:result.snapshot.id,observation_id:dom.properties[0].evidence.observation_id}}]};
       save(`${name}.json`,result.sample.frames[0].canonical);
     }
-    await driver.close();driver=null;
+    await closeDriver();
     await attach();
     await page.evaluate(()=>{const f=document.createElement('iframe');f.id='w06-unallowed';f.srcdoc='<p>Outside scope</p>';document.body.append(f);});
     await page.waitForFunction(()=>document.getElementById('w06-unallowed').contentDocument?.readyState==='complete',{},{timeout:2000});
-    assert.equal((await observe('actual-extra-frame')).snapshot,null);await driver.close();driver=null;
+    assert.equal((await observe('actual-extra-frame')).snapshot,null);await closeDriver();
     await page.evaluate(()=>document.getElementById('w06-unallowed').remove());
     await attach();
     await page.evaluate(()=>document.querySelector('iframe').srcdoc='<p>New child loader</p>');
     await page.waitForFunction(()=>document.querySelector('iframe').contentDocument?.body?.textContent==='New child loader',{},{timeout:2000});
-    assert.equal((await observe('actual-child-navigation')).snapshot,null);await driver.close();driver=null;
+    assert.equal((await observe('actual-child-navigation')).snapshot,null);await closeDriver();
     report.status='passed';report.chromium=browser.version();report.node=process.version;
   }catch(e){report.failure=e.stack;throw e;}
   finally{
-    try{if(driver){report.cleanup=await driver.close();driver=null;}}
+    try{if(driver)await closeDriver();}
     finally{try{if(context)await context.close();}finally{try{if(browser)await browser.close();}finally{try{if(server)await server.close();}finally{if(fixture)await fixture.close();save('report.json',report);console.log(JSON.stringify(report));}}}}
   }
 }
