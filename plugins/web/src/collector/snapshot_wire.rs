@@ -10,15 +10,15 @@ pub(super) struct Capture {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(super) struct Document {
     #[serde(rename = "documentURL")]
-    pub document_url: usize,
-    pub title: usize,
+    pub document_url: i32,
+    pub title: i32,
     #[serde(rename = "baseURL")]
-    pub base_url: usize,
-    pub content_language: usize,
-    pub encoding_name: usize,
-    pub public_id: usize,
-    pub system_id: usize,
-    pub frame_id: usize,
+    pub base_url: i32,
+    pub content_language: i32,
+    pub encoding_name: i32,
+    pub public_id: i32,
+    pub system_id: i32,
+    pub frame_id: i32,
     pub nodes: Nodes,
     pub layout: Layout,
     pub text_boxes: TextBoxes,
@@ -31,7 +31,7 @@ pub(super) struct Document {
 #[serde(deny_unknown_fields)]
 pub(super) struct Rare {
     pub index: Vec<usize>,
-    pub value: Vec<usize>,
+    pub value: Vec<i32>,
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -43,10 +43,10 @@ pub(super) struct Flags {
 pub(super) struct Nodes {
     pub parent_index: Vec<i32>,
     pub node_type: Vec<u32>,
-    pub node_name: Vec<usize>,
-    pub node_value: Vec<usize>,
+    pub node_name: Vec<i32>,
+    pub node_value: Vec<i32>,
     pub backend_node_id: Vec<u32>,
-    pub attributes: Vec<Vec<usize>>,
+    pub attributes: Vec<Vec<i32>>,
     pub shadow_root_type: Rare,
     pub text_value: Rare,
     pub input_value: Rare,
@@ -67,7 +67,7 @@ pub(super) struct Layout {
     pub node_index: Vec<usize>,
     pub styles: Vec<Vec<usize>>,
     pub bounds: Vec<Vec<f64>>,
-    pub text: Vec<usize>,
+    pub text: Vec<i32>,
     pub stacking_contexts: Flags,
     pub offset_rects: Vec<Vec<f64>>,
     pub scroll_rects: Vec<Vec<f64>>,

@@ -10,7 +10,7 @@ const property=(n,f)=>n.properties.find(p=>p.field===f);
 const fact=(n,f)=>n.extensions.find(e=>e.name===f)?.property;
 const rect=g=>{const r=g.shape.value;return[r.x,r.y,r.width,r.height];};
 function compare(raw,snapshot){
-  const strings=raw.strings;
+  const strings=raw.strings, text=index=>index===-1?'':strings[index];
   assert.equal(snapshot.nodes.length,raw.documents.reduce((n,d)=>n+d.nodes.backendNodeId.length,0));
   assert.equal(snapshot.surface_records.length,raw.documents.length);
   assert.equal(snapshot.coverage.status,'partial');assert.equal(snapshot.coverage.omitted_count,0);
@@ -19,17 +19,17 @@ function compare(raw,snapshot){
     const n=d.nodes,frame=strings[d.frameId],get=i=>snapshot.nodes.find(v=>v.key.namespace==='web.dom'&&v.key.key===String(n.backendNodeId[i]));
     for(let i=0;i<n.backendNodeId.length;i++){
       const node=get(i);assert(node);assert.equal(node.surface.id,frame);
-      assert.equal(node.native_role.value.value,strings[n.nodeName[i]]);
-      assert.equal(known(property(node,'value')),strings[n.nodeValue[i]]);
+      assert.equal(node.native_role.value.value,text(n.nodeName[i]));
+      assert.equal(known(property(node,'value')),text(n.nodeValue[i]));
       assert.equal(known(fact(node,'nodeType')),n.nodeType[i]);fields+=3;
       assert.deepEqual(node.children.map(c=>c.key),n.parentIndex.flatMap((p,j)=>p===i?[String(n.backendNodeId[j])]:[]));
       for(let a=0;a<n.attributes[i].length;a+=2){
-        assert.equal(known(fact(node,`attribute.${a/2}.name`)),strings[n.attributes[i][a]]);
-        assert.equal(known(fact(node,`attribute.${a/2}.value`)),strings[n.attributes[i][a+1]]);fields+=2;
+        assert.equal(known(fact(node,`attribute.${a/2}.name`)),text(n.attributes[i][a]));
+        assert.equal(known(fact(node,`attribute.${a/2}.value`)),text(n.attributes[i][a+1]));fields+=2;
       }
       for(const name of ['shadowRootType','textValue','inputValue','pseudoType','pseudoIdentifier','currentSourceURL','originURL']){
         const at=n[name].index.indexOf(i);
-        if(at>=0){assert.equal(known(fact(node,name)),strings[n[name].value[at]]);fields++;}
+        if(at>=0){assert.equal(known(fact(node,name)),text(n[name].value[at]));fields++;}
         else assert.equal(fact(node,name),undefined);
       }
       for(const name of ['inputChecked','optionSelected','isClickable']){assert.equal(known(fact(node,name)),n[name].index.includes(i));fields++;}
@@ -37,7 +37,7 @@ function compare(raw,snapshot){
       if(l<0){assert.equal(property(node,'layout_bounds').state.availability,'unknown');continue;}
       const geometry=known(property(node,'layout_bounds'));assert.equal(geometry.coordinate_space.units,'css_px');assert.equal(geometry.coordinate_space.kind,'document');
       assert.deepEqual(rect(geometry),d.layout.bounds[l]);fields++;
-      assert.equal(known(fact(node,'layout.text')),strings[d.layout.text[l]]);
+      assert.equal(known(fact(node,'layout.text')),text(d.layout.text[l]));
       assert.equal(known(fact(node,'layout.stackingContext')),d.layout.stackingContexts.index.includes(l));fields+=2;
       for(const [suffix,name]of [['offsetRect','offsetRects'],['clientRect','clientRects'],['scrollRect','scrollRects']]){
         const p=fact(node,`layout.${suffix}`),r=d.layout[name][l];
@@ -50,7 +50,7 @@ function compare(raw,snapshot){
         assert.equal(known(fact(node,`textBox.${ordinal}.lengthUtf16`)),d.textBoxes.length[b]);ordinal++;boxes++;fields+=3;
       }
     }
-    for(const name of ['documentURL','title','baseURL','contentLanguage','encodingName','publicId','systemId']){assert.equal(known(fact(get(0),name)),strings[d[name]]);fields++;}
+    for(const name of ['documentURL','title','baseURL','contentLanguage','encodingName','publicId','systemId']){assert.equal(known(fact(get(0),name)),text(d[name]));fields++;}
     for(const name of ['scrollOffsetX','scrollOffsetY','contentWidth','contentHeight']){assert.equal(known(fact(get(0),name)),d[name]);fields++;}
     for(let i=0;i<n.contentDocumentIndex.index.length;i++){
       const owner=String(n.backendNodeId[n.contentDocumentIndex.index[i]]),child=String(raw.documents[n.contentDocumentIndex.value[i]].nodes.backendNodeId[0]);

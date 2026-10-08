@@ -53,8 +53,14 @@ fn ext(
         property: prop(field, value, sensitive, observation),
     });
 }
-fn text(strings: &[String], index: usize, cap: usize) -> Result<Value, Failure> {
-    let value = strings.get(index).ok_or_else(malformed)?;
+fn text(strings: &[String], index: i32, cap: usize) -> Result<Value, Failure> {
+    // Chromium AddString returns -1 for an empty native string, not unknown.
+    if index == -1 {
+        return Ok(Value::Text(String::new()));
+    }
+    let value = strings
+        .get(usize::try_from(index).map_err(|_| malformed())?)
+        .ok_or_else(malformed)?;
     if value.len() > cap {
         return Err(Failure::new(ErrorKind::Limit));
     }
@@ -186,14 +192,14 @@ fn validate(d: &raw::Document, cap: usize) -> Result<(), Failure> {
     }
     Ok(())
 }
-fn private_node(attrs: &[usize], strings: &[String]) -> Result<bool, Failure> {
+fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
     for pair in attrs.chunks_exact(2) {
         let name = strings
-            .get(pair[0])
+            .get(pair[0] as usize)
             .ok_or_else(malformed)?
             .to_ascii_lowercase();
         let value = strings
-            .get(pair[1])
+            .get(pair[1] as usize)
             .ok_or_else(malformed)?
             .to_ascii_lowercase();
         if (name == "type" && value == "password")
@@ -239,7 +245,7 @@ pub(super) fn snapshot(
     for document in &capture.documents {
         let frame = capture
             .strings
-            .get(document.frame_id)
+            .get(document.frame_id as usize)
             .ok_or_else(malformed)?;
         let index = scope
             .documents
@@ -325,7 +331,7 @@ pub(super) fn snapshot(
             relations.push(Relation {
                 kind: RelationKind::Owns,
                 from: key(document.nodes.backend_node_id[*i]),
-                to: roots.get(*child).ok_or_else(malformed)?.clone(),
+                to: roots.get(*child as usize).ok_or_else(malformed)?.clone(),
                 evidence: normalize::evidence(&observation, "cdp-contentDocumentIndex"),
             });
         }
@@ -568,7 +574,7 @@ mod tests {
                     document_backend_id: capture
                         .documents
                         .iter()
-                        .find(|d| capture.strings[d.frame_id] == surface.id.0)
+                        .find(|d| capture.strings[d.frame_id as usize] == surface.id.0)
                         .unwrap()
                         .nodes
                         .backend_node_id[0],
@@ -583,7 +589,7 @@ mod tests {
                 capture
                     .documents
                     .iter()
-                    .find(|d| capture.strings[d.frame_id] == seed.surface.id.0)
+                    .find(|d| capture.strings[d.frame_id as usize] == seed.surface.id.0)
                     .unwrap()
                     .nodes
                     .backend_node_id
