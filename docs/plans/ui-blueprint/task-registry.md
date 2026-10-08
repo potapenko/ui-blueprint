@@ -54,6 +54,19 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Параллельные owners после Q01 assessment
+
+- V02 01a11bf3-fb4c-7910-95e8-849247d6a7ce — protected input implementation;
+  desktop lane передана после Q01 release, свежая ownership проверяется перед UI.
+- «A02 — Analysis fixture expectations», local01a11c24-e37f-7730-b30f-f50978b35faa,
+  base7381ff3, full finite oracle reconciliation, без production source/UI.
+- «Q03 — Польза UI-данных для агента», local01a11c24-e7cd-7982-a070-c05e0721ad81,
+  base7381ff3, recorded-data usefulness; owns потребление/cleanup8Q03 nonimage files,
+  never images/parent. Новый runtime не запрошен.
+- Q01 01a11bdd-8a56-7f21-8435-953df4ce9185 idle, retained для affected independent
+  recheck; не зависший процесс. Его full matrix/failures не объявлены accepted.
+  I02 completed/archived. Q02 statistical gate ещё не выполнен.
+
 ## Q01 fixed-candidate assessment сохранён
 
 Q01/V016a63136 pushed, terminal completed; полная [матрица](receipts/Q01-integrated-acceptance.md)
