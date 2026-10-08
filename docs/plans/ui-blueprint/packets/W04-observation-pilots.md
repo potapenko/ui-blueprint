@@ -1,6 +1,6 @@
 # W04 — закончить Web read-only pilots B01/B04/B06
 
-Queued до terminal B03-G и освобождения Web owners. Один самостоятельный task
+Ready после terminal B03-Gb43d0dfbe8b893d02fd6027e5d9f31331d4e4f57/push; Web owners освобождены. Один самостоятельный task
 среднего размера по PLAN.UIB@1 P2/P3, shipping_product; оставшаяся Web observation
 часть, не весь Web и не одно поручение на каждый тест. Immediate consumer Q01 и
 практические geometry/diff вопросы агента. Уже сделанное повторно не реализовать.
@@ -29,7 +29,9 @@ GEOMETRY/PROJECTIONS/FORMS/PRIVACY@1, EXCHANGE@2; acceptance/README →
 WEB-PILOTS@1 B01/B04/B06 и полный explicit Requires (PILOTS/CACHE/ACTIONS/
 LIFECYCLE/GOLDEN); D01@1,D02@2,D03@3,D04@1,D05@4/MEMORY@2/WORK@1/D06@1/D07@5,
 RUST/DEV.RUST@2, ROADMAP/RUST-BOUNDARIES/REUSE/EVIDENCE/PERFORMANCE@1.
-При dispatch закрепить actual current revisions и upstream B03 commit.
+Pin: registry28/CLI@15, B03b43d0df, E03c97c513, Native5fd4b6a;
+Web-specific нормы и перечисленный closure неизменны. Independent review B03
+пока pending; итоговую квалификацию выполнять на coherent saved inputs, не WIP.
 CONTENT нормы не меняются; новый schema/feature/constant не создаёт свою authority.
 Reference R01/Web source ledger использовать по механизму; новое upstream чтение
 только при конкретном недостающем API, без повторения всего исследования.

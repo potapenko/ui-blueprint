@@ -54,6 +54,26 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Геометрическая группа завершена; новые tasks готовы
+
+- B03-Gb43d0dfbe8b893d02fd6027e5d9f31331d4e4f57/push: positive scoped popup
+  геометрия/relations, native intersection facts и exact point hit,13headless +
+  priorpopup regression/75collector checks по автору. Полная visibility/hit area
+  не заявлены. Runtime использовал соседний CLI WIP: это scoped interface evidence,
+  не доказательство final integrated build; сохранить этот предел до Q01.
+- M03-C5fd4b6af1c6df2e79f6f3cae7a535d26cc178f59/push: shipping crop_transform
+  по public SCK metadata; реальные AX/capture pairs move/parent-resize/reopen,
+  popup362×228px, Confirm230×48px, stale refusal.96checks/19canonical по автору.
+  Cold1062.46ms exceeded1s сохранил AX без capture; D06 не passed. Source runtime
+  pin ee752f9 + ownedNative, отдельные clocks/partial сохранены. Consumer
+  standalone composition — qualification, не новый shipping join command.
+  Все28image/staging files retained, own nonimages/processes cleaned.
+- Оба чата terminal completed, receipts прочитаны, Native/Web owners released.
+  E03c97c513 также completed; её pre-existing E01 baseline debt сохранён.
+- M02-N и W04 теперь ready на этом saved input. Native/Desktop/CLI/shared-host
+  у M02, Web/headless у W04, reviews read-only. Реализацию ведут два отдельных
+  чата полного цикла. Полная независимая acceptance новой группы ещё нужна.
+
 ## E03 завершён и дальнейшая очередь
 
 E03c97c513d52358c7c74f4a231e768986587731b58 pushed; terminal completed,

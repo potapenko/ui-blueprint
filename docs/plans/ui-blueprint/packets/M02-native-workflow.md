@@ -1,6 +1,7 @@
 # M02-N — безопасная Native форма в одной живой сессии
 
-Queued, не dispatch-ready до результатов B03-G/M03-C/E03 и исправления Replay.
+Ready: B03-Gb43d0df, M03-C5fd4b6a, E03c97c513 завершены/pushed; Replay85ea656
+принят scoped source review. Native/CLI/shared-host owners освобождены.
 Геометрический приоритет пользователя сохраняется: этот P5 task не задерживает
 текущие geometry/export результаты. Объём P5/M02 уже одобрен в PLAN.UIB@1 и не
 удалён прежней приоритетной паузой. Пакет готовит передачу, реализация ещё не выдана.
@@ -27,7 +28,10 @@ PROJECTIONS closure; acceptance/NATIVE-PILOTS@1 M02/M06 + PILOTS/GOLDEN;
 CLI-ACTIONS@3 (текущий Web контракт сохраняется, Native representation additive),
 D02@2/D04@1/D05@4/Native acquisition@2/MEMORY@2/WORK@1 и их explicit Requires;
 reference/README → executor-catalog/native-catalog/REUSE@1; RUST/DEV.RUST@2.
-В момент dispatch закрепить актуальные revisions и сохранённую основу новой группы.
+Pin этой группы: saved5fd4b6af1c6df2e79f6f3cae7a535d26cc178f59; registry28,
+CLI@15, CLI-EXPORT@2, CLI-ACTIONS@3. Root прочитал изменённый export leaf и CLI delta;
+нормы Native/actions и их closure неизменны. Старый E01 baseline test остаётся
+известным pre-existing debt, не повод переписывать unrelated export.
 Root восстановил эти нормы полностью; технический design внутри уже разрешённого
 Native исхода поручается исполнителю по ROADMAP, нормы он не изобретает.
 
@@ -68,7 +72,9 @@ Native-specific и прямо необходимые shared RuntimeHost/session/
 owners, существующий engine action kernel/provider boundary и plugin-api,
 CLI Native session/action integration; соответствующие focused tests/docs и
 технические spec leaves с регистрацией до semantic representation change.
-Это будущая передача ownership, не право писать поверх running tasks.
+Ownership передаётся этой задаче после сохранённых результатов выше. Параллельный
+W04 owns plugins/web, worker_web, Web fixtures/bridges/tests/docs; эти области
+защищены. Read-only reviewer не writer. E03/M03-C/B03 owners завершены.
 Перед dispatch перечислить защищённые active owners; внутри области конкретные
 файлы и план выбирает исполнитель. Web collector/provider behavior, schema/wire
 и Cargo dependencies защищены; требуемый cross-domain change сначала обосновать
