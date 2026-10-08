@@ -54,6 +54,16 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Следующий общий gate подготовлен
+
+[Q01/V01 integrated acceptance](packets/Q01-integrated-acceptance.md) — queued до
+terminal M02-N и coherent saved candidate. Полные M01–M06/B01–B06, оба E2E,
+GOLDEN/privacy/model-free/install/recovery в одной verification-задаче; independent
+expectations, без подмены positive gate отказом/текущей узкой implementation leaf.
+D06/Q02 и Q03 остаются отдельными consumers. Root прочитал NATIVE-SESSION@1 и
+CLI@16/registry29 diff как текущий candidate, не как завершённую приёмку;
+до dispatch закрепляется его сохранённая версия. Прежний closure не изменён.
+
 ## W05 завершён
 
 W05e6616037608dd12a2d3459254f9f5159626d82e1 saved/pushed; terminal receipt
