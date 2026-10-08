@@ -54,6 +54,22 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q03 recorded-data задача завершена, real-case gap открыт
+
+Q03fff46985ca1e8eb2c6f2b4ba8dbf722b308a7cd6 pushed, terminal/archived.
+[Receipt](receipts/Q03-recorded-usefulness.md) прочитан полностью.12CLI calls:
+231.5pt width/18pt gap, popup181pt/33pt edge gap, resize+100pt, Web content/evidence
+diff; original sources/unknown retained.72.258ms total subprocess samples/278067B
+stdout — не полный agent latency, не p95/speedup/token saving. Screenshot view
+не blind comparison.8Q03 nonimages consumed/removed; images unchanged/retained.
+
+Positive actual RC03/Director applicability остаётся открытой: internal bounds,
+точные bindings/transforms/before-after отсутствуют. Own F01/F02 не заменяют
+реальный case. Оба Mac/Web advisor получили узкий read-only availability запрос
+на уже имеющиеся ORIGINAL measured datasets/tool outputs, без нового runtime,
+изменений/captures/инференции из CSS/чисел receipt. Ответы ожидаются; они могут
+закрыть data prerequisite без расширения текущих полномочий.
+
 ## N03 текущий writer
 
 «N03 — Native popup workflow и E2E», local01a11c53-168d-78e3-a2ff-08c985596e51,
