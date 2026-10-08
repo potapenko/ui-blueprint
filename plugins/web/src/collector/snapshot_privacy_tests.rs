@@ -129,22 +129,53 @@ fn source_url_facts_refuse_before_canonical_storage_and_preserve_safe_values() {
     struct Case {
         name: String,
         value: String,
-        #[serde(rename="private")]
+        #[serde(rename = "private")]
         blocked: bool,
     }
-    let cases:Vec<Case>=serde_json::from_str(include_str!("../../tests/fixtures/collector/srcset-cases.json")).unwrap();
+    let cases: Vec<Case> = serde_json::from_str(include_str!(
+        "../../tests/fixtures/collector/srcset-cases.json"
+    ))
+    .unwrap();
     for case in cases {
-        raw=source.clone();
-        raw["strings"][3]=case.value.clone().into();
+        raw = source.clone();
+        raw["strings"][3] = case.value.clone().into();
         // The selected resource is safe. Classification must cover ALL candidates.
-        raw["strings"][6]="http://127.0.0.1/public.png".into();
-        let result=snapshot(serde_json::from_value(raw).unwrap(),&scope,&r,&[2],o.clone(),(1,1),l);
+        raw["strings"][6] = "http://127.0.0.1/public.png".into();
+        let result = snapshot(
+            serde_json::from_value(raw).unwrap(),
+            &scope,
+            &r,
+            &[2],
+            o.clone(),
+            (1, 1),
+            l,
+        );
         if case.blocked {
-            assert!(matches!(result,Err(Failure{kind:ErrorKind::InvalidInput,..})),"{}",case.name);
+            assert!(
+                matches!(
+                    result,
+                    Err(Failure {
+                        kind: ErrorKind::InvalidInput,
+                        ..
+                    })
+                ),
+                "{}",
+                case.name
+            );
         } else {
-            let result=result.expect("safe candidate list");
-            let value=&result.nodes[1].extensions.iter().find(|e|e.name.0=="attribute.0.value").unwrap().property;
-            assert_eq!(value.known(),Some(&Value::Text(case.value)),"{}",case.name);
+            let result = result.expect("safe candidate list");
+            let value = &result.nodes[1]
+                .extensions
+                .iter()
+                .find(|e| e.name.0 == "attribute.0.value")
+                .unwrap()
+                .property;
+            assert_eq!(
+                value.known(),
+                Some(&Value::Text(case.value)),
+                "{}",
+                case.name
+            );
         }
     }
 }

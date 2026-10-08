@@ -23,11 +23,12 @@ Q01/Q02-owned files, frozen fixtures, schema/engine/Cargo/Native and images prot
 Shared performance.cjs is currently Q02 WIP; do not stage, overwrite or consume it
 for runtime until that owner's terminal saved release.
 
-Execution state: waiting_resource for builds/tests/headless. Q02
+Initial execution state was waiting_resource for builds/tests/headless. Q02
 01a11c77-25bf-7072-8cf6-a255fa4dc11c owns CPU/headless for accepted single-control
 D06 cohorts. Source/test edits prepared without runtime or compilation. Recheck
-compact wait_threads after independent editing; only its terminal lane release plus
-receipt permits focused checks/one affected live proof. No new root grant required.
+compact wait_threads returned terminal completed/idle and final CPU/runtime release
+on pushed b3c3a22; its full result/release receipt was read. The lane is now released
+for focused checks/one affected live proof. No new root grant required.
 All existing shared evidence/reviewer reproducers remain read-only and retained.
 
 ## Q01 repair continuation — 2026-10-08

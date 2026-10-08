@@ -63,7 +63,8 @@ async function main(){
     await page.evaluate(()=>{const image=document.createElement('img');image.id='w06-srcset';image.width=1;image.height=1;image.src='/public.png';document.body.append(image);});
     for(const name of selected){
       const item=cases.find(c=>c.name===name);assert(item);
-      const srcset=item.value.replaceAll('SYNTHETIC_SRCSET_CANARY','W06_PRIVATE_CANARY');
+      const srcset=item.value.replaceAll('SYNTHETIC_SRCSET_CANARY','W06_PRIVATE_CANARY')
+        .replaceAll('@127.0.0.1/','@'+new URL(fixture.url).host+'/');
       await page.evaluate(value=>document.getElementById('w06-srcset').srcset=value,srcset);
       // Wait only for the controlled currentSrc precondition, never a sampling cadence.
       const first=srcset.split(/[\t\n\f\r ]/)[0];

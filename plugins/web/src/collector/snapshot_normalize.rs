@@ -260,24 +260,38 @@ fn private_url(value: &str) -> bool {
         .any(|name| query.contains(name))
 }
 fn private_srcset(value: &str) -> bool {
-    let bytes=value.as_bytes();
-    let space=|b:u8| matches!(b,b' '|b'\t'|b'\n'|b'\x0c'|b'\r');
-    let mut i=0;
-    while i<bytes.len() {
-        while i<bytes.len() && (space(bytes[i]) || bytes[i]==b',') { i+=1; }
-        let start=i;
+    let bytes = value.as_bytes();
+    let space = |b: u8| matches!(b, b' ' | b'\t' | b'\n' | b'\x0c' | b'\r');
+    let mut i = 0;
+    while i < bytes.len() {
+        while i < bytes.len() && (space(bytes[i]) || bytes[i] == b',') {
+            i += 1;
+        }
+        let start = i;
         // ASCII delimiters ensure these slice boundaries never split UTF-8.
         // URL-internal commas stay intact; descriptor commas begin a new URL.
-        while i<bytes.len() && !space(bytes[i]) { i+=1; }
-        let mut end=i;
-        while end>start && bytes[end-1]==b',' { end-=1; }
-        if end>start && private_url(&value[start..end]) { return true; }
-        if end<i { continue; }
-        while i<bytes.len() && bytes[i]!=b',' {
-            if matches!(bytes[i],b'('|b')') { return true; }
-            i+=1;
+        while i < bytes.len() && !space(bytes[i]) {
+            i += 1;
         }
-        if i<bytes.len() { i+=1; }
+        let mut end = i;
+        while end > start && bytes[end - 1] == b',' {
+            end -= 1;
+        }
+        if end > start && private_url(&value[start..end]) {
+            return true;
+        }
+        if end < i {
+            continue;
+        }
+        while i < bytes.len() && bytes[i] != b',' {
+            if matches!(bytes[i], b'(' | b')') {
+                return true;
+            }
+            i += 1;
+        }
+        if i < bytes.len() {
+            i += 1;
+        }
     }
     false
 }
