@@ -1,5 +1,53 @@
 # F01 Web fixture and exploratory baseline
 
+## W05 public form workflow qualification
+
+The finite [W05 harness](../../tests/bridges/web/form-e2e.cjs) composes the existing
+shipping Observe/Prepare/Execute/Diff/Check/Export commands. It starts with an empty
+field: Semantic Focus, Keyboard Type `Lo`, named invalid/debounce readiness, Type
+`n`, named suggestion readiness, Semantic option selection, then separate Commit
+and independent application-controller confirmation. All positive input uses the
+public CLI; Playwright supplies exact target metadata, read-only oracles and the
+explicit adversarial stimuli. No fixture fill is counted as product input.
+
+Run from this repository with Node24.15.0, installed Playwright Core1.58.2 /
+Chromium145.0.7632.6 and coherent saved Web CLI/worker products. No installation,
+desktop input, model key or real application is needed. Set absolute paths and
+their independently calculated SHA256 values:
+
+```sh
+S01_WEB_PLAYWRIGHT_CORE="$UIB_PLAYWRIGHT_CORE" \
+UIB_WEB_LIVE_ALLOW=1 UIB_WEB_LIVE_CASE=form_e2e \
+UIB_WEB_LIVE_TEST="$UIB_CLI" UIB_WEB_LIVE_TEST_SHA256="$UIB_CLI_SHA256" \
+UIB_WEB_LIVE_WORKER="$UIB_WORKER" UIB_WEB_LIVE_WORKER_SHA256="$UIB_WORKER_SHA256" \
+UIB_WEB_LIVE_EVIDENCE="$(node -e 'console.log(require("node:path").join(require("node:fs").realpathSync(require("node:os").tmpdir()),require("node:crypto").randomUUID()))')" \
+node tests/bridges/web/guarded-live.cjs --run-authorized
+```
+
+The new UUID directory must not exist. The launcher writes its bounded report,
+original canonical inputs/outputs and six-file compare package there. Consume the
+report, then remove only those run-owned non-image files and empty directories;
+never recursively remove a directory containing retained images. This harness
+creates no screenshots. It closes its own browser/context/server/profile and
+checks each CLI invocation has reaped its worker. Unknown effects stop the current
+chain; a failed run is never silently retried or counted as a positive result.
+
+The current34-call scenario verifies two scoped form states, draft/selected/applied
+separation, authored32css_px Commit height, unchanged original observations,
+attributed graph diff and full model-free compare package. Portal and remount are
+explicit fixture stimuli; stale/disabled/private Execute refuse without delivery.
+A separate result-private-after-delivery probe returns action_outcome_unknown,
+reobserves redaction and performs exactly one click. Synthetic private canary
+never appears in serialized command results or the package. DOM native validity
+and AX aria-invalid remain separately attributed. Observe retains partial/exit4;
+successful commands do not upgrade coverage or prove server/business success.
+
+[W05 result and limits](../plans/ui-blueprint/receipts/W05-web-form-e2e.md) records
+the tested source and actual run. This is author qualification of the bounded
+workflow, not independent review, full P7 or D06 performance acceptance.
+
+## Historical F01 basis
+
 Tooling candidate for C01/W01/W02/W03/Q01/Q02. No production B01–B06 acceptance.
 Authority: [approved F01 packet](../plans/ui-blueprint/packets/F01.md), PLAN.UIB@1
 launch in [registry](../plans/ui-blueprint/task-registry.md), accepted R01
