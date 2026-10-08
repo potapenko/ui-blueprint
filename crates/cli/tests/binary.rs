@@ -436,15 +436,23 @@ fn observe_cli_uses_real_guarded_peer_and_preserves_failed_partial_and_timed_out
             .output()
             .unwrap()
     };
-    for (mode, channels, exit, lines) in [
-        ("F", 1, 0, 1),
-        ("F", 3, 4, 2),
-        ("J", 1, 4, 1),
-        ("X", 3, 1, 1),
-        ("D", 3, 4, 1),
+    for (mode, channels, exit, lines, backend) in [
+        ("F", 1, 0, 1, "native_ax"),
+        ("F", 1, 0, 1, "native_fixture"),
+        ("F", 3, 4, 2, "native_fixture"),
+        ("J", 1, 4, 1, "native_fixture"),
+        ("X", 3, 1, 1, "native_fixture"),
+        ("D", 3, 4, 1, "native_fixture"),
     ] {
         let mut connection = base_connection.clone();
         connection["provider"]["configuration"] = json!(mode);
+        if backend == "native_ax" {
+            connection["provider"]["backend"] = json!(backend);
+            connection["provider"]
+                .as_object_mut()
+                .unwrap()
+                .remove("channels");
+        }
         let mut request = base_request.clone();
         request["artifact"]["data"]["limits"]["deadline_ms"] =
             json!(if mode == "D" { 500 } else { 2000 });
@@ -504,6 +512,23 @@ fn observe_cli_uses_real_guarded_peer_and_preserves_failed_partial_and_timed_out
         );
         if exit == 0 {
             assert!(output.stderr.is_empty());
+        }
+        if backend == "native_ax" {
+            connection["provider"]["channels"] = json!(1);
+            fs::write(&connection_file, serde_json::to_vec(&connection).unwrap()).unwrap();
+            let rejected = run(&worker, 65536);
+            assert_eq!(rejected.status.code(), Some(2));
+            assert!(rejected.stdout.is_empty());
+            connection["provider"]
+                .as_object_mut()
+                .unwrap()
+                .remove("channels");
+            fs::write(&connection_file, serde_json::to_vec(&connection).unwrap()).unwrap();
+            request["artifact"]["data"]["operation"]["channels"] = json!(["rendered_capture"]);
+            fs::write(&request_file, serde_json::to_vec(&request).unwrap()).unwrap();
+            let rejected = run(&worker, 65536);
+            assert_eq!(rejected.status.code(), Some(2));
+            assert!(rejected.stdout.is_empty());
         }
     }
     fs::write(

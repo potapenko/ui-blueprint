@@ -601,3 +601,43 @@ operation width/height, one layout anchor in that same space. Engine computes fa
 Existing Change layout then fresh Snapshot supplies after-state for recorded Diff.
 Actual G03 run confirmed component173.5×48→231.5×62pt and measured gap8→18pt; these
 are controlled F02 facts, not real RC03 inner geometry. No capture/input gate implied.
+
+
+## Ordinary Mac AX geometry — native_ax
+
+The existing public observe command also accepts trusted provider
+{backend:"native_ax",helper_executable:"/absolute/native-helper",configuration:"..."}.
+AX-only channels are fixed; no channels field, fixture identity_path/probe file or
+F02 bundle/window identifier restriction. Build HostHelper with NativeFocusedAX.swift
+alongside its existing sources. Old native_fixture configuration remains unchanged.
+
+Private configuration is exactly collection="focused-ax", process={pid,bundle_id,
+launch_time}, scope_id and acquisition_limits. Obtain incarnation from public
+NSRunningApplication for the explicitly selected PID, not a UI label/title. Target
+id is macos-pid-PID; generation is PID:launch_time using its full reported value.
+For fresh Request.request_id R, its sole Surface is id=ax-focused-R/generation=R.
+This names the public AXFocusedWindow observed during that request, not CGWindowID
+or a stable cross-request/action identity. Request external_semantics/current_required,
+explicit supported fields and existing160/depth9/512KiB/deadline limits. Session
+capability describes partial AX read only. Common CLI trusted connection/profile and
+Attach remain explicit; this extension does not discover or launch user applications.
+
+Helper checks process/bundle/launch and public AX owner, holds the focused-window
+object during collection and compares the same AXFocusedWindow before/after reply.
+No activation/focus/scroll/input/TCC request, title/rect/order matching or other-window
+fallback. Unresolved selection/currentness refuses, denied AX yields permission_required.
+Secure AX values remain redacted through the existing WindowAX owner. Each requested
+property has its real availability; no hidden layout/paint/hit geometry is fabricated.
+
+Feed original observed response to existing inspect design and measure; select exact
+SourceKey from that response. Accessibility bounds are ax-screen/screen/pt/top_left;
+pixel transform unknown. NativeFocusedAX collects no images/probe/CG metadata and
+exports no BackendRef. Optional own measured probe remains the separate fixture path.
+Cross-request Diff requiring stable Surface continuity is not claimed by these ephemeral
+window identities; this first generic route supports within-record bounds/relationships.
+
+Actual generic-route qualification on own unmodified F02 required NO Snapshot action:
+run directory stayed empty, no fixture/probe/current files existed. Observed75 AX nodes,
+selected button rect801,364,173.5,48pt; ordinary Inspect and Measure returned173.5×48pt.
+This is public AXFocusedWindow geometry via the generic route, not general Mac app
+compatibility or a claim of stable identity/capture mapping. See P01-probe-source receipt.

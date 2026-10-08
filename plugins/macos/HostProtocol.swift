@@ -111,6 +111,15 @@ struct NativeConfiguration: Decodable {
     }
 }
 
+struct NativeInbound {
+    let configurationBytes: Data
+    let document: [String: Any]
+    let control: NativeControl
+    let replyCap: Int
+    let deadline: Double
+    let started: Double
+}
+
 struct NativeCommand {
     let configuration: NativeConfiguration
     let document: [String: Any]
@@ -179,14 +188,14 @@ struct NativeDescriptorIO {
     static let inputCap = 2 * 1_048_576
     static let replyCap = 512 * 1024
 
-    static func receive(_ io: NativeDescriptorIO) throws -> NativeCommand {
+    static func receiveInput(_ io: NativeDescriptorIO) throws -> NativeInbound {
         // Same eight-second bootstrap safeguard as the existing one-shot helper;
         // not a request default. Parent cleanup also covers a missing Submit.
         let bootstrap = NativeDescriptorIO.now + 8
         let configure = try NativeControl(io.read(64, deadline: bootstrap))
         guard configure.kind == 1, configure.length > 0, configure.length <= configCap,
               configure.auxiliary > 1, configure.auxiliary <= replyCap else { throw NativeProtocolError.control }
-        let configuration = try NativeConfiguration.decode(io.read(Int(configure.length), deadline: bootstrap))
+        let configurationBytes = try io.read(Int(configure.length), deadline: bootstrap)
         let submit = try NativeControl(io.read(64, deadline: bootstrap))
         guard submit.kind == 3, submit.channel == configure.channel, submit.epoch == configure.epoch,
               submit.operation == configure.operation, submit.ticket == configure.ticket,
@@ -195,7 +204,19 @@ struct NativeDescriptorIO {
         let start = NativeDescriptorIO.now
         let deadline = start + Double(submit.auxiliary) / 1000
         let request = try io.read(Int(submit.length), deadline: deadline)
-        guard let doc = try JSONSerialization.jsonObject(with: request) as? [String: Any],
+        guard let doc = try JSONSerialization.jsonObject(with: request) as? [String: Any] else { throw NativeProtocolError.request }
+        return NativeInbound(configurationBytes: configurationBytes, document: doc, control: submit,
+            replyCap: Int(configure.auxiliary), deadline: deadline, started: start)
+    }
+
+    static func receive(_ io: NativeDescriptorIO) throws -> NativeCommand {
+        try fixtureCommand(receiveInput(io))
+    }
+
+    static func fixtureCommand(_ input: NativeInbound) throws -> NativeCommand {
+        let configuration = try NativeConfiguration.decode(input.configurationBytes)
+        let doc = input.document, submit = input.control, start = input.started, deadline = input.deadline
+        guard
               doc["schema_version"] as? String == "0.1.0",
               let artifact = doc["artifact"] as? [String: Any], artifact["kind"] as? String == "request",
               let data = artifact["data"] as? [String: Any],
@@ -235,6 +256,6 @@ struct NativeDescriptorIO {
         let boundedDeadline = min(deadline, start + duration / 1000)
         try NativeDescriptorIO.check(boundedDeadline)
         return NativeCommand(configuration: configuration, document: doc, control: submit,
-            replyCap: min(Int(configure.auxiliary), output), deadline: boundedDeadline)
+            replyCap: min(input.replyCap, output), deadline: boundedDeadline)
     }
 }

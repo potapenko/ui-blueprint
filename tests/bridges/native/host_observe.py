@@ -111,7 +111,7 @@ def prepare(args):
               'tests/bridges/native/Collector.swift', 'tests/bridges/native/WindowAX.swift']
     helper = output / 'native-host-helper'
     descriptor = output / 'descriptor-collector'
-    for target, flags, extra in [(helper, ['-D', 'HOST_HELPER'], ['plugins/macos/HostProtocol.swift', 'plugins/macos/HostHelper.swift']),
+    for target, flags, extra in [(helper, ['-D', 'HOST_HELPER'], ['plugins/macos/HostProtocol.swift', 'plugins/macos/NativeFocusedAX.swift', 'plugins/macos/HostHelper.swift']),
                                  (descriptor, [], [])]:
         command = ['xcrun', 'swiftc', '-parse-as-library', '-swift-version', '6', '-D', 'CAPTURE_LIBRARY',
                    '-target', 'arm64-apple-macos14.0', '-module-cache-path', str(output / 'module-cache'), *flags, *[str(source / p) for p in common + extra], '-o', str(target)]
@@ -132,7 +132,7 @@ def prepare(args):
     if not executable:
         raise RuntimeError('consumer artifact missing')
     # Saved SDK/build closure plus task-owned caller; no mutable neighbor evidence.
-    inputs = [source / p for p in common + ['plugins/macos/HostProtocol.swift', 'plugins/macos/HostHelper.swift']]
+    inputs = [source / p for p in common + ['plugins/macos/HostProtocol.swift', 'plugins/macos/NativeFocusedAX.swift', 'plugins/macos/HostHelper.swift']]
     inputs += [source / p for p in ('Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml')]
     for owner in ('host', 'schema', 'engine', 'plugin-api'):
         inputs += [source / f'crates/{owner}/Cargo.toml', *sorted((source / f'crates/{owner}/src').rglob('*.rs'))]

@@ -7,7 +7,17 @@ import Darwin
     @MainActor static func main() async {
         do {
             let io = try NativeDescriptorIO()
-            let command = try NativeHostProtocol.receive(io)
+            let input = try NativeHostProtocol.receiveInput(io)
+            if try NativeFocusedAX.isConfiguration(input.configurationBytes) {
+                let command = try NativeFocusedAX.command(input)
+                let remaining = command.deadline - NativeDescriptorIO.now
+                guard remaining > 0 else { throw NativeProtocolError.expired }
+                DispatchQueue.global().asyncAfter(deadline: .now() + remaining) { _exit(124) }
+                let frame = try NativeFocusedAX.collect(command)
+                try io.reply(frame, cap: command.replyCap, deadline: command.deadline)
+                return
+            }
+            let command = try NativeHostProtocol.fixtureCommand(input)
             let remaining = command.deadline - NativeDescriptorIO.now
             guard remaining > 0 else { throw NativeProtocolError.expired }
             // A blocked SDK call cannot extend local life; parent still owns reap.

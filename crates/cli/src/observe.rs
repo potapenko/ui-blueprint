@@ -96,6 +96,11 @@ mod supported {
                 helper_executable,
                 configuration,
                 channels,
+            }
+            | Provider::NativeAx {
+                helper_executable,
+                configuration,
+                channels,
             } => {
                 if !cfg!(feature = "macos") {
                     return Err(Failure::unsupported("unsupported_observe_backend"));

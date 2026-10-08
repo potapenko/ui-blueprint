@@ -72,6 +72,12 @@ pub(crate) enum Provider {
         configuration: String,
         channels: u8,
     },
+    NativeAx {
+        helper_executable: std::path::PathBuf,
+        configuration: String,
+        #[serde(skip, default = "ax_channel")]
+        channels: u8,
+    },
     #[cfg(feature = "web")]
     Web {
         #[serde(deserialize_with = "object")]
@@ -87,6 +93,10 @@ pub(crate) enum Provider {
     #[serde(other)]
     Unsupported,
 }
+fn ax_channel() -> u8 {
+    1
+}
+
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub(crate) struct Connection {

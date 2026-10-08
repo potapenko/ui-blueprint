@@ -311,3 +311,93 @@ are explicit trusted setup files, own opt-in fixture-only internal layout and un
 screen transform. Next useful consumer is selected real component geometry when
 available scope/data authorized, not mutation readiness. Changed links/route/whitespace
 checked; exact2 docs checkpoint/push via short Git lease, unrelated WIP untouched.
+
+
+## G04 — ordinary-window AX geometry without fixture files
+
+User geometry-first priority + root-selected G04/native_ax binding. Registered BEFORE
+code: NATIVE@2 new AX-READ clause, CLI@7 additive native_ax provider, registry19/current
+product routes. Existing CONTENT/core0.1/analysis0.2/arithmetic and old native_fixture
+provider protected; ANALYSIS@2 direct observed Measure retained. Full G04 packet read,
+selected existing Native/identity/privacy/geometry/lifecycle/D02/D04/D05 closure reused.
+No fixture/state/engine/schema/capture/action/nonce/held-helper change or new framework.
+
+Exact14 paths: docs/specs/{README.md,product/README.md,product/native.md,product/cli.md};
+plugins/macos/{NativeFocusedAX.swift,HostProtocol.swift,HostHelper.swift};
+tests/bridges/native/host_observe.py, acquisition/FocusedAXChecks.swift;
+crates/cli/src/{connection.rs,observe.rs}, crates/cli/tests/binary.rs;
+docs/development/native-helper.md and this receipt. observe.rs has only the five-line
+matching NativeAx variant handoff into its existing opaque NativeHelperBinding branch,
+mechanically required by additive connection enum; exact extra Core callsite disclosed
+before implementation. No unrelated CLI/host or current Core/Web WIP included.
+
+NativeFocusedAX config binds explicit PID/bundle/public launch time, scope/profile and
+AXFocusedWindow selector only. Request Target matches process incarnation; Surface
+ax-focused-REQUEST_ID/generationREQUEST_ID is observation-scoped AX binding, never CG
+window ID or stable cross-request/action ref. Public process/AX owner and CFEqual same
+focused object checked before/after collection/publication. Existing bounded WindowAX
+traversal/redaction/property builders and NativeJSON/FD owners reused. Native snapshot
+surface evidence explicitly public_process_incarnation_and_AXFocusedWindow; no fixture
+binding evidence falsely reused. Capture/probe/layout-only fields unavailable/rejected;
+no activation, focus/scroll adjustment, permission request or window-search fallback.
+
+Common protocol receive factored into bounded NativeInbound + existing fixtureCommand;
+original fixture decode/Request validation/limits/output preserved. HostHelper selects
+focused-ax only by its explicit config and otherwise uses old fixture path. Existing
+host_observe helper build closure includes NativeFocusedAX; descriptor builds unchanged.
+CLI NativeAx strict variant fixes AX mask1, denies extra channels member; existing
+Native broker/worker/host API unchanged. Parent still owns deadline/shutdown/reap.
+
+Focused actual-owner synthetic12 checks passed, six canonical documents validator0:
+ordinary non-F02 bundle/no identity_path; current process, exact AX owner/selection;
+focused object replacement yields stale_target; permission/owner/incarnation refusal;
+secure value schedule has zero secret AXValue calls and redacted output; small output
+whole failure; fixture-key/false CG Surface/capture config refusal. Initial test passed
+a Swift Int duration directly instead of protocol JSON NSNumber; fixed test through
+real JSON decode before validation, no oracle/source cap weakened. Helpers compiled.
+Existing fixture FD33 tests passed because common receive changed; prior valid/Ticket/
+cap/framing/errors/scope/capture/config paths protected, no SDK work in those tests.
+Focused CLI actual guarded-peer test passed old Native fixture cases plus native_ax
+AX-only success/no request rewrite; injected channels/capture refused2 before dispatch.
+Affected CLI macos bin/binary Clippy -D warnings passed, scoped rustfmt/whitespace clean.
+Build archive initially omitted include_bytes golden inputs; added exact saved fixtures,
+not changed dependencies/data. No unrelated numeric/allocator/input matrix rerun.
+
+Actual generic-route chain: saved Core e275823 archive + exact current own CLI3 files;
+current Native source compiled, fixture behavior saved23f22fb unchanged. Own F02-off
+PID22786 launched with a new empty run directory; NO Snapshot or control/input sent.
+Read-only CUA showed exact Window A, then its full live AX state stayed equal after
+Observe (focusOpenB/Count0/Resultnone/form/scroll). Public process metadata supplies
+incarnation; run directory verified empty before/after Observe and at completion.
+No a.json/a-identity/probe file or F02 metadata consumed by native_ax configuration.
+
+One public native_ax Observe: exit4/observed partial,218370 bytes/75 actual AX nodes;
+current process and exact focused AX object checked by helper before/after. Validator0.
+Actual explicit reported AXIdentifier f02.sample.a selects its SourceKey within original
+response; design Inspect0, width/height Measure0/known and analysis validator0.
+Both MeasurementCase Snapshots structurally equal original Observe Snapshot.
+Actual accessibility_bounds rect(x801,y364,width173.5,height48)pt in ax-screen/screen/
+top_left; Rust Measure173.5×48pt. No AX→CG/pixel/layout/hit transform invented.
+Surface ax-focused-de5c6986ae314a52862e8d64e8c08d4e/generationde5c6986ae314a52862e8d64e8c08d4e;
+helper native_owner is verified process, no action BackendRef/capture/probe output.
+This validates generic read path on controlled own app, not real RC03 inner geometry
+or general Mac compatibility. Source currentness is scoped to that Observe only.
+
+Observe wall262.11ms (single call, not p95/performance gate). Launcher start280825.939729041/
+deadline280945.939729041; finally elapsed60.858774667s,cleanup0.113662792s,timeoutfalse,
+exact fixture exit confirmed before outer assertions. Actual worker/helper absent;
+shared desktop lane released. Images0; all older images untouched. Non-image build/
+source/test/operation files consumed and removed with absence verified after facts.
+
+Binary pins: helperfdbdaa8f5b4d19e7cbf3f440b9a85d2af097ab276b5f8aaf78e172e473d88287;
+CLI960eaf723d316e46559ad7e4e6c2b71791460adef8006582070a4e17ce1d33a3;
+worker1d9251a3df57cc6a52fea93fa808317113b93f25cdaa71b024a23b9a276ea978;
+validator7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828;
+fixture8c82ed594c44495967aa674e69d002810494e85605c4e042ef31e1c26d2ed3df.
+Coherent source+tests+actual finite result ready for exact14 checkpoint/push; one grouped
+binding/privacy risk review when root selects it, no per-edit rounds. Main delivered
+capability is ordinary-window external AX geometry without fixture files. Known limits:
+explicit trusted connection setup, AX partialness, observation-scoped Surface/no stable
+cross-request Diff, no CG/capture or hidden layout probe for arbitrary apps. P7 open.
+
+G04 source/test map SHA256: a5f08b5c88ab1e03442bb721a44106d99b941650ecf61f907aeef43f8b82f9b9.

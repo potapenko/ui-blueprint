@@ -1,7 +1,7 @@
 # Нативное наблюдение и capture
 
 - Node type: leaf; domain: `uib.native`.
-- Contract: `UIB.NATIVE@1`; stable clause: `UIB.NATIVE.CONTENT`.
+- Contract: `UIB.NATIVE@2`; stable clauses: `UIB.NATIVE.CONTENT`, `UIB.NATIVE.AX-READ`; supersedes @1 additively.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
 - Read when: Mac AX, capture, оконное matching, probe.
@@ -41,3 +41,25 @@ Popup, меню и системный ввод могут принадлежат
 Opt-in probe сообщает измеренный output, а не значение modifier из исходника. Связь с файлом и измеренные bounds — разные поля. Probe не меняет accessibility, focus, hit area, layout или продуктовые данные. Приёмка проверяет это сравнением instrumented/uninstrumented fixture; private API не становятся неоговорённым основанием. SDK-кадр не заменяет внешнее наблюдение канонической сборки.
 
 Для обычной проверки нужен именно размер/состояние проверяемого сценария. Нет общего требования максимального окна, физического монитора или 2x. Поддержанный виртуальный дисплей пригоден там, где сценарий не требует конкретного физического свойства. Изменять конфигурацию дисплеев только ради удобного захвата не требуется.
+
+
+## UIB.NATIVE.AX-READ — explicit ordinary-window geometry
+
+Root selected G03 ordinary-window extension under approved PLAN.UIB@1/user geometry
+priority. Existing CONTENT unchanged. `native_ax` is read-only external_semantics:
+trusted operator names PID/bundle/process launch time and selector AXFocusedWindow.
+Helper reads that public AX window without activating/focusing or searching by title,
+rectangle/order. Hold the selected object only during this Observe; check process
+incarnation/AX owner and same focused-window object before/after collection/publication.
+Missing permission returns permission_required without prompt; changed/unresolved window
+refuses. No F02 identity/probe file required. Native fixture provider remains unchanged.
+
+Private config collection="focused-ax", process={pid,bundle_id,launch_time}, scope_id,
+acquisition_limits. Request Target is macos-pid-PID with caller generation tied to
+trusted process incarnation; Surface id="ax-focused-REQUEST_ID", generation=REQUEST_ID.
+Surface is observation-scoped public AX binding, not CGWindowID or stable cross-request/
+action identity. No capture/probe/action/ref authority from this path. Report actual
+AX properties/bounds and known process owner, partial coverage and unknown transforms.
+AX accessibility_bounds remain ax-screen/screen/pt/top_left; hidden layout/hit/paint
+not inferred. Existing canonical0.1 shape/limits/privacy/deadlines/cleanup preserved.
+Optional own measured probe is independent; ordinary windows gain no fabricated layout.
