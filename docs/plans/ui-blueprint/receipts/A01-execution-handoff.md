@@ -812,3 +812,84 @@ WIP source SHA256:
 - worker_ops.rs:0e089d37a1018132c566a161b1cf14f9ad130c2041bc1d28930a16c796ae524b
 - worker_action.rs:1c57a8b56b337a9b30e492f702b0fda6d2bdf0ea80b4e20a24ba177a519a6f40
 - worker_web.rs:665f90ba2d919136e9ca47d36fa66e974276fba8427df91038f93d583a2f5fd2
+
+## A03 resumed private Web Focus/Type composition
+
+Root explicitly resumed the saved bc2874e P5 slice under user-authorized PLAN.UIB@1
+while read-only geometry/G10 continued independently. Current registry21's CLI
+additions do not alter private action meaning. Recovered AGENTS/current A02 packet
+and this WIP receipt; reused current full ACTIONS/FORMS/IDENTITY/LIFECYCLE/PRIVACY/
+MODEL/EXCHANGE/BOUNDARIES/PROJECTIONS/GEOMETRY/CACHE closure, relevant GOLDEN/Web
+pilots, D02@2/D04@1/D05@4/MEMORY@2/WORK@1/RUST/DEV.RUST@2. Restore already-selected
+action-state-result semantics, no new product/schema/protocol/framework. No nested
+agent/branch/worktree. CLI/Export, Web provider/harness, Native and root docs excluded.
+
+Exact5 writes: host src/worker_ops.rs and worker_web.rs; tests/web_worker.rs and
+tests/support/web_worker_peer.rs; this receipt. Existing ActionExecution9bd5809,
+Web provider464b1d2/form facts c63b07a/4b12d7b, worker_action composition, parent
+admission/nonce/Focus+Keyboard lane/publication/status/cleanup all reused unchanged.
+No Native Activate/helper persistence, public CLI/scope/spec registry/Cargo changes.
+
+Caller interface, compiling and exercised against real parent/production worker:
+- Prepare: existing Tape(Snapshot Document OR observed ChannelResponse,
+  canonical Request::Prepare Document, canonical Expectation Document).
+- Act: Tape(prepared ActionCase Document, matching Request::Act Document,
+  the same explicit caller Expectation Document). Header Prepare/Mutation classes,
+  channels1/input_format1; existing positive request/host aggregate/output bounds
+  and authoritative parent operation-start deadline clamp remain. No body parse
+  in parent. TargetLease independently grants mutation only for authorized Act.
+- Legacy SetChecked pair remains accepted. Request's actual attached clock must
+  match; saved Snapshot/Observation evidence is not rebound/restamped. Type.text
+  is delivered suffix, never inferred full/draft/applied/business expectation.
+
+Actual new source gap: Prepare decoded the third record's general binding but did
+not reject an incompatible intent condition (for example Focused=false for Focus)
+until Act. Direct helper edit validates one selected/requested result key, allowed
+condition mode, exact Focus Focused=true or Type Value/Text on the action node,
+and exact explicit SetChecked Checked/intent value before SDK preparation. It uses
+the same existing kernel/provider intent semantics; no second parser/executor.
+Unsupported platform/text_scale/mismatched input_mode refuses in this first port.
+Prepare still returns fresh capability ActionCase, not fulfilled verification;
+worker_web comment explains why the checked third record is not passed into the
+bootstrap provider signature. Act forwards it into fresh resolver/verify ports.
+
+Privacy/current binding before Prepare are actual provider obligations exercised:
+validate_seed rejects classified private saved source; current probe independently
+rejects sensitive/currently lost/remounted object before any permit. Canonical
+Request/Expectation type/count/order/scope/ref validation stays inside worker.
+No authority comes from UI fields, expected value or saved Current flags.
+
+Focused locked/offline Rust1.96/macOS evidence passed:
+- guarded_focus_then_type_uses_explicit_expected_value_and_truthful_ack_outcomes:
+  3 actual parent/production worker/saved provider paths. Read Observe→read-only
+  Prepare Focus→one Semantic DOM.focus→fresh keyboard Focused proof→read-only
+  Prepare Type→one Keyboard Input.insertText→fresh explicit Value proof. Wanted
+  prefixsuffix differs from delivered suffix. Pass/known mismatch/lost-focus
+  Unknown produce matching canonical Transition and ACKed2/3/4 statuses. Exactly
+  two real parent permits/two Mutation ACKs per path; Type never repairs focus.
+  Original earlier Observe bytes survive, and actual owned shutdown/reap completes.
+- forms_expected_record_binding_and_live_privacy_or_staleness_refuse_before_effect:
+  9 cases: missing third record, wrong third artifact, wrong scope, stale snapshot
+  ref, invalid Focus rule before SDK; fresh private/stale object after Prepare
+  refuses Act; fresh private/stale source also refuses Prepare. Zero permits/
+  focus/type calls; no private canary in output; old bytes/reap preserved.
+- existing guarded_prepare_then_act... SetChecked regression passed5 paths.
+  The guarded_ selector also ran existing privacy/deadline affected peer cases;
+  all4 selected tests passed. Shared-lane cases were not repeated: no lane code
+  changed and bc2874e already proves actual global contention/cancel/loss/reap.
+- affected host lib/bin/web_worker Clippy -D warnings passed. No wider suite.
+
+The peer adds bounded text/focus replies and counters only; synthetic protocol
+facts are not live UI/B02 acceptance. No test manufactures a delivery nonce or ACK.
+Real remaining consumer: CLI A04 and Web share one isolated F01 public CLI run
+against saved/check-ready worker, without an extra duplicate API-only browser run.
+No arbitrary app/site/user input or physical desktop action in this author slice.
+Grouped integration risk review remains root-owned, not a gate on each file.
+Source freezes at coherent save; root receives readiness/API handoff. Own nonimage
+temp target removed/absence-verified after use; no images created/deleted, no live
+process/helper/runtime/index/physical lane held. Short exact5 commit/push lease next.
+Source SHA256 pins:
+- worker_ops.rs:3f93eb6263c5e2bc680b913dfe7b931eef747c477dda27ebc8f96fe08c2c6636
+- worker_web.rs:4a6d47eb6aca8c3a42e19046d483d3528dba692c3f5fd6947ab7dfd2104aebcb
+- web_worker test:2d13eca07c77720409b5e760dde38f677206f08d891f9257f5a06857bba2f25c
+- peer:ee1179df27808ca3ff131c17a3ae40c4f707da25733026386af2fa7bf362c803

@@ -53,6 +53,9 @@ impl WebSession {
             if control.class != OperationClass::Prepare || control.flags & 8 == 0 {
                 return Err(HostError::InvalidControl);
             }
+            // prepare_input validates the explicit condition's record/rule/binding.
+            // Bootstrap returns current capability facts; Act separately forwards
+            // that same caller condition to the kernel/provider for fresh verify.
             let (snapshot, request, clock, _expected) = match session.prepare_input(input) {
                 Ok(input) => input,
                 Err(error) => {

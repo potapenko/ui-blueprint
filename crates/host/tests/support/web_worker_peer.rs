@@ -31,6 +31,13 @@ pub struct State {
     pub lost_post_binding: AtomicBool,
     pub stale_node: AtomicBool,
     pub events_once: AtomicUsize,
+    pub text_control: AtomicBool,
+    pub focused: AtomicBool,
+    pub focus_calls: AtomicUsize,
+    pub type_calls: AtomicUsize,
+    pub text: Mutex<String>,
+    pub ignore_type: AtomicBool,
+    pub lose_focus_after_type: AtomicBool,
 }
 pub struct Peer {
     pub url: String,
@@ -99,6 +106,29 @@ impl Peer {
                                     json!({"executionContextId":3})
                                 }
                                 "Accessibility.enable" => json!({}),
+                                "DOM.focus" => {
+                                    assert!(shared.text_control.load(Ordering::Acquire));
+                                    assert_eq!(params["objectId"], "node-11");
+                                    shared.focus_calls.fetch_add(1, Ordering::AcqRel);
+                                    shared.focused.store(true, Ordering::Release);
+                                    json!({})
+                                }
+                                "Input.insertText" => {
+                                    assert!(shared.text_control.load(Ordering::Acquire));
+                                    assert!(
+                                        shared.focused.load(Ordering::Acquire),
+                                        "Type cannot implicitly focus"
+                                    );
+                                    shared.type_calls.fetch_add(1, Ordering::AcqRel);
+                                    if !shared.ignore_type.load(Ordering::Acquire) {
+                                        shared
+                                            .text
+                                            .lock()
+                                            .unwrap()
+                                            .push_str(params["text"].as_str().unwrap());
+                                    }
+                                    json!({})
+                                }
                                 "Runtime.releaseObjectGroup" => {
                                     shared.releases.fetch_add(1, Ordering::AcqRel);
                                     json!({})
@@ -157,7 +187,19 @@ impl Peer {
                                         shared.reads.fetch_add(1, Ordering::AcqRel);
                                         let connected = params["objectId"] == "node-11";
                                         let private = shared.secret.load(Ordering::Acquire);
-                                        json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":true,"tag":"INPUT","sensitive":private,"rect":{"x":40,"y":60,"width":120,"height":40},"value":if private{CANARY}else{""},"checked":shared.checkbox_checked.load(Ordering::Acquire),"enabled":true}}})
+                                        if shared.text_control.load(Ordering::Acquire) {
+                                            let text = shared.text.lock().unwrap().clone();
+                                            let focused = shared.focused.load(Ordering::Acquire)
+                                                && !(shared
+                                                    .lose_focus_after_type
+                                                    .load(Ordering::Acquire)
+                                                    && shared.type_calls.load(Ordering::Acquire)
+                                                        > 0);
+                                            let n = text.encode_utf16().count();
+                                            json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":true,"tag":"INPUT","inputKind":"text","sensitive":private,"rect":{"x":40,"y":60,"width":120,"height":40},"value":if private{CANARY}else{&text},"enabled":true,"readonly":false,"focused":focused,"documentFocused":true,"selection":{"start":n,"end":n,"direction":"none","documentFocused":true}}}})
+                                        } else {
+                                            json!({"result":{"type":"object","value":{"connected":connected,"sameDocument":true,"tag":"INPUT","sensitive":private,"rect":{"x":40,"y":60,"width":120,"height":40},"value":if private{CANARY}else{""},"checked":shared.checkbox_checked.load(Ordering::Acquire),"enabled":true}}})
+                                        }
                                     }
                                 }
                                 "Runtime.getProperties" => {

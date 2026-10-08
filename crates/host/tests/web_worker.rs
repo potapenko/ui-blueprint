@@ -1145,3 +1145,381 @@ fn retained_history_survives_received_event_or_loss_and_other_session_progresses
         assert!(!domain.usage().abandoned);
     }
 }
+
+fn forms_expected_pair<'a>(
+    host: &mut RuntimeHost<'a, process::Platform>,
+    session: SessionHandle<'a>,
+    source: &Document,
+    request: &Document,
+    expected: &Document,
+    class: OperationClass,
+) {
+    let encoded = [
+        serde_json::to_vec(source).unwrap(),
+        serde_json::to_vec(request).unwrap(),
+        serde_json::to_vec(expected).unwrap(),
+    ];
+    let parts: Vec<&[u8]> = encoded.iter().map(Vec::as_slice).collect();
+    let mut input = host.reserve_input(session, tape_length(&parts)).unwrap();
+    worker_tape::encode(&parts, input.bytes_mut()).unwrap();
+    let mut requested = output(1);
+    requested.input_format = 1;
+    host.submit(session, class, input, requested, deadline())
+        .unwrap();
+}
+fn forms_seed(
+    snapshot: &Snapshot,
+    clock: &str,
+    intent: Intent,
+    field: Field,
+    wanted: Value,
+) -> (Document, Document) {
+    let mut request = action_seed(snapshot, clock);
+    let Artifact::Request(r) = &mut request.artifact else {
+        panic!("request")
+    };
+    let Operation::Prepare { action } = &mut r.operation else {
+        panic!("prepare")
+    };
+    action.modality = if matches!(intent, Intent::Type { .. }) {
+        InputModality::Keyboard
+    } else {
+        InputModality::Semantic
+    };
+    action.intent = intent;
+    let expected = Document {
+        schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+        artifact: Artifact::Expectation(Box::new(Expectation {
+            id: Id("caller-explicit-state".into()),
+            scope_id: snapshot.context.scope_id.clone(),
+            targets: vec![action.backend_ref.key.clone()],
+            rule: Rule::PropertyEquals {
+                field,
+                expected: wanted,
+            },
+            applies_when: ContextConditions {
+                platform: None,
+                input_mode: None,
+                text_scale: None,
+            },
+            expected_from: Id("caller_scenario".into()),
+        })),
+    };
+    request.validate().unwrap();
+    expected.validate().unwrap();
+    (request, expected)
+}
+fn forms_act(prepared: &Document, seed: &Document) -> Document {
+    let Artifact::Action(case) = &prepared.artifact else {
+        panic!("prepared")
+    };
+    let mut act = seed.clone();
+    let Artifact::Request(request) = &mut act.artifact else {
+        panic!("request")
+    };
+    request.context = case.snapshot.context.clone();
+    request.operation = Operation::Act {
+        action: case.action.clone(),
+    };
+    act
+}
+#[test]
+fn guarded_focus_then_type_uses_explicit_expected_value_and_truthful_ack_outcomes() {
+    use uiblueprint_host::{
+        host_types::EffectReceipt, publication::ActionPublicationStatus as Status,
+    };
+    let _serial = SERIAL.lock().unwrap();
+    for (mode, wanted_status, wanted_outcome) in [
+        (0, Status::VerifiedSuccess, Outcome::Succeeded),
+        (1, Status::VerifiedMismatch, Outcome::Failed),
+        (2, Status::Uncertain, Outcome::ActionOutcomeUnknown),
+    ] {
+        let peer = peer::Peer::new();
+        peer.state.text_control.store(true, Ordering::Release);
+        *peer.state.text.lock().unwrap() = "prefix".into();
+        let trace = Arc::new(process::Trace::default());
+        let domain = HostDomain::new::<process::Platform>(data::limits()).unwrap();
+        let mut host = RuntimeHost::new(
+            &domain,
+            SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap(),
+            process::Platform(trace.clone()),
+        )
+        .unwrap();
+        let (session, clock) = attach_authorized(&mut host, &peer, true);
+        let mut observe = data::request(&clock, vec![Channel::ExternalSemantics]);
+        let Artifact::Request(r) = &mut observe.artifact else {
+            panic!("request")
+        };
+        r.context.fields = vec![
+            Field::Enabled,
+            Field::Focused,
+            Field::Value,
+            Field::InputKind,
+            Field::Readonly,
+        ];
+        submit(
+            &mut host,
+            session,
+            &observe,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let observed = complete(&mut host);
+        let original = observed.bytes(0).unwrap().to_vec();
+        let source = Document::from_json(&original, 65536).unwrap();
+        let snapshot = snapshot(&response(&original)).clone();
+        let (seed, expected) = forms_seed(
+            &snapshot,
+            &clock,
+            Intent::Focus {},
+            Field::Focused,
+            Value::Flag(true),
+        );
+        forms_expected_pair(
+            &mut host,
+            session,
+            &source,
+            &seed,
+            &expected,
+            OperationClass::Prepare,
+        );
+        let prepared = complete(&mut host);
+        assert_eq!(prepared.terminal, Terminal::Completed);
+        assert_eq!(prepared.action_status(), Some(Status::Prepared));
+        assert_eq!(trace.effect_permits.load(Ordering::Acquire), 0);
+        let prepared_doc = Document::from_json(prepared.bytes(0).unwrap(), 65536).unwrap();
+        drop(prepared);
+        forms_expected_pair(
+            &mut host,
+            session,
+            &prepared_doc,
+            &forms_act(&prepared_doc, &seed),
+            &expected,
+            OperationClass::Mutation,
+        );
+        let focus = complete(&mut host);
+        assert_eq!(focus.action_status(), Some(Status::VerifiedSuccess));
+        assert_eq!(focus.terminal, Terminal::Completed);
+        assert_eq!(peer.state.focus_calls.load(Ordering::Acquire), 1);
+        let Artifact::TransitionContext(focus_report) =
+            Document::from_json(focus.bytes(0).unwrap(), 65536)
+                .unwrap()
+                .artifact
+        else {
+            panic!("transition")
+        };
+        let after = focus_report.after.unwrap();
+        drop(focus);
+        let source = Document {
+            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+            artifact: Artifact::Snapshot(Box::new(after.clone())),
+        };
+        let (seed, expected) = forms_seed(
+            &after,
+            &clock,
+            Intent::Type {
+                text: "suffix".into(),
+            },
+            Field::Value,
+            Value::Text("prefixsuffix".into()),
+        );
+        forms_expected_pair(
+            &mut host,
+            session,
+            &source,
+            &seed,
+            &expected,
+            OperationClass::Prepare,
+        );
+        let prepared = complete(&mut host);
+        assert_eq!(prepared.action_status(), Some(Status::Prepared));
+        let prepared_doc = Document::from_json(prepared.bytes(0).unwrap(), 65536).unwrap();
+        drop(prepared);
+        peer.state.ignore_type.store(mode == 1, Ordering::Release);
+        peer.state
+            .lose_focus_after_type
+            .store(mode == 2, Ordering::Release);
+        forms_expected_pair(
+            &mut host,
+            session,
+            &prepared_doc,
+            &forms_act(&prepared_doc, &seed),
+            &expected,
+            OperationClass::Mutation,
+        );
+        let typed = complete(&mut host);
+        assert_eq!(typed.action_status(), Some(wanted_status));
+        assert_eq!(typed.terminal, Terminal::Completed);
+        assert!(matches!(typed.effect, EffectReceipt::Confirmed { .. }));
+        let Artifact::TransitionContext(report) =
+            Document::from_json(typed.bytes(0).unwrap(), 65536)
+                .unwrap()
+                .artifact
+        else {
+            panic!("transition")
+        };
+        assert_eq!(report.transition.steps[0].outcome, wanted_outcome);
+        assert_eq!(peer.state.type_calls.load(Ordering::Acquire), 1);
+        assert_eq!(
+            peer.state.focus_calls.load(Ordering::Acquire),
+            1,
+            "Type cannot repair focus"
+        );
+        assert_eq!(trace.effect_permits.load(Ordering::Acquire), 2);
+        assert_eq!(trace.mutation_acks.load(Ordering::Acquire), 2);
+        assert_eq!(observed.bytes(0), Some(original.as_slice()));
+        drop(typed);
+        drop(observed);
+        stop(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}
+
+#[test]
+fn forms_expected_record_binding_and_live_privacy_or_staleness_refuse_before_effect() {
+    use uiblueprint_host::host_types::EffectReceipt;
+    let _serial = SERIAL.lock().unwrap();
+    for mode in 0..9 {
+        let peer = peer::Peer::new();
+        peer.state.text_control.store(true, Ordering::Release);
+        *peer.state.text.lock().unwrap() = "prefix".into();
+        let trace = Arc::new(process::Trace::default());
+        let domain = HostDomain::new::<process::Platform>(data::limits()).unwrap();
+        let mut host = RuntimeHost::new(
+            &domain,
+            SpawnSpec::new(Path::new(env!("CARGO_BIN_EXE_session-worker"))).unwrap(),
+            process::Platform(trace.clone()),
+        )
+        .unwrap();
+        let (session, clock) = attach_authorized(&mut host, &peer, true);
+        let mut observe = data::request(&clock, vec![Channel::ExternalSemantics]);
+        let Artifact::Request(r) = &mut observe.artifact else {
+            panic!("request")
+        };
+        r.context.fields = vec![
+            Field::Enabled,
+            Field::Focused,
+            Field::Value,
+            Field::InputKind,
+            Field::Readonly,
+        ];
+        submit(
+            &mut host,
+            session,
+            &observe,
+            &data::selection(false),
+            1,
+            deadline(),
+        );
+        let first = complete(&mut host);
+        let original = first.bytes(0).unwrap().to_vec();
+        let source = Document::from_json(&original, 65536).unwrap();
+        let snapshot = snapshot(&response(&original)).clone();
+        let (mut seed, mut expected) = forms_seed(
+            &snapshot,
+            &clock,
+            Intent::Focus {},
+            Field::Focused,
+            Value::Flag(true),
+        );
+        if mode == 6 {
+            let Artifact::Expectation(e) = &mut expected.artifact else {
+                panic!("expectation")
+            };
+            e.rule = Rule::PropertyEquals {
+                field: Field::Focused,
+                expected: Value::Flag(false),
+            };
+        }
+        if mode == 2 {
+            let Artifact::Expectation(e) = &mut expected.artifact else {
+                panic!("expectation")
+            };
+            e.scope_id = Id("outside-scope".into());
+        }
+        if mode == 3 {
+            let Artifact::Request(r) = &mut seed.artifact else {
+                panic!("request")
+            };
+            let Operation::Prepare { action } = &mut r.operation else {
+                panic!("prepare")
+            };
+            action.backend_ref.snapshot_id = Id("stale-snapshot".into());
+        }
+        let before = peer.state.calls.load(Ordering::Acquire);
+        if mode == 7 {
+            peer.state.secret.store(true, Ordering::Release);
+        }
+        if mode == 8 {
+            peer.state.stale_node.store(true, Ordering::Release);
+        }
+        if mode == 0 {
+            action_pair(&mut host, session, &source, &seed, OperationClass::Prepare);
+        } else {
+            forms_expected_pair(
+                &mut host,
+                session,
+                &source,
+                &seed,
+                if mode == 1 { &source } else { &expected },
+                OperationClass::Prepare,
+            );
+        }
+        let prepared = complete(&mut host);
+        if mode < 4 || mode == 6 || mode >= 7 {
+            assert!(matches!(prepared.terminal, Terminal::Failed(_)));
+            assert_eq!(prepared.effect, EffectReceipt::NotDispatched);
+            if mode < 4 || mode == 6 {
+                assert_eq!(
+                    peer.state.calls.load(Ordering::Acquire),
+                    before,
+                    "invalid third record/ref refused before SDK"
+                );
+            }
+            if mode >= 7 {
+                assert_eq!(
+                    prepared.terminal,
+                    Terminal::Failed(uiblueprint_host::HostError::ActionRefused)
+                );
+                assert!(
+                    !String::from_utf8_lossy(prepared.bytes(0).unwrap()).contains(peer::CANARY)
+                );
+            }
+            drop(prepared);
+        } else {
+            assert_eq!(prepared.terminal, Terminal::Completed);
+            let prepared_doc = Document::from_json(prepared.bytes(0).unwrap(), 65536).unwrap();
+            drop(prepared);
+            peer.state.secret.store(mode == 4, Ordering::Release);
+            peer.state.stale_node.store(mode == 5, Ordering::Release);
+            forms_expected_pair(
+                &mut host,
+                session,
+                &prepared_doc,
+                &forms_act(&prepared_doc, &seed),
+                &expected,
+                OperationClass::Mutation,
+            );
+            let refused = complete(&mut host);
+            assert_eq!(refused.effect, EffectReceipt::NotDispatched);
+            assert_eq!(
+                refused.terminal,
+                Terminal::Failed(uiblueprint_host::HostError::ActionRefused)
+            );
+            assert!(!String::from_utf8_lossy(refused.bytes(0).unwrap()).contains(peer::CANARY));
+            drop(refused);
+        }
+        assert_eq!(trace.effect_permits.load(Ordering::Acquire), 0);
+        assert_eq!(peer.state.focus_calls.load(Ordering::Acquire), 0);
+        assert_eq!(peer.state.type_calls.load(Ordering::Acquire), 0);
+        assert_eq!(first.bytes(0), Some(original.as_slice()));
+        drop(first);
+        stop(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
+}

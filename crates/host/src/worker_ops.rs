@@ -114,7 +114,8 @@ impl<'a> CanonicalSession<'a> {
             .invalidate_session(self.cache_session)
             .map_err(|_| HostError::InvalidState)
     }
-    /// Existing Tape(ActionCase Document, Act Request Document); typed decoding
+    /// Tape(ActionCase, Act Request, explicit Expectation); the legacy SetChecked
+    /// pair remains valid. Typed decoding
     /// stays inside the admitted worker. The provider separately enforces its
     /// trusted attachment's plugin/surface/scope before fresh acquisition.
     #[cfg(feature = "web")]
@@ -253,14 +254,47 @@ impl<'a> CanonicalSession<'a> {
         let Artifact::Expectation(expected) = document.artifact else {
             return Err(HostError::InvalidInput);
         };
-        let Rule::PropertyEquals { field, .. } = &expected.rule else {
+        let Rule::PropertyEquals {
+            field,
+            expected: value,
+        } = &expected.rule
+        else {
             return Err(HostError::InvalidInput);
         };
         if expected.scope_id != action.authorized_scope
             || expected.targets.len() != 1
             || !snapshot.context.fields.contains(field)
             || !snapshot.nodes.iter().any(|n| n.key == expected.targets[0])
+            || expected.applies_when.platform.is_some()
+            || expected.applies_when.text_scale.is_some()
+            || expected
+                .applies_when
+                .input_mode
+                .is_some_and(|mode| mode != action.modality)
         {
+            return Err(HostError::InvalidInput);
+        }
+        // Bind the first concrete Web forms conditions before SDK preparation,
+        // using the same intent semantics as kernel/provider verification.
+        let valid = match &action.intent {
+            Intent::Focus {} => {
+                *field == Field::Focused
+                    && *value == Value::Flag(true)
+                    && expected.targets[0] == action.backend_ref.key
+            }
+            Intent::Type { .. } => {
+                *field == Field::Value
+                    && matches!(value, Value::Text(_))
+                    && expected.targets[0] == action.backend_ref.key
+            }
+            Intent::SetChecked { value: wanted } => {
+                *field == Field::Checked
+                    && *value == Value::Flag(*wanted)
+                    && expected.targets[0] == action.backend_ref.key
+            }
+            _ => true,
+        };
+        if !valid {
             return Err(HostError::InvalidInput);
         }
         Ok(Some(*expected))
