@@ -535,3 +535,10 @@ continuation returned threadnotfound, no WIP/lease. This is a confirmed unavaila
 handle, not replacement on timeout. New Web owns only its packet, no Core takeover.
 Root owns registry/G03 packet; short Git index lease only for checkpoints. Both
 workers stop after their finite result; no new review or input wave dispatched.
+
+Completed unavailable Core01a111a7 and old Web01a110ac-2aae chats archived successfully
+through app tool after saved results/lease release; histories retained. Advisors and
+active Native/new Web retained. Native G05 exact4 source-backed developer example
+choice accepted in G03 packet; worker implementation and own-F02 verification active.
+Web established http://localhost:3000 from the source project's instructions; actual
+availability/Director measurements remain pending, no arbitrary port/target discovery.

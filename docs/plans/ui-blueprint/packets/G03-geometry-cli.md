@@ -87,3 +87,13 @@ completed checks and preserve images in system temp. Focused changed-code checks
 and one relevant scenario, then short scoped Git lease/commit/push and terminal
 receipt. Immediate consumer is reproducible geometry, not a new audit framework.
 Root owns this packet and registry only; worker IDs/current leases live in registry.
+
+Native source-backed choice accepted: add geometry subcommand to existing
+tests/bridges/native/host_observe.py and read-only describe-process PID to existing
+plugins/macos/HostHelper.swift, plus native-helper.md/P01 receipt. This developer
+example uses public NSRunningApplication incarnation and existing public CLI; no
+new uiblueprint syntax or connection/schema contract. Named component lookup is
+only over the returned Snapshot; ambiguous names require an exact SourceKey, never
+first/coordinate selection. Preserve old helper modes and default no-Value reads.
+Run the finite own-F02 check and affected helper/error checks without another
+activation round; actual source/test/runtime result remains pending.
