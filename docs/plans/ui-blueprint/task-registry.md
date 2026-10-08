@@ -27,25 +27,24 @@ Root получает итог или конкретный блокер; про�
 Новая цель, переисполнение готовой работы и новые подагенты не нужны.
 
 - Host goal подтверждён `active`; approved P0–P7 и текущая `master` сохранены.
-- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: terminal recheck `88d0920`
-  pushed. На `9d715ee` semantic focusability/P2 приняты; own21-case headless подтвердил
-  full97-node positive facts. Documents privacy/P1 отклонён: comma-tight srcset с
-  безопасным выбранным currentSrc публикует private unselected credential URL.
-  CPU/runtime освобождены. Same reviewer сохранён для affected privacy recheck.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal `completed`,
-  result `b3c3a22` pushed. На accepted9d715ee semantic warm p95=2.845584ms,
-  geometry p95=2.899125ms, по100warm, обе20ms gates выполнены по отчёту Q02.
-  Все240cohort samples valid;40cold-control отдельно, не full-fixture acceptance.
-  CPU/headless освобождены; full Documents/Native и отдельные stage gaps открыты.
-- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: full remaining-P1 repair
-  `inProgress`; source checkpoint `a4b3af6` pushed. Условие Q02 resource release
-  выполнено, продолжает свои affected проверки без root grant. P2 остаётся закрытым.
+- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: remaining-P1 repair
+  terminal completed; coherent pin `a7c0416`, final `c16a603` pushed. Author reports
+  both exact reproducers,20shared cases,10affected live cases including6zero-publication
+  private variants. CPU/headless released; handed off and archived, no independent pass claimed.
+- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: dispatched same-context
+  affected srcset privacy recheck on a7c0416; no reopening accepted P2/unchanged domains.
+  Its terminal committed Documents verdict/release is the exact Q02 prerequisite.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: retained semantic/geometry
+  b3c3a22 result; resumed for remaining full-document Web task. After Q01 accepts
+  Documents privacy and releases CPU/runtime, it proceeds independently through
+  saved build/preflight/frozen full cohorts/docs/commit+push. No root grant needed.
+  Full Documents/Native and precise separate-stage evidence gaps remain open.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02/W06. Переход W06 к heavy checks после Q02 release уже разрешён по точному
-  условию; промежуточные шаги не требуют управляющего follow-up.
+  Q01/Q02. Переход к full-document measurements после Q01 acceptance/release
+  уже разрешён; промежуточные шаги не требуют управляющего follow-up.
 
 ## История предыдущей группы самостоятельных задач
 
@@ -82,6 +81,23 @@ active/inProgress через wait_threads:
 Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; root также
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
+
+## Remaining srcset repair delivered for affected recheck
+
+W06 completed its full assigned P1 cycle: verified a7c0416/final c16a603 pushed;
+[receipt](receipts/W06-web-fidelity.md) new section read completely. Author's20-case
+shared guard corpus, exact Q01 JS/Rust reproductions and10own guarded Observes passed:
+full97-node sanity plus3safe inputs/6private refusals, each private0publication.
+One host closure0sessions/leases, no remaining workers; own CPU/headless released.
+This is author evidence only. P2/semantic timings were untouched and not rerun.
+
+Same Q01 receives source/reproduction/actual affected qualification/reconciliation
+as one task. Q02 receives the dependent full-document measurement task with advance
+conditional execution after committed Documents privacy acceptance and release.
+Both reuse their contexts and saved criteria; no new agents/chats or task split.
+W06 archived after terminal delivery and handoff. New sanitized minimal proof
+uib-w06-srcset-proof-yi3pBs and older shared inputs retained for named consumers.
+Native/Q03 human questions remain unchanged and unanswered.
 
 ## Q02 single-control measurements delivered; W06 resource dependency released
 
