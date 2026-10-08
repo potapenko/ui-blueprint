@@ -190,7 +190,7 @@ object_record!(Frame {
     id: String,
     loader_id: String
 });
-object_record!(FrameTree { frame: Frame });
+object_record!(FrameTree { frame: Frame, child_frames: Option<Vec<FrameTree>> });
 object_record!(FrameResult {
     frame_tree: FrameTree
 });

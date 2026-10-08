@@ -3,8 +3,12 @@ mod acquire;
 mod action;
 pub use action::{CheckboxProvider, WebActionProvider};
 mod bootstrap;
+mod documents;
 mod io;
 mod observe;
+mod snapshot_normalize;
+mod snapshot_wire;
+pub use documents::{DocumentSeed, DocumentsScope};
 pub(crate) mod wire;
 use crate::{cdp, transport};
 use std::{
@@ -296,6 +300,7 @@ pub struct Collector {
     sequence: u64,
     loss_generation: u64,
     pending_invalidation: bool,
+    allowed_surfaces: Vec<Identity>,
 }
 impl fmt::Debug for Collector {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

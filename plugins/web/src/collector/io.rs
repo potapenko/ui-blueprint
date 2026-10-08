@@ -81,6 +81,7 @@ impl Collector {
             return Err(Failure::new(ErrorKind::InvalidInput));
         }
         let mut owner = Self {
+            allowed_surfaces: vec![binding.surface.clone()],
             client,
             binding,
             limits,
@@ -122,7 +123,7 @@ impl Collector {
         owner.verify_document(&mut budget)?;
         Ok(owner)
     }
-    fn verify_target(&mut self, budget: &mut Budget) -> Result<(), Failure> {
+    pub(super) fn verify_target(&mut self, budget: &mut Budget) -> Result<(), Failure> {
         let target: wire::TargetResult =
             self.send("Target.getTargetInfo", &serde_json::json!({}), budget)?;
         if target.target_info.target_id != self.binding.target.id.0 {

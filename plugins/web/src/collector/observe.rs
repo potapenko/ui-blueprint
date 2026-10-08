@@ -169,7 +169,12 @@ impl Collector {
     }
 }
 
-fn document(request: &Request, sequence: u64, channel: Channel, result: ChannelResult) -> Document {
+pub(super) fn document(
+    request: &Request,
+    sequence: u64,
+    channel: Channel,
+    result: ChannelResult,
+) -> Document {
     Document {
         schema_version: SchemaVersion::CURRENT,
         artifact: Artifact::ChannelResponse(Box::new(ChannelResponse {

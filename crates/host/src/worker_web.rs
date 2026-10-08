@@ -202,7 +202,7 @@ impl WebSession {
             setup.cdp.limits(),
         )
         .map_err(cdp_error)?;
-        let collector = collector::Collector::attach(
+        let collector = collector::Collector::attach_with_surfaces(
             client,
             collector::Binding {
                 session_id: descriptor.session_id,
@@ -216,6 +216,7 @@ impl WebSession {
                 allowed_scopes: descriptor.allowed_scopes,
                 plugin: descriptor.plugin,
             },
+            descriptor.surfaces,
             setup.collector.limits(),
             deadline,
         )
@@ -355,6 +356,26 @@ impl WebSession {
             };
             guard::phase(guard::Phase::Admission);
             let collected = match selection {
+                WebSelection::Documents {
+                    documents,
+                    max_visited_nodes,
+                } => {
+                    let scope = collector::DocumentsScope {
+                        scope_id: request.context.scope_id.clone(),
+                        documents: documents
+                            .into_iter()
+                            .map(|d| collector::DocumentSeed {
+                                surface: d.surface,
+                                document_backend_id: d.document_backend_id,
+                                sensitivity: d.sensitivity,
+                            })
+                            .collect(),
+                        max_visited_nodes,
+                    };
+                    self.collector
+                        .observe_documents(&request, &scope, sequence, deadline, &mut callback)
+                        .map(|_| ())
+                }
                 WebSelection::Rooted {
                     root,
                     max_visited_nodes,

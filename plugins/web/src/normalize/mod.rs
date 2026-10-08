@@ -410,7 +410,28 @@ pub(crate) fn ax(read: &AxNode, context: &Context, observation: &Observation, ca
         native_role: text(raw_role, cap),
         properties,
         children: vec![],
-        extensions: vec![],
+        extensions: if context.fields.contains(&Field::Focused) {
+            vec![ExtensionProperty {
+                namespace: id("web.ax"),
+                name: id("focusable"),
+                property: property(
+                    Field::Value,
+                    false,
+                    observation,
+                    "cdp-addressed-partial-ax-focusable",
+                    flag(read.properties.as_ref().and_then(|properties| {
+                        ax_bool(
+                            properties
+                                .iter()
+                                .find(|p| p.name == "focusable")
+                                .map(|p| &p.value),
+                        )
+                    })),
+                ),
+            }]
+        } else {
+            vec![]
+        },
         source_declarations: vec![],
     }
 }

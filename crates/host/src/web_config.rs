@@ -117,8 +117,19 @@ pub struct WebRootSeed {
     pub sensitivity: Sensitivity,
 }
 #[derive(Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct WebDocument {
+    pub surface: Identity,
+    pub document_backend_id: u32,
+    pub sensitivity: Sensitivity,
+}
+#[derive(Serialize, Deserialize)]
 #[serde(tag = "selection", rename_all = "snake_case", deny_unknown_fields)]
 pub enum WebSelection {
+    Documents {
+        documents: Vec<WebDocument>,
+        max_visited_nodes: u32,
+    },
     Rooted {
         root: WebRootSeed,
         max_visited_nodes: u32,
