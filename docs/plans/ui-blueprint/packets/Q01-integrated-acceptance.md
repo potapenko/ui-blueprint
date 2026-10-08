@@ -1,6 +1,8 @@
 # Q01/V01 — интегрированная функциональная и privacy приёмка
 
-Queued до terminal M02-N, сохранённого integrated candidate и освобождения desktop.
+Ready: M02-N terminal completed, candidate6a5bec2/final94724df pushed.
+Product pin94724df (полный SHA разрешить через Git до запуска), registry29/CLI@16,
+NATIVE-SESSION@1 прочитан root; остальные нормы/closure сохранены.
 Одна самостоятельная verification-задача: собственный план проверки, выполнение,
 полный отчёт по исходным обязательствам и точные repair dependencies. Не отдельные
 чаты на команды/fixtures. User-authorized P0–P7 и отдельные чаты полного цикла;
@@ -41,8 +43,12 @@ privacy-canary input/error/cancel/cache/history/prompt/trace, а не объяв
 Использовать существующие собственные fixtures и авторские harnesses как инструменты,
 но проверять их expectations/coverage по нормам и независимым фактам. Продуктовую
 доставку не подменять прямым Playwright/AX setup. Состояния и setup явно отделять.
-Не запускать/изменять реальные PlayPhrase.me проекты. Desktop lane принадлежит
-только этой задаче после M02 cleanup; Web можно адресовать собственным headless.
+Не запускать/изменять реальные PlayPhrase.me проекты. Перед desktop input подтвердить свежую доступность и владение lane: M02 сообщил
+посторонний ввод ПОСЛЕ завершённых ACKed сценариев, остановил дальнейший input
+и очистил собственный fixture. Не продолжать старую UI-сессию и не обходить
+явный tool/user handoff. Новые действия только после восстановления разрешённой
+ownership/начального состояния; при требуемом подтверждении вернуть точный blocker.
+Номинальная Native lane после M02 освобождена; Web можно адресовать собственным headless.
 
 Особо восстановить целые цепочки: Native точное одноимённое окно → popup →
 measurement/input/result → resize/local diff → stale old popup → compare,
@@ -95,3 +101,18 @@ temp, с точными pin/environment/scope и named Q03 consumer. Это не
 все failures/неточные claims/ограничения, source/harness commits и push, ресурсы.
 Если задача неполна, точная оставшаяся проверка/внешняя зависимость, а не общий
 «всё работает». P0–P7 завершает root только после Q02/Q03 и всех оставшихся gates.
+
+## Dispatch context
+
+Новая обязательная source review в этой задаче касается M02 commits6a5bec2/94724df
+и W04d3f4723 (декларативные component mappings), включая актуальную composition.
+Предыдущие source/safety review groups уже закрыты по unchanged graph/export/
+clipping/capture/distribution; не повторять их без изменённого consumer/риска.
+До своей initial source assessment не читать author receipts этих двух изменений.
+После initial observations root передаст их для reconciliation в этом же чате;
+независимые проверки собственного источника/тестов продолжать по правилам.
+Task owns integration tests/harness/receipt, не product code. Если W04 harness
+ещё ожидает прежний generic Attach exit1, согласовать его с уже принятой typed
+семантикой исправленного host; это correction устаревшего теста, не изменение нормы.
+I02 параллельно владеет только distribution recipe/docs/packaging checks, без UI.
+Не потреблять его незавершённые файлы; pin actual recipe при проверке установки.

@@ -54,6 +54,25 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## M02-N завершён; integrated candidate готов к проверке
+
+M02-N6a5bec23b8d15e4cc825aaff6105ac001a9a17bb/final94724df pushed, terminal
+completed; [receipt](receipts/M02-native-workflow.md) прочитан. Actual one-session
+Focus/Fill/Complete/explicit Activate checkbox/Apply достигaccepted-a,50records
+валидны;26host runtime cases и focused kernel/protocol/order/privacy checks по
+автору. W04 pre-Ready stale/invalid/permission propagation исправлена и peer
+проверена. Type остаётся Accepted/unknown, secure input/IME/selection mutation/
+nonsettable SetChecked Unsupported, не positive gate. Полный M02/P7/D06 не принят.
+После ACKed positive form был посторонний input; worker остановил новые UI actions,
+очистил own fixture/helper/processes. QA обязан восстановить свежую доступную
+ownership, не продолжать старый UI flow/обходить handoff. Retained image сохранён.
+
+Ready [Q01/V01](packets/Q01-integrated-acceptance.md) на94724df и независимый
+[I02 current distribution](packets/I02-current-distribution.md). Q01 owns integration
+verification + desktop только при доступности; I02 owns packaging/own temp builds,
+без UI. Source/safety M02/W04 initial assessment до builder narratives. Остальные
+закрытые reviews сохраняются. Замеры Q02 после функционального candidate.
+
 ## Следующий общий gate подготовлен
 
 [Q01/V01 integrated acceptance](packets/Q01-integrated-acceptance.md) — queued до
