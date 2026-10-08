@@ -36,8 +36,9 @@ Root получает итог или конкретный блокер; про�
   receipt `a1cae1a` committed/pushed. Оба findings W06 закрыты: exact reproducers,
   20-case corpus и own Chromium10cases,6private0publication,97-node baseline.
   CPU/headless освобождены; Native foreground wait не изменён. Сейчас этот же
-  контекст получил saved N04 repair7709067 на один affected source/recorded recheck
-  по прежнему reject b1667d9; live/SDK/D06 не включены. Web verdict закрыт.
+  контекст завершил N04 repair ACCEPT7709067 в pushed44eeb77; own recorded/boundary
+  checks закрыли Title isolation. Дополнительный trusted readonly provenance handoff
+  сохранён/pushed7a6b0b4. CPU свободен; Web закрыт, live/SDK/D06 не приняты.
 - Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal completed,
   `f63930d` pushed; полный текущий receipt прочитан. Все4Web numeric gates прошли;
   separate Rust report завершён actual owning routines на saved a7c0416 inputs,
@@ -64,8 +65,15 @@ Root получает итог или конкретный блокер; про�
   build и unchanged Q01 reproducer прошли;396facts/75nodes preserved. Один extra
   AX batch на selected-name node остаётся реальным будущим D06 cost, не pass.
   Proof uib-n04-title-isolation-q70i6po1 передан same Q01; original handoffs сохранены.
-  CPU/UI ресурсы не удерживает, чат архивирован. Source acceptance repair pending;
-  actual Native equivalence/foreground/E2E/D06 не приняты.
+  CPU/UI ресурсы не удерживает, чат архивирован. Source/recorded repair принят Q01
+  в44eeb77; actual Native equivalence/foreground/E2E/D06 не приняты.
+- Q01 handoff7a6b0b4: retained uib-q01-final-5w3j1hkw/live/a-identity.json и
+  a.json согласованы только как historical provenance (PID68614/bundle
+  local.uiblueprint.f02.on/window14982). Actual availability не проверялась;
+  Q02 делает fresh incarnation/binding validation. open/connection.json — старый
+  четырёхконтрольный form config, НЕ full-window input. Разрешён existing window-ax
+  с7709067 и исходными9fields/limits, новый readonly session/request; old refs не
+  используются. Без setup/app launches/B retry/активации и изменения fixture.
 - 2026-10-09 scope reconciliation: root перечитал NATIVE@2 и NATIVE-SESSION@3
   вместе с точным Q01 N03 foreground receipt. Последний прямо называет активацию
   runtime precondition ввода, not implementation approval. Поэтому уточнён ранее
@@ -78,7 +86,8 @@ Root получает итог или конкретный блокер; про�
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q01. Полный repaired N04 передан на affected recheck. Native live/performance
+  Q02 readonly preflight. N04 source repair и trusted file provenance приняты;
+  Native live/performance
   и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.
 
