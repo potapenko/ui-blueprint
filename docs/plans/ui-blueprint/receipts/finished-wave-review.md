@@ -38,3 +38,16 @@ B03/Web source и текущие Native/Export owners не затрагиваю�
 не повторяется из-за отдельного input-kind error. После saved correction root
 передаст три author receipts и исправление ЭТОМУ ЖЕ reviewer для final reconciliation.
 Другой reviewer/новый audit не создаётся. M04/B05/P7 целиком не приняты.
+
+## Исправление и reconciliation
+
+Автор воспроизвёл finding реальным guarded worker и сохранил/pushed
+85ea656aeba7c0f93a7e230af84e14a487444aad. Mandatory full validator сохранён;
+лишь после compatibility error bounded canonical decode определяет Artifact kind,
+не принимая invalid record. По автору wrong/malformed/private inputs InvalidInput,
+Delta mismatch/lost base ResyncRequired, valid Replay равно independent full;
+focused test/Clippy/rustfmt pass, успешный Web runtime не повторялся.
+Исходный W03-R task completed и снова archived после передачи результата.
+Тому же reviewer переданы точный correction commit и три author receipts только
+ПОСЛЕ initial observations. Second-stage reconciliation running; final verdict
+пока не получен. Ни нового reviewer, ни расширения на E03/B03/M03-C/I01 нет.

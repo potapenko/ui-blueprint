@@ -54,6 +54,15 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Replay correction сохранён
+
+85ea656aeba7c0f93a7e230af84e14a487444aad pushed; исходный W03-R repair completed,
+focused actual-worker regression подтвердил invalid-artifact vs Delta recovery,
+retained bytes/zero refusal commits и cleanup. Web/UI не повторялись; чат archived.
+Reviewer01a11b64-7375-7160-b876-47068b8c29a7 снова running на втором этапе:
+source correction + author-receipt reconciliation. Initial observations получены
+до author narratives; final scoped acceptance ещё pending. [Review](receipts/finished-wave-review.md).
+
 ## Подготовленная очередь после геометрии
 
 [M02-N Native form workflow](packets/M02-native-workflow.md) — queued, один будущий
