@@ -217,6 +217,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         let safeIdentity = [kAXRoleAttribute, kAXSubroleAttribute, kAXIdentifierAttribute].allSatisfy(admittedIdentity)
         var names: [String] = []
         if selected.contains("description") || selected.contains("accessibility_name") { names.append(kAXDescriptionAttribute) }
+        if selected.contains("accessibility_name") { names.append(kAXTitleAttribute) }
         if selected.contains("placeholder") { names.append(kAXPlaceholderValueAttribute) }
         if selected.contains("enabled") { names.append(kAXEnabledAttribute) }
         if selected.contains("focused") { names.append(kAXFocusedAttribute) }
@@ -273,14 +274,17 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
             }
         }
         let extensions = try json.array {
-            try [kAXIdentifierAttribute, kAXSubroleAttribute].map { name in
+            // Keep the raw title distinct from the existing AXDescription mapping.
+            // It is selected name evidence, never a fabricated canonical Name.
+            try ([kAXIdentifierAttribute, kAXSubroleAttribute] +
+                 (selected.contains("accessibility_name") ? [kAXTitleAttribute] : [])).map { name in
                 try json.object(["namespace", "name", "property"]) {
                     ["namespace": try json.scalar("macos.ax"), "name": try json.scalar(name),
                      "property": try json.object(["selection", "field", "sensitivity", "evidence", "state"]) {
-                        ["selection": try json.scalar("requested"), "field": try json.scalar("description"),
+                        ["selection": try json.scalar("requested"), "field": try json.scalar(name == kAXTitleAttribute ? "accessibility_name" : "description"),
                          "sensitivity": try json.scalar("public"),
                          "evidence": try json.evidence(observationID, "macos.ax", "bounded_public_ax_attributes"),
-                         "state": try typed(identity[name], expected: "text")]
+                         "state": try typed(name == kAXTitleAttribute ? values[name] : identity[name], expected: "text")]
                      }]
                 }
             }
