@@ -454,3 +454,14 @@ existing receipt; root владеет только coordination. Межфайл�
 без общего аудита/новой платформы. Оба advisor запрошены о существующем конкретном
 кейсе и полезном геометрическом ответе, read-only без нового runtime/fixtures.
 Это приоритетная запись поверх прежних P5-next строк, не удаление истории.
+
+Geometry ready work now follows [G03](packets/G03-geometry-cli.md). Native P5 WIP
+38546350d267716f75ec27c9adbdecd146ea734b and Web source464b1d214e24071b2b95d2adce2c5a61c4064514
+saved/pushed, not full action acceptance. Core P5 WIPbc2874e26f73c0ae8566ef72113ea60efee9b106 saved/pushed exact7; now fixes
+confirmed measure/check direct-ChannelResponse input; independent Native source
+inspection identified the same reusable read_snapshot boundary. Explicit additive
+ANALYSIS@2/registry18 registration precedes code; other contracts/wire/arithmetic
+remain protected. Geometry workers have standing authority for their one controlled
+F01/F02 chain once the saved loader is ready, no repeated activation round.
+Advisors' RC03/Director handoffs are saved in platform-test-advice; missing real inner
+bounds remain unknown. Full product scope retained, main geometry utility prioritized.

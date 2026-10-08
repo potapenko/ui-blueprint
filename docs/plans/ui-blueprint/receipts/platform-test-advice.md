@@ -197,3 +197,25 @@ fresh routing evidence required, not blind shortcut repetition. A new popup-loca
 Snapshot button would be a separate fixture change, not assumed existing behavior.
 Advisor ran no app or edits. Root activated one alternate bounded attempt using
 this evidence; actual outcome pending, source expectation is not runtime acceptance.
+
+## Geometry-first cases from existing advisor context — 2026-10-08
+
+Mac advisor nominates RC03 paused Search & Learn resize: left suggestions, central
+video/transport, right learner panel and bottom query strip. Existing current-repo
+fixtures/real-world/mac-resize/{observations.json,README.md,expected-answer.md}.
+Actual outer windows1920x1050 and961x1050pt, origin0,30,2xPNG, same query/clip/paused
+state. Inner content/panels/tab/text/clipping bounds are NOT measured. Desired question:
+where does width run out, which container to change? Need attributed panel widths/
+gaps/insets/transport alignment and before-after, not window-as-content substitution.
+
+Web advisor nominates already-open Director popover in desktop Clip Search; wrapper
+#clip-search-filter-director-wrap contains trigger/popup (not portal in inspected
+source), input/listbox/visibleoptions. Need same CSSpx-space bounds, trigger→popup
+gap, wrapper/trigger left offsets, input insets, input→list gap, option-left spread,
+viewport overflow/known clipping. Code declares top100%+8px,left0,width258px,
+max-width100vw-32px,padding10px; these are source declarations, NOT measured numbers
+or universal expectations. Existing F01 B03/B04 oracle values belong only to F01.
+Source handoff refers to playphraseme-site picker_view.cljs127/468, suggestions/
+view.cljs1054 and qa/cases/regression/tc-clip-search-desktop-filters-and-suggestions-panel.md.
+No new runtime/source edits by either advisor; no actual Director inner measurements.
+Both cases are consumers for geometry utility, not an action-executor prerequisite.
