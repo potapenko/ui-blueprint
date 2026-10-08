@@ -74,6 +74,7 @@ function check(sample,context,kind,requestId,previous,raw) {
 function client(executable,config) {
   const child=spawn(executable,['--ignored','--exact','requested_series','--nocapture','--test-threads=1'],
     {env:{...process.env,UIB_Q02_ALLOW:'1',UIB_Q02_CONFIG:config},stdio:['pipe','pipe','pipe']});
+  child.stdout.setEncoding('utf8'); // Keep multibyte native text intact across pipe chunks.
   let buffer='',stderrBytes=0, pending=[],queue=[],exit=null;
   const deliver=value=>pending.length?pending.shift()(value):queue.push(value);
   child.stdout.on('data',chunk=>{
@@ -134,8 +135,8 @@ async function run(){
   const output=process.env.UIB_Q02_OUTPUT;assert(path.isAbsolute(output||''));
   assert(path.resolve(output).startsWith(fs.realpathSync(os.tmpdir())+path.sep));fs.mkdirSync(output,{mode:0o700});
   const fixtureSetup=prepare(),report={functional_pin:functional,executable_sha256:digest(executable),mode:preflight?'quality_preflight':'timed_series',samples:[],comparability:{},
-    unavailable:['Documents cohorts await separate privacy acceptance; single-control acceptance does not release that scope.',
-      'Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],closures:[],
+    unavailable:['Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],closures:[],
+    reused_evidence:{semantic_geometry_pin:'9d715ee7bd8e566ad2b955024a68a8c3804966a4',receipt:'b3c3a22',basis:'a7c0416 delta changes Documents privacy only'},
     environment:{node:process.version,arch:os.arch(),release:os.release(),cpus:os.cpus().length,cpu:os.cpus()[0].model,memory:os.totalmem(),load_start:os.loadavg()},
     retention:'Q02/root review consumer; remove run-owned nonimages after consumption; no screenshots created'};
   let fixture;
@@ -240,8 +241,8 @@ async function run(){
   }
   try{
     fixture=await start();
-    // Q01 88d0920 accepts these independent scopes on9d715ee; Documents remains rejected.
-    for(const kind of ['semantic','geometry']){
+    // Remaining Q02 scope; execute only after terminal Documents acceptance/release.
+    for(const kind of ['documents']){
       if(preflight){await series(kind,1,'preflight');continue;}
       if(!accepted.comparability[kind]?.comparable){report.comparability[kind]=accepted.comparability[kind];continue;}
       assert(accepted.samples.some(s=>s.kind===kind&&s.status==='valid_partial'&&s.freshness_challenge),'preflight quality and freshness required');
@@ -251,7 +252,7 @@ async function run(){
     }
   }catch(error){report.failure=String(error.message).slice(0,300);}
   finally{if(fixture)await fixture.close();report.environment.load_end=os.loadavg();
-    report.summary={};for(const kind of ['semantic','geometry','documents']){
+    report.summary={};for(const kind of ['documents']){
       const planned=report.samples.filter(s=>s.kind===kind&&s.cohort==='reused-session'&&s.index>0);
       const warm=planned.filter(s=>s.status!=='not_run_after_failure');
       const cold=report.samples.filter(s=>s.kind===kind&&s.cohort.startsWith('cold-'));

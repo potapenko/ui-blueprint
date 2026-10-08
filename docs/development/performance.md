@@ -52,9 +52,13 @@ Then supply UIB_Q02_PREFLIGHT pointing to that report. Only comparable workloads
 with passed quality/freshness execute series, using the identical saved executable.
 The original8e3dba2 semantic gap is retained historically; W06's extension must pass
 new actual preflight rather than be assumed correct from its representation.
-Current executable loop deliberately selects only semantic/geometry, as authorized
-after Q01 receipt88d0920 and root's scoped continuation. Documents code is prepared
-but not selected; a new accepted Documents pin/release is required before that row.
+Current executable loop selects only the remaining Documents workload. It is
+staged for root's conditional continuation after terminal committed Q01 Documents
+acceptance/release on a7c0416; until then no runtime execution. Existing9d715ee
+semantic/geometry results are reused: the source delta changes Documents privacy
+only. Single-control rows are not rerun merely to populate this report.
+Stdout uses streaming UTF-8 decoding so large canonical payloads preserve native
+text when a multibyte character crosses a pipe-chunk boundary.
 Each semantic/geometry cohort has20 process-cold single-control samples and one
 reused session containing initial response plus100 explicit fresh warm requests.
 First Observe resolves #left; subsequent calls reuse the observed ref and attachment.

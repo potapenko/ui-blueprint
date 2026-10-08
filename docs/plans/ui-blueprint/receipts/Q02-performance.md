@@ -1,5 +1,25 @@
 # Q02 performance — scoped Web result, Native pending
 
+## Remaining Web continuation on a7c0416 — waiting Q01
+
+Root supplied sourcea7c04164df08441cfbbaa61b501aa64d29290732/finalc16a603 and
+conditional authorization: after terminal COMMITTED Documents privacy accept or
+accept_with_residual and CPU/runtime release from the same Q01, independently
+build/preflight/measure remaining full97-node rows without another root grant.
+Native remains separate. Full author top section and exact source delta read;
+no contract/API/Cargo/host/schema/engine drift. Production changes are only the
+Documents JS preflight/srcset scanner and captured-table privacy scanner; ordinary
+semantic/geometry source paths are unchanged. Reuse b3c3a22 evidence at its actual
+9d715ee pin; never relabel those observations as newly run on a7c0416.
+
+Q02 driver now selects only Documents; full facts/gates remain unchanged. One
+necessary harness correction: large443KB canonical payload contains native `★`;
+Buffer-to-string conversion per chunk could split UTF-8. Stdout now uses Node's
+streaming decoder. A local owned stub deliberately split the character across
+two pipe writes; the actual client preserved it and confirmed exit/cleanup. Stub
+was removed and absence verified. Node syntax/offline quality checks pass; no
+browser or heavy build executed while Q01 owns the lane. Shared proofs untouched.
+
 ## Accepted single-control result on9d715ee — 2026-10-08
 
 Root's latest direct continuation refined the prior all-findings gate: after
