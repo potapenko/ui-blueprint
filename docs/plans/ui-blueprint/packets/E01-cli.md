@@ -70,3 +70,39 @@ author checks do not establish privacy/release acceptance.
 Checkpoint-ready → root Git lease → scoped commit+push → exact SHA/push/checks/
 source revisions/residual/lease release. Stop after this result. Missing shared
 dependency gets a precise waiting condition while independent work continues.
+# G09 observed-file document continuation — 2026-10-08
+
+Approved PLAN.UIB@1 P6 and the user's geometry priority authorize the next shipping
+outcome: existing observed Snapshot/ChannelResponse file → full public CLI document
+package, reusing the current compiler. Existing --brief modes and accepted E02
+numerical/privacy/status behavior remain protected. No image/model/runtime call.
+
+Root fully read registry19→PRODUCT-ROUTES→CLI@7/EXPORT@1 and the full explicit
+DRAWING-PACKAGE/STYLE/GEOMETRY/PROMPT-A/PROMPT-B/REVIEW/EXAMPLE@1 closure, plus
+existing GEOMETRY/PROJECTIONS/MODEL/EXCHANGE/IDENTITY/BOUNDARIES/PRIVACY and
+ANALYSIS@2/TYPES/VALIDATION@1, RUST/DEV.RUST@2. Source receipt E01-cli explicitly
+leaves observe→export unconnected; it is evidence of the gap, not new authority.
+
+Owner: resumed Export01a11286-a187-7720-a452-41b6ea7b228b, master/inherit/no nested
+agents. Inspect current DrawingBrief metadata/source/selection and bounded CLI
+loader first, then register any additive concrete input/metadata syntax/revision
+before code. Restore existing observed document semantics; delegated representation
+choice may use an explicit Evolve/Reconcile delta. Bare Snapshot cannot fabricate
+title/audience/state/approval or current/full coverage. Preserve original source
+and unknowns; no implicit Snapshot-ID storage service or second graph/compiler.
+
+Task-wide only crates/export, narrow crates/cli source/tests, necessary export/CLI
+spec and registry route references, existing cli/export developer guides and
+E01-cli receipt. Schema/engine/plugin-api/host, collectors/fixtures, manifests/lock/
+dependencies and root coordination protected. Declare subset; cross-owner need
+returns the exact dependency. Current input has no released baseline; legacy
+brief→package behavior and all source evidence remain protected nonetheless.
+
+Verify actual public observed-file document command with existing saved owned
+fixtures/caller metadata, complete six-file output and A+B prompt, source/units/
+partial/unknown unchanged, bounded invalid/privacy/no-overwrite cases and affected
+legacy brief regression. No recollection, whole suite or per-preparation review.
+One finished input/privacy boundary review when necessary. OS-temp test output,
+image retention and consumed nonimage cleanup apply. Scoped checkpoint+push via
+short Git lease, exact usable command/checks/limitations, then stop. Full P7 remains
+open; this packet does not substitute for the full goal.

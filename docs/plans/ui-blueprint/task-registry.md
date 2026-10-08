@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G08 Web01a11983-223d-7a30-8334-573658f237fb и G07 Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a active; disjoint Web/build-doc write sets. Git lease свободна. Прежние Core/Web archived, saved source сохранён |
+| Активные чаты/пакеты/ресурсы | G09 Export01a11286-a187-7720-a452-41b6ea7b228b active, owns export/narrow CLI. G07/G08 completed/pushed, Git/runtime leases released. Native и Web archived after result handoff; IDs/receipts сохранены для будущих пакетов |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | G07: одна воспроизводимая команда сборки текущих CLI/worker/helper. G08: generic explicit-target Web first-use command. G05/G06 результаты сохранены. P5 WIP сохранён; новая input работа отложена. Full P0–P7 scope сохраняется |
+| Следующий шаг | G09: observed canonical file → full document package through existing public export compiler. G07 one-command build and G08 generic Web first use saved. P5 WIP сохранён; input не блокирует geometry. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -581,3 +581,29 @@ Native G07 source-backed owner: extend existing host_observe.py build-geometry,
 exact3 launcher/native-helper guide/P01 receipt; three executables to explicit
 existing directory without overwrite, committed HEAD locked/offline build. No
 source/manifests/feature changes. Both tasks active, leases disjoint; Git free.
+
+G07 saved/pushed5f185fe93f46244baf6567f05f068d288d1115de exact3. One command
+build-geometry produces Web+Mac CLI, Web worker and Native helper from committed
+HEAD with locked/offline installed toolchains. Author verified local Measure8/
+Inspect/help/helper errors and non-overwrite behavior; no runtime/model launch.
+Native originals retained for G08 until its own copies/hash confirmation, then
+originals/metadata removed. Native completed and archived after handoff; history
+and P01 receipt retained for future finite native work, no unsaved result lost.
+
+G08 saved/pushed46ec1de15bd5d877f4ac572a5e26c45ced7c9a07 exact4; generic explicit
+target/frame/loader/document/backend-root helper and Web guide. Actual owned-F01
+command154.34ms yielded known360×123css_px plus partial coverage (exit4); original
+Snapshot/bytes unchanged. Missing root/foreign document/stale after reload refuse4,
+zero stdout. Final cleanup-only error branch received focused failure check; no
+unchanged UI rerun. Same G07 binaries reused; copies/temp/own runtime cleaned.
+Root read full author receipt, no independent/full Web/P7 acceptance claim.
+Web chat archived after this finite saved result and resource release; restore its
+recorded ID when the next Web packet is ready instead of losing accepted work.
+
+G09 resumed existing Export01a11286-a187-7720-a452-41b6ea7b228b successfully;
+actual active turn01a119a5-5c07-7d43-853d-5f11a3cdcb32 confirmed. Its previous
+264a838 source was saved/pushed and idle, with no conflicting writer. Finite
+[packet](packets/E01-cli.md) owns observed-file→public document package plus
+necessary additive syntax registration before source. Full EXPORT/DRAWING route
+read by root; native/Web geometry and existing brief modes protected. No new chat,
+source-app operation, model call or changed goal scope; whole P0–P7 remains active.
