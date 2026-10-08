@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12; Web01a11983 implements B04. Native01a110ac-2da3 composite source frozen pending schema/request admission dependency; Integration01a11286 restored for finite read-only shared-boundary handoff. No Native runtime; Web isolated headless lane after saved source; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12 and owns spec-root/product routes; Web01a11983 implements B04; Integration01a11286 implements narrow schema/plugin admission and EXCHANGE/D03 leaves. Native01a110ac-2da3 WIP0114fa1 waits saved shared fix. No Native runtime; Web isolated headless lane after saved source; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -994,3 +994,16 @@ no unconditional guard removal, attribution loss, golden expectation tuning or
 parent ACK/slot change. Core G12/schema shape outside handoff, Web/Native owners
 protected. Return exact scope/contract dependency for implementation selection.
 This resolves a demonstrated shipping blocker while unrelated implementation runs.
+
+Integration handoff completed: same-channel-only is a technical restriction, not
+MODEL/EXCHANGE intent; none of126 golden documents is a ChannelResponse. Simply
+removing it would bypass nested-channel authorization, so root selected a narrow
+probe-wrapper/design/exactAX+probe extension with per-nested-channel request and
+Supported/Partial session checks in the actual prepublication admission owner.
+Existing schema shape/core0.1, all126, parent/ACK/slot protocol stay unchanged.
+Packet S01-native-proof M05 section grants exactly two production owners plus
+focused validators/lifecycle/Native-peer checks. EXCHANGE@2/D03@3 leaves registered
+before code by Integration; Core remains sole writer of root/product routes and
+will receive their exact registration-ready amendment. No concurrent file writer.
+Native remains on saved WIP0114fa1 until the shared fix; one grouped independent
+permission-boundary review follows saved shared+Native sources. No new audit loop.
