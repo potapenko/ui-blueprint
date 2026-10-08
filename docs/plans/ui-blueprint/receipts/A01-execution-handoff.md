@@ -976,3 +976,57 @@ on its isolated fixture, expected nine exit outcomes4/0/0/4/0/0/4/0/4; those rem
 pending here, not guessed from source/preflight. Grouped input-risk acceptance and
 full B02/P5/P7 remain separate. No source changes after the above checks; only this
 receipt and developer handoff updated, awaiting root's short documentation Git grant.
+
+## A05 narrow Web Activate caller — compiling-provider source checkpoint
+
+Finite A05-CLI, root-selected under existing PLAN.UIB@1 P5/P6; accepted A03/A04,
+G09/G10 and numerical fixes stay protected. Current master, no nested agents or
+runtime. Source handoff at the end of W02-provider-handoff establishes OWN F01:
+option-london selects/drafts London and removes itself; separate commit applies
+London to applied output; unexpected BODY dialog disables commit and caller must
+issue zero dependent Execute. These fixture facts were read in fixture.js and
+extension.html, not inferred from labels or claimed as actual new UI proof.
+
+Reused current full ACTIONS/FORMS/IDENTITY/PRIVACY/LIFECYCLE/CLI-ACTIONS@2→CLI@10,
+EXCHANGE/MODEL/BOUNDARIES and D02@2/D04@1/D05@4/WORK@1/MEMORY@2/RUST/DEV.RUST@2
+closure after no-diff check. Material choice derives from the existing canonical
+Activate/PropertyEquals/kernel and root's concrete compiling provider handoff,
+not an invented executor. Registered before source: A05-CLI-001,
+CLI-ACTIONS@3/CLI@11/registry23, additive narrow representation only.
+
+Concrete inspected Web handoff (working provider, not saved acceptance):
+WebActionProvider::prepare_exact(&Snapshot,&Request,Option<&Expectation>,
+&ClockReading,u64); worker_web forwards its validated expected.as_ref().
+Tape3/Act unchanged. Port is Activate/Semantic on native HTMLButtonElement with
+explicit PropertyEquals(Value,Text) on one DISTINCT public web.dom native INPUT
+text/search/url/tel or plain OUTPUT, SAME Surface/scope. Readonly/disabled result
+is readable; request fields enabled/value/input_kind required. Excludes same-node
+result, textarea/select, Native/pointer/hardware. Both identities held separately;
+self-removal never authorizes reacquisition. Missing/private/unavailable result
+cannot pass. Standard isolated HTMLElement.click, userGesture=false, untrusted
+script Semantic attribution; no direct onclick/setter/dispatchEvent/Enter fallback.
+
+Only production caller change is adding Activate/Semantic to the existing branch
+requiring --expectation. Parent does not parse expected/source graphs, infer result
+from Type.text/label/click return, or implement a second validator. File count/order,
+aggregate byte bound, target authority, permit/lane/effect/ACK/no-retry/cleanup,
+canonical output/status/exits and legacy SetChecked/Focus/Type are unchanged.
+Developer handoff documents separate option draft versus later applied expectation
+and caller stop on unexpected transition, without adding a scenario runner.
+
+Exact9 paths: CLI src/action.rs/main.rs, tests/action_binary.rs; spec registry,
+product registry/cli.md/cli-actions.md; docs/development/cli.md; this existing receipt.
+No arguments/parser change, host/plugin/Web/schema/engine/export/fixture/manifest/
+root coordination edit. New test covers mandatory Expectation, aggregate fourth-file
+budget and different result-key CLI admission without claiming provider validation;
+unsupported-modality regression now uses Activate/Pointer. Existing worker tests
+and actual Web consumer own binding/privacy/result semantics.
+
+Independent checks completed: default CLI binary check, scoped CLI fmt, changed
+links/node-size and whitespace checks. Web-feature tests/build/lint wait for saved
+check-ready provider and mechanical host handoff; current Web/host WIP is not
+qualified. No browser/input/model/actual sequence or unchanged Focus/Type suite run.
+No binary products created yet for the dependent consumer. Source checkpoint-ready;
+root may grant a coherent WIP save, then final affected checks on saved integration
+will produce one retained CLI/worker pair for Web's single actual public sequence.
+No full B02/P5/P7 or grouped risk acceptance claimed at this stage.

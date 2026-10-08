@@ -63,7 +63,7 @@ mod supported {
         };
         match (&action.intent, action.modality) {
             (Intent::SetChecked { .. }, InputModality::Setter) => (),
-            (Intent::Focus {}, InputModality::Semantic)
+            (Intent::Focus {} | Intent::Activate {}, InputModality::Semantic)
             | (Intent::Type { .. }, InputModality::Keyboard) => {
                 if args.expectation.is_none() {
                     return Err(Failure::invalid("expectation_required"));

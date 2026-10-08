@@ -338,3 +338,51 @@ This is the public caller handoff for the combined A03/A04 integration. Core own
 saved/check-ready worker composition; Web owns the one actual isolated public
 Focus→Type chain and its runtime proof. CLI preflight tests are not delivery proof,
 and a source-state result does not close full B02/P5/P7 or Native capability.
+
+
+## A05 narrow native-button activation
+
+[CLI-ACTIONS@3](../specs/product/cli-actions.md) extends the same explicit
+single-step command with `Intent::Activate {}` and `InputModality::Semantic`.
+It requires --expectation FILE on Prepare and Execute, exactly like Focus/Type;
+source, Request, Expectation order and all budgets/output/exits stay unchanged.
+The parent transports that record without inspecting or inventing its result.
+
+```sh
+uiblueprint action prepare --connection connection.json --snapshot observed.json \
+  --request activate-prepare.json --expectation result-expected.json \
+  --worker /absolute/path/session-worker --max-input-bytes 131072 \
+  --max-output-bytes 65536 --json
+uiblueprint action execute --connection connection.json --plan activate-plan.json \
+  --request activate-act.json --expectation result-expected.json \
+  --worker /absolute/path/session-worker --max-input-bytes 131072 \
+  --max-output-bytes 65536 --json
+```
+
+First supported port: actor is an observed native HTMLButtonElement; Expectation
+is PropertyEquals(Value,Text) on one distinct independently bound public web.dom
+result, in the same authorized Surface/scope. Result must be INPUT of type
+text/search/url/tel or plain OUTPUT. Readonly/disabled results are readable;
+required requested fields are enabled,value,input_kind. This is not textarea,
+select, same-node result, generic arbitrary DOM or Native activation. Source/private/
+stale/missing-result validation remains in the existing guarded worker/provider.
+
+In our F01 fixture, selecting the observed option expects Value(Text("London"))
+on the distinct draft node; a separate fresh Commit step expects it on the
+applied output node. Selection is not Apply. Neither button label, click return
+nor prior draft determines the expected outcome. An option may remove itself;
+verification reads the separately held result without reacquiring either node by
+label or coordinates. Missing/private/unavailable after-state cannot verify success.
+
+Delivery is the provider's fixed isolated standard HTMLElement.click with
+userGesture=false and untrusted script Semantic attribution. It does not prove
+pointer/hardware input and does not invoke onclick directly or use a value setter,
+Enter, synthetic dispatchEvent or a fallback backend. Existing real parent permit,
+ACK/effect metadata, deadline/cleanup and post-Possible no-retry rules apply.
+The explicit caller must freshly observe unexpected transition/disabled Commit
+and stop with zero dependent Execute calls; no new scenario/batch runner exists.
+
+A05 source is a compiling-provider adaptation, awaiting saved Web/host-dependent
+checks and Web's one actual public selection→apply/unexpected-stop sequence.
+Prior accepted A03/A04 and geometry/export/neighbors remain protected; full B02/
+P5/P7 is not inferred from this port or its registration.

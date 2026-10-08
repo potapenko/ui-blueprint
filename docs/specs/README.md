@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 22.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 23.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -40,7 +40,6 @@ clarification preserves explicit request-driven collection, without periodic pol
 `D05-RET-002` originally selected [retained memory policy](development/decisions/d05-memory.md)
 under D05@2/ROADMAP before K01 storage; that decision left D02/wire unchanged.
 Working-memory implementation and live acceptance remain open.
-
 `L01-ANALYSIS-001` registers [D03@2](development/decisions/d03-data.md) and
 [ANALYSIS@1](product/analysis.md) under delegated ROADMAP representation authority,
 using accepted handoff8fdf608. Local analysis0.2 reuses protected core0.1 data;
@@ -70,6 +69,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `G09-EXPORT-INPUT-001`: [CLI@8](product/cli.md)/[CLI-EXPORT@1](product/cli-export.md) adds explicit Snapshot or observed ChannelResponse plus caller metadata to document export under delegated P6; existing --brief, compiler versions, numerical/privacy/status contracts and other CLI commands preserved.
 `G10-NEIGHBORS-001`: [CLI@9](product/cli.md)/[CLI-NEIGHBORS@1](product/cli-neighbors.md) exposes accepted G02 relation selection with explicit cap/source attribution under P3/P6; no engine/wire or existing-command change.
 `A04-CLI-001`: [CLI@10](product/cli.md)/[CLI-ACTIONS@2](product/cli-actions.md) connects Web Focus/Type to explicit canonical Expectation input under P5/P6; legacy SetChecked, geometry, authority/effect/ACK and canonical versions unchanged.
+`A05-CLI-001`: [CLI@11](product/cli.md)/[CLI-ACTIONS@3](product/cli-actions.md) adds the compiling Web native-button Activate port with explicit independently held public result identity under P5/P6; existing transport/permissions/canonical versions and other commands preserved.
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.

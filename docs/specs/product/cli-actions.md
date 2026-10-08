@@ -1,36 +1,39 @@
 # Single-step action CLI
 - Node type: leaf; domain: `uib.cli.actions`.
 - Authority: Active; Stability: Evolving; accepted/released baseline: none.
-- Contract: `UIB.CLI-ACTIONS@2`; supersedes @1 additively.
+- Contract: `UIB.CLI-ACTIONS@3`; supersedes @2 additively.
 - Authority source: approved PLAN.UIB@1 P5/P6, CLI.CONTENT/ACTIONS and [root's selected finite packet](../../plans/ui-blueprint/packets/L01-actions-contract.md) under ROADMAP; registration is not implementation acceptance.
 - Read when: action prepare/execute commands, authority, output or exits.
 - Do not read when: unchanged inspect/observe/diff or unrelated backend acquisition.
-- Requires: [CLI@10](cli.md), [ACTIONS@1](actions.md), [IDENTITY@1](identity.md), [LIFECYCLE@1](lifecycle.md), [D02@2](../development/decisions/d02-boundaries.md); their explicit closure applies.
-## UIB.CLI-ACTIONS.SCOPE — First concrete caller
-Expose one Web SetChecked(bool), Focus(Semantic) or Type(Keyboard) through the existing guarded worker/provider; Focus/Type require an explicit caller Expectation.
-This is not full B02/multi-step or Native/Activate delivery support. Unsupported
-intent/backend is explicit; those remaining goal capabilities are not removed.
-Core0.1/analysis0.2, existing commands, evidence, policy and feature defaults stay.
-No new graph, scenario DSL, step loop, dependency, implicit discovery or source launch.
+- Requires: [CLI@11](cli.md), [ACTIONS@1](actions.md), [IDENTITY@1](identity.md), [LIFECYCLE@1](lifecycle.md), [D02@2](../development/decisions/d02-boundaries.md); their explicit closure applies.
+## UIB.CLI-ACTIONS.SCOPE
+Expose one Web SetChecked(bool), Focus/Activate(Semantic) or Type(Keyboard) through the existing guarded worker/provider; Focus/Type/Activate require an explicit caller Expectation.
+This is not full B02/multi-step or Native delivery support. Unsupported intent/backend is explicit; those remaining goal capabilities are not removed.
+Core0.1/analysis0.2, existing commands, evidence, policy and feature defaults stay. No new graph, scenario DSL, step loop, dependency, implicit discovery or source launch.
 ## UIB.CLI-ACTIONS.INPUT — Canonical records and bounds
 ```text
 action prepare --connection FILE --snapshot FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--expectation FILE] [--json]
 action execute --connection FILE --plan FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--expectation FILE] [--json]
 ```
-Reuse strict connection1.0.0, explicit host limits, supported host/features and
-established exact Web target/document from CLI.OBSERVE; defaults remain empty.
-All explicit regular files (including Expectation when present) share one positive aggregate input budget. --snapshot
-accepts canonical Snapshot or observed ChannelResponse containing it, as Inspect.
-Failed/no-snapshot response refuses; full envelope validation and extraction stay
-in the guarded worker, preserving the embedded Snapshot/evidence unchanged.
-Plan is the existing single ActionCase Document.
-Request is the existing core0.1 Request Document with Prepare or Act respectively.
-Prepare uses Tape(Snapshot/observed ChannelResponse,Prepare Request[,Expectation]);
-Execute uses Tape(ActionCase,Act Request[,Expectation]). Missing --expectation for
-Focus/Type refuses expectation_required/2 before attach. Legacy SetChecked without
-it keeps the exact two-document path. Parent reads expectation bytes under the same
-budget, never parses source graphs or derives expected Value from Type.text.
-Guarded worker validates canonical Expectation/type/count/order/binding/privacy.
+Reuse strict connection1.0.0, explicit host limits, supported host/features and established exact Web target/document from CLI.OBSERVE; defaults remain empty.
+All explicit regular files (including Expectation when present) share one positive aggregate input budget. --snapshot accepts canonical Snapshot or observed ChannelResponse containing it, as Inspect.
+Failed/no-snapshot response refuses; full envelope validation and extraction stay in the guarded worker, preserving the embedded Snapshot/evidence unchanged.
+Plan is the existing single ActionCase Document. Request is the existing core0.1 Request Document with Prepare or Act respectively.
+Prepare uses Tape(Snapshot/observed ChannelResponse,Prepare Request[,Expectation]); Execute uses Tape(ActionCase,Act Request[,Expectation]). Missing --expectation for
+Focus/Type/Activate refuses expectation_required/2 before attach. Legacy SetChecked without it keeps the exact two-document path. Parent reads expectation bytes under the same
+budget, never parses source graphs or derives expected Value from Type.text. Guarded worker validates canonical Expectation/type/count/order/binding/privacy.
+Activate first port: native HTMLButtonElement Semantic activation and explicit
+PropertyEquals(Value,Text) on one DISTINCT web.dom result in the SAME Surface/scope.
+Result is public INPUT text/search/url/tel or plain OUTPUT; readonly/disabled result
+is readable. Required fields: enabled,value,input_kind. Exclude textarea/select,
+same-node result, Native/pointer/Enter/onclick/setter/dispatchEvent alternatives.
+Fixed isolated standard HTMLElement.click uses userGesture=false, untrusted script
+Semantic attribution; neither pointer nor hardware proof. Both identities are held
+independently before dispatch; self-removal of actor permits reading only the still
+bound result, never reacquisition by label/coordinates. Unreadable/private/lost
+result cannot verify success. Selection draft and later apply are separate caller
+expectations, never inferred from label, click return or earlier draft. Unexpected
+transition requires caller stop with zero dependent Execute; no batch runner added.
 Focus requires PropertyEquals(Focused,true) on the exact action node; Type requires
 PropertyEquals(Value,Text) on that node with an explicit expected full public draft
 source value, not inferred applied/business success. Source field/current identity
@@ -86,15 +89,12 @@ results and effect uncertainty survive loss; establish actual state before retry
 | Valid Prepare / verified exact SetChecked | Prepare0 / Execute0 only with full ACK and cleanup |
 | Output IO or unconfirmed owned cleanup | Exit1 overrides success |
 ## Change record
-
-L01-ACTIONS-001: Evolve preliminary CLI action syntax into this first concrete,
-unreleased slice under the selected packet. CLI@5→@6/registry15→16; protected
-core/analysis/connection versions and existing commands unchanged. Source c3967ca
-shows delivery-only HostCompletion; producer metadata, caller and actual CLI runtime
-acceptance remain unimplemented gates, separate from ongoing Web host qualification.
-
-`A04-CLI-001`: additive CLI-ACTIONS@2/CLI@10/registry22 registers public Web
-Focus/Type explicit --expectation transport under root A04 dispatch/PLAN.UIB@1.
-Canonical versions, SetChecked, output ACK/status/exits and metadata unchanged.
-Source/kernel/provider proof and one actual public Focus→Type chain remain
-separately attributed; registration does not accept input delivery or full B02.
+L01-ACTIONS-001: initial delegated single-step CLI@6/registry16 registration;
+core/analysis/connection versions and prior commands unchanged. Historical c3967ca
+metadata/runtime gaps are tracked in the action receipt; registration was not acceptance.
+`A04-CLI-001`: CLI-ACTIONS@2/CLI@10/registry22 added explicit Focus/Type under
+root dispatch/PLAN.UIB@1; prior canonical versions/SetChecked/ACK/status/exits stayed.
+Source/runtime acceptance is separately recorded; registration does not close B02.
+`A05-CLI-001`: CLI-ACTIONS@3/CLI@11/registry23 registers the narrow Web Activate
+port from the compiling provider handoff under PLAN.UIB@1 P5/P6. Same --expectation,
+Tape3, permit/ACK/status/exits; concrete provider and actual sequence proof separate.

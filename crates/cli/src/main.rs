@@ -28,8 +28,8 @@ Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_
 Observe needs a selected macos/web build and explicit trusted connection; emits committed canonical NDJSON and cleans only owned workers/helpers.\n\
 Action: uiblueprint action prepare --connection FILE --snapshot FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--expectation FILE] [--json]\n\
 Action: uiblueprint action execute --connection FILE --plan FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--expectation FILE] [--json]\n\
-Actions support one Web SetChecked, Focus or Type through a selected web build; saved plans are freshly revalidated, delivery and verified source state are separate.\n\
-Web Focus(Semantic)/Type(Keyboard) require --expectation FILE; SetChecked(Setter) retains the legacy path. Never infer expected state from typed text.\n\
+Actions support one Web SetChecked, Focus, Type or native-button Activate through a selected web build; saved plans are freshly revalidated, delivery and verified source state are separate.\n\
+Web Focus/Activate(Semantic)/Type(Keyboard) require --expectation FILE; SetChecked(Setter) retains the legacy path. Never infer expected state from typed text.\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Saved input accepts Snapshot or observed ChannelResponse; expectation/query stay canonical. Bounds are explicit; local analysis collects nothing.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\

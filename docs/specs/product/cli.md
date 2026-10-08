@@ -1,14 +1,14 @@
 # CLI и bounded output
 
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@10`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@2; supersedes @9 with explicit Web Focus/Type expectations; existing commands preserved.
+- Contract: `UIB.CLI@11`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @10 with narrow Web Activate and explicit result identity; existing commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
 - Read when: CLI commands, compact/JSON и публикация.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
 - Conditional requires, recorded diff only: [UIB.CLI-DIFF@2](cli-diff.md); existing clauses unchanged.
-- Conditional requires, action caller only: [UIB.CLI-ACTIONS@2](cli-actions.md); selected first single-step syntax/output/authority/exits, no full scenario claim.
+- Conditional requires, action caller only: [UIB.CLI-ACTIONS@3](cli-actions.md); selected first single-step syntax/output/authority/exits, no full scenario claim.
 - Conditional requires, observed export: [UIB.CLI-EXPORT@1](cli-export.md); additive --snapshot plus caller metadata, preserving --brief.
 - Conditional requires, neighbors: [UIB.CLI-NEIGHBORS@1](cli-neighbors.md); explicit cap/source coverage, preserving inspect.
 - Source mapping: TZ 372–398; [inverse map](../reference/source-map.md); source links are provenance, not requires.

@@ -301,7 +301,7 @@ fn forms_require_explicit_expectation_and_preserve_byte_budget_before_spawn() {
 #[test]
 fn action_cli_does_not_expand_intents_or_reinterpret_type_as_setter() {
     for (intent, modality) in [
-        (Intent::Activate {}, InputModality::Semantic),
+        (Intent::Activate {}, InputModality::Pointer),
         (
             Intent::Type {
                 text: "PRIVATE_UNSUPPORTED_CANARY".into(),
@@ -325,5 +325,55 @@ fn action_cli_does_not_expand_intents_or_reinterpret_type_as_setter() {
         assert_eq!(out.status.code(), Some(5));
         assert_eq!(out.stderr, b"unsupported_command\n");
         assert!(out.stdout.is_empty());
+    }
+}
+
+#[test]
+fn semantic_activate_requires_explicit_distinct_result_expectation_and_same_budget() {
+    for command in ["prepare", "execute"] {
+        let c = Case::new(command);
+        c.forms_request(false);
+        let path = c.directory.join("request.json");
+        let mut request: Document = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        let Artifact::Request(r) = &mut request.artifact else {
+            panic!("request")
+        };
+        let a = match &mut r.operation {
+            Operation::Prepare { action } | Operation::Act { action } => action,
+            _ => panic!("action"),
+        };
+        a.intent = Intent::Activate {};
+        a.modality = InputModality::Semantic;
+        request.validate().unwrap();
+        fs::write(path, serde_json::to_vec(&request).unwrap()).unwrap();
+        let path = c.directory.join("expected.json");
+        let mut expected: Document = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        let Artifact::Expectation(e) = &mut expected.artifact else {
+            panic!("expectation")
+        };
+        e.targets[0].key = Id("explicit-result-node".into());
+        e.rule = Rule::PropertyEquals {
+            field: Field::Value,
+            expected: Value::Text("London".into()),
+        };
+        expected.validate().unwrap();
+        let original = serde_json::to_vec(&expected).unwrap();
+        fs::write(&path, &original).unwrap();
+        let missing = c.run(command, 100_000, 65536, &["--json"]);
+        assert_eq!(missing.status.code(), Some(2));
+        assert_eq!(missing.stderr, b"expectation_required\n");
+        assert!(missing.stdout.is_empty());
+        let args = ["--json", "--expectation", path.to_str().unwrap()];
+        let bounded = c.run(command, c.total_input() - 1, 65536, &args);
+        assert_eq!(bounded.status.code(), Some(2));
+        assert_eq!(bounded.stderr, b"input_limit\n");
+        assert!(bounded.stdout.is_empty());
+        // Parent admits the new intent and transports caller result identity;
+        // an absent worker proves no provider validation or delivery here.
+        let admitted = c.run(command, c.total_input(), 65536, &args);
+        assert_eq!(admitted.status.code(), Some(1));
+        assert_eq!(admitted.stderr, b"io_error\n");
+        assert!(admitted.stdout.is_empty());
+        assert_eq!(fs::read(path).unwrap(), original);
     }
 }
