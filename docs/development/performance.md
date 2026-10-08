@@ -1,6 +1,8 @@
 # Q02 fixed D06 evaluation
 
-Status: preparation; **no candidate timing or performance acceptance yet**.
+Status: Web-only scoped evaluation on8e3dba2: warm requested geometry p95
+2.688ms/100calls meets20ms; Native, semantic fidelity, whole-fixture cold and
+separate-stage telemetry remain open. **No aggregate D06/P7 acceptance.**
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
@@ -40,6 +42,11 @@ UIB_Q02_EXECUTABLE and matching UIB_Q02_EXECUTABLE_SHA256, new system-temp
 UIB_Q02_OUTPUT and the established S01_WEB_PLAYWRIGHT_CORE. It launches only owned
 headless F01 at800×600/DPR1 with the frozen Chromium145.0.7632.6/Playwright1.58.2/
 Node24.15.0. No real site/profile, screenshots, cadence or background UI collection.
+First run with `--preflight`: actual CDP protocol,2-document/97-node fixture shape,
+raw addressed AX fields, independent rect literals and changed/restored data.
+Then supply UIB_Q02_PREFLIGHT pointing to that report. Only comparable workloads
+with passed quality/freshness execute series. Known raw `focusable=true` currently
+prevents the semantic cohort; dropping it is not an equivalent response.
 Each semantic/geometry cohort has20 process-cold single-control samples and one
 reused session containing initial response plus100 explicit fresh warm requests.
 First Observe resolves #left; subsequent calls reuse the observed ref and attachment.

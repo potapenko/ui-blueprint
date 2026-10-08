@@ -84,11 +84,18 @@ function setup(binding){return {endpoint:binding.endpoint,cdp_session_id:null,su
 async function run(){
   assert(process.argv.includes('--run-authorized') && process.env.UIB_Q02_ALLOW==='1','explicit timed resource activation');
   const functional=process.env.UIB_Q02_FUNCTIONAL_PIN;assert(/^[a-f0-9]{40}$/.test(functional||''),'reviewed functional source pin');
+  const preflight=process.argv.includes('--preflight');
+  let accepted;
+  if(!preflight){
+    const proof=process.env.UIB_Q02_PREFLIGHT;assert(path.isAbsolute(proof||''),'saved quality preflight required before series');
+    accepted=JSON.parse(fs.readFileSync(proof));assert.equal(accepted.functional_pin,functional);
+    assert(!accepted.failure&&!accepted.cleanup_failure,'successful preflight lifecycle required');
+  }
   const executable=process.env.UIB_Q02_EXECUTABLE;assert(path.isAbsolute(executable||''));
   assert.equal(digest(executable),process.env.UIB_Q02_EXECUTABLE_SHA256);
   const output=process.env.UIB_Q02_OUTPUT;assert(path.isAbsolute(output||''));
   assert(path.resolve(output).startsWith(fs.realpathSync(os.tmpdir())+path.sep));fs.mkdirSync(output,{mode:0o700});
-  const fixtureSetup=prepare(),report={functional_pin:functional,executable_sha256:digest(executable),samples:[],
+  const fixtureSetup=prepare(),report={functional_pin:functional,executable_sha256:digest(executable),mode:preflight?'quality_preflight':'timed_series',samples:[],comparability:{},
     unavailable:['Web full-fixture cold: current rooted collector refuses iframe; 2-document/97-node baseline cannot be substituted by single-control cold.',
       'Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],
     environment:{node:process.version,arch:os.arch(),release:os.release(),cpus:os.cpus().length,cpu:os.cpus()[0].model,memory:os.totalmem(),load_start:os.loadavg()},
@@ -107,6 +114,20 @@ async function run(){
       const page=await context.newPage();await page.goto(fixture.url+'/?generation=1',{timeout:3000});
       await page.waitForFunction(()=>!!window.f01,{},{timeout:3000});
       session=await context.newCDPSession(page);
+      if(preflight){
+        const version=await session.send('Browser.getVersion');assert.equal(version.protocolVersion,'1.3');report.environment.protocol=version;
+        const full=await session.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});
+        const shape={documents:full.documents.length,nodes:full.documents.reduce((n,d)=>n+d.nodes.nodeName.length,0)};
+        assert.deepEqual(shape,{documents:2,nodes:97});report.fixture_shape=shape;
+        const {root}=await session.send('DOM.getDocument',{depth:0});
+        const {nodeId}=await session.send('DOM.querySelector',{nodeId:root.nodeId,selector:'#left'});
+        const {node}=await session.send('DOM.describeNode',{nodeId});
+        const ax=await session.send('Accessibility.getPartialAXTree',{backendNodeId:node.backendNodeId,fetchRelatives:false});
+        fs.writeFileSync(path.join(output,`${kind}-raw-ax.json`),JSON.stringify(ax),{flag:'wx',mode:0o600});
+        const unmapped=ax.nodes.flatMap(n=>(n.properties||[]).filter(p=>p.name==='focusable').map(p=>({name:p.name,value:p.value})));
+        report.comparability[kind]={comparable:kind==='geometry'||unmapped.length===0,
+          gaps:kind==='semantic'&&unmapped.length?['raw known focusable has no canonical selected Field; do not measure reduced semantic payload as equal']:[],raw_unmapped:kind==='semantic'?unmapped:[]};
+      }
       const {targetInfo}=await session.send('Target.getTargetInfo');const {frameTree}=await session.send('Page.getFrameTree');
       const binding={endpoint:`ws://127.0.0.1:${port}/devtools/page/${targetInfo.targetId}`,
         target:{id:targetInfo.targetId,generation:crypto.randomUUID()},surface:{id:frameTree.frame.id,generation:frameTree.frame.loaderId}};
@@ -131,7 +152,7 @@ async function run(){
           const checked=check(sample,contextData,kind,requestId,ids);Object.assign(record,checked,{snapshot:undefined,status:'valid_partial'});
           if(i===0){const s=checked.snapshot,n=s.nodes.find(n=>n.key.namespace==='web.dom'),o=n.properties[0].evidence;
             selection={selection:'references',nodes:[{sensitivity:'public',reference:{session_id:s.context.session_id,target:s.context.target,surface:n.surface,key:n.key,snapshot_id:s.id,observation_id:o.observation_id}}]};}
-          if(i===0 && label==='reused-session'){
+          if(i===0 && (label==='reused-session'||preflight)){
             // Separate explicit fixture stimulus, outside every measured warm sample.
             // Prove that a reused ref reads new requested data, then restore baseline.
             const saved=await page.evaluate(()=>{const n=document.getElementById('left');return {style:n.getAttribute('style'),label:n.getAttribute('aria-label')};});
@@ -151,7 +172,7 @@ async function run(){
             fs.writeFileSync(path.join(output,requestId+'-restored.json'),JSON.stringify(fresh),{flag:'wx',mode:0o600});
             record.freshness_challenge='changed_and_restored_on_same_attachment_and_ref';
           }
-        }catch(error){record.outer_ms=performance.now()-begin;record.failure=String(error.message).slice(0,200);}
+        }catch(error){record.status='failed';record.outer_ms=performance.now()-begin;record.failure=String(error.message).slice(0,200);}
         report.samples.push(record);
         // A failure remains a sample. Do not blindly retry a broken session.
         if(record.status==='failed'){for(let j=i+1;j<count;j++)report.samples.push({kind,cohort:label,index:j,status:'not_run_after_failure'});break;}
@@ -163,6 +184,9 @@ async function run(){
   try{
     fixture=await start();
     for(const kind of ['semantic','geometry']){
+      if(preflight){await series(kind,1,'preflight');continue;}
+      if(!accepted.comparability[kind]?.comparable){report.comparability[kind]=accepted.comparability[kind];continue;}
+      assert(accepted.samples.some(s=>s.kind===kind&&s.status==='valid_partial'&&s.freshness_challenge),'preflight quality and freshness required');
       // Cold single-control is supplemental, never the frozen whole-fixture gate.
       for(let i=0;i<20;i++)await series(kind,1,`cold-control-${i}`);
       await series(kind,101,'reused-session'); // first retained separately; next 100 are warm
