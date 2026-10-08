@@ -34,6 +34,46 @@ existing responsibility.
 Implementation: [scope.rs](../../crates/engine/src/scope.rs).
 Deterministic cases: [scope tests](../../crates/engine/tests/scope.rs).
 Check status: [G02 receipt](../plans/ui-blueprint/receipts/G02-scope.md).
-Full projections, geometry-based neighbors, CLI integration and live W01/M01/P01
-qualification remain separate work. Canonical wire, host, cache and arithmetic
+Full projections, geometry-based neighbors and live W01/M01/P01
+qualification remain separate work. The public caller is described below. Canonical wire, host, cache and arithmetic
 are unchanged.
+
+## Public saved-data neighbor caller
+
+[CLI-NEIGHBORS@1](../specs/product/cli-neighbors.md) exposes the accepted borrowed
+API directly, with an explicit relation-entry cap and no spatial inference:
+
+```sh
+uiblueprint neighbors --snapshot observation.json \
+  --ref '{"namespace":"web.dom","key":"7"}' --max-relations 1 \
+  --max-input-bytes 200000 --max-output-bytes 200000 --json
+```
+
+Use an actual SourceKey from the selected source; the example key belongs to the
+historical F01 D05 response used for this caller proof. FILE accepts a canonical
+Snapshot Document or one observed ChannelResponse, using the existing CLI loader.
+No live collection, source-ID discovery, action ref or separate graph is created.
+
+Compact output is default. JSON is a CLI-owned envelope output_version1.0.0,
+kind=relation_neighbors, source=saved, live_revalidated=false, selector,
+snapshot (full unchanged source), selection {max_relations, returned_relations,
+omitted_relations, truncated}, neighbors [{direction, relation, counterpart}].
+Direction is outgoing/incoming/self_loop; Relation and counterpart Node are the
+unchanged canonical objects, including Evidence and unavailable properties.
+A cap of0 is valid and returns no selected edges but counts every omitted incident
+edge. Repeated links/counterparts are retained; absence of an explicit edge does
+not disprove a relationship in the live interface.
+
+Source coverage remains independent of selection. For the saved F01 sample, key
+web.dom:7 with cap1 returns one outgoing corresponds_to edge to web.ax:7 and reports
+one omitted edge; the full32-node/17-relation Snapshot still says partial with
+unknown_count=null. It does not become a complete UI or an action-ready mapping.
+
+max-input-bytes bounds source plus selector UTF-8 bytes. max-output-bytes bounds
+the entire response including newline; the full source is included even when
+selection is capped, so byte overflow rejects2 rather than silently dropping
+source facts. Cap limits output selection, not acquisition/CPU/RSS. Exit0 means
+selection produced (including partial source/capped output),4 missing exact seed,
+2 invalid/limit,1 IO/allocation failure. No partial stdout before validation/encode
+failure; constant sanitized diagnostics on stderr. No output files are created.
+Existing inspect's JSON envelope/compact behavior and all other commands remain.

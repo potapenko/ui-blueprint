@@ -570,3 +570,78 @@ pub(crate) fn recorded_diff(
     }
     Ok(buffer.bytes)
 }
+
+pub(crate) fn neighbors(
+    args: &crate::arguments::NeighborArguments,
+    view: &uiblueprint_engine::scope::NeighborView<'_>,
+) -> Result<Vec<u8>, Failure> {
+    use uiblueprint_engine::scope::RelationDirection;
+    let mut buffer = Bounded::new(args.max_output);
+    let direction = |d| match d {
+        RelationDirection::Incoming => "incoming",
+        RelationDirection::Outgoing => "outgoing",
+        RelationDirection::SelfLoop => "self_loop",
+    };
+    if args.json {
+        // Stream canonical borrowed objects through the existing bounded writer.
+        // The original source is separate from, and never capped by, selection.
+        buffer.write_all(b"{\"output_version\":\"1.0.0\",\"kind\":\"relation_neighbors\",\"source\":\"saved\",\"live_revalidated\":false,\"selector\":").map_err(|_|buffer.error())?;
+        serde_json::to_writer(&mut buffer, &view.seed.key).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"snapshot\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, view.snapshot).map_err(|_| buffer.error())?;
+        write!(buffer,",\"selection\":{{\"max_relations\":{},\"returned_relations\":{},\"omitted_relations\":{},\"truncated\":{}}},\"neighbors\":[",args.max_relations,view.neighbors.len(),view.omitted_relations,view.omitted_relations>0).map_err(|_|buffer.error())?;
+        for (index, neighbor) in view.neighbors.iter().enumerate() {
+            if index > 0 {
+                buffer.write_all(b",").map_err(|_| buffer.error())?;
+            }
+            write!(
+                buffer,
+                "{{\"direction\":\"{}\",\"relation\":",
+                direction(neighbor.direction)
+            )
+            .map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, neighbor.relation).map_err(|_| buffer.error())?;
+            buffer
+                .write_all(b",\"counterpart\":")
+                .map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, neighbor.counterpart).map_err(|_| buffer.error())?;
+            buffer.write_all(b"}").map_err(|_| buffer.error())?;
+        }
+        buffer.write_all(b"]}\n").map_err(|_| buffer.error())?;
+    } else {
+        let written = (|| -> io::Result<()> {
+            writeln!(
+                buffer,
+                "neighbors=saved_observation live_revalidated=false snapshot={:?} revision={} context={:?}",
+                view.snapshot.id, view.snapshot.revision, view.snapshot.context
+            )?;
+            writeln!(buffer, "source_coverage={:?}", view.snapshot.coverage)?;
+            for observation in &view.snapshot.observations {
+                writeln!(buffer, "recorded_observation={observation:?}")?;
+            }
+            writeln!(
+                buffer,
+                "selection max_relations={} returned_relations={} omitted_relations={} truncated={}",
+                args.max_relations,
+                view.neighbors.len(),
+                view.omitted_relations,
+                view.omitted_relations > 0
+            )?;
+            writeln!(buffer, "seed={:?}", view.seed)?;
+            for neighbor in &view.neighbors {
+                writeln!(
+                    buffer,
+                    "direction={} relation={:?} counterpart={:?}",
+                    direction(neighbor.direction),
+                    neighbor.relation,
+                    neighbor.counterpart
+                )?;
+            }
+            Ok(())
+        })();
+        written.map_err(|_| buffer.error())?;
+    }
+    Ok(buffer.bytes)
+}

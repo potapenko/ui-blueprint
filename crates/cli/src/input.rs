@@ -45,16 +45,19 @@ pub(crate) struct Loaded {
 }
 
 pub(crate) fn load_inspect(args: &InspectArguments) -> Result<(Snapshot, SourceKey), Failure> {
-    let mut remaining = args
-        .max_input
-        .checked_sub(args.reference.len())
+    load_selected(&args.snapshot, &args.reference, args.max_input)
+}
+pub(crate) fn load_selected(
+    path: &Path,
+    selector: &str,
+    max_input: usize,
+) -> Result<(Snapshot, SourceKey), Failure> {
+    let mut remaining = max_input
+        .checked_sub(selector.len())
         .ok_or(Failure::invalid("input_limit"))?;
-    let reference = serde_json::from_str::<SourceKey>(&args.reference)
+    let reference = serde_json::from_str::<SourceKey>(selector)
         .map_err(|_| Failure::invalid("invalid_input"))?;
-    Ok((
-        read_snapshot(&args.snapshot, &mut remaining, args.max_input)?,
-        reference,
-    ))
+    Ok((read_snapshot(path, &mut remaining, max_input)?, reference))
 }
 pub(crate) fn read_snapshot(
     path: &Path,

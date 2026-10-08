@@ -336,3 +336,58 @@ pub(crate) fn limit(value: OsString) -> Result<usize, Failure> {
         .filter(|n| *n > 0 && *n < usize::MAX)
         .ok_or(Failure::invalid("invalid_arguments"))
 }
+
+pub(crate) struct NeighborArguments {
+    pub snapshot: PathBuf,
+    pub reference: String,
+    pub max_relations: usize,
+    pub max_input: usize,
+    pub max_output: usize,
+    pub json: bool,
+}
+impl NeighborArguments {
+    pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
+        let (mut snapshot, mut reference, mut cap, mut max_input, mut max_output) =
+            (None, None, None, None, None);
+        let invalid = Failure::invalid("invalid_arguments");
+        let mut json = false;
+        while let Some(flag) = args.next() {
+            if flag == "--json" {
+                if json {
+                    return Err(invalid);
+                }
+                json = true;
+                continue;
+            }
+            let value = args.next().ok_or(invalid)?;
+            match flag.to_str() {
+                Some("--snapshot") if snapshot.is_none() => snapshot = Some(PathBuf::from(value)),
+                Some("--ref") if reference.is_none() => {
+                    reference = Some(value.into_string().map_err(|_| invalid)?)
+                }
+                Some("--max-relations") if cap.is_none() => {
+                    cap = Some(
+                        value
+                            .to_str()
+                            .filter(|s| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit()))
+                            .and_then(|s| s.parse::<usize>().ok())
+                            .ok_or(invalid)?,
+                    );
+                }
+                Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
+                Some("--max-output-bytes") if max_output.is_none() => {
+                    max_output = Some(limit(value)?)
+                }
+                _ => return Err(invalid),
+            }
+        }
+        Ok(Self {
+            snapshot: snapshot.ok_or(invalid)?,
+            reference: reference.ok_or(invalid)?,
+            max_relations: cap.ok_or(invalid)?,
+            max_input: max_input.ok_or(invalid)?,
+            max_output: max_output.ok_or(invalid)?,
+            json,
+        })
+    }
+}

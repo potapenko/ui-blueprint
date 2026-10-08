@@ -25,10 +25,11 @@
 | [UIB.LIFECYCLE@1](lifecycle.md) | cancel/dispatch, native handles, очереди Target и изоляция; contract |
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
-| [UIB.CLI@8](cli.md) | CLI commands/output; preserved CONTENT/INSPECT/OBSERVE, [recorded diff@2](cli-diff.md) and selected [single-step CLI-ACTIONS@1](cli-actions.md) |
+| [UIB.CLI@9](cli.md) | CLI commands/output; preserved CONTENT/INSPECT/OBSERVE, [recorded diff@2](cli-diff.md) and selected [single-step CLI-ACTIONS@1](cli-actions.md) |
 | [UIB.ANALYSIS@2](analysis.md) | local measurement/check0.2, direct observed input, result-space/evaluation, validation layers and protected0.1 compatibility; types/validation closure unchanged |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |
+| [UIB.CLI-NEIGHBORS@1](cli-neighbors.md) | bounded explicit recorded relation context; contract |
 | [UIB.CLI-EXPORT@1](cli-export.md) | saved Snapshot/ChannelResponse → document package with explicit metadata; contract |
 | [UIB.EXPORT@1](export.md) | E01/E02, imagegen-prompt, человеческий экспорт; contract |
 | [UIB.DRAWING-STYLE@1](drawing-style.md) | компоновка документа и обозначения; contract |

@@ -257,3 +257,21 @@ No raw serde, filesystem, payload or argument errors are printed. A write failur
 is never reported as success. If stdout itself fails after files were written,
 exit1 reports IO failure and the completed package remains at the explicit
 location; retrying cannot overwrite it. No automatic retry is performed.
+
+
+## Saved relation neighbors
+
+`uiblueprint neighbors --snapshot FILE --ref SOURCE_KEY_JSON --max-relations N
+--max-input-bytes N --max-output-bytes N [--json]` selects one step of existing
+incident relations through the accepted engine API. FILE is a canonical Snapshot
+or observed ChannelResponse; --ref is the same strict SourceKey as inspect.
+All flags are required once; max-relations accepts0, byte budgets remain positive.
+
+See [CLI-NEIGHBORS@1](../specs/product/cli-neighbors.md) for exact JSON shape,
+exits and bounds, and [scope example](scope.md#public-saved-data-neighbor-caller)
+for a usable command. Selection cap/omitted/truncated are separate from unchanged
+source coverage. Direction, counterpart Node and Evidence are preserved. Output
+is saved context only; no live revalidation, inferred link or stable action ref.
+Inspect remains unchanged; it still shows all incident relation keys in compact
+and the original Snapshot in its version1.0.0 inspection envelope. Neighbors adds
+explicit capped selection and counterpart data, rather than another graph owner.

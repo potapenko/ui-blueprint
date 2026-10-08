@@ -62,3 +62,79 @@ Residual: this supplies explicit one-step relation selection on stored canonical
 data only. Full interaction/design views and live W01/M01/P01 source qualification
 remain open. Root switched Web to a saved source snapshot excluding G02 WIP, so
 there is no outstanding Core source hold or unsaved-input dependency on this slice.
+
+## G10 public neighbor caller — 2026-10-08
+
+Finite follow-through assigned to existing CLI/Export worker under G02 packet's
+G10 addendum, root4373187 and original PLAN.UIB@1 P3/P6 authority. Restore explicit
+connected context; concrete additive CLI representation registered before source
+as CLI@9/CLI-NEIGHBORS@1, registry21, G10-NEIGHBORS-001. Existing engine meaning,
+core0.1/analysis0.2, G09 export and numerical/privacy/source invariants unchanged.
+
+Traversal: current registry20 → product branch → CLI@8 and PROJECTIONS@1 →
+MODEL/IDENTITY/EXCHANGE/PRIVACY/BOUNDARIES full retained closure, RUST/DEV.RUST@2;
+G10 packet/source receipt and actual accepted scope API read. Root instructions
+and applicable governance reused from immediately preceding G09 with no drift.
+No action/collection, generic proximity, live UI or new data-contract owner.
+
+Source reconciliation: inspect already called relation_neighbors with all recorded
+relations, showing keys in compact; JSON inspection retained only the original
+Snapshot. Reused its strict Snapshot/observed-response loader and SourceKey parsing.
+Remaining missing capability was explicit cap plus a structured neighbor selection
+and counterpart data. New `neighbors` dispatch is a thin caller to the SAME engine,
+not a duplicate graph/selection algorithm; inspect semantics/envelope preserved.
+
+```sh
+uiblueprint neighbors --snapshot observation.json \
+  --ref '{"namespace":"web.dom","key":"7"}' --max-relations 1 \
+  --max-input-bytes 200000 --max-output-bytes 200000 --json
+```
+
+Borrowed output preserves the full Snapshot separately from selection (explicit
+cap/returned/omitted/truncated), plus ordered incoming/outgoing/self_loop relations,
+full counterpart Nodes and exact source Evidence. Duplicate counterpart entries
+remain one per edge. Cap0 is valid. Source partial/unknown is independent and never
+upgraded; no new stable/actionable ref, inferred identity or current observation.
+JSON output_version1.0.0 is a documented CLI envelope, not a normalized schema.
+Byte bounds include selector input and complete output/newline; cap cannot make
+oversized source output bypass the writer. Missing seed4; invalid/limits2; IO1;
+valid capped/partial selection0 with truthful statuses. Errors retain no payload.
+
+Exact12 paths: crates/cli/src/{arguments,input,main,output}.rs;
+crates/cli/tests/neighbors_binary.rs; docs/specs/README.md and
+product/{README,cli,cli-neighbors}.md; docs/development/{cli,scope}.md; this receipt.
+No engine/schema/export/provider/fixtures/manifests/root coordination writes.
+
+Focused verification, Rust1.96:
+- `cargo check --locked -p uiblueprint-cli --bin uiblueprint`: pass.
+- `cargo fmt -p uiblueprint-cli -- --check`: pass.
+- `cargo clippy --locked -p uiblueprint-cli --bin uiblueprint --test neighbors_binary -- -D warnings`: pass.
+- `cargo test --locked -p uiblueprint-cli --test neighbors_binary`:4 passed.
+- `cargo test --locked -p uiblueprint-cli --test binary inspect`:4 passed,
+  preserving actual inspect output/identity/unknown/byte/privacy behavior.
+No live/whole-workspace/numerical/review wave or unrelated suite was run.
+
+New binary cases independently assert directions/order/self-loop/repeated links,
+exact relation Evidence/counterpart Nodes and unchanged Snapshot, cap0/1 separate
+from partial/unknown coverage, redaction, missing exact namespace/key, sanitized
+invalid input and exact aggregate input/output byte boundaries without truncation.
+Test-only canonical derivatives are not live proof; their known nonimage temp
+source files and empty directories are removed by the case owner.
+
+One actual public command used the original saved F01 D05 overlay-on response,
+SHA256 `11e2a77cf6460636050e90ed0f6f63bcf3412c062bb3eb917d677be035858180`.
+Seed web.dom:7, cap1 returned outgoing corresponds_to → web.ax:7; one incident
+relation omitted. Full source32nodes/17relations and partial/unknown_count=null
+remained structurally identical after decoding; source file bytes unchanged. JSON80524B,
+exit0. No output file, image or runtime collection was created. This historical
+controlled fixture is not live PlayPhrase.me or complete interface acceptance.
+
+Input identity: inspection HEAD4373187; unchanged scope.rs SHA256
+`b9dfd68d682d701f9e2f4dbb7813890d32651eaf7c14be671166933024426b44`, matching
+accepted53c6f74. Relevant60-file Rust map SHA256
+`7028b5857ca5c095d68bc4a1ec11308a0fa9de8560f28f9e38aab7fac52b9566`:
+root Cargo.toml/Cargo.lock/rust-toolchain.toml and every .rs/Cargo.toml under
+crates/{schema,engine,cli}, sorted compact JSON path→file-SHA256 then SHA256.
+Protected owner diffs were empty. Source is frozen checkpoint-ready; root grants
+short exact-path commit+push, then terminal SHA/push/release. Remaining full
+projections/spatial heuristics/live qualification/P7 are separate, not claimed.

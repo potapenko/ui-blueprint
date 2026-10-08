@@ -11,7 +11,8 @@ mod observe;
 mod output;
 
 use arguments::{
-    ActionArguments, Arguments, Command, DiffArguments, InspectArguments, ResultVersion,
+    ActionArguments, Arguments, Command, DiffArguments, InspectArguments, NeighborArguments,
+    ResultVersion,
 };
 use std::{
     io::{self, Write},
@@ -31,6 +32,7 @@ Actions support one Web SetChecked through a selected web build; saved plans are
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Saved input accepts Snapshot or observed ChannelResponse; expectation/query stay canonical. Bounds are explicit; local analysis collects nothing.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
+Neighbors: uiblueprint neighbors --snapshot FILE --ref SOURCE_KEY_JSON --max-relations N --max-input-bytes N --max-output-bytes N [--json]\n\
 Inspect: uiblueprint inspect --snapshot FILE --ref SOURCE_KEY_JSON --view interaction|design --max-input-bytes N --max-output-bytes N [--json]\n\
 Inspect accepts a saved Snapshot or observed ChannelResponse; selector is canonical {namespace,key} JSON. No live revalidation; JSON uses CLI inspection envelope1.0.0 with unchanged source Snapshot.\n\
 Export: uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose MODE] [--profile blue-engineering] [--json]\n\
@@ -174,6 +176,26 @@ fn execute_inspect(args: InspectArguments) -> Result<(Vec<u8>, u8), Failure> {
     })?;
     Ok((output::inspect(&args, &view)?, 0))
 }
+fn execute_neighbors(args: NeighborArguments) -> Result<(Vec<u8>, u8), Failure> {
+    let (snapshot, reference) =
+        input::load_selected(&args.snapshot, &args.reference, args.max_input)?;
+    let view = engine::scope::relation_neighbors(
+        &snapshot,
+        &reference,
+        engine::scope::NeighborLimits {
+            max_relations: args.max_relations,
+        },
+    )
+    .map_err(|error| match error {
+        engine::scope::ScopeError::MissingSeed => Failure {
+            code: "target_unresolved",
+            exit: 4,
+        },
+        engine::scope::ScopeError::InvalidSnapshot(_) => Failure::invalid("invalid_input"),
+        engine::scope::ScopeError::AllocationFailure => Failure::io(),
+    })?;
+    Ok((output::neighbors(&args, &view)?, 0))
+}
 fn execute_diff(args: DiffArguments) -> Result<(Vec<u8>, u8), Failure> {
     let (before, after) = input::load_diff(&args)?;
     let result = engine::diff::compare_recorded(
@@ -223,6 +245,8 @@ fn main() -> ExitCode {
         Ok((HELP.as_bytes().to_vec(), 0))
     } else if args.first().is_some_and(|arg| arg == "imagegen-prompt") {
         export::execute(args.into_iter().skip(1).collect())
+    } else if args.first().is_some_and(|arg| arg == "neighbors") {
+        NeighborArguments::parse(args.into_iter().skip(1)).and_then(execute_neighbors)
     } else if args.first().is_some_and(|arg| arg == "inspect") {
         InspectArguments::parse(args.into_iter().skip(1)).and_then(execute_inspect)
     } else if args.first().is_some_and(|arg| arg == "diff") {
