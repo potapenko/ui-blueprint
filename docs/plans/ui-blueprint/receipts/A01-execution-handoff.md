@@ -893,3 +893,86 @@ Source SHA256 pins:
 - worker_web.rs:4a6d47eb6aca8c3a42e19046d483d3528dba692c3f5fd6947ab7dfd2104aebcb
 - web_worker test:2d13eca07c77720409b5e760dde38f677206f08d891f9257f5a06857bba2f25c
 - peer:ee1179df27808ca3ff131c17a3ae40c4f707da25733026386af2fa7bf362c803
+
+## A04 public Focus/Type caller — saved source and consumer products
+
+CLI/Export owner, finite A04 dispatch under approved PLAN.UIB@1 P5/P6, after G09/G10.
+This addendum is the existing actual action-CLI receipt: no separate
+L01-actions-implementation receipt existed. Core's five-path8493c14 source/receipt
+freeze/release preceded this documentation-only update. No Core/Web source edited.
+
+Registered before source: CLI-ACTIONS@2, CLI@10, registry22, A04-CLI-001.
+Full applicable basis: CLI/ACTIONS/FORMS/IDENTITY/LIFECYCLE/EXCHANGE/PRIVACY/MODEL/
+BOUNDARIES, D02@2/D04@1/D05@4/MEMORY@2/WORK@1 and required dependencies, RUST/
+DEV.RUST@2. Reused current routing/governance and read newly applicable host/action
+contracts plus A03 continuation and concrete provider/kernel/worker API. Mode:
+Restore existing required form semantics with delegated additive CLI representation;
+no new canonical types, engine, parser, backend, authority or product intent.
+
+Saved coherent CLI WIP `c15ffb3dbaedbcd2a7e7e27f812533ab7d987163` is pushed.
+Its9 paths: CLI src/{action,arguments,main}.rs, tests/action_binary.rs,
+spec registry/product registry/CLI/CLI-ACTIONS and developer CLI handoff.
+Default check/fmt/link/whitespace proof preceded that checkpoint. Actual guard
+composition then saved at `8493c14ea4f7510a6897bc0b78589ab9234e317b`, including
+Prepare rule/target/condition validation before SDK and the attributed peer proof.
+
+Caller: `action prepare --snapshot FILE` or `action execute --plan FILE`, each with
+existing --connection/--request/--worker/budgets and **--expectation FILE** for
+Semantic Focus or Keyboard Type. Direct flag carries only a path, not text/secret
+argv. All explicit files share aggregate input bytes. Parent forwards unchanged
+source/Expectation bytes in existing Tape order[source,request,expectation],
+channels1/input_format1; only Request.clock_domain is rebound after Attach.
+No parent graph decode or duplicate validator. Missing expectation refuses2 before
+attach. Native/Activate/unsupported modality still refuses5. Legacy SetChecked
+without the flag keeps its exact pair/kernel predicate, output/status/exit path.
+The canonical caller expectation, not Type.text, states the whole expected public
+draft value. Actual permit, shared Focus/Keyboard lane, effect uncertainty/no retry,
+matching ACK metadata and cleanup remain with existing host/kernel/provider owners.
+Usable commands and record semantics: [CLI handoff](../../../development/cli.md#a04-single-step-web-focus-and-type).
+
+### Final affected caller checks on the saved integrated source
+
+Rust1.96.0; build/check inputs from exactly8493c14, no crate/plugin source changes.
+Web JS WIP was neither compiled nor included in the Rust input map. One system-temp
+target `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a04-products-d7pjog71`:
+
+- `cargo build --locked --offline -p uiblueprint-cli -p uiblueprint-host --features web --bins`: pass.
+- `cargo test --locked --offline -p uiblueprint-cli --features web --test action_binary`:4 passed.
+- `cargo test --locked --offline -p uiblueprint-cli --features web --bin uiblueprint action::supported::tests`:1 passed.
+- `cargo clippy --locked --offline -p uiblueprint-cli --features web --bin uiblueprint --test action_binary -- -D warnings`: pass.
+All commands used that same --target-dir. No repeated Core/shared-lane suite or
+separate actual UI run. Scoped fmt had passed on unchanged saved CLI source.
+
+Binary preflight checks cover Prepare/Execute Focus/Type missing expectation,
+exact fourth-file aggregate byte boundary, duplicate flags, canonical valid input
+reaching the deliberately absent-worker IO boundary (not a delivery claim),
+unsupported Activate and Type-as-Setter, sanitized diagnostics and legacy
+SetChecked admission/connection/budget behavior. The fixed semantic-status test
+preserves delivery versus verification, metadata absence, mismatch/unknown,
+post-Possible timeout/loss and cleanup/error precedence. Malformed/wrong-artifact/
+scope/ref/Focus rule, stale/private preparation and execution refusal are covered
+by Core's separately attributed9 production-worker/parent synthetic cases above;
+this caller owner did not repeat them or manufacture an alternate validator.
+
+Source map before/after equal:171files, SHA256
+`68f280b7d98d352e48baec57621a56ad384663739cba94e7d6c47718d6fcccac`.
+Recipe: sorted compact JSON path→file-SHA256 map; root Cargo.toml/Cargo.lock/
+rust-toolchain.toml plus every .rs/Cargo.toml recursively in crates/ and plugins/.
+Source equality and absence of dirty crate/plugin/Cargo inputs were verified.
+
+### Immediate Web consumer handoff and retention
+
+Retain these actual just-built products, no duplicate build requested:
+
+- CLI: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a04-products-d7pjog71/debug/uiblueprint`;
+  SHA256 `e3eff19b73fae793b5f9c48a14bae2d124e5ba307a31e0d2e1e62a0b032d3d7f`.
+- Worker: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a04-products-d7pjog71/debug/session-worker`;
+  SHA256 `7636e4bf7a2ae770a0ab520e0d6c2116f8aed2c5323b33bb93b7998db7778233`.
+
+Retention owner: this CLI worker until Web confirms copying/consumption, then
+remove only this run's nonimage target/products. No images created/deleted; no live
+app/browser/input lane held. Web owns the single actual public Focus→Type chain
+on its isolated fixture, expected nine exit outcomes4/0/0/4/0/0/4/0/4; those remain
+pending here, not guessed from source/preflight. Grouped input-risk acceptance and
+full B02/P5/P7 remain separate. No source changes after the above checks; only this
+receipt and developer handoff updated, awaiting root's short documentation Git grant.

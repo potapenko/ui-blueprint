@@ -279,10 +279,12 @@ explicit capped selection and counterpart data, rather than another graph owner.
 
 ## A04 single-step Web Focus and Type
 
-Current checkpoint status: **WIP — waiting for Core-dependent checks**. Default
-CLI check and scoped fmt passed; Web-feature/binary/worker verification and the
-Web-owned actual public Focus→Type consumer run remain pending. This source
-checkpoint is not delivery proof or acceptance. No new runtime test was run here.
+Current caller status: **saved and Web-consumer-ready**. CLI source c15ffb3 plus
+Core8493c14 passed the Web-feature build, four action binary preflight tests,
+semantic-status/ACK/cleanup test and affected Clippy. Worker rule/binding/privacy
+cases are separately attributed to Core's saved proof. The Web-owned actual public
+Focus→Type run and grouped acceptance remain pending; CLI preflight is not delivery
+proof. Matching CLI/worker products are retained for that immediate consumer.
 
 [CLI-ACTIONS@2](../specs/product/cli-actions.md) adds explicit caller Expectation
 transport to the existing action path. Build with the existing `web` feature.
