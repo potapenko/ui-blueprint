@@ -260,3 +260,82 @@ or implementation automatically started. Existing receipt only updated; exact1 s
 checkpoint/push lease required. Consumer: select existing-control Semantic Activate
 provider/kernel boundary; SetChecked setter must refuse Unsupported before permit.
 M02 actual delivery/forms/focus/type and full P5/P7 remain unaccepted.
+
+
+## A02 Native/Core held identity boundary — engineering proposal
+
+Read saved e3a6880 (current Core/Web WIP excluded): native_broker::NativeBroker,
+helper_runtime::{spawn_registered,poll_helpers}, helpers::Helper, supervisor helper/
+effect cleanup; worker_native::NativeExchange; Swift HostHelper/HostProtocol and
+WindowAX::key. No capfacts re-read, runtime/source edits/tests or new framework.
+A02 early API handed off by root: one ActionExecution::prepare_action(case,Expectation,...),
+provider resolve_exact/observe_after receive &Expectation; SetChecked compatibility.
+This API is integration input, not permission to change private protocol here.
+
+Observed lifetime: broker Admit spawns a registered one-shot helper under active
+Observe deadline; reads one NDJSON line, moves charged HelperBytes, sends opaque
+body to worker. Helper::take_line starts cleanup; deadline expiry also stops helper.
+Swift main receives Configure+Submit/Observe, uses local watchdog, replies and returns.
+Parent poll_helpers confirms reap before slot reuse; lost/reap failure quarantines.
+Current macos.ax key is observationID-handle-index, no reusable CF object handle.
+Existing saved Observe refs consequently cannot establish held native continuity
+for later public Prepare/Execute; resolveElement(identifier) is not an old-ref repair.
+
+Minimum proposed ownership: one parent-registered non-capture Native action helper
+holds only exact target and Expectation result AXUIElement objects in a fixed bounded
+registry; Rust guarded provider owns canonical refs/Expectation/kernel, parent owns
+process/byte leases, correlations and EffectReady/Possible/one-use permit. Swift owns
+CF retains/releases only; no second graph/kernel. No unregistered child/daemon or
+capture lease for action. Registry tokens bind helper serial/session epoch, surface
+generation and exact held object; reported canonical SourceKey remains stable within
+that lifetime, not regenerated from traversal position on each re-read. Reap invalidates
+all tokens. Legacy one-shot observation remains supported but refs are non-actionable.
+
+Action-capable observation must originate in that held helper; retain exact objects
+when producing its Snapshot, not infer them later from arbitrary saved identifiers.
+Prepare re-reads held target and separately held result node, public process/window/
+current surface and unique/current/enabled/capability; return fresh canonical evidence
+for the same keys only. Deleted/remounted/disconnected object refuses, never binds a
+replacement by label/identifier/coordinates. Expectation result continuity checked
+independently; Activation Count outcome must not be inferred from source declaration.
+
+Minimum private exchange phases: bound Observe/Prepare reads; Deliver on the same
+held token only after actual parent effect permit, carrying its one-use nonce/exact
+operation correlation/remaining deadline; PostRead(Expectation result token); Close.
+No delivery on read request or UI-supplied nonce. Worker invokes existing A02 provider
+ports and canonical validation; parent transports bounded bytes/fixed metadata without
+JSON parse. Swift rechecks held object/capability/current identity at dispatch, invokes
+one reported AXPress for explicit Semantic Activate and returns honest delivery state;
+fresh result read remains separate. Lost reply/timeout after Possible stays unknown,
+never re-dispatch. Exact private tags/encoding are a Core-selected protocol delta,
+not specified or invented by this source handoff.
+
+Root selected lifecycle requirement: refs survive sequential Observe/Prepare/Act
+within ONE attached RuntimeHost session; after helper reap old refs invalidate/resync.
+No daemon or hidden helper retention across terminated CLI processes. Single transaction
+with refs dying between those session operations does not satisfy this requirement.
+Existing helpers have fixed per-operation deadline and cleanup on taking reply: need
+Core-selected explicit bounded session residency, separate request deadlines and
+nonterminal reply reuse. No numeric cap/default/private encoding selected here.
+Dependency remains until shared owner grant; do not silently extend deadlines or claim
+current one-shot refs work. Public invocation lifetime must remain truthfully scoped.
+
+Core write split for the selected attached-session workflow: existing native_broker/worker_native
+phase exchange; helpers/helper_runtime bounded reply reuse/lifetime; supervisor reuse
+only registered matching helper and stop/reap/quarantine on cancel/detach/session EOF/
+deadline; worker_main/worker_ops Native routing to A02 ActionExecution and unchanged
+worker_effect gate/publication ACK owner. native_binding only if selected trusted
+lifetime/token metadata cannot fit existing opaque configuration. No pool/cap growth.
+Swift split: HostProtocol validates selected private phases/token/permit correlations;
+HostHelper owns bounded held object registry/request loop/EOF termination/watchdog;
+existing Collector/WindowAX re-read exact target/result properties and canonical keys.
+Fixture/schema/common kernel untouched by Native; Core owns A02 extension independently.
+
+Reuse current cleanup1s and confirmed child reap; no slot/token reuse on CleanupPending.
+Parent closes/kills only exact registered helper, Swift drops CF refs on clean Close;
+process death clears remaining SDK handles. No callback after cancellation permits
+new input. Required proof: old one-shot ref refusal, same-ID remount, target/result
+identity mismatch, forged/replayed/wrong-session permit rejection before delivery,
+exactly one authorized AXPress, fresh Count outcome, post-Possible loss unknown/no retry,
+request deadline/cancel/detach/EOF/failed reap and bounded registry/resource admission.
+Proposal only, no authority to implement private encoding/lifetime/limits yet.
