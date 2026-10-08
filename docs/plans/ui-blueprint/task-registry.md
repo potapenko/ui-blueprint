@@ -738,3 +738,20 @@ mechanical Core Prepare call exception. Native HTML click primary-source qualifi
 Semantic/kFromScript/untrusted/userGesturefalse, not pointer/keyboard proof. CLI
 resumed for contract-first additive port; no new schema/kernel/grammar. Native,
 Web/provider+onehostcall and CLI/spec write sets remain non-overlapping.
+
+Native proposalb554866 and guarded test candidate1ad6b51b0257d391f5378da8b75b89e4ecfc55f5
+saved/pushed; guard P01_SAMPLE_HITS excludes seam from ordinary fixture builds.
+One actual off setup stopped with p01_sample Code3 (sample frame unavailable),
+before events; on not launched, Count1/focusnone, own cleanup1.33s/lane released.
+This is setup failure, not a probe-hit mismatch or proof. Exact1 failure receipt
+save granted, then bounded own-metadata diagnosis/minimal test-seam correction;
+no guessing coordinates, unchanged retry, old suites or hidden backend replacement.
+
+A05 Web compiling handoff forwarded: prepare_exact(Snapshot,Request,optional
+Expectation,ClockReading,u64), same Tape3/Act; actor native HTMLButtonElement,
+distinct same-Surface/scope public web.dom INPUT text/search/url/tel or plain OUTPUT
+result, Value/Text expectation, required enabled/value/input_kind fields. Readonly/
+disabled result readable, private/missing/unavailable cannot succeed. CLI registers
+CLI-ACTIONS@3/CLI@11/registry23 and saveda9ad665744e665b33b9a171cda67f90fde13c800
+exact9 WIP; default check/fmt/docs passed, final provider-dependent checks pending.
+Same shared binary consumer plan, no repeated Focus/Type or API-only actual wave.
