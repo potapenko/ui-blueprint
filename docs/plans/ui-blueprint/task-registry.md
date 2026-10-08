@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 reads G12 selected-space diff gap; Native01a110ac-2da3 restored for read-only M05 AX↔probe mapping handoff after completed M04/cleanup archival; Web01a11983 implements B04 transform, source compiles and focused checks run. Completed CLI01a11286 archived. No Native runtime lease; Web isolated headless sequence after saved-source checks; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12 selected-space geometry diff; Native01a110ac-2da3 reads M05 AX↔probe mapping; Web01a11983 implements B04 transform, source compiles and focused checks run. Completed CLI01a11286 archived. No Native runtime lease; Web isolated headless sequence after saved-source checks; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -950,3 +950,13 @@ and no code/files/tests/runtime/repeated invariance or broad audit is authorized
 Immediate consumer is the remaining M05/G02 mapping requirement; preserve distinct
 source identities/action authority, never match by equal names/boxes. Core/Web
 owners remain protected. Explicit original parallel authorization applies.
+
+G12 read-only handoff completed: existing raw compatibility, bound evaluation and
+directional/all-corner rect resolver suffice; no public rect-comparison result yet.
+Root selected engine+CLI implementation in G02-recorded-diff G12 section. Opt-in
+geometry mode uses explicit SourceKey/FrameKind/Space; reuse measure's existing
+Snapshot-bound evaluation construction, optional per-side inputs only when needed.
+Register new CLI-owned report before source; preserve raw diff JSON1.0.0 and every
+original Snapshot/Space/Evidence. Delta only for two known finite results; missing
+mapping never zero. Exact G12 source/check ownership is disjoint from Web B04 and
+Native read-only handoff. Same approved P3/P6 scope, no schema/cache/math redesign.
