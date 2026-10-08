@@ -36,7 +36,8 @@ Root получает итог или конкретный блокер; про�
   receipt `a1cae1a` committed/pushed. Оба findings W06 закрыты: exact reproducers,
   20-case corpus и own Chromium10cases,6private0publication,97-node baseline.
   CPU/headless освобождены; Native foreground wait не изменён. Сейчас этот же
-  контекст выполняет bounded N04 source/recorded recheck; Web verdict закрыт.
+  контекст завершил N04 recheck: `b1667d9` pushed, REJECT из-за Title isolation;
+  source/recorded scope only, все ресурсы освобождены. Web verdict закрыт.
 - Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal completed,
   `f63930d` pushed; полный текущий receipt прочитан. Все4Web numeric gates прошли;
   separate Rust report завершён actual owning routines на saved a7c0416 inputs,
@@ -52,21 +53,21 @@ Root получает итог или конкретный блокер; про�
   core/reinstall/recovery/licensing evidence reused по exact source equivalence.
   Recipe6a5bec2 не менялась; упаковочных blockers нет, ресурсов не удерживает.
   Чат архивирован после сохранения результата. Native live/P7 этим не приняты.
-- N04, чат `01a11d5e-782b-7cf1-922e-b28815151915`: terminal completed,
-  `17d3475` pushed; receipt/recipe прочитаны. WindowAX восстанавливает raw AXTitle
-  отдельным macos.ax extension при accessibility_name, Description не заменяет.
-  Авторский replay:396known facts/75nodes/75action lists/74edges,7fidelity+5form
-  cases validated, full helper и distinct53e6e6e off/on fixture compiled, без launch.
-  Handoff system-temp uib-n04-787o_x0t передан Q01/Q02; чат архивирован.
-  Q01 запущен на neutral source/recorded assessment17d3475 до author narrative;
-  actual Native equivalence/foreground/E2E/D06 этим не приняты. Исторический fixture
-  отличается Snapshot от reactive baseline — live reconciliation обязателен.
+- N04, чат `01a11d5e-782b-7cf1-922e-b28815151915`: исходный владелец
+  разархивирован и получил полный repair outcome по Q01 `b1667d9`.
+  Candidate17d3475 preserves normal396facts/75nodes, но Title4097bytes делает
+  unknown ранее known Description/name, states, Value и75bounds. Existing NATIVE@2
+  требует field-local error isolation; нормальный replay/schema pass этого не закрывает.
+  Exact reproducer system-temp uib-q01-n04-source-gm25z5c4 передан read-only.
+  Весь repair/tests/docs/commit+push cycle у N04 без root microgrants; CPU свободны,
+  no Native UI/foreground/capture. Исходный handoff uib-n04-787o_x0t сохранён для
+  Q01/Q02; actual live/fixture equivalence/D06 ещё не приняты.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02/Q01. N04 source/recorded result передан на принятие; Native live/performance
-  и Q03 human waits остаются. I02 packaging proof относится к a7c0416, финальная
+  N04. После полного repair result — same Q01 affected recheck. Native live/performance
+  и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.
 
 ## История предыдущей группы самостоятельных задач
