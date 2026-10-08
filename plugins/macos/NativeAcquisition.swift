@@ -89,7 +89,7 @@ final class NativeAcquisition {
         guard converted == length, used <= ceiling else { throw NativeAcquisitionError.limit }
         return used
     }
-    private func reserveCopies(_ bytes: Int) throws {
+    func reserveCopies(_ bytes: Int) throws {
         // UTF-8 conversion buffer plus the resulting owned String. SDK-owned CF
         // storage is a separate opaque category, not disguised as zero cost.
         let total = try nativeAdd(copiedUTF8, nativeMultiply(bytes, 2))

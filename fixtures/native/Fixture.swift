@@ -328,7 +328,14 @@ private struct PilotView: View {
                     changed()
                 }.accessibilityIdentifier("f02.apply")
             }
-            Text("Result: \(applied)").accessibilityIdentifier("f02.result")
+            HStack {
+                Text("Result: \(applied)").accessibilityIdentifier("f02.result")
+                Spacer(minLength: 0)
+                Text(secret.isEmpty ? "Protected input: empty" : "Protected input: received")
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(secret.isEmpty ? "Protected input: empty" : "Protected input: received")
+                    .accessibilityIdentifier("f02.secret-status")
+            }.accessibilityElement(children: .contain)
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 6) {

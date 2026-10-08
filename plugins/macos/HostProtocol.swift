@@ -63,15 +63,27 @@ struct NativeConfiguration: Decodable {
     let probe_uptime: Double?
     let form_identifiers: [String]?
     let form_session_ms: UInt64?
+    struct ProtectedInput: Decodable {
+        let reference: String
+        let action_id: String
+        let identifier: String
+        let path: String
+        let trace: Bool
+    }
+    let protected_input: ProtectedInput?
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime", "form_identifiers", "form_session_ms"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime", "form_identifiers", "form_session_ms", "protected_input"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
         if let parent = object["parent_binding"] as? [String:Any] {
             guard Set(parent.keys)==Set(["pid","bundle_id","launch_time","window_id","window_identifier","target_generation","surface_generation"])
+            else { throw NativeProtocolError.configuration }
+        }
+        if let source = object["protected_input"] as? [String: Any] {
+            guard Set(source.keys) == Set(["reference", "action_id", "identifier", "path", "trace"])
             else { throw NativeProtocolError.configuration }
         }
         let config = try JSONDecoder().decode(Self.self, from: bytes)
@@ -118,6 +130,12 @@ struct NativeConfiguration: Decodable {
                   let duration = config.form_session_ms, (1...300000).contains(duration)
             else { throw NativeProtocolError.configuration }
         } else if config.form_identifiers != nil || config.form_session_ms != nil { throw NativeProtocolError.configuration }
+        if let source = config.protected_input {
+            guard config.collection == "form", config.form_identifiers?.contains(source.identifier) == true,
+                  [source.reference, source.action_id, source.identifier].allSatisfy({ !$0.isEmpty && $0.utf8.count <= 256 }),
+                  source.path.hasPrefix("/"), source.path.utf8.count <= 1024, !source.path.utf8.contains(0),
+                  !source.path.split(separator: "/").contains("..") else { throw NativeProtocolError.configuration }
+        }
         return config
     }
 }

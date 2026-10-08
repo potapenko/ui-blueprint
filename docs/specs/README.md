@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 29.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 30.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -72,6 +72,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `G13-GRAPH-DIFF-001`: [CLI@14](product/cli.md)/[CLI-GRAPH-DIFF@1](product/cli-graph-diff.md) registers additive saved structure/relations/components/metadata/focus comparison under [G13](../plans/ui-blueprint/packets/autonomous-tasks-2026-10-08.md#g13--сравнение-структуры-связей-и-фокуса), preserving raw JSON1.0.0, G12, canonical sources and cache.
 `E03-EXPORT-COMPARE-001`: [CLI@15](product/cli.md)/[CLI-EXPORT@2](product/cli-export.md) connects saved pairs to engine-attributed six-file compare export under [E03](../plans/ui-blueprint/packets/E03-observed-compare.md); comparison packages0.2, other exports/core/raw diff unchanged.
 `M02-N-SESSION-001`: [NATIVE-SESSION@1](product/native-session.md)/[CLI@16](product/cli.md) registers bounded attached Native form refs/private exchange/CLI under the assigned [M02-N packet](../plans/ui-blueprint/packets/M02-native-workflow.md). Existing wire, Web and ordinary AX behavior remain protected; runtime/review acceptance separate.
+`V02-PROTECTED-001`: [NATIVE-SESSION@2](product/native-session.md)/[D03@4](development/decisions/d03-data.md) reuses existing FillSecret through a private one-use Native delivery source under [V02](../plans/ui-blueprint/packets/V02-protected-input.md). No core/analysis/wire/legacy change; actual capability and privacy acceptance separate.
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.

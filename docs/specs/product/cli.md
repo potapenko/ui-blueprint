@@ -11,7 +11,7 @@
 - Conditional requires, action caller only: [UIB.CLI-ACTIONS@3](cli-actions.md); selected first single-step syntax/output/authority/exits, no full scenario claim.
 - Conditional requires, observed export: [UIB.CLI-EXPORT@2](cli-export.md); additive --snapshot or --before/--after plus caller metadata, preserving --brief.
 - Conditional requires, neighbors: [UIB.CLI-NEIGHBORS@1](cli-neighbors.md); explicit cap/source coverage, preserving inspect.
-- Conditional requires, Native form session: [NATIVE-SESSION@1](native-session.md); bounded sequential explicit operations in one process; old commands unchanged.
+- Conditional requires, Native form session: [NATIVE-SESSION@2](native-session.md); bounded sequential explicit operations in one process; old commands unchanged.
 - Source mapping: TZ 372–398; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; INSPECT fixes its local representation; CLI-ACTIONS selects concrete syntax/authority/output/exits for its first single-step scope over preliminary CONTENT examples.
 

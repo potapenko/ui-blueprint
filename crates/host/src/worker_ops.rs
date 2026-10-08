@@ -216,6 +216,7 @@ impl<'a> CanonicalSession<'a> {
                     | (Intent::Focus {}, InputModality::Semantic)
                     | (Intent::Type { .. }, InputModality::Keyboard)
                     | (Intent::Fill { .. }, InputModality::Setter)
+                    | (Intent::FillSecret { .. }, InputModality::Setter)
                     | (Intent::Activate {}, InputModality::Semantic)
             )
             || snapshot
@@ -284,6 +285,15 @@ impl<'a> CanonicalSession<'a> {
                 *field == Field::Value
                     && matches!(value, Value::Text(_))
                     && expected.targets[0] == action.backend_ref.key
+            }
+            Intent::FillSecret { .. } => {
+                expected.targets[0] != action.backend_ref.key
+                    && snapshot.nodes.iter().any(|node| {
+                        node.key == expected.targets[0]
+                            && node.surface == action.backend_ref.surface
+                            && node.properties.iter().any(|property| matches!(property,
+                                Property::Requested { field: f, sensitivity: Sensitivity::Public, .. } if f == field))
+                    })
             }
             Intent::SetChecked { value: wanted } => {
                 *field == Field::Checked

@@ -163,6 +163,7 @@ impl ActionExecution {
                 | Intent::Focus {}
                 | Intent::Type { .. }
                 | Intent::Fill { .. }
+                | Intent::FillSecret { .. }
                 | Intent::Activate {}
         ) || expected.targets.len() != 1
             || expected.scope_id != case.action.authorized_scope
@@ -199,6 +200,29 @@ impl ActionExecution {
                 return Err(ValidationError::InvalidDocument);
             }
             _ => (),
+        }
+        if matches!(case.action.intent, Intent::FillSecret { .. }) {
+            let actor = case
+                .snapshot
+                .nodes
+                .iter()
+                .find(|n| n.key == case.action.backend_ref.key);
+            let result = case
+                .snapshot
+                .nodes
+                .iter()
+                .find(|n| n.key == expected.targets[0]);
+            if !matches!(case.action.modality, InputModality::Setter)
+                || expected.targets[0] == case.action.backend_ref.key
+                || !actor.is_some_and(|n| n.properties.iter().any(|p| matches!(p,
+                    Property::Requested { field: Field::Value, sensitivity: Sensitivity::Sensitive,
+                        state: Availability::Redacted {}, .. })))
+                || !result.is_some_and(|n| n.surface == case.action.backend_ref.surface
+                    && n.properties.iter().any(|p| matches!(p,
+                        Property::Requested { field: f, sensitivity: Sensitivity::Public, .. } if f == field)))
+            {
+                return Err(ValidationError::PrivateValue);
+            }
         }
         let deadline = start
             .milliseconds

@@ -32,7 +32,7 @@ documentation candidate separately from the author marking work complete.
 | --- | --- | --- |
 | [D01](d01-support.md) / `UIB.D01@1` / `UIB.D01.CONTENT` | Initial matrix chosen; runtime qualification open before P2 claims | T01 toolchain; W01/M01 capabilities |
 | [D02](d02-boundaries.md) / `UIB.D02@2` / `UIB.D02.CONTENT` | Reviewed reusable worker/publication/lifecycle boundary registered; implementation proof open | Host/S01 protocol; W01/M01 adapters |
-| [D03](d03-data.md) / `UIB.D03@3` / `UIB.D03.CONTENT` | Core0.1 protected; analysis0.2 and explicit EXCHANGE@2 AX/probe admission registered | S01/G01/L01 analysis, K01 compatibility |
+| [D03](d03-data.md) / `UIB.D03@4` / `UIB.D03.CONTENT` | Core0.1 protected; analysis0.2 and explicit EXCHANGE@2 AX/probe admission registered | S01/G01/L01 analysis, K01 compatibility |
 | [D04](d04-identity.md) / `UIB.D04@1` / `UIB.D04.CONTENT` | Freshness policy chosen; adversarial proof before P4/P5 | W01/M01, K02, A01 |
 | [D05](d05-limits.md) / `UIB.D05@4` / `UIB.D05.CONTENT` | [D05-MEMORY@2](d05-memory.md) supervised partition and [D05-WORK@1](d05-working-memory.md) actual enforcement registered; proof/calibration open | Host/K01; S01 before live use; W01/M01/P01 |
 | [Native acquisition](d05-native-acquisition.md) / `UIB.D05-NATIVE-ACQUISITION@2` | Original profile45c2667; image retention reconciled under explicit user rule/[M03](../../../plans/ui-blueprint/packets/M03-popup-capture.md); no implementation acceptance | Native acquisition only; not a pure Rust H01 dependency |

@@ -1084,3 +1084,109 @@ fn activate_result_node_is_independent_current_public_and_within_selected_scope(
         );
     }
 }
+
+// FillSecret reuses canonical core0.1; only a separately held public result may
+// verify it. No secret material enters the kernel, even in error/cancel cases.
+fn protected_case() -> (ActionCase, Snapshot, Expectation) {
+    let (mut case, mut post, expected) = forms_case(Intent::Activate {});
+    case.action.intent = Intent::FillSecret {
+        secret_reference: Id("opaque-once".into()),
+    };
+    case.action.modality = InputModality::Setter;
+    case.action.resolution.available_intents = vec![Id("fill".into())];
+    for snapshot in [&mut case.snapshot, &mut post] {
+        property_state(
+            snapshot,
+            0,
+            Field::Value,
+            Availability::Redacted {},
+            Sensitivity::Sensitive,
+        );
+    }
+    (case, post, expected)
+}
+#[test]
+fn protected_input_requires_distinct_public_result_and_truthful_delivery() {
+    for mode in 0..7 {
+        let (case, post, expected) = protected_case();
+        let mut provider = Provider::new();
+        provider.resolved = Ok(case.clone());
+        provider.observed = Ok(post);
+        if mode == 1 {
+            provider.delivered = DeliveryStatus::Accepted;
+        }
+        if mode == 2 {
+            provider.delivered = DeliveryStatus::Unknown;
+        }
+        if mode == 6 {
+            provider.observed = Err(issue(ErrorCode::Interrupted));
+        }
+        let mut kernel = forms_prepared(case, expected);
+        let mut gate = Gate::new();
+        let mut control = Control::new();
+        if mode == 3 {
+            kernel.cancel(&reading(1)).unwrap();
+        } else {
+            kernel
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap();
+            if mode == 4 {
+                kernel.cancel(&reading(10)).unwrap();
+            } else if mode == 5 {
+                kernel.cancel(&reading(100)).unwrap();
+            } else if kernel.step().outcome == Outcome::PendingVerification {
+                kernel.verify(&mut provider, &mut control).unwrap();
+            }
+        }
+        assert!(
+            kernel
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .is_err()
+        );
+        let outcome = kernel.step().outcome;
+        if mode == 0 {
+            assert_eq!(outcome, Outcome::Succeeded);
+        } else {
+            assert_ne!(outcome, Outcome::Succeeded);
+        }
+        let result = kernel.finish().unwrap();
+        Document {
+            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+            artifact: Artifact::TransitionContext(Box::new(result)),
+        }
+        .validate()
+        .unwrap();
+    }
+    let (case, _, mut expected) = protected_case();
+    expected.targets[0] = case.action.backend_ref.key.clone();
+    assert!(
+        ActionExecution::prepare_action(
+            case,
+            expected,
+            Id("t".into()),
+            Id("s".into()),
+            reading(0),
+            100
+        )
+        .is_err()
+    );
+    let (mut case, _, expected) = protected_case();
+    property_state(
+        &mut case.snapshot,
+        1,
+        Field::Value,
+        Availability::Redacted {},
+        Sensitivity::Sensitive,
+    );
+    assert!(
+        ActionExecution::prepare_action(
+            case,
+            expected,
+            Id("t".into()),
+            Id("s".into()),
+            reading(0),
+            100
+        )
+        .is_err()
+    );
+}

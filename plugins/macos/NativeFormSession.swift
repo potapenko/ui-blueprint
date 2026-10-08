@@ -5,7 +5,64 @@ import Darwin
 
 // Explicit fixture-only resident AX owner. No input is emitted from Observe or
 // resolve. The parent broker authenticates the delivery nonce before forwarding.
-enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, inputOwner, privateValue, focusUnavailable, keyboardUnavailable, setterUnavailable }
+enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, inputOwner, privateValue, focusUnavailable, keyboardUnavailable, setterUnavailable, protectedSource }
+
+// Delivery-only source reader. Public records carry an Id, never these bytes.
+// No persistent store, path lookup from UI, or secret in an Error/description.
+enum NativeProtectedSource {
+    enum Stage: String { case sourceOpen = "source_open", sourceRead = "source_read", dispatch, error, released }
+    static func trace(_ stage: Stage, enabled: Bool) {
+        if enabled { fputs("native_protected:\(stage.rawValue)\n", stderr) }
+    }
+    static func withValue(_ source: NativeConfiguration.ProtectedInput, admission: NativeAcquisition,
+                             body: (String) throws -> Bool) throws -> Bool {
+        let deadline = admission.deadline
+        trace(.sourceOpen, enabled: source.trace)
+        defer { trace(.released, enabled: source.trace) }
+        do {
+            try NativeDescriptorIO.check(deadline)
+            var core = rlimit(rlim_cur: 0, rlim_max: 0)
+            guard setrlimit(RLIMIT_CORE, &core) == 0 else { throw NativeProtocolError.request }
+            // Nonblocking prevents special-file open from hanging before fstat.
+            let fd = open(source.path, O_RDONLY | O_NOFOLLOW | O_NONBLOCK | O_CLOEXEC)
+            guard fd >= 0 else { throw NativeProtocolError.request }
+            defer { close(fd) }
+            var info = stat()
+            guard fstat(fd, &info) == 0, info.st_mode & S_IFMT == S_IFREG,
+                  info.st_uid == geteuid(), info.st_mode & 0o777 == 0o600,
+                  info.st_size > 0, info.st_size <= min(4096, admission.limits.value_utf8_bytes)
+            else { throw NativeProtocolError.request }
+            let count = Int(info.st_size)
+            try admission.reserveCopies(count + 1)
+            var bytes = Data(count: count + 1)
+            defer { bytes.resetBytes(in: 0..<bytes.count) }
+            var used = 0
+            while used < bytes.count {
+                try NativeDescriptorIO.check(deadline)
+                let n = bytes.withUnsafeMutableBytes { storage in
+                    Darwin.read(fd, storage.baseAddress!.advanced(by: used), storage.count - used)
+                }
+                if n == 0 { break }
+                if n < 0 {
+                    if errno == EINTR { continue }
+                    throw NativeProtocolError.request
+                }
+                used += n
+            }
+            guard used == count else { throw NativeProtocolError.request }
+            bytes.removeLast()
+            guard let text = String(data: bytes, encoding: .utf8),
+                  !text.unicodeScalars.contains(where: { CharacterSet.controlCharacters.contains($0) })
+            else { throw NativeProtocolError.request }
+            try NativeDescriptorIO.check(deadline)
+            trace(.sourceRead, enabled: source.trace)
+            return try body(text)
+        } catch {
+            trace(.error, enabled: source.trace)
+            throw NativeProtocolError.request // never propagate source/SDK payloads
+        }
+    }
+}
 
 @MainActor final class NativeFormSession {
     let config: NativeConfiguration
@@ -21,6 +78,8 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
     var order: NativeFormOrder
     var inputOwner: pid_t?
     var ownerWindow: CFTypeRef?
+    var protectedUsed = false
+    var revision: UInt64 = 0
 
     static func run(io: NativeDescriptorIO, first: NativeInbound) throws {
         let watchdog = DispatchSource.makeTimerSource(queue: .global())
@@ -149,6 +208,10 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
         var result = try Collector.snapshot(context: context, surface: surfaces[0], target: target, scope: config.scope_id,
             fields: fields, observation: observation, channel: "external_semantics", started: input.started,
             nodes: nodes, captures: [], json: json)
+        let (nextRevision, overflow) = revision.addingReportingOverflow(1)
+        guard !overflow else { throw NativeProtocolError.limit }
+        revision = nextRevision
+        result["revision"] = try json.scalar(revision)
         let focused = try attribute(application, kAXFocusedUIElementAttribute, admission)
         let focusedIndex = try currentInputOwner(admission) == config.binding.pid
             ? focused.flatMap { focused in handles.indices.first(where: { CFEqual(handles[$0], focused) }) } : nil
@@ -182,13 +245,20 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
               let intent = action["intent"] as? [String: Any], let name = intent["intent"] as? String else { throw NativeProtocolError.request }
         let i = try index(key), handle = unsafeDowncast(handles[i], to: AXUIElement.self)
         try validateHandles(admission)
-        // Sensitive and unclassified inputs are never admitted to delivery.
+        // Only explicit FillSecret may enter a known protected control.
         let roleRaw = try attribute(handle, kAXRoleAttribute, admission)
         let subroleRaw = try attribute(handle, kAXSubroleAttribute, admission)
         let role = try roleRaw.map { try admission.text($0) }
         let subrole = try subroleRaw.map { try admission.text($0) }
         guard try bool(handle, kAXEnabledAttribute, admission) else { throw NativeFormFailure.unsupported }
-        if name != "focus" && (identifiers[i] == "f02.secret" || role == "AXSecureTextField" || subrole == "AXSecureTextField") { throw NativeFormFailure.privateValue }
+        let secure = identifiers[i] == "f02.secret" || role == "AXSecureTextField" || subrole == "AXSecureTextField"
+        if name != "focus" && name != "fill_secret" && secure { throw NativeFormFailure.privateValue }
+        if name == "fill_secret" {
+            guard role == "AXSecureTextField" || subrole == "AXSecureTextField", let source = config.protected_input,
+                  source.reference == intent["secret_reference"] as? String,
+                  source.action_id == action["id"] as? String, source.identifier == identifiers[i],
+                  !protectedUsed || delivery else { throw NativeFormFailure.protectedSource }
+        }
         let owner = try currentInputOwner(admission)
         let focusedWindow = try attribute(application, kAXFocusedWindowAttribute, admission)
         guard (name == "focus" || owner == config.binding.pid), let focusedWindow, CFEqual(focusedWindow, window) else { throw NativeFormFailure.inputOwner }
@@ -210,6 +280,11 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
             guard action["modality"] as? String == "setter", role == "AXTextField",
                   let text = intent["text"] as? String, text.utf8.count <= config.acquisition_limits.value_utf8_bytes,
                   !text.unicodeScalars.contains(where: { CharacterSet.controlCharacters.contains($0) }),
+                  AXUIElementIsAttributeSettable(handle, kAXValueAttribute as CFString, &settable) == .success, settable.boolValue
+            else { throw NativeFormFailure.setterUnavailable }
+        case "fill_secret":
+            var settable = DarwinBoolean(false)
+            guard action["modality"] as? String == "setter",
                   AXUIElementIsAttributeSettable(handle, kAXValueAttribute as CFString, &settable) == .success, settable.boolValue
             else { throw NativeFormFailure.setterUnavailable }
         case "type":
@@ -248,6 +323,16 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
                     guard let app = NSRunningApplication(processIdentifier: config.binding.pid), app.activate(options: []) else { throw NativeFormFailure.inputOwner }
                     confirmed = AXUIElementSetAttributeValue(handle, kAXFocusedAttribute as CFString, kCFBooleanTrue) == .success
                 }
+                else if name == "fill_secret" {
+                    guard !protectedUsed, let source = config.protected_input else { throw NativeFormFailure.protectedSource }
+                    protectedUsed = true // consume before source read, even on error/cancel
+                    confirmed = try NativeProtectedSource.withValue(source, admission: admission) { text in
+                        _ = try validateAction(act, admission, delivery: true)
+                        try admission.check()
+                        NativeProtectedSource.trace(.dispatch, enabled: source.trace)
+                        return AXUIElementSetAttributeValue(handle, kAXValueAttribute as CFString, text as CFString) == .success
+                    }
+                }
                 else if name == "fill" {
                     let intent = act["intent"] as! [String: Any]
                     confirmed = AXUIElementSetAttributeValue(handle, kAXValueAttribute as CFString, intent["text"] as! CFString) == .success
@@ -283,19 +368,24 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
                           let expected = input.documents[2]["artifact"] as? [String: Any], expected["kind"] as? String == "expectation",
                           let expectedData = expected["data"] as? [String: Any], let targets = expectedData["targets"] as? [[String: String]], targets.count == 1
                     else { throw NativeProtocolError.request }
-                    _ = try index(targets[0]) // snapshot independently validated every held object
+                    let resultIndex = try index(targets[0]) // independent held result
+                    if name == "fill_secret" {
+                        guard targets[0] != act["backend_ref"].flatMap({ $0 as? [String: Any] })?["key"] as? [String: String],
+                              identifiers[resultIndex] != "f02.secret" else { throw NativeFormFailure.privateValue }
+                    }
                     var reference = act["backend_ref"] as! [String: Any]
                     reference["snapshot_id"] = snapshot["id"]
                     let observation = (snapshot["observations"] as! [[String: Any]])[0]["id"] as! String
                     reference["observation_id"] = observation
                     act["backend_ref"] = reference; act["unique_match"] = true
-                    act["resolution"] = try json.borrowed(["available_intents": [name], "writable": try json.known("flag", name == "type" || name == "fill"),
-                        "value_allowed": try json.known("flag", name == "type" || name == "fill"),
+                    act["resolution"] = try json.borrowed(["available_intents": [name == "fill_secret" ? "fill" : name], "writable": try json.known("flag", name == "type" || name == "fill" || name == "fill_secret"),
+                        "value_allowed": try json.known("flag", name == "type" || name == "fill" || name == "fill_secret"),
                         "evidence": try json.evidence(observation, "macos.ax", "exact_held_capability")] as [String: Any])
                     try frame.encode(json.envelope("action") { try json.borrowed(["snapshot": snapshot, "action": act]) })
                 }
             }
         } catch {
+            if config.protected_input?.trace == true { NativeProtectedSource.trace(.error, enabled: true) }
             frame.reset()
             let failure = NativeJSON(config.acquisition_limits)
             // Fixed issues only; never serialize the request, value or SDK error.
@@ -304,6 +394,7 @@ enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, 
             case NativeFormFailure.staleTarget: code = "stale_target"; recovery = "new_native_session"
             case NativeFormFailure.ambiguousTarget: code = "ambiguous_target"; recovery = "unique_native_identity"
             case NativeFormFailure.inputOwner: code = "interrupted"; recovery = "input_owner_changed"
+            case NativeFormFailure.protectedSource: code = "unsupported"; recovery = "protected_source_binding_unavailable"
             case NativeFormFailure.privateValue: code = "unsupported"; recovery = "public_enabled_control_required"
             case NativeFormFailure.focusUnavailable: code = "unsupported"; recovery = "focus_not_settable"
             case NativeFormFailure.setterUnavailable: code = "unsupported"; recovery = "value_not_settable"

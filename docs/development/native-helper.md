@@ -878,8 +878,8 @@ Send one strict bounded JSON line per explicit operation on stdin:
 Requests, source and Expectation are existing canonical documents. The caller reads
 stdout records and creates the next explicit request; this is not an automatic
 scenario runner. Partial AX observations retain their coverage and can be used for
-an exactly bound control. Every action needs a caller condition. Secret input,
-IME/composition and selection mutation remain unavailable. Secure values are
+an exactly bound control. Every action needs a caller condition. IME/composition
+and selection mutation remain unavailable. Secure values are
 redacted; available selection is UTF-16. Known checkbox0/1 maps to Checked, but its
 AXPress never substitutes for the unavailable SetChecked setter.
 
@@ -901,3 +901,36 @@ watchdogs stop the owned helper even during SDK work. Cleanup retains the existi
 one-second bound/quarantine. The input application is never part of helper cleanup.
 
 [Author result and remaining qualification](../plans/ui-blueprint/receipts/M02-native-workflow.md).
+
+### Protected input (V02)
+
+Existing core0.1 intent `{"intent":"fill_secret","secret_reference":"opaque-once"}`
+with modality `setter` now has a bounded own-fixture path. A known secure AX
+role/subrole AND current AXValue-settable capability are required. No raw Fill/Type
+secret, keyboard fallback, clipboard, automatic submit or retry. Add the following
+optional object to the trusted private helper configuration (not to ActionCase):
+
+```json
+{"protected_input":{"reference":"opaque-once","action_id":"protected-step","identifier":"f02.secret","path":"/absolute/caller-owned-input","trace":false}}
+```
+
+The actual Action.id must equal action_id. Source is a caller-owned same-uid0600
+regular file with1..4096 UTF-8 bytes (tighter acquisition limits apply), no control
+characters; final-component symlinks/special files refuse. Prepare never opens it.
+Only permitted delivery reads it once, after exact session/ref/generation/window/
+input-owner validation and parent nonce. Data+String copies charge the existing
+Native acquisition budget; buffer clears on exit and core dumps are disabled before
+read. The product does not create/delete the caller source. Swift/CF SDK copies are
+bounded temporary delivery owners, not a universal memory-erasure claim.
+
+Use an explicit Expectation on a DISTINCT public held result in the same Surface.
+Own fixture `f02.secret-status` exposes AccessibilityName `Protected input: empty`
+or `Protected input: received`; this proves presence only, not exact secret equality.
+Available intent remains `fill`; canonical versions/shapes and old commands remain.
+Optional trace emits only fixed stage codes to helper stderr (ordinary host discards
+it). No raw errors, paths, secret values or command dumps. Consumed reference,
+wrong binding, unsupported setter, stale owner and uncertain outcomes stop the session.
+Resident snapshots now have increasing checked revisions, so existing CacheStore can
+retain their actual history without conflicting revision1 records.
+
+[Full canary results, reproduction and limits](../plans/ui-blueprint/receipts/V02-protected-input.md).

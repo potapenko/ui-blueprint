@@ -1,8 +1,7 @@
 # D03 — candidate data and rules ownership
-
 - Domain: `uib.development.d03`; accepted/released baseline: none.
 - Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [L01-ANALYSIS-001](../../product/analysis.md#change-record).
-- Node type: leaf; contract: `UIB.D03@3`; clause: `UIB.D03.CONTENT`; supersedes @2.
+- Node type: leaf; contract: `UIB.D03@4`; clause: `UIB.D03.CONTENT`; supersedes @3.
 - Authority: Active / Stability: Evolving; candidate schema, no released format.
 - Read when: S01 envelopes/validator, G01 rules or K01 graph delta.
 - Do not read when: no shared data/compatibility choice is affected.
@@ -12,18 +11,14 @@
   [ANALYSIS@2](../../product/analysis.md) and its closure for local analysis serialization.
 - Owner/deadline: S01 definitions and valid/invalid examples before P1 tests;
   G01 measurements, K01 atomic replay; final compatibility after both pilots/P3.
-
 ## Requirement, observed evidence and chosen representation
-
 R03 shows why complete selected-field replacement differs from merging old values; R01/R02 show distinct DOM/AX/probe identities and incomplete design information.
 Choose Rust structs/newtypes and closed enums with serde JSON at the boundary. Schema owns wire types/validation; engine owns materialized graph/analysis, plugin
 API owns lifecycle/capability methods. No second schema in adapters or experiments.
-
 Initial core transport wire version is `0.1.0`; advertised accepted range initially exactly `0.1.0`. It is not the illustrative `0.3-draft` from CACHE. A compatible
 range can expand only with tests. Core fields are snake_case, unknown core fields rejected; bounded namespaced extensions preserve native identifiers explicitly.
 Breaking pre-release wire changes advance minor version and fixtures together;
 editorial-only changes do not. Never deserialize incompatible data optimistically.
-
 | Responsibility | Required expression / validation |
 | --- | --- |
 | Identity | Typed session/target/surface/generation/source-element keys and Observation/Snapshot/revision IDs; serialized opaque strings, never coordinates/title as identity; native_role retained when available |
@@ -36,15 +31,12 @@ editorial-only changes do not. Never deserialize incompatible data optimisticall
 | Delta | Full upsert in selected fields/projection, explicit justified removal, whole-context/base compatibility; children/relations/focus published together or resync_required |
 | Source oracle | source_state only where reproducible; never invent global OS revision. Full/delta compares the same recorded checkpoint and coverage |
 | Errors/actions | Existing ACTIONS error vocabulary; delivery and verification separated, partial completed_steps preserved; timeout after potential effect → action_outcome_unknown, not automatic retry |
-
 Only `Known` contains `value`; omission of a requested property is invalid, not
 implicitly unknown. Unrequested history can remain explicitly historical under
 its old Observation; it is not included as a current value. A complete empty
 scope differs from failed extraction or a narrower projection. Raw handles and
 secret material cannot enter serialized graph/errors; redaction precedes storage.
-
 ## Rules choice and acceptance
-
 Choose a declarative JSON relation record, not executable JS or a textual DSL
 parser in P1: id, scope, targets, relation, parameters, units, tolerance,
 applies_when and expected_from. Relation is a closed enum for the operations in
@@ -98,3 +90,11 @@ No wire field/version/schema/126-golden change; the prior homogeneous-only seman
 restriction is explicitly relaxed only for this pair. Old ordinary single-channel,
 failed-channel, cache, analysis and source/action-identity contracts stay protected.
 This registration is not implementation or Native runtime acceptance.
+
+## V02-PROTECTED-001
+[V02 authority](../../../plans/ui-blueprint/packets/V02-protected-input.md) selects
+[NATIVE-SESSION@2 PROTECTED](../../product/native-session.md): reuse existing
+core0.1 FillSecret/Id and fill capability; private one-use delivery-source binding.
+No schema, validation meaning, accounting or126 legacy golden migration. Typed
+intent already exists; raw strings/magic placeholders or fake Action are forbidden.
+No new dependency/parser/secret storage; downstream acceptance remains required.
