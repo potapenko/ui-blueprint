@@ -1029,3 +1029,51 @@ parts, bounds and mutual distances in a short grounded answer/diff, using existi
 collector/F01/engine APIs. That integrated useful report is still unproved; this
 handoff does not invent a missing geometry implementation or require action-ready
 refs/mutations/executor as a prerequisite. Root selects the precise read-only route.
+## A03 resumed real Focus/Type preparation — 2026-10-08
+
+Root explicitly resumed the saved P5 consumer after geometry/export delivery,
+then selected one public CLI chain after A03 Core and A04 CLI source/check readiness.
+No separate API-only series or SetChecked rerun. Current scope is own isolated
+headless F01 only; read-only geometry and real PlayPhrase.me remain untouched.
+Registry21 reflects unrelated G09/G10 additions; selected FORMS/ACTIONS/common
+closure has no drift from the saved provider. EXECUTOR-SOURCES@1/REUSE and current
+RUST/DEV.RUST/QA/operational/browser contracts govern the consumer. No new provider,
+executor/schema/fixture/dependency, semantic contract delta or quota change.
+
+Declared Web write subset so far: tests/bridges/web/guarded-live.cjs and this receipt.
+Existing provider464b1d2 is unchanged. The initial API-driver need in protected
+crates/host/tests/web_live.rs is superseded by root's one-public-CLI-chain direction;
+Web will not edit that file or duplicate host composition. Actual execution waits
+for saved/check-ready Core three-record Expectation and A04 CLI handoffs.
+
+Prepared finite oracle: ordinary owned-fixture setup makes draft `L`, waits for its
+authored invalid-state debounce, and focuses the unrelated existing `left` control.
+Product Focus uses Semantic/DOM.focus and explicit Focused=true; fresh observation
+must name the exact draft keyboard-focus key. Product Type sends `on` via Keyboard/
+Input.insertText native ImeCommitText, while the independently explicit expected
+full value is `Lon`, not Type.text. After the source-authored suggestion readiness,
+fresh Observe must retain that public draft; selected/applied stay empty, valid=false,
+commit delivered count0 and unrelated rows remain unchanged. No selection/submit.
+
+One new-focus-boundary negative prepares Type `!` with explicit `Lon!`, then the
+owned setup focuses `left`; execution must refuse before native input/permit, keep
+draft `Lon` and never silently refocus/retry. Existing readonly/stale/after-Possible
+source proofs remain separate; hardware keyboard, IME composition, business success
+and full B02 are not inferred. Fixed32/depth8/64KiB/250ms/120s remain.
+
+Registered A04 basis is now CLI-ACTIONS@2 with CLI@10/registry22. New action leaf
+read fully; unchanged CLI/common clauses reused with the additive diff checked.
+Prepared public harness mode is `form_actions`: nine commands with explicit
+Expectation files on Prepare and Execute, original source/plan bytes preserved,
+expected exits4/0/0/4/0/0/4/0/4. No host test edit or API-only activation remains.
+JS state/transition checks and setup are prepared; syntax/diff checks pass. No new
+browser, build, fixture input, Core WIP consumption or runtime claim at this point.
+
+Runtime readiness handoff: root accepted Core8493c14 and CLIc15ffb3 with A04
+Web-feature build,4binary checks,1status/ACK check and affected Clippy. Those checks
+are owner-attributed, not rerun here. Source171-map68f280b7d98d352e48baec57621a56ad384663739cba94e7d6c47718d6fcccac.
+Copied only the supplied CLI/worker into task-owned system temp; both originals and
+copies matched owner SHA256: CLIe3eff19b73fae793b5f9c48a14bae2d124e5ba307a31e0d2e1e62a0b032d3d7f,
+worker7636e4bf7a2ae770a0ab520e0d6c2116f8aed2c5323b33bb93b7998db7778233.
+No rebuild or original-file change. After this prepared harness checkpoint, the
+single actual public CLI run is authorized; results/cleanup remain to be recorded.

@@ -20,8 +20,10 @@ const FORM_CASES = Object.freeze({
   'form-collapsed': {start:4,end:4,direction:'none',anchor:4,focus:4,output:'London',private:false},
   'form-private': {start:1,end:3,direction:'forward',output:'London',private:true}
 });
+const FORM_ACTION_CASES=['form-initial','form-focus-prepare','form-focus','form-focused','form-type-prepare','form-type','form-typed','form-unfocused-prepare','form-unfocused'];
 const CASES = new Set([...Object.keys(FORM_CASES),'action-observe','action-prepare','action-success','action-prepare-stale','action-stale','action-readonly-observe','action-readonly-prepare','action-readonly-refused','action-unknown-observe','action-unknown-prepare','action-unknown','b05-initial','b05-retain-initial','b05-parent','b05-history-parent','b05-font','b05-history-font','rooted-current','rooted-wrong-binding','rooted-wrong-document','rooted-stale','popup-context','left-initial','sized-before','sized-after','private','cross-target','old-remount-ref','new-remount-binding','old-navigation-ref','new-document-binding']);
-const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required']);
+for(const stage of FORM_ACTION_CASES)CASES.add(stage);
+const TERMINALS = new Set(['completed','cancelled','timed_out','invalid_limits','resource_limit','allocation_failure','overflow','busy','invalid_input','invalid_state','invalid_control','stale_operation','deadline_expired','permission_denied','io','worker_failed','system_allocation_failure','cleanup_pending','resync_required','action_refused']);
 const FRAME_FILES = Object.freeze({'form-forward':'form-forward.json','form-backward':'form-backward.json','form-collapsed':'form-collapsed.json','action-observe':'action-observe.json','action-prepare':'action-prepared.json','action-success':'action-transition.json','b05-initial':'b05-initial.json','b05-parent':'b05-parent.json','b05-font':'b05-font.json','rooted-current':'rooted-context.json','popup-context':'popup-context.json','left-initial':'initial-left.json','sized-before':'sized-before.json','sized-after':'sized-after.json'});
 function bounded(promise, ms, code) {
   let timer; return Promise.race([promise, new Promise((_, reject) => {
@@ -278,6 +280,62 @@ async function run(evidence, report) {
       await invoke('example-stale-document',{},4);
       report.checks.push({case:'first-use',generic_arguments:true,read_invariance:true,known_rust_dimensions:true,missing_foreign_stale_refused:true});
       report.cli_cleanup_confirmed=true;return;
+    }
+    if(report.mode==='form_actions'){
+      report.phase='public_focus_type';report.binaries.cli=report.binaries.test;delete report.binaries.test;
+      const connection=cliConnection(await binding(pages.a),'draft');connection.session.session_id='live-cli-forms';
+      const context={schema_version:'0.1.0',session_id:connection.session.session_id,target:connection.target,surfaces:connection.session.surfaces,
+        scope_id:'f01-draft',projection:'interaction',fields:['enabled','focused','value','input_kind','readonly'],
+        plugin:connection.session.plugin,environment_revision:'f01-form-actions'};
+      const pins=[];
+      async function save(name,value){const bytes=Buffer.from(JSON.stringify(value));assert(bytes.length<=131072);const file=path.join(evidence,name);await writeExclusive(file,bytes);pins.push({file,bytes});return file;}
+      const config=await save('forms-connection.json',connection);
+      async function invoke(stage,kind,request,source,expectation,expectedExit,oracle){
+        const input=await save(`${stage}-request.json`,request);
+        let args;
+        if(kind==='observe')args=['observe'];
+        else{
+          const file=await save(`${stage}-expectation.json`,expectation);
+          args=['action',kind,kind==='prepare'?'--snapshot':'--plan',path.join(evidence,`${source.stage}.json`),'--expectation',file,'--json'];
+        }
+        args.push('--connection',config,'--request',input,'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536');
+        await command({command:'before',payload:{page:'a',case:stage}});
+        const output=await callCli(stage,args,expectedExit);
+        await command({command:'form_action_check',payload:{page:'a',case:stage,kind:oracle,document:output.document,canonical:output.bytes.toString('utf8')}});
+        return {...output,stage};
+      }
+      async function observe(stage){return invoke(stage,'observe',cliRequest(context,{operation:'observe',channels:['external_semantics']},stage),null,null,4,'observe');}
+      async function prepareForm(stage,source,intent,field,expected){
+        const snapshot=source.document.artifact.data.result.data,node=snapshot.nodes.find(n=>n.key.namespace==='web.dom');assert(node);
+        const evidence=node.properties.find(p=>p.field==='enabled').evidence,unknown={availability:'unknown',reason:'not-prepared'};
+        const action={id:stage,context:snapshot.context,backend_ref:{session_id:snapshot.context.session_id,target:snapshot.context.target,surface:node.surface,
+          key:node.key,snapshot_id:snapshot.id,observation_id:evidence.observation_id},intent,modality:intent.intent==='focus'?'semantic':'keyboard',input_space:null,
+          required_enabled:true,authorized_scope:snapshot.context.scope_id,unique_match:false,resolution:{evidence,writable:unknown,value_allowed:unknown,available_intents:[]}};
+        const expectation={schema_version:'0.1.0',artifact:{kind:'expectation',data:{id:`${stage}-expected`,scope_id:snapshot.context.scope_id,targets:[node.key],
+          rule:{relation:'property_equals',field,expected},applies_when:{platform:null,input_mode:null,text_scale:null},expected_from:'explicit-f01-form-scenario'}}};
+        const result=await invoke(stage,'prepare',cliRequest(snapshot.context,{operation:'prepare',action},stage),source,expectation,0,'prepare');
+        return {...result,expectation};
+      }
+      async function executeForm(stage,prepared,exit,oracle){const c=prepared.document.artifact.data;
+        return invoke(stage,'execute',cliRequest(c.snapshot.context,{operation:'act',action:c.action},stage),prepared,prepared.expectation,exit,oracle);}
+      await command({command:'stimulus',payload:{page:'a',action:'form-start'}});
+      const initial=await observe('form-initial');
+      const focus=await prepareForm('form-focus-prepare',initial,{intent:'focus'},'focused',{type:'flag',value:true});
+      await executeForm('form-focus',focus,0,'focus');
+      const focused=await observe('form-focused');
+      const type=await prepareForm('form-type-prepare',focused,{intent:'type',text:'on'},'value',{type:'text',value:'Lon'});
+      await executeForm('form-type',type,0,'type');
+      await command({command:'stimulus',payload:{page:'a',action:'form-settle'}});
+      const typed=await observe('form-typed');
+      const unfocused=await prepareForm('form-unfocused-prepare',typed,{intent:'type',text:'!'},'value',{type:'text',value:'Lon!'});
+      await command({command:'stimulus',payload:{page:'a',action:'form-lose-focus'}});
+      await executeForm('form-unfocused',unfocused,4,'refused');
+      for(const pin of pins)assert((await fs.readFile(pin.file)).equals(pin.bytes));
+      for(const frame of report.frames)assert.equal(crypto.createHash('sha256').update(await fs.readFile(path.join(evidence,frame.file))).digest('hex'),frame.sha256);
+      assert.deepEqual(report.outcomes.map(o=>o.stage),FORM_ACTION_CASES);assert.deepEqual(ownWorkerPids(worker),[]);
+      assert.deepEqual(report.form_action_setup,['form-start','form-settle','form-lose-focus']);
+      assert.equal(before.size,0);report.cli_cleanup_confirmed=true;
+      checks.push({case:'forms-cli-complete',explicit_expectation_differs_from_delivered_text:true,applied_not_inferred:true,no_retry:true,browser_alive_after_workers:true});return;
     }
     if(directorCase){
       report.phase='director_geometry';report.fixture=null;
@@ -558,7 +616,7 @@ async function run(evidence, report) {
         }
         case 'before': {
           assert(CASES.has(payload.case)); report.last_stage=payload.case;
-          const state=await uiState(page, report.mode==='form_reads');
+          const state=await uiState(page, ['form_reads','form_actions'].includes(report.mode));
           if(report.mode==='form_reads'){
             assert(Object.hasOwn(FORM_CASES,payload.case));
             assert.equal(report.form_setup?.at(-1),payload.case);
@@ -614,6 +672,53 @@ async function run(evidence, report) {
             const file=FRAME_FILES[payload.case];await writeExclusive(path.join(evidence,file),bytes);report.frames.push({case:payload.case,file,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
           }
           checks.push({case:payload.case,readonly:payload.kind!=='success',oracle:payload.kind,non_target_state_unchanged:true});return {};
+        }
+        case 'form_action_check': {
+          assert.equal(report.mode,'form_actions');assert(FORM_ACTION_CASES.includes(payload.case));assert(before.has(payload.case));
+          const prior=before.get(payload.case),after=await uiState(page,true);before.delete(payload.case);
+          assert.equal(after.form.documentFocused,true);assert.equal(after.form.output,'');
+          assert.deepEqual([after.state.selected,after.state.applied,after.state.valid,after.state.delivered],['','',false,0]);
+          assert.deepEqual(after.state.rows,prior.state.rows);assert.deepEqual(after.scroll,prior.scroll);
+          if(payload.kind==='focus'){
+            assert.equal(prior.active,'left');assert.equal(after.active,'draft');assert.equal(after.form.value,'L');assert.deepEqual(after.state,prior.state);
+          }else if(payload.kind==='type'){
+            assert.equal(prior.active,'draft');assert.equal(prior.form.value,'L');assert.deepEqual([prior.form.start,prior.form.end],[1,1]);
+            assert.equal(after.active,'draft');assert.equal(after.form.value,'Lon');assert.deepEqual([after.form.start,after.form.end],[3,3]);
+            assert(['draft-pending','suggestion-ready'].includes(after.state.source_state));
+          }else assert.deepEqual(after,prior);
+          const doc=payload.document;assert.equal(doc.schema_version,'0.1.0');let snapshot;
+          if(payload.kind==='observe'){
+            assert.equal(doc.artifact.kind,'channel_response');assert.equal(doc.artifact.data.result.status,'observed');snapshot=doc.artifact.data.result.data;
+          }else if(payload.kind==='prepare'){
+            assert.equal(doc.artifact.kind,'action');const c=doc.artifact.data;snapshot=c.snapshot;
+            const intent=payload.case==='form-focus-prepare'?'focus':'type';
+            assert.equal(c.action.intent.intent,intent);assert.equal(c.action.modality,intent==='focus'?'semantic':'keyboard');
+            if(intent==='type')assert.equal(c.action.intent.text,payload.case==='form-type-prepare'?'on':'!');
+            assert.equal(c.action.resolution.evidence.method,intent==='focus'?'cdp.DOM.focus-native-text-control':'cdp.Input.insertText-native-ImeCommitText');
+            assert.equal(c.action.resolution.writable.value.value,true);assert.equal(c.action.resolution.value_allowed.value.value,true);
+            assert(c.action.resolution.available_intents.includes(intent));assert.equal(c.action.backend_ref.snapshot_id,snapshot.id);
+          }else{
+            assert.equal(doc.artifact.kind,'transition_context');const c=doc.artifact.data;assert.equal(c.transition.steps.length,1);const step=c.transition.steps[0];
+            if(payload.kind==='refused'){
+              assert.equal(step.delivery,'not_dispatched');assert.equal(step.outcome,'failed');assert.equal(c.after,null);
+              assert.equal(after.active,'left');assert.equal(after.form.value,'Lon');
+            }else{
+              assert(['focus','type'].includes(payload.kind));assert.equal(step.delivery,'confirmed');assert.equal(step.outcome,'succeeded');
+              assert(c.after);assert.notEqual(c.before.id,c.after.id);assert(step.verification_observation);snapshot=c.after;
+            }
+          }
+          if(snapshot){
+            const input=snapshot.nodes.find(n=>n.key.namespace==='web.dom');assert(input);
+            assert.equal(property(input,'value').value,after.form.value);assert.equal(property(input,'focused').value,after.active==='draft');
+            if(after.active==='draft'){assert.equal(snapshot.focus.keyboard.status,'known');assert.deepEqual(snapshot.focus.keyboard.target,input.key);}
+            assert.equal(snapshot.focus.composition_state.selection,'not_requested');
+          }
+          if(['form-focus','form-type','form-typed'].includes(payload.case)){
+            assert.equal(typeof payload.canonical,'string');const bytes=Buffer.from(payload.canonical);assert(bytes.length<=65536);
+            assert.deepEqual(JSON.parse(payload.canonical),doc);assert(!payload.canonical.includes(CANARY));
+            const file=`${payload.case}.json`;assert((await fs.readFile(path.join(evidence,file))).equals(bytes));
+          }
+          checks.push({case:payload.case,oracle:payload.kind,unrelated_state_unchanged:true,draft:after.form.value,applied:after.state.applied});return {};
         }
         case 'check': {
           assert(CASES.has(payload.case));
@@ -717,7 +822,16 @@ async function run(evidence, report) {
           checks.push({case:payload.case,readonly:true,oracle:payload.kind}); return {};
         }
         case 'stimulus': {
-          if(Object.hasOwn(FORM_CASES,payload.action)){
+          if(['form-start','form-settle','form-lose-focus'].includes(payload.action)){
+            assert.equal(report.mode,'form_actions');assert.equal(before.size,0);
+            if(payload.action==='form-start'){
+              await page.bringToFront();await page.locator('#draft').fill('L');
+              await page.waitForFunction(()=>document.getElementById('validation').textContent==='Invalid city');
+              await page.locator('#left').focus();
+            }else if(payload.action==='form-settle')await page.locator('#option-london').waitFor();
+            else await page.locator('#left').focus();
+            report.form_action_setup??=[];report.form_action_setup.push(payload.action);
+          }else if(Object.hasOwn(FORM_CASES,payload.action)){
             assert.equal(report.mode,'form_reads');assert.equal(before.size,0);
             report.form_setup??=[];
             assert.equal(Object.keys(FORM_CASES)[report.form_setup.length],payload.action);
@@ -793,7 +907,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean((directorCase||['cli_actions','geometry','first_use'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
+    await clean((directorCase||['cli_actions','geometry','first_use','form_actions'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -802,7 +916,7 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use'].includes(report.mode))
+    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use','form_actions'].includes(report.mode))
       ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
       :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
@@ -811,14 +925,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','form_actions','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='form_actions'?'A03-public-Focus-Type':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}
