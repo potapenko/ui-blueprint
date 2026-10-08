@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Native01a110ac-2da3 selected own window-local synthetic M05 test; Web01a11983 implements A05 Semantic native-button Activate/held result; CLI01a11286 restored for matching additive caller. Core archived; Web owns only mechanical worker_web.rs exception. Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 restored for read-only G02 interaction/design implementation handoff; Native01a110ac-2da3 reads M04 move/scroll/local-geometry gap; Web01a11983 cleans consumed A05 nonimage artifacts and updates exact1 receipt. CLI01a11286 retained for next G02 public caller. No runtime lane held; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | Native saves minimal test-only adapter and runs one matched intrawindow hit/focus pair. Web+CLI prepare one select→draftLondon→Commit→appliedLondon and unexpected-stop outcome on own F01. External CUA mapping remains unverified; accepted work unchanged; full P0–P7 incomplete |
+| Следующий шаг | Use the two bounded current-source handoffs to assign G02 component/parts view and M04 local geometry implementation; reuse accepted collectors/engine/CLI. Finish A05 retention checkpoint without more action development. External CUA mapping remains unverified; full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -801,3 +801,36 @@ Own runtime closed, no pointer/hardware/business/fullB02 claim. Runtime exact1
 receipt save granted, then one focused new input-boundary review uses retained
 26 canonical files at system-temp ba23e8db-1e32-49ac-b51e-e0d8dfece0fb. CLI originals
 already consumed/removed; no new source tests or UI repetition requested.
+
+## Geometry priority continuation — 2026-10-08
+
+The user again reaffirmed the original utility: fast real component geometry for
+AI-assisted Web/Mac development. Existing runbook priority remains authoritative;
+no polling/dynamics or new product scope is introduced. The previous explanatory
+turn was no progress; this turn reconciles actual worker results and dispatches
+the next two dependency-ready geometry handoffs, without another broad audit.
+
+Native outcome905dd06179f0e741bfc51ac480509af051e7c7d5 saved/pushed exact1:
+matched own synthetic inside +1 / outside0 on both builds, logical FocusState
+none unchanged. Author evidence is scoped to that method; unknown SDK focused
+identity and external physical/CUA mapping remain explicit. No full M05/P7 claim.
+Runtime/Git lanes released. Source3a521f9 and earlier AX/layout/pixel/probe evidence
+remain reusable; no new P01 experiment is assigned.
+
+A05 test repair5c2c88aecf08324176ac60e6ca6564c6d36829e2 saved/pushed exact2.
+Same reviewer a05_activate_review verified reachable modes6/7, restored rooted
+loop and truthful25→27 correction; scoped review complete, no remaining finding.
+Original independently inspected seven-output artifacts stand; no production or
+harness change, no repeated UI run. Web owns only its consumed26 nonimage artifact
+cleanup and W02 receipt checkpoint; full B02/P5/P7 remain outside this acceptance.
+
+Core G02 read-only handoff: current engine/schema/CLI gap from accepted neighbors
+to interaction/design component-and-parts views. Basis registry23→product→
+PROJECTIONS@1→MODEL/IDENTITY/BOUNDARIES@1, existing G02 packet/receipt. Return exact
+APIs/write set and literal checks; no code/build/runtime changes or nested agents.
+Immediate consumer is G02 shipping implementation, not a general architecture map.
+Native M04 read-only handoff: source-backed smallest move/scroll/local geometry
+gap, preserving AX/probe provenance and unknown transforms. Basis NATIVE-PILOTS@1,
+NATIVE@2/GEOMETRY@1 and full required closure restored; no implementation permission
+yet. Existing owner context reused; both handoffs run in parallel on master.
+CLI remains idle for the ensuing public caller, with no active write lease.
