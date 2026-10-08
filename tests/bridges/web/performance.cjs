@@ -23,7 +23,7 @@ function known(node,field) {
   assert(p && p.selection==='requested' && p.state.availability==='known', `required known ${field}`);
   return p.state.value;
 }
-function check(sample,context,kind,requestId,previous) {
+function check(sample,context,kind,requestId,previous,raw) {
   assert.equal(sample.terminal,'Completed');assert.equal(sample.missing,0);assert.equal(sample.committed,1);
   assert.equal(sample.frames.length,1);
   const doc=JSON.parse(sample.frames[0].canonical); assert.equal(doc.artifact.kind,'channel_response');
@@ -38,6 +38,17 @@ function check(sample,context,kind,requestId,previous) {
     assert.equal(observation.time_unit,'milliseconds');
     assert(!previous.has(observation.id),'fresh observation identity');previous.add(observation.id);
   }
+  if(kind==='documents'){
+    const result=require('./fidelity.cjs').compare(raw,snapshot);
+    assert.deepEqual(result,{nodes:97,documents:2,fields:1102,boxes:19});
+    for(const id of ['left','child-button']){
+      const node=snapshot.nodes.find(n=>n.extensions.some((e,j)=>e.name.endsWith('.name')&&e.property.state.value?.value==='id'&&n.extensions[j+1]?.property.state.value?.value===id));
+      assert(node,'literal fixture control present');const rect=known(node,'layout_bounds').value.shape.value;
+      ['x','y','width','height'].forEach((p,i)=>assert(Math.abs(rect[p]-oracle.initial[id].bounds[i])<=oracle.tolerance_css_px));
+    }
+    return {snapshot,bytes:Buffer.byteLength(sample.frames[0].canonical),nodes:snapshot.nodes.length,coverage:result,
+      source_intervals_ms:snapshot.observations.map(o=>({namespace:o.source_namespace,ms:o.end-o.start}))};
+  }
   const dom=snapshot.nodes.filter(n=>n.key.namespace==='web.dom');assert.equal(dom.length,1);
   assert.deepEqual(dom[0].surface,context.surfaces[0]);
   if(kind==='geometry'){
@@ -49,6 +60,11 @@ function check(sample,context,kind,requestId,previous) {
     const ax=snapshot.nodes.filter(n=>n.key.namespace==='web.ax');assert.equal(ax.length,1);
     assert.equal(known(ax[0],'role').value,'button');assert.equal(known(ax[0],'accessibility_name').value,'Apply');
     assert.equal(known(ax[0],'invalid').value,false);
+    const focusable=ax[0].extensions.find(e=>e.namespace==='web.ax'&&e.name==='focusable');
+    assert(focusable,'required raw focusable retained');
+    assert.equal(focusable.property.selection,'requested');assert.equal(focusable.property.field,'value');
+    assert.deepEqual(focusable.property.state,{availability:'known',value:{type:'flag',value:true}});
+    assert.equal(focusable.property.evidence.source_namespace,'web.ax');
   }
   return {snapshot,bytes:Buffer.byteLength(sample.frames[0].canonical),nodes:snapshot.nodes.length,
     source_intervals_ms:snapshot.observations.map(o=>({namespace:o.source_namespace,ms:o.end-o.start}))};
@@ -77,10 +93,29 @@ function client(executable,config) {
     return closed;
   }};
 }
-function setup(binding){return {endpoint:binding.endpoint,cdp_session_id:null,surface:binding.surface,
+function setup(binding,documents=false){const value={endpoint:binding.endpoint,cdp_session_id:null,surface:binding.surface,
   transport:{endpoint_bytes:1024,handshake_bytes:2048,read_buffer_bytes:64,write_buffer_bytes:64,write_buffer_max:32768,frame_bytes:8192,message_bytes:8192,outbound_bytes:16384},
   cdp:{max_request_bytes:16384,max_message_bytes:8192,max_metadata_bytes:256,max_results:1,result_bytes:8192,max_events:4,event_bytes:34000},
-  collector:{max_nodes:16,max_methods:100,max_reply_bytes:8192,max_total_reply_bytes:65536,max_text_bytes:600,max_handle_bytes:256,max_ax_properties:32,io_read_bytes:16384,io_write_bytes:32768,io_work:2048}};}
+  collector:{max_nodes:16,max_methods:100,max_reply_bytes:8192,max_total_reply_bytes:65536,max_text_bytes:600,max_handle_bytes:256,max_ax_properties:32,io_read_bytes:16384,io_write_bytes:32768,io_work:2048}};
+  if(documents){Object.assign(value.transport,{frame_bytes:32768,message_bytes:32768});
+    Object.assign(value.cdp,{max_message_bytes:32768,result_bytes:32768});
+    Object.assign(value.collector,{max_nodes:128,max_reply_bytes:32768,max_total_reply_bytes:262144,max_text_bytes:16384,io_read_bytes:65536,io_work:8192});}
+  return value;
+}
+async function documentBindings(session,frames){
+  const result=[];
+  for(const surface of frames){
+    // Metadata only. No DOMSnapshot/tree/layout capture before the timed response.
+    const world=await session.send('Page.createIsolatedWorld',{frameId:surface.id,worldName:'q02-document-identity',grantUniveralAccess:false});
+    const remote=await session.send('Runtime.evaluate',{expression:'document',contextId:world.executionContextId});
+    assert(remote.result.objectId && remote.result.subtype==='node');
+    try{const {node}=await session.send('DOM.describeNode',{objectId:remote.result.objectId,depth:0});
+      assert.equal(node.nodeType,9);assert(node.backendNodeId>0);
+      result.push({surface,document_backend_id:node.backendNodeId,sensitivity:'public'});
+    }finally{await session.send('Runtime.releaseObject',{objectId:remote.result.objectId});}
+  }
+  return result;
+}
 async function run(){
   assert(process.argv.includes('--run-authorized') && process.env.UIB_Q02_ALLOW==='1','explicit timed resource activation');
   const functional=process.env.UIB_Q02_FUNCTIONAL_PIN;assert(/^[a-f0-9]{40}$/.test(functional||''),'reviewed functional source pin');
@@ -93,16 +128,17 @@ async function run(){
   }
   const executable=process.env.UIB_Q02_EXECUTABLE;assert(path.isAbsolute(executable||''));
   assert.equal(digest(executable),process.env.UIB_Q02_EXECUTABLE_SHA256);
+  if(accepted)assert.equal(accepted.executable_sha256,digest(executable),'preflight and series use identical saved products');
   const output=process.env.UIB_Q02_OUTPUT;assert(path.isAbsolute(output||''));
   assert(path.resolve(output).startsWith(fs.realpathSync(os.tmpdir())+path.sep));fs.mkdirSync(output,{mode:0o700});
   const fixtureSetup=prepare(),report={functional_pin:functional,executable_sha256:digest(executable),mode:preflight?'quality_preflight':'timed_series',samples:[],comparability:{},
-    unavailable:['Web full-fixture cold: current rooted collector refuses iframe; 2-document/97-node baseline cannot be substituted by single-control cold.',
-      'Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],
+    unavailable:['Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],closures:[],
     environment:{node:process.version,arch:os.arch(),release:os.release(),cpus:os.cpus().length,cpu:os.cpus()[0].model,memory:os.totalmem(),load_start:os.loadavg()},
     retention:'Q02/root review consumer; remove run-owned nonimages after consumption; no screenshots created'};
   let fixture;
   async function series(kind,count,label){
-    let server,browser,session,driver;const totalBegin=performance.now();
+    let server,browser,session,driver,raw;const totalBegin=performance.now();
+    const full=kind==='documents';
     try{
       server=await fixtureSetup.chromium.launchServer({headless:true,timeout:8000,args:['--remote-debugging-port=0','--remote-debugging-address=127.0.0.1']});
       browser=await fixtureSetup.chromium.connect(server.wsEndpoint(),{timeout:3000});
@@ -113,90 +149,112 @@ async function run(){
       await context.route('**/*',route=>new URL(route.request().url()).origin===fixture.url?route.continue():route.abort());
       const page=await context.newPage();await page.goto(fixture.url+'/?generation=1',{timeout:3000});
       await page.waitForFunction(()=>!!window.f01,{},{timeout:3000});
+      const attachBegin=performance.now(); // includes all required discovery/metadata/config, not only worker startup
       session=await context.newCDPSession(page);
-      if(preflight){
-        const version=await session.send('Browser.getVersion');assert.equal(version.protocolVersion,'1.3');report.environment.protocol=version;
-        const full=await session.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});
-        const shape={documents:full.documents.length,nodes:full.documents.reduce((n,d)=>n+d.nodes.nodeName.length,0)};
-        assert.deepEqual(shape,{documents:2,nodes:97});report.fixture_shape=shape;
-        const {root}=await session.send('DOM.getDocument',{depth:0});
-        const {nodeId}=await session.send('DOM.querySelector',{nodeId:root.nodeId,selector:'#left'});
-        const {node}=await session.send('DOM.describeNode',{nodeId});
-        const ax=await session.send('Accessibility.getPartialAXTree',{backendNodeId:node.backendNodeId,fetchRelatives:false});
-        fs.writeFileSync(path.join(output,`${kind}-raw-ax.json`),JSON.stringify(ax),{flag:'wx',mode:0o600});
-        const unmapped=ax.nodes.flatMap(n=>(n.properties||[]).filter(p=>p.name==='focusable').map(p=>({name:p.name,value:p.value})));
-        report.comparability[kind]={comparable:kind==='geometry'||unmapped.length===0,
-          gaps:kind==='semantic'&&unmapped.length?['raw known focusable has no canonical selected Field; do not measure reduced semantic payload as equal']:[],raw_unmapped:kind==='semantic'?unmapped:[]};
-      }
       const {targetInfo}=await session.send('Target.getTargetInfo');const {frameTree}=await session.send('Page.getFrameTree');
       const binding={endpoint:`ws://127.0.0.1:${port}/devtools/page/${targetInfo.targetId}`,
         target:{id:targetInfo.targetId,generation:crypto.randomUUID()},surface:{id:frameTree.frame.id,generation:frameTree.frame.loaderId}};
-      const before=await page.evaluate(()=>({active:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()}));
-      const contextData={schema_version:'0.1.0',session_id:'q02-'+crypto.randomUUID(),target:binding.target,surfaces:[binding.surface],scope_id:'f01-left',
-        projection:'interaction',fields:kind==='geometry'?['layout_bounds']:['role','accessibility_name','enabled','focused','invalid'],
+      const surfaces=full?[frameTree,...(frameTree.childFrames||[])].map(t=>({id:t.frame.id,generation:t.frame.loaderId})):[binding.surface];
+      const documents=full?await documentBindings(session,surfaces):null;
+      if(full)assert.equal(documents.length,2);
+      const before=await page.evaluate(()=>({active:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint(),viewport:[innerWidth,innerHeight,devicePixelRatio]}));
+      assert.deepEqual(before.viewport,[800,600,1]);
+      const contextData={schema_version:'0.1.0',session_id:'q02-'+crypto.randomUUID(),target:binding.target,surfaces,scope_id:full?'f01-documents':'f01-left',
+        projection:full?'design':'interaction',fields:full?['value','layout_bounds']:kind==='geometry'?['layout_bounds']:['role','accessibility_name','enabled','focused','invalid'],
         plugin:{id:'web',version:'0.1.0'},environment_revision:'f01-800x600-dpr1'};
       const descriptor={schema_version:'0.1.0',artifact:{kind:'session',data:{session_id:contextData.session_id,plugin:contextData.plugin,supported_versions:['0.1.0'],
-        target:binding.target,surfaces:[binding.surface],allowed_scopes:['f01-left'],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'bounded-f01'}]}}};
-      const config=path.join(output,`${label}-${kind}-config.json`);fs.writeFileSync(config,JSON.stringify({descriptor,provider:{backend:'web',setup:setup(binding)}}),{flag:'wx',mode:0o600});
-      const attachBegin=performance.now();driver=client(executable,config);assert.equal((await driver.next()).kind,'attached');
-      const ids=new Set();let selection={selection:'initial',ids:[{id:'left',sensitivity:'public'}],max_visited_nodes:256};
+        target:binding.target,surfaces,allowed_scopes:[contextData.scope_id],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'bounded-f01'}]}}};
+      const config=path.join(output,`${label}-${kind}-config.json`);fs.writeFileSync(config,JSON.stringify({descriptor,provider:{backend:'web',setup:setup(binding,full)}}),{flag:'wx',mode:0o600});
+      driver=client(executable,config);assert.equal((await driver.next()).kind,'attached');
+      const ids=new Set();let selection=full?{selection:'documents',documents,max_visited_nodes:128}:{selection:'initial',ids:[{id:'left',sensitivity:'public'}],max_visited_nodes:256};
       for(let i=0;i<count;i++){
         const requestId=`${label}-${kind}-${i}`,request={schema_version:'0.1.0',artifact:{kind:'request',data:{request_id:requestId,clock_domain:'rebound',context:contextData,
-          limits:{max_elements:32,max_depth:8,max_output_bytes:65536,deadline_ms:250},freshness_policy:'current_required',operation:{operation:'observe',channels:['external_semantics']}}}};
+          limits:full?{max_elements:128,max_depth:16,max_output_bytes:524288,deadline_ms:2000}:{max_elements:32,max_depth:8,max_output_bytes:65536,deadline_ms:250},freshness_policy:'current_required',operation:{operation:'observe',channels:['external_semantics']}}}};
         const record={kind,cohort:label,index:i,status:'failed'},begin=performance.now();
         try{
           driver.send({request,selection});const sample=await driver.next();record.outer_ms=performance.now()-begin;
           assert.equal(sample.kind,'sample');record.request_ms=sample.request_ms;record.domain_usage=sample.domain_usage;
           if(i===0){record.attach_first_ms=performance.now()-attachBegin;record.process_cold_ms=performance.now()-totalBegin;}
           fs.writeFileSync(path.join(output,requestId+'.json'),JSON.stringify(sample),{flag:'wx',mode:0o600});
-          const checked=check(sample,contextData,kind,requestId,ids);Object.assign(record,checked,{snapshot:undefined,status:'valid_partial'});
-          if(i===0){const s=checked.snapshot,n=s.nodes.find(n=>n.key.namespace==='web.dom'),o=n.properties[0].evidence;
+          if(i===0 && (full||preflight)){
+            raw=await session.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});
+            const shape={documents:raw.documents.length,nodes:raw.documents.reduce((n,d)=>n+d.nodes.nodeName.length,0)};
+            assert.deepEqual(shape,{documents:2,nodes:97});report.fixture_shape=shape;
+            fs.writeFileSync(path.join(output,requestId+'-raw-oracle.json'),JSON.stringify(raw),{flag:'wx',mode:0o600});
+          }
+          const checked=check(sample,contextData,kind,requestId,ids,raw);Object.assign(record,checked,{snapshot:undefined,status:'valid_partial'});
+          if(preflight){
+            const version=await session.send('Browser.getVersion');assert.equal(version.protocolVersion,'1.3');report.environment.protocol=version;
+            if(kind==='semantic'){
+              const {root}=await session.send('DOM.getDocument',{depth:0});
+              const {nodeId}=await session.send('DOM.querySelector',{nodeId:root.nodeId,selector:'#left'});
+              const {node}=await session.send('DOM.describeNode',{nodeId,depth:0});
+              assert.equal(checked.snapshot.nodes.find(n=>n.key.namespace==='web.dom').key.key,String(node.backendNodeId));
+              const ax=await session.send('Accessibility.getPartialAXTree',{backendNodeId:node.backendNodeId,fetchRelatives:false});
+              assert.equal(ax.nodes[0].properties.find(p=>p.name==='focusable').value.value,true);
+              fs.writeFileSync(path.join(output,'semantic-raw-ax.json'),JSON.stringify(ax),{flag:'wx',mode:0o600});
+            }
+          }
+          if(i===0&&!full){const s=checked.snapshot,n=s.nodes.find(n=>n.key.namespace==='web.dom'),o=n.properties[0].evidence;
             selection={selection:'references',nodes:[{sensitivity:'public',reference:{session_id:s.context.session_id,target:s.context.target,surface:n.surface,key:n.key,snapshot_id:s.id,observation_id:o.observation_id}}]};}
           if(i===0 && (label==='reused-session'||preflight)){
             // Separate explicit fixture stimulus, outside every measured warm sample.
             // Prove that a reused ref reads new requested data, then restore baseline.
             const saved=await page.evaluate(()=>{const n=document.getElementById('left');return {style:n.getAttribute('style'),label:n.getAttribute('aria-label')};});
             try{
-              await page.evaluate(kind=>{const n=document.getElementById('left');if(kind==='geometry')n.style.width='121px';else n.setAttribute('aria-label','Q02 fresh control');},kind);
+              await page.evaluate(kind=>{const n=document.getElementById('left');if(kind!=='semantic')n.style.width='121px';else n.setAttribute('aria-label','Q02 fresh control');},kind);
               const changed=structuredClone(request);changed.artifact.data.request_id=requestId+'-freshness';
               driver.send({request:changed,selection});const fresh=await driver.next();assert.equal(fresh.kind,'sample');assert.equal(fresh.terminal,'Completed');assert.equal(fresh.missing,0);
               const response=JSON.parse(fresh.frames[0].canonical).artifact.data;assert.equal(response.request_id,changed.artifact.data.request_id);
               assert.equal(response.result.status,'observed');assert.deepEqual(response.result.data.context,contextData);
-              const node=response.result.data.nodes.find(n=>n.key.namespace===(kind==='geometry'?'web.dom':'web.ax'));
-              if(kind==='geometry')assert.equal(known(node,'layout_bounds').value.shape.value.width,121);
+              const node=response.result.data.nodes.find(n=>n.key.namespace===(kind==='semantic'?'web.ax':'web.dom'));
+              if(full){
+                const changedRaw=await session.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});
+                require('./fidelity.cjs').compare(changedRaw,response.result.data);
+                const left=response.result.data.nodes.find(n=>n.extensions.some((e,j)=>e.name.endsWith('.name')&&e.property.state.value?.value==='id'&&n.extensions[j+1]?.property.state.value?.value==='left'));
+                assert.equal(known(left,'layout_bounds').value.shape.value.width,121);
+              }else if(kind==='geometry')assert.equal(known(node,'layout_bounds').value.shape.value.width,121);
               else assert.equal(known(node,'accessibility_name').value,'Q02 fresh control');
               fs.writeFileSync(path.join(output,requestId+'-freshness.json'),JSON.stringify(fresh),{flag:'wx',mode:0o600});
             }finally{await page.evaluate(saved=>{const n=document.getElementById('left');for(const [key,value] of [['style',saved.style],['aria-label',saved.label]]){if(value===null)n.removeAttribute(key);else n.setAttribute(key,value);}},saved);}
             const restored=structuredClone(request);restored.artifact.data.request_id=requestId+'-restored';
-            driver.send({request:restored,selection});const fresh=await driver.next();check(fresh,contextData,kind,restored.artifact.data.request_id,ids);
+            driver.send({request:restored,selection});const fresh=await driver.next();check(fresh,contextData,kind,restored.artifact.data.request_id,ids,raw);
             fs.writeFileSync(path.join(output,requestId+'-restored.json'),JSON.stringify(fresh),{flag:'wx',mode:0o600});
             record.freshness_challenge='changed_and_restored_on_same_attachment_and_ref';
           }
-        }catch(error){record.status='failed';record.outer_ms=performance.now()-begin;record.failure=String(error.message).slice(0,200);}
+          if(preflight)report.comparability[kind]={comparable:true,gaps:[],raw_facts:full?checked.coverage:null};
+        }catch(error){record.status='failed';record.outer_ms??=performance.now()-begin;record.failure=String(error.message).slice(0,200);}
         report.samples.push(record);
         // A failure remains a sample. Do not blindly retry a broken session.
         if(record.status==='failed'){for(let j=i+1;j<count;j++)report.samples.push({kind,cohort:label,index:j,status:'not_run_after_failure'});break;}
       }
-      assert.deepEqual(await page.evaluate(()=>({active:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()})),before,'read-only state invariance');
-      await driver.close();driver=null;
-    }finally{if(driver){try{await driver.close();}catch{report.cleanup_failure=true;}}if(session)await session.detach().catch(()=>{});if(browser)await browser.close();if(server)await server.close();}
+      assert.deepEqual(await page.evaluate(()=>({active:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint(),viewport:[innerWidth,innerHeight,devicePixelRatio]})),before,'read-only state invariance');
+      report.closures.push({kind,cohort:label,...await driver.close()});driver=null;
+    }catch(error){
+      if(!report.samples.some(s=>s.kind===kind&&s.cohort===label))report.samples.push({kind,cohort:label,index:0,status:'failed',process_cold_ms:performance.now()-totalBegin,failure:`setup: ${String(error.message).slice(0,160)}`});
+      throw error;
+    }finally{if(driver){try{report.closures.push({kind,cohort:label,...await driver.close()});}catch{report.cleanup_failure=true;}}if(session)await session.detach().catch(()=>{});if(browser)await browser.close();if(server)await server.close();}
   }
   try{
     fixture=await start();
-    for(const kind of ['semantic','geometry']){
+    for(const kind of ['semantic','geometry','documents']){
       if(preflight){await series(kind,1,'preflight');continue;}
       if(!accepted.comparability[kind]?.comparable){report.comparability[kind]=accepted.comparability[kind];continue;}
       assert(accepted.samples.some(s=>s.kind===kind&&s.status==='valid_partial'&&s.freshness_challenge),'preflight quality and freshness required');
-      // Cold single-control is supplemental, never the frozen whole-fixture gate.
-      for(let i=0;i<20;i++)await series(kind,1,`cold-control-${i}`);
+      // Only Documents is the frozen whole-fixture cold gate.
+      for(let i=0;i<20;i++)await series(kind,1,`${kind==='documents'?'cold-full':'cold-control'}-${i}`);
       await series(kind,101,'reused-session'); // first retained separately; next 100 are warm
     }
   }catch(error){report.failure=String(error.message).slice(0,300);}
   finally{if(fixture)await fixture.close();report.environment.load_end=os.loadavg();
-    report.summary={};for(const kind of ['semantic','geometry']){
+    report.summary={};for(const kind of ['semantic','geometry','documents']){
       const planned=report.samples.filter(s=>s.kind===kind&&s.cohort==='reused-session'&&s.index>0);
       const warm=planned.filter(s=>s.status!=='not_run_after_failure');
-      report.summary[kind]={warm:stats(warm,'outer_ms'),not_run:100-warm.length,quality_failures:warm.filter(s=>s.status!=='valid_partial').length,threshold_ms:20};
+      const cold=report.samples.filter(s=>s.kind===kind&&s.cohort.startsWith('cold-'));
+      report.summary[kind]={warm:stats(warm,'outer_ms'),cold_total:stats(cold,'process_cold_ms'),cold_attach_first:stats(cold,'attach_first_ms'),not_run:100-warm.length,
+        quality_failures:[...warm,...cold].filter(s=>s.status!=='valid_partial').length,
+        gates:kind==='documents'?{attach_ms:50,process_cold_ms:500}:{warm_ms:20},
+        supplemental:kind==='documents'?'warm full capture':'cold single control'};
     }
     fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});
   }

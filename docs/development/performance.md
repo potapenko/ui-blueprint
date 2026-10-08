@@ -3,6 +3,9 @@
 Status: Web-only scoped evaluation on8e3dba2: warm requested geometry p95
 2.688ms/100calls meets20ms; Native, semantic fidelity, whole-fixture cold and
 separate-stage telemetry remain open. **No aggregate D06/P7 acceptance.**
+W06 source139d202 now supplies the missing Web representations; Q02's adapted
+driver is offline-checked and awaits Q01 changed-scope acceptance/resource release
+before its own saved release build and current-candidate preflight/timing.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
@@ -43,10 +46,13 @@ UIB_Q02_OUTPUT and the established S01_WEB_PLAYWRIGHT_CORE. It launches only own
 headless F01 at800×600/DPR1 with the frozen Chromium145.0.7632.6/Playwright1.58.2/
 Node24.15.0. No real site/profile, screenshots, cadence or background UI collection.
 First run with `--preflight`: actual CDP protocol,2-document/97-node fixture shape,
-raw addressed AX fields, independent rect literals and changed/restored data.
+raw addressed AX fields (including the reported focusable extension), independent
+rect literals and changed/restored data. Documents additionally compares every
+native fact through the saved W06 oracle:97nodes/2documents/1102facts/19text boxes.
 Then supply UIB_Q02_PREFLIGHT pointing to that report. Only comparable workloads
-with passed quality/freshness execute series. Known raw `focusable=true` currently
-prevents the semantic cohort; dropping it is not an equivalent response.
+with passed quality/freshness execute series, using the identical saved executable.
+The original8e3dba2 semantic gap is retained historically; W06's extension must pass
+new actual preflight rather than be assumed correct from its representation.
 Each semantic/geometry cohort has20 process-cold single-control samples and one
 reused session containing initial response plus100 explicit fresh warm requests.
 First Observe resolves #left; subsequent calls reuse the observed ref and attachment.
@@ -55,6 +61,17 @@ name/width on that same held ref; a fresh response must report it, then another
 response verifies restored baseline. These two checks are retained separately and
 excluded from the latency cohort. Observation itself remains read-only.
 Cold single-control is **supplemental**, never the D06 full-fixture cold gate.
+The Documents cohort uses the actual explicit WebSelection::Documents API and
+trusted two-Surface descriptor. Its128nodes/depth16/512KiB/2s failure bounds are the
+W06 whole-document profile within unchanged D05, not changed latency thresholds.
+Twenty process-cold full captures test50ms attach+response and500ms overall;100
+reused-session full captures are reported separately without inventing a warm-full
+threshold. Cold includes caller CDP setup, frame/document binding and configuration:
+document IDs come from bounded metadata calls, never an untimed DOMSnapshot.
+The raw comparison snapshot is requested only AFTER the timed candidate response
+on the controlled unchanged checkpoint. Local oracle checking is outside response
+latency and never becomes background UI work. First/startup failures remain rows;
+quality failure never overwrites an already measured response time.
 Partial source coverage remains partial. Requested known values are independently
 checked against authored R01 literals; unknown/field loss cannot pass quality.
 Semantic field fidelity against the original raw AX response still needs explicit
@@ -92,7 +109,7 @@ explicit calls after owned helpers reap, so later sampling can give each request
 a distinct image destination while reusing the guarded Rust attachment. The current
 preflight does not implement or claim completed Native statistical series.
 
-## Established preparation discrepancies
+## Established preparation discrepancies (original8e3dba2)
 
 * F01 HTML/JS/server/oracle remain byte-identical to a8368076; the existing rooted
   collector refuses iframe boundaries. Thus the2-document/97-node whole-fixture

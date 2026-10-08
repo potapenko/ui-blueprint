@@ -1,5 +1,38 @@
 # Q02 performance — scoped Web result, Native pending
 
+## W06 handoff adaptation — offline, acceptance pending
+
+Root handed off production139d202b78a59d9017efaea1e55032f69f6468ac / final862572f
+and authorized offline harness adaptation; heavy/build/timed work waits Q01's
+changed-scope acceptance/release. Native foreground gate remains unchanged.
+Route refreshed through specs/README → product/README → WEB-DOCUMENTS@1
+SCOPE/FACTS/BOUNDS and its already-read explicit MODEL/EXCHANGE@2/PROJECTIONS/
+PRIVACY/D04/D05/D06 closure. No further spec drift139d202..0728ee6.
+Read full W06 receipt/packet, development API section, WebSelection::Documents,
+worker dispatch, Collector::attach_with_surfaces/observe_documents and author
+fidelity driver. Contract requires all original facts; source provides an additive
+extension/explicit scope, not independent or performance acceptance.
+
+Own changes only Web performance driver/recipe/this receipt; generic Rust caller
+already accepts the new typed selection without modification. Full cold binds
+both real frame/loader/document IDs through metadata calls. Its timer starts before
+CDP setup/binding/configuration; first DOMSnapshot is the product request. Oracle
+capture occurs after the timed response, not a hidden prewarming capture. Reuse
+the existing public raw↔canonical oracle, with independent authored root/child
+rects. Semantic requires the namespaced reported Value::Flag focusable extension.
+Fresh changed/restored facts stay separate from the100 warm cohort. Full adds20
+process-cold and100 warm; no new threshold or cheaper field/node selection.
+
+Offline replay of retained W06 semantic/full records passed:7108-byte semantic,
+443366-byte full,97nodes/2documents/1102facts/19text boxes; deleting focusable or a
+DOM node refused. Node syntax/existing quantile/quality checks passed. No runtime,
+heavy build, new timing or production edit; old geometry46aa360 is preserved.
+W06 raw directory `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-e020gN`
+was read only and remains for Q01 reconciliation; nothing there was deleted.
+Next: accepted W06 source pin/release → saved optimized build → own preflight →
+all comparable frozen Web rows. Possible Q01 findings are not bypassed by author
+proof. Task remains active in scope, waiting_evidence/resource for that next step.
+
 ## Web-only execution authorized after preparation
 
 Root's direct2026-10-08 follow-up explicitly released Web quality preflight and
