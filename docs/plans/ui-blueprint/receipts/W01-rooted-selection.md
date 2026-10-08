@@ -1,5 +1,87 @@
 # W01 rooted selection source handoff
 
+## G03 actual ordinary CLI component geometry — 2026-10-08
+
+Working path: original Observe ChannelResponse → design Inspect → Rust Measure
+queries → recorded resize Diff. Authority: [G03](../packets/G03-geometry-cli.md),
+user's geometry-first priority; registry18/ANALYSIS@2 direct source input plus
+unchanged TYPES/VALIDATION@1, CLI@6, CLI-DIFF@2 and selected Web geometry closure.
+Only this receipt and tests/bridges/web/guarded-live.cjs changed. No collector,
+engine, Core CLI, fixture or input-executor work. Existing owned F01 setup exposes
+City/London and Options popup; values below are actual F01, not real Director data.
+
+Corrected actual run2026-10-08T01:11:24.272Z–01:11:26.428Z passed17CLI calls:
+3Observe (partial4), design Inspect0,12measurements (10known0 +2unknown4), Diff0.
+Rooted scope contained10DOM+10AX after the existing London option appeared; BODY
+portal remained outside it. A separate explicit context collected8DOM+8AX including
+popup/trigger/input/list/option and the existing responsive marker. No snapshots
+were merged or reserialized for analysis. Every result embeds the original source
+Snapshot unchanged. Bounds are reported CSSOM layout_bounds, viewport/top-left,
+css_px; AX names are linked through reported corresponds_to, never AX-as-layout.
+
+| Selected part | Actual x,y,width,height css_px |
+| --- | --- |
+| Fixture form |380,20,360,133|
+| City input |380,42,188,21|
+| Suggestions listbox |380,67,360,32|
+| London option |380,67,62.484375,32|
+| Open options trigger |477.234375,121,97.296875,32|
+| Options popup |400,290,200,60|
+| Close options |400,290,98.78125,32|
+
+Rust results: trigger-bottom→popup-top gap137; popup-left relative to trigger-left
+−77.234375; input-bottom→list-top gap4; input→list and list→option left offsets0/0.
+Input within wrapper: left0/top22/right172/bottom90; these measured insets are NOT
+declared padding. Wrapper360×133 and popup200×60 came through factual CLI queries.
+Clipping-aware popup width remains unknown_property; no viewport geometry node
+exists for viewport-overflow calculation. Aggregate Aligned remains incomplete_scope
+because the current engine requires complete coverage for that group operation.
+Partial scope and sequential/unknown consistency remain visible, not upgraded.
+
+Real viewport resize800×600→640×600 changed the context marker bounds from
+660,120,100,30 to500,120,100,30. Ordinary Diff returned that changed DOM layout
+property with both complete original records/environments and omitted_entries0.
+It is a recorded property comparison, not deletion, clipping or normalized motion.
+Observed CLI acquisition times were120.42/102.58/100.30ms including worker lifecycle;
+Inspect23.39ms, local measurements24.84–26.33ms, Diff27.37ms in this single run,
+not a percentile/performance qualification. No source-CSS numbers became measurements.
+
+One initial attempt stopped at the harness's mistaken expectation that Aligned
+would be known on a partial snapshot. The engine correctly returned incomplete_scope.
+Only the harness was corrected: retain that unknown and add two ordinary pairwise
+Gap queries for useful left-offset facts. No engine/source/cap/tolerance change;
+the corrected complete chain above passed. Initial artifact inventory26files/report
+fd81fd5f269eb08fbae75101238b0d1b7a2dcab7fd01888daa703441a6d9ba0e preserved that failure
+until consumption; worker absence was independently verified after it.
+
+Immutable shipping base e275823c18351bc05a6ac68972221758220d9c32, with only launcher
+overlay733ea5f02a771ef15db8950c554dcd5180d52a447b36249166cc3d311d0a05cc.
+199-input fingerprint811f4c9f60f36d148d0ad0d2df11219d5ac2d3a44f1932da30b5dbff9a0ea8ec;
+CLI373ea712c934e1c59bedcd5979c99db76d15a75c79a1bdc85c2038dabf8d674b;
+worker7a2fd76528424f01908bdbd72e2635699788580f10d963fb8c48e905c9306dec.
+Locked/offline web CLI/worker builds and launcher syntax/diff checks passed. Root's
+Core loader checks were reused; no old action or unrelated full suite repeated.
+Native/runtime: Chromium145.0.7632.6, Node24.15.0, Playwright1.58.2, darwin arm64.
+Unchanged live32nodes/depth8/64KiB/250ms/256visited caps,120s overall; local Diff
+explicit output budget200000B accommodates two unchanged snapshots (actual86268B).
+No browser/model/measurement framework was added; arithmetic remains Rust-only.
+
+Read invariance passed for all three observations. All CLI children closed without
+signals; exact worker-path process inventories were empty after every call and
+after the run. Browser survival and owned context/driver/browser/server/profile
+cleanup confirmed; private host counters were not invented. Source/binary/output
+hashes matched after use. Key consumed output pins: rooted44044B ea92782d3f740ce9b63592ef221d6d86d1da05a9047dc63b63295257b5ddb1a4;
+context36408B f7e68fc9d581b0d50fe88600ee42f7d29439c85132131b5f8145be869bff80c5;
+resized36408B b09576ae03901bae7e5392422f7a7efc745e040b074714570290e74d5f5bbfe3;
+Diff86268B ecb76c3ae512109e04f8885d9b35de78333010db635360fe605d6416cc8dcbd2;
+report ba6701b4408afac57df58b784d6bd40869ed0a35d7d797700dba8b0fdc1b66bc.
+These are checked/deleted bytes, not available file links. After inline delivery,
+both run-owned output sets26+36 non-image files and current uib-web-geometry-69gec8w1
+source/build were consumed/removed with absence verified. No images produced or
+deleted, older evidence unchanged. No runtime resources remain held.
+
+## Earlier rooted collector qualification
+
 Status: corrected rooted sequence PASSED:9DOM+9AX within selected section;
 wrong-binding/document/remount refusals passed; cleanup/temp removal confirmed.
 Authority: root's explicit implementation dispatch and [packet](../packets/W01-rooted-selection.md),

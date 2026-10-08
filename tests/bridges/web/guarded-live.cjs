@@ -202,6 +202,132 @@ async function run(evidence, report) {
           surface:{id:frameTree.frame.id,generation:frameTree.frame.loaderId}};
       } finally { await session.detach(); }
     }
+    async function callCli(stage,args,expectedExit,maxOutput=65536,jsonOutput=true){
+      report.last_stage=stage;
+      const started=performance.now();
+      child=spawn(executable,args,{stdio:['ignore','pipe','pipe']});
+      const chunks=[];let bytes=0,errors=0,over=false;
+      child.stdout.on('data',chunk=>{bytes+=chunk.length;if(bytes>maxOutput){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
+      child.stderr.on('data',chunk=>{errors+=chunk.length;if(errors>65536){over=true;child.kill('SIGKILL');}});
+      exited=new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>resolve({code,signal}));});
+      const exit=await bounded(exited,5000,'cli_call_timeout');
+      const stdout=Buffer.concat(chunks);const pids=ownWorkerPids(worker);
+      report.outcomes.push({stage,exit:exit.code,signal:exit.signal,stdout_bytes:stdout.length,stderr_bytes:errors,elapsed_ms:performance.now()-started,owned_worker_pids_after:pids});
+      assert(!over);assert.equal(exit.signal,null);assert.deepEqual(pids,[]);
+      assert(stdout.length>0&&stdout.at(-1)===10);
+      if(jsonOutput)assert.equal(stdout.toString('utf8').split('\n').length,2,'one complete JSON line');
+      const document=jsonOutput?JSON.parse(stdout.toString('utf8')):null;
+      const name=`${stage}.${jsonOutput?'json':'txt'}`;await writeExclusive(path.join(evidence,name),stdout);
+      report.frames.push({case:stage,file:name,bytes:stdout.length,sha256:crypto.createHash('sha256').update(stdout).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
+      assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
+      return {bytes:stdout,document};
+    }
+    if(report.mode==='geometry'){
+      report.phase='component_geometry';report.binaries.cli=report.binaries.test;delete report.binaries.test;
+      const page=pages.a;
+      // Only fixture setup: expose existing content, without the product executor.
+      await page.locator('#draft').fill('Lon');await page.locator('#option-london').waitFor();
+      await page.locator('#open-popup').click();await page.locator('#portal').waitFor();
+      const actual=await binding(page), connection=cliConnection(actual,'component');
+      connection.session.session_id='live-cli-geometry';
+      const ids=['f01','draft','suggestions','option-london','open-popup','portal','close-popup','responsive'];
+      const selectedKeys=new Map();let rootBackend,documentBackend;
+      const session=await context.newCDPSession(page);
+      try{
+        const {root}=await session.send('DOM.getDocument',{depth:0,pierce:false});documentBackend=root.backendNodeId;
+        for(const id of ids){
+          const found=await session.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:`#${id}`});assert.equal(found.nodeIds.length,1);
+          const {node}=await session.send('DOM.describeNode',{nodeId:found.nodeIds[0],depth:0,pierce:false});
+          selectedKeys.set(id,{namespace:'web.dom',key:String(node.backendNodeId)});if(id==='f01')rootBackend=node.backendNodeId;
+        }
+      }finally{await session.detach();}
+      const fields=['role','accessibility_name','layout_bounds','hit_region','visible_region'];
+      const sourceContext={schema_version:'0.1.0',session_id:connection.session.session_id,target:actual.target,surfaces:[actual.surface],
+        scope_id:'f01-component',projection:'design',fields,plugin:connection.session.plugin,environment_revision:'f01-800x600-geometry'};
+      report.geometry={scope:'owned F01 only; not real Director',bounds:[],measurements:[],viewport_overflow:'unknown: no observed viewport geometry node',clipping:'unknown unless supplied by source'};
+      async function save(name,value){const bytes=Buffer.from(JSON.stringify(value));assert(bytes.length<=131072);await writeExclusive(path.join(evidence,name),bytes);return path.join(evidence,name);}
+      async function state(){return {ui:await uiState(page),geometry:await page.evaluate(ids=>({viewport:[innerWidth,innerHeight],nodes:ids.map(id=>{
+        const n=document.getElementById(id),r=n.getBoundingClientRect();return {id,rect:[r.x,r.y,r.width,r.height]};
+      })}),ids)};}
+      async function observeGeometry(stage,selection,environment){
+        const c={...connection,provider:{...connection.provider,selection}};
+        const request=cliRequest({...sourceContext,environment_revision:environment},{operation:'observe',channels:['external_semantics']},stage);
+        const config=await save(`${stage}-connection.json`,c), input=await save(`${stage}-request.json`,request);
+        const before=await state();
+        const output=await callCli(stage,['observe','--connection',config,'--request',input,'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536'],4);
+        assert.deepEqual(await state(),before);
+        assert.equal(output.document.artifact.kind,'channel_response');assert.equal(output.document.artifact.data.result.status,'observed');
+        const snapshot=output.document.artifact.data.result.data;assert.equal(snapshot.coverage.status,'partial');
+        const dom=snapshot.nodes.filter(n=>n.key.namespace==='web.dom');assert(dom.length<=16);
+        for(const item of before.geometry.nodes){
+          const node=dom.find(n=>n.key.key===selectedKeys.get(item.id).key);
+          if(node)compareRect(rectangle(node),item.rect);
+        }
+        report.checks.push({case:stage,read_invariance:true,dom_nodes:dom.length,ax_nodes:snapshot.nodes.length-dom.length});
+        return {snapshot,file:path.join(evidence,`${stage}.json`),bytes:output.bytes};
+      }
+      const rooted=await observeGeometry('geometry-rooted',{selection:'rooted',max_visited_nodes:256,root:{
+        session_id:connection.session.session_id,target:actual.target,surface:actual.surface,
+        document_backend_id:documentBackend,backend_node_id:rootBackend,sensitivity:'public'}},sourceContext.environment_revision);
+      assert.equal(rooted.snapshot.nodes.filter(n=>n.key.namespace==='web.dom').length,10);
+      assert(!rooted.snapshot.nodes.some(n=>n.key.namespace==='web.dom'&&n.key.key===selectedKeys.get('portal').key),'BODY portal is not silently in rooted subtree');
+      const inspectArgs=['inspect','--snapshot',rooted.file,'--ref',JSON.stringify(selectedKeys.get('f01')),'--view','design','--max-input-bytes','131072','--max-output-bytes','65536'];
+      await callCli('geometry-design-inspect',inspectArgs,0,65536,false);
+      const selection={selection:'initial',ids:ids.map(id=>({id,sensitivity:'public'})),max_visited_nodes:256};
+      const component=await observeGeometry('geometry-context',selection,sourceContext.environment_revision);
+      const nodes=component.snapshot.nodes.filter(n=>n.key.namespace==='web.dom');assert.equal(nodes.length,ids.length);
+      const node=id=>nodes.find(n=>n.key.key===selectedKeys.get(id).key);
+      for(const id of ids){
+        const relation=component.snapshot.relations.find(r=>r.kind==='corresponds_to'&&r.from.namespace==='web.dom'&&r.from.key===node(id).key.key);
+        const ax=relation&&component.snapshot.nodes.find(n=>n.key.namespace===relation.to.namespace&&n.key.key===relation.to.key);
+        const name=ax?.properties.find(p=>p.field==='accessibility_name');
+        report.geometry.bounds.push({id,accessible_name:name?.state.availability==='known'?name.state.value.value:null,rect:rectangle(node(id)),units:'css_px'});
+      }
+      assert(component.snapshot.relations.some(r=>r.kind==='anchored_to'&&r.from.key===selectedKeys.get('portal').key&&r.to.key===selectedKeys.get('open-popup').key));
+      assert(component.snapshot.relations.some(r=>r.kind==='controls'&&r.from.key===selectedKeys.get('draft').key&&r.to.key===selectedKeys.get('suggestions').key));
+      const space=property(node('f01'),'layout_bounds').value.coordinate_space;
+      const anchor=(id,fraction=0,axis='x',frame_kind='layout_bounds')=>({element:selectedKeys.get(id),frame_kind,coordinate_space:space,fraction,axis});
+      const queries=[
+        ['wrapper-width','width',[anchor('f01')]],['wrapper-height','height',[anchor('f01')]],
+        ['popup-width','width',[anchor('portal')]],['popup-height','height',[anchor('portal')]],
+        ['trigger-popup-gap','gap',[anchor('open-popup',1,'y'),anchor('portal',0,'y')]],
+        ['popup-left-offset','gap',[anchor('open-popup'),anchor('portal')]],
+        ['input-insets','inside',[anchor('draft'),anchor('f01')]],
+        ['input-list-gap','gap',[anchor('draft',1,'y'),anchor('suggestions',0,'y')]],
+        ['input-list-left-offset','gap',[anchor('draft'),anchor('suggestions')]],
+        ['list-option-left-offset','gap',[anchor('suggestions'),anchor('option-london')]],
+        ['left-edge-spread','aligned',[anchor('draft'),anchor('suggestions'),anchor('option-london')]],
+        ['visible-popup-width','width',[anchor('portal',0,'x','visible_region')]]
+      ];
+      for(const [id,operation,anchors] of queries){
+        const query={schema_version:'0.2.0',artifact:{kind:'geometry_query',data:{id,scope_id:component.snapshot.context.scope_id,
+          targets:anchors.map(a=>a.element),operation,anchors,quantity_kind:'length',units:'css_px',applies_when:{platform:null,input_mode:null,text_scale:null}}}};
+        const q=await save(`geometry-${id}-query.json`,query);
+        const unknown=id==='visible-popup-width'||id==='left-edge-spread';
+        const measured=await callCli(`geometry-${id}`,['measure','--snapshot',component.file,'--query',q,'--space',space.id,'--max-input-bytes','131072','--max-output-bytes','65536','--json'],unknown?4:0);
+        assert.equal(measured.document.schema_version,'0.2.0');assert.equal(measured.document.artifact.kind,'measurement');
+        const result=measured.document.artifact.data;assert.deepEqual(result.snapshot,component.snapshot);
+        assert.equal(result.result.status,unknown?'unknown':'known');
+        if(id==='left-edge-spread')assert.equal(result.result.reason,'incomplete_scope');
+        if(!unknown){assert.deepEqual(result.result.measurement.space,space);assert(result.result.measurement.evidence.length>0);}
+        if(id==='popup-width')assert.equal(result.result.measurement.value.value.amount,200);
+        if(id==='popup-height')assert.equal(result.result.measurement.value.value.amount,60);
+        report.geometry.measurements.push({id,result:result.result});
+      }
+      // Existing responsive F01 context marker shifts on real viewport resize.
+      await page.setViewportSize({width:640,height:600});
+      const after=await observeGeometry('geometry-resized',selection,'f01-640x600-geometry');
+      const diff=await callCli('geometry-diff',['diff','--before',component.file,'--after',after.file,'--max-input-bytes','131072','--max-output-bytes','200000','--max-entries','128','--json'],0,200000);
+      assert.equal(diff.document.kind,'recorded_difference');assert.equal(diff.document.omitted_entries,0);
+      assert.deepEqual(diff.document.before,component.snapshot);assert.deepEqual(diff.document.after,after.snapshot);
+      const changed=diff.document.entries.filter(e=>e.kind==='property'&&e.field==='layout_bounds'&&e.content_changed&&e.key.namespace==='web.dom');
+      assert(changed.some(e=>e.key.key===selectedKeys.get('responsive').key));
+      report.geometry.resize={from:[800,600],to:[640,600],changed_dom_bounds:changed.map(e=>e.key),responsive_after:rectangle(after.snapshot.nodes.find(n=>n.key.namespace==='web.dom'&&n.key.key===selectedKeys.get('responsive').key))};
+      assert((await fs.readFile(component.file)).equals(component.bytes));assert((await fs.readFile(rooted.file)).equals(rooted.bytes));
+      assert.deepEqual(ownWorkerPids(worker),[]);await uiState(page);
+      report.cli_cleanup_confirmed=true;report.checks.push({case:'geometry-pipeline',engine_only_measurements:true,original_channel_bytes_preserved:true,browser_alive_after_workers:true});
+      return;
+    }
     if(report.mode==='cli_actions'){
       report.phase='public_cli_consumer';
       report.binaries.cli=report.binaries.test;delete report.binaries.test;
@@ -221,22 +347,7 @@ async function run(evidence, report) {
         const file=kind=>path.join(evidence,files.find(f=>f[0]===kind)[1]);
         const args=command==='observe'?['observe']:['action',command,command==='prepare'?'--snapshot':'--plan',file('source'),'--json'];
         args.push('--connection',file('connection'),'--request',file('request'),'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536');
-        child=spawn(executable,args,{stdio:['ignore','pipe','pipe']});
-        const chunks=[];let bytes=0,errors=0,over=false;
-        child.stdout.on('data',chunk=>{bytes+=chunk.length;if(bytes>65536){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
-        child.stderr.on('data',chunk=>{errors+=chunk.length;if(errors>65536){over=true;child.kill('SIGKILL');}});
-        exited=new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>resolve({code,signal}));});
-        const exit=await bounded(exited,5000,'cli_call_timeout');
-        const stdout=Buffer.concat(chunks);const pids=ownWorkerPids(worker);
-        report.outcomes.push({stage,exit:exit.code,signal:exit.signal,stdout_bytes:stdout.length,stderr_bytes:errors,owned_worker_pids_after:pids});
-        assert(!over);assert.equal(exit.signal,null);assert.deepEqual(pids,[]);
-        assert(stdout.length>0&&stdout.at(-1)===10);
-        assert.equal(stdout.toString('utf8').split('\n').length,2,'one complete canonical JSON line');
-        const document=JSON.parse(stdout.toString('utf8'));assert.equal(document.schema_version,'0.1.0');
-        const name=`${stage}.json`;await writeExclusive(path.join(evidence,name),stdout);
-        report.frames.push({case:stage,file:name,bytes:stdout.length,sha256:crypto.createHash('sha256').update(stdout).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
-        assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
-        return {bytes:stdout,document};
+        return callCli(stage,args,expectedExit);
       }
       function observation(connection,selected,stage){
         return cliRequest({schema_version:'0.1.0',session_id:connection.session.session_id,target:actual.target,surfaces:[actual.surface],
@@ -554,7 +665,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean(report.mode==='cli_actions'?'cli_process':'test_process',!!child,async()=>{
+    await clean(['cli_actions','geometry'].includes(report.mode)?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -563,7 +674,7 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=report.mode==='cli_actions'
+    report.cleanup.worker_sessions=['cli_actions','geometry'].includes(report.mode)
       ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
       :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
@@ -572,14 +683,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions','geometry'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[mode==='geometry'?'Web-component-geometry':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}
