@@ -481,3 +481,67 @@ worker36321578ac3a2f420b65d499a35ff39ff22d1db6522039d1ccc1df8df607fc9f;
 validatordf8803a2c16e0e28e16c43c3e1de0f9d2f5ef800e59048decd47beecb8b82210.
 Existing-source runtime result only, exact1 receipt checkpoint/push via lease. No source
 change/repeated test wave, new input work or general Mac/full RC03/P7 acceptance.
+
+
+## G05 — runnable developer first-use geometry example
+
+Root accepted source-backed choice: existing host_observe.py geometry mode plus
+HostHelper.swift read-only describe-process PID. Exact4 owners: those2 sources,
+native-helper.md and this receipt. Existing explicit trusted-target NATIVE@2/CLI@7/
+ANALYSIS@2/D05 closure reused; no public uiblueprint contract/schema/host/engine change,
+new framework/directory, fixture coupling or action/monitoring/polling infrastructure.
+This is developer first-use tooling for the shipping read-only consumer, not installed
+release UX. Existing fixture/capture/probe/FD modes unchanged when helper argv absent.
+
+Helper metadata uses NSRunningApplication for caller PID only: exact current bundle/
+launch/target generation, no app/window discovery, launch/activation/focus/TCC request.
+Missing running Mac process returns target_unresolved4; invalid argc/PID returns2.
+Metadata output bounded below existing4032-byte setup capacity. Launcher verifies returned
+PID, constructs current canonical Session/Request/private native_ax config and queries
+in system-temp, uses public Observe→design Inspect→Measure on original response. Reads
+role/name/AXbounds only. No manual Snapshot extraction/second graph/parser/geometry engine.
+Source JSON is inspected only for selection/reporting; actual width/height from Rust.
+Missing/ambiguous reported name rejects4, ambiguity reports candidates/exact SourceKey
+need, no first-match/order/coordinate fallback. Unavailable geometry/permissions preserved;
+no retry. All successful analysis embedded Snapshots checked equal to original source.
+
+Small affected checks only: helper compiled; Python AST valid; metadata nonexistent
+PID2147483647→4, PID0/missing argv/unknown mode→2. Two local selector checks (0 and2
+matches) return4 and perform zero downstream Inspect/Measure, no SDK/UI. No broad
+protocol/numeric/input/review wave; G04 old modes remain their prior accepted evidence.
+
+Initial owned launch setup invoked example immediately after PID detection, before
+establishing actual AX window readiness; received canonical target_unresolved4/no geometry,
+cleanup0.354s and empty fixture run. Cause of missing focused-window selection not
+established; no source/cap change or fake output. Corrected test setup only: new own
+F02 existing Window A established by read-only CUA, then unchanged example invocation.
+No Snapshot/control/input, no identity/probe file; ordinary user example requires an
+already-running app with an accessible selected AXFocusedWindow and never sets UI up.
+
+Actual copyable invocation shape:
+python3 tests/bridges/native/host_observe.py geometry --pid CALLER_SELECTED_PID
+--name "Activate sample" --cli ABSOLUTE_UIBLUEPRINT --worker ABSOLUTE_SESSION_WORKER
+--helper ABSOLUTE_NATIVE_HELPER. Docs supply self-contained build/run shell procedure
+with caller-provided TARGET_PID/COMPONENT_NAME, no stale RC03 PID/launch constant.
+
+Qualified owned PID32759/F02-off: example exited0/no stderr, ordinary native_ax
+Observe+design Inspect+two Measure calls, original response only. Result:
+accessibility_bounds x801/y364/width173.5/height48pt, spaceax-screen, coveragepartial,
+transformunknown; observation-scoped SourceKey printed. Observe wall285.92ms(singlecall,
+notp95). Full live CUA AX before/after read equal, focusOpenB/Count0/Resultnone/fields
+unchanged. Own run directory verified empty before/after; no fixture state consumed.
+No real PlayPhrase.me app read/change/launch in G05, no probe/pixel/hidden layout claim.
+
+Finally exact own fixture cleanup before timing assertions: qualified lifecycle
+26.528672625s,cleanup0.118067958s,timeoutfalse,fixture absent. Own CLI/worker/helper
+absence checked. Example removes only its named JSON outputs/non-image inputs plus
+empty private dir, no recursive deletion. Operation build/source/cache/binaries consumed
+and removed/absence verified after checks; images0, all existing image assets untouched.
+No resource/input lane remains; request short exact4 coherent checkpoint/push lease.
+Useful first-use capability established; observation scope/AX partialness/unknown
+layout/paint/hit/clipping/capture mapping and explicit running target remain real limits.
+
+Binary pins: helperac545eef5d15687c3a2b06db1011234260c43f1126486d7a6b6d20580bd07ab0;
+CLIc37159a47322ae9be9e3a19c2e28b5d9f4657bb6c6959fa288b442c16ad40e49;
+worker36321578ac3a2f420b65d499a35ff39ff22d1db6522039d1ccc1df8df607fc9f;
+fixture8c82ed594c44495967aa674e69d002810494e85605c4e042ef31e1c26d2ed3df.

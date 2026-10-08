@@ -641,3 +641,44 @@ run directory stayed empty, no fixture/probe/current files existed. Observed75 A
 selected button rect801,364,173.5,48pt; ordinary Inspect and Measure returned173.5×48pt.
 This is public AXFocusedWindow geometry via the generic route, not general Mac app
 compatibility or a claim of stable identity/capture mapping. See P01-probe-source receipt.
+
+
+## Developer first-use example: PID and component name
+
+From the repository root, set TARGET_PID to the explicitly chosen already-running
+Mac app and COMPONENT_NAME to its exact reported accessibility name. The example
+never launches/activates/focuses/resizes the target or requests permissions. It gets
+PID/bundle/full launch incarnation through helper describe-process, prepares private
+canonical inputs in system temp, calls public Observe/Inspect/Measure, then removes
+its named non-image JSON files. No fixture identity/probe file or hand-authored JSON.
+
+Build the existing binaries once (pinned Rust/Swift/Xcode setup applies):
+
+```sh
+EXAMPLE_TMP="$(mktemp -d "${TMPDIR:-/tmp}/uib-native-example.XXXXXX")"
+cargo build --locked --offline -p uiblueprint-cli --features macos --bin uiblueprint --target-dir "$EXAMPLE_TMP/target"
+cargo build --locked --offline -p uiblueprint-host --bin session-worker --target-dir "$EXAMPLE_TMP/target"
+xcrun swiftc -parse-as-library -swift-version 6 -D HOST_HELPER -D CAPTURE_LIBRARY -target arm64-apple-macos14.0 -module-cache-path "$EXAMPLE_TMP/module-cache" plugins/macos/NativeAcquisition.swift plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift fixtures/native/Observe.swift tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift plugins/macos/HostProtocol.swift plugins/macos/NativeFocusedAX.swift plugins/macos/HostHelper.swift -o "$EXAMPLE_TMP/native-helper"
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py geometry --pid "${TARGET_PID:?Set an explicit running app PID}" --name "${COMPONENT_NAME:?Set the exact component name}" --cli "$EXAMPLE_TMP/target/debug/uiblueprint" --worker "$EXAMPLE_TMP/target/debug/session-worker" --helper "$EXAMPLE_TMP/native-helper"
+```
+
+Typical controlled example output:
+
+```text
+component="Activate sample" source_key={...}
+accessibility_bounds x=801 y=364 width=173.5 height=48.0 units=pt space=ax-screen
+coverage=partial source=saved_observation transform=unknown observe_wall_ms=285.92
+hidden layout/paint/hit/clipping unavailable; AX refs are observation-scoped
+```
+
+This is a developer example, not an installed-release CLI. Selects only from the
+original returned Snapshot, never a new UI search; zero/multiple name matches return4
+and report need for exact SourceKey (candidates for ambiguity), never choose by order
+or coordinates. Such keys describe that recorded observation only; retain an original
+Observe response when using public inspect/measure for further explicit selection.
+Unavailable AX/selection/bounds returns its actual refusal without retry or dialog.
+Default fields are role/accessibility_name/accessibility_bounds, no user Value/secret.
+Width/height come from Rust Measure; x/y from reported AX rectangle, not inferred layout.
+Own-F02 check used this mode with no Snapshot action/fixture files; real apps are not
+launched by this procedure. Build products are temporary developer tools; clean owned
+non-image products after use, preserve any images and their containing directories.

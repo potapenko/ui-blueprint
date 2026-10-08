@@ -10,6 +10,7 @@ import subprocess
 import tarfile
 import threading
 import tempfile
+import time
 import uuid
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -284,6 +285,129 @@ def live(args):
     return 0
 
 
+def geometry(args):
+    """Developer example: explicit running PID, public CLI, original Observe input."""
+    for executable in (args.cli, args.worker, args.helper):
+        if not executable.is_absolute() or not executable.is_file():
+            raise ValueError('absolute existing executable required')
+    if args.pid <= 0 or args.pid > 2_147_483_647 or len(args.name.encode()) > 4096:
+        raise ValueError('explicit positive PID and bounded component name required')
+    owned = []
+    output = Path(tempfile.mkdtemp(prefix='uib-native-geometry-'))
+    def save(name, data):
+        path = output / name
+        owned.append(path)
+        path.write_bytes(data)
+        return path
+    def call(command, timeout=15, data=None):
+        return run_bounded(command, timeout, data=data, cap=FRAME)
+    try:
+        code, metadata, _ = call([str(args.helper), 'describe-process', str(args.pid)], 3)
+        if code:
+            print('target_unresolved: supplied process is not a current running Mac app' if code == 4 else 'process metadata lookup failed')
+            return code
+        metadata = json.loads(metadata)
+        if (metadata.get('metadata_version') != '1.0.0' or metadata.get('status') != 'known'
+                or metadata.get('process', {}).get('pid') != args.pid):
+            raise ValueError('invalid helper process metadata')
+        nonce = uuid.uuid4().hex
+        fields = ['role', 'accessibility_name', 'accessibility_bounds']
+        context = {'schema_version':'0.1.0','session_id':'geometry-'+nonce,
+            'target':metadata['target'], 'surfaces':[{'id':'ax-focused-'+nonce,'generation':nonce}],
+            'scope_id':'selected-focused-window','projection':'design','fields':fields,
+            'plugin':{'id':'macos','version':'0.1.0'},'environment_revision':'geometry-'+nonce}
+        session = {'allowed_scopes':[context['scope_id']],'session_id':context['session_id'],
+            'plugin':context['plugin'],'supported_versions':['0.1.0'],'target':context['target'],
+            'surfaces':context['surfaces'],'capabilities':[{'channel':'external_semantics','operation':'observe',
+                'status':'partial','reason':'explicit_public_AXFocusedWindow'}]}
+        profile = {'workers':1,'worker_bytes':67108864,'publication_reserve':1048576,'bootstrap_bytes':1048576,
+            'parent_bytes':33554432,'input_bytes':2097152,'ingress_bytes':524288,'output_bytes':524288,
+            'request_output_bytes':2097152,'completion_groups':2,'control_bytes':4096,'cleanup_ms':1000,
+            'retained_domain_bytes':67108864,'retained_per_worker':15728640,'main_stack_bytes':8388608,
+            'watchdog_stack_bytes':1048576}
+        configuration = {'collection':'focused-ax','process':metadata['process'],'scope_id':context['scope_id'],
+            'acquisition_limits':json.loads((ROOT/'tests/bridges/native/acquisition/profile.json').read_bytes())}
+        if len(encode(configuration)) > 4032:
+            raise ValueError('private configuration bound')
+        connection = {'connection_version':'1.0.0','target':context['target'],'session':session,
+            'host_limits':profile,'attach_deadline_ms':2000,'provider':{'backend':'native_ax',
+                'helper_executable':str(args.helper),'configuration':encode(configuration).decode()}}
+        request = {'schema_version':'0.1.0','artifact':{'kind':'request','data':{
+            'clock_domain':'rebound_after_attach','request_id':nonce,'context':context,
+            'limits':{'max_elements':160,'max_depth':9,'max_output_bytes':FRAME,'deadline_ms':1000},
+            'freshness_policy':'current_required','operation':{'operation':'observe','channels':['external_semantics']}}}}
+        connection_path = save('connection.json', encode(connection))
+        request_path = save('request.json', encode(request))
+        start = time.monotonic()
+        code, observed, _ = call([str(args.cli),'observe','--connection',str(connection_path),
+            '--request',str(request_path),'--worker',str(args.worker),'--max-input-bytes','2097152',
+            '--max-output-bytes',str(FRAME)])
+        wall_ms = (time.monotonic()-start)*1000
+        if code not in (0,4) or not observed:
+            print('observe failed; no geometry result')
+            return code if code else 1
+        response = json.loads(observed)['artifact']['data']['result']
+        if response['status'] != 'observed':
+            print('observe unavailable: '+response['data']['code'])
+            return 4
+        snapshot = response['data']
+        observed_path = save('observed.json', observed)
+        matches = [node for node in snapshot['nodes'] if any(
+            prop['field']=='accessibility_name' and prop['state'].get('availability')=='known'
+            and prop['state'].get('value',{}).get('value')==args.name for prop in node['properties'])]
+        if len(matches) != 1:
+            print('component matches in returned record: '+str(len(matches))+'; use an exact SourceKey with public inspect/measure')
+            if matches:
+                print('candidates='+json.dumps([node['key'] for node in matches], separators=(',',':')))
+            return 4
+        node = matches[0]
+        code, _, _ = call([str(args.cli),'inspect','--snapshot',str(observed_path),'--ref',encode(node['key']).decode(),
+            '--view','design','--max-input-bytes','2097152','--max-output-bytes',str(FRAME)], 5)
+        if code:
+            return code
+        bounds = next((prop['state'].get('value',{}).get('value') for prop in node['properties']
+            if prop['field']=='accessibility_bounds' and prop['state'].get('availability')=='known'), None)
+        if not bounds:
+            print('accessibility_bounds unknown for selected component')
+            return 4
+        values = {}
+        for metric in ('width','height'):
+            query = {'schema_version':'0.2.0','artifact':{'kind':'geometry_query','data':{
+                'id':metric,'scope_id':context['scope_id'],'targets':[node['key']],
+                'operation':metric,'quantity_kind':'length','units':'pt',
+                'applies_when':{'platform':None,'input_mode':None,'text_scale':None},
+                'anchors':[{'element':node['key'],'frame_kind':'accessibility_bounds',
+                    'coordinate_space':bounds['coordinate_space'],'fraction':0,'axis':'x' if metric=='width' else 'y'}]}}}
+            query_path = save(metric+'-query.json', encode(query))
+            code, measured, _ = call([str(args.cli),'measure','--snapshot',str(observed_path),'--query',str(query_path),
+                '--space',bounds['coordinate_space']['id'],'--max-input-bytes','2097152',
+                '--max-output-bytes',str(FRAME),'--json'],5)
+            if code:
+                print(metric+' measurement unavailable')
+                return code
+            case = json.loads(measured)['artifact']['data']
+            if case['snapshot'] != snapshot:
+                raise ValueError('source Snapshot changed in analysis')
+            values[metric] = case['result']['measurement']['value']['value']['amount']
+        rect = bounds['shape']['value']
+        print('component='+json.dumps(args.name)+' source_key='+encode(node['key']).decode())
+        print('accessibility_bounds x='+str(rect['x'])+' y='+str(rect['y'])+' width='+str(values['width'])+
+            ' height='+str(values['height'])+' units=pt space='+bounds['coordinate_space']['id'])
+        print('coverage='+snapshot['coverage']['status']+' source=saved_observation transform='+
+            bounds['transform']['status']+' observe_wall_ms='+format(wall_ms,'.2f'))
+        print('hidden layout/paint/hit/clipping unavailable; AX refs are observation-scoped')
+        return 0
+    finally:
+        # Only this example's named non-image inputs/outputs; never recursive
+        # deletion of a directory that could contain retained image artifacts.
+        for path in owned:
+            path.unlink(missing_ok=True)
+        try:
+            output.rmdir()
+        except OSError:
+            pass
+
+
 def main():
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers(dest='mode', required=True)
@@ -295,7 +419,21 @@ def main():
     runtime.add_argument('--validator', type=Path, required=True)
     runtime.add_argument('--output', type=Path, required=True)
     runtime.add_argument('--allow-live', action='store_true')
+    example = commands.add_parser('geometry', help='developer example: running PID → public AX geometry')
+    example.add_argument('--pid', type=int, required=True)
+    example.add_argument('--name', required=True, help='exact reported accessibility name in returned Snapshot')
+    for name in ('cli', 'worker', 'helper'):
+        example.add_argument('--'+name, type=Path, required=True)
     args = parser.parse_args()
+    if args.mode == 'geometry':
+        try:
+            return geometry(args)
+        except (ValueError, KeyError, TypeError):
+            print('geometry_example_invalid_input')
+            return 2
+        except (OSError, RuntimeError):
+            print('geometry_example_io_or_cleanup_failure')
+            return 1
     if args.mode == 'prepare':
         prepare(args)
         return 0

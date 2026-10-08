@@ -6,6 +6,23 @@ import Darwin
 @main struct NativeHostHelper {
     @MainActor static func main() async {
         do {
+            if CommandLine.arguments.count > 1 {
+                guard CommandLine.arguments.count == 3, CommandLine.arguments[1] == "describe-process",
+                      let pid = Int32(CommandLine.arguments[2]), pid > 0 else { _exit(2) }
+                guard let app = NSRunningApplication(processIdentifier: pid), !app.isTerminated,
+                      let bundle = app.bundleIdentifier, bundle.utf8.count <= 256,
+                      let launch = app.launchDate?.timeIntervalSince1970 else {
+                    FileHandle.standardOutput.write(Data("{\"status\":\"target_unresolved\"}\n".utf8)); _exit(4)
+                }
+                let process = NativeFocusedAX.Process(pid: pid, bundle_id: bundle, launch_time: launch)
+                let value: [String: Any] = ["metadata_version": "1.0.0", "status": "known",
+                    "process": ["pid": pid, "bundle_id": bundle, "launch_time": launch],
+                    "target": ["id": "macos-pid-\(pid)", "generation": process.generation]]
+                let bytes = try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys])
+                guard bytes.count < NativeHostProtocol.configCap else { _exit(2) }
+                FileHandle.standardOutput.write(bytes); FileHandle.standardOutput.write(Data([10]))
+                return
+            }
             let io = try NativeDescriptorIO()
             let input = try NativeHostProtocol.receiveInput(io)
             if try NativeFocusedAX.isConfiguration(input.configurationBytes) {
