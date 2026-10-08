@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><title>B03 owned popup geometry</title>
+<style>
+body { margin:0; height:1000px; }
+#controls { position:absolute; left:20px; top:20px; }
+#clip { position:absolute; left:100px; top:100px; width:220px; height:120px; overflow:hidden; }
+#popup { position:absolute; left:20px; top:20px; width:180px; height:80px; background:#eee; }
+#item { position:absolute; left:8px; top:8px; width:40px; height:20px; }
+#overlay { display:none; position:absolute; left:190px; top:140px; width:40px; height:40px; background:black; z-index:2; }
+#boundary { position:absolute; left:500px; top:400px; width:200px; height:100px; }
+</style>
+<div id="controls"><button id="trigger" aria-controls="popup" aria-expanded="true">Options</button></div>
+<div id="clip"><div id="popup" role="dialog" aria-label="Options" data-anchor="trigger"><button id="item">One</button></div></div>
+<div id="overlay"></div>
+<iframe id="boundary" srcdoc="<button id='foreign'>FRAME_PRIVATE_CANARY</button>"></iframe>

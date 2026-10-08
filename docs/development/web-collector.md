@@ -50,8 +50,8 @@ keys/space/units/frame kind/evidence, dimension results, coverage and observatio
 No second graph or JavaScript geometry calculation is created. Names/roles are
 explicitly not requested; canonical source keys are identifiers, not observed
 human names. Unknown/redacted/unsupported geometry remains unavailable. Hit/visible
-regions are requested but never replaced by layout bounds; no clipping/viewport
-overflow, transform or padding claim follows.
+regions are requested but never replaced by layout bounds. The B03 facts below
+add partial hit/clipping evidence; no full visibility or padding claim follows.
 
 The fixed geometry profile matches G05:32 output nodes, depth8,64KiB,250ms,
 256 visited, collector16nodes, and existing bounded transport/host settings.
@@ -140,7 +140,7 @@ DOM ACK before AX. Requested capture/probe channels return Failed(Unsupported).
 | --- | --- |
 | DOM/CSSOM | Raw tag; applicable native form value/type/placeholder/flags; layout rect only with a fragment, css_px/viewport/top-left; sourced viewport→document mapping when qualified below |
 | Addressed AX | fetchRelatives=false, exact backend/frame mapping; raw role plus finite mapping, name/accessibility_name/description, typed value/flags; mixed checked stays unknown |
-| Unknown/unimplemented | DOM name/role inference, visible-text qualification, AX geometry, hit/visible/paint/baseline, actions, selection/IME, component/anchor discovery and screen/frame/capture mappings |
+| Unknown/unimplemented | DOM name/role inference, visible-text qualification, AX geometry, full hit area/visible/paint/baseline, actions, selection/IME, component/anchor discovery and screen/frame/capture mappings |
 
 False/empty stay known; unrequested properties are not synthesized. Only sourced
 backendDOMNodeId creates corresponds_to. Flat nonempty projections are partial;
@@ -200,7 +200,7 @@ applied filter state. Requested fields and privacy behavior are unchanged.
 The opt-in popup_relations live case selects F01 open-popup, portal, close-popup,
 draft and suggestions after the existing popup trigger. The City field is outside
 the popup. It checks explicit controls/declared-anchor, compatible CSS viewport
-geometry, Close focus and honest unknown hit testing/active descendant. This
+geometry, Close focus, partial single-point hit testing and unknown active descendant. This
 fixture does not establish actual PlayPhrase.me structure or dimensions.
 [Preparation and exact evidence](../plans/ui-blueprint/receipts/W01-popup-relations.md).
 
@@ -318,3 +318,71 @@ five synthetic events into four queue slots and proves explicit recovery separat
 The [W03-R receipt](../plans/ui-blueprint/receipts/W03-resync-complete.md) records
 commands, coverage and remaining acceptance limits. No continuous event detection,
 automatic reconnect/retry, browser-wide collection or changed deadlines is implied.
+
+
+## B03: one-shot clipping and hit facts
+
+For requested `hit_region`, the isolated reader samples `Document.elementFromPoint`
+at the original layout rectangle's center. It compares object identity only with
+the selected node; it does not inspect the hit object's text, identity or subtree.
+An exact match publishes a **zero-area point** as canonical HitRegion rect with
+`cssom-elementFromPoint-single-exact-sample` evidence. This is partial sampled
+coverage, never the full hit area or permission to click. A miss remains unknown
+HitRegion: it does not prove the whole element is blocked. Descendant hits do not
+count as an exact match. Pointer-events and visual opacity are distinct.
+
+When `visible_region` is requested, a single-target IntersectionObserver obtains
+one initial result with root=null, zero rootMargin and threshold0, only in the
+bound top document. The timer uses remaining request time; callback, timeout or
+API refusal disconnects the observer and clears the timer. No observer remains
+after a successful response; no polling, page callback, focus, scroll or input.
+Cancellation/transport loss preserves the existing unconfirmed remote-cleanup
+status: a suspended browser cannot be promised to execute its cleanup timer.
+Neither timeout nor a late callback performs new source reads. The independently
+sampled hit fact survives unavailable clipping. Original/current/entry layout
+rectangles and before/after viewport context must agree or collection refuses
+`resync_required`; overall multi-node consistency still remains unknown/sequential.
+
+The existing `web.dom` ExtensionProperty envelope carries these reported facts,
+with the DOM Observation, viewport/css_px/top-left space and local-only transform:
+
+| Extension name | Meaning |
+| --- | --- |
+| `hit_sample_point` | Tested point, represented by zero-size HitRegion rect; not a confirmed hit by itself |
+| `hit_sample_matches` | Exact selected object matched at that point |
+| `intersection_rect_not_occlusion` | Native browser intersection rectangle, including known ancestor/root clipping |
+| `intersection_ratio_not_visibility` | Browser-reported intersection ratio |
+| `is_intersecting_not_visible` | Browser-reported intersection flag, including known false |
+
+Canonical VisibleRegion stays unknown: intersection does not establish paint,
+opacity, filters or occlusion. PaintBounds stays unknown. Empty intersection with
+ratio0/false is a known clipping result, unlike missing callback/API data. These
+facts do not fabricate a separate popup Surface: the element belongs to the bound
+document Surface; explicit selected `Controls` and fixture-declared `AnchoredTo`
+relations retain their own source evidence. No schema/version or engine change.
+
+The API basis is [Intersection Observer](https://www.w3.org/TR/intersection-observer/)
+and [CSSOM View hit testing](https://drafts.csswg.org/cssom-view/#dom-document-elementfrompoint).
+Browser intersection computation is opaque native work, not a bounded browser
+CPU/RSS guarantee. Selected count, method/reply/output and worker budgets stay
+unchanged; a large requested subtree can refuse within those bounds. IO waiting
+adds latency; this is not a new D06 performance qualification.
+
+Run the finite authored oracle using existing Web-enabled executables:
+
+```sh
+S01_WEB_PLAYWRIGHT_CORE=<absolute-pinned-playwright-core-1.58.2> \
+UIB_WEB_LIVE_ALLOW=1 UIB_WEB_LIVE_CLI=<absolute-uiblueprint> \
+UIB_WEB_LIVE_WORKER=<absolute-session-worker> \
+node tests/bridges/web/popup-geometry.cjs --run-authorized
+```
+
+The [fixture](../../fixtures/web/popup-geometry.html) is setup data, not product
+input. The [harness](../../tests/bridges/web/popup-geometry.cjs) checks public
+Observe/inspect/measure, authored open/clipped/fully-clipped/covered geometry,
+explicit popup relations, close/remount, exact document binding, frame refusal,
+limits and read-only invariance. It closes only its own headless Chromium/server
+and removes its non-image temporary files. Rooted scopes can observe a selected
+popup beside an iframe; selecting the frame itself still refuses without reading
+its content. Cross-origin/OOPIF/shadow support is not added. See the
+[B03 receipt](../plans/ui-blueprint/receipts/B03-popup-geometry.md) for actual results.

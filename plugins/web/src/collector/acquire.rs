@@ -29,6 +29,7 @@ struct ReadOptions<'a> {
     fields: &'a [Field],
     max_chars: usize,
     sensitive: bool,
+    remaining_ms: u64,
 }
 #[derive(Serialize)]
 #[serde(untagged)]
@@ -208,6 +209,11 @@ impl Collector {
                     fields: &request.context.fields,
                     max_chars: self.limits.max_text_bytes / 6,
                     sensitive: sensitivity == Sensitivity::Sensitive,
+                    remaining_ms: budget
+                        .deadline
+                        .saturating_duration_since(Instant::now())
+                        .as_millis()
+                        .min(u64::MAX as u128) as u64,
                 },
             });
             arguments.push(Argument::Object {
@@ -226,7 +232,7 @@ impl Collector {
                 return_by_value: true,
                 silent: true,
                 user_gesture: false,
-                await_promise: false,
+                await_promise: true,
                 // Chromium 145 marks getClientRects/matches as potentially effectful
                 // for debugger evaluation, despite these being native read APIs.
                 // Only this fixed isolated-world reader uses ordinary evaluation;
@@ -373,6 +379,7 @@ impl Collector {
                                     fields: &[Field::LayoutBounds],
                                     max_chars: self.limits.max_text_bytes / 6,
                                     sensitive: records.dom[index].1.sensitive,
+                                    remaining_ms: 0,
                                 },
                             },
                             Argument::Object {
@@ -590,6 +597,30 @@ pub(super) fn validate_dom(
         })
     {
         return Err(Failure::new(ErrorKind::Malformed));
+    }
+    if let Some(hit) = &read.hit
+        && (!hit.x.is_finite() || !hit.y.is_finite() || read.rect.is_none())
+    {
+        return Err(Failure::new(ErrorKind::Malformed));
+    }
+    if let Some(clip) = &read.clip {
+        if !clip.ratio.is_finite()
+            || !(0.0..=1.0).contains(&clip.ratio)
+            || [&clip.rect, &clip.bounds, &clip.current].iter().any(|r| {
+                !r.values().iter().all(|v| v.is_finite()) || r.width < 0.0 || r.height < 0.0
+            })
+        {
+            return Err(Failure::new(ErrorKind::Malformed));
+        }
+        let rect = read
+            .rect
+            .as_ref()
+            .ok_or(Failure::new(ErrorKind::Malformed))?;
+        if clip.bounds.values() != [rect.x, rect.y, rect.width, rect.height]
+            || clip.current.values() != clip.bounds.values()
+        {
+            return Err(Failure::new(ErrorKind::ResyncRequired));
+        }
     }
     if let Some(samples) = read.rect.as_ref().and_then(|r| r.viewport.as_ref()) {
         for facts in [&samples.before, &samples.after].into_iter().flatten() {

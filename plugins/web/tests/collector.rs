@@ -3925,3 +3925,139 @@ fn activation_prepare_requires_explicit_distinct_present_public_result() {
         fixture.finish();
     }
 }
+
+fn popup_geometry_peer(mode: u8) -> Fixture {
+    Fixture::new(move |method, command, _| {
+        if method != "Runtime.callFunctionOn"
+            || !command["params"]["functionDeclaration"]
+                .as_str()
+                .is_some_and(|s| s.starts_with("function readNode("))
+        {
+            return None;
+        }
+        let mut read: Json =
+            serde_json::from_str(include_str!("fixtures/collector/dom.json")).unwrap();
+        read["result"]["value"]["hit"] = json!({"x":100,"y":80,"matches":mode != 1});
+        let bounds = json!({"x":40,"y":60,"width":120,"height":40});
+        read["result"]["value"]["clip"] = json!({"rect":{"x":40,"y":60,"width":60,"height":40},
+            "bounds":bounds,"current":bounds,"intersects":true,"ratio":0.5});
+        match mode {
+            2 => read["result"]["value"]["clip"]["ratio"] = json!(2),
+            3 => read["result"]["value"]["clip"]["current"]["x"] = json!(41),
+            4 => read["result"]["value"]["clip"]["rect"]["width"] = json!(-1),
+            5 => read["result"]["value"]["hit"]["x"] = json!("private"),
+            6 => read["result"]["value"]["clip"]["bounds"]["width"] = json!(121),
+            _ => (),
+        }
+        Some(read)
+    })
+}
+#[test]
+fn popup_geometry_keeps_clipping_and_single_hit_sample_separate_from_visibility() {
+    for mode in [0, 1, 7] {
+        let fixture = popup_geometry_peer(mode);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = if mode == 7 {
+            vec![Field::LayoutBounds]
+        } else {
+            vec![
+                Field::LayoutBounds,
+                Field::HitRegion,
+                Field::VisibleRegion,
+                Field::PaintBounds,
+            ]
+        };
+        let (_, docs) = collect(&mut c, &r, &scope(&[11]));
+        let s = snapshot(&docs[0]);
+        validation::validate_snapshot(s).unwrap();
+        let n = &s.nodes[0];
+        assert_eq!(s.coverage.status, CoverageStatus::Partial);
+        if mode == 7 {
+            assert!(n.extensions.is_empty());
+        } else {
+            assert_eq!(n.extensions.len(), 5);
+            assert!(n.extensions.iter().all(|e| matches!(&e.property, Property::Requested { evidence, .. }
+                if evidence.provenance==Provenance::Reported && evidence.source_namespace==id("web.dom"))));
+            for field in [Field::VisibleRegion, Field::PaintBounds] {
+                assert!(matches!(
+                    n.properties.iter().find(|p| p.field() == field).unwrap(),
+                    Property::Requested {
+                        state: Availability::Unknown { .. },
+                        ..
+                    }
+                ));
+            }
+            let hit = n
+                .properties
+                .iter()
+                .find(|p| p.field() == Field::HitRegion)
+                .unwrap();
+            if mode == 0 {
+                let Some(Value::Geometry(g)) = hit.known() else {
+                    panic!("known sample")
+                };
+                assert_eq!(
+                    g.shape,
+                    Shape::Rect(Rect {
+                        x: 100.0,
+                        y: 80.0,
+                        width: 0.0,
+                        height: 0.0
+                    })
+                );
+            } else {
+                assert!(hit.known().is_none());
+            }
+            let clipped = n
+                .extensions
+                .iter()
+                .find(|e| e.name == id("intersection_rect_not_occlusion"))
+                .unwrap();
+            let Some(Value::Geometry(g)) = clipped.property.known() else {
+                panic!("clip")
+            };
+            assert_eq!(
+                g.shape,
+                Shape::Rect(Rect {
+                    x: 40.0,
+                    y: 60.0,
+                    width: 60.0,
+                    height: 40.0
+                })
+            );
+        }
+        c.detach();
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn popup_geometry_malformed_or_changed_source_cannot_publish() {
+    for mode in 2..=6 {
+        let fixture = popup_geometry_peer(mode);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::LayoutBounds, Field::HitRegion, Field::VisibleRegion];
+        let error = c
+            .observe(
+                &r,
+                &scope(&[11]),
+                1,
+                Instant::now() + Duration::from_secs(2),
+                |_| panic!("no publication"),
+            )
+            .expect_err("malformed or unstable source");
+        assert_eq!(
+            error.kind,
+            if mode == 3 || mode == 6 {
+                ErrorKind::ResyncRequired
+            } else {
+                ErrorKind::Malformed
+            }
+        );
+        c.detach();
+        drop(c);
+        fixture.finish();
+    }
+}

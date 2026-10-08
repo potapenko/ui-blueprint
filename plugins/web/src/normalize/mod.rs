@@ -155,6 +155,23 @@ pub(crate) fn dom(
                             })))
                         })
                         .unwrap_or_else(|| unknown("no-layout-box-reported")),
+                    Field::HitRegion => read
+                        .hit
+                        .as_ref()
+                        .filter(|hit| hit.matches)
+                        .map(|hit| {
+                            known(web_geometry(
+                                FrameKind::HitRegion,
+                                [hit.x, hit.y, 0.0, 0.0],
+                                context,
+                            ))
+                        })
+                        .unwrap_or_else(|| {
+                            unknown("single-hit-sample-does-not-establish-hit-region")
+                        }),
+                    Field::VisibleRegion => {
+                        unknown("intersection-clipping-is-not-occlusion-or-paint")
+                    }
                     Field::Value
                         if read.tag.as_deref() == Some("OUTPUT") && read.value.is_none() =>
                     {
@@ -185,6 +202,8 @@ pub(crate) fn dom(
                 observation,
                 if field == Field::LayoutBounds {
                     "cssom-getBoundingClientRect"
+                } else if field == Field::HitRegion {
+                    "cssom-elementFromPoint-single-exact-sample"
                 } else {
                     "isolated-dom-native-read"
                 },
@@ -205,9 +224,83 @@ pub(crate) fn dom(
         },
         properties,
         children: vec![],
-        extensions: vec![],
+        extensions: geometry_facts(read, context, observation),
         source_declarations: vec![],
     }
+}
+// Native Web facts are separate from canonical visible/paint area. The existing
+// extension envelope preserves their typed geometry and per-fact provenance.
+fn web_geometry(kind: FrameKind, rect: [f64; 4], context: &Context) -> Value {
+    Value::Geometry(Box::new(Geometry {
+        frame_kind: kind,
+        coordinate_space: Space {
+            id: context.surfaces[0].id.clone(),
+            kind: SpaceKind::Viewport,
+            units: Unit::CssPx,
+            origin: Origin::TopLeft,
+        },
+        shape: Shape::Rect(Rect {
+            x: rect[0],
+            y: rect[1],
+            width: rect[2],
+            height: rect[3],
+        }),
+        // No transform sampled concurrently with this asynchronous browser fact.
+        transform: TransformState::LocalOnly {},
+    }))
+}
+fn geometry_facts(
+    read: &DomRead,
+    context: &Context,
+    observation: &Observation,
+) -> Vec<ExtensionProperty> {
+    let mut result = Vec::new();
+    let mut add = |name: &str, field, value, method| {
+        result.push(ExtensionProperty {
+            namespace: id("web.dom"),
+            name: id(name),
+            property: property(field, false, observation, method, known(value)),
+        })
+    };
+    if context.fields.contains(&Field::HitRegion)
+        && let Some(hit) = &read.hit
+    {
+        add(
+            "hit_sample_point",
+            Field::HitRegion,
+            web_geometry(FrameKind::HitRegion, [hit.x, hit.y, 0.0, 0.0], context),
+            "cssom-elementFromPoint-sample-location",
+        );
+        add(
+            "hit_sample_matches",
+            Field::Value,
+            Value::Flag(hit.matches),
+            "cssom-elementFromPoint-single-exact-sample",
+        );
+    }
+    if context.fields.contains(&Field::VisibleRegion)
+        && let Some(clip) = &read.clip
+    {
+        add(
+            "intersection_rect_not_occlusion",
+            Field::VisibleRegion,
+            web_geometry(FrameKind::VisibleRegion, clip.rect.values(), context),
+            "intersection-observer-single-target-zero-margin",
+        );
+        add(
+            "intersection_ratio_not_visibility",
+            Field::Value,
+            Value::Number(clip.ratio),
+            "intersection-observer-single-target-zero-margin",
+        );
+        add(
+            "is_intersecting_not_visible",
+            Field::Value,
+            Value::Flag(clip.intersects),
+            "intersection-observer-single-target-zero-margin",
+        );
+    }
+    result
 }
 fn ax_text(value: Option<&AxValue>) -> Option<&str> {
     let v = value?;

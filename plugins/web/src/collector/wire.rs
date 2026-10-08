@@ -30,7 +30,31 @@ object_record!(DomRead {
  required:Option<bool>, enabled:Option<bool>, readonly:Option<bool>, checked:Option<bool>,
  selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>,
  controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>,
- selection:Option<SelectionRead>, document_focused:Option<bool>
+ selection:Option<SelectionRead>, document_focused:Option<bool>,
+ hit:Option<HitRead>, clip:Option<ClipRead>
+});
+object_record!(HitRead {
+    x: f64,
+    y: f64,
+    matches: bool
+});
+object_record!(ClipRect {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64
+});
+impl ClipRect {
+    pub(crate) fn values(&self) -> [f64; 4] {
+        [self.x, self.y, self.width, self.height]
+    }
+}
+object_record!(ClipRead {
+    rect: ClipRect,
+    bounds: ClipRect,
+    current: ClipRect,
+    intersects: bool,
+    ratio: f64
 });
 object_record!(LayoutRect { x:f64, y:f64, width:f64, height:f64, viewport:Option<ViewportSamples> });
 object_record!(ViewportSamples { before:Option<ViewportFacts>, after:Option<ViewportFacts> });

@@ -243,3 +243,34 @@ Element.prototype.getBoundingClientRect=function(){viewportFacts.scrollY++;viewp
 const changing=read(layoutNode,['layout_bounds']).rect.viewport;assert.notEqual(changing.before.scrollY,changing.after.scrollY);
 Element.prototype.getBoundingClientRect=oldRect;delete document.defaultView;
 console.log('Viewport source mocks passed: native getters, signed/fractional CSS facts, separate scrollbar widths, requested-only reads, unsupported/missing and changed context; no JS conversion.');
+
+
+// One-shot observer lifecycle and source-only hit point; no real browser claim.
+(async () => {
+  document.defaultView=viewportWindow;
+  const target=node();let observed=0,disconnected=0,hits=0,callback;
+  const timers=new Set();
+  context.setTimeout=(fn,ms)=>{const timer=setTimeout(()=>{timers.delete(timer);fn();},ms);timers.add(timer);return timer;};
+  context.clearTimeout=timer=>{clearTimeout(timer);timers.delete(timer);};
+  Document.prototype.elementFromPoint=function(x,y){hits++;assert.equal(x,100);assert.equal(y,80);return target;};
+  context.IntersectionObserver=class {
+    constructor(fn,options){callback=fn;assert.equal(options.root,null);assert.equal(options.rootMargin,'0px');assert.equal(options.threshold,0);}
+    observe(n){observed++;assert.equal(n,target);}
+    disconnect(){disconnected++;}
+  };
+  const begin=fields=>{context.node=target;context.options={fields,maxChars:100,sensitive:false,remainingMs:20};return vm.runInContext('readNode.call(node,options,document)',context,{timeout:100});};
+  const entry={target,intersectionRect:{x:40,y:60,width:60,height:40},boundingClientRect:target.box,isIntersecting:true,intersectionRatio:0.5};
+  let promise=begin(['hit_region','visible_region']);callback([entry]);let result=await promise;
+  assert.deepEqual(JSON.parse(JSON.stringify(result.hit)),{x:100,y:80,matches:true});
+  assert.equal(result.clip.ratio,0.5);assert.equal(observed,1);assert.equal(disconnected,1);assert.equal(timers.size,0);
+  callback([entry]);assert.equal(disconnected,1,'late callback ignored');assert.equal(hits,1);
+  promise=begin(['visible_region']);callback([entry]);result=await promise;assert.equal(result.hit,undefined);assert.equal(hits,1);
+  result=begin(['hit_region']);assert.equal(result.hit.matches,true);assert.equal(observed,2,'hit-only does not install an observer');
+  const hitCount=hits;result=await begin(['hit_region','visible_region']);assert.equal(result.clip,undefined);assert.equal(result.hit.matches,true);assert.equal(timers.size,0);assert.equal(disconnected,3);assert.equal(hits,hitCount+1,'timeout preserves prior hit but performs no new source reads');
+  callback([entry]);assert.equal(hits,hitCount+1,'late timed-out observer cannot collect');
+  promise=begin(['hit_region','visible_region']);target.isConnected=false;callback([entry]);result=await promise;assert.equal(result.clip,undefined);assert.equal(result.hit.matches,true);target.isConnected=true;
+  context.IntersectionObserver=class {observe(){throw Error('native refusal');}disconnect(){disconnected++;}};
+  result=await begin(['visible_region']);assert.equal(result.clip,undefined);assert.equal(timers.size,0);
+  const beforeCount=disconnected;begin(['layout_bounds']);assert.equal(disconnected,beforeCount);
+  console.log('One-shot clipping/hit mocks passed: requested-only facts, timeout/disconnect/refusal/detach and late-callback suppression.');
+})().catch(error=>{console.error(error);process.exitCode=1;});

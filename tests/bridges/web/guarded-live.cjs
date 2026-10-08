@@ -958,7 +958,7 @@ async function run(evidence, report) {
               assert.equal(s.relations.filter(r=>r.kind!=='corresponds_to').length,3);
               // Literal CSS rectangle from frozen fixtures/web/extension.html; no runtime-derived oracle.
               compareRect(rectangle(popup),[400,290,200,60]);
-              for(const node of dom){rectangle(node);assert.equal(property(node,'layout_bounds').value.coordinate_space.id,s.context.surfaces[0].id);assert.equal(node.properties.find(p=>p.field==='hit_region').state.availability,'unknown');}
+              for(const node of dom){rectangle(node);assert.equal(property(node,'layout_bounds').value.coordinate_space.id,s.context.surfaces[0].id);const sample=node.extensions.find(e=>e.name==='hit_sample_matches')?.property.state.value.value;assert.equal(node.properties.find(p=>p.field==='hit_region').state.availability,sample===true?'known':'unknown');if(sample===true){const hit=property(node,'hit_region').value;assert.equal(hit.shape.value.width,0);assert.equal(hit.shape.value.height,0);}}
               assert.equal(property(trigger,'expanded').value,true);
               assert.equal(property(close,'focused').value,true);
               assert.equal(property(input,'focused').value,false);

@@ -1,7 +1,7 @@
 function readNode(options, expectedDocument) {
   'use strict';
   // The caller resolves exactly one backend node in this isolated world.
-  // Arguments are data; there is no selector, eval, page callback, await or mutation.
+  // Arguments are data; there is no selector, eval, page callback or UI mutation.
   const fields = new Set(options.fields);
   const owns = this instanceof Element && this.ownerDocument === expectedDocument && expectedDocument === document;
   const connected = owns && this.isConnected;
@@ -49,7 +49,8 @@ function readNode(options, expectedDocument) {
     if (fields.has('focused') && document.activeElement === this)
       out.activeDescendant = endpoint(text(attr('aria-activedescendant')));
   }
-  if (fields.has('layout_bounds')) {
+  let readViewport = null;
+  if (fields.has('layout_bounds') || fields.has('hit_region') || fields.has('visible_region')) {
     // Source facts only. Rust constructs the viewport -> document mapping.
     const viewport = () => {
       try {
@@ -67,6 +68,7 @@ function readNode(options, expectedDocument) {
         return Object.values(facts).every(Number.isFinite) ? facts : null;
       } catch (_) { return null; }
     };
+    readViewport = viewport;
     // CSSOM's native layout/fragments computation is opaque browser work.
     // Empty fragment list is unavailable layout, never a fabricated zero rectangle.
     const fragments = Element.prototype.getClientRects.call(this);
@@ -137,5 +139,45 @@ function readNode(options, expectedDocument) {
     const validity = native(input ? HTMLInputElement.prototype : area ? HTMLTextAreaElement.prototype : HTMLSelectElement.prototype, 'validity');
     out.invalid = !validity.valid;
   }
-  return out;
+  // One API hit sample, not an area or an actionability/occlusion verdict.
+  const sampleHit = () => {
+    if (!fields.has('hit_region') || !out.rect) return;
+    const r = out.rect, x = r.x + r.width / 2, y = r.y + r.height / 2;
+    if (r.width > 0 && r.height > 0 && Number.isFinite(x) && Number.isFinite(y)) {
+      const hit = Document.prototype.elementFromPoint.call(expectedDocument, x, y);
+      // Do not read a foreign hit's identity, text, ancestors or children.
+      out.hit = { x, y, matches: hit === this };
+    }
+  };
+  sampleHit();
+  if (!fields.has('visible_region') || !out.rect || typeof IntersectionObserver === 'undefined' ||
+      !Number.isFinite(options.remainingMs) || options.remainingMs <= 0 ||
+      expectedDocument.defaultView !== expectedDocument.defaultView.top) {
+    return out;
+  }
+  // Single-target, single-result read. Native intersection includes known ancestor
+  // clipping, NOT paint/occlusion. No page observer/callback or persistent observer.
+  return new Promise(resolve => {
+    let observer = null, timer = null, finished = false;
+    const finish = entry => {
+      if (finished) return;
+      finished = true;
+      if (observer) observer.disconnect();
+      if (timer !== null) clearTimeout(timer);
+      if (entry && entry.target === this && this.isConnected && this.ownerDocument === expectedDocument) {
+        const rect = r => ({x:r.x,y:r.y,width:r.width,height:r.height});
+        out.clip = {rect:rect(entry.intersectionRect),bounds:rect(entry.boundingClientRect),
+          current:rect(Element.prototype.getBoundingClientRect.call(this)),
+          intersects:entry.isIntersecting,ratio:entry.intersectionRatio};
+        out.rect.viewport.after = readViewport();
+      }
+      resolve(out);
+    };
+    try {
+      observer = new IntersectionObserver(entries => finish(entries.length === 1 ? entries[0] : null),
+        {root:null,rootMargin:'0px',threshold:0});
+      timer = setTimeout(() => finish(null), options.remainingMs);
+      observer.observe(this);
+    } catch (_) { finish(null); }
+  });
 }
