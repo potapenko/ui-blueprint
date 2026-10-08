@@ -1291,3 +1291,31 @@ All184 inputs and six owned source/test bytes matched the checked snapshot after
 use. Consumed own system-temp source/check tree3241non-image files removed with
 absence verified; no other evidence touched. Runtime/CLI connected proof and grouped
 review remain separate. No browser, input lane, image or source-app operation ran.
+
+### Prepared single public application sequence
+
+Provider/host5605206 is saved/pushed. A05 source a9ad665 and registered
+CLI-ACTIONS@3/CLI@11/registry23 were read; ordinary command/version/ACK/exit clauses
+remain unchanged, and the narrow Activate/result constraints match the provider.
+Root reports integrated saved0661359 Web build,4affected binary tests,status/ACK
+test and Clippy passed with172 Rust inputs unchanged; those checks are attributed.
+Only CLI/worker were copied from its retained products into this task's system temp.
+Originals and copies matched CLIc5a9dc30a9adef5ba33a35a6351d7cc4f3f568cde97522f33d7e3beddfec80be
+and worker6c9464c9d1b1b510850aa8bf4f82b166054212166d13a2e2b26b5b940e52c5b0.
+No rebuild or original change; source writes for this step are only guarded-live.cjs
+and this receipt.
+
+Prepared mode `application` uses the existing owned F01. Ordinary fixture fill `Lon`
+and authored suggestion readiness are setup, not repeated product Focus/Type proof.
+It records actual same-target CDP identities for option/input and later commit/output;
+no actor/result choice by returned-node order. Seven public calls, expected exits
+4/0/0/4/0/0/4: scoped Observe→Prepare→Activate option with explicit input Value London;
+fresh Observe→Prepare→Activate Commit with explicit output Value London; own surprise
+stimulus then fresh Observe of commit Enabled=false plus actual AX dialog relation.
+The caller stops and records zero dependent Execute calls; no disabled Execute is
+substituted for that stop proof, and no general batch executor is claimed.
+Independent fixture state separates draft/selected/applied/valid/delivery count;
+option self-removal and result-only after Snapshot are checked. Original inputs and
+ACKed outputs are pinned and compared. Bounds/quotas unchanged; no pointer/hardware
+claim from Semantic activation. Syntax/diff checks passed; actual run follows this
+prepared harness checkpoint, with no other activation/review round required.

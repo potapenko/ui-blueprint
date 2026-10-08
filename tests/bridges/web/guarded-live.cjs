@@ -237,6 +237,88 @@ async function run(evidence, report) {
       assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
       return {bytes:stdout,document};
     }
+    if(report.mode==='application'){
+      report.phase='public_application';report.binaries.cli=report.binaries.test;delete report.binaries.test;
+      const page=pages.a,connection=cliConnection(await binding(page),'f01');
+      connection.session.session_id='live-cli-application';connection.session.allowed_scopes=['f01-application','f01-application-stop'];
+      const context={schema_version:'0.1.0',session_id:connection.session.session_id,target:connection.target,surfaces:connection.session.surfaces,
+        scope_id:'f01-application',projection:'interaction',fields:['enabled','value','input_kind'],plugin:connection.session.plugin,environment_revision:'f01-application'};
+      const keys=new Map(),pins=[];
+      async function save(name,value){const bytes=Buffer.from(JSON.stringify(value));assert(bytes.length<=131072);const file=path.join(evidence,name);await writeExclusive(file,bytes);pins.push({file,bytes});return file;}
+      async function identify(ids){
+        const session=await page.context().newCDPSession(page);
+        try{const {root}=await session.send('DOM.getDocument',{depth:0,pierce:false});
+          for(const id of ids){const found=await session.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:`#${id}`});assert.equal(found.nodeIds.length,1);
+            const {node}=await session.send('DOM.describeNode',{nodeId:found.nodeIds[0],depth:0,pierce:false});keys.set(id,{namespace:'web.dom',key:String(node.backendNodeId)});}
+        }finally{await session.detach();}
+      }
+      function node(snapshot,id){const key=keys.get(id);const matches=snapshot.nodes.filter(n=>n.key.namespace===key.namespace&&n.key.key===key.key);assert.equal(matches.length,1);return matches[0];}
+      async function invoke(stage,kind,request,source,expectation,expectedExit,selection){
+        const config=await save(`${stage}-connection.json`,selection?{...connection,provider:{...connection.provider,selection}}:connection);
+        const input=await save(`${stage}-request.json`,request);let args;
+        if(kind==='observe')args=['observe'];
+        else{const e=await save(`${stage}-expectation.json`,expectation);args=['action',kind,kind==='prepare'?'--snapshot':'--plan',path.join(evidence,`${source.stage}.json`),'--expectation',e,'--json'];}
+        args.push('--connection',config,'--request',input,'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536');
+        const prior=await uiState(page,true),result=await callCli(stage,args,expectedExit),after=await uiState(page,true);
+        if(kind!=='execute')assert.deepEqual(after,prior);
+        else{assert.deepEqual(after.scroll,prior.scroll);assert.deepEqual(after.state.rows,prior.state.rows);assert.equal(after.active,prior.active);
+          const c=result.document.artifact.data;assert.equal(result.document.artifact.kind,'transition_context');assert.equal(c.transition.steps.length,1);
+          const step=c.transition.steps[0];assert.equal(step.delivery,'confirmed');assert.equal(step.outcome,'succeeded');assert(c.after);assert(step.verification_observation);
+          assert.notEqual(c.before.id,c.after.id);assert.equal(c.after.nodes.length,1,'only independently held result is republished');}
+        checks.push({case:stage,readonly:kind!=='execute',unrelated_rows_scroll_unchanged:true});return {...result,stage,prior,after};
+      }
+      async function observe(stage,ids,stop=false){
+        await identify(ids);const selected={selection:'initial',ids:ids.map(id=>({id,sensitivity:'public'})),max_visited_nodes:256};
+        const ctx=stop?{...context,scope_id:'f01-application-stop',fields:['enabled','role']}:context;
+        const result=await invoke(stage,'observe',cliRequest(ctx,{operation:'observe',channels:['external_semantics']},stage),null,null,4,selected);
+        assert.equal(result.document.artifact.kind,'channel_response');assert.equal(result.document.artifact.data.result.status,'observed');
+        return {...result,snapshot:result.document.artifact.data.result.data};
+      }
+      async function prepareActivation(stage,source,actorId,resultId,expectedValue){
+        const snapshot=source.snapshot,actor=node(snapshot,actorId),result=node(snapshot,resultId),evidence=actor.properties.find(p=>p.field==='enabled').evidence;
+        const unknown={availability:'unknown',reason:'not-prepared'};
+        const action={id:stage,context:snapshot.context,backend_ref:{session_id:snapshot.context.session_id,target:snapshot.context.target,surface:actor.surface,key:actor.key,
+          snapshot_id:snapshot.id,observation_id:evidence.observation_id},intent:{intent:'activate'},modality:'semantic',input_space:null,required_enabled:true,
+          authorized_scope:snapshot.context.scope_id,unique_match:false,resolution:{evidence,writable:unknown,value_allowed:unknown,available_intents:[]}};
+        const expectation={schema_version:'0.1.0',artifact:{kind:'expectation',data:{id:`${stage}-expected`,scope_id:snapshot.context.scope_id,targets:[result.key],
+          rule:{relation:'property_equals',field:'value',expected:{type:'text',value:expectedValue}},applies_when:{platform:null,input_mode:null,text_scale:null},expected_from:'f01-authored-B02'}}};
+        const prepared=await invoke(stage,'prepare',cliRequest(snapshot.context,{operation:'prepare',action},stage),source,expectation,0);
+        assert.equal(prepared.document.artifact.kind,'action');const c=prepared.document.artifact.data;
+        assert.equal(c.action.modality,'semantic');assert.equal(c.action.intent.intent,'activate');assert.equal(c.snapshot.nodes.length,2);
+        assert.equal(c.action.resolution.evidence.method,'dom.HTMLElement.click-native-button-untrusted');assert(c.action.resolution.available_intents.includes('activate'));
+        assert.equal(c.action.backend_ref.snapshot_id,c.snapshot.id);node(c.snapshot,resultId);return {...prepared,expectation,resultId};
+      }
+      async function executeActivation(stage,prepared){const c=prepared.document.artifact.data;
+        const result=await invoke(stage,'execute',cliRequest(c.snapshot.context,{operation:'act',action:c.action},stage),prepared,prepared.expectation,0);
+        const after=result.document.artifact.data.after;assert.equal(property(node(after,prepared.resultId),'value').value,prepared.expectation.artifact.data.rule.expected.value);return result;}
+      // Ordinary existing-fixture setup only; accepted Focus/Type is not rerun here.
+      await page.bringToFront();await page.locator('#draft').fill(f01.B02.valid_draft);await page.locator('#option-london').waitFor();
+      report.application={setup:'ordinary fixture fill Lon and authored suggestion readiness; not product Type proof'};
+      const optionSource=await observe('application-option-observe',['option-london','draft']);
+      assert.equal(property(node(optionSource.snapshot,'draft'),'value').value,f01.B02.valid_draft);
+      const selected=await executeActivation('application-option-execute',await prepareActivation('application-option-prepare',optionSource,'option-london','draft',f01.B02.option));
+      assert.deepEqual([selected.after.state.draft,selected.after.state.selected,selected.after.state.valid,selected.after.state.applied,selected.after.state.delivered],['London','London',true,'',0]);
+      assert.equal(await page.locator('#option-london').count(),0);
+      const commitSource=await observe('application-commit-observe',['commit','applied']);assert.equal(property(node(commitSource.snapshot,'applied'),'value').value,'');
+      const commit=await prepareActivation('application-commit-prepare',commitSource,'commit','applied',f01.B02.applied);
+      const applied=await executeActivation('application-commit-execute',commit);
+      assert.deepEqual([applied.after.state.draft,applied.after.state.selected,applied.after.state.valid,applied.after.state.applied,applied.after.state.delivered],['London','London',true,'London',1]);
+      assert.equal(applied.after.form.output,'London');
+      const executionsBefore=report.outcomes.filter(o=>o.stage.endsWith('-execute')).length;
+      await page.locator('#surprise').click(); // explicit owned-fixture unexpected-transition stimulus
+      const stop=await observe('application-stop-observe',['commit','unexpected'],true);
+      const unexpected=node(stop.snapshot,'unexpected');const links=stop.snapshot.relations.filter(r=>r.kind==='corresponds_to'&&r.from.namespace===unexpected.key.namespace&&r.from.key===unexpected.key.key);assert.equal(links.length,1);
+      const dialog=stop.snapshot.nodes.find(n=>n.key.namespace===links[0].to.namespace&&n.key.key===links[0].to.key);
+      const blocked=property(node(stop.snapshot,'commit'),'enabled').value===false&&property(dialog,'role').value==='dialog';
+      const dependentExecutions=report.outcomes.filter(o=>o.stage.endsWith('-execute')).length-executionsBefore;
+      assert(blocked);assert.equal(dependentExecutions,f01.B02.dependent_steps_after_surprise);
+      assert.deepEqual([stop.after.state.applied,stop.after.state.delivered,stop.after.state.source_state],['London',1,'unexpected-transition']);
+      for(const pin of pins)assert((await fs.readFile(pin.file)).equals(pin.bytes));
+      for(const frame of report.frames)assert.equal(crypto.createHash('sha256').update(await fs.readFile(path.join(evidence,frame.file))).digest('hex'),frame.sha256);
+      report.application.selected=selected.after.state.selected;report.application.applied=applied.after.state.applied;report.application.dependent_execute_calls=dependentExecutions;report.application.actor_removed=true;report.application.stopped_at='application-stop-observe';
+      assert.equal(report.outcomes.length,7);assert.deepEqual(ownWorkerPids(worker),[]);report.cli_cleanup_confirmed=true;
+      checks.push({case:'application-complete',separate_explicit_results:true,unexpected_dialog_and_disabled_observed:true,zero_dependent_execute:true,no_retry:true});return;
+    }
     if(report.mode==='first_use'){
       report.phase='developer_example';
       const page=pages.a,actual=await binding(page),other=await binding(pages.b);
@@ -907,7 +989,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean((directorCase||['cli_actions','geometry','first_use','form_actions'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
+    await clean((directorCase||['cli_actions','geometry','first_use','form_actions','application'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -916,7 +998,7 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use','form_actions'].includes(report.mode))
+    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use','form_actions','application'].includes(report.mode))
       ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
       :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
@@ -925,14 +1007,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','form_actions','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','form_actions','application','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='form_actions'?'A03-public-Focus-Type':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='application'?'B02-applied-and-stop':mode==='form_actions'?'A03-public-Focus-Type':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}
