@@ -54,6 +54,15 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Следующая зависимая задача
+
+[E03 observed compare](packets/E03-observed-compare.md) подготовлена как один
+полный task. Статус queued: ждёт финальный G13 receipt, сохранённый API и
+освобождение CLI/spec ownership. Никакой дополнительный source-handoff task
+не требуется; исполнитель сам пройдёт весь цикл после получения готового входа.
+Новые чаты/подагенты для внутренних проверок четырёх running задач не выдавались.
+Последний turn — verified wait по четырём actual inProgress handles, не blocker.
+
 ## Следующая независимая задача и продуктовые ответы
 
 Оба консультанта завершили read-only ответы; шесть кейсов и границы записаны
