@@ -54,6 +54,13 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Активный E03 остаток
+
+Исходный чат E03 01a11b60-48cb-7570-940c-0f0ce9131350 восстановлен из архива;
+turn01a11b89-2983-7630-9743-5c6e69c8f115 подтверждён inProgress. Base7943eb0,
+только tests/current examples/docs/receipt, без source/CLI/engine/spec writes.
+Новый чат или reviewer не создавался; M02-N/W04 продолжаются параллельно.
+
 ## Закрытие оставшегося E03 baseline gap
 
 Независимый source/privacy review не выявил E03 regression, но подтверждённое
