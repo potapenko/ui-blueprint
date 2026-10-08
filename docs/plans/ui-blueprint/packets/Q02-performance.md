@@ -124,3 +124,44 @@ these protections, return the exact source-backed necessary owner change rather 
 a generic unavailability statement. Native foreground/runtime waits stay separate.
 Complete harness, measurements, documentation, scoped commit+push and final result
 without additional root grants for internal steps; CPU resources are now free.
+
+## Independent Native read-only comparability continuation — 2026-10-09
+
+Scope clarification grounded in NATIVE@2.CONTENT/AX-READ and the saved Q01 N03
+foreground receipt: the pending operator activation is a runtime precondition for
+input/whole popup-action composition, not a fresh implementation approval. Ordinary
+one-shot AX/capture is independent of resident form/input ownership. The prior
+blanket stop on every Native preflight was broader than those requirements.
+
+After Q01 source/recorded acceptance of the N04 repair and CPU/resource release,
+continue the existing Q02 task with a bounded read-only Native comparability
+preflight against ONLY Q01's already running owned F02 instance, if still available.
+Use Q01's trusted retained handoff at system temp uib-q01-final-5w3j1hkw as provenance,
+not as proof the old PID68614/window/generation is still current. Validate exact
+process incarnation and current own identity/window metadata before addressing it.
+No title/geometry search, target substitution or old action refs. Missing/stale
+ownership returns that exact condition; no replacement app launch or prompt.
+
+Use current accepted helper/host and explicit bounded window-only AX/capture scopes,
+requested fields and existing owned-synthetic pixel policy. Do not perform Focus,
+Prepare/Execute, Compare/Snapshot setup, resize, reset, close, activation, input,
+application launch or any TCC/display change. Do not alter or retire Q01's retained
+fixture/resources. No actual PlayPhrase.me app or historical prepared off/on bundle
+may be operated in this continuation. All task images remain in system temp without
+agent cleanup. Read-only state/focus/geometry invariance must be checked.
+
+The complete outcome is current source-fact preservation and actual original
+field/value/tree/window/pixel comparability evidence, or a precise observed mismatch
+or availability condition. N04's recorded mapping and pinned fixture proposal are
+inputs, not live equivalence. Preserve every required field/node and explain extra
+controls; never lower coverage, ignore state differences or replace frozen numbers.
+If fixture setup/mutation is needed, keep that slice waiting for the pending Native
+condition and return the exact needed setup, not an automatic workaround.
+
+This authorizes the independent preflight, NOT unconditionally the Native timed
+cohorts or N03 actions. Q01's ordinary-collection functional acceptance and matched
+live comparison are still required before Native performance acceptance. Continue
+only already-ready existing-task work; retain the still-open off/on/capture/cold
+rows rather than narrowing the goal. Read relevant Apple/QA/runtime routes before
+operations. Save the complete scoped result with checks, pins, invariance/cleanup,
+commit+push and exact remaining dependency, without per-command root grants.

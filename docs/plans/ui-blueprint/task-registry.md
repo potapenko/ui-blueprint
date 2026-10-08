@@ -45,8 +45,11 @@ Root получает итог или конкретный блокер; про�
   exact Snapshot/Document/canonical-byte equality. Diagnostic spans не подменяют
   неизменённые live cohorts (`b3c3a22`/`4cb8230`). Full reused p95 normalization
  257.917µs/sizing337.667µs/worker encoding352.833µs; не суммировать percentiles.
-  CPU/headless освобождены. Native foreground/functional/comparability остаются;
-  контекст сохранён для продолжения Native, никакого Native/P7 pass не заявлено.
+  CPU/headless освобождены. Q02 возобновлён для bounded read-only Native preflight
+  существующего own F02 после N04 source acceptance и Q01 resource/handoff release.
+  N03 foreground остаётся precondition ввода, не ordinary AX/capture; no setup,
+  activation, app launch, mutation или timed cohorts этим не разрешены. Missing/stale
+  target либо несопоставимость возвращаются точно, без обхода. Web result сохранён.
 - I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: terminal `completed`,
   `5cb7662ac01f1c9d1d19ef7ec7b57634b16dd218` pushed; receipt прочитан целиком.
   Web/Native/combined a7c0416 installed builds/smoke/verify/remove прошли;
@@ -63,6 +66,14 @@ Root получает итог или конкретный блокер; про�
   Proof uib-n04-title-isolation-q70i6po1 передан same Q01; original handoffs сохранены.
   CPU/UI ресурсы не удерживает, чат архивирован. Source acceptance repair pending;
   actual Native equivalence/foreground/E2E/D06 не приняты.
+- 2026-10-09 scope reconciliation: root перечитал NATIVE@2 и NATIVE-SESSION@3
+  вместе с точным Q01 N03 foreground receipt. Последний прямо называет активацию
+  runtime precondition ввода, not implementation approval. Поэтому уточнён ранее
+  слишком общий запрет всякого Native preflight: чтение уже существующего trusted
+  own target может проверяться отдельно после N04 source acceptance. СтарыйPID68614
+  и uib-q01-final-5w3j1hkw — только provenance, Q02 обязан freshvalidate incarnation/
+  current identity/window. Q01 попросили передать read-only facts, не запускать UI.
+  Pending activation question для N03 и Q03 scope question не отменены и не отвечены.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
