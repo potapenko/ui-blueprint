@@ -54,6 +54,22 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q01 initial observations: исходный privacy gap подтверждён
+
+Q01 initial source stage завершён без builder narratives: Native parent nonce/
+phase/held identity и explicit Web component mapping прослежены; introduced
+finding не заявлен. Обязательные gaps: secure Native input отвергается и не
+закрывает positive M02/privacy; M02 synthetic secret был external CUA setup;
+канарий только в canonical records не доказывает всю named lifecycle цепочку.
+Также W04 harness ожидает старыйgeneric Attach1 при уже исправленном typed host.
+
+В тот же Q01 переданы author receipts после first observations; он продолжает
+runtime/functional матрицу на94724df, корректируя только stale harness expectation,
+не production. Desktop lane у Q01 при фактической доступности. Подготовлен
+[V02 protected input](packets/V02-protected-input.md) как полный implementation
+outcome исходного P5/V01; offline work параллелен, actual UI ждёт lane release.
+I02 packaging независим. Goal не уменьшается до кандидата с Unsupported.
+
 ## Активная итоговая группа
 
 На product94724df / task checkpointe0ce277 созданы отдельные local чаты:
