@@ -483,18 +483,29 @@ impl<'a> CanonicalSession<'a> {
         if tape.count() != 2 {
             return Err(HostError::InvalidInput);
         }
-        let doc =
-            Document::from_json(tape.get(0)?, self.limits.input_bytes).map_err(
-                |error| match error {
-                    // The canonical decoder also validates delta compatibility. Keep
-                    // its recovery meaning identical to a refusal by retained replay.
-                    uiblueprint_schema::validation::ValidationError::IncompatibleContext
-                    | uiblueprint_schema::validation::ValidationError::ResyncRequired => {
-                        HostError::ResyncRequired
-                    }
-                    _ => HostError::InvalidInput,
-                },
-            )?;
+        let bytes = tape.get(0)?;
+        let doc = Document::from_json(bytes, self.limits.input_bytes).map_err(|error| {
+            use uiblueprint_schema::validation::ValidationError;
+            // Semantic validation can fail before the artifact check below.
+            // On compatibility errors only, the SAME canonical serde type/decoder
+            // establishes the artifact kind; it never admits the invalid record.
+            // All allocation remains under the worker guard. Successful requests
+            // and other validation failures do not decode again.
+            if matches!(
+                error,
+                ValidationError::IncompatibleContext | ValidationError::ResyncRequired
+            ) && matches!(
+                serde_json::from_slice::<Document>(bytes),
+                Ok(Document {
+                    artifact: Artifact::Delta(_),
+                    ..
+                })
+            ) {
+                HostError::ResyncRequired
+            } else {
+                HostError::InvalidInput
+            }
+        })?;
         let Artifact::Delta(case) = doc.artifact else {
             return Err(HostError::InvalidInput);
         };

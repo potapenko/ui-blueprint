@@ -131,3 +131,50 @@ All five task-owned Rust inputs equal the tested immutable source overlay. No
 shared workspace formatter or Cargo/dependency update was run. Canonical run output
 is transient and will be removed after this receipt records its consumed result;
 no images were created. Checkpoint/push identity is returned in the chat result.
+
+## Reviewer P2 correction — Delta-only recovery classification (2026-10-08)
+
+Authority: direct correction dispatch in this chat, following independent source
+review of ffe33e4. Restore the original requirement that inappropriate artifacts
+remain InvalidInput; no renewed Web runtime or adjacent feature scope. Reused the
+fully read W03-R CACHE/EXCHANGE/D02/D05-WORK/RUST/DEV.RUST basis above after verifying
+those selected contracts unchanged since ffe33e4. Current AGENTS and receipt read.
+Owned writes: worker_ops.rs, new crates/host/tests/replay_input.rs in the existing
+tests directory, and this receipt. Web/worker_web/harness, schema, API, engine,
+protocol, CLI and other owners' WIP remain untouched.
+
+Reproduced BEFORE the correction with the actual guarded worker: first Replay
+Tape segment ENV-SESSION-INVALID.json yields Failed(ResyncRequired), while the
+regression expects Failed(InvalidInput). Canonical validation rejects this
+session_context with IncompatibleContext before the old Artifact::Delta check.
+The finding is an implementation defect; the intended error contract is unchanged.
+
+Fix: Document::from_json remains the mandatory full validator. Only when it
+returns IncompatibleContext or ResyncRequired, deserialize the same bounded bytes
+with the existing canonical Document/serde decoder to establish artifact kind.
+Only Artifact::Delta receives ResyncRequired; all other kinds and malformed inputs
+receive InvalidInput. This diagnostic-only second decode never admits/reuses the
+invalid record, adds no parser/types/schema/tag scanner and remains inside the
+worker allocation guard. Successful requests and all other validation failures
+keep their single decode; no parent parsing or validation bypass was introduced.
+
+Focused regression `replay_recovery_is_reserved_for_delta_compatibility`: PASS
+following the observed pre-fix failure. Real Retain/Replay covers invalid
+session_context, valid non-Delta, malformed JSON, missing-property/private-value
+Delta => InvalidInput; lost base, scope and revision mismatch => ResyncRequired;
+compatible Delta => exact independent full canonical bytes. Refusals commit0;
+original retained bytes survive refusals and successful replay. Worker shutdown
+confirms sessions0/groups0/abandonedfalse. No browser/native target was attached.
+
+Checked immutable source archive ef19ba5c67ce5f35f588339758b8c8f9cb8ba28c with only
+this correction's two Rust files overlaid, isolated OS-temp Cargo target. Commands:
+`cargo test --locked --offline -p uiblueprint-host --test replay_input -- --exact
+replay_recovery_is_reserved_for_delta_compatibility`; affected session-worker and
+replay_input Clippy with -D warnings; scoped rustfmt --check and git diff --check.
+Prior successful Web/live evidence remains applicable and was not rerun. This
+correction has author verification; the same independent reviewer receives the
+saved result through the coordinator. No agents/chats or external messages created.
+
+Correction Clippy, scoped rustfmt and diff checks all PASS; both Rust inputs match
+the tested overlay. Temporary source/build files are run-owned, contain no images,
+and are removed after recording these results. Checkpoint/push is returned in chat.
