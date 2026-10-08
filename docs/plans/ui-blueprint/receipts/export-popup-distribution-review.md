@@ -31,3 +31,21 @@ M03 cold1062.46ms incomplete при1s, D06 не passed, финальный defen
 проверен focused source tests, standalone composition consumer не shipping join.
 Final verdict ещё не получен. Review относится к source/safety scope, не full
 P7/pilots/performance. Author runtime не становится independently rerun.
+
+## Final scoped acceptance
+
+Тот же reviewer завершил reconciliation, turn01a11b83-16b6-7b03-971d-8694d6005ddc:
+source/safety scope четырёх commits принят с evidence residuals, actionable
+introduced findings нет; противоречий receipts с прочитанным source/tests нет.
+Все четыре Native source hashes из receipt дополнительно совпали.
+Независимое доказательство — source/contracts/diff/tests reading; runtime/build
+не выполнялись. Source input/privacy E03 проверка закрыта без замечаний.
+
+Сохраняются: I01 tested product82342f0 вместо последней интеграции; E03 41focused
+pass при сохранённой pre-existing failing assertion исторического baseline;
+B03 shared-checkout/parallelCLI runtime не exact final build; M03 defensive
+post-runtime guard проверен focused tests, cold1062.46ms incomplete при1s и D06
+не passed. Saved-data Native composition не shipping join/atomicity/pointer proof,
+AX/capture clocks отдельные. Whole-suite, полные pilots/P7, final integration и
+performance остаются вне этой приёмки. Повтора неизменённого runtime ради receipt
+reviewer не потребовал. Root принял scoped verdict; завершённый review чат archived.

@@ -54,6 +54,16 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Review group2 завершён
+
+[Final source/safety verdict](receipts/export-popup-distribution-review.md) принят
+для3075239/c97c513/b43d0df/5fd4b6a с сохранёнными evidence residuals, findings нет.
+Independent read reconciled с author checks/runtime; full-suite/pilots/D06/P7 не
+закрыты. E03 old historical baseline остаётся acceptance debt; I01 и B03 требуют
+final coherent-build qualification, M03 cold incomplete не скрывается.
+Reviewer01a11b7c-f321-70e2-b0ca-91f161b5d340 archived, новый review не запущен.
+Активны M02-N и W04; их новые changes не входили в закрытую группу.
+
 ## Review group2: initial observations получены
 
 Reviewer01a11b7c-f321-70e2-b0ca-91f161b5d340 не нашёл actionable introduced
