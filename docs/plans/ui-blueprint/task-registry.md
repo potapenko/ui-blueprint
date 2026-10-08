@@ -895,3 +895,11 @@ is not delayed for this input. No extra collection/UI run or rebuild is required
 Native owns that nonimage file until Core consumes it and root releases retention;
 Core owns the binary through the same consumer, then each cleans only owned
 nonimages. This is transient consumer retention, not a permanent evidence archive.
+
+M04 source107cc3037a01e35109885e513d913b69ab431daf saved/pushed exact5;
+Native released Git lease and continues the already-authorized runtime. Author
+17 cases/34 assertions,15 canonical validations and legacy response equality pass;
+fixture/helper compile cleanly. New measured scope f02.scroll.a supplies viewport/
+row0 in the existing local pt space; no paint/clip or screen transform claim.
+Runtime uses saved905dd061 Rust consumer and pinned new Native products, excluding
+Core G11 WIP. Actual Scroll/Move outcome remains pending, not inferred from tests.
