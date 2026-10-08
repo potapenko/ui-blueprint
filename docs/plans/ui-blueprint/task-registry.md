@@ -54,6 +54,22 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## N03 сохранён; final functional review и Q02 подготовка
+
+N03 source6ba77073fb85ce6a2e6b146b3ff27118446cecf2/finala40652a pushed,
+terminal completed, receipt прочитан. Product Activate open/Resize/Confirm,
+held parent Result после popup self-close, stale refusal, local width+100pt,
+compare и targeted permission_required correction по автору.46canonical/13kernel/
+34protocol + ordinary/secure compatibility; no quota/secret/SAME Surface weakening.
+NativeSession@3/NativePopup@1 полностью прочитаны root, registry31. Owner archived,
+resources released; Q01 продолжает same-chat independent source-first delta
+assessment до N03 builder receipt, затем affected actual/final matrix.
+
+[Q02](packets/Q02-performance.md) готов к source/harness preparation, timed/runtime
+серии ждут functional candidate/release Q01. Frozen D0620cold/100warm и quality
+остаются без изменения; полноценная measured задача, не одно поручение на тест.
+Real Q03 authority вопрос pending, выполнение его не подразумевается elapsed time.
+
 ## Q03 real-data authority clarification pending
 
 Mac/Web advisors подтвердили отсутствие готовых original internal geometry datasets;
