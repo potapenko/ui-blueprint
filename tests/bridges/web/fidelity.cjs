@@ -100,7 +100,7 @@ async function main(){
         limits:{max_elements:128,max_depth:16,max_output_bytes:524288,deadline_ms:2000},freshness_policy:'current_required',operation:{operation:'observe',channels:['external_semantics']}}}};
       mutate(request);const before=await state();driver.send({request,selection});const sample=await driver.next();assert.equal(sample.kind,'sample');assert.deepEqual(await state(),before);
       const snapshot=sample.frames.length?JSON.parse(sample.frames[0].canonical).artifact.data.result.data:null;
-      report.checks.push({name,terminal:sample.terminal,committed:sample.committed,bytes:sample.frames[0]?.canonical.length||0,domain_usage:sample.domain_usage});
+      report.checks.push({name,terminal:sample.terminal,committed:sample.committed,bytes:Buffer.byteLength(sample.frames[0]?.canonical||''),domain_usage:sample.domain_usage});
       if(snapshot){assert.equal(sample.terminal,'Completed');assert.deepEqual(snapshot.context,ctx);assert(snapshot.observations.every(o=>o.freshness==='current'&&o.answer_source==='live'));}
       assert(!JSON.stringify(sample).includes('W06_PRIVATE_CANARY'));return {snapshot,sample,request};
     }

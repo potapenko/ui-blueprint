@@ -66,6 +66,15 @@ fn text(strings: &[String], index: i32, cap: usize) -> Result<Value, Failure> {
     }
     Ok(Value::Text(value.clone()))
 }
+fn native_string(strings: &[String], index: i32) -> Result<&str, Failure> {
+    if index == -1 {
+        return Ok("");
+    }
+    strings
+        .get(usize::try_from(index).map_err(|_| malformed())?)
+        .map(String::as_str)
+        .ok_or_else(malformed)
+}
 fn rectangle(rect: &[f64], surface: &Identity, local: bool) -> Result<Availability, Failure> {
     if rect.is_empty() {
         return Ok(normalize::unknown("no-native-rect"));
@@ -194,14 +203,8 @@ fn validate(d: &raw::Document, cap: usize) -> Result<(), Failure> {
 }
 fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
     for pair in attrs.chunks_exact(2) {
-        let name = strings
-            .get(pair[0] as usize)
-            .ok_or_else(malformed)?
-            .to_ascii_lowercase();
-        let value = strings
-            .get(pair[1] as usize)
-            .ok_or_else(malformed)?
-            .to_ascii_lowercase();
+        let name = native_string(strings, pair[0])?.to_ascii_lowercase();
+        let value = native_string(strings, pair[1])?.to_ascii_lowercase();
         if (name == "type" && value == "password")
             || name == "data-private"
             || name == "data-sensitive"
@@ -362,7 +365,17 @@ fn normalize_document(
     let values = request.context.fields.contains(&Field::Value);
     let layout = request.context.fields.contains(&Field::LayoutBounds);
     let mut private = Vec::new();
+    let mut depths = Vec::new();
     for i in 0..n.backend_node_id.len() {
+        let depth = if i == 0 {
+            0
+        } else {
+            depths[n.parent_index[i] as usize] + 1u32
+        };
+        if depth > request.limits.max_depth {
+            return Err(Failure::new(ErrorKind::Limit));
+        }
+        depths.push(depth);
         let sensitive = seed.sensitivity == Sensitivity::Sensitive
             || private_node(&n.attributes[i], strings)?
             || (i > 0 && private[n.parent_index[i] as usize]);
