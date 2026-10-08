@@ -162,3 +162,16 @@ exit separation and stdout-empty failure. Default CLI check and affected Clippy
 passed on final Rust. Source checkpoint+push below includes NATIVE-SESSION@2,
 D03@4 and registry30 with the implementation; subsequent receipt-only cleanup does
 not change that source pin. No independent acceptance/full-goal claim.
+
+## Saved candidate and cleanup
+Source/spec candidate01b5a584351f257c0d20732b17667d99d2ed690d was committed on
+master and pushed to origin/master. Remote reported its repository relocation but
+accepted the push; configured remote/key/branch were not changed. This checkpoint
+pins the final implementation, contracts and tests.
+Consumed-result cleanup removed10119 run-owned non-image files (including
+synthetic source inputs, builds, histories, exports and logs); the task temp root
+uib-v02.rz3dcyZjlT is confirmed absent. Both screenshots above and their containing
+directory remain intact, as do tool-managed originals. Existing repository PNG
+was untouched. Runtime/lane already released; no user process or caller-owned
+external secret source was deleted. The next scoped receipt-only commit records
+this cleanup and does not alter the saved source candidate.
