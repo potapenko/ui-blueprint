@@ -886,3 +886,12 @@ focused checks precedes one own isolated headless scroll/resize comparison.
 Original viewport geometry and unknown unconfirmed zoom/frame mapping remain.
 Transform-aware motion Diff is preserved as a later Core consumer dependency;
 Web measurement proof will not be mislabeled as that feature or full B04.
+
+Immediate combined G11/M04 consumer: Native retains one unchanged canonical scroll
+probe response from its authorized successful run in its existing system-temp
+location, with path/hash/source identity. Core retains its already-built G11 CLI
+for one public design-inspect demonstration on that response; source checkpoint
+is not delayed for this input. No extra collection/UI run or rebuild is required.
+Native owns that nonimage file until Core consumes it and root releases retention;
+Core owns the binary through the same consumer, then each cleans only owned
+nonimages. This is transient consumer retention, not a permanent evidence archive.
