@@ -54,6 +54,14 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## V02 implementation owner
+
+«V02 — Защищённый ввод и privacy lifecycle», local
+01a11bf3-fb4c-7910-95e8-849247d6a7ce, task base6d96655 / product94724df.
+Полный цикл code/offline/canary в разрешённой области; Native runtime ждёт
+освобождения Q01 desktop lane. Q01 продолжает fixed-candidate остальные criteria,
+I02 packaging независимо. Новых подагентов или микрозадач не создаётся.
+
 ## Q01 initial observations: исходный privacy gap подтверждён
 
 Q01 initial source stage завершён без builder narratives: Native parent nonce/
