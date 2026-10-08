@@ -154,7 +154,7 @@ async function run(evidence, report) {
       await bounded(new Promise((resolve,reject)=>{own.once('error',reject);own.listen(0,'127.0.0.1',resolve);}),3000,'actions_server_timeout');
       fixture.url=`http://127.0.0.1:${own.address().port}`;
       report.fixture='9bd9f662d28cdb66f8b7b096fcd77a93ecf524e4:actions.html';
-    }else fixture = await start();
+    }else if(report.mode!=='director') fixture = await start();
     // Keep pinned Playwright launch defaults and own its actual process/profile.
     // This is a Chromium TCP CDP endpoint in addition to the fixture driver's connection.
     server = await bounded(setup.chromium.launchServer({headless:true,timeout:8000,
@@ -179,13 +179,23 @@ async function run(evidence, report) {
     const http = `http://127.0.0.1:${port}`;
     browser = await bounded(setup.chromium.connect(server.wsEndpoint(), {timeout:3000}), 3500, 'driver_connect_timeout');
     report.environment.chromium=browser.version(); assert.equal(report.environment.chromium, '145.0.7632.6');
-    context = await browser.newContext({viewport:{width:800,height:600},deviceScaleFactor:1});
-    await context.route('**/*', route => new URL(route.request().url()).origin === fixture.url ? route.continue() : route.abort());
+    context = await browser.newContext({viewport:report.mode==='director'?{width:1280,height:900}:{width:800,height:600},deviceScaleFactor:1});
+    if(fixture)await context.route('**/*', route => new URL(route.request().url()).origin === fixture.url ? route.continue() : route.abort());
     const pages = {};
-    for (const name of ['a','b']) {
+    for (const name of report.mode==='director'?['a']:['a','b']) {
       const page = await context.newPage(); page.setDefaultTimeout(2000); page.setDefaultNavigationTimeout(3000);
-      await page.goto(`${fixture.url}/?generation=1`);
-      if(report.mode==='actions'||report.mode==='cli_actions')await page.locator('#action-target').waitFor();else await page.waitForFunction(() => !!window.f01);
+      if(report.mode==='director'){
+        report.site_diagnostics={page_errors:0,console_errors:0,failed_first_party_requests:0,first_party_http_errors:0};
+        page.on('pageerror',()=>report.site_diagnostics.page_errors++);
+        page.on('console',message=>{if(message.type()==='error')report.site_diagnostics.console_errors++;});
+        page.on('requestfailed',request=>{if(new URL(request.url()).origin==='http://localhost:3000')report.site_diagnostics.failed_first_party_requests++;});
+        page.on('response',response=>{if(new URL(response.url()).origin==='http://localhost:3000'&&response.status()>=400)report.site_diagnostics.first_party_http_errors++;});
+        await page.goto('http://localhost:3000/#/clip-search?language=en',{timeout:15000,waitUntil:'domcontentloaded'});
+        await page.locator('#clip-search-filter-director-trigger').waitFor({timeout:15000});
+      }else{
+        await page.goto(`${fixture.url}/?generation=1`);
+        if(report.mode==='actions'||report.mode==='cli_actions')await page.locator('#action-target').waitFor();else await page.waitForFunction(() => !!window.f01);
+      }
       pages[name] = page;
     }
     async function binding(page) {
@@ -206,13 +216,15 @@ async function run(evidence, report) {
       report.last_stage=stage;
       const started=performance.now();
       child=spawn(executable,args,{stdio:['ignore','pipe','pipe']});
-      const chunks=[];let bytes=0,errors=0,over=false;
+      const chunks=[];let bytes=0,errors=0,over=false,diagnostic='';
       child.stdout.on('data',chunk=>{bytes+=chunk.length;if(bytes>maxOutput){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
-      child.stderr.on('data',chunk=>{errors+=chunk.length;if(errors>65536){over=true;child.kill('SIGKILL');}});
+      child.stderr.on('data',chunk=>{errors+=chunk.length;if(errors>65536){over=true;child.kill('SIGKILL');}else if(errors<=128)diagnostic+=chunk.toString('utf8');});
       exited=new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>resolve({code,signal}));});
       const exit=await bounded(exited,5000,'cli_call_timeout');
       const stdout=Buffer.concat(chunks);const pids=ownWorkerPids(worker);
       report.outcomes.push({stage,exit:exit.code,signal:exit.signal,stdout_bytes:stdout.length,stderr_bytes:errors,elapsed_ms:performance.now()-started,owned_worker_pids_after:pids});
+      // Public CLI diagnostics are fixed codes. Never retain arbitrary stderr/UI.
+      if(/^(observe_invalid_or_limit|observe_unavailable|observe_incomplete|observe_worker_or_cleanup_failure)\n$/.test(diagnostic))report.outcomes.at(-1).diagnostic=diagnostic.trim();
       assert(!over);assert.equal(exit.signal,null);assert.deepEqual(pids,[]);
       assert(stdout.length>0&&stdout.at(-1)===10);
       if(jsonOutput)assert.equal(stdout.toString('utf8').split('\n').length,2,'one complete JSON line');
@@ -221,6 +233,76 @@ async function run(evidence, report) {
       report.frames.push({case:stage,file:name,bytes:stdout.length,sha256:crypto.createHash('sha256').update(stdout).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
       assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
       return {bytes:stdout,document};
+    }
+    if(report.mode==='director'){
+      report.phase='director_geometry';report.fixture=null;
+      report.binaries.cli=report.binaries.test;delete report.binaries.test;
+      const page=pages.a,prefix='clip-search-filter-director';
+      const selectors={wrapper:`#${prefix}-wrap`,trigger:`#${prefix}-trigger`,popup:`[data-testid="${prefix}-popover"]`,input:`#${prefix}-input`,list:`#${prefix}-options`};
+      // Explicit ordinary setup only: no query input, selection or submission.
+      await page.locator(selectors.trigger).click();await page.locator(selectors.input).waitFor();
+      const actual=await binding(page),connection=cliConnection(actual,'director');
+      connection.session.session_id='live-cli-director';connection.session.allowed_scopes=['playphraseme-director'];
+      const selectedKeys=new Map();let documentBackend,rootBackend;
+      const session=await context.newCDPSession(page);
+      try{
+        const {root}=await session.send('DOM.getDocument',{depth:0,pierce:false});documentBackend=root.backendNodeId;
+        for(const [name,selector] of Object.entries(selectors)){
+          const found=await session.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector});assert.equal(found.nodeIds.length,1);
+          const {node}=await session.send('DOM.describeNode',{nodeId:found.nodeIds[0],depth:0,pierce:false});
+          selectedKeys.set(name,{namespace:'web.dom',key:String(node.backendNodeId)});if(name==='wrapper')rootBackend=node.backendNodeId;
+        }
+      }finally{await session.detach();}
+      connection.provider.selection={selection:'rooted',max_visited_nodes:256,root:{session_id:connection.session.session_id,
+        target:actual.target,surface:actual.surface,document_backend_id:documentBackend,backend_node_id:rootBackend,sensitivity:'public'}};
+      const sourceContext={schema_version:'0.1.0',session_id:connection.session.session_id,target:actual.target,surfaces:[actual.surface],
+        scope_id:'playphraseme-director',projection:'design',fields:['layout_bounds','hit_region','visible_region'],
+        plugin:connection.session.plugin,environment_revision:'playphraseme-director-1280x900-dpr1'};
+      async function save(name,value){const bytes=Buffer.from(JSON.stringify(value));assert(bytes.length<=131072);await writeExclusive(path.join(evidence,name),bytes);return path.join(evidence,name);}
+      async function state(){return page.evaluate(selectors=>({url:location.href,active:document.activeElement?.id,scroll:[scrollX,scrollY],
+        expanded:document.querySelector(selectors.trigger).getAttribute('aria-expanded'),input:document.querySelector(selectors.input).value,
+        option_count:document.querySelector(selectors.list).querySelectorAll('[role="option"]').length,
+        nodes:Object.entries(selectors).map(([name,s])=>{const r=document.querySelector(s).getBoundingClientRect();return {name,rect:[r.x,r.y,r.width,r.height]};})}),selectors);}
+      const before=await state();
+      const config=await save('director-connection.json',connection),request=await save('director-request.json',cliRequest(sourceContext,{operation:'observe',channels:['external_semantics']},'director-observe'));
+      const output=await callCli('director-observe',['observe','--connection',config,'--request',request,'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536'],4);
+      assert.deepEqual(await state(),before);
+      assert.equal(output.document.artifact.kind,'channel_response');assert.equal(output.document.artifact.data.result.status,'observed');
+      const snapshot=output.document.artifact.data.result.data,file=path.join(evidence,'director-observe.json');
+      const nodes=snapshot.nodes.filter(n=>n.key.namespace==='web.dom');
+      const node=name=>nodes.find(n=>n.key.key===selectedKeys.get(name).key);
+      report.geometry={scope:'real local PlayPhrase.me Director; empty query; opened only',url:before.url,viewport:[1280,900],dpr:1,
+        coverage:snapshot.coverage,observations:snapshot.observations,available_option_count:before.option_count,bounds:[],measurements:[],
+        viewport_overflow:'unknown: no observed viewport geometry node',clipping:'unknown: source visible_region unavailable'};
+      for(const [name,key] of selectedKeys){
+        if(node(name)){const rect=rectangle(node(name));compareRect(rect,before.nodes.find(n=>n.name===name).rect);report.geometry.bounds.push({name,key,rect,units:'css_px'});}
+        else report.geometry.bounds.push({name,key,availability:'unknown',reason:'outside_returned_scope'});
+      }
+      report.checks.push({case:'director-observe',read_invariance:true,dom_nodes:nodes.length,ax_nodes:snapshot.nodes.length-nodes.length});
+      await callCli('director-design-inspect',['inspect','--snapshot',file,'--ref',JSON.stringify(selectedKeys.get('wrapper')),'--view','design','--max-input-bytes','131072','--max-output-bytes','65536'],0,65536,false);
+      const space=property(node('wrapper'),'layout_bounds').value.coordinate_space;
+      const anchor=(name,fraction=0,axis='x',frame_kind='layout_bounds')=>({element:selectedKeys.get(name),frame_kind,coordinate_space:space,fraction,axis});
+      const queries=[['wrapper-width','width',[anchor('wrapper')]],['wrapper-height','height',[anchor('wrapper')]],
+        ['popup-width','width',[anchor('popup')]],['popup-height','height',[anchor('popup')]],
+        ['trigger-popup-gap','gap',[anchor('trigger',1,'y'),anchor('popup',0,'y')]],
+        ['wrapper-popup-left-offset','gap',[anchor('wrapper'),anchor('popup')]],
+        ['trigger-popup-left-offset','gap',[anchor('trigger'),anchor('popup')]],
+        ['input-insets','inside',[anchor('input'),anchor('popup')]],
+        ['input-list-gap','gap',[anchor('input',1,'y'),anchor('list',0,'y')]],
+        ['input-list-left-offset','gap',[anchor('input'),anchor('list')]],
+        ['visible-popup-width','width',[anchor('popup',0,'x','visible_region')]]];
+      for(const [id,operation,anchors] of queries){
+        const query={schema_version:'0.2.0',artifact:{kind:'geometry_query',data:{id,scope_id:snapshot.context.scope_id,targets:anchors.map(a=>a.element),
+          operation,anchors,quantity_kind:'length',units:'css_px',applies_when:{platform:null,input_mode:null,text_scale:null}}}};
+        const q=await save(`director-${id}-query.json`,query);
+        const unknown=id==='visible-popup-width'||anchors.some(a=>!nodes.some(n=>n.key.key===a.element.key));
+        const measured=await callCli(`director-${id}`,['measure','--snapshot',file,'--query',q,'--space',space.id,'--max-input-bytes','131072','--max-output-bytes','65536','--json'],unknown?4:0);
+        assert.equal(measured.document.artifact.kind,'measurement');const result=measured.document.artifact.data;
+        assert.deepEqual(result.snapshot,snapshot);report.geometry.measurements.push({id,result:result.result});
+      }
+      assert((await fs.readFile(file)).equals(output.bytes));assert.deepEqual(await state(),before);
+      assert.deepEqual(ownWorkerPids(worker),[]);report.cli_cleanup_confirmed=true;
+      report.checks.push({case:'director-pipeline',engine_only_measurements:true,original_channel_bytes_preserved:true,browser_alive_after_workers:true});return;
     }
     if(report.mode==='geometry'){
       report.phase='component_geometry';report.binaries.cli=report.binaries.test;delete report.binaries.test;
@@ -665,7 +747,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean(['cli_actions','geometry'].includes(report.mode)?'cli_process':'test_process',!!child,async()=>{
+    await clean(['cli_actions','geometry','director'].includes(report.mode)?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -674,7 +756,7 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=['cli_actions','geometry'].includes(report.mode)
+    report.cleanup.worker_sessions=['cli_actions','geometry','director'].includes(report.mode)
       ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
       :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
@@ -683,14 +765,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions','geometry'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions','geometry','director'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[mode==='geometry'?'Web-component-geometry':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[['geometry','director'].includes(mode)?'Web-component-geometry':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}

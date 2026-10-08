@@ -1,5 +1,107 @@
 # W01 rooted selection source handoff
 
+## G05 real PlayPhrase.me Director geometry — 2026-10-08
+
+Finite verification delivered: existing public Observe → design Inspect → Rust
+Measure on the real local Director popover. Immediate consumer: AI geometry work
+and first-use instructions. No product contract delta, collector/engine/CLI/site
+source change, action executor, login/profile reuse or source-app launch/build.
+Write set: this receipt and `tests/bridges/web/guarded-live.cjs` only.
+
+Basis: AGENTS → execution/worker packet → registry19 → PRODUCT-ROUTES@1 →
+CLI@7 CONTENT/OBSERVE/INSPECT, ANALYSIS@2 SCOPE/CLI with TYPES/VALIDATION@1,
+GEOMETRY/PROJECTIONS/MODEL/EXCHANGE/IDENTITY/BOUNDARIES/PRIVACY/LIFECYCLE@1;
+Web PILOTS and explicit common D02@2/D04@1/D05@4/MEMORY@2/WORK@1/D07@5
+closure. No semantic drift. Native/export/actions/mobile/full P7 excluded.
+Reference route: named site's AGENTS → specs/discovery-playback → Clip Search
+surface-shell/filter-controls/filter-context; source picker_view.cljs and
+suggestions/view.cljs plus the named desktop QA case establish selectors and
+`http://localhost:3000/#/clip-search?language=en`, not measured expectations.
+The setup uses the packet's explicit isolated-headless permission.
+
+HTTP preflight200; clean Chromium145.0.7632.6, Node24.15.0, Playwright1.58.2,
+darwin arm64/27.0.0. New private context1280×900/DPR1, empty query, ordinary
+trigger opening only. Same bound target/frame/document and actual backend root;
+no synthetic ref, portal assumption, selection application or form submission.
+Actual run03:22:48.066–03:22:50.840UTC passed13 public CLI calls: Observe4
+(partial), Inspect0,10 known Measure0 and1 unknown Measure4. One original
+25944B ChannelResponse supplied directly to every analysis command. Each result
+preserves its full Snapshot exactly; read invariance passed before/after collection
+and again after measurement. No independent acceptance or p95 claim.
+
+All bounds below are reported CSSOM `layout_bounds`, same viewport/top_left
+`css_px` space, local_only transform. They are real runtime values, not the
+source's 8px/258px/10px declarations. Binary-to-site-source correspondence and
+the cause of differing declaration/measurement values were not diagnosed.
+
+| Part | Actual x,y,width,height css_px | Canonical web.dom key in this observation |
+| --- | --- | --- |
+| Wrapper |25.09375,278.109375,178.703125,42.90625|544|
+| Trigger |25.09375,292.40625,178.703125,28.609375|17|
+| Popup |25.09375,327.03125,194.25,85.9375|548|
+| Input |33.609375,352.84375,177.21875,25.59375|18|
+| List |33.609375,384.453125,177.21875,20|552|
+
+Rust measured trigger-bottom→popup-top and input-bottom→list-top gaps6.015625;
+wrapper→popup, trigger→popup and input→list left offsets0. Input within popup:
+left8.515625/top25.8125/right8.515625/bottom34.53125. Insets are not padding.
+Available option count was0 in this empty-query state; no option bounds/alignment
+are fabricated. Clipping-aware width returns `unknown_property`; viewport overflow
+is unmeasured because no canonical viewport geometry node was collected.
+
+Snapshot `web-snapshot:1:1`, Observation `web.dom:1:1`, space/surface
+`88FAE71C0A3D4A04B730A5681A94519B`; these identities belong only to this run.
+16DOM/0AX nodes, coverage partial, omitted_count unknown, unknown_count33;
+freshness current/live_read, consistency unknown/sequential-reads-not-atomic.
+Limits unchanged32nodes/depth8/64KiB/250ms,256visited, collector16nodes and
+120s overall. First broader request included role/accessibility_name and returned
+exit2, zero stdout,25 stderr bytes in118.35ms. Its exact underlying limit was not
+established. The only retry removed those unnecessary fields; no cap was raised,
+scope widened or failure relabelled. It requested layout_bounds/hit_region/
+visible_region. Public refusal diagnostics are now retained only by fixed-code
+allowlist, never raw stderr. Broad AX+geometry remains an explicit limitation.
+
+Single-run CLI acquisition119.92ms including worker lifetime; Inspect23.63ms;
+local Measure24.59–26.34ms. Browser page/console errors and failed/error first-party
+requests all0. Owned worker inventories empty after every CLI; context/driver/
+browser/profile cleanup confirmed; no fixture server or source service was created.
+Initial failed run also left no worker at its exact executable path; its harness
+cleanup status stayed unconfirmed because the successful pipeline marker was absent.
+
+Saved Rust base3a73ac792aa1effd570cfcf7b14609261b12cafb, exported to system temp
+before build; concurrent Native WIP excluded. Locked/offline web CLI+worker build,
+launcher syntax, activation refusal and diff checks passed; no old fixture suite.
+CLI SHA256f01096d21fac591ded9d008083e28ca90aceac41c619113d765c222f964b98b2;
+worker726557f3c66372f6bf37c920c5763d9c4032822e69e32fe5586447f3cd08d44d;
+launcher b7ecd65d7ac1081076db17fcd4b49e7f9a2f1aaeb24f30882e15aaff5f01d35e.
+Consumed Observe SHA2567d11e4a1152361ffa8b1eb147d3eb4a89e2c0dc5eb11dd764348c8eaf95adda3;
+report350be6f43b5919fe9c1d0587b5613e1e8f81773fe98df3515765b3f7cb7ecb1c.
+Post-use182 saved build-input files, both binaries and launcher hash matched.
+No images were created. After immediate consumption, both run-owned output sets
+(3+27 non-image files) and the separate2770-file temporary source/build tree were
+removed with absence verified. No owned browser/worker/runtime resources remain.
+Hashes identify historical bytes, not available downloads.
+
+Runnable current command from this checkout (requires the existing local site;
+does not start it; system-temp output must be consumed then removed):
+
+```sh
+UIB_G05_BUILD=$(mktemp -d "${TMPDIR:-/tmp}/uib-g05-web.XXXXXX")
+git archive HEAD Cargo.toml Cargo.lock rust-toolchain.toml crates plugins/web | tar -xf - -C "$UIB_G05_BUILD"
+cargo build --locked --offline --manifest-path "$UIB_G05_BUILD/Cargo.toml" -p uiblueprint-cli -p uiblueprint-host --features uiblueprint-cli/web,uiblueprint-host/web --bin uiblueprint --bin session-worker
+export UIB_WEB_LIVE_TEST="$UIB_G05_BUILD/target/debug/uiblueprint"
+export UIB_WEB_LIVE_WORKER="$UIB_G05_BUILD/target/debug/session-worker"
+export UIB_WEB_LIVE_TEST_SHA256=$(shasum -a 256 "$UIB_WEB_LIVE_TEST" | cut -d ' ' -f 1)
+export UIB_WEB_LIVE_WORKER_SHA256=$(shasum -a 256 "$UIB_WEB_LIVE_WORKER" | cut -d ' ' -f 1)
+export UIB_WEB_LIVE_EVIDENCE=$(python3 -c 'import os,tempfile,uuid; print(os.path.join(os.path.realpath(tempfile.gettempdir()),str(uuid.uuid4())))')
+S01_WEB_PLAYWRIGHT_CORE=/Users/eugenepotapenko/.npm/_npx/f88013d20c39cb98/node_modules/playwright-core UIB_WEB_LIVE_ALLOW=1 UIB_WEB_LIVE_CASE=director node tests/bridges/web/guarded-live.cjs --run-authorized
+```
+
+`report.json` contains bounds/measurements/timings/cleanup. `director-observe.json`
+is the original canonical input; `director-*-query.json` plus the recorded CLI
+command shape make individual Measure calls reproducible while those files exist.
+Fixture geometry, whole Web pilot acceptance and full performance gates stay open.
+
 ## G03 actual ordinary CLI component geometry — 2026-10-08
 
 Working path: original Observe ChannelResponse → design Inspect → Rust Measure
