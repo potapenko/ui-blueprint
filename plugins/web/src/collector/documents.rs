@@ -42,7 +42,6 @@ impl Collector {
         deadline: Instant,
     ) -> Result<Self, Failure> {
         if surfaces.is_empty()
-            || surfaces.len() > limits.max_nodes
             || !surfaces.contains(&binding.surface)
             || surfaces.iter().enumerate().any(|(i, s)| {
                 [&s.id, &s.generation]
