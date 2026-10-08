@@ -54,6 +54,20 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q02 Web geometry measured; W06 quality prerequisites
+
+Q0246aa360 pushed: source8e3dba2,100warm geometry p50=2.526646ms/p95=2.687833ms,
+0quality failures/timeouts; partial source coverage сохраняется, required rect known.
+20supplemental control-cold p95=159.202916/max648.4605ms, не full-fixture gate.
+Raw samples retained для named performance reviewer; численная строка не весь D06.
+
+[W06 fidelity/full scope](packets/W06-web-fidelity.md) открывает один полный
+implementation outcome: canonical raw focusable fidelity + explicit2-document/
+97-node F01 whole scope. Это подтверждённые prerequisite gaps исходного D06,
+не measured bottleneck или разрешение снижать fields/coverage/thresholds.
+Q02 сохраняет benchmark sources; новый Web owner не меняет их или baseline.
+Native/Q03 human waits остаются отдельными, этот task работает только headless.
+
 ## Native foreground wait; independent Web D06 continues
 
 Q01 requires operator activation of own F02 Synthetic/Window A: product Focus and
