@@ -54,6 +54,23 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## E03 завершён и дальнейшая очередь
+
+E03c97c513d52358c7c74f4a231e768986587731b58 pushed; terminal completed,
+[receipt](receipts/E03-observed-compare.md) прочитан. Direct before/after/metadata
+и существующий --brief получают G13-attributed comparison, G12 geometry_space,
+полный six-file compare0.2, safe facts/unknown/redacted. Author41focused tests,
+Clippy/example и byte-equality прежних document/propose на e4bc256 подтверждены.
+Независимая privacy/input acceptance ещё нужна. Старый исторический E01 baseline
+тест падает и на e4bc256: это открытый pre-existing acceptance gap, не full-suite
+pass и не регрессия E03; baseline не переписан. Чат E03 archived, CLI/export released.
+Root прочитал CLI-EXPORT@2 целиком и CLI@15 delta; registry28, другие closure
+нормы неизменны. M02 queued ждёт remaining B03/M03 terminal handoff.
+
+Следующий независимый [W04 observation task](packets/W04-observation-pilots.md)
+закрывает оставшиеся B01/B04/B06, после B03 release; существующие B03/B05 доказательства
+переиспользуются. Native M02 и W04 не пересекаются по исходникам/desktop.
+
 ## Групповая source review закрыта
 
 [Final verdict](receipts/finished-wave-review.md): accept_with_residual для
