@@ -77,7 +77,7 @@ async function main(){
     const port=Number(fs.readFileSync(path.join(profile,'DevToolsActivePort'),'utf8').split('\n')[0]);
     browser=await setup.chromium.connect(server.wsEndpoint(),{timeout:3000});assert.equal(browser.version(),'145.0.7632.6');
     context=await browser.newContext({viewport:{width:800,height:600},deviceScaleFactor:1});
-    await context.route('**/*',r=>new URL(r.request().url()).origin===fixture.url?r.continue():r.abort());
+    await context.route('**/*',r=>new URL(r.request().url()).origin===fixture.url&&!r.request().url().includes('W06_PRIVATE_CANARY')?r.continue():r.abort());
     const page=await context.newPage();await page.goto(fixture.url+'/?generation=1',{timeout:3000});await page.waitForFunction(()=>!!window.f01,{},{timeout:3000});
     const cdp=await context.newCDPSession(page),raw=await cdp.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});
     const {targetInfo}=await cdp.send('Target.getTargetInfo'),{frameTree}=await cdp.send('Page.getFrameTree');
@@ -134,6 +134,18 @@ async function main(){
     await page.evaluate(()=>history.replaceState(null,'','?token=W06_PRIVATE_CANARY'));
     assert.equal((await observe('private-url-refusal')).snapshot,null);
     await page.evaluate(()=>history.replaceState(null,'','?generation=1'));
+    // Only the test-owned page changes; original F01 files/oracle stay frozen.
+    await page.evaluate(()=>{const image=document.createElement('img');image.id='w06-image';image.width=1;image.height=1;image.src='/public.png';image.srcset='/public.png 1x, /image?token=W06_PRIVATE_CANARY 2x';document.body.append(image);});
+    assert.equal((await observe('private-srcset-second-candidate')).snapshot,null);
+    await page.evaluate(()=>document.getElementById('w06-image').srcset='/image?token=W06_PRIVATE_CANARY 1x');
+    assert.equal((await observe('private-srcset-selected-candidate')).snapshot,null);
+    await page.evaluate(()=>{const image=document.getElementById('w06-image');image.src='/public.png';image.srcset='/public.png?size=1 1x, /public.png?size=2 2x';});
+    await page.waitForFunction(()=>document.getElementById('w06-image').currentSrc.endsWith('/public.png?size=1'),{},{timeout:2000});
+    const safeRaw=await cdp.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});
+    const safe=await observe('safe-srcset-current-source-preserved');assert(safe.snapshot);compare(safeRaw,safe.snapshot);
+    const safeURL=safe.snapshot.nodes.flatMap(n=>n.extensions).find(e=>e.name==='currentSourceURL'&&e.property.state.value?.value.endsWith('/public.png?size=1'));
+    assert(safeURL,'known public selected resource is retained');
+    await page.evaluate(()=>document.getElementById('w06-image').remove());
     await closeDriver();
     await attach([frames[0]]);
     assert.equal((await observe('unallowed-frame')).snapshot,null);await closeDriver();

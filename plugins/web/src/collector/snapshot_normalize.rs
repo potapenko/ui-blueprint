@@ -1,6 +1,9 @@
 use super::{snapshot_wire as raw, *};
 use crate::normalize;
 use uiblueprint_schema::validation;
+#[cfg(test)]
+#[path = "snapshot_privacy_tests.rs"]
+mod privacy_tests;
 
 fn malformed() -> Failure {
     Failure::new(ErrorKind::Malformed)
@@ -208,6 +211,10 @@ fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
         if (name == "type" && value == "password")
             || (matches!(name.as_str(), "href" | "src" | "action" | "formaction")
                 && private_url(&value))
+            || (name == "srcset"
+                && value
+                    .split_ascii_whitespace()
+                    .any(|candidate| private_url(candidate.trim_end_matches(','))))
             || name == "data-private"
             || name == "data-sensitive"
             || name.contains("token")
@@ -231,8 +238,9 @@ fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
 }
 fn private_url(value: &str) -> bool {
     let authority = value
-        .split_once("://")
-        .map(|(_, tail)| tail.split(['/', '?', '#']).next().unwrap_or(""));
+        .strip_prefix("//")
+        .or_else(|| value.split_once("://").map(|(_, tail)| tail))
+        .map(|tail| tail.split(['/', '?', '#']).next().unwrap_or(""));
     if authority.is_some_and(|a| a.contains('@')) {
         return true;
     }
@@ -294,6 +302,19 @@ pub(super) fn snapshot(
         seen.push(index);
         let seed = &scope.documents[index];
         validate(document, limits.max_nodes)?;
+        // These native URL facts can differ from current attributes (e.g. a
+        // selected srcset resource or the script that originally created a node).
+        // Classify the captured values before constructing any canonical node.
+        for urls in [
+            &document.nodes.current_source_url,
+            &document.nodes.origin_url,
+        ] {
+            for index in &urls.value {
+                if private_url(native_string(&capture.strings, *index)?) {
+                    return Err(Failure::new(ErrorKind::InvalidInput));
+                }
+            }
+        }
         if document.nodes.backend_node_id.len() != counts[index]
             || document.nodes.backend_node_id[0] != seed.document_backend_id
         {

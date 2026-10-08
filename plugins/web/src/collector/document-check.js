@@ -27,6 +27,15 @@ function checkDocument(options) {
         if(name.length>options.maxChars || attribute.value.length>options.maxChars) return {status:'limit',count};
         if(name==='data-private' || name==='data-sensitive' || name.includes('token') || name.includes('secret')) return {status:'private',count};
         if(['href','src','action','formaction'].includes(name) && privateURL(attribute.value)) return {status:'private',count};
+        // URLs in srcset cannot contain ASCII whitespace. Inspect every token,
+        // including descriptors conservatively, without selecting/rebuilding it.
+        // Trailing commas delimit candidates; embedded data-URL commas stay intact.
+        if(name==='srcset' && attribute.value.split(/[\t\n\f\r ]+/).filter(Boolean)
+          .some(value=>privateURL(value.replace(/,+$/,'')))) return {status:'private',count};
+      }
+      if(typeof HTMLImageElement!=='undefined' && node instanceof HTMLImageElement) {
+        const currentSrc=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'currentSrc').get.call(node);
+        if(privateURL(currentSrc)) return {status:'private',count};
       }
       const type=node.getAttribute('type'), autocomplete=node.getAttribute('autocomplete');
       if(type?.toLowerCase()==='password' || (autocomplete && /(?:^|\s)(?:current-password|new-password|one-time-code|cc-number|cc-csc)(?:\s|$)/i.test(autocomplete)))

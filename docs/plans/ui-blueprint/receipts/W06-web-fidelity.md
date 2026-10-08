@@ -1,4 +1,25 @@
-# W06 Web fidelity — delivered for Q02 qualification
+# W06 Web fidelity — Q01 repair in progress
+
+## Q01 repair continuation — 2026-10-08
+
+Candidate139d202 below was rejected by Q01 for confirmed W06-Q01-P1/P2; the
+historical author proof does not establish independent acceptance. Same approved
+W06/PLAN.UIB@1 scope and WEB-DOCUMENTS@1 FACTS/BOUNDS, mode Restore; no new semantic
+contract delta. Read the entire Q01 final review and original W06 packet; reused
+unchanged full closure after verifying no applicable spec/Web source drift from
+139d202 to starting master8bcdaf4. Reviewer counterexamples were read without edits.
+
+Observed: srcset and preserved native currentSourceURL/originURL bypassed URL
+classification; focusable reused a converter accepting token/tristate strings.
+Repair plan: classify srcset URL tokens plus observable currentSrc at bounded
+preflight, classify captured URL facts before canonical nodes, and accept only
+boolean-typed/boolean-valued focusable. Keep safe facts and legacy Checked mapping.
+Write set: normalize/mod.rs; collector/document-check.js, snapshot_normalize.rs,
+snapshot_privacy_tests.rs; collector.rs focused tests, document-privacy.cjs;
+tests/bridges/web/fidelity.cjs and this author receipt. No Q01/Q02-owned files.
+Checks: repaired independent repros, source type/URL matrices, original full97-node
+headless workload plus safe/private srcset and existing binding/bound/cleanup cases.
+The shared e020gN records and reviewer r0o_1c_n reproducers are retained untouched.
 
 Authority: [packet](../packets/W06-web-fidelity.md), approved PLAN.UIB@1 original
 358c757 and user approval preserved in [registry](../task-registry.md). This chat

@@ -420,12 +420,11 @@ pub(crate) fn ax(read: &AxNode, context: &Context, observation: &Observation, ca
                     observation,
                     "cdp-addressed-partial-ax-focusable",
                     flag(read.properties.as_ref().and_then(|properties| {
-                        ax_bool(
-                            properties
-                                .iter()
-                                .find(|p| p.name == "focusable")
-                                .map(|p| &p.value),
-                        )
+                        let value = &properties.iter().find(|p| p.name == "focusable")?.value;
+                        match (value.r#type.as_str(), value.value.as_ref()) {
+                            ("boolean", Some(Scalar::Flag(value))) => Some(*value),
+                            _ => None,
+                        }
                     })),
                 ),
             }]

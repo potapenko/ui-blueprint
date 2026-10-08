@@ -20,19 +20,39 @@ use uiblueprint_web::{
 const CANARY: &str = "PRIVATE_COLLECTOR_CANARY";
 #[test]
 fn raw_focusability_extension_preserves_true_false_unknown_and_selection() {
-    for value in [Some(true), Some(false), None] {
+    for (kind, value, expected) in [
+        ("boolean", json!(true), Some(true)),
+        ("boolean", json!(false), Some(false)),
+        ("", Json::Null, None),
+        ("boolean", json!("true"), None),
+        ("boolean", json!(1), None),
+        ("boolean", Json::Null, None),
+        ("token", json!("true"), None),
+        ("tristate", json!("false"), None),
+        ("string", json!("true"), None),
+        ("number", json!(1), None),
+        ("token", json!(true), None),
+        ("booleanOrUndefined", json!(true), None),
+    ] {
         let fixture = Fixture::new(move |method, _, _| {
             if method != "Accessibility.getPartialAXTree" {
                 return None;
             }
+            let mut properties = vec![
+                json!({"name":"checked","value":{"type":"tristate","value":"true"}}),
+                json!({"name":"focused","value":{"type":"boolean","value":false}}),
+            ];
+            if !kind.is_empty() {
+                properties.push(json!({"name":"focusable","value":{"type":kind,"value":value}}));
+            }
             Some(
                 json!({"nodes":[{"nodeId":"ax-11","ignored":false,"backendDOMNodeId":11,
-                "role":{"type":"role","value":"button"},"properties":value.map(|v|vec![json!({"name":"focusable","value":{"type":"boolean","value":v}})]).unwrap_or_default()}]}),
+                "role":{"type":"role","value":"button"},"properties":properties}]}),
             )
         });
         let mut c = fixture.attach(limits());
         let mut r = request();
-        r.context.fields = vec![Field::Focused];
+        r.context.fields = vec![Field::Focused, Field::Checked];
         let (_, docs) = collect(&mut c, &r, &scope(&[11]));
         let ax = snapshot(&docs[0])
             .nodes
@@ -42,7 +62,7 @@ fn raw_focusability_extension_preserves_true_false_unknown_and_selection() {
         let extension = &ax.extensions[0];
         assert_eq!(extension.name.0, "focusable");
         assert_eq!(extension.namespace.0, "web.ax");
-        match value {
+        match expected {
             Some(value) => assert_eq!(extension.property.known(), Some(&Value::Flag(value))),
             None => assert!(matches!(
                 extension.property,
@@ -52,9 +72,11 @@ fn raw_focusability_extension_preserves_true_false_unknown_and_selection() {
                 }
             )),
         }
-        assert!(
-            ax.properties[0].known().is_none(),
-            "focusable must not become focused"
+        assert_eq!(known(ax, Field::Focused), &Value::Flag(false));
+        assert_eq!(
+            known(ax, Field::Checked),
+            &Value::Flag(true),
+            "legacy tristate remains known"
         );
         r.context.fields = vec![Field::Role];
         let (_, docs) = collect(&mut c, &r, &scope(&[11]));
