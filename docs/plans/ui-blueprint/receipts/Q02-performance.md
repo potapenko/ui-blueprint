@@ -7,6 +7,15 @@ initial master1f3e5cb/producta40652a/N03 source6ba7707. Preparation snapshot
 Q01's independent N03 P2 keeps the functional gate closed; original N03 owner repairs
 it. Root explicitly restated the gate and authorized continued offline preparation.
 
+Latest dependency: repair8e3dba2 is saved. Q01 independently passed its source
+counterexample and12 membership regressions, but its actual product Focus/CUA click
+left the own fixture inactive/non-key/non-main. Q01 requested user activation of
+Window A and is awaiting that input before the remaining live chain. This is not
+Q02's permission to operate it or start timing. Q02's preparation checkpoints
+a44887c,9f63ea3,c601e90 are pushed; no runtime/capture/build resource remains held.
+Continue this same full Q02 task after root supplies the accepted functional pin
+and resource release; preparation is not terminal performance acceptance.
+
 ## Basis and protected scope
 
 Traversal: supplied global/repository AGENTS → implementation/product-truth/QA
