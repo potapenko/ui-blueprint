@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G05 Web01a11983-223d-7a30-8334-573658f237fb и Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a active; disjoint Web/Native write sets. Git lease свободна. Core/Web прежние handles недоступны для continuation; saved source сохранён |
+| Активные чаты/пакеты/ресурсы | G06 Web01a11983-223d-7a30-8334-573658f237fb и G07 Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a active; disjoint Web/build-doc write sets. Git lease свободна. Прежние Core/Web archived, saved source сохранён |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | G05: real Director geometry через существующий Web CLI и воспроизводимый explicit-target Mac first-use example. P5 WIP сохранён; новая input работа отложена. Full P0–P7 scope сохраняется |
+| Следующий шаг | G06: точная причина actual Web role/name+geometry отказа. G07: одна воспроизводимая команда сборки текущих CLI/worker/helper. G05 Web/Mac результаты сохранены. P5 WIP сохранён; новая input работа отложена. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -556,3 +556,13 @@ for that actual combined-field refusal, keeping limits and passing geometry.
 Native G05 example positive run returned173.5×48pt/partial via existing public CLI;
 285.92ms singleObserve, ownF02/no identity-probe files,26.53s owned cleanup perauthor.
 Exact4 developer example/docs checkpoint pending; no source acceptance overstated.
+
+Native G05a9c2ff2ef42842b70333afc43543369354f447db saved/pushed exact4; helper
+metadata/error and missing/ambiguous-name checks plus one actual own-F02 example
+passed perauthor. [First-use instructions](../../development/native-helper.md)
+give explicit PID/name/binary paths without hand-written JSON. This is developer
+tooling, not installed release or new public CLI syntax. Git/runtime leases released.
+Same owner now runs [G07 local build](packets/G03-geometry-cli.md) from existing
+recipes; no product/source behavior or scope change. One command/build smoke only,
+no repeated UI/review. Web G06 remains active; current diagnostic is bounded static
+failure codes/counts in a temporary source copy, no raw UI or cap relaxation.

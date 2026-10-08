@@ -114,3 +114,23 @@ resource/count; a cross-owner defect returns the exact dependency. One affected
 focused check and actual changed/diagnostic case as needed; no blind retry/full
 suite. Owned cleanup repair allowed only for demonstrated failure. Checkpoint/push
 the finite result under a short Git lease, then stop.
+
+## G07 local selected-module build
+
+Native G05a9c2ff2 is saved. Approved P6/I01/ROADMAP allows earlier CLI delivery work;
+this finite shipping packet prepares the current geometry subset, not full I01/P7
+acceptance. Reuse existing build owner if present; otherwise one minimal root-level
+build entry may combine existing locked Rust web/macos and Swift helper recipes.
+One command must produce the current CLI/worker/helper in an explicitly supplied,
+already-existing directory. No global install/PATH change, implicit directory,
+dependency/toolchain/feature change, network download, signing or new public CLI.
+Preserve unrelated destination files and refuse conflicting artifacts safely.
+
+Native owns only necessary build entry, existing delivery/native developer guide
+and P01 receipt. Crate/product source/manifests, Web, fixtures and acquisition
+behavior protected. Current CLI@7, ROADMAP/BOUNDARIES@1, D01/D02@2/D07@5 and
+RUST/DEV.RUST@2 apply, with their explicit closure. An agent implementation choice
+cannot invent product behavior. Check one fresh system-temp build and produced
+binary local saved-fixture analysis/helper metadata smoke; no UI/review rerun.
+Return command/paths/prerequisites and exact limitation, scoped checkpoint+push,
+cleanup run-owned nonimage test output and stop. Native owner continues; no new chat.
