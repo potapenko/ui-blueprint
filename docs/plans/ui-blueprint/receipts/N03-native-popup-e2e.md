@@ -183,3 +183,14 @@ Swift6 helper SHA25671b5b0aa9d1e63ecfd409743353ae7682dc0d6b7d84bb48b30a1afebc4e6
 includes only the post-runtime invariant comment/indentation changes; no behavior
 delta. Changed Markdown links145 resolved, contract nodes≤100lines, Python syntax
 and git diff --check passed. No full workspace suite was necessary or claimed.
+
+Source checkpoint6ba77073fb85ce6a2e6b146b3ff27118446cecf2 pushed successfully to
+configured origin/master (GitHub reports repository rename redirect; no remote/key
+configuration changed). Own PID51336 verified by exact executable/run-dir, terminated,
+and absence confirmed; no task-root worker/helper/CLI remains. Native desktop lane
+is released. Removed659 task-owned non-image build/input/report/package files and
+verified uib-n03-1_3oeerr absent. Both image directories and all4 PNG/staging files
+remain, including originals; unrelated after-title-spacing.png remains untouched.
+No canonical export/source evidence was staged as a permanent run archive. The
+versioned source/harness/receipt are the Q01 handoff; independent runtime must use
+fresh own bindings. Final receipt checkpoint+push follows this cleanup record.
