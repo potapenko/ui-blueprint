@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G09 Export01a11286-a187-7720-a452-41b6ea7b228b active, owns export/narrow CLI. G07/G08 completed/pushed, Git/runtime leases released. Native и Web archived after result handoff; IDs/receipts сохранены для будущих пакетов |
+| Активные чаты/пакеты/ресурсы | G09 Export saved/pushed468c668, idle/frozen; one focused input/privacy source review ready for dispatch. Git/runtime leases released. G07/G08 completed; Native/Web archived, IDs/receipts retained |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | G09: observed canonical file → full document package through existing public export compiler. G07 one-command build and G08 generic Web first use saved. P5 WIP сохранён; input не блокирует geometry. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -607,3 +607,15 @@ actual active turn01a119a5-5c07-7d43-853d-5f11a3cdcb32 confirmed. Its previous
 necessary additive syntax registration before source. Full EXPORT/DRAWING route
 read by root; native/Web geometry and existing brief modes protected. No new chat,
 source-app operation, model call or changed goal scope; whole P0–P7 remains active.
+
+G09 source468c6686114c60d21a07501bc4ec426e88a711d7 saved/pushed exact12. Root read
+full new CLI-EXPORT@1 and CLI@8 delta/registry20, additive observed-file+caller
+metadata syntax selected before implementation; existing commands/wire protected.
+Author16 export binary tests/check/fmt/Clippy and actual saved F01 response→6-file
+package passed:32nodes/17relations/32known dimensions/4sheets/full A+B prompt,
+original source unchanged, partial/unknown/draft/unverified retained. One stale
+test assertion reconciled with accepted256f2a2 known-anchor behavior, not engine
+relaxation. Author proof is not independent acceptance. Input/privacy boundary
+receives one fresh read-only review of468c668 against8f7f456; no old numerical/UI/
+whole-suite review wave. Reviewer first inspects source/contracts, then author
+receipt. G09 owner frozen, ready for an exact repair only if actionable findings.
