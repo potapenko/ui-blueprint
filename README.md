@@ -21,4 +21,7 @@ The [distribution guide](docs/development/distribution.md) contains prerequisite
 examples, artifact layout, limitations and safe removal/recovery. See
 [CLI details](docs/development/cli.md), [dependency notices](THIRD_PARTY_NOTICES.md)
 and the [specification registry](docs/specs/README.md).
-Local delivery is available; integrated pilots and release acceptance remain separate.
+I02 verifies all four selections at product source `94724df`, including the Native
+session entry point and saved-data compare export. See the
+[I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current-distribution.md)
+for exact pins and limits. Integrated pilots and release acceptance remain separate.

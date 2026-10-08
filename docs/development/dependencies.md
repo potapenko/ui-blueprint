@@ -1,5 +1,15 @@
 # Resolved dependency inventory — T01 and S01 Stage A
 
+## I02 qualification (2026-10-08)
+
+Product pin `94724dfd412f966d3d7a90db29aec8be7e35d650` preserves the I01 Cargo.lock,
+all Cargo manifests and toolchain pin. The actual selected graph remains
+17 core / 18 Native / 39 Web and combined external normal/build crates.
+I02 reuses the scoped I01 license review and rechecks generated inventory/notice
+fingerprints; it introduces no dependency, license choice or toolchain update.
+See [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md) for
+actual build/verification evidence and the distinct product/recipe revisions.
+
 ## I01 local distribution inventory (2026-10-08)
 
 The local delivery procedure is now [distribution.py](../../distribution.py),

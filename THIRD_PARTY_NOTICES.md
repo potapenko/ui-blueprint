@@ -13,7 +13,8 @@ features as the binaries; dev-only jsonschema and its graph are not included.
 Build-time procedural macros are included conservatively; they are not runtime
 processes. Cargo metadata locates files but does not define the shipping graph.
 
-The inspected graph at product revision 82342f0 includes:
+The graph inspected for I01 at product revision 82342f0 and rechecked for I02
+at 94724df is unchanged (same lock, manifests and selected features). It includes:
 
 - Core: serde, serde_core, serde_derive, serde_json, itoa, memchr, zmij,
   proc-macro2, quote, syn, unicode-ident, schemars, schemars_derive,

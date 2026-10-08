@@ -2,7 +2,7 @@
 
 Build a selected set from one **committed** source revision. This is a local
 P6 delivery procedure, not a signed release or P7 acceptance. Saved-data analysis
-and document/proposal export run without a model, API keys, browser, Node or Swift.
+and document/proposal/comparison export run without a model, API keys, browser, Node or Swift.
 
 ## Prerequisites and selection
 
@@ -58,6 +58,12 @@ newer than `--revision`. Reproduce both the source pin and the recipe revision f
 this repository. Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
+I02 qualifies product source `94724dfd412f966d3d7a90db29aec8be7e35d650` with the
+recipe last changed at `6a5bec2` (including Native form session helper sources).
+Use that exact product pin to reproduce I02; `HEAD` selects whatever is committed
+when you run. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
+records module checks and the separate documentation/checkpoint revision.
+
 ## Flat artifact layout
 
 Everything is directly under the chosen directory; no package manager is needed:
@@ -109,6 +115,19 @@ Example byte/count limits are explicit example parameters, not production defaul
 Keep exports separately; the distribution manager never deletes them. Remove only
 your own non-image example outputs after use; retain any images and their folders.
 
+For saved-pair comparison, supply two canonical Snapshot/observed ChannelResponse
+files and explicit comparison metadata as described in [CLI export](cli.md).
+Use the same export limits as above, replacing both the `--brief FILE` and
+`--purpose document|propose` arguments with:
+
+```sh
+--before "$BEFORE" --after "$AFTER" --metadata "$COMPARE_METADATA" --purpose compare
+```
+
+The pair is analyzed locally. Comparison packages/receipts use version **0.2.0**;
+other exports retain **0.1.0**. Source coverage, unknown values and independent
+statuses remain explicit. No generated image or fresh observation is implied.
+
 ## Live use and matching components
 
 The CLI keeps its explicit paths and trusted connection/request grammar:
@@ -126,6 +145,23 @@ This build does not launch/discover an app/browser, grant AX/capture permission,
 collect UI or prepare action authority. Workers and helpers use the private owned
 FD protocol and are not standalone commands. Relocation requires updating explicit
 paths in your trusted connection, then verifying the bundle again.
+
+Native/combined also include the bounded `native-session` entry point:
+
+```sh
+"$BUNDLE/uiblueprint" native-session --connection "$CONNECTION" \
+  --worker "$BUNDLE/session-worker" --duration-ms 120000 \
+  --max-input-bytes 2097152 --max-output-bytes 524288
+```
+
+This requires an explicitly configured own-fixture `native_fixture` connection with
+AX channels1, helper `collection:"form"`, bounded session duration and exact form
+identifiers; see [Native session setup](native-helper.md#attached-native-forms-m02-n).
+Bounded stdin records name canonical request/source/expectation files. EOF ends
+owned resources; refs do not survive CLI exit. No UI access occurs merely by
+building or requesting `--help`. Core/Web refuse this command as unsupported.
+I02 checks entry/feature availability without attaching to UI; actual input,
+privacy and lifecycle acceptance remain separate Q01 responsibilities.
 
 Canonical input/version failures keep their existing exits: invalid/limit2,
 IO/internal1, unknown/incomplete4, unsupported5; check mismatch3. Observe can return

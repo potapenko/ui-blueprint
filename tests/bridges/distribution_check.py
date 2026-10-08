@@ -40,7 +40,11 @@ def smoke(bundle):
     assert 'Copyright notices for The Rust Standard Library' in (bundle / 'RUST_LIBRARY_NOTICES.html').read_text()
     call([sys.executable, bundle / 'distribution.py', 'verify', '--destination', bundle], env=env)
     cli, validator = bundle / 'uiblueprint', bundle / 'uiblueprint-validate'
-    call([cli, '--help'], env=env)
+    assert b'native-session --connection' in call([cli, '--help'], env=env).stdout
+    native = manifest['modules'] in ('native', 'combined')
+    entry = call([cli, 'native-session'], 2 if native else 5, env)
+    assert not entry.stdout
+    assert entry.stderr.strip() == (b'invalid_arguments' if native else b'unsupported_command')
     for name in ('snapshot', 'query', 'evaluation', 'expectation'):
         result = call([validator, '--max-bytes', '131072', bundle / f'example-{name}.json'], env=env)
         assert json.loads(result.stdout)['valid'] is True
@@ -66,13 +70,46 @@ def smoke(bundle):
             assert receipt['generated_image'] is False and receipt['status'] == 'package_written'
             assert set(p.name for p in (stage / purpose).iterdir()) == {
                 'manifest.json', 'drawing-brief.md', 'scene.json', 'dimensions.json', 'sheets.json', 'prompt.txt'}
+            assert receipt['result_version'] == '0.1.0'
+            assert json.loads((stage / purpose / 'manifest.json').read_text())['package_version'] == '0.1.0'
+        # Two saved synthetic observations, with one literal width change. No UI or model.
+        before = json.loads((bundle / 'example-snapshot.json').read_text())
+        after = json.loads(json.dumps(before))
+        after['artifact']['data']['nodes'][0]['properties'][0]['state']['value']['value']['shape']['value']['width'] = 34
+        (stage / 'after.json').write_text(json.dumps(after))
+        brief = json.loads((bundle / 'example-observed-brief.json').read_text())
+        side = {'title': 'Synthetic local geometry', 'state': 'saved fixture',
+                'scope': 'two authored rectangles', 'environment': 'synthetic fixture; no live collection',
+                'safe_source_reference': 'bundled analysis fixture', 'not_depicted': [],
+                'public_text_fields': []}
+        metadata = {'metadata': brief['metadata'], 'before': side, 'after': side,
+                    'geometry_space': 'local-form', 'different_basis': None}
+        (stage / 'compare-metadata.json').write_text(json.dumps(metadata))
+        result = call([cli, 'imagegen-prompt', '--before', bundle / 'example-snapshot.json',
+                       '--after', stage / 'after.json', '--metadata', stage / 'compare-metadata.json',
+                       '--purpose', 'compare', '--out', stage / 'compare',
+                       '--max-input-bytes', '1048576', '--max-output-bytes', '1048576',
+                       '--max-components', '100', '--max-views', '10',
+                       '--components-per-detail', '10', '--json'], env=env)
+        receipt = json.loads(result.stdout)
+        assert receipt['result_version'] == '0.2.0' and receipt['generated_image'] is False
+        assert json.loads((stage / 'compare' / 'manifest.json').read_text())['package_version'] == '0.2.0'
+        assert set(p.name for p in (stage / 'compare').iterdir()) == {
+            'manifest.json', 'drawing-brief.md', 'scene.json', 'dimensions.json', 'sheets.json', 'prompt.txt'}
+        scene = json.loads((stage / 'compare' / 'scene.json').read_text())
+        comparison = scene['comparison_results'][0]
+        assert comparison['omitted_entries'] == 0
+        assert any(e['field'] == 'layout_bounds' and e['content_changed'] for e in comparison['entries'])
+        geometry = next(g for g in comparison['geometry']
+                        if g['before_index'] == 0 and g['field'] == 'layout_bounds')
+        assert geometry['displacement'] == {'dx': 0, 'dy': 0, 'dwidth': 4, 'dheight': 0}
         missing = call([cli, 'measure', '--snapshot', stage / 'absent.json',
                         '--query', bundle / 'example-query.json', '--space', 'local-form', *limits], 1, env)
         assert not missing.stdout
     finally:
         dist.clean_stage(stage)
         assert not stage.exists()
-    print(f"PASS {manifest['modules']}: hashes/inventory, four validators, help, gap8, check-pass, two exports, missing input")
+    print(f"PASS {manifest['modules']}: hashes/inventory, four validators, Native entry/gate, gap8, check-pass, document/propose/compare, missing input")
 
 
 def safety():
