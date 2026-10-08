@@ -1030,3 +1030,50 @@ No binary products created yet for the dependent consumer. Source checkpoint-rea
 root may grant a coherent WIP save, then final affected checks on saved integration
 will produce one retained CLI/worker pair for Web's single actual public sequence.
 No full B02/P5/P7 or grouped risk acceptance claimed at this stage.
+
+### A05 saved integration checks and retained consumer pair
+
+Caller `a9ad665744e665b33b9a171cda67f90fde13c800` and Web/mechanical-host
+`5605206c2ee22a78d8fc4f83253307bde6ae0557` saved/pushed; checked source HEAD
+`0661359de7cdb4ce3299ed1a3083c54e8ecd9d70` combines both. No dirty crates/plugins/
+Cargo source, no source changes during checks. Concurrent Native Fixture.swift
+WIP was excluded and untouched. Web's W02 receipt separately attributes its
+5activation test functions/27cases and saved provider guards; not rerun by CLI.
+
+Rust1.96.0, locked/offline, one system-temp target throughout:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a05-products-rti2ca4z`.
+
+- `cargo build --locked --offline -p uiblueprint-cli -p uiblueprint-host --features web --bins`: pass.
+- `cargo test --locked --offline -p uiblueprint-cli --features web --test action_binary -- --skip forms_require_explicit_expectation_and_preserve_byte_budget_before_spawn`:4 passed,1 filtered.
+- `cargo test --locked --offline -p uiblueprint-cli --features web --bin uiblueprint action::supported::tests`:1 passed.
+- `cargo clippy --locked --offline -p uiblueprint-cli --features web --bin uiblueprint --test action_binary -- -D warnings`: pass.
+Each used the same --target-dir. Prior fmt passed on unchanged caller source.
+No new/repeated Core/shared-lane/provider/old FocusType suite or UI/API-only run.
+
+New activation test proves missing Expectation refuses2 before attach, exact
+aggregate fourth-file byte boundary, different caller result identity retained,
+and canonical valid intent reaching the absent-worker IO boundary. It is admission,
+not fresh binding/delivery proof. Existing selected tests preserve SetChecked
+syntax/bounds, strict connection handling, Activate/Pointer and Type/Setter refusal.
+Existing status table preserves outcome/ACK/effect/cleanup priorities without a
+new parser or metadata interpretation. Actual worker/private/result behavior is
+attributed to Web source tests and remains subject to the actual public consumer.
+
+172-input Rust map before/after equal:
+`2d80924030c52eb5b0b0bcee1ad1ce23974ea0e8b6d02fdbee142d90e9350f59`.
+Recipe unchanged: sorted compact JSON path→file-SHA256 map of root Cargo.toml/
+Cargo.lock/rust-toolchain.toml and every .rs/Cargo.toml recursively in crates/ and
+plugins/. Web/Native JS/Swift WIP cannot silently enter this Rust source identity.
+
+Immediate consumer artifacts, built once and retained until Web confirms copy/use:
+- `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a05-products-rti2ca4z/debug/uiblueprint`:
+  SHA256 `c5a9dc30a9adef5ba33a35a6351d7cc4f3f568cde97522f33d7e3beddfec80be`.
+- `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a05-products-rti2ca4z/debug/session-worker`:
+  SHA256 `6c9464c9d1b1b510850aa8bf4f82b166054212166d13a2e2b26b5b940e52c5b0`.
+
+Retention owner: CLI worker until Web's immediate consumption confirmation; then
+remove only this run's nonimage products/target. No images or actual UI created,
+no process/input lane held. Web owns the one actual public selection→apply and
+unexpected-stop proof. Caller checks are not that runtime result or grouped
+acceptance; full B02/P5/P7 remains separate. Documentation-only final save follows
+root's short grant on this receipt and developer CLI handoff; code stays frozen.

@@ -382,7 +382,10 @@ ACK/effect metadata, deadline/cleanup and post-Possible no-retry rules apply.
 The explicit caller must freshly observe unexpected transition/disabled Commit
 and stop with zero dependent Execute calls; no new scenario/batch runner exists.
 
-A05 source is a compiling-provider adaptation, awaiting saved Web/host-dependent
-checks and Web's one actual public selection→apply/unexpected-stop sequence.
-Prior accepted A03/A04 and geometry/export/neighbors remain protected; full B02/
-P5/P7 is not inferred from this port or its registration.
+A05 caller source a9ad665 and provider/host5605206 are saved. Their combined
+baseline0661359 passed Web-feature build, four affected action binary tests,
+status/ACK/cleanup test and affected Clippy; matching CLI/worker products are
+retained for Web's one actual public selection→apply/unexpected-stop sequence.
+That runtime consumer and grouped acceptance are pending here. Prior accepted
+A03/A04 and geometry/export/neighbors remain protected; full B02/P5/P7 is not
+inferred from this port, preflight checks or registration.
