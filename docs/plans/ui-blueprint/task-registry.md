@@ -54,6 +54,17 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Initial review и один owner repair
+
+Общая проверка завершила first observation без builder narrative. [Запись](receipts/finished-wave-review.md):
+Native7478af3/Graph9046671 без actionable finding, Webffe33e4 один P2 wrong-artifact
+Replay error mapping. Final acceptance ждёт reconciliation, не объявлена.
+Исходный W03-R чат01a11b4f-0b8d-70a2-9e5c-4f0e92b18965 восстановлен, repair running:
+worker_ops и отдельный focused regression/receipt, без B03 files и нового UI run.
+Reviewer01a11b64-7375-7160-b876-47068b8c29a7 idle awaiting saved repair+author
+receipts; не путать с пропавшим или зависшим исполнителем. После correction
+продолжить тот же review, не создавать другую сессию. Остальные tasks продолжаются.
+
 ## I01-L завершён
 
 Чат01a11b54-e32b-7ef2-a707-28d82677dfd5 terminal completed; saved/pushed
