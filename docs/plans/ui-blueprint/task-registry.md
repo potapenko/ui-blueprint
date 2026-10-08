@@ -54,6 +54,15 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Review group2: initial observations получены
+
+Reviewer01a11b7c-f321-70e2-b0ca-91f161b5d340 не нашёл actionable introduced
+findings на initial source pass четырёх saved commits. [Запись](receipts/export-popup-distribution-review.md).
+Ему же переданы author receipts только после собственной оценки; сейчас running
+final reconciliation. I01 source pin/E03 historical test debt/B03 WIP runtime/M03
+cold deadline и неполные qualification limits явно сохраняются. Нет новых audits
+или repair tasks без finding. M02-N/W04 продолжают реализацию самостоятельно.
+
 ## Текущие чаты следующей группы
 
 Все local, созданы на saved0f441db, active/inProgress подтверждено wait_threads:
