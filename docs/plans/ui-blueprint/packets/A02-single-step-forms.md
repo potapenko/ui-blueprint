@@ -64,3 +64,8 @@ Use changed-owner checks, not broad unchanged suites. No live browser/native run
 Record exact source/API handoff, proof and remaining host/provider dependencies in
 existing A01-execution-handoff receipt. Coherent checkpoint+push via short Git lease;
 protected changed-boundary review before live composition, no automatic next packet.
+
+Mechanical consumer amendment: Core also owns the single expired-budget
+resolve_exact callsite in plugins/web/tests/collector.rs to pass &Expectation,
+without test-semantic changes. Release this path and collector/action.rs to Web
+after the coherent API checkpoint. Web provider source waits for that release.
