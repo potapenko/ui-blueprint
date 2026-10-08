@@ -34,7 +34,7 @@ active/inProgress через wait_threads:
 
 | Задача | Чат | ID | Статус |
 | --- | --- | --- | --- |
-| W03-R | W03 — Web resync и full/delta | 01a11b4f-0b8d-70a2-9e5c-4f0e92b18965 | running, полный цикл |
+| W03-R | W03 — Web resync и full/delta | 01a11b4f-0b8d-70a2-9e5c-4f0e92b18965 | deliveredffe33e4, push; author live recovery/oracle, independent gate open |
 | M04-T | M04 — Native локальные координаты | 01a11b4f-110f-76b2-b2d0-28a478c1766a | delivered7478af3, push; scoped author checks/runtime, final independent gate open |
 | G13 | G13 — Сравнение структуры интерфейса | 01a11b4f-18db-7181-99de-8ae3892c5f20 | delivered9046671, push; 24checks/self-check, final independent gate open |
 
@@ -53,6 +53,18 @@ active/inProgress через wait_threads:
 Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; root также
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
+
+## W03-R завершён; следующая Web-задача
+
+W03-R terminal completed, ffe33e4f1ccd1f292e419bfa7bc6bd593fffb847/push.
+Исправлено Replay context-error mapping, author live TCP loss/explicit recovery/
+Target B/limits/history/cleanup и controlled full-delta oracle pass. Delta не
+обновляет Surface records: byte equality двух live captures не заявляется,
+сравнение source-state oracle контролируемое. Receipt принят в этой области,
+независимая проверка остаётся; full K02/P4/P7 не закрыты. Owner освобождён.
+Следующий целый task: [B03-G](packets/B03-popup-geometry.md), disjoint от
+Native/Export/Distribution. Одна групповая source review для saved M04-T/G13/W03-R
+может идти read-only параллельно; повтор неизменённых runtime не назначен.
 
 ## Текущие новые владельцы после передачи
 
