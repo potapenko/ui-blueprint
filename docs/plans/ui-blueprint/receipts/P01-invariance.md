@@ -244,3 +244,49 @@ scope before any fixture code/runtime; otherwise physical pointer mapping gap re
 No new fixture/build/event call/image/resource/source change now; append only this
 concise source-backed proposal. Existing accepted dimensions preserved, no M05 complete
 claim. Links/whitespace checked; later exact1 checkpoint via short Git lease.
+
+
+## Selected intrawindow synthetic profile — source candidate before runtime
+
+Root explicitly selected OWN intrawindow synthetic mouse routing/focus equivalence
+as next M05 profile under unchanged probe-hit invariance requirement. External CUA/
+WindowServer/physical-device mapping remains separate unproved evidence; no guarantee
+weakened or that gap labelled solved. Exact2 writes Fixture.swift and this receipt.
+No other source/collector/schema/host/public input capability, new directory/framework/
+dependency. Test-only compile guard P01_SAMPLE_HITS excludes adapter/task from ordinary
+fixture builds; PROBE remains the only off/on difference in measured UI instrumentation.
+
+WindowSetup.sampledPoints resolves unique visible own A and unique public NSAccessibility
+sample element within bounded160/depth9 own tree, reads its screen accessibilityFrame,
+converts midpoint with NSWindow.convertPoint(fromScreen:). Same code on off/on, no on-only
+probe frame or screenshot ratio. Outside content point5,5 converted via contentView
+convert(_:to:nil) to window base; both within content, outside excluded from sample
+rectangle. These are public platform conversions, no inferred global pointer mapping.
+
+Complete left down/up pair constructed with own live window number, actual associated
+window object equality, timestamp/number/clickCount; queued NSApplication.postEvent and
+return to existing app loop. No direct NSWindow.sendEvent, mouseDown/closure/AXPress/
+hitTest, global CGEvent, acceptsFirstMouse or visible AppKit UI. Source setup reuses
+expanded/count1/name focus and existing WindowSetup comparison; it doesn't claim input
+proof. Normal-event outcome independently reads existing SwiftUI activations/focus.
+
+Async test-only task saves phases before_inside/after_inside/after_outside to new
+run-owned sampled-mouse.json, current window ID/surface generation/base point, actual
+app/key/main, nullable SDK firstResponder/accessibility identifiers and explicit
+SwiftUI FocusState control mapping. Class recorded only diagnostically, not equated
+with focused control. Inside expects1→2, outside2→2; failed/unavailable reports failure,
+never probe regression by itself. Current window/points checked again between pairs.
+No infinite retry or alternate dispatch; actual event-loop tracking remains unqualified.
+
+Primary basis: Apple NSEvent location/windowNumber, NSAccessibilityProtocol screen
+frame, NSWindow screen conversion, NSView convert to window, NSApplication postEvent
+queue docs. Existing gesture/SwiftUI APIs register callbacks but do not supply this
+window event queue; narrow nonvisual AppKit test interoperability, UI still SwiftUI.
+Changed pair compiled cleanly within120s each; a property-vs-method SDK compiler error
+in focus accessor corrected before build proof. No runtime started or old Rust/AX/
+pixel/gap suite repeated. Build guard/error returns checked by source; runtime must
+prove actual routing rather than this plausibility. Source candidate ready exact2
+checkpoint+push before the authorized one bounded≤300s pair/cleanup5s. Per root no
+additional activation needed after save; no full M05/P7 acceptance now.
+
+Fixture candidate SHA256 7771a7d51dbbfd83c71a95fce23386ad3ef5fb8d096261cfeff8fd293fdd4386.

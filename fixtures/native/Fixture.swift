@@ -160,6 +160,51 @@ private struct Marker: ViewModifier {
                                       y: min(max(desired.y, visible.minY), visible.maxY - window.frame.height)))
         if comparison { window.makeKeyAndOrderFront(nil); NSApp.activate() }
     }
+
+    #if P01_SAMPLE_HITS
+    // Test-only public event-queue adapter; all visible content remains SwiftUI.
+    static func sampledPoints(role: String) throws -> (NSWindow, NSPoint, NSPoint) {
+        let windows = NSApp.windows.filter { $0.identifier?.rawValue == role && $0.isVisible }
+        guard windows.count == 1, let window = windows.first, window.windowNumber > 0,
+              let content = window.contentView else { throw NSError(domain: "p01_window", code: 1) }
+        var queue: [(Any, Int)] = [(window, 0)], seen: Set<ObjectIdentifier> = [], frames: [NSRect] = []
+        while !queue.isEmpty && seen.count < 160 {
+            let (value, depth) = queue.removeFirst()
+            guard seen.insert(ObjectIdentifier(value as AnyObject)).inserted,
+                  let element = value as? NSAccessibilityProtocol else { continue }
+            if element.accessibilityIdentifier() == "f02.sample.\(role)" { frames.append(element.accessibilityFrame()) }
+            if depth < 9, let children = element.accessibilityChildren() {
+                guard children.count <= 1280, queue.count + children.count + seen.count <= 160
+                else { throw NSError(domain: "p01_children", code: 2) }
+                queue.append(contentsOf: children.map { ($0, depth + 1) })
+            }
+        }
+        guard queue.isEmpty, frames.count == 1, let screenFrame = frames.first,
+              screenFrame.width > 0, screenFrame.height > 0 else { throw NSError(domain: "p01_sample", code: 3) }
+        let inside = window.convertPoint(fromScreen: NSPoint(x: screenFrame.midX, y: screenFrame.midY))
+        let outside = content.convert(NSPoint(x: content.bounds.minX + 5, y: content.bounds.minY + 5), to: nil)
+        let sampleInWindow = window.convertFromScreen(screenFrame)
+        guard inside.x.isFinite, inside.y.isFinite, outside.x.isFinite, outside.y.isFinite,
+              content.bounds.contains(content.convert(inside, from: nil)),
+              content.bounds.contains(content.convert(outside, from: nil)), !sampleInWindow.contains(outside)
+        else { throw NSError(domain: "p01_coordinates", code: 4) }
+        return (window, inside, outside)
+    }
+    static func postMousePair(window: NSWindow, point: NSPoint, number: Int) throws {
+        guard NSApp.windows.contains(where: { $0 === window }), window.isVisible, window.windowNumber > 0
+        else { throw NSError(domain: "p01_current_window", code: 5) }
+        let now = ProcessInfo.processInfo.systemUptime
+        guard let down = NSEvent.mouseEvent(with: .leftMouseDown, location: point, modifierFlags: [],
+            timestamp: now, windowNumber: window.windowNumber, context: nil, eventNumber: number,
+            clickCount: 1, pressure: 1),
+            let up = NSEvent.mouseEvent(with: .leftMouseUp, location: point, modifierFlags: [],
+            timestamp: now + 0.001, windowNumber: window.windowNumber, context: nil, eventNumber: number + 1,
+            clickCount: 1, pressure: 0), down.window === window, up.window === window
+        else { throw NSError(domain: "p01_event_binding", code: 6) }
+        NSApp.postEvent(down, atStart: false)
+        NSApp.postEvent(up, atStart: false)
+    }
+    #endif
 }
 private enum Field: String, Hashable { case name, secret, sample }
 private struct PilotView: View {
@@ -303,6 +348,9 @@ private struct PilotView: View {
         .padding(20).frame(width: wide ? 650 : 550)
         .coordinateSpace(name: "fixture")
         .defaultFocus($focus, .name)
+        #if P01_SAMPLE_HITS
+        .task { if role == "a" { await sampledMouseProfile() } }
+        #endif
         .onChange(of: popup) { _, _ in
             if !popup { measurements.popupContainingWindow = nil }
             let app = NSRunningApplication.current
@@ -361,6 +409,62 @@ private struct PilotView: View {
         }
         #endif
     }
+
+    #if P01_SAMPLE_HITS
+    @MainActor private func sampledMouseProfile() async {
+        var records: [[String: Any]] = []
+        func state(_ phase: String, window: NSWindow, point: NSPoint? = nil) -> [String: Any] {
+            let responder = window.firstResponder as? NSAccessibilityProtocol
+            let accessibilityFocus = NSApp.accessibilityFocusedUIElement as? NSAccessibilityProtocol
+            let declaredFocus = focus.map { field in
+                field == .sample ? "f02.sample.\(role)" : field == .name ? "f02.name" : "f02.secret"
+            }
+            var value: [String: Any] = ["phase": phase, "count": activations,
+                "swiftui_focus": focus?.rawValue ?? "none", "window_id": window.windowNumber,
+                "surface_generation": measurements.surfaceGeneration, "app_active": NSApp.isActive,
+                "window_key": window.isKeyWindow, "window_main": window.isMainWindow,
+                "first_responder_identifier": responder?.accessibilityIdentifier() as Any? ?? NSNull(),
+                "accessibility_focus_identifier": accessibilityFocus?.accessibilityIdentifier() as Any? ?? NSNull(),
+                "swiftui_focus_declared_control": declaredFocus as Any? ?? NSNull(),
+                "first_responder_class": window.firstResponder.map { String(describing: type(of: $0)) } ?? "none"]
+            if let point { value["point_window_base_pt"] = ["x": point.x, "y": point.y] }
+            return value
+        }
+        func save(_ status: String, error: String? = nil) {
+            var value: [String: Any] = ["profile": "own_intrawindow_synthetic_mouse", "status": status,
+                "dispatch": "NSApplication.postEvent_normal_run_loop", "records": records]
+            if let error { value["error"] = error }
+            if let bytes = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) {
+                try? bytes.write(to: runDirectory.appendingPathComponent("sampled-mouse.json"), options: .atomic)
+            }
+        }
+        do {
+            expanded = true; activations = 1; focus = .name
+            try await Task.sleep(for: .milliseconds(200))
+            WindowSetup.apply(role: role, comparison: true)
+            try await Task.sleep(for: .milliseconds(200))
+            publish()
+            let (window, inside, outside) = try WindowSetup.sampledPoints(role: role)
+            records.append(state("before_inside", window: window, point: inside))
+            save("running")
+            try WindowSetup.postMousePair(window: window, point: inside, number: 1)
+            try await Task.sleep(for: .milliseconds(200)) // Return to the existing app event loop.
+            publish()
+            records.append(state("after_inside", window: window, point: inside))
+            guard activations == 2 else { save("failed", error: "inside_count_not_plus_one"); return }
+            let (current, newInside, newOutside) = try WindowSetup.sampledPoints(role: role)
+            guard current === window, inside == newInside, outside == newOutside
+            else { save("failed", error: "window_or_points_changed"); return }
+            try WindowSetup.postMousePair(window: window, point: outside, number: 3)
+            try await Task.sleep(for: .milliseconds(200))
+            publish()
+            records.append(state("after_outside", window: window, point: outside))
+            save(activations == 2 ? "complete" : "failed", error: activations == 2 ? nil : "outside_count_changed")
+        } catch {
+            save("failed", error: String(describing: error))
+        }
+    }
+    #endif
 
     @MainActor private func publish() {
         let app = NSRunningApplication.current
