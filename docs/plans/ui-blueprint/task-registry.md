@@ -54,6 +54,23 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## W06 delivered; Q02/Q01 handoff
+
+W06source139d202b78a59d9017efaea1e55032f69f6468ac/final862572f0441eb69cb9eda2358f6b3d74b38e2c30
+pushed, terminal completed/archived; [receipt](receipts/W06-web-fidelity.md) и
+WEB-DOCUMENTS@1 прочитаны root полностью. Explicit Documents authority и raw
+focusable реализованы без schema/engine/Cargo/Native change. Author proof18requests,
+2Surfaces/97DOM/1102facts/19textboxes; raw10788B/canonical443366B, current512KiB cap.
+Fresh changed/restored, hostile/privacy/loader/foreign-frame refusals no publication;
+77collector/15lib/12host и Clippy pass, all5sessions cleaned. Independent/D06 pending.
+
+Q02 получил actual API/config/request/raw/canonical handoff и rebuild/offline
+adaptation. Retained /private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-e020gN
+нужен Q02 И Q01, cleanup только после обеих consumption. Q01 same verifier получил
+neutral production diff139d202 vs2d1eb5d/related contracts, initial assessment до
+W06 author narrative. Changed-scope source/privacy и scoped headless proof не
+зависят от Native foreground, а timed Q02 ждёт их release. Human gates прежние.
+
 ## W06 production owner
 
 «W06 — Web fidelity и полный fixture scope», local01a11cb3-7994-7b30-871b-69d5ae04b063,
