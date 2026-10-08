@@ -78,21 +78,7 @@ pub fn compare_recorded<'a>(
     validation::validate_snapshot(after).map_err(DiffError::InvalidSnapshot)?;
     // Recorded comparison spans layout/environment changes; Delta applicability
     // remains stricter. Both original environments/spaces remain in the result.
-    let a = &before.context;
-    let b = &after.context;
-    if a.schema_version != b.schema_version
-        || a.session_id != b.session_id
-        || a.target != b.target
-        || a.scope_id != b.scope_id
-        || a.projection != b.projection
-        || a.plugin != b.plugin
-        || a.surfaces.len() != b.surfaces.len()
-        || a.surfaces
-            .iter()
-            .any(|surface| !b.surfaces.contains(surface))
-        || a.fields.len() != b.fields.len()
-        || a.fields.iter().any(|field| !b.fields.contains(field))
-    {
+    if !sources_compatible(&before.context, &after.context) {
         return Err(DiffError::IncompatibleContext);
     }
     let mut total = Some(0usize);
@@ -260,4 +246,158 @@ fn same_evidence(
             }
             _ => false,
         })
+}
+
+fn sources_compatible(a: &Context, b: &Context) -> bool {
+    !(a.schema_version != b.schema_version
+        || a.session_id != b.session_id
+        || a.target != b.target
+        || a.scope_id != b.scope_id
+        || a.projection != b.projection
+        || a.plugin != b.plugin
+        || a.surfaces.len() != b.surfaces.len()
+        || a.surfaces
+            .iter()
+            .any(|surface| !b.surfaces.contains(surface))
+        || a.fields.len() != b.fields.len()
+        || a.fields.iter().any(|field| !b.fields.contains(field)))
+}
+
+/// Resolved factual frame on one side, retaining reached/contributing sources.
+#[derive(Clone, Debug, PartialEq)]
+pub enum ResolvedRect {
+    Known {
+        rect: Rect,
+        evidence: Vec<Evidence>,
+    },
+    Unknown {
+        reason: crate::UnknownReason,
+        evidence: Vec<Evidence>,
+    },
+}
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct RectDisplacement {
+    pub dx: f64,
+    pub dy: f64,
+    pub dwidth: f64,
+    pub dheight: f64,
+}
+/// Original records remain borrowed; numerical frames are in one explicit Space.
+pub struct GeometryDifference<'a> {
+    pub before: &'a Snapshot,
+    pub after: &'a Snapshot,
+    pub key: &'a SourceKey,
+    pub frame_kind: FrameKind,
+    pub before_evaluation: &'a uiblueprint_schema::analysis::EvaluationInput,
+    pub after_evaluation: &'a uiblueprint_schema::analysis::EvaluationInput,
+    pub before_geometry: ResolvedRect,
+    pub after_geometry: ResolvedRect,
+    pub displacement: Option<RectDisplacement>,
+}
+/// Compare one exact frame with independently bound sourced transforms.
+/// # Errors
+/// Invalid sources/evaluations, incompatible source/result Spaces, malformed
+/// mappings or nonfinite calculations refuse. Missing facts remain typed unknown.
+pub fn compare_geometry<'a>(
+    before: &'a Snapshot,
+    after: &'a Snapshot,
+    key: &'a SourceKey,
+    frame_kind: FrameKind,
+    before_input: &'a uiblueprint_schema::analysis::EvaluationInput,
+    after_input: &'a uiblueprint_schema::analysis::EvaluationInput,
+) -> Result<GeometryDifference<'a>, crate::GeometryError> {
+    use crate::{GeometryError, finite};
+    use uiblueprint_schema::analysis::validate_bound_evaluation;
+    validation::validate_snapshot(before).map_err(GeometryError::InvalidInput)?;
+    validation::validate_snapshot(after).map_err(GeometryError::InvalidInput)?;
+    validate_bound_evaluation(before, before_input).map_err(GeometryError::InvalidInput)?;
+    validate_bound_evaluation(after, after_input).map_err(GeometryError::InvalidInput)?;
+    if !sources_compatible(&before.context, &after.context)
+        || before_input.result_space != after_input.result_space
+    {
+        return Err(GeometryError::InvalidInput(
+            ValidationError::IncompatibleContext,
+        ));
+    }
+    if let (Some(a), Some(b)) = (
+        before.nodes.iter().find(|n| &n.key == key),
+        after.nodes.iter().find(|n| &n.key == key),
+    ) && a.surface != b.surface
+    {
+        return Err(GeometryError::InvalidInput(
+            ValidationError::IncompatibleContext,
+        ));
+    }
+    let old = resolve_geometry(before, key, frame_kind, before_input)?;
+    let new = resolve_geometry(after, key, frame_kind, after_input)?;
+    let displacement = match (&old, &new) {
+        (ResolvedRect::Known { rect: a, .. }, ResolvedRect::Known { rect: b, .. }) => {
+            Some(RectDisplacement {
+                dx: finite(b.x - a.x)?,
+                dy: finite(b.y - a.y)?,
+                dwidth: finite(b.width - a.width)?,
+                dheight: finite(b.height - a.height)?,
+            })
+        }
+        _ => None,
+    };
+    Ok(GeometryDifference {
+        before,
+        after,
+        key,
+        frame_kind,
+        before_evaluation: before_input,
+        after_evaluation: after_input,
+        before_geometry: old,
+        after_geometry: new,
+        displacement,
+    })
+}
+fn resolve_geometry(
+    snapshot: &Snapshot,
+    key: &SourceKey,
+    frame_kind: FrameKind,
+    input: &uiblueprint_schema::analysis::EvaluationInput,
+) -> Result<ResolvedRect, crate::GeometryError> {
+    use crate::{EvaluationContext, resolve};
+    let mut evidence = Vec::new();
+    let field = match frame_kind {
+        FrameKind::LayoutBounds => Field::LayoutBounds,
+        FrameKind::AccessibilityBounds => Field::AccessibilityBounds,
+        FrameKind::HitRegion => Field::HitRegion,
+        FrameKind::VisibleRegion => Field::VisibleRegion,
+        FrameKind::PaintBounds => Field::PaintBounds,
+    };
+    let property = snapshot
+        .nodes
+        .iter()
+        .find(|n| &n.key == key)
+        .and_then(|n| n.properties.iter().find(|p| p.field() == field));
+    let source_space = property
+        .and_then(Property::known)
+        .and_then(|v| {
+            if let Value::Geometry(g) = v {
+                Some(g.coordinate_space.clone())
+            } else {
+                None
+            }
+        })
+        .unwrap_or_else(|| input.result_space.clone());
+    let anchor = Anchor {
+        element: key.clone(),
+        frame_kind,
+        coordinate_space: source_space,
+        fraction: 0.0,
+        axis: Id("x".into()),
+    };
+    let context = EvaluationContext {
+        space: &input.result_space,
+        transforms: &input.transforms,
+        conditions: input.conditions.as_ref().map(|c| (&c.values, &c.evidence)),
+    };
+    // Preserve the existing resolver's precise availability/binding/evidence rules.
+    match resolve::rect(snapshot, &anchor, &context, &mut evidence)? {
+        Ok(rect) => Ok(ResolvedRect::Known { rect, evidence }),
+        Err(reason) => Ok(ResolvedRect::Unknown { reason, evidence }),
+    }
 }

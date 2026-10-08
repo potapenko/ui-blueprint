@@ -352,3 +352,144 @@ fn environment_changes_are_attributed_records_while_delta_compatibility_stays_st
     // Only original records are returned; no converted value/displacement exists.
     assert_eq!(b.coordinate_space.id.0, "other-recorded-space");
 }
+
+fn evaluation(s: &Snapshot, space: Space) -> uiblueprint_schema::analysis::EvaluationInput {
+    uiblueprint_schema::analysis::EvaluationInput {
+        snapshot_id: s.id.clone(),
+        revision: s.revision,
+        context: s.context.clone(),
+        result_space: space,
+        transforms: vec![],
+        conditions: None,
+    }
+}
+fn translated(s: &mut Snapshot, from: &Space, to: &Space, x: f64, y: f64, tx: f64, ty: f64) {
+    let Property::Requested { evidence, .. } = &s.nodes[0].properties[0] else {
+        panic!("source")
+    };
+    let transform = Transform {
+        from: from.clone(),
+        to: to.clone(),
+        affine: [1.0, 0.0, 0.0, 1.0, tx, ty],
+        target: s.context.target.clone(),
+        surface: s.nodes[0].surface.clone(),
+        environment_revision: s.context.environment_revision.clone(),
+        evidence: evidence.clone(),
+    };
+    let g = geometry(s);
+    g.coordinate_space = from.clone();
+    g.transform = TransformState::Known {
+        transform: Box::new(transform),
+    };
+    let Shape::Rect(r) = &mut g.shape else {
+        panic!("rect")
+    };
+    r.x = x;
+    r.y = y;
+}
+#[test]
+fn geometry_comparison_separates_sourced_window_and_scroll_motion_from_rect_changes() {
+    use uiblueprint_engine::diff::{ResolvedRect, compare_geometry};
+    for scroll in [false, true] {
+        let mut a = source();
+        let mut b = a.clone();
+        b.context.environment_revision = Id("after-environment".into());
+        let mut original = geometry(&mut a).coordinate_space.clone();
+        original.id = Id(if scroll { "viewport" } else { "screen" }.into());
+        original.kind = if scroll {
+            SpaceKind::Viewport
+        } else {
+            SpaceKind::Screen
+        };
+        let mut local = original.clone();
+        local.id = Id(if scroll { "document" } else { "window-local" }.into());
+        local.kind = if scroll {
+            SpaceKind::Document
+        } else {
+            SpaceKind::Local
+        };
+        if scroll {
+            translated(&mut a, &original, &local, 10.0, 100.0, 0.0, 0.0);
+            translated(&mut b, &original, &local, 10.0, 50.0, 0.0, 50.0);
+        } else {
+            translated(&mut a, &original, &local, 110.0, 20.0, -100.0, 0.0);
+            translated(&mut b, &original, &local, 210.0, 20.0, -200.0, 0.0);
+        }
+        let originals = (a.clone(), b.clone());
+        let key = a.nodes[0].key.clone();
+        let old = evaluation(&a, original.clone());
+        let new = evaluation(&b, original);
+        let screen = compare_geometry(&a, &b, &key, FrameKind::LayoutBounds, &old, &new).unwrap();
+        assert_eq!(
+            if scroll {
+                screen.displacement.unwrap().dy
+            } else {
+                screen.displacement.unwrap().dx
+            },
+            if scroll { -50.0 } else { 100.0 }
+        );
+        let old = evaluation(&a, local.clone());
+        let new = evaluation(&b, local.clone());
+        let resolved = compare_geometry(&a, &b, &key, FrameKind::LayoutBounds, &old, &new).unwrap();
+        let delta = resolved.displacement.unwrap();
+        assert_eq!(
+            (delta.dx, delta.dy, delta.dwidth, delta.dheight),
+            (0.0, 0.0, 0.0, 0.0)
+        );
+        assert!(
+            matches!(&resolved.before_geometry,ResolvedRect::Known{evidence,..} if !evidence.is_empty())
+        );
+        assert_eq!((a.clone(), b.clone()), originals);
+        width(&mut b, 48.0);
+        let new = evaluation(&b, local);
+        assert_eq!(
+            compare_geometry(&a, &b, &key, FrameKind::LayoutBounds, &old, &new)
+                .unwrap()
+                .displacement
+                .unwrap()
+                .dwidth,
+            18.0
+        );
+    }
+}
+#[test]
+fn geometric_unknown_mapping_never_becomes_zero_and_wrong_bindings_refuse() {
+    use uiblueprint_engine::{
+        GeometryError, UnknownReason,
+        diff::{ResolvedRect, compare_geometry},
+    };
+    let mut a = source();
+    let b = a.clone();
+    let key = a.nodes[0].key.clone();
+    let own = geometry(&mut a).coordinate_space.clone();
+    let mut local = own.clone();
+    local.id = Id("missing-local-path".into());
+    let old = evaluation(&a, local.clone());
+    let new = evaluation(&b, local);
+    let result = compare_geometry(&a, &b, &key, FrameKind::LayoutBounds, &old, &new).unwrap();
+    assert!(result.displacement.is_none());
+    assert!(matches!(
+        result.before_geometry,
+        ResolvedRect::Unknown {
+            reason: UnknownReason::MissingTransform,
+            ..
+        }
+    ));
+    let mut bad = new.clone();
+    bad.snapshot_id = Id("wrong".into());
+    assert!(compare_geometry(&a, &b, &key, FrameKind::LayoutBounds, &old, &bad).is_err());
+    bad = new.clone();
+    bad.result_space.units = Unit::Pt;
+    assert!(matches!(
+        compare_geometry(&a, &b, &key, FrameKind::LayoutBounds, &old, &bad),
+        Err(GeometryError::InvalidInput(
+            validation::ValidationError::IncompatibleContext
+        ))
+    ));
+    let mut other = b.clone();
+    other.context.surfaces[0].generation = Id("other".into());
+    other.nodes[0].surface = other.context.surfaces[0].clone();
+    other.nodes[1].surface = other.context.surfaces[0].clone();
+    let input = evaluation(&other, own);
+    assert!(compare_geometry(&a, &other, &key, FrameKind::LayoutBounds, &old, &input).is_err());
+}

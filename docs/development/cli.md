@@ -137,6 +137,11 @@ the product does not import it. Existing measure/check/export paths are unchange
 
 ## Recorded node/property differences
 
+For an explicit sourced result Space, [geometry diff](diff.md#opt-in-geometry-in-a-selected-space)
+adds `--geometry --ref SOURCE_KEY_JSON --frame-kind KIND --space ID` instead of
+`--max-entries`; optional per-side evaluation files follow existing analysis binding.
+It reports resolved rectangles/displacement or unknown, preserving raw mode below.
+
 ```text
 uiblueprint diff --before BEFORE.json --after AFTER.json --max-input-bytes 65536 --max-output-bytes 65536 --max-entries 100 [--json]
 ```

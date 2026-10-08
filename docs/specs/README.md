@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 24.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 26.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -21,13 +21,11 @@ not a requirement to reread both full originals for each task. Read selected
 leaves completely and follow explicit `Requires`; follow additional task routes
 only when their trigger applies. Catalog/reference links do not authorize work
 in another project or import all upstream contracts.
-
 `UIB.ROUTING.SCOPE`: [PLAN.UIB@1](../plans/ui-blueprint-development.md) was
 approved and launched; exact approval and original commit are preserved in the
 [task registry](../plans/ui-blueprint/task-registry.md). Root is coordination-only;
 finite workers implement/review within packets. Approval covers P0–P7, not F1–F4,
 mobile implementations or unrelated products. Plan status is not runtime evidence.
-
 Historical authority delta `UIB-AUTH-001`: Draft 1.3 / Draft 1.0 → Active 1.4 / 1.1
 on user confirmation; no wire schema or released behavior changed. Field-level
 `draft` and historical statements remain meaningful. C00 adds routing only.
@@ -70,6 +68,8 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `A04-CLI-001`: [CLI@10](product/cli.md)/[CLI-ACTIONS@2](product/cli-actions.md) connects Web Focus/Type to explicit canonical Expectation input under P5/P6; legacy SetChecked, geometry, authority/effect/ACK and canonical versions unchanged.
 `A05-CLI-001`: [CLI@11](product/cli.md)/[CLI-ACTIONS@3](product/cli-actions.md) adds the compiling Web native-button Activate port with explicit independently held public result identity under P5/P6; existing transport/permissions/canonical versions and other commands preserved.
 `G11-COMPONENT-001`: [CLI@12](product/cli.md) extends compact design inspect with reported component members/properties and attributed context under [G11 packet](../plans/ui-blueprint/packets/G02-scope.md#g11-component-parts-through-existing-design-inspect--2026-10-08). Existing JSON1.0.0/graph/identity/neighbor meaning unchanged; registration precedes source acceptance.
+`G12-GEOMETRY-DIFF-001`: [CLI@13](product/cli.md)/[CLI-GEOMETRY-DIFF@1](product/cli-geometry-diff.md) adds explicit selected-space rect comparison under [G12](../plans/ui-blueprint/packets/G02-recorded-diff.md#g12-geometry-comparison-in-a-selected-space--2026-10-08), preserving raw JSON1.0.0/core/analysis/arithmetic/cache.
+`M05-COMPOSITION-001`: [EXCHANGE@2](product/exchange.md#uibexchangecomposition--explicit-axprobe-design-response)/[D03@3](development/decisions/d03-data.md) registers probe-wrapper/design/exact AX+probe observations and per-nested-channel request/session Supported-or-Partial authorization under [S01-native-proof M05](../plans/ui-blueprint/packets/S01-native-proof.md); homogeneous replies/126goldens/wire preserved.
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.

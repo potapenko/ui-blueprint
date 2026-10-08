@@ -2,19 +2,42 @@ use crate::Failure;
 use std::{ffi::OsString, path::PathBuf};
 use uiblueprint_schema::model::Projection;
 
+pub(crate) enum DiffMode {
+    Raw {
+        max_entries: usize,
+    },
+    Geometry {
+        reference: String,
+        frame_kind: uiblueprint_schema::model::FrameKind,
+        space: String,
+        before_evaluation: Option<PathBuf>,
+        after_evaluation: Option<PathBuf>,
+    },
+}
 pub(crate) struct DiffArguments {
     pub before: PathBuf,
     pub after: PathBuf,
     pub max_input: usize,
     pub max_output: usize,
-    pub max_entries: usize,
+    pub mode: DiffMode,
     pub json: bool,
 }
 impl DiffArguments {
     pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
-        let (mut before, mut after, mut max_input, mut max_output, mut max_entries) =
-            (None, None, None, None, None);
-        let mut json = false;
+        use uiblueprint_schema::model::FrameKind;
+        let (
+            mut before,
+            mut after,
+            mut input,
+            mut output,
+            mut entries,
+            mut reference,
+            mut kind,
+            mut space,
+            mut before_evaluation,
+            mut after_evaluation,
+        ) = (None, None, None, None, None, None, None, None, None, None);
+        let (mut json, mut geometry) = (false, false);
         let invalid = Failure::invalid("invalid_arguments");
         while let Some(flag) = args.next() {
             if flag == "--json" {
@@ -24,16 +47,21 @@ impl DiffArguments {
                 json = true;
                 continue;
             }
+            if flag == "--geometry" {
+                if geometry {
+                    return Err(invalid);
+                }
+                geometry = true;
+                continue;
+            }
             let value = args.next().ok_or(invalid)?;
             match flag.to_str() {
                 Some("--before") if before.is_none() => before = Some(PathBuf::from(value)),
                 Some("--after") if after.is_none() => after = Some(PathBuf::from(value)),
-                Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
-                Some("--max-output-bytes") if max_output.is_none() => {
-                    max_output = Some(limit(value)?)
-                }
-                Some("--max-entries") if max_entries.is_none() => {
-                    max_entries = Some(
+                Some("--max-input-bytes") if input.is_none() => input = Some(limit(value)?),
+                Some("--max-output-bytes") if output.is_none() => output = Some(limit(value)?),
+                Some("--max-entries") if entries.is_none() => {
+                    entries = Some(
                         value
                             .to_str()
                             .filter(|s| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit()))
@@ -41,15 +69,63 @@ impl DiffArguments {
                             .ok_or(invalid)?,
                     )
                 }
+                Some("--ref") if reference.is_none() => {
+                    reference = Some(value.into_string().map_err(|_| invalid)?)
+                }
+                Some("--space") if space.is_none() => {
+                    space = Some(value.into_string().map_err(|_| invalid)?)
+                }
+                Some("--frame-kind") if kind.is_none() => {
+                    kind = Some(match value.to_str() {
+                        Some("layout_bounds") => FrameKind::LayoutBounds,
+                        Some("accessibility_bounds") => FrameKind::AccessibilityBounds,
+                        Some("hit_region") => FrameKind::HitRegion,
+                        Some("visible_region") => FrameKind::VisibleRegion,
+                        Some("paint_bounds") => FrameKind::PaintBounds,
+                        _ => return Err(Failure::unsupported("unsupported_frame_kind")),
+                    })
+                }
+                Some("--before-evaluation") if before_evaluation.is_none() => {
+                    before_evaluation = Some(PathBuf::from(value))
+                }
+                Some("--after-evaluation") if after_evaluation.is_none() => {
+                    after_evaluation = Some(PathBuf::from(value))
+                }
                 _ => return Err(invalid),
             }
         }
+        let mode = if geometry {
+            if entries.is_some() {
+                return Err(invalid);
+            }
+            DiffMode::Geometry {
+                reference: reference.ok_or(invalid)?,
+                frame_kind: kind.ok_or(invalid)?,
+                space: space
+                    .filter(|s| !s.is_empty() && s.chars().count() <= 256)
+                    .ok_or(invalid)?,
+                before_evaluation,
+                after_evaluation,
+            }
+        } else {
+            if reference.is_some()
+                || kind.is_some()
+                || space.is_some()
+                || before_evaluation.is_some()
+                || after_evaluation.is_some()
+            {
+                return Err(invalid);
+            }
+            DiffMode::Raw {
+                max_entries: entries.ok_or(invalid)?,
+            }
+        };
         Ok(Self {
             before: before.ok_or(invalid)?,
             after: after.ok_or(invalid)?,
-            max_input: max_input.ok_or(invalid)?,
-            max_output: max_output.ok_or(invalid)?,
-            max_entries: max_entries.ok_or(invalid)?,
+            max_input: input.ok_or(invalid)?,
+            max_output: output.ok_or(invalid)?,
+            mode,
             json,
         })
     }

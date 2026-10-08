@@ -11,8 +11,8 @@ mod observe;
 mod output;
 
 use arguments::{
-    ActionArguments, Arguments, Command, DiffArguments, InspectArguments, NeighborArguments,
-    ResultVersion,
+    ActionArguments, Arguments, Command, DiffArguments, DiffMode, InspectArguments,
+    NeighborArguments, ResultVersion,
 };
 use std::{
     io::{self, Write},
@@ -23,6 +23,7 @@ use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
 Diff: uiblueprint diff --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
+Geometry diff: diff --geometry --before FILE --after FILE --ref SOURCE_KEY_JSON --frame-kind KIND --space ID --max-input-bytes N --max-output-bytes N [--before-evaluation FILE] [--after-evaluation FILE] [--json]\n\
 Diff reports recorded node/property differences; missing records do not imply deletion. Entry cap0 is allowed; complete report0, truncated/context mismatch4.\n\
 Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N\n\
 Observe needs a selected macos/web build and explicit trusted connection; emits committed canonical NDJSON and cleans only owned workers/helpers.\n\
@@ -199,12 +200,43 @@ fn execute_neighbors(args: NeighborArguments) -> Result<(Vec<u8>, u8), Failure> 
     Ok((output::neighbors(&args, &view)?, 0))
 }
 fn execute_diff(args: DiffArguments) -> Result<(Vec<u8>, u8), Failure> {
+    if let DiffMode::Geometry { frame_kind, .. } = &args.mode {
+        let input = input::load_geometry_diff(&args)?;
+        let result = engine::diff::compare_geometry(
+            &input.before,
+            &input.after,
+            &input.key,
+            *frame_kind,
+            &input.before_evaluation,
+            &input.after_evaluation,
+        )
+        .map_err(|error| match error {
+            engine::GeometryError::InvalidInput(
+                validation::ValidationError::IncompatibleContext,
+            ) => Failure {
+                code: "context_mismatch",
+                exit: 4,
+            },
+            engine::GeometryError::NonFiniteCalculation => Failure {
+                code: "invalid_geometry",
+                exit: 1,
+            },
+            _ => Failure::invalid("invalid_geometry"),
+        })?;
+        return Ok((
+            output::geometry_diff(&args, &result)?,
+            if result.displacement.is_some() { 0 } else { 4 },
+        ));
+    }
+    let DiffMode::Raw { max_entries } = &args.mode else {
+        unreachable!("geometry handled above")
+    };
     let (before, after) = input::load_diff(&args)?;
     let result = engine::diff::compare_recorded(
         &before,
         &after,
         engine::diff::DiffLimits {
-            max_entries: args.max_entries,
+            max_entries: *max_entries,
         },
     )
     .map_err(|error| match error {

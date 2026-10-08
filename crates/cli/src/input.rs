@@ -1,6 +1,6 @@
 use crate::{
     Failure,
-    arguments::{Arguments, DiffArguments, InspectArguments, QueryFile},
+    arguments::{Arguments, DiffArguments, DiffMode, InspectArguments, QueryFile},
 };
 use std::{
     fs::{self, File},
@@ -106,34 +106,8 @@ pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
             (*query, None)
         }
     };
-    let supplied = if let Some(path) = &args.evaluation {
-        let document = AnalysisDocument::from_json(&read(path, &mut remaining)?, args.max_input)
-            .map_err(|_| Failure::invalid("invalid_input"))?;
-        let AnalysisArtifact::EvaluationInput(input) = document.artifact else {
-            return Err(Failure::invalid("invalid_input"));
-        };
-        Some(*input)
-    } else {
-        None
-    };
-    let selected = space(&snapshot, &query, supplied.as_ref(), &args.space)?;
-    let evaluation = if let Some(input) = supplied {
-        if input.result_space != selected {
-            return Err(Failure::invalid("invalid_input"));
-        }
-        input
-    } else {
-        EvaluationInput {
-            snapshot_id: snapshot.id.clone(),
-            revision: snapshot.revision,
-            context: snapshot.context.clone(),
-            result_space: selected,
-            transforms: vec![],
-            conditions: None,
-        }
-    };
-    validate_bound_evaluation(&snapshot, &evaluation)
-        .map_err(|_| Failure::invalid("invalid_input"))?;
+    let supplied = read_evaluation(args.evaluation.as_deref(), &mut remaining, args.max_input)?;
+    let evaluation = evaluation_for(&snapshot, &query.anchors, supplied, &args.space)?;
     Ok(Loaded {
         snapshot,
         query,
@@ -150,11 +124,11 @@ fn transform_spaces<'a>(transform: &'a TransformState, spaces: &mut Vec<&'a Spac
 }
 fn space(
     snapshot: &Snapshot,
-    query: &GeometryQuery,
+    anchors: &[Anchor],
     evaluation: Option<&EvaluationInput>,
     id: &str,
 ) -> Result<Space, Failure> {
-    let mut candidates: Vec<_> = query.anchors.iter().map(|a| &a.coordinate_space).collect();
+    let mut candidates: Vec<_> = anchors.iter().map(|a| &a.coordinate_space).collect();
     for node in &snapshot.nodes {
         for property in &node.properties {
             match property.known() {
@@ -182,4 +156,83 @@ fn space(
         return Err(Failure::invalid("ambiguous_space"));
     }
     Ok(selected.clone())
+}
+
+pub(crate) struct GeometryDiffInput {
+    pub before: Snapshot,
+    pub after: Snapshot,
+    pub key: SourceKey,
+    pub before_evaluation: EvaluationInput,
+    pub after_evaluation: EvaluationInput,
+}
+pub(crate) fn load_geometry_diff(args: &DiffArguments) -> Result<GeometryDiffInput, Failure> {
+    let DiffMode::Geometry {
+        reference,
+        space,
+        before_evaluation,
+        after_evaluation,
+        ..
+    } = &args.mode
+    else {
+        return Err(Failure::invalid("invalid_arguments"));
+    };
+    let mut remaining = args
+        .max_input
+        .checked_sub(reference.len())
+        .ok_or(Failure::invalid("input_limit"))?;
+    let key = serde_json::from_str::<SourceKey>(reference)
+        .map_err(|_| Failure::invalid("invalid_input"))?;
+    let before = read_snapshot(&args.before, &mut remaining, args.max_input)?;
+    let after = read_snapshot(&args.after, &mut remaining, args.max_input)?;
+    let old = read_evaluation(before_evaluation.as_deref(), &mut remaining, args.max_input)?;
+    let new = read_evaluation(after_evaluation.as_deref(), &mut remaining, args.max_input)?;
+    let before_evaluation = evaluation_for(&before, &[], old, space)?;
+    let after_evaluation = evaluation_for(&after, &[], new, space)?;
+    Ok(GeometryDiffInput {
+        before,
+        after,
+        key,
+        before_evaluation,
+        after_evaluation,
+    })
+}
+fn read_evaluation(
+    path: Option<&Path>,
+    remaining: &mut usize,
+    limit: usize,
+) -> Result<Option<EvaluationInput>, Failure> {
+    let Some(path) = path else {
+        return Ok(None);
+    };
+    let doc = AnalysisDocument::from_json(&read(path, remaining)?, limit)
+        .map_err(|_| Failure::invalid("invalid_input"))?;
+    let AnalysisArtifact::EvaluationInput(input) = doc.artifact else {
+        return Err(Failure::invalid("invalid_input"));
+    };
+    Ok(Some(*input))
+}
+fn evaluation_for(
+    snapshot: &Snapshot,
+    anchors: &[Anchor],
+    supplied: Option<EvaluationInput>,
+    id: &str,
+) -> Result<EvaluationInput, Failure> {
+    let selected = space(snapshot, anchors, supplied.as_ref(), id)?;
+    let input = if let Some(input) = supplied {
+        if input.result_space != selected {
+            return Err(Failure::invalid("invalid_input"));
+        }
+        input
+    } else {
+        EvaluationInput {
+            snapshot_id: snapshot.id.clone(),
+            revision: snapshot.revision,
+            context: snapshot.context.clone(),
+            result_space: selected,
+            transforms: vec![],
+            conditions: None,
+        }
+    };
+    validate_bound_evaluation(snapshot, &input).map_err(|_| Failure::invalid("invalid_input"))?;
+    Ok(input)
 }

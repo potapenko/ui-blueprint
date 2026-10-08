@@ -669,3 +669,104 @@ pub(crate) fn neighbors(
     }
     Ok(buffer.bytes)
 }
+
+pub(crate) fn geometry_diff(
+    args: &DiffArguments,
+    result: &uiblueprint_engine::diff::GeometryDifference<'_>,
+) -> Result<Vec<u8>, Failure> {
+    use uiblueprint_engine::diff::ResolvedRect;
+    let mut buffer = Bounded::new(args.max_output);
+    if args.json {
+        buffer.write_all(b"{\"output_version\":\"1.0.0\",\"kind\":\"geometry_difference\",\"source\":\"saved\",\"live_revalidated\":false,\"selector\":").map_err(|_|buffer.error())?;
+        serde_json::to_writer(&mut buffer, result.key).map_err(|_| buffer.error())?;
+        buffer
+            .write_all(b",\"frame_kind\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, &result.frame_kind).map_err(|_| buffer.error())?;
+        for (label, snapshot) in [("before", result.before), ("after", result.after)] {
+            write!(buffer, ",\"{label}\":").map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, snapshot).map_err(|_| buffer.error())?;
+        }
+        for (label, input) in [
+            ("before_evaluation", result.before_evaluation),
+            ("after_evaluation", result.after_evaluation),
+        ] {
+            write!(buffer, ",\"{label}\":").map_err(|_| buffer.error())?;
+            serde_json::to_writer(&mut buffer, input).map_err(|_| buffer.error())?;
+        }
+        buffer
+            .write_all(b",\"result_space\":")
+            .map_err(|_| buffer.error())?;
+        serde_json::to_writer(&mut buffer, &result.before_evaluation.result_space)
+            .map_err(|_| buffer.error())?;
+        for (label, geometry) in [
+            ("before_geometry", &result.before_geometry),
+            ("after_geometry", &result.after_geometry),
+        ] {
+            write!(buffer, ",\"{label}\":").map_err(|_| buffer.error())?;
+            match geometry {
+                ResolvedRect::Known { rect, evidence } => {
+                    buffer
+                        .write_all(b"{\"status\":\"known\",\"rect\":")
+                        .map_err(|_| buffer.error())?;
+                    serde_json::to_writer(&mut buffer, rect).map_err(|_| buffer.error())?;
+                    buffer
+                        .write_all(b",\"evidence\":")
+                        .map_err(|_| buffer.error())?;
+                    serde_json::to_writer(&mut buffer, evidence).map_err(|_| buffer.error())?;
+                }
+                ResolvedRect::Unknown { reason, evidence } => {
+                    buffer
+                        .write_all(b"{\"status\":\"unknown\",\"reason\":")
+                        .map_err(|_| buffer.error())?;
+                    serde_json::to_writer(&mut buffer, reason).map_err(|_| buffer.error())?;
+                    buffer
+                        .write_all(b",\"evidence\":")
+                        .map_err(|_| buffer.error())?;
+                    serde_json::to_writer(&mut buffer, evidence).map_err(|_| buffer.error())?;
+                }
+            }
+            buffer.write_all(b"}").map_err(|_| buffer.error())?;
+        }
+        buffer
+            .write_all(b",\"displacement\":")
+            .map_err(|_| buffer.error())?;
+        if let Some(d) = result.displacement {
+            buffer.write_all(b"{").map_err(|_| buffer.error())?;
+            for (i, (name, value)) in [
+                ("dx", d.dx),
+                ("dy", d.dy),
+                ("dwidth", d.dwidth),
+                ("dheight", d.dheight),
+            ]
+            .into_iter()
+            .enumerate()
+            {
+                if i > 0 {
+                    buffer.write_all(b",").map_err(|_| buffer.error())?;
+                }
+                write!(buffer, "\"{name}\":").map_err(|_| buffer.error())?;
+                serde_json::to_writer(&mut buffer, &value).map_err(|_| buffer.error())?;
+            }
+            buffer.write_all(b"}").map_err(|_| buffer.error())?;
+        } else {
+            buffer.write_all(b"null").map_err(|_| buffer.error())?;
+        }
+        buffer.write_all(b"}\n").map_err(|_| buffer.error())?;
+    } else {
+        writeln!(buffer,"comparison=saved_geometry live_revalidation=not_performed selector={:?} frame_kind={:?} result_space={:?}",result.key,result.frame_kind,result.before_evaluation.result_space).map_err(|_|buffer.error())?;
+        for (side, snapshot, geometry) in [
+            ("before", result.before, &result.before_geometry),
+            ("after", result.after, &result.after_geometry),
+        ] {
+            writeln!(
+                buffer,
+                "{side} snapshot={:?} context={:?} coverage={:?} geometry={geometry:?}",
+                snapshot.id, snapshot.context, snapshot.coverage
+            )
+            .map_err(|_| buffer.error())?;
+        }
+        writeln!(buffer, "displacement={:?}", result.displacement).map_err(|_| buffer.error())?;
+    }
+    Ok(buffer.bytes)
+}

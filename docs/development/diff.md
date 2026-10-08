@@ -1,5 +1,29 @@
 # Recorded membership and property comparison
 
+## Opt-in geometry in a selected Space
+
+[CLI-GEOMETRY-DIFF@1](../specs/product/cli-geometry-diff.md):
+
+```text
+diff --geometry --before FILE --after FILE --ref SOURCE_KEY_JSON --frame-kind layout_bounds --space ID --max-input-bytes N --max-output-bytes N [--before-evaluation E1] [--after-evaluation E2] [--json]
+```
+
+Use one exact recorded key/frame. No max-entries in this mode. Optional canonical
+analysis0.2 evaluations bind independently; without them, reuse measure's existing
+Space discovery/default evaluation. Original records/coverage/evidence unchanged.
+Raw command/JSON below remains exact; normalization is never silently inferred.
+
+`diff::compare_geometry(before,after,key,frame_kind,before_input,after_input)` reuses
+the directional/all-corner resolver, compares full result Spaces and returns
+known Rect/Evidence or precise per-side unknown. Only two knowns give finite
+signed after-minus-before dx/dy/dwidth/dheight in selected units. Source screen/
+viewport motion can disappear in sourced local/document Space, without a cause,
+all-UI or layout-change claim. Missing paths are unknown, never zero/guessed inverse.
+Source/binding incompatibility refuses; cache/Delta compatibility remains strict.
+JSON1.0.0 kind geometry_difference retains originals/evaluations/result_space,
+resolved states and displacement/null. Known0, unknown4/report, incompatible4/empty,
+invalid/bounds2, IO/internal1. Full bounded encoding precedes stdout; no live read.
+
 `uiblueprint_engine::diff::compare_recorded(before, after, DiffLimits { max_entries })`
 validates both canonical Snapshots and requires matching session/target/surface
 generations, schema/plugin and scope/projection/field sets. Distinct environment
