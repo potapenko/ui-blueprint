@@ -54,6 +54,24 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q01 V02 recheck принят; Native остаток точный
+
+Q01 recheck0e416cd pushed: independent actual secure Setter,30canonical records,
+152 serialized files/canary scan, actual cache/history/export и enabled trace
+прошли в declared scope. V02 accepted без нового exact-secret-equality/OS-syscall-
+cancel требования. A02 analysis15/schema59/legacygoldens проверены независимо.
+M05 обе off/on сборки1→2→2 через approved normal-event queue, matching sample
+frame/active/key/main/focus; scoped feasibility accepted с reuse unchanged proofs.
+
+Матрица reconciled с original requirements: дополнительные B-pixels/universal
+pointer/reused-ID-for-every-app не обязательны; historicalB−3801 не повторён.
+Осталось N03 product popup composition и конкретный P2 permission classification:
+NativeFormSession.current() смешивает false AXIsProcessTrusted с identity mismatch
+в stale_target; нужен permission_required до delivery. Это source finding, не
+претензия на actual TCC transition. Передано текущему N03 writer вместе с desktop
+lane после Q01 confirmed cleanup. Q01 idle retained для final affected recheck.
+Q02/D06 и real-case Q03 gap остаются отдельно; полного P7 completion нет.
+
 ## Q03 recorded-data задача завершена, real-case gap открыт
 
 Q03fff46985ca1e8eb2c6f2b4ba8dbf722b308a7cd6 pushed, terminal/archived.
