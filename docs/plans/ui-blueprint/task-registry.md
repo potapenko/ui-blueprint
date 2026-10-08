@@ -54,6 +54,23 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## I01-L завершён
+
+Чат01a11b54-e32b-7ef2-a707-28d82677dfd5 terminal completed; saved/pushed
+3075239c20b841810693f2c1e4367601ee9da428. [Receipt](receipts/I01-local-distribution.md)
+прочитан;7paths включают distribution.py build/verify/remove, guide/README/notices
+и focused checks. Чат архивирован после передачи результата/подтверждённого cleanup.
+Author проверил release core/web/native/combined, запуск из / без model keys,
+saved validator/measure/check/document/propose examples и safe install/remove/
+reinstall/refusal/rollback. Tested PRODUCT pin82342f0, recipe commit3075239;
+это не финальный bundle последних изменений и не live/V01/Q01/Q02/P7 acceptance.
+Независимый safety review удаления/публикации bundle остаётся в итоговой проверке
+готового installation блока; implementation не открывается заново без findings.
+
+Текущие реализации: E03, M03-C, B03-G. Общая source review трёх предыдущих
+изменений идёт отдельно. Shared Native action/session и итоговые lifecycle/пилоты
+остаются в очереди по зависимостям; полный исходный P0–P7 не сокращён.
+
 ## Новые B03 и общая source review
 
 - «B03 — Геометрия popup, clipping и frame scope», local
@@ -126,7 +143,7 @@ Mac RC03 resize и Web Director, без новой авторизации зап
 от текущих feature changes, V01/P7 остаются acceptance dependencies. Область записи
 отделена от трёх активных задач, desktop не используется. Запущен local чат
 «I01 — Локальная поставка и восстановление», ID
-01a11b54-e32b-7ef2-a707-28d82677dfd5, base3fa8d3a; полный цикл, status running.
+01a11b54-e32b-7ef2-a707-28d82677dfd5, base3fa8d3a; delivered3075239, archived.
 
 ## Уточнение организации при паузе — 2026-10-08 (история)
 
