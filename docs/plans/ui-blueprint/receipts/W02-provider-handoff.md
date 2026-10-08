@@ -1358,9 +1358,10 @@ report5904B8366a1766849e64d4381d5f513f8f4bec2f70eedaa622ba03dc60369ffb318be;
 option8316B287e2149a0c745707e05d7c50216333e130c2b0f26b426edf2c8dfdc16c8ca5f;
 commit8268Bc41d5994ccb268bb9f85750f3429b3e7df1bbcd161c0622bb5fa2532842b3eab;
 stop6733B6de3aa565c41b76bb6687f0ce417529eeef3db009874fbcbd0934c0982f1db39.
-The26 canonical inputs/outputs/report are retained only for the immediate grouped
-source review at `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/ba23e8db-1e32-49ac-b51e-e0d8dfece0fb`.
-Web owns removal after that consumer finishes; records are historical, not live refs.
+The26 canonical inputs/outputs/report were retained through grouped review and its
+scoped repair recheck at `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/ba23e8db-1e32-49ac-b51e-e0d8dfece0fb`.
+They are now consumed/removed as recorded below; hashes identify historical bytes,
+not retained downloads or live refs.
 
 ### Grouped-review evidence correction — 2026-10-08
 
@@ -1389,4 +1390,13 @@ at the recorded ba23e8db path remain untouched for the same reviewer's recheck.
 Write set is this receipt and collector.rs only. Corrected collector.rs SHA256
 d8a735b68775d8f3aa9beeb7a67f345160b8340c3dd54098a45de81df3e64e7c.
 Consumed own test-target1669non-image files removed with absence verified; runtime
-artifacts/images/other evidence untouched. Independent scoped recheck remains pending.
+artifacts/images/other evidence untouched at that stage.
+
+Root subsequently reported the same reviewer's minimal5c2c88a recheck completed:
+the evidence finding is resolved with no remaining actionable A05 finding. Earlier
+independent artifact inspection stands; no runtime rerun or broader audit occurred.
+After that consumer finished, Web verified the exact26-name inventory, regular-file
+types and valid JSON contents, removed only those run-owned nonimage files and the
+empty ba23e8db directory, and verified absence. Images and other evidence were not
+touched. Scoped source/evidence review is complete; full B02/P5/P7, broader platform,
+pointer/hardware/IME and external/durable business outcomes remain excluded.
