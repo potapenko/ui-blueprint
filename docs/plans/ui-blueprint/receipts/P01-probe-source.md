@@ -663,3 +663,50 @@ additional activation/review round, no direct input proof/permission/display/use
 operation or cap tuning. Current binaries/temp inputs held only for this next operation.
 
 M04 source pins {"fixtures/native/Fixture.swift": "c2c359d71987ff3b704dd031aa3014ff70683864aea3c4329d41b4c8ada0af3f", "tests/bridges/native/Collector.swift": "490151964d62b53eb3edab50a8d5d726a3c003231d2965e97ddf825a7a6899b9", "tests/bridges/native/acquisition/ProbeChecks.swift": "a0efaa930e3e0edc9add142af910476e231c624a3abcd9951622e6e8f782c980"}.
+
+
+## M04 actual scroll + Move comparison — 2026-10-08
+
+Saved Native source107cc3037a01e35109885e513d913b69ab431daf and immutable Rust
+905dd06179f0e741bfc51ac480509af051e7c7d5 consumed; unrelated Core G11 WIP excluded.
+Recovery registry24 adds separate G11 representation only; selected M04 contract
+closure/revisions above unchanged. One own F02-on PID3882/exact temp executable,
+A window12145/surface generation6A1CD2DF-3974-46AC-B149-68FDEE0CCF3A. No real
+PlayPhrase.me/user app, capture, pointer, permission or display operation.
+
+Fresh semantic AX setup: existing Snapshot → Scroll end → Snapshot → Move → Snapshot.
+Each separate read-only collection preserves the freshly read full AX state and
+pre/post identity file. Existing public CLI observe --connection INPUT --request
+INPUT --worker WORKER → measure --snapshot ORIGINAL_CHANNEL_RESPONSE --query QUERY
+--space f02-fixture-local --json; inside/intersects computed by Rust. Public diff
+--before ORIGINAL_RESPONSE --after ORIGINAL_RESPONSE compares both transitions.
+No graph extraction, arithmetic replacement, restamped source time or extra run.
+Canonical response validation0; Observe observed/partial exit4; both Diff exit0.
+
+| State | Viewport x/y/w/h, pt | Row0 x/y/w/h, pt | Inside minimum inset, pt | Rectangular intersection, pt² |
+| --- | --- | --- | ---: | ---: |
+| Before scroll |20/301/510/90|26/307/498/16|6|7968|
+| After Scroll end |20/301/510/90|26/-483/498/16|-784|0|
+| After Move |20/301/510/90|26/-483/498/16|-784|0|
+
+Observed own window frame moves781/293/550/511 →821/273/550/511, actual +40/-20pt.
+Scroll diff: viewport content_changed=false, row0=true. Move diff: both false;
+evidence_changed=true on both transitions. Local rectangles/insets stay unchanged
+through actual window movement, satisfying this narrow source-backed M04 result.
+Single Observe walls131.285/127.507/126.076ms; not p95 or a D06 comparison.
+Imported explicit fixture snapshot stays cache/unverified, fixture-3882-monotonic,
+source revision1; unknown screen/pixel transform and consistency retained. Rect
+intersection establishes no visible_region, paint/glyph clipping or occlusion.
+Cross-display and full M04/P7 acceptance remain open.
+
+Owned operation90.533515s, fixture cleanup0.120878s, PID absence confirmed, no timeout;
+helper/worker absence checked after every Observe. Physical lane released. Images0.
+All consumed run-owned nonimage source/build/cache/input/result files removed except
+one unchanged canonical response for the immediate Root/Core G11 consumer:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m04-scroll-2eux5ocd/scrolled-probe.json`.
+SHA2569477eedfeb83524a0bf4f5c1fa71ff26d81a5fb228f7402ccb58e9b38a0eaa05.
+Retention owner Root/Core; Native cleans that file/empty containing dir only after
+Core consumption and explicit Root release. No permanent evidence archive.
+Response request5692564832454f67ab7263a48d3b83ba, Targetf02-pid-3882 generation
+3882:1791450974.8839421, scopef02.scroll.a/design/layout_bounds, local pt/top_left,
+measured fixture time307116.86318366666s and explicit reported component mapping.
