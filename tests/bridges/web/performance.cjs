@@ -32,6 +32,7 @@ function check(sample,context,kind,requestId,previous) {
   const snapshot=response.result.data;assert.deepEqual(snapshot.context,context);
   assert.equal(snapshot.coverage.status,'partial'); // current adapter has explicit partial source coverage
   assert.deepEqual(snapshot.coverage.fields,context.fields);
+  for(const node of snapshot.nodes)assert.deepEqual(node.properties.map(p=>p.field),context.fields,'no requested property omitted');
   for(const observation of snapshot.observations){
     assert.equal(observation.freshness,'current');assert.equal(observation.answer_source,'live');
     assert.equal(observation.time_unit,'milliseconds');
@@ -124,7 +125,7 @@ async function run(){
         const record={kind,cohort:label,index:i,status:'failed'},begin=performance.now();
         try{
           driver.send({request,selection});const sample=await driver.next();record.outer_ms=performance.now()-begin;
-          assert.equal(sample.kind,'sample');record.request_ms=sample.request_ms;
+          assert.equal(sample.kind,'sample');record.request_ms=sample.request_ms;record.domain_usage=sample.domain_usage;
           if(i===0){record.attach_first_ms=performance.now()-attachBegin;record.process_cold_ms=performance.now()-totalBegin;}
           fs.writeFileSync(path.join(output,requestId+'.json'),JSON.stringify(sample),{flag:'wx',mode:0o600});
           const checked=check(sample,contextData,kind,requestId,ids);Object.assign(record,checked,{snapshot:undefined,status:'valid_partial'});
@@ -156,10 +157,21 @@ async function run(){
     fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});
   }
   console.log(JSON.stringify({output,summary:report.summary,failure:report.failure,cleanup_failure:report.cleanup_failure}));
+  if(report.failure||report.cleanup_failure||report.samples.some(s=>s.status!=='valid_partial'))process.exitCode=1;
 }
-if(process.argv.includes('--check')){
+if(require.main===module && process.argv.includes('--check')){
   assert.deepEqual(stats(Array.from({length:20},(_,i)=>({ms:i+1})),'ms'),{count:20,measured:20,p50:10.5,p95:19});
   assert.equal(stats([{ms:1},{}],'ms').p95,null);assert.equal(stats([{ms:1},{}],'ms').count,2);
+  const context={target:{id:'own',generation:'1'},session_id:'session',surfaces:[{id:'surface',generation:'1'}],fields:['layout_bounds']};
+  const snapshot={context,coverage:{status:'partial',fields:context.fields},observations:[{id:'fresh',freshness:'current',answer_source:'live',time_unit:'milliseconds',source_namespace:'web.dom',start:5,end:6}],
+    nodes:[{key:{namespace:'web.dom',key:'left'},surface:context.surfaces[0],properties:[{field:'layout_bounds',selection:'requested',state:{availability:'known',value:{type:'geometry',value:{coordinate_space:{units:'css_px'},shape:{value:{x:40,y:60,width:120,height:40}}}}}}]}]};
+  const response={request_id:'r',target:context.target,session_id:context.session_id,result:{status:'observed',data:snapshot}};
+  const sample=()=>({terminal:'Completed',missing:0,committed:1,frames:[{canonical:JSON.stringify({artifact:{kind:'channel_response',data:response}})}]});
+  assert.equal(check(sample(),context,'geometry','r',new Set()).source_intervals_ms[0].ms,1);
+  assert.throws(()=>check(sample(),context,'geometry','wrong-request',new Set()));
+  assert.throws(()=>check(sample(),context,'geometry','r',new Set(['fresh'])));
+  snapshot.nodes[0].properties[0].state.availability='unknown';assert.throws(()=>check(sample(),context,'geometry','r',new Set()));
+  snapshot.nodes[0].properties=[];assert.throws(()=>check(sample(),context,'geometry','r',new Set()));
   console.log('Q02 quantiles and missing-sample handling pass; no runtime launched');
 }else if(require.main===module)run().catch(error=>{console.error(error.message);process.exitCode=1;});
 module.exports={stats,check,client};

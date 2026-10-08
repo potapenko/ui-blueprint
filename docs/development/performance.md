@@ -57,6 +57,9 @@ canonical bytes/node counts and source intervals. Cache/allocation high-water,
 independent transport/normalization CPU, syscalls and model tokens are unavailable
 until measured, never zero or estimated from bytes. No full/delta live equivalence
 is inferred; that remains the controlled checkpoint proof accepted by Q01.
+Available HostDomain parent-owned bytes, retained reservations, sessions/completion
+leases and poison/abandonment flags are sampled at each ACK and after cleanup.
+They are attributed reservations/owned layouts, not worker usage or SDK/RSS peaks.
 
 ## Native comparability before timing
 

@@ -46,6 +46,10 @@ this confirms the live opt-in guard, not a runtime performance test. Changed
 Markdown links, original F01 report hash and five frozen fixture files verified.
 Quantile check20 samples returns median10.5/p9519; missing sample preserves count
 and yields unavailable p95. No UI/SDK collection or candidate timing was run.
+Additional focused offline assertions reject reused Observation, wrong request,
+unknown geometry and omitted requested property; Observation milliseconds remain
+milliseconds. Existing HostDomain accounting is now emitted at ACK/cleanup without
+claiming worker cache usage, allocator/SDK high-water or RSS. Focused Clippy passed.
 No broad product suites were rerun for these test-only changes.
 
 ## Baseline and open gates

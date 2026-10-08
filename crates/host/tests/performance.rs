@@ -75,6 +75,12 @@ fn emit(value: serde_json::Value) {
     writeln!(stdout, "@Q02 {}", value).expect("owned harness stdout");
     stdout.flush().expect("harness flush");
 }
+fn usage(domain: &HostDomain) -> serde_json::Value {
+    let value = domain.usage();
+    serde_json::json!({"parent_owned_bytes":value.parent_owned_bytes,
+        "retained_reserved_bytes":value.retained_reserved_bytes,"reserved_sessions":value.reserved_sessions,
+        "completion_groups":value.completion_groups,"abandoned":value.abandoned,"reaping_poisoned":value.reaping_poisoned})
+}
 fn next<'a>(
     host: &mut RuntimeHost<'a, DarwinPlatform>,
     end: Instant,
@@ -281,14 +287,14 @@ fn requested_series() {
             emit(
                 serde_json::json!({"kind":"sample","number":number,"request_ms":request_ms,
                 "terminal":format!("{:?}",completion.terminal),"committed":completion.committed(),
-                "missing":completion.missing(),"frames":frames}),
+                "missing":completion.missing(),"domain_usage":usage(&domain),"frames":frames}),
             );
         }
         Ok(())
     })();
     let released = cleanup(&mut host);
     emit(
-        serde_json::json!({"kind":"closed","cleanup_confirmed":released,
+        serde_json::json!({"kind":"closed","cleanup_confirmed":released,"domain_usage":usage(&domain),
         "error":outcome.as_ref().err().map(|e|format!("{e:?}"))}),
     );
     assert!(released && outcome.is_ok(), "Q02 caller or cleanup failed");
