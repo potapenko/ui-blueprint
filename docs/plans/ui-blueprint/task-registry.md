@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core: Focus lane + host explicit Expectation composition. Web: Focus/Type provider и B02 integration. Native: bounded held AX owner, затем Activate после общего exchange. Disjoint source owners; короткий Git lease, runtime lane сейчас свободен |
+| Активные чаты/пакеты/ресурсы | Product priority correction: Core/Web/Native save current P5 WIP, then geometry-focused work. Both original advisors provide existing geometry cases. Git short leases; no new input runtime or P5 expansion |
 | Последний принятый результат продукта | Actual CLIec844f6: Observe→Prepare→SetChecked→verify и disabled/remount refusals passed. Web form facts4b12d7b passed. Native popup AX+capture8507aa4 passed с раздельными identity checks/retained PNG. A02 kernel9bd5809 accepted scoped source; full P5/P7 не завершены |
-| Следующий шаг | Закончить Web Focus→Type→fresh explicit verification и Native Semantic Activate→observed result. Обычные целевые тесты, одно ревью связной рискованной интеграции. Полные P3/P4 obligations, B02/M02, P6 integration и P7 gates сохраняются |
+| Следующий шаг | Сохранить P5 WIP; довести основной Web/Mac read-only geometry scenario до полезного agent-facing результата, используя существующий engine/collectors/probe и реальные component cases. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -440,3 +440,17 @@ crates/host source/tests/common integration; Web task-wide plugins/web source/te
 existing receipt; root владеет только coordination. Межфайловые механические
 адаптации внутри owner не требуют повторного root grant; общий API синхронизируется
 одним concrete handoff. Пауза/goal completion не объявлены.
+
+## Приоритет пользователя: геометрия для разработки UI
+
+2026-10-08: основной продуктовый смысл — быстрые реальные геометрические данные
+для ИИ, Web/Mac. Root перечитал оригинальные тематические разделы UIB.TZ@1.4
+и PLAN.UIB@1; смещение приоритета на P5 признано ошибкой исполнения. Scope P0–P7
+не сокращён, goal active. Три owner получили drain только развития input: сохранить
+текущий coherent code/tests (честный WIP допустим), не начинать следующий P5 участок.
+После checkpoint: Core — полезный geometry CLI/engine путь; Web — содержательный
+компонент/вложенная геометрия; Native — AX bounds и measured probe внутреннихчастей.
+Каждый возвращает существующий callable путь и один ближайший недостающий шаг,
+без общего аудита/новой платформы. Оба advisor запрошены о существующем конкретном
+кейсе и полезном геометрическом ответе, read-only без нового runtime/fixtures.
+Это приоритетная запись поверх прежних P5-next строк, не удаление истории.
