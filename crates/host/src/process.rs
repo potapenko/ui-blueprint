@@ -247,3 +247,24 @@ impl Drop for DarwinChild {
         }
     }
 }
+
+/// Bounded readiness for a caller-owned input descriptor. Never consumes bytes.
+/// The caller must be its sole reader until the following bounded read completes.
+pub fn input_ready(input: BorrowedFd<'_>, timeout_ms: u32) -> Result<bool, HostError> {
+    let mut fd = libc::pollfd {
+        fd: input.as_raw_fd(),
+        events: libc::POLLIN,
+        revents: 0,
+    };
+    // SAFETY: one initialized pollfd with a descriptor borrowed for this call;
+    // poll cannot retain it and the timeout is representable and bounded.
+    let result = unsafe { libc::poll(&mut fd, 1, timeout_ms.min(1000) as i32) };
+    if result < 0 {
+        return if errno() == libc::EINTR {
+            Ok(false)
+        } else {
+            Err(HostError::Io)
+        };
+    }
+    Ok(result > 0)
+}

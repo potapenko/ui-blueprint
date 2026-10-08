@@ -10,7 +10,7 @@ use uiblueprint_schema::{SchemaVersion, model::*};
 
 /// Existing operation/output owners, never a serialized input or new graph.
 pub(super) struct ActionOperation<'a> {
-    pub io: &'a mut WorkerIo,
+    pub io: &'a WorkerIo,
     pub publication: &'a mut [u8],
     pub control: Control,
     pub target: TargetLease,
@@ -127,7 +127,7 @@ impl ActionOperation<'_> {
     }
 }
 pub(super) fn publish_refusal(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     publication: &mut [u8],
     control: Control,
     scope: Id,
@@ -155,7 +155,7 @@ pub(super) fn publish_refusal(
     )
 }
 pub(super) fn publish_issue(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     publication: &mut [u8],
     control: Control,
     issue: Issue,
@@ -178,7 +178,7 @@ pub(super) fn publish_issue(
     Err(error)
 }
 pub(super) fn publish_prepared(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     publication: &mut [u8],
     control: Control,
     case: ActionCase,
@@ -196,7 +196,7 @@ pub(super) fn publish_prepared(
     Ok(0)
 }
 fn encode_publish(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     publication: &mut [u8],
     control: Control,
     document: &Document,

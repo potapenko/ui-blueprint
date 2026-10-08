@@ -162,6 +162,7 @@ impl ActionExecution {
             Intent::SetChecked { .. }
                 | Intent::Focus {}
                 | Intent::Type { .. }
+                | Intent::Fill { .. }
                 | Intent::Activate {}
         ) || expected.targets.len() != 1
             || expected.scope_id != case.action.authorized_scope

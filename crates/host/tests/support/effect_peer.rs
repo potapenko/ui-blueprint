@@ -176,7 +176,7 @@ fn main() {
                 .into());
                 let mut timing = worker_effect::WorkerActionControl::new(clock.clone(), origin);
                 let mut gate = worker_effect::WorkerEffectGate::new(
-                    &mut io,
+                    &io,
                     operation,
                     config.target,
                     clock,
@@ -397,14 +397,9 @@ fn main() {
         );
         let mut control = worker_effect::WorkerActionControl::new(clock.clone(), origin);
         let reading: ClockReading = control.now();
-        let mut gate = worker_effect::WorkerEffectGate::new(
-            &mut io,
-            operation,
-            config.target,
-            clock,
-            deadline,
-        )
-        .unwrap();
+        let mut gate =
+            worker_effect::WorkerEffectGate::new(&io, operation, config.target, clock, deadline)
+                .unwrap();
         let permit = gate
             .authorize(&selected, &reading)
             .unwrap_or_else(|_| panic!("actual parent permit required"));

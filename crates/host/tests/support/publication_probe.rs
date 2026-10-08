@@ -6,6 +6,10 @@
 #[allow(dead_code)]
 #[path = "../../src/quota_allocator.rs"]
 mod quota_allocator;
+#[path = "../../src/worker_action.rs"]
+mod worker_action;
+#[path = "../../src/worker_effect.rs"]
+mod worker_effect;
 #[allow(dead_code)]
 #[path = "../../src/worker_io.rs"]
 mod worker_io;
@@ -15,6 +19,8 @@ mod worker_main;
 #[allow(dead_code)]
 #[path = "../../src/worker_native.rs"]
 mod worker_native;
+#[path = "../../src/worker_native_action.rs"]
+mod worker_native_action;
 #[allow(dead_code)]
 #[path = "../../src/worker_ops.rs"]
 mod worker_ops;
@@ -100,7 +106,7 @@ fn main() {
     std::panic::set_hook(Box::new(|_| {
         quota_allocator::fatal(quota_allocator::FatalReason::Panic, 0)
     }));
-    let mut io = worker_io::WorkerIo::inherited().unwrap();
+    let io = worker_io::WorkerIo::inherited().unwrap();
     let operation = io.control().unwrap();
     let mode = operation.value;
     assert!(mode <= 6);
@@ -204,8 +210,7 @@ fn main() {
     };
     let mut io_failed = false;
     if !writer_failed {
-        io_failed =
-            worker_main::publish(&mut io, operation, 0, &fixed.bytes[..fixed.used], false).is_err();
+        io_failed = worker_main::publish(&io, operation, 0, &fixed.bytes[..fixed.used], 0).is_err();
     }
     let used = fixed.used;
     drop(reserve); // Must return to the already-full ordinary level.

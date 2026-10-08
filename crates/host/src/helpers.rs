@@ -186,6 +186,36 @@ impl<'a, C: OwnedProcess> Helper<'a, C> {
         frame.bytes.set_len(length)?;
         Ok(frame)
     }
+    pub(crate) fn take_resident_line(
+        &mut self,
+        length: usize,
+    ) -> Result<HelperBytes<'a>, HostError> {
+        self.io_ready()?;
+        if length.checked_add(1) != Some(self.used) {
+            return Err(HostError::InvalidControl);
+        }
+        let mut bytes = self.ingress.take().ok_or(HostError::InvalidState)?;
+        bytes.set_len(length)?;
+        Ok(HelperBytes {
+            helper: self.handle,
+            bytes,
+        })
+    }
+    pub(crate) fn restore_resident_line(
+        &mut self,
+        mut frame: HelperBytes<'a>,
+    ) -> Result<(), HostError> {
+        self.io_ready()?;
+        if frame.helper != self.handle || self.ingress.is_some() {
+            return Err(HostError::InvalidState);
+        }
+        frame
+            .bytes
+            .set_len(self.handle.session.domain.limits.ingress_bytes)?;
+        self.ingress = Some(frame.bytes);
+        self.used = 0;
+        Ok(())
+    }
     pub(crate) fn read(&mut self) -> Result<Transfer, HostError> {
         let cap = self.ingress.as_ref().ok_or(HostError::InvalidState)?.len();
         self.read_limit(cap)

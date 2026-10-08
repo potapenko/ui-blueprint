@@ -45,23 +45,23 @@ impl WorkerIo {
     ) -> Option<uiblueprint_host::diagnostic::DiagnosticRecord> {
         self.diagnostic.take()
     }
-    pub fn control(&mut self) -> Result<Control, HostError> {
+    pub fn control(&self) -> Result<Control, HostError> {
         let mut bytes = [0; CONTROL_BYTES];
-        self.input
+        (&self.input)
             .read_exact(&mut bytes)
             .map_err(|_| HostError::Io)?;
         Control::decode(&bytes)
     }
-    pub fn read(&mut self, bytes: &mut [u8]) -> Result<(), HostError> {
-        self.input.read_exact(bytes).map_err(|_| HostError::Io)
+    pub fn read(&self, bytes: &mut [u8]) -> Result<(), HostError> {
+        (&self.input).read_exact(bytes).map_err(|_| HostError::Io)
     }
-    pub fn write_control(&mut self, control: Control) -> Result<(), HostError> {
-        self.output
+    pub fn write_control(&self, control: Control) -> Result<(), HostError> {
+        (&self.output)
             .write_all(&control.encode())
             .map_err(|_| HostError::Io)
     }
-    pub fn write(&mut self, bytes: &[u8]) -> Result<(), HostError> {
-        self.output.write_all(bytes).map_err(|_| HostError::Io)
+    pub fn write(&self, bytes: &[u8]) -> Result<(), HostError> {
+        (&self.output).write_all(bytes).map_err(|_| HostError::Io)
     }
 }
 

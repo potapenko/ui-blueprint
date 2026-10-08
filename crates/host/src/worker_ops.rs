@@ -118,7 +118,6 @@ impl<'a> CanonicalSession<'a> {
     /// pair remains valid. Typed decoding
     /// stays inside the admitted worker. The provider separately enforces its
     /// trusted attachment's plugin/surface/scope before fresh acquisition.
-    #[cfg(feature = "web")]
     pub(crate) fn action_input(
         &self,
         bytes: &[u8],
@@ -169,7 +168,6 @@ impl<'a> CanonicalSession<'a> {
     }
     /// Read-only preparation has no effect authority. Only actual provider
     /// acquisition may replace the input's unknown Resolution facts.
-    #[cfg(feature = "web")]
     pub(crate) fn prepare_input(
         &self,
         bytes: &[u8],
@@ -217,6 +215,7 @@ impl<'a> CanonicalSession<'a> {
                 (Intent::SetChecked { .. }, InputModality::Setter)
                     | (Intent::Focus {}, InputModality::Semantic)
                     | (Intent::Type { .. }, InputModality::Keyboard)
+                    | (Intent::Fill { .. }, InputModality::Setter)
                     | (Intent::Activate {}, InputModality::Semantic)
             )
             || snapshot
@@ -235,7 +234,6 @@ impl<'a> CanonicalSession<'a> {
         let expected = self.action_expectation(&tape, &snapshot, action)?;
         Ok((*snapshot, *request, self.clock.clone(), expected))
     }
-    #[cfg(feature = "web")]
     fn action_expectation(
         &self,
         tape: &Tape<'_>,
@@ -282,7 +280,7 @@ impl<'a> CanonicalSession<'a> {
                     && *value == Value::Flag(true)
                     && expected.targets[0] == action.backend_ref.key
             }
-            Intent::Type { .. } => {
+            Intent::Type { .. } | Intent::Fill { .. } => {
                 *field == Field::Value
                     && matches!(value, Value::Text(_))
                     && expected.targets[0] == action.backend_ref.key

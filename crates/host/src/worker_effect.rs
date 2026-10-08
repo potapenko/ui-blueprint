@@ -31,7 +31,7 @@ impl ActionControl for WorkerActionControl {
 }
 
 pub(super) struct WorkerEffectGate<'a> {
-    io: &'a mut WorkerIo,
+    io: &'a WorkerIo,
     operation: Control,
     target: TargetLease,
     clock: Id,
@@ -43,7 +43,7 @@ impl<'a> WorkerEffectGate<'a> {
     /// Deadline/clock/TargetLease come from the real worker's trusted attach and
     /// parent-clamped operation owner, never from response/UI data.
     pub(super) fn new(
-        io: &'a mut WorkerIo,
+        io: &'a WorkerIo,
         operation: Control,
         target: TargetLease,
         clock: Id,

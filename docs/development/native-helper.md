@@ -854,3 +854,50 @@ and button dimensions/insets and rejects missing, wrong-Surface, retired-generat
 and wrong-environment mapping. No supplemental observation is invented in evaluation.
 This is a saved-data test consumer, not a new CLI composition command or live sync
 service. Real own-fixture evidence and retained PNGs: [M03-C receipt](../plans/ui-blueprint/receipts/M03-capture-mapping.md).
+
+## Attached Native forms (M02-N)
+
+The additive [Native session contract](../specs/product/native-session.md) exposes:
+
+```sh
+uiblueprint native-session --connection /absolute/connection.json --worker /absolute/session-worker --duration-ms 120000 --max-input-bytes 2097152 --max-output-bytes 524288
+```
+
+Build CLI with `macos`; the existing `native_fixture` connection has AX channels1.
+Set helper configuration `collection:"form"`, explicit `form_session_ms`≤300000
+and `form_identifiers` containing1–8 unique actual fixture AXIdentifiers. Other
+binding/acquisition fields remain mandatory. No ordinary-process input is exposed.
+Send one strict bounded JSON line per explicit operation on stdin:
+
+```json
+{"request":"/absolute/observe.json"}
+{"request":"/absolute/prepare.json","source":"/absolute/observed.json","expectation":"/absolute/expectation.json"}
+{"request":"/absolute/act.json","source":"/absolute/prepared.json","expectation":"/absolute/expectation.json"}
+```
+
+Requests, source and Expectation are existing canonical documents. The caller reads
+stdout records and creates the next explicit request; this is not an automatic
+scenario runner. Partial AX observations retain their coverage and can be used for
+an exactly bound control. Every action needs a caller condition. Secret input,
+IME/composition and selection mutation remain unavailable. Secure values are
+redacted; available selection is UTF-16. Known checkbox0/1 maps to Checked, but its
+AXPress never substitutes for the unavailable SetChecked setter.
+
+One parent-registered helper owns original CF handles and fresh UUID/session/helper
+keys until shutdown. No refs survive CLI exit. Semantic Focus uses the parent Focus
+lane, checks the prior owner, activates the exact process, then sets AXFocused.
+Fill uses a reported settable public AXValue. Activate uses a reported AXPress and
+an independently held caller result. Keyboard Type uses bounded public Unicode
+key-down/key-up with clear modifier flags; the CG API gives Accepted, not a delivery
+acknowledgement. Even an observed matching value cannot convert it to Confirmed;
+the canonical outcome stays unknown and the session stops with4. No implicit Enter,
+retry, rollback, locator repair or business-success inference occurs.
+
+The existing parent permit is the only delivery authority. Phase0/1 are read-only;
+phase2 requires the current exact one-use nonce; phase3 reads fresh source state.
+Fixed parent ingress is returned after forwarding rather than newly allocated.
+Operation deadlines and idle residency stay separate; parent EOF and per-operation
+watchdogs stop the owned helper even during SDK work. Cleanup retains the existing
+one-second bound/quarantine. The input application is never part of helper cleanup.
+
+[Author result and remaining qualification](../plans/ui-blueprint/receipts/M02-native-workflow.md).

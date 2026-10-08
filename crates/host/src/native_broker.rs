@@ -26,9 +26,12 @@ pub(super) struct NativeBroker<'a> {
     frame: Option<HelperBytes<'a>>,
     cap: usize,
     failed: bool,
+    phase: u8,
+    nonce: u64,
+    resident: bool,
 }
 impl<'a> NativeBroker<'a> {
-    pub(super) fn new(channel: u8, ticket: u64, cap: usize) -> Self {
+    pub(super) fn new(channel: u8, ticket: u64, cap: usize, phase: u8, nonce: u64) -> Self {
         Self {
             channel,
             ticket,
@@ -39,6 +42,9 @@ impl<'a> NativeBroker<'a> {
             frame: None,
             cap,
             failed: false,
+            phase,
+            nonce,
+            resident: false,
         }
     }
     fn control<C: OwnedProcess>(
@@ -53,7 +59,7 @@ impl<'a> NativeBroker<'a> {
         let active = w.active.as_ref().expect("broker belongs to active observe");
         Control {
             kind,
-            class: OperationClass::Observe,
+            class: active.class,
             slot: self.channel,
             flags,
             correlation: Correlation {
@@ -112,19 +118,43 @@ impl<'a> NativeBroker<'a> {
                     // helper entitlement: spawn_registered owns two fixed slots.
                     HelperKind::ExternalSemantics
                 };
-                match helper_runtime::spawn_registered(
-                    w,
-                    platform,
-                    kind,
-                    &binding.executable,
-                    deadline,
-                ) {
-                    Ok(handle) => self.helper = Some(handle),
-                    Err(HostError::Busy) => return Ok(false), // admission only; no child dispatched
-                    Err(HostError::CleanupPending) => return Err(HostError::CleanupPending),
-                    Err(e) => {
-                        self.failure(w, e);
-                        return Ok(false);
+                self.resident = binding.residency.is_some();
+                if self.resident && self.channel != 0 {
+                    return Err(HostError::InvalidControl);
+                }
+                if let Some(handle) = w.resident.filter(|_| self.resident) {
+                    if !w
+                        .helpers
+                        .iter()
+                        .flatten()
+                        .any(|h| h.handle == handle && h.cleanup.is_none())
+                    {
+                        return Err(HostError::ResyncRequired);
+                    }
+                    self.helper = Some(handle);
+                } else {
+                    if self.resident && self.phase != 0 {
+                        return Err(HostError::ResyncRequired);
+                    }
+                    match helper_runtime::spawn_registered(
+                        w,
+                        platform,
+                        kind,
+                        &binding.executable,
+                        binding.residency.unwrap_or(deadline),
+                    ) {
+                        Ok(handle) => {
+                            self.helper = Some(handle);
+                            if self.resident {
+                                w.resident = Some(handle);
+                            }
+                        }
+                        Err(HostError::Busy) => return Ok(false),
+                        Err(HostError::CleanupPending) => return Err(HostError::CleanupPending),
+                        Err(e) => {
+                            self.failure(w, e);
+                            return Ok(false);
+                        }
                     }
                 }
                 self.header = self
@@ -137,6 +167,12 @@ impl<'a> NativeBroker<'a> {
                         0,
                     )
                     .encode();
+                if self.resident {
+                    let mut c = Control::decode(&self.header)?;
+                    c.flags = 128 | self.phase;
+                    c.value = self.helper.ok_or(HostError::InvalidState)?.serial;
+                    self.header = c.encode();
+                }
                 self.stage = Stage::Configure;
             }
             Stage::Configure | Stage::Configuration | Stage::Submit | Stage::Request => {
@@ -196,6 +232,15 @@ impl<'a> NativeBroker<'a> {
                                     0,
                                 )
                                 .encode();
+                            if self.resident {
+                                let mut c = Control::decode(&self.header)?;
+                                c.flags = 128 | self.phase;
+                                // Nonce is only forwarded by the validated parent phase2.
+                                if self.phase == 2 {
+                                    c.value = self.nonce;
+                                }
+                                self.header = c.encode();
+                            }
                             Stage::Submit
                         }
                         Stage::Submit => Stage::Request,
@@ -212,7 +257,11 @@ impl<'a> NativeBroker<'a> {
                     .ok_or(HostError::StaleOperation)?;
                 match helper.read_line(self.cap) {
                     Ok(Some(length)) => {
-                        self.frame = Some(helper.take_line(length)?);
+                        self.frame = Some(if self.resident {
+                            helper.take_resident_line(length)?
+                        } else {
+                            helper.take_line(length)?
+                        });
                         self.header = self
                             .control(
                                 w,
@@ -248,6 +297,15 @@ impl<'a> NativeBroker<'a> {
                 if self.offset == length {
                     self.offset = 0;
                     if matches!(self.stage, Stage::Body) || self.failed {
+                        if self.resident && !self.failed {
+                            let handle = self.helper.ok_or(HostError::InvalidState)?;
+                            w.helpers[handle.slot]
+                                .as_mut()
+                                .ok_or(HostError::StaleOperation)?
+                                .restore_resident_line(
+                                    self.frame.take().ok_or(HostError::InvalidState)?,
+                                )?;
+                        }
                         if self.failed {
                             w.active
                                 .as_mut()

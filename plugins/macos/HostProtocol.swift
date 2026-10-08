@@ -7,6 +7,8 @@ enum NativeProtocolError: Error { case control, configuration, request, closed, 
 
 struct NativeControl {
     let kind: UInt8
+    let operationClass: UInt8
+    let flags: UInt8
     let channel: UInt8
     let epoch: UInt64
     let operation: UInt64
@@ -16,13 +18,14 @@ struct NativeControl {
 
     init(_ bytes: Data) throws {
         guard bytes.count == 64, Array(bytes.prefix(8)) == Array("UIBHST01".utf8),
-              bytes[9] == 8, bytes[10] <= 2, bytes[11] == 0,
+              [8, 9, 10].contains(bytes[9]), bytes[10] <= 2,
+              (bytes[11] == 0 || (128...131).contains(bytes[11])),
               bytes[12..<16].allSatisfy({ $0 == 0 }), bytes[56..<64].allSatisfy({ $0 == 0 })
         else { throw NativeProtocolError.control }
         func integer(_ offset: Int) -> UInt64 {
             (0..<8).reduce(0) { $0 | UInt64(bytes[offset + $1]) << ($1 * 8) }
         }
-        kind = bytes[8]; channel = bytes[10]
+        kind = bytes[8]; operationClass = bytes[9]; flags = bytes[11]; channel = bytes[10]
         epoch = integer(16); operation = integer(24); length = integer(32)
         ticket = integer(40); auxiliary = integer(48)
         guard epoch > 0, operation > 0, ticket > 0 else { throw NativeProtocolError.control }
@@ -58,10 +61,12 @@ struct NativeConfiguration: Decodable {
     let probe_snapshot_request: Int?
     let probe_source_revision: Int?
     let probe_uptime: Double?
+    let form_identifiers: [String]?
+    let form_session_ms: UInt64?
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime", "form_identifiers", "form_session_ms"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
@@ -79,7 +84,7 @@ struct NativeConfiguration: Decodable {
               ["local.uiblueprint.f02.on", "local.uiblueprint.f02.off"].contains(config.binding.bundle_id),
               ["a", "b", "popup-a", "popup-b"].contains(config.binding.window_identifier),
               !config.binding.target_generation.isEmpty, !config.binding.surface_generation.isEmpty,
-              !config.scope_id.isEmpty, ["sample", "window-ax", "popup-ax"].contains(config.collection)
+              !config.scope_id.isEmpty, ["sample", "window-ax", "popup-ax", "form"].contains(config.collection)
         else { throw NativeProtocolError.configuration }
         if config.collection == "popup-ax" {
             guard let parent = config.parent_binding, let path = config.parent_identity_path,
@@ -107,6 +112,12 @@ struct NativeConfiguration: Decodable {
         } else if config.probe_snapshot_request != nil || config.probe_source_revision != nil || config.probe_uptime != nil {
             throw NativeProtocolError.configuration
         }
+        if config.collection == "form" {
+            guard let ids = config.form_identifiers, (1...8).contains(ids.count), Set(ids).count == ids.count,
+                  ids.allSatisfy({ !$0.isEmpty && $0.utf8.count <= 256 }),
+                  let duration = config.form_session_ms, (1...300000).contains(duration)
+            else { throw NativeProtocolError.configuration }
+        } else if config.form_identifiers != nil || config.form_session_ms != nil { throw NativeProtocolError.configuration }
         return config
     }
 }
@@ -118,6 +129,7 @@ struct NativeInbound {
     let replyCap: Int
     let deadline: Double
     let started: Double
+    var documents: [[String: Any]] = []
 }
 
 struct NativeCommand {
@@ -188,25 +200,47 @@ struct NativeDescriptorIO {
     static let inputCap = 2 * 1_048_576
     static let replyCap = 512 * 1024
 
-    static func receiveInput(_ io: NativeDescriptorIO) throws -> NativeInbound {
+    static func receiveInput(_ io: NativeDescriptorIO, until: Double? = nil) throws -> NativeInbound {
         // Same eight-second bootstrap safeguard as the existing one-shot helper;
         // not a request default. Parent cleanup also covers a missing Submit.
-        let bootstrap = NativeDescriptorIO.now + 8
+        let bootstrap = until ?? (NativeDescriptorIO.now + 8)
         let configure = try NativeControl(io.read(64, deadline: bootstrap))
         guard configure.kind == 1, configure.length > 0, configure.length <= configCap,
               configure.auxiliary > 1, configure.auxiliary <= replyCap else { throw NativeProtocolError.control }
         let configurationBytes = try io.read(Int(configure.length), deadline: bootstrap)
         let submit = try NativeControl(io.read(64, deadline: bootstrap))
         guard submit.kind == 3, submit.channel == configure.channel, submit.epoch == configure.epoch,
-              submit.operation == configure.operation, submit.ticket == configure.ticket,
+              submit.operation == configure.operation, submit.flags == configure.flags, submit.operationClass == configure.operationClass,
+              (configure.flags >= 128 || submit.ticket == configure.ticket),
               submit.length > 0, submit.length <= inputCap, submit.auxiliary > 0
         else { throw NativeProtocolError.control }
         let start = NativeDescriptorIO.now
         let deadline = start + Double(submit.auxiliary) / 1000
         let request = try io.read(Int(submit.length), deadline: deadline)
-        guard let doc = try JSONSerialization.jsonObject(with: request) as? [String: Any] else { throw NativeProtocolError.request }
-        return NativeInbound(configurationBytes: configurationBytes, document: doc, control: submit,
-            replyCap: Int(configure.auxiliary), deadline: deadline, started: start)
+        let parts: [Data]
+        if submit.operationClass != 8 {
+            guard submit.flags >= 128, request.count >= 40, request.prefix(8) == Data("UIBARGS1".utf8) else { throw NativeProtocolError.request }
+            var offset = 40, decoded: [Data] = []
+            var ended = false
+            for index in 0..<4 {
+                let length = (0..<8).reduce(UInt64(0)) { $0 | UInt64(request[8 + index * 8 + $1]) << ($1 * 8) }
+                if length == 0 { ended = true; continue }
+                guard !ended, length <= UInt64(request.count - offset) else { throw NativeProtocolError.request }
+                decoded.append(request.subdata(in: offset..<(offset + Int(length)))); offset += Int(length)
+            }
+            guard offset == request.count, decoded.count == 3 else { throw NativeProtocolError.request }
+            parts = decoded
+        } else { parts = [request] }
+        let documents = try parts.map { part -> [String: Any] in
+            guard let doc = try JSONSerialization.jsonObject(with: part) as? [String: Any] else { throw NativeProtocolError.request }
+            return doc
+        }
+        var result = NativeInbound(configurationBytes: configurationBytes, document: documents[submit.operationClass == 8 ? 0 : 1], control: submit,
+            replyCap: Int(configure.auxiliary), deadline: min(deadline, until ?? deadline), started: start)
+        result.documents = documents
+        // The parent-generated helper serial is not UI data and is stable across requests.
+        result.documents.append(["helper_serial": configure.ticket])
+        return result
     }
 
     static func receive(_ io: NativeDescriptorIO) throws -> NativeCommand {
@@ -214,7 +248,9 @@ struct NativeDescriptorIO {
     }
 
     static func fixtureCommand(_ input: NativeInbound) throws -> NativeCommand {
+        guard input.control.operationClass == 8, input.control.flags == 0 else { throw NativeProtocolError.control }
         let configuration = try NativeConfiguration.decode(input.configurationBytes)
+        guard configuration.collection != "form" else { throw NativeProtocolError.configuration }
         let doc = input.document, submit = input.control, start = input.started, deadline = input.deadline
         guard
               doc["schema_version"] as? String == "0.1.0",
@@ -244,7 +280,7 @@ struct NativeDescriptorIO {
             && context["fields"] as? [String] == ["role", "accessibility_name", "enabled", "accessibility_bounds", "layout_bounds"]
         guard let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
               composite || (submit.channel == 2 ? fields == ["layout_bounds"] : configuration.collection != "sample"
-                ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"])
+                ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "checked", "actions", "accessibility_bounds"])
                 : fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"]),
               let nodes = limits["max_elements"] as? Int, (1...160).contains(nodes),
               let depth = limits["max_depth"] as? Int, (1...9).contains(depth)
@@ -260,5 +296,31 @@ struct NativeDescriptorIO {
         try NativeDescriptorIO.check(boundedDeadline)
         return NativeCommand(configuration: configuration, document: doc, control: submit,
             replyCap: min(input.replyCap, output), deadline: boundedDeadline)
+    }
+}
+
+// Session-local ordering is independent of canonical UI data. The parent has
+// already checked the actual permit nonce before forwarding phase2.
+struct NativeFormOrder {
+    let epoch: UInt64
+    let serial: UInt64
+    private(set) var operation: UInt64 = 0
+    private(set) var phase: UInt8 = 255
+    private(set) var lastNonce: UInt64 = 0
+    private var operationClass: UInt8 = 0
+    mutating func accept(_ control: NativeControl, serial: UInt64) throws {
+        let next = control.flags & 127
+        guard control.flags >= 128, control.epoch == epoch, serial == self.serial, control.channel == 0 else { throw NativeProtocolError.control }
+        if next <= 1 {
+            guard control.operation > operation,
+                  (next == 0 && control.operationClass == 8) || (next == 1 && [9,10].contains(control.operationClass))
+            else { throw NativeProtocolError.control }
+        } else {
+            guard control.operation == operation, control.operationClass == 9, operationClass == 9,
+                  phase < 3, next == phase + 1, next != 2 || control.ticket > lastNonce
+            else { throw NativeProtocolError.control }
+        }
+        operation = control.operation; phase = next; operationClass = control.operationClass
+        if next == 2 { lastNonce = control.ticket }
     }
 }

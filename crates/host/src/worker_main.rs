@@ -64,7 +64,7 @@ pub(super) fn tighten_deadline(remaining: u64) -> Result<Instant, HostError> {
         .ok_or(HostError::Overflow)
 }
 pub(super) fn admit_observation(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     operation: Control,
     ticket: u64,
     request_deadline: u64,
@@ -75,9 +75,8 @@ pub(super) fn admit_observation(
     }
     admit_request(io, operation, ticket, request_deadline, channels)
 }
-#[cfg(feature = "web")]
 pub(super) fn admit_action(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     operation: Control,
     request_deadline: u64,
 ) -> Result<Instant, HostError> {
@@ -97,7 +96,7 @@ pub(super) fn admit_action(
     )
 }
 fn admit_request(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     operation: Control,
     ticket: u64,
     request_deadline: u64,
@@ -162,7 +161,7 @@ fn fatal(error: HostError) -> ! {
     )
 }
 pub(super) fn publish(
-    io: &mut WorkerIo,
+    io: &WorkerIo,
     operation: Control,
     slot: u8,
     bytes: &[u8],
@@ -210,6 +209,19 @@ fn control_error(error: HostError) -> u64 {
         HostError::ActionRefused => 9,
         _ => 5,
     }
+}
+
+fn attach_failure(io: &WorkerIo, attach: Control, error: HostError) -> Result<(), HostError> {
+    io.write_control(Control {
+        kind: ControlKind::Terminal,
+        class: OperationClass::Attach,
+        slot: 0,
+        flags: 0,
+        correlation: attach.correlation,
+        length: 0,
+        value: control_error(error),
+        auxiliary: 0,
+    })
 }
 
 pub fn run() -> Result<(), HostError> {
@@ -311,44 +323,57 @@ pub fn run() -> Result<(), HostError> {
     let size = usize::try_from(attach.length).map_err(|_| HostError::Overflow)?;
     io.read(&mut input[..size])?;
     let clock = clock_id(configure.correlation.session_epoch)?;
+    // Canonical attach failures are bounded typed control, never raw parser/UI
+    // diagnostics. Return normally after publishing; no competing Fatal record.
+    macro_rules! attached {
+        ($value:expr) => {
+            match $value {
+                Ok(value) => value,
+                Err(error) => return attach_failure(&io, attach, error),
+            }
+        };
+    }
     let web_attach = attach.flags & 128 != 0;
     #[cfg(not(feature = "web"))]
     if web_attach {
-        return Err(HostError::PermissionDenied);
+        return attach_failure(&io, attach, HostError::PermissionDenied);
     }
     let tape = if web_attach {
-        Some(crate::worker_tape::Tape::decode(&input[..size])?)
+        Some(attached!(crate::worker_tape::Tape::decode(&input[..size])))
     } else {
         None
     };
     if tape.as_ref().is_some_and(|t| t.count() != 2) {
-        return Err(HostError::InvalidInput);
+        return attach_failure(&io, attach, HostError::InvalidInput);
     }
     let descriptor = if let Some(t) = &tape {
-        t.get(0)?
+        attached!(t.get(0))
     } else {
         &input[..size]
     };
-    let mut session = CanonicalSession::attach(
+    let mut session = attached!(CanonicalSession::attach(
         descriptor,
         configuration.target,
         uiblueprint_schema::model::Id(clock.as_str().into()),
         now(),
         &ledger,
         limits,
-    )?;
+    ));
     #[cfg(feature = "web")]
     let mut web_session = if let Some(t) = &tape {
-        let setup = uiblueprint_host::web_config::WebSetup::decode(t.get(1)?, limits.input_bytes)?;
-        Some(crate::worker_web::WebSession::attach(
+        let setup = attached!(uiblueprint_host::web_config::WebSetup::decode(
+            attached!(t.get(1)),
+            limits.input_bytes
+        ));
+        Some(attached!(crate::worker_web::WebSession::attach(
             descriptor,
             setup,
             configuration.target,
             uiblueprint_schema::model::Id(clock.as_str().into()),
             clock_origin(),
             limits,
-            tighten_deadline(attach.value)?,
-        )?)
+            attached!(tighten_deadline(attach.value)),
+        )))
     } else {
         None
     };
@@ -418,12 +443,24 @@ pub fn run() -> Result<(), HostError> {
                         operation,
                         &input[..size],
                     ),
-                    None => Err(HostError::PermissionDenied),
+                    None => crate::worker_native_action::run(
+                        &mut session,
+                        &io,
+                        &mut publication,
+                        operation,
+                        &input[..size],
+                    ),
                 }
             }
             #[cfg(not(feature = "web"))]
             {
-                Err(HostError::PermissionDenied)
+                crate::worker_native_action::run(
+                    &mut session,
+                    &io,
+                    &mut publication,
+                    operation,
+                    &input[..size],
+                )
             }
         } else if operation.class == OperationClass::Observe
             && operation.flags & 128 != 0
@@ -467,7 +504,7 @@ pub fn run() -> Result<(), HostError> {
                         return Err(HostError::ResourceLimit);
                     }
                     publication[..bytes.len()].copy_from_slice(bytes);
-                    publish(&mut io, operation, slot, &publication[..bytes.len()], 0)
+                    publish(&io, operation, slot, &publication[..bytes.len()], 0)
                 })
                 .map(|_| 0)
         } else {
@@ -485,7 +522,7 @@ pub fn run() -> Result<(), HostError> {
                     (operation.flags >> 4) & 7,
                 )
                 .and_then(|value| {
-                    publish(&mut io, operation, 0, &encoded.bytes[..encoded.used], 0)?;
+                    publish(&io, operation, 0, &encoded.bytes[..encoded.used], 0)?;
                     Ok(value)
                 })
         };

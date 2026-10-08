@@ -71,6 +71,7 @@ struct Worker<'a, C: OwnedProcess> {
     helpers: [Option<crate::helpers::Helper<'a, C>>; crate::limits::HELPERS],
     worker_reaped: bool,
     web: bool,
+    resident: Option<crate::helpers::HelperHandle<'a>>,
     broker: Option<native_broker::NativeBroker<'a>>,
 }
 struct RuntimeState<'a, P: ProcessPlatform> {
@@ -254,6 +255,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             worker_reaped: false,
             web,
             broker: None,
+            resident: None,
         });
         if ownership_lost {
             let worker = state.workers[session.slot]
@@ -925,7 +927,14 @@ fn pump<'a, P: ProcessPlatform>(
             };
             worker.body_offset += count;
             if worker.body_offset == input.bytes.len() {
-                if worker.active.as_ref().is_none_or(|a| !a.live) {
+                if worker.active.as_ref().is_none_or(|a| {
+                    !(a.live
+                        || binding.is_some_and(|b| b.residency.is_some())
+                            && matches!(
+                                a.class,
+                                OperationClass::Prepare | OperationClass::Mutation
+                            ))
+                }) {
                     worker.input = None;
                 }
                 worker.stage = TxStage::Idle;
@@ -1046,7 +1055,33 @@ fn pump<'a, P: ProcessPlatform>(
         ControlKind::HelperRequest => {
             let publication = active.publish.as_ref().ok_or(HostError::InvalidState)?;
             let prior = publication.committed() | active.native_failed;
-            if !active.live
+            let resident_action = binding.is_some_and(|b| b.residency.is_some())
+                && !active.live
+                && active.request.input_format == 1
+                && matches!(
+                    active.class,
+                    OperationClass::Prepare | OperationClass::Mutation
+                );
+            if resident_action {
+                let phase = control.flags;
+                let allowed = native_action_phase_allowed(
+                    active.class,
+                    active.native_requested,
+                    active.effect,
+                    phase,
+                    control.auxiliary,
+                );
+                if !allowed
+                    || active.refusal_started
+                    || active.ticket != Some(control.value)
+                    || control.slot != 0
+                    || control.length != 0
+                    || !publication.idle()
+                    || publication.committed() != 0
+                {
+                    return Err(HostError::InvalidControl);
+                }
+            } else if !active.live
                 || active.request.input_format != 0
                 || active.class != OperationClass::Observe
                 || active.ticket != Some(control.value)
@@ -1081,11 +1116,17 @@ fn pump<'a, P: ProcessPlatform>(
             if cap <= 1 {
                 return Err(HostError::ResourceLimit);
             }
-            active.native_requested |= 1 << control.slot;
+            active.native_requested |= if resident_action {
+                1 << control.flags
+            } else {
+                1 << control.slot
+            };
             worker.broker = Some(native_broker::NativeBroker::new(
                 control.slot,
                 control.value,
                 cap,
+                control.flags,
+                control.auxiliary,
             ));
             Ok(None)
         }
@@ -1222,6 +1263,19 @@ fn pump<'a, P: ProcessPlatform>(
                 9 => Terminal::Failed(HostError::ActionRefused),
                 _ => return Err(HostError::InvalidControl),
             };
+            if active.class == OperationClass::Attach {
+                if control.value == 0
+                    || control.value == 9
+                    || control.flags != 0
+                    || control.length != 0
+                    || control.auxiliary != 0
+                {
+                    return Err(HostError::InvalidControl);
+                }
+                return Ok(Some(HostEvent::Complete(terminalize(
+                    worker, terminal, cleanup_ms, now,
+                ))));
+            }
             if active.class == OperationClass::Mutation {
                 if terminal != Terminal::Completed
                     && matches!(active.effect, EffectReceipt::Possible { .. })
@@ -1256,5 +1310,74 @@ fn pump<'a, P: ProcessPlatform>(
             })))
         }
         _ => Err(HostError::InvalidControl),
+    }
+}
+
+// A correlated worker request alone cannot create delivery authority. This exact
+// check is shared by the live HelperRequest branch and the negative boundary tests.
+fn native_action_phase_allowed(
+    class: OperationClass,
+    requested: u8,
+    effect: EffectReceipt,
+    phase: u8,
+    nonce: u64,
+) -> bool {
+    match phase {
+        1 => requested == 0 && effect == EffectReceipt::NotDispatched && nonce == 0,
+        2 => {
+            class == OperationClass::Mutation
+                && requested == 2
+                && matches!(effect, EffectReceipt::Possible { nonce: actual } if actual == nonce && nonce != 0)
+        }
+        3 => class == OperationClass::Mutation && requested == 6 && nonce == 0,
+        _ => false,
+    }
+}
+#[cfg(test)]
+mod native_delivery_tests {
+    use super::*;
+    #[test]
+    fn native_forwarding_requires_exact_parent_nonce_and_single_phase() {
+        let possible = EffectReceipt::Possible { nonce: 17 };
+        assert!(native_action_phase_allowed(
+            OperationClass::Prepare,
+            0,
+            EffectReceipt::NotDispatched,
+            1,
+            0
+        ));
+        assert!(native_action_phase_allowed(
+            OperationClass::Mutation,
+            2,
+            possible,
+            2,
+            17
+        ));
+        assert!(native_action_phase_allowed(
+            OperationClass::Mutation,
+            6,
+            possible,
+            3,
+            0
+        ));
+        for (class, requested, effect, phase, nonce) in [
+            (OperationClass::Mutation, 0, possible, 2, 17),
+            (OperationClass::Prepare, 2, possible, 2, 17),
+            (
+                OperationClass::Mutation,
+                2,
+                EffectReceipt::NotDispatched,
+                2,
+                17,
+            ),
+            (OperationClass::Mutation, 2, possible, 2, 18),
+            (OperationClass::Mutation, 6, possible, 2, 17),
+            (OperationClass::Mutation, 2, possible, 3, 0),
+            (OperationClass::Mutation, 6, possible, 3, 17),
+        ] {
+            assert!(!native_action_phase_allowed(
+                class, requested, effect, phase, nonce
+            ));
+        }
     }
 }

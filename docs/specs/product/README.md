@@ -16,6 +16,7 @@
 | [UIB.BOUNDARIES@1](boundaries.md) | выбор архитектуры, platform/plugin/profile/extension boundaries; contract |
 | [UIB.MODEL@1](model.md) | schema, нормализация, свойства, роли, provenance; contract |
 | [UIB.EXCHANGE@2](exchange.md) | request/session/property/time/error/JSON envelopes and narrow explicit probe-wrapper composition; contract |
+| [UIB.NATIVE-SESSION@1](native-session.md) | attached Native form observation/actions and CLI; contract |
 | [UIB.NATIVE@2](native.md) | Mac AX, capture, оконное matching, probe; contract |
 | [UIB.GEOMETRY@1](geometry.md) | пространства, transforms, измерения, Expectation/check; contract |
 | [UIB.PROJECTIONS@1](projections.md) | выбор области, coverage, проекции, many-to-many mapping; contract |
@@ -25,7 +26,7 @@
 | [UIB.LIFECYCLE@1](lifecycle.md) | cancel/dispatch, native handles, очереди Target и изоляция; contract |
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
-| [UIB.CLI@15](cli.md) | CLI commands/output; compact component parts, [raw diff@2](cli-diff.md)/[selected-space diff@1](cli-geometry-diff.md)/[graph diff@1](cli-graph-diff.md), preserved JSON/OBSERVE and [CLI-ACTIONS@3](cli-actions.md) |
+| [UIB.CLI@16](cli.md) | CLI commands/output; compact component parts, [raw diff@2](cli-diff.md)/[selected-space diff@1](cli-geometry-diff.md)/[graph diff@1](cli-graph-diff.md), preserved JSON/OBSERVE and [CLI-ACTIONS@3](cli-actions.md) |
 | [UIB.ANALYSIS@2](analysis.md) | local measurement/check0.2, direct observed input, result-space/evaluation, validation layers and protected0.1 compatibility; types/validation closure unchanged |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |

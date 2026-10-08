@@ -7,7 +7,6 @@ use std::{
     thread,
     time::{Duration, Instant},
 };
-#[cfg(feature = "web")]
 use uiblueprint_host::worker_tape;
 use uiblueprint_host::{
     HostError, HostLimits,
@@ -215,7 +214,6 @@ pub(crate) fn encoded(document: &Document, limit: usize) -> Result<Vec<u8>, Fail
     // Uses the existing CLI bounded writer, not an unbounded payload clone.
     crate::output::trusted_input(document, limit)
 }
-#[cfg(feature = "web")]
 pub(crate) fn tape_len(parts: &[&[u8]]) -> Result<usize, Failure> {
     parts
         .iter()

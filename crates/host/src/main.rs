@@ -3,9 +3,9 @@
 
 #[cfg(target_os = "macos")]
 mod quota_allocator;
-#[cfg(all(target_os = "macos", feature = "web"))]
+#[cfg(target_os = "macos")]
 mod worker_action;
-#[cfg(all(target_os = "macos", feature = "web"))]
+#[cfg(target_os = "macos")]
 mod worker_effect;
 #[cfg(target_os = "macos")]
 mod worker_io;
@@ -13,6 +13,8 @@ mod worker_io;
 mod worker_main;
 #[cfg(target_os = "macos")]
 mod worker_native;
+#[cfg(target_os = "macos")]
+mod worker_native_action;
 #[cfg(target_os = "macos")]
 mod worker_ops;
 #[cfg(all(target_os = "macos", feature = "web"))]

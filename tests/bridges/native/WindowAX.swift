@@ -152,7 +152,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
     fields: [String], json: NativeJSON, access: NativeAXAccess = .live) throws -> WindowAXResult {
     let selected = Set(fields)
     guard !fields.isEmpty, selected.count == fields.count,
-          selected.isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]),
+          selected.isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "checked", "actions", "accessibility_bounds"]),
           access.isElement(root) else { throw NativeAcquisitionError.invalidValue }
     var handles = [root], depths = [0]
     var nodes: [[String: Any]] = try json.array { [] }
@@ -221,7 +221,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         if selected.contains("enabled") { names.append(kAXEnabledAttribute) }
         if selected.contains("focused") { names.append(kAXFocusedAttribute) }
         if selected.contains("accessibility_bounds") { names += [kAXPositionAttribute, kAXSizeAttribute] }
-        if selected.contains("value") && nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { names.append(kAXValueAttribute) }
+        if (selected.contains("value") || selected.contains("checked")) && nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { names.append(kAXValueAttribute) }
         let values = names.isEmpty ? [:] : try batch(el, names)
         let roles = ["AXButton": "button", "AXCheckBox": "checkbox", "AXTextField": "textbox",
                      "AXStaticText": "text", "AXGroup": "group", "AXScrollArea": "scrollarea", "AXSlider": "slider"]
@@ -248,6 +248,13 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
                     if secure { return try json.redacted() }
                     if !nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { return try json.unavailable("identity_classification_unavailable") }
                     return try nativeAXScalar(values[kAXValueAttribute], json: json)
+                }
+            case "checked":
+                try append(field) {
+                    guard role == "AXCheckBox", let number = values[kAXValueAttribute] as? NSNumber,
+                          CFGetTypeID(number) == CFNumberGetTypeID(), [0.0, 1.0].contains(number.doubleValue)
+                    else { return try json.unavailable("checked_state_not_exposed", status: "unsupported") }
+                    return try json.known("flag", number.doubleValue == 1)
                 }
             case "placeholder": try append(field) { try typed(values[kAXPlaceholderValueAttribute], expected: "text") }
             case "enabled": try append(field) { try typed(values[kAXEnabledAttribute], expected: "flag") }

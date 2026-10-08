@@ -33,7 +33,7 @@ SWIFT = ['plugins/macos/NativeAcquisition.swift', 'plugins/macos/NativeJSON.swif
          'plugins/macos/NativeArtifacts.swift', 'fixtures/native/Observe.swift',
          'tests/bridges/native/Collector.swift', 'tests/bridges/native/WindowAX.swift',
          'plugins/macos/HostProtocol.swift', 'plugins/macos/NativeFocusedAX.swift',
-         'plugins/macos/HostHelper.swift']
+         'plugins/macos/NativeFormSession.swift', 'plugins/macos/HostHelper.swift']
 
 
 def files_for(modules):

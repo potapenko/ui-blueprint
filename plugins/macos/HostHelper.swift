@@ -26,6 +26,10 @@ import Darwin
             }
             let io = try NativeDescriptorIO()
             let input = try NativeHostProtocol.receiveInput(io)
+            if input.control.flags >= 128 {
+                try NativeFormSession.run(io: io, first: input)
+                return
+            }
             if try NativeFocusedAX.isConfiguration(input.configurationBytes) {
                 let command = try NativeFocusedAX.command(input)
                 let remaining = command.deadline - NativeDescriptorIO.now

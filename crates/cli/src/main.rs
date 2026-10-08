@@ -7,6 +7,8 @@ mod arguments;
 mod connection;
 mod export;
 mod input;
+#[cfg(all(target_os = "macos", feature = "macos"))]
+mod native_session;
 mod observe;
 mod output;
 
@@ -22,6 +24,7 @@ use uiblueprint_engine::{self as engine, MeasurementResult};
 use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
+Native session: native-session --connection FILE --worker ABSOLUTE_PATH --duration-ms N --max-input-bytes N --max-output-bytes N (macos feature; bounded NDJSON command paths on stdin)\n\
 Diff: uiblueprint diff --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Graph diff: diff --graph --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Geometry diff: diff --geometry --before FILE --after FILE --ref SOURCE_KEY_JSON --frame-kind KIND --space ID --max-input-bytes N --max-output-bytes N [--before-evaluation FILE] [--after-evaluation FILE] [--json]\n\
@@ -272,6 +275,17 @@ fn diff_failure(error: engine::diff::DiffError) -> Failure {
 
 fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
+    #[cfg(all(target_os = "macos", feature = "macos"))]
+    if args.first().is_some_and(|arg| arg == "native-session") {
+        let result = native_session::execute(args.into_iter().skip(1), &mut io::stdout().lock());
+        return match result {
+            Ok(code) => ExitCode::from(code),
+            Err(error) => {
+                let _ = writeln!(io::stderr().lock(), "{}", error.code);
+                ExitCode::from(error.exit)
+            }
+        };
+    }
     if args.first().is_some_and(|arg| arg == "action") {
         let result = ActionArguments::parse(args.into_iter().skip(1))
             .and_then(|args| action::execute(args, &mut io::stdout().lock()));

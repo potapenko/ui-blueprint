@@ -657,6 +657,12 @@ fn forms_case(intent: Intent) -> (ActionCase, Snapshot, Expectation) {
             Field::Value,
             Value::Text("prefixsuffix".into()),
         ),
+        Intent::Fill { .. } => (
+            "fill",
+            InputModality::Setter,
+            Field::Value,
+            Value::Text("prefixsuffix".into()),
+        ),
         Intent::Activate {} => (
             "activate",
             InputModality::Semantic,
@@ -681,7 +687,7 @@ fn forms_case(intent: Intent) -> (ActionCase, Snapshot, Expectation) {
     };
     let initial = if name == "focus" {
         Value::Flag(false)
-    } else if name == "type" {
+    } else if name == "type" || name == "fill" {
         Value::Text("prefix".into())
     } else {
         Value::Number(0.0)
@@ -766,8 +772,11 @@ fn forms_prepared(case: ActionCase, expected: Expectation) -> ActionExecution {
     .unwrap()
 }
 #[test]
-fn focus_type_activate_verify_only_explicit_fresh_public_source_state() {
+fn focus_fill_type_activate_verify_only_explicit_fresh_public_source_state() {
     for intent in [
+        Intent::Fill {
+            text: "prefixsuffix".into(),
+        },
         Intent::Focus {},
         Intent::Type {
             text: "suffix".into(),
