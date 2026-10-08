@@ -32,14 +32,14 @@ Root получает итог или конкретный блокер; про�
   full97-node positive facts. Documents privacy/P1 отклонён: comma-tight srcset с
   безопасным выбранным currentSrc публикует private unselected credential URL.
   CPU/runtime освобождены. Same reviewer сохранён для affected privacy recheck.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: turn `inProgress`; разрешено
-  самостоятельно измерить принятые single-control semantic/geometry на saved9d715ee.
-  Он владеет CPU/headless lane до terminal release. Full Documents и Native остаются
-  отдельными открытыми строками; ни fields/workload, ни D06 thresholds не меняются.
-- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: разархивирован, новый repair
-  turn `inProgress`. Полный remaining-P1 outcome у исходного владельца; source edits
-  независимы от Q02. Heavy checks/headless ждут Q02 terminal resource release,
-  после которого W06 сам продолжает весь цикл без root grant. P2 остаётся закрытым.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal `completed`,
+  result `b3c3a22` pushed. На accepted9d715ee semantic warm p95=2.845584ms,
+  geometry p95=2.899125ms, по100warm, обе20ms gates выполнены по отчёту Q02.
+  Все240cohort samples valid;40cold-control отдельно, не full-fixture acceptance.
+  CPU/headless освобождены; full Documents/Native и отдельные stage gaps открыты.
+- W06, чат `01a11cb3-7994-7b30-871b-69d5ae04b063`: full remaining-P1 repair
+  `inProgress`; source checkpoint `a4b3af6` pushed. Условие Q02 resource release
+  выполнено, продолжает свои affected проверки без root grant. P2 остаётся закрытым.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
@@ -82,6 +82,28 @@ active/inProgress через wait_threads:
 Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; root также
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
+
+## Q02 single-control measurements delivered; W06 resource dependency released
+
+Terminal Q02 `b3c3a22` pushed; [receipt](receipts/Q02-performance.md) read through
+its complete new result. Saved optimized9d715ee on frozen host/browser/F01:
+semantic100warm p50=2.586313/p95=2.845584ms; geometry100warm
+p50=2.714687/p95=2.899125ms. Both20ms numerical gates met. All240cohort requests
+valid, no timeout/retry/drop;20cold-control per row separate, semantic558.086541ms
+maximum retained. Cold-control does not stand in for full-document50/500ms gates.
+Fresh semantic/name and geometry/width challenges preserved known original facts.
+
+Two preflight plus42cohort attachments closed with0sessions/leases; exact own
+caller/worker process inventories empty. Q02 explicitly released CPU/headless;
+W06 can complete its already-authorized checks automatically. No new task or grant
+was required. Q02 retained for full-document and Native work; not archived as done
+with the whole task. Source-clock DOM/AX intervals are reported, exclusive Rust/
+transport/match/diff/check/format/syscall/cache-stage gaps remain explicit.
+
+Minimal raw records under existing Q02 temp root (web9d-build-pins.json,
+web9d-preflight-1/,web9d-series-1/) remain for Q01/root performance evidence consumer.
+No performance optimization or product-source change was needed for these rows.
+Native foreground/Q03 authority questions remain unanswered; no goal completion.
 
 ## Split W06 verdict; independent measurement and remaining privacy repair
 
