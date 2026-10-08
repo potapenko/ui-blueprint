@@ -706,3 +706,12 @@ Type/focus-loss result records; actual execution remains author-attributed. No
 fix/retest/second review triggered. FullB02/P5/P7 and Native/IME/hardware/business
 claims remain open. CLI original build target cleanup confirmed, no images/other
 tasks affected. Web's26 canonical files are consumed and released for its cleanup.
+
+A03 cleanup5fa249549c6dad026499767077ae872ad6264bce saved/pushed exact1.
+Web removed exactly26 consumed JSON files and empty run directory, absence
+verified; images/other evidence untouched. Core/CLI/Web all confirmed terminal,
+source saved, Git/runtime leases free. These completed chats were archived after
+handoff; IDs remain above and can be explicitly restored for a ready next packet.
+No work or acceptance discarded. Goal stays active; next turn selects the remaining
+Native M05/held-action and Web full-pilot work from their exact residuals, without
+reopening accepted A03/A04 or rebuilding completed geometry/export paths.
