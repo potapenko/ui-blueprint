@@ -2,7 +2,11 @@
 
 Используется после запуска [плана](../ui-blueprint-development.md).
 Пакет создаётся root только для готовой задачи; placeholders заполняются до dispatch.
-Один worker не получает цель «реализуй весь проект» или весь root transcript.
+Один чат получает самостоятельную задачу среднего размера, не всю платформу
+и не отдельный технический шаг. Применяется [порядок самостоятельных задач](execution.md#самостоятельные-чаты-задачи--уточнение-пользователя-2026-10-08).
+Root задаёт результат и границы; исполнитель сам проходит постановку, локальный
+план, реализацию, проверки, исправления, документацию, commit и push до финального
+ответа. Внутренние шаги не требуют новых заданий или одобрения root.
 
 ## Обязательные поля
 
@@ -14,7 +18,7 @@ ready_because: принятые зависимости и revision
 immediate_consumer: ближайшая capability/решение/приёмка
 economy_basis: прямой путь; зачем отдельный контекст; когда расширять исследование
 authority: исходное пользовательское разрешение + approved plan revision
-execution_mode: coordinated; nested delegation: forbidden
+execution_mode: самостоятельный видимый чат-задача; nested delegation: forbidden
 model/reasoning: inherit
 repo/current_branch/base_commit:
 mode: Restore | Reconcile | Evolve | Discover | Behavior-neutral
@@ -26,12 +30,12 @@ spec_basis:
   evidence_inputs: source records/fixtures/revisions
   discrepancy/authority: подтверждённые правила отдельно от предложения
 envelope: outcome; разрешённый contract delta; защищённые соседние домены
-authority_mode: bounded
-write_set: точные файлы/символы; нельзя писать вне набора
+authority_mode: bounded по целостной области задачи; task-wide только при отсутствии пересекающихся writers
+write_set: область реализации + необходимые тесты/документация; shared owners и защищённые пути отдельно; исполнитель уточняет файлы до правок
 reuse: готовые schema/API/owners, запрещённые дубли
 forbidden: новые frameworks/сервисы вне outcome, чужие проекты, branch/worktree
-resource_lease: target/session/build/Git lane; owner; release condition
-checks: конкретные команды/сценарии для этого изменения
+resource_lease: только реальные общие ресурсы; способ взаимного исключения согласован до старта; освобождение без отдельного разрешения root
+checks: обязательные критерии/сценарии; достаточные команды и локальные проверки выбирает исполнитель
 acceptance: обязательные критерии; optional references отдельно
 done_when: результат + checks + checkpoint commit + push + terminal receipt
 waiting: точная dependency/permission/resource; не обходить границу
@@ -71,7 +75,9 @@ runtime_or_visual_handoff: target/build/state/action/result/evidence or not appl
 ```
 
 `done` означает готовность конечного результата, не закрытие всей цели.
-Root записывает receipt до освобождения слота и запуска зависимой задачи.
+Root принимает финальный ответ по критериям задачи, записывает результат и
+передаёт его зависимым задачам. Промежуточные сообщения не являются поводом
+выдавать исполнителю новые микропоручения.
 
 ## Review packet
 
