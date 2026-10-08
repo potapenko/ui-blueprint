@@ -499,3 +499,24 @@ AXFocusedWindow, no fixture identity/probe dependency, no CG mapping/input claim
 Native owns Swift/docs plus narrow CLI connection branch/tests; Core notified,
 engine/schema protected. Truthful per-observation identity must fit existing contract
 or return exact dependency; no invented continuity. Test only ownF02 genericroute.
+
+Alignment source256f2a27e88106a1987515dc3ee654b9cd725120 saved/pushed exact7 by root
+from completed Core author-ready result: explicitknownanchors nowcompute despite
+partialSnapshot, mirrorvalidator/recompute/CLI JSON regression passed perauthor; no
+browserrerun. Core thread01a111a7-9887-7983-9aa0-c08dfa2d46bc completed/notLoaded;
+send_message failed twice threadnotfound (including explicitlocal host). Active/
+archived tool lists did not expose it; no actor replacement/restart yet. Existing
+source/history retained; root onlycheckpointed, did notimplement or reruntests.
+
+G04 source/contracts/actual qualification05a76f0f1f95f0a160b072329fdfe2e5a8993592
+saved/pushed exact14; NATIVE@2/CLI@7/registry19, Core0.1/analysis0.2unchanged.
+Grouped binding/privacy review accepted, source matches; tests/runtime attributed.
+OrdinaryAX process/window gave75nodes and173.5x48pt withoutfixturefiles;262.11ms
+singleObserve is notp95. Next Native task: previouslyauthorizedF03/Q03 readonly
+existingMac process from advisor—PID13309/playphraseme.Playphraseme, precision
+incarnation must be refreshed before use. Neverlaunch/change/focus/resize/terminate
+userapp, neverinferAXbindingfromCG11489/title/outer1920x1050. CurrentAXwindow/inner
+geometryonly, old961window andpausedstate notassumed. Scope Role/Name/AXbounds,
+existinglimits, ownhelpercleanup. Ifunavailable return fact, no silentpreparation.
+Webadvisor continuation currently also reports threadnotfound; existing casehandoff
+retained, no new realwebsite target guessed. Geometry work/goal remain active.

@@ -70,3 +70,14 @@ individual pre-post identity assertions/reap still required; shared-parent/fullM
 remain open. Native prepared saved23f22fb Swift +138d7bc Rust inputs without current
 WIP; root activated one bounded own-fixture combined AX/capture run,300s existing
 bound, unchanged D05 per-channel/cleanup caps, all images retained in system temp.
+
+## Ordinary AX geometry05a76f0 — grouped review
+
+Same non-author reviewer read changed source/contracts/tests before author receipt,
+then reconciled savedG04 section. Scoped accept, no actionable findings; reviewed
+source matches05a76f0 vs256f2a2. Explicit process andAXFocusedWindow binding, same
+object pre/post, permission refusal/no prompt, secure-value exclusion, bounded output
+and common fixture receive preserved. Surface observation-scoped only; no CG/stable
+crossrequest/action/capture authority. Author12checks/6canonical/33fixtureFD/CLIpeer/
+Clippy and actual75node173.5x48pt run remain attributed; no reviewer runtime/replay
+of removedoutputs. RealRC03/generalcompatibility/hiddenlayout/P7 still open.
