@@ -69,3 +69,10 @@ created images retained in OS temp forever from the agent's perspective, non-ima
 run files cleaned after consumption. Append actual facts and limitations to the
 same existing receipt, checkpoint+push; next implementation needs explicit owner
 split after this evidence, no auto-next or nested agents.
+
+Binding setup clarification: the existing f02.snapshot semantic button action on
+fresh exact own-fixture AX is allowed solely to publish current window binding.
+No popup or target-control action: AXPress/setter/input prohibition applies to
+f02.enabled/f02.sample.a and product delivery. Verify current binding after Snapshot
+before read-only capability probe. This explicit setup exception adds no code or
+wire capability; native modality labels must reuse actual canonical Semantic.
