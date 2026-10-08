@@ -54,6 +54,17 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Следующая независимая задача и продуктовые ответы
+
+Оба консультанта завершили read-only ответы; шесть кейсов и границы записаны
+в [platform advice](receipts/platform-test-advice.md). Первые Q03 consumers —
+Mac RC03 resize и Web Director, без новой авторизации запуска реальных проектов.
+
+Подготовлен [I01-L](packets/I01-local-distribution.md): законченная локальная
+сборка/поставка/recovery/notices по имеющимся binaries; implementation независима
+от текущих feature changes, V01/P7 остаются acceptance dependencies. Область записи
+отделена от трёх активных задач, desktop не используется. ID после запуска.
+
 ## Уточнение организации при паузе — 2026-10-08 (история)
 
 Прямое требование пользователя: самостоятельные задачи среднего размера из

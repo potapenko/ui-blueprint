@@ -240,3 +240,25 @@ through dispatch. Round-trip arithmetic and AX rectangle containment do not prov
 hit region; inside/outside Count outcomes remain necessary. No external CUA/global
 WindowServer/physical-device claim. Root selected minimal trusted frame input to
 existing own test seam, with Native source reconciliation and one changed pair.
+
+## Q03 самостоятельные geometry/diff кейсы — 2026-10-08
+
+Оба автора ответили read-only из уже имеющегося контекста, без новых запусков,
+изменений или captures. Это выбор полезных вопросов и источников, не новая
+runtime-приёмка и не разрешение менять/запускать реальные проекты PlayPhrase.me.
+Mac: чат01a1102f-791c-7e91-bec3-1877ea004d51, turn01a11b4f-97f1-7ae0-9da6-a462dc8dec99.
+Web: чат01a1102f-e21d-7251-9597-c29a1c66d088, turn01a11b4f-9d16-7212-a8b7-280e16ee287c.
+
+| Кейс | Вопрос для агента / нужный результат | Основание и ограничения |
+| --- | --- | --- |
+| Mac RC03 Search resize, первый выбор | При сужении где перестают помещаться learner tabs? Bounds панелей/видео/transport/tab strip, gaps, оси и containment в pt; одинаковые query/clip/paused state | fixtures/real-world/mac-resize содержит пару внешних окон1920×1050/961×1050pt. Внутренние bounds/text extent/hit ещё unknown; наружное окно не подменяет content viewport |
+| Mac RC02 Director | Остался ли popup рядом с trigger и помещаются ли input/list? Сourced anchored_to, отдельные Surface bounds/containment в pt | mac-filters содержит idle состояние, без ввода/results. AX↔CG исторически было inferred. Right-placement — предпочтение, допустимый system fallback не дефект; точные anchor/insets неизвестны |
+| Mac RC01 Settings | После изменения строки сохранились axes labels/controls, widths/gaps и доступность Close? | mac-settings: семантика10controls и вложенная панель. Merged AX не раскрывает внутренние части; crop не равен dialog bounds. До/после правки ещё отсутствует |
+| Web Director, первый выбор | Выровнены ли trigger/popup/input/list/options, какие gaps/insets/overflow изменились? Отделить перенос блока от внутреннего layout | Existing filter contract и tc-clip-search-desktop-filters-and-suggestions-panel; CSS только declaration. Полная occlusion/pointer доступность unknown. Не использовать спорный tag ellipsis как oracle |
+| Web mobile Settings, дополнительный будущий профиль | Длинный текст не сжимает switch/select? Пересечения, scroll и viewport отдельно от layout | mobile-layout contracts и tc-mobile-settings-fixed-toggle-and-select-widths. Native content-size Simulator Safari нужен только для окончательного мобильного claim; этот случай не добавляет iOS implementation к цели. Положительный rect не доказывает читаемость |
+| Web desktop Settings | При resize выровнены controls, локальны ли пояснения и сохранён ли порядок строк/значения? | settings/overview-and-behavior и tc-settings-modal-controls-persist. Отступ без принятого дизайна — факт, не fail; снимок не доказывает persistence |
+
+Все пары сравнивать при явно известных state/environment/units и отдельных
+наблюдениях до/после. Исторические numbers и F01 oracle не переносить на настоящий
+сайт. Предпочтительные первые consumers Q03: Mac RC03 и Web Director. Runtime
+разрешение и наличие нужных наблюдений проверяются перед Q03 отдельно.
