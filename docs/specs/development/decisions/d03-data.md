@@ -11,7 +11,7 @@
   [PROJECTIONS@1](../../product/projections.md), [FORMS@1](../../product/forms.md),
   [CACHE@1](../../product/cache.md), [ACTIONS@1](../../product/actions.md),
   [GOLDEN@1](../../acceptance/golden.md), [evidence](evidence.md);
-  [ANALYSIS@1](../../product/analysis.md) and its closure for local analysis serialization.
+  [ANALYSIS@2](../../product/analysis.md) and its closure for local analysis serialization.
 - Owner/deadline: S01 definitions and valid/invalid examples before P1 tests;
   G01 measurements, K01 atomic replay; final compatibility after both pilots/P3.
 

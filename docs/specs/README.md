@@ -1,6 +1,6 @@
 # Specification registry
 
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 17.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 18.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -73,6 +73,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.
+`L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
 | Product behavior/schema/engine/plugin/CLI/export | [Product tree](product/README.md) | Current norms; select the smallest applicable leaf closure |
@@ -85,7 +86,6 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 
 ## Routing invariants
-
 `UIB.ROUTING.NODES`: every new node is at most 100 physical lines. Stable clause
 IDs identify meaning; source line ranges aid fidelity checks and do not replace
 IDs. Original imported documents remain unchanged. Leaf `CONTENT` clauses retain

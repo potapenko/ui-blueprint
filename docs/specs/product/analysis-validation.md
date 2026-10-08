@@ -6,7 +6,7 @@
 - Read when: validating/computing/importing analysis artifacts or designing their tests.
 - Do not read when: an unaffected existing core validator path is sufficient.
 - Requires: [TYPES@1](analysis-types.md), [GEOMETRY@1](geometry.md), [MODEL@1](model.md), [PRIVACY@1](privacy.md), [IDENTITY@1](identity.md).
-- Compatibility/CLI and change record: [ANALYSIS@1](analysis.md).
+- Compatibility/CLI and change record: [ANALYSIS@2](analysis.md).
 
 ## UIB.ANALYSIS-VALIDATION.BINDING
 

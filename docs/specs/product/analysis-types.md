@@ -6,7 +6,7 @@
 - Read when: defining/serializing analysis0.2 inputs or results.
 - Do not read when: an unchanged core0.1 artifact is the only consumer.
 - Requires: [MODEL@1](model.md), [EXCHANGE@1](exchange.md), [GEOMETRY@1](geometry.md).
-- Route/compatibility: [ANALYSIS@1](analysis.md); binding/verification: [VALIDATION@1](analysis-validation.md).
+- Route/compatibility: [ANALYSIS@2](analysis.md); binding/verification: [VALIDATION@1](analysis-validation.md).
 
 ## UIB.ANALYSIS-TYPES.ENVELOPE
 

@@ -26,7 +26,7 @@
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
 | [UIB.CLI@6](cli.md) | CLI commands/output; preserved CONTENT/INSPECT/OBSERVE, [recorded diff@2](cli-diff.md) and selected [single-step CLI-ACTIONS@1](cli-actions.md) |
-| [UIB.ANALYSIS@1](analysis.md) | local measurement/check0.2, result-space/evaluation, validation layers and protected0.1 compatibility; contract with types/validation closure |
+| [UIB.ANALYSIS@2](analysis.md) | local measurement/check0.2, direct observed input, result-space/evaluation, validation layers and protected0.1 compatibility; types/validation closure unchanged |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |
 | [UIB.EXPORT@1](export.md) | E01/E02, imagegen-prompt, человеческий экспорт; contract |

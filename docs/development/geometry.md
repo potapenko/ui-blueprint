@@ -1,6 +1,6 @@
 # Pure geometry and canonical analysis
 
-`uiblueprint-engine` computes deterministic geometry on immutable canonical data without IO, collection, actions, clocks, cache mutation or a model. [ANALYSIS@1](../specs/product/analysis.md) owns factual queries/versioned results; [GEOMETRY@1](../specs/product/geometry.md) still governs arithmetic.
+`uiblueprint-engine` computes deterministic geometry on immutable canonical data without IO, collection, actions, clocks, cache mutation or a model. [ANALYSIS@2](../specs/product/analysis.md) owns factual queries/versioned results; [GEOMETRY@1](../specs/product/geometry.md) still governs arithmetic.
 
 ## Entry points and ownership
 

@@ -1,11 +1,11 @@
 # Local measurement and check artifacts
 
-- Node type: branch + leaf; domain: `uib.analysis`; contract: `UIB.ANALYSIS@1`.
+- Node type: branch + leaf; domain: `uib.analysis`; contract: `UIB.ANALYSIS@2`; supersedes @1.
 - Authority: Active / Stability: Evolving; accepted/released implementation: none.
 - Authority source: ROADMAP D03 delegation under approved PLAN.UIB@1; root-accepted decision8fdf608 and [registration packet](../../plans/ui-blueprint/packets/L01-analysis-registration.md).
 - Read when: local measurement/check JSON, result space, evaluation input or version integration.
 - Do not read when: unchanged core transport or unrelated product behavior is sufficient.
-- Requires: [types@1](analysis-types.md), [validation@1](analysis-validation.md), [CLI@1](cli.md), [EXCHANGE@1](exchange.md), [GEOMETRY@1](geometry.md), [MODEL@1](model.md), [PRIVACY@1](privacy.md).
+- Requires: [types@1](analysis-types.md), [validation@1](analysis-validation.md), [CLI@6](cli.md), [EXCHANGE@1](exchange.md), [GEOMETRY@1](geometry.md), [MODEL@1](model.md), [PRIVACY@1](privacy.md).
 - Implementation handoff: [exact saved decision](../../development/schema.md#l01-analysis-result-contract), checkpoint8fdf608; supporting detail, not a replacement for these clauses.
 
 ## UIB.ANALYSIS.SCOPE
@@ -44,8 +44,11 @@ uiblueprint measure --snapshot S --expectation X --space ID --max-input-bytes N 
 uiblueprint check --snapshot S --expectation X --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json --result-version 0.2.0]
 ```
 
-S/X are core0.1 Snapshot/Expectation Documents; Q/E are analysis0.2 query/evaluation
-documents. Measure requires exactly one of query/expectation; check requires
+S is core0.1 Snapshot or observed ChannelResponse containing its unchanged Snapshot;
+X is core0.1 Expectation; Q/E are analysis0.2 query/evaluation documents. Failed/no-
+Snapshot response or wrong artifact refuses2; full canonical validation and the same
+aggregate byte bound apply. No extraction/restamping or extra files required of caller.
+Measure requires exactly one of query/expectation; check requires
 expectation and rejects query. The compatibility measure form extracts a factual
 query from the actual expectation, without fabricating normative fields.
 Without E, use snapshot binding, the explicitly selected Space, no extra transforms
@@ -90,3 +93,7 @@ ANALYSIS/TYPES/VALIDATION@1. Mode Reconcile delegated technical shape/versioning
 normative authority is existing CLI/GEOMETRY/EXCHANGE/MODEL/PRIVACY and approved
 ROADMAP, not a self-authorizing proposal. No released baseline or arithmetic change.
 The five shared repairs and E02-R1/R2/R3 remain accepted and protected.
+`L01-GEOMETRY-INPUT-001`: root selected compatible additive direct Observe input for
+measure/check under approved read-only geometry goal; @2/registry18 reuses existing
+local CLI snapshot loader. TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic,
+inspect/diff/transport and original source records stay unchanged. Acceptance pending.

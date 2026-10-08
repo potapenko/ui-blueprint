@@ -77,11 +77,7 @@ pub(crate) fn load_diff(args: &DiffArguments) -> Result<(Snapshot, Snapshot), Fa
 }
 pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
     let mut remaining = args.max_input;
-    let document = Document::from_json(&read(&args.snapshot, &mut remaining)?, args.max_input)
-        .map_err(|_| Failure::invalid("invalid_input"))?;
-    let Artifact::Snapshot(snapshot) = document.artifact else {
-        return Err(Failure::invalid("invalid_input"));
-    };
+    let snapshot = read_snapshot(&args.snapshot, &mut remaining, args.max_input)?;
     let (query, expectation) = match &args.query {
         QueryFile::Expectation(path) => {
             let document = Document::from_json(&read(path, &mut remaining)?, args.max_input)
@@ -132,7 +128,7 @@ pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
     validate_bound_evaluation(&snapshot, &evaluation)
         .map_err(|_| Failure::invalid("invalid_input"))?;
     Ok(Loaded {
-        snapshot: *snapshot,
+        snapshot,
         query,
         expectation,
         evaluation,

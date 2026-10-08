@@ -135,7 +135,11 @@ impl Case {
 }
 impl Drop for Case {
     fn drop(&mut self) {
-        fs::remove_dir_all(&self.dir).expect("remove only own temporary inputs");
+        for name in ["snapshot", "expectation", "query", "evaluation"] {
+            fs::remove_file(self.dir.join(name)).expect("remove owned non-image input");
+        }
+        fs::remove_dir(&self.dir).expect("remove empty owned directory");
+        assert!(!self.dir.exists(), "own non-image test temp removed");
     }
 }
 fn analysis(output: &Output, exit: i32) -> AnalysisDocument {
@@ -167,6 +171,165 @@ fn measurement(document: &AnalysisDocument) -> &Measurement {
         panic!("known")
     };
     measurement
+}
+
+fn observed(snapshot: &Snapshot) -> Document {
+    Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::ChannelResponse(Box::new(ChannelResponse {
+            request_id: Id("observed-geometry".into()),
+            session_id: snapshot.context.session_id.clone(),
+            dispatch_sequence: 1,
+            target: snapshot.context.target.clone(),
+            channel: snapshot.observations[0].channel,
+            result: ChannelResult::Observed(Box::new(snapshot.clone())),
+        })),
+    }
+}
+
+#[test]
+fn direct_observed_response_measure_and_check_preserve_source_and_known_geometry() {
+    let case = Case::new();
+    let response = observed(&case.snapshot);
+    response.validate().unwrap();
+    let bytes = serde_json::to_vec(&response).unwrap();
+    fs::write(case.dir.join("snapshot"), &bytes).unwrap();
+    let measured = analysis(&case.run("measure", "query", false, true, None), 0);
+    let AnalysisArtifact::Measurement(bundle) = &measured.artifact else {
+        panic!("measurement")
+    };
+    assert_eq!(bundle.snapshot, case.snapshot);
+    assert_eq!(
+        measurement(&measured).value,
+        Value::Quantity {
+            amount: 8.0,
+            kind: QuantityKind::Length,
+            source_units: Unit::CssPx
+        }
+    );
+    uiblueprint_engine::verify_analysis_result(&measured).unwrap();
+    let checked = analysis(
+        &case.run("check", "expectation", false, true, Some("0.2.0")),
+        0,
+    );
+    let AnalysisArtifact::GeometryCheck(bundle) = &checked.artifact else {
+        panic!("check")
+    };
+    assert_eq!(bundle.snapshot, case.snapshot);
+    assert_eq!(bundle.finding.status, CheckStatus::Pass);
+    uiblueprint_engine::verify_analysis_result(&checked).unwrap();
+    let legacy = case.run("check", "expectation", false, true, None);
+    assert_eq!(legacy.status.code(), Some(0));
+    let Artifact::Finding(bundle) = Document::from_json(&legacy.stdout, 200_000)
+        .unwrap()
+        .artifact
+    else {
+        panic!("legacy check")
+    };
+    assert_eq!(bundle.snapshot, case.snapshot);
+    assert_eq!(
+        fs::read(case.dir.join("snapshot")).unwrap(),
+        bytes,
+        "source envelope unchanged"
+    );
+}
+
+#[test]
+fn direct_observed_response_keeps_unknown_and_refuses_failed_or_wrong_artifact() {
+    let mut case = Case::new();
+    let Property::Requested { state, .. } = case.snapshot.nodes[0]
+        .properties
+        .iter_mut()
+        .find(|p| p.field() == Field::LayoutBounds)
+        .unwrap()
+    else {
+        panic!("geometry")
+    };
+    *state = Availability::Unknown {
+        reason: Id("not-measured".into()),
+    };
+    let response = observed(&case.snapshot);
+    response.validate().unwrap();
+    fs::write(
+        case.dir.join("snapshot"),
+        serde_json::to_vec(&response).unwrap(),
+    )
+    .unwrap();
+    let result = analysis(&case.run("measure", "query", false, true, None), 4);
+    let AnalysisArtifact::Measurement(bundle) = result.artifact else {
+        panic!("measurement")
+    };
+    assert_eq!(bundle.snapshot, case.snapshot);
+    assert!(matches!(bundle.result, MeasurementResult::Unknown { .. }));
+    let Artifact::ChannelResponse(mut response) = response.artifact else {
+        panic!("channel")
+    };
+    response.result = ChannelResult::Failed(Issue {
+        code: ErrorCode::Unsupported,
+        scope_id: case.snapshot.context.scope_id.clone(),
+        failed_step: None,
+        recovery_class: Id("observe_geometry".into()),
+    });
+    let failed = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::ChannelResponse(response),
+    };
+    failed.validate().unwrap();
+    fs::write(
+        case.dir.join("snapshot"),
+        serde_json::to_vec(&failed).unwrap(),
+    )
+    .unwrap();
+    error(
+        case.run("measure", "query", false, true, None),
+        2,
+        "invalid_input",
+    );
+    error(
+        case.run("check", "expectation", false, false, None),
+        2,
+        "invalid_input",
+    );
+    fs::write(
+        case.dir.join("snapshot"),
+        serde_json::to_vec(&Document {
+            schema_version: SchemaVersion::CURRENT,
+            artifact: Artifact::Expectation(Box::new(case.expectation.clone())),
+        })
+        .unwrap(),
+    )
+    .unwrap();
+    error(
+        case.run("measure", "query", false, true, None),
+        2,
+        "invalid_input",
+    );
+}
+
+#[test]
+fn direct_observed_response_uses_full_envelope_aggregate_byte_bound() {
+    let case = Case::new();
+    fs::write(
+        case.dir.join("snapshot"),
+        serde_json::to_vec(&observed(&case.snapshot)).unwrap(),
+    )
+    .unwrap();
+    let total = ["snapshot", "query"]
+        .into_iter()
+        .map(|name| fs::metadata(case.dir.join(name)).unwrap().len() as usize)
+        .sum::<usize>();
+    error(
+        case.command("measure", "query", false, true, total - 1, 200_000)
+            .output()
+            .unwrap(),
+        2,
+        "input_limit",
+    );
+    let result = case
+        .command("measure", "query", false, true, total, 200_000)
+        .output()
+        .unwrap();
+    analysis(&result, 0);
 }
 
 #[test]

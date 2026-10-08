@@ -1,5 +1,50 @@
 # L01 factual analysis engine / CLI — checked candidate
 
+## Read-only geometry priority — additive Observe input, selected 2026-10-08
+
+User goal: quickly expose real Web/Mac UI structure/geometry to an agent. Root
+selected L01-GEOMETRY-INPUT-001 before source edit: ANALYSIS@2/registry18 adds existing
+observed ChannelResponse input to measure/check, like current inspect/diff. This is
+an additive compatible input choice, not new core/analysis wire/output/arithmetic.
+Traversal: registry17 → product routes → ANALYSIS/TYPES/VALIDATION@1, CLI@6,
+CLI-DIFF@2, GEOMETRY/PROJECTIONS and existing full MODEL/EXCHANGE/IDENTITY/PRIVACY/
+CACHE/BOUNDARIES closure; RUST/DEV.RUST unchanged. Supporting original Purpose/
+Geometry/Scope requirements stay governing. No action refs/executor prerequisites.
+Actual source gap: input::load decodes Snapshot only while read_snapshot already
+validates/moves Snapshot or observed ChannelResponse with no graph clone/restamp.
+Registered analysis input clause and current version-route refs before changing
+that loader. Preserve failed/no-Snapshot/wrong artifact error2, aggregate budgets,
+all source IDs/time/coverage/units/bounds kinds and strict engine binding. No Web/
+Swift/host parent parse, schema/Cargo/engine or new CLI command/formatter framework.
+Source/tests/checkpoint/runtime result follows separately; registration is not proof.
+
+The ordinary loader now directly reuses read_snapshot for measure/check; no new
+parser/graph/copy/restamp. Local CLI analysis decodes this saved canonical wrapper;
+live host parent byte ownership remains unchanged. Inspect/diff already used this
+same helper and were not altered. Main help/development docs state the compatible
+input. Current analysis route refs updated; historical original@1 evidence preserved.
+
+Focused actual public binary tests (default CLI, locked/offline Rust1.96/macOS)
+passed3 groups: direct observed known gap8 css_px plus check0.2 and legacy check0.1,
+original Snapshot/outer bytes preserved and independent engine recomputation;
+unknown property stays unknown, canonical Failed/no-Snapshot and wrong artifact
+refuse2/empty stdout; full envelope+query aggregate bound rejects total-1 and
+accepts exact total. No arithmetic, version decoder or output envelope changed.
+Test-owned JSON files/empty temp directories removed with exact paths and absence
+verified. Source compile showed no new warning; formatting/diff-check/links/routes/
+<=100-line spec nodes passed. No unchanged broad tests/SDK/UI/action/collector run.
+
+Exact12 coherent save set: CLI src/input.rs, main.rs, tests/analysis_binary.rs;
+specs/product/analysis.md, analysis-types.md, analysis-validation.md, README.md;
+specs/README.md, specs/development/decisions/d03-data.md;
+development/cli.md, geometry.md; this existing receipt. Engine/schema/Cargo/Web/
+Swift/host source untouched. This unlocks direct Observe→measure/check for Web and
+Native consumers; actual real-data geometry/presentation proof follows on saved
+source. Own non-image build temp removed/absence-verified after operation; no images
+created/deleted or active runtime/physical handle held. Scoped checkpoint/push next.
+Loader SHA2561a6b8ecc850386f5e4c41da712d56bf9835514231cc4b35166585af482e082e0;
+test SHA256ae6e85a1c125baa9c09a872e6ba4cd7eb8ab9e8980b2dd3e8e11eb6ae4284576.
+
 Status: final coordinated migration checks passed; source frozen, checkpoint-ready.
 This is author/cross-consumer proof, not independent or live/P1/P6 acceptance.
 

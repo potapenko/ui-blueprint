@@ -1,6 +1,6 @@
 # Local CLI and canonical analysis
 
-Local commands use the existing engine and registered [ANALYSIS@1](../specs/product/analysis.md), reusing core0.1 source records. No model, live collection or reference IO. Export remains the separate unchanged command below.
+Local analysis commands use the existing engine and registered [ANALYSIS@2](../specs/product/analysis.md), reusing core0.1 source records. They collect no live data, invoke no model and load no embedded references. Explicit Observe is separate below; export remains unchanged.
 
 ## Guarded live observation
 
@@ -64,7 +64,7 @@ uiblueprint check --snapshot S --expectation X --space ID --max-input-bytes N --
 uiblueprint --help
 ```
 
-S/X are strict core0.1 Snapshot/Expectation Documents; Q/E are strict analysis0.2 GeometryQuery/EvaluationInput Documents. Measure accepts exactly one query/expectation; check requires expectation and rejects query. Duplicate/unknown/incompatible flags reject. Compatibility measure extracts factual fields from the actual expectation, never a normative placeholder or pass/fail.
+S accepts strict core0.1 Snapshot OR observed ChannelResponse containing it; X is core0.1 Expectation, Q/E are analysis0.2 GeometryQuery/EvaluationInput. A single Observe line can go directly to measure/check as to inspect/diff; preserve the embedded Snapshot/evidence. Failed/no-Snapshot responses reject2. Measure accepts exactly one query/expectation; check requires expectation and rejects query. Duplicate/unknown/incompatible flags reject. Compatibility measure extracts factual fields from the actual expectation, never a normative placeholder or pass/fail.
 All named regular files share ONE aggregate input byte budget before parsing. No budget/tolerance/space defaults. Only those files are read: no stdin, URLs or embedded references. Source IDs, generations, coverage, timestamps and freshness stay unchanged; saved analysis is not a fresh UI read.
 SPACE_ID resolves unambiguously among query anchors, existing geometry/baselines/capture transforms and supplied transform endpoints. Same ID with different Space definitions rejects. E must select that complete Space and bind Snapshot ID/revision/full Context and existing evidence. Without E: source binding, selected Space, no extra transforms/conditions. Missing facts stay unknown, not guessed.
 
@@ -172,7 +172,7 @@ inferred arithmetic displacement. Live changes/full graph comparison remain sepa
 | 4 | Check/measure unknown, including missing/mismatched applicability |
 | 5 | Unsupported command/rule/version or unrepresentable legacy result |
 
-Bounded diagnostics: invalid_arguments, invalid_input, invalid_input_file, input_limit, output_limit, io_error, invalid_geometry, invalid_analysis, unknown_space, ambiguous_space, unsupported_command, unsupported_rule, unsupported_result_version, analysis_roundtrip_mismatch. No raw path/argument/serde/private payload error is echoed. Observe/action/plugin commands are absent; schema-validator exits remain0/2/1.
+Bounded diagnostics: invalid_arguments, invalid_input, invalid_input_file, input_limit, output_limit, io_error, invalid_geometry, invalid_analysis, unknown_space, ambiguous_space, unsupported_command, unsupported_rule, unsupported_result_version, analysis_roundtrip_mismatch. No raw path/argument/serde/private payload error is echoed. Local analysis does not itself observe/act; schema-validator exits remain0/2/1.
 The sole engine uses schema-owned results. Cache/replay, bridges/transport, core schema/fixtures and export package format stay protected. Live condition acquisition, transform discovery, generic diff, cache ID resolution and D05 peak enforcement remain separate. [Analysis receipt](../plans/ui-blueprint/receipts/L01-analysis-engine-cli.md) records current proof; [initial L01 receipt](../plans/ui-blueprint/receipts/L01.md) retains the old boundary.
 
 ## E01 public imagegen-prompt command

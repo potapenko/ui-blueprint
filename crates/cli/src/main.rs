@@ -29,7 +29,7 @@ Action: uiblueprint action prepare --connection FILE --snapshot FILE --request F
 Action: uiblueprint action execute --connection FILE --plan FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--json]\n\
 Actions support one Web SetChecked through a selected web build; saved plans are freshly revalidated, delivery and verified source state are separate.\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
-Inputs are canonical Snapshot/Expectation Documents. Bounds are explicit; no live collection.\n\
+Saved input accepts Snapshot or observed ChannelResponse; expectation/query stay canonical. Bounds are explicit; local analysis collects nothing.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
 Inspect: uiblueprint inspect --snapshot FILE --ref SOURCE_KEY_JSON --view interaction|design --max-input-bytes N --max-output-bytes N [--json]\n\
 Inspect accepts a saved Snapshot or observed ChannelResponse; selector is canonical {namespace,key} JSON. No live revalidation; JSON uses CLI inspection envelope1.0.0 with unchanged source Snapshot.\n\
