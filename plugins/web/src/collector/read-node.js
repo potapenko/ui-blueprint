@@ -44,6 +44,18 @@ function readNode(options, expectedDocument) {
       const ids = controls.trim().split(/[\t\n\f\r ]+/);
       if (ids.length <= selected.length) out.controls = [...new Set(ids.map(endpoint).filter(index => index !== null))];
     }
+    // Explicit application declaration only. Never infer membership from ancestry,
+    // labels or rectangles, and never expand the selected scope to find parts.
+    const componentKey = text(attr('data-component-key'));
+    const componentParts = text(attr('data-component-parts'));
+    if (componentKey && componentParts && componentKey.length <= 256) {
+      const ids = componentParts.trim().split(/[\t\n\f\r ]+/);
+      if (ids.length <= selected.length) {
+        const members = ids.map(endpoint);
+        if (members.every(index => index !== null) && new Set(members).size === members.length)
+          out.component = {key:componentKey, members};
+      }
+    }
     // data-anchor is the explicit fixture declaration, not an ARIA synonym.
     out.declaredAnchor = endpoint(text(attr('data-anchor')));
     if (fields.has('focused') && document.activeElement === this)

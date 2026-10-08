@@ -4061,3 +4061,86 @@ fn popup_geometry_malformed_or_changed_source_cannot_publish() {
         fixture.finish();
     }
 }
+
+#[test]
+fn component_declarations_preserve_distinct_sources_and_refuse_incomplete_or_private_mapping() {
+    // Positive, sensitive member, duplicate key, invalid member, duplicate member,
+    // overlong key, absent declaration, and sensitive declaration owner.
+    for mode in 0..8 {
+        let fixture = Fixture::new(move |method, command, _| {
+            if method != "Runtime.callFunctionOn"
+                || !command["params"]["functionDeclaration"]
+                    .as_str()
+                    .unwrap_or("")
+                    .starts_with("function readNode(")
+            {
+                return None;
+            }
+            let mut reply: Json =
+                serde_json::from_str(include_str!("fixtures/collector/dom.json")).unwrap();
+            if mode != 6 && (command["params"]["objectId"] == "node-11" || mode == 2) {
+                reply["result"]["value"]["component"] = json!({
+                    "key": if mode == 5 { "x".repeat(257) } else { "apply-control".into() },
+                    "members": match mode {3 => vec![2], 4 => vec![1,1], _ => vec![1]}
+                });
+            }
+            Some(reply)
+        });
+        let mut c = fixture.attach(limits());
+        let mut selected = initial(&["left", "right"]);
+        if mode == 1 {
+            selected.ids[1].sensitivity = Sensitivity::Sensitive;
+        }
+        if mode == 7 {
+            selected.ids[0].sensitivity = Sensitivity::Sensitive;
+        }
+        let mut docs = Vec::new();
+        let result = c.observe_initial(&request(), &selected, 41, op().deadline, |d| {
+            d.validate().unwrap();
+            docs.push(d);
+            Publication::Acknowledged
+        });
+        if (3..=5).contains(&mode) {
+            assert_eq!(result.unwrap_err().kind, ErrorKind::Malformed);
+            assert!(docs.is_empty());
+        } else {
+            let report = result.unwrap();
+            let s = snapshot(&docs[0]);
+            // Existing source refs stay source-owned; no component/AX action refs.
+            assert!(
+                report
+                    .references
+                    .iter()
+                    .all(|r| r.key.namespace.0 == "web.dom")
+            );
+            if mode == 0 {
+                assert_eq!(s.components.len(), 1);
+                let component = &s.components[0];
+                assert_eq!(component.logical_component_key.0, "apply-control");
+                assert_eq!(component.provenance, Provenance::Reported);
+                assert_eq!(
+                    component
+                        .members
+                        .iter()
+                        .map(|k| (k.namespace.0.as_str(), k.key.0.as_str()))
+                        .collect::<Vec<_>>(),
+                    vec![
+                        ("web.dom", "11"),
+                        ("web.dom", "12"),
+                        ("web.ax", "ax-11"),
+                        ("web.ax", "ax-12")
+                    ]
+                );
+                assert_eq!(
+                    s.nodes[0].source_declarations[0].source,
+                    component.declaration_source
+                );
+                assert!(s.nodes[1].source_declarations.is_empty());
+            } else {
+                assert!(s.components.is_empty());
+            }
+        }
+        drop(c);
+        fixture.finish();
+    }
+}

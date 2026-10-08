@@ -274,3 +274,19 @@ console.log('Viewport source mocks passed: native getters, signed/fractional CSS
   const beforeCount=disconnected;begin(['layout_bounds']);assert.equal(disconnected,beforeCount);
   console.log('One-shot clipping/hit mocks passed: requested-only facts, timeout/disconnect/refusal/detach and late-callback suppression.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
+
+// Explicit component declarations cannot widen scope or infer missing members.
+trigger.attrs['data-component-key']='apply-control';trigger.attrs['data-component-parts']='popup';
+document.idNodes=[trigger,popup,external];
+const component=relationRead(trigger,[trigger,popup]).component;
+assert.equal(component.key,'apply-control');assert.deepEqual(Array.from(component.members),[1]);
+assert.equal(relationRead(trigger,[trigger,popup],true).component,undefined);
+for(const parts of ['external','popup missing','popup popup','', 'x'.repeat(101)]) {
+  trigger.attrs['data-component-parts']=parts;
+  assert.equal(relationRead(trigger,[trigger,popup]).component,undefined);
+}
+trigger.attrs['data-component-parts']='popup';
+assert.equal(relationRead(trigger,[trigger,popup,duplicatePopup]).component,undefined);
+document.idNodes=[duplicatePopup,trigger,popup];
+assert.equal(relationRead(trigger,[trigger,popup]).component,undefined);
+console.log('9 offline explicit component checks passed; no guessed or out-of-scope parts.');

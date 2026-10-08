@@ -1,5 +1,7 @@
 //! Source-owned normalization. No geometry/name/identity inference across sources.
+mod components;
 use crate::collector::wire::{AxNode, AxValue, DomRead, Scalar, SelectionDirection};
+pub(crate) use components::components;
 use uiblueprint_schema::model::*;
 
 pub(crate) fn id(value: &str) -> Id {

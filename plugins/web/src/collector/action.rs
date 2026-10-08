@@ -550,6 +550,7 @@ fn checkbox_read(state: wire::CheckboxState) -> wire::DomRead {
         document_focused: None,
         hit: None,
         clip: None,
+        component: None,
     }
 }
 fn make_snapshot(

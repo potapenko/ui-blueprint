@@ -268,6 +268,7 @@ impl Collector {
                 read.declared_anchor = None;
                 read.active_descendant = None;
                 read.selection = None;
+                read.component = None;
             }
             validate_dom(&read, self.limits.max_text_bytes, node_count)
                 .map_err(|e| e.at(MalformedSite::ReadData))?;
@@ -562,6 +563,7 @@ impl Collector {
             relations,
             empty,
         );
+        normalize::components(&records.dom, &mut snapshot);
         snapshot.focus.active_descendant = active_descendant;
         snapshot.focus.keyboard = keyboard;
         if let Some((keyboard, selection)) = selection {
@@ -577,6 +579,19 @@ pub(super) fn validate_dom(
     cap: usize,
     selected: usize,
 ) -> Result<(), Failure> {
+    if read.component.as_ref().is_some_and(|c| {
+        c.key.is_empty()
+            || c.key.len() > cap
+            || c.key.chars().count() > 256
+            || c.members.is_empty()
+            || c.members.len() > selected
+            || c.members
+                .iter()
+                .enumerate()
+                .any(|(i, n)| *n >= selected || c.members[..i].contains(n))
+    }) {
+        return Err(Failure::new(ErrorKind::Malformed));
+    }
     if read.controls.as_ref().is_some_and(|v| {
         v.len() > selected
             || v.iter()

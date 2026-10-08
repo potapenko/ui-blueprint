@@ -31,8 +31,9 @@ object_record!(DomRead {
  selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>,
  controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>,
  selection:Option<SelectionRead>, document_focused:Option<bool>,
- hit:Option<HitRead>, clip:Option<ClipRead>
+ hit:Option<HitRead>, clip:Option<ClipRead>, component:Option<ComponentRead>
 });
+object_record!(ComponentRead { key:String, members:Vec<usize> });
 object_record!(HitRead {
     x: f64,
     y: f64,

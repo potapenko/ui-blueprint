@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><title>Observation pilots</title>
+<style>
+body { margin:0; min-height:1400px; }
+button { box-sizing:border-box; border:0; padding:0; font:16px monospace; }
+#left { position:absolute; left:40px; top:40px; width:120px; height:40px;
+  display:flex; align-items:center; gap:8px; }
+#icon { display:block; width:16px; height:16px; background:#333; flex:none; }
+#label { display:block; width:2em; height:1em; font-size:16px; flex:none; }
+#right { position:absolute; left:200px; top:40px; width:120px; height:40px; }
+#responsive { position:absolute; right:40px; top:120px; width:100px; height:30px; }
+input { position:absolute; left:40px; width:160px; height:24px; }
+#value { top:220px; } #empty { top:260px; } #secret { top:300px; }
+</style>
+<button id="left" data-component-key="apply-control" data-component-parts="icon label"><span id="icon" aria-hidden="true"></span><span id="label">Apply</span></button>
+<button id="right">Apply</button><button id="responsive">Responsive</button>
+<input id="value" aria-label="City" value="London"><input id="empty" aria-label="Empty" value="">
+<input id="secret" aria-label="Private" type="password" value="W04_PRIVATE_CANARY">
+</html>

@@ -386,3 +386,58 @@ and removes its non-image temporary files. Rooted scopes can observe a selected
 popup beside an iframe; selecting the frame itself still refuses without reading
 its content. Cross-origin/OOPIF/shadow support is not added. See the
 [B03 receipt](../plans/ui-blueprint/receipts/B03-popup-geometry.md) for actual results.
+
+## Explicit Web component declarations and observation pilots
+
+An application can declare `data-component-key="apply-control"` and
+`data-component-parts="icon label"` on its owner element. These are reported source
+metadata, not inferred framework structure or action authority. The fixed reader
+resolves each space-separated part ID only among the original selected elements,
+with the same native ID lookup/uniqueness checks used for selected relationships.
+It never widens the scope. Missing, duplicate, foreign or out-of-scope part IDs
+withhold the mapping. Oversized declarations are bounded; malformed private DTO
+indices refuse before publication. A sensitive owner/member or duplicate component
+key within the selected records withholds the entire association.
+
+Rust publishes the owner first, then explicitly declared DOM parts in declaration
+order, then their separately observed AX counterparts via `cdp-backendDOMNodeId`.
+`ComponentMapping` retains `reported` provenance and a declaration source tied to
+the DOM owner; its `component_key` also appears in that owner's source declarations.
+DOM and AX nodes keep distinct namespaces, native roles, properties and observations.
+Both projections retain these source records. Existing public design Inspect can
+show the parts from an AX seed; interaction Inspect keeps that seed primary.
+A decorative span remains a span with unavailable action semantics. Mapping does
+not create an actionable ref, full tree, source-state revision or layout measurement.
+Unmarked components still have no declared parts; names/rectangles never substitute.
+This opt-in attribute convention is qualified on the owned fixture only.
+
+Run the finite B01/B04/B06 author qualification with existing pinned fixture tooling
+and Web-enabled products (no install/browser-profile reuse):
+
+```sh
+S01_WEB_PLAYWRIGHT_CORE=<absolute-pinned-playwright-core-1.58.2> \
+UIB_WEB_LIVE_ALLOW=1 UIB_WEB_LIVE_CLI=<absolute-uiblueprint> \
+UIB_WEB_LIVE_WORKER=<absolute-session-worker> \
+node tests/bridges/web/observation-pilots.cjs --run-authorized
+```
+
+The [fixture](../../fixtures/web/observation-pilots.html) and
+[harness](../../tests/bridges/web/observation-pilots.cjs) check two same-label targets,
+source refs/remount/navigation, text size and locale with value preservation,
+resize/scroll, and reported DOM/AX component membership through public Observe,
+Inspect, Measure and saved Diff. Rust performs geometry/transform comparisons.
+The authored 2em text element is a layout box, never glyph bounds; locale does not
+supply logical leading/trailing, a breakpoint or inferred scale. Coverage remains
+partial and every unavailable property stays explicit. Observe preserves both
+pages' focus, scroll, live values, markup and layout; setup mutations are separate.
+Each CLI call checks worker retirement; the harness confirms owned browser/profile,
+server and non-image temp cleanup before printing success. It creates no images.
+
+Known common-host limitation on the pinned candidate: wrong-target or old-loader
+failure during Attach gives CLI exit1 `observe_worker_or_cleanup_failure`, empty
+stdout and confirmed cleanup. Existing-ref/remount refusal after Attach gives4.
+The collector's precise stale failure is lost before common worker Ready; fixing
+that startup publication path belongs to the shared host owner. These refusals
+establish isolation, not complete error-code qualification. The
+[W04 receipt](../plans/ui-blueprint/receipts/W04-observation-pilots.md) separates
+actual capabilities, author checks, this gap and remaining independent acceptance.
