@@ -9,8 +9,10 @@ pub(super) struct Capture {
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub(super) struct Document {
+    #[serde(rename = "documentURL")]
     pub document_url: usize,
     pub title: usize,
+    #[serde(rename = "baseURL")]
     pub base_url: usize,
     pub content_language: usize,
     pub encoding_name: usize,
@@ -54,7 +56,9 @@ pub(super) struct Nodes {
     pub pseudo_type: Rare,
     pub pseudo_identifier: Rare,
     pub is_clickable: Flags,
+    #[serde(rename = "currentSourceURL")]
     pub current_source_url: Rare,
+    #[serde(rename = "originURL")]
     pub origin_url: Rare,
 }
 #[derive(Deserialize)]
