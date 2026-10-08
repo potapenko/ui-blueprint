@@ -54,6 +54,17 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Следующая Native composition задача
+
+[N03 product popup E2E](packets/N03-native-popup-e2e.md) готов к source/offline
+работе на V0201b5a58/34e1c90. Закрывает конкретный Q01 gap product popup input /
+parent result / lifetime → geometry/diff/compare; не весь Native заново.
+Q01 owns текущий actual verification desktop, N03 runtime ждёт release.
+V02 source owner completed/archived; Q01 read-only, A02 completed, Q03 no UI;
+production write ownership Native передаётся N03. Protected V02 guards не ослаблять.
+Если independent V02 review выявит конкретный defect, один текущий Native writer
+согласует ремонт, не возникают параллельные writers одного файла.
+
 ## V02 и analysis oracle сохранены; Q01 recheck
 
 V02 source01b5a584351f257c0d20732b17667d99d2ed690d/final34e1c90 pushed,
