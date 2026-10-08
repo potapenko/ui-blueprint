@@ -952,3 +952,60 @@ uib-q01-n04-recheck-pfxb1bbh absence confirmed. All shared old/new handoffs, ori
 reproducer and images remain unchanged. Receipt local links and whitespace checks
 passed; one-path checkpoint/push records the accepted source/recorded scope and
 CPU release, with the explicit live/D06 residual above.
+
+## Retained Native read-only preflight provenance — input wait unchanged
+
+Root's explicit continuation distinguishes N03's foreground/input precondition from
+NATIVE@2 ordinary one-shot read-only AX/capture. After N04 source acceptance and CPU
+release, Q02 may perform its conditionally authorized bounded READ-ONLY comparability
+preflight against the already-running own fixture, subject to fresh validation.
+This does not authorize activation, input, setup/Snapshot publication, a new fixture
+launch, reuse of old refs, change/cleanup of the retained fixture or a B−3801 retry.
+N03 activation and Q03 user questions remain pending. Q01 made only file/provenance
+reads for this handoff, no new UI/SDK/capture/current-process check.
+
+Trusted Q01-owned retained root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-final-5w3j1hkw`.
+It was created by this Q01 chat from immutable8e3dba2 for the N03 verification above.
+Its F02-on.app was launched through LaunchServices with explicit `--run-dir ROOT/live`;
+exact executable is ROOT/F02-on.app/Contents/MacOS/F02Fixture. Fixture source at
+ROOT/source/fixtures/native/Fixture.swift hashes
+aaa1ca8f9c55aeccdd45bab8c551c30d5a3537af78aee8aabd44054768fdd801.
+This is the retained current fixture with later controls, NOT prepared historical53e6e6e.
+No equivalence to the original75-node timing fixture is inferred.
+
+| Retained input | Provenance / scope |
+| --- | --- |
+| ROOT/live/a-identity.json | Explicit own A identity-only record; source for fresh exact binding validation |
+| ROOT/live/a.json | Last explicitly published own A manifest/state/probe, historical until revalidated |
+| ROOT/live/b-identity.json and b.json | Same-run B provenance only, not authority to expand A's requested scope |
+| ROOT/open/connection.json | Historical Q01 trusted native_fixture FORM configuration; hash58bdffe2a43e43a36d78f8d01d423356826086f7192684364899a849993273a1 |
+| ROOT/open/request-1.json | Historical Observe command, not an action/ref; hashc2dbb25a60b35414bead0195f0fe6465db2066d95d555415f15bf1a65e35cf29 |
+
+File-only inspection found A identity and manifest mutually consistent: historical
+PID68614, bundle local.uiblueprint.f02.on, launch_time1791480213.409255, window14982,
+identifier a, target_generation68614:1791480213.409255,
+surface_generation6EA93860-D822-4150-B0EB-C986EAFB5EC4, recorded state=open.
+Recorded app_active=false/key=true/main=true is not current ownership evidence.
+No claim is made that this PID/window remains alive or authorized merely because
+those files exist or agree. Q02 must validate the actual process incarnation, exact
+executable/bundle/window/identifier/generations and current identity before/after
+reading through the existing admitted observer. Missing/changed binding refuses;
+it does not authorize rebind-by-title, launch, activation or setup repair.
+
+Do NOT run the old form config unchanged as the full-window preflight: collection
+is form, channels1, selected controls f02.popup/f02.resize/f02.result/f02.name; its
+seven requested fields omit Description and it names the old helper executable.
+Use the existing authorized one-shot window-ax flow and Q02's explicit original
+nine-field/profile/limit policy with independently pinned collector source7709067,
+a fresh read-only session/request and validated binding. Old ActionCase/BackendRef,
+permits and form-session lifetime are not transferred. No observer/source/binary
+or saved Observation is restamped to manufacture currentness or comparability.
+
+The latest earlier actual read-only Observe returned usable partial data while
+keyboard owner was unknown; no known source-based blanket prohibition of this
+bounded ordinary read follows from that input-owner failure. Current availability
+was intentionally not tested by Q01 here. If fresh validation/preflight fails, return
+that concrete failure without touching the retained app. Comparability differences
+must remain reported; neither this provenance nor accepted source/recorded fidelity
+establishes whole-Native runtime, performance, pixel or input acceptance.
