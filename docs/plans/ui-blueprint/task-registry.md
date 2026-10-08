@@ -1025,3 +1025,18 @@ Native resumes only the previously failing canonical check and saved-source own
 AX+probe Observe→G11; old P01/M04 runs are not repeated. One independent review is
 limited to shared admission plus explicit Native association, not old math/G12/
 B04. Runtime results and final scoped acceptance remain pending.
+
+Fresh single reviewer /root/m05_composition_review independently inspected saved
+Native0114fa1 + sharedad4c56b source/callers before author receipts, then reconciled
+S01 proof. Exactly one P2: composition callback in Collector.swift maps resource
+NativeAcquisitionError.limit to target_unresolved instead of required incomplete_scope
+(Native acquisition83–87). Same Native owner receives minimal typed-error repair
+and offline callback-limit check; same reviewer waits for saved delta/actual outcome.
+No source-permission finding otherwise; synthetic/author test limitations retained.
+No new reviewer or broad test wave. Native reports its authorized actual Observe
+already published separate AX and four-node composed probe, and G11 from exact
+macos.ax:f02.sample.a displayed three measured parts/represents relations with
+source times/freshness preserved. Own fixture/launcher cleanup reported. Written
+runtime receipt/retained response and error repair remain pending, so this report
+does not close M05 acceptance. Positive runtime need not repeat for an isolated
+negative resource-classification repair; preserve original source attribution.
