@@ -281,4 +281,4 @@ if(require.main===module && process.argv.includes('--check')){
   snapshot.nodes[0].properties=[];assert.throws(()=>check(sample(),context,'geometry','r',new Set()));
   console.log('Q02 quantiles and missing-sample handling pass; no runtime launched');
 }else if(require.main===module)run().catch(error=>{console.error(error.message);process.exitCode=1;});
-module.exports={stats,check,client};
+module.exports={stats,check,client,setup};

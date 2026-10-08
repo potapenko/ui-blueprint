@@ -1,4 +1,131 @@
-# Q02 performance — scoped Web result, Native pending
+# Q02 performance — Web and Rust-stage results, Native pending
+
+## Final current outcome — Rust-stage report completed
+
+Root explicitly extended the existing Q02 continuation through the packet section
+“Complete the remaining Rust-stage report”. It authorizes exact-owner test-only
+measurements on saved inputs, with temporary instrumentation separated from original
+production cohorts. The section was read completely; existing full D06/PERFORMANCE/
+MODEL/EXCHANGE/WEB-DOCUMENTS/D05/RUST/DEV.RUST basis remains current. No contract,
+threshold, feature/dependency or product choice changed. This section supersedes
+the earlier Web Rust-stage unavailability below; historical latency numbers stay.
+
+| Requirement | Current result |
+| --- | --- |
+| Four frozen Web numeric gates | Met: semantic2.846/20ms, geometry2.899/20ms, full attach37.508/50ms, full process-cold264.900/500ms p95; original counts/pins unchanged |
+| Separate Web Rust normalization/formatting report | Measured directly below; diagnostic saved-input replay of actual owners, not a clock subtraction or replacement live cohort |
+| Quality/source preservation | Exact complete Snapshot/Document equality and canonical byte equality for every replay; originals/1102 full facts preserved |
+| Native D06 off/on and fixture comparability | Still waiting for Native foreground/functional/resource release; no Native runtime or result inferred |
+| Other telemetry | Opaque SDK costs, exclusive transport/syscalls, worker/cache/RSS peaks remain unavailable where the contract permits; not zero or fabricated |
+| Resources | All own input-acquisition/browser/peer/test processes completed; CPU/headless released; production/installed candidate unchanged |
+
+### Actual routines, inputs and instrumentation
+
+Pinned source `a7c04164df08441cfbbaa61b501aa64d29290732`, optimized Rust1.96.0,
+locked/offline, same macOS27.0.1 arm64/M4 Pro development host. No live latency
+cohort was rerun. Two explicit own-F01 read-only Observes acquired the previously
+unsaved single-control source DTOs using the EXACT production read-node.js plus
+addressed AX at the same unchanged checkpoint. The getter hash is
+7226c14ba2dc688086e7de5605a270b75b8b65cca5fcb7aac6d8cc4e9f9a04ad.
+Those two canonical responses were independently checked, state/focus/scroll held,
+both real host shutdowns returned0sessions/leases/192-byte ledger backing. Full
+input reuses the original a7 full cold0 raw/canonical pair; no new full capture.
+Inputs are hashed once and reused without re-query or reinterpretation.
+
+Persistent write set: four rust-stages helpers under existing tests/bridges/web,
+test-only `setup` export in performance.cjs, performance recipe and this receipt.
+In a system-temp source copy ONLY, append conditional test code to four files:
+Web lib self-alias, acquire child-test inclusion of the existing collector fixture,
+that fixture's direct-call test, and worker_main's fixed-output test. The205 pinned
+crate/Web/Cargo/toolchain files were compared with Git objects: all original bytes
+unchanged, only the four appendices. No owning implementation body is copied or
+rewritten; no unsafe construction, Cargo/API/schema change or installed replacement.
+The existing bounded inert peer merely supplies an owned unused Client to a fully
+initialized Collector value; this is not a live attached-session qualification.
+No attach/SDK acquisition executes during normalization replay.
+
+* Control normalization calls actual `Collector::normalize` with saved DomRead/AX
+  records and original Context, identities, stamps and intervals. It includes the
+  production node/property mapping, relations/components/focus and nested semantic
+  validation, including consumed-input cleanup. No simplified reconstruction loop.
+* Documents calls actual `snapshot_normalize::snapshot`, including native-table
+  validation/privacy checks, all97nodes/1102facts/19text boxes, Surface relations
+  and nested Snapshot validation. No fields/bytes are removed.
+* Sizing-format calls actual `observe::bounded_document` and its real bounded Count
+  serializer after normalization. The scope is this serialization pass exclusively.
+* Worker encoding calls real `worker_main::FixedOutput` plus the shipping serde_json
+  call under actual GuardedAllocator and PublicationGuard. Its span includes guard
+  enter/exit and bounded byte writes, not later IPC/ACK/stdout.
+
+All spans use Instant start/end in their OWN process. File reads, source/canonical
+decode, scope/buffer setup, expected-output checks, peer setup/cleanup and report
+emission are outside the named span. Normalization includes its nested validation;
+do not label it exclusive mapping-only. Library normalization/sizing uses System
+allocator in the unit test; worker encoding uses the real63+1MiB allocator profile
+in a standalone binary test, without claiming complete supervisor/SDK behavior.
+These differences are explicit: the numbers are diagnostic routine costs, not
+the same allocation/scheduling context as the unmodified guarded live cohorts.
+No phase is estimated from subtraction, and no percentile sum is a live total.
+
+### Measured stages (microseconds; p50 / nearest-rank p95)
+
+Each process-fresh row has20 new test processes×1 invocation; each reused row has
+100 invocations in one process, including its first call. Startup is NOT in these
+stage timings. No warm-up, failed run or outlier was discarded. No new stage gate.
+
+| Scope / diagnostic cohort | n | Normalize inclusive μs | Sizing serialization μs | Worker encoding μs |
+| --- | ---: | ---: | ---: | ---: |
+| Semantic / process-fresh |20|14.500 /23.042|22.313 /33.583|18.125 /23.209|
+| Semantic / reused process |100|2.583 /5.584|4.833 /4.958|5.438 /5.625|
+| Geometry / process-fresh |20|12.271 /20.625|20.834 /29.666|15.188 /21.792|
+| Geometry / reused process |100|1.417 /4.042|2.500 /2.625|3.000 /3.208|
+| Documents / process-fresh |20|301.146 /332.250|329.938 /337.750|380.021 /413.959|
+| Documents / reused process |100|231.812 /257.917|312.604 /337.667|324.563 /352.833|
+
+All126 test processes exited0.360 normalization invocations,360 sizing calls and
+360 worker encoding calls:1080 retained spans,0failures/timeouts. Normalized full
+Snapshot AND envelope equal the original saved data every time; encoded canonical
+bytes equal the original7110/3820/443410-byte semantic/geometry/Documents inputs.
+Raw report retains every duration, including maxima. Full maxima across both
+cohorts: normalization386.333μs, sizing388.167μs, worker encoding454.708μs.
+No numerical Rust speedup or fraction of outer response is inferred. Ambient load
+was not sampled during this subsecond offline campaign; compiler work completed
+before it and no Q02 parallel load existed. Timer overhead is not subtracted.
+
+### Pins, checks, retention and release
+
+Task-temp root `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uiblueprint-q02-rust-stages`:
+`prepared.json` includes all12 input hashes, including actual acquisition/configs;
+SHA25615a1464fd7b3cb58230ccd8f2604fea3ee7ca06e1f922e45027cd1eb493fb97c.
+Exact `instrumentation.diff` SHA256cf01ed1702cdcbd7a2bc7ab50390d292884f0fadf999923cf94efa6b265a7c92.
+Normalization test binary92ac09c758a1e4d8256220de9ae5b7c903f1fe4c65d40e052efafe809b7567c0;
+worker encoding test binarydae8175a5965e41564089351b0611724275624aca04380a372dd27bab80c278e.
+`stage-report-fd713badcb05.json` SHA2568c35bfc4ea54d41b58e6f713bb21774e1e4bad1ca64df603f6004b9e1912557e
+contains all samples and summaries. Both binaries, every input and the exact delta
+hash were checked after execution. Release compile (no compiler warnings/errors),
+Rustfmt, Node syntax and Python AST checks pass. Only selected diagnostic tests ran; no unrelated suite or live
+cohort repeat. First preparation lacked the required Playwright path and refused
+before launch; its consumed nonimage temp tree was removed, not a failed sample.
+
+This closes the named Web Rust-stage report requirement by the explicitly permitted
+test-only method. Other unavailable counters are still reported, not widened into
+an observability project. Match/diff/Expectation-check are not invoked by Observe.
+All own processes/peers/browser contexts ended; exact diagnostic PID inventories
+empty, CPU/headless released. Minimal inputs/delta/raw samples are retained for
+Q01/root review until consumption; no raw evidence committed, no image created or
+deleted. Shared author/Q01 evidence remains untouched. Native foreground and
+current-fixture comparability are the actual remaining Q02 execution dependency;
+no overall Native/D06/P7 acceptance is claimed.
+Consumed stage `source/` and `target/` trees were checked to contain no image assets,
+removed and absence verified. Inputs/delta/manifests/raw report remain. Binary paths
+in the manifest are historical; their hashes were verified before removal. Exact
+replay can restore a7c0416 into the SAME temp source path and apply retained
+instrumentation.diff with git apply -p0, then use the helper's build/run actions;
+this reuses the pinned inputs without another browser acquisition.
+Incoming [N04 handoff](N04-native-fidelity.md), reported by root at17d3475, is a
+separate source/recorded dependency pending Q01 and actual Native comparability.
+It was not imported into this a7c0416 diagnostic source or used as live evidence;
+the Native foreground/runtime gate remains unchanged.
 
 ## Full Web result on a7c0416 — 2026-10-08
 

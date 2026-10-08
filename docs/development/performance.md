@@ -6,13 +6,52 @@ Full2-document/97-node capture on accepted a7c0416:20cold, attach+response
 p9537.508ms≤50ms and process-cold264.900ms≤500ms. Full warm100,p9521.504ms is
 supplemental, without a20ms gate. Zero cohort failures; all outliers retained.
 Ordinary scope source is unchanged9d715ee→a7c0416, so prior evidence is reused,
-not relabelled as rerun. Native and exclusive-stage telemetry remain open.
+not relabelled as rerun. Required Web Rust normalization/formatting is separately
+measured by exact-owner saved-input diagnostics below. Native remains open; opaque
+SDK/syscall/cache-peak counters remain unavailable without invented zeroes.
 **No overall D06/P7 acceptance.** Historical8e3dba2 geometry2.688ms remains recorded.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
 unchanged. [Current receipt](../plans/ui-blueprint/receipts/Q02-performance.md)
 records pins, checks and resource dependencies.
+
+## Separate Rust stages (diagnostic, not another latency cohort)
+
+[rust-stages.py](../../tests/bridges/web/rust-stages.py) creates an immutable a7c0416
+copy under an explicit system-temp destination. Its [input helper](../../tests/bridges/web/rust-stages-inputs.cjs)
+performs only two public F01 Observes and saves the shipping read-node.js/AX inputs
+at the same unchanged checkpoint. Full input reuses the original measured raw/
+canonical pair. Every input and exact test-only delta is hashed before replay.
+
+[Normalization test](../../tests/bridges/web/rust-stages-normalize.rs) is included
+as a test child of the existing acquire owner, reusing its inert-peer helper solely
+to own an unused client. It calls actual `Collector::normalize` and
+`snapshot_normalize::snapshot`, not a copied normalizer. The entire normalization
+call includes its own schema validation, relations/focus/component or native-table/
+privacy work. `bounded_document` measures the real sizing-serialization pass.
+Normalization runs in the library test process with System allocator; it does not
+claim the worker's allocator overhead or a live collection cost.
+
+[Worker format test](../../tests/bridges/web/rust-stages-format.rs) calls real
+`FixedOutput` + serde_json::to_writer with actual GuardedAllocator/PublicationGuard.
+It measures encoding and the publication guard, excluding input decode/validation,
+buffer setup, syscall/ACK and output comparison. Normalization requires exact saved
+Snapshot/Document equality; encoding requires byte-for-byte original canonical output.
+No original production body, Cargo/features/dependency, public API or installation
+changes. Only four conditional append-only test inclusions in task-temp.
+
+Build via the helper's `prepare`, `build`, `run` actions, always with `--output`
+under system temp. Prepare also takes `--pins` (saved accepted consumer manifest),
+`--full-sample` and `--full-raw` from the original cohort; set the existing
+S01_WEB_PLAYWRIGHT_CORE. Build is release/locked/offline for only the library test
+and explicitly selected worker binary test. Run uses20 fresh processes×1 invocation
+and100 invocations in one process per scope/stage; no warm-up/outlier is discarded.
+Process startup and decode are OUTSIDE these stage spans: these are not cold outer
+response numbers. Unique reports preserve failed runs; no new stage threshold.
+The receipt contains all p50/p95/counts, exact input/delta/binary hashes and limits.
+The mandatory Web stage-report gap is closed by these explicit diagnostics; do not
+sum their percentiles or substitute them for the already accepted live latency rows.
 
 ## Recipe and timing boundary
 
@@ -82,9 +121,9 @@ latency and never becomes background UI work. First/startup failures remain rows
 quality failure never overwrites an already measured response time.
 Partial source coverage remains partial. Requested known values are independently
 checked against authored R01 literals; unknown/field loss cannot pass quality.
-Semantic field fidelity against the original raw AX response still needs explicit
-reconciliation (e.g. raw focusable has no canonical selected Field). Numerical
-timing does not by itself settle that gate.
+Semantic fidelity now retains raw focusable through the registered extension,
+separately from Focused; Q01 acceptance and the new actual preflight close that
+earlier gap. Numerical timing alone was never used as its quality proof.
 
 Failures remain in samples; missing duration makes percentile unavailable. A broken
 session stops and separately labels unrun requests, never silently restarts/censors.
