@@ -290,3 +290,45 @@ checkpoint+push before the authorized one bounded≤300s pair/cleanup5s. Per roo
 additional activation needed after save; no full M05/P7 acceptance now.
 
 Fixture candidate SHA256 7771a7d51dbbfd83c71a95fce23386ad3ef5fb8d096261cfeff8fd293fdd4386.
+
+
+## Actual selected synthetic profile — sample frame unestablished, no dispatch
+
+Source candidate1ad6b51b0257d391f5378da8b75b89e4ecfc55f5 saved/pushed before runtime;
+index/source lease released. Matching off/on binaries verified against recorded pins,
+no rebuild, cap/oracle change or extra activation. One bounded pair operation started;
+only own off Window A/PID58017 launched, exact executable/unique run-dir attributed.
+Test-only setup used existing expanded/count1/name focus/WindowSetup comparison.
+
+Own fixture reported statusfailed/error “Error Domain=p01_sample Code=3 (null)”, records[].
+That exact source guard covers public NSAccessibility own sample lookup: exhausted
+bounded queue, exactly one positive accessibilityFrame. It did not establish that
+condition. No separate matched-count/frame details were captured, so zero/multiple/
+zero-sized sample frame subtype is unknown. No guessed cause, public-API absence or
+probe regression inferred. The profile dispatch string names intended method only:
+WindowSetup.postMousePair was not reached; NSApplication.postEvent calls0, no input.
+No Count+1/0 or meaningful post-input focus proof exists; no physical pointer claim.
+
+Setup manifest existed (binding published): window11690/generation
+B295D11C-7816-4B88-B873-05A6BFD5F35C, count1/expandedtrue, actual focusnone and
+app_active/key/maintrue. Source requested name focus during setup, but observed state
+was none; do not turn that request into measured focus. These are setup facts only,
+not event action outcome. On fixture never launched because
+required off input binding failed. No blind point, direct hitTest/sendEvent/AXPress/
+CGEvent, different backend or second attempt. Existing accepted matched geometry/
+semantics/focus/pixels and probe8→18 facts preserved; sampled local hit/focus remains
+not_verified/waiting_evidence. External CUA pointer mapping gap separately unchanged.
+
+Off phase1.205591292s; exact PID/path/run argument rechecked before SIGTERM of this
+OWN fixture, absence confirmed within5s, cleanup0.126360125s. Total1.333129958s≤300,
+finally before outer assertions; physical lane released, no fixture/helper remains.
+Images0, no capture/permission/display/user-app operation. Current build/source/cache/
+run metadata/profile non-image files consumed and removed/dir absence verified;
+all historical images/assets untouched. No automatic next runtime/source task.
+
+Exact remaining owner dependency is own test seam sampledPoints: establish actual
+accessible sample element/frame using supported own-window API equally on both builds,
+with explicit failure detail, before any queue event. Current pointer route/source
+plausibility alone does not supply this binding. Root disposition needed for any
+subsequent correction/new operation; this failed bounded attempt is saved honestly,
+not relabelled as M05 completion. Receipt-only exact1 checkpoint/push via short lease.
