@@ -182,3 +182,65 @@ action framework or relaxed oracle. Semantic AX target activation would demonstr
 only a different modality and cannot close sampled hit invariance. No user question,
 new review or auto-next task started. Receipt-only exact1 links/whitespace checked;
 checkpoint/push waits short Git lease, index untouched.
+
+
+## Source-only proposal — local synthetic mouse event routing
+
+After saved0e310d3 root requested this bounded assessment only, no code/SDK input.
+Read actual Fixture.swift PilotView/WindowSetup/window metadata owner and local public
+AppKit SDK NSWindow/NSEvent/NSApplication/NSView declarations; selected M05/QA/Apple
+basis unchanged. Visible UI is SwiftUI Button(.plain), @FocusState(sample/name), Count
+state incremented only by its existing Button action. Current WindowSetup resolves a
+unique visible own NSWindow by authored a/b and already supplies nonvisual setup.
+Popup reader has hitTest nil/non-first-responder; it is not a sample-event test seam.
+
+Primary Apple sources establish:
+- [NSWindow.sendEvent](https://developer.apple.com/documentation/appkit/nswindow/sendevent(_:))
+  dispatches events, but expressly says never invoke directly. A proposed direct
+  down/up sendEvent call therefore is not the documented path to select.
+- [NSEvent.mouseEvent](https://developer.apple.com/documentation/appkit/nsevent/mouseevent(with:location:modifierflags:timestamp:windownumber:context:eventnumber:clickcount:pressure:))
+  creates mouse events with own window number and location in its base coordinate system.
+- [NSApplication.postEvent](https://developer.apple.com/documentation/appkit/nsapplication/postevent(_:atstart:))
+  adds to the app's queue; NSWindow.postEvent forwards there. Let the existing app loop
+  dispatch rather than call Button action/mouseDown/hitTest or AXPress directly.
+- [Mouse event handling](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/EventOverview/HandlingMouseEvents/HandlingMouseEvents.html)
+  documents window-to-view dispatch and first-responder behavior; control tracking can
+  consume queued mouse-up, so queue the complete bounded pair rather than synchronously
+  blocking in a direct down-call and hoping the next call supplies up.
+
+Engineering proposal: tiny test-only nonvisual function next to WindowSetup, running
+inside OWN fixture process/main actor. Resolve current unique visible A/window object/
+number/generation, convert confirmed content/sample positions using public NSView/NSWindow
+coordinate conversion (not screenshot scale inference), build leftMouseDown+leftMouseUp,
+post both to NSApp queue and return to its normal run loop. Same points/setup/events on
+both off/on builds; independent existing Count +1/0 and FocusState/firstResponder/source
+state observations after dispatch. No visible AppKit UI, NSWindow subclass, extra overlay,
+probe measurement on input, global event posting or foreign-process hook. Avoid adding
+allowsHitTesting/acceptsFirstMouse changes that would alter the behavior being tested.
+
+This route could exercise normal in-process AppKit→hosting-view→SwiftUI mouse routing
+and focus response at sampled window points if actual runtime Count/focus proves it.
+It is materially stronger than lookup-only hitTest or calling the action closure, but
+synthetic events do not prove WindowServer/global pointer mapping, physical delivery,
+background activation/occlusion/first-click equivalence or hardware mouse-button state.
+SwiftUI gesture internals may consult event/global state; source alone cannot promise
+queued NSEvents activate this Button. No assertion that runtime will pass was made.
+Matched actual key/main/active states still matter to interpreting each cohort; not a
+universal true-only gate. Points require an established window-base conversion equally
+on probe-off/on; on-only measured frames cannot substitute for off targeting evidence.
+
+Why a narrow AppKit seam: current SwiftUI Button/FocusState and gesture APIs express
+state/callbacks, not a public window event queue/window-number dispatch. [onTapGesture](https://developer.apple.com/documentation/swiftui/view/ontapgesture(count:coordinatespace:perform:))
+registers an action for recognized interaction; invoking/replacing that callback would
+skip hit routing and change fixture semantics. No applicable SwiftUI-only injection API
+was found in these actual owners; this is a scoped constraint, not a universal claim
+about every Apple test tool. Event queue is platform-level nonvisual interoperability,
+allowed by Apple governance only as minimal isolated adapter with all UI SwiftUI.
+
+Acceptance disposition: conditional candidate for narrower OWN intrawindow synthetic
+routing/focus invariance. It cannot silently close the currently selected external
+physical/CUA sampled-hit packet. Root must explicitly choose/profile that evidence
+scope before any fixture code/runtime; otherwise physical pointer mapping gap remains.
+No new fixture/build/event call/image/resource/source change now; append only this
+concise source-backed proposal. Existing accepted dimensions preserved, no M05 complete
+claim. Links/whitespace checked; later exact1 checkpoint via short Git lease.
