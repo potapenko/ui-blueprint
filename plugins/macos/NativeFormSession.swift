@@ -173,6 +173,13 @@ enum NativeProtectedSource {
             let (element, depth) = queue.removeFirst()
             if seen.contains(where: { CFEqual($0, element) }) { continue }
             seen.append(element)
+            // A descendant popover is a separate Surface, even when AX nests it
+            // beneath the parent trigger. The explicitly bound root stays in scope.
+            if depth > 0 {
+                guard let rawRole = try nativeAXAttribute(element, kAXRoleAttribute, admission: admission, access: access)
+                else { throw NativeAcquisitionError.invalidValue }
+                if try admission.text(rawRole) == kAXPopoverRole { continue }
+            }
             if let raw = try nativeAXAttribute(element, kAXIdentifierAttribute, admission: admission, access: access),
                let index = ids.firstIndex(of: try admission.text(raw)) {
                 guard found[index] == nil else { throw NativeFormFailure.ambiguousTarget }

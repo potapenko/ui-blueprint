@@ -5,6 +5,7 @@ import ApplicationServices
         let limits = try JSONDecoder().decode(NativeAcquisitionLimits.self, from: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[1])))
         var duplicate = false
         let access = NativeAXAccess(prepare: { _ in }, attribute: { raw, name in
+            if name == kAXRoleAttribute { return (.success, kAXButtonRole as CFString) }
             guard name == kAXIdentifierAttribute else { return (.noValue, nil) }
             let id = (raw as! NSNumber).intValue
             return (.success, (id == 1 || (id == 3 && duplicate) ? "target" : id == 2 ? "result" : "other") as CFString)

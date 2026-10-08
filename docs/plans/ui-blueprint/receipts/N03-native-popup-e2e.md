@@ -194,3 +194,51 @@ remain, including originals; unrelated after-title-spacing.png remains untouched
 No canonical export/source evidence was staged as a permanent run archive. The
 versioned source/harness/receipt are the Q01 handoff; independent runtime must use
 fresh own bindings. Final receipt checkpoint+push follows this cleanup record.
+
+
+## Q01 parent-membership repair — 2026-10-08
+
+Root explicitly assigned Q01's independently reproduced P2 in this same task,
+source/regression/checkpoint+push, without UI or another general runtime campaign.
+Reuse the fully read, unchanged NATIVE-SESSION@3/NATIVE-POPUP@1.BINDING/ACTION,
+NATIVE@2/IDENTITY/PROJECTIONS and original N03 closure above; no contract revision
+or new API choice. AGENTS/current branch and selected contract drift checked.
+Mode Restore: parent controls must belong to parent, independent of identifier
+strings. The defect was a parent AX walk crossing its nested AXPopover, allowing
+one CF object or another popup child to be labelled as a parent Surface node.
+
+Read Q01's retained Review.swift at system-temp uib-q01-n03-source-mglf_0td;
+the reviewer-owned file/directory remain untouched for its independent recheck.
+The new PopupMembershipChecks.swift reuses that parent→trigger→popover graph with
+reported AXRole values and a real parent result. Before the fix it failed with
+acceptedForeignSurface; that is an expected red regression, not a passing test.
+
+Minimal production repair: the existing shared resolve function reads a bounded
+reported role before a descendant's identifier; nested AXPopover is a separate
+Surface and its identifier/children are not traversed. An explicitly supplied
+popup root remains in scope. Missing/unreadable role fails closed. All initial
+parent resolution, full handle revalidation and phase3 result-only resolution
+already use this same function, so no new mode, exclusion parameter, wrapper or
+shadow graph is introduced. Role copies use existing acquisition accounting.
+No change to nonce/permits, held CF equality, after-close parent-only publication,
+V02/PROTECTED, wire, limits, owner/permission policy or analytical consumers.
+
+Focused offline proof:12 membership checks cover same actor/different popup child
+as parent, result-only refusal, allowed parent, equal identifiers on genuinely
+different Surfaces, no excluded subtree reads, after-close held result, reopened
+same-ID replacement refusal, held-result reparenting refusal, revalidation and
+unknown container classification. Production unique/duplicate resolver checks,
+3 valid/14 invalid configuration cases and13 permission/identity phase checks
+also pass. Swift6 helper builds at macOS14 deployment target with no diagnostics.
+Tests use inert NativeAXAccess; zero SDK input/value reads and no desktop acquisition.
+This is the requested boundary regression, not a new runtime or independent pass.
+Write set: NativeFormSession.swift (7 lines), FormIdentityChecks.swift role fixture,
+PopupMembershipChecks.swift and this receipt only. Other-owner performance sources
+and after-title-spacing.png remain untouched. Cleanup/checkpoint follows below.
+
+Repair source SHA2569a468f1b6d78c32985ed69c53816a9ec858fb48fa2de1b1d553da15a0df940be; compiled helperb26f472e9a53c627cc92199f71d17452d91802df16dfc403227afd467b7309ff.
+Removed only own system-temp uib-n03-membership-vafejdqn (129 nonimage files),
+verified absent. Reviewer Review.swift retained unchanged SHA25605bad866ee9024a9cc47709a2e20ccebf30e78c61209c7474d8fd57bf31d7c53.
+No task images created/deleted or desktop resources acquired. Diff whitespace passed;
+no changed Markdown links/spec routes. Exact four-path current-master checkpoint
+and configured origin/master push follow; Q01 independent recheck remains required.
