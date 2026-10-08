@@ -113,13 +113,16 @@ impl EffectGate for WorkerEffectGate<'_> {
                 "effect_gate_expired_or_cancelled",
             ));
         }
-        let flags = u8::from(matches!(
-            action.modality,
-            InputModality::Pointer
-                | InputModality::Keyboard
-                | InputModality::Touch
-                | InputModality::Remote
-        ));
+        let flags = u8::from(
+            matches!(action.intent, Intent::Focus {})
+                || matches!(
+                    action.modality,
+                    InputModality::Pointer
+                        | InputModality::Keyboard
+                        | InputModality::Touch
+                        | InputModality::Remote
+                ),
+        );
         let ready = Control {
             kind: ControlKind::EffectReady,
             class: OperationClass::Mutation,

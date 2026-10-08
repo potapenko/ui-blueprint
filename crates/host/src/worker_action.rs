@@ -23,9 +23,10 @@ impl ActionOperation<'_> {
         self,
         case: ActionCase,
         limits: Limits,
-        provider: &mut impl uiblueprint_plugin_api::actions::SetCheckedProvider,
+        provider: &mut impl uiblueprint_plugin_api::actions::ActionProvider,
+        expected: Option<Expectation>,
     ) -> Result<u64, HostError> {
-        use uiblueprint_plugin_api::actions::SetCheckedExecution;
+        use uiblueprint_plugin_api::actions::ActionExecution;
         let mut clock = WorkerActionControl::new(self.clock.clone(), self.origin);
         let start = clock.now();
         let remaining = u64::try_from(
@@ -38,19 +39,21 @@ impl ActionOperation<'_> {
             return Err(HostError::DeadlineExpired);
         }
         let scope = case.action.authorized_scope.clone();
-        let mut kernel = match SetCheckedExecution::prepare(
-            case,
-            Id(format!(
-                "action-transition:{}:{}",
-                self.control.correlation.session_epoch, self.control.correlation.operation
-            )),
-            Id(format!(
-                "action-step:{}:{}",
-                self.control.correlation.session_epoch, self.control.correlation.operation
-            )),
-            start,
-            remaining,
-        ) {
+        let transition = Id(format!(
+            "action-transition:{}:{}",
+            self.control.correlation.session_epoch, self.control.correlation.operation
+        ));
+        let step = Id(format!(
+            "action-step:{}:{}",
+            self.control.correlation.session_epoch, self.control.correlation.operation
+        ));
+        let prepared = match expected {
+            Some(expected) => {
+                ActionExecution::prepare_action(case, expected, transition, step, start, remaining)
+            }
+            None => ActionExecution::prepare(case, transition, step, start, remaining),
+        };
+        let mut kernel = match prepared {
             Ok(kernel) => kernel,
             Err(_) => {
                 return publish_refusal(

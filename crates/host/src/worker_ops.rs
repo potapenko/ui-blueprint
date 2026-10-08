@@ -121,7 +121,7 @@ impl<'a> CanonicalSession<'a> {
     pub(crate) fn action_input(
         &self,
         bytes: &[u8],
-    ) -> Result<(ActionCase, Limits, TargetLease, Id), HostError> {
+    ) -> Result<(ActionCase, Limits, TargetLease, Id, Option<Expectation>), HostError> {
         if !self.target.permits(OperationClass::Mutation) {
             return Err(HostError::PermissionDenied);
         }
@@ -130,7 +130,7 @@ impl<'a> CanonicalSession<'a> {
         }
         guard::phase(guard::Phase::Decode);
         let tape = Tape::decode(bytes)?;
-        if tape.count() != 2 {
+        if !matches!(tape.count(), 2 | 3) {
             return Err(HostError::InvalidInput);
         }
         let source = Document::from_json(tape.get(0)?, self.limits.input_bytes)
@@ -157,18 +157,28 @@ impl<'a> CanonicalSession<'a> {
         {
             return Err(HostError::InvalidInput);
         }
-        Ok((*case, request.limits, self.target, self.clock.clone()))
+        let expected = self.action_expectation(&tape, &case.snapshot, &case.action)?;
+        Ok((
+            *case,
+            request.limits,
+            self.target,
+            self.clock.clone(),
+            expected,
+        ))
     }
     /// Read-only preparation has no effect authority. Only actual provider
     /// acquisition may replace the input's unknown Resolution facts.
     #[cfg(feature = "web")]
-    pub(crate) fn prepare_input(&self, bytes: &[u8]) -> Result<(Snapshot, Request, Id), HostError> {
+    pub(crate) fn prepare_input(
+        &self,
+        bytes: &[u8],
+    ) -> Result<(Snapshot, Request, Id, Option<Expectation>), HostError> {
         if bytes.len() > self.limits.input_bytes {
             return Err(HostError::ResourceLimit);
         }
         guard::phase(guard::Phase::Decode);
         let tape = Tape::decode(bytes)?;
-        if tape.count() != 2 {
+        if !matches!(tape.count(), 2 | 3) {
             return Err(HostError::InvalidInput);
         }
         let source = Document::from_json(tape.get(0)?, self.limits.input_bytes)
@@ -201,8 +211,13 @@ impl<'a> CanonicalSession<'a> {
             || reference.target != snapshot.context.target
             || reference.snapshot_id != snapshot.id
             || action.authorized_scope != snapshot.context.scope_id
-            || !matches!(action.intent, Intent::SetChecked { .. })
-            || action.modality != InputModality::Setter
+            || !matches!(
+                (&action.intent, action.modality),
+                (Intent::SetChecked { .. }, InputModality::Setter)
+                    | (Intent::Focus {}, InputModality::Semantic)
+                    | (Intent::Type { .. }, InputModality::Keyboard)
+                    | (Intent::Activate {}, InputModality::Semantic)
+            )
             || snapshot
                 .nodes
                 .iter()
@@ -216,7 +231,39 @@ impl<'a> CanonicalSession<'a> {
         {
             return Err(HostError::InvalidInput);
         }
-        Ok((*snapshot, *request, self.clock.clone()))
+        let expected = self.action_expectation(&tape, &snapshot, action)?;
+        Ok((*snapshot, *request, self.clock.clone(), expected))
+    }
+    #[cfg(feature = "web")]
+    fn action_expectation(
+        &self,
+        tape: &Tape<'_>,
+        snapshot: &Snapshot,
+        action: &Action,
+    ) -> Result<Option<Expectation>, HostError> {
+        if tape.count() == 2 {
+            return if matches!(action.intent, Intent::SetChecked { .. }) {
+                Ok(None)
+            } else {
+                Err(HostError::InvalidInput)
+            };
+        }
+        let document = Document::from_json(tape.get(2)?, self.limits.input_bytes)
+            .map_err(|_| HostError::InvalidInput)?;
+        let Artifact::Expectation(expected) = document.artifact else {
+            return Err(HostError::InvalidInput);
+        };
+        let Rule::PropertyEquals { field, .. } = &expected.rule else {
+            return Err(HostError::InvalidInput);
+        };
+        if expected.scope_id != action.authorized_scope
+            || expected.targets.len() != 1
+            || !snapshot.context.fields.contains(field)
+            || !snapshot.nodes.iter().any(|n| n.key == expected.targets[0])
+        {
+            return Err(HostError::InvalidInput);
+        }
+        Ok(Some(*expected))
     }
     pub fn execute(
         &mut self,

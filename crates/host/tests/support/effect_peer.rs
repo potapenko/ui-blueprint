@@ -77,6 +77,7 @@ fn main() {
             operation.class == OperationClass::Mutation
                 || (metadata_mode && operation.class == OperationClass::Validate)
                 || ((budget_mode || metadata_mode) && operation.class == OperationClass::Prepare)
+                || (mode == b'I' && operation.class == OperationClass::Observe)
         );
         let canonical = &input[1..];
         let Artifact::Action(action) = Document::from_json(canonical, 65536).unwrap().artifact
@@ -84,6 +85,38 @@ fn main() {
             panic!("action")
         };
         assert!(config.target.matches(&action.snapshot.context.target));
+        if mode == b'I' {
+            let read = serde_json::to_vec(&Document {
+                schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+                artifact: Artifact::Snapshot(Box::new(action.snapshot)),
+            })
+            .unwrap();
+            let frame = Control {
+                kind: ControlKind::Frame,
+                class: operation.class,
+                slot: 0,
+                flags: 0,
+                correlation: operation.correlation,
+                length: read.len() as u64,
+                value: 0,
+                auxiliary: 0,
+            };
+            io.write_control(frame).unwrap();
+            io.write(&read).unwrap();
+            io.write_control(Control {
+                kind: ControlKind::Commit,
+                ..frame
+            })
+            .unwrap();
+            assert_eq!(io.control().unwrap().kind, ControlKind::Ack);
+            io.write_control(Control {
+                kind: ControlKind::Terminal,
+                length: 0,
+                ..frame
+            })
+            .unwrap();
+            continue;
+        }
         if metadata_mode {
             let ready = Control {
                 kind: ControlKind::ObserveReady,
@@ -337,7 +370,7 @@ fn main() {
             kind: ControlKind::EffectReady,
             class: operation.class,
             slot: 0,
-            flags: u8::from(mode == b'P'),
+            flags: u8::from(matches!(mode, b'P' | b'F' | b'Q')),
             correlation: operation.correlation,
             length: 0,
             value: 0,
@@ -347,6 +380,15 @@ fn main() {
         if mode == b'P' {
             selected.modality = InputModality::Pointer;
         } // existing fake physical-lane case
+        if matches!(mode, b'F' | b'Q') {
+            selected.intent = uiblueprint_schema::model::Intent::Focus {};
+            selected.modality = InputModality::Semantic;
+            selected
+                .resolution
+                .available_intents
+                .push(Id("focus".into()));
+            uiblueprint_schema::validation::validate_action(&action.snapshot, &selected).unwrap();
+        }
         let clock = Id(
             uiblueprint_host::host_types::clock_id(operation.correlation.session_epoch)
                 .unwrap()
@@ -375,13 +417,13 @@ fn main() {
         deliveries += 1;
         assert_eq!(deliveries, 1);
         match mode {
-            b'L' => return, // Lost acknowledgement after possible fake delivery.
+            b'L' | b'Q' => return, // Lost acknowledgement after possible fake delivery.
             b'D' => {
                 io.write_control(ready).unwrap();
                 let _ = io.control();
                 panic!("duplicate permit accepted");
             }
-            b'P' => {
+            b'P' | b'F' => {
                 // Keep the fake physical delivery unresolved until parent cancel
                 // closes input. The outer test/RuntimeHost owns the finite deadline
                 // and kill/reap bound; no sleep is used as readiness evidence.

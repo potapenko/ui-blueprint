@@ -53,7 +53,7 @@ impl WebSession {
             if control.class != OperationClass::Prepare || control.flags & 8 == 0 {
                 return Err(HostError::InvalidControl);
             }
-            let (snapshot, request, clock) = match session.prepare_input(input) {
+            let (snapshot, request, clock, _expected) = match session.prepare_input(input) {
                 Ok(input) => input,
                 Err(error) => {
                     return crate::worker_action::publish_refusal(
@@ -115,7 +115,7 @@ impl WebSession {
             if control.class != OperationClass::Mutation || control.flags & 8 == 0 {
                 return Err(HostError::InvalidControl);
             }
-            let (case, limits, target, clock) = match session.action_input(input) {
+            let (case, limits, target, clock, expected) = match session.action_input(input) {
                 Ok(input) => input,
                 Err(error) => {
                     return crate::worker_action::publish_refusal(
@@ -140,7 +140,7 @@ impl WebSession {
                 origin: worker_main::clock_origin(),
                 deadline,
             }
-            .execute(case, limits, &mut provider)
+            .execute(case, limits, &mut provider, expected)
         })();
         if self.collector.pending_invalidation() {
             session.invalidate_retained_session()?;

@@ -360,7 +360,7 @@ fn marked_pre_dispatch_refusal_cannot_gain_effect_authority_or_false_success() {
 #[test]
 fn fake_loss_or_duplicate_permit_request_is_unknown_and_never_retried() {
     let _serial = RUNTIME_TEST.lock().unwrap();
-    for mode in [b'L', b'D'] {
+    for mode in [b'L', b'D', b'Q'] {
         let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
         let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
         let session = attach(&mut host, true);
@@ -396,13 +396,13 @@ fn readonly_cancel_and_deadline_refuse_before_fake_dispatch() {
     let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
     let read = attach(&mut host, false);
     assert!(matches!(
-        submit(&mut host, read, b'C', deadline()),
+        submit(&mut host, read, b'F', deadline()),
         Err(HostError::PermissionDenied)
     ));
     host.detach(read).unwrap();
     assert!(matches!(next(&mut host), HostEvent::Closed { .. }));
     let session = attach(&mut host, true);
-    let op = submit(&mut host, session, b'C', deadline()).unwrap();
+    let op = submit(&mut host, session, b'F', deadline()).unwrap();
     let c = host.cancel(op).unwrap();
     assert_eq!(c.effect, EffectReceipt::NotDispatched);
     assert_eq!(c.terminal, Terminal::Cancelled);
@@ -412,7 +412,7 @@ fn readonly_cancel_and_deadline_refuse_before_fake_dispatch() {
     submit(
         &mut host,
         session,
-        b'C',
+        b'F',
         Instant::now() + Duration::from_millis(2),
     )
     .unwrap();
@@ -448,39 +448,72 @@ fn same_target_mutation_claim_refuses_parallel_dispatch() {
 #[test]
 fn physical_lane_is_shared_across_targets_and_cancel_after_permit_is_unknown() {
     let _serial = RUNTIME_TEST.lock().unwrap();
-    let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
-    let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
-    let a = attach(&mut host, true);
-    // Known bounded fixtures only: update every target occurrence consistently.
-    let b_descriptor = std::str::from_utf8(DESCRIPTOR)
-        .unwrap()
-        .replace("native-app", "second-app");
-    let b_action = std::str::from_utf8(ACTION)
-        .unwrap()
-        .replace("native-app", "second-app");
-    let Artifact::Session(s) = Document::from_json(b_descriptor.as_bytes(), 65536)
-        .unwrap()
-        .artifact
-    else {
-        panic!("session")
-    };
-    let mut input = host
-        .reserve_attach_input(
-            TargetLease::authorized(&s.target, true).unwrap(),
-            b_descriptor.len(),
-        )
-        .unwrap();
-    input.bytes_mut().copy_from_slice(b_descriptor.as_bytes());
-    let b = host.attach(input, deadline()).unwrap();
-    assert!(matches!(next(&mut host), HostEvent::Attached { .. }));
-    let a_op = submit(&mut host, a, b'P', deadline()).unwrap();
-    let mut input = host.reserve_input(b, b_action.len() + 1).unwrap();
-    input.bytes_mut()[0] = b'P';
-    input.bytes_mut()[1..].copy_from_slice(b_action.as_bytes());
-    let b_op = host
-        .submit(
-            b,
-            OperationClass::Mutation,
+    for (a_mode, b_mode) in [(b'P', b'P'), (b'F', b'P'), (b'F', b'F')] {
+        let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
+        let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
+        let a = attach(&mut host, true);
+        // Known bounded fixtures only: update every target occurrence consistently.
+        let b_descriptor = std::str::from_utf8(DESCRIPTOR)
+            .unwrap()
+            .replace("native-app", "second-app");
+        let b_action = std::str::from_utf8(ACTION)
+            .unwrap()
+            .replace("native-app", "second-app");
+        let Artifact::Session(s) = Document::from_json(b_descriptor.as_bytes(), 65536)
+            .unwrap()
+            .artifact
+        else {
+            panic!("session")
+        };
+        let mut input = host
+            .reserve_attach_input(
+                TargetLease::authorized(&s.target, true).unwrap(),
+                b_descriptor.len(),
+            )
+            .unwrap();
+        input.bytes_mut().copy_from_slice(b_descriptor.as_bytes());
+        let b = host.attach(input, deadline()).unwrap();
+        assert!(matches!(next(&mut host), HostEvent::Attached { .. }));
+        let a_op = submit(&mut host, a, a_mode, deadline()).unwrap();
+        let mut input = host.reserve_input(b, b_action.len() + 1).unwrap();
+        input.bytes_mut()[0] = b_mode;
+        input.bytes_mut()[1..].copy_from_slice(b_action.as_bytes());
+        let b_op = host
+            .submit(
+                b,
+                OperationClass::Mutation,
+                input,
+                OutputRequest {
+                    channels: 1,
+                    frame_bytes: 65536,
+                    total_bytes: 65536,
+                    input_format: 0,
+                    retained_partition: 0,
+                },
+                deadline(),
+            )
+            .unwrap();
+        let refused = complete(&mut host);
+        assert_eq!(refused.terminal, Terminal::Failed(HostError::Busy));
+        assert_eq!(refused.effect, EffectReceipt::NotDispatched);
+        let permitted = if refused.operation == a_op {
+            b_op
+        } else {
+            assert_eq!(refused.operation, b_op);
+            a_op
+        };
+        let refused_session = refused.operation.session;
+        drop(refused);
+        assert!(matches!(next(&mut host),HostEvent::Closed {session} if session==refused_session));
+        // The physical/focus permit is still held. An independently admitted readonly
+        // Observe on the freed slot must use no mutation or physical claim.
+        let read_session = attach(&mut host, false);
+        let mut input = host.reserve_input(read_session, ACTION.len() + 1).unwrap();
+        input.bytes_mut()[0] = b'I';
+        input.bytes_mut()[1..].copy_from_slice(ACTION);
+        host.submit(
+            read_session,
+            OperationClass::Observe,
             input,
             OutputRequest {
                 channels: 1,
@@ -492,23 +525,30 @@ fn physical_lane_is_shared_across_targets_and_cancel_after_permit_is_unknown() {
             deadline(),
         )
         .unwrap();
-    let refused = complete(&mut host);
-    assert_eq!(refused.terminal, Terminal::Failed(HostError::Busy));
-    assert_eq!(refused.effect, EffectReceipt::NotDispatched);
-    let permitted = if refused.operation == a_op {
-        b_op
-    } else {
-        assert_eq!(refused.operation, b_op);
-        a_op
-    };
-    let cancelled = host.cancel(permitted).unwrap();
-    assert_eq!(cancelled.terminal, Terminal::Cancelled);
-    assert!(cancelled.effect_unknown());
-    assert_eq!(cancelled.committed(), 0);
-    drop(refused);
-    drop(cancelled);
-    finish(&mut host);
-    assert_eq!(domain.usage().reserved_sessions, 0);
+        let read = complete(&mut host);
+        assert_eq!(read.terminal, Terminal::Completed);
+        assert_eq!(read.effect, EffectReceipt::NotDispatched);
+        let saved = read.bytes(0).unwrap().to_vec();
+        assert!(matches!(
+            Document::from_json(&saved, 65536).unwrap().artifact,
+            Artifact::Snapshot(_)
+        ));
+        let cancelled = host.cancel(permitted).unwrap();
+        assert_eq!(cancelled.terminal, Terminal::Cancelled);
+        assert!(cancelled.effect_unknown());
+        assert_eq!(cancelled.committed(), 0);
+        assert_eq!(
+            read.bytes(0),
+            Some(saved.as_slice()),
+            "readonly ACK survives focus cancel"
+        );
+        drop(read);
+        drop(cancelled);
+        finish(&mut host);
+        assert_eq!(domain.usage().reserved_sessions, 0);
+        assert_eq!(domain.usage().completion_groups, 0);
+        assert!(!domain.usage().abandoned);
+    }
 }
 
 #[test]

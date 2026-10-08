@@ -744,3 +744,71 @@ Source pins SHA256:
 - Web test:00b7a6487148e8742b0967497320a6724314e960d390c5ef73bd1fa2da0a2a49
 Short exact5 Git lease requested for checkpoint+bounded canonical push. No automatic
 host composition/focus claim/runtime/next packet; root owns subsequent selection.
+
+## Focus lane and Expectation composition WIP — geometry priority switch
+
+Root expanded Core task-wide ownership in plugin-api/host for connected Web forms,
+then relayed the user's explicit main priority: fast read-only real UI geometry and
+structure for Web/Mac development. Stop new input/helper-action work, save current
+coherent WIP, then switch to observe/inspect/measure/diff. P5 is retained, but action
+refs/mutations/executor are not prerequisites for the geometry result. No new goal,
+planner/engine/audit or reset of accepted infrastructure. Root clarified that useful
+risk-focused review is grouped over finished integrations; ordinary tests remain
+the main implementation loop, no repeated review for mechanical preparation.
+
+Exact7 current checkpoint paths: host src/worker_effect.rs, worker_ops.rs,
+worker_action.rs, worker_web.rs; tests/support/effect_peer.rs, effects_host.rs;
+this existing receipt. Web provider/collector/harness and Native Swift remain owned
+elsewhere and excluded from staging. No public CLI/schema/Cargo changes.
+
+Finished lane change: existing WorkerEffectGate physical-claim predicate now includes
+Intent::Focus even when Semantic, alongside existing Pointer/Keyboard/Touch/Remote.
+No new control flag/queue/lane/framework; same actual parent MutationLease, Target
+claim and one-use nonce. Setter behavior unchanged; Keyboard already uses this lane.
+Nearest existing peer now exercises a canonical Semantic Focus through the actual
+fixed-I/O gate, not a duplicate permit. Fake delivery remains a local counter.
+Added bounded saved-Snapshot Observe reply proves readonly admission while the lane
+is held; it is not fresh collection/UI evidence and preserves original fixture data.
+
+Focused real-parent/owned-peer checks passed, locked/offline Rust1.96/macOS:
+- physical_lane_is_shared_across_targets_and_cancel_after_permit_is_unknown:
+  Pointer/Pointer, Focus/Pointer and Focus/Focus contend across exact distinct Targets;
+  losing request fails Busy/NotDispatched before permit; readonly Observe succeeds
+  while the winning lane stays held; its ACKed Snapshot survives subsequent cancel;
+  winning cancel after permit gives unknown/no committed mutation, confirmed reap.
+- readonly_cancel_and_deadline_refuse_before_fake_dispatch now uses Focus:
+  readonly Target denied, cancellation/expiry before permit remain NotDispatched.
+- fake_loss_or_duplicate_permit_request_is_unknown_and_never_retried includes
+  Semantic Focus loss after permit; unknown result/slot cleanup, no retry/reuse.
+Affected host web lib/bin/runtime/effect_peer Clippy passed; host web bin check passed.
+No unchanged broad suite or actual focus/typing/browser/native input ran.
+
+Started host composition WIP: existing private Tape accepts a third existing
+Expectation Document for Prepare/Act; legacy two-document SetChecked stays valid.
+New Focus/Type/Activate requires that explicit record; type/count/scope/single result
+node/requested field validated inside worker. Parent still never parses bodies.
+Act selects ActionExecution::prepare_action when expectation is present; old prepare
+otherwise. Expected state is never inferred from Type.text. Existing canonical
+Transition/metadata/ACK/deadline/effect owners retained, no new graph/schema/framing.
+Bootstrap Prepare validates/binds the third record but provider prepare_exact still
+uses its existing read-only signature; actual new forms host chain is not yet tested.
+Host uses saved compatibility constructor CheckboxProvider, so this checkpoint
+does not require Web's uncommitted constructor rename. Web owns actual expanded
+provider source and its runtime proof independently.
+
+This transport/composition is a truthful compiling WIP, not connected forms or
+Native acceptance. New end-to-end host forms tests were not started after the
+priority switch; input/helper changes stop after this save. Native held identity/
+helper exchange selection is not performed or implemented here. Preserve this
+source for future explicit P5 continuation rather than discarding/reworking it.
+
+Own system-temp non-image target removed/absence-verified after last check; all
+existing images/application-state evidence untouched. No process/runtime/input lane
+held. Exact7 checkpoint+bounded canonical push follows short Git lease. After save,
+next consumer is the practical read-only geometry path using existing callable
+observe/inspect/measure/diff and current real Web/Mac data; no action readiness gate.
+WIP source SHA256:
+- worker_effect.rs:cd8b4d009de29575debd567e82b15dbeb9a8d9461f84a778cb234d97725d81cf
+- worker_ops.rs:0e089d37a1018132c566a161b1cf14f9ad130c2041bc1d28930a16c796ae524b
+- worker_action.rs:1c57a8b56b337a9b30e492f702b0fda6d2bdf0ea80b4e20a24ba177a519a6f40
+- worker_web.rs:665f90ba2d919136e9ca47d36fa66e974276fba8427df91038f93d583a2f5fd2
