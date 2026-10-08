@@ -82,8 +82,8 @@ async function main(){
       const result=await call(['observe','--connection',await json(input.connection),'--request',await json(input.request),'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536']);
       assert.deepEqual(await state(),before,`${name}: read-only invariance`);
       assert(!result.output.includes('W04_PRIVATE_CANARY'));
-      assert((attachRefusal?[1]:[2,4]).includes(result.code),`${name}: exit ${result.code} ${result.diagnostics}`);
-      if(attachRefusal){assert.equal(result.output,'');assert.equal(result.diagnostics.trim(),'observe_worker_or_cleanup_failure');}
+      assert((attachRefusal?[4]:[2,4]).includes(result.code),`${name}: exit ${result.code} ${result.diagnostics}`);
+      if(attachRefusal){assert.equal(result.output,'');assert.equal(result.diagnostics.trim(),'observe_unavailable');}
       const doc=result.output?JSON.parse(result.output):null;
       const snapshot=doc?.artifact?.data?.result?.status==='observed'?doc.artifact.data.result.data:null;
       checks.push({name,exit:result.code,observed:!!snapshot,readonly:true});
