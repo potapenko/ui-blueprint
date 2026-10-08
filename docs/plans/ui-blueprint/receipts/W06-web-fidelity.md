@@ -1,4 +1,4 @@
-# W06 Web fidelity — remaining srcset boundary repair
+# W06 Web fidelity — srcset boundary repair ready for affected Q01 recheck
 
 ## Remaining P1 continuation — 2026-10-08
 
@@ -30,6 +30,66 @@ compact wait_threads returned terminal completed/idle and final CPU/runtime rele
 on pushed b3c3a22; its full result/release receipt was read. The lane is now released
 for focused checks/one affected live proof. No new root grant required.
 All existing shared evidence/reviewer reproducers remain read-only and retained.
+
+### Remaining P1 repaired result
+
+Verified source `a7c04164df08441cfbbaa61b501aa64d29290732`. Both guards now scan
+URL and descriptor phases separately. A descriptor comma starts a new candidate
+even without following whitespace; URL-internal commas stay inside the URL.
+Unsupported parenthesized descriptors refuse safely. This is a bounded privacy
+classification pass, not a new browser source-selection algorithm or text rewrite.
+All205 saved crate/Web/Cargo/toolchain inputs matched this pin byte-for-byte.
+
+After Q02's terminal b3c3a22 release only:
+
+* Shared20-case corpus passes in JS preflight and actual Rust snapshot normalization:
+  tight/spaced density and width descriptors, first/second/third candidates,
+  descriptor-less trailing delimiters, ASCII whitespace, Unicode, data URL commas,
+  credential/token variants and ambiguous descriptor refusal. Safe native strings
+  are compared verbatim; each private table uses a SAFE currentSourceURL.
+* Exact Q01 comma-repro.cjs with repaired source/expectation returns private/count2.
+  Exact comma-counterexample.rs with a repaired refusal assertion passes in a
+  temporary test overlay. Original saved production bytes were restored before
+  runtime compilation; reviewer files remain untouched. Existing captured-only
+  currentSourceURL/originURL safe/private checks also pass in the same focused test.
+* Separate affected headless driver srcset-privacy.cjs passes10 explicit Observes:
+  baseline plus3 safe positives and6 private refusals. The actual comma-tight
+  protocol-relative credential case with the real fixture port and safe selected
+  currentSrc returns InvalidInput/0committed/0canonical bytes. Absolute credentials,
+  third candidate, tab boundary, private candidate after a data URL and tight token
+  query likewise refuse. Safe tight lists, base64 data URL and multiple internal
+  data-URL commas retain exact source facts with raw/canonical parity.
+* One necessary full positive sanity response still has97nodes/2documents/1102facts/
+  19text boxes (443,370canonical bytes). Safe supplemental responses452,585 /
+  452,695 /453,677bytes stay below the unchanged512KiB profile. Accepted P2 and
+  semantic/geometry cohorts were neither changed nor rerun; no D06 timing campaign.
+* Final Clippy Web lib -D warnings, selected Rust formatting, Node syntax, local
+  receipt links and diff whitespace pass. No broad unrelated suites were run.
+
+Actual Node24.15.0/Playwright1.58.2/Chromium145.0.7632.6, own headless800×600/DPR1;
+original frozen F01 source hashes checked. All requests preserve state/focus/scroll.
+No canary in canonical output, bounded diagnostics or saved report/config. Private
+cases produce no Snapshot/publication for downstream retained/cache/history/export
+consumers; no independent rerun of those unchanged consumers is claimed.
+One actual host closure reports0sessions/0completion groups,192bytes ledger backing,
+cleanup_confirmed=true, no abandoned/poisoned owner and caller exit0. Own browser,
+context/server closed; exact task worker inventory empty. CPU/headless released.
+
+Minimal sanitized report/config retained for the same Q01 affected recheck/Q02:
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-srcset-proof-yi3pBs`.
+SHA256 report `beeec335505776e8bdf6cea34759e0f13d1caf54160ae5a0531dcb052f36a21a`;
+consumer `c6ff2485a688a83b8da06efa0db10ee613c539dd09732de5e64ecc2089f54cf6`;
+worker `1b8f2689ccb661396d6eece44aefdc6eb9df0abf28f6887810954b8c5d65fd6c`;
+driver `338b7dba25e521c01a45bfd8f1ed6e5c315d25f83959734d39047454885ee62d`.
+Retain until both named consumers finish. Previous e020gN/Ln5Cz7, all Q01 proof
+directories and both reviewer reproducer directories remain untouched. Own source/
+build/log nonimages are cleaned after verification; no images created/deleted.
+Shared performance.cjs changes belong exclusively to Q02's committed b3c3a22;
+this task did not stage/edit its sources, documents or receipts.
+
+This author result closes the reproduced behavior in its tested scope; the final
+Documents privacy acceptance remains the same Q01 reviewer, then Q02's full-document
+measurement gate. Existing accepted P2/positive facts retain their9d715ee acceptance.
 
 ## Q01 repair continuation — 2026-10-08
 
