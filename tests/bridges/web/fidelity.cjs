@@ -126,6 +126,9 @@ async function main(){
     await page.evaluate(()=>{const p=document.createElement('input');p.id='w06-private';p.type='password';p.value='W06_PRIVATE_CANARY';document.body.append(p);});
     assert.equal((await observe('private-source-refusal')).snapshot,null);
     await page.evaluate(()=>document.getElementById('w06-private').remove());
+    await page.evaluate(()=>history.replaceState(null,'','?token=W06_PRIVATE_CANARY'));
+    assert.equal((await observe('private-url-refusal')).snapshot,null);
+    await page.evaluate(()=>history.replaceState(null,'','?generation=1'));
     await driver.close();driver=null;
     await attach([frames[0]]);
     assert.equal((await observe('unallowed-frame')).snapshot,null);await driver.close();driver=null;

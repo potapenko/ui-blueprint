@@ -206,6 +206,8 @@ fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
         let name = native_string(strings, pair[0])?.to_ascii_lowercase();
         let value = native_string(strings, pair[1])?.to_ascii_lowercase();
         if (name == "type" && value == "password")
+            || (matches!(name.as_str(), "href" | "src" | "action" | "formaction")
+                && private_url(&value))
             || name == "data-private"
             || name == "data-sensitive"
             || name.contains("token")
@@ -227,6 +229,31 @@ fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
     }
     Ok(false)
 }
+fn private_url(value: &str) -> bool {
+    let authority = value
+        .split_once("://")
+        .map(|(_, tail)| tail.split(['/', '?', '#']).next().unwrap_or(""));
+    if authority.is_some_and(|a| a.contains('@')) {
+        return true;
+    }
+    let query = value
+        .find(['?', '#'])
+        .map(|i| value[i..].to_ascii_lowercase())
+        .unwrap_or_default();
+    query.contains('%')
+        || [
+            "token",
+            "secret",
+            "password",
+            "authorization",
+            "api_key",
+            "api-key",
+            "apikey",
+            "signature",
+        ]
+        .iter()
+        .any(|name| query.contains(name))
+}
 
 pub(super) fn snapshot(
     capture: raw::Capture,
@@ -246,6 +273,12 @@ pub(super) fn snapshot(
     let mut surfaces = Vec::new();
     let mut seen = Vec::new();
     for document in &capture.documents {
+        if [document.document_url, document.base_url]
+            .iter()
+            .any(|i| native_string(&capture.strings, *i).is_ok_and(private_url))
+        {
+            return Err(Failure::new(ErrorKind::InvalidInput));
+        }
         let frame = capture
             .strings
             .get(document.frame_id as usize)

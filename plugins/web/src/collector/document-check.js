@@ -2,6 +2,14 @@ function checkDocument(options) {
   'use strict';
   if (this !== document) return {status:'stale',count:0};
   if (options.sensitive) return {status:'private',count:0};
+  const privateURL=value=>{
+    if(value.length>options.maxChars) return true;
+    try {
+      const url=new URL(value,document.baseURI), query=url.search+url.hash;
+      return !!(url.username||url.password) || /%|token|secret|password|authorization|api[_-]?key|signature/i.test(query);
+    } catch { return true; }
+  };
+  if(privateURL(document.URL)||privateURL(document.baseURI)) return {status:'private',count:0};
   const end=performance.now()+options.remainingMs;
   const stack=[[this,0]];
   let count=0;
@@ -18,6 +26,7 @@ function checkDocument(options) {
         const name=attribute.name.toLowerCase();
         if(name.length>options.maxChars || attribute.value.length>options.maxChars) return {status:'limit',count};
         if(name==='data-private' || name==='data-sensitive' || name.includes('token') || name.includes('secret')) return {status:'private',count};
+        if(['href','src','action','formaction'].includes(name) && privateURL(attribute.value)) return {status:'private',count};
       }
       const type=node.getAttribute('type'), autocomplete=node.getAttribute('autocomplete');
       if(type?.toLowerCase()==='password' || (autocomplete && /(?:^|\s)(?:current-password|new-password|one-time-code|cc-number|cc-csc)(?:\s|$)/i.test(autocomplete)))
