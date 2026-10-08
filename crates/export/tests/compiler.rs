@@ -84,7 +84,7 @@ fn observed_full_scope_exact_fractional_geometry_and_unknowns() {
     let all = String::from_utf8(p.files().values().flatten().copied().collect()).unwrap();
     assert!(!all.contains("fixture-ref-"));
     assert!(!all.contains("payload_ref"));
-    // D05 observations are consistency=unknown: G01 is allowed to retain unknown dimensions.
+    // Unknown consistency remains attributed; it is not an affirmative unstable state.
     assert_eq!(v["observations"][0]["consistency"], "unknown");
 }
 #[test]
@@ -314,25 +314,145 @@ fn confirmed_flow_retains_modality_and_requires_action_and_after_evidence() {
     assert!(compile(&b, limits()).is_err());
 }
 
+// Literal widths/heights read from the retained F01 source rectangles, not compiler
+// output. Partial coverage and unknown consistency do not erase these known anchors
+// (accepted engine changes 256f2a2 and 2491dec). Historical package files stay intact.
+fn current_observed_dimensions() -> (String, String) {
+    let historical = std::fs::read_to_string(format!(
+        "{}/../../fixtures/export/observed-package/dimensions.json",
+        env!("CARGO_MANIFEST_DIR")
+    ))
+    .unwrap();
+    let expected = [
+        ("N000", 97.296875, 32.0),
+        ("N002", 200.0, 60.0),
+        ("N004", 98.78125, 32.0),
+        ("N006", 120.0, 40.0),
+        ("N008", 120.0, 40.0),
+        ("N010", 100.0, 40.0),
+        ("N012", 60.0, 30.0),
+        ("N014", 360.0, 123.0),
+        ("N016", 188.0, 21.0),
+        ("N018", 360.0, 22.0),
+        ("N020", 360.0, 22.0),
+        ("N022", 87.625, 32.0),
+        ("N024", 0.0, 18.0),
+        ("N026", 146.9375, 32.0),
+        ("N028", 100.0, 30.0),
+        ("N030", 32.0, 16.0),
+    ];
+    let parsed: serde_json::Value = serde_json::from_str(&historical).unwrap();
+    assert_eq!(parsed[0]["dimensions"].as_array().unwrap().len(), 32);
+    assert_eq!(historical.matches("\"value\": null").count(), 32);
+    assert_eq!(
+        historical
+            .matches("\"unknown_reason\": \"unstable_state\"")
+            .count(),
+        32
+    );
+    let mut current = historical.clone();
+    for (index, (component, width, height)) in expected.into_iter().enumerate() {
+        for (axis, value) in [width, height].into_iter().enumerate() {
+            let dimension = &parsed[0]["dimensions"][index * 2 + axis];
+            assert_eq!(dimension["id"], format!("M{:04}", index * 2 + axis + 1));
+            for anchor in dimension["anchors"].as_array().unwrap() {
+                assert_eq!(anchor["component"], component);
+            }
+            current = current.replacen("\"value\": null", &format!("\"value\": {value:?}"), 1);
+        }
+    }
+    current = current.replace(
+        "\"unknown_reason\": \"unstable_state\"",
+        "\"unknown_reason\": null",
+    );
+    (historical, current)
+}
+// Prompt embeds the single view object; drawing-brief embeds the full array.
+fn single_dimension_view(array: &str) -> String {
+    array
+        .strip_prefix("[\n")
+        .unwrap()
+        .strip_suffix("\n]")
+        .unwrap()
+        .lines()
+        .map(|line| line.strip_prefix("  ").unwrap())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
 #[test]
-fn factual_query_migration_keeps_saved_packages_structurally_unchanged() {
+fn current_packages_preserve_history_except_accepted_known_anchor_results() {
+    let (historical_dimensions, current_dimensions) = current_observed_dimensions();
     for name in ["observed", "proposed"] {
-        let package = compile(&fixture(name), limits()).expect("existing package");
+        let brief = fixture(name);
+        let original = serde_json::to_vec(&brief).unwrap();
+        let package = compile(&brief, limits()).expect("existing package");
+        assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
+        assert_eq!(package.files().len(), 6);
         for (file, actual) in package.files() {
             let path = format!(
                 "{}/../../fixtures/export/{name}-package/{file}",
                 env!("CARGO_MANIFEST_DIR")
             );
-            let expected = std::fs::read(path).expect("saved package artifact");
-            if file.ends_with(".json") {
-                let actual: serde_json::Value = serde_json::from_slice(actual).unwrap();
-                let expected: serde_json::Value = serde_json::from_slice(&expected).unwrap();
-                assert!(actual == expected, "{name}/{file}");
-            } else {
-                assert!(actual == &expected, "{name}/{file}");
+            let mut expected =
+                std::fs::read_to_string(path).expect("immutable historical artifact");
+            if name == "observed" {
+                let replacement = match file.as_str() {
+                    "dimensions.json" | "drawing-brief.md" => {
+                        Some((historical_dimensions.clone(), current_dimensions.clone()))
+                    }
+                    "prompt.txt" => Some((
+                        single_dimension_view(&historical_dimensions),
+                        single_dimension_view(&current_dimensions),
+                    )),
+                    _ => None,
+                };
+                if let Some((old, new)) = replacement {
+                    assert_eq!(
+                        expected.matches(&old).count(),
+                        1,
+                        "{file}: exact historical dimension block"
+                    );
+                    expected = expected.replacen(&old, &new, 1);
+                }
             }
+            // All six files, including every unrelated byte, remain checked.
+            // No normalization of source facts, privacy, evidence, anchors or statuses.
+            assert!(actual == expected.as_bytes(), "{name}/{file}");
         }
     }
+}
+
+#[test]
+fn explicitly_unstable_observation_keeps_dimensions_unknown_with_evidence() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!("observed fixture")
+    };
+    for observation in &mut snapshot.observations {
+        observation.consistency = Consistency::Unstable;
+        observation.consistency_reason = Some(Id("synthetic_unstable_source".into()));
+    }
+    let original = serde_json::to_vec(&brief).unwrap();
+    let package = compile(&brief, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
+    let dimensions = data(&package, "dimensions.json");
+    let dimensions = dimensions[0]["dimensions"].as_array().unwrap();
+    assert_eq!(dimensions.len(), 32);
+    for dimension in dimensions {
+        assert!(dimension["value"].is_null());
+        assert_eq!(dimension["unknown_reason"], "unstable_state");
+        assert!(!dimension["evidence"].as_array().unwrap().is_empty());
+        assert!(dimension["requirement_ref"].is_null());
+        assert!(dimension["check_tolerance"].is_null());
+    }
+    assert_eq!(
+        data(&package, "scene.json")["views"][0]["coverage"]["status"],
+        "partial"
+    );
+    assert_eq!(
+        data(&package, "manifest.json")["validation_status"],
+        "unverified"
+    );
 }
 
 #[test]

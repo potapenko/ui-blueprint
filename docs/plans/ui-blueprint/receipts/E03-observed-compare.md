@@ -1,5 +1,9 @@
 # E03 — saved observations to attributed compare package
 
+Current status: the original source/privacy review and the historical-baseline
+verification gap below are closed; see the final follow-up section. Earlier check
+counts/failures are retained as historical evidence, not current suite status.
+
 Authority: autonomous E03 task under approved PLAN.UIB@1 P3/P6, master base
 `e4bc256`, [packet](../packets/E03-observed-compare.md). The dispatch explicitly
 permits implementation after this chat's plan, necessary checks/docs/commit/push;
@@ -116,3 +120,75 @@ Task-owned non-image baseline/build files are removed and absence verified after
 checks; no images were created/deleted. Shared fcntl flock protects empty-index
 verification, exact-path commit and canonical master push. Final chat records actual
 checkpoint SHA and successful push; it is the immediate root/reviewer handoff.
+
+
+## Historical export expectation reconciliation — 2026-10-08
+
+Authority: root's continuation and [E03 amendment](../packets/E03-observed-compare.md#закрыть-оставшийся-export-acceptance-gap)
+at7943eb0 explicitly authorize closing this remaining P6 verification debt without
+changing product source, overwriting historical outputs, skipping the failure or
+starting another reviewer. [Independent source/privacy acceptance](export-popup-distribution-review.md#final-scoped-acceptance)
+ofc97c513 is already terminal with no introduced findings; no new independent
+runtime claim is made here.
+
+Recovered prior full applicable AGENTS/implementation/product-truth/QA/RUST and
+EXPORT/DRAWING/GEOMETRY/ANALYSIS/GOLDEN/DEV.RUST closure from this chat. Checked
+current packet and changes sincec97c513: applicable product norms/engineering
+contracts unchanged; concurrent Native/Web routes do not enlarge this scope.
+Mode Reconcile test expectations with accepted intent, not product evolution.
+Inspected saved fixture/test, current resolver and accepted source changes:
+256f2a2 permits known named anchors within partial coverage;2491dec distinguishes
+unknown consistency from affirmative unstable. The historical F01 dimensions
+specifically used unstable_state for unknown consistency. This precision supplements
+the earlier attribution to partial coverage; both distinctions remain protected.
+
+Plan declared before edits: retain six-file regression for both fixtures, change
+only the outdated expected scalar results using an independently authored literal
+inventory, add explicit unstable negative evidence, run the complete export suite
+and actual export CLI modes, document preservation and save under the shared flock.
+Actual three-file write set: crates/export/tests/compiler.rs, development/export.md
+and this receipt. No fixtures, source, schema, CLI, registry, manifests, host or
+other owners' files were changed; no new persistent directory or framework.
+
+The old failing test is reconciled as
+current_packages_preserve_history_except_accepted_known_anchor_results. It remains
+an exhaustive check of all six files for observed AND proposed. Sixteen labelled
+source rectangles supply independent width/height literals (32 values, including
+97.296875,98.78125,87.625,146.9375 and known zero). Candidate output is never used
+to construct expected values. The test reads the immutable historical dimension
+block, checks its exact32 entries/IDs/component anchors, and updates expected value
+and unknown_reason only in memory. It replaces exactly one matching block in each
+of dimensions.json, drawing-brief.md and prompt.txt; every other byte remains
+compared unchanged. Proposal still matches its historical six files byte-for-byte.
+The test additionally checks that compiler input is not mutated. This is not a
+removed assertion, skipped test, indiscriminate normalization or refreshed baseline.
+
+An explicit synthetic unstable variant retains32 unknown dimensions with
+unstable_state and reached Evidence, null normative requirement/tolerance,
+partial source coverage, unverified image status and unchanged input. Ordinary
+unknown consistency remains attributed without erasing known factual extents.
+Existing unknown/redacted/privacy, source facts and all modes remain covered.
+The development guide explains which committed packages are historical and how
+the existing command produces a current package in a new destination.
+
+Actual verification on Rust1.96.0, own system-temp CARGO_TARGET_DIR:
+
+- `cargo test --locked --offline -p uiblueprint-export`:30 passed
+  (compiler15, observed_compare8, proposal_regressions7),0 failed/ignored/filtered.
+  Unit/doc targets contain0 tests and completed successfully.
+- `cargo test --locked --offline -p uiblueprint-cli --test export_binary`:20 passed,
+  0 failed/ignored/filtered. Actual public binary covers document/explain, propose,
+  detail, flow and compare plus inputs, privacy, budgets, output and no-overwrite.
+- `cargo clippy --locked --offline -p uiblueprint-export --all-targets -- -D warnings`
+  and changed-file rustfmt --check: passed. No full workspace suite claimed.
+- All14 files under fixtures/export match7943eb0 Git-object bytes exactly,
+  including both historical six-file packages and both original briefs.
+- Changed Markdown link targets and exact-path git diff --check: passed.
+
+Fifty affected tests now pass without skips; the established E03 baseline
+acceptance gap is closed. Source/privacy acceptance remains the previously recorded
+independent review, not this author's test run. General live/P7 and ImageGen
+qualification stay outside E03; no remaining source dependency for this amendment.
+No UI/model calls or images. Own temporary non-image build directory removed and
+absence verified after checks. Current master checkpoint/push SHA is returned in
+the final chat; only the three declared paths are staged under the shared flock.

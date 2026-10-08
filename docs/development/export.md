@@ -202,6 +202,27 @@ unknown. It is historical observation of our controlled F01 runtime, not a new
 collection, full application view or real-site acceptance. Method/namespace
 strings in this safe input are known fixture provenance, not arbitrary paths.
 
+The committed `observed-package` and `proposed-package` directories are immutable
+historical E01 compiler outputs. They are not refreshed in place. In particular,
+the historical observed package marks 32 extents unknown with unstable_state.
+Current compilation of the same unchanged observed brief produces the 32 known
+widths/heights of its 16 explicitly reported DOM rectangles, including
+97.296875×32 css_px and the known zero width of N024. This follows accepted
+known-anchor semantics (`256f2a2`) and the distinction between unknown consistency
+and affirmative instability (`2491dec`); partial scope does not establish missing
+geometry for a named known anchor. Source coverage stays partial and consistency
+stays unknown. No new observation, complete scope or image validation is claimed.
+
+The current package regression retains comparison of all six files for both
+examples. Its independent literal extent inventory updates only expected numeric
+values and their unknown_reason fields in memory, including the exact embedded
+blocks in brief/prompt. All other bytes, evidence, anchors, privacy, source facts
+and statuses still match the historical outputs. A separate synthetic unstable
+variant verifies all 32 dimensions remain unknown with reached evidence. Historical
+files are never overwritten, and expected values are not captured from candidate
+compiler output. Run the existing commands above into a new destination for a
+current example package; no second persistent example tree is needed.
+
 Scoped verification: `cargo check --locked -p uiblueprint-export --all-targets`,
 `cargo fmt -p uiblueprint-export -- --check`,
 `cargo clippy --locked -p uiblueprint-export --all-targets -- -D warnings`, and
