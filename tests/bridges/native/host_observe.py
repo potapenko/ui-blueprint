@@ -298,6 +298,86 @@ def live(args):
     return 0
 
 
+def sample_frame(args):
+    """Own P01 test input only: existing exact-fixture AX sample read, no event."""
+    run = args.run_dir.resolve()
+    if not args.run_dir.is_absolute() or not run.is_relative_to(Path(tempfile.gettempdir()).resolve()):
+        raise ValueError('explicit own system-temp run directory required')
+    for executable in (args.cli,args.worker,args.helper):
+        if not executable.is_absolute() or not executable.is_file():
+            raise ValueError('absolute executable required')
+    manifest = json.loads((run/'a.json').read_bytes())
+    frame_request = json.loads((run/'sample-frame-request.json').read_bytes())
+    keys = ('pid','bundle_id','launch_time','window_id','window_identifier','target_generation','surface_generation')
+    binding = {key:manifest[key] for key in keys}
+    if (binding != frame_request['binding'] or manifest['window_identifier']!='a'
+            or manifest['bundle_id'] not in ('local.uiblueprint.f02.off','local.uiblueprint.f02.on')):
+        raise ValueError('exact own A frame request mismatch')
+    current = json.loads(Path(manifest['identity_path']).read_bytes())
+    if current['state']!='open' or any(current[key]!=binding[key] for key in keys):
+        raise ValueError('current own surface mismatch')
+    nonce = uuid.uuid4().hex
+    context = {'schema_version':'0.1.0','session_id':'sample-frame-'+nonce,
+        'target':{'id':'f02-pid-'+str(binding['pid']),'generation':binding['target_generation']},
+        'surfaces':[{'id':'window-'+str(binding['window_id']),'generation':binding['surface_generation']}],
+        'scope_id':'own-sample-frame','projection':'interaction','fields':FIELDS,
+        'plugin':{'id':'macos','version':'0.1.0'},'environment_revision':'own-p01-frame'}
+    session = {'allowed_scopes':[context['scope_id']],'session_id':context['session_id'],
+        'plugin':context['plugin'],'supported_versions':['0.1.0'],'target':context['target'],
+        'surfaces':context['surfaces'],'capabilities':[{'channel':'external_semantics','operation':'observe','status':'partial','reason':'own_sample_scope'}]}
+    limits = {'workers':1,'worker_bytes':67108864,'publication_reserve':1048576,'bootstrap_bytes':1048576,
+        'parent_bytes':33554432,'input_bytes':2097152,'ingress_bytes':FRAME,'output_bytes':FRAME,
+        'request_output_bytes':2097152,'completion_groups':2,'control_bytes':4096,'cleanup_ms':1000,
+        'retained_domain_bytes':67108864,'retained_per_worker':15728640,'main_stack_bytes':8388608,'watchdog_stack_bytes':1048576}
+    configuration = {'binding':binding,'identity_path':manifest['identity_path'],'scope_id':context['scope_id'],
+        'collection':'sample','acquisition_limits':json.loads((ROOT/'tests/bridges/native/acquisition/profile.json').read_bytes()),'acquisition_evidence':False}
+    connection = {'connection_version':'1.0.0','target':context['target'],'session':session,'host_limits':limits,
+        'attach_deadline_ms':2000,'provider':{'backend':'native_fixture','helper_executable':str(args.helper),'configuration':encode(configuration).decode(),'channels':1}}
+    request = {'schema_version':'0.1.0','artifact':{'kind':'request','data':{'clock_domain':'rebound_after_attach',
+        'request_id':nonce,'context':context,'limits':{'max_elements':160,'max_depth':9,'max_output_bytes':FRAME,'deadline_ms':1000},
+        'freshness_policy':'current_required','operation':{'operation':'observe','channels':['external_semantics']}}}}
+    connection_path = run/'frame-connection.json';request_path = run/'frame-request.json'
+    try:
+        connection_path.write_bytes(encode(connection));request_path.write_bytes(encode(request))
+        code,output,_ = run_bounded([str(args.cli),'observe','--connection',str(connection_path),
+            '--request',str(request_path),'--worker',str(args.worker),'--max-input-bytes','2097152','--max-output-bytes',str(FRAME)],15)
+        if code not in (0,4) or not output:
+            raise RuntimeError('bounded own AX frame read failed')
+        response = json.loads(output)['artifact']['data']['result']
+        if response['status']!='observed':
+            raise RuntimeError('AX frame unavailable: '+response['data']['code'])
+        snapshot = response['data']
+        if snapshot['context'] != context or len(snapshot['nodes']) != 1:
+            raise ValueError('AX sample scope mismatch')
+        node = snapshot['nodes'][0]
+        if node['key']!={'namespace':'macos.ax','key':'f02.sample.a'} or node['surface']!=context['surfaces'][0]:
+            raise ValueError('AX sample identity mismatch')
+        prop = next(value for value in node['properties'] if value['field']=='accessibility_bounds')
+        geometry = prop['state']['value']['value']
+        if (prop['state']['availability']!='known' or geometry['frame_kind']!='accessibility_bounds'
+                or geometry['coordinate_space']!={'id':'ax-screen','kind':'screen','origin':'top_left','units':'pt'}):
+            raise ValueError('AX sample frame space unavailable')
+        after = json.loads(Path(manifest['identity_path']).read_bytes())
+        if after!=current or frame_request!=json.loads((run/'sample-frame-request.json').read_bytes()):
+            raise ValueError('own binding changed during AX frame read')
+        value = {'binding':binding,'environment':frame_request['environment'],'ax_rect':geometry['shape']['value']}
+        data = encode(value)
+        if len(data)>4096:
+            raise ValueError('test frame input cap')
+        destination = run/'sample-frame-input.json'
+        temporary = run/'sample-frame-input.json.tmp'
+        with temporary.open('xb') as file:
+            file.write(data)
+        try:
+            os.link(temporary,destination)  # complete JSON, exclusive publication
+        finally:
+            temporary.unlink()
+        print('own AX frame input ready; no events dispatched by runner')
+        return 0
+    finally:
+        connection_path.unlink(missing_ok=True);request_path.unlink(missing_ok=True)
+
+
 def build_geometry(args):
     """Local selected committed-source build; no install, browser, model or UI."""
     if platform.system() != 'Darwin' or platform.machine() != 'arm64':
@@ -521,7 +601,13 @@ def main():
         example.add_argument('--'+name, type=Path, required=True)
     selected = commands.add_parser('build-geometry', help='build selected Web+Mac executables without installation')
     selected.add_argument('--output', type=Path, required=True, help='existing absolute destination; product conflicts refuse')
+    frame = commands.add_parser('sample-frame', help='own P01 test-only external AX frame binding')
+    frame.add_argument('--run-dir', type=Path, required=True)
+    for name in ('cli','worker','helper'):
+        frame.add_argument('--'+name,type=Path,required=True)
     args = parser.parse_args()
+    if args.mode == 'sample-frame':
+        return sample_frame(args)
     if args.mode == 'build-geometry':
         try:
             return build_geometry(args)

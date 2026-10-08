@@ -163,45 +163,38 @@ private struct Marker: ViewModifier {
 
     #if P01_SAMPLE_HITS
     // Test-only public event-queue adapter; all visible content remains SwiftUI.
-    static func sampledPoints(role: String) throws -> (NSWindow, NSPoint, NSPoint) {
+    static func ownWindow(role: String) throws -> NSWindow {
         let windows = NSApp.windows.filter { $0.identifier?.rawValue == role && $0.isVisible }
         guard windows.count == 1, let window = windows.first, window.windowNumber > 0,
-              let content = window.contentView else { throw NSError(domain: "p01_window", code: 1) }
-        var queue: [(Any, Int)] = [(window, 0)], seen: Set<ObjectIdentifier> = [], frames: [NSRect] = []
-        var metadata: [[String: Any]] = []
-        while !queue.isEmpty && seen.count < 160 {
-            let (value, depth) = queue.removeFirst()
-            guard seen.insert(ObjectIdentifier(value as AnyObject)).inserted else { continue }
-            let object = value as AnyObject
-            let full = value is NSAccessibilityProtocol
-            let elementProtocol = value is NSAccessibilityElementProtocol
-            var entry: [String: Any] = ["type": String(describing: type(of: object)), "depth": depth,
-                "full_protocol": full, "element_protocol": elementProtocol]
-            if let element = value as? NSAccessibilityProtocol {
-                entry["modern_children_count"] = element.accessibilityChildren()?.count ?? -1
-            }
-
-            metadata.append(entry)
-            guard let element = value as? NSAccessibilityProtocol else { continue }
-            if element.accessibilityIdentifier() == "f02.sample.\(role)" { frames.append(element.accessibilityFrame()) }
-            if depth < 9, let children = element.accessibilityChildren() {
-                guard children.count <= 1280, queue.count + children.count + seen.count <= 160
-                else { throw NSError(domain: "p01_children", code: 2) }
-                queue.append(contentsOf: children.map { ($0, depth + 1) })
-            }
-        }
-        guard queue.isEmpty, frames.count == 1, let screenFrame = frames.first,
-              screenFrame.width > 0, screenFrame.height > 0 else { throw NSError(domain: "p01_sample", code: 3, userInfo: [
-                "match_count": frames.count, "seen_count": seen.count, "remaining_queue": queue.count,
-                "object_metadata": metadata, "frames": frames.map { ["x": $0.minX, "y": $0.minY, "width": $0.width, "height": $0.height] }]) }
-        let inside = window.convertPoint(fromScreen: NSPoint(x: screenFrame.midX, y: screenFrame.midY))
+              window.contentView != nil else { throw NSError(domain: "p01_window", code: 1) }
+        return window
+    }
+    static func environment(_ window: NSWindow) -> [String: Any] {
+        func rect(_ r: NSRect) -> [String: Double] { ["x": r.minX, "y": r.minY, "width": r.width, "height": r.height] }
+        return ["window_id": window.windowNumber, "window_frame": rect(window.frame),
+            "screens": NSScreen.screens.map { screen in
+                ["id": screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as Any? ?? NSNull(),
+                 "frame": rect(screen.frame), "scale_identity_only": screen.backingScaleFactor] as [String: Any]
+            }]
+    }
+    static func sampledPoints(window: NSWindow, ax: [String: Double]) throws -> (NSPoint, NSPoint) {
+        guard let content = window.contentView, !NSScreen.screens.isEmpty,
+              Set(ax.keys) == ["x", "y", "width", "height"], ax.values.allSatisfy(\.isFinite),
+              let x = ax["x"], let y = ax["y"], let width = ax["width"], let height = ax["height"],
+              width > 0, height > 0 else { throw NSError(domain: "p01_ax_frame", code: 3) }
+        // AX global origin is the primary screen's top-left; AppKit is bottom-left.
+        // These are points, not backing pixels; no Retina or titlebar adjustment.
+        let primaryTop = NSScreen.screens[0].frame.maxY
+        let screenPoint = NSPoint(x: x + width / 2, y: primaryTop - (y + height / 2))
+        let inside = window.convertPoint(fromScreen: screenPoint)
         let outside = content.convert(NSPoint(x: content.bounds.minX + 5, y: content.bounds.minY + 5), to: nil)
-        let sampleInWindow = window.convertFromScreen(screenFrame)
+        let sampleInWindow = window.convertFromScreen(NSRect(x: x, y: primaryTop - y - height, width: width, height: height))
         guard inside.x.isFinite, inside.y.isFinite, outside.x.isFinite, outside.y.isFinite,
               content.bounds.contains(content.convert(inside, from: nil)),
-              content.bounds.contains(content.convert(outside, from: nil)), !sampleInWindow.contains(outside)
+              content.bounds.contains(content.convert(outside, from: nil)), !sampleInWindow.contains(outside),
+              window.convertPoint(toScreen: inside) == screenPoint
         else { throw NSError(domain: "p01_coordinates", code: 4) }
-        return (window, inside, outside)
+        return (inside, outside)
     }
     static func postMousePair(window: NSWindow, point: NSPoint, number: Int) throws {
         guard NSApp.windows.contains(where: { $0 === window }), window.isVisible, window.windowNumber > 0
@@ -426,6 +419,7 @@ private struct PilotView: View {
     #if P01_SAMPLE_HITS
     @MainActor private func sampledMouseProfile() async {
         var records: [[String: Any]] = []
+        var frameEvidence: [String: Any]?
         func state(_ phase: String, window: NSWindow, point: NSPoint? = nil) -> [String: Any] {
             let responder = window.firstResponder as? NSAccessibilityProtocol
             let accessibilityFocus = NSApp.accessibilityFocusedUIElement as? NSAccessibilityProtocol
@@ -447,6 +441,7 @@ private struct PilotView: View {
             var value: [String: Any] = ["profile": "own_intrawindow_synthetic_mouse", "status": status,
                 "dispatch": "NSApplication.postEvent_normal_run_loop", "records": records]
             if let error { value["error"] = error }
+            if let frameEvidence { value["frame_evidence"] = frameEvidence }
             if let metadata { value["failure_metadata"] = metadata }
             if let bytes = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) {
                 try? bytes.write(to: runDirectory.appendingPathComponent("sampled-mouse.json"), options: .atomic)
@@ -458,7 +453,30 @@ private struct PilotView: View {
             WindowSetup.apply(role: role, comparison: true)
             try await Task.sleep(for: .milliseconds(200))
             publish()
-            let (window, inside, outside) = try WindowSetup.sampledPoints(role: role)
+            let window = try WindowSetup.ownWindow(role: role)
+            let environment = WindowSetup.environment(window)
+            let manifest = try JSONSerialization.jsonObject(with: Data(contentsOf: runDirectory.appendingPathComponent("\(role).json"))) as! [String: Any]
+            let keys = ["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"]
+            let binding = Dictionary(uniqueKeysWithValues: keys.map { ($0, manifest[$0]!) })
+            let request: [String: Any] = ["binding": binding, "environment": environment]
+            try JSONSerialization.data(withJSONObject: request, options: [.sortedKeys]).write(
+                to: runDirectory.appendingPathComponent("sample-frame-request.json"), options: .atomic)
+            let inputPath = runDirectory.appendingPathComponent("sample-frame-input.json")
+            let deadline = ProcessInfo.processInfo.systemUptime + 30
+            while !FileManager.default.fileExists(atPath: inputPath.path) && ProcessInfo.processInfo.systemUptime < deadline {
+                try await Task.sleep(for: .milliseconds(50))
+            }
+            let bytes = try Data(contentsOf: inputPath)
+            guard bytes.count <= 4096, let input = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
+                  let actualBinding = input["binding"] as? [String: Any], (actualBinding as NSDictionary).isEqual(binding),
+                  let actualEnvironment = input["environment"] as? [String: Any], (actualEnvironment as NSDictionary).isEqual(environment),
+                  let ax = input["ax_rect"] as? [String: Double],
+                  (WindowSetup.environment(window) as NSDictionary).isEqual(environment),
+                  measurements.surfaceGeneration == binding["surface_generation"] as? String
+            else { throw NSError(domain: "p01_frame_binding_changed", code: 8) }
+            frameEvidence = ["binding": binding, "environment": environment, "ax_rect": ax,
+                "conversion": "AX_top_left_primary_maxY_to_AppKit_then_NSWindow_base_pt"]
+            let (inside, outside) = try WindowSetup.sampledPoints(window: window, ax: ax)
             #if P01_FRAME_DIAGNOSTIC
             records.append(state("diagnostic_points", window: window, point: inside))
             save("diagnostic_ready")
@@ -470,13 +488,19 @@ private struct PilotView: View {
             publish()
             records.append(state("after_inside", window: window, point: inside))
             guard activations == 2 else { save("failed", error: "inside_count_not_plus_one"); return }
-            let (current, newInside, newOutside) = try WindowSetup.sampledPoints(role: role)
-            guard current === window, inside == newInside, outside == newOutside
+            let current = try WindowSetup.ownWindow(role: role)
+            let (newInside, newOutside) = try WindowSetup.sampledPoints(window: window, ax: ax)
+            guard current === window, inside == newInside, outside == newOutside,
+                  (WindowSetup.environment(window) as NSDictionary).isEqual(environment),
+                  measurements.surfaceGeneration == binding["surface_generation"] as? String
             else { save("failed", error: "window_or_points_changed"); return }
             try WindowSetup.postMousePair(window: window, point: outside, number: 3)
             try await Task.sleep(for: .milliseconds(200))
             publish()
             records.append(state("after_outside", window: window, point: outside))
+            guard (WindowSetup.environment(window) as NSDictionary).isEqual(environment),
+                  measurements.surfaceGeneration == binding["surface_generation"] as? String
+            else { throw NSError(domain: "p01_environment_changed", code: 9) }
             save(activations == 2 ? "complete" : "failed", error: activations == 2 ? nil : "outside_count_changed")
             #endif
         } catch {

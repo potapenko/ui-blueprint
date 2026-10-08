@@ -385,3 +385,45 @@ complete claim. Exact2 diagnostic WIP/source+receipt ready for scoped checkpoint
 no new runtime/autonext. Source SHA256 follows.
 
 Diagnostic source 73d0a38f41369dad09802968b524fa8177795782302b709be34358187f674143.
+
+
+## Selected public external-AX frame bridge — source ready before changed pair
+
+Mac coauthor primary-source answer reconciled by Native/root; selected necessary seam
+extension inside SAME own synthetic profile. Not runtime proof or external CUA mapping.
+Exact3 source/receipt owners: Fixture.swift, existing host_observe.py, this receipt.
+Unsuccessful in-process subtree search removed, no deprecated getter/fallback retained.
+No collector/host/schema/public input capability/new service/framework/visible UI.
+
+Fixture test publishes direct own A binding+window frame/display configuration request
+in existing run dir after setup; awaits one bounded minimal trusted frame input.
+Existing runner sample-frame calls public CLI native_fixture/sample (one exact authored
+f02.sample.a node), existing process/CG owner/current identity checks before/after and
+current_required/160/depth9/512KiB/AX1s/cleanup1s. Target Scope/Surface/key exact; no title/
+name/order/coordinate fallback. Writes only binding/environment/known AX rect in same
+own system-temp directory,4096-byte bound; external helper/worker normal cleanup.
+No root-handwritten stale point or on-only probe frame; same read path on both builds.
+
+Fixture verifies exact process/window generation binding, same current own window frame/
+display list/order/IDs/scale(identity only) through dispatch. AX point uses documented
+upper-left menu-bar-screen origin: primary NSScreen.screens[0].frame.maxY flips Y,
+then exact own NSWindow.convertPoint(fromScreen:); not NSScreen.main/visibleFrame,
+Retina multiplier or manual titlebar offset. Outside remains content5,5 through public
+NSView→window conversion; candidate inside/outside/source rect and environmental identity
+reported. Round-trip checks arithmetic only, actual Count/focus still required.
+
+Primary Apple AXPosition/NSScreen.screens/NSWindow conversion/NSEvent.location docs read;
+previous synthetic queue dispatch remains documented postEvent normal loop, no direct
+sendEvent/hitTest/closure/AXPress/CGEvent. Test-only compiler guards protect ordinary
+fixture; FocusState identifiers/class unknown semantics remain explicit. Bounds are
+not claimed hit region; primary source advice is candidate geometry, not acceptance.
+
+Final changed off/on pair compiled cleanly, Python AST valid, no Rust/pixel/probe suites
+or SDK hit operation repeated. Saved existing helper/CLI inputs reused; no new production
+errors found. Source/build candidate requires scoped exact3 checkpoint+push before the
+ONE changed bounded pair already authorized by root;≤300s/setup≤120s/cleanup5s unchanged.
+If frame input/identity/environment unavailable, stop affected operation without events;
+no oracle/cap tuning. Prior failure records kept intact. No full M05/P7 completion.
+
+Frame bridge source SHA d1e1fd5a4fee39ecd03da9ff513141122fb265562eccf95d442119e2d2562d5e.
+Runner SHA 5a74583aeb24df0e3025ca4ef3cc108ac69cd8bc57713d0b116518a81efd87ec.
