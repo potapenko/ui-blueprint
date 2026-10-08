@@ -84,6 +84,16 @@ def main():
     raw = json.loads(args.baseline.read_text())
     snapshot = json.loads((run / 'recorded.json').read_text())['artifact']['data']
     report.update(reconcile(raw, snapshot))
+    # A Title-only change/refusal cannot erase any independently admissible
+    # sibling state, including unavailable/redacted states and non-property data.
+    def without_title(node):
+        return dict(node, extensions=[e for e in node['extensions']
+                                     if (e['namespace'], e['name']) != ('macos.ax', 'AXTitle')])
+    siblings = [without_title(node) for node in snapshot['nodes']]
+    for mode in ('empty', 'unsupported', 'unknown', 'oversized', 'wrong-type'):
+        changed = json.loads((run / (mode + '.json')).read_text())['artifact']['data']
+        assert [without_title(node) for node in changed['nodes']] == siblings, mode + ': Title changed sibling data'
+        assert changed['context'] == snapshot['context'] and changed['coverage'] == snapshot['coverage']
     negative = copy.deepcopy(snapshot)
     negative['nodes'][0]['extensions'] = [e for e in negative['nodes'][0]['extensions'] if e['name'] != 'AXTitle']
     try:
@@ -93,7 +103,8 @@ def main():
     else:
         raise AssertionError('missing title must fail')
     report.update(canonical_validated=7, baseline_sha256=BASELINE_SHA256, owned_run=str(run),
-                  evidence_kind='recorded_boundary_replay_not_live_SDK_or_D06', missing_title_rejected=True)
+                  evidence_kind='recorded_boundary_replay_not_live_SDK_or_D06', missing_title_rejected=True,
+                  title_isolation_cases=5, unaffected_nodes_per_case=len(siblings))
     (run / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
     print(json.dumps(report, indent=2))
 

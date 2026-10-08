@@ -26,8 +26,13 @@ new core field, schema version, dependency or shared owner is needed.
 
 Title is acquired only when accessibility_name is selected. It does not supply a
 canonical Name, substitute for Description, become a locator, or establish window
-identity. Fixed identity batch remains three; the largest requested value batch is
-now eight, within the existing profile. String/batch/aggregate/construction admission
+identity. Fixed identity batch remains three; the original value batch remains at
+most seven. A separate one-attribute Title batch follows its admission, so a local
+Title refusal cannot erase the original fields. This adds one public AX batch per
+node when accessibility_name is requested; its live latency cost remains unmeasured.
+The same per-value/batch/aggregate ceilings apply to both batches, without retries,
+splitting already-returned batches or copying/truncating rejected Title.
+String/batch/aggregate/construction admission
 and unavailable outcomes remain in the same owners. Failure or wrong type has no
 value; known empty is preserved. No blanket attribute discovery/dump was introduced.
 AXF02Unsupported was a deliberately invalid diagnostic attribute in the historical
@@ -66,7 +71,13 @@ breadth-first output using the recorded tree, never title/rect matching.
 Generated snapshots are explicitly **boundary replay**, despite production-shaped
 live metadata: no new AX observation, SDK lifetime, runtime or latency evidence.
 Seven cases cover original records, empty/unsupported/unknown/oversized/mistyped
-title and an unselected name. A missing-title counterexample must be rejected.
+title and an unselected name. All non-Title node data must match the original in
+each of the five Title-only variants, including unavailable/redacted states, geometry,
+actions and edges. Oversized Title must copy zero bytes, proven by equal copy counters
+to empty Title while all sibling data remains equal. A missing-title counterexample
+must be rejected. The original17d3475 runner lacked sibling-isolation assertions;
+Q01 rejected that source after reproducing loss of otherwise known fields. This
+repair extends the oracle rather than treating canonical validity as preservation.
 
 ## Reproducible distinct fixture input
 

@@ -217,13 +217,15 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         let safeIdentity = [kAXRoleAttribute, kAXSubroleAttribute, kAXIdentifierAttribute].allSatisfy(admittedIdentity)
         var names: [String] = []
         if selected.contains("description") || selected.contains("accessibility_name") { names.append(kAXDescriptionAttribute) }
-        if selected.contains("accessibility_name") { names.append(kAXTitleAttribute) }
         if selected.contains("placeholder") { names.append(kAXPlaceholderValueAttribute) }
         if selected.contains("enabled") { names.append(kAXEnabledAttribute) }
         if selected.contains("focused") { names.append(kAXFocusedAttribute) }
         if selected.contains("accessibility_bounds") { names += [kAXPositionAttribute, kAXSizeAttribute] }
         if (selected.contains("value") || selected.contains("checked")) && nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { names.append(kAXValueAttribute) }
         let values = names.isEmpty ? [:] : try batch(el, names)
+        // An inadmissible Title must not discard the independently admitted
+        // original fields. The same per-value/batch/aggregate checks still apply.
+        let title = selected.contains("accessibility_name") ? try batch(el, [kAXTitleAttribute])[kAXTitleAttribute] : nil
         let roles = ["AXButton": "button", "AXCheckBox": "checkbox", "AXTextField": "textbox",
                      "AXStaticText": "text", "AXGroup": "group", "AXScrollArea": "scrollarea", "AXSlider": "slider"]
         let normalized = role.flatMap { roles[$0] }
@@ -284,7 +286,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
                         ["selection": try json.scalar("requested"), "field": try json.scalar(name == kAXTitleAttribute ? "accessibility_name" : "description"),
                          "sensitivity": try json.scalar("public"),
                          "evidence": try json.evidence(observationID, "macos.ax", "bounded_public_ax_attributes"),
-                         "state": try typed(name == kAXTitleAttribute ? values[name] : identity[name], expected: "text")]
+                         "state": try typed(name == kAXTitleAttribute ? title : identity[name], expected: "text")]
                      }]
                 }
             }

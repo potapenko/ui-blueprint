@@ -1,7 +1,8 @@
 # N04 — Native AX fidelity and benchmark input handoff
 
-2026-10-08; finite source/recorded/handoff task complete, Native live comparison
-remains open. Mode Restore; shipping collector repair plus supporting verification.
+Initial17d3475 author report,2026-10-08; Q01 subsequently rejected its Title
+failure isolation. The repair section below is the current source/recorded result;
+Native live comparison remains open. Mode Restore; collector repair and verification.
 Authority: approved PLAN.UIB@1 P2/Q02 and explicit full-cycle [N04 packet](../packets/N04-native-fidelity.md)
 dispatch in this chat; no new approval or nested delegation. Current master only.
 Initial source pin506d7995073b643ce0aacbabecfc2061780a76f1; this checkpoint adds N04.
@@ -100,3 +101,66 @@ node/geometry/field difference is a D06 dependency, not a pass or reduced worklo
 No ownership of Q02 performance files or Q01 receipt/runtime was taken. Unrelated
 work and after-title-spacing.png preserved. Exact-path checkpoint/push on master
 uses /tmp/ui-blueprint-master-git.lock; final SHA returned in the chat handoff.
+
+## Title isolation repair after N04-Q01-P2 — current result
+
+Full final Q01 verdict b1667d9 and its REPRO.md/check_title_isolation.py read before
+repair. Reused the complete N04 basis above after no-diff checks on AGENTS, packet,
+NATIVE@2 and Native acquisition@2; no new contract or product meaning. Direct
+continuation authorizes the entire repair/check/save cycle on current master.
+Base b1667d9552ce8c382661e8bfb146aacc0cb947d4. Q01/Q02 explicitly released CPU;
+no UI/foreground/permission authority inferred. Same pending human question remains.
+
+Confirmed defect: one Title string4097 bytes rejected the whole value batch,
+erasing14Description/14accessibility_name/65Enabled/26Focused/4Value/75bounds.
+Normal396-fact proof did not cover this and the initial acceptance claim above is
+superseded. Required behavior is existing NATIVE.CONTENT per-attribute isolation.
+
+Minimal repair in WindowAX: leave original identity3/value≤7 batches intact,
+then request Title in its own singleton batch through the SAME batch/admission
+owner. A locally refused Title cannot discard already admitted sibling values.
+No retry or post-copy/prefix salvage; per-value, batch, aggregate, response/output
+and deadline checks unchanged. Oversized Title remains unknown/no value and is not
+copied. Genuine aggregate/deadline exhaustion still refuses under existing policy.
+This adds one public AX batch per selected-name node; actual latency impact is an
+explicit future D06 measurement, not an assumed improvement. NativeAcquisition,
+identity/privacy classification, schema, Cargo, host and all other production
+sources remain untouched. No acquisition redesign or protected-owner dependency.
+
+Exact write set: WindowAX.swift, acquisition/FidelityChecks.swift,
+acquisition/fidelity_check.py, acquisition/FormChecks.swift, native-fidelity recipe
+and this receipt. FormChecks' exact batch-count assertion now requires the third
+singleton Title batch; old8-field request, secure non-reading and all value/state
+expectations stay unchanged. No test oracle was relaxed to hide the original loss.
+
+Actual checks on repaired source, Swift6.4/SDK27/macOS14 arm64, Rust1.96.0:
+
+- Recorded replay7 cases/3256 assertions,7 canonical validations: all396 known
+  facts/75nodes/75action lists/74edges and partial coverage preserved.
+- Five Title-only variants compare ALL remaining node data exactly to recorded
+  mode, including unavailable/redacted properties, bounds, actions and edges.
+  All75nodes per case match; context/coverage unchanged. Original missing-title
+  counterexample remains rejected. Admission counters prove oversized Title adds
+  zero copies versus empty Title, with75 refusals and admitted=actual bytes.
+- Q01's unchanged check_title_isolation.py passed against the new recorded and
+  oversized outputs. This author execution of the independent reproducer is NOT
+  the same Q01's independent recheck verdict.
+- Existing form proof5 cases/45 assertions and5 canonical validations passed.
+  Full current Native helper compiled with focused/session/action owners; never run.
+  Rust validator compiled locked/offline. Python syntax, changed links and whitespace
+  checks passed. No full suite, fixture rebuild, UI/SDK/capture or timed cohort run.
+
+Historical fixture53e6e6e source/off/on hashes and distinct-input limitations are
+unchanged; accepted unaffected preparation is reused, not rebuilt or relabelled.
+Original shared uib-n04-787o_x0t and Q01 uib-q01-n04-source-gm25z5c4 handoffs remain
+unchanged. Repair raw records and source/binary hashes are in system temp:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n04-title-isolation-q70i6po1`:
+pins.json and fidelity-6w8n1wkh/{recorded,oversized,report}.json. Named consumer is
+same Q01 affected recheck; retain through its reconciliation. Consumed local compiler
+products/caches/form and other synthetic outputs removed with absence verified.
+No image created/deleted; no fixture/helper process or UI lane acquired; CPU released.
+
+Repair is ready for one affected Q01 source/recorded recheck; its verdict is pending.
+Actual SDK/live comparison, Snapshot-node difference, off/on full pixels and Native
+D06 gates remain separately open. Exact-path commit+push uses the same master Git
+mutex; resulting SHA is returned in the chat. No Q01/Q02 file or foreign change staged.

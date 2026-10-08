@@ -42,7 +42,8 @@ import Darwin
                 admission: admission, fields: fields, json: json, access: access)
             let props = result.nodes[0]["properties"] as! [[String: Any]]
             check(props.map { $0["field"] as! String } == fields)
-            check(schedule.count == 2 && !schedule.flatMap { $0 }.contains(kAXValueAttribute) && actionCalls == 0)
+            check(schedule.count == 3 && schedule.last == [kAXTitleAttribute]
+                && !schedule.flatMap { $0 }.contains(kAXValueAttribute) && actionCalls == 0)
             check(!schedule.flatMap { $0 }.contains(kAXPositionAttribute))
             let states = Dictionary(uniqueKeysWithValues: props.map { ($0["field"] as! String, $0["state"] as! [String: Any]) })
             if mode == "unsupported" || mode == "unknown" {

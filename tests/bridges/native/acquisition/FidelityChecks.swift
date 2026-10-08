@@ -15,6 +15,7 @@ import Darwin
         let fields = ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]
         let surface: [String: Any] = ["id": "recorded-window", "generation": "recorded-generation"]
         var assertions = 0
+        var emptyTitleCopiedUTF8: Int?
         func check(_ condition: Bool) { precondition(condition, "F02 fidelity"); assertions += 1 }
         func errorValue(_ code: Int32) -> CFTypeRef {
             var error = AXError(rawValue: code)!
@@ -77,6 +78,15 @@ import Darwin
             check(result.nodes.count == original.count && result.metrics["coverage"] as? String == "partial")
             check(secureValueReads == 0 && schedule.allSatisfy { $0.count <= 8 })
             check(schedule.flatMap { $0 }.contains(kAXTitleAttribute) == (mode != "unselected"))
+            check(schedule.filter { $0.contains(kAXTitleAttribute) }.allSatisfy { $0 == [kAXTitleAttribute] })
+            if mode == "empty" { emptyTitleCopiedUTF8 = admission.actualUTF8 }
+            if mode == "oversized" {
+                // Rejected Title contributes no copied bytes; all sibling text
+                // still has exactly the same copy accounting as empty Title.
+                check(admission.actualUTF8 == emptyTitleCopiedUTF8)
+                check(admission.copiedUTF8 == admission.actualUTF8)
+                check(result.metrics["refused_values"] as? Int == original.count)
+            }
             for node in result.nodes {
                 let properties = node["properties"] as! [[String: Any]]
                 check(properties.map { $0["field"] as! String } == selected)
