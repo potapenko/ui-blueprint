@@ -54,6 +54,17 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Подготовленная очередь после геометрии
+
+[M02-N Native form workflow](packets/M02-native-workflow.md) — queued, один будущий
+полноцикловый task вместо прежних Core→Swift→harness→activation поручений.
+Зависимости старта: законченные B03-G/M03-C/E03, сохранённый Replay repair и
+освобождение Native/CLI/shared-host ownership. Полномочия записи пока не переданы.
+Прежний приоритет геометрии соблюдается; P5 остаётся в исходном полном объёме.
+Восстановлены ACTIONS/FORMS/CLI-ACTIONS@3 и Native held-session handoff, explicit
+reference executor/native catalogs. Перед dispatch только revalidate изменённые
+контракты/точную готовую ревизию, без повторного исследования того же handoff.
+
 ## Initial review и один owner repair
 
 Общая проверка завершила first observation без builder narrative. [Запись](receipts/finished-wave-review.md):
