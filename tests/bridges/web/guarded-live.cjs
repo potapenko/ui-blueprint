@@ -52,7 +52,7 @@ function rectangle(node) {
   const p = property(node, 'layout_bounds'); assert.equal(p.type, 'geometry');
   const g = p.value; assert.equal(g.frame_kind, 'layout_bounds');
   assert.equal(g.coordinate_space.units, 'css_px'); assert.equal(g.coordinate_space.origin, 'top_left');
-  assert.equal(g.transform.status, 'local_only'); assert.equal(g.shape.shape, 'rect');
+  assert(['local_only','known','unknown'].includes(g.transform.status)); assert.equal(g.shape.shape, 'rect');
   const {x,y,width,height} = g.shape.value;
   assert([x,y,width,height].every(Number.isFinite)); return [x,y,width,height];
 }
@@ -236,6 +236,64 @@ async function run(evidence, report) {
       report.frames.push({case:stage,file:name,bytes:stdout.length,sha256:crypto.createHash('sha256').update(stdout).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
       assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
       return {bytes:stdout,document};
+    }
+    if(report.mode==='viewport'){
+      report.phase='viewport_document_geometry';report.binaries.cli=report.binaries.test;delete report.binaries.test;
+      const page=pages.a,actual=await binding(page),connection=cliConnection(actual,'viewport');connection.session.session_id='live-cli-viewport';
+      const ids=['f01','responsive'],keys=new Map();
+      connection.provider.selection={selection:'initial',ids:ids.map(id=>({id,sensitivity:'public'})),max_visited_nodes:256};
+      const sourceContext={schema_version:'0.1.0',session_id:connection.session.session_id,target:actual.target,surfaces:[actual.surface],scope_id:'f01-viewport',
+        projection:'design',fields:['layout_bounds'],plugin:connection.session.plugin,environment_revision:'f01-800x600-scroll0'};
+      const session=await context.newCDPSession(page);
+      try{const {root}=await session.send('DOM.getDocument',{depth:0,pierce:false});
+        for(const id of ids){const found=await session.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:`#${id}`});assert.equal(found.nodeIds.length,1);
+          const {node}=await session.send('DOM.describeNode',{nodeId:found.nodeIds[0],depth:0,pierce:false});keys.set(id,{namespace:'web.dom',key:String(node.backendNodeId)});}
+      }finally{await session.detach();}
+      async function save(name,value){const bytes=Buffer.from(JSON.stringify(value));assert(bytes.length<=131072);const file=path.join(evidence,name);await writeExclusive(file,bytes);return file;}
+      const config=await save('viewport-connection.json',connection);
+      async function state(){return {ui:await uiState(page),bounds:await page.evaluate(ids=>ids.map(id=>{const r=document.getElementById(id).getBoundingClientRect();return [r.x,r.y,r.width,r.height];}),ids)};}
+      let documentSpace;
+      report.viewport={captures:[],measurements:[],diff:'not_run; Core selected-space consumer separate'};
+      async function capture(stage,environment,scroll,expectedRect,expectedX){
+        const ctx={...sourceContext,environment_revision:environment},input=await save(`${stage}-request.json`,cliRequest(ctx,{operation:'observe',channels:['external_semantics']},stage));
+        const prior=await state();assert.deepEqual(prior.ui.scroll,[0,scroll]);
+        const output=await callCli(stage,['observe','--connection',config,'--request',input,'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536'],4);
+        assert.deepEqual(await state(),prior);const s=output.document.artifact.data.result.data;
+        assert.equal(output.document.artifact.kind,'channel_response');assert.equal(output.document.artifact.data.result.status,'observed');assert.equal(s.nodes.length,2);assert.equal(s.coverage.status,'partial');
+        const nodes=ids.map(id=>s.nodes.find(n=>n.key.namespace==='web.dom'&&n.key.key===keys.get(id).key));
+        let viewportSpace;
+        nodes.forEach((node,index)=>{
+          compareRect(rectangle(node),prior.bounds[index]);const g=property(node,'layout_bounds').value;viewportSpace=g.coordinate_space;
+          assert.equal(g.transform.status,'known');const t=g.transform.transform;
+          assert.deepEqual(t.from,g.coordinate_space);assert.equal(t.to.kind,'document');assert.equal(t.to.units,'css_px');assert.equal(t.to.origin,'top_left');
+          assert.deepEqual(t.affine,[1,0,0,1,0,scroll]);assert.deepEqual(t.target,ctx.target);assert.deepEqual(t.surface,actual.surface);assert.equal(t.environment_revision,environment);
+          assert.equal(t.evidence.provenance,'derived');assert(s.observations.some(o=>o.id===t.evidence.observation_id&&o.source_namespace===t.evidence.source_namespace));
+          if(documentSpace)assert.deepEqual(t.to,documentSpace);else documentSpace=t.to;
+        });
+        compareRect(rectangle(nodes[1]),expectedRect);
+        const file=path.join(evidence,`${stage}.json`);
+        report.viewport.captures.push({stage,file:`${stage}.json`,source_keys:Object.fromEntries(keys),document_space:documentSpace,context:s.context,bounds:ids.map((id,i)=>({id,rect:rectangle(nodes[i])})),sha256:crypto.createHash('sha256').update(output.bytes).digest('hex')});
+        const anchor=(id,axis)=>({element:keys.get(id),frame_kind:'layout_bounds',coordinate_space:viewportSpace,fraction:0,axis});
+        // Independent F01 literals: wrapper left380/top20, authored marker rects.
+        for(const [name,operation,anchors,expected] of [['x-offset','gap',[anchor('f01','x'),anchor('responsive','x')],expectedX],['y-offset','gap',[anchor('f01','y'),anchor('responsive','y')],100],['width','width',[anchor('responsive','x')],100]]){
+          const query={schema_version:'0.2.0',artifact:{kind:'geometry_query',data:{id:`${stage}-${name}`,scope_id:ctx.scope_id,targets:anchors.map(a=>a.element),operation,anchors,
+            quantity_kind:'length',units:'css_px',applies_when:{platform:null,input_mode:null,text_scale:null}}}};
+          const q=await save(`${stage}-${name}-query.json`,query);
+          const measured=await callCli(`${stage}-${name}`,['measure','--snapshot',file,'--query',q,'--space',documentSpace.id,'--max-input-bytes','131072','--max-output-bytes','65536','--json'],0);
+          const result=measured.document.artifact.data;assert.equal(measured.document.artifact.kind,'measurement');assert.deepEqual(result.snapshot,s);assert.equal(result.result.status,'known');
+          const m=result.result.measurement;assert.deepEqual(m.space,documentSpace);assert.equal(m.value.value.amount,expected);
+          assert(m.evidence.some(e=>e.method==='cssom-scroll-viewport-to-document'&&e.provenance==='derived'));
+          report.viewport.measurements.push({stage,name,result:result.result});
+        }
+        assert((await fs.readFile(file)).equals(output.bytes));checks.push({case:stage,readonly:true,original_viewport_preserved:true,sourced_document_measurements:true});
+      }
+      await capture('viewport-baseline','f01-800x600-scroll0',0,f01.B04.responsive_before,280);
+      await page.setViewportSize({width:1000,height:600});
+      await capture('viewport-resized','f01-1000x600-scroll0',0,f01.B04.responsive_after_resize,480);
+      await page.evaluate(()=>scrollTo(0,100));
+      await capture('viewport-scrolled','f01-1000x600-scroll100',100,f01.B04.responsive_after_scroll,480);
+      report.viewport.consumer_pairs={resize:['viewport-baseline.json','viewport-resized.json'],scroll:['viewport-resized.json','viewport-scrolled.json']};
+      assert.deepEqual(ownWorkerPids(worker),[]);assert.equal(report.outcomes.length,12);report.cli_cleanup_confirmed=true;return;
     }
     if(report.mode==='application'){
       report.phase='public_application';report.binaries.cli=report.binaries.test;delete report.binaries.test;
@@ -989,7 +1047,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean((directorCase||['cli_actions','geometry','first_use','form_actions','application'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
+    await clean((directorCase||['cli_actions','geometry','first_use','form_actions','application','viewport'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -998,7 +1056,7 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use','form_actions','application'].includes(report.mode))
+    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use','form_actions','application','viewport'].includes(report.mode))
       ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
       :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
@@ -1007,14 +1065,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','form_actions','application','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','form_actions','application','viewport','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='application'?'B02-applied-and-stop':mode==='form_actions'?'A03-public-Focus-Type':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[mode==='viewport'?'B04-measure-and-Core-G12': ['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='application'?'B02-applied-and-stop':mode==='form_actions'?'A03-public-Focus-Type':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}

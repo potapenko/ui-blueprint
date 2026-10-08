@@ -32,7 +32,7 @@ function node() { const n = new HTMLInputElement(); Object.assign(n,{attrs:{},bo
 function read(n,fields,sensitive=false,doc=document,maxChars=100) { context.node=n;context.options={fields,sensitive,maxChars};context.expected=doc;return vm.runInContext('readNode.call(node, options, expected)',context,{timeout:100}); }
 const ordinary=node(), before=JSON.stringify(ordinary);
 const result=read(ordinary,['layout_bounds','checked','value','enabled','focused','invalid']);
-assert.equal(JSON.stringify(ordinary),before);assert.deepEqual(JSON.parse(JSON.stringify(result.rect)),{x:40,y:60,width:120,height:40});assert.equal(result.checked,false);assert.equal(result.value,'');assert.equal(result.invalid,false);assert.equal(result.enabled,true);assert.equal(result.focused,false);
+assert.equal(JSON.stringify(ordinary),before);assert.deepEqual(JSON.parse(JSON.stringify(result.rect)),{x:40,y:60,width:120,height:40,viewport:{before:null,after:null}});assert.equal(result.checked,false);assert.equal(result.value,'');assert.equal(result.invalid,false);assert.equal(result.enabled,true);assert.equal(result.focused,false);
 const secret=node();secret.state.kind='password';secret.state.data='PRIVATE_SCRIPT_CANARY';valueReads=0;
 assert.equal(read(secret,['value']).sensitive,true);assert.equal(valueReads,0);assert(!JSON.stringify(read(secret,['value','placeholder'])).includes('PRIVATE_SCRIPT_CANARY'));
 const marked=node();marked.state.data='PRIVATE_SCRIPT_CANARY';valueReads=0;read(marked,['value'],true);assert.equal(valueReads,0);
@@ -221,3 +221,25 @@ nativeClicks=valueReads=0;assert.equal(activate(button(),resultInput),true);asse
 resultInput.state.kind='password';nativeClicks=valueReads=0;assert.equal(activate(button(),resultInput),false);assert.deepEqual([nativeClicks,valueReads],[0,0]);
 nativeClicks=0;assert.equal(activate(button(),publicOutput(),{}),false);assert.equal(nativeClicks,0);
 console.log('Native activation guard mocks passed: exact button/result/document, disabled/private/stale refusal, readonly result and no direct handler/focus/value/own-click fallback.');
+
+class Window {}
+class VisualViewport {}
+const viewportWindow=new Window(),visual=new VisualViewport();viewportWindow.top=viewportWindow;
+const viewportFacts={scrollX:-12.25,scrollY:100.5,innerWidth:1000,innerHeight:600,devicePixelRatio:2,scale:1,offsetLeft:0,offsetTop:0,pageLeft:-12.25,pageTop:100.5,width:985,height:600};
+let viewportReads=0;
+for(const name of ['scrollX','scrollY','innerWidth','innerHeight','devicePixelRatio'])Object.defineProperty(viewportWindow,name,{get(){viewportReads++;return viewportFacts[name];}});
+Object.defineProperty(viewportWindow,'visualViewport',{get(){return visual;}});
+for(const name of ['scale','offsetLeft','offsetTop','pageLeft','pageTop','width','height'])Object.defineProperty(VisualViewport.prototype,name,{get(){viewportReads++;return viewportFacts[name];}});
+context.Window=Window;context.VisualViewport=VisualViewport;document.defaultView=viewportWindow;
+const layoutNode=node();const mapped=read(layoutNode,['layout_bounds']).rect;
+assert.deepEqual([mapped.x,mapped.y,mapped.width,mapped.height],[40,60,120,40],'raw rect never translated in JS');
+assert.deepEqual(JSON.parse(JSON.stringify(mapped.viewport.before)),{scrollX:-12.25,scrollY:100.5,width:1000,height:600,dpr:2,scale:1,offsetLeft:0,offsetTop:0,pageLeft:-12.25,pageTop:100.5,visualWidth:985,visualHeight:600});
+assert.deepEqual(mapped.viewport.before,mapped.viewport.after);viewportReads=0;read(layoutNode,['enabled']);assert.equal(viewportReads,0);
+viewportFacts.scale=2;assert.equal(read(layoutNode,['layout_bounds']).rect.viewport.before.scale,2,'unsupported scale remains an actual fact for Rust');viewportFacts.scale=1;
+viewportWindow.top={};assert.equal(read(layoutNode,['layout_bounds']).rect.viewport.before,null);viewportWindow.top=viewportWindow;
+viewportFacts.scrollX=NaN;assert.equal(read(layoutNode,['layout_bounds']).rect.viewport.before,null);viewportFacts.scrollX=-12.25;
+const oldRect=Element.prototype.getBoundingClientRect;
+Element.prototype.getBoundingClientRect=function(){viewportFacts.scrollY++;viewportFacts.pageTop++;return oldRect.call(this);};
+const changing=read(layoutNode,['layout_bounds']).rect.viewport;assert.notEqual(changing.before.scrollY,changing.after.scrollY);
+Element.prototype.getBoundingClientRect=oldRect;delete document.defaultView;
+console.log('Viewport source mocks passed: native getters, signed/fractional CSS facts, separate scrollbar widths, requested-only reads, unsupported/missing and changed context; no JS conversion.');

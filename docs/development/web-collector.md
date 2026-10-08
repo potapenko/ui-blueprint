@@ -138,9 +138,9 @@ DOM ACK before AX. Requested capture/probe channels return Failed(Unsupported).
 
 | Source | Reported data / explicit unknowns |
 | --- | --- |
-| DOM/CSSOM | Raw tag; applicable native form value/type/placeholder/flags; layout rect only with a fragment, css_px/viewport/top-left/LocalOnly |
+| DOM/CSSOM | Raw tag; applicable native form value/type/placeholder/flags; layout rect only with a fragment, css_px/viewport/top-left; sourced viewport→document mapping when qualified below |
 | Addressed AX | fetchRelatives=false, exact backend/frame mapping; raw role plus finite mapping, name/accessibility_name/description, typed value/flags; mixed checked stays unknown |
-| Unknown/unimplemented | DOM name/role inference, visible-text qualification, AX geometry, hit/visible/paint/baseline, actions, selection/IME, component/anchor discovery and cross-space transforms |
+| Unknown/unimplemented | DOM name/role inference, visible-text qualification, AX geometry, hit/visible/paint/baseline, actions, selection/IME, component/anchor discovery and screen/frame/capture mappings |
 
 False/empty stay known; unrequested properties are not synthesized. Only sourced
 backendDOMNodeId creates corresponds_to. Flat nonempty projections are partial;
@@ -238,6 +238,39 @@ Only successful publication returns BootstrapReport references tied to the actua
 Snapshot/Observation. Existing InitialIds and References retain their distinct
 semantics. [Finite source checks and actual-root fixture preparation](../plans/ui-blueprint/receipts/W01-rooted-selection.md)
 are not live Director or general browser-selection qualification.
+
+## Sourced document-space geometry
+
+On a requested layout read, the fixed isolated reader brackets the original client
+rect with native Window/VisualViewport getters from its own bound root document.
+[CSSOM View](https://drafts.csswg.org/cssom-view/) defines client rectangles and
+scroll offsets in CSS pixels, with scrollX/Y locating the viewport against the
+initial containing block. Rust constructs the existing canonical Known Transform:
+viewport→document, affine `[1,0,0,1,scrollX,scrollY]`. The original viewport rect,
+frame kind and property evidence stay unchanged. Transform evidence is separately
+Derived/cssom-scroll-viewport-to-document with the actual DOM Observation and full
+target, Surface/loader and caller environment binding. Space IDs are opaque and
+document-generation-bound; use the returned transform.to.id, never invent one.
+
+Finite positive viewport dimensions and DPR, visual scale1, zero visual offset and
+matching native page/scroll offsets qualify this first mapping. Dimensions/DPR are
+context guards, not inferred scale factors. Physical pixels/screen mapping, frames,
+pinch/panned visual viewport and intrinsic pre-CSS-transform geometry are not claimed.
+Missing/unconfirmed context retains original bounds with Unknown transform; old
+private records without new facts retain LocalOnly. No missing value becomes zero.
+Before/after and cross-node facts must agree; a final bounded selected-node context
+read precedes the existing final identity/root checks. Changed context refuses with
+resync_required, invalid facts refuse; no raised acquisition/deadline budget. The
+DOM interval includes that context check but overall consistency stays sequential/
+unknown, not atomic layout. Caller sensitivity is preserved on the final read.
+
+Public Measure already accepts original Observe responses and `--space` equal to
+the returned document Space ID. Rust alone transforms anchors and computes relations;
+no JS rectangle conversion or new CLI flags. The `viewport` mode of
+`tests/bridges/web/guarded-live.cjs` prepares the existing F01 baseline→resize→scroll
+proof. Its canonical resized response also serves as before-scroll input. Results
+and exact usage are recorded in the [W01 receipt](../plans/ui-blueprint/receipts/W01-rooted-selection.md).
+Normalized-motion Diff is the separately owned Core G12 consumer, not this proof.
 
 ## Pending retained-session invalidation
 

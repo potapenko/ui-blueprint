@@ -50,12 +50,31 @@ function readNode(options, expectedDocument) {
       out.activeDescendant = endpoint(text(attr('aria-activedescendant')));
   }
   if (fields.has('layout_bounds')) {
+    // Source facts only. Rust constructs the viewport -> document mapping.
+    const viewport = () => {
+      try {
+        const win = expectedDocument.defaultView;
+        if (!win || win !== win.top || typeof Window === 'undefined' || typeof VisualViewport === 'undefined') return null;
+        const windowGet = name => {
+          const descriptor = Object.getOwnPropertyDescriptor(win, name) || Object.getOwnPropertyDescriptor(Window.prototype, name);
+          return descriptor && typeof descriptor.get === 'function' ? descriptor.get.call(win) : undefined;
+        };
+        const visual = windowGet('visualViewport');
+        if (!visual) return null;
+        const visualGet = name => Object.getOwnPropertyDescriptor(VisualViewport.prototype, name).get.call(visual);
+        const facts = {scrollX:windowGet('scrollX'),scrollY:windowGet('scrollY'),width:windowGet('innerWidth'),height:windowGet('innerHeight'),dpr:windowGet('devicePixelRatio'),
+          scale:visualGet('scale'),offsetLeft:visualGet('offsetLeft'),offsetTop:visualGet('offsetTop'),pageLeft:visualGet('pageLeft'),pageTop:visualGet('pageTop'),visualWidth:visualGet('width'),visualHeight:visualGet('height')};
+        return Object.values(facts).every(Number.isFinite) ? facts : null;
+      } catch (_) { return null; }
+    };
     // CSSOM's native layout/fragments computation is opaque browser work.
     // Empty fragment list is unavailable layout, never a fabricated zero rectangle.
     const fragments = Element.prototype.getClientRects.call(this);
     if (fragments.length > 0) {
+      const before = viewport();
       const r = Element.prototype.getBoundingClientRect.call(this);
-      out.rect = { x: r.x, y: r.y, width: r.width, height: r.height };
+      const after = viewport();
+      out.rect = { x: r.x, y: r.y, width: r.width, height: r.height, viewport:{before,after} };
     }
   }
   if (!sensitive) {

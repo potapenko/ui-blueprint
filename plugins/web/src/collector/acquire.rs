@@ -313,8 +313,10 @@ impl Collector {
                 .map_err(|e| e.at(MalformedSite::AxData))?;
             records.ax.push((backend, ax));
         }
-        // Final target/document check and one bounded pass over the ORIGINAL handles.
-        // Do this after every source read, immediately before group release/publication.
+        if let Some(document) = document.as_deref() {
+            self.verify_viewports(records, document, &handles, budget)?;
+        }
+        // Final identity/root continuity remains AFTER all source/context reads.
         self.verify_document(budget)?;
         if let Some(document) = document.as_deref() {
             self.verify_nodes(document, &handles, budget)?;
@@ -326,6 +328,78 @@ impl Collector {
                     request.limits.max_depth,
                     budget,
                 )?;
+            }
+        }
+        Ok(())
+    }
+    fn verify_viewports(
+        &mut self,
+        records: &mut Records,
+        document: &str,
+        handles: &[String],
+        budget: &mut Budget,
+    ) -> Result<(), Failure> {
+        // Bind every mapped rectangle to one unchanged viewport context and
+        // bracket the completed collection with one final native read.
+        let mut layouts = records
+            .dom
+            .iter()
+            .enumerate()
+            .filter_map(|(i, (_, read))| read.rect.as_ref().map(|rect| (i, rect)));
+        if let Some((index, first)) = layouts.next() {
+            let observed = viewport_context(first);
+            if layouts.any(|(_, rect)| viewport_context(rect) != observed) {
+                return Err(Failure::new(ErrorKind::ResyncRequired));
+            }
+            if first
+                .viewport
+                .as_ref()
+                .and_then(|v| v.before.as_ref())
+                .is_some_and(wire::ViewportFacts::supported)
+            {
+                let checked: wire::ReadResult = self.send(
+                    "Runtime.callFunctionOn",
+                    &Read {
+                        object_id: &handles[index],
+                        function_declaration: READ_NODE,
+                        return_by_value: true,
+                        silent: true,
+                        user_gesture: false,
+                        await_promise: false,
+                        throw_on_side_effect: false,
+                        arguments: [
+                            Argument::Options {
+                                value: ReadOptions {
+                                    fields: &[Field::LayoutBounds],
+                                    max_chars: self.limits.max_text_bytes / 6,
+                                    sensitive: records.dom[index].1.sensitive,
+                                },
+                            },
+                            Argument::Object {
+                                object_id: document,
+                            },
+                            Argument::Object {
+                                object_id: &handles[index],
+                            },
+                        ],
+                    },
+                    budget,
+                )?;
+                if checked.exception_details.is_some() || checked.result.r#type != "object" {
+                    return Err(Failure::new(ErrorKind::Malformed));
+                }
+                let read = checked
+                    .result
+                    .value
+                    .ok_or(Failure::new(ErrorKind::Malformed))?;
+                validate_dom(&read, self.limits.max_text_bytes, 1)?;
+                if !read.connected || !read.same_document {
+                    return Err(Failure::new(ErrorKind::StaleTarget));
+                }
+                if read.rect.as_ref().map(viewport_context) != Some(observed) {
+                    return Err(Failure::new(ErrorKind::ResyncRequired));
+                }
+                records.dom_end = self.time();
             }
         }
         Ok(())
@@ -517,7 +591,35 @@ pub(super) fn validate_dom(
     {
         return Err(Failure::new(ErrorKind::Malformed));
     }
+    if let Some(samples) = read.rect.as_ref().and_then(|r| r.viewport.as_ref()) {
+        for facts in [&samples.before, &samples.after].into_iter().flatten() {
+            if !facts.values().iter().all(|v| v.is_finite())
+                || [
+                    facts.width,
+                    facts.height,
+                    facts.dpr,
+                    facts.scale,
+                    facts.visual_width,
+                    facts.visual_height,
+                ]
+                .iter()
+                .any(|v| *v < 0.0)
+            {
+                return Err(Failure::new(ErrorKind::Malformed));
+            }
+        }
+        if samples.before.as_ref().map(wire::ViewportFacts::values)
+            != samples.after.as_ref().map(wire::ViewportFacts::values)
+        {
+            return Err(Failure::new(ErrorKind::ResyncRequired));
+        }
+    }
     Ok(())
+}
+fn viewport_context(rect: &wire::LayoutRect) -> Option<Option<[f64; 12]>> {
+    rect.viewport
+        .as_ref()
+        .map(|s| s.before.as_ref().map(wire::ViewportFacts::values))
 }
 fn validate_ax(
     ax: &wire::AxNode,

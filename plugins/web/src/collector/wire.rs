@@ -4,7 +4,6 @@ use serde::{
     de::{self, MapAccess, Visitor},
 };
 use std::fmt;
-use uiblueprint_schema::model::Rect;
 
 // CDP records are objects; derived struct deserialization alone also accepts arrays.
 macro_rules! object_record {
@@ -27,12 +26,58 @@ macro_rules! object_record {
 }
 object_record!(DomRead {
  connected:bool, same_document:bool, tag:Option<String>, sensitive:bool,
- rect:Option<Rect>, input_kind:Option<String>, value:Option<String>, placeholder:Option<String>,
+ rect:Option<LayoutRect>, input_kind:Option<String>, value:Option<String>, placeholder:Option<String>,
  required:Option<bool>, enabled:Option<bool>, readonly:Option<bool>, checked:Option<bool>,
  selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>,
  controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>,
  selection:Option<SelectionRead>, document_focused:Option<bool>
 });
+object_record!(LayoutRect { x:f64, y:f64, width:f64, height:f64, viewport:Option<ViewportSamples> });
+object_record!(ViewportSamples { before:Option<ViewportFacts>, after:Option<ViewportFacts> });
+object_record!(ViewportFacts {
+    scroll_x: f64,
+    scroll_y: f64,
+    width: f64,
+    height: f64,
+    dpr: f64,
+    scale: f64,
+    offset_left: f64,
+    offset_top: f64,
+    page_left: f64,
+    page_top: f64,
+    visual_width: f64,
+    visual_height: f64
+});
+impl ViewportFacts {
+    pub(crate) fn values(&self) -> [f64; 12] {
+        [
+            self.scroll_x,
+            self.scroll_y,
+            self.width,
+            self.height,
+            self.dpr,
+            self.scale,
+            self.offset_left,
+            self.offset_top,
+            self.page_left,
+            self.page_top,
+            self.visual_width,
+            self.visual_height,
+        ]
+    }
+    pub(crate) fn supported(&self) -> bool {
+        self.width > 0.0
+            && self.height > 0.0
+            && self.visual_width > 0.0
+            && self.visual_height > 0.0
+            && self.dpr > 0.0
+            && self.scale == 1.0
+            && self.offset_left == 0.0
+            && self.offset_top == 0.0
+            && self.page_left == self.scroll_x
+            && self.page_top == self.scroll_y
+    }
+}
 object_record!(SelectionRead {
     start: u64,
     end: u64,

@@ -67,6 +67,57 @@ fn property(
         },
     }
 }
+fn viewport_transform(
+    rect: &crate::collector::wire::LayoutRect,
+    context: &Context,
+    observation: &Observation,
+) -> TransformState {
+    let Some(samples) = &rect.viewport else {
+        return TransformState::LocalOnly {};
+    };
+    let unknown = || TransformState::Unknown {
+        reason: id("web-viewport-mapping-unconfirmed"),
+    };
+    let (Some(before), Some(after)) = (&samples.before, &samples.after) else {
+        return unknown();
+    };
+    if before.values() != after.values() || !before.supported() {
+        return unknown();
+    }
+    let surface = &context.surfaces[0];
+    let document_id = format!(
+        "document:{}:{}:{}",
+        surface.id.0.len(),
+        surface.id.0,
+        surface.generation.0
+    );
+    if document_id.chars().count() > 256 {
+        return unknown();
+    }
+    let mut source = evidence(observation, "cssom-scroll-viewport-to-document");
+    source.provenance = Provenance::Derived;
+    TransformState::Known {
+        transform: Box::new(Transform {
+            from: Space {
+                id: surface.id.clone(),
+                kind: SpaceKind::Viewport,
+                units: Unit::CssPx,
+                origin: Origin::TopLeft,
+            },
+            to: Space {
+                id: Id(document_id),
+                kind: SpaceKind::Document,
+                units: Unit::CssPx,
+                origin: Origin::TopLeft,
+            },
+            affine: [1.0, 0.0, 0.0, 1.0, before.scroll_x, before.scroll_y],
+            target: context.target.clone(),
+            surface: surface.clone(),
+            environment_revision: context.environment_revision.clone(),
+            evidence: source,
+        }),
+    }
+}
 pub(crate) fn dom(
     backend: u32,
     read: &DomRead,
@@ -94,8 +145,13 @@ pub(crate) fn dom(
                                     units: Unit::CssPx,
                                     origin: Origin::TopLeft,
                                 },
-                                shape: Shape::Rect(rect.clone()),
-                                transform: TransformState::LocalOnly {},
+                                shape: Shape::Rect(Rect {
+                                    x: rect.x,
+                                    y: rect.y,
+                                    width: rect.width,
+                                    height: rect.height,
+                                }),
+                                transform: viewport_transform(rect, context, observation),
                             })))
                         })
                         .unwrap_or_else(|| unknown("no-layout-box-reported")),

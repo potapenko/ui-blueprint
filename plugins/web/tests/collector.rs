@@ -596,6 +596,187 @@ fn canonical_dom_ax_literals_preserve_sources_geometry_false_empty_and_same_labe
     fixture.finish();
 }
 
+fn viewport_peer(mode: u8) -> Fixture {
+    let mut reads = 0;
+    Fixture::new(move |method, command, _| {
+        if method != "Runtime.callFunctionOn"
+            || !command["params"]["functionDeclaration"]
+                .as_str()
+                .is_some_and(|f| f.starts_with("function readNode("))
+        {
+            return None;
+        }
+        reads += 1;
+        let mut read: Json =
+            serde_json::from_str(include_str!("fixtures/collector/dom.json")).unwrap();
+        let mut facts = json!({"scrollX":-12.25,"scrollY":100.5,"width":1000,"height":600,"dpr":2,"scale":1,"offsetLeft":0,"offsetTop":0,"pageLeft":-12.25,"pageTop":100.5,"visualWidth":985,"visualHeight":600});
+        if mode == 1 {
+            facts["scale"] = json!(2);
+        }
+        if mode == 4 && reads == 2 || mode == 5 && reads == 3 {
+            facts["scrollY"] = json!(101.5);
+            facts["pageTop"] = json!(101.5);
+        }
+        if mode == 6 {
+            facts["width"] = json!(-1);
+        }
+        if mode == 7 {
+            facts["scrollX"] = Json::Null;
+        }
+        if mode == 8 {
+            facts["width"] = json!(0);
+        }
+        if mode == 9 {
+            facts["offsetLeft"] = json!(1);
+            facts["pageLeft"] = json!(-11.25);
+        }
+        if mode == 10 {
+            facts["pageTop"] = json!(99);
+        }
+        let mut after = facts.clone();
+        if mode == 3 {
+            after["scrollY"] = json!(101.5);
+            after["pageTop"] = json!(101.5);
+        }
+        read["result"]["value"]["rect"]["viewport"] = if mode == 2 {
+            json!({"before":null,"after":null})
+        } else {
+            json!({"before":facts,"after":after})
+        };
+        if mode == 11 {
+            assert_eq!(
+                command["params"]["arguments"][0]["value"]["sensitive"],
+                true
+            );
+            read["result"]["value"]["value"] = json!(CANARY);
+        }
+        Some(read)
+    })
+}
+
+#[test]
+fn viewport_mapping_preserves_original_rect_and_binds_sourced_document_translation() {
+    let fixture = viewport_peer(0);
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.context.fields = vec![Field::LayoutBounds];
+    let (report, docs) = collect(&mut c, &r, &scope(&[11, 12]));
+    let s = snapshot(&docs[0]);
+    assert_eq!(report.dom_nodes, 2);
+    for node in &s.nodes {
+        let Value::Geometry(g) = known(node, Field::LayoutBounds) else {
+            panic!("geometry")
+        };
+        assert_eq!(
+            g.shape,
+            Shape::Rect(Rect {
+                x: 40.0,
+                y: 60.0,
+                width: 120.0,
+                height: 40.0
+            })
+        );
+        assert_eq!(g.frame_kind, FrameKind::LayoutBounds);
+        let TransformState::Known { transform } = &g.transform else {
+            panic!("sourced mapping")
+        };
+        assert_eq!(transform.from, g.coordinate_space);
+        assert_eq!(transform.to.kind, SpaceKind::Document);
+        assert_eq!(transform.to.units, Unit::CssPx);
+        assert_eq!(transform.to.origin, Origin::TopLeft);
+        assert_eq!(transform.affine, [1.0, 0.0, 0.0, 1.0, -12.25, 100.5]);
+        assert_eq!(transform.target, r.context.target);
+        assert_eq!(transform.surface, r.context.surfaces[0]);
+        assert_eq!(
+            transform.environment_revision,
+            r.context.environment_revision
+        );
+        assert_eq!(transform.evidence.provenance, Provenance::Derived);
+        assert_eq!(
+            transform.evidence.method,
+            id("cssom-scroll-viewport-to-document")
+        );
+        assert_eq!(transform.evidence.observation_id, s.observations[0].id);
+        assert_eq!(g.coordinate_space.kind, SpaceKind::Viewport);
+    }
+    assert_eq!(s.coverage.status, CoverageStatus::Partial);
+    drop(c);
+    fixture.finish();
+}
+
+#[test]
+fn viewport_mapping_keeps_unconfirmed_scale_offsets_and_missing_facts_unknown() {
+    for mode in [1, 2, 8, 9, 10] {
+        let fixture = viewport_peer(mode);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::LayoutBounds];
+        let (_, docs) = collect(&mut c, &r, &scope(&[11]));
+        let Value::Geometry(g) = known(&snapshot(&docs[0]).nodes[0], Field::LayoutBounds) else {
+            panic!("geometry")
+        };
+        assert!(matches!(g.transform, TransformState::Unknown { .. }));
+        assert_eq!(
+            g.shape,
+            Shape::Rect(Rect {
+                x: 40.0,
+                y: 60.0,
+                width: 120.0,
+                height: 40.0
+            })
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn viewport_mapping_refuses_context_changes_or_invalid_facts_without_publication() {
+    for mode in [3, 4, 5, 6, 7] {
+        let fixture = viewport_peer(mode);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::LayoutBounds];
+        let mut published = false;
+        let error = c
+            .observe(&r, &scope(&[11, 12]), 41, op().deadline, |_| {
+                published = true;
+                Publication::Acknowledged
+            })
+            .unwrap_err();
+        assert_eq!(
+            error.kind,
+            if mode >= 6 {
+                ErrorKind::Malformed
+            } else {
+                ErrorKind::ResyncRequired
+            },
+            "mode {mode}"
+        );
+        assert!(!published);
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn viewport_final_read_preserves_caller_sensitivity() {
+    let fixture = viewport_peer(11);
+    let mut c = fixture.attach(limits());
+    let mut r = request();
+    r.context.fields = vec![Field::LayoutBounds];
+    let mut selected = scope(&[11]);
+    selected.nodes[0].sensitivity = Sensitivity::Sensitive;
+    let (_, docs) = collect(&mut c, &r, &selected);
+    assert!(!serde_json::to_string(&docs[0]).unwrap().contains(CANARY));
+    let Value::Geometry(g) = known(&snapshot(&docs[0]).nodes[0], Field::LayoutBounds) else {
+        panic!("geometry")
+    };
+    assert!(matches!(g.transform, TransformState::Known { .. }));
+    drop(c);
+    fixture.finish();
+}
+
 #[test]
 fn failed_ax_keeps_dom_and_publishes_canonical_partial_once() {
     let fixture = Fixture::new(|m, _, _| {

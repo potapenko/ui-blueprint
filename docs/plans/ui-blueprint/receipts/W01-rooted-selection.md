@@ -1,5 +1,73 @@
 # W01 rooted selection source handoff
 
+## B04 sourced viewport→document preparation — 2026-10-08
+
+Authority: appended [B04 packet](../packets/W01-rooted-selection.md), approved P2/P3
+geometry work. Selected registry23 WEB-PILOTS B04/GEOMETRY/PROJECTIONS/common closure
+reused; Core registry24/CLI@12 work is unrelated and protected. No public schema,
+engine/CLI/spec/manifest/fixture or action source change. Exact9 writes: collector
+read-node.js/wire.rs/acquire.rs; normalize/mod.rs; existing collector.rs and
+script-check.cjs tests; guarded-live.cjs; Web developer guide; this receipt.
+During preparation, the additive EXCHANGE@2 M05 composition diff was read: its
+Native mixed-channel case is outside this packet; Web's homogeneous external_semantics
+observations and requested/allowed channel remain unchanged. No shared WIP consumed.
+
+Primary reconciliation: [CSSOM View](https://drafts.csswg.org/cssom-view/#dom-window-scrollx)
+defines API geometry/scroll in CSS px and viewport offset against the initial
+containing block. Client rect remains original viewport/layout_bounds/top_left;
+Rust builds existing Known Transform `[1,0,0,1,scrollX,scrollY]` to document CSS space,
+with separate Derived evidence, actual DOM Observation and full target/Surface/
+environment binding. No source declaration, screen size or DPR-derived scale.
+Document Space ID binds frame+loader (length-delimited frame ID); it is opaque.
+
+Private rect DTO embeds before/after native Window/VisualViewport facts without
+changing DomRead constructor fields/legacy actions. Finite positive viewport and
+DPR, visual scale1, zero visual offset and matching page/scroll offsets qualify;
+scrollbar width need not equal visual width. Missing/unconfirmed zoom/frame context
+is Unknown; legacy private records without facts remain LocalOnly. Invalid data
+refuses, changed per-read/cross-node/final context gives resync_required. One extra
+bounded original-node read brackets mapped collection; original identity/root
+checks remain LAST. Caller sensitivity is retained, native values are not acquired
+for this check. Sequential consistency remains unknown, not global atomicity.
+
+PASS:4 focused viewport functions/12 cases (signed fractional source facts, binding,
+original bounds, unsupported/missing/invalid contexts, intra-read/cross-node/final
+change, sensitivity), existing canonical local-only literal case and4 rooted
+functions. Offline JS suite plus native Window/VisualViewport getter mocks passed;
+Web lib/collector check+Clippy -D warnings and host web lib/worker check passed.
+Only a test's nonexistent Document.to_json call needed repair to serde_json; no
+contract/expectation change. Owned rustfmt, harness syntax and diff checks passed.
+No runtime or physical lane yet; checks use savedeb2cb12 plus owned overlays,
+excluding Core/Native WIP. Source pins and consumed test-temp cleanup below.
+
+Final184-input sorted path→SHA256 fingerprint
+418114917cc31041d6dbee1ac6fddad6df3f0857bca0143499363198bcb62375;
+reader e8d00a767dfa6e37e19d7f9b031da3d45088f8eed836c93e61fb0dfe05202db1;
+wire f6d821327dd896f70ae8a7a130b7e1833120f68fa0103e8c0347a750a82c9b42;
+acquire e4a08802768b5a6620409a162ac431cb7131d3359b2687aefafebfb310b217b9;
+normalize264794c06055c840b5c3ba31de0b109231fa97d0bc3f15612bca77651bbd6ab2;
+collector tests94eabf6e14ac204f704b8b759e2a8436a9cf229adcb439c4f5065a8207d68408;
+script-check e3b94f3b5885c192e22a2d3e3df6620ae1e0ef4912ab5656f8d0afb6fbc4c68d;
+harness092a007bd2c37b7539fb211e224e801e258617027e8b8715e73f4802fe4dca0f.
+All checked inputs matched after use; own2884-file nonimage source/test tree
+consumed/removed with absence verified. No images or older evidence touched.
+
+Prepared mode `UIB_WEB_LIVE_CASE=viewport` reuses the current guarded launcher and
+explicit CLI/worker products. One own F01 sequence captures baseline800×600/scroll0,
+resized1000×600/scroll0, then scrolled1000×600/scroll100. Source-authored marker
+rect expectations are existing B04 arrays; wrapper left380/top20 grounds independent
+document-space edge-offset expectations x280→480→480, y100 throughout, width100.
+Rust Measure computes every quantity from each original ChannelResponse using its
+returned document Space ID and contributing transform evidence. No JS conversion.
+Fixed32/depth8/64KiB/250ms/256visited/120s and original geometry/privacy remain.
+
+Immediate Core G12 consumer will receive ONLY3 unchanged canonical responses:
+resize compares baseline→resized; scroll compares resized→scrolled. The resized
+response is also before-scroll, avoiding extra collection. Preserve every original
+session/target/surface/environment/Observation; publish exact keys/Space/hashes after
+the run. Web retains those files until Core consumes/root releases; other consumed
+own nonimages are cleaned normally. Transform-aware Diff/full B04/P7 are not claimed.
+
 ## G08 generic explicit-target Web first use — 2026-10-08
 
 Delivered tooling: `node tests/bridges/web/geometry.cjs` takes explicit CLI/worker,
