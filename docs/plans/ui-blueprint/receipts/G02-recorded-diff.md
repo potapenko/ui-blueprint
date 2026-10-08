@@ -127,3 +127,42 @@ geometry_diff_binary2: both passed, no G12 semantic/type/arithmetic change.
 Final retained binary SHA is now
 1d667712912191c8344001e9c1a404c355aa51ae55af77235f8695f2a6d65274
 (same path). Earlier3456553f pin records the prior build, not this final consumer.
+
+## G12 actual saved B04 public consumer
+
+Root supplied three unchanged actual records from the completed B04 source run,
+not another collection. Verified retained CLI hash1d667712912191c8344001e9c1a404c355aa51ae55af77235f8695f2a6d65274
+and input hashes before two existing public `diff --geometry` invocations. No
+rebuild/evaluation file/input/collector/action/review/test/source edit created.
+Exact selector web.dom:23, frame layout_bounds, --space
+document:32:D4AE1D0B4F6FB761C9C00D0B89047D67:1347F1B49D80FB45B00897C94B573903,
+document/css_px/top_left. Existing automatic side-bound evaluations used source
+facts only; positive aggregate/output caps1048576 each, JSON mode.
+
+| Actual pair | Resolved before→after rect (css_px) | Displacement | Result |
+| --- | --- | --- | --- |
+| baseline→resized | [660,120,100,30]→[860,120,100,30] | dx200,dy0,dwidth0,dheight0 | exit0,12607B,stderr empty |
+| resized→scrolled | [860,120,100,30]→[860,120,100,30] | all0 in document Space | exit0,12621B,stderr empty |
+
+Scroll's original viewport y120→20 is compensated by the supplied sourced y+100
+viewport→document transform; zero applies to this exact selected document-space
+rect, not absence of viewport motion or a global unchanged-layout/causality claim.
+Each side retains reported cssom-getBoundingClientRect and derived
+cssom-scroll-viewport-to-document Evidence, with its original record context.
+Original environments f01-800x600-scroll0/f01-1000x600-scroll0/
+f01-1000x600-scroll100 remain distinct. Full before/after output Snapshots equal
+the respective input records after decoding. Partial coverage/omittedNone/
+unknown_count0 and current/consistencyUnknown observations remain unchanged.
+Repeated web-snapshot:1:1/web.dom:1:1/uib-worker-1-clock labels do NOT establish
+common clocks, temporal ordering, atomic acquisition or cross-record freshness.
+Each transform/evaluation binds only its own source, no source timestamp rewrite.
+
+Input identity/byte preservation verified before and after commands:
+- viewport-baseline.json,5337B SHA256ea8176746d2e4ac5eb2490e17704cfde4f0e5aec22cc5146159a6c305043cd8d;
+- viewport-resized.json,5339B SHA25688de587eabfb79bfe5803dfa8b45e2ad21683a8146012203727992d002a6d3eb;
+- viewport-scrolled.json,5350B SHA256a5b44fd6b368d5d70fb88b8ab495eb488b1582cfd0926057e075752039e4dad1.
+Web-owned directory95947cba-acee-46e9-a092-b4ab0d375a88 and all three files left
+untouched/released to Web. Only this receipt changed; root saves accepted doc-only
+result directly. Own retained CLI/task target nonimages removed/absence-verified
+after consumer. No images deleted, output files or live resources held. This is
+actual-record/public-CLI evidence, not a fresh UI run or full B04/G02/P7 acceptance.

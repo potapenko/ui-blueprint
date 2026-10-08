@@ -787,3 +787,16 @@ ProbeChecks callback-limit case added. Affected checker rebuild clean,28 cases/
 positive composed response. This negative-error-only delta did not change actual
 successful inputs or acquisition and needs no repeated UI run. Root's retained
 reviewer consumes the saved delta; self-check is not independent acceptance.
+
+
+M05 scoped review and consumer release — 2026-10-08: Root saved/pushed exact4
+repair/outcomee2c474a and relayed the same independent reviewer's resolved P2 plus
+inspection of the actual response/hash: four distinct AX/probe nodes, explicit
+mapping/three relations, separate original clocks/cache/live freshness and partial/
+unknown preserved; no remaining actionable finding in composition/admission scope.
+This is attributed independent review, not Native self-acceptance or full P7/general
+SDK/pointer/capture acceptance. Root explicitly released the one retained response.
+Native inventory found exactly that regular nonsymlink JSON, verified recorded SHA,
+removed only it and its empty containing directory, and confirmed both absent.
+Images0; other evidence untouched. Only this receipt changed; no source/tests/UI or
+shared Git-index action. Exact1 ready for Root's direct cleanup checkpoint.

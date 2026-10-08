@@ -68,6 +68,67 @@ session/target/surface/environment/Observation; publish exact keys/Space/hashes 
 the run. Web retains those files until Core consumes/root releases; other consumed
 own nonimages are cleaned normally. Transform-aware Diff/full B04/P7 are not claimed.
 
+### Actual B04 Observe→Measure and G12 handoff
+
+Root saved/pushed exact9 asb234fff. Common `host_observe.py build-geometry --output
+<own temp>` succeeded at committedd033667254eea4004b0d57f9e8809405fd4a7ba6; Web/harness
+pins matched. CLI SHA25600c7b970b6522d6ee3031fa031768945b61e68070af049081501b21e34895ad6;
+worker d969c7d47671982ee0597442f1376f6264fd8065a5543da5192d9c0a209cccc4.
+No WIP input, install, repeat tests or Native runtime. One `UIB_WEB_LIVE_CASE=viewport`
+guarded run2026-10-08T10:37:19.704Z–10:37:21.601Z PASSED:3Observe partial/4 and9
+Rust Measure known/0; all original Snapshot equality and read invariance checks passed.
+
+| Actual state | Marker viewport rect css_px | Rust document-space x/y left/top offsets from f01; width |
+| --- | --- | --- |
+|800×600, scroll0|660,120,100,30|280 /100;100|
+|1000×600, scroll0|860,120,100,30|480 /100;100|
+|1000×600, scroll100|860,20,100,30|480 /100;100|
+
+Wrapper viewport rect is380,20,360,123 then380,20,360,123 then380,-80,360,123.
+Original viewport/layout_bounds/css_px/top_left records remain unchanged; actual
+Known matrices are `[1,0,0,1,0,0]`, same, then `[1,0,0,1,0,100]`. Measure used the
+selected document Space and includes contributing Derived transform evidence.
+No screen mapping, JS rectangle conversion or normalized-motion Diff was run.
+Observe wall87.51/74.91/75.25ms; local Measure24.69–26.69ms including process lifetime,
+one sample, not percentile/full B04/P7 acceptance. Existing bounds unchanged.
+
+G12 retained directory:
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/95947cba-acee-46e9-a092-b4ab0d375a88`.
+The3 ORIGINAL ChannelResponse files were retained through G12 consumption:
+- viewport-baseline.json5337B SHA256ea8176746d2e4ac5eb2490e17704cfde4f0e5aec22cc5146159a6c305043cd8d
+- viewport-resized.json5339B SHA25688de587eabfb79bfe5803dfa8b45e2ad21683a8146012203727992d002a6d3eb
+- viewport-scrolled.json5350B SHA256a5b44fd6b368d5d70fb88b8ab495eb488b1582cfd0926057e075752039e4dad1
+Resize pair baseline→resized; scroll pair resized→scrolled. SourceKey f01=
+`{"namespace":"web.dom","key":"21"}`, responsive=`{"namespace":"web.dom","key":"23"}`.
+Result Space ID `document:32:D4AE1D0B4F6FB761C9C00D0B89047D67:1347F1B49D80FB45B00897C94B573903`,
+kind=document, units=css_px, origin=top_left. Session live-cli-viewport, scope
+f01-viewport, projection design, fields[layout_bounds] are unchanged. Target ID
+D4AE1D0B4F6FB761C9C00D0B89047D67/generationd4231094-239f-4d02-a9d9-7028c96299e4;
+same Surface ID/generation1347F1B49D80FB45B00897C94B573903 in all3. Environments are
+respectively f01-800x600-scroll0, f01-1000x600-scroll0, f01-1000x600-scroll100.
+No session/environment/clock/identity was coerced; per-call worker Snapshot/Observation
+IDs can repeat and do not imply a shared monotonic clock. G12 must retain attribution.
+
+All CLI children ended without signals and exact worker inventories were empty;
+owned context/driver/browser/profile/server cleanup confirmed. Public counters not
+invented. Consumed report SHA256112afda23083a8383a10fff1aa348ca53a47c8cdbd31108d1a537bc202f49a75.
+The3 responses were retained until Core consumption and root's release; other owned
+nonimage output/products were consumed and cleaned, with the final inventory below.
+No images created; unrelated images/source/WIP remain untouched.
+Post-use3 product hashes matched, products/empty output directory removed with
+absence verified. Exact26-name JSON inventory validated;23 consumed files removed,
+only the3 named responses remained with matching hashes for the G12 consumer.
+
+Root subsequently reported Core's actual public G12 comparisons passed exit0:
+baseline→resized has document-space dx200css_px with other deltas0; resized→scrolled
+has allzero document-space deltas. Original input hashes/context/partial coverage/
+evidence were preserved. This is attributed to Core's comparison run, not a Web
+rerun or independent/full B04/P7 acceptance.
+After root released retention, Web verified the exact3-name inventory, regular JSON
+types and all3 original hashes, removed only those files and the empty95947cba run
+directory, and confirmed absence. No images or other evidence touched. The hashes
+above now identify consumed historical bytes, not retained downloads or live refs.
+
 ## G08 generic explicit-target Web first use — 2026-10-08
 
 Delivered tooling: `node tests/bridges/web/geometry.cjs` takes explicit CLI/worker,
