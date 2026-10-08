@@ -788,3 +788,16 @@ no runtime success claimed yet. Git lease released before actual execution.
 Native declares minimal bridge write subset Fixture.swift/host_observe.py/P01
 receipt, protected collector/host/schema untouched. Primary API reconciliation
 and trusted external-frame input implementation active; no mapped-hit proof yet.
+
+Native bridge3a521f979f4eeae4611bb830f0a4ed8c81c71c7e saved/pushed exact3;
+own changed off/on queue pair active on pinned builds, no rebuild after save.
+Only actual counts/focus/identity can establish the selected local evidence.
+
+A05 actual seven-call application chain succeeded per Web: option→draft/selected
+London while applied empty, separate Commit→appliedLondon/delivered1, fresh actual
+AX dialog+Commit disabled observation→zero dependent Execute. Removed actor not
+republished; fresh result-only after Snapshot and original bytes preserved.
+Own runtime closed, no pointer/hardware/business/fullB02 claim. Runtime exact1
+receipt save granted, then one focused new input-boundary review uses retained
+26 canonical files at system-temp ba23e8db-1e32-49ac-b51e-e0d8dfece0fb. CLI originals
+already consumed/removed; no new source tests or UI repetition requested.
