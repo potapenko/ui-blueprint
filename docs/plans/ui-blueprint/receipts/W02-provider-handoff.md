@@ -730,3 +730,91 @@ Only this existing receipt changes for the result checkpoint; no runtime/Git lea
 held. Full B02, richer output shapes, selection absence-reason/schema gap,
 Focus/Type/Execute and application-result acceptance remain separate. No broader
 CLI action/host semantic review is accepted by this finite Observe qualification.
+
+## Public CLI action qualification preparation (not activated)
+
+Authority: root assigned [L01-live-actions](../packets/L01-live-actions.md) after
+accepted CLI/host3ebfafe and form-read result4b12d7b. Recovered registry17 → product
+CLI@6/CLI-ACTIONS@1 SCOPE/INPUT/AUTHORITY/OUTPUT/EXITS/ACCEPTANCE, preserving the
+already-read ACTIONS/EXCHANGE/MODEL/IDENTITY/FORMS/LIFECYCLE/PRIVACY/BOUNDARIES and
+D02/D04/D05 closure, WEB-PILOTS/PILOTS/GOLDEN/RUST/DEV.RUST. Verification only;
+no product semantic delta. Upcoming Core A02 WIP is excluded from all build inputs.
+
+Exact minimal writes: tests/bridges/web/guarded-live.cjs and this receipt.
+The existing launcher can invoke public CLI directly, so no Rust host-test glue
+is necessary. Existing owned actions.html/server/browser/context/binding/cleanup
+are reused in cli_actions mode. No shipping source/schema/Cargo/fixture/framework
+changes. UIB_WEB_LIVE_TEST in this mode points to the actual public uiblueprint
+binary, not the Rust API test; UIB_WEB_LIVE_WORKER is the production session-worker.
+Each real CLI invocation owns its own worker while the browser document survives.
+
+Concrete six-call sequence (runtime still closed):
+1. Public observe for action-target with Enabled/Checked/InputKind. Require one
+   unchanged canonical ChannelResponse/newline, partial coverage/exit4 but all
+   necessary native facts known: enabledtrue/checkedfalse/input_kindcheckbox.
+2. Public action prepare --json consumes those ORIGINAL stdout bytes as --snapshot.
+   Build Prepare Request from actual context/source key/Snapshot/Observation and
+   source Evidence; unique_matchfalse/writableunknown/value_allowedunknown/intents
+   empty are seed declarations. Require exit0 and actual source-derived ActionCase.
+3. Public action execute --json consumes ORIGINAL prepared stdout as --plan and
+   Act Request containing that actual Action. Require exit0, canonical confirmed
+   delivery/Succeeded/fresh after.Checkedtrue plus actual targetfalse→true and
+   unchanged duplicate/disabled/mixed/custom/focus/scroll.
+4–5. Fresh public Observe of existing action-disabled, then Prepare. Require
+   observed Enabledfalse, Prepare exit4/canonical Unsupported, unchanged UI.
+6. Explicit own-fixture remount, then Execute of original prepared plan: exit4,
+   canonical failed/not_dispatched/no after-state, unchanged replacement/unrelated
+   state and no retry. This setup is not product action delivery qualification.
+
+Important caller boundary: connection1.0.0 has no readonly mutation-authority flag;
+Execute explicitly requests trusted mutation authority for its exact connection.
+Therefore the previous API readonly TargetLease case cannot be expressed through
+this public CLI. Disabled Prepare is a FRESH CAPABILITY refusal, not a substitute
+claim of readonly authority enforcement. That API proof remains9d3a0a5; root must
+retain this distinction when activating/accepting the CLI cases. No new flag added.
+
+Exact invocation templates (all files in the one run-owned system-temp directory):
+`uiblueprint observe --connection cli-observe-connection.json --request cli-observe-request.json --worker ABS --max-input-bytes 131072 --max-output-bytes 65536`.
+`uiblueprint action prepare --snapshot cli-prepare-source.json --json --connection cli-prepare-connection.json --request cli-prepare-request.json --worker ABS --max-input-bytes 131072 --max-output-bytes 65536`.
+`uiblueprint action execute --plan cli-execute-source.json --json --connection cli-execute-connection.json --request cli-execute-request.json --worker ABS --max-input-bytes 131072 --max-output-bytes 65536`.
+Negative calls use their corresponding cli-disabled-observe/cli-disabled-prepare/
+cli-remount-refused filename prefixes. Paths passed to the actual commands are
+absolute. Connection target/frame/loader/endpoint come from the same independently
+established owned CDP binding; session/context/fields/scopes are explicit. Only
+Request.clock_domain is rebound by production CLI after attach. No fake current
+clock/capability/effect permit or API host call replaces the public command.
+
+Driver bounds stdout/stderr to64KiB each, individual caller lifetime5s (including
+attach/shutdown), unchanged canonical32/depth8/64KiB/250ms and whole120s. Successful
+CLI outputs are unchanged canonical bytes, including newline; original input bytes
+are hash-checked after use. Valid canonical failure output is saved before an
+unexpected exit stops dependent steps. Raw stderr is discarded, counts only.
+Each invocation requires closed CLI process and absence of the unique pinned worker
+executable via bounded pgrep. Cleanup also requires browser survival and launcher
+context/server/browser/profile teardown. CLI-private session/group counters are
+NOT exposed and are not fabricated: success uses CLI's acknowledged-result/cleanup
+exit contract plus actual process-absence evidence. No test-host counters claimed.
+
+Unchanged shipping build from exact3ebfafe982b09ff395e1e059a2e469d37419bf2a:
+`cargo build --locked --offline -p uiblueprint-cli --features web --bin uiblueprint`
+and matching host --features web --bin session-worker PASS.199saved inputs SHA256
+fingerprint9ccb4638da5ef60122136b79553fc4173ef60e5c381dda1bc418a6f20f883425,
+no mutable overlays. Two synthetic offline generated Observe/Prepare inputs pass
+the actual CLI connection/Request parser and reach missing-worker IO1/stdoutempty,
+without CDP/browser; temporary sanity files removed/absence checked. They are not
+live records. Launcher syntax/scoped diff and fixture/helper saved-equality pass.
+
+Build root retained for immediate finite consumer:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-cli-actions-live-vxbyrvc7/target/debug.
+uiblueprint SHA256e0a2136dfc7b5bff07f176d7c12bcc17c36a6ec939759373a65418563be78369;
+session-worker SHA2560abbebeec64f5d44d635a8b76027d07aa7acb53d1b17d0a91853372cd35fa724.
+Launcher candidate SHA25673dfb5865c96c265619b2029c434dd55b3eda387155d19388cdd50efee1aa779.
+After coherent save and ROOT ACTIVATION ONLY: existing --run-authorized,
+UIB_WEB_LIVE_ALLOW=1, UIB_WEB_LIVE_CASE=cli_actions, UIB_WEB_LIVE_TEST/WORKER and
+their *_SHA256 pins above; same S01_WEB_PLAYWRIGHT_CORE path as previous run.
+Planned UIB_WEB_LIVE_EVIDENCE (absent):
+/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/33fbadbd-fb1d-42ae-939f-e1babca035f6.
+Runtime/pointer/desktop untouched. Current Web owns temp build and later finite
+inputs/outputs until result consumption, then removes only its non-image files and
+verifies absence; all images/containing directories remain if any are produced.
+No actual public CLI browser result or broader forms/business/IME claim yet.

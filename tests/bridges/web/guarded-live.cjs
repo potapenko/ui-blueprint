@@ -81,6 +81,42 @@ function assertFormState(state, expected) {
   // particular native output London is NOT its application applied state.
   assert.deepEqual([state.state.selected,state.state.applied,state.state.valid,state.state.delivered,state.state.revision],['','',false,0,0]);
 }
+// Trusted own-fixture connection, using the existing web_worker_data profile.
+// No UI field or saved capability grants connection authority.
+function cliConnection(binding, selected) {
+  const mib=1048576;
+  return {connection_version:'1.0.0',target:binding.target,attach_deadline_ms:2000,
+    session:{session_id:'live-cli-actions',plugin:{id:'web',version:'0.1.0'},supported_versions:['0.1.0'],
+      target:binding.target,surfaces:[binding.surface],allowed_scopes:[`f01-${selected}`],
+      capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'bounded-live-source-under-verification'}]},
+    host_limits:{workers:2,worker_bytes:64*mib,publication_reserve:mib,bootstrap_bytes:mib,parent_bytes:32*mib,input_bytes:2*mib,
+      ingress_bytes:512*1024,output_bytes:512*1024,request_output_bytes:2*mib,completion_groups:2,control_bytes:4096,
+      cleanup_ms:1000,retained_domain_bytes:64*mib,retained_per_worker:15*mib,main_stack_bytes:8*mib,watchdog_stack_bytes:mib},
+    provider:{backend:'web',selection:{selection:'initial',ids:[{id:selected,sensitivity:'public'}],max_visited_nodes:256},
+      setup:{endpoint:binding.endpoint,cdp_session_id:null,surface:binding.surface,
+        transport:{endpoint_bytes:1024,handshake_bytes:2048,read_buffer_bytes:64,write_buffer_bytes:64,write_buffer_max:32768,frame_bytes:8192,message_bytes:8192,outbound_bytes:16384},
+        cdp:{max_request_bytes:16384,max_message_bytes:8192,max_metadata_bytes:256,max_results:1,result_bytes:8192,max_events:4,event_bytes:34000},
+        collector:{max_nodes:16,max_methods:100,max_reply_bytes:8192,max_total_reply_bytes:65536,max_text_bytes:600,max_handle_bytes:256,max_ax_properties:32,io_read_bytes:16384,io_write_bytes:32768,io_work:2048}}}};
+}
+function cliRequest(context, operation, stage) {
+  return {schema_version:'0.1.0',artifact:{kind:'request',data:{request_id:stage,clock_domain:'caller-clock-rebound-after-attach',context,
+    limits:{max_elements:32,max_depth:8,max_output_bytes:65536,deadline_ms:250},freshness_policy:'current_required',operation}}};
+}
+function cliPrepareRequest(observed, stage) {
+  assert.equal(observed.artifact.kind,'channel_response');assert.equal(observed.artifact.data.result.status,'observed');
+  const s=observed.artifact.data.result.data, nodes=s.nodes.filter(n=>n.key.namespace==='web.dom');assert.equal(nodes.length,1);
+  const node=nodes[0], evidence=node.properties.find(p=>p.field==='enabled').evidence;
+  const unknown={availability:'unknown',reason:'not-prepared'};
+  return cliRequest(s.context,{operation:'prepare',action:{id:'live-cli-set-checked',context:s.context,
+    backend_ref:{session_id:s.context.session_id,target:s.context.target,surface:node.surface,key:node.key,snapshot_id:s.id,observation_id:evidence.observation_id},
+    intent:{intent:'set_checked',value:true},modality:'setter',input_space:null,required_enabled:true,authorized_scope:s.context.scope_id,
+    unique_match:false,resolution:{evidence,writable:unknown,value_allowed:unknown,available_intents:[]}}},stage);
+}
+function ownWorkerPids(worker) {
+  const pattern='^'+worker.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'( |$)';
+  try {return execFileSync('/usr/bin/pgrep',['-f',pattern],{timeout:1000,maxBuffer:4096,encoding:'utf8'}).trim().split('\n').filter(Boolean).map(s=>{assert(/^\d+$/.test(s));return Number(s);});}
+  catch(error){if(error.status===1)return [];throw new Error('owned_worker_inventory_failed');}
+}
 async function run(evidence, report) {
   // Check BEFORE prepare/start/launch; ordinary node execution cannot start a live run.
   if (!process.argv.includes('--run-authorized') || process.env.UIB_WEB_LIVE_ALLOW !== '1')
@@ -100,7 +136,7 @@ async function run(evidence, report) {
   for (const name of [...setup.fixtureFiles,r01Oracle,'tests/bridges/web/guarded-live.cjs','crates/host/tests/web_live.rs'])
     sourceHashes[name]=crypto.createHash('sha256').update(await fs.readFile(path.join(setup.root,name))).digest('hex');
   let actionsHtml;
-  if(report.mode==='actions'){
+  if(report.mode==='actions'||report.mode==='cli_actions'){
     actionsHtml=await fs.readFile(path.join(setup.root,'fixtures/web/actions.html'));
     const pinned=execFileSync('git',['show','9bd9f662d28cdb66f8b7b096fcd77a93ecf524e4:fixtures/web/actions.html'],{cwd:setup.root,timeout:5000,maxBuffer:65536});
     assert(actionsHtml.equals(pinned));sourceHashes['fixtures/web/actions.html']=crypto.createHash('sha256').update(actionsHtml).digest('hex');
@@ -111,7 +147,7 @@ async function run(evidence, report) {
   report.phase='fixture_setup';
   const whole = setTimeout(() => { failed = true; child?.kill('SIGKILL'); if(server) void server.kill().catch(()=>{}); }, 120000);
   try {
-    if(report.mode==='actions'){
+    if(report.mode==='actions'||report.mode==='cli_actions'){
       const own=require('node:http').createServer((req,res)=>{res.setHeader('Cache-Control','no-store');if(new URL(req.url,'http://127.0.0.1').pathname==='/'){res.setHeader('Content-Type','text/html; charset=utf-8');res.end(actionsHtml);}else{res.statusCode=404;res.end('Not found');}});
       own.requestTimeout=3000;own.headersTimeout=3000;
       fixture={url:null,close:()=>new Promise(resolve=>own.close(resolve))};
@@ -149,7 +185,7 @@ async function run(evidence, report) {
     for (const name of ['a','b']) {
       const page = await context.newPage(); page.setDefaultTimeout(2000); page.setDefaultNavigationTimeout(3000);
       await page.goto(`${fixture.url}/?generation=1`);
-      if(report.mode==='actions')await page.locator('#action-target').waitFor();else await page.waitForFunction(() => !!window.f01);
+      if(report.mode==='actions'||report.mode==='cli_actions')await page.locator('#action-target').waitFor();else await page.waitForFunction(() => !!window.f01);
       pages[name] = page;
     }
     async function binding(page) {
@@ -165,6 +201,100 @@ async function run(evidence, report) {
         return {endpoint:endpoint.href,target:{id:targetInfo.targetId,generation:launchId},
           surface:{id:frameTree.frame.id,generation:frameTree.frame.loaderId}};
       } finally { await session.detach(); }
+    }
+    if(report.mode==='cli_actions'){
+      report.phase='public_cli_consumer';
+      report.binaries.cli=report.binaries.test;delete report.binaries.test;
+      // In this mode UIB_WEB_LIVE_TEST is the pinned PUBLIC CLI executable.
+      // Each call owns its production worker; no test-host API substitutes for it.
+      const page=pages.a, actual=await binding(page);
+      assert.deepEqual(ownWorkerPids(worker),[]);
+      const inputPins=[];report.cli_inputs=inputPins;
+      async function invoke(stage,command,connection,request,source,expectedExit){
+        report.last_stage=stage;
+        const files=[];
+        for(const [kind,bytes] of [['connection',Buffer.from(JSON.stringify(connection))],['request',Buffer.from(JSON.stringify(request))],...(source?[['source',source]]:[])]){
+          const name=`${stage}-${kind}.json`;await writeExclusive(path.join(evidence,name),bytes);files.push([kind,name,bytes.length]);
+          inputPins.push({file:name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')});
+        }
+        assert(files.reduce((sum,f)=>sum+f[2],0)<=131072);
+        const file=kind=>path.join(evidence,files.find(f=>f[0]===kind)[1]);
+        const args=command==='observe'?['observe']:['action',command,command==='prepare'?'--snapshot':'--plan',file('source'),'--json'];
+        args.push('--connection',file('connection'),'--request',file('request'),'--worker',worker,'--max-input-bytes','131072','--max-output-bytes','65536');
+        child=spawn(executable,args,{stdio:['ignore','pipe','pipe']});
+        const chunks=[];let bytes=0,errors=0,over=false;
+        child.stdout.on('data',chunk=>{bytes+=chunk.length;if(bytes>65536){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
+        child.stderr.on('data',chunk=>{errors+=chunk.length;if(errors>65536){over=true;child.kill('SIGKILL');}});
+        exited=new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>resolve({code,signal}));});
+        const exit=await bounded(exited,5000,'cli_call_timeout');
+        const stdout=Buffer.concat(chunks);const pids=ownWorkerPids(worker);
+        report.outcomes.push({stage,exit:exit.code,signal:exit.signal,stdout_bytes:stdout.length,stderr_bytes:errors,owned_worker_pids_after:pids});
+        assert(!over);assert.equal(exit.signal,null);assert.deepEqual(pids,[]);
+        assert(stdout.length>0&&stdout.at(-1)===10);
+        assert.equal(stdout.toString('utf8').split('\n').length,2,'one complete canonical JSON line');
+        const document=JSON.parse(stdout.toString('utf8'));assert.equal(document.schema_version,'0.1.0');
+        const name=`${stage}.json`;await writeExclusive(path.join(evidence,name),stdout);
+        report.frames.push({case:stage,file:name,bytes:stdout.length,sha256:crypto.createHash('sha256').update(stdout).digest('hex'),usage:'historical_analysis_only',live_ref_reuse:false});
+        assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
+        return {bytes:stdout,document};
+      }
+      function observation(connection,selected,stage){
+        return cliRequest({schema_version:'0.1.0',session_id:connection.session.session_id,target:actual.target,surfaces:[actual.surface],
+          scope_id:`f01-${selected}`,projection:'interaction',fields:['enabled','checked','input_kind'],plugin:connection.session.plugin,
+          environment_revision:'actions-800x600-dpr1-cli'}, {operation:'observe',channels:['external_semantics']},stage);
+      }
+      const connection=cliConnection(actual,'action-target');
+      let prior=await uiState(page);assert.equal(prior.state.target,false);assert.equal(prior.state.duplicate,true);
+      const observed=await invoke('cli-observe','observe',connection,observation(connection,'action-target','cli-observe'),null,4);
+      assert.deepEqual(await uiState(page),prior);
+      const seed=cliPrepareRequest(observed.document,'cli-prepare');
+      const observedSnapshot=observed.document.artifact.data.result.data;
+      assert.equal(observedSnapshot.coverage.status,'partial');
+      const observedNode=observedSnapshot.nodes.find(n=>n.key.namespace==='web.dom');
+      assert.equal(property(observedNode,'enabled').value,true);assert.equal(property(observedNode,'checked').value,false);
+      assert.equal(property(observedNode,'input_kind').value,'checkbox');
+      const prepared=await invoke('cli-prepare','prepare',connection,seed,observed.bytes,0);
+      assert.deepEqual(await uiState(page),prior);assert.equal(prepared.document.artifact.kind,'action');
+      const plan=prepared.document.artifact.data;
+      assert.equal(plan.action.unique_match,true);assert.equal(plan.action.modality,'setter');
+      for(const name of ['writable','value_allowed'])assert.deepEqual(plan.action.resolution[name],{availability:'known',value:{type:'flag',value:true}});
+      assert(plan.action.resolution.available_intents.includes('set_checked'));
+      assert.deepEqual(plan.action.backend_ref.key,seed.artifact.data.operation.action.backend_ref.key);
+      assert.equal(plan.action.backend_ref.snapshot_id,plan.snapshot.id);
+      assert.deepEqual(plan.snapshot.context,observedSnapshot.context);
+      assert.equal(property(plan.snapshot.nodes.find(n=>n.key.namespace==='web.dom'),'checked').value,false);
+      const act=stage=>cliRequest(plan.snapshot.context,{operation:'act',action:plan.action},stage);
+      const executed=await invoke('cli-execute','execute',connection,act('cli-execute'),prepared.bytes,0);
+      assert.equal(executed.document.artifact.kind,'transition_context');
+      const transition=executed.document.artifact.data;assert.equal(transition.transition.steps.length,1);
+      const step=transition.transition.steps[0];assert.equal(step.delivery,'confirmed');assert.equal(step.outcome,'succeeded');
+      assert(transition.after&&step.verification_observation);assert.notEqual(transition.before.id,transition.after.id);
+      assert.equal(property(transition.after.nodes.find(n=>n.key.namespace==='web.dom'),'checked').value,true);
+      const after=await uiState(page);assert.equal(after.state.target,true);
+      assert.deepEqual({...after,state:{...after.state,target:false}},prior);
+      report.checks.push({case:'cli-positive',observe_exit:4,prepare_exit:0,execute_exit:0,source_state_verified:true,non_target_state_unchanged:true});
+      prior=after;
+      const disabledConnection=cliConnection(actual,'action-disabled');
+      const disabled=await invoke('cli-disabled-observe','observe',disabledConnection,observation(disabledConnection,'action-disabled','cli-disabled-observe'),null,4);
+      const disabledSeed=cliPrepareRequest(disabled.document,'cli-disabled-prepare');
+      assert.equal(property(disabled.document.artifact.data.result.data.nodes.find(n=>n.key.namespace==='web.dom'),'enabled').value,false);
+      const refusal=await invoke('cli-disabled-prepare','prepare',disabledConnection,disabledSeed,disabled.bytes,4);
+      assert.equal(refusal.document.artifact.kind,'error');assert.equal(refusal.document.artifact.data.code,'unsupported');
+      assert.deepEqual(await uiState(page),prior);
+      report.checks.push({case:'cli-disabled-prepare',fresh_capability_refused:true,state_unchanged:true,not_readonly_authority_test:true});
+      await page.locator('#remount-target').click(); // explicit fixture setup only
+      prior=await uiState(page);
+      const stale=await invoke('cli-remount-refused','execute',connection,act('cli-remount-refused'),prepared.bytes,4);
+      assert.equal(stale.document.artifact.kind,'transition_context');
+      const refusalStep=stale.document.artifact.data.transition.steps[0];
+      assert.equal(refusalStep.delivery,'not_dispatched');assert.equal(refusalStep.outcome,'failed');
+      assert.equal(stale.document.artifact.data.after,null);assert.deepEqual(await uiState(page),prior);
+      report.checks.push({case:'cli-remount-refused',old_ref_refused:true,no_retry:true,state_unchanged:true});
+      // All source files remain byte-identical, including original newline/evidence.
+      for(const pin of inputPins){const data=await fs.readFile(path.join(evidence,pin.file));assert.equal(crypto.createHash('sha256').update(data).digest('hex'),pin.sha256);}
+      assert.deepEqual(ownWorkerPids(worker),[]);await uiState(page);
+      report.checks.push({case:'cli-cleanup',browser_alive_after_cli_workers:true,no_owned_worker_processes:true,private_session_counters:'not_exposed'});
+      report.cli_cleanup_confirmed=true;assert.equal(report.outcomes.length,6);return;
     }
     let rootMembers, b05Previous;
     async function command(message) {
@@ -424,7 +554,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean('test_process',!!child,async()=>{
+    await clean(report.mode==='cli_actions'?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -433,21 +563,23 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
+    report.cleanup.worker_sessions=report.mode==='cli_actions'
+      ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
+      :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
     if(errors.length){report.failure={code:'owned_cleanup_unconfirmed',count:errors.length};throw new Error('cleanup_failed');}
   }
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}
