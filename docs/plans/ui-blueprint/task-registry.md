@@ -54,6 +54,19 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Текущие новые владельцы после передачи
+
+- E03: «E03 — Сравнение наблюдений в ImageGen-пакете», local
+  01a11b60-48cb-7570-940c-0f0ce9131350; basee4bc256, полный цикл, running.
+- M03-C: «M03 — Геометрия popup и capture», local
+  01a11b60-4d80-7093-a149-6ead0670d522; basee4bc256, полный цикл, running;
+  Native desktop lane перешла этому owner после cleanup M04-T.
+- G13 и M04-T чаты архивированы после сохранения результатов/передачи контекста.
+- W03-R01a11b4f-0b8d-70a2-9e5c-4f0e92b18965 и I01-L01a11b54-e32b-7ef2-a707-28d82677dfd5
+  продолжают прежние полные tasks, без дополнительных внутренних поручений.
+- E03 получает API9046671 и CLI-GRAPH-DIFF@1; M03-C получает Native7478af3.
+  Исходные scope/acceptance limits не расширены; final P7 review открыт.
+
 ## Завершённые самостоятельные результаты
 
 M04-T7478af3: actual own-fixture Move local diff0/inset6pt; Scroll dy−790pt;
