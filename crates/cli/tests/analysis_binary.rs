@@ -333,6 +333,48 @@ fn direct_observed_response_uses_full_envelope_aggregate_byte_bound() {
 }
 
 #[test]
+fn named_alignment_json_keeps_partial_source_without_incomplete_scope_veto() {
+    let mut case = Case::new();
+    case.query.operation = GeometryRelation::Aligned;
+    for anchor in &mut case.query.anchors {
+        anchor.fraction = 0.0;
+    }
+    for node in &mut case.snapshot.nodes {
+        let Property::Requested {
+            state:
+                Availability::Known {
+                    value: Value::Geometry(geometry),
+                },
+            ..
+        } = &mut node.properties[0]
+        else {
+            panic!("geometry")
+        };
+        let Shape::Rect(rect) = &mut geometry.shape else {
+            panic!("rect")
+        };
+        rect.x = 380.0;
+    }
+    case.snapshot.coverage.status = CoverageStatus::Partial;
+    case.snapshot.coverage.omitted_count = Some(6);
+    case.save();
+    let result = analysis(&case.run("measure", "query", false, true, None), 0);
+    let AnalysisArtifact::Measurement(bundle) = &result.artifact else {
+        panic!("measurement")
+    };
+    assert_eq!(bundle.snapshot, case.snapshot);
+    assert_eq!(
+        measurement(&result).value,
+        Value::Quantity {
+            amount: 0.0,
+            kind: QuantityKind::Length,
+            source_units: Unit::CssPx
+        }
+    );
+    uiblueprint_engine::verify_analysis_result(&result).unwrap();
+}
+
+#[test]
 fn actual_factual_measure_json_and_compact_have_no_invented_expectation() {
     let case = Case::new();
     let output = case.run("measure", "query", false, true, None);

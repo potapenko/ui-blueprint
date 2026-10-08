@@ -326,12 +326,9 @@ fn unknown_consistency_preserves_known_dimensions_and_unstable_refusal() {
     s.observations[0].consistency_reason = Some(Id("sequential-reads-not-atomic".into()));
     s.coverage.status = CoverageStatus::Partial;
     s.coverage.omitted_count = None;
-    assert_eq!(
-        measure_query_bound(&s, &q, &e)
-            .expect("partial")
-            .unknown_reason(),
-        Some(UnknownReason::IncompleteScope)
-    );
+    let result = measure_query_bound(&s, &q, &e).expect("explicit named anchors");
+    assert_eq!(amount(&result), 0.0);
+    assert_eq!(s.coverage.status, CoverageStatus::Partial);
 }
 
 #[test]
@@ -796,5 +793,86 @@ fn every_manifest_engine_expectation_is_verified_at_its_contract_layer() {
         failures.is_empty(),
         "manifest engine coverage: {matches} match, {mismatches} mismatch, {inputs} input-only, {invalid} contract-invalid\n{}",
         failures.join("\n")
+    );
+}
+
+#[test]
+fn synthetic_f01_literal_alignment_uses_named_known_anchors_on_partial_snapshot() {
+    // These rectangles are the retained literal values from the F01 handoff.
+    // All IDs, Space and evidence below belong to the synthetic GEO fixture,
+    // not a reconstructed actual browser Snapshot/provenance.
+    let (mut s, mut q, e) = inputs("GEO-EQUAL-SPACING");
+    let rectangles = [
+        Rect {
+            x: 380.0,
+            y: 42.0,
+            width: 188.0,
+            height: 21.0,
+        },
+        Rect {
+            x: 380.0,
+            y: 67.0,
+            width: 360.0,
+            height: 32.0,
+        },
+        Rect {
+            x: 380.0,
+            y: 67.0,
+            width: 62.484375,
+            height: 32.0,
+        },
+    ];
+    for (index, rect) in rectangles.into_iter().enumerate() {
+        geometry(&mut s, index).shape = Shape::Rect(rect);
+    }
+    q.id = Id("synthetic-f01-left-edge-spread".into());
+    q.operation = GeometryRelation::Aligned;
+    for anchor in &mut q.anchors {
+        anchor.fraction = 0.0;
+        anchor.axis = Id("x".into());
+    }
+    s.coverage.status = CoverageStatus::Partial;
+    s.coverage.omitted_count = Some(6);
+    s.coverage.unknown_count = Some(4);
+    let original = s.clone();
+    let result = measure_query_bound(&s, &q, &e).unwrap();
+    assert_eq!(amount(&result), 0.0);
+    assert_eq!(measured(&result).space, e.result_space);
+    assert_eq!(measured(&result).details, Details::Scalar {});
+    for node in &s.nodes {
+        let Property::Requested { evidence, .. } = &node.properties[0] else {
+            panic!("source")
+        };
+        assert!(measured(&result).evidence.contains(evidence));
+    }
+    assert_eq!(
+        s, original,
+        "original partial coverage/geometry/evidence untouched"
+    );
+    let declaration = declaration(s.clone(), q.clone(), e.clone());
+    verify_analysis_result(&declaration).unwrap();
+    let AnalysisArtifact::Measurement(bundle) = &declaration.artifact else {
+        panic!("measurement")
+    };
+    assert_eq!(bundle.snapshot.coverage.status, CoverageStatus::Partial);
+    // A missing actual named datum still makes this query unknown.
+    let mut missing = q.clone();
+    missing.targets[1].key = Id("missing-named-datum".into());
+    missing.anchors[1].element = missing.targets[1].clone();
+    assert_eq!(
+        measure_query_bound(&s, &missing, &e)
+            .unwrap()
+            .unknown_reason(),
+        Some(UnknownReason::MissingTarget)
+    );
+    let Property::Requested { state, .. } = property(&mut s, 1) else {
+        panic!("property")
+    };
+    *state = Availability::Unknown {
+        reason: Id("not-reported".into()),
+    };
+    assert_eq!(
+        measure_query_bound(&s, &q, &e).unwrap().unknown_reason(),
+        Some(UnknownReason::UnknownProperty)
     );
 }

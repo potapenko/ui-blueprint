@@ -45,6 +45,62 @@ created/deleted or active runtime/physical handle held. Scoped checkpoint/push n
 Loader SHA2561a6b8ecc850386f5e4c41da712d56bf9835514231cc4b35166585af482e082e0;
 test SHA256ae6e85a1c125baa9c09a872e6ba4cd7eb8ab9e8980b2dd3e8e11eb6ae4284576.
 
+## G03 explicit-anchor alignment — coupled Restore
+
+Actual Web handoff reports query left-edge-spread: Aligned over draft/suggestions/
+London-option web.dom targets, layout_bounds/x/fraction0, length/css_px, no conditions,
+scope f01-component. Retained literal rects: [380,42,188,21], [380,67,360,32],
+[380,67,62.484375,32]; Snapshot partial, two same-left gap queries known0/0.
+Numeric backend IDs/full Space/actual Snapshot output were not retained; no rerun
+requested and no actual provenance reconstructed. Literal regression below is
+explicitly synthetic on existing GEO fixture identity/Space/Evidence.
+
+Spec Basis: current ANALYSIS@2/TYPES/VALIDATION@1 and GEOMETRY/PROJECTIONS closure.
+Query targets/anchors are explicit finite operands, not universal unseen membership.
+Each named target/property/Space/Evidence remains required; source coverage is
+preserved independently. Source discrepancy: engine measure_query and schema
+analysis::known_inputs both vetoed Aligned/EqualSpacing for global partial/omitted/
+unknown scope before evaluating those named anchors. No contract clause requires
+whole Snapshot completeness for these factual operands. Classify implementation
+overconstraint; Restore only the coupled veto, not a semantic specification delta.
+Root explicitly granted the discovered schema counterpart before its mutation.
+
+Exact7 writes: engine src/lib.rs, tests/analysis.rs, tests/geometry.rs;
+schema src/analysis/results.rs, tests/analysis_contract.rs;
+CLI tests/analysis_binary.rs; this receipt. Native-owned connection/Swift, Web
+collector/harness, types/generated schema/core0.1, versions/Cargo/output unchanged.
+Remove only aggregate global-coverage veto; named target existence, known geometry,
+identity/binding/units/transforms/conditions/unstable source/evidence checks stay.
+Two old test assertions encoded that veto; update their named equal-spacing result
+to known0/5 while retaining original partial coverage. This does not assert that
+all unobserved nodes align or that every actual menu member was enumerated.
+
+Focused tests actually passed, locked/offline Rust1.96/macOS:
+- engine synthetic_f01_literal_alignment_uses_named_known_anchors_on_partial_snapshot:
+  the three literal rects yield known0 spread, preserve original partial/omitted/
+  unknown source and contributing evidence, pass independent recomputation;
+  absent named target and unknown named geometry still yield precise unknown.
+- affected r03_e1_ordered_gaps_and_partial_membership and
+  unknown_consistency_preserves_known_dimensions_and_unstable_refusal passed;
+  named spacing survives partial source, unstable/unavailable source still refuses.
+- schema explicit_known_aggregate_anchors_do_not_require_complete_unseen_scope:
+  known finite operands on partial Snapshot pass exact round-trip with original
+  source; absent named target/unknown geometry cannot validate a known declaration.
+- actual public CLI named_alignment_json_keeps_partial_source_without_incomplete_scope_veto:
+  synthetic explicit alignment publishes known0 analysis0.2 JSON, original partial
+  Snapshot preserved, then engine recomputation validates output. No live browser.
+The first negative fixture removed an unnamed auxiliary node; corrected it to a
+missing actual query target. Expected unknown/known semantics were not weakened.
+The first recomputation failure exposed the mirrored schema veto; it is repaired
+as the same discrepancy. No legacy126/full unchanged suite or UI/source rerun.
+Affected engine lib/tests, schema lib/analysis_contract and CLI bin/analysis_binary
+Clippy passed; scoped format/diff-check passed. Source coverage never rewritten.
+Own non-image target and test JSON temps removed/absence-verified after use; no
+images created/deleted, runtime or physical resources held. Exact7 checkpoint+
+bounded canonical push next; actual Web owner consumes saved fix independently.
+Engine lib SHA2565344db548954c2a6e9cf53cf09b05bcb2021f3a77bf683720d2d74c39968c2f2;
+schema result SHA256af7f4307a00364a2b453855ff1fbc50c8a4973192ae55ee1be9e9395015882c1.
+
 Status: final coordinated migration checks passed; source frozen, checkpoint-ready.
 This is author/cross-consumer proof, not independent or live/P1/P6 acceptance.
 

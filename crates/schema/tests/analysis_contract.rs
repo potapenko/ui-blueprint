@@ -438,3 +438,48 @@ fn map_only_enum_adaptation_keeps_duplicate_and_unknown_member_rejection() {
     assert!(serde_json::from_str::<AnalysisArtifact>(&duplicate).is_err());
     assert!(serde_json::from_str::<AnalysisArtifact>(&unknown).is_err());
 }
+
+#[test]
+fn explicit_known_aggregate_anchors_do_not_require_complete_unseen_scope() {
+    use uiblueprint_schema::model::*;
+    let document =
+        AnalysisDocument::from_json(&analysis_fixture("measurement-gap"), 65536).unwrap();
+    let AnalysisArtifact::Measurement(mut case) = document.artifact else {
+        panic!("measurement")
+    };
+    // The fixture's named right/left edges differ by8; their spread is also8.
+    // Changing query kind adds no source, identity or global-membership claim.
+    case.query.operation = GeometryRelation::Aligned;
+    case.snapshot.coverage.status = CoverageStatus::Partial;
+    case.snapshot.coverage.omitted_count = Some(6);
+    case.snapshot.coverage.unknown_count = Some(4);
+    validate_measurement_case(&case).unwrap();
+    let original = case.snapshot.clone();
+    let encoded = serde_json::to_vec(&AnalysisDocument {
+        schema_version: AnalysisVersion::CURRENT,
+        artifact: AnalysisArtifact::Measurement(case.clone()),
+    })
+    .unwrap();
+    let parsed = AnalysisDocument::from_json(&encoded, encoded.len()).unwrap();
+    let AnalysisArtifact::Measurement(parsed) = parsed.artifact else {
+        panic!("measurement")
+    };
+    assert_eq!(
+        parsed.snapshot, original,
+        "partial source/evidence preserved"
+    );
+    let mut missing = case.clone();
+    missing.query.targets[0].key = Id("missing-named-datum".into());
+    missing.query.anchors[0].element = missing.query.targets[0].clone();
+    assert!(validate_measurement_case(&missing).is_err());
+    let Property::Requested { state, .. } = &mut case.snapshot.nodes[0].properties[0] else {
+        panic!("property")
+    };
+    *state = Availability::Unknown {
+        reason: Id("not-reported".into()),
+    };
+    assert_eq!(
+        validate_measurement_case(&case),
+        Err(ValidationError::UnknownMeasurement)
+    );
+}

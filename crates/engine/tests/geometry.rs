@@ -232,9 +232,11 @@ fn r03_e1_ordered_gaps_and_partial_membership() {
     );
     case.snapshot.coverage.status = CoverageStatus::Partial;
     assert_eq!(
-        run(&case).measurement.unknown_reason(),
-        Some(UnknownReason::IncompleteScope)
+        amount(&run(&case)),
+        5.0,
+        "only the explicitly named four anchors"
     );
+    assert_eq!(case.snapshot.coverage.status, CoverageStatus::Partial);
 }
 #[test]
 fn unavailable_is_never_pass_even_with_large_tolerance() {

@@ -139,17 +139,6 @@ fn known_inputs(
             .all(|key| snapshot.nodes.iter().any(|n| &n.key == key)),
         ValidationError::UnknownMeasurement,
     )?;
-    if matches!(
-        query.operation,
-        GeometryRelation::Aligned | GeometryRelation::EqualSpacing
-    ) {
-        require(
-            snapshot.coverage.status == CoverageStatus::Complete
-                && snapshot.coverage.omitted_count.is_none_or(|n| n == 0)
-                && snapshot.coverage.unknown_count.is_none_or(|n| n == 0),
-            ValidationError::UnknownMeasurement,
-        )?;
-    }
     let required = &query.applies_when;
     if required.platform.is_some() || required.input_mode.is_some() || required.text_scale.is_some()
     {

@@ -106,18 +106,8 @@ pub fn measure_query(
     {
         return Ok(MeasurementResult::Unknown { reason, evidence });
     }
-    if matches!(
-        operation,
-        GeometryRelation::EqualSpacing | GeometryRelation::Aligned
-    ) && (snapshot.coverage.status != CoverageStatus::Complete
-        || snapshot.coverage.omitted_count.is_some_and(|n| n > 0)
-        || snapshot.coverage.unknown_count.is_some_and(|n| n > 0))
-    {
-        return Ok(MeasurementResult::Unknown {
-            reason: UnknownReason::IncompleteScope,
-            evidence,
-        });
-    }
+    // Queries name their targets/anchors explicitly. Partial coverage elsewhere
+    // does not make those reported geometries unknown or assert unseen membership.
     for target in &query.targets {
         if !snapshot.nodes.iter().any(|n| &n.key == target) {
             return Ok(MeasurementResult::Unknown {
