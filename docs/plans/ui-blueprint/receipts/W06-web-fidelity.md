@@ -1,4 +1,34 @@
-# W06 Web fidelity — repaired candidate ready for Q01 recheck
+# W06 Web fidelity — remaining srcset boundary repair
+
+## Remaining P1 continuation — 2026-10-08
+
+Q01 terminal88d0920 independently accepts P2 focusability and the original97-node
+positive facts on9d715ee. Those scopes stay closed. Read its entire final recheck
+section and the five exact reviewer reproducers under system-temp
+uib-q01-w06-recheck-_cy5phij. Same W06 packet/WEB-DOCUMENTS@1 FACTS/BOUNDS and full
+closure, reused after no-drift check. Mode Restore; no spec delta or new secret class.
+
+Confirmed remaining defect: whitespace-only splitting hides the credential candidate
+after `1x,` when no whitespace follows. Plan: candidate URL phase preserves internal
+commas, descriptor phase recognizes its terminating comma; refuse unsupported
+parenthesized descriptor ambiguity. Use identical finite scans in JS preflight and
+Rust captured-table guard. Preserve original source bytes and currentSourceURL/originURL
+checks. Basis: existing private credential-URL policy and [HTML srcset parsing](https://html.spec.whatwg.org/multipage/images.html#parsing-a-srcset-attribute)
+URL/descriptor boundaries; original code, no upstream copy/new dependency/selection engine.
+
+Write set: collector/document-check.js and snapshot_normalize.rs;
+snapshot_privacy_tests.rs; document-privacy.cjs and shared srcset-cases.json;
+new tests/bridges/web/srcset-privacy.cjs plus this receipt. Accepted focusability,
+Q01/Q02-owned files, frozen fixtures, schema/engine/Cargo/Native and images protected.
+Shared performance.cjs is currently Q02 WIP; do not stage, overwrite or consume it
+for runtime until that owner's terminal saved release.
+
+Execution state: waiting_resource for builds/tests/headless. Q02
+01a11c77-25bf-7072-8cf6-a255fa4dc11c owns CPU/headless for accepted single-control
+D06 cohorts. Source/test edits prepared without runtime or compilation. Recheck
+compact wait_threads after independent editing; only its terminal lane release plus
+receipt permits focused checks/one affected live proof. No new root grant required.
+All existing shared evidence/reviewer reproducers remain read-only and retained.
 
 ## Q01 repair continuation — 2026-10-08
 

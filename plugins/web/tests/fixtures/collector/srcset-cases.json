@@ -1,0 +1,22 @@
+[
+  {"name":"safe-single","value":"/public.png 1x","private":false},
+  {"name":"safe-tight-density","value":"/public.png 1x,/large.png 2x","private":false},
+  {"name":"safe-tight-width","value":"/public.png 100w,/large.png 200w","private":false},
+  {"name":"safe-leading-trailing-delimiters","value":",, /public.png, /large.png 2x,","private":false},
+  {"name":"safe-data-base64","value":"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw== 1x,/large.png 2x","private":false},
+  {"name":"safe-data-internal-commas","value":"data:text/plain,hello,world 1x,/large.png?size=2 2x","private":false},
+  {"name":"safe-unicode","value":"/картинка.png 1x,/大.png 2x","private":false},
+  {"name":"private-first-token","value":"/image?token=SYNTHETIC_SRCSET_CANARY 1x","private":true},
+  {"name":"private-spaced-second-token","value":"/public.png 1x, /image?token=SYNTHETIC_SRCSET_CANARY 2x","private":true},
+  {"name":"private-tight-relative-credential","value":"/public.png 1x,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 2x","private":true},
+  {"name":"private-tight-absolute-credential","value":"/public.png 1x,http://user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 2x","private":true},
+  {"name":"private-tight-width","value":"/public.png 100w,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 200w","private":true},
+  {"name":"private-third-candidate","value":"/public.png 1x,/large.png 2x,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 3x","private":true},
+  {"name":"private-no-descriptor-first","value":"/public.png, //user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 2x","private":true},
+  {"name":"private-after-data-comma","value":"data:text/plain,hello,world 1x,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 2x","private":true},
+  {"name":"private-after-tab","value":"/public.png\t1x,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png\t2x","private":true},
+  {"name":"private-after-newlines","value":"/public.png\r\n1x,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png\n2x","private":true},
+  {"name":"private-after-form-feed","value":"/public.png\f1x,//user:SYNTHETIC_SRCSET_CANARY@127.0.0.1/private.png 2x","private":true},
+  {"name":"private-token-tight","value":"/public.png 1x,/image?token=SYNTHETIC_SRCSET_CANARY 2x","private":true},
+  {"name":"ambiguous-descriptor-group","value":"/public.png (1x,/large.png 2x)","private":true}
+]

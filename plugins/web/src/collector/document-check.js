@@ -9,6 +9,28 @@ function checkDocument(options) {
       return !!(url.username||url.password) || /%|token|secret|password|authorization|api[_-]?key|signature/i.test(query);
     } catch { return true; }
   };
+  const privateSrcset=value=>{
+    const space=c=>/[\t\n\f\r ]/.test(c);
+    let i=0;
+    while(i<value.length) {
+      while(i<value.length && (space(value[i]) || value[i]===',')) i++;
+      const start=i;
+      // URL tokens include internal commas (notably data URLs). Only trailing
+      // commas end a candidate here; a descriptor's comma ends the next phase.
+      while(i<value.length && !space(value[i])) i++;
+      let end=i;
+      while(end>start && value[end-1]===',') end--;
+      if(end>start && privateURL(value.slice(start,end))) return true;
+      if(end<i) continue;
+      while(i<value.length && value[i]!==',') {
+        // Do not guess boundaries inside unsupported descriptor groups.
+        if(value[i]==='(' || value[i]===')') return true;
+        i++;
+      }
+      if(i<value.length) i++;
+    }
+    return false;
+  };
   if(privateURL(document.URL)||privateURL(document.baseURI)) return {status:'private',count:0};
   const end=performance.now()+options.remainingMs;
   const stack=[[this,0]];
@@ -27,11 +49,7 @@ function checkDocument(options) {
         if(name.length>options.maxChars || attribute.value.length>options.maxChars) return {status:'limit',count};
         if(name==='data-private' || name==='data-sensitive' || name.includes('token') || name.includes('secret')) return {status:'private',count};
         if(['href','src','action','formaction'].includes(name) && privateURL(attribute.value)) return {status:'private',count};
-        // URLs in srcset cannot contain ASCII whitespace. Inspect every token,
-        // including descriptors conservatively, without selecting/rebuilding it.
-        // Trailing commas delimit candidates; embedded data-URL commas stay intact.
-        if(name==='srcset' && attribute.value.split(/[\t\n\f\r ]+/).filter(Boolean)
-          .some(value=>privateURL(value.replace(/,+$/,'')))) return {status:'private',count};
+        if(name==='srcset' && privateSrcset(attribute.value)) return {status:'private',count};
       }
       if(typeof HTMLImageElement!=='undefined' && node instanceof HTMLImageElement) {
         const currentSrc=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'currentSrc').get.call(node);
