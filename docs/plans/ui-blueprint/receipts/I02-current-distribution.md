@@ -1,5 +1,8 @@
 # I02 — current local distribution qualification
 
+Current continuation: see [a7c0416 qualification](#current-candidate-a7c0416).
+The original94724df record below remains historical evidence.
+
 ## Authority and plan
 
 Finite single-chat full-cycle task under approved PLAN.UIB@1 P6 and the
@@ -172,5 +175,144 @@ checks were run. The final exact-path checkpoint is made in the current master
 under /tmp/ui-blueprint-master-git.lock (fcntl.flock), then pushed to the existing
 canonical origin/master. The completing chat reports the resulting SHA; this
 receipt is its own checkpointed record, avoiding a self-referential commit hash.
+
+
+
+## Current candidate a7c0416
+
+Same finite task, resumed by root's direct current-candidate instruction and
+[packet continuation](../packets/I02-current-distribution.md#current-candidate-continuation--2026-10-08).
+Initial current checkout51a09e, master; product pin
+**a7c04164df08441cfbbaa61b501aa64d29290732**. The accepted original outcome and
+write boundaries remain; user explicitly requests reuse of unchanged proof and
+no eight-build replay. Mode Restore/verification, not new product design.
+
+### Updated basis and plan
+
+Recovered original full applicable AGENTS/governance/spec closure from this chat;
+changed route evidence854037f→current: registry32, product/decision branch links,
+CLI@16 Native requires reference, D03@4, NATIVE-SESSION@3, NATIVE-POPUP@1 and
+WEB-DOCUMENTS@1. Read updated contracts and their changes fully; all other explicit
+dependencies remain byte-unchanged and are reused. Protected input uses existing
+FillSecret/core0.1 with one-use private source and same-Surface public result;
+popup binding is explicit and excludes protected input. Documents adds explicit
+whole-document selection, never expands ordinary scope. No contract delta here.
+
+Requirement: deliver the coherent current saved source. Observed implementation:
+recipe still archives all crates/plugins/web (including new JS/Rust collector
+files), and existing Swift list already includes every changed Native source.
+The only production deltas are host, plugin-api, Web and Native sources. Their
+exact owners are protected. No missing packaging file or feature was found.
+Agent technical choice: retain recipe; build Web/Native/combined once each after
+Q02's terminal resource release; run affected installed checks and final removal.
+Source-equivalent core evidence and unchanged full remove/reinstall/safety review
+are reused instead of recompiling/replaying them. Scope stated before edits:
+README, notices, distribution/dependencies docs, owned distribution_check and this
+receipt. distribution.py only if a real packaging defect emerges; none observed.
+
+Core equivalence was checked across complete production owners and manifests:
+crates/cli/src (features off), schema/src, engine/src, export/src plus their manifests,
+root manifest/lock/toolchain, schemas and all actually bundled analysis/export
+inputs. No diff94724df→a7c0416. Core imports no host/plugin-api/Web/Native production
+owner; changed export tests and analysis fixture generator/manifest are not shipped
+core code or bundled example inputs. Prior core build/smoke/reinstall applies;
+no freshly installed core/a7c0416 binary is falsely claimed.
+
+Current CPU/headless dependency is Q02 chat01a11c77-25bf-7072-8cf6-a255fa4dc11c's
+FULL-DOCUMENT task terminal release, not its historical/control-only release or
+Q01's intermediate release. Preparation and disjoint docs/harness edits proceed
+while waiting. No Native desktop or real application operation is authorized.
+
+### New checks and reuse
+
+Owned harness adds a no-UI Web Documents entry check: syntactically complete
+configuration with an intentionally invalid connection version must reach
+invalid_connection_version/2; an unknown selection must instead give
+invalid_connection/2. Both stop before request IO, worker spawn, endpoint access or
+host allocation. Zero caps/placeholder identities are intentionally inadmissible
+test data, not documentation defaults. This proves deserialization availability,
+not document acquisition, privacy or whole-document quality.
+
+Original saved-data smoke (validator/measure/check/document/propose/compare and
+Native entry gates) remains applicable and runs on each new installed set.
+Existing manager publication/removal implementation and dependency/toolchain/
+feature policy are unchanged. Reuse the prior detailed collision/fsync rollback/
+changed-file/symlink/path traversal and actual four-set reinstall proof; freshly
+verify and remove new sets with foreign-file preservation. No new package-manager
+framework, dependency or broad audit. Graph and notice fingerprints must match
+the historical table above; current source/recipe metadata must match the pins.
+
+Saved Q01 acceptance a1cae1a on producta7c0416 was read:10 actual Documents cases,
+original97-node/2-document baseline plus six private refusals and three safe
+srcset cases, no leaked canary and confirmed owned cleanup. This is attributed
+independent Q01 evidence; I02 does not rerun it or promote it to D06/P7/Native
+acceptance. Q02 subsequently completed its full Documents campaign and explicitly
+released CPU/headless in message msg_03fde7498d981145016ac7fba3f15081919a3a95cfd7ac9f5b.
+Before compiling, I02 read its saved weba7-series-1/report.json under the Q02
+system-temp root: no failure/cleanup_failure and21 confirmed clean closures.
+This is the current full-document terminal release, not the earlier scoped one.
+No additional root grant was requested. Timing results remain Q02 evidence.
+
+### Current installed result
+
+Classification remains **verification**: distribution.py did not need correction.
+Recipe revision remains6a5bec23b8d15e4cc825aaff6105ac001a9a17bb and SHA-256
+62fcf2f486d2b1ce8e69d87272089be20ab4bb52e53a7faaa077006c45027cd5.
+Updated docs/harness are saved in this continuation checkpoint, separately from
+producta7c04164df08441cfbbaa61b501aa64d29290732. No protected production owner,
+manifest, lockfile, schema, specification or Q01/Q02 harness was changed.
+
+Exactly THREE new release builds ran after the release above, using the existing
+manager with --revision a7c04164df08441cfbbaa61b501aa64d29290732. Rust1.96.0,
+locked/offline aarch64-apple-darwin, macOS27.0.1/26A434 and Swift6.4/SDK27.0 remain.
+Private source/target/module-cache and install directories were system-temp only.
+Web build used refusing Swift/Xcode sentinels; all three build PATHs contained only
+an existing rustup link and system tools, without Node/browser tooling.
+
+| Selection | Current evidence | Reuse / limit |
+| --- | --- | --- |
+| web | Current CLI/worker/validator build, verify, smoke, Documents parser, remove PASS | Unchanged manager reinstall/rollback and scoped license review reused |
+| native | Current CLI/worker/Native helper/validator build, verify, smoke, remove PASS | Native session entry present; no protected input/popup UI delivery claimed |
+| combined | Current matching full set build, verify, smoke, Documents parser, remove PASS | Same live-runtime boundary; no UI/browser launched |
+| core | Complete production/input/dependency no-diff proof | Prior94724df build/smoke/reinstall, no new core build claimed |
+
+Every new manifest has the exact current product pin and expected CLI/worker
+feature sets. Recipe and documentation file hashes match across all three bundles.
+Graph, DEPENDENCY_LICENSES and Rust standard-library notice fingerprints equal the
+historical table above (Web/combined39, Native18). Cargo.lock hash also unchanged.
+Every installed executable's otool -L dependencies resolve only to /usr/lib or
+/System/Library, not the checkout or temporary build path.
+
+Each new bundle passed the owned smoke from cwd / with no model credentials and
+PATH=/usr/bin:/bin: four validators, gap8 css_px, check-pass, document/propose0.1,
+compare0.2 with literal width30→34/displacement4, Native entry/feature refusal,
+missing-input empty-stdout failure. Web/combined additionally passed the new
+Documents version-vs-selection parse distinction. Invoked smoke directly to avoid
+repeating the unchanged safety() campaign. No whole workspace suite, live session,
+collection, secret read or fixture/browser/app launch occurred.
+
+Fresh installed recovery checks on all three sets: build-over-existing refuses
+before compilation; copied manager verify succeeds; copied manager remove preserves
+the foreign sentinel and destination. Historical actual rebuild/reinstall and
+injected failure proof remain applicable to the byte-unchanged manager. No claim
+that those were repeated on this pin. All three new bundles were consumed/removed;
+then only own sentinels, tool guards/link and transient results.json were removed.
+Exact task root uib-I02-current-g434t6fc was empty, removed and confirmed absent.
+Recipe/smoke owners clean their own non-image stages. No task images were created,
+relocated or deleted. Shared Q01/Q02 proof and after-title-spacing.png untouched.
+
+Updated README/distribution/dependency/notices explain the current pin and the
+existing Native protected-input/popup and Web Documents setup routes. These are
+source-checkout guides, not fake live identities or newly bundled fixture apps.
+Python syntax, changed local links and git diff --check pass. Checkpoint/push uses
+current master, exact six task paths and the shared fcntl Git lock; final chat gives
+its actual SHA after remote verification.
+
+No packaging/compile/API blocker remains for this finite continuation. Working
+output is the current reproducible installed procedure and checked module choices.
+Q01 privacy evidence and Q02 timing evidence retain their own pins and limitations;
+Native foreground/comparability and full P7/release remain outside I02 acceptance.
+No signed/notarized publication, global/home/PATH install, new persistent output
+directory, arbitrary-app support or new platform qualification is claimed.
 
 

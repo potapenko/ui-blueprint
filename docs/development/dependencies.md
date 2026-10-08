@@ -1,5 +1,14 @@
 # Resolved dependency inventory — T01 and S01 Stage A
 
+## I02 current candidate continuation (2026-10-08)
+
+Candidate `a7c04164df08441cfbbaa61b501aa64d29290732` keeps the same manifests,
+Cargo.lock, toolchain and selected features as `94724df`. Native protected input/
+popup and Web Documents add no shipping dependencies. Actual Web/combined39 and
+Native18 normal/build graphs and notice fingerprints are rechecked; unchanged
+core17 evidence is reused after checking its complete production dependency closure.
+The historical license review below remains the basis, not a new universal audit.
+
 ## I02 qualification (2026-10-08)
 
 Product pin `94724dfd412f966d3d7a90db29aec8be7e35d650` preserves the I01 Cargo.lock,

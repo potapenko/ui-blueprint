@@ -25,6 +25,41 @@ def call(command, expected=0, env=None):
     return result
 
 
+def documents_entry(cli, stage, context, env):
+    # Deliberately invalid version stops immediately after strict deserialization,
+    # before request IO, spawning or transport. These are not live setup defaults.
+    surface = context['surfaces'][0]
+    selection = {'selection': 'documents', 'documents': [
+        {'surface': surface, 'document_backend_id': 1, 'sensitivity': 'public'}],
+        'max_visited_nodes': 1}
+    setup = {'endpoint': 'not-a-live-endpoint', 'cdp_session_id': None, 'surface': surface,
+             'transport': dict.fromkeys(('endpoint_bytes', 'handshake_bytes', 'read_buffer_bytes',
+                 'write_buffer_bytes', 'write_buffer_max', 'frame_bytes', 'message_bytes', 'outbound_bytes'), 0),
+             'cdp': dict.fromkeys(('max_request_bytes', 'max_message_bytes', 'max_metadata_bytes',
+                 'max_results', 'result_bytes', 'max_events', 'event_bytes'), 0),
+             'collector': dict.fromkeys(('max_nodes', 'max_methods', 'max_reply_bytes',
+                 'max_total_reply_bytes', 'max_text_bytes', 'max_handle_bytes', 'max_ax_properties',
+                 'io_read_bytes', 'io_write_bytes', 'io_work'), 0)}
+    connection = {'connection_version': 'I02-parse-only', 'target': context['target'],
+        'session': {'session_id': context['session_id'], 'plugin': context['plugin'],
+            'supported_versions': ['0.1.0'], 'target': context['target'], 'surfaces': [surface],
+            'allowed_scopes': [context['scope_id']], 'capabilities': []},
+        'host_limits': dict.fromkeys(('workers', 'worker_bytes', 'publication_reserve', 'bootstrap_bytes',
+            'parent_bytes', 'input_bytes', 'ingress_bytes', 'output_bytes', 'request_output_bytes',
+            'completion_groups', 'control_bytes', 'cleanup_ms', 'retained_domain_bytes',
+            'retained_per_worker', 'main_stack_bytes', 'watchdog_stack_bytes'), 0),
+        'attach_deadline_ms': 0, 'provider': {'backend': 'web', 'setup': setup, 'selection': selection}}
+    path = stage / 'documents-connection.json'
+    for kind, code in [('documents', b'invalid_connection_version'),
+                       ('I02-unknown', b'invalid_connection')]:
+        selection['selection'] = kind
+        path.write_text(json.dumps(connection))
+        result = call([cli, 'observe', '--connection', path, '--request', stage / 'absent-request',
+                       '--worker', stage / 'absent-worker', '--max-input-bytes', '131072',
+                       '--max-output-bytes', '131072'], 2, env)
+        assert not result.stdout and result.stderr.strip() == code
+
+
 def smoke(bundle):
     # Runtime environment deliberately has no model credentials or build-tool PATH.
     env = {'PATH': '/usr/bin:/bin', 'TMPDIR': tempfile.gettempdir()}
@@ -74,6 +109,8 @@ def smoke(bundle):
             assert json.loads((stage / purpose / 'manifest.json').read_text())['package_version'] == '0.1.0'
         # Two saved synthetic observations, with one literal width change. No UI or model.
         before = json.loads((bundle / 'example-snapshot.json').read_text())
+        if manifest['modules'] in ('web', 'combined'):
+            documents_entry(cli, stage, before['artifact']['data']['context'], env)
         after = json.loads(json.dumps(before))
         after['artifact']['data']['nodes'][0]['properties'][0]['state']['value']['value']['shape']['value']['width'] = 34
         (stage / 'after.json').write_text(json.dumps(after))

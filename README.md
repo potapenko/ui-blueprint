@@ -21,7 +21,8 @@ The [distribution guide](docs/development/distribution.md) contains prerequisite
 examples, artifact layout, limitations and safe removal/recovery. See
 [CLI details](docs/development/cli.md), [dependency notices](THIRD_PARTY_NOTICES.md)
 and the [specification registry](docs/specs/README.md).
-I02 verifies all four selections at product source `94724df`, including the Native
-session entry point and saved-data compare export. See the
+I02 qualifies current Web/Native/combined bundles at product source `a7c0416`;
+unchanged core evidence is reused from `94724df`. The current candidate includes
+Native protected-input/popup sessions and explicit Web Documents selection. See the
 [I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current-distribution.md)
 for exact pins and limits. Integrated pilots and release acceptance remain separate.

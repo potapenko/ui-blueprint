@@ -58,11 +58,12 @@ newer than `--revision`. Reproduce both the source pin and the recipe revision f
 this repository. Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
-I02 qualifies product source `94724dfd412f966d3d7a90db29aec8be7e35d650` with the
+I02 qualifies product source `a7c04164df08441cfbbaa61b501aa64d29290732` with the
 recipe last changed at `6a5bec2` (including Native form session helper sources).
 Use that exact product pin to reproduce I02; `HEAD` selects whatever is committed
 when you run. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
-records module checks and the separate documentation/checkpoint revision.
+records fresh Web/Native/combined checks, source-equivalent core reuse and the
+separate documentation/checkpoint revision. Earlier `94724df` results are historical.
 
 ## Flat artifact layout
 
@@ -162,6 +163,25 @@ owned resources; refs do not survive CLI exit. No UI access occurs merely by
 building or requesting `--help`. Core/Web refuse this command as unsupported.
 I02 checks entry/feature availability without attaching to UI; actual input,
 privacy and lifecycle acceptance remain separate Q01 responsibilities.
+
+The current candidate also includes two explicit Native form options through that
+same entry point. [Protected input](native-helper.md#protected-input-v02) binds a
+caller-owned bounded file to a one-use FillSecret/Setter delivery and a distinct
+public result in the same Surface. Secret bytes never belong in argv or diagnostic
+JSON; the bundle does not create or delete the caller's source file.
+[Popup confirmation](native-helper.md#popup-confirmation-with-a-held-parent-result-n03)
+uses explicit popup and parent bindings with a held public parent result. These
+two-Surface forms exclude protected input; closed popup refs cannot be reused.
+
+For Web, the existing `observe` connection can explicitly select
+[Documents](web-collector.md#w06-explicit-full-documents-and-ax-focusability), naming
+every authorized Surface/frame-loader/document backend ID and a finite visit bound.
+Ordinary scoped collection never expands to whole documents automatically.
+Known private documents/subtrees or unsafe URL facts refuse the whole channel.
+The linked setup guides live in the source checkout; the flat bundle contains no
+fixture app/browser or synthetic live identities. I02's offline parser check proves
+Documents entry availability only; Q01/Q02 retain live quality/privacy/performance
+acceptance. Rebuild the complete matching set when moving from the old candidate.
 
 Canonical input/version failures keep their existing exits: invalid/limit2,
 IO/internal1, unknown/incomplete4, unsupported5; check mismatch3. Observe can return
