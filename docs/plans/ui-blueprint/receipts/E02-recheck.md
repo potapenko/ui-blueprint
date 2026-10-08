@@ -47,3 +47,14 @@ execution. The static counterexample uses exact representable inputs.
 Reviewer verified scoped files still matched the candidate; unrelated Native
 fixture edit excluded. Same reviewer retained for the next affected recheck.
 Current approved repair authority applies; no renewed user permission is needed.
+# G09 observed-input boundary — scoped acceptance, 2026-10-08
+
+Fresh read-only reviewer `/root/g09_export_review` reviewed468c668 against8f7f456.
+Verdict: no actionable findings; accept this input/privacy boundary. Source-first
+inspection confirmed unchanged Snapshot handoff, caller annotation separation,
+shared input budget, existing privacy validation, bounded diagnostics/publication
+and no relevant worktree drift (later6da1439 was coordination only). Author receipt
+reconciliation followed source observations. Check/fmt/Clippy,16 binary tests and
+one saved-F01 public command remain author-attributed; reviewer ran no tests/apps,
+changed no files and did not recreate removed output. This is not full P6/P7 or
+generated-image acceptance. Earlier numerical reviews below retain their own scope.

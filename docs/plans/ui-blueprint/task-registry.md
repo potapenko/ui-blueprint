@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G09 Export saved/pushed468c668, idle/frozen; one focused input/privacy source review ready for dispatch. Git/runtime leases released. G07/G08 completed; Native/Web archived, IDs/receipts retained |
+| Активные чаты/пакеты/ресурсы | G09 Export saved/pushed468c668 and scoped input/privacy review accepted. Same owner next G10 public neighbor caller; Git/runtime leases free. G07/G08 completed; Native/Web archived, IDs/receipts retained |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | G09: observed canonical file → full document package through existing public export compiler. G07 one-command build and G08 generic Web first use saved. P5 WIP сохранён; input не блокирует geometry. Full P0–P7 scope сохраняется |
+| Следующий шаг | G10: public saved-data neighbors through accepted pure scope engine, useful component context. G09 observed-file document export and G07/G08 build/first-use paths saved. P5 WIP сохранён; input не блокирует geometry. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -619,3 +619,11 @@ relaxation. Author proof is not independent acceptance. Input/privacy boundary
 receives one fresh read-only review of468c668 against8f7f456; no old numerical/UI/
 whole-suite review wave. Reviewer first inspects source/contracts, then author
 receipt. G09 owner frozen, ready for an exact repair only if actionable findings.
+
+G09 fresh reviewer /root/g09_export_review completed: no actionable findings,
+scoped input/privacy acceptance; [receipt](receipts/E02-recheck.md). No product
+repair or repeat test/review triggered. Root read new registered contract and
+received source-first/author-reconciliation verdict; fullP6/P7 remains open.
+Next ready source-backed geometry consumer is [G10](packets/G02-scope.md): public
+neighbors over accepted borrowed scope engine. Current CLI owner is reusable;
+no collector/runtime/action changes and no duplicate source-analysis framework.

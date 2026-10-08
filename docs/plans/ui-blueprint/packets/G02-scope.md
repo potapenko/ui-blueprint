@@ -61,3 +61,32 @@ pushes after root Git grant. Return API, actual checks, saved input identity,
 scope/self-review and residuals; final G02 integration/adapter acceptance remains
 open. No new independent reviewer wave for this bounded deterministic supporting
 slice unless an actual protected-domain change appears.
+# G10 public stored-neighbor caller — 2026-10-08
+
+Finite shipping follow-through under approved P3/P6, PROJECTIONS.CONTENT and
+CLI.CONTENT. Existing engine53c6f74 exposes borrowed relation_neighbors; current
+public CLI gap is to be verified from source before editing. Outcome: AI can ask
+for explicit connected context around a selected recorded component through CLI,
+without rebuilding its graph or inferring spatial membership.
+
+Root route registry20→product→CLI@8/PROJECTIONS@1→MODEL/IDENTITY and existing
+EXCHANGE/PRIVACY/BOUNDARIES closure; full G02 source receipt read. RUST/DEV.RUST@2
+apply. Reuse scope::relation_neighbors and NeighborLimits, strict observed-response
+Snapshot loader, existing bounded output. No new engine graph/proximity algorithm,
+collection, action refs, canonical wire or source coverage change. Source+seed,
+edge direction, counterpart identity/evidence and selection truncation must remain
+distinct from original partial/unknown coverage. Missing exact seed refuses.
+
+Owner is the current CLI/Export worker after scoped G09 acceptance. Task-wide only
+narrow crates/cli source/tests, necessary CLI spec/route and developer/scope docs,
+G02-scope receipt. Existing engine/schema/export/collectors/manifests/root registry
+protected. First verify current caller gap and source API, register additive CLI
+syntax/output representation before code; this is delegated representation, not
+new product intent. If already callable, reuse it and avoid duplicate commands.
+
+One public saved-data positive command plus focused cap/unknown/missing-seed and
+relevant legacy CLI regressions; no live UI, numeric re-review or full suite. Do not
+claim full projections/heuristic neighbors/P7. Current master/inherit/no nested
+agents; same short Git lease/scoped commit/push and temp rules. Return concrete
+command/result/limitations, then stop; no independent review wave for mechanical
+delegation to the accepted pure engine unless a concrete changed risk appears.
