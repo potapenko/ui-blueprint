@@ -513,3 +513,132 @@ retry, no renewed ownership assertion, no change to its pending operator questio
 retained fixture/run state. Existing accepted unchanged domains remain scoped facts;
 this verdict does not accept Native or overall P0–P7. Only this Q01 receipt is written;
 other-owner tests/bridges/web/performance.cjs and the unrelated image are untouched.
+
+## W06 repair recheck on9d715ee — split verdict, Documents still rejected
+
+Same Q01 context and unchanged WEB-DOCUMENTS@1 FACTS/BOUNDS/closure and recorded
+repair criteria. Candidate `9d715ee7bd8e566ad2b955024a68a8c3804966a4`, author final
+`591aba996cf4528f8d495a514248f349ff6e13ae`. Read the repair source delta from139d202,
+author's new top section and focused tests; no new general audit or contract change.
+No production/Q02/frozen-fixture/schema/threshold files changed by this reviewer.
+Native foreground question, ownership wait and retained fixture were not operated.
+
+| Changed domain | Independent verdict | Accepted pin / limit |
+| --- | --- | --- |
+| Reported semantic focusability / W06-Q01-P2 | **accept** |9d715ee, supported single-control semantic scope; strict actual boolean values, correct unknown/mistyped behavior, Focused and legacy Checked preserved |
+| Original two-document native-fact positive workload | **accept for tested positive quality facts** |9d715ee, original97 nodes/2 documents/1102 facts/19 text boxes; not privacy or timing acceptance |
+| Documents privacy / W06-Q01-P1 | **reject** |No accepted Documents repair pin: comma-tight credential URL variant still leaks |
+| W06 changed Web scope as a whole | **reject pending remaining P1 repair** |Do not use this receipt as full Documents/D06/P7 acceptance |
+
+Q02 may continue the already authorized matching single-control semantic cohort on
+accepted9d715ee (and previously accepted unchanged geometry). Full-document cold
+cohorts remain behind the Documents privacy gate. This is a precise domain outcome,
+not an extra root-grant requirement or a change to any frozen workload/threshold.
+
+### Closed original cases and own functional qualification
+
+Own immutable9d715ee source copy, with images excluded, used Rust1.96.0 locked/
+offline and the saved host consumer/performance client ONLY as finite request tools.
+No Q02 timing loop was run or Q02 path edited. Original counterexample modules were
+applied as temporary test-only overlays with repaired assertions, then removed
+before the runtime build.85 relevant saved production/Cargo/toolchain source files
+were compared byte-for-byte after restoration, zero mismatches.
+
+- Original JS token-srcset counterexample now returns private/count2.
+- Original two-node Rust token-srcset/currentSourceURL counterexample now rejects
+  InvalidInput before a Snapshot; original token-typed focusable now yields Unknown.
+- Committed captured-URL safe/private matrix passes for srcset/currentSourceURL/
+  originURL, including captured-only facts. Focusability's15-case type/value matrix
+  passes, including true/false, absence and wrong kinds/values, with legacy Checked
+  tristate=true and Focused=false unaffected. Only these affected tests were selected.
+- Independent actual Chromium145.0.7632.6 / Playwright Core1.58.2 / Node24.15.0,
+  own headless800×600/DPR1: finite21-case qualification passed,7 positives/14 expected
+  refusals,5 actual host closures. Full baseline retains97 nodes,2 documents,
+  1102 raw/canonical facts and19 text boxes; authored root/child dimensions checked.
+  Changed/restored full and semantic states, safe srcset/currentSourceURL, password,
+  token document URL, first/second srcset candidates, wrong/stale/unallowed frames,
+  actual added frame/navigation, node/depth/output bounds and readonly checks passed.
+- This own runtime additionally recorded the raw AX focusable kind for all3 semantic
+  states: booleanOrUndefined with actual bool. Accepting that native boolean kind
+  preserves FACTS; it is not token/tristate/string coercion or a widened contract.
+- The finite quality profile remains128nodes/depth16/512KiB/2s; it does not relax
+  single-control or D06 timing requirements and is not a percentile campaign.
+
+### Remaining P1: srcset candidate boundary before a credential URL
+
+Exact9d715ee owners: `plugins/web/src/collector/document-check.js:33–34` and
+`plugins/web/src/collector/snapshot_normalize.rs:214–217`.
+Both split srcset only on ASCII whitespace. In
+`/public.png 1x,//user:<synthetic-canary>@127.0.0.1:PORT/private.png 2x`, the token
+`1x,//user:...` is treated as one relative URL. Removing trailing commas does not
+remove the leading descriptor/comma. URL username/password classification therefore
+misses the second candidate. The first safe1x URL remains the selected currentSrc,
+so the extra IMG currentSrc check cannot protect the unselected private candidate.
+The complete srcset attribute is then published as Public/Known native data.
+
+This is the same recorded requirement to classify known private srcset candidates,
+not a demand for universal secret recognition. Credential-bearing URLs were already
+private under the existing policy, and the repair's own tests explicitly cover them
+when separated by whitespace. No new semantic contract or private-data class is added.
+
+Three independent observations establish the failure:
+
+1. Exact repaired JS preflight on the inert two-node model still returns current/count2.
+2. The real repaired Rust normalizer accepts a two-node table with this srcset and
+   a SAFE currentSourceURL; its schema-valid serialized Snapshot contains the canary.
+3. A separate owned headless run first passes the original97-node baseline, inserts
+   only this supplemental1×1 IMG into the controlled page, and waits until actual
+   currentSrc is the safe /public.png. Explicit Documents Observe then returns
+   **Completed,1 committed channel,452627 canonical bytes**, and the independent
+   response canary assertion fails. No failed response was labelled safe or omitted.
+   The selected native data reached the actual guarded publication boundary.
+
+The negative run used the same saved binaries and bounds as the positive run.
+Only synthetic credentials were used. Requests containing the canary were aborted
+by the owned browser route; no credential was transmitted to an external service.
+The private canonical payload was inspected in memory, not saved as a public fixture.
+The sanitized failure report preserves case/status/counts, not the credential URL.
+No automatic retry or alternative collection backend was used.
+
+Required completion of P1: candidate-aware srcset classification (or safe refusal
+of ambiguous input) in BOTH bounded preflight and captured-table normalization;
+include a comma immediately after a descriptor with no following whitespace, and
+safe selected/private unselected candidate. Preserve data-URL internal commas and
+safe native source facts, existing first/second candidates and captured-only URL
+checks. The exact live case must give InvalidInput with0committed channels/0canonical
+bytes and no canary in output/diagnostics. Re-run this changed privacy case and the
+necessary positive fidelity checks on a coherent saved repair; do not rerun the
+already closed P2/other domains without an affected dependency. Existing constraints
+on aliases, authority, ordinary scopes, budgets and source fidelity remain intact.
+
+### Evidence ownership and resources
+
+Author shared e020gN and Ln5Cz7 directories were read-only and remain untouched for
+BOTH Q01 and Q02. Repaired author report hash
+f6de920702477944cf95157f8683e17586048fc43b644ffdf7e8b756e4ff7eef and canonical hash
+40f96c11c5a7ddbffd7543d700aaeaa52d5ba5ff9208f29112721159e890ecd2 match its receipt.
+Author evidence agrees with the cases it covers; its whitespace-separated srcset
+checks do not dispose the independently demonstrated delimiter failure.
+
+Own positive public evidence:
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-2oLBt8`.
+Own sanitized negative report/config:
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-KjzDsa`.
+These are historical evidence, never reusable live refs; retain for Q01/Q02 and the
+single W06 repair consumer until consumption. No image was generated or deleted.
+Minimal new reproducers remain in system-temp uib-q01-w06-recheck-_cy5phij for the
+same repair/recheck; other run-owned non-image builds/logs are removed after receipt.
+
+All6 actual host closures confirm cleanup,0sessions/0completion groups,192-byte ledger
+backing, no abandoned/poisoned ownership. Both Node runs exited after awaited own
+context/browser/server closure; exact worker absence checked. All compiler/test
+processes ended. CPU/headless runtime resources are released for accepted independent
+Q02 workloads. Native input/foreground/user-authority wait remains unchanged, with
+no new Native operation or ownership claim. Only this Q01 receipt is staged.
+
+Recheck cleanup verified:4356 own non-image build/log/source files removed; only5
+small repair/recheck files remain in uib-q01-w06-recheck-_cy5phij (REPRO.md,
+comma-repro.cjs, exact document-check.js, comma-counterexample.rs and the finite
+q01_srcset_negative.cjs). All old/new shared public proof directories above remain
+untouched for their named consumers. Images0. Receipt links/whitespace passed;
+this one-path checkpoint and canonical master push record the final split verdict.
