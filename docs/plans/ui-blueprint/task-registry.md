@@ -39,18 +39,17 @@ Root получает итог или конкретный блокер; про�
   контекст завершил N04 repair ACCEPT7709067 в pushed44eeb77; own recorded/boundary
   checks закрыли Title isolation. Дополнительный trusted readonly provenance handoff
   сохранён/pushed7a6b0b4. CPU свободен; Web закрыт, live/SDK/D06 не приняты.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal completed,
-  `f63930d` pushed; полный текущий receipt прочитан. Все4Web numeric gates прошли;
-  separate Rust report завершён actual owning routines на saved a7c0416 inputs,
- 20process-fresh/100reused per scope,1080spans/126clean exits,0failures,
-  exact Snapshot/Document/canonical-byte equality. Diagnostic spans не подменяют
-  неизменённые live cohorts (`b3c3a22`/`4cb8230`). Full reused p95 normalization
- 257.917µs/sizing337.667µs/worker encoding352.833µs; не суммировать percentiles.
-  CPU/headless освобождены. Q02 возобновлён для bounded read-only Native preflight
-  существующего own F02 после N04 source acceptance и Q01 resource/handoff release.
-  N03 foreground остаётся precondition ввода, не ordinary AX/capture; no setup,
-  activation, app launch, mutation или timed cohorts этим не разрешены. Missing/stale
-  target либо несопоставимость возвращаются точно, без обхода. Web result сохранён.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: readonly Native preflight
+  terminal completed, `40f201d` pushed; receipt прочитан. Fresh exact PID/incarnation/
+  executable/windowA validation passed, AX+isolated capture Observed;78nodes,
+ 627known scalar components/387unavailable-redacted/78actions/77edges exactly match
+  after-witness; AXTitle preserved,550×525pt/1100×1050px. Existing77node data
+  unchanged; one anonymous titlebar AXGroup inserted, causeunknown. Full tree
+  invariance not passed. Original75-node workload differs: snapshot/secret-status,
+  ResultHStack and OpenB x−89.5pt;339/340common explicit facts equal. No timing grant,
+  retry/setup/mutation; exact target/foreground retained. CPU/resources released.
+  Prior Web numeric+Rust-stage results `f63930d` remain. Native comparability/input
+  and Q03 questions open; source preservation is not frozen-workload acceptance.
 - I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: terminal `completed`,
   `5cb7662ac01f1c9d1d19ef7ec7b57634b16dd218` pushed; receipt прочитан целиком.
   Web/Native/combined a7c0416 installed builds/smoke/verify/remove прошли;
@@ -82,11 +81,17 @@ Root получает итог или конкретный блокер; про�
   и uib-q01-final-5w3j1hkw — только provenance, Q02 обязан freshvalidate incarnation/
   current identity/window. Q01 попросили передать read-only facts, не запускать UI.
   Pending activation question для N03 и Q03 scope question не отменены и не отвечены.
+- Mac-соавтор «Спроектировать UI Blueprint»,01a1102f-791c-7e91-bec3-1877ea004d51,
+  получил конечный read-only вопрос о минимальном D06 workload reconciliation:
+  original reactive75-node baseline versus required request-only/current additions.
+  Это разрешённая пользователем консультация; no app/code/real-project operation.
+  Ответ должен отделить действующий контракт от предложения; сам совет не меняет
+  D06 и не даёт runtime authority. Web-соавтор повторно не опрашивается без нового вопроса.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02 readonly preflight. N04 source repair и trusted file provenance приняты;
+  Mac-консультация по точному Native workload mismatch; readonly preflight завершён.
   Native live/performance
   и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.
