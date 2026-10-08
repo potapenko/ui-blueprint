@@ -54,6 +54,19 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Новые B03 и общая source review
+
+- «B03 — Геометрия popup, clipping и frame scope», local
+  01a11b64-6fca-79e0-b970-11fb330d1d36, base6509209, running полный task.
+  Предыдущий завершённый W03-R чат архивирован после передачи результата.
+- «Review — graph diff, Native transforms, Web resync», local
+  01a11b64-7375-7160-b876-47068b8c29a7, running read-only source review трёх
+  saved commits7478af3/9046671/ffe33e4 против своих parents. Авторские receipts
+  пока не переданы; следующий этап только после initial independent observations
+  в том же чате. Runtime/build/внешняя отправка/подагенты и WIP соседей исключены.
+  Review не блокирует независимые B03/M03-C/E03/I01 реализации. Итоговые findings
+  возвращаются соответствующему владельцу, не создают параллельного implementer.
+
 ## W03-R завершён; следующая Web-задача
 
 W03-R terminal completed, ffe33e4f1ccd1f292e419bfa7bc6bd593fffb847/push.
