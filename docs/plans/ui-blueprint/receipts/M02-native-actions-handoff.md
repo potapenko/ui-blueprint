@@ -202,3 +202,61 @@ selects whether to repeat the same bounded capability read; no product-source re
 or further SDK attempt is silently authorized by this failure. Receipt exact1 save
 awaits Git lease. Native provider/capability selection remains open, static checkbox
 non-settable guidance retained solely as static evidence.
+
+
+## Phase-aware adapter — actual exact control capability established
+
+Root authorized direct transient error-boundary repair within same diagnostic packet,
+then one bounded same2control read. Product source/fixture/limits unchanged; saved
+Native23f22fb inputs only. Temporary adapter added named phases and last AX call/status,
+handled top-level errors without SIGTRAP and per-control resolution unavailable without
+fabricating value or terminating the other read. Existing owner invocation inspected:
+nativeAXAttribute returns nil on unavailable, nativeAXElements/resolveElement enforce
+complete bounded unique mapping and throw invalidValue on unresolved/read failure.
+Earlier failure phase was not recorded and remains unknown; this successful fresh
+run does not retroactively establish its cause. No framework/general logging audit.
+
+Fresh fixture/adapter compiled before timer; adapter source
+ddcf8a0e3a4fbb0edc44583ded85fa73c001babe7e5025b536ba1d5638e5af57,
+binaryb7f40bf822b9a8a5ba576cf8534e5cb5ae2d351cfa70f5cfecb8a7d601f1d399,
+fixture8c82ed594c44495967aa674e69d002810494e85605c4e042ef31e1c26d2ed3df.
+No production helper/protocol/schema/Rust owner change or test suite. CUA fresh exact
+Window A state→existing Snapshot index4 only→Snapshot1/current own binding. No popup,
+field/control input, setter, target AXPress, focus/permission/display manipulation.
+
+Own PID45693/bundlelocal.uiblueprint.f02.off/launch1791417966.013506,
+target_generation45693:1791417966.013506/window11055/identifiera/
+surface_generationC9654CB2-DE78-4409-8C1E-A8F30B6977E1. Current identity independently
+read OPEN before/after SDK diagnostic and equal; diagnostic also checked current
+file/public process launch/CG owner before/after and each exact control. AXWindows
+identifiera and unique bounded exact control resolution rooted in that window;
+each AXUIElementGetPid returned success/PID45693. No other window content/source ref
+continuity or product BackendRef lifetime claimed by this capability diagnostic.
+
+Actual SDK result exit0/no stderr, public fields only:
+- f02.enabled: AXRole success/CFString AXCheckBox; AXValue success/CFNumber type22,
+  value0; AXEnabled success/CFBoolean type21,true. AXUIElementIsAttributeSettable(Value)
+  success/valuefalse. Reported actions success/[AXPress]. No setter attempted; proposed
+  new value admissibility remains untested because writable=false. This actual instance
+  cannot support the selected SetChecked setter path, not merely a static prediction.
+- f02.sample.a: AXRole success/CFString AXButton; AXEnabled success/CFBoolean,true.
+  AXValue status-25212/no returned value preserved as unavailable (not false/empty).
+  Settable(Value) success/valuefalse; reported actions success/[AXPress]. This establishes
+  current Semantic Activate capability candidate only; no AXPress delivery or Count
+  outcome/provider/parent-permit proof. Does not substitute toggle for SetChecked.
+
+Native read interval274089.71137879166→274089.85765200004 in diagnostic process
+monotonic, within unchanged1s/depth9/cap160/512KiB/profile. Exact full live CUA AX
+before/after SDK query equal: checkboxValue0/Count0/Resultnone/focus Open B/forms/scroll
+state unchanged. No saved Snapshot equality masquerading as live verification, no
+pixels/hit proof. Diagnostic records mutation_calls0, no mutation entrypoint exists.
+
+Launcher start274071.955392166/deadline274191.955392166. Finally before timing assertion:
+elapsed27.800881042s/cleanup0.118551500s/timeoutfalse/exact own fixture absence confirmed;
+SDK child reaped, no own process/input lane remains. Images0, old images untouched.
+Transient source/binaries/cache/run values retained through diagnosis/fix/actual result,
+then consumed non-image files removed and directory absence verified. No next runtime
+or implementation automatically started. Existing receipt only updated; exact1 short
+checkpoint/push lease required. Consumer: select existing-control Semantic Activate
+provider/kernel boundary; SetChecked setter must refuse Unsupported before permit.
+M02 actual delivery/forms/focus/type and full P5/P7 remain unaccepted.
