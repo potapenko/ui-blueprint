@@ -54,6 +54,23 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## W05 завершён
+
+W05e6616037608dd12a2d3459254f9f5159626d82e1 saved/pushed; terminal receipt
+[Web workflow](receipts/W05-web-form-e2e.md) прочитан. Продуктовых source правок
+не потребовалось: actual empty→Focus→Lo→invalid→Lon→option→applied London,
+34public calls/5confirmed Execute,31per-call invariance checks, graph diff,
+height32±0.01css_px check и six-file compare export. Stale/disabled/private refusals,
+unknown-after-delivery/no retry и bounded canary проверены по author evidence.
+Tested product260c742, без Native WIP; source equality/cleanup подтверждены.
+Full B01 Attach semantics всё ещё у M02 shared host; independent/final coherent
+P7 и D06 не закрыты этим авторским запуском. W05 чат archived, Web owners released.
+
+Native M02-N всё ещё active. Пользовательская обязанность coherent checkpoint+
+push напомнена один раз после длительной реализации и positive workflow, без
+новых внутренних поручений/остановки или объявления приёмки. Завершение исходного
+task и оставшиеся проверки остаются ответственностью его чата.
+
 ## W05 запущен
 
 «W05 — Web form workflow и E2E», local01a11ba1-9f72-7ee0-8e8b-2efd5cd32c87,
