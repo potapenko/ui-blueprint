@@ -201,3 +201,36 @@ consumer; remove owned nonimage target after it, never images/directories with t
 Engine scope SHA2565545c57a001215581d7ba2e7d767191fe74d2fcc1c08a4a9cde534b29248b04d;
 CLI output SHA256f09c4445e4484c981b6004245d8530696d5da222a57e8e36ea51eb99f2a4fc00;
 CLI main SHA2560929c81e02ecda0a60fd48da50e0e30c5699d6e059996e5a2faa12ad5b269f42.
+
+## G11 one actual recorded Native component consumer
+
+After accepted/pushed eb37b0c, root supplied unchanged canonical scrolled-probe.json
+under system temp (Native-owned input, untouched here), SHA256
+9477eedfeb83524a0bf4f5c1fa71ff26d81a5fb228f7402ccb58e9b38a0eaa05,4449B.
+Native source107cc303/original Rust consumer905dd061/current outcome24ae6d9 supplied
+its attribution; this task did not recollect UI or reconstruct observations.
+Verified retained CLI SHA e62b000cf08c59706649d65e3f7ed8d947a94267d5cdbdf7adec67345e548263
+then invoked public inspect ONCE, design, exact selector
+{"namespace":"macos.swiftui.probe","key":"f02.scroll.a.viewport"},
+max-input-bytes1048576/max-output-bytes1048576. Exit0, complete compact output.
+
+Actual output: component f02.scroll.a,1 reported mapping/1 returned part,
+omitted_parts0/relations0/selection_truncatedfalse/parts_exposurerecorded. Selected
+viewport LayoutBounds rect x20,y301,width510,height90pt; mapped row0
+x26,y-483,width498,height16pt. Both retain f02-fixture-local/Local/TopLeft and
+reported swiftui_anchorPreference_explicit_snapshot Evidence from the original
+opt_in_layout_probe Observation. The negative row coordinate is the recorded
+scrolled local position, not deletion, screen position or an occlusion claim.
+
+Original source coverage remains Partial with omitted/unknown countsNone;
+answer_sourceCache, freshnessUnverified, no last_verified, consistencyUnknown/
+explicit_fixture_snapshot_not_atomic_os_state, fixture-3882-monotonic/Seconds.
+Transform remains Unknown/fixture_screen_transform_unverified; VisibleRegion,
+HitRegion/AX bounds/role/value are not requested, not manufactured. No current/live
+claim or global source completeness from complete local selection. Source file
+SHA was identical after command. No output/image file, runtime, build/test/review,
+collector action or extra process/physical reservation created.
+
+Only this receipt changed. The immediate-use retained CLI/target nonimages are now
+removed/absence-verified; all images/other owners' dirs excluded. Native input kept
+untouched for its owner's cleanup. Short exact1 receipt checkpoint/push next.
