@@ -542,3 +542,17 @@ active Native/new Web retained. Native G05 exact4 source-backed developer exampl
 choice accepted in G03 packet; worker implementation and own-F02 verification active.
 Web established http://localhost:3000 from the source project's instructions; actual
 availability/Director measurements remain pending, no arbitrary port/target discovery.
+
+G05 Web result cf9c0710ee2b00663acc1455199b1e4948168a92 saved/pushed exact2;
+[W01 receipt](receipts/W01-rooted-selection.md) records real existing Director at
+1280×900: popup194.25×85.9375css_px, trigger gap6.015625, matching left edges;
+13CLI calls,10known/1unknown measurements, source Snapshot unchanged. Geometry-only
+Observe119.92ms in one run, not p95; options absent, clipping/viewport overflow
+unmeasured. Earlier role/name+geometry refusal2 retained with exact cause unknown;
+initial failed harness cleanup confirmation incomplete, no live worker remains.
+Current successful own browser/worker cleanup confirmed. No real-site changes.
+Same Web owner now runs [G06](packets/G03-geometry-cli.md), a finite exact cause/fix
+for that actual combined-field refusal, keeping limits and passing geometry.
+Native G05 example positive run returned173.5×48pt/partial via existing public CLI;
+285.92ms singleObserve, ownF02/no identity-probe files,26.53s owned cleanup perauthor.
+Exact4 developer example/docs checkpoint pending; no source acceptance overstated.

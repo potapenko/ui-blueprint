@@ -97,3 +97,20 @@ only over the returned Snapshot; ambiguous names require an exact SourceKey, nev
 first/coordinate selection. Preserve old helper modes and default no-Value reads.
 Run the finite own-F02 check and affected helper/error checks without another
 activation round; actual source/test/runtime result remains pending.
+
+## G06 Web — actual combined-field refusal
+
+G05 cf9c071 real geometry succeeds, but the same rooted Director request including
+role/accessibility_name returned2 before Snapshot. This observed failure, not a
+theoretical audit, triggers a finite cause/fix packet. Consumer: component names
+and roles alongside measured geometry. Same Web owner, master/inherit/no nested
+agents; same current contract closure and fixed limits, passing geometry protected.
+Task-wide scope plugins/web and focused tests, existing guarded-live.cjs and W01
+receipt. Source-first exact rejection diagnosis; minimal Restore if contracts
+establish a defect there. No Core/Native/schema/CLI changes or new semantic contract.
+No whole-page scan, quota increase, privacy/identity relaxation, raw UI diagnostics,
+source-site changes or false completeness. A justified limit returns the exact
+resource/count; a cross-owner defect returns the exact dependency. One affected
+focused check and actual changed/diagnostic case as needed; no blind retry/full
+suite. Owned cleanup repair allowed only for demonstrated failure. Checkpoint/push
+the finite result under a short Git lease, then stop.
