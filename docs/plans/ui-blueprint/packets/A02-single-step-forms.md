@@ -69,3 +69,41 @@ Mechanical consumer amendment: Core also owns the single expired-budget
 resolve_exact callsite in plugins/web/tests/collector.rs to pass &Expectation,
 without test-semantic changes. Release this path and collector/action.rs to Web
 after the coherent API checkpoint. Web provider source waits for that release.
+# A03 saved composition continuation — 2026-10-08
+
+Root resumes the approved P5 slice in parallel after delivered G03–G09 geometry,
+first-use/build and observed export; G10 context caller continues independently.
+P5 was sequenced behind useful geometry, not removed from the user's full P0–P7
+goal. No input capability is a prerequisite for read-only observation/analysis.
+
+Core01a111a7 was explicitly unarchived and continuation now succeeds; no replacement
+agent created. Finish saved bc2874e three-document Expectation Prepare/Act WIP and
+its real-parent/peer checks, preserving reviewed9bd5809 kernel and existing Focus
+shared lane. Task-wide only plugin-api/host, nearest owned tests/common peer and
+A01-execution-handoff receipt; no CLI/Web/Native/schema/manifests/root docs. Public
+CLI remains SetChecked-only in this packet. No Native Activate/helper persistence.
+Return one compiling caller-shape handoff for Web, coherent checkpoint/checks and
+exact actual-provider dependency, not another architecture or copy of saved code.
+
+Web01a11983 was unarchived for the newly ready consumer. Reuse provider464b1d2 and
+form facts c63b07a/4b12d7b; own only Web provider/tests/harness and W02 handoff receipt.
+Prepare independently; consume Core only after saved source/check readiness. One
+controlled own isolated F01 Focus→fresh focus proof→Type→fresh explicit draft-state
+verification is then authorized without per-step review/activation. No real source
+app/user page, hidden focus, setter-as-input proof or fake permit. Preserve draft
+versus applied/business result, old SetChecked and all parent-only effect/lane/
+binding/privacy/bounds/no-retry semantics. No new fixture, quota increase or source
+contract. Ordinary focused tests and one coherent integration-risk review suffice;
+do not repeat unchanged old suites or prior input proof.
+
+Current ACTIONS/FORMS/etc@1 and D02@2/D04@1/D05@4/MEMORY@2/WORK@1/RUST/DEV.RUST@2
+closure below remains current; newer CLI@9 is unrelated additive context routing.
+Same master/inherit/no nested agents, disjoint source owners, short Git lease and
+scoped commit+push. Images retained; immediate consumer keeps needed nonimage temp
+until use. The original first-kernel section is historical scope, not a request
+to rebuild it. Full M02/B02/P5/P7 remain incomplete until actual required outcomes.
+
+A04 integration refinement: current CLI owner wires explicit Expectation for
+public Focus/Type in parallel. Web's actual sequence consumes saved/check-ready
+Core AND CLI once; do not run a separate API-only sequence before repeating the
+same outcome through CLI. Exact legacy behavior and all input boundaries remain.

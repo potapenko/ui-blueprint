@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G09 Export saved/pushed468c668 and scoped input/privacy review accepted. Same owner next G10 public neighbor caller; Git/runtime leases free. G07/G08 completed; Native/Web archived, IDs/receipts retained |
+| Активные чаты/пакеты/ресурсы | A04 CLI01a11286, A03 Core01a111a7 and Web01a11983 active, disjoint CLI vs host/plugin-api vs Web ownership. G10fb770dc saved/pushed; Git free. Native stays archived |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | G10: public saved-data neighbors through accepted pure scope engine, useful component context. G09 observed-file document export and G07/G08 build/first-use paths saved. P5 WIP сохранён; input не блокирует geometry. Full P0–P7 scope сохраняется |
+| Следующий шаг | A03 Core finishes saved explicit-Expectation host composition; A04 exposes public Focus/Type caller. Web prepares ONE actual owned CLI sequence after both saved/check-ready, avoiding separate API+CLI reruns. G03–G10 geometry/context/export preserved; full P0–P7 scope retained |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -627,3 +627,31 @@ received source-first/author-reconciliation verdict; fullP6/P7 remains open.
 Next ready source-backed geometry consumer is [G10](packets/G02-scope.md): public
 neighbors over accepted borrowed scope engine. Current CLI owner is reusable;
 no collector/runtime/action changes and no duplicate source-analysis framework.
+
+G10 author checkpoint-ready: root read CLI-NEIGHBORS@1/CLI@9/registry21 and scoped
+receipt. Same accepted borrowed engine/strict loader; public cap plus structured
+selection was the actual gap (inspect already showed some relation keys). Four
+new+four inspect checks, check/fmt/Clippy and saved F01 cap1 outgoing corresponds_to
+→web.ax:7/one omitted relation passed perauthor, source partial Snapshot unchanged.
+Exact12 short Git grant issued; no new numerical/review/runtime wave.
+
+A03 explicit continuation selected in [A02 packet](packets/A02-single-step-forms.md)
+after actual usable geometry/export delivery, within unchanged approved P5 scope.
+Unarchive repaired prior Core continuation availability: send succeeds and actual
+turn01a119b4-abb8-7eb2-a74a-73759fde76c1 is active; no missing-handle replacement.
+Web actual turn01a119b6-d39c-7fa2-b272-05a1abeca59a active, owns prepared real provider
+consumer. Core saved bc2874e WIP is resumed, not rebuilt. One concrete saved/check-
+ready host handoff unlocks Web's own-headless actual sequence; public CLI unchanged.
+Native remains archived, no physical desktop lane or real PlayPhrase.me action.
+
+G10fb770dc1db337cf639bad3aecbd1aee1fce2e6cd saved/pushed exact12; registered
+CLI@9/CLI-NEIGHBORS@1/registry21, existing engine hash matched accepted53c6f74.
+Same CLI owner now runs [A04](packets/L01-actions-implementation.md): public
+Focus/Type with explicit caller Expectation, additive contract before source;
+protected SetChecked/geometry/export semantics. Core/Web notified of ONE public
+actual sequence after both source/check handoffs instead of repeated API+CLI runs.
+Core compiling handoff: Prepare Tape(Snapshot/Observed,Prepare Request,Expectation),
+Act Tape(ActionCase,Act Request,same Expectation), channels1/input_format1, legacy
+SetChecked2records unchanged. Final check-ready revision pending. CLI reports
+worker_web prepare expectation validation as an exact protected-boundary test
+consumer; Core must settle it through own focused tests, not parent re-parsing.

@@ -81,3 +81,27 @@ and invalid terminal-state cases, then independent source review before live use
 Mechanical affected-consumer grant: crates/host/tests/web_live.rs::outcome only
 exhaustive fixed mapping for HostError::ActionRefused. Assigned to Core; Web notified
 and owns no concurrent host-test writes. Do not change or run live scenarios here.
+# A04 public Focus/Type caller — 2026-10-08
+
+Approved P5/P6 continuation after G03–G10 useful geometry delivery. CLI owner
+01a11286 extends existing prepare/execute with canonical Web Focus/Type and an
+explicit caller Expectation file; legacy SetChecked and other commands remain.
+No batch runner, Native action/Activate, graph/parser/framework or new dependency.
+Register necessary additive CLI-ACTIONS@2/CLI route before source using current
+ACTIONS/FORMS/IDENTITY/LIFECYCLE/EXCHANGE/PRIVACY and D02/D04/D05/WORK closure.
+Concrete --expectation terminology reuses existing type; file bytes share input
+budget. Type text never defines inferred whole/applied/business expected value.
+
+Own only CLI source/tests, affected CLI-action spec/route/developer docs and this
+task's existing action-CLI receipt. Core A03 owns host/plugin-api and publishes one
+saved/check-ready three-document handoff; Web A03 owns provider/harness. No shared
+source edits or qualified result built on another owner's unsaved WIP. Prepare
+independently; final dependent checks wait for saved Core. Parent permit/shared
+Focus+Keyboard lane, matching ACK/outcome, uncertainty/no retry, bounded errors
+and cleanup remain protected. Actual existing source determines needed wiring.
+
+Web's one actual own-isolated F01 Focus→Type→explicit draft result will consume
+both saved Core and CLI. It replaces a duplicate API-only run; this adds no new
+UI action/fixture/limit/real-site authority. Focused binary/legacy checks and one
+grouped finished-risk review, not per-preparation rounds. Same master/inherit/no
+nested agents, short scoped checkpoint+push, exact command/limitations and stop.
