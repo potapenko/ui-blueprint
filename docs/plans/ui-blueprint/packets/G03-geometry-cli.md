@@ -134,3 +134,35 @@ cannot invent product behavior. Check one fresh system-temp build and produced
 binary local saved-fixture analysis/helper metadata smoke; no UI/review rerun.
 Return command/paths/prerequisites and exact limitation, scoped checkpoint+push,
 cleanup run-owned nonimage test output and stop. Native owner continues; no new chat.
+
+Source-backed G07 owner choice: extend existing host_observe.py with build-geometry
+--output ABS, rather than add a separate build owner. Exact3 paths: launcher,
+native-helper.md and P01 receipt. Build committed HEAD locked/offline Web+Mac CLI,
+Web-capable worker and Swift helper; publish exactly three files exclusively into
+the explicit existing destination. Product-name conflicts refuse before build.
+
+## G08 generic Web developer example
+
+G06 resolved the real refusal as an enforced output limit;02ba827 saved the finite
+diagnosis. Next Web packet supplies one generic first-use command, analogous to
+Native G05, with caller-explicit existing CDP endpoint/target and component selection.
+Use existing rooted binding, canonical request/analysis and public CLI, no Director/
+F01/site URL/viewport/stale identity/.npm-cache hardcoding. Classification tooling;
+immediate consumer is reproducible ordinary Web geometry without hand-written JSON.
+Reuse G05 current complete Spec Basis; no public CLI/contract/schema delta.
+
+Web owns only necessary files under existing tests/bridges/web, existing Web guide
+(or one file under existing docs/development) and W01 receipt. Collector changes
+only for a demonstrated existing-contract defect; Core/Native/fixtures/manifests/
+common build entry protected. No second graph, new dependency, server or framework.
+Connect to explicit target only; no discovery, user-page launch/navigation/focus,
+profile reuse, source-app mutation or whole-page scan. Selection must be unique
+and currently bound; absent/ambiguous/stale refuses without substitute. Labels are
+observed or explicitly caller labels, never invented observed facts. Preserve
+geometry kind/units/provenance/coverage/unknown and unchanged bounded profile.
+
+Use explicit built CLI/worker paths, not a second build recipe. One controlled
+own-F01 setup verifies generic arguments→Observe→Inspect→Measure; example itself
+does not set up UI. Check relevant missing/ambiguous refusal, no old suite/review.
+No after-failure cap tuning;64KiB combined-field limitation stays honest. Same
+master/inherit/no nested agents/images retained; short scoped commit/push and stop.

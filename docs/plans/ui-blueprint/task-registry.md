@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | G06 Web01a11983-223d-7a30-8334-573658f237fb и G07 Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a active; disjoint Web/build-doc write sets. Git lease свободна. Прежние Core/Web archived, saved source сохранён |
+| Активные чаты/пакеты/ресурсы | G08 Web01a11983-223d-7a30-8334-573658f237fb и G07 Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a active; disjoint Web/build-doc write sets. Git lease свободна. Прежние Core/Web archived, saved source сохранён |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | G06: точная причина actual Web role/name+geometry отказа. G07: одна воспроизводимая команда сборки текущих CLI/worker/helper. G05 Web/Mac результаты сохранены. P5 WIP сохранён; новая input работа отложена. Full P0–P7 scope сохраняется |
+| Следующий шаг | G07: одна воспроизводимая команда сборки текущих CLI/worker/helper. G08: generic explicit-target Web first-use command. G05/G06 результаты сохранены. P5 WIP сохранён; новая input работа отложена. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -566,3 +566,18 @@ Same owner now runs [G07 local build](packets/G03-geometry-cli.md) from existing
 recipes; no product/source behavior or scope change. One command/build smoke only,
 no repeated UI/review. Web G06 remains active; current diagnostic is bounded static
 failure codes/counts in a temporary source copy, no raw UI or cap relaxation.
+
+G06 diagnostic02ba8272d1bd3df007669154ece8e0b04650f821 saved/pushed exact2. Root
+read full finite receipt: collector::observe::bounded_document accepted65530-byte
+prefix then rejected the next write at65536 cap; total required size unknown.
+DOM+AX acquisition/normalization already returned; no product bug established.
+Current limits/fields/geometry-only behavior preserved. Temporary instrumentation
+removed, no source-app changes or surviving owned processes; internal session
+counter remains unexposed/unconfirmed, not fabricated cleanup telemetry.
+
+Same Web owner dispatched G08 generic explicit-target/component developer example,
+scope in [G03 follow-through](packets/G03-geometry-cli.md). No new worker/review.
+Native G07 source-backed owner: extend existing host_observe.py build-geometry,
+exact3 launcher/native-helper guide/P01 receipt; three executables to explicit
+existing directory without overwrite, committed HEAD locked/offline build. No
+source/manifests/feature changes. Both tasks active, leases disjoint; Git free.
