@@ -1,5 +1,41 @@
 # Resolved dependency inventory — T01 and S01 Stage A
 
+## I01 local distribution inventory (2026-10-08)
+
+The local delivery procedure is now [distribution.py](../../distribution.py),
+documented in [distribution](distribution.md). Its selected **normal/build** graph
+supersedes the historical 17-package inventory only for current bundle contents.
+Product source tested: `82342f0e67761504bd643fe4d9d027af93481d0e`, locked Rust1.96.0,
+release profile, `aarch64-apple-darwin`. No manifest/lock/default policy changed.
+Core has17 external crates; Native18; Web/combined39. Build-time proc macros are
+included; dev-only jsonschema and its graph are excluded. The CLI and optional
+worker are built together with matching features from one committed archive.
+
+Web adds locked transport/hash/random support: tungstenite0.30.0, log0.4.29,
+bytes1.12.1, http1.5.0, httparse1.10.1, data-encoding2.11.1, sha1 0.11.0,
+digest0.11.3, block-buffer0.12.1, crypto-common0.2.2, const-oid0.10.2,
+hybrid-array0.4.15, typenum1.20.1, cpufeatures0.3.1, cfg-if1.0.5,
+rand0.10.3, rand_core0.10.1, getrandom0.4.3, chacha20 0.10.2,
+thiserror/thiserror-impl2.0.21. Native/Web host includes libc0.2.190.
+All other versions remain in the tables below. serde_json now uses runtime
+float_roundtrip as registered in D07@5; the old T01 feature row is historical.
+
+Actual cached locked LICENSE/NOTICE/COPYING material was enumerated and selected
+MIT texts read for these packages. unicode-ident retains additional Unicode-3.0;
+serde_json retains Alexander Huszagh's lexical module attribution; sha1 preserves
+its RustCrypto/Mozilla/Graydon Hoare notices. No NOTICE-named files were found.
+Each build reassembles the complete actual texts and their hashes, rather than
+copying this historical table as a license assertion. Missing material or a license
+expression outside the reviewed set stops publication. New source/dependency
+adoption still requires D07 review; the assembler is not a universal license audit.
+
+The bundle carries [notice policy](../../THIRD_PARTY_NOTICES.md), full
+DEPENDENCY_LICENSES.txt and selected package/version/checksum/notice hashes in its
+manifest. No project license is granted. The pinned Rust toolchain’s complete COPYRIGHT-library.html is also shipped
+for linked standard-library code outside Cargo.lock. Swift runtime and Apple
+frameworks remain system prerequisites, not vendored SDKs. Playwright/Node/Chromium remain
+fixture/external tooling; no browser/model stack enters Native/core delivery.
+
 ## S01 additions under D07@2
 
 The Stage A normal/build dependency closure contains17 external packages: the
