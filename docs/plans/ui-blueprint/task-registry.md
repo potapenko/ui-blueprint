@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G11 engine+compact design inspector; Native01a110ac-2da3 implements M04 measured scroll viewport/row; Web01a11983 implements B04 sourced viewport→document transform. Disjoint source owners, completed CLI01a11286 archived. Native physical lane and Web isolated headless lane separate after saved-source checks; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 G11 saved eb37b0c, consumes one actual Native record; Native01a110ac-2da3 M04 outcome24ae6d9 saved, idle retaining that input; Web01a11983 implements B04 transform. Completed CLI01a11286 archived. Native physical lane released; Web owns isolated headless sequence after saved-source checks; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -903,3 +903,22 @@ fixture/helper compile cleanly. New measured scope f02.scroll.a supplies viewpor
 row0 in the existing local pt space; no paint/clip or screen transform claim.
 Runtime uses saved905dd061 Rust consumer and pinned new Native products, excluding
 Core G11 WIP. Actual Scroll/Move outcome remains pending, not inferred from tests.
+
+G11 eb37b0c4642292076c4019a3acc21f26bda67ab5 saved/pushed exact11, remote verified.
+Scoped deterministic source accepted on author engine8/design3/inspect5/neighbors4,
+check/Clippy/fmt/link checks; no independent-review claim or new review wave. CLI@12/
+registry24 compact design includes reported member properties/bounds, preserves
+JSON1.0.0, source identities/unknowns and existing neighbor behavior. Core now runs
+the single retained Native-data consumer; canonical graph and live authority stay
+unchanged. Broader G02 comparison/views and P7 requirements remain separate.
+
+M04 actual outcome24ae6d91b355d49726d3b33d280df935fa635d69 saved/pushed exact1.
+Own Snapshot→Scroll end→Snapshot→Move→Snapshot: viewport20/301/510/90pt unchanged;
+row0 26/307/498/16→26/-483/498/16pt, Rust minimum inset6→-784pt and rectangular
+intersection7968→0pt². Actual window +40/-20pt leaves both local frames unchanged;
+recorded Diff content_changed=false for Move, evidence_changed=true. Observe wall
+131.285/127.507/126.076ms are single samples, not p95. Only cached/unverified local
+probe facts proven; screen mapping, paint/clipping/cross-display/fullM04 remain open.
+Own runtime stopped and cleanup confirmed; one original response retained for Core
+at the exact path/hash in P01 receipt. Git/physical lanes released; no new Native
+run assigned. Release that input through Native after Core confirms consumption.
