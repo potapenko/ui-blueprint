@@ -934,3 +934,41 @@ Resident snapshots now have increasing checked revisions, so existing CacheStore
 retain their actual history without conflicting revision1 records.
 
 [Full canary results, reproduction and limits](../plans/ui-blueprint/receipts/V02-protected-input.md).
+
+
+### Popup confirmation with a held parent result (N03)
+
+[NATIVE-POPUP@1](../specs/product/native-session-popup.md) extends the same
+`native-session` entrypoint. First open the existing trigger with product Activate
+in an ordinary parent form. Publish own fixture Snapshot explicitly to establish
+the actual popup binding; this is binding setup, not action-delivery evidence.
+A new form session selects popup binding/identity_path and both Surfaces (popup
+first), with `form_identifiers:["f02.popup.confirm"]`, existing parent_binding/
+parent_identity_path and `parent_form_identifiers:["f02.popup","f02.result"]`.
+The combined selected-control cap remains8. Two-Surface forms reject protected_input;
+ordinary V02 configuration and same-Surface public-result rule remain unchanged.
+
+Resolve and delivery revalidate the exact retained popup/parent objects, generations,
+unique control connectivity and current focused parent window/process. Only public
+popup Activate with an independently held parent Expectation is supported here.
+Confirm sets `Result: popup-a` (or popup-b) and closes its popup. Phase3 reads only
+that original parent result and publishes its actual Surface record; the retired
+actor is not queried/reacquired or reported current. Original Context retains the
+explicit authorized Surface set, with partial observed coverage. A subsequent old
+popup request refuses; reopening requires a fresh binding/session/ref. Prepare is
+read-only and every input still passes the existing parent one-use nonce.
+
+`tests/bridges/native/popup_session.py` exercises `--step open|resize|confirm` on
+an already bound fixture. All directory/helper/cli/worker/manifest paths are explicit;
+outputs must be new system-temp directories. Open includes product Focus when
+needed. Confirm checks parent-only after data and then a NotDispatched retired-ref
+refusal. Optional --reopen-barrier pauses for an explicit product reopen/new binding
+before the old ref check; it never performs fixture UI setup itself. Independent
+CUA/fixture observations, retained capture pairs and existing measure/diff/export
+consumers establish the whole outcome in the [N03 receipt](../plans/ui-blueprint/receipts/N03-native-popup-e2e.md).
+
+Permission loss in the current-session preflight now reports permission_required
+separately from stale_target. Delivery-phase errors still report uncertainty.
+`host_helper/permission_boundary.py` compiles the exact production preflight and
+issue switch against inert permission/identity stubs: no TCC changes or SDK input.
+This focused classification proof is not a claim of real permission-toggle QA.

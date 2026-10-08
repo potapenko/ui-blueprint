@@ -16,7 +16,7 @@
 | [UIB.BOUNDARIES@1](boundaries.md) | выбор архитектуры, platform/plugin/profile/extension boundaries; contract |
 | [UIB.MODEL@1](model.md) | schema, нормализация, свойства, роли, provenance; contract |
 | [UIB.EXCHANGE@2](exchange.md) | request/session/property/time/error/JSON envelopes and narrow explicit probe-wrapper composition; contract |
-| [UIB.NATIVE-SESSION@2](native-session.md) | attached Native form observation/actions and CLI; contract |
+| [UIB.NATIVE-SESSION@3](native-session.md) | attached Native form observation/actions and CLI; contract |
 | [UIB.NATIVE@2](native.md) | Mac AX, capture, оконное matching, probe; contract |
 | [UIB.GEOMETRY@1](geometry.md) | пространства, transforms, измерения, Expectation/check; contract |
 | [UIB.PROJECTIONS@1](projections.md) | выбор области, coverage, проекции, many-to-many mapping; contract |

@@ -62,6 +62,7 @@ struct NativeConfiguration: Decodable {
     let probe_source_revision: Int?
     let probe_uptime: Double?
     let form_identifiers: [String]?
+    let parent_form_identifiers: [String]?
     let form_session_ms: UInt64?
     struct ProtectedInput: Decodable {
         let reference: String
@@ -74,7 +75,7 @@ struct NativeConfiguration: Decodable {
 
     static func decode(_ bytes: Data) throws -> Self {
         guard let object = try JSONSerialization.jsonObject(with: bytes) as? [String: Any],
-              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime", "form_identifiers", "form_session_ms", "protected_input"]),
+              Set(object.keys).isSubset(of: ["binding", "scope_id", "collection", "artifact_directory", "pixel_policy", "parent_binding", "parent_identity_path", "identity_path", "acquisition_limits", "acquisition_evidence", "probe_manifest_path", "probe_snapshot_request", "probe_source_revision", "probe_uptime", "form_identifiers", "parent_form_identifiers", "form_session_ms", "protected_input"]),
               let binding = object["binding"] as? [String: Any],
               Set(binding.keys) == Set(["pid", "bundle_id", "launch_time", "window_id", "window_identifier", "target_generation", "surface_generation"])
         else { throw NativeProtocolError.configuration }
@@ -98,12 +99,13 @@ struct NativeConfiguration: Decodable {
               !config.binding.target_generation.isEmpty, !config.binding.surface_generation.isEmpty,
               !config.scope_id.isEmpty, ["sample", "window-ax", "popup-ax", "form"].contains(config.collection)
         else { throw NativeProtocolError.configuration }
-        if config.collection == "popup-ax" {
+        if config.collection == "popup-ax" || (config.collection == "form" && config.parent_binding != nil) {
             guard let parent = config.parent_binding, let path = config.parent_identity_path,
                   ["a","b"].contains(parent.window_identifier),
                   config.binding.window_identifier == "popup-\(parent.window_identifier)",
                   parent.pid == config.binding.pid, parent.bundle_id == config.binding.bundle_id,
                   parent.launch_time == config.binding.launch_time, parent.target_generation == config.binding.target_generation,
+                  parent.window_id > 0, !parent.surface_generation.isEmpty,
                   parent.window_id != config.binding.window_id, path.hasPrefix("/"), !path.utf8.contains(0),
                   !path.split(separator:"/").contains("..") else { throw NativeProtocolError.configuration }
         } else if config.parent_binding != nil || config.parent_identity_path != nil || config.binding.window_identifier.hasPrefix("popup-") {
@@ -129,7 +131,13 @@ struct NativeConfiguration: Decodable {
                   ids.allSatisfy({ !$0.isEmpty && $0.utf8.count <= 256 }),
                   let duration = config.form_session_ms, (1...300000).contains(duration)
             else { throw NativeProtocolError.configuration }
-        } else if config.form_identifiers != nil || config.form_session_ms != nil { throw NativeProtocolError.configuration }
+            if let parentIDs = config.parent_form_identifiers {
+                guard config.parent_binding != nil, !parentIDs.isEmpty, ids.count + parentIDs.count <= 8,
+                      Set(parentIDs).count == parentIDs.count, parentIDs.contains("f02.popup"),
+                      parentIDs.allSatisfy({ !$0.isEmpty && $0.utf8.count <= 256 }), config.protected_input == nil
+                else { throw NativeProtocolError.configuration }
+            } else if config.parent_binding != nil { throw NativeProtocolError.configuration }
+        } else if config.form_identifiers != nil || config.parent_form_identifiers != nil || config.form_session_ms != nil { throw NativeProtocolError.configuration }
         if let source = config.protected_input {
             guard config.collection == "form", config.form_identifiers?.contains(source.identifier) == true,
                   [source.reference, source.action_id, source.identifier].allSatisfy({ !$0.isEmpty && $0.utf8.count <= 256 }),

@@ -5,7 +5,7 @@ import Darwin
 
 // Explicit fixture-only resident AX owner. No input is emitted from Observe or
 // resolve. The parent broker authenticates the delivery nonce before forwarding.
-enum NativeFormFailure: Error { case staleTarget, ambiguousTarget, unsupported, inputOwner, privateValue, focusUnavailable, keyboardUnavailable, setterUnavailable, protectedSource }
+enum NativeFormFailure: Error { case permissionRequired, staleTarget, ambiguousTarget, unsupported, inputOwner, privateValue, focusUnavailable, keyboardUnavailable, setterUnavailable, protectedSource }
 
 // Delivery-only source reader. Public records carry an Id, never these bytes.
 // No persistent store, path lookup from UI, or secret in an Error/description.
@@ -73,6 +73,9 @@ enum NativeProtectedSource {
     let end: Double
     let application: AXUIElement
     let window: CFTypeRef
+    let parentWindow: CFTypeRef?
+    let primaryCount: Int
+    var parentResult: Int?
     let identifiers: [String]
     let handles: [CFTypeRef]
     var order: NativeFormOrder
@@ -114,27 +117,54 @@ enum NativeProtectedSource {
         epoch = input.control.epoch; self.serial = serial
         order = NativeFormOrder(epoch: input.control.epoch, serial: serial)
         end = input.started + Double(duration) / 1000
-        identifiers = ids
+        primaryCount = ids.count
+        identifiers = ids + (config.parent_form_identifiers ?? [])
         guard AXIsProcessTrusted() else { throw NativeProtocolError.configuration }
         var manifest = config.binding.manifest; manifest["identity_path"] = config.identity_path
         try NativeCurrentIdentity.verify(path: config.identity_path, expected: manifest)
         let admission = try NativeAcquisition(config.acquisition_limits, deadline: input.deadline)
         application = AXUIElementCreateApplication(config.binding.pid)
-        window = try Collector.resolveWindow(application, identifier: config.binding.window_identifier, admission: admission)
-        let selectedWindow = window
-        handles = try Self.resolve(selectedWindow, ids: ids, admission: admission)
+        if let parent = config.parent_binding, let path = config.parent_identity_path {
+            try NativeCurrentIdentity.verify(path: path, expected: parent.manifest)
+            let selectedParent = try Collector.resolveWindow(application, identifier: parent.window_identifier, admission: admission)
+            parentWindow = selectedParent
+            window = try Collector.resolvePopover(selectedParent, ownerIdentifier: "f02.popup.owner.\(parent.window_identifier)",
+                maxNodes: 160, maxDepth: 9, admission: admission)
+            handles = try Self.resolve(window, ids: ids, admission: admission)
+                + Self.resolve(selectedParent, ids: config.parent_form_identifiers!, admission: admission)
+        } else {
+            parentWindow = nil
+            window = try Collector.resolveWindow(application, identifier: config.binding.window_identifier, admission: admission)
+            handles = try Self.resolve(window, ids: ids, admission: admission)
+        }
     }
-    func current(_ admission: NativeAcquisition) throws {
+    func current(_ admission: NativeAcquisition, parentOnly: Bool = false) throws {
         try admission.check()
-        guard AXIsProcessTrusted(), let app = NSRunningApplication(processIdentifier: config.binding.pid),
-              !app.isTerminated, app.bundleIdentifier == config.binding.bundle_id,
-              app.launchDate?.timeIntervalSince1970 == config.binding.launch_time,
-              Collector.windowOwnedBy(pid: config.binding.pid, window: config.binding.window_id)
+        let binding = parentOnly ? (config.parent_binding ?? config.binding) : config.binding
+        guard AXIsProcessTrusted() else { throw NativeFormFailure.permissionRequired }
+        guard let app = NSRunningApplication(processIdentifier: binding.pid),
+              !app.isTerminated, app.bundleIdentifier == binding.bundle_id,
+              app.launchDate?.timeIntervalSince1970 == binding.launch_time,
+              Collector.windowOwnedBy(pid: binding.pid, window: binding.window_id)
         else { throw NativeFormFailure.staleTarget }
-        do { try NativeCurrentIdentity.verify(path: config.identity_path, expected: config.binding.manifest) }
-        catch { throw NativeFormFailure.staleTarget }
-        guard CFEqual(window, try Collector.resolveWindow(application, identifier: config.binding.window_identifier, admission: admission))
-        else { throw NativeFormFailure.staleTarget }
+        do {
+            if !parentOnly { try NativeCurrentIdentity.verify(path: config.identity_path, expected: config.binding.manifest) }
+            if let parent = config.parent_binding, let path = config.parent_identity_path, let held = parentWindow {
+                try NativeCurrentIdentity.verify(path: path, expected: parent.manifest)
+                guard Collector.windowOwnedBy(pid: parent.pid, window: parent.window_id),
+                      CFEqual(held, try Collector.resolveWindow(application, identifier: parent.window_identifier, admission: admission))
+                else { throw NativeFormFailure.staleTarget }
+                if !parentOnly {
+                    guard CFEqual(window, try Collector.resolvePopover(held, ownerIdentifier: "f02.popup.owner.\(parent.window_identifier)",
+                        maxNodes: 160, maxDepth: 9, admission: admission)) else { throw NativeFormFailure.staleTarget }
+                }
+            } else {
+                guard CFEqual(window, try Collector.resolveWindow(application, identifier: binding.window_identifier, admission: admission))
+                else { throw NativeFormFailure.staleTarget }
+            }
+        } catch NativeAcquisitionError.expired { throw NativeAcquisitionError.expired }
+          catch NativeAcquisitionError.limit { throw NativeAcquisitionError.limit }
+          catch { throw NativeFormFailure.staleTarget }
     }
     static func resolve(_ window: CFTypeRef, ids: [String], admission: NativeAcquisition, access: NativeAXAccess = .live) throws -> [CFTypeRef] {
         var queue: [(CFTypeRef, Int)] = [(window, 0)], seen: [CFTypeRef] = []
@@ -156,9 +186,19 @@ enum NativeProtectedSource {
         guard queue.isEmpty, found.allSatisfy({ $0 != nil }) else { throw NativeAcquisitionError.invalidValue }
         return found.map { $0! } // every requested identity was proved unique above
     }
-    func validateHandles(_ admission: NativeAcquisition) throws {
-        let fresh = try Self.resolve(window, ids: identifiers, admission: admission)
-        guard zip(handles, fresh).allSatisfy({ CFEqual($0, $1) }) else { throw NativeFormFailure.staleTarget }
+    func validateHandles(_ admission: NativeAcquisition, resultOnly: Int? = nil) throws {
+        do {
+            if let index = resultOnly, let parent = parentWindow {
+                let fresh = try Self.resolve(parent, ids: [identifiers[index]], admission: admission)
+                guard CFEqual(handles[index], fresh[0]) else { throw NativeFormFailure.staleTarget }
+            } else {
+                var fresh = try Self.resolve(window, ids: Array(identifiers.prefix(primaryCount)), admission: admission)
+                if let parent = parentWindow {
+                    fresh += try Self.resolve(parent, ids: Array(identifiers.dropFirst(primaryCount)), admission: admission)
+                }
+                guard zip(handles, fresh).allSatisfy({ CFEqual($0, $1) }) else { throw NativeFormFailure.staleTarget }
+            }
+        } catch NativeAcquisitionError.invalidValue { throw NativeFormFailure.staleTarget }
     }
     func key(_ index: Int) -> [String: String] {
         ["namespace": "macos.ax", "key": "native-\(generation)-\(epoch)-\(serial)-\(index)"]
@@ -183,9 +223,10 @@ enum NativeProtectedSource {
         return pid
     }
     func snapshot(_ request: [String: Any], _ input: NativeInbound, _ admission: NativeAcquisition, _ json: NativeJSON) throws -> [String: Any] {
-        try current(admission)
+        let resultOnly = input.control.flags & 127 == 3 ? parentResult : nil
+        try current(admission, parentOnly: resultOnly != nil)
         guard let context = request["context"] as? [String: Any], let target = context["target"] as? [String: Any],
-              let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
+              let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == (parentWindow == nil ? 1 : 2),
               target["id"] as? String == "f02-pid-\(config.binding.pid)", target["generation"] as? String == config.binding.target_generation,
               surfaces[0]["id"] as? String == "window-\(config.binding.window_id)", surfaces[0]["generation"] as? String == config.binding.surface_generation,
               context["scope_id"] as? String == config.scope_id,
@@ -194,27 +235,48 @@ enum NativeProtectedSource {
               let depth = limits["max_depth"] as? Int, (1...9).contains(depth),
               let id = request["request_id"] as? String
         else { throw NativeProtocolError.request }
+        if let parent = config.parent_binding {
+            guard surfaces[1]["id"] as? String == "window-\(parent.window_id)",
+                  surfaces[1]["generation"] as? String == parent.surface_generation else { throw NativeProtocolError.request }
+        }
         let observation = "\(id)-native-\(input.control.operation)-\(input.control.flags)"
-        try validateHandles(admission)
+        try validateHandles(admission, resultOnly: resultOnly)
+        let selected = resultOnly.map { [$0] } ?? Array(handles.indices)
         var nodes: [[String: Any]] = []
-        for index in handles.indices {
-            let result = try collectWindowAX(handles[index], surface: surfaces[0], observationID: observation,
+        for index in selected {
+            let result = try collectWindowAX(handles[index], surface: surfaces[index < primaryCount ? 0 : 1], observationID: observation,
                 maxNodes: 1, maxDepth: 1, deadline: input.deadline, admission: admission, fields: fields, json: json)
             guard result.nodes.count == 1 else { throw NativeProtocolError.request }
             var node = result.nodes[0]
             node["key"] = try json.borrowed(key(index)); node["children"] = try json.array { [Any]() }
             nodes.append(node)
         }
-        var result = try Collector.snapshot(context: context, surface: surfaces[0], target: target, scope: config.scope_id,
+        var result = try Collector.snapshot(context: context, surface: surfaces[resultOnly == nil ? 0 : 1], target: target, scope: config.scope_id,
             fields: fields, observation: observation, channel: "external_semantics", started: input.started,
             nodes: nodes, captures: [], json: json)
+        if parentWindow != nil && resultOnly == nil {
+            // The binding source is the own fixture content attachment, not AX geometry.
+            let bindingID = observation + "-binding"
+            var bindingObservation = (result["observations"] as! [[String: Any]])[0]
+            bindingObservation["id"] = bindingID
+            bindingObservation["source_namespace"] = "macos.fixture.binding"
+            result["observations"] = try json.borrowed((result["observations"] as! [[String: Any]]) + [bindingObservation])
+            let evidence = try json.evidence(bindingID, "macos.fixture.binding", "explicit_fixture_popover_trigger_binding")
+            // Configuration requires this exact parent anchor before session creation.
+            let anchorIndex = identifiers.indices.first { $0 >= primaryCount && identifiers[$0] == "f02.popup" }!
+            let parentRecord: [String: Any] = ["identity": surfaces[1], "native_owner": try json.known("identity", target),
+                "initiated_by": NSNull(), "anchor": NSNull(), "evidence": evidence]
+            let popupRecord: [String: Any] = ["identity": surfaces[0], "native_owner": try json.known("identity", target),
+                "initiated_by": surfaces[1], "anchor": key(anchorIndex), "evidence": evidence]
+            result["surface_records"] = try json.borrowed([popupRecord, parentRecord])
+        }
         let (nextRevision, overflow) = revision.addingReportingOverflow(1)
         guard !overflow else { throw NativeProtocolError.limit }
         revision = nextRevision
         result["revision"] = try json.scalar(revision)
         let focused = try attribute(application, kAXFocusedUIElementAttribute, admission)
         let focusedIndex = try currentInputOwner(admission) == config.binding.pid
-            ? focused.flatMap { focused in handles.indices.first(where: { CFEqual(handles[$0], focused) }) } : nil
+            ? focused.flatMap { focused in selected.first(where: { CFEqual(handles[$0], focused) }) } : nil
         var focus = result["focus"] as! [String: Any]
         let evidence = try json.evidence(observation, "macos.ax", "current_keyboard_focus")
         if let index = focusedIndex {
@@ -231,8 +293,8 @@ enum NativeProtectedSource {
             focus["keyboard"] = try json.borrowed(["status": "unknown", "reason": "focus_outside_selected_controls"])
         }
         result["focus"] = focus
-        try current(admission)
-        try validateHandles(admission)
+        try current(admission, parentOnly: resultOnly != nil)
+        try validateHandles(admission, resultOnly: resultOnly)
         return result
     }
     func action(_ request: [String: Any]) throws -> [String: Any] {
@@ -261,7 +323,7 @@ enum NativeProtectedSource {
         }
         let owner = try currentInputOwner(admission)
         let focusedWindow = try attribute(application, kAXFocusedWindowAttribute, admission)
-        guard (name == "focus" || owner == config.binding.pid), let focusedWindow, CFEqual(focusedWindow, window) else { throw NativeFormFailure.inputOwner }
+        guard (name == "focus" || owner == config.binding.pid), let focusedWindow, CFEqual(focusedWindow, parentWindow ?? window) else { throw NativeFormFailure.inputOwner }
         if delivery {
             guard owner == inputOwner, let old = ownerWindow, CFEqual(old, focusedWindow) else { throw NativeFormFailure.inputOwner }
         } else { inputOwner = owner; ownerWindow = focusedWindow }
@@ -363,12 +425,17 @@ enum NativeProtectedSource {
                     try frame.encode(json.envelope("snapshot") { snapshot })
                 } else {
                     var act = try action(request)
-                    let (_, name) = try validateAction(act, admission, delivery: false)
+                    let (actorIndex, name) = try validateAction(act, admission, delivery: false)
+                    parentResult = nil
                     guard input.documents.count == 4,
                           let expected = input.documents[2]["artifact"] as? [String: Any], expected["kind"] as? String == "expectation",
                           let expectedData = expected["data"] as? [String: Any], let targets = expectedData["targets"] as? [[String: String]], targets.count == 1
                     else { throw NativeProtocolError.request }
                     let resultIndex = try index(targets[0]) // independent held result
+                    if parentWindow != nil {
+                        guard name == "activate", actorIndex < primaryCount, resultIndex >= primaryCount else { throw NativeFormFailure.unsupported }
+                        parentResult = resultIndex
+                    }
                     if name == "fill_secret" {
                         guard targets[0] != act["backend_ref"].flatMap({ $0 as? [String: Any] })?["key"] as? [String: String],
                               identifiers[resultIndex] != "f02.secret" else { throw NativeFormFailure.privateValue }
@@ -391,6 +458,7 @@ enum NativeProtectedSource {
             // Fixed issues only; never serialize the request, value or SDK error.
             let code: String, recovery: String
             switch error {
+            case NativeFormFailure.permissionRequired: code = "permission_required"; recovery = "native_ax_permission_required"
             case NativeFormFailure.staleTarget: code = "stale_target"; recovery = "new_native_session"
             case NativeFormFailure.ambiguousTarget: code = "ambiguous_target"; recovery = "unique_native_identity"
             case NativeFormFailure.inputOwner: code = "interrupted"; recovery = "input_owner_changed"

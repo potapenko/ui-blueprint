@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 30.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 31.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -41,15 +41,12 @@ Working-memory implementation and live acceptance remain open.
 [ANALYSIS@1](product/analysis.md) under delegated ROADMAP representation authority,
 using accepted handoff8fdf608. Local analysis0.2 reuses protected core0.1 data;
 registration precedes implementation and does not accept runtime or new arithmetic.
-
 `ANALYSIS-FLOAT-001` records [D07@3](development/decisions/d07-reuse.md)'s verified
 need for the same pinned serde_json runtime float_roundtrip feature, preserving
 source-number fidelity without new dependencies, tolerance or core wire changes.
-
 `W01-TRANSPORT-001` records [D07@4](development/decisions/d07-reuse.md)'s narrow
 numeric-loopback ws codec/log-boundary adoption before Web transport source work.
 All source-audit guards apply; runtime float_roundtrip and open D05 gates remain.
-
 `D02-WORKER-001` / `D05-WORK-001` / `D05-PARTITION-001` register reviewed designdb629fc:
 [D02@2](development/decisions/d02-boundaries.md), [D05@3](development/decisions/d05-limits.md),
 [D05-MEMORY@2](development/decisions/d05-memory.md), [D05-WORK@1](development/decisions/d05-working-memory.md).
@@ -73,6 +70,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `E03-EXPORT-COMPARE-001`: [CLI@15](product/cli.md)/[CLI-EXPORT@2](product/cli-export.md) connects saved pairs to engine-attributed six-file compare export under [E03](../plans/ui-blueprint/packets/E03-observed-compare.md); comparison packages0.2, other exports/core/raw diff unchanged.
 `M02-N-SESSION-001`: [NATIVE-SESSION@1](product/native-session.md)/[CLI@16](product/cli.md) registers bounded attached Native form refs/private exchange/CLI under the assigned [M02-N packet](../plans/ui-blueprint/packets/M02-native-workflow.md). Existing wire, Web and ordinary AX behavior remain protected; runtime/review acceptance separate.
 `V02-PROTECTED-001`: [NATIVE-SESSION@2](product/native-session.md)/[D03@4](development/decisions/d03-data.md) reuses existing FillSecret through a private one-use Native delivery source under [V02](../plans/ui-blueprint/packets/V02-protected-input.md). No core/analysis/wire/legacy change; actual capability and privacy acceptance separate.
+`N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.

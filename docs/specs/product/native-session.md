@@ -1,8 +1,8 @@
 # Native form session
-- Node type: leaf; domain: `uib.native.session`; contract: `UIB.NATIVE-SESSION@2`.
+- Node type: leaf; domain: `uib.native.session`; contract: `UIB.NATIVE-SESSION@3`.
 - Authority: Active / Evolving; implementation/acceptance separate.
 - Authority source: approved PLAN.UIB@1 P5/P6 and [M02-N packet](../../plans/ui-blueprint/packets/M02-native-workflow.md), explicitly assigned full execution on 2026-10-08.
-- Requires: [NATIVE@2](native.md), [CLI-ACTIONS@3](cli-actions.md), [D02@2](../development/decisions/d02-boundaries.md), [Native acquisition@2](../development/decisions/d05-native-acquisition.md) and their closure.
+- Requires: [NATIVE@2](native.md), [CLI-ACTIONS@3](cli-actions.md), [D02@2](../development/decisions/d02-boundaries.md), [Native acquisition@2](../development/decisions/d05-native-acquisition.md) and their closure; [popup composition](native-session-popup.md) for an explicitly bound popup form.
 - Read when: attached Native form observation/preparation/delivery; excludes ordinary AX geometry.
 ## UIB.NATIVE-SESSION.LIFETIME
 M02-N chooses one explicit resident non-capture helper in the existing registered
@@ -48,6 +48,7 @@ EOF/session expiry closes owned resources; references never survive CLI exit.
 Each stdin line is a strict JSON object {"request":"FILE","source":"FILE","expectation":"FILE"} with a4096-byte ceiling. Source/expectation are required together for actions and absent for Observe. Fields/files share a per-command positive aggregate input budget. Per-command failure stops the session, preserving already ACKed bytes. Partial observation is explicitly marked and may continue; EOF0 means completed session operations, not complete AX coverage. Verified mismatch exits3; uncertainty/refusal4; IO/cleanup1; invalid/limit2; unsupported command/backend5. Existing
 action/observe commands and exit meanings stay unchanged. No secrets in argv,
 command records, graph, diagnostic or errors; protected input follows PROTECTED below; raw secure input refuses.
+N03 adds the optional two-Surface form defined in [NATIVE-POPUP@1](native-session-popup.md); ordinary forms and PROTECTED below are unchanged.
 ## Required evidence
 Repeated Observe/Prepare/Act in one session, no Prepare effects, current focus/value/
 selection, secure redaction, remount/ambiguity/input-owner refusal; forged/replayed/
@@ -90,7 +91,6 @@ source-state verification and delivery; an SDK acknowledgement alone cannot pass
 Opt-in trace emits fixed stage codes only on helper stderr, which normal host
 ownership discards; no raw errors/paths/request/value, including cancellation.
 Own fixture public presence status is derived directly from its SwiftUI state.
-
 Required proof: supported real delivery plus independent safe observation; backend
 error/cancel before and after reveal; source refusal/bounds/one-use; all existing
 nonce/ref/input-owner/stop rules; canary in cache/history/export/stdout/errors and
