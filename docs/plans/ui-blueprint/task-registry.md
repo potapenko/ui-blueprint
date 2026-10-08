@@ -54,6 +54,18 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q03 real-data authority clarification pending
+
+Mac/Web advisors подтвердили отсутствие готовых original internal geometry datasets;
+[availability](receipts/platform-test-advice.md) сохранена. После исчерпания этого
+read-only пути отправлен один async вопрос пользователю о новом ограниченном сборе
+в уже работающих Mac/Web PlayPhrase.me: popup/два размера как setup, затем read-only
+geometry, без кода/настроек/значений форм/старта серверов. Причина — действующая
+формулировка goal «только свои разрешённые fixtures» при нужном real-case Q03.
+Ответ пока не получен: состояние этой операции awaiting_authority, не разрешение
+по таймеру. N03 и прочая независимая работа продолжаются, goal active. Новый real
+runtime не запускался; scope не был молча расширен.
+
 ## Q01 V02 recheck принят; Native остаток точный
 
 Q01 recheck0e416cd pushed: independent actual secure Setter,30canonical records,

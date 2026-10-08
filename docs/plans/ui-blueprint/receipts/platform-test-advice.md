@@ -262,3 +262,14 @@ Web: чат01a1102f-e21d-7251-9597-c29a1c66d088, turn01a11b4f-9d16-7212-a8b7-280
 наблюдениях до/после. Исторические numbers и F01 oracle не переносить на настоящий
 сайт. Предпочтительные первые consumers Q03: Mac RC03 и Web Director. Runtime
 разрешение и наличие нужных наблюдений проверяются перед Q03 отдельно.
+
+## Проверка готовых measured datasets для real Q03
+
+Оба консультанта ответили на узкий read-only availability запрос: готового raw
+набора внутренних bounds/точных bindings/transforms и before/after пары нет.
+Mac RC03 сохраняет внешние961×1050/1920×1050pt в CGWindowListCopyWindowInfo,
+отдельные AX/PNG, content/per-control geometry unknown. RC02 имеет idle AX и
+CG-кандидат436×348pt с лишь temporal/visual correspondence, без внутренних rects.
+Web Director QA содержит пересказ/style/source declarations, не исходные runtime
+rect records. F01 synthetic expectations не заменяют сайт. Новых запусков,
+измерений/файлов ни один advisor не делал. Q03 positive real-case data gap открыт.
