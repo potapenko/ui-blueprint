@@ -64,7 +64,15 @@ fn main() {
         2 => Channel::OptInLayoutProbe,
         _ => panic!("unsupported channel"),
     };
-    let result = if matches!(mode[0], b'P' | b'T' | b'E' | b'C') {
+    let composed = matches!(mode[0], b'M' | b'U' | b'N' | b'R');
+    let result = if mode[0] == b'N' && config.slot == 0 {
+        ChannelResult::Failed(Issue {
+            code: ErrorCode::PermissionRequired,
+            scope_id: request.context.scope_id.clone(),
+            failed_step: None,
+            recovery_class: Id("explicit_permission".into()),
+        })
+    } else if composed || matches!(mode[0], b'P' | b'T' | b'E' | b'C') {
         let Artifact::Finding(case) = Document::from_json(
             include_bytes!("../../../../fixtures/golden/GEO-SIZE-RATIO__width.json"),
             65536,
@@ -85,6 +93,55 @@ fn main() {
                 observation.freshness = Freshness::Unverified;
                 observation.freshness_basis = FreshnessBasis::Unverified;
                 observation.last_verified = None;
+            }
+        }
+        if composed && config.slot == 2 {
+            let mut ax = snapshot.observations[0].clone();
+            ax.id = Id("composed-ax".into());
+            ax.channel = Channel::ExternalSemantics;
+            ax.source_namespace = Id("fixture.ax".into());
+            let mut node = snapshot.nodes[0].clone();
+            let probe_key = node.key.clone();
+            node.key = SourceKey {
+                namespace: ax.source_namespace.clone(),
+                key: Id("merged".into()),
+            };
+            for property in &mut node.properties {
+                if let Property::Requested {
+                    evidence, state, ..
+                } = property
+                {
+                    evidence.observation_id = ax.id.clone();
+                    evidence.source_namespace = ax.source_namespace.clone();
+                    *state = Availability::Unknown {
+                        reason: Id("ax_layout_not_exposed".into()),
+                    };
+                }
+            }
+            snapshot.relations.push(Relation {
+                kind: RelationKind::Represents,
+                from: node.key.clone(),
+                to: probe_key.clone(),
+                evidence: Evidence {
+                    observation_id: snapshot.observations[0].id.clone(),
+                    source_namespace: snapshot.observations[0].source_namespace.clone(),
+                    provenance: Provenance::Reported,
+                    method: Id("explicit_fixture_mapping".into()),
+                    uncertainty: None,
+                },
+            });
+            snapshot.components.push(ComponentMapping {
+                logical_component_key: Id("merged-fixture".into()),
+                members: vec![node.key.clone(), probe_key],
+                declaration_source: Id("explicit_fixture_mapping".into()),
+                provenance: Provenance::Reported,
+            });
+            snapshot.observations.push(ax);
+            snapshot.nodes.push(node);
+            snapshot.coverage.status = CoverageStatus::Partial;
+            snapshot.coverage.unknown_count = None;
+            if mode[0] == b'R' {
+                snapshot.context.environment_revision = Id("wrong-environment".into());
             }
         }
         ChannelResult::Observed(Box::new(snapshot))

@@ -2,31 +2,25 @@
 
 - Domain: `uib.development.d03`; accepted/released baseline: none.
 - Authority source: [C01-DEC-001](README.md#meaning-and-precedence), [L01-ANALYSIS-001](../../product/analysis.md#change-record).
-- Node type: leaf; contract: `UIB.D03@2`; clause: `UIB.D03.CONTENT`; supersedes @1.
+- Node type: leaf; contract: `UIB.D03@3`; clause: `UIB.D03.CONTENT`; supersedes @2.
 - Authority: Active / Stability: Evolving; candidate schema, no released format.
 - Read when: S01 envelopes/validator, G01 rules or K01 graph delta.
 - Do not read when: no shared data/compatibility choice is affected.
-- Requires: [MODEL@1](../../product/model.md), [EXCHANGE@1](../../product/exchange.md),
-  [IDENTITY@1](../../product/identity.md), [GEOMETRY@1](../../product/geometry.md),
-  [PROJECTIONS@1](../../product/projections.md), [FORMS@1](../../product/forms.md),
-  [CACHE@1](../../product/cache.md), [ACTIONS@1](../../product/actions.md),
-  [GOLDEN@1](../../acceptance/golden.md), [evidence](evidence.md);
+- Requires: [MODEL@1](../../product/model.md), [EXCHANGE@2](../../product/exchange.md),
+  [IDENTITY@1](../../product/identity.md), [GEOMETRY@1](../../product/geometry.md),   [PROJECTIONS@1](../../product/projections.md), [FORMS@1](../../product/forms.md),
+  [CACHE@1](../../product/cache.md), [ACTIONS@1](../../product/actions.md),   [GOLDEN@1](../../acceptance/golden.md), [evidence](evidence.md);
   [ANALYSIS@2](../../product/analysis.md) and its closure for local analysis serialization.
 - Owner/deadline: S01 definitions and valid/invalid examples before P1 tests;
   G01 measurements, K01 atomic replay; final compatibility after both pilots/P3.
 
 ## Requirement, observed evidence and chosen representation
 
-R03 shows why complete selected-field replacement differs from merging old values;
-R01/R02 show distinct DOM/AX/probe identities and incomplete design information.
-Choose Rust structs/newtypes and closed enums with serde JSON at the boundary.
-Schema owns wire types/validation; engine owns materialized graph/analysis, plugin
+R03 shows why complete selected-field replacement differs from merging old values; R01/R02 show distinct DOM/AX/probe identities and incomplete design information.
+Choose Rust structs/newtypes and closed enums with serde JSON at the boundary. Schema owns wire types/validation; engine owns materialized graph/analysis, plugin
 API owns lifecycle/capability methods. No second schema in adapters or experiments.
 
-Initial core transport wire version is `0.1.0`; advertised accepted range initially
-exactly `0.1.0`. It is not the illustrative `0.3-draft` from CACHE. A compatible
-range can expand only with tests. Core fields are snake_case, unknown core fields
-rejected; bounded namespaced extensions preserve native identifiers explicitly.
+Initial core transport wire version is `0.1.0`; advertised accepted range initially exactly `0.1.0`. It is not the illustrative `0.3-draft` from CACHE. A compatible
+range can expand only with tests. Core fields are snake_case, unknown core fields rejected; bounded namespaced extensions preserve native identifiers explicitly.
 Breaking pre-release wire changes advance minor version and fixtures together;
 editorial-only changes do not. Never deserialize incompatible data optimistically.
 
@@ -91,3 +85,16 @@ the sole engine recomputes imported results. No fabricated facts or source mutat
 Compatibility: unreleased new analysis format with explicit version rejection;
 old product meaning, accepted shared/E02 fixes and remaining live gates protected.
 Source packets and affected consumer proof follow this registration, not vice versa.
+
+
+## M05-COMPOSITION-001
+
+Under the selected [M05 Integration packet](../../../plans/ui-blueprint/packets/S01-native-proof.md#m05-design-composition-admission--2026-10-08),
+D03@3 adopts EXCHANGE@2.COMPOSITION: homogeneous ChannelResponse plus only a
+probe-wrapper/design/exact AX+probe Snapshot. Request-aware session admission must
+check every nested channel's requested membership and Supported/Partial observe
+capability before publication; wrapper/slot/evidence/limits remain distinct.
+No wire field/version/schema/126-golden change; the prior homogeneous-only semantic
+restriction is explicitly relaxed only for this pair. Old ordinary single-channel,
+failed-channel, cache, analysis and source/action-identity contracts stay protected.
+This registration is not implementation or Native runtime acceptance.

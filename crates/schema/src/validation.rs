@@ -130,7 +130,23 @@ fn validate_semantics(artifact: &Artifact) -> Result {
                 require(
                     snapshot.context.session_id == x.session_id
                         && snapshot.context.target == x.target
-                        && snapshot.observations.iter().all(|o| o.channel == x.channel),
+                        && (snapshot.observations.iter().all(|o| o.channel == x.channel)
+                            || (x.channel == Channel::OptInLayoutProbe
+                                && snapshot.context.projection == Projection::Design
+                                && snapshot
+                                    .observations
+                                    .iter()
+                                    .any(|o| o.channel == Channel::ExternalSemantics)
+                                && snapshot
+                                    .observations
+                                    .iter()
+                                    .any(|o| o.channel == Channel::OptInLayoutProbe)
+                                && snapshot.observations.iter().all(|o| {
+                                    matches!(
+                                        o.channel,
+                                        Channel::ExternalSemantics | Channel::OptInLayoutProbe
+                                    )
+                                }))),
                     ValidationError::IncompatibleContext,
                 )
             }

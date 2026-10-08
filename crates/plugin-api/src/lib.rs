@@ -303,15 +303,26 @@ impl ObservationSession {
                 {
                     return Err(Error::InvalidChannel);
                 }
-                if !self.descriptor.capabilities.iter().any(|c| {
-                    c.channel == r.channel
-                        && c.operation.0 == "observe"
-                        && matches!(
-                            c.status,
-                            CapabilityStatus::Supported | CapabilityStatus::Partial
-                        )
-                }) {
-                    return Err(Error::InvalidChannel);
+                // A permitted publication slot does not authorize other sources
+                // embedded in its Snapshot. Check all channels before retention
+                // or the caller's ACK/publication boundary, without filling any
+                // other requested slot on behalf of this response.
+                for channel in
+                    std::iter::once(r.channel).chain(s.observations.iter().map(|o| o.channel))
+                {
+                    if !p.requested.contains(&channel) {
+                        return Err(Error::UnexpectedChannel);
+                    }
+                    if !self.descriptor.capabilities.iter().any(|c| {
+                        c.channel == channel
+                            && c.operation.0 == "observe"
+                            && matches!(
+                                c.status,
+                                CapabilityStatus::Supported | CapabilityStatus::Partial
+                            )
+                    }) {
+                        return Err(Error::InvalidChannel);
+                    }
                 }
             }
             ChannelResult::Failed(issue) => {

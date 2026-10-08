@@ -359,3 +359,187 @@ fn reply_correlation_and_channel_permissions_cannot_be_forged() {
             .is_empty()
     );
 }
+
+fn composed_setup() -> (Request, SessionDescriptor, Snapshot) {
+    let Artifact::Snapshot(mut snapshot) = fixture("GRAPH-MANY-TO-MANY.json").artifact else {
+        panic!("mixed graph")
+    };
+    snapshot.context.projection = Projection::Design;
+    let mut r = request();
+    r.context = snapshot.context.clone();
+    r.operation = Operation::Observe {
+        channels: vec![Channel::ExternalSemantics, Channel::OptInLayoutProbe],
+    };
+    let mut d = descriptor();
+    d.capabilities.push(Capability {
+        channel: Channel::OptInLayoutProbe,
+        operation: Id("observe".into()),
+        status: CapabilityStatus::Supported,
+        reason: None,
+    });
+    (r, d, *snapshot)
+}
+fn composed_session(d: SessionDescriptor) -> ObservationSession {
+    ObservationSession::attach(
+        d,
+        clock(0).domain,
+        Limits {
+            max_frame_bytes: 65_536,
+            max_in_flight: 1,
+            max_pending_encoded_bytes: 131_072,
+        },
+    )
+    .unwrap()
+}
+fn composed_reply(ticket: &Ticket, s: Snapshot) -> Vec<u8> {
+    encode(Artifact::ChannelResponse(Box::new(ChannelResponse {
+        request_id: ticket.request_id.clone(),
+        session_id: ticket.session_id.clone(),
+        dispatch_sequence: ticket.sequence,
+        target: s.context.target.clone(),
+        channel: Channel::OptInLayoutProbe,
+        result: ChannelResult::Observed(Box::new(s)),
+    })))
+}
+#[test]
+fn composed_sources_require_each_requested_channel_and_observe_capability() {
+    for variant in 0..6 {
+        let (mut r, mut d, snapshot) = composed_setup();
+        match variant {
+            0 => {
+                r.operation = Operation::Observe {
+                    channels: vec![Channel::OptInLayoutProbe],
+                }
+            }
+            1 => d
+                .capabilities
+                .retain(|c| c.channel != Channel::ExternalSemantics),
+            2 | 3 => {
+                let c = d
+                    .capabilities
+                    .iter_mut()
+                    .find(|c| c.channel == Channel::ExternalSemantics)
+                    .unwrap();
+                c.status = if variant == 2 {
+                    CapabilityStatus::Unsupported
+                } else {
+                    CapabilityStatus::PermissionRequired
+                };
+                c.reason = Some(Id("explicit-refusal".into()));
+            }
+            4 => {
+                d.capabilities
+                    .iter_mut()
+                    .find(|c| c.channel == Channel::ExternalSemantics)
+                    .unwrap()
+                    .operation = Id("inspect".into())
+            }
+            _ => {
+                let c = d
+                    .capabilities
+                    .iter_mut()
+                    .find(|c| c.channel == Channel::OptInLayoutProbe)
+                    .unwrap();
+                c.status = CapabilityStatus::Unsupported;
+                c.reason = Some(Id("explicit-refusal".into()));
+            }
+        }
+        let mut session = composed_session(d);
+        let ticket = session
+            .begin(&encode(Artifact::Request(Box::new(r))), &clock(1))
+            .unwrap();
+        let frame = composed_reply(&ticket, snapshot);
+        Document::from_json(&frame, 65_536).unwrap(); // schema validity is not permission
+        assert_eq!(
+            session.receive(&ticket, &frame, &clock(2)),
+            Err(if variant == 0 {
+                Error::UnexpectedChannel
+            } else {
+                Error::InvalidChannel
+            })
+        );
+        assert!(session.cancel(&ticket).unwrap().channels.is_empty());
+    }
+}
+#[test]
+fn accepted_composition_keeps_source_partial_and_never_completes_another_slot() {
+    for partial_capability in [false, true] {
+        let (r, mut d, mut snapshot) = composed_setup();
+        if partial_capability {
+            for c in &mut d.capabilities {
+                if matches!(
+                    c.channel,
+                    Channel::ExternalSemantics | Channel::OptInLayoutProbe
+                ) {
+                    c.status = CapabilityStatus::Partial;
+                    c.reason = Some(Id("limited".into()));
+                }
+            }
+        }
+        snapshot.coverage.status = CoverageStatus::Partial;
+        snapshot.coverage.unknown_count = None;
+        let original = snapshot.clone();
+        let mut s = composed_session(d);
+        let ticket = s
+            .begin(&encode(Artifact::Request(Box::new(r))), &clock(1))
+            .unwrap();
+        s.receive(&ticket, &composed_reply(&ticket, snapshot), &clock(2))
+            .unwrap();
+        let result = s.cancel(&ticket).unwrap();
+        assert_eq!(result.channels.len(), 1);
+        assert_eq!(result.missing_channels, vec![Channel::ExternalSemantics]);
+        assert_eq!(
+            result.channels[&Channel::OptInLayoutProbe],
+            ChannelResult::Observed(Box::new(original))
+        );
+    }
+}
+#[test]
+fn composed_validation_retains_limits_freshness_and_earlier_channel_on_refusal() {
+    for variant in 0..4 {
+        let (mut r, d, mut snapshot) = composed_setup();
+        match variant {
+            0 => snapshot.observations[0].freshness = Freshness::Stale,
+            1 => r.limits.max_elements = 1,
+            2 => snapshot.context.environment_revision = Id("different-environment".into()),
+            _ => r.limits.max_output_bytes = 1,
+        }
+        let mut s = composed_session(d);
+        let ticket = s
+            .begin(&encode(Artifact::Request(Box::new(r))), &clock(1))
+            .unwrap();
+        let result = s.receive(&ticket, &composed_reply(&ticket, snapshot), &clock(2));
+        assert!(result.is_err(), "variant{variant}");
+        assert!(s.cancel(&ticket).unwrap().channels.is_empty());
+    }
+    // A prior valid AX result remains available when a mixed probe is refused.
+    let (r, d, mut snapshot) = composed_setup();
+    let mut s = composed_session(d);
+    let ticket = s
+        .begin(&encode(Artifact::Request(Box::new(r))), &clock(1))
+        .unwrap();
+    let mut ax = snapshot.clone();
+    for o in &mut ax.observations {
+        o.channel = Channel::ExternalSemantics;
+    }
+    let ax_response = encode(Artifact::ChannelResponse(Box::new(ChannelResponse {
+        request_id: ticket.request_id.clone(),
+        session_id: ticket.session_id.clone(),
+        dispatch_sequence: ticket.sequence,
+        target: ax.context.target.clone(),
+        channel: Channel::ExternalSemantics,
+        result: ChannelResult::Observed(Box::new(ax.clone())),
+    })));
+    s.receive(&ticket, &ax_response, &clock(2)).unwrap();
+    snapshot.observations[0].freshness = Freshness::Stale;
+    assert!(
+        s.receive(&ticket, &composed_reply(&ticket, snapshot), &clock(3))
+            .is_err()
+    );
+    let remaining = s.cancel(&ticket).unwrap();
+    assert_eq!(
+        remaining.channels[&Channel::ExternalSemantics],
+        ChannelResult::Observed(Box::new(ax))
+    );
+    assert_eq!(remaining.missing_channels, vec![Channel::OptInLayoutProbe]);
+}

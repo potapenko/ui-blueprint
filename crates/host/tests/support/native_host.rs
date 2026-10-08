@@ -100,6 +100,10 @@ fn probe_channel_uses_existing_two_helpers_without_capture_and_keeps_ax_on_failu
         (b'T', 5, 0),
         (b'E', 5, 0),
         (b'C', 4, 2),
+        (b'M', 5, 0), // requested AX+probe, both capabilities; composite publishes
+        (b'U', 4, 0), // nested AX not requested despite permitted probe wrapper
+        (b'N', 5, 0), // AX capability denied; prior failed AX remains ACKed
+        (b'R', 5, 0), // wrong composite context; prior successful AX remains ACKed
     ] {
         AX_ACK.store(false, Ordering::SeqCst);
         PROBE_ACK.store(false, Ordering::SeqCst);
@@ -127,6 +131,19 @@ fn probe_channel_uses_existing_two_helpers_without_capture_and_keeps_ax_on_failu
             status: CapabilityStatus::Supported,
             reason: None,
         });
+        if mode == b'N' || mode == b'M' {
+            let ax = session_data
+                .capabilities
+                .iter_mut()
+                .find(|c| c.channel == Channel::ExternalSemantics)
+                .unwrap();
+            ax.status = if mode == b'N' {
+                CapabilityStatus::PermissionRequired
+            } else {
+                CapabilityStatus::Partial
+            };
+            ax.reason = Some(Id("explicit-fixture-capability".into()));
+        }
         let descriptor = serde_json::to_vec(&descriptor).unwrap();
         let mut input = host
             .reserve_attach_input(target(), descriptor.len())
@@ -183,6 +200,9 @@ fn probe_channel_uses_existing_two_helpers_without_capture_and_keeps_ax_on_failu
             panic!("request")
         };
         r.context.fields = vec![Field::LayoutBounds];
+        if matches!(mode, b'M' | b'U' | b'N' | b'R') {
+            r.context.projection = uiblueprint_schema::model::Projection::Design;
+        }
         r.freshness_policy = FreshnessPolicy::CachedAllowed;
         r.operation = Operation::Observe {
             channels: if mask == 5 {
@@ -208,7 +228,7 @@ fn probe_channel_uses_existing_two_helpers_without_capture_and_keeps_ax_on_failu
             .unwrap();
         assert_eq!(operation.sequence, 2);
         let completion = result(&mut host);
-        if mode == b'P' {
+        if mode == b'P' || mode == b'M' {
             assert_eq!(completion.terminal, Terminal::Completed);
             assert_eq!(completion.committed(), mask);
             assert_eq!(completion.missing(), 0);
@@ -222,13 +242,44 @@ fn probe_channel_uses_existing_two_helpers_without_capture_and_keeps_ax_on_failu
             let ChannelResult::Observed(snapshot) = response.result else {
                 panic!("observed")
             };
-            assert!(
-                snapshot
-                    .observations
-                    .iter()
-                    .all(|o| o.channel == Channel::OptInLayoutProbe
-                        && o.freshness == Freshness::Unverified)
-            );
+            if mode == b'M' {
+                assert!(
+                    snapshot
+                        .observations
+                        .iter()
+                        .any(|o| o.channel == Channel::ExternalSemantics)
+                );
+                assert!(
+                    snapshot
+                        .observations
+                        .iter()
+                        .any(|o| o.channel == Channel::OptInLayoutProbe)
+                );
+                assert_eq!(
+                    snapshot.coverage.status,
+                    uiblueprint_schema::model::CoverageStatus::Partial
+                );
+                assert!(
+                    snapshot
+                        .components
+                        .iter()
+                        .any(|c| c.logical_component_key.0 == "merged-fixture")
+                );
+                assert!(
+                    snapshot
+                        .relations
+                        .iter()
+                        .any(|r| r.kind == uiblueprint_schema::model::RelationKind::Represents)
+                );
+            } else {
+                assert!(
+                    snapshot
+                        .observations
+                        .iter()
+                        .all(|o| o.channel == Channel::OptInLayoutProbe
+                            && o.freshness == Freshness::Unverified)
+                );
+            }
             assert!(snapshot.nodes.iter().any(|n| {
                 n.properties
                     .iter()
@@ -244,6 +295,12 @@ fn probe_channel_uses_existing_two_helpers_without_capture_and_keeps_ax_on_failu
         if mask & 1 != 0 {
             assert!(AX_ACK.load(Ordering::SeqCst));
             assert!(completion.bytes(0).is_some());
+            if mode == b'N' {
+                let d = Document::from_json(completion.bytes(0).unwrap(), 65536).unwrap();
+                assert!(
+                    matches!(d.artifact,Artifact::ChannelResponse(r) if matches!(r.result,ChannelResult::Failed(_)))
+                );
+            }
         }
         assert_eq!(
             HELPERS.load(Ordering::SeqCst),
