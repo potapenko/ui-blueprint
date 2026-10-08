@@ -141,3 +141,27 @@ The original browser fixtures remain alive through product worker teardown.
 The source/build temp tree is consumed after final input/hash checks and removed
 only after confirming it contains no images; final cleanup/checkpoint evidence is
 appended below. Existing task/other images are never included in cleanup.
+
+## Saved candidate and final cleanup
+
+Implementation checkpoint: d3f472361abc3c46bb3a8aa0f00b01607e651bd9. The final live
+run AFTER that checkpoint passed all29 entries, including original unmodified
+ChannelResponse byte storage and exact post-consumer byte checks. Eight compiled
+Web source/test overlays and the runtime fixture/harness were compared byte-for-byte
+with that saved commit; no concurrent shared source entered the candidate.
+Eight-file path/hash fingerprint:
+368396aee9834c4f3bf152daff4e4c710f2bd40b1e173a4e8912735e4c4f419a.
+Fixture SHA256:1dcf3bfc89a24adb2471a1e15d9c27550adaa614d75192d65e35e983aba52d8c.
+Harness SHA256:d5073b95fd8fab860bd69bc74b64907b60b3b701fbb385a4f956b59b26443d4d.
+Owned rustfmt, Node syntax, both changed-document local links and diff checks passed.
+One mistyped formatting invocation named nonexistent read-node.rs; corrected exact
+Rust-file invocation passed, with no source change or waived check.
+
+The task-temp source/build inventory contained no image/PDF/SVG files. After
+consuming results and verifying no owned session-worker remained, all3700 run-owned
+non-image files and empty directories were removed; the exact task directory's
+absence was verified. Harness output separately confirms CLI workers reaped,
+context closed, browser exited, profile absent, server closed and JSON temp absent.
+No screenshot, crop, real application, existing image or unrelated source was touched.
+Final receipt checkpoint and canonical master push use the prescribed shared flock;
+actual final SHA/push result is returned in the chat, without another agent/message.
