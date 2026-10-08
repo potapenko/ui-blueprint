@@ -95,3 +95,32 @@ concurrent heavy checks. This is a scoped domain release, not accepted Native or
 whole D06. Unsupported full-fixture iframe/semantic rows remain explicit gaps;
 no single-control substitution. Native still awaits Q01/operator ownership and
 functional release; production timing optimizations follow the original packet.
+
+## Complete the remaining Rust-stage report
+
+The full Web numeric campaign on accepted a7c0416 now passes all four frozen
+thresholds. Preserve these measured cohorts and their original source pins.
+D06@1 separately requires timing the added Rust normalization/formatting; the
+current receipt establishes that the existing guarded API does not expose those
+intervals. That is an observed evidence gap, not permission to mark the requirement
+complete or to invent a subtraction-based timing.
+
+Continue the same full Q02 outcome with the smallest test-only measurement of the
+actual owning Rust routines on pinned saved inputs. The existing Q02 harness/
+bridge/recipe/receipt ownership covers this work. Choose the method after inspecting
+its real source boundaries; do not duplicate the implementation as a toy benchmark.
+If narrowly placed timing hooks in a system-temp source copy are necessary, preserve
+exact pin plus the minimal instrumentation delta and label its results diagnostic;
+it must not be reported as a new unmodified production latency cohort. Keep product
+source, public formats, features/dependencies and the installed candidate unchanged.
+No runtime telemetry service, profiler framework, source refactor or new threshold.
+
+Report actual separately measured intervals and what they cover, including whether
+they are exclusive or nested. Reuse accepted outer-response and unrelated quality
+proof; rerun only what the instrumentation actually affects. Other SDK/internal
+counters remain explicitly unavailable where D06 allows that; do not expand this
+into a new observability project. If the required boundary cannot be measured under
+these protections, return the exact source-backed necessary owner change rather than
+a generic unavailability statement. Native foreground/runtime waits stay separate.
+Complete harness, measurements, documentation, scoped commit+push and final result
+without additional root grants for internal steps; CPU resources are now free.

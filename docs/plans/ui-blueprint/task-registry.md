@@ -36,22 +36,27 @@ Root получает итог или конкретный блокер; про�
   receipt `a1cae1a` committed/pushed. Оба findings W06 закрыты: exact reproducers,
   20-case corpus и own Chromium10cases,6private0publication,97-node baseline.
   CPU/headless освобождены; Native foreground wait не изменён. Контекст сохранён.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: условие Documents acceptance
-  выполнено; ранее выданное разрешение действует на весь full-document Web task.
-  Harness UTF-8 streaming сохранён `51a09e0`; semantic/geometry `b3c3a22` остаются
-  применимыми. CPU/headless lane принадлежит Q02 до его terminal release.
-- I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: разархивирован, turn
-  `inProgress`; полный current-installed-candidate outcome на a7c0416 по
-  [актуализированному packet](packets/I02-current-distribution.md).
-  Собственные recipe/docs/checks анализ и правки идут независимо. Heavy builds
-  ждут именно текущий Q02 terminal release, затем I02 продолжает сам без root grant.
-  Старый94724df install receipt не подменяет проверку актуальных Native/Web изменений.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: full-document campaign
+  закончен по текущему receipt, turn ещё сохраняет результат. На a7c0416
+  full attach p95=37.507583ms/50, process-cold p95=264.899833ms/500;20cold,
+  100warm,120/120quality pass. Все4численных Web gates имеют passing evidence,
+  прежние semantic/geometry b3c3a22 переиспользованы по source applicability.
+  CPU/headless освобождены. Тот же Q02 получил полный bounded outcome отдельной
+  Rust normalization/formatting stage отчётности по дополнению своего packet:
+  actual routines/test-only measurement, production candidate защищён. Native
+  остаётся отдельным ожиданием; итоговый SHA проверить после сохранения результата.
+- I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: terminal `completed`,
+  `5cb7662ac01f1c9d1d19ef7ec7b57634b16dd218` pushed; receipt прочитан целиком.
+  Web/Native/combined a7c0416 installed builds/smoke/verify/remove прошли;
+  core/reinstall/recovery/licensing evidence reused по exact source equivalence.
+  Recipe6a5bec2 не менялась; упаковочных blockers нет, ресурсов не удерживает.
+  Чат архивирован после сохранения результата. Native live/P7 этим не приняты.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02/I02. Full-document measurements разрешены; I02 heavy verification следует
-  после Q02 release без промежуточных управляющих follow-up.
+  Q02. После сохранения полного Web результата остаются его точные stage gaps
+  и Native/Q03 human waits; завершённую упаковку не повторять.
 
 ## История предыдущей группы самостоятельных задач
 
