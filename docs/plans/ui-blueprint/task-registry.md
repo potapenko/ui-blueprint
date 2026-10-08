@@ -54,6 +54,16 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## N03 Surface repair сохранён
+
+8e3dba2 pushed, source writer terminal completed/archived. Общий resolver не
+пересекает вложенный AXPopover; explicit popup root остаётся допустим. Same/different
+child, result-only/revalidation/reparenting/allowed parent covered12focused cases
+по автору; production helper compiled, UI не повторялся. Reviewer-owned Review.swift
+сохранён. Same Q01 получил saved delta + author N03 receipt после initial source
+assessment и продолжает independent recheck/необходимый affected runtime.
+Q02 timed gate пока закрыт, source/offline prep продолжается; новых reviewers нет.
+
 ## N03 initial P2 и Q02 comparability
 
 Q01 initial source review6ba7707/a40652a без author narrative подтвердил P2:
