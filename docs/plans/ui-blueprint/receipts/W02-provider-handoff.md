@@ -818,3 +818,67 @@ Runtime/pointer/desktop untouched. Current Web owns temp build and later finite
 inputs/outputs until result consumption, then removes only its non-image files and
 verifies absence; all images/containing directories remain if any are produced.
 No actual public CLI browser result or broader forms/business/IME claim yet.
+
+## Activated actual public CLI actions result — 2026-10-08
+
+Root activated ONE cli_actions run on saved launcher
+ca8213bef95957dc4c198b43e121ff6a1ad202fb and exact shipping3ebfafe inputs/binaries
+above. All199input pins, launcher73dfb586...1aa779, CLIe0a2136d...e78369 and
+worker0abbebee...5fa724 matched before/after. No rebuild/current Core A02 WIP,
+retry, timeout/tolerance adjustment, omitted case or fixture change.
+Actual interval2026-10-08T00:11:30.147Z–00:11:32.368Z; passed/launcherexit0,
+six public subprocess calls, four independent checks, pending0. Same
+Chromium145.0.7632.6/Node24.15.0/Playwright1.58.2/darwin arm64 OS27.0.0,
+32/depth8/64KiB/250ms/256traversal-node/5s-call/120s-whole parameters.
+
+| Actual public call | Exit / actual canonical and independent result |
+| --- | --- |
+| observe action-target | 4; honest partial ChannelResponse, Enabledtrue/Checkedfalse/InputKindcheckbox known; UI unchanged |
+| action prepare --json | 0; ActionCase with actual native-checkbox-setter-capability Evidence, writable/value_allowed knowntrue, exact source key and unique_matchtrue; UI unchanged |
+| action execute --json | 0; confirmed delivery/Succeeded, before Snapshot1:2→after1:3, verification web.dom:1:3, actual Checkedtrue; independent targetfalse→true only |
+| observe action-disabled | 4; honest partial, Enabledfalse/Checkedfalse known |
+| action prepare disabled --json | 4; canonical Unsupported with reobserve_exact_native_checkbox; no UI change; capability refusal, not readonly authority proof |
+| action execute original plan after explicit remount --json | 4; canonical not_dispatched/failed, no after/verification; replacement and unrelated states unchanged, no retry |
+
+Exactly one Execute returned confirmed delivery; the other Execute refused before
+dispatch. This is canonical delivery plus independent source-state proof, not a
+separately instrumented count of native setter calls. Duplicate checkbox, disabled,
+mixed/custom state and focus/scroll stayed unchanged across product commands.
+Explicit remount is fixture setup and its focus effect is outside the subsequent
+read-only refusal invariance interval. Setter delivery is not physical input,
+application commit or business success. Earlier readonly TargetLease proof remains
+the API qualification9d3a0a5; no fictitious public CLI authority flag was used.
+
+Each stdout was exactly one complete canonical JSON document plus newline; runtime
+producer validation/ACK and CLI success/cleanup contract were exercised through
+the real CLI and production worker. No test RuntimeHost/capability/nonce replaced
+that path. Original Observe bytes were passed unchanged to Prepare; original
+ActionCase bytes unchanged to Execute and the stale-plan attempt. Saved context,
+source IDs/evidence were preserved; only production Request clock rebinding applies.
+All16input-file hashes and six output hashes matched after use. Two partial Observe
+calls emitted bounded19B diagnostics each; raw stderr was not retained or exposed.
+
+All six CLI processes closed without signals; bounded unique-worker path inventory
+was empty after each and independently after the run. CLI cleanup result and
+process absence support teardown; private session/group counters are not exposed
+and are NOT asserted zero. Browser survived all CLI workers. Own context/driver/
+browser/server/profile and final CLI process teardown confirmed; no Rust test
+process was created and no user browser or desktop lane used.
+
+Consumed/deleted canonical stdout pins:
+- cli-observe.json5368B SHA256df0989a6e24edd1f96b01d985eda2426e984737d6aa69763f00cfdf8a56638ac.
+- cli-prepare.json4625B SHA256815ef6066afefbe9746a0ec865de50a41334f5dc359dccb28723dad86f90cfda.
+- cli-execute.json7160B SHA256c976c62d9103288052e87f1937798bd96851cf7febbe930a1f4860883c5e459c.
+- cli-disabled-observe.json5400B SHA2560be6a35de82da13214b3efe097bae6072d3a73b496990c12e7a60e5c63289e6d.
+- cli-disabled-prepare.json188B SHA2565a56ce8df17fafb78f69ffee6d4a5c41abd036a7c2411612b3fa223c0d932c29.
+- cli-remount-refused.json4047B SHA256290dece2532b621400c4a731fd4c7dd2f7a358f860ca09ef091691c4180427d4.
+Report6696B SHA256430bb1fc92b9d4cc06da5458f56523af00719108f5d651e29738dbeb60242aa4.
+These identify checked/deleted bytes, not retained downloadable artifacts.
+
+After inline delivery/consumption, exact23run-owned JSON files (16inputs,6outputs,
+report) and their empty directory were removed, absence verified. Current
+uib-cli-actions-live-vxbyrvc7 source/build contained no images by suffix/signature
+inspection; removed and absence verified. No images generated/deleted, older
+evidence unchanged. Only this receipt changes for result checkpoint; no runtime
+resource held. This finite public SetChecked caller path does not close fullB02,
+Focus/Type/Activate, IME, other apps or business-result acceptance.
