@@ -779,3 +779,12 @@ build,4affected binary tests,status/ACK,Clippy;172 Rust inputs unchanged. Produc
 retained in system-temp uib-a05-products-rti2ca4z/debug; source/binary pins sent Web,
 which may copy for immediate single application chain. CLI docs exact2 save lease
 active; native/UI source owners remain disjoint. No duplicate builds/runtime.
+
+A05 CLI proof9350fd56eb0a51dd628b523466fccf07fdc6817e and actual-harness
+df5fb92847d777745d8f77e8457150297a87d549 saved/pushed. Web copied/verified same
+CLI/worker; original CLI target cleanup confirmed. ONE7-call application run
+activated after save (selection/draft, fresh commit/applied, unexpected-stop);
+no runtime success claimed yet. Git lease released before actual execution.
+Native declares minimal bridge write subset Fixture.swift/host_observe.py/P01
+receipt, protected collector/host/schema untouched. Primary API reconciliation
+and trusted external-frame input implementation active; no mapped-hit proof yet.
