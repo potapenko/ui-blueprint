@@ -315,3 +315,67 @@ source, builds, trace captures, cache/history/export records and fixture metadat
 Only protected-input.png remains under this new temp root; file and containing
 root retained. Older Q03 handoff/images were not cleaned. Receipt local-link and
 whitespace checks passed; scoped current-master checkpoint/push follows.
+
+## N03 membership repair recheck — source accepted, live owner pending
+
+Saved candidate `8e3dba2191004ac459999abd29dcbc7e243cbeb6`, including N03
+6ba7707/a40652a. Same Q01 reviewer; initial N03 source observations preceded the
+builder receipt. Reviewed repair before reconciliation: nested AXPopover is pruned
+before identifier/children reads, while an explicitly selected popup root remains
+in scope. Initial, full revalidation and result-only use the same repaired resolver.
+Existing NATIVE-SESSION@3/NATIVE-POPUP@1 and prior closure remain unchanged.
+
+Own retained counterexample was replayed with reported roles added to its inert AX
+fixture (otherwise missing-role refusal would not prove the intended boundary).
+All3 foreign-parent selections now refuse, explicit popup root succeeds. Author's
+12 membership regressions and3 positive/14 negative configuration cases also pass
+independently. Exact production permission preflight/error switch13 combinations
+pass against inert SDK stubs: permission_required before delivery, uncertainty at
+phase2. Source causes of both reported P2 findings are resolved; no new source
+finding. No TCC changes or actual OS-permission transition claim.
+
+Immutable8e3dba2 source archive, Rust CLI/worker/validator (web+macos) and Swift6
+helper/current F02-on compiled in system-temp
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-final-5w3j1hkw`.
+No current WIP or author binary used. Fresh CUA inventory showed no prior fixture.
+Own LaunchServices fixture PID68614, exact executable F02-on.app/Contents/MacOS/
+F02Fixture and run-dir live, has A/B same-title windows. B initial empty/unchecked/
+Count0/Result none was recorded. CUA only performs setup/publication here.
+
+The first product Focus returned Confirmed/action_outcome_unknown; harness stopped
+BEFORE popup Activate. Independent CUA then showed Name AX-focused, but fresh fixture
+metadata showed inactive/nonkey/nonmain and product Observe keyboard focus unknown.
+A separate read-only recovery attempt refused its prerequisite without input.
+Existing Compare setup, CUA Tab and one current titlebar click established key/main,
+but app_active remained false. A NEW explicit Focus attempt after re-establishing
+that changed starting state again returned Confirmed/unknown; it was not silently
+retried as the same unresolved operation. No popup mutation or dependent step ran.
+The optional documented cua.computer.launch_app function is unavailable in this
+session; this is not a claim that Computer Use itself is unavailable.
+
+Latest fresh read-only native-session Observe exits0 with partial data and
+keyboard={status:unknown,reason:focus_outside_selected_controls}. Do not equate an
+AX field's focused=true with the actual process/input owner. No policy/owner guard
+was bypassed, another input backend selected, or unsupported success manufactured.
+Operator activation of own F02 Synthetic / Window A was requested through the
+current chat's input tool; it is a runtime precondition, not implementation approval.
+That question is pending. The fixture is intentionally left open for this requested
+activation; no live helper/worker/session is retained and no agent input is pending.
+
+Independent non-input checks continued: actual parent-EOF after2 observations
+retired both registered descendants within3s;1ms Observe deadline returned4 with
+empty stdout. Ordinary form read/secure redaction still works through the repaired
+role-aware traversal. Accepted V02/M05/A02/Web scopes remain reusable where unchanged.
+
+Status: `waiting_resource` for exact Native foreground/input ownership. Source and
+focused boundary repair accepted; NOT yet a final functional candidate or independent
+whole-chain runtime pass. Remaining action is fresh owner establishment, then actual
+product-open→capture/measure→product-resize/local-diff→Confirm/held parent result→
+retired/reopened-ref refusal→compare and affected ordinary/secure compatibility.
+Q02 timed work must not infer functional readiness from this source checkpoint.
+No additional reviewer/writer/task was created. Agent UI input is stopped; builds
+and verification workloads have ended. Own fixture remains solely for operator
+activation, so complete UI resource cleanup is not claimed yet. Current-operation
+non-image source/binaries/records are retained only for this pending Q01 continuation
+and will be consumed/removed at its completion; no permanent archive. Existing
+images and Q03 handoff are untouched. Only this receipt changes in the repository.
