@@ -71,3 +71,23 @@ fresh public result identity and separate delivery/check preserved. Author12kern
 tests/5CheckboxProvider tests/scopedchecks remain attributed. Focus lane, host
 Expectation transport and actual Web/Native delivery remain implementation tasks.
 No repeated review of this unchanged kernel is scheduled.
+
+## A03/A04 grouped Focus/Type acceptance — 2026-10-08
+
+Fresh read-only reviewer `/root/a03_a04_review` found no actionable introduced
+findings in the composed saved integration: provider464b1d2, hostbc2874e/8493c14,
+CLIc15ffb3, actual harnessa8b3fbd and receiptd8b72c3; latest9ed4da2 was coordination.
+Reviewed specified parent diffs/current source first, then author receipts and
+retained canonical artifacts. No relevant source drift or dirty product files.
+Explicit expectation/Prepare validation, parent permits/shared Focus+Keyboard
+lane, current identity/focus/privacy, ACK/output/cleanup/no retry and protected
+SetChecked have scoped source support. No broader re-audit or tests/apps executed.
+
+Independent artifact inspection matched all nine output lengths/hashes, report
+and harness pins. Focus fresh keyboard targetweb.dom:6, Type deliveredon with
+separately expected/observedLon, and unfocused NotDispatched/Failed/no after
+snapshot/completed step corroborate the recorded fixture outcome. Partial remains
+partial. Tests/live execution remain author-attributed; this is not independent
+browser/hardware execution, fullB02/P5/P7, arbitrary-site/IME/business/Native
+acceptance. Reviewer changed/deleted no files. Web may now clean its26 consumed
+nonimage run files and empty run directories, retaining all images/other evidence.

@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | A04 CLI01a11286, A03 Core01a111a7 and Web01a11983 active, disjoint CLI vs host/plugin-api vs Web ownership. G10fb770dc saved/pushed; Git free. Native stays archived |
+| Активные чаты/пакеты/ресурсы | A03/A04 source+actual owned Web result saved; one grouped input-risk review accepted, no findings. Core/CLI/Web finite work terminal; Web cleanup of consumed26-file evidence next. Git/runtime free; Native archived |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | A03 Core finishes saved explicit-Expectation host composition; A04 exposes public Focus/Type caller. Web prepares ONE actual owned CLI sequence after both saved/check-ready, avoiding separate API+CLI reruns. G03–G10 geometry/context/export preserved; full P0–P7 scope retained |
+| Следующий шаг | Record accepted A03/A04 and evidence cleanup; select remaining dependency-ready full-plan work (Native M05/held-action gaps, remaining Web form/geometry/cache pilots), preserving G03–G10 and qualified public Focus/Type. Full P0–P7 remains active and incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -698,3 +698,11 @@ SetChecked. No duplicate UI/test/review waves. Sources frozen pending verdict.
 Web retains only26 nonimage canonical run files in system-temp743c700e-9eb5-456f-a6db-d92baeaa6ffb
 for this immediate review, then owns cleanup. CLI original build can be cleaned
 after copied-product consumption; exact paths/hashes in A01/W02 receipts.
+
+A03/A04 fresh grouped review completed, no actionable introduced findings;
+[scoped receipt](receipts/A01-action-review.md). Source-first then independently
+checked retained9 output lengths/hashes/report/harness and matched explicitFocus/
+Type/focus-loss result records; actual execution remains author-attributed. No
+fix/retest/second review triggered. FullB02/P5/P7 and Native/IME/hardware/business
+claims remain open. CLI original build target cleanup confirmed, no images/other
+tasks affected. Web's26 canonical files are consumed and released for its cleanup.
