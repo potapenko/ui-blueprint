@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Native01a110ac-2da3 restored for remaining M05 sampled-hit evidence; Web01a11983 restored for concrete next B02 source handoff. Git free; Native alone may hold physical input during bounded own-fixture operation. Core/CLI archived |
+| Активные чаты/пакеты/ресурсы | Native01a110ac-2da3 selected own window-local synthetic M05 test; Web01a11983 implements A05 Semantic native-button Activate/held result; CLI01a11286 restored for matching additive caller. Core archived; Web owns only mechanical worker_web.rs exception. Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | Native establishes current documented CUA pointer targeting and runs only missing M05 hit pair when valid; Web selects actual autocomplete/applied-value owner seam for next B02 implementation. Accepted geometry/export/Focus/Type unchanged; full P0–P7 active and incomplete |
+| Следующий шаг | Native saves minimal test-only adapter and runs one matched intrawindow hit/focus pair. Web+CLI prepare one select→draftLondon→Commit→appliedLondon and unexpected-stop outcome on own F01. External CUA mapping remains unverified; accepted work unchanged; full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -724,3 +724,17 @@ foreground/monitor condition, backend workaround or unchanged runtime replay.
 Native owns only P01-invariance receipt and its bounded own-fixture physical lane;
 Web owns only short W02 source handoff, no input/source-code mutation yet. Reused
 known chat IDs through explicit unarchive, no duplicate/new agents or reviews.
+
+Current Mac CUA contract-gap0e310d3e36149dc9db7743ee6d61f69d3e88558e saved/pushed,
+remote master verified. No clicks/builds/retry performed in that discovery. Native
+primary Apple/fixture assessment supports conditional NSApp.postEvent queue profile;
+root selected explicit OWN intrawindow evidence as recorded in P01 packet, no
+external physical/CUA claim. Proposal exact1 save then minimal source/run authorized.
+
+Web source handoff5fefce3ed1f67e9a0290d9038336ba7a663c1454 saved/pushed, lease
+released; actual existing button onclick semantics and owner seams read by root.
+A05 implementation granted with explicit separate held result node and a single
+mechanical Core Prepare call exception. Native HTML click primary-source qualified,
+Semantic/kFromScript/untrusted/userGesturefalse, not pointer/keyboard proof. CLI
+resumed for contract-first additive port; no new schema/kernel/grammar. Native,
+Web/provider+onehostcall and CLI/spec write sets remain non-overlapping.

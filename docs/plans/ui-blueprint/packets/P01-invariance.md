@@ -115,3 +115,28 @@ stay system temp and are NEVER agent-deleted, including containing directories;
 this supersedes all earlier independent-retention/unlinked-output cleanup wording.
 Only consumed run-owned nonimage files/empty dirs are cleaned. Short scoped Git
 checkpoint/push, release physical lane, concise facts/limitations and stop.
+
+## Selected window-local synthetic evidence profile
+
+Source-backed Apple/fixture proposal is selected explicitly for M05's OWN
+intrawindow hit-routing/focus equivalence. M05's product clause does not mandate
+the failed CUA coordinate mechanism; this does not solve or claim external CUA,
+WindowServer/global pointer, physical device/occlusion/first-click behavior.
+Actual normal framework routing and independent Count/focus evidence are required,
+not source plausibility. Final M05 disposition waits for actual results.
+
+Native may add only the minimal test-only nonvisual seam beside existing Fixture/
+WindowSetup plus necessary existing runner/receipt. SwiftUI owns all visible UI.
+Public NSApplication.postEvent queues the complete bounded mouse down/up pair;
+do not directly invoke NSWindow.sendEvent (Apple discourages direct invocation),
+Button action, AXPress, hitTest lookup or global CGEvent as the proof. Resolve exact
+owned live A/window number/generation and window-base points with documented
+conversions equally off/on, never on-only probe or screenshot-size inference.
+Preserve rendered/probe code and hitTest/acceptsFirstMouse semantics. Record real
+Count+1/0, meaningful local focus/responder identity and actual foreground separately.
+
+Source/build candidate saves before the one bounded matched runtime pair; no
+extra per-step activation. Original300s/setup120s/cleanup5s limits and image/temp
+rules stand. Reuse unchanged prior AX/pixel/probe evidence, no old suites. If event
+injection does not exercise the required behavior, return failed/unverified scope;
+no fake M05 or physical-input success. No product adapter/public protocol changes.

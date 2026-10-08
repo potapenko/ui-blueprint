@@ -67,3 +67,32 @@ new fixture, real-site work, new review or broad audit. Return concrete source f
 symbols, mechanism, explicit result expectation, protected boundaries and exact
 cross-owner dependency. Same master/inherit/no nested agents and scoped commit/push.
 Native owns its separate physical lane; this source work does not contend with it.
+
+## A05 native-button Semantic Activate and held result
+
+Source handoff5fefce3 selects actual F01 native #option-london button onclick:
+draft/selectedLondon, validtrue, option removed; then #commit onclick produces
+public #appliedLondon. Unexpected BODY dialog disablescommit; next dependent
+Execute must be suppressed by the bounded caller after fresh observation. This
+does not add a scenario framework or encode real-site Apply/Enter behavior.
+
+Web owns the provider/harness implementation and focused tests, plus ONLY mechanical
+worker_web.rs forwarding of already validated Expectation (nearest mechanical
+caller test if necessary). Core is archived/no concurrent writer; kernel/Tape3/
+schema/other host/manifests/fixtures remain protected. Current standard/native
+HTMLElement.click is source-qualified as untrusted programmatic activation:
+Semantic, userGesture=false, no pointer/Enter/dispatchEvent/direct onclick/value
+setter/hidden focus or browser-permission workaround. Not physical hit evidence.
+
+Hold action and public native input/output result identities separately; validate
+both before real parent permit, then freshly read held result after activation.
+Expected self-removal of option cannot cause label/ID/coordinate reacquisition or
+publication of vanished/stale actor facts as fresh. Readable result is not required
+to be editable. Preserve legacy modes, classification, binding, bounds, uncertainty
+and no retry. Return exact extra owner need rather than broaden scope silently.
+
+CLI owner01a11286 separately registers/exposes Activate through existing explicit
+Expectation/Tape3; no new grammar or parent validator. One coherent saved provider/
+mechanical-host/CLI baseline and one actual public select→draft→Commit→applied plus
+unexpected-stop case, then one grouped risk review. Focused source tests now; no
+actual run until both owners ready. Existing Focus/Type proof is not repeated.
