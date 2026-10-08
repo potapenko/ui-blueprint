@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12 and owns spec-root/product routes; Web01a11983 implements B04; Integration01a11286 implements narrow schema/plugin admission and EXCHANGE/D03 leaves. Native01a110ac-2da3 WIP0114fa1 waits saved shared fix. No Native runtime; Web isolated headless lane after saved source; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core G12 source140e53d saved, waits B04 records; Web B04 sourceb234fff saved and actual headless sequence authorized; Integration admissionad4c56b saved, waits grouped review; Native WIP0114fa1 resumes canonical check and actual AX+probe consumer on saved shared fix. Native physical and Web headless lanes separate; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -1007,3 +1007,21 @@ before code by Integration; Core remains sole writer of root/product routes and
 will receive their exact registration-ready amendment. No concurrent file writer.
 Native remains on saved WIP0114fa1 until the shared fix; one grouped independent
 permission-boundary review follows saved shared+Native sources. No new audit loop.
+
+Saved checkpoints: Core140e53d493b907464b72f05b65774d8766e52c73 exact14, including
+CLI@13/registry26 and mechanical EXCHANGE@2/D03@3 route registration; Integration
+ad4c56b exact10 and Webb234fff exact9 saved/pushed directly by root from frozen
+author-ready results to release the Git queue. Index empty; unrelated repository
+PNG preserved/excluded. Correct host test owner is tests/support/native_host.rs.
+
+Integration reports schema2/golden-parity4(all126)/lifecycle11/production Native
+peer9 plus affected check/Clippy/fmt passed; no UI acceptance. Schema shape/old
+fixtures/parent protocol unchanged. Core G12 focused public/default-evaluation/
+unknown/limits/raw compatibility checks passed and retained CLI awaits B04 input.
+Web's 4viewport functions/12cases, local-only/rooted/JS/host checks passed on pinned
+saved base plus owned source; its source/harness is now saved and actual single
+headless baseline800→resize1000→scroll100 sequence resumes without another gate.
+Native resumes only the previously failing canonical check and saved-source own
+AX+probe Observe→G11; old P01/M04 runs are not repeated. One independent review is
+limited to shared admission plus explicit Native association, not old math/G12/
+B04. Runtime results and final scoped acceptance remain pending.

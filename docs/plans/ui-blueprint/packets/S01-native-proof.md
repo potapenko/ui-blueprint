@@ -82,7 +82,7 @@ No declaration relabels AX as probe or grants source/action authority.
 Production write set exactly crates/schema/src/validation.rs and
 crates/plugin-api/src/lib.rs. Focused tests: new/existing schema channel-response
 test under crates/schema/tests; plugin-api/tests/lifecycle.rs;
-host/tests/native_host.rs and host/tests/support/native_peer.rs. Contract/doc owners:
+host/tests/support/native_host.rs and host/tests/support/native_peer.rs. Contract/doc owners:
 product/exchange.md→EXCHANGE@2; development/decisions/d03-data.md→D03@3 and its
 decision README route; existing development/schema.md and plugin API guide only
 if needed; existing receipts/S01-native-proof.md. Declare actual subset. Root's
