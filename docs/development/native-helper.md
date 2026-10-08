@@ -813,3 +813,44 @@ a direct-executable launch observed with launch_time=0 is refused, never repaire
 by substituting a timestamp. Actual saved-source Observe/G11 passed; details and
 initial refused setup are in the existing P01-probe-source receipt. This is own-
 fixture explicit design linkage, not arbitrary-app SDK or full M05/P7 acceptance.
+
+## M03-C known full-window capture mapping
+
+The existing capture producer now emits a known crop_transform only when public
+SCContentFilter.contentRect exactly matches SCWindow.frame and addressed window-server
+bounds, the API's pointPixelScale produces the admitted natural pixel dimensions
+without rounding, and window/display geometry is unchanged across capture. The
+full-window filter excludes shadows/children/audio, explicitly preserves aspect ratio,
+uses the complete destination rectangle and disables upscaling. Unsupported metadata
+combinations retain unknown; no guessed titlebar/content origin or PNG-derived scale.
+
+The directional canonical transform is ax-screen (screen/pt/top_left) → a unique
+capture-OBSERVATION-pixels (surface/px/top_left), `[s,0,0,s,-x*s,-y*s]`, bound to
+Target/Surface/environment and derived ScreenCaptureKit Evidence. Source geometry
+remains unchanged. Popup rechecks current public geometry before/after PNG encoding
+and immediately before returning its frame; change returns stale_target with no
+advertised payload. Current process and both own parent/popup identities still
+revalidate separately. Endpoint equality is not proof of atomic acquisition or
+absence of an intervening move-and-return. Recorded mappings remain historical,
+never current pointer/action authority. Observe itself creates no action refs.
+
+Optional existing acquisition_evidence records raw window/filter rect, reported
+scale, actual dimensions and helper-local interval in bounded capture-metadata.json.
+AX and capture remain separate ChannelResponses with separate clocks and partial
+coverage. Parent is explicitly excluded from isolated popup pixels. A known crop
+transform does not add AX fields to capture or claim synchronized channels/occlusion.
+
+The focused developer qualification consumes an explicitly saved own-popup pair:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/capture_mapping.py --pair "$OBSERVE_NDJSON" --cli "$CLI" --validator "$VALIDATOR"
+```
+
+It creates a temporary standalone Snapshot with the original AX nodes and actual
+capture Observations/frame, retaining all original clocks/properties/coverage; it
+is not a mixed-channel Observe response. An explicit EvaluationInput supplies the
+recorded crop transform to the unchanged Rust measurement API. Rust checks popup
+and button dimensions/insets and rejects missing, wrong-Surface, retired-generation
+and wrong-environment mapping. No supplemental observation is invented in evaluation.
+This is a saved-data test consumer, not a new CLI composition command or live sync
+service. Real own-fixture evidence and retained PNGs: [M03-C receipt](../plans/ui-blueprint/receipts/M03-capture-mapping.md).

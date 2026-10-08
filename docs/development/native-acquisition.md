@@ -197,3 +197,19 @@ Keep matched D06 stage+outer latency gates, including PNG cost and current data;
 do not mix old pixels, reduced workloads or synthetic limits with live acceptance.
 B−3801 remains stopped until a separate authorized runtime condition permits its
 positive gate; this proposal authorizes no permission/settings/backend retry.
+
+## M03-C mapping qualification
+
+Capture geometry now has an additional bounded public metadata witness: one exact
+CG window record plus at most31 active display records (fixed32-ID buffer, saturation
+refuses). Display IDs/bounds/pixel sizes/rotation and selected window bounds must
+match before/after capture. No extra image or UI-tree acquisition occurs. The public
+SC window/filter rect and scale qualify only the full-window natural-resolution
+case described in [native-helper](native-helper.md#m03-c-known-full-window-capture-mapping).
+All native profile limits, deadlines, pixel admission and opaque SDK/codec exclusions
+remain unchanged. Actual PNG width/height validate the selected mapping; they do not
+supply its scale. No transform is published for fractional-size rounding or mismatched
+metadata. Window/display change refuses stale_target; synthetic geometry/resize/race
+checks and actual popup/move/parent-resize/reopen evidence are separately recorded in
+[M03-C](../plans/ui-blueprint/receipts/M03-capture-mapping.md). No arbitrary-app mapping,
+cross-display runtime qualification, global SDK allocation cap or D06 pass is claimed.

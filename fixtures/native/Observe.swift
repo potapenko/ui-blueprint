@@ -9,7 +9,7 @@ import Darwin
 // Public ScreenCaptureKit callbacks avoid the imported async overlay involved in
 // the reproduced lost-continuation path. A local gate owns exactly one reply.
 enum OwnedCaptureError: Error {
-    case timeout(String), cancelled, permissionRequired, targetUnresolved, emptyCallback(String), resourceUnavailable
+    case timeout(String), cancelled, permissionRequired, targetUnresolved, staleTarget, emptyCallback(String), resourceUnavailable
 }
 struct CapturePlatformFailure: Error {
     let stage: String
@@ -49,6 +49,55 @@ struct OwnedCapture {
     let filterRect: CGRect
     let scale: Float
     let admissionWait: Double
+    var mapping: CaptureMapping? = nil
+}
+
+// Public window-server metadata is a geometry witness, not an identity source.
+// The caller separately holds the fixture process/Surface generation binding.
+struct CaptureGeometry: Equatable {
+    let frame: CGRect
+    let displays: [Double]
+    static func read(windowID: UInt32, pid: Int32) throws -> CaptureGeometry {
+        guard let rows = CGWindowListCopyWindowInfo(.optionIncludingWindow, windowID) as? [[String: Any]],
+              rows.count == 1, let row = rows.first,
+              row[kCGWindowOwnerPID as String] as? Int32 == pid,
+              let bounds = row[kCGWindowBounds as String] as? [String: Any],
+              let frame = CGRect(dictionaryRepresentation: bounds as CFDictionary)
+        else { throw OwnedCaptureError.staleTarget }
+        var ids = [CGDirectDisplayID](repeating: 0, count: 32)
+        var count: UInt32 = 0
+        guard CGGetActiveDisplayList(32, &ids, &count) == .success, count > 0, count < 32
+        else { throw OwnedCaptureError.resourceUnavailable }
+        var displays: [Double] = []
+        for id in ids.prefix(Int(count)).sorted() {
+            let bounds = CGDisplayBounds(id)
+            displays += [Double(id), bounds.minX, bounds.minY, bounds.width, bounds.height,
+                         Double(CGDisplayPixelsWide(id)), Double(CGDisplayPixelsHigh(id)), CGDisplayRotation(id)]
+        }
+        return CaptureGeometry(frame: frame, displays: displays)
+    }
+    func requireUnchanged(_ current: CaptureGeometry) throws {
+        guard self == current else { throw OwnedCaptureError.staleTarget }
+    }
+}
+
+struct CaptureMapping {
+    let geometry: CaptureGeometry
+    let affine: [Double]
+    // Only the API-reported full-window, natural-resolution case is admitted.
+    // Rounding/scaling/unknown content origin is not inferred from PNG dimensions.
+    static func verified(before: CaptureGeometry, after: CaptureGeometry, window: CGRect,
+                         content: CGRect, scale: Double, width: Int, height: Int) throws -> CaptureMapping? {
+        try before.requireUnchanged(after)
+        guard before.frame == window, content == window,
+              [window.minX, window.minY, window.width, window.height, scale].allSatisfy({ $0.isFinite }),
+              window.width > 0, window.height > 0, scale > 0,
+              window.width * scale == Double(width), window.height * scale == Double(height)
+        else { return nil }
+        let affine = [scale, 0, 0, scale, -window.minX * scale, -window.minY * scale]
+        guard affine.allSatisfy({ $0.isFinite }) else { return nil }
+        return CaptureMapping(geometry: before, affine: affine)
+    }
 }
 enum CaptureAdmission { case legacyRun, parentOwned }
 @MainActor enum CaptureLifecycle {
@@ -121,6 +170,7 @@ enum CaptureAdmission { case legacyRun, parentOwned }
         if fault == "failure" {
             throw OwnedCaptureError.emptyCallback("injected_capture_failure")
         }
+        let geometryBefore = try CaptureGeometry.read(windowID: windowID, pid: pid)
         let content: SCShareableContent = try await callback(stage: "shareable_content", deadline: deadline) { complete in
             SCShareableContent.getExcludingDesktopWindows(true, onScreenWindowsOnly: false, completionHandler: complete)
         }
@@ -135,6 +185,9 @@ enum CaptureAdmission { case legacyRun, parentOwned }
         let dimensions = try acquisition.imageDimensions(width: Double(filter.contentRect.width),
             height: Double(filter.contentRect.height), scale: Double(filter.pointPixelScale))
         configuration.width = dimensions.0; configuration.height = dimensions.1
+        configuration.scalesToFit = false
+        configuration.preservesAspectRatio = true
+        configuration.destinationRect = CGRect(x: 0, y: 0, width: dimensions.0, height: dimensions.1)
         if #available(macOS 15.0, *) { configuration.captureDynamicRange = .SDR }
         if #available(macOS 14.2, *) { configuration.includeChildWindows = false }
         let image: CGImage = try await callback(stage: "screenshot", deadline: deadline) { complete in
@@ -144,8 +197,12 @@ enum CaptureAdmission { case legacyRun, parentOwned }
         try acquisition.returnedImage(width: image.width, height: image.height, rowBytes: image.bytesPerRow, requested: dimensions)
         guard image.bitsPerComponent == 8, image.bitsPerPixel == 32, image.colorSpace?.model == .rgb
         else { throw NativeAcquisitionError.invalidValue }
+        let mapping = try CaptureMapping.verified(before: geometryBefore,
+            after: CaptureGeometry.read(windowID: windowID, pid: pid), window: window.frame,
+            content: filter.contentRect, scale: Double(filter.pointPixelScale), width: image.width, height: image.height)
         completedPlatformCall = true
-        return OwnedCapture(image: image, windowFrame: window.frame, filterRect: filter.contentRect, scale: filter.pointPixelScale, admissionWait: admissionWait)
+        return OwnedCapture(image: image, windowFrame: window.frame, filterRect: filter.contentRect,
+                            scale: filter.pointPixelScale, admissionWait: admissionWait, mapping: mapping)
     }
     static func nativeError(_ error: any Error) -> (domain: String, code: Int) {
         if let platform = error as? CapturePlatformFailure { return (platform.domain, platform.code) }
@@ -192,6 +249,7 @@ enum CaptureAdmission { case legacyRun, parentOwned }
             case .cancelled: return ("interrupted", "cancelled")
             case .permissionRequired: return ("permission_required", "permission")
             case .targetUnresolved: return ("target_unresolved", "window_binding")
+            case .staleTarget: return ("stale_target", "capture_geometry_changed")
             case .emptyCallback(let step): return ("incomplete_scope", step)
             case .resourceUnavailable: return ("incomplete_scope", "capture_resource_unavailable")
             }

@@ -173,6 +173,7 @@ import Darwin
         let stalePixel=try await runCapture("capture_stale",generation:"old-generation"){_,_,_,_ in captureCalls+=1;return captured}
         expect((stalePixel["data"] as! [String:Any])["code"] as? String=="stale_target" && captureCalls==1)
         for (name,error,code) in [("capture_permission",OwnedCaptureError.permissionRequired,"permission_required"),
+            ("capture_geometry_race",OwnedCaptureError.staleTarget,"stale_target"),
             ("capture_timeout",OwnedCaptureError.timeout("screenshot"),"timeout"),("capture_cancelled",OwnedCaptureError.cancelled,"interrupted"),("capture_unresolved",OwnedCaptureError.targetUnresolved,"target_unresolved")]{
             let failed=try await runCapture(name){_,_,_,_ in throw error}
             expect(failed["status"] as? String=="failed" && (failed["data"] as! [String:Any])["code"] as? String==code)
@@ -204,6 +205,57 @@ import Darwin
         }
         expect(raced["status"] as? String=="failed" && (raced["data"] as! [String:Any])["code"] as? String=="stale_target")
         expect(!FileManager.default.fileExists(atPath:dir.appendingPathComponent("images-capture_identity_race/capture/capture.png").path))
+        // Independent literal geometry: negative screen origin and 2x density.
+        // PNG size alone cannot make mapping known; all source metadata agrees.
+        let sourceRect = CGRect(x: -120, y: 80, width: 1.5, height: 1)
+        let witness = CaptureGeometry(frame: sourceRect, displays: [1, 0, 0, 1000, 800, 2000, 1600, 0])
+        let mapped = try CaptureMapping.verified(before: witness, after: witness, window: sourceRect,
+            content: sourceRect, scale: 2, width: 3, height: 2)!
+        expect(mapped.affine == [2,0,0,2,240,-160])
+        let resizedRect = CGRect(x: -100,y: 90,width: 2,height: 1.5)
+        let resizedWitness = CaptureGeometry(frame: resizedRect, displays: witness.displays)
+        let resizedMapping = try CaptureMapping.verified(before: resizedWitness, after: resizedWitness,
+            window: resizedRect, content: resizedRect, scale: 2, width: 4, height: 3)!
+        expect(resizedMapping.affine == [2,0,0,2,200,-180])
+        for changed in [CaptureGeometry(frame: sourceRect.offsetBy(dx: 1, dy: 0), displays: witness.displays),
+                        CaptureGeometry(frame: CGRect(x: -120,y: 80,width: 2,height: 1), displays: witness.displays),
+                        CaptureGeometry(frame: sourceRect, displays: [2])] {
+            do {
+                _ = try CaptureMapping.verified(before: witness, after: changed, window: sourceRect,
+                    content: sourceRect, scale: 2, width: 3, height: 2)
+                preconditionFailure("changed geometry/display must refuse")
+            } catch { expect(CaptureLifecycle.issue(error).code == "stale_target") }
+        }
+        for (content,scale,width) in [(sourceRect.offsetBy(dx: 1,dy: 0),2.0,3),
+                                     (sourceRect,Double.nan,3),(sourceRect,0.0,3),
+                                     (sourceRect,2.0,4),(sourceRect,1.5,3)] {
+            expect(try CaptureMapping.verified(before: witness,after: witness,window: sourceRect,
+                content: content,scale: scale,width: width,height: 2) == nil)
+        }
+        let overflowRect = CGRect(x: Double.greatestFiniteMagnitude,y: 0,width: 1.5,height: 1)
+        let overflowWitness = CaptureGeometry(frame: overflowRect, displays: witness.displays)
+        expect(try CaptureMapping.verified(before: overflowWitness,after: overflowWitness,
+            window: overflowRect,content: overflowRect,scale: 2,width: 3,height: 2) == nil)
+        let mappedCapture = OwnedCapture(image:image,windowFrame:sourceRect,filterRect:sourceRect,
+            scale:2,admissionWait:0,mapping:mapped)
+        let mappedJSON = NativeJSON(try config(popupGen).acquisition_limits)
+        let record = try Collector.captureRecord(mappedCapture,context:pixelContext,surface:pixelSurfaces[0],
+            observation:"popup-request-rendered_capture",payload:"capture/capture.png",json:mappedJSON)
+        var missingEnvironment = pixelContext
+        missingEnvironment.removeValue(forKey: "environment_revision")
+        do {
+            _ = try Collector.captureRecord(mappedCapture,context:missingEnvironment,surface:pixelSurfaces[0],
+                observation:"popup-request-rendered_capture",payload:"capture/capture.png",json:mappedJSON)
+            preconditionFailure("missing binding must refuse without a trap")
+        } catch { checks += 1 }
+        let transform = (record["crop_transform"] as! [String:Any])["transform"] as! [String:Any]
+        expect(transform["affine"] as! [Double] == [2,0,0,2,240,-160])
+        expect((transform["surface"] as! NSDictionary).isEqual(pixelSurfaces[0]))
+        expect((transform["evidence"] as! [String:Any])["provenance"] as? String == "derived")
+        var mappedSnapshot = pixelSnapshot
+        mappedSnapshot["captures"] = [record]
+        let mappedDoc:[String:Any] = ["schema_version":"0.1.0","artifact":["kind":"snapshot","data":mappedSnapshot]]
+        try JSONSerialization.data(withJSONObject:mappedDoc).write(to:out.appendingPathComponent("mapped_capture.json"),options:.withoutOverwriting)
         print("{\"checks\":\(checks),\"actual_popup_collector_owner\":true,\"live_sdk\":false}")
     }
 }

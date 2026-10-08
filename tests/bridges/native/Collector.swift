@@ -155,6 +155,7 @@ struct Collector {
             let stale = try envelope { try json.failure("stale_target", scope: scope, channel: channel) }
             var proof: [String: Any] = [:]
             var proofDirectory: URL?
+            var captureGeometry: CaptureGeometry?
             func prepare() async throws {
                 if !identityResolved { try frame.encode(unresolved); return }
                 let started = ProcessInfo.processInfo.systemUptime
@@ -206,6 +207,7 @@ struct Collector {
                         try frame.encode(envelope { try json.failure("stale_target", scope: scope, channel: channel) })
                         return
                     }
+                    captureGeometry = captured.mapping?.geometry
                     let pngBytes = try writeNativePNG(captured.image, admission: admission, directory: directory, name: "capture.png")
                     if evidence {
                         func rect(_ r: CGRect) -> [String: Double] { ["x": r.minX, "y": r.minY, "width": r.width, "height": r.height] }
@@ -216,12 +218,12 @@ struct Collector {
                             "pixel_width": captured.image.width, "pixel_height": captured.image.height,
                             "row_bytes": captured.image.bytesPerRow, "png_bytes": pngBytes,
                             "capture_serialization": selectedChannel == nil ? "exclusive_run_owned_flock" : "parent_owned_capture_lease_until_reap",
-                            "capture_admission_wait_seconds": captured.admissionWait, "transform_status": "unknown",
+                            "capture_admission_wait_seconds": captured.admissionWait, "transform_status": captured.mapping == nil ? "unknown" : "known",
                             "capture_call_start": started, "capture_call_end": ProcessInfo.processInfo.systemUptime,
                             "clock_domain": "helper-\(ProcessInfo.processInfo.processIdentifier)-monotonic", "time_unit": "seconds"]
                         proof = metadata
                     }
-                    captures = try json.array { [try captureRecord(captured, surface: surface, observation: oid, payload: selectedChannel == nil ? "capture.png" : "capture/capture.png", json: json)] }
+                    captures = try json.array { [try captureRecord(captured, context: context, surface: surface, observation: oid, payload: selectedChannel == nil ? "capture.png" : "capture/capture.png", json: json)] }
                 }
                 let complete = try envelope {
                     try json.object(["status", "data"]) {
@@ -249,6 +251,13 @@ struct Collector {
             try await finishChannel(frame: frame, failure: failure, prepare: prepare, evidence: emitEvidence, send: { value in
                 guard NSRunningApplication(processIdentifier: pid)?.launchDate?.timeIntervalSince1970 == launch,
                       windowOwnedBy(pid: pid, window: wid) else {
+                    value.reset(); try value.encode(stale); try send(value); return
+                }
+                do {
+                    if let captureGeometry {
+                        try captureGeometry.requireUnchanged(CaptureGeometry.read(windowID: wid, pid: pid))
+                    }
+                } catch {
                     value.reset(); try value.encode(stale); try send(value); return
                 }
                 try sendCurrentIdentity(value, stale: stale, manifest: manifest, send: send)
@@ -396,14 +405,43 @@ extension Collector {
              }, "captures": captures, "coverage": try coverage()]
         }
     }
-    static func captureRecord(_ capture: OwnedCapture, surface: [String: Any], observation: String,
+    static func captureTransform(_ capture: OwnedCapture, context: [String: Any], surface: [String: Any],
+                                 observation: String, json: NativeJSON) throws -> [String: Any] {
+        guard let mapping = capture.mapping else {
+            return try json.object(["status", "reason"]) {
+                ["status": try json.scalar("unknown"), "reason": try json.scalar("frame_mapping_not_calibrated")]
+            }
+        }
+        guard let target = context["target"] as? [String: Any],
+              let environment = context["environment_revision"] as? String
+        else { throw NativeAcquisitionError.invalidValue }
+        func space(_ id: String, _ kind: String, _ units: String) throws -> [String: Any] {
+            try json.object(["id", "kind", "units", "origin"]) {
+                ["id": try json.scalar(id), "kind": try json.scalar(kind),
+                 "units": try json.scalar(units), "origin": try json.scalar("top_left")]
+            }
+        }
+        var evidence = try json.evidence(observation, "macos.screencapturekit",
+            "sccontentfilter_screen_rect_scale_full_window_no_shadow_geometry_revalidated")
+        evidence["provenance"] = try json.scalar("derived")
+        return try json.object(["status", "transform"]) {
+            ["status": try json.scalar("known"), "transform": try json.object([
+                "from", "to", "affine", "target", "surface", "environment_revision", "evidence"]) {
+                ["from": try space("ax-screen", "screen", "pt"),
+                 "to": try space("capture-\(observation)-pixels", "surface", "px"),
+                 "affine": try json.array { try mapping.affine.map { try json.scalar($0) } },
+                 "target": try json.borrowed(target), "surface": try json.borrowed(surface),
+                 "environment_revision": try json.scalar(environment), "evidence": evidence]
+            }]
+        }
+    }
+    static func captureRecord(_ capture: OwnedCapture, context: [String: Any], surface: [String: Any], observation: String,
                               payload: String, json: NativeJSON) throws -> [String: Any] {
         try json.object(["observation_id", "capture_target", "capture_kind", "pixel_width", "pixel_height", "crop_transform", "included_surfaces", "excluded_surfaces", "unresolved_surfaces", "surface_coverage", "captures_audio", "filter_id", "payload_ref"]) {
             ["observation_id": try json.scalar(observation), "capture_target": try json.borrowed(surface),
              "capture_kind": try json.scalar("window_isolated"), "pixel_width": try json.scalar(capture.image.width),
-             "pixel_height": try json.scalar(capture.image.height), "crop_transform": try json.object(["status", "reason"]) {
-                ["status": try json.scalar("unknown"), "reason": try json.scalar("frame_mapping_not_calibrated")]
-             }, "included_surfaces": try json.borrowed([surface]), "excluded_surfaces": try json.array { [Any]() },
+             "pixel_height": try json.scalar(capture.image.height),
+             "crop_transform": try captureTransform(capture, context: context, surface: surface, observation: observation, json: json), "included_surfaces": try json.borrowed([surface]), "excluded_surfaces": try json.array { [Any]() },
              "unresolved_surfaces": try json.array { [Any]() }, "surface_coverage": try json.scalar("partial"),
              "captures_audio": try json.scalar(false), "filter_id": try json.scalar("desktopIndependentWindow-no-children-no-audio"),
              "payload_ref": try json.scalar(payload)]
@@ -680,10 +718,29 @@ extension Collector {
                 let image = try await capture(config.binding.window_id,config.binding.pid,
                     min(2,command.deadline-started),admission)
                 try valid()
+                func geometryCurrent() throws {
+                    if let mapping = image.mapping {
+                        try mapping.geometry.requireUnchanged(CaptureGeometry.read(windowID: config.binding.window_id, pid: config.binding.pid))
+                    }
+                }
+                try geometryCurrent()
                 _ = try writeNativePNG(image.image,admission:admission,directory:directory,name:"capture.png")
                 try valid()
+                try geometryCurrent()
+                if config.acquisition_evidence == true {
+                    func rect(_ r: CGRect) -> [String: Double] {
+                        ["x": r.minX, "y": r.minY, "width": r.width, "height": r.height]
+                    }
+                    let metadata: [String: Any] = ["window_frame": rect(image.windowFrame),
+                        "filter_content_rect": rect(image.filterRect), "filter_point_pixel_scale": image.scale,
+                        "pixel_width": image.image.width, "pixel_height": image.image.height,
+                        "mapping_verified": image.mapping != nil, "capture_call_start": started,
+                        "capture_call_end": ProcessInfo.processInfo.systemUptime,
+                        "clock_domain": "helper-\(ProcessInfo.processInfo.processIdentifier)-monotonic"]
+                    _ = try writeNativeSidecar(metadata, name: "capture-metadata.json", admission: admission, directory: directory)
+                }
                 let oid = "\(requestID)-rendered_capture"
-                var record = try captureRecord(image,surface:popupSurface,observation:oid,payload:"capture/capture.png",json:json)
+                var record = try captureRecord(image,context:context,surface:popupSurface,observation:oid,payload:"capture/capture.png",json:json)
                 record["excluded_surfaces"] = try json.borrowed([parentSurface])
                 var result = try snapshot(context:context,surface:popupSurface,target:target,scope:scope,fields:fields,
                     observation:oid,channel:command.channel,started:started,nodes:try json.array{[]},captures:try json.array{[record]},json:json)
@@ -698,12 +755,12 @@ extension Collector {
                      "evidence":try json.evidence(bindingObservation,"macos.fixture.binding","explicit_fixture_popover_window_binding")]
                 }]}
                 try frame.encode(json.response(request:request,ticket:command.control.ticket,channel:command.channel){try json.object(["status","data"]){["status":try json.scalar("observed"),"data":result]}})
-                try valid()
+                try valid(); try geometryCurrent()
             } catch {
                 frame.reset()
                 do { try validIdentity() } catch { try frame.encode(stale); return frame }
                 let issue = CaptureLifecycle.issue(error)
-                try frame.encode(issue.code == "permission_required" ? permission : issue.code == "timeout" ? timeout : issue.code == "interrupted" ? interrupted : issue.code == "target_unresolved" ? unresolved : failure)
+                try frame.encode(issue.code == "stale_target" ? stale : issue.code == "permission_required" ? permission : issue.code == "timeout" ? timeout : issue.code == "interrupted" ? interrupted : issue.code == "target_unresolved" ? unresolved : failure)
             }
             return frame
         }
