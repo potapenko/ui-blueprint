@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 restored for read-only G02 interaction/design implementation handoff; Native01a110ac-2da3 reads M04 move/scroll/local-geometry gap; Web01a11983 cleans consumed A05 nonimage artifacts and updates exact1 receipt. CLI01a11286 retained for next G02 public caller. No runtime lane held; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 restored for read-only G02 interaction/design implementation handoff; Native01a110ac-2da3 reads M04 move/scroll/local-geometry gap; Web01a11983 archived after accepted A05/cleanup checkpointcce939a. CLI01a11286 retained for next G02 public caller. No runtime lane held; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Use the two bounded current-source handoffs to assign G02 component/parts view and M04 local geometry implementation; reuse accepted collectors/engine/CLI. Finish A05 retention checkpoint without more action development. External CUA mapping remains unverified; full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -834,3 +834,13 @@ gap, preserving AX/probe provenance and unknown transforms. Basis NATIVE-PILOTS@
 NATIVE@2/GEOMETRY@1 and full required closure restored; no implementation permission
 yet. Existing owner context reused; both handoffs run in parallel on master.
 CLI remains idle for the ensuing public caller, with no active write lease.
+
+A05 retention checkpointcce939af9ff8699943741f8baa4b6f4074a590ea saved/pushed;
+exact26 consumed JSON files and empty run directory removed, images/other evidence
+untouched. Web terminal idle/index clean/lease released, then archived via host.
+Restorable owner01a11983-223d-7a30-8334-573658f237fb; no unfinished A05 consumer.
+Core turn01a11aab-c2cb-7291-80f6-7d666806dc4b and Native turn01a11aac-e514-7ae2-a551-20be48955712
+confirmed inProgress by wait_threads. Core has identified that current design inspect
+lists keys rather than full mapped-part data; final exact implementation handoff
+pending. Timeout does not mean either worker stopped. Continue these same handles;
+no duplicate worker, new audit or unchanged runtime repetition.
