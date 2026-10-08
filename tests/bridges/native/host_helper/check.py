@@ -168,6 +168,9 @@ def main():
     # These actual entrypoint cases fail in receive(), before Collector/SDK calls.
     case('actual helper rejects scope before SDK', denied_wire, binary=args.helper)
     case('actual helper rejects header before SDK', wire[:63], binary=args.helper)
+    form_config=copy.deepcopy(config)
+    form_config.update(collection='form',form_identifiers=['f02.name'],form_session_ms=1000)
+    case('form requires explicit resident protocol', inputs(config=form_config)[0], binary=args.helper)
     bad_config = copy.deepcopy(config); del bad_config['artifact_directory']; del bad_config['pixel_policy']
     case('actual helper rejects missing pixel policy before SDK', inputs(channel=1, config=bad_config)[0], binary=args.helper)
     bad_config = copy.deepcopy(config); del bad_config['acquisition_limits']

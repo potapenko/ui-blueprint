@@ -50,8 +50,7 @@ No parent JSON parse or Web collector/harness modification.
 
 ## Actual checks and results
 
-- Rust host/CLI compilation and affected all-target Clippy (web+macos), final result
-  recorded below. Action kernel12 tests passed, including added Fill within the
+- Rust host/CLI compilation and affected all-target Clippy (web+macos) passed. Action kernel12 tests passed, including added Fill within the
   existing confirmed/mismatch/unknown/redaction/remount matrix.
 - Host runtime26 passed; fixed-owner4, parent allocation1, parent-death outer1,
   publication4, public Web action CLI2 passed. Existing disposable helper entry
@@ -67,7 +66,7 @@ No parent JSON parse or Web collector/harness modification.
   skipped phase and Prepare→delivery misuse; no SDK input. Production resolver
   test: unique target/result and duplicate-identifier refusal with zero value reads.
 - Existing Swift form checks45 assertions/five canonical validated cases passed;
-  one-shot FD protocol33 checks passed, including exact caps, malformed frames,
+  one-shot FD protocol34 checks passed, including exact caps, malformed frames,
   correlation, timeout, scope and missing pixel policy. No SDK/capture in these.
 - Own real F02 via LaunchServices, PID48775, bundle local.uiblueprint.f02.off:
   repeated Observe→Prepare/Act Focus→Fill Ada→Activate sample→fresh Observe in
@@ -109,3 +108,48 @@ and cleaned at task end. No task image is deleted. Retained screenshot:
 CUA inline/tool-managed references remain untouched. The unrelated repository PNG
 and other-owner Web changes are excluded from staging. Final cleanup/checkpoint
 facts are appended after execution; the commit containing this receipt pins source.
+
+## Final qualification and checkpoint
+
+Production candidate checkpoint6a5bec23b8d15e4cc825aaff6105ac001a9a17bb was pushed
+on master before final receipt/cleanup work. The final production-only changes
+since that tested candidate are comments; extra final changes are focused tests
+and this receipt. The current commit containing this append is the final checkpoint.
+
+Additional actual form scenario passed17 canonical records/exit0 in one session:
+Focus→Fill Ada→Activate Complete Ada (explicit Name Ada Lovelace expectation)→
+Semantic Activate checkbox (explicit Checked true)→Activate Apply (explicit separate
+Result accepted-a). This is explicit activation, never an idempotent SetChecked
+fallback. The synthetic secret was prepopulated through CUA setup, not product
+secret-input support. The final independent CUA read confirmed checkbox1 and
+Result accepted-a; unrelated input appeared in Name after the ACKed scenario, so
+no claim is made that its earlier value remained current afterward. Further UI
+input stopped and the task-owned fixture exited; no unrelated text was copied
+into the task's source, reports or screenshots.
+
+Actual parent-EOF case: after two read-only observations, terminated the owned CLI;
+its registered worker and resident Native helper both disappeared within the
+three-second test bound, with zero mutation. This directly qualifies resident
+parent-loss cleanup, distinct from the existing Web worker parent-death test.
+
+All50 canonical records from positive/SetChecked/secure/stale/Type/remount/
+parent-EOF/full-form runs passed the canonical validator; synthetic canary absent.
+Final helper compilation and34 FD cases passed. Form order9 refusals/two sequences,
+identity duplicate refusal,45 form assertions/five canonical cases passed. Affected
+all-target Clippy passed after local fixes; selected Rust formatting, changed
+Python syntax and Markdown links/whitespace passed. No full-workspace/export suite
+or D06 measurement was claimed. Web CLI tests required the documented Web-enabled
+CLI executable; after building it both action CLI tests passed.
+
+Native fixture PID48775 was identified by exact run-owned executable and run-dir,
+terminated, and absence confirmed. LaunchServices launcher exited0. No task-owned
+worker/helper or desktop lane remains. Final cleanup removes only run-owned
+non-image products; the separate retained image directory above is excluded.
+The required independent final review and Native permission-transition/secure-input/
+IME/D06/full-pilot qualification remain explicit acceptance dependencies.
+
+Cleanup completed: all10189 run-owned non-image files were removed and absence of
+`uib-m02n.KZyKYdF52q` was verified. The separate screenshot remains present and was
+shown inline; no image or image-containing directory was deleted. Default-feature
+CLI all-target check also passed, so the opt-in Native path does not break the
+platform-free CLI build. Final scoped checkpoint+push follows this recorded result.

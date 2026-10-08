@@ -272,7 +272,7 @@ impl<'a> CanonicalSession<'a> {
         {
             return Err(HostError::InvalidInput);
         }
-        // Bind the first concrete Web forms conditions before SDK preparation,
+        // Bind the concrete public form conditions before SDK preparation,
         // using the same intent semantics as kernel/provider verification.
         let valid = match &action.intent {
             Intent::Focus {} => {

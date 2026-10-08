@@ -3,13 +3,13 @@
 No launch/input setup, permission changes, screenshot or external app access.
 All generated commands/results are caller-owned system-temp files.
 """
-import argparse, copy, json, pathlib, selectors, subprocess, tempfile, time
+import argparse, copy, json, os, pathlib, selectors, subprocess, tempfile, time
 ROOT=pathlib.Path(__file__).resolve().parents[3]
 def doc(kind,data):return {'schema_version':'0.1.0','artifact':{'kind':kind,'data':data}}
 def main():
  p=argparse.ArgumentParser()
  for key in ('directory','identity','helper','cli','worker'):p.add_argument('--'+key,type=pathlib.Path,required=True)
- p.add_argument('--scenario',default='positive',choices=['positive','checked','secure','type','stale','owner','remount'])
+ p.add_argument('--scenario',default='positive',choices=['positive','checked','secure','type','stale','owner','remount','parent-eof','form'])
  a=p.parse_args();assert a.directory.resolve().is_relative_to(pathlib.Path(tempfile.gettempdir()).resolve())
  a.directory.mkdir(exist_ok=True)
  binding=json.loads(a.identity.read_text());binding={k:v for k,v in binding.items() if k not in ('state','identity_version')}
@@ -60,10 +60,38 @@ def main():
   first=observe();snap=snapshot(first)
   assert state(snap,1,'value')['availability']=='redacted'
   second=snapshot(observe());assert [n['key'] for n in snap['nodes']]==[n['key'] for n in second['nodes']]
+  if a.scenario=='parent-eof':
+   rows=subprocess.check_output(['ps','-axo','pid=,ppid='],text=True).splitlines()
+   children=[int(row.split()[0]) for row in rows if int(row.split()[1])==process.pid]
+   assert len(children)==2,'registered worker and resident helper must exist'
+   process.kill();process.wait(timeout=3)
+   end=time.monotonic()+3
+   remaining=set(children)
+   while remaining and time.monotonic()<end:
+    for pid in list(remaining):
+     try:os.kill(pid,0)
+     except ProcessLookupError:remaining.remove(pid)
+    time.sleep(.01)
+   assert not remaining,'owned descendant survived parent EOF'
+   report={'scenario':'parent-eof','owned_descendants_exited':len(children),'canonical_records':len(records),'mutation_calls':0}
+   save('report.json',report);print(json.dumps(report));return
   if a.scenario=='positive':
    for index,intent,field,value,result in [(0,{'intent':'focus'},'focused',{'type':'flag','value':True},None),(0,{'intent':'fill','text':'Ada'},'value',{'type':'text','value':'Ada'},None),(3,{'intent':'activate'},'value',{'type':'text','value':'Count: 1'},4)]:
     outcome=action(second,index,intent,field,value,result);assert outcome['artifact']['kind']=='transition_context',outcome
     step=outcome['artifact']['data']['transition']['steps'][0];assert step['delivery']=='confirmed' and step['outcome']=='succeeded',step
+    second=snapshot(observe())
+  elif a.scenario=='form':
+   steps=[(0,{'intent':'focus'},'focused',{'type':'flag','value':True},None),
+          (0,{'intent':'fill','text':'Ada'},'value',{'type':'text','value':'Ada'},None),
+          (5,{'intent':'activate'},'value',{'type':'text','value':'Ada Lovelace'},0),
+          (2,{'intent':'activate'},'checked',{'type':'flag','value':True},2),
+          (6,{'intent':'activate'},'value',{'type':'text','value':'Result: accepted-a'},7)]
+   assert state(second,2,'checked')=={'availability':'known','value':{'type':'flag','value':False}}
+   for index,intent,field,value,result in steps:
+    outcome=action(second,index,intent,field,value,result)
+    assert outcome['artifact']['kind']=='transition_context',outcome
+    step=outcome['artifact']['data']['transition']['steps'][0]
+    assert step['delivery']=='confirmed' and step['outcome']=='succeeded',step
     second=snapshot(observe())
   elif a.scenario=='checked':
    # No value setter means no SetChecked capability; AXPress is not a substitute.
@@ -83,7 +111,7 @@ def main():
    second=snapshot(observe())
    outcome=action(second,0,{'intent':'type','text':'Z'},'value',{'type':'text','value':'AdaZ'});assert outcome['artifact']['data']['transition']['steps'][0]['outcome']=='action_outcome_unknown'
   process.stdin.close();code=process.wait(timeout=5)
-  assert code==(0 if a.scenario=='positive' else 4),(code,process.stderr.read().decode())
+  assert code==(0 if a.scenario in ('positive','form') else 4),(code,process.stderr.read().decode())
   assert 'M02_SYNTHETIC_CANARY' not in json.dumps(records)
   report={'scenario':a.scenario,'canonical_records':len(records),'exit':code,'fixture_pid':binding['pid'],'cleanup':'CLI exited; registered shutdown required','images':0}
   save('report.json',report);print(json.dumps(report))

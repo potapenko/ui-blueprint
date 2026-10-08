@@ -1,4 +1,4 @@
-//! One SetChecked/Focus/Type/Activate step; trusted ports own current UI/authority/effect evidence.
+//! One SetChecked/Focus/Fill/Type/Activate step; trusted ports own current UI/authority/effect evidence.
 //! No SDK, input transport, nonce generator or automatic retry exists here.
 use crate::{ClockReading, Error};
 use uiblueprint_schema::{
