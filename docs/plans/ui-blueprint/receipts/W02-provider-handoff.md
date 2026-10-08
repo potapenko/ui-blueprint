@@ -1132,9 +1132,13 @@ Focus8813B465c31ff823130e4707f2bea73495ddde3421c32ed9777e99fafd547416d31c2;
 Type9205B4f083f1915cc4583d9a8fbb520394167813a12941961f62525b018e602172e79;
 final Observe7014B6471ad7efd113743f62e40646ccba2e1e629706ec548969e0500c7c6a444e209;
 refusal5053B7cc8b659a6011d688ad7bc6790482ef87bfc8b26a8cf60b92c702c4415c0c5bd.
-The26 run-owned canonical inputs/outputs/report remain temporarily at
+Root reported the grouped source/privacy review completed without actionable
+findings: reviewer independently matched9 output lengths/hashes, report/harness
+and Focus/Type/focus-loss records. Source/input boundary accepted; runtime execution
+remains author-attributed, without full B02/P5/P7 or broader editable-control/IME/
+hardware/business/Native acceptance.
+After that consumer finished, Web checked the exact26-name inventory, regular-file
+types and valid JSON contents, then removed only those run-owned files and the empty
 `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/743c700e-9eb5-456f-a6db-d92baeaa6ffb`
-for the requested grouped Core/CLI/Web changed-risk review. Web owns their cleanup
-after that immediate consumer finishes; they are not a persistent archive or live
-action authority. Runtime is author-attributed; independent review, full B02/P5/P7,
-broader editable-control/IME/hardware/business/Native outcomes remain separate.
+directory. Absence verified; no images or other evidence touched. Hashes above now
+identify consumed historical bytes, not retained downloads or live action authority.
