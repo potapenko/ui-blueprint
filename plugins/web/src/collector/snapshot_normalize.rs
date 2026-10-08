@@ -224,23 +224,13 @@ pub(super) fn snapshot(
     scope: &DocumentsScope,
     request: &Request,
     counts: &[usize],
-    clock: &Id,
+    observation: Observation,
     stamp: (u64, u64),
-    interval: [f64; 2],
     limits: Limits,
 ) -> Result<Snapshot, Failure> {
     if capture.documents.len() != scope.documents.len() {
         return Err(Failure::new(ErrorKind::StaleTarget));
     }
-    let observation = normalize::observation(
-        &request.context,
-        clock,
-        "web.dom",
-        stamp,
-        interval,
-        true,
-        false,
-    );
     let mut nodes = Vec::new();
     let mut roots = Vec::new();
     let mut relations = Vec::new();
@@ -481,67 +471,64 @@ fn normalize_document(
                 );
             }
         }
-        if layout {
-            if let Some(l) = layout_index {
+        if layout && let Some(l) = layout_index {
+            ext(
+                &mut node,
+                "layout.text",
+                if sensitive {
+                    Availability::Redacted {}
+                } else {
+                    known(text(strings, d.layout.text[l], limits.max_text_bytes)?)
+                },
+                sensitive,
+                observation,
+            );
+            ext(
+                &mut node,
+                "layout.stackingContext",
+                known(Value::Flag(d.layout.stacking_contexts.index.contains(&l))),
+                false,
+                observation,
+            );
+            for (name, rect) in [
+                ("layout.offsetRect", &d.layout.offset_rects[l]),
+                ("layout.scrollRect", &d.layout.scroll_rects[l]),
+                ("layout.clientRect", &d.layout.client_rects[l]),
+            ] {
                 ext(
                     &mut node,
-                    "layout.text",
-                    if sensitive {
-                        Availability::Redacted {}
-                    } else {
-                        known(text(strings, d.layout.text[l], limits.max_text_bytes)?)
-                    },
-                    sensitive,
-                    observation,
-                );
-                ext(
-                    &mut node,
-                    "layout.stackingContext",
-                    known(Value::Flag(d.layout.stacking_contexts.index.contains(&l))),
+                    name,
+                    rectangle(rect, &seed.surface, true)?,
                     false,
                     observation,
                 );
-                for (name, rect) in [
-                    ("layout.offsetRect", &d.layout.offset_rects[l]),
-                    ("layout.scrollRect", &d.layout.scroll_rects[l]),
-                    ("layout.clientRect", &d.layout.client_rects[l]),
+            }
+            for (ordinal, (b, _)) in d
+                .text_boxes
+                .layout_index
+                .iter()
+                .enumerate()
+                .filter(|(_, idx)| **idx == l)
+                .enumerate()
+            {
+                ext(
+                    &mut node,
+                    format!("textBox.{ordinal}.bounds"),
+                    rectangle(&d.text_boxes.bounds[b], &seed.surface, false)?,
+                    false,
+                    observation,
+                );
+                for (name, value) in [
+                    ("startUtf16", d.text_boxes.start[b]),
+                    ("lengthUtf16", d.text_boxes.length[b]),
                 ] {
                     ext(
                         &mut node,
-                        name,
-                        rectangle(rect, &seed.surface, true)?,
-                        false,
+                        format!("textBox.{ordinal}.{name}"),
+                        known(Value::Number(f64::from(value))),
+                        sensitive,
                         observation,
                     );
-                }
-                let mut ordinal = 0;
-                for (b, _) in d
-                    .text_boxes
-                    .layout_index
-                    .iter()
-                    .enumerate()
-                    .filter(|(_, idx)| **idx == l)
-                {
-                    ext(
-                        &mut node,
-                        format!("textBox.{ordinal}.bounds"),
-                        rectangle(&d.text_boxes.bounds[b], &seed.surface, false)?,
-                        false,
-                        observation,
-                    );
-                    for (name, value) in [
-                        ("startUtf16", d.text_boxes.start[b]),
-                        ("lengthUtf16", d.text_boxes.length[b]),
-                    ] {
-                        ext(
-                            &mut node,
-                            format!("textBox.{ordinal}.{name}"),
-                            known(Value::Number(f64::from(value))),
-                            sensitive,
-                            observation,
-                        );
-                    }
-                    ordinal += 1;
                 }
             }
         }
@@ -553,4 +540,88 @@ fn normalize_document(
         }
     }
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    /// Explicit public F01 table replay; it does no browser access and creates no output files.
+    #[test]
+    #[ignore = "requires explicitly selected W06 public F01 raw/request files"]
+    fn recorded_document_fidelity() {
+        let raw = std::fs::read(std::env::var("UIB_W06_RAW").unwrap()).unwrap();
+        let input = std::fs::read(std::env::var("UIB_W06_REQUEST").unwrap()).unwrap();
+        let document = Document::from_json(&input, 65536).unwrap();
+        let Artifact::Request(request) = document.artifact else {
+            panic!("request")
+        };
+        let capture: raw::Capture = serde_json::from_slice(&raw).expect("native table shape");
+        let scope = DocumentsScope {
+            scope_id: request.context.scope_id.clone(),
+            max_visited_nodes: 128,
+            documents: request
+                .context
+                .surfaces
+                .iter()
+                .map(|surface| DocumentSeed {
+                    surface: surface.clone(),
+                    document_backend_id: capture
+                        .documents
+                        .iter()
+                        .find(|d| capture.strings[d.frame_id] == surface.id.0)
+                        .unwrap()
+                        .nodes
+                        .backend_node_id[0],
+                    sensitivity: Sensitivity::Public,
+                })
+                .collect(),
+        };
+        let counts = scope
+            .documents
+            .iter()
+            .map(|seed| {
+                capture
+                    .documents
+                    .iter()
+                    .find(|d| capture.strings[d.frame_id] == seed.surface.id.0)
+                    .unwrap()
+                    .nodes
+                    .backend_node_id
+                    .len()
+            })
+            .collect::<Vec<_>>();
+        let observation = normalize::observation(
+            &request.context,
+            &request.clock_domain,
+            "web.dom",
+            (1, 1),
+            [1.0, 2.0],
+            true,
+            false,
+        );
+        let limits = Limits {
+            max_nodes: 128,
+            max_methods: 100,
+            max_reply_bytes: 32768,
+            max_total_reply_bytes: 262144,
+            max_text_bytes: 16384,
+            max_handle_bytes: 256,
+            max_ax_properties: 32,
+            io_read_bytes: 65536,
+            io_write_bytes: 32768,
+            io_work: 8192,
+        };
+        let result = snapshot(
+            capture,
+            &scope,
+            &request,
+            &counts,
+            observation,
+            (1, 1),
+            limits,
+        )
+        .expect("native normalization");
+        assert_eq!(result.nodes.len(), 97);
+        assert_eq!(result.surface_records.len(), 2);
+    }
 }

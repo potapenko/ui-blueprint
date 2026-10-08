@@ -105,8 +105,9 @@ async function main(){
       assert(!JSON.stringify(sample).includes('W06_PRIVATE_CANARY'));return {snapshot,sample,request};
     }
     await attach();
-    const baseline=await observe('full-baseline');assert(baseline.snapshot);report.coverage=compare(raw,baseline.snapshot);assert.equal(report.coverage.nodes,97);
-    save('raw-baseline.json',raw);save('canonical-baseline.json',baseline.sample.frames[0].canonical);save('request-baseline.json',baseline.request);
+    save('raw-baseline.json',raw);
+    const baseline=await observe('full-baseline');save('request-baseline.json',baseline.request);assert(baseline.snapshot);report.coverage=compare(raw,baseline.snapshot);assert.equal(report.coverage.nodes,97);
+    save('canonical-baseline.json',baseline.sample.frames[0].canonical);
     await page.evaluate(()=>document.getElementById('left').style.width='121px');
     const changedRaw=await cdp.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});const changed=await observe('full-changed');compare(changedRaw,changed.snapshot);
     await page.evaluate(()=>document.getElementById('left').style.removeProperty('width'));

@@ -135,9 +135,16 @@ impl Collector {
                 scope,
                 request,
                 &before,
-                &self.binding.clock.domain,
+                crate::normalize::observation(
+                    &request.context,
+                    &self.binding.clock.domain,
+                    "web.dom",
+                    (self.owner, self.sequence),
+                    [start, self.time()],
+                    true,
+                    false,
+                ),
                 (self.owner, self.sequence),
-                [start, self.time()],
                 self.limits,
             )
         })();
