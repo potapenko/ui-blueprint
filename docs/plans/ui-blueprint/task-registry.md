@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 G11 actual consumer saved eb2cb12, reads G12 selected-space diff gap; Native01a110ac-2da3 completed M04 and input cleanup, ready for archival after cleanup checkpoint; Web01a11983 implements B04 transform. Completed CLI01a11286 archived. Native physical lane released; Web isolated headless sequence after saved-source checks; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 reads G12 selected-space diff gap; Native01a110ac-2da3 restored for read-only M05 AX↔probe mapping handoff after completed M04/cleanup archival; Web01a11983 implements B04 transform, source compiles and focused checks run. Completed CLI01a11286 archived. No Native runtime lease; Web isolated headless sequence after saved-source checks; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -938,3 +938,15 @@ write set and representation choice; preserve current raw-diff JSON1.0.0, origin
 evidence, identity and missing-transform semantics. No code/files/tests/runtime or
 generic framework yet. This is the remaining approved G02 comparison requirement,
 not authority to normalize unverified coordinates or relax cache compatibility.
+
+Native M04 was completed/archived after cleanup checkpoint58dc42d. Restored the
+same chat for a distinct finite M05/G02 source question: determine whether current
+canonical records explicitly associate the merged external AX control with the
+measured probe parts, or only contain probe-only member groups/declarations.
+Basis NATIVE@2/NATIVE-PILOTS@1 M05/PROJECTIONS@1 and full existing closure; inspect
+only current Collector/HostProtocol/fixture mapping and accepted P01 evidence.
+Return implemented shape/consumer or precise gap/write set. No defect is assumed,
+and no code/files/tests/runtime/repeated invariance or broad audit is authorized.
+Immediate consumer is the remaining M05/G02 mapping requirement; preserve distinct
+source identities/action authority, never match by equal names/boxes. Core/Web
+owners remain protected. Explicit original parallel authorization applies.
