@@ -11,6 +11,9 @@ import tarfile
 import threading
 import tempfile
 import time
+import platform
+import shutil
+import signal
 import uuid
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -30,9 +33,9 @@ def encode(value):
     return data
 
 
-def run_bounded(command, timeout, *, env=None, data=None, cap=FRAME):
+def run_bounded(command, timeout, *, env=None, data=None, cap=FRAME, build_group=False):
     child = subprocess.Popen(command, stdin=subprocess.PIPE if data is not None else subprocess.DEVNULL,
-                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env)
+                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, start_new_session=build_group)
     parts = [bytearray(), bytearray()]
     overflow = [False, False]
     def read(index, stream):
@@ -54,7 +57,10 @@ def run_bounded(command, timeout, *, env=None, data=None, cap=FRAME):
             child.stdin.close()
         code = child.wait(timeout=timeout)
     except subprocess.TimeoutExpired:
-        child.terminate()  # exact child created here; fixture never terminated by this launcher
+        if build_group:
+            os.killpg(child.pid, signal.SIGTERM)  # isolated compiler group created here
+        else:
+            child.terminate()  # exact child created here; target app never terminated
         try:
             child.wait(timeout=1)
         except subprocess.TimeoutExpired:
@@ -72,6 +78,13 @@ def run_bounded(command, timeout, *, env=None, data=None, cap=FRAME):
                 child.wait(timeout=1)
         else:
             child.wait()
+        if build_group:
+            # Cargo/Swift can spawn compiler descendants. Stop only this newly
+            # isolated build group, including descendants after its leader exits.
+            try:
+                os.killpg(child.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
         for reader in readers:
             reader.join(timeout=2)
         if any(reader.is_alive() for reader in readers):
@@ -285,6 +298,88 @@ def live(args):
     return 0
 
 
+def build_geometry(args):
+    """Local selected committed-source build; no install, browser, model or UI."""
+    if platform.system() != 'Darwin' or platform.machine() != 'arm64':
+        raise ValueError('selected build requires the supported arm64 Mac')
+    if not args.output.is_absolute() or not args.output.is_dir():
+        raise ValueError('output must be an explicit existing absolute directory')
+    output = args.output.resolve()
+    names = ('uiblueprint', 'session-worker', 'native-host-helper')
+    if any(os.path.lexists(output/name) for name in names):
+        raise ValueError('conflicting product file; nothing overwritten')
+    stage = Path(tempfile.mkdtemp(prefix='uib-geometry-build-'))
+    published = []
+    try:
+        revision = subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True,timeout=10).strip()
+        archive = subprocess.check_output(['git','archive',revision,'Cargo.toml','Cargo.lock','rust-toolchain.toml',
+            'crates','plugins/web','plugins/macos','fixtures/native/Observe.swift',
+            'tests/bridges/native/Collector.swift','tests/bridges/native/WindowAX.swift'],cwd=ROOT,timeout=30)
+        source = stage/'source'
+        source.mkdir()
+        with tarfile.open(fileobj=io.BytesIO(archive)) as saved:
+            saved.extractall(source,filter='data')
+        environment = dict(os.environ,CARGO_TARGET_DIR=str(stage/'target'),CARGO_INCREMENTAL='0',CARGO_PROFILE_DEV_DEBUG='0')
+        for package, binary, features in [('uiblueprint-cli','uiblueprint','web,macos'),
+                                           ('uiblueprint-host','session-worker','web')]:
+            code, _, error = run_bounded(['rustup','run','1.96.0','cargo','build','--locked','--offline',
+                '--manifest-path',str(source/'Cargo.toml'),'-p',package,'--bin',binary,'--features',features],
+                180,env=environment,cap=2*1024*1024,build_group=True)
+            if code:
+                raise RuntimeError('selected Rust build failed: '+error.decode(errors='replace')[-2000:])
+        swift_sources = ['plugins/macos/NativeAcquisition.swift','plugins/macos/NativeJSON.swift',
+            'plugins/macos/NativeArtifacts.swift','fixtures/native/Observe.swift','tests/bridges/native/Collector.swift',
+            'tests/bridges/native/WindowAX.swift','plugins/macos/HostProtocol.swift',
+            'plugins/macos/NativeFocusedAX.swift','plugins/macos/HostHelper.swift']
+        code, _, error = run_bounded(['xcrun','swiftc','-parse-as-library','-swift-version','6',
+            '-D','HOST_HELPER','-D','CAPTURE_LIBRARY','-target','arm64-apple-macos14.0',
+            '-module-cache-path',str(stage/'module-cache'),*[str(source/path) for path in swift_sources],
+            '-o',str(stage/'native-host-helper')],120,cap=2*1024*1024,build_group=True)
+        if code:
+            raise RuntimeError('selected Swift build failed: '+error.decode(errors='replace')[-2000:])
+        products = {'uiblueprint':stage/'target/debug/uiblueprint',
+            'session-worker':stage/'target/debug/session-worker','native-host-helper':stage/'native-host-helper'}
+        for name, product in products.items():
+            destination = output/name
+            # Exclusive create also protects a conflict appearing after preflight.
+            fd = os.open(destination,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o700)
+            identity = os.fstat(fd)
+            published.append((destination,identity.st_dev,identity.st_ino))
+            with os.fdopen(fd,'wb') as target, product.open('rb') as source_file:
+                shutil.copyfileobj(source_file,target)
+                os.fchmod(target.fileno(),0o755)
+        print(json.dumps({'source_revision':revision,'features':['web','macos'],
+            'products':{name:str(output/name) for name in names},
+            'sha256':{name:digest(output/name) for name in names},
+            'runtime_launched':False,'installed':False},indent=2))
+        return 0
+    except Exception:
+        for path, device, inode in published:
+            try:
+                info = path.lstat()
+                if info.st_dev == device and info.st_ino == inode:
+                    path.unlink()
+            except FileNotFoundError:
+                pass
+        raise
+    finally:
+        # Build-owned non-image files only. Keep any source/SDK image and its
+        # containing directory; no recursive removal of retained images.
+        image_extensions = {'.png','.jpg','.jpeg','.gif','.webp','.svg','.ico','.icns',
+                            '.bmp','.tif','.tiff','.heic','.partial'}
+        for path in stage.rglob('*'):
+            if (path.is_file() or path.is_symlink()) and path.suffix.lower() not in image_extensions:
+                path.unlink()
+        for path in sorted((path for path in stage.rglob('*') if path.is_dir()),
+                           key=lambda path:len(path.parts),reverse=True):
+            if not any(path.iterdir()):
+                path.rmdir()
+        if not any(stage.iterdir()):
+            stage.rmdir()
+        else:
+            print('retained build image artifacts: '+str(stage))
+
+
 def geometry(args):
     """Developer example: explicit running PID, public CLI, original Observe input."""
     for executable in (args.cli, args.worker, args.helper):
@@ -424,7 +519,18 @@ def main():
     example.add_argument('--name', required=True, help='exact reported accessibility name in returned Snapshot')
     for name in ('cli', 'worker', 'helper'):
         example.add_argument('--'+name, type=Path, required=True)
+    selected = commands.add_parser('build-geometry', help='build selected Web+Mac executables without installation')
+    selected.add_argument('--output', type=Path, required=True, help='existing absolute destination; product conflicts refuse')
     args = parser.parse_args()
+    if args.mode == 'build-geometry':
+        try:
+            return build_geometry(args)
+        except ValueError as error:
+            print(str(error))
+            return 2
+        except (OSError, RuntimeError, subprocess.SubprocessError) as error:
+            print(str(error))
+            return 1
     if args.mode == 'geometry':
         try:
             return geometry(args)

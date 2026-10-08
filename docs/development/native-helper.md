@@ -655,11 +655,12 @@ its named non-image JSON files. No fixture identity/probe file or hand-authored 
 Build the existing binaries once (pinned Rust/Swift/Xcode setup applies):
 
 ```sh
-EXAMPLE_TMP="$(mktemp -d "${TMPDIR:-/tmp}/uib-native-example.XXXXXX")"
-cargo build --locked --offline -p uiblueprint-cli --features macos --bin uiblueprint --target-dir "$EXAMPLE_TMP/target"
-cargo build --locked --offline -p uiblueprint-host --bin session-worker --target-dir "$EXAMPLE_TMP/target"
-xcrun swiftc -parse-as-library -swift-version 6 -D HOST_HELPER -D CAPTURE_LIBRARY -target arm64-apple-macos14.0 -module-cache-path "$EXAMPLE_TMP/module-cache" plugins/macos/NativeAcquisition.swift plugins/macos/NativeJSON.swift plugins/macos/NativeArtifacts.swift fixtures/native/Observe.swift tests/bridges/native/Collector.swift tests/bridges/native/WindowAX.swift plugins/macos/HostProtocol.swift plugins/macos/NativeFocusedAX.swift plugins/macos/HostHelper.swift -o "$EXAMPLE_TMP/native-helper"
-PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py geometry --pid "${TARGET_PID:?Set an explicit running app PID}" --name "${COMPONENT_NAME:?Set the exact component name}" --cli "$EXAMPLE_TMP/target/debug/uiblueprint" --worker "$EXAMPLE_TMP/target/debug/session-worker" --helper "$EXAMPLE_TMP/native-helper"
+BUILD_OUT="$(mktemp -d "${TMPDIR:-/tmp}/uib-native-example.XXXXXX")"
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py build-geometry --output "$BUILD_OUT"
+CLI="$BUILD_OUT/uiblueprint"
+WORKER="$BUILD_OUT/session-worker"
+HELPER="$BUILD_OUT/native-host-helper"
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py geometry --pid "${TARGET_PID:?Set an explicit running app PID}" --name "${COMPONENT_NAME:?Set the exact component name}" --cli "$CLI" --worker "$WORKER" --helper "$HELPER"
 ```
 
 Typical controlled example output:
@@ -682,3 +683,42 @@ Width/height come from Rust Measure; x/y from reported AX rectangle, not inferre
 Own-F02 check used this mode with no Snapshot action/fixture files; real apps are not
 launched by this procedure. Build products are temporary developer tools; clean owned
 non-image products after use, preserve any images and their containing directories.
+
+
+## Selected Web+Mac local build
+
+One entrypoint builds the current committed HEAD with locked/offline dependencies:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/host_observe.py build-geometry --output "$BUILD_OUT"
+```
+
+BUILD_OUT must be an explicitly supplied existing absolute directory. The command
+publishes only uiblueprint, session-worker and native-host-helper, refuses any existing
+product file/symlink and preserves unrelated files. Build stages/module caches stay in
+system temp and are cleaned as owned non-image files; image files/containing dirs are
+retained if encountered. Failed publication removes only its own newly created products.
+Committed-source archive ignores uncommitted WIP, prints source revision/product paths/
+SHA256. This is reproducible source/recipe selection, not a bit-identical-binary guarantee.
+
+Selected configurations are CLI features web,macos and worker feature web on supported
+arm64 Mac; default/core-only feature semantics and manifests do not change. Requires
+installed pinned Rust1.96.0, Xcode/Swift SDK and cached locked crates. rustup run plus
+Cargo --offline never installs/downloads a toolchain or dependency; missing prerequisites
+fail. No signing, global installation/PATH changes, app/browser launch or permissions.
+Ordinary saved analysis works from this CLI without a model or browser session.
+
+Use the produced paths for the Native developer example above. For existing Web
+trusted connection/request inputs, retain the public observe grammar:
+
+```sh
+CLI="$BUILD_OUT/uiblueprint"
+WORKER="$BUILD_OUT/session-worker"
+HELPER="$BUILD_OUT/native-host-helper"
+"$CLI" observe --connection "$WEB_CONNECTION" --request "$WEB_REQUEST" --worker "$WORKER" --max-input-bytes 2097152 --max-output-bytes 524288
+```
+
+The browser and explicit authorized CDP endpoint/tab/document are external prerequisites,
+not discovered/installed by this build. No .npm cache executable path is embedded.
+This local distribution preparation delivers selected geometry executables; it is not
+full P5/P7/released-product, general OS compatibility or license/signing acceptance.

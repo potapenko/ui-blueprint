@@ -545,3 +545,75 @@ Binary pins: helperac545eef5d15687c3a2b06db1011234260c43f1126486d7a6b6d20580bd07
 CLIc37159a47322ae9be9e3a19c2e28b5d9f4657bb6c6959fa288b442c16ad40e49;
 worker36321578ac3a2f420b65d499a35ff39ff22d1db6522039d1ccc1df8df607fc9f;
 fixture8c82ed594c44495967aa674e69d002810494e85605c4e042ef31e1c26d2ed3df.
+
+
+## G07 — one selected Web+Mac geometry build command
+
+Root finite P6/I01 local distribution-preparation packet, shipping_product classification;
+user-approved geometry goal, no complete P5/P7/release claim. Traversal current registry19
+→ product route → ROADMAP P6/BOUNDARIES/CLI@7 plus established EXCHANGE/PRIVACY/Native/
+lifecycle/D02/D04/D05 closure, RUST/DEV.RUST@2/D01/D07. Whole COMPLETION requirements
+remain unmet/excluded from this slice; build wiring is not whole product acceptance.
+Existing build owners inspected: build_support.py pinned old host/validator example,
+prepare/host_observe prepare fixture consumers; no equivalent current selected build.
+
+Exact3 writes: existing host_observe.py, native-helper.md and this receipt. Added
+build-geometry --output ABS_EXISTING_DIRECTORY to existing script, no new root file/
+framework/directory/dependency/manifests/feature/lock/toolchain/schema/runtime behavior.
+Build committed HEAD via immutable Git archive; only selected source/compiler products
+in system temp. Uses installed rustup run1.96.0 Cargo --locked --offline, CLI web,macos,
+worker web; existing Swift helper source list/Swift6/macOS14 compile minimum. No downloads,
+models/browser sessions, signing/global install/PATH/app launch/TCC/real UI reads.
+
+Destination must pre-exist and be absolute. Fixed product names uiblueprint/session-worker/
+native-host-helper; preflight refuses existing file or symlink, publication O_EXCL handles
+later collision without overwriting. Unrelated output files preserved. All products build
+before publishing; failure removes only newly created same-inode products. Compiler build
+calls use isolated owned process groups so timeout cleanup includes Cargo/Swift descendants;
+other launcher modes remain direct-child behavior. No new public option/host protocol.
+Tiny success/descendant-timeout check passed for that bounded compiler group path.
+Stage cleanup removes non-image source/cache/build files only, never image/containing dirs.
+Reproducible source/recipe/locked dependency selection, not binary bitwise determinism.
+
+Actual single joint build in fresh existing system-temp output completed0 from committed
+02ba8272d1bd3df007669154ece8e0b04650f821; all3 executable paths produced. Unrelated
+sentinel file byte-equal. Output remains caller-selected; no inferred home/local-bin path.
+No test runtime/compiler/node cache discovery in shipping command. Fixed180s Rust stage/
+120s Swift stage waits, owned output bounded2MiB; no UI runtime/performance gate.
+
+Distribution wiring smoke from those produced files: public CLI --help0; saved authored
+measurement-gap fixture → local Measure0/known8css_px with embedded Snapshot unchanged;
+same saved SourceKey design Inspect0. No model key/browser/native window required.
+Helper describe-process missing PID2147483647 returned4; unknown-mode usage2. Repeated
+build to occupied product destination refused2 before compile and preserved hashes of
+all3 products+unrelated sentinel. Missing destination refused2 and was not created.
+No prior runtime or broad suite repeated; no third-party/user application operated.
+
+Docs now give one build invocation and CLI/WORKER/HELPER variables for current Native
+geometry example and existing Web observe connection/request grammar. Browser/runtime/
+authorized endpoint/tab remain explicit external prerequisites, not installed/discovered.
+Output setup JSON reports source_revision/features/product paths/SHA256. No shipping
+connection/public parser contract invented; agent no longer assembles Cargo/swiftc lists.
+
+Produced SHA256: uiblueprint4324cae4ff918d08f3a1c1e321c49373be2887c9c1b0ad853e6c5e4dd09c77d8;
+session-worker4cb36acbfeebeb9b6a0fd9bfd598ea7a2063dadb55623d9302500963eae7ab23;
+native-host-helperae74553be747387d4ae4d6925a4aaef499411b91863c51c6d559aeafb1e16960.
+Root selected immediate G08 Web consumer before output cleanup. All3 compiled binaries
+and /private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-g07-output-ue8jgdg3/
+retained through its consumption, root/Web release is cleanup condition; no permanent
+archive. Separate smoke fixtures/reports removed; minimal build-result.json metadata restored
+at the previous checks path for G08 copy/hash consumer only (no build/check rerun).
+After Web confirms copied CLI/worker, root may release originals and handoff metadata.
+Build stage
+removed, images0/old assets untouched. Final compiler-group change was tested with
+bounded success/descendant-timeout commands after actual build publication body proof;
+no extra joint build or runtime. No process/lane held. Exact3 links/route/whitespace checks; checkpoint/push via Git lease.
+Remaining: installed distribution/signing/license/support and full P5/P7 acceptance,
+not claimed or expanded here. Local Mac selected geometry build capability established.
+
+
+G07 final consumer release: root relayed Web verification of both CLI/worker SHA and
+successful copies into Web's own task-temp; originals unmodified. Root explicitly
+released original products/output and handoff metadata. Removed only the3 own binary
+files and build-result.json, then empty containing dirs; absence verified. No images
+or Web copies touched, no new build/runtime/check. Exact3 coherent checkpoint follows.
