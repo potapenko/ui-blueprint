@@ -422,7 +422,9 @@ pub(crate) fn ax(read: &AxNode, context: &Context, observation: &Observation, ca
                     flag(read.properties.as_ref().and_then(|properties| {
                         let value = &properties.iter().find(|p| p.name == "focusable")?.value;
                         match (value.r#type.as_str(), value.value.as_ref()) {
-                            ("boolean", Some(Scalar::Flag(value))) => Some(*value),
+                            ("boolean" | "booleanOrUndefined", Some(Scalar::Flag(value))) => {
+                                Some(*value)
+                            }
                             _ => None,
                         }
                     })),

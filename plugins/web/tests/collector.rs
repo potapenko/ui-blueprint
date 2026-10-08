@@ -32,7 +32,10 @@ fn raw_focusability_extension_preserves_true_false_unknown_and_selection() {
         ("string", json!("true"), None),
         ("number", json!(1), None),
         ("token", json!(true), None),
-        ("booleanOrUndefined", json!(true), None),
+        ("booleanOrUndefined", json!(true), Some(true)),
+        ("booleanOrUndefined", json!(false), Some(false)),
+        ("booleanOrUndefined", json!("true"), None),
+        ("booleanOrUndefined", Json::Null, None),
     ] {
         let fixture = Fixture::new(move |method, _, _| {
             if method != "Accessibility.getPartialAXTree" {
