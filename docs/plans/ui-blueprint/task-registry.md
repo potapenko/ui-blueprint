@@ -54,6 +54,23 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## N03 initial P2 и Q02 comparability
+
+Q01 initial source review6ba7707/a40652a без author narrative подтвердил P2:
+NativeFormSession parent resolver проходит внутрь AXPopover; same/distinct popup
+child принимается как parent control/result и получает ложную Surface. Offline
+reproducer: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-n03-source-mglf_0td/Review.swift.
+Q01 retains его до same-review repair recheck. N03 исходный owner восстановлен,
+получил exact finding/reproducer; fixes resolution/revalidation/result-only scope
+в своём полном task, без второго writer/UI/TCC. Q01 idle awaiting saved delta;
+functional candidate пока не принят, source-first stage ещё не reconciled.
+
+Q02 source/baseline/offline работа продолжается. Нужен actual node/field/pixel
+comparability check: V02 добавил protected status row, поэтому frozen74–75-node
+Native workload нельзя автоматически приравнять к current tree. Timed серии и
+product optimizations пока не разрешены; thresholds/fields/quality не меняются.
+Нагрузка/desktop свободны по Q01 source-only этапу, но functional gate ещё открыт.
+
 ## Q02 owner и ресурсная зависимость
 
 «Q02 — D06 performance gates», local01a11c77-25bf-7072-8cf6-a255fa4dc11c,
