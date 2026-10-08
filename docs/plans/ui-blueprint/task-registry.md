@@ -54,6 +54,24 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q01 fixed-candidate assessment сохранён
+
+Q01/V016a63136 pushed, terminal completed; полная [матрица](receipts/Q01-integrated-acceptance.md)
+прочитана. Собственный94724df runtime подтвердил WebB01–B06 в заявленных границах,
+WebE2E, Native form/stale/owner/cleanup, probe18pt, selected local diff, export и
+combined delivery. Full candidate НЕ принят. Open: V02 protected input/full canary;
+Native product popup-action composition; full scoped M05 hit invariance; оставшиеся
+Native real permission/event/B-pixel gates; два analysis expectations; Q02/Q03.
+Положительные B05 debug и B03 release указаны раздельно; никакого whole-suite pass.
+Desktop освобождён и передан V02 сообщением; Source/Q01 не будет оперировать им
+до нового владения. Сохраняется Q03 minimal original handoff7responses+metadata.
+
+Ready параллельно V02: [A02-F](packets/A02-analysis-expectations.md) исправляет
+конкретный historical analysis oracle без product code; [Q03](packets/Q03-recorded-usefulness.md)
+оценивает usefulness retained data без live UI. Q01 сохранён для affected recheck
+после V02/исправлений, не создаётся новый verifier. Native popup/remaining gates
+не исчезают из полного scope; follow-up implementation после освобождения Native.
+
 ## I02 завершён
 
 I02854037fc531b684a3513b3fb6c5434543606fd58 pushed, terminal completed,
