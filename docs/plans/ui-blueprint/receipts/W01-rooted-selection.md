@@ -1,5 +1,73 @@
 # W01 rooted selection source handoff
 
+## G08 generic explicit-target Web first use — 2026-10-08
+
+Delivered tooling: `node tests/bridges/web/geometry.cjs` takes explicit CLI/worker,
+page-CDP endpoint, target/frame/loader/document/backend-root identity and invokes
+public Observe → design Inspect → Rust Measure(width,height). The complete
+copyable invocation and prerequisites are in the [Web guide](../../../development/web-collector.md#developer-first-use-an-explicitly-selected-existing-component).
+It never launches/navigates/focuses a page, scans the document, imports Playwright,
+reuses profiles/cookies or builds executables. No Director/F01/URL/viewport/cache
+path is embedded in the helper. Existing rooted collector and canonical records
+are reused; no product source/schema/grammar/dependency/contract changed.
+
+Basis: current registry19/G05–G06 CLI@7 OBSERVE/INSPECT, ANALYSIS@2 with full
+TYPES/VALIDATION@1 and geometry/identity/privacy/lifecycle/Web/D02/D04/D05/WORK/D07
+closure reused; no relevant spec/Rust/Web source drift. Mode tooling, immediate
+developer geometry consumer. Caller-origin identity bundle is mandatory: the
+helper compares target/frame/loader/document, describes exactly one backend node,
+then the existing collector verifies same-document/connectivity/root continuity.
+No stale ID repair or cross-navigation stable-ref/action claim. A numeric backend
+identity has no selector ambiguity; duplicate arguments are refused, never chosen
+by order. Missing, foreign and stale document paths were actually exercised.
+
+Write set: new `tests/bridges/web/geometry.cjs`, existing guarded-live.cjs, Web guide
+and this receipt. Native's common build command remains its sole owner. The G07
+build-result file had already been removed when supplied, but both original binaries
+still existed; SHA values from its owner receipt matched. Only CLI/worker were
+copied to this task's system temp. G07 saved recipe5f185fe, actual product source
+build02ba827; no duplicate build and no modification/removal of Native originals.
+
+Actual smoke03:48:46.759–03:48:48.340UTC: owned existing F01, generic command
+arguments, root web.dom:21. Current example exit4 retained partial coverage and
+printed8216B including reported root rect380,20,360,123 css_px plus8 other DOM
+parts. Rust width360/height123 were both known, same viewport/top_left space,
+local_only; source CSSOM reported, current live_read, sequential consistency unknown.
+Coverage partial, omitted_count unknown, unknown_count18. Names/roles not requested;
+hit/visible availability is not replaced by layout. No JavaScript geometry arithmetic.
+Each Measure output's original Snapshot equality and unchanged Observe bytes passed.
+Entire positive command154.34ms; not p95, speed qualification or real Director proof.
+
+Missing backend2147483647 returned `target_unresolved`/4, foreign document IDs
+from the second owned target returned `stale_document`/4, and the original bundle
+after owned-fixture reload returned `stale_document`/4. All three had zero stdout.
+Each command preserved fixture state; no owned worker remained after it. Context,
+driver, browser, profile, fixture server and CLI cleanup confirmed. The helper's
+own non-image JSON directory is removed before its result exits. It leaves caller
+pages open; only the fixture harness subsequently closes its owned pages/browser.
+
+Invocation under existing finite harness: G05 environment/pinned executable paths
+with `UIB_WEB_LIVE_CASE=first_use node tests/bridges/web/guarded-live.cjs --run-authorized`.
+Caps stayed32/depth8/64KiB/250ms/256visited/120s; no cap tuning or old suite repeat.
+Syntax/diff/local-link checks and three pre-network invalid-argument cases passed.
+After the live proof, only cleanup-error handling changed to attempt every owned
+file removal even if child cleanup fails. A focused mocked-metadata/missing-CLI
+spawn-failure check confirmed no browser/network access, failure1 and no leftover
+helper temp directory. Successful collection/measurement logic stayed unchanged.
+
+CLI SHA2564324cae4ff918d08f3a1c1e321c49373be2887c9c1b0ad853e6c5e4dd09c77d8;
+worker4cb36acbfeebeb9b6a0fd9bfd598ea7a2063dadb55623d9302500963eae7ab23.
+Live helper2c86438c36751d96c21f4d6a6b02ddf9b28bebdc16ab1cd5708c3741d2536804;
+final helper7360cd83e585e42035c1d123322280194a9f8fa629070cf27e1ce7fde788dff3;
+harness cef2056ee1f48366c4ca8529dba9786b51cb70acd1729b17efb0feb92258d44a.
+Report6f90dc9886e8d6a05091766ccca093b0b6fa45d0f806fc4df107132a65ef6dda;
+human outpute27319f954dcd8d9452cf7ab45415f7cf277fae7f6bd0cc615945fc789e52a8c.
+Both copied executable hashes matched after use and their worker process inventory
+was empty. The two copied binaries and two consumed output/report files were removed
+from their own temporary directories, with absence verified; originals untouched.
+No image or persistent output directory created. G06 combined-field64KiB refusal,
+general browser/platform support and full B03/P7 acceptance remain unchanged.
+
 ## G06 combined Director request: exact limit — 2026-10-08
 
 Classification: diagnostic / justified resource refusal, not a shipping defect.

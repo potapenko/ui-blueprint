@@ -235,6 +235,50 @@ async function run(evidence, report) {
       assert.equal(exit.code,expectedExit); // retain a valid canonical failure before stopping
       return {bytes:stdout,document};
     }
+    if(report.mode==='first_use'){
+      report.phase='developer_example';
+      const page=pages.a,actual=await binding(page),other=await binding(pages.b);
+      const session=await context.newCDPSession(page);let documentBackend,rootBackend;
+      try{
+        const {root}=await session.send('DOM.getDocument',{depth:0,pierce:false});documentBackend=root.backendNodeId;
+        const found=await session.send('DOM.querySelectorAll',{nodeId:root.nodeId,selector:'#f01'});assert.equal(found.nodeIds.length,1);
+        const {node}=await session.send('DOM.describeNode',{nodeId:found.nodeIds[0],depth:0,pierce:false});rootBackend=node.backendNodeId;
+      }finally{await session.detach();}
+      const helper=path.join(setup.root,'tests/bridges/web/geometry.cjs');
+      report.sourceHashes['tests/bridges/web/geometry.cjs']=crypto.createHash('sha256').update(await fs.readFile(helper)).digest('hex');
+      const args={'--cli':executable,'--worker':worker,'--endpoint':actual.endpoint,'--target-id':actual.target.id,
+        '--frame-id':actual.surface.id,'--loader-id':actual.surface.generation,'--document-backend-id':String(documentBackend),'--root-backend-id':String(rootBackend)};
+      async function invoke(stage,overrides,expectedExit){
+        const before=await uiState(page),started=performance.now();
+        child=spawn(process.execPath,[helper,...Object.entries({...args,...overrides}).flat()],{stdio:['ignore','pipe','pipe']});
+        const stdout=[],stderr=[];let size=0;
+        const capture=chunks=>chunk=>{size+=chunk.length;if(size>65536)child.kill('SIGKILL');else chunks.push(chunk);};
+        child.stdout.on('data',capture(stdout));child.stderr.on('data',capture(stderr));
+        exited=new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>resolve({code,signal}));});
+        const result=await bounded(exited,20000,'example_timeout');
+        assert.equal(result.signal,null);assert.equal(result.code,expectedExit);assert(size<=65536);
+        const bytes=Buffer.concat(stdout),diagnostic=Buffer.concat(stderr).toString('utf8');
+        assert(!diagnostic||/^(target_unresolved|stale_document)\n$/.test(diagnostic));
+        assert.deepEqual(await uiState(page),before);assert.deepEqual(ownWorkerPids(worker),[]);
+        report.outcomes.push({stage,exit:result.code,stdout_bytes:bytes.length,diagnostic:diagnostic.trim(),elapsed_ms:performance.now()-started});
+        return bytes;
+      }
+      const output=await invoke('example-current',{},4);
+      const lines=output.toString('utf8').split('\n');
+      const width=JSON.parse(lines.find(line=>line.startsWith('width: ')).slice(7));
+      const height=JSON.parse(lines.find(line=>line.startsWith('height: ')).slice(8));
+      assert.equal(width.status,'known');assert.equal(height.status,'known');
+      assert.equal(width.measurement.value.value.amount,360); // existing authored F01 wrapper literal
+      assert.equal(width.measurement.space.units,'css_px');
+      await writeExclusive(path.join(evidence,'first-use.txt'),output);
+      report.geometry={scope:'owned existing F01; generic caller arguments',width,height};
+      await invoke('example-missing',{'--root-backend-id':'2147483647'},4);
+      await invoke('example-foreign-document',{'--frame-id':other.surface.id,'--loader-id':other.surface.generation},4);
+      await page.reload();await page.waitForFunction(()=>!!window.f01); // own-fixture setup only
+      await invoke('example-stale-document',{},4);
+      report.checks.push({case:'first-use',generic_arguments:true,read_invariance:true,known_rust_dimensions:true,missing_foreign_stale_refused:true});
+      report.cli_cleanup_confirmed=true;return;
+    }
     if(directorCase){
       report.phase='director_geometry';report.fixture=null;
       report.binaries.cli=report.binaries.test;delete report.binaries.test;
@@ -749,7 +793,7 @@ async function run(evidence, report) {
       if(!exists){report.cleanup[name]='not_created';return;}
       try {await action();report.cleanup[name]='confirmed';}catch(_){report.cleanup[name]='unconfirmed';errors.push(name);}
     }
-    await clean((directorCase||['cli_actions','geometry'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
+    await clean((directorCase||['cli_actions','geometry','first_use'].includes(report.mode))?'cli_process':'test_process',!!child,async()=>{
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
@@ -758,7 +802,7 @@ async function run(evidence, report) {
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
     await clean('fixture_server',!!fixture,()=>bounded(fixture.close(),3000,'server_cleanup_timeout'));
     await clean('owned_profile',!!profile,async()=>{try{await fs.stat(profile);}catch(error){if(error.code==='ENOENT')return;throw error;}throw new Error('profile_not_removed');});
-    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry'].includes(report.mode))
+    report.cleanup.worker_sessions=(directorCase||['cli_actions','geometry','first_use'].includes(report.mode))
       ?(report.cli_cleanup_confirmed===true&&ownWorkerPids(worker).length===0?'confirmed_closed':'unconfirmed')
       :report.worker_cleanup?.confirmed===true&&report.worker_cleanup.reserved_sessions===0?'confirmed_closed':child?'unconfirmed':'not_created';
     report.pending_case_count=before.size;
@@ -767,14 +811,14 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions','geometry','director','director_semantics'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');
   assert.equal(await fs.realpath(EVIDENCE_ROOT),EVIDENCE_ROOT,'evidence parent must not redirect');
   await fs.mkdir(evidence,{mode:0o700}); // exclusive: EEXIST refuses before any launch
   const report={status:'failed',mode,outcomes:[],kind:'guarded-real-chromium-finite-scope',phase:'preflight',started_utc:new Date().toISOString(),
-    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics'].includes(mode)?'Web-component-geometry':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
+    retention:{owner:'Web-current-operation',consumers:[['geometry','director','director_semantics','first_use'].includes(mode)?'Web-component-geometry':mode==='cli_actions'?'L01-public-CLI-action-qualification':mode==='form_reads'?'W02-form-read-qualification':'B03-result-and-immediate-measurement'],until:'current operation result accepted and consumed; remove owned directory and verify removal'},
     limits:{nodes:32,depth:8,output_bytes:65536,request_ms:250,traversal_nodes:256},checks:[],frames:[],cleanup:{test_process:'not_created',context:'not_created',driver_connection:'not_created',owned_browser:'not_created',fixture_server:'not_created',owned_profile:'not_created',worker_sessions:'not_created'}};
   try {await run(evidence,report);report.status=mode==='first_observe_diagnostic'?'diagnostic_passed':'passed';report.phase='complete';}
   catch(_){report.failure??={code:'live_run_failed'};process.exitCode=1;}

@@ -1,5 +1,79 @@
 # Addressed Web collector and first request
 
+## Developer first use: an explicitly selected existing component
+
+The [geometry example](../../tests/bridges/web/geometry.cjs) is tooling, not a new
+public CLI grammar or an installed release. It requires Node24 (built-in
+WebSocket), existing Web-enabled `uiblueprint` and `session-worker` executables,
+and an already accessible numeric-loopback CDP **page** WebSocket endpoint. Use
+the shared [selected-module build](native-helper.md#selected-webmac-local-build)
+to obtain executables; this example accepts their absolute paths and never builds,
+installs, launches a browser/server, opens/navigates/focuses a page or reads a
+browser profile. Playwright is needed only by the separate fixture test harness.
+
+Select a component through an authorized caller's existing CDP node picker or
+equivalent exact node selection. Supply its identity bundle from that SAME target
+and document: target ID, root frame ID, loader ID, document backend ID and selected
+element backend ID. `Target.getTargetInfo`, `Page.getFrameTree`,
+`DOM.getDocument(depth:0,pierce:false)` and `DOM.describeNode(depth:0,pierce:false)`
+provide those identities in the existing caller. This example does not search for
+the component. It accepts no CSS/name/coordinate selector or first-match fallback.
+IDs from another browser tool are not CDP backend IDs. Do not substitute a bare
+old ID and current document metadata for the original bundle.
+
+With those explicit values in shell variables, run from the repository root:
+
+```sh
+node tests/bridges/web/geometry.cjs \
+  --cli "${UIB_CLI:?absolute Web-enabled CLI path}" \
+  --worker "${UIB_WORKER:?absolute Web-enabled worker path}" \
+  --endpoint "${UIB_CDP_PAGE_WS:?explicit ws://127.0.0.1:PORT/devtools/page/TARGET}" \
+  --target-id "${UIB_TARGET_ID:?selected CDP target}" \
+  --frame-id "${UIB_FRAME_ID:?selected root frame}" \
+  --loader-id "${UIB_LOADER_ID:?original document loader}" \
+  --document-backend-id "${UIB_DOCUMENT_BACKEND_ID:?original document backend ID}" \
+  --root-backend-id "${UIB_ROOT_BACKEND_ID:?selected element backend ID}"
+```
+
+The command checks the caller-supplied target/frame/loader/document before passing
+the exact root to the existing rooted collector. A missing element, foreign or
+stale document refuses; duplicate flags are invalid. A backend identity addresses
+one node, so no selector ambiguity is resolved by guessing. The collector still
+checks ownership, connectivity, original root/parent/children and final document
+continuity. This is a fresh read-only observation, not a stable cross-navigation
+ref or action authorization. The run's target generation is observation-scoped.
+
+It invokes public Observe → design Inspect → Measure(width,height), using the
+original ChannelResponse bytes directly. Rust computes both dimensions. Output
+includes compact inspection, reported component-part layout bounds with canonical
+keys/space/units/frame kind/evidence, dimension results, coverage and observations.
+No second graph or JavaScript geometry calculation is created. Names/roles are
+explicitly not requested; canonical source keys are identifiers, not observed
+human names. Unknown/redacted/unsupported geometry remains unavailable. Hit/visible
+regions are requested but never replaced by layout bounds; no clipping/viewport
+overflow, transform or padding claim follows.
+
+The fixed geometry profile matches G05:32 output nodes, depth8,64KiB,250ms,
+256 visited, collector16nodes, and existing bounded transport/host settings.
+Metadata setup is at most five sequential calls,2s each,8KiB per reply/64KiB total,
+four events, no document traversal. Checks precede JSON decode; Node WebSocket's
+opaque receive allocation is tooling and is not claimed to have the Rust worker's
+memory guard. Local CLI calls allow5s each; the finite operation stays under120s.
+No retry or increased quota after refusal. Limits do not promise every subtree or
+field combination fits: G06 found that adding names/roles for the real Director
+exceeded the64KiB canonical frame. This example does not claim that case solved.
+
+Exit0 means commands completed without incomplete/unknown status; exit4 can still
+contain useful measured bounds with honest partial coverage. Exit2 is invalid/limit,
+exit1 is IO/validation/cleanup failure, and public CLI unsupported exits propagate.
+The example prints bounded static refusal codes, never raw CDP/CLI errors. An
+earlier printed inspection remains historical if a later measurement fails.
+It closes only its own CDP connection and CLI children. Temporary JSON stays in a
+unique system-temp directory and is removed after printing; the selected page and
+browser remain open. No images or persistent profile/output files are created.
+The [G08 receipt](../plans/ui-blueprint/receipts/W01-rooted-selection.md)
+records the actual finite F01 proof separately from this generic invocation.
+
 `uiblueprint-web::collector` owns actual CDP selection/reads and canonical DOM/AX
 normalization. [Collector repair](../plans/ui-blueprint/receipts/W01-collector-recheck.md)
 accepted source4a45400; [bootstrap receipt](../plans/ui-blueprint/receipts/W01-bootstrap.md)
