@@ -53,9 +53,11 @@ output ceilings remain unchanged. No polling, hidden reattempt or collection aft
 terminalization. Remote handles belong to the request and are released or reported
 unconfirmed under the existing collector lifecycle.
 
-Raw protocol buffers exist transiently in the guarded adapter only. Classify
-caller-sensitive documents and known password/private DOM subtrees before creating
-canonical text/attributes/layout text. Redacted facts carry no value; no raw string
+Raw protocol buffers exist transiently in the guarded adapter only. Refuse
+caller-sensitive documents and known password/private DOM subtrees at preflight;
+refuse the entire channel if a private node appears in the captured tables. This
+avoids alias leaks through srcdoc/inline source copies. Ordinary scoped redaction
+is unchanged. No raw string
 table, unclassified URL token or diagnostic payload is persisted. Public source
 text remains an explicitly selected native fact. This is bounded
 fixture qualification, not detection of arbitrary unknown secrets. Any inability

@@ -244,6 +244,8 @@ impl Collector {
                 object_id:&handle,function_declaration:include_str!("document-check.js"),
                 return_by_value:true,silent:true,user_gesture:false,await_promise:false,throw_on_side_effect:false,
                 arguments:[serde_json::json!({"value":{"maxNodes":remaining,
+                    "maxAttributes":self.limits.max_ax_properties,"maxChars":self.limits.max_text_bytes / 6,
+                    "sensitive":seed.sensitivity==Sensitivity::Sensitive,
                     "maxDepth":request.limits.max_depth,"remainingMs":budget.deadline.saturating_duration_since(Instant::now()).as_secs_f64()*1000.0}})],
             },budget)?;
             if result.exception_details.is_some() {
@@ -251,6 +253,7 @@ impl Collector {
             }
             match result.result.value.status.as_str() {
                 "current" => {}
+                "private" => return Err(Failure::new(ErrorKind::InvalidInput)),
                 "timeout" => return Err(Failure::new(ErrorKind::Timeout)),
                 "limit" => return Err(Failure::new(ErrorKind::Limit)),
                 "unsupported" => {

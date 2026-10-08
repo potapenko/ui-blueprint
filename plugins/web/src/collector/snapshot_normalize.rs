@@ -371,6 +371,11 @@ fn normalize_document(
             || private_node(&n.attributes[i], strings)?
             || (i > 0 && private[n.parent_index[i] as usize]);
         private.push(sensitive);
+        // Whole capture cannot safely isolate srcdoc/inline-source aliases if
+        // a private node appeared after preflight. Publish no channel in that case.
+        if sensitive {
+            return Err(Failure::new(ErrorKind::InvalidInput));
+        }
         let layout_index = d.layout.node_index.iter().position(|idx| *idx == i);
         let mut node = Node {
             key: key(n.backend_node_id[i]),

@@ -18,6 +18,59 @@ use uiblueprint_web::{
 };
 
 const CANARY: &str = "PRIVATE_COLLECTOR_CANARY";
+#[test]
+fn raw_focusability_extension_preserves_true_false_unknown_and_selection() {
+    for value in [Some(true), Some(false), None] {
+        let fixture = Fixture::new(move |method, _, _| {
+            if method != "Accessibility.getPartialAXTree" {
+                return None;
+            }
+            Some(
+                json!({"nodes":[{"nodeId":"ax-11","ignored":false,"backendDOMNodeId":11,
+                "role":{"type":"role","value":"button"},"properties":value.map(|v|vec![json!({"name":"focusable","value":{"type":"boolean","value":v}})]).unwrap_or_default()}]}),
+            )
+        });
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::Focused];
+        let (_, docs) = collect(&mut c, &r, &scope(&[11]));
+        let ax = snapshot(&docs[0])
+            .nodes
+            .iter()
+            .find(|n| n.key.namespace.0 == "web.ax")
+            .unwrap();
+        let extension = &ax.extensions[0];
+        assert_eq!(extension.name.0, "focusable");
+        assert_eq!(extension.namespace.0, "web.ax");
+        match value {
+            Some(value) => assert_eq!(extension.property.known(), Some(&Value::Flag(value))),
+            None => assert!(matches!(
+                extension.property,
+                Property::Requested {
+                    state: Availability::Unknown { .. },
+                    ..
+                }
+            )),
+        }
+        assert!(
+            ax.properties[0].known().is_none(),
+            "focusable must not become focused"
+        );
+        r.context.fields = vec![Field::Role];
+        let (_, docs) = collect(&mut c, &r, &scope(&[11]));
+        assert!(
+            snapshot(&docs[0])
+                .nodes
+                .iter()
+                .find(|n| n.key.namespace.0 == "web.ax")
+                .unwrap()
+                .extensions
+                .is_empty()
+        );
+        c.detach();
+        fixture.finish();
+    }
+}
 struct Logger(AtomicBool);
 static LOGGER: Logger = Logger(AtomicBool::new(false));
 static INIT: Once = Once::new();
