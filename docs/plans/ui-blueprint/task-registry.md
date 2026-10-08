@@ -37,16 +37,15 @@ Root получает итог или конкретный блокер; про�
   20-case corpus и own Chromium10cases,6private0publication,97-node baseline.
   CPU/headless освобождены; Native foreground wait не изменён. Сейчас этот же
   контекст выполняет bounded N04 source/recorded recheck; Web verdict закрыт.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: full-document campaign
-  закончен по текущему receipt, turn ещё сохраняет результат. На a7c0416
-  full attach p95=37.507583ms/50, process-cold p95=264.899833ms/500;20cold,
-  100warm,120/120quality pass. Все4численных Web gates имеют passing evidence,
-  прежние semantic/geometry b3c3a22 переиспользованы по source applicability.
-  CPU/headless освобождены. Тот же Q02 получил полный bounded outcome отдельной
-  Rust normalization/formatting stage отчётности по дополнению своего packet:
-  actual routines/test-only measurement, production candidate защищён. Numeric
-  checkpoint `4cb8230` pushed; stage runs прошли по промежуточному сообщению,
-  финальные boundaries/SHA ещё ожидаются. Native отдельно, без runtime authority.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal completed,
+  `f63930d` pushed; полный текущий receipt прочитан. Все4Web numeric gates прошли;
+  separate Rust report завершён actual owning routines на saved a7c0416 inputs,
+ 20process-fresh/100reused per scope,1080spans/126clean exits,0failures,
+  exact Snapshot/Document/canonical-byte equality. Diagnostic spans не подменяют
+  неизменённые live cohorts (`b3c3a22`/`4cb8230`). Full reused p95 normalization
+ 257.917µs/sizing337.667µs/worker encoding352.833µs; не суммировать percentiles.
+  CPU/headless освобождены. Native foreground/functional/comparability остаются;
+  контекст сохранён для продолжения Native, никакого Native/P7 pass не заявлено.
 - I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: terminal `completed`,
   `5cb7662ac01f1c9d1d19ef7ec7b57634b16dd218` pushed; receipt прочитан целиком.
   Web/Native/combined a7c0416 installed builds/smoke/verify/remove прошли;
