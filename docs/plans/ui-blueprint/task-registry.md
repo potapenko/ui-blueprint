@@ -160,8 +160,8 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Product priority correction: Core/Web/Native save current P5 WIP, then geometry-focused work. Both original advisors provide existing geometry cases. Git short leases; no new input runtime or P5 expansion |
-| Последний принятый результат продукта | Actual CLIec844f6: Observe→Prepare→SetChecked→verify и disabled/remount refusals passed. Web form facts4b12d7b passed. Native popup AX+capture8507aa4 passed с раздельными identity checks/retained PNG. A02 kernel9bd5809 accepted scoped source; full P5/P7 не завершены |
+| Активные чаты/пакеты/ресурсы | Core исправляет concrete explicit-anchor aggregate coverage overconstraint (engine + mirrored schema guard). Web/Native geometry chains saved/pushed, runtime lanes released. Native next ordinary-window AX binding proposal ready; no new input work |
+| Последний принятый результат продукта | G03 ordinary CLI geometry работает на Weba7dfcfd и Nativeea90baf: реальные bounds, размеры/gaps и recorded diff без ручного Snapshot extraction. Ограничения пространства/partial/clipping указаны; actual geometry examples delivered. Full P0–P7 не завершён |
 | Следующий шаг | Сохранить P5 WIP; довести основной Web/Mac read-only geometry scenario до полезного agent-facing результата, используя существующий engine/collectors/probe и реальные component cases. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
@@ -465,3 +465,30 @@ remain protected. Geometry workers have standing authority for their one control
 F01/F02 chain once the saved loader is ready, no repeated activation round.
 Advisors' RC03/Director handoffs are saved in platform-test-advice; missing real inner
 bounds remain unknown. Full product scope retained, main geometry utility prioritized.
+
+G03 concrete outcomes: Nativeea90baf68a44f1887d33f3eae8d6648976f3ab0b ordinary
+CLI Observe/Inspect/Measure/Diff: component173.5x48→231.5x62pt and icon/text gap8→18pt,
+AX screen versus probe local frames preserved, transform unknown/probe unverified,
+actual cleanup. Weba7dfcfd01d2cc3cc89c1b98dcff39ec8a84314c5: group360x133,input188x21,
+popup200x60CSSpx; trigger-popup gap137,leftoffset-77.234375,input-listgap4, pairwise
+left offsets0/0, resize800→640 markerx660→500; actual Observe100–120ms in this run,
+not Q02 p95 qualification. Original first alignment expectation failure preserved;
+later full chain returned honest aggregate/clipping unknown with numeric pairwise
+measurements. No Director/RC03 inner-geometry claim or repeated UI run.
+
+Concrete remaining geometry defect: engine global Complete coverage veto rejects
+Aligned/EqualSpacing before examining explicit known anchors. Core reconciled with
+ANALYSIS/GEOMETRY explicit-target contract; synthetic3rects reproducealignment0.
+Schema analysis/results.rs::known_inputs mirrors this veto and currently rejects
+publication. Root authorizes exactly coupled guard removal+focused tests in engine/
+schema, preserving all property/evidence/binding/unknown checks and originalpartial
+Snapshot. No public types/wire change. ActualUIoutputs alreadyconsumed/deleted;
+no reconstruction of runtime IDs/provenance, no recapture required for this fix.
+
+Native external-geometry usability handoff: fixture-only gate is currently coded
+(F02bundle/a-b/current identityfiles). Existing bounded collectWindowAX already
+provides public AX accessibility_bounds in screenpt without actionrefs/probe. Next
+minimal candidate is explicit read-only AXFocusedWindow binding with PID/incarnation
+and before/after sameAXobject checks; CG mapping remains unknown, no title/rect/order
+substitute, ordinary AX cannot reveal hidden SwiftUI layout. Exact public binding/
+CLI extension needs selection before implementation; no realapp launch granted.
