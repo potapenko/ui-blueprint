@@ -54,6 +54,14 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Q02 owner и ресурсная зависимость
+
+«Q02 — D06 performance gates», local01a11c77-25bf-7072-8cf6-a255fa4dc11c,
+base1f3e5cb/producta40652a, полный task. Source/baseline/harness подготовка
+разрешена; timed серии/product optimizations ждут Q01 functional pin и release
+нагружающих/UI ресурсов. Q01 notified, продолжает N03 independent assessment
+в том же чате. Отдельный reviewer/per-command tasks не создавались.
+
 ## N03 сохранён; final functional review и Q02 подготовка
 
 N03 source6ba77073fb85ce6a2e6b146b3ff27118446cecf2/finala40652a pushed,
