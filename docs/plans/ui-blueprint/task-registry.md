@@ -63,7 +63,9 @@ Mac RC03 resize и Web Director, без новой авторизации зап
 Подготовлен [I01-L](packets/I01-local-distribution.md): законченная локальная
 сборка/поставка/recovery/notices по имеющимся binaries; implementation независима
 от текущих feature changes, V01/P7 остаются acceptance dependencies. Область записи
-отделена от трёх активных задач, desktop не используется. ID после запуска.
+отделена от трёх активных задач, desktop не используется. Запущен local чат
+«I01 — Локальная поставка и восстановление», ID
+01a11b54-e32b-7ef2-a707-28d82677dfd5, base3fa8d3a; полный цикл, status running.
 
 ## Уточнение организации при паузе — 2026-10-08 (история)
 
