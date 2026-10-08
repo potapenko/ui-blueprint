@@ -54,6 +54,14 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## W06 production owner
+
+«W06 — Web fidelity и полный fixture scope», local01a11cb3-7994-7b30-871b-69d5ae04b063,
+base2d1eb5d, full source/test/runtime/docs/checkpoint task. Web production/necessary
+Web connection у W06; Q02 только свои benchmark harnesses/методика/результаты.
+Q02 notified, semantic/full-cold ждут saved W06 handoff. Native/Q03 human gates
+без ответа сохраняются; нет нового разрешения по автоматическому goal continuation.
+
 ## Q02 Web geometry measured; W06 quality prerequisites
 
 Q0246aa360 pushed: source8e3dba2,100warm geometry p50=2.526646ms/p95=2.687833ms,
