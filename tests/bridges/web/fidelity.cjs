@@ -87,15 +87,16 @@ async function main(){
       transport:{endpoint_bytes:1024,handshake_bytes:2048,read_buffer_bytes:64,write_buffer_bytes:64,write_buffer_max:32768,frame_bytes:32768,message_bytes:32768,outbound_bytes:16384},
       cdp:{max_request_bytes:16384,max_message_bytes:32768,max_metadata_bytes:256,max_results:1,result_bytes:32768,max_events:4,event_bytes:34000},
       collector:{max_nodes:128,max_methods:100,max_reply_bytes:32768,max_total_reply_bytes:262144,max_text_bytes:16384,max_handle_bytes:256,max_ax_properties:32,io_read_bytes:65536,io_write_bytes:32768,io_work:8192}};
-    let activeSurfaces;
+    let activeSurfaces,sessionId;
     async function attach(surfaces=frames){
       activeSurfaces=surfaces;
-      const descriptor={schema_version:'0.1.0',artifact:{kind:'session',data:{session_id:'w06',plugin,supported_versions:['0.1.0'],target,surfaces,allowed_scopes:['full','left'],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'explicit-f01'}]}}};
+      sessionId='w06-'+crypto.randomUUID();
+      const descriptor={schema_version:'0.1.0',artifact:{kind:'session',data:{session_id:sessionId,plugin,supported_versions:['0.1.0'],target,surfaces,allowed_scopes:['full','left'],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'explicit-f01'}]}}};
       driver=client(executable,save(`config-${counter++}.json`,{descriptor,provider:{backend:'web',setup:setupConfig}}));assert.equal((await driver.next()).kind,'attached');
     }
     const state=()=>page.evaluate(()=>({active:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()}));
     async function observe(name,selection={selection:'documents',documents:docs,max_visited_nodes:128},fields=['value','layout_bounds'],mutate=()=>{}){
-      const ctx={schema_version:'0.1.0',session_id:'w06',target,surfaces:activeSurfaces,scope_id:selection.selection==='documents'?'full':'left',projection:'design',fields,plugin,environment_revision:'f01-800x600-dpr1'};
+      const ctx={schema_version:'0.1.0',session_id:sessionId,target,surfaces:activeSurfaces,scope_id:selection.selection==='documents'?'full':'left',projection:'design',fields,plugin,environment_revision:'f01-800x600-dpr1'};
       const request={schema_version:'0.1.0',artifact:{kind:'request',data:{request_id:`w06-${counter++}`,clock_domain:'rebound',context:ctx,
         limits:{max_elements:128,max_depth:16,max_output_bytes:524288,deadline_ms:2000},freshness_policy:'current_required',operation:{operation:'observe',channels:['external_semantics']}}}};
       mutate(request);const before=await state();driver.send({request,selection});const sample=await driver.next();assert.equal(sample.kind,'sample');assert.deepEqual(await state(),before);
@@ -110,7 +111,7 @@ async function main(){
     save('canonical-baseline.json',baseline.sample.frames[0].canonical);
     await page.evaluate(()=>document.getElementById('left').style.width='121px');
     const changedRaw=await cdp.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true});const changed=await observe('full-changed');compare(changedRaw,changed.snapshot);
-    await page.evaluate(()=>document.getElementById('left').style.removeProperty('width'));
+    await page.evaluate(()=>document.getElementById('left').removeAttribute('style'));
     compare(await cdp.send('DOMSnapshot.captureSnapshot',{computedStyles:[],includeDOMRects:true}),(await observe('full-restored')).snapshot);
     assert.notEqual(changed.snapshot.observations[0].id,baseline.snapshot.observations[0].id);
     for(const [name,selection,mutation]of[
@@ -129,17 +130,28 @@ async function main(){
     await attach([frames[0]]);
     assert.equal((await observe('unallowed-frame')).snapshot,null);await driver.close();driver=null;
     await attach([frames[0]]);
-    const semFields=['role','accessibility_name','enabled','focused','invalid'];const selected={selection:'initial',ids:[{id:'left',sensitivity:'public'}],max_visited_nodes:256};
+    const semFields=['role','accessibility_name','enabled','focused','invalid'];let selected={selection:'initial',ids:[{id:'left',sensitivity:'public'}],max_visited_nodes:256};
     for(const [name,value]of [['semantic-baseline','Apply'],['semantic-changed','Changed'],['semantic-restored','Apply']]){
-      await page.evaluate(v=>document.getElementById('left').setAttribute('aria-label',v),value);
+      if(name==='semantic-changed')await page.evaluate(v=>document.getElementById('left').setAttribute('aria-label',v),value);
+      if(name==='semantic-restored')await page.evaluate(()=>document.getElementById('left').removeAttribute('aria-label'));
       const result=await observe(name,selected,semFields);assert(result.snapshot);const ax=result.snapshot.nodes.find(n=>n.key.namespace==='web.ax');
       assert.equal(known(property(ax,'accessibility_name')),value);assert.equal(known(fact(ax,'focusable')),true);
       const dom=result.snapshot.nodes.find(n=>n.key.namespace==='web.dom');const source=await cdp.send('Accessibility.getPartialAXTree',{backendNodeId:Number(dom.key.key),fetchRelatives:false});
       assert.equal(source.nodes[0].properties.find(p=>p.name==='focusable').value.value,known(fact(ax,'focusable')));
       assert.equal(fact(ax,'focusable').evidence.source_namespace,'web.ax');
+      selected={selection:'references',nodes:[{sensitivity:'public',reference:{session_id:sessionId,target,surface:dom.surface,key:dom.key,snapshot_id:result.snapshot.id,observation_id:dom.properties[0].evidence.observation_id}}]};
       save(`${name}.json`,result.sample.frames[0].canonical);
     }
     await driver.close();driver=null;
+    await attach();
+    await page.evaluate(()=>{const f=document.createElement('iframe');f.id='w06-unallowed';f.srcdoc='<p>Outside scope</p>';document.body.append(f);});
+    await page.waitForFunction(()=>document.getElementById('w06-unallowed').contentDocument?.readyState==='complete',{},{timeout:2000});
+    assert.equal((await observe('actual-extra-frame')).snapshot,null);await driver.close();driver=null;
+    await page.evaluate(()=>document.getElementById('w06-unallowed').remove());
+    await attach();
+    await page.evaluate(()=>document.querySelector('iframe').srcdoc='<p>New child loader</p>');
+    await page.waitForFunction(()=>document.querySelector('iframe').contentDocument?.body?.textContent==='New child loader',{},{timeout:2000});
+    assert.equal((await observe('actual-child-navigation')).snapshot,null);await driver.close();driver=null;
     report.status='passed';report.chromium=browser.version();report.node=process.version;
   }catch(e){report.failure=e.stack;throw e;}
   finally{

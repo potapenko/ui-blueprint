@@ -564,6 +564,13 @@ fn normalize_document(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn native_empty_string_is_known_and_other_negative_indices_refuse() {
+        assert_eq!(text(&[], -1, 1).unwrap(), Value::Text(String::new()));
+        assert!(text(&[], -2, 1).is_err());
+        assert!(!private_node(&[0, -1], &["style".into()]).unwrap());
+        assert!(private_node(&[0, 1], &["type".into(), "password".into()]).unwrap());
+    }
     /// Explicit public F01 table replay; it does no browser access and creates no output files.
     #[test]
     #[ignore = "requires explicitly selected W06 public F01 raw/request files"]
@@ -635,12 +642,47 @@ mod tests {
             &scope,
             &request,
             &counts,
-            observation,
+            observation.clone(),
             (1, 1),
             limits,
         )
         .expect("native normalization");
         assert_eq!(result.nodes.len(), 97);
         assert_eq!(result.surface_records.len(), 2);
+        for case in 0..7 {
+            let mut value: serde_json::Value = serde_json::from_slice(&raw).unwrap();
+            match case {
+                0 => value["documents"][0]["nodes"]["parentIndex"][1] = 1.into(),
+                1 => value["documents"][0]["nodes"]["nodeValue"][1] = 999999.into(),
+                2 => value["documents"][0]["nodes"]["backendNodeId"][0] = 2147483647.into(),
+                3 => value["documents"][0]["layout"]["bounds"][0][2] = (-1).into(),
+                4 => {
+                    value["documents"][0]["nodes"]["backendNodeId"][1] =
+                        value["documents"][0]["nodes"]["backendNodeId"][0].clone()
+                }
+                5 => {
+                    let strings = value["strings"].as_array_mut().unwrap();
+                    let at = strings.len();
+                    strings.extend(["type".into(), "password".into()]);
+                    value["documents"][0]["nodes"]["attributes"][1] =
+                        serde_json::json!([at, at + 1]);
+                }
+                _ => value["documents"][0]["textBoxes"]["layoutIndex"][0] = 99999.into(),
+            }
+            let capture = serde_json::from_value(value).unwrap();
+            assert!(
+                snapshot(
+                    capture,
+                    &scope,
+                    &request,
+                    &counts,
+                    observation.clone(),
+                    (1, 2),
+                    limits
+                )
+                .is_err(),
+                "hostile native table {case}"
+            );
+        }
     }
 }

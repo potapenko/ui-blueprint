@@ -43,7 +43,7 @@ impl Collector {
     ) -> Result<Self, Failure> {
         if surfaces.is_empty()
             || surfaces.len() > limits.max_nodes
-            || surfaces.first() != Some(&binding.surface)
+            || !surfaces.contains(&binding.surface)
             || surfaces.iter().enumerate().any(|(i, s)| {
                 [&s.id, &s.generation]
                     .iter()
@@ -81,6 +81,9 @@ impl Collector {
                 .iter()
                 .zip(&c.surfaces)
                 .any(|(d, s)| &d.surface != s)
+            || scope.documents.iter().any(|d| {
+                d.surface == self.binding.surface && d.document_backend_id != self.document
+            })
         {
             return Err(Failure::new(ErrorKind::StaleTarget));
         }
