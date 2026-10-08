@@ -146,6 +146,7 @@ async function main(){
     const safe=await observe('safe-srcset-current-source-preserved');assert(safe.snapshot);compare(safeRaw,safe.snapshot);
     const safeURL=safe.snapshot.nodes.flatMap(n=>n.extensions).find(e=>e.name==='currentSourceURL'&&e.property.state.value?.value.endsWith('/public.png?size=1'));
     assert(safeURL,'known public selected resource is retained');
+    save('safe-url-raw.json',safeRaw);save('safe-url-canonical.json',safe.sample.frames[0].canonical);
     await page.evaluate(()=>document.getElementById('w06-image').remove());
     await closeDriver();
     await attach([frames[0]]);
