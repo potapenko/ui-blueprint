@@ -2144,7 +2144,7 @@ fn rooted_seed_publishes_actual_refs_without_initial_ids_or_fake_provenance() {
 }
 #[test]
 fn rooted_seed_wrong_binding_or_document_refuses_before_any_collection() {
-    for mode in 0..8 {
+    for mode in 0..6 {
         let fixture = Fixture::new(|_, _, _| None);
         let mut c = fixture.attach(limits());
         let before = fixture.methods().len();
@@ -3670,7 +3670,7 @@ fn activation_result_loss_privacy_unknown_mismatch_or_delivery_loss_never_retrie
 
 #[test]
 fn activation_prepare_requires_explicit_distinct_present_public_result() {
-    for mode in 0..6 {
+    for mode in 0..8 {
         let (fixture, calls) = activation_peer(0, false);
         let mut c = fixture.attach(limits());
         let (mut case, mut expected) = activation_case(&mut c);

@@ -1267,6 +1267,7 @@ or a deletion delta. Missing/private result -> unknown outcome; unavailable Valu
 stays unknown; mismatch fails. No action or result is repaired by label/ID/coordinates.
 Existing SetChecked/Focus/Type paths retain their read/delivery semantics.
 
+Historical author claim (count corrected by the review repair below):
 PASS:5 new activation test functions/27 cases, including saved-result refusal
 (public redacted/unsupported and caller resource bound);5 affected form-provider
 and8 checkbox regressions; existing offline
@@ -1360,3 +1361,32 @@ stop6733B6de3aa565c41b76bb6687f0ce417529eeef3db009874fbcbd0934c0982f1db39.
 The26 canonical inputs/outputs/report are retained only for the immediate grouped
 source review at `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/ba23e8db-1e32-49ac-b51e-e0d8dfece0fb`.
 Web owns removal after that consumer finishes; records are historical, not live refs.
+
+### Grouped-review evidence correction — 2026-10-08
+
+Reviewer found no introduced production defect, but the reported27 activation
+cases were inaccurate: saved5605206 actually ran25. In
+activation_prepare_requires_explicit_distinct_present_public_result, `0..6` made
+modes6/7 unreachable. Mode4 also set Sensitive, so it did not separately prove
+Public+Redacted or Public+Unsupported admission. The earlier claim above is retained
+as a corrected historical author report; those two cases did NOT run earlier.
+
+Exact repair in plugins/web/tests/collector.rs: that named loop is now `0..8`;
+rooted_seed_wrong_binding_or_document_refuses_before_any_collection is restored
+from accidental `0..8` to its original `0..6` (extra iterations merely repeated
+the zero-visit case). No production, harness, expectation, limit or fixture change.
+
+One targeted command passed2functions/14iterations:8 activation preparation cases
+including the newly reached Public+Redacted and Public+Unsupported refusals, and6
+rooted binding/document cases. All refuse before further collection; no new defect.
+The other19 activation cases retain their prior unchanged evidence, yielding27
+distinct cases only after this correction; the full suite was not rerun.
+
+Command: `CARGO_TARGET_DIR=<own system-temp> cargo test --locked --offline -p uiblueprint-web --test collector -- --exact activation_prepare_requires_explicit_distinct_present_public_result rooted_seed_wrong_binding_or_document_refuses_before_any_collection`.
+Saved basebdb1e389 plus the two loop-bound edits; only necessary test compilation,
+no separate product build/browser/runtime/new review. The26 application artifacts
+at the recorded ba23e8db path remain untouched for the same reviewer's recheck.
+Write set is this receipt and collector.rs only. Corrected collector.rs SHA256
+d8a735b68775d8f3aa9beeb7a67f345160b8340c3dd54098a45de81df3e64e7c.
+Consumed own test-target1669non-image files removed with absence verified; runtime
+artifacts/images/other evidence untouched. Independent scoped recheck remains pending.
