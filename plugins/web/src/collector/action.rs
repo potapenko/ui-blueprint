@@ -8,6 +8,8 @@ use uiblueprint_plugin_api::{
     actions::{ActionProvider, DeliveryPermit},
 };
 use uiblueprint_schema::{SchemaVersion, validation};
+#[path = "activate.rs"]
+mod activate;
 
 const SET_CHECKED: &str = include_str!("set-checked.js");
 const STATE: &str = r#"function checkboxState(expectedDocument) {
@@ -31,6 +33,7 @@ struct Held {
     group: String,
     action: Option<Action>,
     expected: Option<Expectation>,
+    result: Option<activate::HeldResult>,
     budget: Budget,
 }
 /// One action attempt; use only inside the worker's admitted allocation boundary.
@@ -77,6 +80,9 @@ impl<'a> WebActionProvider<'a> {
     fn supported(&self, action: &Action) -> Result<(), Failure> {
         let fields: &[Field] = match (&action.intent, action.modality) {
             (Intent::SetChecked { .. }, InputModality::Setter) => &[Field::Enabled, Field::Checked],
+            (Intent::Activate {}, InputModality::Semantic) => {
+                &[Field::Enabled, Field::Value, Field::InputKind]
+            }
             (Intent::Focus {}, InputModality::Semantic) => &[
                 Field::Enabled,
                 Field::Focused,
@@ -109,6 +115,7 @@ impl<'a> WebActionProvider<'a> {
         mut self,
         snapshot: &Snapshot,
         requested: &Request,
+        expected: Option<&Expectation>,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<ActionCase, Issue> {
@@ -130,7 +137,17 @@ impl<'a> WebActionProvider<'a> {
                 return Err(Failure::new(ErrorKind::InvalidInput));
             }
             validate_seed(snapshot, &action.backend_ref)?;
-            let (fresh, mut held) = self.probe(action, now, remaining_ms)?;
+            let result = if matches!(action.intent, Intent::Activate {}) {
+                Some(activate::result_seed(
+                    snapshot,
+                    action,
+                    expected.ok_or(Failure::new(ErrorKind::InvalidInput))?,
+                    self.collector.limits.max_text_bytes,
+                )?)
+            } else {
+                None
+            };
+            let (fresh, mut held) = self.probe(action, result, now, remaining_ms)?;
             let prepared = (|| {
                 let mut prepared_action = action.clone();
                 prepared_action.backend_ref.snapshot_id = fresh.id.clone();
@@ -180,8 +197,18 @@ impl<'a> WebActionProvider<'a> {
             .map_err(|_| Failure::new(ErrorKind::InvalidInput))?;
         let action = &requested.action;
         self.supported(action)?;
-        expected_for(action, expected)?;
-        let (snapshot, mut held) = self.probe(action, now, remaining)?;
+        let result = if matches!(action.intent, Intent::Activate {}) {
+            Some(activate::result_seed(
+                &requested.snapshot,
+                action,
+                expected,
+                self.collector.limits.max_text_bytes,
+            )?)
+        } else {
+            expected_for(action, expected)?;
+            None
+        };
+        let (snapshot, mut held) = self.probe(action, result, now, remaining)?;
         let mut fresh = action.clone();
         fresh.backend_ref.snapshot_id = snapshot.id.clone();
         fresh.backend_ref.observation_id = snapshot.observations[0].id.clone();
@@ -197,6 +224,7 @@ impl<'a> WebActionProvider<'a> {
     fn probe(
         &mut self,
         action: &Action,
+        result_node: Option<NodeRef>,
         now: &ClockReading,
         remaining: u64,
     ) -> Result<(Snapshot, Held), Failure> {
@@ -212,10 +240,13 @@ impl<'a> WebActionProvider<'a> {
             sensitivity: Sensitivity::Public,
         };
         let request = self.request(context, &action.id);
-        let scope = Scope {
+        let mut scope = Scope {
             scope_id: context.scope_id.clone(),
             nodes: vec![node],
         };
+        if let Some(result) = result_node {
+            scope.nodes.push(result);
+        }
         self.collector.validate_request(&request, &scope)?;
         let backend = scope.nodes[0].backend_id()?;
         self.collector.sequence = self
@@ -232,6 +263,7 @@ impl<'a> WebActionProvider<'a> {
             ),
             action: None,
             expected: None,
+            result: None,
             budget: Budget {
                 deadline: deadline(remaining.min(self.limits.deadline_ms))?,
                 methods: 0,
@@ -251,13 +283,26 @@ impl<'a> WebActionProvider<'a> {
                 .resolve(backend, &held.group, &mut held.budget)?;
             let start = self.collector.time();
             let read = action_read(self.collector, &mut held, action, true)?;
+            let mut records = vec![(backend, read)];
+            if let Some(result) = scope.nodes.get(1) {
+                let backend = result.backend_id()?;
+                let object = self
+                    .collector
+                    .resolve(backend, &held.group, &mut held.budget)?;
+                held.result = Some(activate::HeldResult { backend, object });
+                records.push((
+                    backend,
+                    activate::read_result(self.collector, &mut held, action, true)?,
+                ));
+                activate::verify_result(self.collector, &mut held)?;
+            }
             self.collector.verify_document(&mut held.budget)?;
             self.collector.verify_nodes(
                 &held.document,
                 std::slice::from_ref(&held.object),
                 &mut held.budget,
             )?;
-            let snapshot = make_snapshot(self.collector, &request, backend, read, start)?;
+            let snapshot = make_snapshot(self.collector, &request, records, start)?;
             Ok(snapshot)
         })();
         match result {
@@ -333,6 +378,7 @@ fn resolution(snapshot: &Snapshot, intent: &Intent) -> Resolution {
     let (method, name) = match intent {
         Intent::Focus {} => ("cdp.DOM.focus-native-text-control", "focus"),
         Intent::Type { .. } => ("cdp.Input.insertText-native-ImeCommitText", "type"),
+        Intent::Activate {} => ("dom.HTMLElement.click-native-button-untrusted", "activate"),
         _ => ("native-checkbox-setter-capability", "set_checked"),
     };
     Resolution {
@@ -406,36 +452,18 @@ fn action_read(
         eligible(&state, before)?;
         return Ok(checkbox_read(state));
     }
-    let result: wire::ReadResult = collector.send(
-        "Runtime.callFunctionOn",
-        &Read {
-            object_id: &held.object,
-            function_declaration: acquire::READ_NODE,
-            return_by_value: true,
-            silent: true,
-            user_gesture: false,
-            await_promise: false,
-            throw_on_side_effect: false,
-            arguments: [
-                serde_json::json!({"value":{"fields":action.context.fields,"maxChars":collector.limits.max_text_bytes/6,"sensitive":false}}),
-                serde_json::json!({"objectId":held.document}),
-                serde_json::json!({"objectId":held.object}),
-            ],
-        },
+    let read = read_dom(
+        collector,
+        &held.document,
+        &held.object,
+        &action.context.fields,
         &mut held.budget,
     )?;
-    if result.exception_details.is_some() || result.result.r#type != "object" {
-        return Err(Failure::new(ErrorKind::Malformed));
+    if matches!(action.intent, Intent::Activate {}) {
+        activate::eligible_actor(&read)?;
+        return Ok(read);
     }
-    let read = result
-        .result
-        .value
-        .ok_or(Failure::new(ErrorKind::Malformed))?;
-    acquire::validate_dom(&read, collector.limits.max_text_bytes, 1)?;
-    if !read.connected || !read.same_document {
-        return Err(Failure::new(ErrorKind::StaleTarget));
-    }
-    // Restrict this first port to the native controls covered by form facts.
+    // Restrict the existing Focus/Type port to its qualified editable controls.
     if read.sensitive
         || !matches!(
             (read.tag.as_deref(), read.input_kind.as_deref()),
@@ -455,6 +483,44 @@ fn action_read(
     if matches!(action.intent, Intent::Type { .. })
         && (read.focused != Some(true) || read.document_focused != Some(true))
     {
+        return Err(Failure::new(ErrorKind::StaleTarget));
+    }
+    Ok(read)
+}
+fn read_dom(
+    collector: &mut Collector,
+    document: &str,
+    object: &str,
+    fields: &[Field],
+    budget: &mut Budget,
+) -> Result<wire::DomRead, Failure> {
+    let result: wire::ReadResult = collector.send(
+        "Runtime.callFunctionOn",
+        &Read {
+            object_id: object,
+            function_declaration: acquire::READ_NODE,
+            return_by_value: true,
+            silent: true,
+            user_gesture: false,
+            await_promise: false,
+            throw_on_side_effect: false,
+            arguments: [
+                serde_json::json!({"value":{"fields":fields,"maxChars":collector.limits.max_text_bytes/6,"sensitive":false}}),
+                serde_json::json!({"objectId":document}),
+                serde_json::json!({"objectId":object}),
+            ],
+        },
+        budget,
+    )?;
+    if result.exception_details.is_some() || result.result.r#type != "object" {
+        return Err(Failure::new(ErrorKind::Malformed));
+    }
+    let read = result
+        .result
+        .value
+        .ok_or(Failure::new(ErrorKind::Malformed))?;
+    acquire::validate_dom(&read, collector.limits.max_text_bytes, 1)?;
+    if !read.connected || !read.same_document {
         return Err(Failure::new(ErrorKind::StaleTarget));
     }
     Ok(read)
@@ -487,8 +553,7 @@ fn checkbox_read(state: wire::CheckboxState) -> wire::DomRead {
 fn make_snapshot(
     collector: &mut Collector,
     request: &Request,
-    backend: u32,
-    read: wire::DomRead,
+    records: Vec<(u32, wire::DomRead)>,
     start: f64,
 ) -> Result<Snapshot, Failure> {
     collector.sequence = collector
@@ -504,14 +569,18 @@ fn make_snapshot(
         true,
         false,
     );
-    let node = normalize::dom(
-        backend,
-        &read,
-        &request.context,
-        &observation,
-        collector.limits.max_text_bytes,
-    );
-    let records = [(backend, read)];
+    let nodes = records
+        .iter()
+        .map(|(backend, read)| {
+            normalize::dom(
+                *backend,
+                read,
+                &request.context,
+                &observation,
+                collector.limits.max_text_bytes,
+            )
+        })
+        .collect();
     let keyboard = normalize::keyboard_focus(&records, &observation, &request.context);
     let selection = normalize::text_selection(
         &records,
@@ -523,7 +592,7 @@ fn make_snapshot(
         request,
         (collector.owner, collector.sequence),
         vec![observation],
-        vec![node],
+        nodes,
         vec![],
         false,
     );
@@ -598,6 +667,18 @@ impl ActionProvider for WebActionProvider<'_> {
             }
             tighten(&mut held, remaining_ms)?;
             self.collector.verify_document(&mut held.budget)?;
+            if matches!(action.intent, Intent::Activate {}) {
+                action_read(self.collector, &mut held, action, true)?;
+                activate::read_result(self.collector, &mut held, action, true)?;
+                activate::verify_result(self.collector, &mut held)?;
+                self.collector.verify_nodes(
+                    &held.document,
+                    std::slice::from_ref(&held.object),
+                    &mut held.budget,
+                )?;
+                self.collector.pending_invalidation = true;
+                return activate::deliver(self.collector, &mut held);
+            }
             if !matches!(action.intent, Intent::SetChecked { .. }) {
                 // Native Input.insertText targets the CURRENT focused widget and
                 // calls widget Focus internally. The host must hold its input lane.
@@ -678,6 +759,25 @@ impl ActionProvider for WebActionProvider<'_> {
             tighten(&mut held, remaining_ms)?;
             self.collector.verify_document(&mut held.budget)?;
             let start = self.collector.time();
+            if matches!(action.intent, Intent::Activate {}) {
+                let read = activate::read_result(self.collector, &mut held, action, false)?;
+                self.collector.verify_document(&mut held.budget)?;
+                activate::verify_result(self.collector, &mut held)?;
+                let backend = held
+                    .result
+                    .as_ref()
+                    .ok_or(Failure::new(ErrorKind::InvalidInput))?
+                    .backend;
+                let request = self.request(&action.context, &action.id);
+                let snapshot =
+                    make_snapshot(self.collector, &request, vec![(backend, read)], start)?;
+                let _: wire::Empty = self.collector.send(
+                    "Runtime.releaseObjectGroup",
+                    &serde_json::json!({"objectGroup":held.group}),
+                    &mut held.budget,
+                )?;
+                return Ok(snapshot);
+            }
             let read = action_read(self.collector, &mut held, action, false)?;
             self.collector.verify_document(&mut held.budget)?;
             self.collector.verify_nodes(
@@ -691,7 +791,7 @@ impl ActionProvider for WebActionProvider<'_> {
                 sensitivity: Sensitivity::Public,
             }
             .backend_id()?;
-            let snapshot = make_snapshot(self.collector, &request, backend, read, start)?;
+            let snapshot = make_snapshot(self.collector, &request, vec![(backend, read)], start)?;
             if matches!(action.intent, Intent::Type { .. })
                 && !matches!(&snapshot.focus.keyboard, FocusRef::Known { target, .. } if target == &action.backend_ref.key)
             {

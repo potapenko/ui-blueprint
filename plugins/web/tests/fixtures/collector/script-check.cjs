@@ -197,3 +197,27 @@ console.log('Output getter checks passed: empty/nonempty/exact bound/shape/overs
 selectionReads=valueReads=0;document.activeElement=textInput;document.hasFocusFlag=true;
 const focusOnly=read(textInput,['focused']);assert.equal(focusOnly.focused,true);assert.equal(focusOnly.documentFocused,true);assert.equal(focusOnly.selection,undefined);assert.deepEqual([selectionReads,valueReads],[0,0]);
 console.log('Independent native document-focus fact requires no value/selection getter.');
+
+const activationSource=fs.readFileSync(require('node:path').join(__dirname,'../../../src/collector/activate.rs'),'utf8').match(/const ACTIVATE: &str = r#"([\s\S]*?)"#;/)[1];
+let nativeClicks=0;
+class HTMLElement extends Element { click(){nativeClicks++;this.isConnected=false;} }
+context.HTMLElement=HTMLElement;
+vm.runInContext(activationSource,context,{timeout:100});
+const button=()=>Object.assign(new HTMLButtonElement(),{attrs:{},isConnected:true,ownerDocument:document,disabled:false,
+  click(){throw Error('own click override forbidden');},onclick(){throw Error('direct handler forbidden');}});
+const publicOutput=()=>Object.assign(new HTMLOutputElement(),{attrs:{},isConnected:true,ownerDocument:document});
+const activate=(actor,result,doc=document)=>context.activateButton.call(actor,doc,result).invoked;
+let actor=button();nativeClicks=0;assert.equal(activate(actor,publicOutput()),true);assert.equal(nativeClicks,1);assert.equal(actor.isConnected,false,'self-removal does not undo native invocation');
+for(const change of [a=>{a.isConnected=false;},a=>{a.ownerDocument={};},a=>{a.disabled=true;},a=>{a.attrs.autocomplete='one-time-code';}]){
+  actor=button();change(actor);nativeClicks=0;assert.equal(activate(actor,publicOutput()),false);assert.equal(nativeClicks,0);
+}
+for(const change of [r=>{r.isConnected=false;},r=>{r.ownerDocument={};},r=>{r.attrs.autocomplete='current-password';}]){
+  const result=publicOutput();change(result);nativeClicks=0;assert.equal(activate(button(),result),false);assert.equal(nativeClicks,0);
+}
+nativeClicks=0;assert.equal(activate(Object.assign(new Element(),{attrs:{},isConnected:true,ownerDocument:document}),publicOutput()),false);
+assert.equal(activate(button(),Object.assign(new Element(),{attrs:{},isConnected:true,ownerDocument:document})),false);assert.equal(nativeClicks,0);
+const resultInput=node();resultInput.state.kind='text';resultInput.state.readOnly=true;resultInput.disabled=true;
+nativeClicks=valueReads=0;assert.equal(activate(button(),resultInput),true);assert.equal(nativeClicks,1);assert.equal(valueReads,0,'activation never reads result values');
+resultInput.state.kind='password';nativeClicks=valueReads=0;assert.equal(activate(button(),resultInput),false);assert.deepEqual([nativeClicks,valueReads],[0,0]);
+nativeClicks=0;assert.equal(activate(button(),publicOutput(),{}),false);assert.equal(nativeClicks,0);
+console.log('Native activation guard mocks passed: exact button/result/document, disabled/private/stale refusal, readonly result and no direct handler/focus/value/own-click fallback.');

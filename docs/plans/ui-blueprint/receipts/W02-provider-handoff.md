@@ -1216,3 +1216,78 @@ Semantic activation proves neither pointer hit testing nor hardware/IME delivery
 This handoff closes no remaining B02 partial/invalid/debounce/stop runtime gate;
 it identifies the concrete next applied-result capability and owners. No source
 implementation, tests, browser/input, real application, build or new review ran.
+
+## B02 Activate provider: compiling preparation handoff
+
+Root authorized implementation after5fefce3, including only the mechanical
+worker_web.rs forwarding exception. Primary source qualification read:
+[HTML click steps](https://html.spec.whatwg.org/multipage/interaction.html#dom-click)
+and Chromium145.0.7632.6 [HTMLElement::click](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/core/html/html_element.cc)
+plus [Node::DispatchSimulatedClick](https://raw.githubusercontent.com/chromium/chromium/145.0.7632.6/third_party/blink/renderer/core/dom/node.cc).
+Standard click is programmatic/untrusted and Chromium uses kFromScript, not a
+hardware/pointer gesture. No upstream code copied. Selected own fixed isolated
+function calls HTMLElement.prototype.click on an exact HTMLButtonElement only,
+with userGesture=false and no focus/onclick/value/dispatchEvent/fallback call.
+Callback acceptance still requires separate fresh explicit result verification.
+
+Compiling signature for the existing Web preparation owner:
+`prepare_exact(snapshot, request, expected: Option<&Expectation>, now, remaining_ms)`.
+Core worker_web::prepare_action now forwards the already validated expected.as_ref();
+legacy caller tests pass None. Activate requires an explicit distinct same-surface
+web.dom result, public input/output Value and PropertyEquals(Value,Text), with
+Enabled/Value/InputKind request fields. Kernel/host Tape3/Act port unchanged.
+Web/host library, worker and collector-test cargo check passed on saved5fefce3
+plus five owned source/test overlays in system temp. This is compile readiness
+only; focused capability/identity/privacy/after-delivery proof and save are pending.
+Write set: collector/{action.rs,activate.rs,wire.rs}, collector.rs/script-check.cjs
+tests, worker_web.rs mechanical forwarding, this receipt; runtime harness only
+after saved/check-ready source and CLI. No other shared owner/manifest changes.
+
+### Source/check-ready native button slice
+
+Implemented within that exact7-file write set. New private activate.rs owns fixed
+native click guarding and the separately held result; common action.rs reuses its
+existing decoder/normalizer, identity checks, deadline, permit and teardown. Private
+wire adds only invoked:boolean reply decoding with ignored exception payloads.
+No canonical schema, kernel, host transport, fixture, dependency or CLI changes.
+
+Before dispatch, both exact objects are bound to the original document. Actor must
+remain enabled/public/native BUTTON; result must remain public text/search/url/tel
+INPUT or OUTPUT with bounded readable Value. Result readonly/disabled does not mean
+unreadable. Saved sensitive/redacted/unsupported result metadata refuses before any
+new source acquisition; current privacy/type/identity is independently rechecked.
+Same-node result is unsupported in this slice. Native guard repeats current document,
+connectivity, class, disabled and privacy checks immediately before click, with no
+userGesture/focus bypass. One invocation only; exceptions/lost replies stay uncertain.
+
+Postread uses the held result, never resolves it again, and does not require or
+republish the actor that its own handler may remove. The after Snapshot contains
+fresh result facts only with partial coverage, not fabricated current actor facts
+or a deletion delta. Missing/private result -> unknown outcome; unavailable Value
+stays unknown; mismatch fails. No action or result is repaired by label/ID/coordinates.
+Existing SetChecked/Focus/Type paths retain their read/delivery semantics.
+
+PASS:5 new activation test functions/27 cases, including saved-result refusal
+(public redacted/unsupported and caller resource bound);5 affected form-provider
+and8 checkbox regressions; existing offline
+JS/native-getter suite plus native-click guard mocks; Web collector test/host web
+lib+worker check and Clippy -D warnings; owned rustfmt and diff checks. The final
+5activation tests pass on the final source. Peers/mock native prototype are not
+browser delivery proof or genuine parent-permit evidence; actual runtime remains next.
+One test initially attempted verify after unknown delivery had already terminalized;
+corrected it to require refusal/no retry. Test-only redacted variant syntax and one
+boolean Clippy simplification were repaired; no product contract or expectation weakened.
+
+Immutable saved base5fefce3 plus6owned source/test overlays, with other saved inputs
+unchanged; new activation module included. Final184-input sorted path→SHA256 map
+fingerprint58389f3654070901b700e56bb0abd968a42bcb596b884e49ebf09869af88d222.
+action.rs7bff7eda044361aa3c3772150c3dae37c873ae303b7338b70b81e06fdd6cfc2d;
+activate.rsd29d7b08bd3881a92f815456e66562ca9c5e1b3b46f377ac500cb15afe3f9d5e;
+wire.rs91785edc913db5de07423ca3830e6455f3c0cec510d94caf7328a87dfd00f47a;
+collector.rs05d58c5186481865c2027d051c3b666b91d2c6e3109afad893c5f60bdbe1288c;
+script-check.cjs2ddd556501aea154e3290abf836e07288b31f16e14f13ec2c6dd86a0416ff015;
+worker_web.rs0001692b8b4950e07b5f0155f29eb4f1a952f2a095ed2c0b9aaacfc7b6349cdd.
+All184 inputs and six owned source/test bytes matched the checked snapshot after
+use. Consumed own system-temp source/check tree3241non-image files removed with
+absence verified; no other evidence touched. Runtime/CLI connected proof and grouped
+review remain separate. No browser, input lane, image or source-app operation ran.

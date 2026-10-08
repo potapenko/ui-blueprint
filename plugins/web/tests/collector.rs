@@ -2144,7 +2144,7 @@ fn rooted_seed_publishes_actual_refs_without_initial_ids_or_fake_provenance() {
 }
 #[test]
 fn rooted_seed_wrong_binding_or_document_refuses_before_any_collection() {
-    for mode in 0..6 {
+    for mode in 0..8 {
         let fixture = Fixture::new(|_, _, _| None);
         let mut c = fixture.attach(limits());
         let before = fixture.methods().len();
@@ -2696,6 +2696,7 @@ fn form_provider_preparation_is_read_only_and_replaces_unknown_capabilities() {
             .prepare_exact(
                 &case.snapshot,
                 &requested,
+                None,
                 &ClockReading {
                     domain: id("worker-clock"),
                     milliseconds: 1,
@@ -3162,7 +3163,7 @@ fn checkbox_preparation_produces_real_resolution_without_permit_or_setter_then_r
         milliseconds: 1,
     };
     let case = collector::CheckboxProvider::new(&mut c, request.limits.clone())
-        .prepare_exact(&snapshot, &request, &now, 1500)
+        .prepare_exact(&snapshot, &request, None, &now, 1500)
         .unwrap();
     assert_eq!(snapshot, before);
     assert_eq!(writes.load(Ordering::Acquire), 0);
@@ -3224,6 +3225,7 @@ fn checkbox_preparation_refuses_current_capability_or_cleanup_failure_without_ef
             .prepare_exact(
                 &snapshot,
                 &request,
+                None,
                 &uiblueprint_plugin_api::ClockReading {
                     domain: id("worker-clock"),
                     milliseconds: 1,
@@ -3278,6 +3280,7 @@ fn checkbox_preparation_rejects_missing_stale_private_or_changed_request_before_
                 .prepare_exact(
                     &snapshot,
                     &request,
+                    None,
                     &uiblueprint_plugin_api::ClockReading {
                         domain: id("worker-clock"),
                         milliseconds: 1
@@ -3288,6 +3291,455 @@ fn checkbox_preparation_rejects_missing_stale_private_or_changed_request_before_
         );
         assert_eq!(fixture.methods().len(), calls);
         assert_eq!(writes.load(Ordering::Acquire), 0);
+        drop(c);
+        fixture.finish();
+    }
+}
+
+fn activation_peer(mode: u8, input_result: bool) -> (Fixture, Arc<std::sync::atomic::AtomicUsize>) {
+    let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let clicked = calls.clone();
+    let verify_clicked = calls.clone();
+    let mut actor_reads = 0;
+    let mut result_reads = 0;
+    let mut result_resolves = 0;
+    let fixture = Fixture::with_verification(
+        move |method, command, _| {
+            let delivered = clicked.load(Ordering::Acquire) > 0;
+            if method == "DOM.resolveNode" && command["params"]["backendNodeId"] == 12 {
+                result_resolves += 1;
+                assert!(!delivered, "never reacquire the result after activation");
+                if mode == 9 && result_resolves > 1 {
+                    return Some(json!({"error":{"code":-32000,"message":CANARY}}));
+                }
+            }
+            if method != "Runtime.callFunctionOn" {
+                return None;
+            }
+            let function = command["params"]["functionDeclaration"].as_str().unwrap();
+            if function.starts_with("function activateButton(") {
+                assert_eq!(command["params"]["objectId"], "node-11");
+                assert_eq!(
+                    command["params"]["arguments"],
+                    json!([{"objectId":"node-1"},{"objectId":"node-12"}])
+                );
+                assert_eq!(command["params"]["userGesture"], false);
+                assert!(function.contains("HTMLElement.prototype.click.call(this)"));
+                assert!(!function.contains("dispatchEvent"));
+                clicked.fetch_add(1, Ordering::AcqRel);
+                return Some(if mode == 15 {
+                    json!({"error":{"code":-32000,"message":CANARY}})
+                } else {
+                    json!({"result":{"type":"object","value":{"invoked":true}}})
+                });
+            }
+            if !function.starts_with("function readNode(") {
+                return None;
+            }
+            let actor = command["params"]["objectId"] == "node-11";
+            if actor {
+                actor_reads += 1;
+                assert!(
+                    !delivered,
+                    "removed actor must not be reread/published after delivery"
+                );
+            } else {
+                assert_eq!(command["params"]["objectId"], "node-12");
+                result_reads += 1;
+            }
+            let fresh = if actor {
+                actor_reads > 1
+            } else {
+                result_reads > 1
+            };
+            let sensitive = (fresh && ((actor && mode == 2) || (!actor && mode == 3)))
+                || (delivered && mode == 12);
+            let connected = !(fresh && ((actor && mode == 4) || (!actor && mode == 5)))
+                && !(delivered && mode == 10);
+            let same = !(fresh && !actor && mode == 6 || delivered && mode == 11);
+            let tag = if actor {
+                if fresh && mode == 8 { "DIV" } else { "BUTTON" }
+            } else if fresh && mode == 7 {
+                "SPAN"
+            } else if input_result {
+                "INPUT"
+            } else {
+                "OUTPUT"
+            };
+            Some(json!({"result":{"type":"object","value":{
+                "connected":connected,"sameDocument":same,"tag":tag,"sensitive":sensitive,
+                "enabled":if actor {json!(!(fresh && mode == 1))}else if input_result{json!(false)}else{Json::Null},"inputKind":if !actor && input_result {json!("text")}else{Json::Null},
+                "readonly":if !actor && input_result{json!(true)}else{Json::Null},"value":if actor || (delivered && mode == 13) {Json::Null}
+                    else if sensitive {json!(CANARY)}else if delivered {json!(if mode==14{"different"}else{"London"})}else{json!("")}
+            }}}))
+        },
+        move |command| {
+            if verify_clicked.load(Ordering::Acquire) > 0 {
+                assert_eq!(
+                    command["params"]["arguments"],
+                    json!([{"objectId":"node-1"},{"objectId":"node-12"}]),
+                    "only the held result survives"
+                );
+            }
+            json!({"result":{"type":"object","value":{"current":true}}})
+        },
+    );
+    (fixture, calls)
+}
+
+fn activation_case(c: &mut Collector) -> (ActionCase, Expectation) {
+    let mut r = request();
+    r.context.fields = vec![
+        Field::Enabled,
+        Field::Value,
+        Field::InputKind,
+        Field::Readonly,
+    ];
+    let (_, docs) = collect(c, &r, &scope(&[11, 12]));
+    let snapshot = snapshot(&docs[0]).clone();
+    let evidence = snapshot
+        .observations
+        .iter()
+        .find(|o| o.source_namespace.0 == "web.dom")
+        .unwrap();
+    let action = Action {
+        id: id("activate-button"),
+        context: snapshot.context.clone(),
+        backend_ref: BackendRef {
+            session_id: id("session"),
+            key: SourceKey {
+                namespace: id("web.dom"),
+                key: id("11"),
+            },
+            snapshot_id: snapshot.id.clone(),
+            observation_id: evidence.id.clone(),
+            target: target(),
+            surface: surface(),
+        },
+        intent: Intent::Activate {},
+        modality: InputModality::Semantic,
+        input_space: None,
+        required_enabled: true,
+        authorized_scope: id("scope"),
+        unique_match: true,
+        resolution: Resolution {
+            evidence: Evidence {
+                observation_id: evidence.id.clone(),
+                source_namespace: id("web.dom"),
+                provenance: Provenance::Reported,
+                method: id("synthetic-button-capability"),
+                uncertainty: None,
+            },
+            writable: Availability::Known {
+                value: Value::Flag(true),
+            },
+            value_allowed: Availability::Known {
+                value: Value::Flag(true),
+            },
+            available_intents: vec![id("activate")],
+        },
+    };
+    let expected = Expectation {
+        id: id("explicit-applied-value"),
+        scope_id: id("scope"),
+        targets: vec![SourceKey {
+            namespace: id("web.dom"),
+            key: id("12"),
+        }],
+        rule: Rule::PropertyEquals {
+            field: Field::Value,
+            expected: Value::Text("London".into()),
+        },
+        applies_when: ContextConditions {
+            platform: None,
+            input_mode: None,
+            text_scale: None,
+        },
+        expected_from: id("explicit-fixture-application"),
+    };
+    (ActionCase { snapshot, action }, expected)
+}
+
+#[test]
+fn activation_preparation_holds_readonly_input_or_output_result_without_delivery() {
+    for input in [false, true] {
+        let (fixture, calls) = activation_peer(0, input);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = activation_case(&mut c);
+        let source = case.snapshot.clone();
+        let mut request = request();
+        request.context = case.snapshot.context.clone();
+        request.operation = Operation::Prepare {
+            action: case.action,
+        };
+        let now = uiblueprint_plugin_api::ClockReading {
+            domain: id("worker-clock"),
+            milliseconds: 1,
+        };
+        let prepared = collector::WebActionProvider::new(&mut c, request.limits.clone())
+            .prepare_exact(&source, &request, Some(&expected), &now, 1500)
+            .unwrap();
+        assert_eq!(prepared.snapshot.nodes.len(), 2);
+        assert_eq!(source, case.snapshot);
+        assert_eq!(
+            known(&prepared.snapshot.nodes[1], Field::Value),
+            &Value::Text("".into())
+        );
+        assert_eq!(
+            prepared.action.resolution.available_intents,
+            vec![id("activate")]
+        );
+        assert_eq!(
+            prepared.action.resolution.evidence.method,
+            id("dom.HTMLElement.click-native-button-untrusted")
+        );
+        assert_eq!(calls.load(Ordering::Acquire), 0);
+        assert_eq!(
+            fixture.methods().last().unwrap(),
+            "Runtime.releaseObjectGroup"
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn activation_verifies_held_result_after_actor_removal_without_reacquisition() {
+    use uiblueprint_plugin_api::actions::*;
+    for input in [false, true] {
+        let (fixture, calls) = activation_peer(0, input);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = activation_case(&mut c);
+        let mut clock = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = clock.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            assert_eq!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut clock)
+                    .unwrap(),
+                DeliveryStatus::Confirmed
+            );
+            assert_eq!(
+                execution.verify(&mut provider, &mut clock).unwrap(),
+                CheckStatus::Pass
+            );
+            assert!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut clock)
+                    .is_err()
+            );
+        }
+        let result = execution.finish().unwrap();
+        let after = result.after.unwrap();
+        assert_eq!(after.nodes.len(), 1);
+        assert_eq!(after.nodes[0].key.key, id("12"));
+        assert_eq!(
+            known(&after.nodes[0], Field::Value),
+            &Value::Text("London".into())
+        );
+        assert_eq!(result.transition.steps[0].outcome, Outcome::Succeeded);
+        assert_eq!(calls.load(Ordering::Acquire), 1);
+        assert_eq!(gate.calls, 1);
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn activation_refuses_fresh_disabled_private_stale_missing_or_wrong_control_before_permit() {
+    use uiblueprint_plugin_api::actions::*;
+    for mode in 1..=9 {
+        let (fixture, calls) = activation_peer(mode, false);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = activation_case(&mut c);
+        let mut clock = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = clock.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            assert_eq!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut clock)
+                    .unwrap(),
+                DeliveryStatus::NotDispatched,
+                "mode {mode}"
+            );
+        }
+        assert_eq!(
+            execution.finish().unwrap().transition.steps[0].outcome,
+            Outcome::Failed
+        );
+        assert_eq!(gate.calls, 0);
+        assert_eq!(calls.load(Ordering::Acquire), 0);
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn activation_result_loss_privacy_unknown_mismatch_or_delivery_loss_never_retries() {
+    use uiblueprint_plugin_api::actions::*;
+    for mode in 10..=15 {
+        let (fixture, calls) = activation_peer(mode, false);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = activation_case(&mut c);
+        let mut clock = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = clock.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            let delivery = execution
+                .dispatch(&mut provider, &mut gate, &mut clock)
+                .unwrap();
+            assert_eq!(
+                delivery,
+                if mode == 15 {
+                    DeliveryStatus::Unknown
+                } else {
+                    DeliveryStatus::Confirmed
+                }
+            );
+            if mode == 15 {
+                assert!(
+                    execution.verify(&mut provider, &mut clock).is_err(),
+                    "uncertain delivery already terminalized"
+                );
+            } else {
+                assert_eq!(
+                    execution.verify(&mut provider, &mut clock).unwrap(),
+                    if mode == 14 {
+                        CheckStatus::Fail
+                    } else {
+                        CheckStatus::Unknown
+                    }
+                );
+            }
+            assert!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut clock)
+                    .is_err()
+            );
+        }
+        let result = execution.finish().unwrap();
+        assert_ne!(result.transition.steps[0].outcome, Outcome::Succeeded);
+        assert!(!serde_json::to_string(&result).unwrap().contains(CANARY));
+        assert_eq!(calls.load(Ordering::Acquire), 1);
+        assert_eq!(gate.calls, 1);
+        drop(c);
+        fixture.finish();
+    }
+}
+
+#[test]
+fn activation_prepare_requires_explicit_distinct_present_public_result() {
+    for mode in 0..6 {
+        let (fixture, calls) = activation_peer(0, false);
+        let mut c = fixture.attach(limits());
+        let (mut case, mut expected) = activation_case(&mut c);
+        if mode == 1 {
+            expected.targets[0].key = id("999");
+        }
+        if mode == 2 {
+            expected.targets[0] = case.action.backend_ref.key.clone();
+        }
+        if mode == 3 {
+            expected.rule = Rule::PropertyEquals {
+                field: Field::Value,
+                expected: Value::Text("x".repeat(601)),
+            };
+        }
+        if matches!(mode, 4 | 6 | 7) {
+            let node = case
+                .snapshot
+                .nodes
+                .iter_mut()
+                .find(|n| n.key == expected.targets[0])
+                .unwrap();
+            let Property::Requested {
+                sensitivity, state, ..
+            } = node
+                .properties
+                .iter_mut()
+                .find(|p| p.field() == Field::Value)
+                .unwrap()
+            else {
+                unreachable!()
+            };
+            if mode == 4 {
+                *sensitivity = Sensitivity::Sensitive;
+            }
+            *state = if mode == 7 {
+                Availability::Unsupported {
+                    reason: id("unexposed-result"),
+                }
+            } else {
+                Availability::Redacted {}
+            };
+        }
+        let mut request = request();
+        if mode == 5 {
+            request.limits.max_elements = 1;
+        }
+        request.context = case.snapshot.context.clone();
+        request.operation = Operation::Prepare {
+            action: case.action,
+        };
+        let count = fixture.methods().len();
+        let now = uiblueprint_plugin_api::ClockReading {
+            domain: id("worker-clock"),
+            milliseconds: 1,
+        };
+        assert!(
+            collector::WebActionProvider::new(&mut c, request.limits.clone())
+                .prepare_exact(
+                    &case.snapshot,
+                    &request,
+                    if mode == 0 { None } else { Some(&expected) },
+                    &now,
+                    1500
+                )
+                .is_err()
+        );
+        assert_eq!(fixture.methods().len(), count);
+        assert_eq!(calls.load(Ordering::Acquire), 0);
         drop(c);
         fixture.finish();
     }

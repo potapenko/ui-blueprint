@@ -169,3 +169,6 @@ object_record!(SetterState {
 });
 object_record!(SetterRemote { r#type:String, value:Option<SetterState> });
 object_record!(SetterResult { result:SetterRemote, exception_details:Option<de::IgnoredAny> });
+object_record!(ActivationState { invoked: bool });
+object_record!(ActivationRemote { r#type:String, value:Option<ActivationState> });
+object_record!(ActivationResult { result:ActivationRemote, exception_details:Option<de::IgnoredAny> });

@@ -56,7 +56,7 @@ impl WebSession {
             // prepare_input validates the explicit condition's record/rule/binding.
             // Bootstrap returns current capability facts; Act separately forwards
             // that same caller condition to the kernel/provider for fresh verify.
-            let (snapshot, request, clock, _expected) = match session.prepare_input(input) {
+            let (snapshot, request, clock, expected) = match session.prepare_input(input) {
                 Ok(input) => input,
                 Err(error) => {
                     return crate::worker_action::publish_refusal(
@@ -86,7 +86,7 @@ impl WebSession {
             }
             let provider =
                 collector::CheckboxProvider::new(&mut self.collector, request.limits.clone());
-            match provider.prepare_exact(&snapshot, &request, &now, remaining) {
+            match provider.prepare_exact(&snapshot, &request, expected.as_ref(), &now, remaining) {
                 Ok(case) => {
                     crate::worker_action::publish_prepared(io, publication, control, case, limit)
                 }
