@@ -76,3 +76,10 @@ No popup or target-control action: AXPress/setter/input prohibition applies to
 f02.enabled/f02.sample.a and product delivery. Verify current binding after Snapshot
 before read-only capability probe. This explicit setup exception adds no code or
 wire capability; native modality labels must reuse actual canonical Semantic.
+
+Root lifecycle selection after source0e7fa32: choose held Native identity within
+one attached RuntimeHost session across explicit Observe/Prepare/Act requests.
+Reap invalidates refs; completed CLI processes retain no helper/daemon. A single
+finite transaction cannot be represented as persistent refs and is not substituted
+for that session contract. Exact private exchange and bounded residency parameters
+are still a Core-owned technical choice before implementation; no invented defaults.
