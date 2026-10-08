@@ -90,3 +90,36 @@ synthetic данные не маркируются live; реальные сох
 Независимая acceptance проверка input/privacy остаётся обязательной и может быть
 сгруппирована с готовыми export изменениями; не создавать отдельные review rounds
 на каждый внутренний шаг. Чат сам доводит код и свои проверки до результата.
+
+## Закрыть оставшийся export acceptance gap
+
+После c97c513 и независимого source/privacy acceptance остался конкретный
+pre-existing test failure factual_query_migration_keeps_saved_packages_structurally_unchanged.
+Он воспроизведён автором на e4bc256: historical F01 package ожидает unknown,
+хотя ранее принятый256f2a2 и текущие G09/GEOMETRY semantics вычисляют известные
+явные anchors даже при partial coverage. E03 доказал byte-equality document/propose
+до/после своей правки; E03 regression не установлена.
+
+Это продолжение исходному owner для P6 verification debt: полностью reconcile
+текущие export expectations с нормативным поведением и закрыть failed test,
+сохранив исторические observed/proposed package artifacts и raw evidence.
+Нельзя просто удалить/skip тест, переименовать failure в pass, weaken privacy/
+unknown requirements или вернуть engine к старой ошибке. Исполнитель сам выбирает
+минимальные независимые expected assertions/current fixture representation и
+проверяет все затронутые export modes. Никакого нового framework или каталога.
+
+Норма/authority: GEOMETRY/ANALYSIS@2 known source anchor vs partial scope,
+EXPORT/DRAWING full package/unknown/evidence/statuses; accepted source256f2a2,
+G09/E03 receipts и unchanged public outputs как evidence. Новые продуктовые нормы
+не вводятся. При реальном конфликте baseline authority вернуть точный факт.
+
+Владение для этого остатка: crates/export/tests, fixtures/export (новые current
+examples в существующих каталогах, НЕ overwrite исторических artifacts),
+docs/development/export.md и E03 receipt. Product source/engine/CLI/spec registry/
+Native/Web/host/manifests защищены, они принадлежат текущим M02/W04 или приняты.
+Если выявится реальный source bug, сообщить точную dependency, не расширять
+исправление молча. Цель — полный результат закрытия одного установленного gap,
+не поручение на очередной промежуточный тест. Own plan→change→checks→commit+push;
+общий flock, system temp и image retention прежние. UI/models не запускать.
+Final: нормативное основание актуальных expectations, сохранность historical
+артефактов, какой suite действительно прошёл, SHA/push и remaining gaps.

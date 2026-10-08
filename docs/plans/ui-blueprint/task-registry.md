@@ -54,6 +54,15 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Закрытие оставшегося E03 baseline gap
+
+Независимый source/privacy review не выявил E03 regression, но подтверждённое
+старое падение export compiler fixture остаётся обязательным verification debt.
+Исходному E03 owner разрешено завершить [reconciliation](packets/E03-observed-compare.md#закрыть-оставшийся-export-acceptance-gap)
+в tests/current examples/docs, сохранив historical artifacts; no skip/weaken/source
+rollback. CLI/engine/Native/Web/specs не открываются. Это независимая от M02/W04
+работа исходного task, без новой review сессии или подагента.
+
 ## Review group2 завершён
 
 [Final source/safety verdict](receipts/export-popup-distribution-review.md) принят
