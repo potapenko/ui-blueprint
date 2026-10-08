@@ -68,9 +68,9 @@ async function main(){
   const executable=process.env.UIB_W06_EXECUTABLE;assert(path.isAbsolute(executable||''));assert.equal(hash(executable),process.env.UIB_W06_EXECUTABLE_SHA256);
   const setup=prepare(),output=fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()),'uib-w06-proof-'));
   const report={source_pin:process.env.UIB_W06_PIN,executable_sha256:hash(executable),driver_sha256:hash(__filename),checks:[],closures:[],output,retention:'Q02 consumes canonical baseline and report; run-owned nonimages retained until that review. No images.'};
-  let fixture,server,browser,context,driver;let counter=0;
+  let fixture,server,browser,context,driver;let counter=0,diagnosticCanary=false;
   const save=(name,data)=>{const file=path.join(output,name);fs.writeFileSync(file,typeof data==='string'?data:JSON.stringify(data),{flag:'wx',mode:0o600});return file;};
-  async function closeDriver(){const closed=await driver.close();report.closures.push(closed);driver=null;}
+  async function closeDriver(){const closed=await driver.close();report.closures.push(closed);driver=null;assert.equal(diagnosticCanary,false,'no canary in caller diagnostics');report.diagnostic_canary=false;}
   try{
     fixture=await start();server=await setup.chromium.launchServer({headless:true,timeout:8000,args:['--remote-debugging-port=0','--remote-debugging-address=127.0.0.1']});
     const profile=server.process().spawnargs.find(v=>v.startsWith('--user-data-dir=')).slice(16);
@@ -94,6 +94,7 @@ async function main(){
       sessionId='w06-'+crypto.randomUUID();
       const descriptor={schema_version:'0.1.0',artifact:{kind:'session',data:{session_id:sessionId,plugin,supported_versions:['0.1.0'],target,surfaces,allowed_scopes:['full','left'],capabilities:[{channel:'external_semantics',operation:'observe',status:'partial',reason:'explicit-f01'}]}}};
       driver=client(executable,save(`config-${counter++}.json`,{descriptor,provider:{backend:'web',setup:setupConfig}}));assert.equal((await driver.next()).kind,'attached');
+      driver.child.stderr.on('data',bytes=>{diagnosticCanary ||= bytes.toString().includes('W06_PRIVATE_CANARY');});
     }
     const state=()=>page.evaluate(()=>({active:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()}));
     async function observe(name,selection={selection:'documents',documents:docs,max_visited_nodes:128},fields=['value','layout_bounds'],mutate=()=>{}){
