@@ -50,3 +50,20 @@ Focused checks: exact identity/current focus, stale/remount, disabled/readonly/p
 bounded text/native calls, true postread match/mismatch/unknown and cancel/no retry;
 preserve SetChecked consumer behavior. Stage source/checks→coherent checkpoint/push
 →protected review→separately activated actual B02 run; not full forms acceptance.
+
+## Next B02 consumer source handoff — 2026-10-08
+
+A03/A04 Focus/Type is saved, actual public fixture outcome and grouped source/
+artifact review accepted; do not rebuild or rerun it. WEB-PILOTS.B02 still requires
+autocomplete/applied source value and stopping on unexpected transitions. Web
+owner now reads only the existing F01/provider/harness source and current required
+forms/actions contracts to select the actual remaining fixture control/result and
+minimal owner seam. Existing canonical Activate/PropertyEquals may be reused only
+if source/contracts support the needed semantics; no invented Apply/Enter behavior.
+
+Classification diagnostic, immediate consumer is next finite B02 implementation.
+Only W02-provider-handoff receipt may change. No runtime/input, source implementation,
+new fixture, real-site work, new review or broad audit. Return concrete source files/
+symbols, mechanism, explicit result expectation, protected boundaries and exact
+cross-owner dependency. Same master/inherit/no nested agents and scoped commit/push.
+Native owns its separate physical lane; this source work does not contend with it.

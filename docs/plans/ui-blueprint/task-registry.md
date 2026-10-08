@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | A03/A04 source+actual owned Web result saved; one grouped input-risk review accepted, no findings. Core/CLI/Web finite work terminal; Web cleanup of consumed26-file evidence next. Git/runtime free; Native archived |
+| Активные чаты/пакеты/ресурсы | Native01a110ac-2da3 restored for remaining M05 sampled-hit evidence; Web01a11983 restored for concrete next B02 source handoff. Git free; Native alone may hold physical input during bounded own-fixture operation. Core/CLI archived |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | Record accepted A03/A04 and evidence cleanup; select remaining dependency-ready full-plan work (Native M05/held-action gaps, remaining Web form/geometry/cache pilots), preserving G03–G10 and qualified public Focus/Type. Full P0–P7 remains active and incomplete |
+| Следующий шаг | Native establishes current documented CUA pointer targeting and runs only missing M05 hit pair when valid; Web selects actual autocomplete/applied-value owner seam for next B02 implementation. Accepted geometry/export/Focus/Type unchanged; full P0–P7 active and incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -715,3 +715,12 @@ handoff; IDs remain above and can be explicitly restored for a ready next packet
 No work or acceptance discarded. Goal stays active; next turn selects the remaining
 Native M05/held-action and Web full-pilot work from their exact residuals, without
 reopening accepted A03/A04 or rebuilding completed geometry/export paths.
+
+Native M05 and Web B02 handoff dispatched after clean642ba35 recovery. Previous
+turn is progress: accepted source/actual Focus/Type plus cleanup saved, not a wait
+or repeated status. Current root QA/Apple/CUA instructions and P01 packet/receipt
+fully reread; old image deletion language explicitly superseded. No new universal
+foreground/monitor condition, backend workaround or unchanged runtime replay.
+Native owns only P01-invariance receipt and its bounded own-fixture physical lane;
+Web owns only short W02 source handoff, no input/source-code mutation yet. Reused
+known chat IDs through explicit unarchive, no duplicate/new agents or reviews.

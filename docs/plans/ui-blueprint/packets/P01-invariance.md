@@ -89,3 +89,29 @@ inline facts. Update only this existing outcome receipt and save checkpoint thro
 short Git lease; transient GitHub500 leaves push_pending, not lost results.
 This checks the declared sampled locations, not a continuous arbitrary hit-region
 proof or unrelated native inputs. Equal prior AX/pixels need not be remeasured.
+
+## Current supported-pointer continuation — 2026-10-08
+
+After accepted A03/A04 cleanup all input lanes are free. Native owner restored
+for only the unresolved sampled hit/focus dimension; accepted AX/pixel/probe
+facts are reused, not recreated. Root reread current QA/Apple/Computer Use routes
+and this entire packet/receipt. First establish current CUA documented coordinate
+space and exact owned target addressing from current metadata. Old titlebar click
+with false active/key/main is an unproved precondition, not a hit mismatch.
+
+No universal all-true foreground gate: require foreground if the documented
+pointer backend requires it; if it supports independently addressed pointer
+delivery, record that basis and actual state. This never permits AXPress-as-pointer,
+image-size/title/rect/order transform inference, stale coordinates, a new backend,
+fixture changes, arbitrary user-app operation or a blind activation loop.
+Once the supported route is established, perform the existing finite inside/outside
++1/0 pair on own sequential off/on A, with current identity and focus/state evidence.
+Otherwise return the exact missing API/metadata and source-backed proposal only.
+Original operation/setup/cleanup limits remain. Current exact fixture source may
+be built when old temp binaries are absent; no old Rust/runtime suite repetition.
+
+Only P01-invariance receipt is writable; no new code/tool/framework. All task images
+stay system temp and are NEVER agent-deleted, including containing directories;
+this supersedes all earlier independent-retention/unlinked-output cleanup wording.
+Only consumed run-owned nonimage files/empty dirs are cleaned. Short scoped Git
+checkpoint/push, release physical lane, concise facts/limitations and stop.
