@@ -137,6 +137,7 @@ import Darwin
             let frame=try Collector.probe(data:JSONSerialization.data(withJSONObject:manifest),command:command(req),acquireAX:{_,json in
                 if source==1{throw Collector.ProbeLinkError.permissionRequired}
                 if source==2{throw NativeProtocolError.request}
+                if source==5{throw NativeAcquisitionError.limit}
                 var result=ax(json,wrong:source==3)
                 if source==4{result=WindowAXResult(nodes:result.nodes+result.nodes,metrics:[:])}
                 return(result,100.0,101.0)
@@ -155,6 +156,8 @@ import Darwin
         check(observations[0]["freshness"] as? String=="unverified" && observations[1]["freshness"] as? String=="current")
         check(observations[1]["start"] as? Double==100 && observations[1]["end"] as? Double==101)
         for source in 1...4{check(try linked("linked_source_\(source)",source:source)["status"] as? String=="failed")}
+        let limited=try linked("linked_source_limit",source:5)
+        check(limited["status"] as? String=="failed" && (limited["data"] as! [String:Any])["code"] as? String=="incomplete_scope")
         for name in ["declaration","stale","missing","unauthorized"]{
             var m=linkedManifest;var r=linkedRequest
             if name=="declaration"{m["sample_association"]=["ax_key":"wrong"]}
@@ -170,6 +173,6 @@ import Darwin
         let ordinary=try linked("linked_ordinary",req:request)
         check(reads==beforeReads)
         check((ordinary["data"] as! NSDictionary).isEqual(((baseline["data"] as! [String:Any])["result"] as! [String:Any])["data"] as! NSDictionary))
-        print("{\"cases\":27,\"assertions\":\(assertions),\"live\":false}")
+        print("{\"cases\":28,\"assertions\":\(assertions),\"live\":false}")
     }
 }

@@ -719,3 +719,71 @@ response. Native inventory found exactly the one regular nonsymlink JSON, verifi
 its recorded SHA, removed only that file and its empty containing directory, and
 confirmed both paths absent. Images0; other evidence untouched. No runtime/source/
 test or shared Git-index action. Exact1 receipt ready for Root's direct checkpoint.
+
+
+## M05 actual explicitly linked AX/probe design — 2026-10-08
+
+Root saved frozen Native source0114fa1; shared admissionad4c56b/EXCHANGE@2/D03@3
+and registry26/Core140e53d resolve the explicit dependency recorded above. Matching
+Rust CLI/worker/validator built from immutable d033667254eea4004b0d57f9e8809405fd4a7ba6;
+all five Native files equal saved source. Existing helper/checker compile proof and
+27 synthetic cases/55 assertions remain scoped source evidence. Previously failing
+linked.json now canonical-valid0, public G11 design0/3 parts/3 relations. No broad
+suite or P01/M04 repetition. Current source-only probe structural equality preserved.
+
+First actual setup PID21863/direct executable generated launch_time0 in explicit
+Snapshot. Positive incarnation precondition failed: Observe1/worker_or_cleanup_failure,
+80.941ms/no canonical bytes. No mapping/current result accepted. Exact offline private
+parser check refused configuration on slots0/2; manifest launch_time0 explains it.
+Full CUA AX before/after equal. Owned operation68.211s/cleanup0.003878s, fixture absence
+confirmed/no timeout. Setup repaired only by LaunchServices launch of the same saved
+own .app; no source/guard/limit/timestamp substitution or unchanged retry.
+
+Qualified fresh operation: own F02-on PID22329; public describe-process confirms
+launch1791455908.55376 equal to fresh Snapshot; window12739/A generation
+A0F47B6C-12E1-423F-A87E-90960D4FC786. Explicit Snapshot then ONE public Observe with
+native_fixture/sample mask5, request external_semantics+opt_in_layout_probe, design,
+fields role/accessibility_name/enabled/accessibility_bounds/layout_bounds, cached_allowed;
+160/depth9/512KiB, parent request1s/cleanup1s. Scopef02.sample.a, environmentm05-own-fixture.
+Observe4/observed partial both slots,329.662ms wall; both original responses validate0.
+No p95/D06 acceptance claim. No real PlayPhrase.me/user app, pointer/pixels/TCC/display.
+
+Composed original ChannelResponse contains actual AX SourceKey macos.ax:f02.sample.a
+and three distinct macos.swiftui.probe:f02.sample.a.{icon,text,container}. One reported
+ComponentMapping f02.sample.a includes all four; declaration_sourcef02_explicit_ax_probe_mapping.
+Three reported represents relations AX→each part have fixture declaration evidence.
+Actual AX native_roleAXButton/accessibility_nameActivate sample/enabledtrue and
+accessibility_bounds801/364/173.5/48pt; layout_boundsunsupported/ax_layout_not_exposed.
+Probe icon32/68/26/24pt, text66/70.5/115.5/19pt, container20/56/173.5/48pt in
+f02-fixture-local/pt/top_left. Probe semantic/AX fields unsupported, not fabricated.
+No mapping inferred from equal dimensions, screen transform/hit/paint/clip/action refs.
+
+Public inspect --snapshot ORIGINAL_COMPOSED_RESPONSE --ref
+{"namespace":"macos.ax","key":"f02.sample.a"} --view design (2MiB input/512KiB output)
+returned0,3 actual part_nodes/3 attributed relations. --json returned0 with Snapshot
+structurally equal to the original response; no extraction/replacement graph.
+Probe Observation fixture-22329-monotonic312026.25563875004s/cache/unverified;
+AX Observation helper-22443-monotonic312043.0689938333→312043.1328275s/live/current.
+Both partial/consistencyunknown and unknown transforms preserved; clocks not converted.
+Post-read identity exactly equal and fresh full CUA AX equal to pre-read state.
+Helper/worker absent after Observe; own fixture/launcher absent, operation40.728595s,
+cleanup0.058218s/no timeout. Physical lane released.
+
+Immediate Root/review consumer retains one unchanged original composed response:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-m05-link-8x8z3eik/actual-opt_in_layout_probe.json`.
+SHA256670bf3cd0629fd6c96c0681f60c41e09f3eb51c687defdf0d433fa9bab3a957e,
+request8424f98393e3405b81cb000879841549/Targetf02-pid-22329 generation22329:1791455908.55376.
+Retention owner Root/review; Native removes only released nonimage after consumption
+and explicit Root release. Other consumed run-owned nonimages removed; images0/old
+assets untouched. Full M05/P7 and grouped independent acceptance remain Root-owned;
+this result establishes the previously missing actual own-fixture cross-source linkage.
+
+
+Grouped review correction after the actual run: callback NativeAcquisitionError.limit
+was misclassified as target_unresolved. Exact Collector catch now returns existing
+incomplete_scope; no source/identity/freshness/permission/limit change. One existing
+ProbeChecks callback-limit case added. Affected checker rebuild clean,28 cases/
+56 assertions pass; saved shared validator accepts both corrected limit failure and
+positive composed response. This negative-error-only delta did not change actual
+successful inputs or acquisition and needs no repeated UI run. Root's retained
+reviewer consumes the saved delta; self-check is not independent acceptance.

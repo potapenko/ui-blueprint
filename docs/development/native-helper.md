@@ -742,3 +742,40 @@ rectangles in the same local space. A viewport rectangle is not claimed visible/
 clipping, glyph bounds or occlusion. Existing Move can compare the same local records
 without treating screen translation as changed local offsets; screen/pixel transform
 and cross-display qualification remain unknown. Old sample and P01 seam untouched.
+
+
+## M05 explicitly linked AX and probe design observation
+
+The existing native_fixture/sample Observe supports one composed design request:
+provider channels=5; operation channels=[external_semantics,opt_in_layout_probe];
+Context fields=[role,accessibility_name,enabled,accessibility_bounds,layout_bounds],
+projection=design, freshness_policy=cached_allowed. Both session capabilities and
+request channels must explicitly authorize both sources. Existing single-source
+requests keep their shapes and capabilities; probe-only never performs AX reads.
+
+Trusted binding/identity/probe manifest config is unchanged. A fresh explicit
+fixture Snapshot declares sample_association with AX namespace/key, probe namespace,
+parts icon/text/container, represents relation and f02_explicit_ax_probe_mapping.
+Collector validates that exact declaration before acquiring the unique actual AX
+sample through the existing bounded collector, and revalidates the same AX window.
+No name/box equality creates an association. Missing/stale/ambiguous/unavailable
+source publishes no fabricated mapping; separately requested AX remains its own slot.
+
+Public Observe emits ordinary AX ChannelResponse and probe-wrapper ChannelResponse.
+The latter carries four distinct nodes, one reported ComponentMapping and three
+sourced represents relations. EXCHANGE@2 admits exactly this design AX/probe pair;
+request-aware worker validates every nested channel's authority. AX retains live/
+current helper clock; imported probe retains original cache/unverified fixture clock.
+Unsupported per-source fields stay explicit. No new action refs/transform/calibrated
+pixel/hit/visible-region claim. Use the unchanged composed response directly:
+
+```sh
+"$CLI" inspect --snapshot "$COMPOSED_RESPONSE" --ref '{"namespace":"macos.ax","key":"f02.sample.a"}' --view design --max-input-bytes 2097152 --max-output-bytes 524288
+```
+
+The developer fixture must have a positive public process launch time matching the
+Snapshot before Observe. LaunchServices-backed app launch supplies that identity;
+a direct-executable launch observed with launch_time=0 is refused, never repaired
+by substituting a timestamp. Actual saved-source Observe/G11 passed; details and
+initial refused setup are in the existing P01-probe-source receipt. This is own-
+fixture explicit design linkage, not arbitrary-app SDK or full M05/P7 acceptance.

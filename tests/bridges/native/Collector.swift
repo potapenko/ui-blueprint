@@ -549,6 +549,7 @@ extension Collector {
             let collected: WindowAXResult, start: Double, end: Double
             do { (collected, start, end) = try acquireAX!(admission, json) }
             catch ProbeLinkError.permissionRequired { return try failed("permission_required") }
+            catch NativeAcquisitionError.limit { return try failed("incomplete_scope") }
             catch { return try failed("target_unresolved") }
             guard collected.nodes.count == 1,
                   let axKey = collected.nodes[0]["key"] as? [String: String],
