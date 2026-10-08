@@ -160,10 +160,11 @@ fn execute(args: Arguments) -> Result<(Vec<u8>, u8), Failure> {
 
 fn execute_inspect(args: InspectArguments) -> Result<(Vec<u8>, u8), Failure> {
     let (snapshot, reference) = input::load_inspect(&args)?;
-    let view = engine::scope::relation_neighbors(
+    let view = engine::scope::component_view(
         &snapshot,
         &reference,
-        engine::scope::NeighborLimits {
+        engine::scope::ComponentLimits {
+            max_parts: snapshot.nodes.len(),
             max_relations: snapshot.relations.len(),
         },
     )

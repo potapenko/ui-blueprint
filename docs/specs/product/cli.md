@@ -1,7 +1,7 @@
 # CLI и bounded output
 
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@11`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @10 with narrow Web Activate and explicit result identity; existing commands preserved.
+- Contract: `UIB.CLI@12`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @11 with recorded component-part detail in compact design inspect; existing JSON/commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
 - Read when: CLI commands, compact/JSON и публикация.
@@ -59,7 +59,13 @@ budgets include selector UTF-8 bytes plus file bytes, and complete output/newlin
 Input is core0.1 Snapshot or observed ChannelResponse with unchanged Snapshot.
 Missing exact node: target_unresolved/4; invalid/limit2; IO1; unsupported mode5.
 Found node returns0 even when source coverage/properties are partial/unknown.
-Compact preserves source context/evidence; views reorder presentation only.
+Compact preserves source context/evidence; interaction keeps the seed primary.
+Design renders exact member Node properties/bounds from all reported ComponentMappings containing the seed, preserving groups/namespaces/Surface and declaration_source/provenance.
+Source-order attributed relations around that recorded group remain context, never inferred membership. No recursion/name/box grouping or
+new action refs; absence of declared parts is not_exposed, without guessed causes.
+Selection returned/omitted parts/relations stay separate from source coverage. CLI
+selects all validated recorded members/relations under existing input/output bounds;
+output overflow refuses2 before stdout. Original graph/projection and JSON below stay.
 
 JSON emits exactly these fields in one complete object plus newline:
 output_version="1.0.0", kind="inspection", source="saved",

@@ -138,3 +138,66 @@ crates/{schema,engine,cli}, sorted compact JSON path→file-SHA256 then SHA256.
 Protected owner diffs were empty. Source is frozen checkpoint-ready; root grants
 short exact-path commit+push, then terminal SHA/push/release. Remaining full
 projections/spatial heuristics/live qualification/P7 are separate, not claimed.
+
+## G11 reported component parts in compact design inspect
+
+Authority: root selected G11 in the existing G02 packet under approved PLAN.UIB@1
+P3/P6 and the reaffirmed real UI geometry/structure goal. Current registry23 →
+PROJECTIONS/MODEL/IDENTITY/BOUNDARIES plus GEOMETRY/CLI@11/EXCHANGE/PRIVACY closure
+read/reused completely; RUST/DEV.RUST unchanged. Code evidence, not invented intent:
+old inspect printed seed geometry and mapping/member keys only. Canonical reported
+ComponentMapping already validates unique/existing members; no new schema needed.
+Registered CLI@12/registry24 G11-COMPONENT-001 compact INSPECT semantics BEFORE code;
+existing inspection JSON1.0.0 fields/source and neighbors semantics protected.
+
+Exact11 writes: engine src/scope.rs, tests/scope.rs;
+CLI src/main.rs, src/output.rs, tests/binary.rs;
+specs/README.md, product/README.md, product/cli.md;
+development/scope.md, development/cli.md; this receipt. No provider/Native/Web,
+schema/geometry/math/cache/action/Cargo/lock/root coordination writes.
+
+Working API: component_view(&Snapshot,&SourceKey,ComponentLimits{max_parts,
+max_relations})->ComponentView. Borrowed snapshot/seed/mappings/unique part Nodes,
+source-order RelationNeighbor context and exact omitted_parts/omitted_relations.
+Matching reported groups contain the exact seed; no transitive other-component
+expansion. All member namespaces/Surface/property/Evidence and declaration source
+remain original. Relation direction refers to its selected group endpoint; exact
+from/to remain in Relation. Outside counterpart does not become a component part.
+No name/box/children/estimated-correspondence grouping or action ref construction.
+
+Existing design compact inspector now renders those part properties/bounds via
+the same inspect_property/node formatter. All validated recorded entries are
+selected under input/output byte bounds; no new flags/commands/hidden defaults.
+Selection/source coverage and recorded/not_exposed are separate, with no invented
+reason for absent internals. Interaction keeps seed first; original projection and
+graph remain immutable. Existing JSON body construction/fields/version unchanged.
+
+Focused checks passed, locked/offline Rust1.96/macOS:
+- engine scope8 tests: existing neighbor6 plus borrowed/shared many-to-many groups,
+  namespace/evidence/source order, outside relation counterpart not a member,
+  explicit cap0/1 omissions, partial source unchanged, absence and invalid mapping.
+- public CLI design3 cases: reported container/icon/text bounds120/18/80 css_px,
+  shared part once/two groups, unknown/redacted, not_exposed without inference;
+  original JSON7 fields1.0.0/full Snapshot, complete bounded overflow refusal.
+- public inspect5 compatibility cases and neighbors4 cases passed. No arithmetic,
+  full workspace, browser/Native or changed input/collection run. First cap test
+  failed because the existing printed budget shrank a digit; corrected the test
+  to an unambiguously smaller cap without changing production bounds/expectations.
+Affected engine/CLI check and Clippy passed; final format/link/diff checks next.
+Inputs are explicitly synthetic derivatives, not new real UI proof.
+
+Immediate actual-data consumer requested by root: retain this task's already-built
+CLI only until one Native supplied unchanged scroll-probe response is inspected.
+No new collection/runtime or persistent directory. Binary/target are nonimage
+system-temp assets; cleanup follows that immediate use, never any retained images.
+Checkpoint source promptly via exact11 Git lease; separate actual-data facts follow.
+Final scoped format/link/route checks and <=100-line spec ceilings passed; affected
+Clippy passed after the final rendering test edit. No new warning/failure remains.
+Retained immediate-use binary (system temp, no image):
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/ui-blueprint-g11.gpFcJ4el0g/target/debug/uiblueprint
+SHA256e62b000cf08c59706649d65e3f7ed8d947a94267d5cdbdf7adec67345e548263.
+Immediate retention owner is this Core task until Native's one design-inspect
+consumer; remove owned nonimage target after it, never images/directories with them.
+Engine scope SHA2565545c57a001215581d7ba2e7d767191fe74d2fcc1c08a4a9cde534b29248b04d;
+CLI output SHA256f09c4445e4484c981b6004245d8530696d5da222a57e8e36ea51eb99f2a4fc00;
+CLI main SHA2560929c81e02ecda0a60fd48da50e0e30c5699d6e059996e5a2faa12ad5b269f42.

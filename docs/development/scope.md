@@ -38,6 +38,29 @@ Full projections, geometry-based neighbors and live W01/M01/P01
 qualification remain separate work. The public caller is described below. Canonical wire, host, cache and arithmetic
 are unchanged.
 
+## Reported component parts
+
+`scope::component_view(snapshot, seed, ComponentLimits { max_parts, max_relations })`
+borrows the exact seed, all reported ComponentMappings containing it, unique
+member Nodes in source order and attributed relations touching that recorded
+group. No recursive expansion into other components, name/box inference, identity
+merge or newly actionable ref. Relation counterparts are context, not members.
+Direction is relative to the selected-group endpoint; the full Relation retains
+both exact endpoints and Evidence. Shared parts appear once while matching groups
+remain distinct. A part's Surface/properties/provenance remain unchanged.
+
+Output omissions count only excluded recorded parts/relations. Original Snapshot
+coverage stays independent. Mapping absence means no declared logical component;
+available seed relations remain, and design parts are not_exposed without guessed
+combine/ignore reasons. Validation/refusal/allocation ownership stays as above.
+
+Existing `inspect --view design` uses all validated recorded parts/relations with
+the existing byte caps, and prints each part's property/bounds data. Compact reports
+selection counts/exposure separately from source coverage. Byte overflow refuses
+before stdout; it does not silently truncate. Interaction keeps seed facts primary.
+Inspection JSON1.0.0 remains unchanged, containing the complete original Snapshot,
+not a new component selection graph. Public neighbors remains its one-step API.
+
 ## Public saved-data neighbor caller
 
 [CLI-NEIGHBORS@1](../specs/product/cli-neighbors.md) exposes the accepted borrowed

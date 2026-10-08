@@ -340,9 +340,66 @@ fn inspect_property(
     writeln!(output, " evidence={evidence:?}")
 }
 
+fn inspect_node(output: &mut Bounded, node: &Node, view: Projection) -> io::Result<()> {
+    const FIELDS: &[Field] = &[
+        Field::Role,
+        Field::Name,
+        Field::AccessibilityName,
+        Field::VisibleText,
+        Field::Value,
+        Field::Placeholder,
+        Field::Focused,
+        Field::Enabled,
+        Field::LayoutBounds,
+        Field::AccessibilityBounds,
+        Field::HitRegion,
+        Field::VisibleRegion,
+        Field::PaintBounds,
+    ];
+    let geometry = |field| {
+        matches!(
+            field,
+            Field::LayoutBounds
+                | Field::AccessibilityBounds
+                | Field::HitRegion
+                | Field::VisibleRegion
+                | Field::PaintBounds
+                | Field::Baseline
+        )
+    };
+    for geometry_first in [view == Projection::Design, view != Projection::Design] {
+        for &field in FIELDS.iter().filter(|&&f| geometry(f) == geometry_first) {
+            inspect_property(
+                output,
+                field,
+                node.properties.iter().find(|p| p.field() == field),
+            )?;
+        }
+        for property in node
+            .properties
+            .iter()
+            .filter(|p| !FIELDS.contains(&p.field()) && geometry(p.field()) == geometry_first)
+        {
+            inspect_property(output, property.field(), Some(property))?;
+        }
+    }
+    for extension in &node.extensions {
+        writeln!(
+            output,
+            "extension_namespace={:?} name={:?} property={:?}",
+            extension.namespace.0, extension.name.0, extension.property
+        )?;
+    }
+    for declaration in &node.source_declarations {
+        writeln!(output, "source_declaration={declaration:?}")?;
+    }
+    writeln!(output, "recorded_children={:?}", node.children)?;
+    Ok(())
+}
+
 pub(crate) fn inspect(
     args: &InspectArguments,
-    view: &uiblueprint_engine::scope::NeighborView<'_>,
+    view: &uiblueprint_engine::scope::ComponentView<'_>,
 ) -> Result<Vec<u8>, Failure> {
     let mut buffer = Bounded::new(args.max_output);
     if args.json {
@@ -390,70 +447,37 @@ pub(crate) fn inspect(
             node.key, node.surface, node.native_role
         )?;
         writeln!(output, "recorded_focus={:?}", snapshot.focus)?;
-        const FIELDS: &[Field] = &[
-            Field::Role,
-            Field::Name,
-            Field::AccessibilityName,
-            Field::VisibleText,
-            Field::Value,
-            Field::Placeholder,
-            Field::Focused,
-            Field::Enabled,
-            Field::LayoutBounds,
-            Field::AccessibilityBounds,
-            Field::HitRegion,
-            Field::VisibleRegion,
-            Field::PaintBounds,
-        ];
-        let geometry = |field| {
-            matches!(
-                field,
-                Field::LayoutBounds
-                    | Field::AccessibilityBounds
-                    | Field::HitRegion
-                    | Field::VisibleRegion
-                    | Field::PaintBounds
-                    | Field::Baseline
-            )
-        };
-        for geometry_first in [
-            args.view == Projection::Design,
-            args.view != Projection::Design,
-        ] {
-            for &field in FIELDS.iter().filter(|&&f| geometry(f) == geometry_first) {
-                inspect_property(
-                    output,
-                    field,
-                    node.properties.iter().find(|p| p.field() == field),
-                )?;
-            }
-            for property in node
-                .properties
-                .iter()
-                .filter(|p| !FIELDS.contains(&p.field()) && geometry(p.field()) == geometry_first)
-            {
-                inspect_property(output, property.field(), Some(property))?;
-            }
-        }
-        for extension in &node.extensions {
-            writeln!(
-                output,
-                "extension_namespace={:?} name={:?} property={:?}",
-                extension.namespace.0, extension.name.0, extension.property
-            )?;
-        }
-        for declaration in &node.source_declarations {
-            writeln!(output, "source_declaration={declaration:?}")?;
-        }
-        writeln!(output, "recorded_children={:?}", node.children)?;
-        for component in snapshot
-            .components
-            .iter()
-            .filter(|c| c.members.contains(&node.key))
-        {
+        inspect_node(output, node, args.view)?;
+        let total_parts = view.parts.len() + view.omitted_parts;
+        writeln!(
+            output,
+            "component_selection mappings={} returned_parts={} omitted_parts={} returned_relations={} omitted_relations={} parts_exposure={} selection_truncated={}",
+            view.mappings.len(),
+            view.parts.len(),
+            view.omitted_parts,
+            view.relations.len(),
+            view.omitted_relations,
+            if total_parts == 0 {
+                "not_exposed"
+            } else {
+                "recorded"
+            },
+            view.omitted_parts > 0 || view.omitted_relations > 0
+        )?;
+        for component in &view.mappings {
             writeln!(output, "declared_component={component:?}")?;
         }
-        for neighbor in &view.neighbors {
+        if args.view == Projection::Design {
+            for part in &view.parts {
+                writeln!(
+                    output,
+                    "part_node={:?} surface={:?} native_role={:?}",
+                    part.key, part.surface, part.native_role
+                )?;
+                inspect_node(output, part, Projection::Design)?;
+            }
+        }
+        for neighbor in &view.relations {
             writeln!(
                 output,
                 "relation_direction={:?} relation={:?} counterpart={:?}",

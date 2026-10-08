@@ -314,3 +314,128 @@ fn absent_seed_and_invalid_canonical_graph_refuse_without_partial_output() {
     ));
     assert_eq!(snapshot, before);
 }
+
+#[test]
+fn component_parts_are_reported_borrowed_and_shared_without_namespace_merge() {
+    use uiblueprint_engine::scope::{ComponentLimits, component_view};
+    let mut s = fixture(&[
+        ("macos.ax", "button"),
+        ("probe", "container"),
+        ("probe", "icon"),
+        ("probe", "text"),
+        ("web.dom", "external-label"),
+    ]);
+    s.components = vec![
+        ComponentMapping {
+            logical_component_key: Id("first".into()),
+            members: s.nodes[..4].iter().map(|n| n.key.clone()).collect(),
+            declaration_source: Id("debug-map".into()),
+            provenance: Provenance::Reported,
+        },
+        ComponentMapping {
+            logical_component_key: Id("shared".into()),
+            members: vec![s.nodes[0].key.clone(), s.nodes[3].key.clone()],
+            declaration_source: Id("shared-map".into()),
+            provenance: Provenance::Reported,
+        },
+    ];
+    s.relations = vec![
+        edge(&s, 0, 1, RelationKind::Represents),
+        edge(&s, 2, 3, RelationKind::CorrespondsTo),
+        edge(&s, 4, 3, RelationKind::LabelledBy),
+    ];
+    s.relations[1].evidence.provenance = Provenance::Estimated;
+    let original = s.clone();
+    let v = component_view(
+        &s,
+        &s.nodes[0].key,
+        ComponentLimits {
+            max_parts: 10,
+            max_relations: 10,
+        },
+    )
+    .unwrap();
+    assert_eq!(v.mappings.len(), 2);
+    assert_eq!(v.parts.len(), 3);
+    assert_eq!(v.relations.len(), 3);
+    assert!(std::ptr::eq(v.snapshot, &s));
+    assert!(std::ptr::eq(v.parts[2], &s.nodes[3]));
+    assert!(std::ptr::eq(v.mappings[1], &s.components[1]));
+    assert_eq!(
+        v.relations[1].relation.evidence.provenance,
+        Provenance::Estimated
+    );
+    assert_eq!(v.relations[2].direction, Direction::Incoming);
+    assert_eq!(v.relations[2].counterpart.key, s.nodes[4].key);
+    assert!(
+        !v.parts.iter().any(|n| n.key == s.nodes[4].key),
+        "relation context is not membership"
+    );
+    assert_eq!(s, original);
+}
+#[test]
+fn component_selection_caps_and_not_exposed_never_upgrade_source_coverage() {
+    use uiblueprint_engine::scope::{ComponentLimits, component_view};
+    let mut s = fixture(&[("macos.ax", "button"), ("probe", "icon"), ("probe", "text")]);
+    s.coverage.status = CoverageStatus::Partial;
+    s.nodes[0].children = vec![s.nodes[1].key.clone()];
+    s.relations = vec![edge(&s, 0, 1, RelationKind::CorrespondsTo)];
+    let v = component_view(
+        &s,
+        &s.nodes[0].key,
+        ComponentLimits {
+            max_parts: 10,
+            max_relations: 10,
+        },
+    )
+    .unwrap();
+    assert!(
+        v.parts.is_empty() && v.mappings.is_empty(),
+        "children/names/relations do not mint declared parts"
+    );
+    assert_eq!(v.relations.len(), 1);
+    s.components.push(ComponentMapping {
+        logical_component_key: Id("declared".into()),
+        members: s.nodes.iter().map(|n| n.key.clone()).collect(),
+        declaration_source: Id("explicit".into()),
+        provenance: Provenance::Reported,
+    });
+    for cap in [0, 1] {
+        let v = component_view(
+            &s,
+            &s.nodes[0].key,
+            ComponentLimits {
+                max_parts: cap,
+                max_relations: 0,
+            },
+        )
+        .unwrap();
+        assert_eq!(v.parts.len(), cap);
+        assert_eq!(v.omitted_parts, 2 - cap);
+        assert_eq!(v.omitted_relations, 1);
+        assert_eq!(v.snapshot.coverage.status, CoverageStatus::Partial);
+    }
+    assert!(matches!(
+        component_view(
+            &s,
+            &key("macos.ax", "missing"),
+            ComponentLimits {
+                max_parts: 1,
+                max_relations: 1
+            }
+        ),
+        Err(ScopeError::MissingSeed)
+    ));
+    s.components[0].members.push(key("probe", "absent"));
+    assert!(matches!(
+        component_view(
+            &s,
+            &s.nodes[0].key,
+            ComponentLimits {
+                max_parts: 1,
+                max_relations: 1
+            }
+        ),
+        Err(ScopeError::InvalidSnapshot(_))
+    ));
+}

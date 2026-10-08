@@ -1198,3 +1198,187 @@ fn unknown_space_and_sensitive_canonical_input_fail_without_payload_output() {
         "invalid_input",
     );
 }
+
+#[test]
+fn design_inspect_returns_reported_component_part_bounds_and_preserves_json() {
+    let mut case = Case::new("GEO-GAP");
+    let template = case.snapshot.nodes[0].clone();
+    let observed = case.snapshot.observations[0].clone();
+    case.snapshot.nodes.clear();
+    case.snapshot.observations.clear();
+    case.snapshot.relations.clear();
+    case.snapshot.components.clear();
+    for (i, (ns, name, width)) in [
+        ("macos.ax", "control", 100.0),
+        ("probe", "container", 120.0),
+        ("probe", "icon", 18.0),
+        ("probe", "label", 80.0),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let mut o = observed.clone();
+        o.id = Id(format!("synthetic-part-{i}"));
+        o.source_namespace = Id(ns.into());
+        let mut n = template.clone();
+        n.key = SourceKey {
+            namespace: Id(ns.into()),
+            key: Id(name.into()),
+        };
+        for p in &mut n.properties {
+            if let Property::Requested {
+                evidence,
+                state:
+                    Availability::Known {
+                        value: Value::Geometry(g),
+                    },
+                ..
+            } = p
+            {
+                evidence.observation_id = o.id.clone();
+                evidence.source_namespace = o.source_namespace.clone();
+                let Shape::Rect(r) = &mut g.shape else {
+                    panic!("rect")
+                };
+                r.width = width;
+            }
+        }
+        case.snapshot.nodes.push(n);
+        case.snapshot.observations.push(o);
+    }
+    case.snapshot.components = vec![
+        ComponentMapping {
+            logical_component_key: Id("synthetic-component".into()),
+            members: case.snapshot.nodes.iter().map(|n| n.key.clone()).collect(),
+            declaration_source: Id("literal-debug-map".into()),
+            provenance: Provenance::Reported,
+        },
+        ComponentMapping {
+            logical_component_key: Id("shared-label".into()),
+            members: vec![
+                case.snapshot.nodes[0].key.clone(),
+                case.snapshot.nodes[3].key.clone(),
+            ],
+            declaration_source: Id("second-debug-map".into()),
+            provenance: Provenance::Reported,
+        },
+    ];
+    let Property::Requested { evidence, .. } = &case.snapshot.nodes[2].properties[0] else {
+        panic!("source")
+    };
+    case.snapshot.relations.push(Relation {
+        kind: RelationKind::CorrespondsTo,
+        from: case.snapshot.nodes[2].key.clone(),
+        to: case.snapshot.nodes[3].key.clone(),
+        evidence: evidence.clone(),
+    });
+    case.snapshot.coverage.status = CoverageStatus::Partial;
+    case.snapshot
+        .context
+        .fields
+        .extend([Field::Value, Field::Description]);
+    case.snapshot
+        .coverage
+        .fields
+        .extend([Field::Value, Field::Description]);
+    for o in &mut case.snapshot.observations {
+        o.coverage.fields.extend([Field::Value, Field::Description]);
+    }
+    for (i, n) in case.snapshot.nodes.iter_mut().enumerate() {
+        let Property::Requested { evidence, .. } = &n.properties[0] else {
+            panic!("source")
+        };
+        let evidence = evidence.clone();
+        n.properties.push(Property::Requested {
+            field: Field::Value,
+            sensitivity: if i == 3 {
+                Sensitivity::Sensitive
+            } else {
+                Sensitivity::Public
+            },
+            evidence: evidence.clone(),
+            state: if i == 3 {
+                Availability::Redacted {}
+            } else {
+                Availability::Known {
+                    value: Value::Text(String::new()),
+                }
+            },
+        });
+        n.properties.push(Property::Requested {
+            field: Field::Description,
+            sensitivity: Sensitivity::Public,
+            evidence,
+            state: Availability::Unknown {
+                reason: Id("not-exposed".into()),
+            },
+        });
+    }
+    case.save();
+    let selector = serde_json::to_string(&case.snapshot.nodes[0].key).unwrap();
+    let result = case.inspect(&selector, "design", 65536, 65536, &[]);
+    assert_eq!(result.status.code(), Some(0));
+    let len = result.stdout.len();
+    let text = String::from_utf8(result.stdout).unwrap();
+    for value in [
+        "mappings=2 returned_parts=3 omitted_parts=0",
+        "parts_exposure=recorded",
+        "key: Id(\"icon\")",
+        "width: 18.0",
+        "width: 80.0",
+        "width: 120.0",
+        "frame_kind: LayoutBounds",
+        "units: CssPx",
+        "declaration_source: Id(\"literal-debug-map\")",
+        "status: Partial",
+        "sensitivity=Sensitive availability=redacted",
+        "availability=unknown reason=\"not-exposed\"",
+    ] {
+        assert!(text.contains(value), "{value}");
+    }
+    assert_eq!(
+        text.matches("part_node=").count(),
+        3,
+        "shared member appears once, groups remain distinct"
+    );
+    let json = case.inspect(&selector, "design", 65536, 65536, &["--json"]);
+    assert_eq!(json.status.code(), Some(0));
+    let parsed: serde_json::Value = serde_json::from_slice(&json.stdout).unwrap();
+    assert_eq!(parsed.as_object().unwrap().len(), 7);
+    assert_eq!(parsed["output_version"], "1.0.0");
+    assert_eq!(
+        parsed["snapshot"],
+        serde_json::to_value(&case.snapshot).unwrap()
+    );
+    assert!(parsed.get("parts").is_none());
+    assert_eq!(
+        case.inspect(&selector, "design", 65536, len, &[])
+            .status
+            .code(),
+        Some(0)
+    );
+    // Budget text is part of existing compact output; a reduced cap changes its
+    // own printed digits. This cap is unambiguously below the full part response.
+    assert_error(
+        case.inspect(&selector, "design", 65536, len - 32, &[]),
+        2,
+        "output_limit",
+    );
+    let path = case.directory.clone();
+    drop(case);
+    assert!(!path.exists());
+}
+
+#[test]
+fn design_without_declared_parts_is_not_exposed_without_inference() {
+    let case = Case::new("GEO-GAP");
+    let selector = serde_json::to_string(&case.snapshot.nodes[0].key).unwrap();
+    let result = case.inspect(&selector, "design", 65536, 65536, &[]);
+    assert_eq!(result.status.code(), Some(0));
+    let text = String::from_utf8(result.stdout).unwrap();
+    assert!(text.contains("parts_exposure=not_exposed"));
+    assert!(!text.contains("part_node="));
+    let path = case.directory.clone();
+    drop(case);
+    assert!(!path.exists());
+}

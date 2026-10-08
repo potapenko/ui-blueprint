@@ -114,7 +114,13 @@ native role, selected properties with availability and Evidence, and explicit
 incident relations. Missing/unrequested fields stay not_requested; unknown,
 unsupported, redacted, false and empty remain distinct. Each geometry keeps its
 frame kind, Space and source. Snapshot focus is separate from node Focused.
-Interaction orders semantic facts first; design orders geometry first. Neither
+Interaction keeps seed semantic facts first; design orders geometry first and
+prints full recorded properties/bounds of exact members from reported component
+mappings containing the seed. Multiple groups remain separate, shared parts appear
+once. Compact component_selection counts/exposure stay separate from source coverage;
+missing declared parts is not_exposed, never inferred from names/boxes or guessed
+combine/ignore causes. Attributed group relations remain context, not new membership.
+Existing JSON1.0.0 is unchanged; byte overflow still produces no partial result. Neither
 view creates inner parts, changes the graph, promotes AX bounds to layout bounds,
 or creates action refs. Strings are escaped as data. No external references load.
 
