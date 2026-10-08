@@ -62,3 +62,36 @@ file preservation, verify/remove/reinstall и затронутые failure/recov
 Final: рабочая процедура/комплект, изменения или отсутствие необходимости менять
 recipe, actual source+recipe revisions, проверки/результат, SHA+push и remaining
 limits. Final release/P7/D06 claims вне этой bounded installation задачи.
+
+## Current candidate continuation — 2026-10-08
+
+The original94724df qualification is historical. Continue the SAME finite I02
+outcome on saved candidate `a7c04164df08441cfbbaa61b501aa64d29290732`: installed
+CLI/worker/Native helper must include the completed Native protected-input/popup
+and Web Documents changes. Same PLAN.UIB@1 P6 authority, original ownership and
+forbidden operations; current selected registry32 includes NATIVE-SESSION@3,
+NATIVE-POPUP@1, WEB-DOCUMENTS@1 and D03@4. Reopen only applicable changed contracts
+and explicit dependencies before inspecting source. No new product behavior,
+licensing policy, platform, publication or final P7 acceptance is authorized.
+
+Perform the complete task: source/recipe/feature applicability analysis, necessary
+packaging/documentation corrections, affected installed-build/verify/recovery and
+model-free smoke checks, final receipt, exact-path commit+push. Reuse unchanged
+94724df evidence when source/recipe/dependencies prove applicability; do not repeat
+all eight old builds or the entire safety/license audit automatically. Qualify
+changed selected modules on the current pin; no claimed installed capability may
+rest solely on old unrelated proof. Return a real product-source dependency to its
+owner rather than modifying protected implementation to make packaging pass.
+
+Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c` owns the next CPU/headless interval
+for full-document D06 after Q01 releases it. I02 may inspect/plan/edit its disjoint
+recipe/docs/checks now, but compilation/heavy verification waits for Q02's terminal
+CPU/runtime release; inspect its saved result and compact status, then continue
+without another root grant. Do not launch apps, use foreground or bypass Native's
+pending ownership question. Builds/installations only in owned system temp;
+all image retention, foreign-file and Git-lock rules of the original packet apply.
+
+Final result identifies exact product and recipe pins, newly verified versus
+reused checks, usable current installation instructions and any real remaining
+packaging dependency. Existing source/runtime/performance verdicts are separate;
+this task cannot declare P0–P7 complete.

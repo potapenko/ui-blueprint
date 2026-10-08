@@ -31,20 +31,27 @@ Root получает итог или конкретный блокер; про�
   terminal completed; coherent pin `a7c0416`, final `c16a603` pushed. Author reports
   both exact reproducers,20shared cases,10affected live cases including6zero-publication
   private variants. CPU/headless released; handed off and archived, no independent pass claimed.
-- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: dispatched same-context
-  affected srcset privacy recheck on a7c0416; no reopening accepted P2/unchanged domains.
-  Its terminal committed Documents verdict/release is the exact Q02 prerequisite.
-- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: retained semantic/geometry
-  b3c3a22 result; resumed for remaining full-document Web task. After Q01 accepts
-  Documents privacy and releases CPU/runtime, it proceeds independently through
-  saved build/preflight/frozen full cohorts/docs/commit+push. No root grant needed.
-  Full Documents/Native and precise separate-stage evidence gaps remain open.
+- Q01, чат `01a11bdd-8a56-7f21-8435-953df4ce9185`: terminal `completed`,
+  Documents privacy ACCEPT на `a7c04164df08441cfbbaa61b501aa64d29290732`;
+  receipt `a1cae1a` committed/pushed. Оба findings W06 закрыты: exact reproducers,
+  20-case corpus и own Chromium10cases,6private0publication,97-node baseline.
+  CPU/headless освобождены; Native foreground wait не изменён. Контекст сохранён.
+- Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: условие Documents acceptance
+  выполнено; ранее выданное разрешение действует на весь full-document Web task.
+  Harness UTF-8 streaming сохранён `51a09e0`; semantic/geometry `b3c3a22` остаются
+  применимыми. CPU/headless lane принадлежит Q02 до его terminal release.
+- I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: разархивирован, turn
+  `inProgress`; полный current-installed-candidate outcome на a7c0416 по
+  [актуализированному packet](packets/I02-current-distribution.md).
+  Собственные recipe/docs/checks анализ и правки идут независимо. Heavy builds
+  ждут именно текущий Q02 terminal release, затем I02 продолжает сам без root grant.
+  Старый94724df install receipt не подменяет проверку актуальных Native/Web изменений.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q01/Q02. Переход к full-document measurements после Q01 acceptance/release
-  уже разрешён; промежуточные шаги не требуют управляющего follow-up.
+  Q02/I02. Full-document measurements разрешены; I02 heavy verification следует
+  после Q02 release без промежуточных управляющих follow-up.
 
 ## История предыдущей группы самостоятельных задач
 
