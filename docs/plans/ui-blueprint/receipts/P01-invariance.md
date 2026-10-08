@@ -129,3 +129,56 @@ dirs/framework. Remaining next dependency is confirmed supported CUA screen-to-t
 pointer mapping/foreground activation before +1/0 delivery; no new caller API was
 shown necessary. One-path human receipt ready, index untouched; sampled-hit evidence
 still open and no additional runtime attempt started.
+
+
+## Current CUA sampled-hit recovery — missing Mac pointer mapping contract
+
+Root resumed only M05 sampled hit/focus dimension in current master, not repeat of
+accepted e1c5755 AX/layout/focus/pixel equality or probe8→18 host proof. Current global
+AGENTS/QA/Computer Use/Apple routes and full packet/receipt recovered; existing selected
+Native/M05/geometry/identity/privacy/lifecycle/D04/D05/D06 closure unchanged (selected
+leaves checked against saved05a76f0, no drift). Old image cleanup/independent-retention
+language is superseded: ALL task images/containing dirs remain OS temp/no-agent-delete.
+Only this existing receipt is writable; no source/fixture/helper/schema redesign.
+
+Current callable mcp__cua_repl.js route successfully refreshed complete documentation
+with cua.rewriteDocumentation(). Target.click signature is number|Vec2; Vec2=[x,y].
+For macOS, docs establish getApp by name/path/bundle and background launch if needed;
+they do not specify pointer coordinate units/origin/global-screen vs window-local basis,
+screenshot-to-click mapping, pointer window addressing or foreground requirement.
+Docs explicitly establish window-relative independently addressed input for Linux,
+and screenshot mapping/activation for Windows. Neither rule can be imported into Mac.
+Numeric AX-index click/secondary actions cannot substitute for physical pointer proof.
+
+One current read-only inventory probe: cua.getState({emit:false}), summarized metadata
+only. Observed computerTarget=mac, no errors; App metadata keys displayName/id/isRunning/
+lastUsedDate/useCount; no window metadata entries/coordinate transform; ownFixtureApps=[]
+(no current F02 instance). State schema has no foreground field. Successful discovery
+proves Computer Use available, not mapped Mac pointer delivery. No real app operated.
+Exact current fixture PID/window/inside/outside coordinates consequently not minted:
+launching/building a fixture or taking more dimension-only screenshots cannot establish
+an undocumented input-coordinate contract and is not necessary to this missing owner.
+
+Stop before pointer/keyboard/setup action, rather than blind titlebar/inside/outside
+retry. No Compare/Snapshot/input, app launch/build, capture/screenshot/SDK call, Rust
+suite or alternative backend; no CGEvent/AXPress workaround. Inactive matched states
+remain valid for earlier dimensions; active/key/main=true is not imposed as universal
+QA or evidence gate. Whether this Mac pointer backend requires foreground is unknown,
+not inferred from previous false-state attempts. No new hit mismatch was observed.
+
+Outcome: sampled pointer hits not_verified/waiting_evidence, exact missing proof is
+current Mac click(Vec2) coordinate/addressing/transform contract plus required ownership
+state. Geometry/semantics/focus/pixels keep their prior accepted matched-pair facts;
+no rerun, loss or elevation of those facts. Current operation did not create resources/
+fixture/helper/PIDs/images/temp output; physical lane released without input use.
+No file/image/older asset cleanup needed or performed. No M05/goal-complete claim.
+
+Nearest proposal for root's consumer: obtain the existing CUA provider's supported Mac
+contract (units/origin, exact app/window dispatch, screenshot transform and activation/
+foreground behavior) or a documented operator pointer handoff on the same own fixture.
+Then the already-selected finite inside/outside pair with independent Count+1/0 can
+run unchanged. This is missing tool evidence, not a proposal for a new fixture/backend/
+action framework or relaxed oracle. Semantic AX target activation would demonstrate
+only a different modality and cannot close sampled hit invariance. No user question,
+new review or auto-next task started. Receipt-only exact1 links/whitespace checked;
+checkpoint/push waits short Git lease, index untouched.
