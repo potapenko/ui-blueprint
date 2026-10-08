@@ -54,6 +54,20 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Native foreground wait; independent Web D06 continues
+
+Q01 requires operator activation of own F02 Synthetic/Window A: product Focus and
+CUA attempt leave app inactive/non-key/non-main despite AX focused. Root relayed
+one activation question; no response yet, no further Native mutation authorised by
+time alone. Native wait is awaiting operator, not goal pause/completion. Q03 real
+scope question separately pending.
+
+Scoped Q02 Web release given on8e3dba2: Q01 Web checks at762f244 passed; production
+Web/Rust host/plugin-api/CLI/schema/engine diff through8e3dba2 is empty. Web matching
+quality/20cold/100warm rows may proceed; unsupported frame/fidelity rows stay open.
+Q01 notified to avoid concurrent heavy load. Native/whole D06 still blocked at their
+exact gate. This continues dependency-ready work without inventing acceptance.
+
 ## N03 Surface repair сохранён
 
 8e3dba2 pushed, source writer terminal completed/archived. Общий resolver не

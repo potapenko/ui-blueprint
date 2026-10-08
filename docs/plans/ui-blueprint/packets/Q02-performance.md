@@ -83,3 +83,15 @@ bottleneck/исправления/affected tests если были, limitations,
 Не выдавать exploratory single samples, raw SDK-only timing или другой workload
 за D06 pass. Если обязательный gate fails, он остаётся открытым до достаточного
 исправления/полномочий; не переопределять исходную цель P0–P7.
+
+## Scoped Web release while Native foreground waits
+
+Root scheduling update: Q01 independently passed Web functional on762f244;
+`git diff --name-only 762f244..8e3dba2 -- crates/host/src crates/plugin-api/src
+plugins/web/src crates/cli/src crates/schema/src crates/engine/src` is empty.
+N03/repair affects Native Swift. Therefore Web quality/comparability preflight and
+only matching frozen Web cohorts may run on8e3dba2 now. Q01 has been asked to avoid
+concurrent heavy checks. This is a scoped domain release, not accepted Native or
+whole D06. Unsupported full-fixture iframe/semantic rows remain explicit gaps;
+no single-control substitution. Native still awaits Q01/operator ownership and
+functional release; production timing optimizations follow the original packet.
