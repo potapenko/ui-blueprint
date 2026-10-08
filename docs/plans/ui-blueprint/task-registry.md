@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 G11 saved eb37b0c, consumes one actual Native record; Native01a110ac-2da3 M04 outcome24ae6d9 saved, idle retaining that input; Web01a11983 implements B04 transform. Completed CLI01a11286 archived. Native physical lane released; Web owns isolated headless sequence after saved-source checks; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 G11 actual consumer saved eb2cb12, reads G12 selected-space diff gap; Native01a110ac-2da3 completed M04 and input cleanup, ready for archival after cleanup checkpoint; Web01a11983 implements B04 transform. Completed CLI01a11286 archived. Native physical lane released; Web isolated headless sequence after saved-source checks; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -922,3 +922,19 @@ probe facts proven; screen mapping, paint/clipping/cross-display/fullM04 remain 
 Own runtime stopped and cleanup confirmed; one original response retained for Core
 at the exact path/hash in P01 receipt. Git/physical lanes released; no new Native
 run assigned. Release that input through Native after Core confirms consumption.
+
+G11 actual Native record consumer passed and root saved/pushed accepted exact1
+receipt eb2cb12: compact returns viewport510×90pt and row498×16pt/y-483 under
+reported component f02.scroll.a, retaining Partial/Cache/Unverified/Unknown source
+statuses. Original4449B input hash unchanged. Core removed its consumed CLI/target;
+Native subsequently removed the released sole JSON and empty run directory, with
+absence verified. No image deletion, new runtime or rebuild. Root saves accepted
+Native cleanup receipt directly, avoiding another commit-only worker round trip.
+
+Core now has read-only G12 handoff: selected-space geometric comparison following
+Web B04. Basis CLI@12, CLI-DIFF@2 full explicit closure and G02 compare packet;
+inspect existing geometry/analysis/recorded-diff owners only. Return exact API,
+write set and representation choice; preserve current raw-diff JSON1.0.0, original
+evidence, identity and missing-transform semantics. No code/files/tests/runtime or
+generic framework yet. This is the remaining approved G02 comparison requirement,
+not authority to normalize unverified coordinates or relax cache compatibility.

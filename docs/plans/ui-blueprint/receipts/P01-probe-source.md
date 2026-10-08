@@ -710,3 +710,12 @@ Core consumption and explicit Root release. No permanent evidence archive.
 Response request5692564832454f67ab7263a48d3b83ba, Targetf02-pid-3882 generation
 3882:1791450974.8839421, scopef02.scroll.a/design/layout_bounds, local pt/top_left,
 measured fixture time307116.86318366666s and explicit reported component mapping.
+
+
+M04 consumer release — 2026-10-08: Root relayed successful Core G11 actual
+consumption, unchanged input SHA and preservation of viewport/row0 details plus
+partial/cache/unverified/unknown statuses. Root explicitly released the retained
+response. Native inventory found exactly the one regular nonsymlink JSON, verified
+its recorded SHA, removed only that file and its empty containing directory, and
+confirmed both paths absent. Images0; other evidence untouched. No runtime/source/
+test or shared Git-index action. Exact1 receipt ready for Root's direct checkpoint.
