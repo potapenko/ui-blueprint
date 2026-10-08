@@ -401,3 +401,83 @@ explicit trusted connection setup, AX partialness, observation-scoped Surface/no
 cross-request Diff, no CG/capture or hidden layout probe for arbitrary apps. P7 open.
 
 G04 source/test map SHA256: a5f08b5c88ab1e03442bb721a44106d99b941650ecf61f907aeef43f8b82f9b9.
+
+
+## RC03 — one read of existing PlayPhrase.me interface
+
+Root selected approved F03/Q03 RC03 read-only consumer after accepted G04 source review.
+Only already-running user app PID13309 permitted; NO launch/activate/focus/resize/click/
+typing/project/source changes, and NEVER terminate this app. Existing saved05a76f0
+includes saved256f2a2 partial-known-anchor geometry fix. Built immutable saved source
+before read; no product source/test changes or new framework. Reused NATIVE@2/CLI@7/
+registry19/ANALYSIS@2 and applicable full geometry/privacy/lifecycle/QA closure.
+
+Public NSRunningApplication verified exact PID/bundle playphraseme.Playphraseme,
+existing advisor-specified Release executable path and full launch1791420992.377095,
+Target generation13309:1791420992.377095. Process remained running/incarnation equal
+immediately before/after the single Observe. Advisor CG11489/title/old961pt width were
+not AX binding or an oracle. The actual public AXFocusedWindow was selected/owned/
+CFEqual-checked before/after acquisition by native_ax, no CG matching/inferred coords.
+
+One actual public Observe, fields only role/accessibility_name/accessibility_bounds;
+no user Value/secret reads. Existing160/depth9/512KiB/AX1s/cleanup1s, no raised caps.
+Exit4/observed partial,415309 bytes/160 nodes; canonical validator0. Node ceiling reached,
+coverage partial/omitted_count and unknown_count unknown; no full interface inventory
+or completeness claim. Observation live/current, consistency unknown/separate reads,
+original helper clock/time preserved. Window AX root bounds(0,30,1920,1050)pt measured
+now. Root AXWindow name unavailable; child AXGroup reported Search & Learn, supporting
+screen context without claiming collected window AXTitle. Stored SourceKeys identify
+this observation only; no stable action/window-to-CG refs.
+
+Useful actual accessibility_bounds, x/y/width/height in ax-screen/screen/pt/top_left:
+
+| Source object | Bounds |
+| --- | --- |
+| Left-positioned AXScrollArea |8.5,90.5,513,809|
+| Right-positioned AXScrollArea under reported learning/tab controls |1391.5,133,520,766.5|
+| Previous |784,411.5,84.5,85|
+| Play |889,383,142,142|
+| Next in the same transport group |1051.5,411.5,84.5,85|
+| Playback speed |912.5,533.5,27,27|
+| Playback repeat |946.5,533.5,27,27|
+| Search phrases (AXTextField, no value read) |70,1023,1514.5,33|
+| Clear search |1594.5,1013.5,32,56|
+| Learn Common Phrases tab button |1391.5,90.5,155.5,42.5|
+| Vocabulary tab button |1552,90.5,93,42.5|
+| Favorites tab button |1650,90.5,83,42.5|
+| Grammar tab button |1738,90.5,83.5,42.5|
+| Statistics tab button |1826.5,90.5,85,42.5|
+
+Six ordinary saved design Inspect calls exited0. Fourteen original-response Measure
+queries exited0/known, analysis validator0; every embedded Snapshot structurally equal
+to original observed source. Rust results: scroll sizes513×809 and520×766.5pt; search
+1514.5×33pt; Previous.right→Play.left20.5pt and Play.right→Next.left20.5pt;
+speed.right→repeat.left7pt; search.right→clear.left10pt; all four adjacent tab-button
+edge gaps5pt. No agent arithmetic, manual Snapshot extraction, tolerance or expectation
+fabrication. These are AX boxes/distances, not CSS/native padding or glyph measurements.
+
+Unknown: actual visual panel/container frames (the known scroll areas are not relabelled
+as whole panels), video rectangle (AXUnknown content box does not establish video),
+inner text/glyph bounds, tab-label overflow, visible-region/clipping/paint/hit geometry,
+AX→pixel/layout transforms. List descendants include off-viewport AX bounds; this does
+not prove their current visibility or clipping behavior. No new SDK read to fill gaps,
+no comparison to historical narrow-window state or F02 probe facts substituted here.
+
+Single Observe wall451.368ms, not p95/performance acceptance. Live owned read lifecycle
+(public metadata→Observe→post metadata) completed0.49169s within120s; command returned
+with normal real CLI shutdown. A later pre-analysis remaining-time guard expired during
+reasoning before dispatching those local analysis calls. No further app/AX read was
+performed; subsequent Inspect/Measure used only immutable saved Snapshot under their
+finite5s per-command bounds, without extending live request/deadline or restamping.
+Own CLI/worker/helper absence independently checked after local consumption. Target
+app was never terminated/mutated; no fixture/user-app cleanup, no physical input lane
+used. No image/capture created. Selected snapshot/private metadata and non-image build/
+query/outputs consumed in system task-temp then removed/absence verified; no raw UI
+dump staged in Git, earlier images/evidence untouched.
+
+Pins: helperfdbdaa8f5b4d19e7cbf3f440b9a85d2af097ab276b5f8aaf78e172e473d88287;
+CLIc37159a47322ae9be9e3a19c2e28b5d9f4657bb6c6959fa288b442c16ad40e49;
+worker36321578ac3a2f420b65d499a35ff39ff22d1db6522039d1ccc1df8df607fc9f;
+validatordf8803a2c16e0e28e16c43c3e1de0f9d2f5ef800e59048decd47beecb8b82210.
+Existing-source runtime result only, exact1 receipt checkpoint/push via lease. No source
+change/repeated test wave, new input work or general Mac/full RC03/P7 acceptance.
