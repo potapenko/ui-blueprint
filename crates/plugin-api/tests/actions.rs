@@ -90,34 +90,29 @@ impl SetCheckedProvider for Provider {
     fn resolve_exact(
         &mut self,
         requested: &ActionCase,
+        expected: &Expectation,
         _: &ClockReading,
         remaining: u64,
     ) -> Result<ActionCase, Issue> {
         assert!(remaining > 0);
-        assert!(matches!(requested.action.intent, Intent::SetChecked { .. }));
+        assert_eq!(expected.scope_id, requested.action.authorized_scope);
         self.resolves += 1;
         self.resolved.clone()
     }
-    fn deliver(
-        &mut self,
-        action: &Action,
-        permit: DeliveryPermit,
-        remaining: u64,
-    ) -> DeliveryStatus {
+    fn deliver(&mut self, _: &Action, permit: DeliveryPermit, remaining: u64) -> DeliveryStatus {
         assert!(remaining > 0);
-        assert!(matches!(action.intent, Intent::SetChecked { value: true }));
         self.deliveries += 1;
         self.nonces.push(permit.nonce());
         self.delivered
     }
     fn observe_after(
         &mut self,
-        action: &Action,
+        _: &Action,
+        _: &Expectation,
         _: &ClockReading,
         remaining: u64,
     ) -> Result<Snapshot, Issue> {
         assert!(remaining > 0);
-        assert_eq!(action.modality, InputModality::Setter);
         self.observations += 1;
         self.observed.clone()
     }
@@ -135,12 +130,7 @@ impl Gate {
     }
 }
 impl EffectGate for Gate {
-    fn authorize(
-        &mut self,
-        action: &Action,
-        _: &ClockReading,
-    ) -> Result<DeliveryPermit, GateFailure> {
-        assert_eq!(action.modality, InputModality::Setter);
+    fn authorize(&mut self, _: &Action, _: &ClockReading) -> Result<DeliveryPermit, GateFailure> {
         self.calls += 1;
         if let Some((code, possible)) = self.denial {
             Err(GateFailure {
@@ -604,4 +594,484 @@ fn pending_finish_and_invalid_clock_cannot_manufacture_success() {
         result.transition.steps[0].outcome,
         Outcome::ActionOutcomeUnknown
     );
+}
+
+fn property_evidence(snapshot: &Snapshot, index: usize, field: Field) -> Evidence {
+    let Property::Requested { evidence, .. } = snapshot.nodes[index]
+        .properties
+        .iter()
+        .find(|p| p.field() == field)
+        .unwrap()
+    else {
+        panic!("requested property")
+    };
+    evidence.clone()
+}
+fn property_state(
+    snapshot: &mut Snapshot,
+    index: usize,
+    field: Field,
+    state: Availability,
+    sensitivity: Sensitivity,
+) {
+    if !snapshot.context.fields.contains(&field) {
+        snapshot.context.fields.push(field);
+    }
+    if !snapshot.coverage.fields.contains(&field) {
+        snapshot.coverage.fields.push(field);
+    }
+    let observation = &mut snapshot.observations[0];
+    if !observation.coverage.fields.contains(&field) {
+        observation.coverage.fields.push(field);
+    }
+    let evidence = Evidence {
+        observation_id: observation.id.clone(),
+        source_namespace: observation.source_namespace.clone(),
+        provenance: Provenance::Reported,
+        method: Id("fake_current_property".into()),
+        uncertainty: None,
+    };
+    snapshot.nodes[index]
+        .properties
+        .retain(|p| p.field() != field);
+    snapshot.nodes[index].properties.push(Property::Requested {
+        field,
+        sensitivity,
+        evidence,
+        state,
+    });
+}
+fn forms_case(intent: Intent) -> (ActionCase, Snapshot, Expectation) {
+    let mut case = before();
+    let mut post = after();
+    let (name, modality, field, wanted) = match &intent {
+        Intent::Focus {} => (
+            "focus",
+            InputModality::Semantic,
+            Field::Focused,
+            Value::Flag(true),
+        ),
+        Intent::Type { .. } => (
+            "type",
+            InputModality::Keyboard,
+            Field::Value,
+            Value::Text("prefixsuffix".into()),
+        ),
+        Intent::Activate {} => (
+            "activate",
+            InputModality::Semantic,
+            Field::Value,
+            Value::Number(1.0),
+        ),
+        _ => unreachable!(),
+    };
+    case.action.intent = intent;
+    case.action.modality = modality;
+    case.action.resolution.available_intents = vec![Id(name.into())];
+    let index = if name == "activate" {
+        let mut node = case.snapshot.nodes[0].clone();
+        node.key.key = Id("count".into());
+        case.snapshot.nodes.push(node);
+        let mut node = post.nodes[0].clone();
+        node.key.key = Id("count".into());
+        post.nodes.push(node);
+        1
+    } else {
+        0
+    };
+    let initial = if name == "focus" {
+        Value::Flag(false)
+    } else if name == "type" {
+        Value::Text("prefix".into())
+    } else {
+        Value::Number(0.0)
+    };
+    property_state(
+        &mut case.snapshot,
+        index,
+        field,
+        Availability::Known { value: initial },
+        Sensitivity::Public,
+    );
+    property_state(
+        &mut post,
+        index,
+        field,
+        Availability::Known {
+            value: wanted.clone(),
+        },
+        Sensitivity::Public,
+    );
+    if index == 1 {
+        for snapshot in [&mut case.snapshot, &mut post] {
+            property_state(
+                snapshot,
+                0,
+                field,
+                Availability::Known {
+                    value: Value::Number(0.0),
+                },
+                Sensitivity::Public,
+            );
+        }
+    }
+    case.action.context = case.snapshot.context.clone();
+    let expected = Expectation {
+        id: Id("explicit-state".into()),
+        scope_id: case.action.authorized_scope.clone(),
+        targets: vec![case.snapshot.nodes[index].key.clone()],
+        rule: Rule::PropertyEquals {
+            field,
+            expected: wanted,
+        },
+        applies_when: ContextConditions {
+            platform: None,
+            input_mode: None,
+            text_scale: None,
+        },
+        expected_from: Id("caller_scenario".into()),
+    };
+    if name == "focus" {
+        let evidence = property_evidence(&post, index, field);
+        post.focus.keyboard = FocusRef::Known {
+            target: post.nodes[index].key.clone(),
+            evidence,
+        };
+    }
+    case.snapshot.context.fields = post.context.fields.clone();
+    case.action.context = case.snapshot.context.clone();
+    Document {
+        schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+        artifact: Artifact::Action(Box::new(case.clone())),
+    }
+    .validate()
+    .unwrap();
+    Document {
+        schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(Box::new(post.clone())),
+    }
+    .validate()
+    .unwrap();
+    (case, post, expected)
+}
+fn forms_prepared(case: ActionCase, expected: Expectation) -> ActionExecution {
+    ActionExecution::prepare_action(
+        case,
+        expected,
+        Id("form-transition".into()),
+        Id("form-step".into()),
+        reading(0),
+        100,
+    )
+    .unwrap()
+}
+#[test]
+fn focus_type_activate_verify_only_explicit_fresh_public_source_state() {
+    for intent in [
+        Intent::Focus {},
+        Intent::Type {
+            text: "suffix".into(),
+        },
+        Intent::Activate {},
+    ] {
+        for mode in 0..6 {
+            let (case, mut post, expected) = forms_case(intent.clone());
+            let index = usize::from(matches!(intent, Intent::Activate {}));
+            let Rule::PropertyEquals {
+                field,
+                expected: wanted,
+            } = &expected.rule
+            else {
+                unreachable!()
+            };
+            let mut check = CheckStatus::Pass;
+            if mode == 1 {
+                let wrong = match wanted {
+                    Value::Flag(_) => Value::Flag(false),
+                    Value::Text(_) => Value::Text("suffix".into()),
+                    _ => Value::Number(0.0),
+                };
+                property_state(
+                    &mut post,
+                    index,
+                    *field,
+                    Availability::Known { value: wrong },
+                    Sensitivity::Public,
+                );
+                if matches!(intent, Intent::Focus {}) {
+                    let evidence = property_evidence(&post, index, *field);
+                    post.focus.keyboard = FocusRef::None { evidence };
+                }
+                check = CheckStatus::Fail;
+            }
+            if mode == 2 {
+                property_state(
+                    &mut post,
+                    index,
+                    *field,
+                    Availability::Unknown {
+                        reason: Id("unavailable".into()),
+                    },
+                    Sensitivity::Public,
+                );
+                check = CheckStatus::Unknown;
+            }
+            if mode == 3 {
+                post.nodes[index].key.key = Id("remounted-result".into());
+                check = CheckStatus::Unknown;
+                if matches!(intent, Intent::Focus {}) {
+                    post.focus.keyboard = FocusRef::Unknown {
+                        reason: Id("lost-focus".into()),
+                    };
+                }
+            }
+            if mode == 4 {
+                property_state(
+                    &mut post,
+                    index,
+                    *field,
+                    Availability::Redacted {},
+                    Sensitivity::Sensitive,
+                );
+                check = CheckStatus::Unknown;
+            }
+            if mode == 5 {
+                post.observations[0].freshness = Freshness::Unverified;
+                check = CheckStatus::Unknown;
+            }
+            let mut provider = Provider::new();
+            provider.resolved = Ok(case.clone());
+            provider.observed = Ok(post);
+            let mut kernel = forms_prepared(case, expected);
+            let mut gate = Gate::new();
+            let mut control = Control::new();
+            assert_eq!(
+                kernel
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .unwrap(),
+                DeliveryStatus::Confirmed
+            );
+            assert_eq!(
+                kernel.verify(&mut provider, &mut control).unwrap(),
+                check,
+                "{intent:?} mode{mode}"
+            );
+            assert_eq!((provider.deliveries, gate.calls), (1, 1));
+            let report = validate(kernel.finish().unwrap());
+            assert_eq!(
+                report.transition.steps[0].outcome,
+                match check {
+                    CheckStatus::Pass => Outcome::Succeeded,
+                    CheckStatus::Fail => Outcome::Failed,
+                    CheckStatus::Unknown => Outcome::ActionOutcomeUnknown,
+                }
+            );
+            assert_eq!(report.transition.completed_steps.len(), 1);
+        }
+    }
+}
+#[test]
+fn focus_keyboard_axis_and_prepermit_result_binding_fail_closed() {
+    for mode in 0..5 {
+        let (case, mut post, expected) = forms_case(Intent::Focus {});
+        if mode == 0 {
+            post.focus.keyboard = FocusRef::Unknown {
+                reason: Id("not-observed".into()),
+            };
+        }
+        if mode == 1 {
+            post.focus.accessibility = post.focus.keyboard.clone();
+            post.focus.keyboard = FocusRef::NotRequested {};
+        }
+        if mode == 2 {
+            post.focus.keyboard = FocusRef::None {
+                evidence: property_evidence(&post, 0, Field::Focused),
+            };
+        }
+        let mut provider = Provider::new();
+        provider.resolved = Ok(case.clone());
+        provider.observed = Ok(post);
+        if mode == 3 {
+            provider.resolved.as_mut().unwrap().snapshot.nodes[0]
+                .properties
+                .retain(|p| p.field() != Field::Focused);
+        }
+        if mode == 4 {
+            property_state(
+                &mut provider.resolved.as_mut().unwrap().snapshot,
+                0,
+                Field::Focused,
+                Availability::Unsupported {
+                    reason: Id("not-supported".into()),
+                },
+                Sensitivity::Public,
+            );
+        }
+        let mut kernel = forms_prepared(case, expected);
+        let mut gate = Gate::new();
+        let mut control = Control::new();
+        if mode >= 3 {
+            assert_eq!(
+                kernel
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .unwrap(),
+                DeliveryStatus::NotDispatched
+            );
+            assert_eq!((gate.calls, provider.deliveries), (0, 0));
+        } else {
+            kernel
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap();
+            assert_eq!(
+                kernel.verify(&mut provider, &mut control).unwrap(),
+                CheckStatus::Unknown
+            );
+        }
+        validate(kernel.finish().unwrap());
+    }
+}
+#[test]
+fn forms_permission_cancel_and_unknown_delivery_preserve_one_use_lifecycle() {
+    for mode in 0..4 {
+        let (case, post, expected) = forms_case(Intent::Activate {});
+        let mut provider = Provider::new();
+        provider.resolved = Ok(case.clone());
+        provider.observed = Ok(post);
+        let mut kernel = forms_prepared(case, expected);
+        let mut gate = Gate::new();
+        let mut control = Control::new();
+        if mode <= 1 {
+            gate.denial = Some((ErrorCode::PermissionRequired, mode == 1));
+        }
+        if mode == 2 {
+            provider.delivered = DeliveryStatus::Unknown;
+        }
+        if mode == 3 {
+            control.cancellation = Some(4);
+        }
+        let _ = kernel.dispatch(&mut provider, &mut gate, &mut control);
+        assert!(
+            kernel
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .is_err()
+        );
+        let report = validate(kernel.finish().unwrap());
+        assert_eq!(
+            report.transition.steps[0].outcome,
+            if mode == 0 {
+                Outcome::Failed
+            } else {
+                Outcome::ActionOutcomeUnknown
+            }
+        );
+        assert!(provider.deliveries <= 1);
+        assert_eq!(gate.calls, 1);
+    }
+}
+
+#[test]
+fn focus_known_other_keyboard_target_is_failure_not_accessibility_success() {
+    let (case, mut post, expected) = forms_case(Intent::Focus {});
+    property_state(
+        &mut post,
+        0,
+        Field::Focused,
+        Availability::Known {
+            value: Value::Flag(false),
+        },
+        Sensitivity::Public,
+    );
+    let mut other = post.nodes[0].clone();
+    other.key.key = Id("other-focus".into());
+    post.nodes.push(other);
+    property_state(
+        &mut post,
+        1,
+        Field::Focused,
+        Availability::Known {
+            value: Value::Flag(true),
+        },
+        Sensitivity::Public,
+    );
+    post.focus.keyboard = FocusRef::Known {
+        target: post.nodes[1].key.clone(),
+        evidence: property_evidence(&post, 1, Field::Focused),
+    };
+    post.focus.accessibility = FocusRef::Known {
+        target: post.nodes[0].key.clone(),
+        evidence: property_evidence(&post, 0, Field::Focused),
+    };
+    let mut provider = Provider::new();
+    provider.resolved = Ok(case.clone());
+    provider.observed = Ok(post);
+    let mut kernel = forms_prepared(case, expected);
+    let mut gate = Gate::new();
+    let mut control = Control::new();
+    kernel
+        .dispatch(&mut provider, &mut gate, &mut control)
+        .unwrap();
+    assert_eq!(
+        kernel.verify(&mut provider, &mut control).unwrap(),
+        CheckStatus::Fail
+    );
+    assert_eq!(
+        validate(kernel.finish().unwrap()).transition.steps[0].outcome,
+        Outcome::Failed
+    );
+}
+#[test]
+fn activate_result_node_is_independent_current_public_and_within_selected_scope() {
+    for mode in 0..4 {
+        let (mut case, mut post, expected) = forms_case(Intent::Activate {});
+        if mode == 3 {
+            let surface = Identity {
+                id: Id("other-surface".into()),
+                generation: Id("s2".into()),
+            };
+            case.snapshot.context.surfaces.push(surface.clone());
+            case.action.context = case.snapshot.context.clone();
+            post.context = case.snapshot.context.clone();
+        }
+        let mut fresh = case.clone();
+        match mode {
+            0 => {
+                fresh.snapshot.nodes.remove(1);
+            }
+            1 => property_state(
+                &mut fresh.snapshot,
+                1,
+                Field::Value,
+                Availability::Unsupported {
+                    reason: Id("no-readable-count".into()),
+                },
+                Sensitivity::Public,
+            ),
+            2 => property_state(
+                &mut fresh.snapshot,
+                1,
+                Field::Value,
+                Availability::Redacted {},
+                Sensitivity::Sensitive,
+            ),
+            3 => fresh.snapshot.nodes[1].surface = fresh.snapshot.context.surfaces[1].clone(),
+            _ => unreachable!(),
+        }
+        let mut provider = Provider::new();
+        provider.resolved = Ok(fresh);
+        provider.observed = Ok(post);
+        let mut kernel = forms_prepared(case, expected);
+        let mut gate = Gate::new();
+        let mut control = Control::new();
+        assert_eq!(
+            kernel
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap(),
+            DeliveryStatus::NotDispatched
+        );
+        assert_eq!((gate.calls, provider.deliveries), (0, 0));
+        assert_eq!(
+            validate(kernel.finish().unwrap()).transition.steps[0].outcome,
+            Outcome::Failed
+        );
+    }
 }

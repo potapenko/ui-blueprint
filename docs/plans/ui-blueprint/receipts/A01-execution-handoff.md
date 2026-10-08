@@ -633,3 +633,114 @@ Short exact3 Git checkpoint+bounded canonical push follows, then reviewer rechec
 only this delta. Protected acceptance/live public CLI proof remain root-owned.
 CLI source SHA25665732f95f88b2e41680270fe9cfb24d4e7f49cc51e54777a12288eaa148c16a1;
 test SHA256066835423a1daa10033eab1f2a5ef66f6ed48f1c195d7c85a23509f5b1753ae1.
+
+## A02 single-step forms/activation kernel candidate
+
+Authority: [A02 finite packet](../packets/A02-single-step-forms.md), root's selected
+existing ACTIONS/FORMS/NATIVE requirements under PLAN.UIB@1 P5. Mode Restore;
+registry17 and full current ACTIONS/FORMS/NATIVE/EXCHANGE/MODEL/IDENTITY/LIFECYCLE/
+PRIVACY/BOUNDARIES/PROJECTIONS/GEOMETRY/CACHE@1, GOLDEN/PILOTS/WEB-PILOTS/
+NATIVE-PILOTS, pinned D02@2/D04@1/D05@4/MEMORY@2/WORK@1 closure reused.
+New packet read fully; existing executor/Native source ledgers remain evidence,
+not new product authority. Single chat/master/inherit, no nested work/runtime.
+
+Declared first subset: plugin-api src/actions.rs, tests/actions.rs; two mechanical
+arguments in Web collector/action.rs CheckboxProvider; this existing receipt.
+No schema/Cargo/CLI/host transport/private Tape/Swift/new directory changes.
+Host existing SetChecked kernel callsites remain compiling without edits.
+Native's later actual read fact: f02.enabled settablefalse/AXPress, sample.a
+AXButton enabledtrue/AXPress with AXValue unavailable; no checkbox setter fallback.
+That establishes the explicit Semantic Activate consumer, not delivery/runtime proof.
+
+Actual compiling API:
+- actions::ActionExecution; existing SetCheckedExecution is a direct alias to the
+  same owner, not a wrapper/copied executor. Legacy prepare signature remains and
+  derives its existing Checked(bool) condition from SetChecked intent.
+- prepare_action(case:ActionCase,expected:Expectation,transition_id:Id,step_id:Id,
+  start:ClockReading,remaining_ms:u64)->Result<Self,ValidationError>. One existing
+  Focus/Type/Activate/SetChecked with one PropertyEquals target in authorized scope;
+  unconditional or matching input_mode only, platform/text_scale conditions are
+  unsupported in this first slice. Focus expects Focused=true on the action node;
+  explicit SetChecked condition must preserve its exact key/Checked/intent value.
+- actions::ActionProvider; existing SetCheckedProvider aliases the same trait.
+  resolve_exact(&mut self,&ActionCase,&Expectation,&ClockReading,remaining_ms)
+  ->Result<ActionCase,Issue>;
+  deliver(&mut self,&Action,DeliveryPermit,remaining_ms)->DeliveryStatus unchanged;
+  observe_after(&mut self,&Action,&Expectation,&ClockReading,remaining_ms)
+  ->Result<Snapshot,Issue>.
+- dispatch/verify/cancel/step/issue/finish retain their existing lifecycle/signatures,
+  using that trait; EffectGate/DeliveryPermit/ActionControl signatures unchanged.
+
+Provider must independently pin both action and expected result node in trusted
+scope during resolve, even if distinct, then freshly observe its requested field.
+Canonical key/Surface equality is a necessary check, not opaque-handle continuity;
+providers must refuse lost/remounted handles, never repair by name/ID. New-intent
+fresh missing/private/unsupported/noncurrent result-property source refuses before
+permit. Type.text is delivery input, not inferred full/applied/business value.
+Verification requires fresh known public typed value, exact result key/Surface,
+current source Evidence and requested field/scope coverage. Unknown/private/stale/
+changed binding cannot Pass; confirmed delivery is still necessary. Focus also
+requires current keyboard FocusRef axis; accessibility focus cannot substitute.
+Known different/no keyboard focus with measured Focused=false is Fail; unknown or
+inconsistent focus facts are Unknown. TransitionCase/partial completed_steps stay
+canonical; no Finding/graph/parser/engine DSL or automatic retry added.
+
+Early candidate signature handoff sent after plugin all-targets check and host web
+bin compilation. Root forwards candidate to Web/Native; this is not independent
+acceptance or a runtime grant. Actual fake/pure evidence so far: actions test12 passed,
+including7 unchanged SetChecked lifecycle tests and5 new groups/32 scenarios:
+Focus correct/wrong/unknown keyboard state, Type delivered suffix versus explicit
+prefixsuffix expected value, Activate different in-scope Count node, known mismatch,
+private/unknown/stale/remounted post-state; prepermit missing/unsupported/private/
+changed result Surface, permission denial, post-Possible cancel/unknown/no retry,
+and canonical Transition validity. Clippy plugin lib/test and host web lib/bin passed.
+Initial new fixture missed Value on the action node after requesting that field for
+all selected nodes; repaired fixture representation, without changing expectations.
+
+Nearest Web test consumer compilation exposed one direct resolve_exact invocation
+in collector.rs's expired-budget test requiring the added Expectation argument.
+Return this exact mechanical owner dependency to root before changing that path;
+all source behavior remains unchanged. Candidate source is otherwise compiling;
+the Web test gate cannot be claimed passed until its callsite is reconciled.
+Root then granted exactly that expired-budget resolve_exact call in Web collector.rs:
+add &Expectation mechanically without changing its zero-budget/no-write expectation.
+Checkpoint subset becomes exact5; release both Web action.rs and collector.rs after
+push so the provider owner can continue on the saved candidate signature.
+
+Exact next host dependency before any Focus delivery: worker_effect.rs::authorize
+currently requests global physical lane only for Pointer/Keyboard/Touch/Remote.
+Semantic Focus must also request that existing lane via Intent::Focus predicate,
+under unchanged parent TargetLease/MutationLease/one-use nonce/cleanup ownership.
+No such host mutation/runtime in A02. Explicit Expectation worker input/dispatch
+composition remains a separately selected owner dependency; current CLI/Tape remain
+SetChecked-only. Native still needs held AX identities and a bounded action helper
+exchange/lifetime before consuming this kernel. New Web Focus/Type provider likewise
+must provide actual focused/draft/applied attribution; fake ports are not UI proof.
+After coherent save release collector/action.rs to Web, then protect shared API
+until changed-boundary review. No full forms/Native/P5/P6 or release acceptance.
+
+Final coherent A02 candidate checks: plugin actions12 tests passed; plugin lib/test
+Clippy passed; host web lib/bin check+Clippy passed; five targeted Web
+checkbox_provider_* tests passed after the one mechanical expired-budget argument
+adaptation, covering actual provider success, capability/resource refusal, Accepted/
+uncertain delivery and cancellation/expiry without writes. Web lib/collector-test
+Clippy passed. These Web tests use controlled protocol fixture, not a browser.
+Scoped formatting/whitespace/changed links checked. No unchanged broad suite.
+Test-only evidence helper now destructures existing Property::Requested (no evidence()
+method exists); first compiler failure repaired locally, no API/schema workaround.
+The SourceSetChecked recovery label reobserve_checked_state remains unchanged;
+new-intent unknown verification uses reobserve_expected_source_state.
+
+Exact5 checkpoint: crates/plugin-api/src/actions.rs, crates/plugin-api/tests/actions.rs,
+plugins/web/src/collector/action.rs, plugins/web/tests/collector.rs, this receipt.
+No other source/callsite/export/Cargo/schema/transport/CLI/Swift changes. After save,
+release BOTH Web files to their provider owner; shared kernel/API frozen for review.
+Own non-image system-temp target removed/absence-verified after use; no images
+created/deleted, active runtime/process/physical lane or extra resource held.
+Source pins SHA256:
+- plugin actions.rs:8038e1e8bc248b62a784aaf57842e3ee08a9c5cbd5b7440890b5401b641980dd
+- plugin action tests:ab8de270d909d7903935a211c29d1e2249377f150bf13270bbe6831261505f92
+- Web provider:87dfe74fac37611d85e7bbdd12c153a68f7e187679f0116b11a9c1a003c9cb38
+- Web test:00b7a6487148e8742b0967497320a6724314e960d390c5ef73bd1fa2da0a2a49
+Short exact5 Git lease requested for checkpoint+bounded canonical push. No automatic
+host composition/focus claim/runtime/next packet; root owns subsequent selection.

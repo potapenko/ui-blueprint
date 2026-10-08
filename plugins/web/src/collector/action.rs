@@ -437,6 +437,7 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
     fn resolve_exact(
         &mut self,
         requested: &ActionCase,
+        _: &Expectation,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<ActionCase, Issue> {
@@ -504,6 +505,7 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
     fn observe_after(
         &mut self,
         action: &Action,
+        _: &Expectation,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<Snapshot, Issue> {

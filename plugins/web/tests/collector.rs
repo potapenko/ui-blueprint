@@ -2608,6 +2608,21 @@ fn checkbox_provider_cancel_before_dispatch_and_expired_budget_do_not_write() {
             provider
                 .resolve_exact(
                     &case,
+                    &Expectation {
+                        id: id("expected-checked"),
+                        scope_id: case.action.authorized_scope.clone(),
+                        targets: vec![case.action.backend_ref.key.clone()],
+                        rule: Rule::PropertyEquals {
+                            field: Field::Checked,
+                            expected: Value::Flag(true)
+                        },
+                        applies_when: ContextConditions {
+                            platform: None,
+                            input_mode: None,
+                            text_scale: None
+                        },
+                        expected_from: id("test_scenario"),
+                    },
                     &uiblueprint_plugin_api::ClockReading {
                         domain: id("worker-clock"),
                         milliseconds: 1

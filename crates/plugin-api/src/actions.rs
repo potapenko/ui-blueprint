@@ -1,4 +1,4 @@
-//! One SetChecked step; trusted ports own current UI/authority/effect evidence.
+//! One SetChecked/Focus/Type/Activate step; trusted ports own current UI/authority/effect evidence.
 //! No SDK, input transport, nonce generator or automatic retry exists here.
 use crate::{ClockReading, Error};
 use uiblueprint_schema::{
@@ -49,12 +49,18 @@ pub trait ActionControl {
 /// The caller pins the provider to authorized Target/Surface/scope before invoking
 /// it; requested UI records cannot broaden that attachment. observe_after must
 /// perform a new exact-target read, not return a saved Current-labeled snapshot.
-/// deliver uses the same held identity and checks continuity at the setter point;
+/// deliver uses the same held identity and checks continuity at the delivery point;
 /// a lost object cannot cause fallback to a replacement with the same label/ID.
-pub trait SetCheckedProvider {
+/// For explicit expectations, resolve pins the result node independently within
+/// the trusted scope, even if distinct from the action node. Missing/remounted
+/// result identity must refuse; a same key/label is not proof of opaque continuity.
+/// observe_after reads that held node/field freshly. Global Focus mutation still
+/// needs the actual host input lane; this pure port cannot establish that claim.
+pub trait ActionProvider {
     fn resolve_exact(
         &mut self,
         requested: &ActionCase,
+        expected: &Expectation,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<ActionCase, Issue>;
@@ -67,6 +73,7 @@ pub trait SetCheckedProvider {
     fn observe_after(
         &mut self,
         action: &Action,
+        expected: &Expectation,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<Snapshot, Issue>;
@@ -81,8 +88,9 @@ enum Phase {
 /// Owns existing canonical records; called inside the caller's admitted memory
 /// boundary. A resolver's returned ActionCase/after Snapshot are existing DTOs,
 /// not a second graph. The caller/worker guard owns transient overlap allocations.
-pub struct SetCheckedExecution {
+pub struct ActionExecution {
     current: ActionCase,
+    expected: Expectation,
     after: Option<Snapshot>,
     transition_id: Id,
     step: Step,
@@ -93,7 +101,11 @@ pub struct SetCheckedExecution {
     phase: Phase,
     issue: Option<Issue>,
 }
-impl SetCheckedExecution {
+/// Existing SetChecked consumer names retain the same owner/lifecycle.
+pub use ActionExecution as SetCheckedExecution;
+pub use ActionProvider as SetCheckedProvider;
+
+impl ActionExecution {
     /// Preparation validates declarations; it does not grant mutation authority
     /// or claim that the saved source is still current. Dispatch invokes fresh
     /// trusted resolution and the parent's effect gate independently.
@@ -104,14 +116,88 @@ impl SetCheckedExecution {
         start: ClockReading,
         remaining_ms: u64,
     ) -> Result<Self, ValidationError> {
+        let Intent::SetChecked { value } = case.action.intent else {
+            return Err(ValidationError::InvalidDocument);
+        };
+        let expected = Expectation {
+            id: case.action.id.clone(),
+            scope_id: case.action.authorized_scope.clone(),
+            targets: vec![case.action.backend_ref.key.clone()],
+            rule: Rule::PropertyEquals {
+                field: Field::Checked,
+                expected: Value::Flag(value),
+            },
+            applies_when: ContextConditions {
+                platform: None,
+                input_mode: None,
+                text_scale: None,
+            },
+            expected_from: Id("requested_set_checked".into()),
+        };
+        Self::prepare_action(case, expected, transition_id, step_id, start, remaining_ms)
+    }
+    /// Admit one existing intent with the caller's explicit source-state condition.
+    /// Type text is not inferred as the full resulting value. This does not grant
+    /// effect authority or substitute saved facts for the provider's fresh resolve.
+    pub fn prepare_action(
+        case: ActionCase,
+        expected: Expectation,
+        transition_id: Id,
+        step_id: Id,
+        start: ClockReading,
+        remaining_ms: u64,
+    ) -> Result<Self, ValidationError> {
         validation::validate_snapshot(&case.snapshot)?;
         validation::validate_action(&case.snapshot, &case.action)?;
-        if !matches!(case.action.intent, Intent::SetChecked { .. })
+        validation::validate_expectation(&expected)?;
+        let Rule::PropertyEquals {
+            field,
+            expected: value,
+        } = &expected.rule
+        else {
+            return Err(ValidationError::InvalidDocument);
+        };
+        if !matches!(
+            case.action.intent,
+            Intent::SetChecked { .. }
+                | Intent::Focus {}
+                | Intent::Type { .. }
+                | Intent::Activate {}
+        ) || expected.targets.len() != 1
+            || expected.scope_id != case.action.authorized_scope
+            || expected.applies_when.platform.is_some()
+            || expected.applies_when.text_scale.is_some()
+            || expected
+                .applies_when
+                .input_mode
+                .is_some_and(|mode| mode != case.action.modality)
+            || !case
+                .snapshot
+                .nodes
+                .iter()
+                .any(|node| node.key == expected.targets[0])
             || [&transition_id, &step_id, &start.domain]
                 .iter()
                 .any(|id| id.0.is_empty() || id.0.chars().count() > 256)
         {
             return Err(ValidationError::InvalidDocument);
+        }
+        match case.action.intent {
+            Intent::SetChecked { value: wanted }
+                if *field != Field::Checked
+                    || *value != Value::Flag(wanted)
+                    || expected.targets[0] != case.action.backend_ref.key =>
+            {
+                return Err(ValidationError::InvalidDocument);
+            }
+            Intent::Focus {}
+                if *field != Field::Focused
+                    || *value != Value::Flag(true)
+                    || expected.targets[0] != case.action.backend_ref.key =>
+            {
+                return Err(ValidationError::InvalidDocument);
+            }
+            _ => (),
         }
         let deadline = start
             .milliseconds
@@ -129,6 +215,7 @@ impl SetCheckedExecution {
         };
         Ok(Self {
             current: case,
+            expected,
             after: None,
             transition_id,
             step,
@@ -194,12 +281,91 @@ impl SetCheckedExecution {
             && a.backend_ref.target == b.backend_ref.target
             && a.backend_ref.surface == b.backend_ref.surface
     }
+    fn same_expected_identity(&self, snapshot: &Snapshot) -> bool {
+        let key = &self.expected.targets[0];
+        let original = self.current.snapshot.nodes.iter().find(|n| &n.key == key);
+        let fresh = snapshot.nodes.iter().find(|n| &n.key == key);
+        matches!((original, fresh), (Some(a), Some(b)) if a.surface == b.surface)
+    }
+    fn expected_readable(&self, snapshot: &Snapshot) -> bool {
+        let key = &self.expected.targets[0];
+        let Rule::PropertyEquals { field, .. } = &self.expected.rule else {
+            return false;
+        };
+        let Some(node) = snapshot.nodes.iter().find(|n| &n.key == key) else {
+            return false;
+        };
+        let Some(Property::Requested {
+            sensitivity: Sensitivity::Public,
+            evidence,
+            state: Availability::Known { .. } | Availability::Unknown { .. },
+            ..
+        }) = node.properties.iter().find(|p| p.field() == *field)
+        else {
+            return false;
+        };
+        snapshot.observations.iter().any(|o| {
+            o.id == evidence.observation_id
+                && o.source_namespace == key.namespace
+                && evidence.source_namespace == o.source_namespace
+                && o.freshness == Freshness::Current
+                && o.coverage.scope_id == snapshot.context.scope_id
+                && o.coverage.fields.contains(field)
+        })
+    }
+    fn observed_property<'a>(&self, snapshot: &'a Snapshot) -> Option<(&'a Value, &'a Id)> {
+        if !self.same_expected_identity(snapshot) {
+            return None;
+        }
+        let key = &self.expected.targets[0];
+        let Rule::PropertyEquals { field, .. } = &self.expected.rule else {
+            return None;
+        };
+        let node = snapshot.nodes.iter().find(|n| &n.key == key)?;
+        let Property::Requested {
+            sensitivity: Sensitivity::Public,
+            evidence,
+            state: Availability::Known { value },
+            ..
+        } = node.properties.iter().find(|p| p.field() == *field)?
+        else {
+            return None;
+        };
+        let observation = snapshot.observations.iter().find(|o| {
+            o.id == evidence.observation_id
+                && o.source_namespace == key.namespace
+                && evidence.source_namespace == o.source_namespace
+                && o.freshness == Freshness::Current
+                && o.coverage.scope_id == snapshot.context.scope_id
+                && o.coverage.fields.contains(field)
+        })?;
+        if matches!(self.current.action.intent, Intent::Focus {}) {
+            let (focused, evidence) = match &snapshot.focus.keyboard {
+                FocusRef::Known { target, evidence } => (target == key, evidence),
+                FocusRef::None { evidence } => (false, evidence),
+                _ => return None,
+            };
+            if value != &Value::Flag(focused)
+                || !snapshot.observations.iter().any(|o| {
+                    o.id == evidence.observation_id
+                        && o.source_namespace == key.namespace
+                        && evidence.source_namespace == o.source_namespace
+                        && o.freshness == Freshness::Current
+                        && o.coverage.scope_id == snapshot.context.scope_id
+                        && o.coverage.fields.contains(&Field::Focused)
+                })
+            {
+                return None;
+            }
+        }
+        Some((value, &observation.id))
+    }
     /// Resolves the exact selected handle immediately before the parent permit,
     /// then invokes delivery once. Calls after any attempt are refused. Errors
     /// retain the Step/Issue, including effect uncertainty, for finish().
     pub fn dispatch(
         &mut self,
-        provider: &mut impl SetCheckedProvider,
+        provider: &mut impl ActionProvider,
         gate: &mut impl EffectGate,
         control: &mut impl ActionControl,
     ) -> Result<DeliveryStatus, Error> {
@@ -208,7 +374,7 @@ impl SetCheckedExecution {
         }
         let now = control.now();
         let remaining = self.check(&now, control.cancelled())?;
-        let fresh = match provider.resolve_exact(&self.current, &now, remaining) {
+        let fresh = match provider.resolve_exact(&self.current, &self.expected, &now, remaining) {
             Ok(case) => case,
             Err(issue) => {
                 self.step.outcome = Outcome::Failed;
@@ -219,8 +385,16 @@ impl SetCheckedExecution {
         };
         let invalid = validation::validate_snapshot(&fresh.snapshot)
             .and_then(|_| validation::validate_action(&fresh.snapshot, &fresh.action))
-            .err();
-        if invalid.is_some() || !self.same_requested_identity(&fresh) {
+            .err()
+            .or_else(|| {
+                (!matches!(fresh.action.intent, Intent::SetChecked { .. })
+                    && !self.expected_readable(&fresh.snapshot))
+                .then_some(ValidationError::UnknownMeasurement)
+            });
+        if invalid.is_some()
+            || !self.same_requested_identity(&fresh)
+            || !self.same_expected_identity(&fresh.snapshot)
+        {
             let code = match invalid {
                 Some(ValidationError::AmbiguousTarget) => ErrorCode::AmbiguousTarget,
                 Some(ValidationError::UnknownMeasurement) => ErrorCode::Unsupported,
@@ -277,12 +451,12 @@ impl SetCheckedExecution {
         }
         Ok(self.step.delivery)
     }
-    /// Freshly observes the exact target through the trusted provider. Matching
-    /// Checked is insufficient without confirmed delivery and current, correctly
-    /// bound Evidence. Unknown/changed binding never manufactures success.
+    /// Freshly observes the explicit source-state condition through the trusted
+    /// provider. A match is insufficient without confirmed delivery and current,
+    /// correctly bound Evidence. Unknown/changed binding never makes success.
     pub fn verify(
         &mut self,
-        provider: &mut impl SetCheckedProvider,
+        provider: &mut impl ActionProvider,
         control: &mut impl ActionControl,
     ) -> Result<CheckStatus, Error> {
         if self.phase != Phase::PendingVerification {
@@ -290,13 +464,14 @@ impl SetCheckedExecution {
         }
         let now = control.now();
         let remaining = self.check(&now, control.cancelled())?;
-        let after = match provider.observe_after(&self.current.action, &now, remaining) {
-            Ok(snapshot) => snapshot,
-            Err(issue) => {
-                self.stop(issue);
-                return Ok(CheckStatus::Unknown);
-            }
-        };
+        let after =
+            match provider.observe_after(&self.current.action, &self.expected, &now, remaining) {
+                Ok(snapshot) => snapshot,
+                Err(issue) => {
+                    self.stop(issue);
+                    return Ok(CheckStatus::Unknown);
+                }
+            };
         let now = control.now();
         self.check(&now, control.cancelled())?;
         if validation::validate_snapshot(&after).is_err()
@@ -306,39 +481,20 @@ impl SetCheckedExecution {
             self.stop(self.issue_for(ErrorCode::StaleTarget, "reobserve_exact_target"));
             return Ok(CheckStatus::Unknown);
         }
-        let node = after.nodes.iter().find(|node| {
-            node.key == self.current.action.backend_ref.key
-                && node.surface == self.current.action.backend_ref.surface
-        });
-        let checked =
-            node.and_then(|node| node.properties.iter().find(|p| p.field() == Field::Checked));
-        let observed = match checked {
-            Some(Property::Requested {
-                sensitivity: Sensitivity::Public,
-                evidence,
-                state:
-                    Availability::Known {
-                        value: Value::Flag(value),
-                    },
-                ..
-            }) => after
-                .observations
-                .iter()
-                .find(|o| {
-                    o.id == evidence.observation_id
-                        && o.source_namespace == self.current.action.backend_ref.key.namespace
-                        && evidence.source_namespace == o.source_namespace
-                        && o.freshness == Freshness::Current
-                        && o.coverage.scope_id == after.context.scope_id
-                        && o.coverage.fields.contains(&Field::Checked)
-                })
-                .map(|o| (*value, o.id.clone())),
-            _ => None,
-        };
+        let observed = self
+            .observed_property(&after)
+            .map(|(value, observation)| (value.clone(), observation.clone()));
         self.step.after_snapshot = Some(after.id.clone());
         self.after = Some(after);
         let Some((value, observation)) = observed else {
-            self.stop(self.issue_for(ErrorCode::ActionOutcomeUnknown, "reobserve_checked_state"));
+            self.stop(self.issue_for(
+                ErrorCode::ActionOutcomeUnknown,
+                if matches!(self.current.action.intent, Intent::SetChecked { .. }) {
+                    "reobserve_checked_state"
+                } else {
+                    "reobserve_expected_source_state"
+                },
+            ));
             return Ok(CheckStatus::Unknown);
         };
         self.step.verification_observation = Some(observation);
@@ -349,16 +505,20 @@ impl SetCheckedExecution {
             ));
             return Ok(CheckStatus::Unknown);
         }
-        let Intent::SetChecked { value: wanted } = self.current.action.intent else {
-            unreachable!("prepare restricts intent")
+        let Rule::PropertyEquals {
+            expected: wanted, ..
+        } = &self.expected.rule
+        else {
+            unreachable!("prepare_action restricts the condition")
         };
-        self.step.outcome = if value == wanted {
+        let matches = &value == wanted;
+        self.step.outcome = if matches {
             Outcome::Succeeded
         } else {
             Outcome::Failed
         };
         self.phase = Phase::Finished;
-        Ok(if value == wanted {
+        Ok(if matches {
             CheckStatus::Pass
         } else {
             CheckStatus::Fail
