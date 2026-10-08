@@ -1,5 +1,66 @@
 # W01 rooted selection source handoff
 
+## G06 combined Director request: exact limit — 2026-10-08
+
+Classification: diagnostic / justified resource refusal, not a shipping defect.
+The full request with role/accessibility_name plus layout_bounds/hit_region/
+visible_region reaches `collector::observe::bounded_document` and exceeds its
+65536-byte canonical ChannelResponse budget before publication. The counting
+serializer accepted65530 bytes; the next write would exceed the cap.65530 is
+the accepted prefix count, NOT the full required size (which remains unknown).
+DOM+AX acquisition and normalization already returned; this refusal is not an AX
+lookup failure, wrong root, method quota, timeout or source-app launch failure.
+
+One source-backed diagnostic run03:30:56.747–03:30:59.200UTC on the same actual
+local Director setup reproduced public `observe_invalid_or_limit`, exit2, zero
+stdout,25 stderr bytes,111.24ms including worker lifetime. A temporary Web-only
+diagnostic overlay wrote exactly one fixed record:
+`{"code":"canonical_output","observed":65530,"cap":65536}`.
+Instrumentation covered method admission/use, reply reservation/total, AX response
+cardinality/properties and canonical output refusals. Only fixed literal codes
+and two integers could be written to its task-temp file, capped4096B; no raw UI,
+protocol, stderr or exception payload. It changed no refusal predicate, limit,
+requested field, publication or cleanup behavior and is not shipped.
+
+Selected contracts are reused from G05 with no drift: CLI@7 OBSERVE permits
+invalid/limit exit2 and forbids partial publication; D05@4 and WORK@1 do not promise
+that every node/field combination fits an independently bounded response. The
+existing counting boundary enforces that contract. No product fix, larger quota,
+field suppression or partial-as-complete result is justified by this finding.
+The combined names/roles+geometry request is still unavailable for this component
+at64KiB. The passing geometry-only result remains separate and unchanged; no CSS
+discrepancy or general B03/P7 qualification was attempted.
+
+Persistent write set: this receipt and `tests/bridges/web/guarded-live.cjs` only.
+The latter adds `UIB_WEB_LIVE_CASE=director_semantics` using the same Director
+setup and original five fields. It intentionally still reports failure on this
+limit; it does not turn the result green. Use the G05 command/build preparation
+below with that mode to reproduce the public refusal. Exact diagnostic stage
+came from the temporary instrumented build, not a new public diagnostic API.
+Existing `director` mode retains its original three fields and geometry chain.
+
+Saved build basea9c2ff2ef42842b70333afc43543369354f447db; relevant Web/Core/spec
+bytes equal cf9c071. Temporary overlay touched only Web collector mod.rs,
+observe.rs,io.rs,acquire.rs. Locked/offline CLI+worker build and launcher syntax/
+activation-refusal/diff checks passed. No Rust product source changed and no
+unrelated test suite or unchanged live scenario was repeated.
+Diagnostic CLI SHA256f0f4342da07660032652e1024b5defffd95eb6861ed8f645888f659b71a64008;
+worker b57f2d37cf6310ce37367720080324e5518a0dd83b70742c92e9df8c97f8e1d0;
+launcher de816751f1bef317e4410041c5cdb5d98faf0e6f0a78578e349a3c9d771962c0.
+Report SHA2566d209beeee26a5c316da10bbc913cbdbb22993a9c0fc6364e849d8db32a6ccd1;
+diagnostic a136f7a1a12462c8c57faa61d4ec27c1aedb36877f57302bd611b77658602b4d.
+
+Browser/context/driver/profile and CLI cleanup confirmed; exact worker executable
+inventory empty after the call. Site page/console and first-party request/error
+counts all0. `worker_sessions=unconfirmed` is preserved separately: the harness's
+successful-pipeline marker was never reached, and no internal host-session counter
+was exposed. It is not recast as confirmed session telemetry. No owned process
+remains; no source app/service, user browser or image was created/removed.
+Post-use178 unmodified saved inputs, both binaries and launcher matched; four-file
+diagnostic-overlay fingerprint2a7518327f5cccb9e095e24fd66f6cf26e88dce15155f74c18b49eaf6f92fd00.
+Consumed run output3files and temporary diagnostic source/build2777files were
+removed with absence verified. These hashes are historical identities, not downloads.
+
 ## G05 real PlayPhrase.me Director geometry — 2026-10-08
 
 Finite verification delivered: existing public Observe → design Inspect → Rust
