@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12 selected-space geometry diff; Native01a110ac-2da3 reads M05 AX↔probe mapping; Web01a11983 implements B04 transform, source compiles and focused checks run. Completed CLI01a11286 archived. No Native runtime lease; Web isolated headless sequence after saved-source checks; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12 selected-space geometry diff; Native01a110ac-2da3 implements explicit M05 AX↔probe design association; Web01a11983 implements B04 transform, source compiles and focused checks run. Completed CLI01a11286 archived. Native bounded own-fixture lane after saved source; Web isolated headless lane independent; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -960,3 +960,20 @@ Register new CLI-owned report before source; preserve raw diff JSON1.0.0 and eve
 original Snapshot/Space/Evidence. Delta only for two known finite results; missing
 mapping never zero. Exact G12 source/check ownership is disjoint from Web B04 and
 Native read-only handoff. Same approved P3/P6 scope, no schema/cache/math redesign.
+
+M05 source handoff confirmed missing canonical cross-source association: AX sample
+has no mapping/relations; probe group contains probe-only members. G11 accepts
+mixed namespaces in one validated Snapshot, so root selects narrow Native-owned
+composition in P01-probe-source packet, reusing actual collectors/canonical builder.
+Explicit fixture declaration and explicit both-source request required; source-only
+modes, capability/privacy, original clocks/freshness and AX action authority stay.
+No fake AX node, identity merging or same-name/box association. Native may implement
+within named Swift/caller owners; any actual Rust host/schema/public-wire conflict
+returns as a precise Core dependency before crossing it. One saved-source own
+Observe→G11 consumer follows targeted checks, no repeated P01 invariance wave.
+
+B04's already-authorized sequence retains only original before-scroll/after-scroll/
+after-resize responses for the immediate G12 consumer, with hashes/source selector/
+Space/context. Web owns cleanup after Core consumption and root release. No extra
+run or context coercion; source checkpoint does not wait for G12. Existing temp/
+image rules preserved; no persistent archive or log retention.

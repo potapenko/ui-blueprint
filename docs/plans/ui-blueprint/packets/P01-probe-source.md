@@ -142,3 +142,71 @@ Economy: reuse existing anchors/collector and one real comparison to expose miss
 scroll geometry to the AI. Return checkpoint/push, public invocation, observed
 numbers/checks and precise residuals. Cross-display, paint/occlusion and full M04/P7
 remain separate requirements, not claimed by this slice.
+
+## M05 explicit AX and measured-part association — 2026-10-08
+
+Class shipping_product; retained Native owner/master/inherit/no nested agents.
+Approved PLAN.UIB@1 P3/M05 and explicit user parallel execution/geometry priority.
+Root selected existing NATIVE@2/NATIVE-PILOTS@1 M05/PROJECTIONS@1 plus full MODEL/
+EXCHANGE/IDENTITY/GEOMETRY/BOUNDARIES/PRIVACY/LIFECYCLE closure. Source handoff
+establishes a remaining implementation gap, not new product intent: current AX
+sample Snapshot has no component/relations; probe Snapshot groups only three
+probe nodes. Same identifier string is not an explicit AX↔probe association.
+G11 already consumes a validated mixed-namespace group/relations in one Snapshot.
+
+Deliver one explicitly requested own-fixture design observation containing the
+actual merged AX control and its measured container/icon/text, with declared
+reported mapping and attributed represents/corresponds_to relations. Every endpoint
+must be present and observed, retaining distinct SourceKeys. Fixture declaration
+must identify the association explicitly; no mapping from equal names or boxes.
+Native owns composition because it acquires/reconciles these exact source objects;
+reuse its existing bounded AX/probe collectors, canonical builder and ordinary
+public Observe consumer. Do not create a second engine/graph framework or fabricate
+an AX node merely from declaration. This must reach a usable actual design response,
+not stop at a synthetic mapping test or an unpublished internal helper.
+
+Keep independent AX-only/probe-only paths and capabilities unchanged. Composite
+acquisition must be explicitly requested and authorized for both sources; no AX
+read hidden inside an ordinary probe-only request, permission prompt, unrequested
+field or other-window expansion. Keep channel attribution, original measurement
+times/clock domains, freshness/coverage/consistency truthful; imported probe data
+never gains current status merely because AX was freshly read. Do not erase either
+source provenance to force compatibility. Unsupported/stale/missing source cannot
+publish a fabricated complete linked control; preserve independently available
+channels as their own qualified results. Mapping gives no new action authority:
+AX backend owns real action refs, probe decoration never becomes actionable.
+
+Authority task-wide only for this narrow Native composition outcome. Expected
+owners: existing Collector.swift, HostProtocol.swift, HostHelper.swift and needed
+existing helper dispatch; Fixture.swift explicit source declaration only;
+existing ProbeChecks.swift/nearest Native acquisition checks; existing
+host_observe.py caller if required; native-helper.md and P01-probe-source receipt.
+Declare actual subset and reconcile current private request/channel constraints
+before edits. Equivalent private representation inside these owners is delegated;
+no new product behavior is authorized. If an existing normative restriction or
+Rust host/schema/CLI/public-wire owner must change, return the exact smallest
+dependency before that edit; Core currently owns G12. No old P01 seam/layout/input
+change, Cargo/dependency/new directory, general importer/service or arbitrary app.
+
+Focused source checks: actual declared endpoints, multiple probe parts without
+identity merging; no association for unbound/missing/ambiguous/stale AX/probe;
+original clock/freshness/unknowns and source-only output preserved; bounded
+acquisition/encoding/privacy and malformed declaration refusal. Reuse current
+validators, no duplicated schema. Preserve existing numeric/admission/deadline
+ceilings; expanding output is not permission to raise them. Ordinary targeted
+tests/checks only, no repeat of passed pixel/hit/geometry invariance suites.
+
+After coherent source save/push and checks, ONE bounded own F02 sample observation
+through existing public Observe, then current saved G11 design inspector on actual
+merged AX selector. Verify real reported AX node plus measured parts and sources;
+known gap may be computed through existing Rust measure, never fixture constants
+as observed data. Both source-only outputs keep prior semantics. No real user app,
+capture/display/permission/pointer change. Native sole physical lane if setup
+needs it; Web isolated headless work remains independent. Existing setup120s/
+operation300s/cleanup5s and request/admission caps stand. Stop actual failures,
+repair within scope, no unchanged retry. Runtime is authorized after source save
+without another activation round; exact cross-owner dependency returns to root.
+Preserve all images in system temp, clean only consumed own nonimages. Return
+command/data/checks/source checkpoint+push/cleanup and precise remaining M05 gates.
+Economy: reuse existing Native data owners and G11 consumer to complete the actual
+cross-source design link; expand only for a demonstrated dependency.
