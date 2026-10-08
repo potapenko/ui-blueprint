@@ -154,14 +154,11 @@ pub(crate) fn validate(b: &DrawingBrief, l: ExportLimits) -> Result<()> {
         let a = view(b, &c.before)?;
         let z = view(b, &c.after)?;
         require(a.id != z.id, E::InvalidReference)?;
-        let compatible = match (&a.source, &z.source) {
-            (
-                SourceInput::Observed { snapshot: a, .. },
-                SourceInput::Observed { snapshot: z, .. },
-            ) => validation::contexts_compatible(&a.context, &z.context),
-            (SourceInput::Proposed { .. }, SourceInput::Proposed { .. }) => true,
-            _ => false,
-        };
+        let compatible = matches!(
+            (&a.source, &z.source),
+            (SourceInput::Observed { .. }, SourceInput::Observed { .. })
+                | (SourceInput::Proposed { .. }, SourceInput::Proposed { .. })
+        );
         require(
             compatible || c.different_basis.is_some(),
             E::IncompatibleViews,

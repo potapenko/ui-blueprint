@@ -274,7 +274,7 @@ fn purpose_override_is_explicit_and_other_modes_keep_compiler_gates() {
         json!([{"before":"proposal","after":"proposal-next","different_basis":null}]);
     c.save();
     let receipt = success(c.run(&["--purpose", "compare", "--json"], 2_000_000, 4_000_000));
-    assert_eq!(receipt["comparison_attribution"], "unresolved_g02");
+    assert_eq!(receipt["comparison_attribution"], "not_compared");
     assert_eq!(receipt["views"].as_array().unwrap().len(), 2);
 }
 #[test]
@@ -785,4 +785,273 @@ fn direct_observed_limits_modes_and_no_overwrite_reuse_existing_boundary() {
         "export_destination_exists",
     );
     assert_eq!(fs::read(c.root.join("package/scene.json")).unwrap(), before);
+}
+
+impl Case {
+    fn comparison_inputs(&self, response: bool) {
+        let golden: Value =
+            serde_json::from_slice(include_bytes!("../../../fixtures/golden/GOLDEN01.json"))
+                .unwrap();
+        for side in ["before", "after"] {
+            let snapshot = &golden["artifact"]["data"][side];
+            let artifact = if response {
+                json!({"kind":"channel_response","data":{
+                "request_id":"synthetic-export","session_id":snapshot["context"]["session_id"],
+                "dispatch_sequence":1,"target":snapshot["context"]["target"],"channel":"external_semantics",
+                "result":{"status":"observed","data":snapshot}}})
+            } else {
+                json!({"kind":"snapshot","data":snapshot})
+            };
+            fs::write(
+                self.root.join(format!("{side}.json")),
+                serde_json::to_vec_pretty(&json!({"schema_version":"0.1.0","artifact":artifact}))
+                    .unwrap(),
+            )
+            .unwrap();
+        }
+        let annotation = json!({"title":"Synthetic checkbox","state":"recorded synthetic state","scope":"fixture form",
+            "environment":"Synthetic data; no live observation","safe_source_reference":"GOLDEN01 controlled synthetic pair",
+            "not_depicted":["No geometry or pixels collected"],"public_text_fields":[]});
+        fs::write(
+            self.root.join("metadata.json"),
+            serde_json::to_vec_pretty(&json!({"metadata":self.brief["metadata"],
+            "before":annotation,"after":annotation,"different_basis":null,"geometry_space":null}))
+            .unwrap(),
+        )
+        .unwrap();
+    }
+    fn run_compare(&self, extra: &[&str], input: usize, output: usize) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .args(["imagegen-prompt", "--before"])
+            .arg(self.root.join("before.json"))
+            .arg("--after")
+            .arg(self.root.join("after.json"))
+            .arg("--metadata")
+            .arg(self.root.join("metadata.json"))
+            .arg("--out")
+            .arg(self.root.join("package"))
+            .args([
+                "--max-input-bytes",
+                &input.to_string(),
+                "--max-output-bytes",
+                &output.to_string(),
+                "--max-components",
+                "256",
+                "--max-views",
+                "8",
+                "--components-per-detail",
+                "12",
+            ])
+            .args(extra)
+            .output()
+            .unwrap()
+    }
+}
+#[test]
+fn observed_pair_public_cli_emits_full_attributed_checkbox_package() {
+    for response in [false, true] {
+        let c = Case::new("observed");
+        c.comparison_inputs(response);
+        let original = fs::read(c.root.join("after.json")).unwrap();
+        let r = success(c.run_compare(&["--json"], 2_000_000, 4_000_000));
+        check_files(&c);
+        assert_eq!(r["result_version"], "0.2.0");
+        assert_eq!(r["purpose"], "compare");
+        assert_eq!(r["comparison_attribution"], "engine_recorded_graph");
+        let s = c.package("scene.json");
+        let result = &s["comparison_results"][0];
+        assert_eq!(result["status"], "compared");
+        assert_eq!(result["omitted_entries"], 0);
+        let content: Vec<_> = result["entries"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|e| e["content_changed"] == true)
+            .collect();
+        assert_eq!(content.len(), 1);
+        assert_eq!(content[0]["field"], "checked");
+        assert_eq!(content[0]["before"]["state"]["value"]["value"], false);
+        assert_eq!(content[0]["after"]["state"]["value"]["value"], true);
+        assert_eq!(fs::read(c.root.join("after.json")).unwrap(), original);
+        let prompt = fs::read_to_string(c.root.join("package/prompt.txt")).unwrap();
+        assert!(prompt.contains("ENGINE RECORDED COMPARISON"));
+        assert!(!prompt.contains("unresolved_g02"));
+        assert!(!prompt.contains("native-app"));
+    }
+}
+#[test]
+fn observed_pair_aggregate_bounds_and_no_overwrite_are_exact() {
+    let c = Case::new("observed");
+    c.comparison_inputs(false);
+    // Whitespace makes the file sum dominate the separately checked assembled brief.
+    let pad = |case: &Case| {
+        use std::io::Write;
+        fs::OpenOptions::new()
+            .append(true)
+            .open(case.root.join("metadata.json"))
+            .unwrap()
+            .write_all(&vec![b' '; 10_000])
+            .unwrap();
+    };
+    pad(&c);
+    let total = ["before.json", "after.json", "metadata.json"]
+        .iter()
+        .map(|p| fs::metadata(c.root.join(p)).unwrap().len() as usize)
+        .sum::<usize>();
+    fail(c.run_compare(&[], total - 1, 4_000_000), 2, "input_limit");
+    fail(c.run_compare(&[], 2_000_000, 100), 2, "output_limit");
+    assert!(!c.root.join("package").exists());
+    let output = c.run_compare(&["--json"], total, 4_000_000);
+    let stdout = output.stdout.len();
+    let r = success(output);
+    let limit = r["package_bytes"].as_u64().unwrap() as usize + stdout;
+    let other = Case::new("observed");
+    other.comparison_inputs(false);
+    pad(&other);
+    fail(
+        other.run_compare(&["--json"], total, limit - 1),
+        2,
+        "output_limit",
+    );
+    assert!(!other.root.join("package").exists());
+    assert_eq!(success(other.run_compare(&["--json"], total, limit)), r);
+    let original = fs::read(other.root.join("package/scene.json")).unwrap();
+    fail(
+        other.run_compare(&["--json"], total, limit),
+        2,
+        "export_destination_exists",
+    );
+    assert_eq!(
+        fs::read(other.root.join("package/scene.json")).unwrap(),
+        original
+    );
+}
+#[test]
+fn observed_pair_invalid_modes_metadata_and_sources_fail_without_publication() {
+    for extra in [
+        vec!["--brief", "private"],
+        vec!["--snapshot", "private"],
+        vec!["--before", "private"],
+        vec!["--purpose", "document"],
+    ] {
+        let c = Case::new("observed");
+        c.comparison_inputs(false);
+        fail(
+            c.run_compare(&extra, 2_000_000, 4_000_000),
+            2,
+            "invalid_arguments",
+        );
+        assert!(!c.root.join("package").exists());
+    }
+    for (variant, code) in [
+        (0, "export_metadata_required"),
+        (1, "export_invalid_input"),
+        (2, "export_private_content"),
+        (3, "export_private_content"),
+        (4, "export_approval_record_required"),
+    ] {
+        let c = Case::new("observed");
+        c.comparison_inputs(false);
+        c.mutate_metadata(|m| match variant {
+            0 => {
+                m["after"].as_object_mut().unwrap().remove("environment");
+            }
+            1 => m["before"]["geometry"] = json!({"width":123}),
+            2 => m["after"]["public_text_fields"] = json!(["value"]),
+            3 => m["before"]["title"] = "/private/PAIR_CANARY".into(),
+            _ => m["metadata"]["approval"] = json!({"status":"accepted","named_record":null}),
+        });
+        fail(c.run_compare(&["--json"], 2_000_000, 4_000_000), 2, code);
+        assert!(!c.root.join("package").exists());
+    }
+    for variant in 0..4 {
+        let c = Case::new("observed");
+        c.comparison_inputs(false);
+        let path = c.root.join("after.json");
+        let mut d: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        match variant {
+            0 => d["artifact"]["data"]["context"]["session_id"] = "other".into(),
+            1 => d["schema_version"] = "9.0.0".into(),
+            2 => {
+                let p = &mut d["artifact"]["data"]["nodes"][0]["properties"][1];
+                p["sensitivity"] = "sensitive".into();
+                p["state"] =
+                    json!({"availability":"known","value":{"type":"text","value":"PAIR_CANARY"}});
+            }
+            _ => (),
+        }
+        let mut bytes = serde_json::to_vec(&d).unwrap();
+        if variant == 3 {
+            bytes.extend(serde_json::to_vec(&d).unwrap());
+        }
+        fs::write(path, bytes).unwrap();
+        fail(
+            c.run_compare(&["--json"], 2_000_000, 4_000_000),
+            2,
+            if variant == 0 {
+                "export_incompatible_views"
+            } else {
+                "invalid_input"
+            },
+        );
+        assert!(!c.root.join("package").exists());
+    }
+}
+
+#[test]
+fn observed_pair_geometry_selection_and_strict_metadata_reach_public_binary() {
+    let c = Case::new("observed");
+    c.comparison_inputs(false);
+    let source: Value = serde_json::from_slice(include_bytes!(
+        "../../../fixtures/golden/GEO-SIZE-RATIO__width.json"
+    ))
+    .unwrap();
+    let before = &source["artifact"]["data"]["snapshot"];
+    let mut after = before.clone();
+    after["nodes"][0]["properties"][0]["state"]["value"]["value"]["shape"]["value"]["width"] =
+        48.0.into();
+    for (side, snapshot) in [("before", before), ("after", &after)] {
+        fs::write(
+            c.root.join(format!("{side}.json")),
+            serde_json::to_vec(
+                &json!({"schema_version":"0.1.0","artifact":{"kind":"snapshot","data":snapshot}}),
+            )
+            .unwrap(),
+        )
+        .unwrap();
+    }
+    c.mutate_metadata(|m| {
+        m["geometry_space"] =
+            before["nodes"][0]["properties"][0]["state"]["value"]["value"]["coordinate_space"]["id"]
+                .clone()
+    });
+    success(c.run_compare(&["--purpose", "compare", "--json"], 2_000_000, 4_000_000));
+    assert_eq!(
+        c.package("scene.json")["comparison_results"][0]["geometry"][0]["displacement"],
+        json!({"dx":0.0,"dy":0.0,"dwidth":18.0,"dheight":0.0})
+    );
+    for side in ["before", "after", "metadata"] {
+        let c = Case::new("observed");
+        c.comparison_inputs(false);
+        c.mutate_metadata(|m| m[side] = json!([]));
+        fail(
+            c.run_compare(&[], 2_000_000, 4_000_000),
+            2,
+            "export_invalid_input",
+        );
+        assert!(!c.root.join("package").exists());
+    }
+    let c = Case::new("observed");
+    c.comparison_inputs(false);
+    let path = c.root.join("metadata.json");
+    let mut text = fs::read_to_string(&path).unwrap();
+    text.pop();
+    text.push_str(",\"before\":{} }");
+    fs::write(path, text).unwrap();
+    fail(
+        c.run_compare(&[], 2_000_000, 4_000_000),
+        2,
+        "export_invalid_input",
+    );
+    assert!(!c.root.join("package").exists());
 }

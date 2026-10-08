@@ -214,7 +214,7 @@ uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N
 
 `--brief` is the export-owned DrawingBrief JSON, including canonical Snapshot
 records inside observed views or an explicit ProposedLayout inside proposed
-views. Alternatively, [CLI-EXPORT@1](../specs/product/cli-export.md) connects an
+views. Alternatively, [CLI-EXPORT@2](../specs/product/cli-export.md) connects an
 unchanged canonical observation without re-entering any measured geometry:
 
 ```text
@@ -231,11 +231,21 @@ The default direct mode is document. Source fact extraction is automatic; docume
 annotations remain caller-authored. Metadata's exact object/example is documented
 in [export](export.md#observed-file-to-package). No implicit stored-ID resolver.
 
+Saved pairs also accept `--before FILE --after FILE --metadata FILE`, with the
+same required limits/output flags. Default purpose for this form is compare;
+other purposes and mixed input forms reject2. Three files share the input budget.
+[Pair metadata and runnable example](export.md#two-saved-observations-to-compare)
+show the public path. The six-file comparison package is version0.2.0 and includes
+engine changes, separate content/evidence flags and full safe source views.
+An optional geometry_space selects an existing sourced Space for Rust displacement.
+No selection means literal recorded geometry differences without displacement.
+Incompatible contexts require an explicit different_basis note and stay unpaired.
+
 The optional purpose overrides the input brief's purpose before compiler
 validation. Without it, the brief's explicit purpose applies; a missing JSON
 purpose defaults to document. Thus propose must be explicit either in the brief
 or the flag. `explain` aliases document. Detail, flow and compare retain exactly
-the compiler's data/evidence gates and current G02 attribution limitation.
+the compiler's data/evidence gates. Observed comparisons now use the existing Rust graph engine.
 The only implemented profile is blue-engineering; another profile returns
 `unsupported_profile` (5). Unknown/duplicate flags and invalid positive limits
 return `invalid_arguments` (2). All numeric limits are required, with no hidden
@@ -256,17 +266,17 @@ The existing package writer creates only a new directory and refuses existing
 exports, symlinks or baselines. Its six files retain the full A+B prompt, scene,
 dimensions and sheets. No images/references are added automatically. Compact
 stdout reports mode, view/component counts, coverage per view, independent
-source/validation/approval statuses, package bytes and unresolved comparison
+source/validation/approval statuses, package bytes and actual comparison
 attribution. It contains no input/output path or raw collector identifier.
 
 `--json` emits one export-owned versioned result object, followed by a newline:
-`result_version="0.1.0"`, `command="imagegen-prompt"`,
+`result_version="0.2.0"` for comparison packages, otherwise `"0.1.0"`, `command="imagegen-prompt"`,
 `status="package_written"`, `purpose`, `views` (safe view ID, source_kind,
 coverage status or proposed, omitted_count, unknown_count, component count),
 `package_bytes`, six fixed `files`, `local_numeric_validation="checked"`,
 `validation_status="unverified"`, `approval_status`, `generated_image=false`,
-`references_count=0`, and `comparison_attribution` (not_requested or
-unresolved_g02). This is a package receipt, not a replacement normalized schema.
+`references_count=0`, and `comparison_attribution` (not_requested,
+engine_recorded_graph, partially_compared or not_compared). This is a package receipt, not a replacement normalized schema.
 Unknown quantities stay unknown in the package; successful compilation does not
 make measurements pass, generate/verify an image, or approve the source.
 

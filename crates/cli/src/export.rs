@@ -2,12 +2,17 @@
 use crate::{Failure, arguments::limit, input, output};
 use std::{ffi::OsString, path::PathBuf};
 use uiblueprint_export::{
-    DrawingBrief, ExportError, ExportLimits, ObservedDocumentMetadata, Purpose, SourceInput,
-    ViewInput,
+    ComparisonRequest, DrawingBrief, ExportError, ExportLimits, ObservedComparisonMetadata,
+    ObservedDocumentMetadata, ObservedViewMetadata, Purpose, SourceInput, ViewInput,
 };
 
 enum ExportInput {
     Brief(PathBuf),
+    Compare {
+        before: PathBuf,
+        after: PathBuf,
+        metadata: PathBuf,
+    },
     Snapshot {
         snapshot: PathBuf,
         metadata: PathBuf,
@@ -33,6 +38,8 @@ impl Arguments {
             mut detail,
         ) = (None, None, None, None, None, None, None);
         let mut snapshot = None;
+        let mut before = None;
+        let mut after = None;
         let mut metadata = None;
         let mut purpose = None;
         let mut profile = false;
@@ -47,6 +54,8 @@ impl Arguments {
             }
             let value = args.next().ok_or(Failure::invalid("invalid_arguments"))?;
             match flag.to_str() {
+                Some("--before") if before.is_none() => before = Some(PathBuf::from(value)),
+                Some("--after") if after.is_none() => after = Some(PathBuf::from(value)),
                 Some("--brief") if brief.is_none() => brief = Some(PathBuf::from(value)),
                 Some("--snapshot") if snapshot.is_none() => snapshot = Some(PathBuf::from(value)),
                 Some("--metadata") if metadata.is_none() => metadata = Some(PathBuf::from(value)),
@@ -80,16 +89,30 @@ impl Arguments {
             }
         }
         let missing = Failure::invalid("invalid_arguments");
-        let input = match (brief, snapshot, metadata) {
-            (Some(brief), None, None) => ExportInput::Brief(brief),
-            (None, Some(snapshot), Some(metadata)) => {
-                if purpose.is_some_and(|p| p != Purpose::Document) {
-                    return Err(missing);
-                }
-                ExportInput::Snapshot { snapshot, metadata }
+        let input = if before.is_some() || after.is_some() {
+            if brief.is_some()
+                || snapshot.is_some()
+                || purpose.is_some_and(|p| p != Purpose::Compare)
+            {
+                return Err(missing);
             }
-            (Some(_), _, _) => return Err(missing),
-            _ => return Err(Failure::invalid("export_metadata_required")),
+            ExportInput::Compare {
+                before: before.ok_or(missing)?,
+                after: after.ok_or(missing)?,
+                metadata: metadata.ok_or(Failure::invalid("export_metadata_required"))?,
+            }
+        } else {
+            match (brief, snapshot, metadata) {
+                (Some(brief), None, None) => ExportInput::Brief(brief),
+                (None, Some(snapshot), Some(metadata)) => {
+                    if purpose.is_some_and(|p| p != Purpose::Document) {
+                        return Err(missing);
+                    }
+                    ExportInput::Snapshot { snapshot, metadata }
+                }
+                (Some(_), _, _) => return Err(missing),
+                _ => return Err(Failure::invalid("export_metadata_required")),
+            }
         };
         Ok(Self {
             input,
@@ -119,7 +142,12 @@ pub(crate) fn execute(args: Vec<OsString>) -> Result<(Vec<u8>, u8), Failure> {
         .values()
         .try_fold(0usize, |total, bytes| total.checked_add(bytes.len()))
         .ok_or(Failure::invalid("output_limit"))?;
-    let receipt = receipt(&brief, size, package.files().keys().collect());
+    let receipt = receipt(
+        &brief,
+        size,
+        package.files().keys().collect(),
+        package.comparison_attribution(),
+    );
     let stdout = output::export_receipt(
         &receipt,
         args.json,
@@ -143,6 +171,36 @@ fn load_brief(args: &Arguments) -> Result<DrawingBrief, Failure> {
         ExportInput::Brief(path) => {
             let bytes = input::read(path, &mut remaining)?;
             serde_json::from_slice(&bytes).map_err(decode_failure)
+        }
+        ExportInput::Compare {
+            before,
+            after,
+            metadata,
+        } => {
+            let before = input::read_snapshot(before, &mut remaining, args.limits.max_input_bytes)?;
+            let after = input::read_snapshot(after, &mut remaining, args.limits.max_input_bytes)?;
+            let bytes = input::read(metadata, &mut remaining)?;
+            if bytes.iter().find(|b| !b.is_ascii_whitespace()) != Some(&b'{') {
+                return Err(Failure::invalid("export_invalid_input"));
+            }
+            let m: ObservedComparisonMetadata =
+                serde_json::from_slice(&bytes).map_err(decode_failure)?;
+            Ok(DrawingBrief {
+                metadata: m.metadata,
+                purpose: Purpose::Compare,
+                views: vec![
+                    comparison_view("before", before, m.before),
+                    comparison_view("after", after, m.after),
+                ],
+                details: vec![],
+                transitions: vec![],
+                comparisons: vec![ComparisonRequest {
+                    before: "before".into(),
+                    after: "after".into(),
+                    different_basis: m.different_basis,
+                    geometry_space: m.geometry_space,
+                }],
+            })
         }
         ExportInput::Snapshot { snapshot, metadata } => {
             let snapshot =
@@ -177,6 +235,26 @@ fn load_brief(args: &Arguments) -> Result<DrawingBrief, Failure> {
         }
     }
 }
+fn comparison_view(
+    id: &str,
+    snapshot: uiblueprint_schema::model::Snapshot,
+    mut m: ObservedViewMetadata,
+) -> ViewInput {
+    m.not_depicted.push("State, environment and scope labels are caller annotations; source facts come from the saved Snapshot. No fresh observation.".into());
+    ViewInput {
+        id: id.into(),
+        title: m.title,
+        state: m.state,
+        scope: m.scope,
+        environment: m.environment,
+        safe_source_reference: m.safe_source_reference,
+        not_depicted: m.not_depicted,
+        source: SourceInput::Observed {
+            snapshot: Box::new(snapshot),
+            public_text_fields: m.public_text_fields,
+        },
+    }
+}
 fn failure(error: ExportError) -> Failure {
     match error {
         ExportError::InputLimit => Failure::invalid("input_limit"),
@@ -193,13 +271,18 @@ fn failure(error: ExportError) -> Failure {
         ExportError::Io => Failure::io(),
     }
 }
-fn receipt(b: &DrawingBrief, package_bytes: usize, files: Vec<&String>) -> serde_json::Value {
+fn receipt(
+    b: &DrawingBrief,
+    package_bytes: usize,
+    files: Vec<&String>,
+    attribution: &str,
+) -> serde_json::Value {
     let views:Vec<_>=b.views.iter().map(|v| match &v.source {
         SourceInput::Observed {snapshot,..}=>serde_json::json!({"view_id":v.id,"source_kind":"observed","coverage":snapshot.coverage.status,"omitted_count":snapshot.coverage.omitted_count,"unknown_count":snapshot.coverage.unknown_count,"components":snapshot.nodes.len()}),
         SourceInput::Proposed {layout}=>serde_json::json!({"view_id":v.id,"source_kind":"proposed","coverage":"proposed","omitted_count":null,"unknown_count":null,"components":layout.components.len()}),
     }).collect();
-    serde_json::json!({"result_version":"0.1.0","command":"imagegen-prompt","status":"package_written","purpose":b.purpose,
+    serde_json::json!({"result_version":if b.comparisons.is_empty() {"0.1.0"} else {"0.2.0"},"command":"imagegen-prompt","status":"package_written","purpose":b.purpose,
         "views":views,"package_bytes":package_bytes,"files":files,"local_numeric_validation":"checked","validation_status":"unverified",
         "approval_status":b.metadata.approval.status,"generated_image":false,"references_count":0,
-        "comparison_attribution":if b.comparisons.is_empty() {"not_requested"} else {"unresolved_g02"}})
+        "comparison_attribution":attribution})
 }

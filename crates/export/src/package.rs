@@ -30,8 +30,12 @@ pub(crate) fn bounded_json(value: &impl Serialize, limit: usize) -> Result<Vec<u
 #[derive(Debug)]
 pub struct Package {
     pub(crate) files: BTreeMap<String, Vec<u8>>,
+    pub(crate) comparison_attribution: &'static str,
 }
 impl Package {
+    pub fn comparison_attribution(&self) -> &'static str {
+        self.comparison_attribution
+    }
     pub fn files(&self) -> &BTreeMap<String, Vec<u8>> {
         &self.files
     }

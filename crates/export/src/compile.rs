@@ -19,6 +19,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
         views: vec![],
         flow: vec![],
         comparisons: brief.comparisons.clone(),
+        comparison_results: vec![],
     };
     let mut dims = vec![];
     let mut alias_maps = vec![];
@@ -79,6 +80,18 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
         scene.views.push(sv);
         alias_maps.push(aliases);
     }
+    scene.comparison_results =
+        crate::compare::compile(brief, &scene, &mut alias_maps, limits.max_output_bytes)?;
+    for request in &mut scene.comparisons {
+        if let Some(space) = &request.geometry_space {
+            let index = brief
+                .views
+                .iter()
+                .position(|v| v.id == request.before)
+                .ok_or(E::InvalidReference)?;
+            request.geometry_space = Some(alias_maps[index].id(space));
+        }
+    }
     scene.flow = flow(brief, &mut alias_maps)?;
     let sheets = sheets(brief, &scene, limits)?;
     let prompt = prompt(brief, &scene, &dims, &sheets, limits.max_output_bytes)?;
@@ -97,14 +110,31 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
         remaining = remaining.checked_sub(bytes.len()).ok_or(E::OutputLimit)?;
         files.insert(name.into(), bytes);
     }
-    let manifest = serde_json::json!({"package_version":"0.1.0","guide":GUIDE,"guide_reference":"docs engineering-blueprint-guide.md revision 1.1",
+    let manifest = serde_json::json!({"package_version":if brief.comparisons.is_empty() {"0.1.0"} else {"0.2.0"},"guide":GUIDE,"guide_reference":"docs engineering-blueprint-guide.md revision 1.1",
         "document":brief.metadata,"purpose":brief.purpose,"source_kinds":scene.views.iter().map(|v|v.source_kind).collect::<Vec<_>>(),
         "validation_status":"unverified","local_numeric_validation":"checked","approval_status":brief.metadata.approval.status,
         "scale_mode":"schematic","generated_image":false,"references":[],
         "files":["manifest.json","drawing-brief.md","scene.json","dimensions.json","sheets.json","prompt.txt"],
         "retention_owner":brief.metadata.owner,"retention_condition":brief.metadata.retention});
     files.insert("manifest.json".into(), bounded_json(&manifest, remaining)?);
-    Ok(Package { files })
+    let compared = scene
+        .comparison_results
+        .iter()
+        .filter(|r| r.status == "compared")
+        .count();
+    let comparison_attribution = if scene.comparison_results.is_empty() {
+        "not_requested"
+    } else if compared == scene.comparison_results.len() {
+        "engine_recorded_graph"
+    } else if compared == 0 {
+        "not_compared"
+    } else {
+        "partially_compared"
+    };
+    Ok(Package {
+        files,
+        comparison_attribution,
+    })
 }
 fn flow(b: &DrawingBrief, aliases: &mut [Aliases]) -> Result<Vec<FlowLink>> {
     let mut links = vec![];
@@ -415,6 +445,16 @@ fn prompt(
         ),
         limit,
     )?;
+    if !s.comparison_results.is_empty() {
+        append(
+            &mut result,
+            &format!(
+                "\nENGINE RECORDED COMPARISON\n{}\nEach entry names the changed field and its before and after public facts. Highlight only these recorded changes; unchanged controls remain context. Evidence-only changes do not imply content changes.\n",
+                json(&s.comparison_results, limit)?
+            ),
+            limit,
+        )?;
+    }
     require(
         !result.contains("{{") && !result.contains("}}"),
         E::InvalidInput,

@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 27.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 28.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -70,6 +70,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `G12-GEOMETRY-DIFF-001`: [CLI@13](product/cli.md)/[CLI-GEOMETRY-DIFF@1](product/cli-geometry-diff.md) adds explicit selected-space rect comparison under [G12](../plans/ui-blueprint/packets/G02-recorded-diff.md#g12-geometry-comparison-in-a-selected-space--2026-10-08), preserving raw JSON1.0.0/core/analysis/arithmetic/cache.
 `M05-COMPOSITION-001`: [EXCHANGE@2](product/exchange.md#uibexchangecomposition--explicit-axprobe-design-response)/[D03@3](development/decisions/d03-data.md) registers probe-wrapper/design/exact AX+probe observations and per-nested-channel request/session Supported-or-Partial authorization under [S01-native-proof M05](../plans/ui-blueprint/packets/S01-native-proof.md); homogeneous replies/126goldens/wire preserved.
 `G13-GRAPH-DIFF-001`: [CLI@14](product/cli.md)/[CLI-GRAPH-DIFF@1](product/cli-graph-diff.md) registers additive saved structure/relations/components/metadata/focus comparison under [G13](../plans/ui-blueprint/packets/autonomous-tasks-2026-10-08.md#g13--сравнение-структуры-связей-и-фокуса), preserving raw JSON1.0.0, G12, canonical sources and cache.
+`E03-EXPORT-COMPARE-001`: [CLI@15](product/cli.md)/[CLI-EXPORT@2](product/cli-export.md) connects saved pairs to engine-attributed six-file compare export under [E03](../plans/ui-blueprint/packets/E03-observed-compare.md); comparison packages0.2, other exports/core/raw diff unchanged.
 ## Select a route
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.
@@ -93,7 +94,6 @@ normative distinctions and source-local examples; example numbers are not defaul
 Explicit `Requires` links name semantic dependencies; navigation/provenance links
 are not automatic preload. All current routed nodes have no accepted/released
 baseline; future/reference evidence remains future/reference even inside Active sources.
-
 `UIB.ROUTING.PROVENANCE`: repository instruction/development separation is adapted
 from ai-friendly-search-engine; routing/revision and authority-vs-release structure
 also draws on swiftui-semantic-audit. These references import no product dependencies.

@@ -28,7 +28,7 @@ impl Aliases {
             generation: self.id(&i.generation),
         }
     }
-    fn space(&mut self, s: &Space) -> Space {
+    pub(crate) fn space(&mut self, s: &Space) -> Space {
         Space {
             id: self.id(&s.id),
             ..s.clone()
@@ -118,6 +118,20 @@ impl Aliases {
                     self.availability(state, allowed.contains(field))
                 },
             },
+        }
+    }
+    pub(crate) fn context(&mut self, c: &Context) -> Context {
+        Context {
+            session_id: self.id(&c.session_id),
+            target: self.identity(&c.target),
+            surfaces: c.surfaces.iter().map(|s| self.identity(s)).collect(),
+            scope_id: self.id(&c.scope_id),
+            environment_revision: self.id(&c.environment_revision),
+            plugin: PluginIdentity {
+                id: self.id(&c.plugin.id),
+                version: self.id(&c.plugin.version),
+            },
+            ..c.clone()
         }
     }
     pub(crate) fn coverage(&mut self, c: &Coverage) -> Coverage {

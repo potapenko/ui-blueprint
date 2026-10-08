@@ -208,6 +208,7 @@ fn detail_and_compare_require_explicit_valid_references_and_bases() {
     b.purpose = Purpose::Compare;
     b.views.push(fixture("observed").views.remove(0));
     b.comparisons.push(ComparisonRequest {
+        geometry_space: None,
         before: "proposal".into(),
         after: "observed".into(),
         different_basis: None,

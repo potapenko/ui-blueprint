@@ -72,6 +72,31 @@ pub struct ObservedDocumentMetadata {
     pub public_text_fields: Vec<Field>,
 }
 
+/// Reviewed annotations for one side of a saved comparison, never source facts.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObservedViewMetadata {
+    pub title: String,
+    pub state: String,
+    pub scope: String,
+    pub environment: String,
+    pub safe_source_reference: String,
+    pub not_depicted: Vec<String>,
+    pub public_text_fields: Vec<Field>,
+}
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObservedComparisonMetadata {
+    #[serde(deserialize_with = "object_record")]
+    pub metadata: Metadata,
+    #[serde(deserialize_with = "object_record")]
+    pub before: ObservedViewMetadata,
+    #[serde(deserialize_with = "object_record")]
+    pub after: ObservedViewMetadata,
+    pub different_basis: Option<String>,
+    pub geometry_space: Option<Id>,
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DrawingBrief {
@@ -181,6 +206,9 @@ pub struct ComparisonRequest {
     pub after: String,
     /// Explicitly labels differing requirement/observation bases; never creates identity matches.
     pub different_basis: Option<String>,
+    /// Explicit existing Space for engine displacement; absent means literal graph only.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub geometry_space: Option<Id>,
 }
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -199,6 +227,8 @@ pub struct Scene {
     pub views: Vec<SceneView>,
     pub flow: Vec<FlowLink>,
     pub comparisons: Vec<ComparisonRequest>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub comparison_results: Vec<crate::compare::ComparisonResult>,
 }
 #[derive(Clone, Debug, Serialize)]
 pub struct SceneView {
@@ -273,4 +303,24 @@ pub struct Sheet {
     pub placement: &'static str,
     pub state: String,
     pub units: Vec<Unit>,
+}
+
+// Keep the new file boundary map-only while retaining Serde duplicate/unknown checks.
+fn object_record<'de, D: serde::Deserializer<'de>, T: Deserialize<'de>>(
+    decoder: D,
+) -> std::result::Result<T, D::Error> {
+    struct Object<T>(std::marker::PhantomData<T>);
+    impl<'de, T: Deserialize<'de>> serde::de::Visitor<'de> for Object<T> {
+        type Value = T;
+        fn expecting(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            f.write_str("an object record")
+        }
+        fn visit_map<A: serde::de::MapAccess<'de>>(
+            self,
+            access: A,
+        ) -> std::result::Result<T, A::Error> {
+            T::deserialize(serde::de::value::MapAccessDeserializer::new(access))
+        }
+    }
+    decoder.deserialize_map(Object(std::marker::PhantomData))
 }

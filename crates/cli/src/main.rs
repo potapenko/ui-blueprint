@@ -38,6 +38,7 @@ Measure also accepts --query FILE instead of --expectation. Measure JSON is anal
 Neighbors: uiblueprint neighbors --snapshot FILE --ref SOURCE_KEY_JSON --max-relations N --max-input-bytes N --max-output-bytes N [--json]\n\
 Inspect: uiblueprint inspect --snapshot FILE --ref SOURCE_KEY_JSON --view interaction|design --max-input-bytes N --max-output-bytes N [--json]\n\
 Inspect accepts a saved Snapshot or observed ChannelResponse; selector is canonical {namespace,key} JSON. No live revalidation; JSON uses CLI inspection envelope1.0.0 with unchanged source Snapshot.\n\
+Compare export: imagegen-prompt --before FILE --after FILE --metadata FILE (same output and limit flags; purpose compare)\n\
 Export: uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose MODE] [--profile blue-engineering] [--json]\n\
 Observed export: replace --brief FILE with --snapshot FILE --metadata FILE (document only); Snapshot or one observed ChannelResponse, no geometry re-entry.\n\
 Export requires a complete DrawingBrief with canonical Snapshot or explicit ProposedLayout, public document metadata and caller limits. No model or live collection.\n\

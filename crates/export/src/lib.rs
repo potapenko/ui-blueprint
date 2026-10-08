@@ -1,5 +1,6 @@
 //! Model-free engineering export. Inputs are explicit; embedded references are never opened.
 #![forbid(unsafe_code)]
+mod compare;
 mod compile;
 mod observed;
 mod package;

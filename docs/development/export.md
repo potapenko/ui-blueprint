@@ -108,7 +108,7 @@ an ID. Public text requires the existing allowlist; [] keeps unreviewed text out
 The source and metadata files share the input cap, and the assembled brief must
 also fit the compiler's existing serialization cap. The full six-file package,
 versioned receipt, new-directory writer and output cap remain unchanged. No images
-are created or copied. Other modes continue through their explicit --brief input.
+are created or copied. Direct saved pairs also support compare as documented below; detail and flow use --brief.
 
 ## Source and mode contract
 
@@ -136,7 +136,8 @@ Modes:
 - `detail` requires named component selections linked to the full general view.
 - `compare` requires explicit before/after views. Incompatible or mixed bases
   require an explicit difference statement. Output keeps complete source views
-  side by side; it invents no identity matches or generic diff engine.
+  side by side; observed pairs use the existing Rust graph comparator described below.
+  No heuristic identity matching or second analytical engine is introduced.
 - `flow` requires explicit links. A link without Transition evidence stays
   unverified, including an unknown destination. Confirmed links require canonical
   Transition and Action records, matching before/after evidence, actual modality,
@@ -209,3 +210,88 @@ example arithmetic, full observed scope, unknowns, statuses, privacy, mode gates
 flow attribution, references, limits and refusal to overwrite a destination.
 Shared-owner review defects remain protected; green export tests do not accept
 them or establish E02/P6/P7 product acceptance.
+
+## Two saved observations to compare
+
+[CLI-EXPORT@2](../specs/product/cli-export.md) connects two Snapshot Documents or
+explicitly selected observed ChannelResponse Documents:
+
+```sh
+uiblueprint imagegen-prompt --before before.json --after after.json \
+  --metadata comparison-metadata.json --purpose compare --out "$TMPDIR/new-comparison" \
+  --max-input-bytes 2000000 --max-output-bytes 4000000 --max-components 256 \
+  --max-views 8 --components-per-detail 12 --json
+```
+
+Pair metadata is `{metadata, before, after, different_basis, geometry_space}`.
+`metadata` is the full document Metadata above. Each side requires title, state,
+scope, environment, safe_source_reference, not_depicted and public_text_fields.
+These are reviewed caller annotations, never replacement source facts.
+`different_basis` and `geometry_space` are optional nullable fields. Space selects
+an exact unambiguous source ID; it cannot supply geometry, transforms or Evidence.
+Both sides must contain the same full selected Space definition. Original inputs
+remain unchanged. Missing mappings produce typed unknown, never guessed values.
+
+Existing `--brief` observed comparisons receive the same engine result; each
+ComparisonRequest can also specify geometry_space. The package keeps all source
+views and supplements scene/prompt/brief with `comparison_results`: engine scope,
+status, aliased source contexts, entries with source-array indices and public
+before/after facts, independent content_changed/evidence_changed, geometry and
+limitations. The selected Space ID is aliased in client output. Changes to private
+or unreviewed content retain flags with redacted facts; no raw values are added.
+Children, node metadata, relations, mappings and five focus axes participate.
+Surface records, captures and Snapshot envelope are retained by the ordinary
+projection where permitted, but are not standalone compared domains. Empty entries
+mean only no recorded differences in the named scope, never complete UI equality.
+Absence is not deletion. Source coverage remains separate from result completeness.
+
+An incompatible pair without different_basis refuses export_incompatible_views/2.
+With that note it retains both views and status=incompatible_context without
+matches. Proposal/mixed pairs retain their earlier side-by-side mode and explicit
+status=different_source_bases. Receipts report engine_recorded_graph only if all
+pairs were compared; otherwise partially_compared or not_compared. No unresolved_g02.
+Comparison packages/receipts use0.2.0; no-comparison exports retain0.1.0 and their
+previous contents. All six files plus stdout share the output cap; incomplete
+comparison output is refused before directory creation. No model or image is run.
+
+Runnable synthetic example from repository root (`UIBLUEPRINT_BIN` may select the
+built binary). It uses independent GOLDEN01 expected false→true, not live evidence:
+
+```sh
+python3 - <<'PYEXAMPLE'
+import json, os, pathlib, subprocess, tempfile
+root = pathlib.Path('.')
+chain = json.loads((root / 'fixtures/golden/GOLDEN01.json').read_text())['artifact']['data']
+metadata = json.loads((root / 'fixtures/export/observed-brief.json').read_text())['metadata']
+metadata['title'] = 'Synthetic checkbox comparison'
+side = dict(title='Synthetic checkbox', state='Recorded fixture state', scope='Fixture form',
+            environment='Synthetic records; no live collection',
+            safe_source_reference='GOLDEN01 synthetic pair',
+            not_depicted=['Geometry and pixels not collected'], public_text_fields=[])
+with tempfile.TemporaryDirectory(prefix='uib-compare-example-') as directory:
+    work = pathlib.Path(directory)
+    for name in ('before', 'after'):
+        (work / (name + '.json')).write_text(json.dumps(dict(schema_version='0.1.0',
+            artifact=dict(kind='snapshot', data=chain[name]))))
+    (work / 'metadata.json').write_text(json.dumps(dict(metadata=metadata, before=side,
+        after=side, different_basis=None, geometry_space=None)))
+    run = subprocess.run([os.environ.get('UIBLUEPRINT_BIN', 'uiblueprint'), 'imagegen-prompt',
+        '--before', str(work / 'before.json'), '--after', str(work / 'after.json'),
+        '--metadata', str(work / 'metadata.json'), '--out', str(work / 'package'),
+        '--max-input-bytes', '2000000', '--max-output-bytes', '4000000',
+        '--max-components', '256', '--max-views', '8', '--components-per-detail', '12',
+        '--json'], check=True, capture_output=True, text=True)
+    scene = json.loads((work / 'package/scene.json').read_text())
+    changes = [e for e in scene['comparison_results'][0]['entries'] if e['content_changed']]
+    assert len(changes) == 1 and changes[0]['field'] == 'checked'
+    assert changes[0]['before']['state']['value']['value'] is False
+    assert changes[0]['after']['state']['value']['value'] is True
+    assert len(list((work / 'package').iterdir())) == 6
+    print('Six-file synthetic compare passed: checked false -> true')
+assert not pathlib.Path(directory).exists()
+PYEXAMPLE
+```
+
+This local example removes only its generated non-image input/package files.
+Independent privacy/input acceptance and any generated-image validation remain
+separate. E03 author proof is recorded in the [receipt](../plans/ui-blueprint/receipts/E03-observed-compare.md).

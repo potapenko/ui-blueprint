@@ -1,6 +1,6 @@
 # CLI и bounded output
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@14`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @13 with opt-in recorded graph diff; existing raw JSON/commands preserved.
+- Contract: `UIB.CLI@15`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @14 with observed compare export; existing raw JSON/commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
 - Read when: CLI commands, compact/JSON и публикация.
@@ -9,7 +9,7 @@
 - Conditional requires, recorded diff: [CLI-DIFF@2](cli-diff.md), with [CLI-GEOMETRY-DIFF@1](cli-geometry-diff.md) only for --geometry; raw mode unchanged.
 - Conditional requires, graph diff: [CLI-GRAPH-DIFF@1](cli-graph-diff.md) only for --graph; existing raw/geometry preserved.
 - Conditional requires, action caller only: [UIB.CLI-ACTIONS@3](cli-actions.md); selected first single-step syntax/output/authority/exits, no full scenario claim.
-- Conditional requires, observed export: [UIB.CLI-EXPORT@1](cli-export.md); additive --snapshot plus caller metadata, preserving --brief.
+- Conditional requires, observed export: [UIB.CLI-EXPORT@2](cli-export.md); additive --snapshot or --before/--after plus caller metadata, preserving --brief.
 - Conditional requires, neighbors: [UIB.CLI-NEIGHBORS@1](cli-neighbors.md); explicit cap/source coverage, preserving inspect.
 - Source mapping: TZ 372–398; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; INSPECT fixes its local representation; CLI-ACTIONS selects concrete syntax/authority/output/exits for its first single-step scope over preliminary CONTENT examples.
