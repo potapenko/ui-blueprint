@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Resumed: Core source-only next Focus/Type/Activate boundary handoff after accepted CLI repair3ebfafe; Web prepares actual public CLI path after form-read4b12d7b; Native one bounded read-only capability observation after handoffec817e3. Desktop/runtime lane released; exact paths and short Git leases |
+| Активные чаты/пакеты/ресурсы | Resumed: Core pure A02 Focus/Type/Activate implementation after source-backed selection; Web prepares actual public CLI path after form-read4b12d7b; Native one bounded read-only capability observation after handoffec817e3. Desktop/runtime lane released; exact paths and short Git leases |
 | Последний принятый результат продукта | Web actual native Setter pipeline9d3a0a5 passed10outcomes/12checks with real preparation/result and readonly/remount/cancel negatives. Native popup AX/inspect and explicit close→stale→reopen positive established; live AX equal, separate current-file post-assert unverified. Broader forms/physical/business/capture not inferred |
 | Следующий шаг | Reconcile Core refusal exit distinction and remaining evidence; Native source review before actual capture with separate identity checks; Web mapping/scope reconciliation then read-facts implementation. Full K02/forms/pilots/performance/distribution/P0–P7 DoD remains open |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -169,6 +169,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Packet | Owner chat / host | Basis / scope | Status / receipt |
 | --- | --- | --- | --- |
+| [A02-single-step-forms](packets/A02-single-step-forms.md) | retained Core owner | existing ACTIONS/FORMS + source handoff; source3ebfafe accepted | running pure existing kernel extension Focus/Type/Activate with explicit canonical property expectation; mechanical consumers only, no schema/privateTape/CLI/runtime. Early compiling API handoff→provider owners |
 | [A01-execution-handoff](packets/A01-execution-handoff.md) | Core01a111a7-9887-7983-9aa0-c08dfa2d46bc / local | c3241ed diagnostic saved/pushed; ACTIONS/GOLDEN01; follow-on source grant | single-step API/internal Web edge ffe1166 saved/pushed,7 focused author tests/check/Clippy; source08a271f…0bccc. Scoped independent kernel review accepted through retained h01_producer_review; [receipt](receipts/A01-action-review.md), exact3 hashes match. Real provider/host/live composition still unaccepted |
 | [L01-actions-contract](packets/L01-actions-contract.md) | retained Core owner | CLI@5 CONTENT/ACTIONS + approved P5/P6; actual source handoff | registrationc4bc255 saved/pushed, root read full leaf and delta; CLI-ACTIONS@1/CLI@6/registry16. Direct observed response input and chosen exact private flags registered before code. Actual public CLI implementation separately active |
 | [A01-guarded-composition](packets/A01-guarded-composition.md) | retained Core owner | saved kernel ffe1166; Web provider in progress | coherent WIP80b7449 + remaining edge verification2f5c5eb saved/pushed. Declared6Prepare/3permit-fault/2cancel cases passed per author. Parent deadline repairc3967ca saved/pushed; same reviewer accepts composed source/peer boundary after11timing cases and affected regressions. Earlier not_verified resolved. Source/peer acceptance is not live action/P5 completion |
@@ -398,3 +399,10 @@ processes closed. Source reviewed independently; actual execution remains author
 attributed. Selection source facts do not mean Focus/Type or business success.
 Core3ebfafe compact repair independently accepted; next shared action expansion
 is source handoff only until actual owner/verification signatures are reconciled.
+
+A02 selection: existing canonical Intent/Expectation support is source evidence,
+ACTIONS/FORMS verification is existing product authority. Core extends one executor
+owner with explicit expected source property, no inferred Type final value/business
+success. Native AXPress maps to Semantic Activate, never SetChecked substitution.
+Existing Global focus lane remains a required host dependency; no new runtime grant.
+Public CLI-ACTIONS stays SetChecked-only until a separately selected caller contract.
