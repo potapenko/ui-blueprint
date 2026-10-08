@@ -35,7 +35,8 @@ Root получает итог или конкретный блокер; про�
   Documents privacy ACCEPT на `a7c04164df08441cfbbaa61b501aa64d29290732`;
   receipt `a1cae1a` committed/pushed. Оба findings W06 закрыты: exact reproducers,
   20-case corpus и own Chromium10cases,6private0publication,97-node baseline.
-  CPU/headless освобождены; Native foreground wait не изменён. Контекст сохранён.
+  CPU/headless освобождены; Native foreground wait не изменён. Сейчас этот же
+  контекст выполняет bounded N04 source/recorded recheck; Web verdict закрыт.
 - Q02, чат `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: full-document campaign
   закончен по текущему receipt, turn ещё сохраняет результат. На a7c0416
   full attach p95=37.507583ms/50, process-cold p95=264.899833ms/500;20cold,
@@ -52,21 +53,22 @@ Root получает итог или конкретный блокер; про�
   core/reinstall/recovery/licensing evidence reused по exact source equivalence.
   Recipe6a5bec2 не менялась; упаковочных blockers нет, ресурсов не удерживает.
   Чат архивирован после сохранения результата. Native live/P7 этим не приняты.
-- N04, чат `01a11d5e-782b-7cf1-922e-b28815151915`: самостоятельный Native
-  AX fidelity/readiness task по [packet](packets/N04-native-fidelity.md).
-  Основание — ранее записанный Q02 source-backed missing AXTitle и отличие текущего
-  F02 от frozen baseline; D05 Native.PROOF требует сохранить исходные known facts.
-  Это независимая source/recorded/recipe работа, не ожидание foreground: сохранить
-  известные поля, обосновать faithful inputs для Q02, полный цикл до commit/push.
-  No apps/input/capture; Q02 performance paths защищены. Heavy checks после release
-  текущего Q02 Rust-stage run, без нового root grant. Live Native acceptance остаётся
-  ожидающим пользовательского foreground, не подменяется recorded evidence.
+- N04, чат `01a11d5e-782b-7cf1-922e-b28815151915`: terminal completed,
+  `17d3475` pushed; receipt/recipe прочитаны. WindowAX восстанавливает raw AXTitle
+  отдельным macos.ax extension при accessibility_name, Description не заменяет.
+  Авторский replay:396known facts/75nodes/75action lists/74edges,7fidelity+5form
+  cases validated, full helper и distinct53e6e6e off/on fixture compiled, без launch.
+  Handoff system-temp uib-n04-787o_x0t передан Q01/Q02; чат архивирован.
+  Q01 запущен на neutral source/recorded assessment17d3475 до author narrative;
+  actual Native equivalence/foreground/E2E/D06 этим не приняты. Исторический fixture
+  отличается Snapshot от reactive baseline — live reconciliation обязателен.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02/N04. Независимый Native source/data gap не смешивать с ожиданием UI authority;
-  после этих результатов остаются Native live/performance и Q03 human waits.
+  Q02/Q01. N04 source/recorded result передан на принятие; Native live/performance
+  и Q03 human waits остаются. I02 packaging proof относится к a7c0416, финальная
+  Native поставка учитывает принятый N04 delta при итоговом candidate.
 
 ## История предыдущей группы самостоятельных задач
 
