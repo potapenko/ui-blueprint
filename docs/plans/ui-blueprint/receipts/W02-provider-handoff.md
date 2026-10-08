@@ -1142,3 +1142,77 @@ types and valid JSON contents, then removed only those run-owned files and the e
 `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/743c700e-9eb5-456f-a6db-d92baeaa6ffb`
 directory. Absence verified; no images or other evidence touched. Hashes above now
 identify consumed historical bytes, not retained downloads or live action authority.
+
+## B02 next consumer: choose London, then commit — source handoff
+
+Read-only diagnosis2026-10-08 at642ba35; only this receipt changes. Basis:
+registry22 → product/acceptance routes → FORMS/ACTIONS/WEB-PILOTS@1 and their
+previously read current closure, CLI@10/CLI-ACTIONS@2, A02/A03 saved seams.
+Required contract outcome is actual applied state plus stop on unexpected
+transition. Source below establishes fixture behavior; the mechanism choice below
+is a proposal for the next assigned implementation, not fresh runtime acceptance.
+A03/A04 accepted Focus/Type and geometry remain unchanged and were not rerun.
+
+Concrete source path, using existing F01 only:
+1. `fixtures/web/expected.json` B02 names partial draft `Lo`, invalid `?`, valid
+   draft `Lon`, option/applied `London`, and zero dependent steps after surprise.
+   A03 proved draft `Lon` while selected/applied remained empty; that is not Apply.
+2. `fixtures/web/fixture.js:21–41` debounces120ms and creates the actual native
+   button `#option-london` (role option). Its onclick sets selected/draft=`London`,
+   valid=true, updates validation, and removes the suggestion button itself.
+   First action: explicit Activate on that observed button; expected public result
+   is PropertyEquals(Value,Text("London")) on the separately observed `#draft`.
+   Fixture oracle also checks selected=London/valid=true/applied empty.
+3. `fixture.js:43–47` and `extension.html:22–23`: `#commit` is “Commit city”,
+   type=button; its onclick increments delivered, rejects if !valid, otherwise sets
+   applied=selected and `#applied` output text. Second action: fresh Activate on
+   `#commit`, explicit PropertyEquals(Value,Text("London")) on `#applied`.
+   The existing bounded native HTMLOutputElement.value read in
+   `plugins/web/src/collector/read-node.js:67–76` already supports this plain-text
+   output; normalize::dom preserves unavailable versus known empty/value. No new
+   applied-value schema, inferred business success or source declarations needed.
+4. `fixture.js:56–59` creates BODY dialog `#unexpected` and disables `#commit`.
+   Existing `fixtures/web/run.cjs:138–145` observes it and suppresses the next
+   Commit entirely; this is explicitly driver policy, not a shipped scenario runner.
+   The later bounded caller must freshly observe that transition/disabled control,
+   issue zero dependent Execute calls, and report stopped state. Reuse this case;
+   merely calling a disabled Commit and seeing refusal is not that zero-step proof.
+
+Canonical fit and exact gap: existing Intent::Activate{} + Semantic and explicit
+PropertyEquals can represent both actions. ActionExecution::prepare_action and
+ActionProvider::{resolve_exact,deliver,observe_after} in plugin-api/actions.rs
+already support one independently pinned result node in the same authorized scope.
+Kernel verify reads that node; it need not keep the self-removed option in the after
+Snapshot. Host worker_ops::{prepare_input,action_input,action_expectation} already
+accept Activate/Semantic and Tape3; worker_action::ActionOperation::execute forwards
+the explicit Expectation. No new kernel, Tape shape, schema or executor is required.
+
+Minimal next owners/files:
+- Web: collector/action.rs (`supported`, `expected_for`, `Held`, `probe`,
+  `prepare_exact`, `begin`, `action_read`, `deliver`, `observe_after`) currently
+  admits only SetChecked/Focus/Type and pins/reads one same action node. Add narrow
+  native-button Activate and independently held input/output result identity;
+  retain both nodes in fresh preparation, check both before dispatch, then freshly
+  read the held result after dispatch. Option removal is expected, never permission
+  to reacquire an action/result by label, ID string or coordinates. Proposed delivery
+  seam is the existing fixed isolated Runtime.callFunctionOn transport with a
+  native-button semantic activation call; exact browser API/source qualification
+  belongs to that Web implementation packet. No direct onclick/value setter,
+  synthetic dispatchEvent, pointer fallback, Enter or SelectOption assumption.
+- Core: worker_web::WebSession::prepare_action currently destructures `_expected`
+  then calls provider.prepare_exact without it. Forward the already validated
+  Expectation to the extended Web preparation API so its ActionCase retains the
+  distinct result node. Existing Act port already receives it. Mechanical caller/
+  focused peer updates only; preserve parent permit/ACK/unknown/cleanup semantics.
+- CLI owner: cli/action.rs currently rejects Activate in its intent/modality
+  whitelist. Register the narrow CLI-ACTIONS extension before exposing it, reusing
+  --expectation/Tape3 and current output/exits, including distinct in-scope result
+  identity. No grammar/framework redesign. Web nearest collector tests and existing
+  guarded-live.cjs then cover this connected positive plus unexpected-stop boundary.
+
+Protect public/private classification, exact target/document/held identities,
+bounded source acquisition, real parent permission and no post-Possible retry.
+Semantic activation proves neither pointer hit testing nor hardware/IME delivery.
+This handoff closes no remaining B02 partial/invalid/debounce/stop runtime gate;
+it identifies the concrete next applied-result capability and owners. No source
+implementation, tests, browser/input, real application, build or new review ran.
