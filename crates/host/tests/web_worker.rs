@@ -1136,6 +1136,53 @@ fn retained_history_survives_received_event_or_loss_and_other_session_progresses
         let independent = complete(&mut host);
         assert_eq!(independent.terminal, Terminal::Completed);
         drop(independent);
+        if lost {
+            let stopped_calls = a_peer.state.calls.load(Ordering::Acquire);
+            submit(
+                &mut host,
+                a,
+                &a_request,
+                &data::selection(false),
+                1,
+                deadline(),
+            );
+            let refused = complete(&mut host);
+            assert_eq!(
+                refused.terminal,
+                Terminal::Failed(uiblueprint_host::HostError::ResyncRequired)
+            );
+            assert_eq!(refused.committed(), 0);
+            assert_eq!(
+                a_peer.state.calls.load(Ordering::Acquire),
+                stopped_calls,
+                "loss never silently rebinds or recollects"
+            );
+            drop(refused);
+            assert!(host.detach(a).unwrap().is_none());
+            assert!(matches!(next(&mut host), HostEvent::Closed { session } if session == a));
+            // Synthetic event overflow and an explicitly new transport/worker.
+            // This is separate from the actual Chromium TCP-loss scenario.
+            let recovery_peer = peer::Peer::new();
+            let (recovered, recovered_clock) = attach(&mut host, &recovery_peer);
+            let request = data::request(&recovered_clock, vec![Channel::ExternalSemantics]);
+            submit(
+                &mut host,
+                recovered,
+                &request,
+                &data::selection(false),
+                1,
+                deadline(),
+            );
+            let fresh = complete(&mut host);
+            assert_eq!(fresh.terminal, Terminal::Completed);
+            assert_eq!(fresh.committed(), 1);
+            assert_eq!(recovery_peer.state.selections.load(Ordering::Acquire), 1);
+            drop(fresh);
+            assert!(host.detach(recovered).unwrap().is_none());
+            assert!(
+                matches!(next(&mut host), HostEvent::Closed { session } if session == recovered)
+            );
+        }
         assert_eq!(first.bytes(0), Some(original.as_slice()));
         stop(&mut host);
         assert_eq!(domain.usage().reserved_sessions, 0);

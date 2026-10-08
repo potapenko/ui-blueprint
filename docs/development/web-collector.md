@@ -295,3 +295,26 @@ Source/peer checks do not by themselves prove live retained-cache behavior. See 
 CDP detach now drops undelivered queued event buffers/permits immediately and
 resets ring positions. Caller-held events and replies retain their independent
 permits/data; no disappearance of an owner is treated as release of those borrows.
+
+## W03-R: recovery after loss or a bounded refusal
+
+Event queue overflow ends the current collection with `resync_required` and
+closes that collector's transport; failed exchanges also invalidate retained
+session data. No event handler collects automatically. Calls on that old owner
+cannot silently repair references. The caller explicitly detaches/reaps it,
+establishes the actual authorized Target/Surface binding again, attaches a new
+session and requests a bounded `Initial` selection. Navigation requires a new
+binding; neither labels nor old coordinates substitute for source identity.
+A selection-budget refusal publishes no truncated success; a following explicit
+request with the original permitted bounds can progress on a still-live session.
+Recorded snapshots remain historical, and caller-held ACKed bytes survive detach.
+
+The finite opt-in `UIB_WEB_LIVE_CASE=resync` mode in
+[guarded-live.cjs](../../tests/bridges/web/guarded-live.cjs) uses the existing
+`web_live` test and `session-worker` executable pins. It owns only its headless
+Chromium context and loopback forwarding socket. Closing that socket is actual
+transport loss, not fabricated CDP event loss. The independent peer test injects
+five synthetic events into four queue slots and proves explicit recovery separately.
+The [W03-R receipt](../plans/ui-blueprint/receipts/W03-resync-complete.md) records
+commands, coverage and remaining acceptance limits. No continuous event detection,
+automatic reconnect/retry, browser-wide collection or changed deadlines is implied.

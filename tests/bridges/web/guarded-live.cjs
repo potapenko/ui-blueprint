@@ -144,7 +144,7 @@ async function run(evidence, report) {
     const pinned=execFileSync('git',['show','9bd9f662d28cdb66f8b7b096fcd77a93ecf524e4:fixtures/web/actions.html'],{cwd:setup.root,timeout:5000,maxBuffer:65536});
     assert(actionsHtml.equals(pinned));sourceHashes['fixtures/web/actions.html']=crypto.createHash('sha256').update(actionsHtml).digest('hex');
   }
-  let fixture, server, browser, context, child, exited, profile;
+  let fixture, server, browser, context, child, exited, profile, lossWire;
   const checks = report.checks; const before = new Map(); let failed = false;
   Object.assign(report,{sourceHashes,binaries:{test:process.env.UIB_WEB_LIVE_TEST_SHA256,worker:process.env.UIB_WEB_LIVE_WORKER_SHA256},environment:{node:process.version,playwright:setup.runtimeVersion,platform:process.platform,arch:process.arch,os_release:require('node:os').release()},fixture:setup.fixtureCommit});
   report.phase='fixture_setup';
@@ -738,6 +738,40 @@ async function run(evidence, report) {
       const payload = message.payload; const page = pages[payload.page]; assert(page, 'owned page only');
       switch (message.command) {
         case 'binding': return binding(page);
+        case 'loss_binding': {
+          assert.equal(report.mode,'resync'); assert(!lossWire);
+          const actual=await binding(page);
+          lossWire=await require('./resync-transport.cjs').lossTransport(actual.endpoint);
+          return {...actual,endpoint:lossWire.endpoint};
+        }
+        case 'loss_cut': {
+          assert.equal(report.mode,'resync'); await lossWire.cut();
+          report.transport_loss={kind:'actual-owned-TCP-close',bytes_before_close:lossWire.bytes()};return {};
+        }
+        case 'resync_result': {
+          assert.equal(report.mode,'resync');assert(TERMINALS.has(payload.terminal));
+          assert(report.outcomes.length<8);report.outcomes.push(payload);return {};
+        }
+        case 'resync_before': {
+          assert.equal(report.mode,'resync');assert(!before.has(payload.case));report.last_stage=payload.case;
+          before.set(payload.case,await uiState(page));return {};
+        }
+        case 'resync_check': {
+          assert.equal(report.mode,'resync');assert(before.has(payload.case));
+          assert.deepEqual(await uiState(page),before.get(payload.case));before.delete(payload.case);
+          if(payload.document){
+            const s=payload.document.artifact.data.result.data;
+            assert.equal(s.coverage.status,'partial');assert.equal(s.source_state,null);
+            const dom=s.nodes.filter(n=>n.key.namespace==='web.dom');assert.equal(dom.length,3);
+            compareRect(rectangle(dom[0]),payload.page==='b'?[40,550,120,32]:payload.changed?[40,550,150,48]:[40,550,120,32]);
+            assert(s.nodes.some(n=>n.properties.some(p=>p.state?.availability==='unknown')));
+            assert.deepEqual(property(dom[2],'value'),{type:'text',value:''});
+            if(payload.private)assert.equal(dom[1].properties.find(p=>p.field==='value').state.availability,'redacted');
+            else assert.deepEqual(property(dom[1],'value'),{type:'text',value:''});
+          }
+          if(report.transport_loss)assert.equal(lossWire.bytes(),report.transport_loss.bytes_before_close);
+          checks.push({case:payload.case,readonly:true,oracle:'resync',changed:payload.changed??false});return {};
+        }
         case 'root': {
           const session=await context.newCDPSession(page);
           try {
@@ -1037,7 +1071,7 @@ async function run(evidence, report) {
       assert(report.outcomes.every(o=>o.terminal==='completed'&&o.effect==='not_dispatched'&&o.committed===1&&o.missing===0));
       assert.deepEqual(checks.filter(c=>c.oracle==='form_reads').map(c=>c.case),Object.keys(FORM_CASES));
       assert.equal(report.frames.length,3);
-    }else if(report.mode==='actions'){assert.equal(report.outcomes.length,10);assert(checks.some(c=>c.case==='action-unknown'));assert.equal(report.frames.length,3);}else if(report.mode==='b05'){assert.equal(report.outcomes.length,6);assert(checks.some(c=>c.case==='b05-history-font'));assert.equal(report.frames.length,3);}else if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
+    }else if(report.mode==='resync'){assert.equal(checks.filter(c=>c.oracle==='resync').length,9);assert(report.transport_loss);assert.equal(report.frames.length,0);}else if(report.mode==='actions'){assert.equal(report.outcomes.length,10);assert(checks.some(c=>c.case==='action-unknown'));assert.equal(report.frames.length,3);}else if(report.mode==='b05'){assert.equal(report.outcomes.length,6);assert(checks.some(c=>c.case==='b05-history-font'));assert.equal(report.frames.length,3);}else if(report.mode==='rooted'){assert.equal(report.outcomes.length,4);assert(checks.some(c=>c.case==='rooted-stale'));assert.equal(report.frames.length,1);}else if(report.mode==='popup_relations'){assert(checks.some(c=>c.case==='popup-context'));assert.equal(report.frames.length,1);}else if(report.mode==='first_observe_diagnostic'){assert(checks.some(c=>c.case==='left-initial'));assert.equal(report.frames.length,1);}else{assert(checks.length>=10,'all finite cases completed');assert.equal(report.frames.length,3,'all declared positive evidence captured');}
   } catch (_) {
     report.failure??={code:'live_run_failed',phase:report.phase}; throw new Error('live_run_failed');
   } finally {
@@ -1051,6 +1085,7 @@ async function run(evidence, report) {
       if(child.exitCode===null&&child.signalCode===null)child.kill('SIGKILL');
       if(exited)await bounded(exited,3000,'owned_test_reap_timeout');
     });
+    await clean('loss_transport',!!lossWire,()=>bounded(lossWire.close(),3000,'loss_transport_cleanup_timeout'));
     await clean('context',!!context,()=>bounded(context.close(),3000,'context_cleanup_timeout'));
     await clean('driver_connection',!!browser,()=>bounded(browser.close(),3000,'driver_cleanup_timeout'));
     await clean('owned_browser',!!server,async()=>{try{await bounded(server.close(),4000,'browser_cleanup_timeout');}catch(_){await bounded(server.kill(),3000,'owned_browser_kill_timeout');}});
@@ -1065,7 +1100,7 @@ async function run(evidence, report) {
 }
 async function main(){
   if(!process.argv.includes('--run-authorized')||process.env.UIB_WEB_LIVE_ALLOW!=='1')throw new Error('explicit_live_activation_required');
-  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','actions','form_reads','form_actions','application','viewport','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
+  const mode=process.env.UIB_WEB_LIVE_CASE||'full';assert(['full','first_observe_diagnostic','popup_relations','rooted','b05','resync','actions','form_reads','form_actions','application','viewport','cli_actions','geometry','director','director_semantics','first_use'].includes(mode));
   const evidence=process.env.UIB_WEB_LIVE_EVIDENCE;
   assert(evidence&&path.isAbsolute(evidence)&&evidence===path.join(EVIDENCE_ROOT,path.basename(evidence)));
   assert(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/.test(path.basename(evidence)),'fresh UUID directory required');

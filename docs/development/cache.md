@@ -60,3 +60,26 @@ Every timed operation receives an explicit same-domain monotonic `Clock`; domain
 Focused proof covers exact entry/session/Store/ledger byte boundaries, actual reserved capacity and vacant backing, grants across Stores, constructor rollback, count/sequence overflow, full-key/channel/generation isolation, unchanged rejected input and atomic failed eviction, scoped oldest/family eviction, duplicate age/conflict, clock boundary/regression/domain/overflow, real detach/drop lifecycle, unavailable/false/empty/redacted persistence and sensitive canary rejection.
 Stored replay matches the independently authored full Snapshot at the same recorded checkpoint; lost bases resync. Geometry/replay tests remain passing. These author checks are not independent acceptance or live timing/memory evidence.
 Separate derived relation/check caches, disk/raw-wire/pixel history, CLI ID resolution, host allocation enforcement and live adapters are not implemented by this finite slice. They remain original goal obligations. No schema models/validators, pure replay/geometry, CLI/export, shared Cargo or fixture/oracle data changed here.
+
+## Explicit Web recovery and full/delta qualification
+
+The reusable worker's Replay operation returns `ResyncRequired` for incompatible
+Context or base/revision detected by the canonical decoder, as it does for a
+missing retained base. Malformed/private input still returns `InvalidInput`.
+Failure publishes no candidate and leaves recorded base bytes/time unchanged.
+
+[W03-R](../plans/ui-blueprint/receipts/W03-resync-complete.md) separates three proofs:
+actual Chromium TCP loss and explicit recovery; synthetic event-queue overflow;
+and a controlled full/delta oracle with independently supplied source checkpoints.
+The oracle includes known false/empty, unknown, unsupported and redacted values.
+Partial replay retains omitted nodes with their original observations, and cannot
+satisfy `CurrentRequired` merely because a newer revision was admitted.
+
+A live Web full Snapshot renews Surface binding evidence. Core0.1 Delta has no
+Surface metadata update field: its replay preserves the base `surface_records`
+and any referenced historical observations. A replayed composite therefore is
+not byte-equal to a subsequent live full Snapshot with fresh Surface evidence.
+Use the full Snapshot when that metadata must be current. Do not rewrite either
+record's evidence or invent `source_state` to make a live equality oracle pass.
+The W03-R live worker test separately checks exact composite semantics: current
+selected-node properties, older omitted AX node, original Surface records/times.

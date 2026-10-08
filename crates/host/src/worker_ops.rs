@@ -483,8 +483,18 @@ impl<'a> CanonicalSession<'a> {
         if tape.count() != 2 {
             return Err(HostError::InvalidInput);
         }
-        let doc = Document::from_json(tape.get(0)?, self.limits.input_bytes)
-            .map_err(|_| HostError::InvalidInput)?;
+        let doc =
+            Document::from_json(tape.get(0)?, self.limits.input_bytes).map_err(
+                |error| match error {
+                    // The canonical decoder also validates delta compatibility. Keep
+                    // its recovery meaning identical to a refusal by retained replay.
+                    uiblueprint_schema::validation::ValidationError::IncompatibleContext
+                    | uiblueprint_schema::validation::ValidationError::ResyncRequired => {
+                        HostError::ResyncRequired
+                    }
+                    _ => HostError::InvalidInput,
+                },
+            )?;
         let Artifact::Delta(case) = doc.artifact else {
             return Err(HostError::InvalidInput);
         };

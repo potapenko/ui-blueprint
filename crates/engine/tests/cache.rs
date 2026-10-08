@@ -975,3 +975,149 @@ fn independent_ceilings_do_not_promise_simultaneous_saturation() {
         Err(CacheError::ResyncRequired)
     ));
 }
+
+#[test]
+fn partial_replay_keeps_unobserved_history_and_scope_mismatch_is_atomic() {
+    let mut case = delta_case();
+    // An omitted source node is still historical, even under a newer partial
+    // revision. This authored oracle does not claim a fresh read of that node.
+    case.update.upsert.clear();
+    case.update.removed.clear();
+    case.update.coverage.status = CoverageStatus::Partial;
+    case.update.coverage.omitted_count = Some(1);
+    let ledger = ledger();
+    let mut cache = store(&ledger);
+    let id = Id("clock".into());
+    let session = cache.open_session(header(&case.base)).unwrap();
+    let base = cache
+        .admit_full(session, incoming(case.base.clone()), clock(&id, 0))
+        .unwrap();
+    cache.invalidate_session(session).unwrap();
+    let before = cache.usage();
+    let mut wrong = case.update.clone();
+    wrong.context.scope_id = Id("another-scope".into());
+    assert_eq!(
+        cache
+            .apply_delta(
+                base.handle,
+                vec![Channel::ExternalSemantics],
+                &wrong,
+                Id("S11".into()),
+                clock(&id, 1)
+            )
+            .unwrap_err(),
+        CacheError::Replay(uiblueprint_engine::replay::ReplayError::ResyncRequired(
+            uiblueprint_engine::replay::ResyncReason::ContextMismatch
+        ))
+    );
+    assert_eq!(cache.usage(), before);
+    let after = cache
+        .apply_delta(
+            base.handle,
+            vec![Channel::ExternalSemantics],
+            &case.update,
+            Id("S11".into()),
+            clock(&id, 2),
+        )
+        .unwrap();
+    let recorded = cache
+        .read(after.handle, ReadPolicy::Recorded, clock(&id, 2))
+        .unwrap();
+    assert_eq!(recorded.snapshot.nodes, case.base.nodes);
+    assert!(
+        recorded
+            .snapshot
+            .observations
+            .contains(&case.base.observations[0])
+    );
+    assert_eq!(recorded.snapshot.coverage.status, CoverageStatus::Partial);
+    assert_eq!(recorded.snapshot.coverage.omitted_count, Some(1));
+    assert!(matches!(
+        cache.read(after.handle, ReadPolicy::CurrentRequired, clock(&id, 2)),
+        Err(CacheError::RevalidationRequired)
+    ));
+    let original = cache
+        .read(base.handle, ReadPolicy::Recorded, clock(&id, 2))
+        .unwrap();
+    assert_eq!(original.snapshot, &case.base);
+    assert!(original.invalidated);
+}
+
+#[test]
+fn controlled_full_delta_oracle_preserves_unavailable_and_empty_values() {
+    for state in [
+        Availability::Unknown {
+            reason: Id("controlled-read-unavailable".into()),
+        },
+        Availability::Unsupported {
+            reason: Id("controlled-not-exposed".into()),
+        },
+        Availability::Redacted {},
+        Availability::Known {
+            value: Value::Flag(false),
+        },
+    ] {
+        let mut case = delta_case();
+        let mut expected = case.source_snapshot.take().unwrap();
+        // Two independently supplied checkpoint representations receive the same
+        // authored facts. The expected full state is never produced by replay.
+        for node in [&mut expected.nodes[0], &mut case.update.upsert[0]] {
+            for property in &mut node.properties {
+                if let Property::Requested {
+                    field,
+                    state: value,
+                    ..
+                } = property
+                {
+                    match field {
+                        Field::Checked => *value = state.clone(),
+                        Field::Name => {
+                            *value = Availability::Known {
+                                value: Value::Text(String::new()),
+                            }
+                        }
+                        _ => (),
+                    }
+                }
+            }
+        }
+        case.source_snapshot = Some(expected.clone());
+        Document {
+            schema_version: uiblueprint_schema::SchemaVersion::CURRENT,
+            artifact: Artifact::Delta(Box::new(case.clone())),
+        }
+        .validate()
+        .unwrap();
+        let ledger = ledger();
+        let mut cache = store(&ledger);
+        let id = Id("clock".into());
+        let session = cache.open_session(header(&case.base)).unwrap();
+        let base = cache
+            .admit_full(session, incoming(case.base.clone()), clock(&id, 0))
+            .unwrap();
+        let after = cache
+            .apply_delta(
+                base.handle,
+                vec![Channel::ExternalSemantics],
+                &case.update,
+                expected.id.clone(),
+                clock(&id, 1),
+            )
+            .unwrap();
+        let stored = cache
+            .read(after.handle, ReadPolicy::Recorded, clock(&id, 1))
+            .unwrap();
+        assert_eq!(stored.snapshot, &expected);
+        assert_eq!(
+            serde_json::to_vec(stored.snapshot).unwrap(),
+            serde_json::to_vec(&expected).unwrap()
+        );
+        assert_eq!(
+            cache
+                .read(base.handle, ReadPolicy::Recorded, clock(&id, 1))
+                .unwrap()
+                .snapshot,
+            &case.base
+        );
+    }
+}

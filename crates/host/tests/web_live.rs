@@ -4,6 +4,8 @@
 mod baseline;
 #[path = "support/web_worker_process.rs"]
 mod process;
+#[path = "support/web_resync.rs"]
+mod resync;
 use serde::Deserialize;
 use serde_json::{Value, json};
 use std::{
@@ -799,6 +801,10 @@ fn guarded_live_f01() {
         }
         if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("actions") {
             checkbox_actions(&mut host, &mut fixture, &trace);
+            return;
+        }
+        if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("resync") {
+            resync::run(&mut host, &mut fixture);
             return;
         }
         if std::env::var("UIB_WEB_LIVE_CASE").as_deref() == Ok("b05") {
