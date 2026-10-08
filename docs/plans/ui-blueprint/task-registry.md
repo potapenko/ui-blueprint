@@ -35,8 +35,8 @@ active/inProgress через wait_threads:
 | Задача | Чат | ID | Статус |
 | --- | --- | --- | --- |
 | W03-R | W03 — Web resync и full/delta | 01a11b4f-0b8d-70a2-9e5c-4f0e92b18965 | running, полный цикл |
-| M04-T | M04 — Native локальные координаты | 01a11b4f-110f-76b2-b2d0-28a478c1766a | running, полный цикл |
-| G13 | G13 — Сравнение структуры интерфейса | 01a11b4f-18db-7181-99de-8ae3892c5f20 | running, полный цикл |
+| M04-T | M04 — Native локальные координаты | 01a11b4f-110f-76b2-b2d0-28a478c1766a | delivered7478af3, push; scoped author checks/runtime, final independent gate open |
+| G13 | G13 — Сравнение структуры интерфейса | 01a11b4f-18db-7181-99de-8ae3892c5f20 | delivered9046671, push; 24checks/self-check, final independent gate open |
 
 Прежние завершённые чаты 01a111a7-9887-7983-9aa0-c08dfa2d46bc,
 01a11983-223d-7a30-8334-573658f237fb, 01a110ac-2da3-73d1-9bb2-273d4ff99e7a,
@@ -54,11 +54,25 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Завершённые самостоятельные результаты
+
+M04-T7478af3: actual own-fixture Move local diff0/inset6pt; Scroll dy−790pt;
+Resize width+100pt, source records preserved. 37cases/74assertions/35canonical
+по автору; отдельное экранное/pixel/cross-display mapping не заявлено.
+G13 9046671: public diff --graph, source structure/relations/components/focus,
+separate evidence flags и immutable originals;24focused tests и runnable example
+по автору, raw/G12 protected. Оба чата terminal completed, ресурсы освобождены,
+commit/push подтверждены. Это scoped delivery, не полная независимая P7 приёмка.
+
+Следующие целые tasks готовы: E03 compare export на G13 и
+[M03-C popup capture mapping](packets/M03-capture-mapping.md) на saved Native.
+Области CLI/export и Native disjoint; W03-R и I01-L продолжаются самостоятельно.
+
 ## Следующая зависимая задача
 
 [E03 observed compare](packets/E03-observed-compare.md) подготовлена как один
-полный task. Статус queued: ждёт финальный G13 receipt, сохранённый API и
-освобождение CLI/spec ownership. Никакой дополнительный source-handoff task
+полный task. Статус ready: G13 terminal completed, receipt принят в ограниченном scope,
+API9046671/CLI-GRAPH-DIFF@1 и CLI/spec ownership освобождены. Никакой дополнительный source-handoff task
 не требуется; исполнитель сам пройдёт весь цикл после получения готового входа.
 Новые чаты/подагенты для внутренних проверок четырёх running задач не выдавались.
 Последний turn — verified wait по четырём actual inProgress handles, не blocker.

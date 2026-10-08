@@ -1,6 +1,7 @@
 # E03 — Два наблюдения → полный compare-пакет
 
-Статус: queued; dispatch только после финального G13 receipt и сохранённого API.
+Статус: ready. G13 завершён:904667165703353e7c9cd27bd128367f51d5d6a3,
+push подтверждён финальным ответом; CLI/spec ownership освобождено.
 Класс shipping_product; PLAN.UIB@1 P3/P6; отдельный самостоятельный чат, inherit.
 Пользователь одобрил полные tasks: постановка, собственный план, реализация,
 проверки, исправления, документация, commit+push и финальный ответ без микрошагов
@@ -32,7 +33,11 @@ drawing-example@1), CLI-EXPORT@1 → EXCHANGE@2/PRIVACY@1/ANALYSIS@2 с
 TYPES/VALIDATION@1; CLI/CLI-DIFF/новый G13 leaf после сохранения;
 MODEL/BOUNDARIES/IDENTITY/GEOMETRY/PROJECTIONS/FORMS/CACHE/ACTIONS/LIFECYCLE@1;
 acceptance/GOLDEN@1; ROADMAP/RUST-BOUNDARIES, RUST/DEV.RUST@2 и explicit Requires.
-Перед dispatch закрепить actual G13 API/контракт/commit из финального receipt.
+G13 pin: CLI@14/registry27, CLI-GRAPH-DIFF@1 INPUT/COMPARE/DATA/FAILURE;
+полный новый leaf прочитан root, прежний closure сохранён. API/пример/проверки
+в receipts/G13-graph-diff.md и docs/development/diff.md; кандидат9046671.
+Snapshot metadata/surface_records/captures не входят в standalone graph comparison;
+эту границу не скрывать в экспортном описании.
 Остальные выбранные текущие решения: D01@1,D02@2,D03@3,D04@1,D05@4,
 MEMORY@2/WORK@1/D06@1/D07@5, нормы и не новый повод менять host.
 Публичную additive CLI форму выбирает исполнитель по ROADMAP/P6; регистрирует
