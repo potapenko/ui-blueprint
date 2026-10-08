@@ -90,3 +90,61 @@ claim full projections/heuristic neighbors/P7. Current master/inherit/no nested
 agents; same short Git lease/scoped commit/push and temp rules. Return concrete
 command/result/limitations, then stop; no independent review wave for mechanical
 delegation to the accepted pure engine unless a concrete changed risk appears.
+
+## G11 component parts through existing design inspect — 2026-10-08
+
+Class shipping_product; retained Core owner01a111a7, master/inherit/no nested agents.
+User-approved P3/P6 plus repeated explicit geometry priority and parallel-chat
+authorization remain the basis. One coherent engine+CLI result: an AI requesting
+the existing design view receives actual recorded properties/bounds of explicitly
+mapped component parts, without manually chasing their keys. Existing JSON1.0.0
+and neighbor behavior are protected. No runtime or input authority is added.
+
+Root traversal registry23→product→PROJECTIONS@1 CONTENT→MODEL/IDENTITY/BOUNDARIES@1;
+GEOMETRY@1 and CLI@11 CONTENT/INSPECT→EXCHANGE/PRIVACY full closure, RUST/DEV.RUST@2.
+Current read-only Core handoff found canonical ComponentMapping already validates
+reported provenance, unique members and endpoints; current compact design inspect
+only lists mapping/children keys. That is observed implementation, not intent.
+Selected engineering proposal: reuse validated Snapshot and borrowed members in
+scope.rs; render all declared groups containing the exact seed and their members,
+with attributed relations, through the existing bounded compact renderer.
+
+Register the necessary compact INSPECT clause/revision before implementation:
+the old statement that views only reorder properties describes the earlier slice.
+Full design detail is already required by PROJECTIONS/CLI.CONTENT and PLAN.UIB@1.
+Preserve existing JSON fields/version/full original Snapshot exactly; do not add a
+second JSON graph, new flags, a query language or implicit identity resolution.
+Input and output remain under existing byte limits. Bound selection by validated
+recorded input and explicit internal limits where necessary; never silently
+truncate, upgrade source completeness, or invent product defaults. If selection
+is incomplete, preserve its exact omission status separately from source coverage.
+
+Authority is task-wide only within this narrow component-view outcome, with these
+owners: crates/engine/src/scope.rs and tests/scope.rs; crates/cli/src/main.rs,
+src/output.rs and existing inspect binary tests; docs/specs/README.md,
+product/README.md and product/cli.md for representation registration;
+docs/development/scope.md and cli.md; receipts/G02-scope.md. Declare actual subset.
+CLI's separate owner is idle and has no write lease. Native's work is read-only.
+Protect schema, providers, actions, cache, geometry math, Cargo/lock/dependencies,
+root registry and all unrelated files. Return an exact dependency for other paths.
+
+Keep seed primary in interaction view. Preserve multiple groups sharing a part,
+namespaces, Surface, original mapping/source Evidence and relation direction.
+Mapping absence is no declared logical component; show available explicit context
+and honest not_exposed/partial rather than inferred membership. Equal names/boxes,
+estimated correspondences or decorations do not mint component/action identity.
+Do not recursively expand unrelated components or guess combine/ignore causes.
+
+Checks: literal AX+container/icon/text properties/bounds; shared member in two
+reported mappings; many-to-many relation Evidence; no membership from names/boxes;
+external AX without exposed parts; unknown/redacted/source-coverage/limit behavior;
+invalid mapping or missing seed refusal. Use focused engine and public inspect
+tests, including unchanged JSON/neighbor compatibility, affected check/Clippy/fmt.
+No browser/native run, full suite or independent review wave unless actual
+protected-domain change requires it. Small deterministic slice uses author checks.
+Source-backed current handoff already completed; do not repeat broad discovery.
+Economy: one owner closes engine and public caller together; immediate consumer is
+AI design inspection. Expand only for a demonstrated missing canonical capability.
+Save each coherent checkpoint with short Git lease/commit/push; return exact CLI
+example, checks, source revision, limitations and lease release. Full G02/P7 remains
+subject to its other requirements, not automatically accepted by this slice.

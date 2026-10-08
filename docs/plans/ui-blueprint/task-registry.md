@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 restored for read-only G02 interaction/design implementation handoff; Native01a110ac-2da3 reads M04 move/scroll/local-geometry gap; Web01a11983 archived after accepted A05/cleanup checkpointcce939a. CLI01a11286 retained for next G02 public caller. No runtime lane held; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G11 engine+compact design inspector under G02 packet; Native01a110ac-2da3 reads M04 move/scroll/local-geometry gap. Web01a11983 and CLI01a11286 archived after saved completed work; no separate CLI lease. No runtime lane held; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | Use the two bounded current-source handoffs to assign G02 component/parts view and M04 local geometry implementation; reuse accepted collectors/engine/CLI. Finish A05 retention checkpoint without more action development. External CUA mapping remains unverified; full P0–P7 incomplete |
+| Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; obtain Native M04 exact source gap and assign its independent implementation. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -844,3 +844,13 @@ confirmed inProgress by wait_threads. Core has identified that current design in
 lists keys rather than full mapped-part data; final exact implementation handoff
 pending. Timeout does not mean either worker stopped. Continue these same handles;
 no duplicate worker, new audit or unchanged runtime repetition.
+
+G11 source handoff completed: canonical reported ComponentMapping validation and
+borrowed Node/Relation owners already exist; compact design inspect lacks member
+data. Root selected the coherent engine+existing compact CLI proposal in G02
+packet's G11 section, with compact contract registration first and JSON1.0.0
+unchanged. Core owns exact named engine/CLI/spec/docs/receipt paths, ordinary focused
+checks and checkpoint/push; no schema, action, math/cache, runtime or new framework.
+No new user decision is needed for this approved P3/P6 representation completion.
+Separate completed CLI owner01a11286-a187-7720-a452-41b6ea7b228b archived, no resources
+or unsaved work outstanding; Core is sole current writer of the public caller.
