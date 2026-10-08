@@ -84,3 +84,61 @@ files. No persistent UUID output, archive or incidental screenshots. Runtime
 validates this measured-import path; matched off/on invariance/full P01 remains
 required. Save compact outcome through next Git lease and return exact remaining
 conditions rather than restarting completed first AX/form tests.
+
+## M04 measured scroll viewport and row — 2026-10-08
+
+Class shipping_product. Same Native owner/master/inherit/no nested agents; explicit
+user-authorized parallel PLAN.UIB@1 P2/P3 geometry work. Existing sample probe path
+is accepted and protected. Source handoff established that own-fixture stable keys
+and fixture-local pt already allow Move comparisons through Observe→Measure→Diff;
+ordinary native_ax observation-scoped identity is not interchangeable with it.
+Actual missing capability: MarkerAnchors measures only sample icon/text/container;
+scroll viewport and row are not exposed to the same probe consumer.
+
+Deliver actual measured bounds of the existing scroll viewport and one existing
+authored row via the existing explicit Snapshot→probe→Rust path. Add minimal
+SwiftUI anchors using the same GeometryProxy/local space and a separate validated
+scroll marker set in Collector.swift::probe. Preserve old sample scope/keys/output;
+no change to visible layout, input behavior, unrelated marker acceptance or source
+claims. Do not manufacture screen/pixel transforms, visible/paint/glyph clipping,
+component ownership or true clipping from rectangle intersection. Existing own A
+generation and stable authored keys govern comparison. No engine/schema/API change
+is shown necessary by the handoff; a contrary source finding returns a dependency.
+
+Root basis: registry23→acceptance NATIVE-PILOTS@1 M04→PILOTS/NATIVE@2/GEOMETRY/
+PROJECTIONS/MODEL/IDENTITY/BOUNDARIES/EXCHANGE/LIFECYCLE/PRIVACY/FORMS/CACHE/ACTIONS@1
+full closure; D05@4/Native acquisition@2 and prior full host/probe closure reused.
+Product requirement is local geometry without false move-induced inset changes;
+two measured anchors are the source-backed engineering proposal, not new UX.
+Apple/QA instructions apply; no new AppKit UI/adapter. If a technical contract
+explicitly excludes the new measured set, return that exact dependency first.
+
+Writable outcome-scoped subset: fixtures/native/Fixture.swift anchors only;
+tests/bridges/native/Collector.swift probe only; existing ProbeChecks.swift;
+tests/bridges/native/host_observe.py only for the existing request/measure/diff
+consumer if needed; docs/development/native-helper.md and receipts/P01-probe-source.md.
+Declare actual paths first. Protect host/Core/CLI/schema/Cargo/spec/source UI/other
+fixture behavior and P01 test seam. No new persistent directories, services,
+generic SDK/framework or extra flags.
+
+Focused checks: measured marker/current identity/Space/provenance, off or missing
+markers, malformed/stale refusal, legacy three-marker scope unchanged. Then save/
+push source and execute one bounded own-fixture sequence: explicit Snapshot,
+existing Scroll end, explicit Snapshot; viewport unchanged and authored row
+displaced; existing Rust inside/intersects/measure report actual local relations.
+Existing Move checks unchanged local offsets without another capture/pointer wave.
+Record source-derived literal expected values/state before running; no cap/oracle
+tuning after results. Reuse matching products or compile only changed consumers.
+
+Runtime authorized after saved matching source without another activation round.
+Own F02 only; Native owns physical lane during this finite operation. No real
+PlayPhrase.me/user app, display/permission/capture change. Existing300s operation,
+setup120s/cleanup5s and probe160/depth9/512KiB plus established parent/admission
+budgets remain. Follow current tool documentation before input; stop failed or
+interrupted scenario, clean exact owned nonimage resources and release lane.
+All images stay system-temp and are never agent-deleted. No full suite, old P01
+repetition or broad review; a real protected failure gets its exact repair.
+Economy: reuse existing anchors/collector and one real comparison to expose missing
+scroll geometry to the AI. Return checkpoint/push, public invocation, observed
+numbers/checks and precise residuals. Cross-display, paint/occlusion and full M04/P7
+remain separate requirements, not claimed by this slice.

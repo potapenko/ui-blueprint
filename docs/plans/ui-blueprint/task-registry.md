@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G11 engine+compact design inspector under G02 packet; Native01a110ac-2da3 reads M04 move/scroll/local-geometry gap. Web01a11983 and CLI01a11286 archived after saved completed work; no separate CLI lease. No runtime lane held; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G11 engine+compact design inspector under G02 packet; Native01a110ac-2da3 implements measured scroll viewport/row under P01-probe-source M04 section. Web01a11983 and CLI01a11286 archived; no separate CLI lease. Native has the sole finite own-fixture runtime lane after source save; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
-| Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; obtain Native M04 exact source gap and assign its independent implementation. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
+| Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -854,3 +854,14 @@ checks and checkpoint/push; no schema, action, math/cache, runtime or new framew
 No new user decision is needed for this approved P3/P6 representation completion.
 Separate completed CLI owner01a11286-a187-7720-a452-41b6ea7b228b archived, no resources
 or unsaved work outstanding; Core is sole current writer of the public caller.
+
+Native M04 handoff completed read-only: own-fixture local Move already exists;
+the missing probe source is scroll viewport plus one authored row. Root selects
+that minimal measured extension under P01-probe-source M04 section, using the same
+GeometryProxy/local pt and existing stable own-fixture identity. This is explicit
+P2/P3 geometry, not new polling/dynamics or a different product. No Core/schema
+change is needed; ordinary native_ax remains a distinct observation-scoped source.
+Native owns only listed anchors/collector/checks/existing runner/docs/receipt;
+Core G11 source is disjoint. Source save precedes the one allowed own-fixture
+scroll/move comparison, without per-step activation gates. Paint/occlusion and
+cross-display are not inferred from rectangle relationships. Existing caps stand.
