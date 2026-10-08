@@ -54,6 +54,24 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## Текущие чаты следующей группы
+
+Все local, созданы на saved0f441db, active/inProgress подтверждено wait_threads:
+
+| Task | Название | Thread ID | Владение |
+| --- | --- | --- | --- |
+| M02-N | M02 — Native form workflow | 01a11b7c-eb18-7461-87ab-10bf966fabb7 | Native form/session/CLI/shared host, desktop |
+| W04 | W04 — Web identity, reflow и projections | 01a11b7c-ee3b-7403-aae6-c4da2c25020e | Web observation/worker_web/fixtures, own headless |
+| Review group2 | Review — export, distribution и popup geometry | 01a11b7c-f321-70e2-b0ca-91f161b5d340 | read-only saved3075239/c97c513/b43d0df/5fd4b6a |
+
+M03-C и B03-G чаты архивированы после terminal/push/receipts/cleanup; E03 уже
+архивирован. Их результаты переданы без новых handoff-микрозадач. Review group2
+ещё на first independent observation; author receipts не переданы. После её
+собственных observations передать этим же reviewer четыре author receipts для
+reconciliation; новые implementations/sourceWIP не включать в scope.
+Технический Git flock прежний; при source ownership conflict только реальная
+зависимость, а не root grants на функции. M02/W04 выполняют весь цикл самостоятельно.
+
 ## Геометрическая группа завершена; новые tasks готовы
 
 - B03-Gb43d0dfbe8b893d02fd6027e5d9f31331d4e4f57/push: positive scoped popup
