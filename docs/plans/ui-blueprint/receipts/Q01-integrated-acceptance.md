@@ -379,3 +379,137 @@ activation, so complete UI resource cleanup is not claimed yet. Current-operatio
 non-image source/binaries/records are retained only for this pending Q01 continuation
 and will be consumed/removed at its completion; no permanent archive. Existing
 images and Q03 handoff are untouched. Only this receipt changes in the repository.
+
+## Final W06 changed-scope review — reject pending repair
+
+Reviewed production `139d202b78a59d9017efaea1e55032f69f6468ac` versus
+`2d1eb5d`, including final one-line attach compatibility correction. Author final
+`862572f0441eb69cb9eda2358f6b3d74b38e2c30` changes receipt only. Same Q01 reviewer,
+no new agent/chat, production edit or Native input. Initial source assessment and
+both independently executed counterexamples preceded reading the
+[W06 author receipt](W06-web-fidelity.md). Reconciliation is now complete for this
+candidate; its changed scope is **NOT accepted**. The two defects below exclude
+functional/privacy acceptance, so no full headless or D06 runtime campaign was
+run on a known-failing candidate. This is a terminal review verdict, not a promise
+that source existence or author positive coverage establishes acceptance.
+
+Basis: current root registry32 → [WEB-DOCUMENTS@1](../../../specs/product/web-documents.md)
+SCOPE/FACTS/BOUNDS, its fully read MODEL/EXCHANGE@2/PROJECTIONS/PRIVACY/D04/D05@4/
+D06 closure, W06 packet and existing QA/RUST/DEV.RUST contracts. Existing contract
+contents were reused where unchanged. New implementation representation was not
+allowed to weaken raw fidelity, explicit authority or fail-closed privacy.
+
+### Confirmed defects and exact reproductions
+
+**W06-Q01-P1 — known URL token reaches canonical output.** Owners:
+`plugins/web/src/collector/document-check.js:25–29`,
+`plugins/web/src/collector/snapshot_normalize.rs:200–225,471–507` on139d202.
+Preflight and captured-table private_node inspect only href/src/action/formaction
+as URL-valued attributes. A public IMG with public src and
+`srcset="/image?token=<synthetic-canary> 1x"` therefore passes the exact production
+preflight with status=current/count2. The normalizer also accepts this native
+attribute and publishes its value as Public/Known in attribute.*.value. Native
+currentSourceURL/originURL rare fields are separately copied without private_url
+classification. This is a known token-bearing URL, not an appeal to universal
+recognition of arbitrary secrets or an unrequested new privacy requirement.
+
+Own offline reproduction used139d202 production files, inert native-getter DOM
+objects for preflight, and a two-node canonical native-table fixture for the real
+Rust normalizer. The table supplied srcset plus currentSourceURL with the synthetic
+URL token. snapshot() returned a schema-valid Snapshot; serialization contained
+the canary. Both preflight acceptance and canonical persistence were asserted.
+No browser, remote request, actual credential, production mutation or real-site
+operation was needed. This proves adapter/normalizer leakage; it is not labelled
+an independently observed live CLI/network leak. Generic host serialization cannot
+repair a value already classified Public/Known at this boundary.
+
+**W06-Q01-P2 — malformed focusable type coerces to a known boolean.** Owner:
+`plugins/web/src/normalize/mod.rs:412–429` (shared ax_bool at309–323) on139d202.
+The new focusable extension calls the general AX boolean converter, which accepts
+tristate/token strings. An AX property with
+`{"name":"focusable","value":{"type":"token","value":"true"}}`
+becomes Availability::Known(Value::Flag(true)), rather than unknown for a mistyped
+raw source as WEB-DOCUMENTS.FACTS requires. An independent unit counterexample
+called the exact production ax normalizer and asserted that incorrect known result.
+This is separate from the correctly preserved distinction between focusable and
+focused. The fix must not break legitimate legacy checkbox tristate conversion.
+
+Both Rust counterexamples compiled/executed with locked/offline Rust1.96.0 in an
+image-excluding immutable source copy:2/2 reproduced the bad outcomes. The JS
+preflight counterexample also reproduced. These are defect confirmations, not
+passing acceptance tests. The modified test-only temp copies never entered master.
+Temporary source/build files2263 were removed. Minimal reproducers remain solely
+for the W06 repair owner and this Q01 recheck:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-w06-source-r0o_1c_n/`:
+`check.cjs`, exact `document-check.js`, and `counterexamples.txt` containing the two
+Rust test modules. Consume/delete these non-image files after the repair/recheck;
+no permanent archive and no image creation/deletion. Native wait artifacts unchanged.
+
+### Reconciled evidence and coverage limits
+
+Read author862572f receipt, saved final fidelity driver, and retained public records
+read-only at `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-w06-proof-e020gN`.
+Raw10788-byte baseline hash b50436bb6e6b9f237f75cfea31697abec2b110f0ea20cf009244b5f2cb98d3d1
+and canonical443366-byte hash5c00bddc56886a11324ee69837648564fbdb762ddd061ad1226b2d1f64108e57
+match the receipt. Own independent traversal of the retained native/canonical pair
+checked97 source nodes,2 documents,1102 facts,19 text boxes, backend IDs/Surface IDs,
+ordered children/frame Owns links, native strings including known empty, rects and
+UTF-16 offsets. Original request Context matches the canonical Context. Retained
+semantic baseline/changed/restored records independently show Apply→Changed→Apply
+and reported web.ax.focusable=true. This is saved-record verification, NOT this
+reviewer's live collection or a new source-state/atomicity claim.
+
+Author report has18 requests,6 positives/12 refusals and5 confirmed host shutdowns;
+its source/binary pins and stated outputs are internally consistent. Its password
+probe inserts a type=password node; URL probe changes document URL to a token query.
+Neither tests srcset nor currentSourceURL/originURL leakage. Focusability probes use
+a correctly typed boolean; malformed token/tristate input is absent. Therefore the
+positive report and bounded privacy disclaimers do not contradict or dispose the
+confirmed findings. Author77 collector/15 library/12 worker checks and live shutdown
+results remain AUTHOR execution evidence, not independently rerun here.
+
+Source-reviewed boundaries include exact trusted descriptor/request/selection
+Surface equality, frame-loader/root-document checks, explicit all-document scope,
+unchanged ordinary rooted/initial/references routing, pre/post count checks,
+transport/deadline/worker allocation/publication bounds and remote-group cleanup.
+The final attach correction removes a node-count constraint from trusted Surface
+admission; per-request document bounds remain. No additional actionable finding
+was established in those reviewed boundaries. This statement is not a full runtime
+or arbitrary browser/OOPIF/shadow/SDK-memory qualification.
+
+### Required repair acceptance; no criteria relaxation
+
+1. Known private URL facts must fail closed BOTH before native acquisition where
+   classifiable and on captured-table normalization before ANY channel publication.
+   Cover srcset candidates and the raw URL fact fields actually preserved, including
+   currentSourceURL/originURL; retain password/private-subtree and alias protections.
+   A change appearing only in captured tables must not escape the postflight guard.
+   Verify zero canonical/ACK publication and no token/canary in stdout, diagnostics,
+   retained/cache/history/export channels; retain public safe URL/native fact fidelity.
+2. Focusable must accept actual boolean true AND false, and return unknown for absent
+   or wrong source kind/value. Cover token/tristate/string/numeric mismatches without
+   modifying legacy Checked behavior, Focused state, selection, provenance or authority.
+3. Re-run the two independent counterexamples with repaired expectations plus focused
+   source tests. On the coherent saved repaired pin, execute the necessary owned
+   headless quality cases: original two-document97-node full facts, semantic changed/
+   restored and new privacy/type negatives, exact binding/bound refusals and cleanup.
+   Preserve frozen F01 records, schema/core0.1/analysis0.2, ordinary scopes and D06.
+   Do not substitute single-document/degraded output for the full positive workload.
+4. Reconcile changed source/tests and actual evidence in THIS Q01 chat. A receipt,
+   narrowly patched test or successful raw baseline alone does not close either bug.
+   Q02 may continue offline adaptation; this W06 verdict supplies no new timed-cohort
+   functional acceptance or D06 pass.
+
+The original raw/canonical records are shared inputs for BOTH Q01 and Q02. Q01's
+read-only consumption is complete for this review, but none was modified/deleted;
+Q02 consumption is still required before their owner applies the retention policy.
+Missing independent headless execution is reported separately from confirmed bugs;
+it was intentionally not run after the candidate was disqualified, per assignment.
+
+Resources: all W06-review compiler/test processes exited; no browser, server, UI
+session or new background work was started. CPU/runtime resources are released.
+Native foreground/user-authority wait remains exactly separate: no Focus/mutation
+retry, no renewed ownership assertion, no change to its pending operator question or
+retained fixture/run state. Existing accepted unchanged domains remain scoped facts;
+this verdict does not accept Native or overall P0–P7. Only this Q01 receipt is written;
+other-owner tests/bridges/web/performance.cjs and the unrelated image are untouched.
