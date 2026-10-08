@@ -1,5 +1,123 @@
 # Q02 performance — scoped Web result, Native pending
 
+## Full Web result on a7c0416 — 2026-10-08
+
+Terminal Q01 receipt a1cae1a accepted Documents privacy on
+`a7c04164df08441cfbbaa61b501aa64d29290732`, closed remaining P1 and explicitly
+released CPU/headless. Its complete new acceptance section was read after terminal
+wait_threads completion. Root's prior conditional authorization therefore activated
+without another grant. Registry5ee7c7e reserves the lane for Q02; I02 source work is
+independent and its heavy verification waits this terminal release. I02 WIP never
+entered these binaries. No Native authority was inferred.
+
+All four frozen Web numeric gates now have a measured passing result. Reuse
+b3c3a22 single-control evidence on9d715ee: only Documents-specific JS/captured-table
+srcset guards changed through a7c0416; ordinary collector/normalizer/host paths,
+schema/Cargo/fixtures/contracts unchanged. Old timings are attributed to their
+original pin and not pooled or reported as newly measured. This is Web evaluation,
+not independent D06 acceptance, Native qualification or P7 completion.
+
+### Full-workload conditions and recipe
+
+Fresh immutable a7c0416 source archive; optimized Rust1.96.0 locked/offline build,
+unchanged generic Q02 caller, no overlays/product edits. Current owned driver and
+saved raw-fact comparator separately hashed. It selects Documents only, explicit
+ordered two-Surface/frame-loader/document bindings,128nodes/depth16/512KiB/2s,
+existing W06 transport/profile and unchanged D05 ceilings. Every original fact is
+retained; full canonical response is not reduced to fit the single-control budget.
+Original F01 source/oracle hashes verified by prepare; actual2documents/97nodes,
+800×600/DPR1; Chromium145.0.7632.6/CDP1.3, Playwright1.58.2, Node24.15.0;
+macOS27.0.1/26A434 arm64 Apple M4 Pro,12CPUs/24GiB. No cache flush, power/display/TCC
+change or concurrent Q02 compile/stress. Ambient load start5.320/5.462/5.417,
+end5.535/5.504/5.432, not an idle-host or hardware-general claim.
+
+Cold starts before own browser launch and includes fixture load, metadata discovery,
+configuration, caller/worker launch, attach and first complete normalized response.
+The50ms subinterval starts before caller CDP setup/bindings/config, not after hidden
+preparation. Document IDs come from bounded document-object metadata; NO DOMSnapshot
+prewarms the capture. The first native capture is the product call. Only after its
+response timer ends does the independent raw oracle capture the unchanged fixture.
+API/normalization/validation/canonical serialization/transport/ACK are included;
+outer additionally includes test caller envelope/UTF-8 stdout delivery. Local raw
+comparison is outside response latency; there is no between-request background UI
+collection. Each raw/normalized comparison is the controlled unchanged checkpoint.
+
+Own preflight passed all97nodes/2documents/1102facts/19text boxes, independent root
+and child literal rects, original units/unknown transforms and fresh width121→120
+on the same attached session. Native `★` survives stream chunks through the checked
+UTF-8 client repair. Scoped zero omitted DOM nodes does not upgrade source coverage
+from partial or imply full AX/paint/visibility/arbitrary frames.
+
+### Complete frozen Web outcome
+
+| Frozen row | Source pin | n | p50 ms | p95 ms | Gate |
+| --- | --- | ---: | ---: | ---: | --- |
+| Warm requested semantic control |9d715ee reused|100|2.586313|2.845584|≤20: met |
+| Warm requested geometry control |9d715ee reused|100|2.714687|2.899125|≤20: met |
+| Full fixture attach+first response |a7c0416 actual|20|36.426291|37.507583|≤50: met |
+| Full fixture process-cold total |a7c0416 actual|20|237.152417|264.899833|≤500: met |
+
+Median p50/nearest-rank p95, no discarded sample. Full process-cold range
+220.392500–712.763917ms; the712.764ms maximum is retained in the20 samples.
+Attach+first range34.485666–38.891041ms. Full warm100 outer p50/p95
+19.883812/21.504375ms, max23.256708: supplemental, not evaluated against the
+single-control20ms gate. The same full warm calls through ACK have17.322458/
+17.870875ms, max19.492500. Cold Observe-only outer22.601083/24.600333ms and ACK
+19.743479/20.106416ms are narrower diagnostics, not substitutes for the cold gates.
+
+All120 cohort requests passed full quality; zero failure/timeout/wrong Target/
+missing known field/retry/censoring. Each canonical response compared every1102
+native facts/19text boxes and retained97nodes plus exact identity/current unique
+Observation and known/empty/false/unknown distinctions. One initial warm response,
+two warm changed/restored probes and three preflight calls are separate:126 total
+explicit product Observes in this phase. Every before/after fixture state/focus/
+scroll/viewport check passed. Full warm canonical bytes p50/p95444475/444496,
+range443415–445541; identifier/time/sequence encoding varies, node/fact counts do not.
+
+### Telemetry and its precise limits
+
+At every ACK: parent-owned9,497,976bytes, retained reserved15,728,832bytes,
+1session/1completion lease; no abandoned/poisoned state. These are fixed owned
+layout/reservation metrics, not allocator/worker-cache/browser RSS peaks. Native
+browser snapshot internals remain opaque SDK cost. Source-clock read intervals
+(not exclusive CPU) cold20 p50/p955.322166/5.825292ms; warm1003.441042/3.914459ms.
+Do not sum/subtract these into fictitious normalization or transport measurements.
+
+D06 asks separate stage reporting. Existing guarded APIs expose no exclusive
+normalization, transport or canonical-encoding timers, syscall counts or worker
+allocation/cache high-water. They remain unavailable, included only in actual
+outer/ACK latency; this reporting obligation is **not silently accepted as complete**.
+Match/diff/Expectation-check are not requested by these Observe workloads, rather
+than unmeasured executed stages. No internal-resync counter is exposed; caller made
+zero resync/retry requests. Model tokens are unavailable/not inferred from bytes.
+No new numeric Rust/memory gate or profiler subsystem is invented. No performance
+optimization was needed to meet the four frozen Web thresholds.
+
+### Pins, evidence, checks and terminal resource release
+
+SHA256 consumer `b2e59ccf9017964bc002319c00cbe9d2e2db908d6d4697862d7eca5c214b03f3`;
+worker `959b3e0e0978f152a9ad69f18e3c341808e95be004d21ce4cda901bb7929ad48`;
+caller `5ec1a46c8b8a22898a19b8d122622bb11f6c8830f59ade9fec74f8a8adde1f2c`;
+driver `944602b81dd7eb1703285d2ef4a99db06d81ced7690e4bb96956ed0d2a28a987`;
+fact oracle `be85ecf4981d05603fd78d03c3fcd7873c71995c9afa6ef13d5d14eafbd4fa0c`.
+Saved release compile, streaming UTF-8 split test, Node syntax/quality checks,
+actual preflight and complete20cold/100warm series passed. No unchanged full suite
+or accepted single-control cohort was rerun. Raw records/conditions and every sample
+remain in task-temp `weba7-build-pins.json`, `weba7-preflight-1/`, `weba7-series-1/`;
+source/release products in `weba7c0416/`, `targeta7c0416/`. Q01/root named consumers;
+retain until performance review consumption, then remove only run-owned nonimages.
+All old/new W06 shared proof directories remain untouched. No image or raw evidence
+was committed; no image created/deleted.
+
+Twenty-one cohort attachments plus the preflight attachment confirmed shutdown/
+exit0:0sessions/0completion groups,192bytes ledger backing, no abandoned/poisoned
+owner. Own browser/context/server close calls completed; exact task caller AND
+worker inventory returned no PIDs. **Terminal CPU/headless release: Q02 holds no
+build/runtime/UI/capture resources; I02 may continue its already-authorized heavy
+verification.** Native foreground/comparability and the exclusive-stage reporting
+gap remain explicit. Q02's remaining Web numeric work is delivered; overall Q02/
+D06/P7 is not declared complete, and the source/gates were never weakened.
+
 ## Remaining Web continuation on a7c0416 — waiting Q01
 
 Root supplied sourcea7c04164df08441cfbbaa61b501aa64d29290732/finalc16a603 and

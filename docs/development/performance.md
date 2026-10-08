@@ -1,10 +1,13 @@
 # Q02 fixed D06 evaluation
 
-Status: Q01 accepted single-control scopes on9d715ee; Q02 measured100 warm each:
-semantic p952.846ms, geometry p952.899ms, both below20ms, zero cohort failures.
-Twenty cold-control samples per kind are supplemental. Documents privacy remains
-rejected; its50/500ms cold gates, Native and separate-stage telemetry stay open.
-**No aggregate D06/P7 acceptance.** Historical8e3dba2 geometry2.688ms remains recorded.
+Status: all four frozen Web numeric rows meet their gates on the qualified host.
+Single-control semantic/geometry on9d715ee:100 warm each,p952.846/2.899ms≤20ms.
+Full2-document/97-node capture on accepted a7c0416:20cold, attach+response
+p9537.508ms≤50ms and process-cold264.900ms≤500ms. Full warm100,p9521.504ms is
+supplemental, without a20ms gate. Zero cohort failures; all outliers retained.
+Ordinary scope source is unchanged9d715ee→a7c0416, so prior evidence is reused,
+not relabelled as rerun. Native and exclusive-stage telemetry remain open.
+**No overall D06/P7 acceptance.** Historical8e3dba2 geometry2.688ms remains recorded.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
@@ -52,9 +55,8 @@ Then supply UIB_Q02_PREFLIGHT pointing to that report. Only comparable workloads
 with passed quality/freshness execute series, using the identical saved executable.
 The original8e3dba2 semantic gap is retained historically; W06's extension must pass
 new actual preflight rather than be assumed correct from its representation.
-Current executable loop selects only the remaining Documents workload. It is
-staged for root's conditional continuation after terminal committed Q01 Documents
-acceptance/release on a7c0416; until then no runtime execution. Existing9d715ee
+Current executable loop selects only Documents. It ran after terminal committed
+Q01 Documents acceptance/release a1cae1a on a7c0416. Existing9d715ee
 semantic/geometry results are reused: the source delta changes Documents privacy
 only. Single-control rows are not rerun merely to populate this report.
 Stdout uses streaming UTF-8 decoding so large canonical payloads preserve native
