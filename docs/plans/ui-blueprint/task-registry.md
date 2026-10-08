@@ -43,20 +43,30 @@ Root получает итог или конкретный блокер; про�
   прежние semantic/geometry b3c3a22 переиспользованы по source applicability.
   CPU/headless освобождены. Тот же Q02 получил полный bounded outcome отдельной
   Rust normalization/formatting stage отчётности по дополнению своего packet:
-  actual routines/test-only measurement, production candidate защищён. Native
-  остаётся отдельным ожиданием; итоговый SHA проверить после сохранения результата.
+  actual routines/test-only measurement, production candidate защищён. Numeric
+  checkpoint `4cb8230` pushed; stage runs прошли по промежуточному сообщению,
+  финальные boundaries/SHA ещё ожидаются. Native отдельно, без runtime authority.
 - I02, чат `01a11bdd-8f38-7943-a91f-3621a70a994c`: terminal `completed`,
   `5cb7662ac01f1c9d1d19ef7ec7b57634b16dd218` pushed; receipt прочитан целиком.
   Web/Native/combined a7c0416 installed builds/smoke/verify/remove прошли;
   core/reinstall/recovery/licensing evidence reused по exact source equivalence.
   Recipe6a5bec2 не менялась; упаковочных blockers нет, ресурсов не удерживает.
   Чат архивирован после сохранения результата. Native live/P7 этим не приняты.
+- N04, чат `01a11d5e-782b-7cf1-922e-b28815151915`: самостоятельный Native
+  AX fidelity/readiness task по [packet](packets/N04-native-fidelity.md).
+  Основание — ранее записанный Q02 source-backed missing AXTitle и отличие текущего
+  F02 от frozen baseline; D05 Native.PROOF требует сохранить исходные known facts.
+  Это независимая source/recorded/recipe работа, не ожидание foreground: сохранить
+  известные поля, обосновать faithful inputs для Q02, полный цикл до commit/push.
+  No apps/input/capture; Q02 performance paths защищены. Heavy checks после release
+  текущего Q02 Rust-stage run, без нового root grant. Live Native acceptance остаётся
+  ожидающим пользовательского foreground, не подменяется recorded evidence.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02. После сохранения полного Web результата остаются его точные stage gaps
-  и Native/Q03 human waits; завершённую упаковку не повторять.
+  Q02/N04. Независимый Native source/data gap не смешивать с ожиданием UI authority;
+  после этих результатов остаются Native live/performance и Q03 human waits.
 
 ## История предыдущей группы самостоятельных задач
 
