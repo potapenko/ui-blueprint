@@ -160,9 +160,9 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core исправляет concrete explicit-anchor aggregate coverage overconstraint (engine + mirrored schema guard). Web/Native geometry chains saved/pushed, runtime lanes released. Native next ordinary-window AX binding proposal ready; no new input work |
-| Последний принятый результат продукта | G03 ordinary CLI geometry работает на Weba7dfcfd и Nativeea90baf: реальные bounds, размеры/gaps и recorded diff без ручного Snapshot extraction. Ограничения пространства/partial/clipping указаны; actual geometry examples delivered. Full P0–P7 не завершён |
-| Следующий шаг | Сохранить P5 WIP; довести основной Web/Mac read-only geometry scenario до полезного agent-facing результата, используя существующий engine/collectors/probe и реальные component cases. Full P0–P7 scope сохраняется |
+| Активные чаты/пакеты/ресурсы | G05 Web01a11983-223d-7a30-8334-573658f237fb и Native01a110ac-2da3-73d1-9bb2-273d4ff99e7a active; disjoint Web/Native write sets. Git lease свободна. Core/Web прежние handles недоступны для continuation; saved source сохранён |
+| Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
+| Следующий шаг | G05: real Director geometry через существующий Web CLI и воспроизводимый explicit-target Mac first-use example. P5 WIP сохранён; новая input работа отложена. Full P0–P7 scope сохраняется |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
 
 ## Активное исполнение
@@ -520,3 +520,18 @@ geometryonly, old961window andpausedstate notassumed. Scope Role/Name/AXbounds,
 existinglimits, ownhelpercleanup. Ifunavailable return fact, no silentpreparation.
 Webadvisor continuation currently also reports threadnotfound; existing casehandoff
 retained, no new realwebsite target guessed. Geometry work/goal remain active.
+
+G04 real Mac consumer completed:42f37b85d0fe119e70a7e94d250c09c085eefbeb saved/pushed
+exact1 P01 receipt; original app unchanged, own resources reaped. One451.368ms AX
+Observe produced160 nodes/partial; six Inspect and14 known Measure results attributed
+to Native. Not p95/fullinventory/generalMac/P7. No re-read for receipt recreation.
+
+G05 dispatch confirmed live on2026-10-08: new Web chat01a11983-223d-7a30-8334-573658f237fb
+(local) runs the finite real-component verification; retained Native runs first-use
+example. [G03 follow-through](packets/G03-geometry-cli.md) records scope/Spec Basis.
+User explicitly authorized visible parallel chats, same project/master and scoped
+commit+push. Prior Web01a110ac-2aae-7841-9c8b-12ff38c52d9d completed with a7dfcfd saved;
+continuation returned threadnotfound, no WIP/lease. This is a confirmed unavailable
+handle, not replacement on timeout. New Web owns only its packet, no Core takeover.
+Root owns registry/G03 packet; short Git index lease only for checkpoints. Both
+workers stop after their finite result; no new review or input wave dispatched.

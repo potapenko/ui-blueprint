@@ -59,3 +59,31 @@ of a coherent changed risk boundary. All task images stay OS temp, never delete;
 consumed run-owned nonimage output cleanup as already governed. Root coordination
 only; workers own code/runtime. Short Git lease, physical lane only if actual shared
 input setup requires it; Web own headless and Native bounded setup may be independent.
+
+## G05 finite follow-through — 2026-10-08
+
+Basis remains user geometry priority and approved P2/I01/Q03, registry19,
+CLI@7/NATIVE@2/ANALYSIS@2 with the existing explicit closure above. No product
+contract delta selected. Actual source facts and proposals remain distinct.
+
+- Web verification: use the existing collector/public CLI on the real Director
+  component identified in platform-test-advice. Read-only reference source/QA may
+  establish an existing target; no site launch/build/edit, login bypass or personal
+  browser profile. An owned isolated headless context may navigate the established
+  target and open the popover, without applying filters. Existing32/depth8/64KiB/
+  250ms and120s overall limits. Missing target/access returns the precise dependency.
+  Own only necessary guarded-live.cjs changes, existing Web guide and
+  W01-rooted-selection receipt. Core/Native/product fixtures protected.
+- Native first-use tooling/docs: one reproducible explicit-target example through
+  existing native_ax Observe/Inspect/Measure, constructing canonical input with
+  existing mechanisms. No stale PID/incarnation, implicit app choice, new public
+  CLI/config contract, graph or action requirement. Existing native-helper.md and
+  P01 receipt allowed; necessary existing launcher/helper change requires a
+  concrete source-backed choice before edit. Verify once on own F02 via ordinary
+  native_ax without fixture identity/probe input; no real app reread required.
+
+Both packets inherit model/reasoning, forbid nested agents/new directories, reuse
+completed checks and preserve images in system temp. Focused changed-code checks
+and one relevant scenario, then short scoped Git lease/commit/push and terminal
+receipt. Immediate consumer is reproducible geometry, not a new audit framework.
+Root owns this packet and registry only; worker IDs/current leases live in registry.
