@@ -870,3 +870,85 @@ and Q03 waits remain unchanged. This terminal source/recorded verdict does not a
 N04, live Native, D06 or P0–P7; it also does not reopen accepted unrelated domains.
 Only this existing Q01 receipt changes; checkpoint/push follows its link/whitespace
 checks on current master under the shared Git mutex.
+
+## N04 Title isolation repair — source/recorded ACCEPT
+
+Exact accepted pin `770906798e1326fed3dd0edec40dc59b13772b3a`.
+This closes N04-Q01-P2 from b1667d9 in its bounded source/recorded scope; it does
+not establish live Native SDK preservation, fixture equivalence or D06 acceptance.
+Same Q01 reviewer and original NATIVE@2 per-attribute isolation / Native acquisition@2
+ADMISSION/OUTCOMES/PROOF / D06 closure and repair criteria. No contract, profile,
+threshold, source-data or unrelated accepted-domain change. Author's repair section
+and retained proof were read only after the independent original finding.
+
+Source delta17d3475→7709067 is appropriately narrow: original identity3 and value≤7
+batches are preserved; a singleton Title batch follows the original value admission,
+using the exact existing batch/admission owner. A local oversized or unavailable
+Title cannot erase already admitted sibling values. Title remains selected only by
+accessibility_name and represented in macos.ax/AXTitle, separate from Description.
+No Name fallback, retry, post-copy/prefix salvage, source reclassification or new
+parser/owner was added. NativeAcquisition, secure-value eligibility, identity,
+limits, host/schema/Cargo and other production owners are unchanged. Genuine
+aggregate/deadline exhaustion retains existing refusal behavior.
+
+Own verification used a new immutable system-temp source copy of7709067 and the
+actual WindowAX/NativeAcquisition/NativeJSON/codec functions with inert recorded
+NativeAXAccess, Swift6/macOS14 compile target. The previously built schema validator
+was reused only after checking its schema/Cargo/toolchain inputs unchanged. No app,
+fixture, live AX read, capture or retained Native session was operated. Original
+baseline hash42c2b55194136aec4560192ed5945bb3c2bf844f0417503c116219f52c7a651d stayed unchanged.
+
+Independent checks:
+
+- Recompiled recorded replay:7 cases/3256 assertions and7 canonical validations.
+  Normal mode preserves396 known facts,75 partial nodes,75 action lists and74 edges;
+  Title known1, Description14 and all original counts retained.
+- Ran the ORIGINAL unchanged Q01 check_title_isolation.py against newly generated
+  recorded/oversized records: passes. No previously known sibling state changes.
+- Five Title-only variants additionally compare ALL non-Title node data for all75
+  nodes against recorded mode: empty/unsupported/unknown/oversized/wrong-type keep
+  properties (including unavailable/redacted), native roles, bounds, actions, edges
+  and other extensions identical; Context/coverage remain equal.
+- Oversized4097-byte Title stays unknown/no value. Copy counters equal empty Title,
+  admitted copied bytes equal actual copied bytes, and75 local refusals are counted:
+  no rejected Title bytes are copied and ceilings are not enlarged.
+- Field selection/evidence/type checks and the missing-Title negative still pass.
+  Title is read only in singleton batches; secure Value reads remain zero.
+- Existing form-boundary proof independently recompiled and passed45 assertions /
+  5 cases /5 canonical validations. The exact expected scheduling now includes the
+  singleton Title batch; old field/value/privacy assertions were not relaxed.
+
+These are production-owner recorded/boundary results, not new AX observations or
+SDK allocation/lifetime evidence. CF scalar construction/decoding is not live UI
+collection. No unrelated accepted Web/M05/V02/full-suite/performance checks were
+repeated. Q02's terminal resource release was supplied before these bounded checks.
+
+Author repair report in uib-n04-title-isolation-q70i6po1 agrees with the own results;
+its WindowAX/admission/test source hashes match7709067. Author execution remains
+attributed separately. Original and repaired retained handoffs, historical fixture
+53e6e6e source/off/on products, and the original Q01 reproducer are preserved as
+requested for their named consumers. No historical baseline or current fixture was
+modified/rebuilt/launched for this recheck.
+
+**Cost and remaining live gate:** the repair adds ONE public AX batch per node when
+accessibility_name is selected. Its actual latency/SDK cost is unmeasured here and
+must be included in later Native D06 measurements; no speed or threshold pass is
+predicted. Historical reactive timing source, explicit-request fixture candidate,
+Snapshot-node difference, actual per-field/off-on/window/pixel comparability and
+1100×1050/cold/warm qualification remain the previously recorded live work. This
+source acceptance neither bypasses foreground/user authority nor adds new physical
+pointer, both-window-pixels or TCC-toggle requirements.
+
+Verdict: **ACCEPT source/recorded N04 repair on7709067; live Native/D06 NOT VERIFIED.**
+No remaining actionable finding in this affected source/recorded slice. Native
+foreground and Q03 questions are unchanged. CPU/build/test processes completed;
+no UI or headless resource acquired. Only this existing Q01 receipt changes; product,
+Q02 files, shared retained inputs/reproducers and images remain protected. Own new
+non-image build/replay outputs are consumed into this receipt and cleaned before
+its scoped current-master checkpoint/push.
+
+Repair recheck cleanup verified:152 new own non-image files removed and
+uib-q01-n04-recheck-pfxb1bbh absence confirmed. All shared old/new handoffs, original
+reproducer and images remain unchanged. Receipt local links and whitespace checks
+passed; one-path checkpoint/push records the accepted source/recorded scope and
+CPU release, with the explicit live/D06 residual above.
