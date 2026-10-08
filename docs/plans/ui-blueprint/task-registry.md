@@ -54,6 +54,29 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## W04 и E03 остаток завершены
+
+W04d3f4723/final951bc01 pushed: явный DOM/AX component mapping, B04/B06 positive
+qualification, B01 addressing/remount/navigation safety,76collector tests/29runtime
+entries по автору. Final уточняет18Observe invariance checks, прежнее число20
+исправлено. Scope/compiler/runtime source coherent2f1dcfd + exact own overlays,
+после source save повторён finalrun; cleanup подтверждён.
+Полный B01 остаётся на shared Attach error gap: worker_main до Ready теряет
+ResyncRequired и CLI выдаёт generic1. Эта exact dependency передана текущему
+M02-N shared-host owner, сообщение доставлено. W04 исходники освободились.
+
+E03c6b2357ba2745f501d2cfee00fb1d3d0229cccbf pushed: полный export30 + CLIexport20
+без skip/fail, независимые32expected dimensions, явный unstable negative,
+14historical files unchanged. Product source/fixtures не менялись. Ранее открытый
+baseline acceptance gap закрыт, source/privacy review остаётся применимым.
+Оба чата terminal completed. Explicit host mutation временно не находил их;
+read_thread подтвердил identity/local/codex/idle, повтор archive без host override
+успешен для обоих. Не было restart/duplicate/replacement tasks.
+
+Следующий ready task: [W05 Web form/E2E](packets/W05-web-form-e2e.md), весь цикл
+в отдельном чате; Native/CLI/shared host у M02, W05 только Web/headless. I01/Q01/
+Q02/Q03/V01 и общие final gates не объявлены выполненными по этим срезам.
+
 ## Активный E03 остаток
 
 Исходный чат E03 01a11b60-48cb-7570-940c-0f0ce9131350 восстановлен из архива;
