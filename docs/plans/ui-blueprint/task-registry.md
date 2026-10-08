@@ -755,3 +755,13 @@ disabled result readable, private/missing/unavailable cannot succeed. CLI regist
 CLI-ACTIONS@3/CLI@11/registry23 and saveda9ad665744e665b33b9a171cda67f90fde13c800
 exact9 WIP; default check/fmt/docs passed, final provider-dependent checks pending.
 Same shared binary consumer plan, no repeated Focus/Type or API-only actual wave.
+
+A05 provider/mechanical Prepare forwarding5605206c2ee22a78d8fc4f83253307bde6ae0557
+saved/pushed exact7; same explicit distinct-result port. Author5new functions/
+27cases plus5FocusType/8SetChecked/JS guards and affected check/Clippy/fmt passed,
+184-input map/pins in W02 receipt. Postread publishes fresh result-only partial
+Snapshot, not removed actor or stale facts. CLI owner received saved readiness for
+one integrated build/check and retained binaries; actual application chain pending.
+Native diagnosed exact sample lookup cause: modern children getter returned0 at
+hosting view while documented informal getter returned3; not a coordinate mismatch.
+Its bounded public-accessor correction stays inside the selected test-only seam.
