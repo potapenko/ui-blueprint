@@ -565,3 +565,39 @@ HeldActionChecks.swift with CAPTURE_LIBRARY/HOST_HELPER. Invoke with profile.jso
 It exercises stable target/result keys and source reads, same-ID target/result/window
 remount refusal before property read, current-generation refusal and invalidation.
 No AXPress/setter/runtime or production action acceptance follows from these checks.
+
+
+## Ordinary CLI component geometry (G03)
+
+A fresh F02-on explicit Snapshot provides the trusted current window identity and
+three measured icon/text/container rectangles. Configure existing native_fixture
+provider with channel mask4, collection sample, exact identity_path and probe manifest/
+Snapshot request/source revision/uptime, registered acquisition_limits. Request
+opt_in_layout_probe/layout_bounds/design/cached_allowed with160/depth9/512KiB/1s.
+Probe import retains cache/unverified fixture clock and unknown screen transform.
+AX sample uses a separate mask1/external_semantics/current_required Request with
+role/accessibility_name/enabled/accessibility_bounds and collection sample. Do not
+combine its ax-screen pt bounds with fixture-local layout bounds without a transform.
+
+Once these ordinary trusted connection/Request files are prepared, use the public
+binary, not the ignored native_fixture test caller or a graph-extraction script:
+
+```sh
+uiblueprint observe --connection probe-connection.json --request probe-request.json --worker /absolute/session-worker --max-input-bytes 2097152 --max-output-bytes 524288 > probe-observed.json
+uiblueprint inspect --snapshot probe-observed.json --ref '{"namespace":"macos.swiftui.probe","key":"f02.sample.a.container"}' --view design --max-input-bytes 2097152 --max-output-bytes 524288
+uiblueprint measure --snapshot probe-observed.json --query gap-query.json --space f02-fixture-local --max-input-bytes 2097152 --max-output-bytes 524288 --json
+uiblueprint diff --before before-probe-observed.json --after after-probe-observed.json --max-input-bytes 2097152 --max-output-bytes 524288 --max-entries 32 --json
+```
+
+Observe exit4 is expected for honest partial coverage even when the channel is observed;
+check its canonical status and real cleanup. Inspect/known Measure/complete Diff exit0.
+ANALYSIS@2 directly accepts the original observed ChannelResponse, retaining the source
+Snapshot. No manual Snapshot extraction, timestamp rewrite or mutation-ready refs needed.
+Gap-query is analysis0.2 geometry_query, scope matching Request, targets
+macos.swiftui.probe:f02.sample.a.icon and .text, operation gap/length/pt, anchors
+layout_bounds/f02-fixture-local(local,pt,top_left)/x with fractions1 and0. Applies_when
+fields null; no expectation/expected amount. Width/height queries select .container,
+operation width/height, one layout anchor in that same space. Engine computes facts.
+Existing Change layout then fresh Snapshot supplies after-state for recorded Diff.
+Actual G03 run confirmed component173.5×48→231.5×62pt and measured gap8→18pt; these
+are controlled F02 facts, not real RC03 inner geometry. No capture/input gate implied.

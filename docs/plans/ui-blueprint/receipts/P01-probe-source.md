@@ -233,3 +233,81 @@ Matched off/on invariance, general probe/AX-to-pixel transforms, positive pixels
 SDK saturation and D06/full P01 remain open. Prior failures stay recorded, not
 rewritten as successes. Exact-one-path result receipt ready for next short Git
 lease; no further runtime attempt, process, input/capture lane or index is held.
+
+
+## G03 — actual ordinary CLI AX/probe component geometry
+
+User geometry-first priority/root G03 standing packet. Outcome: public Observe→design
+Inspect→Measure→recorded Diff using original observed ChannelResponse files, no manual
+Snapshot extraction/native_fixture test consumer. Reused established F02 baseline/
+Change layout/explicit Snapshot8→18 oracle, no old invariance/input suites/review loop.
+Traversal registry18→CLI@6/GEOMETRY/Native CONTENT@1 and existing scope/identity/privacy/
+lifecycle/D02/D04/D05/acquisition@2 closure; changed ANALYSIS@2 fully read before use,
+TYPES/VALIDATION@1 unchanged; CLI-DIFF@2 full read plus established dependencies.
+G03 file fully read. RC03 outer1920×1050→961×1050 is context only; inner panels/video/
+query/tab bounds remain unknown, no other project launch or relabelled F02 evidence.
+
+Frozen Native source23f22fb, Core loader e275823c18351bc05a6ac68972221758220d9c32;
+immutable archives built before live, no moving Core/Web WIP. All product-source inputs
+unchanged by Native; only native-helper.md and this receipt updated. Task temp trusted
+inputs generate canonical binding/session/Request/query, no arithmetic or normalized
+Snapshot artifact. Registered explicit host/profile, AX160/depth9/512KiB/1s/cleanup1s;
+query input/output2MiB/512KiB, Diff32entries, overall300s plus5s own fixture cleanup.
+No held action/helper transport, nonce, new framework, fixture or wire changes.
+
+Own F02-on PID17412/bundlelocal.uiblueprint.f02.on/launch1791421737.803286,
+Target17412:1791421737.803286/window11634/identifiera/surface generation
+D05EFE11-686F-4C8E-85A1-E9F26F4A3FD2. Fresh exact CUA before each setup input:
+Snapshot1 baseline; Change layout existing index8; Snapshot2 expanded. No target
+Activate/checkbox/form input/popup/Raise/coordinates/TCC/display action. CUA pre/post
+read-only full states equal for each phase (focus OpenB/Count0/Resultnone/form/scroll).
+Current identity OPEN/equal before/after each phase, same binding across layout stimulus.
+
+Each state actual public CLI sample AX Observe and probe Observe returned4/observed
+partial with validator0; four original channel documents total. AX live/current,
+separate API reads/unknown consistency; probe cache/unverified original fixture uptime,
+unknown consistency, explicit snapshot source provenance retained. AX one combined
+button node; probe three measured parts/source declaration mapping. Actual design
+Inspect exited0 for each source/state. Ten width/height/gap Measure calls exited0/known,
+analysis0.2 validator0, full embedded Snapshot structurally identical to original
+Observe Snapshot in all10. Both Diff calls exited0/omitted0 and preserved both full
+original Snapshots. No source restamping, cross-space transform or agent arithmetic.
+
+Useful factual output, all rectangles x/y/width/height in pt:
+
+| Part/frame | Before | After | Space |
+| --- | --- | --- | --- |
+| Button accessibility_bounds |801,364,173.5,48|801,364,231.5,62|ax-screen/screen/top_left|
+| Container layout_bounds |20,56,173.5,48|20,56,231.5,62|f02-fixture-local/local/top_left|
+| Icon layout_bounds |32,68,26,24|38,75,26,24|same fixture-local|
+| Text layout_bounds |66,70.5,115.5,19|82,74,151.5,26|same fixture-local|
+
+Rust Measure: container width/height173.5×48→231.5×62pt, icon.right→text.left gap8→18pt.
+AX independently measures button dimensions matching those values in this controlled
+case; matching dimensions do not calibrate AX/layout/pixel transforms. Probe screen
+transform unknown; AX-to-pixels unknown; no hit/paint/clipping/padding/overlay claim.
+Diff marks AX accessibility_bounds content+evidence changed, other AX fields evidence
+only; all three probe layout_bounds content+evidence changed. No deletion/Delta claim.
+
+Four readily measured CLI Observe wall times: baseline AX157.54ms/probe94.97ms,
+expanded AX155.53ms/probe98.23ms. One call each, not p95/D06/performance acceptance.
+Launcher start277843.753552666/deadline278143.753552666; final elapsed45.927634834s,
+cleanup0.128693000s/timeoutfalse. Finally exact PID/path/run-arg fixture exit confirmed
+before timing assertions; public CLI worker/helper absence checked each phase and at
+finish. Shared input lane released. No screenshot/capture/images created. Non-image
+run/config/query/outputs/build/source/cache consumed and removed, absence verified;
+all earlier images/evidence untouched. No unexpected failure or retry/tuned limits.
+
+Binary SHA pins: F02-on9663c7248a7ae2431426259a7aced71f04da1bb215a1dd02ff6101386a264730;
+helperd32615ae3b8c9b5291d756e1f4a027d06a8d9ae9a53c5b49161823ca507d73da;
+descriptor2b027460d119e1631fd4afa2f34b73d7dfa201caf61be6735a25cbd90779cf5d;
+CLI33f666aae96959b3b7fdfae563150fecad4595206311b0b397f4495f8e8824e9;
+workerf6e9c71459c002bfe2f36f0bd7fb80cc7dd030e3653efb79b09b10dcc371dfaa;
+validator7e488306401a9f8b5216b555bb943f7e65a2bdc7f0655e9ac8463aaff9b42828.
+
+Finite G03 controlled Native ordinary-CLI consumer chain established; no full M05/
+real RC03/mobile/P7 or complete current-probe freshness acceptance. Current limitations
+are explicit trusted setup files, own opt-in fixture-only internal layout and unknown
+screen transform. Next useful consumer is selected real component geometry when
+available scope/data authorized, not mutation readiness. Changed links/route/whitespace
+checked; exact2 docs checkpoint/push via short Git lease, unrelated WIP untouched.
