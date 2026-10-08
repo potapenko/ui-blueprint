@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G11 engine+compact design inspector; Native01a110ac-2da3 implements M04 measured scroll viewport/row. Web01a11983 restored for read-only B04 source handoff, no source/runtime lease; completed CLI01a11286 archived. Native has sole finite own-fixture runtime lane after source save; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G11 engine+compact design inspector; Native01a110ac-2da3 implements M04 measured scroll viewport/row; Web01a11983 implements B04 sourced viewport→document transform. Disjoint source owners, completed CLI01a11286 archived. Native physical lane and Web isolated headless lane separate after saved-source checks; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -875,3 +875,14 @@ existing command/evidence when already implemented. No code/files/tests/runtime,
 new framework, A05 reopening or whole-product audit. Core/Native owners protected;
 return shared-contract dependencies explicitly. Immediate consumer is B04 geometry
 implementation, same master/inherit/no nested agents. No new chat was created.
+
+B04 handoff complete: read-node.js/DomRead omit scroll offsets and normalize::dom
+always emits LocalOnly, so separate old F01 browser scroll reads do not establish
+published transforms. Root selected the collector→canonical transform→existing
+Rust Measure implementation in W01-rooted-selection packet B04 section. Web owns
+only named collector/normalizer/tests/harness/docs/receipt; source context checks
+and unchanged limits required, no Core/schema/CLI changes. Source checkpoint plus
+focused checks precedes one own isolated headless scroll/resize comparison.
+Original viewport geometry and unknown unconfirmed zoom/frame mapping remain.
+Transform-aware motion Diff is preserved as a later Core consumer dependency;
+Web measurement proof will not be mislabeled as that feature or full B04.

@@ -93,3 +93,60 @@ Use existing launcher and operation temp/in-memory commands, remove/verify own
 outputs. No new wrappers/flags/telemetry. Repair only the proven condition, keeping
 scope/identity/continuity and all limits. Save correction before changed rooted
 sequence; no extra root/user permission step within this existing defect scope.
+
+## B04 viewport-to-document measurements — 2026-10-08
+
+Class shipping_product; current Web owner01a11983-223d-7a30-8334-573658f237fb,
+master/inherit/no nested agents. Explicit user-authorized parallel P2/P3 geometry
+work. Root route registry23→WEB-PILOTS@1 B04→PILOTS/GEOMETRY/PROJECTIONS/FORMS/
+CACHE/ACTIONS with full MODEL/IDENTITY/EXCHANGE/BOUNDARIES/LIFECYCLE/PRIVACY@1,
+existing D05/Web acquisition limits and this rooted source/receipt basis. Core's
+in-progress CLI@12/registry24 compact-only delta does not alter these contracts.
+
+Observed source handoff: read-node.js currently returns getBoundingClientRect but
+no scroll/viewport facts; DomRead lacks offsets; normalize::dom always emits
+viewport/css_px/top_left with LocalOnly. Earlier F01 scroll browser reads did not
+publish an actual UI Blueprint transform. Selected engineering implementation:
+obtain finite requested layout/scroll/needed viewport facts from the same bound
+document, verify consistent mapping context around collection, preserve original
+viewport rect and publish the existing canonical sourced viewport→document
+transform with actual Observation/Target/Surface/environment binding. Use primary
+browser API semantics for units/origins; no arithmetic or mapping inferred from
+screenshots, matching boxes or viewport dimensions alone.
+
+Keep unsupported/unconfirmed zoom/frame mapping unknown and source fields honest;
+never silently cross a frame/Surface or relabel viewport rect as document layout.
+Read-only collection cannot scroll/resize/focus. Same normalized schema/engine and
+bounded collector remain; no new framework, flags, host/service or query language.
+If canonical current owners cannot express a correct mapping, return that precise
+shared dependency before editing protected paths. Do not reduce the requirement
+to a synthetic transform that never reaches actual Observe→Measure.
+
+Writable outcome-scoped subset: plugins/web/src/collector/read-node.js, wire.rs,
+acquire.rs; plugins/web/src/normalize/mod.rs; nearest existing Web collector/
+normalization/JS checks and existing geometry harness under tests/bridges/web;
+docs/development/web-collector.md and receipts/W01-rooted-selection.md. Declare
+actual exact paths. Preserve source privacy, rooted identity/continuity, legacy
+actions, all canonical geometry kinds and fixed acquisition/output/deadline caps.
+Core engine/CLI/schema/spec registry/Cargo/native/fixture UI remain protected.
+
+Focused checks: actual offsets→canonical sourced mapping, finite/invalid facts,
+mapping-context change refuses or truthfully degrades, unchanged local-only cases,
+original viewport geometry/privacy/identity. Reuse bound output/byte/math owners.
+Then save/push source and run one own headless F01 sequence through public Observe
+and existing Rust Measure in explicitly selected document space: scroll-only keeps
+document-space relationships; resize exposes actual changed layout. Pin literal
+source expectations before run, reuse old successful cases, no cap/oracle tuning.
+Use original existing request/operation/cleanup limits; no blanket tests/review.
+Build from saved source or matching products, never Core's unsaved G11 work.
+
+Runtime is authorized after saved matching source and focused checks, with no
+extra activation round: own isolated headless browser/context/loopback fixture,
+no user browser/real PlayPhrase.me, no shared physical input lane. Stop concrete
+failure, repair within scope, do not repeat unchanged runs. Remove only consumed
+owned nonimage temp resources; retain every image and its directory. Return
+source checkpoint/push, public invocation, exact observed numbers/limits and
+cleanup. Transform-aware motion Diff is a separate Core consumer, not claimed
+by Web Measure evidence; full B03/B04/P7 remain subject to their other criteria.
+Economy: fill one proven collector/normalizer gap and exercise the existing Rust
+consumer immediately; expansion requires a concrete source/contract dependency.
