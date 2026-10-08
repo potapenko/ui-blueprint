@@ -44,3 +44,28 @@ No global audit/new framework/third-party code copying. No broad raw logs.
 Deliver concise paths/symbols/revisions, governing expected behavior, actual evidence,
 remaining uncertainty, minimum proposed implementation split and acceptance cases.
 Check document links/route/whitespace only; checkpoint+push via short Git lease.
+
+## Next bounded capability observation
+
+After source handoffec817e3, root authorizes one read-only diagnostic on the exact
+own F02 current window: f02.enabled and existing f02.sample.a only. Immediate
+consumer is selecting supported native delivery, not forcing setter support.
+Current NATIVE capability requirement and local SDK checkbox non-settable evidence
+motivate the actual check; false/unknown remains honest, AXPress is not SetChecked.
+Read actual role/raw AXValue CF type, Enabled, AXIsAttributeSettable(Value) result
+and reported action list, with sourced current process/window/element identity.
+No AX setter/AXPress, input/focus manipulation, permission request or other window
+content. Fixture launch/explicit binding setup only under a short owned lane;
+existing temp build/helper APIs preferred. If a tiny diagnostic adapter is needed,
+it lives only in task system temp, reuses existing scoped AX owners/admissions,
+and has no product schema/protocol/source changes. Do not create a new framework.
+Pin saved Native23f22fb inputs; source/index other-owner WIP excluded. Existing
+Native text/action/count/response caps, AX1s and bounded own cleanup apply; overall
+one lifecycle≤120s after build. Do not expand scope/limits after a failed read.
+All raw values must remain public fixture data; no secret reads. Result is diagnostic
+SDK capability evidence, never production provider/host/effect/gesture proof.
+Exact own processes must be reaped; user apps untouched. Images not needed; any
+created images retained in OS temp forever from the agent's perspective, non-image
+run files cleaned after consumption. Append actual facts and limitations to the
+same existing receipt, checkpoint+push; next implementation needs explicit owner
+split after this evidence, no auto-next or nested agents.

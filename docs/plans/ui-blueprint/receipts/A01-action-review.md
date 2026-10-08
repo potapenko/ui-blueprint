@@ -56,3 +56,10 @@ only delta. No other introduced findings; strict authority/bounds, canonical byt
 ACK-bound metadata/nonce/deadline, terminal9 refusal and cleanup criteria inspected.
 Author22parent/8public CLI synthetic-CDP/17exit/2syntax cases and affected Clippy
 remain attributed; reviewer ran no tests. Real browser/fullrelease acceptance open.
+
+Repair3ebfafe982b09ff395e1e059a2e469d37419bf2a accepted by same reviewer after
+source-first delta and receipt reconciliation; both source/test hashes match.
+committed()!=0 guards compact only, ACKed bytes/JSON/exits/cleanup unchanged.
+Author actual public binary regression reached provider, returned2 with empty
+stdout/zero setters/unchanged source. Reviewer ran nothing. P2 resolved; actual
+browser verification remains separate, assigned L01-live-actions to Web.
