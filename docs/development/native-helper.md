@@ -537,3 +537,31 @@ validate every returned canonical document with the current saved-source Rust va
 Actual capture remains separately activated after source review: one fresh own popup
 AX+capture Observe with separate before/after OPEN/generation/parent identity values,
 inline retained PNG and exact worker/helper/fixture cleanup under fixed budgets.
+
+
+## Native action held-object owner (integration pending)
+
+NativeHeldAction retains only the first action's exact target and independent expected
+result AX objects under one trusted window/current binding. It receives worker-owned
+macos.ax keys from the originating action-capable observation, never reconstructs an
+old ref from an identifier. validate resolves unique current connectivity and compares
+CFEqual against the held window/target/result; any remount/generation loss refuses.
+read returns the requested actual node/property evidence with the same canonical key;
+identity validation surrounds the read. invalidate rejects later access; dropping the
+session owner releases SDK references. Caller supplies explicit node/depth budgets and
+current process/window/surface check, with existing acquisition/text/shape/deadlines.
+
+The owner has no delivery/nonce/transport authority. Core's selected attached-session
+exchange must hold it through Observe/Prepare/Act/result read and retire it on helper
+reap. Legacy one-shot Observe keys remain non-actionable. HostProtocol/HostHelper still
+need that concrete integration; no hidden daemon or cross-CLI process retention.
+The target checkbox's measured non-settable AXValue remains Unsupported for Setter.
+Semantic Activate on f02.sample.a requires actual parent permit and independent Count
+Expectation result, not AXPress return alone. A02 supplies the common action kernel.
+
+Focused synthetic owner check: compile existing Native acquisition/JSON/artifacts,
+Observe/Collector/WindowAX/HostProtocol sources plus NativeHeldAction.swift and
+HeldActionChecks.swift with CAPTURE_LIBRARY/HOST_HELPER. Invoke with profile.json.
+It exercises stable target/result keys and source reads, same-ID target/result/window
+remount refusal before property read, current-generation refusal and invalidation.
+No AXPress/setter/runtime or production action acceptance follows from these checks.

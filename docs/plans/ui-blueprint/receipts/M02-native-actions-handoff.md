@@ -339,3 +339,75 @@ identity mismatch, forged/replayed/wrong-session permit rejection before deliver
 exactly one authorized AXPress, fresh Count outcome, post-Possible loss unknown/no retry,
 request deadline/cancel/detach/EOF/failed reap and bounded registry/resource admission.
 Proposal only, no authority to implement private encoding/lifetime/limits yet.
+
+
+## Task-wide Native Activate source — bounded held target/result owner
+
+Root relayed user's autonomous implementation/test/end-to-end direction, later corrected
+review policy to one focused review of coherent risky integration, not per-mechanical
+change rounds. Task-wide owner Native plugins/macos + tests/bridges/native/docs/receipt;
+fixture/schema/Core Rust protected. A02 kernel accepted; no repeated kernel review.
+Current target outcome remains actual Semantic Activate f02.sample.a + fresh Count result
+under real parent permit, not a source-only completion claim.
+
+Exact4 current writes: new plugins/macos/NativeHeldAction.swift, new
+acquisition/HeldActionChecks.swift, native-helper.md, this receipt. No transport tags,
+nonce authority, private residency numbers or delivery implemented before Core interface.
+NativeHeldAction retains exactly held target/result plus scoped window/application CF
+objects, worker-owned canonical macos.ax keys and trusted current binding callback.
+Initial bind uses bounded exact window/element owners, explicit node/depth budgets;
+validate fresh-resolves unique connectivity then requires CFEqual with the stored
+window/target/result, never replaces old objects by identifier. read surrounds actual
+collectWindowAX node/property read with current/identity validation and preserves keys.
+Different target/result object required; invalidate blocks all further reads, owner drop
+releases refs. Target and Expectation result identity are checked independently. No graph,
+framework/SDK changes or new runtime flag; unknown properties remain existing availability.
+
+Source compiled with existing HOST_HELPER/CAPTURE_LIBRARY collector/acquisition/protocol
+closure. Focused9 synthetic checks passed: target/result stable keys and value-property
+reads; same-identifier target remount refuses before property batch; result/window remount,
+current-generation loss and invalidation refuse. Mutation calls0/live SDKfalse.
+An initial compile was invalidated because the test input changed during build; rebuilt
+final unchanged inputs, clean compile/pass. No product defect/expectation/cap adjustment.
+This proves owner machinery only, not actual native delivery/current SDK ref lifetime.
+
+Integration handoff: construct NativeHeldAction on originating action-capable Observe;
+hold through one attached RuntimeHost session, call validate before A02 resolve and
+read(.result) for explicit Expectation; canonical keys supplied by guarded worker/source
+identity owner. trusted current callback must check live process/CG window/current surface,
+not cached Snapshot flags. On cancel/detach/deadline/EOF/reap invalidate/drop owner and
+refuse old refs. Existing one-shot helper results remain non-actionable; no cross-CLI
+retention. Native provider cannot invent permit or dispatch from Read/Prepare.
+
+One concrete remaining shared dependency returned to root/Core: selected attached-session
+private exchange + bounded residency + actual EffectPermit→held-object delivery path.
+Swift owner/reads are ready; Core owns shared protocol/nonce/lifetime, Native will attach
+reported AXPress delivery only to explicit Semantic Activate when that interface exists.
+No checkbox AXPress fallback: actual false setter remains Unsupported. Ordinary provider
+integration tests and one actual own-fixture Activate/Count follow in same task-wide
+outcome once real parent permit ready; no extra approval on mechanical owner fixes.
+Current implementation is a coherent preparatory slice, not completion of that outcome.
+
+Non-image compile/module-cache products consumed/removed and absence verified; no live
+fixture/input/SDK operation or image created, no lane held. Source pins follow below.
+Changed docs links/whitespace checked; exact4 short Git checkpoint lease requested,
+no unrelated WIP/index staged. Source review, if root retains it, groups completed
+integration risk rather than this mechanical owner step.
+
+plugins/macos/NativeHeldAction.swift: c4b600a48e96ebd86ca845e4396e34515ebe715862e9863e405a26437befeebe.
+tests/bridges/native/acquisition/HeldActionChecks.swift: 0e9530c85bd16ffcc8581db90b7285324cbccd562300975de83b944db7bfba7a.
+
+
+## User priority correction — coherent held-owner WIP checkpoint
+
+Root relayed direct user product clarification: primary value is real UI geometry/
+structure for AI-assisted Web/Mac interface development. Stop further P5 action/helper
+transport work now; preserve current code as WIP, no discard/refactor/infrastructure
+expansion. Source9 focused tests already passed; no started check remains. This save
+contains only the exact4 held-owner source/test/docs/receipt paths above; no delivery,
+protocol or actual Activate implemented. Action scope remains deferred, not removed.
+Read-only geometry does not require action-ready refs/parent nonce/held-action helper.
+Next consumer: existing AX bounds plus measured opt-in probe internal parts, truthful
+units/spaces/unknown and concise agent output. Earlier AX/probe/guarded Measure facts
+remain their evidence; selecting a fresh geometry scenario follows root's product
+context, no invented Mac product goal or new action prerequisite.
