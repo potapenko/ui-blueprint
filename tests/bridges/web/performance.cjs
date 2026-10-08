@@ -134,7 +134,8 @@ async function run(){
   const output=process.env.UIB_Q02_OUTPUT;assert(path.isAbsolute(output||''));
   assert(path.resolve(output).startsWith(fs.realpathSync(os.tmpdir())+path.sep));fs.mkdirSync(output,{mode:0o700});
   const fixtureSetup=prepare(),report={functional_pin:functional,executable_sha256:digest(executable),mode:preflight?'quality_preflight':'timed_series',samples:[],comparability:{},
-    unavailable:['Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],closures:[],
+    unavailable:['Documents cohorts await separate privacy acceptance; single-control acceptance does not release that scope.',
+      'Separate API/transport/Rust normalization/format CPU, syscall counts, worker allocation high-water/cache and model tokens unavailable.'],closures:[],
     environment:{node:process.version,arch:os.arch(),release:os.release(),cpus:os.cpus().length,cpu:os.cpus()[0].model,memory:os.totalmem(),load_start:os.loadavg()},
     retention:'Q02/root review consumer; remove run-owned nonimages after consumption; no screenshots created'};
   let fixture;
@@ -239,7 +240,8 @@ async function run(){
   }
   try{
     fixture=await start();
-    for(const kind of ['semantic','geometry','documents']){
+    // Q01 88d0920 accepts these independent scopes on9d715ee; Documents remains rejected.
+    for(const kind of ['semantic','geometry']){
       if(preflight){await series(kind,1,'preflight');continue;}
       if(!accepted.comparability[kind]?.comparable){report.comparability[kind]=accepted.comparability[kind];continue;}
       assert(accepted.samples.some(s=>s.kind===kind&&s.status==='valid_partial'&&s.freshness_challenge),'preflight quality and freshness required');

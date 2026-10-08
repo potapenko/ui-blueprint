@@ -1,5 +1,91 @@
 # Q02 performance — scoped Web result, Native pending
 
+## Accepted single-control result on9d715ee — 2026-10-08
+
+Root's latest direct continuation refined the prior all-findings gate: after
+terminal COMMITTED Q01 acceptance of semantic focusability and CPU/runtime release,
+run comparable semantic/geometry independently. Documents privacy and Native remain
+separate waits; no gate/field/bound changes authorized. Read Q01's complete new
+recheck section after terminal receipt88d0920: P2 accept on9d715ee, unchanged geometry
+accepted, Documents P1 reject with actual credential-canary publication. All Q01
+CPU/headless resources were explicitly released. This fulfilled the scoped trigger;
+no additional command-by-command/root approval was requested or inferred.
+
+Reused the full selected current basis including WEB-DOCUMENTS@1. Repaired source
+and author handoff read; no spec/API drift9d715ee..88d0920. Author records were
+read-only; new saved-source release build uses
+`9d715ee7bd8e566ad2b955024a68a8c3804966a4` exactly, Rust1.96.0 locked/offline,
+no test overlays or production changes. Generic Q02 Rust caller unchanged.
+The actual driver selects only semantic/geometry; Documents code remains dormant.
+
+Pins SHA256: consumer `b1a5a352add3e280a667e92a61c85dd0705bef2216cbf1adee7a17bf67a42886`;
+worker `03b8824c988683ddde33818f34a439ca840c2eb17e190e30bb4e3c72c66f7c85`;
+caller `5ec1a46c8b8a22898a19b8d122622bb11f6c8830f59ade9fec74f8a8adde1f2c`;
+driver `e3cd8257f0fca77953002e3660d26b828bc51e947306ed3c1bb8e090589de28d`.
+Profile release; actual macOS27.0.1/26A434, arm64 Apple M4 Pro,12CPUs/24GiB;
+Node24.15.0/Playwright1.58.2/Chromium145.0.7632.6/CDP1.3. Same five F01 source/oracle
+files at a8368076; preflight2docs/97nodes and actual800×600/DPR1. OS caches not flushed.
+Ambient load start7.762/6.015/5.461, end7.541/5.998/5.458; no concurrent Q02 compiler
+or stress during samples. This is the development host, not an idle-host claim.
+
+### Measured rows (milliseconds; p50 median, p95 nearest rank)
+
+| Workload | n | p50 | p95 | max | Gate/disposition |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Semantic warm outer response |100|2.586313|2.845584|3.645209|20ms met, requested semantic facts including focusable preserved |
+| Geometry warm outer response |100|2.714687|2.899125|3.059333|20ms met, original complete requested rect preserved |
+| Semantic through ACK (same calls) |100|2.515354|2.755708|3.575917|Contained in outer, not an exclusive normalization stage |
+| Geometry through ACK (same calls) |100|2.667458|2.832625|2.994208|Contained in outer |
+| Semantic process-cold control |20|154.151667|161.646208|558.086541|Supplemental; not the full-fixture500ms gate |
+| Geometry process-cold control |20|150.254500|158.599542|158.718042|Supplemental |
+| Semantic attach+first control |20|15.030104|16.190917|17.606000|Includes discovery/config; not full-fixture50ms gate |
+| Geometry attach+first control |20|14.904709|15.977333|17.030333|Supplemental |
+| Documents full cold/warm |0|unavailable|unavailable|unavailable|waiting_evidence: Q01 remaining P1 privacy reject |
+| Native off/on rows |0|unavailable|unavailable|unavailable|unchanged foreground/comparability wait |
+
+No failed, timed-out, dropped or retried cohort requests:240/240 valid. The558.087ms
+cold outlier remains included. Two initial warm responses and four changed/restored
+checks stay outside the100+100 cohort; six preflight requests are separate. Total252
+explicit Observe calls. One request at a time; no fixed scheduler or idle collection.
+Each accepted response has exact request/session/Target/Surface and fresh unique
+live Observation. Semantic uses1DOM+1AX node, known button/Apply/invalid=false and
+reported AX focusable=true (not Focused); geometry1DOM node retains40/60/120/40css_px
+within unchanged0.01epsilon. All selected fields/availability states remain present.
+Source coverage stays partial, not a whole-design or whole-platform completeness claim.
+On reused attachment/ref, explicit name/width stimuli are observed and restored
+before timing. Independent fixture state/focus/scroll/viewport remains unchanged.
+
+Semantic canonical bytes p50/p957141/7167 (7116–7184); geometry3828/3852
+(3817–3859). Every ACK reports parent-owned9,497,976bytes, retained reserved
+15,728,832bytes,1session/1completion lease and no abandoned/poisoned owner. These
+are layout/reservation counters, not worker cache/RSS/SDK peaks. Canonical source
+read intervals (100 each) p50/p95 ms: semantic DOM0.403771/0.457834,
+AX0.122333/0.158167; geometry DOM0.638875/0.715959. These are attributed source
+clock intervals, not independent CPU stages and are not summed. Exclusive API/transport CPU, Rust
+normalization/match/diff/check/format, syscalls, internal resync and cache high-water
+remain unexposed. No subtraction-based fabricated stage or model-token estimate.
+Caller made no resync/retry requests. No performance optimization was needed for
+these two numerical gates; no adjacent product source was modified.
+
+### Checks, release and retention
+
+Saved release compile, Node syntax/offline quality checks, actual preflight and
+both complete series passed. Two preflight plus42 cohort attachments have checked
+shutdown/exit0:0sessions/0completion groups,192bytes ledger backing, no abandonment
+or poisoned reap. Own browser/context/server closures awaited. Exact caller AND
+worker process inventories returned no PIDs. **CPU/headless runtime released**;
+no native UI/capture lane acquired. W06 source writer may continue its separate work.
+
+Evidence under the existing system-temp task root: `web9d-build-pins.json`,
+`web9d-preflight-1/`, `web9d-series-1/`; saved `web9d715ee/` and `target9d715ee/`
+contain the source/release products. Named consumers Q01/root performance review;
+retain minimum raw records until consumption, then exact nonimage cleanup. Both
+W06 shared proof directories remain untouched for their joint consumers. No image
+created/deleted or raw evidence committed. Full Q02 remains open for Documents,
+Native and the explicitly unavailable separate-stage reporting; old46aa360 results
+are historical, not pooled with this pin. Next Documents timing requires its own
+accepted repair pin and release, while preserving the original2document/97node gate.
+
 ## W06 handoff adaptation — offline, acceptance pending
 
 Root handed off production139d202b78a59d9017efaea1e55032f69f6468ac / final862572f

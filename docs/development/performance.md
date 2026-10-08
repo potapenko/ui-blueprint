@@ -1,11 +1,10 @@
 # Q02 fixed D06 evaluation
 
-Status: Web-only scoped evaluation on8e3dba2: warm requested geometry p95
-2.688ms/100calls meets20ms; Native, semantic fidelity, whole-fixture cold and
-separate-stage telemetry remain open. **No aggregate D06/P7 acceptance.**
-W06 source139d202 now supplies the missing Web representations; Q02's adapted
-driver is offline-checked and awaits Q01 changed-scope acceptance/resource release
-before its own saved release build and current-candidate preflight/timing.
+Status: Q01 accepted single-control scopes on9d715ee; Q02 measured100 warm each:
+semantic p952.846ms, geometry p952.899ms, both below20ms, zero cohort failures.
+Twenty cold-control samples per kind are supplemental. Documents privacy remains
+rejected; its50/500ms cold gates, Native and separate-stage telemetry stay open.
+**No aggregate D06/P7 acceptance.** Historical8e3dba2 geometry2.688ms remains recorded.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
@@ -53,6 +52,9 @@ Then supply UIB_Q02_PREFLIGHT pointing to that report. Only comparable workloads
 with passed quality/freshness execute series, using the identical saved executable.
 The original8e3dba2 semantic gap is retained historically; W06's extension must pass
 new actual preflight rather than be assumed correct from its representation.
+Current executable loop deliberately selects only semantic/geometry, as authorized
+after Q01 receipt88d0920 and root's scoped continuation. Documents code is prepared
+but not selected; a new accepted Documents pin/release is required before that row.
 Each semantic/geometry cohort has20 process-cold single-control samples and one
 reused session containing initial response plus100 explicit fresh warm requests.
 First Observe resolves #left; subsequent calls reuse the observed ref and attachment.
