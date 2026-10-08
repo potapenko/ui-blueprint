@@ -118,8 +118,16 @@ impl Case {
 }
 impl Drop for Case {
     fn drop(&mut self) {
-        for name in ["connection.json", "request.json", "source.json"] {
-            fs::remove_file(self.directory.join(name)).unwrap();
+        for name in [
+            "connection.json",
+            "request.json",
+            "source.json",
+            "expected.json",
+        ] {
+            let path = self.directory.join(name);
+            if path.exists() {
+                fs::remove_file(path).unwrap();
+            }
         }
         fs::remove_dir(&self.directory).unwrap();
         assert!(
@@ -186,5 +194,136 @@ fn action_cli_reuses_strict_connection_version_and_unknown_field_rejection() {
         let result = case.run("prepare", case.input + changed.len(), 65536, &[]);
         assert_eq!(result.status.code(), Some(2));
         assert!(result.stdout.is_empty());
+    }
+}
+
+impl Case {
+    fn forms_request(&self, focus: bool) {
+        let path = self.directory.join("request.json");
+        let mut document: Document = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        let Artifact::Request(request) = &mut document.artifact else {
+            panic!("request")
+        };
+        let action = match &mut request.operation {
+            Operation::Prepare { action } | Operation::Act { action } => action,
+            _ => panic!("action"),
+        };
+        action.intent = if focus {
+            Intent::Focus {}
+        } else {
+            Intent::Type {
+                text: "tail-only".into(),
+            }
+        };
+        action.modality = if focus {
+            InputModality::Semantic
+        } else {
+            InputModality::Keyboard
+        };
+        let expected = Document {
+            schema_version: SchemaVersion::CURRENT,
+            artifact: Artifact::Expectation(Box::new(Expectation {
+                id: Id("explicit-condition".into()),
+                scope_id: action.authorized_scope.clone(),
+                targets: vec![action.backend_ref.key.clone()],
+                rule: Rule::PropertyEquals {
+                    field: if focus { Field::Focused } else { Field::Value },
+                    expected: if focus {
+                        Value::Flag(true)
+                    } else {
+                        Value::Text("prefix-tail-only".into())
+                    },
+                },
+                applies_when: ContextConditions {
+                    platform: None,
+                    input_mode: None,
+                    text_scale: None,
+                },
+                expected_from: Id("caller-test-condition".into()),
+            })),
+        };
+        document.validate().unwrap();
+        expected.validate().unwrap();
+        fs::write(path, serde_json::to_vec(&document).unwrap()).unwrap();
+        fs::write(
+            self.directory.join("expected.json"),
+            serde_json::to_vec(&expected).unwrap(),
+        )
+        .unwrap();
+    }
+    fn total_input(&self) -> usize {
+        [
+            "connection.json",
+            "request.json",
+            "source.json",
+            "expected.json",
+        ]
+        .iter()
+        .map(|n| fs::metadata(self.directory.join(n)).unwrap().len() as usize)
+        .sum()
+    }
+}
+#[test]
+fn forms_require_explicit_expectation_and_preserve_byte_budget_before_spawn() {
+    for command in ["prepare", "execute"] {
+        for focus in [true, false] {
+            let c = Case::new(command);
+            c.forms_request(focus);
+            let expected_path = c.directory.join("expected.json");
+            let path = expected_path.to_str().unwrap();
+            let missing = c.run(command, 100_000, 65536, &["--json"]);
+            assert_eq!(missing.status.code(), Some(2));
+            assert_eq!(missing.stderr, b"expectation_required\n");
+            assert!(missing.stdout.is_empty());
+            let args = ["--json", "--expectation", path];
+            let limited = c.run(command, c.total_input() - 1, 65536, &args);
+            assert_eq!(limited.status.code(), Some(2));
+            assert_eq!(limited.stderr, b"input_limit\n");
+            assert!(limited.stdout.is_empty());
+            // Reaches the absent-worker boundary rather than unsupported/missing
+            // expectation. This is CLI admission proof, never delivery evidence.
+            let ready = c.run(command, c.total_input(), 65536, &args);
+            assert_eq!(ready.status.code(), Some(1));
+            assert_eq!(ready.stderr, b"io_error\n");
+            assert!(ready.stdout.is_empty());
+            let duplicate = c.run(
+                command,
+                100_000,
+                65536,
+                &["--expectation", path, "--expectation", path],
+            );
+            assert_eq!(duplicate.status.code(), Some(2));
+            assert_eq!(duplicate.stderr, b"invalid_arguments\n");
+            assert!(!String::from_utf8_lossy(&ready.stderr).contains("tail-only"));
+        }
+    }
+}
+#[test]
+fn action_cli_does_not_expand_intents_or_reinterpret_type_as_setter() {
+    for (intent, modality) in [
+        (Intent::Activate {}, InputModality::Semantic),
+        (
+            Intent::Type {
+                text: "PRIVATE_UNSUPPORTED_CANARY".into(),
+            },
+            InputModality::Setter,
+        ),
+    ] {
+        let c = Case::new("prepare");
+        let path = c.directory.join("request.json");
+        let mut d: Document = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        let Artifact::Request(request) = &mut d.artifact else {
+            panic!()
+        };
+        let Operation::Prepare { action } = &mut request.operation else {
+            panic!()
+        };
+        action.intent = intent;
+        action.modality = modality;
+        fs::write(path, serde_json::to_vec(&d).unwrap()).unwrap();
+        let out = c.run("prepare", 100_000, 65536, &[]);
+        assert_eq!(out.status.code(), Some(5));
+        assert_eq!(out.stderr, b"unsupported_command\n");
+        assert!(out.stdout.is_empty());
     }
 }

@@ -73,6 +73,7 @@ pub(crate) struct ActionArguments {
     pub connection: PathBuf,
     pub source: PathBuf,
     pub request: PathBuf,
+    pub expectation: Option<PathBuf>,
     pub worker: PathBuf,
     pub max_input: usize,
     pub max_output: usize,
@@ -89,6 +90,7 @@ impl ActionArguments {
         };
         let (mut connection, mut source, mut request, mut worker, mut max_input, mut max_output) =
             (None, None, None, None, None, None);
+        let mut expectation = None;
         let mut json = false;
         while let Some(flag) = args.next() {
             if flag == "--json" {
@@ -110,6 +112,9 @@ impl ActionArguments {
                     source = Some(PathBuf::from(value))
                 }
                 Some("--request") if request.is_none() => request = Some(PathBuf::from(value)),
+                Some("--expectation") if expectation.is_none() => {
+                    expectation = Some(PathBuf::from(value))
+                }
                 Some("--worker") if worker.is_none() => worker = Some(PathBuf::from(value)),
                 Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
                 Some("--max-output-bytes") if max_output.is_none() => {
@@ -123,6 +128,7 @@ impl ActionArguments {
             connection: connection.ok_or(invalid)?,
             source: source.ok_or(invalid)?,
             request: request.ok_or(invalid)?,
+            expectation,
             worker: worker.ok_or(invalid)?,
             max_input: max_input.ok_or(invalid)?,
             max_output: max_output.ok_or(invalid)?,

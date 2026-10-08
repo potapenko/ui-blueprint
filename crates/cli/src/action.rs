@@ -9,6 +9,7 @@ pub(crate) fn execute(args: ActionArguments, _: &mut impl Write) -> Result<u8, F
         args.connection,
         args.source,
         args.request,
+        args.expectation,
         args.worker,
         args.max_input,
         args.max_output,
@@ -60,10 +61,15 @@ mod supported {
             | (Operation::Act { action }, ActionCommand::Execute) => action,
             _ => return Err(Failure::invalid("invalid_request")),
         };
-        if !matches!(action.intent, Intent::SetChecked { .. })
-            || action.modality != InputModality::Setter
-        {
-            return Err(Failure::unsupported("unsupported_command"));
+        match (&action.intent, action.modality) {
+            (Intent::SetChecked { .. }, InputModality::Setter) => (),
+            (Intent::Focus {}, InputModality::Semantic)
+            | (Intent::Type { .. }, InputModality::Keyboard) => {
+                if args.expectation.is_none() {
+                    return Err(Failure::invalid("expectation_required"));
+                }
+            }
+            _ => return Err(Failure::unsupported("unsupported_command")),
         }
         let session = &connection.session;
         if session.target != connection.target
@@ -82,6 +88,13 @@ mod supported {
         // Read bounded raw bytes only. Envelope extraction, graph validation and
         // exact action/source agreement happen in the admitted guarded worker.
         let source = crate::input::read(&args.source, &mut remaining)?;
+        // Expectation is a third existing canonical document. Keep it opaque in
+        // the parent: binding/privacy/type validation stays in the guarded worker.
+        let expected = args
+            .expectation
+            .as_ref()
+            .map(|path| crate::input::read(path, &mut remaining))
+            .transpose()?;
         let deadline_ms = r.limits.deadline_ms;
         let request_output = r.limits.max_output_bytes as usize;
         let limits = connection.host_limits.limits()?;
@@ -143,11 +156,16 @@ mod supported {
             };
             r.clock_domain = Id(clock.as_str().into());
             let request = encoded(&request, limits.input_bytes)?;
-            let parts = [source.as_slice(), request.as_slice()];
+            let parts = [
+                source.as_slice(),
+                request.as_slice(),
+                expected.as_deref().unwrap_or(&[]),
+            ];
+            let parts = &parts[..if expected.is_some() { 3 } else { 2 }];
             let mut input = host
-                .reserve_input(attached, tape_len(&parts)?)
+                .reserve_input(attached, tape_len(parts)?)
                 .map_err(host_error)?;
-            worker_tape::encode(&parts, input.bytes_mut()).map_err(host_error)?;
+            worker_tape::encode(parts, input.bytes_mut()).map_err(host_error)?;
             let end = until(deadline_ms)?;
             host.submit(
                 attached,

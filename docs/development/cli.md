@@ -275,3 +275,64 @@ is saved context only; no live revalidation, inferred link or stable action ref.
 Inspect remains unchanged; it still shows all incident relation keys in compact
 and the original Snapshot in its version1.0.0 inspection envelope. Neighbors adds
 explicit capped selection and counterpart data, rather than another graph owner.
+
+
+## A04 single-step Web Focus and Type
+
+Current checkpoint status: **WIP — waiting for Core-dependent checks**. Default
+CLI check and scoped fmt passed; Web-feature/binary/worker verification and the
+Web-owned actual public Focus→Type consumer run remain pending. This source
+checkpoint is not delivery proof or acceptance. No new runtime test was run here.
+
+[CLI-ACTIONS@2](../specs/product/cli-actions.md) adds explicit caller Expectation
+transport to the existing action path. Build with the existing `web` feature.
+One invocation still handles one step; no batch runner or implicit Focus is added.
+
+```sh
+uiblueprint action prepare --connection connection.json --snapshot observed.json \
+  --request focus-prepare.json --expectation focus-expected.json \
+  --worker /absolute/path/session-worker --max-input-bytes 131072 \
+  --max-output-bytes 65536 --json
+uiblueprint action execute --connection connection.json --plan focus-plan.json \
+  --request focus-act.json --expectation focus-expected.json \
+  --worker /absolute/path/session-worker --max-input-bytes 131072 \
+  --max-output-bytes 65536 --json
+```
+
+Save the complete successful Prepare ActionCase as focus-plan.json; Act Request
+must contain that exact Action, rather than the unresolved preparation seed.
+The Expectation is a normal core0.1 Document with artifact.kind="expectation".
+Focus uses Intent::Focus/InputModality::Semantic and a caller PropertyEquals rule
+with field="focused", expected={type:"flag",value:true}, the exact action SourceKey
+as its single target, matching authorized scope and explicit expected_from.
+After verified Focus, a separate fresh observed source/Prepare/Execute Type step
+uses Intent::Type/InputModality::Keyboard. Its Expectation is field="value" with
+expected={type:"text",value:"the explicitly expected whole draft value"}. The
+value is supplied by the caller; inserting "tail" does not imply a final value
+of "tail", an applied setting, submitted form or business success. No secret
+input/expected values belong in diagnostic documents or command-line arguments.
+
+Both commands require --expectation FILE for Focus/Type; absent returns
+expectation_required/2 before attach. Native action/Activate/other modalities stay
+unsupported5. SetChecked/Setter without the flag keeps the original two-document
+worker transport and kernel-owned Checked predicate. With the flag, all four
+explicit input files share the existing aggregate byte budget. The canonical
+source and Expectation bytes are passed unchanged in Tape order
+[source, request, expectation]; only Request.clock_domain is rebound after Attach.
+Parent never parses source/expectation graph bodies or grants rights from them.
+The guarded worker validates kind/order/scope/target/field/privacy/current binding;
+caller expected state is not invented to turn a result into success.
+
+The actual target permit, shared Focus/Keyboard lane, fixed Frame/Commit/ACK
+semantic metadata, post-Possible uncertainty, no-retry and owned cleanup are the
+existing host/kernel owners. JSON/compact output and exits retain CLI-ACTIONS
+semantics:0 verified source-state success,3 known mismatch,4 refusal/uncertainty,
+1 IO/unconfirmed cleanup,2 pre-Possible invalid/limit,5 unsupported before dispatch.
+Missing/malformed/mismatched expectation must never establish success; worker
+refusal may retain a matching canonical Error document. UI/body text never enters
+stderr. No changes to observe, geometry, diff, export, neighbors or SetChecked.
+
+This is the public caller handoff for the combined A03/A04 integration. Core owns
+saved/check-ready worker composition; Web owns the one actual isolated public
+Focus→Type chain and its runtime proof. CLI preflight tests are not delivery proof,
+and a source-state result does not close full B02/P5/P7 or Native capability.
