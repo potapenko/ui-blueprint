@@ -94,3 +94,101 @@ Checkpoint: root granted the exact write set after `8103675`; master and empty
 index verified. No Cargo/lock staging by E01. Shared hash equality was confirmed
 immediately before the grant, with no intervening source changes;
 package SHA, successful push and Git lease release return in the terminal receipt.
+
+## G09-Export — direct observed file to document package
+
+Current additive outcome, 2026-10-08: the earlier local --brief-only gap is closed
+for an explicit canonical Snapshot or observed ChannelResponse file. Implicit
+stored-ID lookup, live recollection, multi-channel merging and full P6 acceptance
+remain outside this result. Earlier E01-cli checks/limits above are historical.
+
+Authority: root's finite G09-Export dispatch under user-approved PLAN.UIB@1 P0–P7,
+explicit parallel worker authorization and current read-only geometry priority.
+Mode Restore EXPORT.CONTENT; `G09-EXPORT-INPUT-001` selects additive representation
+under ROADMAP/P6 engineering authority. Before implementation, registered CLI@8,
+CLI-EXPORT@1 and registry20; no new measurement/product intent or dependency.
+
+Traversal: current AGENTS/work governance, registry19 → product branch → CLI@7,
+EXPORT@1 and the complete previously read DRAWING/PROMPT/REVIEW/EXAMPLE closure;
+GEOMETRY/PROJECTIONS/MODEL/EXCHANGE/IDENTITY/BOUNDARIES/PRIVACY dependencies reused
+after saved no-diff check. ANALYSIS@2/TYPES/VALIDATION@1 read completely for direct
+observed input and factual queries. RUST/DEV.RUST@2 remain unchanged. Updated
+execution rules preserve current geometry priority and one review per finished
+privacy/input boundary; no unrelated action/live/host route or full-suite preload.
+
+Observed source: existing input::read_snapshot already validates Snapshot or
+observed ChannelResponse through Document::from_json; it moves the unchanged
+Snapshot. Existing export Metadata/ViewInput/SourceInput/compile/new-directory
+writer already own document validation, privacy, geometry and output. Chosen
+adapter: reuse that loader and compiler with one export-owned annotation record;
+no second JSON parser, graph, compiler, geometry calculator or inferred labels.
+
+Concrete command:
+
+```sh
+uiblueprint imagegen-prompt --snapshot observation.json --metadata metadata.json \
+  --out "$TMPDIR/my-new-observed-package" --max-input-bytes 2000000 \
+  --max-output-bytes 4000000 --max-components 256 --max-views 8 \
+  --components-per-detail 12 --json
+```
+
+Metadata shape/example is in [export handoff](../../../development/export.md#observed-file-to-package).
+It reuses full Metadata plus state/scope/environment/safe_source_reference,
+not_depicted and public_text_fields; no source facts can be supplied through it.
+Default direct purpose=document, explain alias; all other existing modes use
+--brief. Missing metadata and mixed input forms reject. One input budget covers
+both explicit files; existing compiler input cap and aggregate package/stdout cap
+remain. User annotations are labelled; no date, fresh status, completeness,
+padding, units conversion, arbitrary-ID meaning or accepted/checked image is guessed.
+Canonical source is never rewritten. Six-file/versioned package and stdout shape
+stay unchanged; no pixels or model calls, no persistent test directory creation.
+
+Exact writes: crates/export/src/types.rs; crates/cli/src/{export,input,main}.rs;
+crates/cli/tests/export_binary.rs; docs/specs/README.md, product/{README,cli,
+cli-export}.md; docs/development/{cli,export}.md; this existing receipt.
+No schema/engine/plugin/host/provider/fixture/Cargo/lock/root-coordination writes.
+
+### Verification and source reconciliation
+
+- `cargo check --locked -p uiblueprint-cli --all-targets`: pass.
+- `cargo fmt -p uiblueprint-export -p uiblueprint-cli -- --check`: pass.
+- `cargo clippy --locked -p uiblueprint-cli --all-targets -- -D warnings`: pass.
+- `cargo test --locked -p uiblueprint-cli --test export_binary`:16 passed,0 failed;
+  four new direct-input cases plus relevant existing --brief/modes/numeric repairs.
+- Changed local links/route consistency and scoped whitespace checks pass.
+
+First test pass exposed one historical assertion expecting every partial-scope
+width/height to be unknown. Current saved known-anchor behavior (protected256f2a2)
+retains explicit source geometry. Reconciled that stale assertion with independent
+source width97.296875/height32 and contributing evidence; coverage/unknown-property
+checks remain. No engine/source fixture or dimension was changed to obtain pass.
+
+One actual public `cargo run ... -- imagegen-prompt --snapshot ... --metadata ...`
+used the original saved F01 D05 overlay-on ChannelResponse, not a regenerated
+DrawingBrief or fresh UI collection. Original bytes SHA256
+`11e2a77cf6460636050e90ed0f6f63bcf3412c062bb3eb917d677be035858180`
+remained unchanged. Output:32 source nodes,17 relations,32 explicit known dimensions,
+partial coverage, unknown_count=null, unavailable properties retained,4 sheets,
+all6 files and full A+B prompt. The particular caller-metadata run totalled629411
+package bytes; image status unverified, approval draft. No machine path/payload_ref
+entered the prompt. Source is our historical controlled F01, not real-site or
+fresh PlayPhrase.me acceptance. Tests also cover direct Snapshot, failed/sensitive/
+wrong-version/multiple responses, missing/private/geometry-injecting metadata,
+text-policy refusal, unknown annotations, bounds, modes and baseline preservation.
+
+All run output/metadata was under a unique system-temp directory. Removed only
+its known6 text/JSON outputs and metadata after checking results, then its empty
+directories; verified absence. No images created/deleted; old evidence untouched.
+
+Checked relevant Rust-input set:72 files, SHA256
+`a26df7203ee07b657c6e513915845d8205049eb4cfeab855031f99cddad29465`.
+Recipe: sorted compact JSON path→file-SHA256 map of root Cargo.toml/Cargo.lock/
+rust-toolchain.toml plus all .rs, Cargo.toml and prompt-template.txt under
+crates/{schema,engine,export,cli}. Relevant provider source/Cargo diffs were empty;
+inspection HEAD46ec1de includes other owner's disjoint saved Web work. No broad
+workspace suite or new E02 numerical review was run. A focused finished input/
+privacy review may follow; author checks do not claim independent acceptance.
+
+Checkpoint-ready for short root Git grant on the12 exact paths above. Own code
+is frozen pending save; existing shared owners and prior numerical fixes remain
+protected. Saved SHA/push and Git release return in the terminal receipt.

@@ -58,6 +58,20 @@ pub struct Metadata {
     pub page_format: String,
     pub output_size: String,
 }
+/// Caller-authored document annotations for one explicitly loaded observation.
+/// Contains no geometry or replacement source facts. Validated in DrawingBrief.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObservedDocumentMetadata {
+    pub metadata: Metadata,
+    pub state: String,
+    pub scope: String,
+    pub environment: String,
+    pub safe_source_reference: String,
+    pub not_depicted: Vec<String>,
+    pub public_text_fields: Vec<Field>,
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DrawingBrief {

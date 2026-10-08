@@ -215,12 +215,16 @@ fn observed_default_document_preserves_partial_fractional_unknown_and_dense_scop
     details.sort();
     details.dedup();
     assert_eq!(details.len(), 32);
+    // Partial coverage does not erase explicitly reported anchor geometry.
+    let dimensions = c.package("dimensions.json");
+    assert_eq!(dimensions[0]["dimensions"][0]["value"], 97.296875);
+    assert_eq!(dimensions[0]["dimensions"][1]["value"], 32.0);
+    assert!(dimensions[0]["dimensions"][0]["unknown_reason"].is_null());
     assert!(
-        c.package("dimensions.json")[0]["dimensions"]
+        !dimensions[0]["dimensions"][0]["evidence"]
             .as_array()
             .unwrap()
-            .iter()
-            .all(|d| d["value"].is_null() && d["unknown_reason"].is_string())
+            .is_empty()
     );
 }
 #[test]
@@ -567,4 +571,218 @@ fn proposal_finite_cancellation_rejects_zero_and_two_in_actual_command() {
             }
         }
     }
+}
+
+impl Case {
+    // Existing historical F01 Snapshot, with an explicitly synthetic response
+    // envelope when requested. Neither this helper nor the CLI recollects UI.
+    fn observed_inputs(&self, response: bool) {
+        let view = &self.brief["views"][0];
+        let snapshot = &view["source"]["snapshot"];
+        let artifact = if response {
+            json!({"kind":"channel_response","data":{
+                "request_id":"export-test-request","session_id":snapshot["context"]["session_id"],
+                "dispatch_sequence":1,"target":snapshot["context"]["target"],"channel":"external_semantics",
+                "result":{"status":"observed","data":snapshot}
+            }})
+        } else {
+            json!({"kind":"snapshot","data":snapshot})
+        };
+        fs::write(
+            self.root.join("source.json"),
+            serde_json::to_vec_pretty(&json!({"schema_version":"0.1.0","artifact":artifact}))
+                .unwrap(),
+        )
+        .unwrap();
+        let metadata = json!({
+            "metadata":self.brief["metadata"],"state":view["state"],"scope":view["scope"],
+            "environment":view["environment"],"safe_source_reference":view["safe_source_reference"],
+            "not_depicted":view["not_depicted"],"public_text_fields":view["source"]["public_text_fields"]
+        });
+        fs::write(
+            self.root.join("metadata.json"),
+            serde_json::to_vec_pretty(&metadata).unwrap(),
+        )
+        .unwrap();
+    }
+    fn run_observed(&self, extra: &[&str], input: usize, output: usize) -> Output {
+        Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .args(["imagegen-prompt", "--snapshot"])
+            .arg(self.root.join("source.json"))
+            .arg("--metadata")
+            .arg(self.root.join("metadata.json"))
+            .arg("--out")
+            .arg(self.root.join("package"))
+            .args([
+                "--max-input-bytes",
+                &input.to_string(),
+                "--max-output-bytes",
+                &output.to_string(),
+                "--max-components",
+                "256",
+                "--max-views",
+                "8",
+                "--components-per-detail",
+                "12",
+            ])
+            .args(extra)
+            .output()
+            .unwrap()
+    }
+    fn mutate_metadata(&self, edit: impl FnOnce(&mut Value)) {
+        let path = self.root.join("metadata.json");
+        let mut metadata: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        edit(&mut metadata);
+        fs::write(path, serde_json::to_vec_pretty(&metadata).unwrap()).unwrap();
+    }
+}
+
+#[test]
+fn direct_observed_snapshot_and_response_compile_full_scope_without_geometry_reentry() {
+    for response in [false, true] {
+        let c = Case::new("observed");
+        c.observed_inputs(response);
+        let original = fs::read(c.root.join("source.json")).unwrap();
+        let out = c.run_observed(&["--json"], 2_000_000, 4_000_000);
+        let receipt = success(out);
+        check_files(&c);
+        assert_eq!(receipt["purpose"], "document");
+        assert_eq!(receipt["views"][0]["source_kind"], "observed");
+        assert_eq!(receipt["views"][0]["coverage"], "partial");
+        assert!(receipt["views"][0]["unknown_count"].is_null());
+        assert_eq!(receipt["validation_status"], "unverified");
+        assert_eq!(receipt["approval_status"], "draft");
+        let scene = c.package("scene.json");
+        let v = &scene["views"][0];
+        assert_eq!(v["components"].as_array().unwrap().len(), 32);
+        assert_eq!(v["relations"].as_array().unwrap().len(), 17);
+        assert_eq!(v["title"], c.brief["metadata"]["title"]);
+        assert_eq!(
+            v["components"][0]["properties"][2]["state"]["value"]["value"]["shape"]["value"]["width"],
+            97.296875
+        );
+        assert_eq!(
+            v["components"][0]["properties"][2]["state"]["value"]["value"]["coordinate_space"]["units"],
+            "css_px"
+        );
+        assert_eq!(
+            v["components"][0]["properties"][3]["state"]["availability"],
+            "unknown"
+        );
+        assert_eq!(v["observations"][0]["consistency"], "unknown");
+        assert_eq!(c.package("sheets.json").as_array().unwrap().len(), 4);
+        assert_eq!(fs::read(c.root.join("source.json")).unwrap(), original);
+        let prompt = fs::read_to_string(c.root.join("package/prompt.txt")).unwrap();
+        assert!(prompt.contains("caller annotations"));
+        assert!(!prompt.contains("fixture-ref-"));
+    }
+}
+#[test]
+fn direct_observed_metadata_is_explicit_and_cannot_inject_geometry_or_sensitive_fields() {
+    for (variant, code) in [
+        (0, "export_metadata_required"),
+        (1, "export_invalid_input"),
+        (2, "export_private_content"),
+        (3, "export_private_content"),
+        (4, "export_approval_record_required"),
+    ] {
+        let c = Case::new("observed");
+        c.observed_inputs(false);
+        c.mutate_metadata(|m| match variant {
+            0 => {
+                m.as_object_mut().unwrap().remove("state");
+            }
+            1 => {
+                m["geometry"] = json!({"width":123});
+            }
+            2 => {
+                m["metadata"]["title"] = "/Users/private/CANARY".into();
+            }
+            3 => {
+                m["public_text_fields"] = json!(["value"]);
+            }
+            _ => {
+                m["metadata"]["approval"] = json!({"status":"accepted","named_record":null});
+            }
+        });
+        fail(c.run_observed(&[], 2_000_000, 4_000_000), 2, code);
+        assert!(!c.root.join("package").exists());
+    }
+    let c = Case::new("observed");
+    c.observed_inputs(false);
+    c.mutate_metadata(|m| {
+        m["state"] = "unknown".into();
+        m["environment"] = "unknown".into();
+        m["public_text_fields"] = json!([]);
+    });
+    success(c.run_observed(&["--json", "--purpose", "explain"], 2_000_000, 4_000_000));
+    assert_eq!(c.package("scene.json")["views"][0]["state"], "unknown");
+    assert_eq!(
+        c.package("scene.json")["views"][0]["environment"],
+        "unknown"
+    );
+}
+#[test]
+fn direct_observed_invalid_failed_multiple_and_sensitive_source_are_rejected() {
+    for variant in 0..4 {
+        let c = Case::new("observed");
+        c.observed_inputs(true);
+        let path = c.root.join("source.json");
+        let mut source: Value = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        match variant {
+            0 => {
+                source["artifact"]["data"]["result"] = json!({"status":"failed","data":{"code":"unsupported","scope_id":"selected","failed_step":null,"recovery_class":"retry"}})
+            }
+            1 => source["schema_version"] = "9.0.0".into(),
+            2 => {
+                let p =
+                    &mut source["artifact"]["data"]["result"]["data"]["nodes"][0]["properties"][1];
+                p["sensitivity"] = "sensitive".into();
+                p["state"] = json!({"availability":"known","value":{"type":"text","value":"PRIVATE_SOURCE_CANARY"}});
+            }
+            _ => (),
+        }
+        let mut bytes = serde_json::to_vec(&source).unwrap();
+        if variant == 3 {
+            bytes.push(b'\n');
+            bytes.extend(serde_json::to_vec(&source).unwrap());
+        }
+        fs::write(path, bytes).unwrap();
+        fail(
+            c.run_observed(&["--json"], 2_000_000, 4_000_000),
+            2,
+            "invalid_input",
+        );
+        assert!(!c.root.join("package").exists());
+    }
+}
+#[test]
+fn direct_observed_limits_modes_and_no_overwrite_reuse_existing_boundary() {
+    let c = Case::new("observed");
+    c.observed_inputs(true);
+    let total = ["source.json", "metadata.json"]
+        .iter()
+        .map(|p| fs::metadata(c.root.join(p)).unwrap().len() as usize)
+        .sum::<usize>();
+    fail(c.run_observed(&[], total - 1, 4_000_000), 2, "input_limit");
+    fail(c.run_observed(&[], 2_000_000, 100), 2, "output_limit");
+    fail(
+        c.run_observed(&["--purpose", "propose"], 2_000_000, 4_000_000),
+        2,
+        "invalid_arguments",
+    );
+    fail(
+        c.run_observed(&["--brief", "irrelevant"], 2_000_000, 4_000_000),
+        2,
+        "invalid_arguments",
+    );
+    assert!(!c.root.join("package").exists());
+    success(c.run_observed(&["--json"], 2_000_000, 4_000_000));
+    let before = fs::read(c.root.join("package/scene.json")).unwrap();
+    fail(
+        c.run_observed(&[], 2_000_000, 4_000_000),
+        2,
+        "export_destination_exists",
+    );
+    assert_eq!(fs::read(c.root.join("package/scene.json")).unwrap(), before);
 }

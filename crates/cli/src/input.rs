@@ -56,7 +56,11 @@ pub(crate) fn load_inspect(args: &InspectArguments) -> Result<(Snapshot, SourceK
         reference,
     ))
 }
-fn read_snapshot(path: &Path, remaining: &mut usize, limit: usize) -> Result<Snapshot, Failure> {
+pub(crate) fn read_snapshot(
+    path: &Path,
+    remaining: &mut usize,
+    limit: usize,
+) -> Result<Snapshot, Failure> {
     let document = Document::from_json(&read(path, remaining)?, limit)
         .map_err(|_| Failure::invalid("invalid_input"))?;
     let snapshot = match document.artifact {

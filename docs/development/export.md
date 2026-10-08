@@ -27,9 +27,10 @@ The public `uiblueprint imagegen-prompt` command now accepts an explicit local
 DrawingBrief with embedded canonical Snapshot or explicit ProposedLayout, reviewed
 metadata and caller limits. Its [finite CLI contract](cli.md#e01-public-imagegen-prompt-command)
 records syntax, aggregate output bounds, versioned receipt and exit behavior.
-No engine/schema wire change is requested. The ordinary live observe → stored
-Snapshot ID → export path still awaits the session/storage and adapter owners;
-local brief export does not claim that end-to-end capability.
+No engine/schema wire change is requested. Direct saved observe output → document
+package is now connected through --snapshot plus explicit --metadata, using the
+same canonical loader as analysis. Live acquisition is separate; no hidden session
+or stored-ID lookup, recollection or permission expansion occurs during export.
 The engine's factual `measure_query(&Snapshot, &GeometryQuery,
 &EvaluationContext) -> Result<MeasurementResult, GeometryError>` API computes
 observed rect width/height. Export constructs a canonical GeometryQuery with
@@ -62,6 +63,52 @@ The numbers above are finite example parameters. The destination must not exist.
 CLI max-output-bytes includes both all package files and the response on stdout.
 The earlier `uiblueprint-export --example compile` remains a library demonstration;
 the commands above exercise the actual public binary.
+
+## Observed file to package
+
+Use a saved canonical Snapshot Document or one observed ChannelResponse Document
+as `observation.json`. The source can come directly from one selected Observe
+response; no manual geometry reconstruction is required. For multi-channel NDJSON,
+select one response explicitly. Failed responses or concatenated records reject.
+The command below is local only and does not create a fresh observation:
+
+```sh
+uiblueprint imagegen-prompt --snapshot observation.json --metadata metadata.json \
+  --out "$TMPDIR/my-new-observed-package" --max-input-bytes 2000000 \
+  --max-output-bytes 4000000 --max-components 256 --max-views 8 \
+  --components-per-detail 12 --json
+```
+
+Example `metadata.json` (caller-authored document annotations, no measured data):
+
+```json
+{
+  "metadata": {
+    "document_id": "UI-DOC", "revision": "1", "title": "Selected interface",
+    "audience": "Developer", "language": "en", "date": "2026-10-08",
+    "owner": "Document author", "retention": "Until this review is complete",
+    "specification_refs": ["UIB.DRAWING@1.1"],
+    "approval": {"status": "draft", "named_record": null},
+    "page_format": "A3 proportions", "output_size": "3840 x 2160 output pixels"
+  },
+  "state": "unknown", "scope": "Selected source scope", "environment": "unknown",
+  "safe_source_reference": "Observation selected by the document author",
+  "not_depicted": ["Uncollected or hidden UI is not claimed"],
+  "public_text_fields": []
+}
+```
+
+All fields are required; use explicit unknown where runtime context is unavailable.
+The metadata uses the existing Metadata type and named-approval validation.
+Direct input forms one view `observed`, named by document title, with an explicit
+note distinguishing caller annotations from source facts. It uses all returned
+source nodes, canonical coverage, units, evidence and unknowns unchanged. No title,
+date, environment, full coverage, current freshness or acceptance is inferred from
+an ID. Public text requires the existing allowlist; [] keeps unreviewed text out.
+The source and metadata files share the input cap, and the assembled brief must
+also fit the compiler's existing serialization cap. The full six-file package,
+versioned receipt, new-directory writer and output cap remain unchanged. No images
+are created or copied. Other modes continue through their explicit --brief input.
 
 ## Source and mode contract
 

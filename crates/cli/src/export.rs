@@ -1,10 +1,20 @@
 //! Thin explicit-file adapter; canonical brief validation and package IO stay in export.
 use crate::{Failure, arguments::limit, input, output};
 use std::{ffi::OsString, path::PathBuf};
-use uiblueprint_export::{DrawingBrief, ExportError, ExportLimits, Purpose, SourceInput};
+use uiblueprint_export::{
+    DrawingBrief, ExportError, ExportLimits, ObservedDocumentMetadata, Purpose, SourceInput,
+    ViewInput,
+};
 
+enum ExportInput {
+    Brief(PathBuf),
+    Snapshot {
+        snapshot: PathBuf,
+        metadata: PathBuf,
+    },
+}
 struct Arguments {
-    brief: PathBuf,
+    input: ExportInput,
     destination: PathBuf,
     limits: ExportLimits,
     purpose: Option<Purpose>,
@@ -22,6 +32,8 @@ impl Arguments {
             mut views,
             mut detail,
         ) = (None, None, None, None, None, None, None);
+        let mut snapshot = None;
+        let mut metadata = None;
         let mut purpose = None;
         let mut profile = false;
         let mut json = false;
@@ -33,12 +45,11 @@ impl Arguments {
                 json = true;
                 continue;
             }
-            if flag == "--snapshot" {
-                return Err(Failure::invalid("export_metadata_required"));
-            }
             let value = args.next().ok_or(Failure::invalid("invalid_arguments"))?;
             match flag.to_str() {
                 Some("--brief") if brief.is_none() => brief = Some(PathBuf::from(value)),
+                Some("--snapshot") if snapshot.is_none() => snapshot = Some(PathBuf::from(value)),
+                Some("--metadata") if metadata.is_none() => metadata = Some(PathBuf::from(value)),
                 Some("--out") if destination.is_none() => destination = Some(PathBuf::from(value)),
                 Some("--max-input-bytes") if max_input.is_none() => max_input = Some(limit(value)?),
                 Some("--max-output-bytes") if max_output.is_none() => {
@@ -69,8 +80,19 @@ impl Arguments {
             }
         }
         let missing = Failure::invalid("invalid_arguments");
+        let input = match (brief, snapshot, metadata) {
+            (Some(brief), None, None) => ExportInput::Brief(brief),
+            (None, Some(snapshot), Some(metadata)) => {
+                if purpose.is_some_and(|p| p != Purpose::Document) {
+                    return Err(missing);
+                }
+                ExportInput::Snapshot { snapshot, metadata }
+            }
+            (Some(_), _, _) => return Err(missing),
+            _ => return Err(Failure::invalid("export_metadata_required")),
+        };
         Ok(Self {
-            brief: brief.ok_or(Failure::invalid("export_metadata_required"))?,
+            input,
             destination: destination.ok_or(missing)?,
             purpose,
             json,
@@ -87,17 +109,7 @@ impl Arguments {
 
 pub(crate) fn execute(args: Vec<OsString>) -> Result<(Vec<u8>, u8), Failure> {
     let args = Arguments::parse(args)?;
-    let mut remaining = args.limits.max_input_bytes;
-    let bytes = input::read(&args.brief, &mut remaining)?;
-    // Decode the compiler-owned type once, apply only the explicit mode, then use
-    // the compiler's existing validator. No metadata or source facts are invented.
-    let mut brief: DrawingBrief = serde_json::from_slice(&bytes).map_err(|error| {
-        if error.is_data() && error.to_string().starts_with("missing field `") {
-            Failure::invalid("export_metadata_required")
-        } else {
-            Failure::invalid("export_invalid_input")
-        }
-    })?;
+    let mut brief = load_brief(&args)?;
     if let Some(purpose) = args.purpose {
         brief.purpose = purpose;
     }
@@ -117,6 +129,53 @@ pub(crate) fn execute(args: Vec<OsString>) -> Result<(Vec<u8>, u8), Failure> {
     // successfully written directory accompanied by a failed validation result.
     package.write_new(&args.destination).map_err(failure)?;
     Ok((stdout, 0))
+}
+fn decode_failure(error: serde_json::Error) -> Failure {
+    if error.is_data() && error.to_string().starts_with("missing field `") {
+        Failure::invalid("export_metadata_required")
+    } else {
+        Failure::invalid("export_invalid_input")
+    }
+}
+fn load_brief(args: &Arguments) -> Result<DrawingBrief, Failure> {
+    let mut remaining = args.limits.max_input_bytes;
+    match &args.input {
+        ExportInput::Brief(path) => {
+            let bytes = input::read(path, &mut remaining)?;
+            serde_json::from_slice(&bytes).map_err(decode_failure)
+        }
+        ExportInput::Snapshot { snapshot, metadata } => {
+            let snapshot =
+                input::read_snapshot(snapshot, &mut remaining, args.limits.max_input_bytes)?;
+            let bytes = input::read(metadata, &mut remaining)?;
+            if bytes.iter().find(|b| !b.is_ascii_whitespace()) != Some(&b'{') {
+                return Err(Failure::invalid("export_invalid_input"));
+            }
+            let mut annotations: ObservedDocumentMetadata =
+                serde_json::from_slice(&bytes).map_err(decode_failure)?;
+            annotations.not_depicted.push("State, environment and scope labels are caller annotations; coverage and source facts come from the saved Snapshot. No fresh observation.".into());
+            Ok(DrawingBrief {
+                purpose: Purpose::Document,
+                views: vec![ViewInput {
+                    id: "observed".into(),
+                    title: annotations.metadata.title.clone(),
+                    state: annotations.state,
+                    scope: annotations.scope,
+                    environment: annotations.environment,
+                    safe_source_reference: annotations.safe_source_reference,
+                    not_depicted: annotations.not_depicted,
+                    source: SourceInput::Observed {
+                        snapshot: Box::new(snapshot),
+                        public_text_fields: annotations.public_text_fields,
+                    },
+                }],
+                metadata: annotations.metadata,
+                details: vec![],
+                comparisons: vec![],
+                transitions: vec![],
+            })
+        }
+    }
 }
 fn failure(error: ExportError) -> Failure {
     match error {

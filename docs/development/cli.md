@@ -187,10 +187,22 @@ uiblueprint imagegen-prompt --brief FILE --out NEW_DIRECTORY --max-input-bytes N
 
 `--brief` is the export-owned DrawingBrief JSON, including canonical Snapshot
 records inside observed views or an explicit ProposedLayout inside proposed
-views. A bare Snapshot is invalid brief input (2). `--snapshot FILE` without
-DrawingBrief metadata returns `export_metadata_required` (2): document identity, safe source labels, state,
-environment, retention, approval, requirements and scope cannot be guessed.
-Stored Snapshot-ID resolution awaits K01 and is not emulated by a path lookup.
+views. Alternatively, [CLI-EXPORT@1](../specs/product/cli-export.md) connects an
+unchanged canonical observation without re-entering any measured geometry:
+
+```text
+uiblueprint imagegen-prompt --snapshot FILE --metadata FILE --out NEW_DIRECTORY --max-input-bytes N --max-output-bytes N --max-components N --max-views N --components-per-detail N [--purpose document|explain] [--profile blue-engineering] [--json]
+```
+
+The direct form loads one core0.1 Snapshot Document or observed ChannelResponse
+through the existing strict snapshot loader. A failed response, wrong artifact
+or multiple JSON records rejects `invalid_input` (2). Select one observed channel
+line explicitly; no automatic merge or silent channel selection. `--brief` cannot
+be combined with --snapshot/--metadata. Missing metadata returns
+`export_metadata_required` (2); direct-input non-document purposes reject2.
+The default direct mode is document. Source fact extraction is automatic; document
+annotations remain caller-authored. Metadata's exact object/example is documented
+in [export](export.md#observed-file-to-package). No implicit stored-ID resolver.
 
 The optional purpose overrides the input brief's purpose before compiler
 validation. Without it, the brief's explicit purpose applies; a missing JSON
@@ -202,8 +214,9 @@ The only implemented profile is blue-engineering; another profile returns
 return `invalid_arguments` (2). All numeric limits are required, with no hidden
 production defaults.
 
-Input is one explicitly named local regular file, read through the existing
-bounded reader. No embedded reference, path, URL, source ID or payload_ref is
+Inputs are explicitly named local regular files, read through the existing
+bounded reader: one brief, or Snapshot/ChannelResponse plus metadata sharing the
+same aggregate input-byte limit. No embedded reference, path, URL, source ID or payload_ref is
 opened. Input bytes and the compiler's serialized in-memory input validation
 must both fit max-input-bytes. The compiler's own node/view/density limits apply.
 `max-output-bytes` bounds the aggregate six package files **plus stdout including
