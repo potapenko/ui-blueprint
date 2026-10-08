@@ -1319,3 +1319,44 @@ option self-removal and result-only after Snapshot are checked. Original inputs 
 ACKed outputs are pinned and compared. Bounds/quotas unchanged; no pointer/hardware
 claim from Semantic activation. Syntax/diff checks passed; actual run follows this
 prepared harness checkpoint, with no other activation/review round required.
+
+### Actual application slice — 2026-10-08
+
+Saved harnessdf5fb92847d777745d8f77e8457150297a87d549 and verified A05 products
+above ran ONCE08:02:46.312–08:02:48.692UTC. All7 public CLI calls passed with
+exits4/0/0/4/0/0/4; no mismatch, retry, rebuild, changed oracle or cap. Observe4
+retains partial coverage; both Execute0 records are Confirmed/Succeeded with fresh
+after Snapshot and verification Observation, not merely invocation acknowledgements.
+
+Fixture fill `Lon` and suggestion readiness were ordinary setup, not repeated
+Focus/Type proof. Option actor web.dom:45 activated semantically; independently held
+draft result web.dom:7 became `London`. Actual selected=London, valid=true,
+applied empty, delivered0; the option disappeared. Its after Snapshot contains only
+result7, never stale actor45. Fresh Commit actor9 then independently verified output
+result42 Value=London; UI draft/selected/applied=London, valid=true, delivered1.
+No input/output result was reacquired after delivery. Rows, scroll and product-call
+focus were unchanged; read-only Prepare/Observe invariance passed.
+
+After the owned surprise stimulus, fresh canonical observation reports Commit
+Enabled=false and the actual unexpected dialog AX role through corresponds_to.
+Caller stopped at application-stop-observe with zero dependent Execute calls;
+applied remainedLondon and delivered1. This is the explicit bounded caller stop,
+not a general batch executor. Semantic native click is untrusted script activation,
+not pointer/hardware/IME proof or external/durable business success. Full B02/P5/P7
+and grouped independent acceptance remain separate; prior Focus/Type proof reused.
+
+Per-call elapsed106.58/92.10/101.57/91.59/92.36/98.79/92.51ms, one sample including
+worker lifecycle, not percentiles. Original inputs/expectations and7 ACKed outputs
+matched post-use pins. All CLI children exited without signals, exact worker
+inventories empty; owned context/driver/browser/profile/fixture server cleanup
+confirmed. Both copied binary hashes matched after use; the2copies/empty temp dir
+were removed with absence verified, A05 originals untouched. No images created.
+
+Harness SHA2565ddc3253403d235609117ce4f165c24ed77b06f3ed3db0103249760b2b06c99f;
+report5904B8366a1766849e64d4381d5f513f8f4bec2f70eedaa622ba03dc60369ffb318be;
+option8316B287e2149a0c745707e05d7c50216333e130c2b0f26b426edf2c8dfdc16c8ca5f;
+commit8268Bc41d5994ccb268bb9f85750f3429b3e7df1bbcd161c0622bb5fa2532842b3eab;
+stop6733B6de3aa565c41b76bb6687f0ce417529eeef3db009874fbcbd0934c0982f1db39.
+The26 canonical inputs/outputs/report are retained only for the immediate grouped
+source review at `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/ba23e8db-1e32-49ac-b51e-e0d8dfece0fb`.
+Web owns removal after that consumer finishes; records are historical, not live refs.
