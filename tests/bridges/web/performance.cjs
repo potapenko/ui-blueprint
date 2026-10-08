@@ -131,6 +131,26 @@ async function run(){
           const checked=check(sample,contextData,kind,requestId,ids);Object.assign(record,checked,{snapshot:undefined,status:'valid_partial'});
           if(i===0){const s=checked.snapshot,n=s.nodes.find(n=>n.key.namespace==='web.dom'),o=n.properties[0].evidence;
             selection={selection:'references',nodes:[{sensitivity:'public',reference:{session_id:s.context.session_id,target:s.context.target,surface:n.surface,key:n.key,snapshot_id:s.id,observation_id:o.observation_id}}]};}
+          if(i===0 && label==='reused-session'){
+            // Separate explicit fixture stimulus, outside every measured warm sample.
+            // Prove that a reused ref reads new requested data, then restore baseline.
+            const saved=await page.evaluate(()=>{const n=document.getElementById('left');return {style:n.getAttribute('style'),label:n.getAttribute('aria-label')};});
+            try{
+              await page.evaluate(kind=>{const n=document.getElementById('left');if(kind==='geometry')n.style.width='121px';else n.setAttribute('aria-label','Q02 fresh control');},kind);
+              const changed=structuredClone(request);changed.artifact.data.request_id=requestId+'-freshness';
+              driver.send({request:changed,selection});const fresh=await driver.next();assert.equal(fresh.kind,'sample');assert.equal(fresh.terminal,'Completed');assert.equal(fresh.missing,0);
+              const response=JSON.parse(fresh.frames[0].canonical).artifact.data;assert.equal(response.request_id,changed.artifact.data.request_id);
+              assert.equal(response.result.status,'observed');assert.deepEqual(response.result.data.context,contextData);
+              const node=response.result.data.nodes.find(n=>n.key.namespace===(kind==='geometry'?'web.dom':'web.ax'));
+              if(kind==='geometry')assert.equal(known(node,'layout_bounds').value.shape.value.width,121);
+              else assert.equal(known(node,'accessibility_name').value,'Q02 fresh control');
+              fs.writeFileSync(path.join(output,requestId+'-freshness.json'),JSON.stringify(fresh),{flag:'wx',mode:0o600});
+            }finally{await page.evaluate(saved=>{const n=document.getElementById('left');for(const [key,value] of [['style',saved.style],['aria-label',saved.label]]){if(value===null)n.removeAttribute(key);else n.setAttribute(key,value);}},saved);}
+            const restored=structuredClone(request);restored.artifact.data.request_id=requestId+'-restored';
+            driver.send({request:restored,selection});const fresh=await driver.next();check(fresh,contextData,kind,restored.artifact.data.request_id,ids);
+            fs.writeFileSync(path.join(output,requestId+'-restored.json'),JSON.stringify(fresh),{flag:'wx',mode:0o600});
+            record.freshness_challenge='changed_and_restored_on_same_attachment_and_ref';
+          }
         }catch(error){record.outer_ms=performance.now()-begin;record.failure=String(error.message).slice(0,200);}
         report.samples.push(record);
         // A failure remains a sample. Do not blindly retry a broken session.

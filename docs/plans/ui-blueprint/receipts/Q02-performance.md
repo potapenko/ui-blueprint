@@ -50,6 +50,9 @@ Additional focused offline assertions reject reused Observation, wrong request,
 unknown geometry and omitted requested property; Observation milliseconds remain
 milliseconds. Existing HostDomain accounting is now emitted at ACK/cleanup without
 claiming worker cache usage, allocator/SDK high-water or RSS. Focused Clippy passed.
+Warm driver now requires an untimed changed/restored name or width challenge on
+the same attachment/ref before100 samples. This is explicit own-fixture setup;
+runtime proof remains pending, not claimed from its syntax/quality checks.
 No broad product suites were rerun for these test-only changes.
 
 ## Baseline and open gates

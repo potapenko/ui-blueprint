@@ -43,6 +43,10 @@ Node24.15.0. No real site/profile, screenshots, cadence or background UI collect
 Each semantic/geometry cohort has20 process-cold single-control samples and one
 reused session containing initial response plus100 explicit fresh warm requests.
 First Observe resolves #left; subsequent calls reuse the observed ref and attachment.
+Before the100 warm samples, a separate explicit fixture stimulus changes requested
+name/width on that same held ref; a fresh response must report it, then another
+response verifies restored baseline. These two checks are retained separately and
+excluded from the latency cohort. Observation itself remains read-only.
 Cold single-control is **supplemental**, never the D06 full-fixture cold gate.
 Partial source coverage remains partial. Requested known values are independently
 checked against authored R01 literals; unknown/field loss cannot pass quality.
