@@ -642,3 +642,108 @@ comma-repro.cjs, exact document-check.js, comma-counterexample.rs and the finite
 q01_srcset_negative.cjs). All old/new shared public proof directories above remain
 untouched for their named consumers. Images0. Receipt links/whitespace passed;
 this one-path checkpoint and canonical master push record the final split verdict.
+
+## Final remaining-srcset P1 acceptance — a7c0416
+
+**Documents privacy: ACCEPT** within WEB-DOCUMENTS@1's explicit bounded same-process
+whole-document scope and known sensitive URL/private-source policy.
+Exact accepted source pin: `a7c04164df08441cfbbaa61b501aa64d29290732`.
+Author final `c16a6038b2012dd64ccb393476a34dd75ff7df59` is receipt-only. This section
+supersedes the remaining Documents P1 rejection on9d715ee. P2 semantic acceptance
+and previous positive/source/binding/ordinary-scope evidence remain closed and are
+reused; no unrelated review campaign or blanket full-workspace rerun occurred.
+
+Same Q01 reviewer, original88d0920 repair criteria and unchanged FACTS/BOUNDS closure.
+Read exact source delta, shared20-case fixture and affected live driver, then
+reconciled the new author receipt and retained proof. No new privacy class, schema,
+API/threshold, source-selection algorithm or Native behavior was introduced.
+Both guards now distinguish URL-token and descriptor phases. A descriptor comma
+starts the next URL even without whitespace; URL-internal data commas remain intact.
+Unsupported parenthesized descriptor ambiguity refuses instead of guessing. The
+Rust scan advances over bounded bytes and slices only at ASCII delimiters; the JS
+scan applies the same boundaries. Existing captured currentSourceURL/originURL
+classification remains before canonical node construction. Safe strings are not
+rewritten. No additional actionable defect was established in this affected repair.
+
+### Independent source and regression proof
+
+Own system-temp immutable a7c0416 archive excluded image assets; builds used
+Rust1.96.0 locked/offline. Replayed the exact retained Q01 comma-tight preflight
+counterexample with repaired source/expectation: private/count2. Replayed the exact
+retained two-node Rust counterexample with a refusal assertion: InvalidInput before
+Snapshot construction. Only temporary test overlay changed; saved production bytes
+were restored before runtime build. The production captured-URL test then passed
+its original safe/private URL checks plus20 srcset boundary cases; the same20 cases
+passed exact JS preflight. Coverage includes tight/spaced density/width descriptors,
+third candidates, ASCII whitespace, descriptor-less delimiters, Unicode, safe data
+commas and private candidate after data commas. No focusability/unchanged suite rerun.
+After build,85 relevant production/Cargo/toolchain source files matched a7c0416
+Git-object bytes exactly. Q02 source/client files were used at their saved pin,
+not edited; only the generic finite request consumer was invoked, never timed cohorts.
+
+### Independent actual affected headless proof
+
+Own Chromium145.0.7632.6 / Playwright Core1.58.2 / Node24.15.0; controlled F01
+800×600/DPR1 with frozen source hashes checked. One own10-request run used original
+bindings,128nodes/depth16/512KiB/2s quality limits. It does NOT establish D06 latency
+or relax its separate limits/thresholds. The test-only driver used the original
+Q01 supplemental element identity and explicitly verified browser process/profile
+cleanup in addition to the existing host checks. Production collection unchanged.
+
+| Case | Actual terminal / committed channels / canonical bytes |
+| --- | --- |
+| Original full baseline | Completed /1 /443377;97nodes,2documents,1102 native facts,19 text boxes |
+| Exact tight relative credential candidate, safe currentSrc | Failed(InvalidInput) /0 /0 |
+| Tight absolute credential candidate | Failed(InvalidInput) /0 /0 |
+| Private third candidate | Failed(InvalidInput) /0 /0 |
+| Private candidate after tab | Failed(InvalidInput) /0 /0 |
+| Private candidate after data-URL internal comma | Failed(InvalidInput) /0 /0 |
+| Tight token-query candidate | Failed(InvalidInput) /0 /0 |
+| Safe tight density list | Completed /1 /452596 |
+| Safe base64 data URL | Completed /1 /452684 |
+| Safe multiple internal data commas | Completed /1 /453696 |
+
+For every supplemental case, currentSrc was independently established as the first
+safe candidate before Observe. This proves rejection of the unselected private
+candidate rather than accidental blocking by the IMG currentSrc guard. Each safe
+response was compared with actual raw native tables and exact srcset source bytes;
+original baseline facts, known empty and source metadata remain preserved.
+All responses and bounded diagnostics were canary-free. Private cases publish no
+Snapshot/ACK for downstream cache/history/export; those unchanged consumers were
+not reimplemented or repeatedly tested. These are known synthetic privacy classes,
+not universal detection of arbitrary unknown secrets or arbitrary-site support.
+
+The own driver exited0/status passed. Actual host closure: cleanup_confirmed=true,
+0sessions/0completion groups,192-byte ledger backing, no abandoned/poisoned owner.
+Browser process exit and browser-profile absence explicitly asserted after closure;
+context/server closed and exact worker absence independently checked. No UI/Native
+input, real application, model service, images or performance campaign was operated.
+
+### Reconciliation, retention and dependent release
+
+Author sanitized proof at system-temp uib-w06-srcset-proof-yi3pBs has report hash
+beeec335505776e8bdf6cea34759e0f13d1caf54160ae5a0531dcb052f36a21a, matching its receipt;
+its10 cases agree with this own execution. Author execution remains attributed,
+while the source/20-case/exact-reproducer/live results above are this reviewer's.
+Own sanitized evidence is retained at
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-comma-proof-fSoeSl`,
+report SHA256dee1990a2bdf3b24dcc60af024a8e645959d4c5ed5feb9bed8274ecf1b40bbd4.
+All old/new shared records and identified reproducers remain untouched for their
+named consumers; no historical facts are rewritten. Own new build/log/source
+non-images are removed after consumption into this receipt, no persistent archive.
+
+All W06 changed-scope findings are now closed. The earlier semantic acceptance
+remains valid on this unchanged semantic source; Documents privacy is accepted on
+a7c0416. **Q02 is released to continue all already-authorized full-document frozen
+D06 rows on this accepted pin without another root grant.** CPU/headless resources
+are free. D06 timing/stage/quality results remain Q02's work; this is not a D06 or
+P0–P7 pass. Unsupported OOPIF/shadow/template/arbitrary private documents and unknown
+cross-frame transforms retain their existing declared boundaries. Native foreground/
+user-authority wait remains unchanged and no Native acceptance is implied.
+Only this existing Q01 receipt changes; product, Q02 paths and images are protected.
+
+Final affected-recheck cleanup:4014 own non-image files removed; the new
+uib-q01-srcset-final-hub1yjl_ build/source root is confirmed absent. Shared proof,
+reviewer reproducers and every existing image remain untouched. Receipt links and
+whitespace pass. The one-path current-master checkpoint/push records this ACCEPT
+and resource release; its SHA is returned in the final chat.
