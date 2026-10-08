@@ -961,3 +961,71 @@ exact held target, stale/remount/wrong focus, private/disabled/readonly, bounded
 typed expected match/mismatch/unknown, lost focus/binding after Possible and no retry.
 Actual runtime remains gated on accepted Core input-lane claim and saved provider
 source. No browser/UI/input or new test run occurred in this documentation handoff.
+
+## Focus/Type source checkpoint; switch to read-only geometry
+
+User's updated priority stops further input work here: source-ready provider,
+ordinary focused checks complete; guarded host composition/live Focus/Type are
+NOT implemented or accepted by this checkpoint. No new action transport or runtime
+was started. Continue the primary read-only component/geometry path after save.
+
+Implemented one WebActionProvider, with CheckboxProvider as a compatible alias.
+Existing consuming prepare_exact preserves its signature and now prepares native
+Focus/Semantic or Type/Keyboard as well as SetChecked. A02 ActionProvider receives
+the explicit Expectation in resolve/postread; this first form slice supports the
+same held source node, Focused=true for Focus and explicit Value for Type. Existing
+held binding/budgets/one-use permit/invalidation/teardown remain shared. Focus sends
+DOM.focus(objectId) once; Type sends Input.insertText(text) once, with no hidden
+focus/selection repair, event synthesis or three-unit limit. Type text is bounded
+by existing max_text_bytes plus request/transport caps; expected resulting value
+is independent. Fresh enabled/editable/public/current-focus checks precede delivery;
+postdelivery binding/focus loss or missing expected data remains unknown/no retry.
+Scope is native input text/search/url/tel and textarea; broader controls remain
+unsupported. Runtime must still use the actual host shared input/focus lane.
+
+Necessary read-owner correction: keyboard focus is now independently sourced from
+native document.hasFocus plus the unique focused public input/textarea; it no longer
+depends on Value selection or an available TextSelection direction. Value/selection
+privacy gates remain unchanged; absent selection is not fabricated as a caret.
+The private DomRead adds optional document_focused; canonical schema stays unchanged.
+Normal collection and action postread share this normalization. Native Invalid,
+output.value, app applied semantics and old SetChecked behavior are preserved.
+
+Exact9writes: plugins/web/src/collector/{action.rs,mod.rs,acquire.rs,read-node.js,
+wire.rs}, plugins/web/src/normalize/mod.rs, plugins/web/tests/collector.rs,
+plugins/web/tests/fixtures/collector/script-check.cjs and this receipt. acquire.rs
+exposes only existing read/validation helpers plus keyboard-focus normalization;
+no host/kernel/CLI/Cargo/fixture edits. Frozen Core API9bd580944b40677269eff08185b6f5b2b85b5597
+plus eight owned source/test overlays compiled, with no current Core/Native WIP.
+
+Checks PASS:5 new form-provider tests (native dispatch/exact expected full value,
+fresh source refusal/bounds, postread mismatch/loss/unknown, readonly preparation,
+cancel/no retry),5 affected form-read tests,8 SetChecked regressions, existing
+offline JS including independent focus without value/selection getters, affected
+Web check/all-targets Clippy -D warnings, owned rustfmt and scoped diff check.
+Synthetic peers use a test-only permit with actual A02 kernel, not browser input.
+Clippy's one boolean simplification was repaired; focused form tests passed again.
+No new independent review rounds or previous live runs repeated.
+
+373input fingerprint b13b13220fe6fa18de9215bef2469993df44b8aff01b806391081054cc9e0dff;
+all eight current overlays matched the checked export. Provider SHA256
+414b92a00c6a0f2d808a132d01c08edf54bfeb1f1d65c807cd7586ef025ecb0b;
+collector tests d372231625cf36cacc09d93a059042bcb7b518fd3e8bee025c9d2d60c06da3d9.
+Current system-temp uib-focus-type-6jhqk36r contained no images by suffix/signature
+inspection; source/build/pins consumed and removed, absence verified. No images
+created/deleted and older evidence untouched; no runtime/process/lane held.
+
+Deferred P5 integration dependency: Core must compose explicit Expectation with
+the saved provider and actual Semantic Focus lane. Existing Tape supports four
+segments, so a third canonical Expectation next to source/Request is a concrete
+candidate without schema expansion; this is a handoff proposal, not implemented
+transport. Do not pursue it ahead of the primary geometry outcome now.
+
+Read-only switching point: prior accepted Web evidence already covers rooted F01
+section collection (9DOM+9AX), actual bounds/context and source relationships;
+public CLI Observe→Inspect(compact/JSON)→Measure has separately returned120css_px.
+Next consumer should demonstrate one meaningful selected component with multiple
+parts, bounds and mutual distances in a short grounded answer/diff, using existing
+collector/F01/engine APIs. That integrated useful report is still unproved; this
+handoff does not invent a missing geometry implementation or require action-ready
+refs/mutations/executor as a prerequisite. Root selects the precise read-only route.

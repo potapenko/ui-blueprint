@@ -21,8 +21,12 @@ class HTMLOutputElement extends Element {}
 for (const [key, sourceKey] of Object.entries({type:'kind',value:'data',placeholder:'placeholder',required:'required',readOnly:'readOnly',checked:'checked',indeterminate:'indeterminate',validity:'validity'})) {
   Object.defineProperty(HTMLInputElement.prototype, key, { configurable:true, get() { if (key === 'value') valueReads++; return this.state[sourceKey]; } });
 }
+class Document {
+  getElementById(id) { return this.idNodes.find(n=>n.attrs.id===id)??null; }
+  hasFocus() { return this.hasFocusFlag === true; }
+}
 const document = { activeElement: null };
-const context = vm.createContext({Element,HTMLInputElement,HTMLTextAreaElement,HTMLSelectElement,HTMLOptionElement,HTMLButtonElement,HTMLOutputElement,document});
+const context = vm.createContext({Element,HTMLInputElement,HTMLTextAreaElement,HTMLSelectElement,HTMLOptionElement,HTMLButtonElement,HTMLOutputElement,Document,document});
 vm.runInContext(source, context, {timeout:100});
 function node() { const n = new HTMLInputElement(); Object.assign(n,{attrs:{},box:{x:40,y:60,width:120,height:40},disabled:false,isConnected:true,ownerDocument:document,tagName:'INPUT',state:{kind:'checkbox',data:'',checked:false,indeterminate:false,required:false,readOnly:false,validity:{valid:true}}});return n; }
 function read(n,fields,sensitive=false,doc=document,maxChars=100) { context.node=n;context.options={fields,sensitive,maxChars};context.expected=doc;return vm.runInContext('readNode.call(node, options, expected)',context,{timeout:100}); }
@@ -67,10 +71,6 @@ children(document,[left,right]);let tick=0;context.performance={now:()=>tick++};
 valueReads=0;rectReads=0;assert.equal(search(['left']).status,'selected');assert.deepEqual([valueReads,rectReads],[0,0],'selection never reads values or layout');
 console.log('10 offline bootstrap scenarios passed; bounded light-DOM selection only, no browser qualification.');
 
-class Document {
-  getElementById(id) { return this.idNodes.find(n=>n.attrs.id===id)??null; }
-  hasFocus() { return this.hasFocusFlag === true; }
-}
 context.Document=Document;
 function relationRead(n, selected, sensitive=false) {
   context.node=n;context.selected=selected;context.options={fields:['focused','layout_bounds'],maxChars:100,sensitive};context.expected=document;
@@ -193,3 +193,7 @@ output.firstChild={nodeType:3,nextSibling:null,data:'x'.repeat(100)};output.outp
 outputReads=lengthReads=shapeReads=0;assert.equal(read(output,['value'],true).value,undefined);assert.deepEqual([outputReads,lengthReads,shapeReads],[0,0,0]);
 read(output,['focused']);assert.deepEqual([outputReads,lengthReads,shapeReads],[0,0,0]);
 console.log('Output getter checks passed: empty/nonempty/exact bound/shape/oversize/private/fields; offline mocks only.');
+
+selectionReads=valueReads=0;document.activeElement=textInput;document.hasFocusFlag=true;
+const focusOnly=read(textInput,['focused']);assert.equal(focusOnly.focused,true);assert.equal(focusOnly.documentFocused,true);assert.equal(focusOnly.selection,undefined);assert.deepEqual([selectionReads,valueReads],[0,0]);
+console.log('Independent native document-focus fact requires no value/selection getter.');

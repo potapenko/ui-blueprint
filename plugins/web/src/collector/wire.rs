@@ -31,7 +31,7 @@ object_record!(DomRead {
  required:Option<bool>, enabled:Option<bool>, readonly:Option<bool>, checked:Option<bool>,
  selected:Option<bool>, expanded:Option<bool>, focused:Option<bool>, invalid:Option<bool>,
  controls:Option<Vec<usize>>, declared_anchor:Option<usize>, active_descendant:Option<usize>,
- selection:Option<SelectionRead>
+ selection:Option<SelectionRead>, document_focused:Option<bool>
 });
 object_record!(SelectionRead {
     start: u64,

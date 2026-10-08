@@ -279,7 +279,10 @@ impl Fixture {
                         assert_eq!(command["params"]["grantUniveralAccess"], false);
                         json!({"executionContextId":3})
                     }
-                    "Accessibility.enable" | "Runtime.releaseObjectGroup" => json!({}),
+                    "Accessibility.enable"
+                    | "Runtime.releaseObjectGroup"
+                    | "DOM.focus"
+                    | "Input.insertText" => json!({}),
                     "DOM.resolveNode" => {
                         assert_eq!(command["params"]["executionContextId"], 3);
                         json!({"object":{"type":"object","subtype":"node","objectId":format!("node-{}",command["params"]["backendNodeId"])}})
@@ -1937,7 +1940,7 @@ fn form_read_peer(value: Json) -> Fixture {
 }
 fn form_read_value() -> Json {
     json!({"connected":true,"sameDocument":true,"tag":"INPUT","sensitive":false,
-        "value":"A💡B","focused":true,"invalid":false,
+        "value":"A💡B","focused":true,"documentFocused":true,"invalid":false,
         "selection":{"start":1,"end":3,"direction":"forward","documentFocused":true}})
 }
 #[test]
@@ -2017,7 +2020,11 @@ fn form_read_selection_withholds_unestablished_private_or_unrequested_facts() {
         let (_, docs) = collect(&mut c, &r, &selected);
         let s = snapshot(&docs[0]);
         assert!(s.focus.text_selection.is_none(), "mode {mode}");
-        assert!(!matches!(s.focus.keyboard, FocusRef::Known { .. }));
+        assert_eq!(
+            matches!(s.focus.keyboard, FocusRef::Known { .. }),
+            !matches!(mode, 6 | 7 | 11 | 12),
+            "focus is independent of selection/value availability: mode {mode}"
+        );
         if mode == 7 {
             assert!(matches!(
                 s.nodes[0].properties[1],
@@ -2364,6 +2371,411 @@ fn checkbox_case(c: &mut Collector, wanted: bool) -> ActionCase {
 struct ActionClock {
     tick: u64,
     cancelled: bool,
+}
+
+fn text_case(c: &mut Collector, focus: bool, text: &str) -> (ActionCase, Expectation) {
+    let mut r = request();
+    r.context.fields = vec![
+        Field::Enabled,
+        Field::Focused,
+        Field::Value,
+        Field::InputKind,
+        Field::Readonly,
+    ];
+    let (_, docs) = collect(c, &r, &scope(&[11]));
+    let snapshot = snapshot(&docs[0]).clone();
+    let node = snapshot
+        .nodes
+        .iter()
+        .find(|n| n.key.namespace.0 == "web.dom")
+        .unwrap();
+    let Property::Requested { evidence, .. } = &node.properties[0] else {
+        panic!("source evidence")
+    };
+    let action = Action {
+        id: id("form-action"),
+        context: snapshot.context.clone(),
+        backend_ref: BackendRef {
+            session_id: snapshot.context.session_id.clone(),
+            target: target(),
+            surface: surface(),
+            key: node.key.clone(),
+            snapshot_id: snapshot.id.clone(),
+            observation_id: evidence.observation_id.clone(),
+        },
+        intent: if focus {
+            Intent::Focus {}
+        } else {
+            Intent::Type { text: text.into() }
+        },
+        modality: if focus {
+            InputModality::Semantic
+        } else {
+            InputModality::Keyboard
+        },
+        input_space: None,
+        required_enabled: true,
+        authorized_scope: id("scope"),
+        unique_match: true,
+        resolution: Resolution {
+            evidence: evidence.clone(),
+            writable: Availability::Known {
+                value: Value::Flag(true),
+            },
+            value_allowed: Availability::Known {
+                value: Value::Flag(true),
+            },
+            available_intents: vec![id(if focus { "focus" } else { "type" })],
+        },
+    };
+    let expected = Expectation {
+        id: id("explicit-form-result"),
+        scope_id: id("scope"),
+        targets: vec![node.key.clone()],
+        rule: Rule::PropertyEquals {
+            field: if focus { Field::Focused } else { Field::Value },
+            expected: if focus {
+                Value::Flag(true)
+            } else {
+                Value::Text(format!("prefix{text}"))
+            },
+        },
+        applies_when: ContextConditions {
+            platform: None,
+            input_mode: None,
+            text_scale: None,
+        },
+        expected_from: id("explicit-test-scenario"),
+    };
+    validation::validate_action(&snapshot, &action).unwrap();
+    (ActionCase { snapshot, action }, expected)
+}
+fn text_peer(mode: u8, focus: bool) -> (Fixture, Arc<std::sync::atomic::AtomicUsize>) {
+    let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+    let count = calls.clone();
+    let mut reads = 0;
+    let mut focused = !focus;
+    let mut value = String::from("prefix");
+    let fixture = Fixture::new(move |method, command, _| {
+        let delivered = count.load(Ordering::Acquire) > 0;
+        if mode == 9 && delivered && method == "Page.getFrameTree" {
+            return Some(json!({"frameTree":{"frame":{"id":"frame","loaderId":"different"}}}));
+        }
+        if method == "DOM.focus" || method == "Input.insertText" {
+            count.fetch_add(1, Ordering::AcqRel);
+            if focus {
+                assert_eq!(method, "DOM.focus");
+                assert_eq!(command["params"]["objectId"], "node-11");
+                if mode != 14 {
+                    focused = true;
+                }
+            } else {
+                assert_eq!(method, "Input.insertText");
+                assert_eq!(command["params"]["text"], "Lon💡");
+                if mode != 7 {
+                    value.push_str("Lon💡");
+                }
+            }
+            return Some(if mode == 10 {
+                json!({"error":{"code":-32000,"message":CANARY}})
+            } else {
+                json!({})
+            });
+        }
+        if method == "Runtime.callFunctionOn"
+            && command["params"]["functionDeclaration"]
+                .as_str()
+                .is_some_and(|s| s.starts_with("function readNode("))
+        {
+            reads += 1;
+            let fresh = reads > 1;
+            if delivered && mode == 11 {
+                return Some(
+                    json!({"result":{"type":"undefined"},"exceptionDetails":{"text":CANARY}}),
+                );
+            }
+            let actual_focus = focused && !(fresh && mode == 4) && !(delivered && mode == 8);
+            let n = value.encode_utf16().count();
+            return Some(json!({"result":{"type":"object","value":{
+                "connected":!(fresh&&mode==6),"sameDocument":true,"tag":"INPUT","inputKind":"text",
+                "sensitive":fresh&&mode==3,"enabled":!(fresh&&mode==1),"readonly":fresh&&mode==2,
+                "focused":actual_focus,"documentFocused":!(fresh&&mode==5),
+                "value":if delivered&&mode==13 {Json::Null}else{json!(value)},
+                "selection":{"start":n,"end":n,"direction":"none","documentFocused":!(fresh&&mode==5)}
+            }}}));
+        }
+        None
+    });
+    (fixture, calls)
+}
+#[test]
+fn form_provider_native_focus_and_type_verify_explicit_full_value_once() {
+    use uiblueprint_plugin_api::actions::*;
+    for focus in [true, false] {
+        let (fixture, calls) = text_peer(0, focus);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = text_case(&mut c, focus, "Lon💡");
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = control.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            assert_eq!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .unwrap(),
+                DeliveryStatus::Confirmed
+            );
+            assert_eq!(
+                execution.verify(&mut provider, &mut control).unwrap(),
+                CheckStatus::Pass
+            );
+            assert!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .is_err()
+            );
+        }
+        let result = execution.finish().unwrap();
+        assert_eq!(result.transition.steps[0].outcome, Outcome::Succeeded);
+        assert!(matches!(
+            result.after.as_ref().unwrap().focus.keyboard,
+            FocusRef::Known { .. }
+        ));
+        if !focus {
+            assert_eq!(
+                known(&result.after.as_ref().unwrap().nodes[0], Field::Value),
+                &Value::Text("prefixLon💡".into())
+            );
+        }
+        assert_eq!(calls.load(Ordering::Acquire), 1);
+        assert_eq!(gate.calls, 1);
+        assert!(c.pending_invalidation());
+        assert_eq!(
+            fixture.methods().last().unwrap(),
+            "Runtime.releaseObjectGroup"
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_provider_refuses_fresh_ineligible_target_and_large_text_before_permit() {
+    use uiblueprint_plugin_api::actions::*;
+    for mode in [1, 2, 3, 4, 5, 6, 12] {
+        let (fixture, calls) = text_peer(mode, false);
+        let mut c = fixture.attach(limits());
+        let text = if mode == 12 {
+            "x".repeat(601)
+        } else {
+            "Lon💡".into()
+        };
+        let (case, expected) = text_case(&mut c, false, &text);
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = control.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            assert_eq!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .unwrap(),
+                DeliveryStatus::NotDispatched
+            );
+        }
+        assert_eq!(calls.load(Ordering::Acquire), 0);
+        assert_eq!(gate.calls, 0);
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_provider_post_state_mismatch_loss_or_uncertain_delivery_never_passes() {
+    use uiblueprint_plugin_api::actions::*;
+    for mode in [7, 8, 9, 10, 11, 13, 14] {
+        let focus = mode == 14;
+        let (fixture, calls) = text_peer(mode, focus);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = text_case(&mut c, focus, "Lon💡");
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: false,
+        };
+        let start = control.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            let delivery = execution
+                .dispatch(&mut provider, &mut gate, &mut control)
+                .unwrap();
+            if mode == 10 {
+                assert_eq!(delivery, DeliveryStatus::Unknown);
+                assert!(execution.verify(&mut provider, &mut control).is_err());
+            } else {
+                assert_eq!(delivery, DeliveryStatus::Confirmed);
+                assert_eq!(
+                    execution.verify(&mut provider, &mut control).unwrap(),
+                    if mode == 7 {
+                        CheckStatus::Fail
+                    } else {
+                        CheckStatus::Unknown
+                    }
+                );
+            }
+        }
+        assert_eq!(calls.load(Ordering::Acquire), 1);
+        let result = execution.finish().unwrap();
+        assert_eq!(
+            result.transition.steps[0].outcome,
+            if mode == 7 {
+                Outcome::Failed
+            } else {
+                Outcome::ActionOutcomeUnknown
+            }
+        );
+        assert!(!serde_json::to_string(&result).unwrap().contains(CANARY));
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_provider_preparation_is_read_only_and_replaces_unknown_capabilities() {
+    use uiblueprint_plugin_api::ClockReading;
+    for focus in [true, false] {
+        let (fixture, calls) = text_peer(0, focus);
+        let mut c = fixture.attach(limits());
+        let (mut case, _) = text_case(&mut c, focus, "Lon💡");
+        case.action.unique_match = false;
+        case.action.resolution.writable = Availability::Unknown {
+            reason: id("not-prepared"),
+        };
+        case.action.resolution.value_allowed = Availability::Unknown {
+            reason: id("not-prepared"),
+        };
+        case.action.resolution.available_intents.clear();
+        let mut requested = request();
+        requested.context = case.snapshot.context.clone();
+        requested.clock_domain = id("worker-clock");
+        requested.operation = Operation::Prepare {
+            action: case.action,
+        };
+        let prepared = collector::WebActionProvider::new(&mut c, requested.limits.clone())
+            .prepare_exact(
+                &case.snapshot,
+                &requested,
+                &ClockReading {
+                    domain: id("worker-clock"),
+                    milliseconds: 1,
+                },
+                1500,
+            )
+            .unwrap();
+        validation::validate_action(&prepared.snapshot, &prepared.action).unwrap();
+        assert!(prepared.action.unique_match);
+        assert_eq!(
+            prepared.action.resolution.available_intents,
+            vec![id(if focus { "focus" } else { "type" })]
+        );
+        assert_eq!(calls.load(Ordering::Acquire), 0);
+        assert!(!c.pending_invalidation());
+        assert_eq!(
+            fixture.methods().last().unwrap(),
+            "Runtime.releaseObjectGroup"
+        );
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn form_provider_cancel_before_or_after_delivery_never_retries() {
+    use uiblueprint_plugin_api::actions::*;
+    for after in [false, true] {
+        let (fixture, calls) = text_peer(0, false);
+        let mut c = fixture.attach(limits());
+        let (case, expected) = text_case(&mut c, false, "Lon💡");
+        let mut control = ActionClock {
+            tick: 0,
+            cancelled: !after,
+        };
+        let start = control.now();
+        let mut gate = ActionGate::default();
+        let mut execution = ActionExecution::prepare_action(
+            case,
+            expected,
+            id("transition"),
+            id("step"),
+            start,
+            1500,
+        )
+        .unwrap();
+        {
+            let mut provider = collector::WebActionProvider::new(&mut c, request().limits);
+            if after {
+                assert_eq!(
+                    execution
+                        .dispatch(&mut provider, &mut gate, &mut control)
+                        .unwrap(),
+                    DeliveryStatus::Confirmed
+                );
+                control.cancelled = true;
+                assert!(execution.verify(&mut provider, &mut control).is_err());
+            } else {
+                assert!(
+                    execution
+                        .dispatch(&mut provider, &mut gate, &mut control)
+                        .is_err()
+                );
+            }
+            assert!(
+                execution
+                    .dispatch(&mut provider, &mut gate, &mut control)
+                    .is_err()
+            );
+        }
+        assert_eq!(calls.load(Ordering::Acquire), usize::from(after));
+        assert_eq!(gate.calls, usize::from(after));
+        if after {
+            assert_eq!(
+                execution.finish().unwrap().transition.steps[0].outcome,
+                Outcome::ActionOutcomeUnknown
+            );
+        }
+        drop(c);
+        fixture.finish();
+    }
 }
 impl uiblueprint_plugin_api::actions::ActionControl for ActionClock {
     fn now(&mut self) -> uiblueprint_plugin_api::ClockReading {

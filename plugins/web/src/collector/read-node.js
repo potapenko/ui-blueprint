@@ -106,7 +106,10 @@ function readNode(options, expectedDocument) {
     if (!native(HTMLInputElement.prototype, 'indeterminate')) out.checked = native(HTMLInputElement.prototype, 'checked');
   }
   if (fields.has('selected') && option) out.selected = native(HTMLOptionElement.prototype, 'selected');
-  if (fields.has('focused')) out.focused = document.activeElement === this;
+  if (fields.has('focused')) {
+    out.focused = document.activeElement === this;
+    out.documentFocused = Document.prototype.hasFocus.call(expectedDocument);
+  }
   if (fields.has('expanded')) {
     const v = attr('aria-expanded');
     if (v === 'true' || v === 'false') out.expanded = v === 'true';

@@ -414,6 +414,33 @@ fn dom_key(backend: u32) -> SourceKey {
         key: Id(backend.to_string()),
     }
 }
+/// A native text control can own keyboard focus even without a known selection.
+pub(crate) fn keyboard_focus(
+    records: &[(u32, DomRead)],
+    observation: &Observation,
+    context: &Context,
+) -> FocusRef {
+    if !context.fields.contains(&Field::Focused) {
+        return FocusRef::NotRequested {};
+    }
+    let mut focused = records.iter().filter(|(_, r)| r.focused == Some(true));
+    if let Some((backend, read)) = focused.next()
+        && focused.next().is_none()
+        && !read.sensitive
+        && read.connected
+        && read.same_document
+        && read.document_focused == Some(true)
+        && matches!(read.tag.as_deref(), Some("INPUT" | "TEXTAREA"))
+    {
+        return FocusRef::Known {
+            target: dom_key(*backend),
+            evidence: evidence(observation, "dom-active-element-document-has-focus"),
+        };
+    }
+    FocusRef::Unknown {
+        reason: id("scope-does-not-establish-global-focus-owner"),
+    }
+}
 /// The optional canonical selection has no target of its own: publish it only
 /// together with the unique, source-confirmed keyboard focus owner in this scope.
 pub(crate) fn text_selection(
@@ -423,6 +450,12 @@ pub(crate) fn text_selection(
     cap: usize,
 ) -> Option<(FocusRef, TextSelection)> {
     if !context.fields.contains(&Field::Focused) || !context.fields.contains(&Field::Value) {
+        return None;
+    }
+    if !matches!(
+        keyboard_focus(records, observation, context),
+        FocusRef::Known { .. }
+    ) {
         return None;
     }
     let mut focused = records.iter().filter(|(_, r)| r.focused == Some(true));

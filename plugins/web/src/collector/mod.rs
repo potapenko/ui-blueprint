@@ -1,7 +1,7 @@
 //! Addressed read-only collection. Live qualification and host authority are separate.
 mod acquire;
 mod action;
-pub use action::CheckboxProvider;
+pub use action::{CheckboxProvider, WebActionProvider};
 mod bootstrap;
 mod io;
 mod observe;

@@ -1,10 +1,11 @@
-//! Exact native-checkbox Setter port. Caller owns the real parent effect gate.
+//! Exact held-node actions; Type uses the explicitly revalidated focused widget.
+//! Caller owns the real parent effect gate and shared focus/input lane.
 use super::{acquire::Read, *};
 use crate::normalize;
 use std::time::Duration;
 use uiblueprint_plugin_api::{
     ClockReading,
-    actions::{DeliveryPermit, SetCheckedProvider},
+    actions::{ActionProvider, DeliveryPermit},
 };
 use uiblueprint_schema::{SchemaVersion, validation};
 
@@ -29,19 +30,23 @@ struct Held {
     object: String,
     group: String,
     action: Option<Action>,
+    expected: Option<Expectation>,
     budget: Budget,
 }
 /// One action attempt; use only inside the worker's admitted allocation boundary.
 /// The constructor grants no mutation authority. Deliver requires Core's move-only
 /// parent permit. Dropping unresolved handles closes only this owned connection.
-pub struct CheckboxProvider<'a> {
+pub struct WebActionProvider<'a> {
     collector: &'a mut Collector,
     limits: uiblueprint_schema::model::Limits,
     held: Option<Held>,
     started: bool,
     delivered: bool,
 }
-impl<'a> CheckboxProvider<'a> {
+/// Compatibility name for the existing native-checkbox consumer.
+pub type CheckboxProvider<'a> = WebActionProvider<'a>;
+
+impl<'a> WebActionProvider<'a> {
     pub fn new(collector: &'a mut Collector, limits: uiblueprint_schema::model::Limits) -> Self {
         Self {
             collector,
@@ -69,6 +74,34 @@ impl<'a> CheckboxProvider<'a> {
         }
         Ok(())
     }
+    fn supported(&self, action: &Action) -> Result<(), Failure> {
+        let fields: &[Field] = match (&action.intent, action.modality) {
+            (Intent::SetChecked { .. }, InputModality::Setter) => &[Field::Enabled, Field::Checked],
+            (Intent::Focus {}, InputModality::Semantic) => &[
+                Field::Enabled,
+                Field::Focused,
+                Field::Value,
+                Field::InputKind,
+            ],
+            (Intent::Type { text }, InputModality::Keyboard) => {
+                if text.len() > self.collector.limits.max_text_bytes {
+                    return Err(Failure::new(ErrorKind::Limit));
+                }
+                &[
+                    Field::Enabled,
+                    Field::Focused,
+                    Field::Value,
+                    Field::InputKind,
+                    Field::Readonly,
+                ]
+            }
+            _ => return Err(Failure::new(ErrorKind::InvalidInput)),
+        };
+        if fields.iter().any(|f| !action.context.fields.contains(f)) {
+            return Err(Failure::new(ErrorKind::InvalidInput));
+        }
+        Ok(())
+    }
     /// Read-only initial preparation from actual recorded identity plus intent.
     /// Consumes this preparation owner; use a new provider for kernel dispatch,
     /// which must resolve again. No permit or setter is reachable from this method.
@@ -86,9 +119,8 @@ impl<'a> CheckboxProvider<'a> {
             let Operation::Prepare { action } = &requested.operation else {
                 return Err(Failure::new(ErrorKind::InvalidInput));
             };
-            if action.modality != InputModality::Setter
-                || !matches!(action.intent, Intent::SetChecked { .. })
-                || !action.required_enabled
+            self.supported(action)?;
+            if !action.required_enabled
                 || requested.limits != self.limits
                 || requested.clock_domain != now.domain
                 || action.authorized_scope != snapshot.context.scope_id
@@ -98,19 +130,13 @@ impl<'a> CheckboxProvider<'a> {
                 return Err(Failure::new(ErrorKind::InvalidInput));
             }
             validate_seed(snapshot, &action.backend_ref)?;
-            let (fresh, mut held) = self.probe(
-                &action.context,
-                &action.backend_ref,
-                &action.id,
-                now,
-                remaining_ms,
-            )?;
+            let (fresh, mut held) = self.probe(action, now, remaining_ms)?;
             let prepared = (|| {
                 let mut prepared_action = action.clone();
                 prepared_action.backend_ref.snapshot_id = fresh.id.clone();
                 prepared_action.backend_ref.observation_id = fresh.observations[0].id.clone();
                 prepared_action.unique_match = true;
-                prepared_action.resolution = resolution(&fresh);
+                prepared_action.resolution = resolution(&fresh, &action.intent);
                 let document = Document {
                     schema_version: SchemaVersion::CURRENT,
                     artifact: Artifact::Action(Box::new(ActionCase {
@@ -137,11 +163,15 @@ impl<'a> CheckboxProvider<'a> {
             }
             prepared
         })();
-        result.map_err(|error| issue_for(scope, error))
+        result.map_err(|error| match &requested.operation {
+            Operation::Prepare { action } => issue(action, error),
+            _ => issue_for(scope, error),
+        })
     }
     fn begin(
         &mut self,
         requested: &ActionCase,
+        expected: &Expectation,
         now: &ClockReading,
         remaining: u64,
     ) -> Result<ActionCase, Failure> {
@@ -149,23 +179,15 @@ impl<'a> CheckboxProvider<'a> {
         validation::validate_action(&requested.snapshot, &requested.action)
             .map_err(|_| Failure::new(ErrorKind::InvalidInput))?;
         let action = &requested.action;
-        if action.modality != InputModality::Setter
-            || !matches!(action.intent, Intent::SetChecked { .. })
-        {
-            return Err(Failure::new(ErrorKind::InvalidInput));
-        }
-        let (snapshot, mut held) = self.probe(
-            &action.context,
-            &action.backend_ref,
-            &action.id,
-            now,
-            remaining,
-        )?;
+        self.supported(action)?;
+        expected_for(action, expected)?;
+        let (snapshot, mut held) = self.probe(action, now, remaining)?;
         let mut fresh = action.clone();
         fresh.backend_ref.snapshot_id = snapshot.id.clone();
         fresh.backend_ref.observation_id = snapshot.observations[0].id.clone();
-        fresh.resolution = resolution(&snapshot);
+        fresh.resolution = resolution(&snapshot, &action.intent);
         held.action = Some(fresh.clone());
+        held.expected = Some(expected.clone());
         self.held = Some(held);
         Ok(ActionCase {
             snapshot,
@@ -174,25 +196,22 @@ impl<'a> CheckboxProvider<'a> {
     }
     fn probe(
         &mut self,
-        context: &Context,
-        reference: &BackendRef,
-        action_id: &Id,
+        action: &Action,
         now: &ClockReading,
         remaining: u64,
     ) -> Result<(Snapshot, Held), Failure> {
+        let context = &action.context;
+        let reference = &action.backend_ref;
         if self.started {
             return Err(Failure::new(ErrorKind::InvalidInput));
         }
         self.started = true;
         self.clock(now)?;
-        if !context.fields.contains(&Field::Enabled) || !context.fields.contains(&Field::Checked) {
-            return Err(Failure::new(ErrorKind::InvalidInput));
-        }
         let node = NodeRef {
             reference: reference.clone(),
             sensitivity: Sensitivity::Public,
         };
-        let request = self.request(context, action_id);
+        let request = self.request(context, &action.id);
         let scope = Scope {
             scope_id: context.scope_id.clone(),
             nodes: vec![node],
@@ -212,6 +231,7 @@ impl<'a> CheckboxProvider<'a> {
                 self.collector.owner, self.collector.sequence
             ),
             action: None,
+            expected: None,
             budget: Budget {
                 deadline: deadline(remaining.min(self.limits.deadline_ms))?,
                 methods: 0,
@@ -230,15 +250,14 @@ impl<'a> CheckboxProvider<'a> {
                 .collector
                 .resolve(backend, &held.group, &mut held.budget)?;
             let start = self.collector.time();
-            let state = read_state(self.collector, &mut held)?;
-            eligible(&state, true)?;
+            let read = action_read(self.collector, &mut held, action, true)?;
             self.collector.verify_document(&mut held.budget)?;
             self.collector.verify_nodes(
                 &held.document,
                 std::slice::from_ref(&held.object),
                 &mut held.budget,
             )?;
-            let snapshot = make_snapshot(self.collector, &request, backend, state, start)?;
+            let snapshot = make_snapshot(self.collector, &request, backend, read, start)?;
             Ok(snapshot)
         })();
         match result {
@@ -249,6 +268,36 @@ impl<'a> CheckboxProvider<'a> {
             }
         }
     }
+}
+fn expected_for(action: &Action, expected: &Expectation) -> Result<(), Failure> {
+    if matches!(action.intent, Intent::SetChecked { .. }) {
+        return Ok(()); // Preserve the original kernel-owned Checked predicate.
+    }
+    validation::validate_expectation(expected)
+        .map_err(|_| Failure::new(ErrorKind::InvalidInput))?;
+    let valid_rule = matches!(
+        (&action.intent, &expected.rule),
+        (
+            Intent::Focus {},
+            Rule::PropertyEquals {
+                field: Field::Focused,
+                expected: Value::Flag(true)
+            }
+        ) | (
+            Intent::Type { .. },
+            Rule::PropertyEquals {
+                field: Field::Value,
+                expected: Value::Text(_)
+            }
+        )
+    );
+    if !valid_rule
+        || expected.targets.as_slice() != [action.backend_ref.key.clone()]
+        || expected.scope_id != action.authorized_scope
+    {
+        return Err(Failure::new(ErrorKind::InvalidInput));
+    }
+    Ok(())
 }
 fn validate_seed(snapshot: &Snapshot, reference: &BackendRef) -> Result<(), Failure> {
     validation::validate_snapshot(snapshot).map_err(|_| Failure::new(ErrorKind::InvalidInput))?;
@@ -280,19 +329,21 @@ fn validate_seed(snapshot: &Snapshot, reference: &BackendRef) -> Result<(), Fail
     }
     Ok(())
 }
-fn resolution(snapshot: &Snapshot) -> Resolution {
+fn resolution(snapshot: &Snapshot, intent: &Intent) -> Resolution {
+    let (method, name) = match intent {
+        Intent::Focus {} => ("cdp.DOM.focus-native-text-control", "focus"),
+        Intent::Type { .. } => ("cdp.Input.insertText-native-ImeCommitText", "type"),
+        _ => ("native-checkbox-setter-capability", "set_checked"),
+    };
     Resolution {
-        evidence: normalize::evidence(
-            &snapshot.observations[0],
-            "native-checkbox-setter-capability",
-        ),
+        evidence: normalize::evidence(&snapshot.observations[0], method),
         writable: Availability::Known {
             value: Value::Flag(true),
         },
         value_allowed: Availability::Known {
             value: Value::Flag(true),
         },
-        available_intents: vec![Id("set_checked".into())],
+        available_intents: vec![Id(name.into())],
     }
 }
 fn deadline(remaining: u64) -> Result<Instant, Failure> {
@@ -344,27 +395,72 @@ fn read_state(collector: &mut Collector, held: &mut Held) -> Result<wire::Checkb
         .value
         .ok_or(Failure::new(ErrorKind::Malformed))
 }
-fn make_snapshot(
+fn action_read(
     collector: &mut Collector,
-    request: &Request,
-    backend: u32,
-    state: wire::CheckboxState,
-    start: f64,
-) -> Result<Snapshot, Failure> {
-    collector.sequence = collector
-        .sequence
-        .checked_add(1)
-        .ok_or(Failure::new(ErrorKind::Limit))?;
-    let observation = normalize::observation(
-        &request.context,
-        &collector.binding.clock.domain,
-        "web.dom",
-        (collector.owner, collector.sequence),
-        [start, collector.time()],
-        true,
-        false,
-    );
-    let read = wire::DomRead {
+    held: &mut Held,
+    action: &Action,
+    before: bool,
+) -> Result<wire::DomRead, Failure> {
+    if matches!(action.intent, Intent::SetChecked { .. }) {
+        let state = read_state(collector, held)?;
+        eligible(&state, before)?;
+        return Ok(checkbox_read(state));
+    }
+    let result: wire::ReadResult = collector.send(
+        "Runtime.callFunctionOn",
+        &Read {
+            object_id: &held.object,
+            function_declaration: acquire::READ_NODE,
+            return_by_value: true,
+            silent: true,
+            user_gesture: false,
+            await_promise: false,
+            throw_on_side_effect: false,
+            arguments: [
+                serde_json::json!({"value":{"fields":action.context.fields,"maxChars":collector.limits.max_text_bytes/6,"sensitive":false}}),
+                serde_json::json!({"objectId":held.document}),
+                serde_json::json!({"objectId":held.object}),
+            ],
+        },
+        &mut held.budget,
+    )?;
+    if result.exception_details.is_some() || result.result.r#type != "object" {
+        return Err(Failure::new(ErrorKind::Malformed));
+    }
+    let read = result
+        .result
+        .value
+        .ok_or(Failure::new(ErrorKind::Malformed))?;
+    acquire::validate_dom(&read, collector.limits.max_text_bytes, 1)?;
+    if !read.connected || !read.same_document {
+        return Err(Failure::new(ErrorKind::StaleTarget));
+    }
+    // Restrict this first port to the native controls covered by form facts.
+    if read.sensitive
+        || !matches!(
+            (read.tag.as_deref(), read.input_kind.as_deref()),
+            (Some("INPUT"), Some("text" | "search" | "url" | "tel"))
+                | (Some("TEXTAREA"), Some("textarea"))
+        )
+        || (before
+            && (read.enabled != Some(true)
+                || read
+                    .value
+                    .as_ref()
+                    .is_none_or(|v| v.len() > collector.limits.max_text_bytes)))
+        || (before && matches!(action.intent, Intent::Type { .. }) && read.readonly != Some(false))
+    {
+        return Err(Failure::new(ErrorKind::InvalidInput));
+    }
+    if matches!(action.intent, Intent::Type { .. })
+        && (read.focused != Some(true) || read.document_focused != Some(true))
+    {
+        return Err(Failure::new(ErrorKind::StaleTarget));
+    }
+    Ok(read)
+}
+fn checkbox_read(state: wire::CheckboxState) -> wire::DomRead {
+    wire::DomRead {
         connected: state.connected,
         same_document: state.same_document,
         tag: Some("INPUT".into()),
@@ -385,7 +481,29 @@ fn make_snapshot(
         declared_anchor: None,
         active_descendant: None,
         selection: None,
-    };
+        document_focused: None,
+    }
+}
+fn make_snapshot(
+    collector: &mut Collector,
+    request: &Request,
+    backend: u32,
+    read: wire::DomRead,
+    start: f64,
+) -> Result<Snapshot, Failure> {
+    collector.sequence = collector
+        .sequence
+        .checked_add(1)
+        .ok_or(Failure::new(ErrorKind::Limit))?;
+    let observation = normalize::observation(
+        &request.context,
+        &collector.binding.clock.domain,
+        "web.dom",
+        (collector.owner, collector.sequence),
+        [start, collector.time()],
+        true,
+        false,
+    );
     let node = normalize::dom(
         backend,
         &read,
@@ -393,7 +511,15 @@ fn make_snapshot(
         &observation,
         collector.limits.max_text_bytes,
     );
-    let snapshot = normalize::snapshot(
+    let records = [(backend, read)];
+    let keyboard = normalize::keyboard_focus(&records, &observation, &request.context);
+    let selection = normalize::text_selection(
+        &records,
+        &observation,
+        &request.context,
+        collector.limits.max_text_bytes,
+    );
+    let mut snapshot = normalize::snapshot(
         request,
         (collector.owner, collector.sequence),
         vec![observation],
@@ -401,6 +527,11 @@ fn make_snapshot(
         vec![],
         false,
     );
+    snapshot.focus.keyboard = keyboard;
+    if let Some((keyboard, selection)) = selection {
+        snapshot.focus.keyboard = keyboard;
+        snapshot.focus.text_selection = Some(selection);
+    }
     validation::validate_snapshot(&snapshot).map_err(|_| Failure::new(ErrorKind::Malformed))?;
     let doc = Document {
         schema_version: SchemaVersion::CURRENT,
@@ -413,7 +544,11 @@ fn make_snapshot(
     Ok(*snapshot)
 }
 fn issue(action: &Action, error: Failure) -> Issue {
-    issue_for(action.authorized_scope.clone(), error)
+    let mut issue = issue_for(action.authorized_scope.clone(), error);
+    if !matches!(action.intent, Intent::SetChecked { .. }) {
+        issue.recovery_class = Id("reobserve_exact_web_form".into());
+    }
+    issue
 }
 fn issue_for(scope_id: Id, error: Failure) -> Issue {
     let code = match error.kind {
@@ -433,15 +568,15 @@ fn issue_for(scope_id: Id, error: Failure) -> Issue {
         recovery_class: Id("reobserve_exact_native_checkbox".into()),
     }
 }
-impl SetCheckedProvider for CheckboxProvider<'_> {
+impl ActionProvider for WebActionProvider<'_> {
     fn resolve_exact(
         &mut self,
         requested: &ActionCase,
-        _: &Expectation,
+        expected: &Expectation,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<ActionCase, Issue> {
-        self.begin(requested, now, remaining_ms)
+        self.begin(requested, expected, now, remaining_ms)
             .map_err(|e| issue(&requested.action, e))
     }
     fn deliver(
@@ -463,6 +598,26 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
             }
             tighten(&mut held, remaining_ms)?;
             self.collector.verify_document(&mut held.budget)?;
+            if !matches!(action.intent, Intent::SetChecked { .. }) {
+                // Native Input.insertText targets the CURRENT focused widget and
+                // calls widget Focus internally. The host must hold its input lane.
+                // Recheck here; never focus/repair a Type target or synthesize events.
+                self.supported(action)?;
+                action_read(self.collector, &mut held, action, true)?;
+                self.collector.verify_nodes(
+                    &held.document,
+                    std::slice::from_ref(&held.object),
+                    &mut held.budget,
+                )?;
+                self.collector.pending_invalidation = true;
+                let (method, params) = match &action.intent {
+                    Intent::Focus {} => ("DOM.focus", serde_json::json!({"objectId":held.object})),
+                    Intent::Type { text } => ("Input.insertText", serde_json::json!({"text":text})),
+                    _ => return Err(Failure::new(ErrorKind::InvalidInput)),
+                };
+                let _: wire::Empty = self.collector.send(method, &params, &mut held.budget)?;
+                return Ok(DeliveryStatus::Confirmed);
+            }
             let Intent::SetChecked { value } = action.intent else {
                 return Err(Failure::new(ErrorKind::InvalidInput));
             };
@@ -505,7 +660,7 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
     fn observe_after(
         &mut self,
         action: &Action,
-        _: &Expectation,
+        expected: &Expectation,
         now: &ClockReading,
         remaining_ms: u64,
     ) -> Result<Snapshot, Issue> {
@@ -513,15 +668,17 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
             return Err(issue(action, Failure::new(ErrorKind::InvalidInput)));
         };
         let result = (|| {
-            if !self.delivered || held.action.as_ref() != Some(action) {
+            if !self.delivered
+                || held.action.as_ref() != Some(action)
+                || held.expected.as_ref() != Some(expected)
+            {
                 return Err(Failure::new(ErrorKind::StaleTarget));
             }
             self.clock(now)?;
             tighten(&mut held, remaining_ms)?;
             self.collector.verify_document(&mut held.budget)?;
             let start = self.collector.time();
-            let state = read_state(self.collector, &mut held)?;
-            eligible(&state, false)?;
+            let read = action_read(self.collector, &mut held, action, false)?;
             self.collector.verify_document(&mut held.budget)?;
             self.collector.verify_nodes(
                 &held.document,
@@ -534,7 +691,12 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
                 sensitivity: Sensitivity::Public,
             }
             .backend_id()?;
-            let snapshot = make_snapshot(self.collector, &request, backend, state, start)?;
+            let snapshot = make_snapshot(self.collector, &request, backend, read, start)?;
+            if matches!(action.intent, Intent::Type { .. })
+                && !matches!(&snapshot.focus.keyboard, FocusRef::Known { target, .. } if target == &action.backend_ref.key)
+            {
+                return Err(Failure::new(ErrorKind::StaleTarget));
+            }
             let _: wire::Empty = self.collector.send(
                 "Runtime.releaseObjectGroup",
                 &serde_json::json!({"objectGroup":held.group}),
@@ -548,7 +710,7 @@ impl SetCheckedProvider for CheckboxProvider<'_> {
         result.map_err(|e| issue(action, e))
     }
 }
-impl Drop for CheckboxProvider<'_> {
+impl Drop for WebActionProvider<'_> {
     fn drop(&mut self) {
         if self.held.is_some() {
             self.collector.detach();

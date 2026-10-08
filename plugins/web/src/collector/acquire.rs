@@ -3,7 +3,7 @@ use crate::normalize;
 use serde::Serialize;
 use uiblueprint_schema::validation;
 
-const READ_NODE: &str = include_str!("read-node.js");
+pub(super) const READ_NODE: &str = include_str!("read-node.js");
 const VERIFY_NODES: &str = include_str!("verify-nodes.js");
 pub(super) struct Records {
     pub(super) dom: Vec<(u32, wire::DomRead)>,
@@ -462,6 +462,7 @@ impl Collector {
         }
         normalize::dom_relations(&records.dom, &dom, &mut relations);
         let active_descendant = normalize::active_descendant(&records.dom, &dom, &request.context);
+        let keyboard = normalize::keyboard_focus(&records.dom, &dom, &request.context);
         let selection = normalize::text_selection(
             &records.dom,
             &dom,
@@ -481,6 +482,7 @@ impl Collector {
             empty,
         );
         snapshot.focus.active_descendant = active_descendant;
+        snapshot.focus.keyboard = keyboard;
         if let Some((keyboard, selection)) = selection {
             snapshot.focus.keyboard = keyboard;
             snapshot.focus.text_selection = Some(selection);
@@ -489,7 +491,11 @@ impl Collector {
         Ok(snapshot)
     }
 }
-fn validate_dom(read: &wire::DomRead, cap: usize, selected: usize) -> Result<(), Failure> {
+pub(super) fn validate_dom(
+    read: &wire::DomRead,
+    cap: usize,
+    selected: usize,
+) -> Result<(), Failure> {
     if read.controls.as_ref().is_some_and(|v| {
         v.len() > selected
             || v.iter()
