@@ -671,3 +671,30 @@ regression checks running. Web public form_actions harness ready (9calls, expect
 4/0/0/4/0/0/4/0/4); initial draftL + deliveredon + explicit expectedLon, applied/
 selected empty, one focus-loss refusal. No actual browser input started; waits
 for saved/check-ready Core+CLI and their binaries. All source owners remain distinct.
+
+Core A03 check-ready8493c14ea4f7510a6897bc0b78589ab9234e317b saved/pushed exact5.
+Prepare intent/field/value/target/condition binding gap fixed before SDK; reviewer
+stage remains one grouped integration boundary. Author parent/production-worker
+CDP-peer pass/mismatch/unknown,9 private/binding/stale cases, legacySetChecked and
+Clippy passed. No live browser proof inferred; old kernel/lane/nonce/quotas intact.
+
+A04 final affected checks passed against saved8493c14: Web CLI/worker build,
+4caller binary tests,1status/ACK test and affectedClippy. Docs proof1ab9a660da9c6b37769d6ab7a76c7dc425c0199a
+saved/pushed exact2; underlying CLI sourcec15ffb3 unchanged. Actual binaries retained
+for immediate Web consumer under OS temp uib-a04-products-d7pjog71/debug; exact
+paths/hashes/171-input map and cleanup owner in A01 receipt. No duplicate build.
+Web exact2 harness save lease granted, then ONE actual9-call sequence already
+authorized without another activation round. Actual result/acceptance pending.
+
+A03/A04 actual public chain completed by Web: prepared harness a8b3fbd857595fa312ad953d597eff527d02375c,
+runtime receipt d8b72c308d0d6ef0c75404358acf64d47bb5b878 saved/pushed. All9 calls
+and10checks passed at original caps; Focus fresh exact keyboard target, Type
+deliveredon/expected and observedLon, caret3, applied/selected empty. Focus-loss
+afterPrepare refused before delivery/no refocus/retry; draftLon preserved. Source
+bytes/owned runtime cleanup confirmed perauthor; no fullB02/IME/hardware/business
+claim. One grouped source/input-risk review now consumes Corebc2874e/8493c14,
+Web464b1d2 and CLIc15ffb3 integration, protecting accepted kernel9bd5809 and
+SetChecked. No duplicate UI/test/review waves. Sources frozen pending verdict.
+Web retains only26 nonimage canonical run files in system-temp743c700e-9eb5-456f-a6db-d92baeaa6ffb
+for this immediate review, then owns cleanup. CLI original build can be cleaned
+after copied-product consumption; exact paths/hashes in A01/W02 receipts.
