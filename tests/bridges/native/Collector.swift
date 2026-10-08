@@ -73,7 +73,9 @@ struct Collector {
               let request = artifact["data"] as? [String: Any], let context = request["context"] as? [String: Any],
               let target = context["target"] as? [String: Any], let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
               let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
-              windowMode ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]) : fields == sampleFields,
+              windowMode ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"]) : (fields == sampleFields || (fields == sampleFields + ["layout_bounds"]
+                  && context["projection"] as? String == "design"
+                  && Set((request["operation"] as? [String: Any])?["channels"] as? [String] ?? []) == Set(["external_semantics", "opt_in_layout_probe"]))),
               let scope = context["scope_id"] as? String,
               let session = context["session_id"] as? String, let requestID = request["request_id"] as? String,
               let operation = request["operation"] as? [String: Any], operation["operation"] as? String == "observe",
@@ -179,7 +181,7 @@ struct Collector {
                         if evidence { proof = collected.metrics }
                     } else {
                         let collected = try sample(window, identifier: identifier, surface: surface, observation: oid,
-                            maxNodes: maxNodes, maxDepth: maxDepth, deadline: min(end, started + min(0.9, deadlineMS / 1000)), admission: admission, json: json)
+                            maxNodes: maxNodes, maxDepth: maxDepth, deadline: min(end, started + min(0.9, deadlineMS / 1000)), admission: admission, json: json, includeLayout: fields.contains("layout_bounds"))
                         nodes = collected.nodes
                         if evidence { proof = collected.metrics }
                     }
@@ -303,7 +305,7 @@ extension Collector {
     }
     @MainActor static func sample(_ window: AXUIElement, identifier: String, surface: [String: Any],
         observation: String, maxNodes: Int, maxDepth: Int, deadline: Double,
-        admission: NativeAcquisition, json: NativeJSON) throws -> WindowAXResult {
+        admission: NativeAcquisition, json: NativeJSON, includeLayout: Bool = false) throws -> WindowAXResult {
         var queue: [(AXUIElement, Int)] = [(window, 0)], matches: [AXUIElement] = []
         var handles = [window]
         var visited = 0, duplicates = 0
@@ -347,6 +349,7 @@ extension Collector {
                  try property("accessibility_name") { try name.map { try json.known("text", $0) } ?? json.unavailable("description_unavailable") },
                  try property("enabled") { try enabled.map { try json.known("flag", $0.boolValue) } ?? json.unavailable("enabled_unavailable") },
                  try property("accessibility_bounds") { try nativeAXGeometry(position, size, json: json) }]
+                  + (includeLayout ? [try property("layout_bounds") { try json.unavailable("ax_layout_not_exposed", status: "unsupported") }] : [])
              }, "children": try json.array { [Any]() }, "extensions": try json.array { [Any]() },
              "source_declarations": try json.array { [Any]() }]
         }] }
@@ -412,7 +415,10 @@ extension Collector {
 extension Collector {
     // Explicit own-fixture snapshot import; its measurement clock/time are retained.
     // No UI recollection, expected.json oracle or derived-gap calculation here.
-    @MainActor static func probe(data: Data, command: NativeCommand) throws -> NativeJSONFrame {
+    enum ProbeLinkError: Error { case permissionRequired }
+
+    @MainActor static func probe(data: Data, command: NativeCommand,
+        acquireAX: ((NativeAcquisition, NativeJSON) throws -> (WindowAXResult, Double, Double))? = nil) throws -> NativeJSONFrame {
         let config = command.configuration
         let json = NativeJSON(config.acquisition_limits)
         let frame = try NativeJSONFrame(capacity: command.replyCap, deadline: command.deadline)
@@ -421,7 +427,8 @@ extension Collector {
               let context = request["context"] as? [String: Any], let requestID = request["request_id"] as? String,
               let scope = context["scope_id"] as? String, let target = context["target"] as? [String: Any],
               let surfaces = context["surfaces"] as? [[String: Any]], surfaces.count == 1,
-              context["fields"] as? [String] == ["layout_bounds"],
+              let fields = context["fields"] as? [String],
+              fields == ["layout_bounds"] || fields == ["role", "accessibility_name", "enabled", "accessibility_bounds", "layout_bounds"],
               let limits = request["limits"] as? [String: Any], let maxNodes = limits["max_elements"] as? Int,
               data.count <= command.replyCap else { throw NativeProtocolError.request }
         func failed(_ code: String) throws -> NativeJSONFrame {
@@ -449,6 +456,10 @@ extension Collector {
         // consumer proves current state; PID/Snapshot equality alone is insufficient.
         guard request["freshness_policy"] as? String == "cached_allowed" else { return try failed("stale_target") }
         if scope.hasPrefix("f02.scroll."), scope != "f02.scroll.\(config.binding.window_identifier)" { return try failed("target_unresolved") }
+        let composite = fields.count == 5
+        guard !composite || (context["projection"] as? String == "design"
+            && Set((request["operation"] as? [String: Any])?["channels"] as? [String] ?? []) == Set(["external_semantics", "opt_in_layout_probe"])
+            && acquireAX != nil) else { return try failed("target_unresolved") }
         let scroll = scope == "f02.scroll.\(config.binding.window_identifier)"
         let component = scroll ? "scroll" : "sample"
         let markers = scroll ? ["viewport", "row.0"] : ["icon", "text", "container"]
@@ -463,6 +474,17 @@ extension Collector {
               declarations["represents"] as? [String] == markers, maxNodes >= markers.count,
               let time = config.probe_uptime, time.isFinite
         else { return try failed("incomplete_scope") }
+        if composite {
+            guard !scroll, maxNodes >= 4, let association = manifest["sample_association"] as? [String: Any],
+                  Set(association.keys) == Set(["ax_namespace", "ax_key", "probe_namespace", "parts", "relation", "declaration_source"]),
+                  association["ax_namespace"] as? String == "macos.ax",
+                  association["ax_key"] as? String == "f02.sample.\(config.binding.window_identifier)",
+                  association["probe_namespace"] as? String == "macos.swiftui.probe",
+                  association["parts"] as? [String] == markers,
+                  association["relation"] as? String == "represents",
+                  association["declaration_source"] as? String == "f02_explicit_ax_probe_mapping"
+            else { return try failed("incomplete_scope") }
+        }
         let admission = try NativeAcquisition(config.acquisition_limits, deadline: command.deadline)
         let source = "macos.swiftui.probe", oid = "\(requestID)-opt_in_layout_probe"
         let surface = surfaces[0]
@@ -490,12 +512,18 @@ extension Collector {
                                  "transform": try json.object(["status", "reason"]) { ["status": try json.scalar("unknown"), "reason": try json.scalar("fixture_screen_transform_unverified")] }]
                             }
                          }]
-                     }] }, "children": try json.array { [Any]() }, "extensions": try json.array { [Any]() }, "source_declarations": try json.array { [Any]() }]
+                     }] + (composite ? try fields.filter { $0 != "layout_bounds" }.map { field in
+                        try json.object(["selection", "field", "sensitivity", "evidence", "state"]) {
+                            ["selection": try json.scalar("requested"), "field": try json.scalar(field), "sensitivity": try json.scalar("public"),
+                             "evidence": try json.evidence(oid, source, "swiftui_anchorPreference_explicit_snapshot"),
+                             "state": try json.unavailable("probe_not_ax", status: "unsupported")]
+                        }
+                     } : []) }, "children": try json.array { [Any]() }, "extensions": try json.array { [Any]() }, "source_declarations": try json.array { [Any]() }]
                 }
             }
         }
         var snapshot = try self.snapshot(context: context, surface: surface, target: target, scope: scope,
-            fields: ["layout_bounds"], observation: oid, channel: "opt_in_layout_probe", started: time,
+            fields: fields, observation: oid, channel: "opt_in_layout_probe", started: time,
             nodes: nodes, captures: try json.array { [] }, json: json)
         // Replace generic helper observation with actual fixture clock/time/source.
         var observation = (snapshot["observations"] as! [[String: Any]])[0]
@@ -517,6 +545,36 @@ extension Collector {
              "members": try json.array { try markers.map(key) },
              "declaration_source": try json.scalar("f02_explicit_component_mapping"), "provenance": try json.scalar("reported")]
         }] }
+        if composite {
+            let collected: WindowAXResult, start: Double, end: Double
+            do { (collected, start, end) = try acquireAX!(admission, json) }
+            catch ProbeLinkError.permissionRequired { return try failed("permission_required") }
+            catch { return try failed("target_unresolved") }
+            guard collected.nodes.count == 1,
+                  let axKey = collected.nodes[0]["key"] as? [String: String],
+                  axKey == ["namespace": "macos.ax", "key": "f02.sample.\(config.binding.window_identifier)"]
+            else { return try failed("target_unresolved") }
+            let axID = "\(requestID)-external_semantics-linked"
+            let axSnapshot = try self.snapshot(context: context, surface: surface, target: target, scope: scope,
+                fields: fields, observation: axID, channel: "external_semantics", started: start,
+                nodes: [], captures: [], json: json)
+            var axObservation = (axSnapshot["observations"] as! [[String: Any]])[0]
+            axObservation["end"] = try json.scalar(end); axObservation["last_verified"] = try json.scalar(end)
+            // The acquisition callback uses this observation ID; no source clock conversion.
+            snapshot["observations"] = try json.array { [observation, axObservation] }
+            snapshot["nodes"] = try json.array { collected.nodes + nodes }
+            snapshot["components"] = try json.array { [try json.object(["logical_component_key", "members", "declaration_source", "provenance"]) {
+                ["logical_component_key": try json.scalar("f02.sample.\(config.binding.window_identifier)"),
+                 "members": try json.array { [try json.borrowed(axKey)] + (try markers.map(key)) },
+                 "declaration_source": try json.scalar("f02_explicit_ax_probe_mapping"), "provenance": try json.scalar("reported")]
+            }] }
+            snapshot["relations"] = try json.array { try markers.map { marker in
+                try json.object(["kind", "from", "to", "evidence"]) {
+                    ["kind": try json.scalar("represents"), "from": try json.borrowed(axKey), "to": try key(marker),
+                     "evidence": try json.evidence(oid, source, "f02_explicit_ax_probe_mapping")]
+                }
+            } }
+        }
         try frame.encode(json.response(request: request, ticket: command.control.ticket, channel: "opt_in_layout_probe") {
             try json.object(["status", "data"]) { ["status": try json.scalar("observed"), "data": snapshot] }
         })

@@ -239,10 +239,13 @@ struct NativeDescriptorIO {
               let duration = limits["deadline_ms"] as? Double, duration.isFinite && duration > 0,
               let output = limits["max_output_bytes"] as? Int, output > 0
         else { throw NativeProtocolError.request }
+        let composite = configuration.collection == "sample" && context["projection"] as? String == "design"
+            && Set(channels) == Set(["external_semantics", "opt_in_layout_probe"])
+            && context["fields"] as? [String] == ["role", "accessibility_name", "enabled", "accessibility_bounds", "layout_bounds"]
         guard let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
-              submit.channel == 2 ? fields == ["layout_bounds"] : configuration.collection != "sample"
+              composite || (submit.channel == 2 ? fields == ["layout_bounds"] : configuration.collection != "sample"
                 ? Set(fields).isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "actions", "accessibility_bounds"])
-                : fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"],
+                : fields == ["role", "accessibility_name", "enabled", "accessibility_bounds"]),
               let nodes = limits["max_elements"] as? Int, (1...160).contains(nodes),
               let depth = limits["max_depth"] as? Int, (1...9).contains(depth)
         else { throw NativeProtocolError.request }

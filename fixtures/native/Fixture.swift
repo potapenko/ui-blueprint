@@ -588,6 +588,9 @@ private struct PilotView: View {
                 "screen_transform": "unknown", "layout_bounds": frames, "scroll_layout_bounds": scrollFrames,
                 "callbacks": measurements.callbackCount, "callback_nanoseconds": measurements.callbackNanoseconds],
             "source_declarations": ["logical_component_key": "f02.sample.\(role)", "represents": ["icon", "text", "container"]],
+            "sample_association": ["ax_namespace": "macos.ax", "ax_key": "f02.sample.\(role)",
+                "probe_namespace": "macos.swiftui.probe", "parts": ["icon", "text", "container"],
+                "relation": "represents", "declaration_source": "f02_explicit_ax_probe_mapping"],
             "scroll_source_declarations": ["logical_component_key": "f02.scroll.\(role)", "represents": ["viewport", "row.0"]],
             "display_scale": displayScale, "observation_utc": ISO8601DateFormatter().string(from: Date()),
             "uptime_seconds": ProcessInfo.processInfo.systemUptime]

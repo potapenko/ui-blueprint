@@ -107,6 +107,69 @@ import Darwin
         try wrongBytes.write(to:output.appendingPathComponent("scroll_wrong_scope.json"),options:.withoutOverwriting)
         let wrongResult=((((try JSONSerialization.jsonObject(with:wrongBytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
         check((wrongResult["data"] as! [String:Any])["code"] as? String=="target_unresolved")
-        print("{\"cases\":17,\"assertions\":\(assertions),\"live\":false}")
+        var linkedRequest=request
+        var linkedContext=context
+        linkedContext["fields"]=["role","accessibility_name","enabled","accessibility_bounds","layout_bounds"]
+        linkedRequest["context"]=linkedContext
+        linkedRequest["operation"]=["operation":"observe","channels":["external_semantics","opt_in_layout_probe"]]
+        var linkedManifest=sample(8)
+        linkedManifest["sample_association"]=["ax_namespace":"macos.ax","ax_key":"f02.sample.a",
+            "probe_namespace":"macos.swiftui.probe","parts":["icon","text","container"],
+            "relation":"represents","declaration_source":"f02_explicit_ax_probe_mapping"]
+        var reads=0
+        func ax(_ json:NativeJSON,wrong:Bool=false)->WindowAXResult {
+            reads+=1
+            // Synthetic canonical AX input, not public AX lifetime proof.
+            let evidence:[String:Any]=["observation_id":"probe-request-external_semantics-linked","source_namespace":"macos.ax",
+                "provenance":"reported","method":"synthetic_ax_input","uncertainty":NSNull()]
+            let properties=(linkedContext["fields"] as! [String]).map { field -> [String:Any] in
+                let state:[String:Any] = field == "role"
+                    ? ["availability":"known","value":["type":"role","value":"button"]]
+                    : ["availability":"unsupported","reason":"synthetic_not_exposed"]
+                return ["selection":"requested","field":field,"sensitivity":"public","evidence":evidence,"state":state]
+            }
+            return WindowAXResult(nodes:[["key":["namespace":"macos.ax","key":wrong ? "wrong" : "f02.sample.a"],
+                "surface":(context["surfaces"] as! [[String:Any]])[0],"native_role":["availability":"known","value":["type":"text","value":"AXButton"]],
+                "properties":properties,"children":[],"extensions":[],"source_declarations":[]]],metrics:[:])
+        }
+        func linked(_ name:String,manifest:[String:Any]=linkedManifest,req:[String:Any]=linkedRequest,
+            source:Int=0)throws->[String:Any]{
+            let frame=try Collector.probe(data:JSONSerialization.data(withJSONObject:manifest),command:command(req),acquireAX:{_,json in
+                if source==1{throw Collector.ProbeLinkError.permissionRequired}
+                if source==2{throw NativeProtocolError.request}
+                var result=ax(json,wrong:source==3)
+                if source==4{result=WindowAXResult(nodes:result.nodes+result.nodes,metrics:[:])}
+                return(result,100.0,101.0)
+            })
+            let bytes=frame.bytes{Data($0)}
+            try bytes.write(to:output.appendingPathComponent(name+".json"),options:.withoutOverwriting)
+            return ((((try JSONSerialization.jsonObject(with:bytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
+        }
+        let good=try linked("linked");check(good["status"] as? String=="observed")
+        let linkedSnapshot=good["data"] as! [String:Any]
+        check((linkedSnapshot["nodes"] as! [[String:Any]]).count==4)
+        check((linkedSnapshot["relations"] as! [[String:Any]]).count==3)
+        check(((linkedSnapshot["components"] as! [[String:Any]])[0]["members"] as! [[String:Any]]).count==4)
+        let observations=linkedSnapshot["observations"] as! [[String:Any]]
+        check(observations[0]["clock_domain"] as? String=="fixture-123-monotonic" && observations[0]["start"] as? Double==20)
+        check(observations[0]["freshness"] as? String=="unverified" && observations[1]["freshness"] as? String=="current")
+        check(observations[1]["start"] as? Double==100 && observations[1]["end"] as? Double==101)
+        for source in 1...4{check(try linked("linked_source_\(source)",source:source)["status"] as? String=="failed")}
+        for name in ["declaration","stale","missing","unauthorized"]{
+            var m=linkedManifest;var r=linkedRequest
+            if name=="declaration"{m["sample_association"]=["ax_key":"wrong"]}
+            if name=="stale"{m["surface_generation"]="changed"}
+            if name=="missing"{m["probe_enabled"]=false}
+            if name=="unauthorized"{r["operation"]=["operation":"observe","channels":["opt_in_layout_probe"]]}
+            let before=reads
+            check(try linked("linked_"+name,manifest:m,req:r)["status"] as? String=="failed")
+            check(reads==before)
+        }
+        // Ordinary probe ignores association/AX callback and keeps exact legacy output.
+        let beforeReads=reads
+        let ordinary=try linked("linked_ordinary",req:request)
+        check(reads==beforeReads)
+        check((ordinary["data"] as! NSDictionary).isEqual(((baseline["data"] as! [String:Any])["result"] as! [String:Any])["data"] as! NSDictionary))
+        print("{\"cases\":27,\"assertions\":\(assertions),\"live\":false}")
     }
 }

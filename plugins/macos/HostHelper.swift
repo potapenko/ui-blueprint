@@ -1,5 +1,6 @@
 import Foundation
 import AppKit
+import ApplicationServices
 import Darwin
 
 // Nonvisual public-system adapter. No app activation or permission prompt.
@@ -71,7 +72,23 @@ import Darwin
                 defer { try? file.close() }
                 let data = try file.read(upToCount: command.replyCap + 1) ?? Data()
                 guard data.count <= command.replyCap else { throw NativeProtocolError.limit }
-                let frame = try Collector.probe(data: data, command: command)
+                let frame = try Collector.probe(data: data, command: command) { admission, json in
+                    guard AXIsProcessTrusted() else { throw Collector.ProbeLinkError.permissionRequired }
+                    let request = (command.document["artifact"] as! [String: Any])["data"] as! [String: Any]
+                    let context = request["context"] as! [String: Any]
+                    let surfaces = context["surfaces"] as! [[String: Any]]
+                    let limits = request["limits"] as! [String: Any]
+                    let requestID = request["request_id"] as! String
+                    let start = ProcessInfo.processInfo.systemUptime
+                    let root = AXUIElementCreateApplication(binding.pid)
+                    let window = unsafeDowncast(try Collector.resolveWindow(root, identifier: binding.window_identifier, admission: admission), to: AXUIElement.self)
+                    let result = try Collector.sample(window, identifier: binding.window_identifier, surface: surfaces[0],
+                        observation: "\(requestID)-external_semantics-linked", maxNodes: (limits["max_elements"] as! Int) - 3,
+                        maxDepth: limits["max_depth"] as! Int, deadline: command.deadline, admission: admission,
+                        json: json, includeLayout: true)
+                    guard CFEqual(window, try Collector.resolveWindow(root, identifier: binding.window_identifier, admission: admission)) else { throw NativeProtocolError.request }
+                    return (result, start, ProcessInfo.processInfo.systemUptime)
+                }
                 do { try NativeCurrentIdentity.verify(path: command.configuration.identity_path, expected: bindingManifest) }
                 catch { try io.reply(identityFailure(), cap: command.replyCap, deadline: command.deadline); return }
                 guard NSRunningApplication(processIdentifier: binding.pid)?.launchDate?.timeIntervalSince1970 == binding.launch_time,

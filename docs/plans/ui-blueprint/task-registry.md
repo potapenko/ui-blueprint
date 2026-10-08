@@ -160,7 +160,7 @@ LICENSE/NOTICE выбранного материала → собственна�
 
 | Текущие аренды / действия | Значение |
 | --- | --- |
-| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12 selected-space geometry diff; Native01a110ac-2da3 implements explicit M05 AX↔probe design association; Web01a11983 implements B04 transform, source compiles and focused checks run. Completed CLI01a11286 archived. Native bounded own-fixture lane after saved source; Web isolated headless lane independent; Git serialized |
+| Активные чаты/пакеты/ресурсы | Core01a111a7 implements G12; Web01a11983 implements B04. Native01a110ac-2da3 composite source frozen pending schema/request admission dependency; Integration01a11286 restored for finite read-only shared-boundary handoff. No Native runtime; Web isolated headless lane after saved source; Git serialized |
 | Последний принятый результат продукта | G04 ordinary native_ax05a76f0 принят в ограниченном scope; actual existing PlayPhrase.me geometry42f37b8 saved/pushed: search1514.5×33pt, transport gaps20.5pt, tab gaps5pt. AX/partial ограничения сохранены. Web/Native controlled chains a7dfcfd/ea90baf и alignment256f2a2 сохранены. Full P0–P7 не завершён |
 | Следующий шаг | Core delivers explicit component-part properties/bounds through existing design inspect; Native delivers measured scroll viewport/row and one saved-source local comparison. Reuse accepted collectors/engine/CLI; no new action development or P01 repeat. Full P0–P7 incomplete |
 | Restart | проверить цель и разрешение; восстановить владельцев, epochs, ожидания и следующий готовый пакет |
@@ -977,3 +977,20 @@ after-resize responses for the immediate G12 consumer, with hashes/source select
 Space/context. Web owns cleanup after Core consumption and root release. No extra
 run or context coercion; source checkpoint does not wait for G12. Existing temp/
 image rules preserved; no persistent archive or log retention.
+
+M05 concrete shared dependency: Native helper/checker compile and27 synthetic
+cases/55 assertions pass, but schema validation.rs rejects a ChannelResponse when
+a nested Observation has another channel. Standalone Snapshot/G11 accepts mixed
+source structure. Native did not edit shared Rust or execute runtime; its five
+declared candidate files remain frozen. Root saves these coherent WIP files with
+this exact canonical-acceptance gap; save is not acceptance or permission weakening.
+
+Integration01a11286 restored for one read-only source/contract handoff: schema
+validation, plugin-api check_response, actual host/worker call path, relevant tests/
+golden invariants. Determine minimal safe explicit multi-source admission and
+every nested channel's request/session/capability authorization before code.
+D03@2/EXCHANGE/MODEL/PROJECTIONS/NATIVE/M05/PRIVACY and legacy126 protections apply;
+no unconditional guard removal, attribution loss, golden expectation tuning or
+parent ACK/slot change. Core G12/schema shape outside handoff, Web/Native owners
+protected. Return exact scope/contract dependency for implementation selection.
+This resolves a demonstrated shipping blocker while unrelated implementation runs.
