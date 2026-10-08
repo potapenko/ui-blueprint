@@ -54,6 +54,29 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## V02 и analysis oracle сохранены; Q01 recheck
+
+V02 source01b5a584351f257c0d20732b17667d99d2ed690d/final34e1c90 pushed,
+terminal completed; receipt прочитан. Existing FillSecret, actual secure AX setter,
+one-use private source и full named canary consumers реализованы; resident snapshot
+revision conflict исправлен без CacheStore relaxation. NativeSession@2/D03@4/
+registry30 полностью восстановлены root, legacy core/analysis/126 unchanged.
+Owner archived и resources released. Q01 independently inspected delta BEFORE
+receipt, actionable findings нет; сейчас получил author evidence и делает actual
+canary/affected verification в том же чате, не новый reviewer.
+
+A02-F762f24418f80d17b5a8ae598c52e47b65ed0bd87 pushed: две engine manifest labels
+match→mismatch, генератор/README согласованы; analysis15/15 + schema59cases по
+автору,188JSON/schema unchanged. Production/test assertions сохранены. Owner
+archived, Q01 получил exact correction для affected recheck.
+
+Для M05 Q01 передан существующий approved normal-queue sampled-hit profile из
+P01-invariance packet, не новый backend. Оригинальные строки455–484 ТЗ перечитаны:
+controlled fixture obligations, необходимые pixels/input, без universal claims.
+B permission stop/TCC границы сохраняются; не объявлять лишнюю квалификацию
+обязательным gate без основания и не подменять действительно нужный positive.
+Q01 owns verification desktop; Q03 recorded-data работает без UI.
+
 ## Параллельные owners после Q01 assessment
 
 - V02 01a11bf3-fb4c-7910-95e8-849247d6a7ce — protected input implementation;
