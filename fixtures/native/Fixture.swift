@@ -553,6 +553,14 @@ private struct PilotView: View {
         let scrollFrames = Dictionary(uniqueKeysWithValues: ["viewport", "row.0"].compactMap { key in
             allFrames["scroll.\(key)"].map { (key, $0) }
         })
+        // Define scroll-local at the measured viewport's upper-left. The same
+        // GeometryProxy resolves all anchors into fixture-local; this authored
+        // fixture has no rotation/scale between them. No screen/pixel inference.
+        let scrollMapping: [String: Any] = [
+            "source": "swiftui_anchor_viewport_origin", "snapshot_request": snapshotRequest,
+            "source_revision": sourceRevision,
+            "environment_revision": "f02-\(role)-snapshot-\(snapshotRequest)",
+            "viewport": scrollFrames["viewport"] ?? NSNull(), "display_scale": displayScale]
         let processStart = app.launchDate?.timeIntervalSince1970 ?? 0
         let windows = NSApp.windows.filter { $0.isVisible }.map {
             ["window_id": $0.windowNumber, "identifier": $0.identifier?.rawValue ?? "unknown",
@@ -586,6 +594,7 @@ private struct PilotView: View {
             "probe_enabled": probeEnabled, "probe": ["source": "swiftui.anchorPreference.explicit_snapshot", "provenance": "reported",
                 "units": "pt", "origin": "top_left", "coordinate_space": "fixture_local",
                 "screen_transform": "unknown", "layout_bounds": frames, "scroll_layout_bounds": scrollFrames,
+                "scroll_local_mapping": scrollMapping,
                 "callbacks": measurements.callbackCount, "callback_nanoseconds": measurements.callbackNanoseconds],
             "source_declarations": ["logical_component_key": "f02.sample.\(role)", "represents": ["icon", "text", "container"]],
             "sample_association": ["ax_namespace": "macos.ax", "ax_key": "f02.sample.\(role)",

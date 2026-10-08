@@ -488,6 +488,52 @@ extension Collector {
         let admission = try NativeAcquisition(config.acquisition_limits, deadline: command.deadline)
         let source = "macos.swiftui.probe", oid = "\(requestID)-opt_in_layout_probe"
         let surface = surfaces[0]
+        func localSpace(_ id: String) throws -> [String: Any] {
+            try json.object(["id", "kind", "units", "origin"]) {
+                ["id": try json.scalar(id), "kind": try json.scalar("local"),
+                 "units": try json.scalar("pt"), "origin": try json.scalar("top_left")]
+            }
+        }
+        func localTransform() throws -> [String: Any] {
+            func unknown(_ reason: String) throws -> [String: Any] {
+                try json.object(["status", "reason"]) {
+                    ["status": try json.scalar("unknown"), "reason": try json.scalar(reason)]
+                }
+            }
+            guard scroll else { return try unknown("fixture_screen_transform_unverified") }
+            guard let mapping = measured["scroll_local_mapping"] as? [String: Any] else {
+                return try unknown("fixture_scroll_mapping_missing")
+            }
+            guard Set(mapping.keys) == Set(["source", "snapshot_request", "source_revision", "environment_revision", "viewport", "display_scale"]),
+                  mapping["source"] as? String == "swiftui_anchor_viewport_origin",
+                  mapping["snapshot_request"] as? Int == config.probe_snapshot_request,
+                  mapping["source_revision"] as? Int == config.probe_source_revision,
+                  let environment = mapping["environment_revision"] as? String,
+                  environment == context["environment_revision"] as? String,
+                  let scale = mapping["display_scale"] as? Double, scale.isFinite, scale > 0,
+                  let viewport = mapping["viewport"] as? [String: Any],
+                  let original = bounds["viewport"] as? [String: Any],
+                  (viewport as NSDictionary).isEqual(original),
+                  Set(viewport.keys) == Set(["x", "y", "width", "height"]),
+                  let x = viewport["x"] as? Double, let y = viewport["y"] as? Double,
+                  let width = viewport["width"] as? Double, let height = viewport["height"] as? Double,
+                  [x,y,width,height].allSatisfy({ $0.isFinite }), width > 0, height > 0
+            else { return try unknown("fixture_scroll_mapping_context_unverified") }
+            // Conversion arithmetic belongs to Rust. This is only the sourced
+            // translation to the explicitly defined measured viewport origin.
+            var evidence = try json.evidence(oid, source, "swiftui_anchor_viewport_origin")
+            evidence["provenance"] = try json.scalar("derived")
+            return try json.object(["status", "transform"]) {
+                ["status": try json.scalar("known"), "transform": try json.object([
+                    "from", "to", "affine", "target", "surface", "environment_revision", "evidence"]) {
+                    ["from": try localSpace("f02-fixture-local"),
+                     "to": try localSpace("f02-scroll-\(config.binding.window_identifier)-local"),
+                     "affine": try json.array { try [1.0,0,0,1,-x,-y].map { try json.scalar($0) } },
+                     "target": try json.borrowed(target), "surface": try json.borrowed(surface),
+                     "environment_revision": try json.scalar(environment), "evidence": evidence]
+                }]
+            }
+        }
         func key(_ marker: String) throws -> [String: Any] {
             try json.object(["namespace", "key"]) { ["namespace": try json.scalar(source), "key": try json.scalar("f02.\(component).\(config.binding.window_identifier).\(marker)")] }
         }
@@ -509,7 +555,7 @@ extension Collector {
                                  "coordinate_space": try json.object(["id", "kind", "units", "origin"]) {
                                     ["id": try json.scalar("f02-fixture-local"), "kind": try json.scalar("local"), "units": try json.scalar("pt"), "origin": try json.scalar("top_left")]
                                  }, "shape": try json.object(["shape", "value"]) { ["shape": try json.scalar("rect"), "value": try json.borrowed(rect)] },
-                                 "transform": try json.object(["status", "reason"]) { ["status": try json.scalar("unknown"), "reason": try json.scalar("fixture_screen_transform_unverified")] }]
+                                 "transform": try localTransform()]
                             }
                          }]
                      }] + (composite ? try fields.filter { $0 != "layout_bounds" }.map { field in

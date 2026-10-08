@@ -740,8 +740,42 @@ stable fixture generation/authored identity. Existing Scroll end changes actual 
 layout position; Snapshot remains explicit. Rust inside/intersects compares measured
 rectangles in the same local space. A viewport rectangle is not claimed visible/paint
 clipping, glyph bounds or occlusion. Existing Move can compare the same local records
-without treating screen translation as changed local offsets; screen/pixel transform
-and cross-display qualification remain unknown. Old sample and P01 seam untouched.
+without treating screen translation as changed local offsets. Old sample and P01
+seam remain unchanged.
+
+M04-T adds a sourced `f02-fixture-local → f02-scroll-a-local` (or b) Transform
+for this scroll scope. The destination is explicitly defined at the measured
+viewport upper-left, local/pt/top_left. The same public GeometryProxy anchor
+subscript supplies both rectangles; the authored fixture has no intermediate
+rotation/scale. The translation `[1,0,0,1,-viewport.x,-viewport.y]` is derived
+Evidence, not a modifier value or guessed screen/window origin. Rust performs
+the actual conversion and measurements. Raw layout rectangles remain unchanged.
+
+The explicit Snapshot's `probe.scroll_local_mapping` carries source method,
+snapshot_request, source_revision, environment_revision, measured viewport and
+actual SwiftUI display_scale. Set Request Context.environment_revision to that
+exact mapping revision. Import checks matching Snapshot/revision/environment,
+exact viewport equality, finite positive size/scale and existing process/Surface
+binding. Missing or mismatched mapping emits Transform unknown while retaining
+measured layout. Scale is context only: it never multiplies points into pixels.
+Imported observations remain cache/unverified with original fixture clocks.
+
+Select `--space f02-scroll-a-local` in existing measure or `diff --geometry`,
+with ref `{"namespace":"macos.swiftui.probe","key":"f02.scroll.a.row.0"}`
+and frame-kind layout_bounds. Each side uses its own original mapping/environment.
+If mapping is absent, no destination Space is present: CLI returns2/unknown_space
+before calculation, and the source Transform remains explicitly unknown. It does
+not invent the missing transform or gain coordinate-action authority. Screen,
+AX-to-local, pixel/capture mapping and cross-display qualification remain unknown.
+
+Focused synthetic verification (executables built using the Native build recipes):
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/bridges/native/local_transforms.py --checks "$NATIVE_TASK_TMP/probe-checks" --validator "$NATIVE_TASK_TMP/target/debug/uiblueprint-validate" --cli "$NATIVE_TASK_TMP/target/debug/uiblueprint"
+```
+
+The test removes only its temporary JSON files. Actual owned-fixture move/scroll/
+resize results and limitations are in the [M04-T receipt](../plans/ui-blueprint/receipts/M04-local-transforms.md).
 
 
 ## M05 explicitly linked AX and probe design observation

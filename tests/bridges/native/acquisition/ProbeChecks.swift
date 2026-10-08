@@ -107,6 +107,33 @@ import Darwin
         try wrongBytes.write(to:output.appendingPathComponent("scroll_wrong_scope.json"),options:.withoutOverwriting)
         let wrongResult=((((try JSONSerialization.jsonObject(with:wrongBytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
         check((wrongResult["data"] as! [String:Any])["code"] as? String=="target_unresolved")
+        // Independent literal geometry: source viewport (20,30), row (26,36)
+        // resolves to scroll-local viewport (0,0), row (6,6), without pixels.
+        for name in ["mapped", "mapped_scroll", "mapped_resize", "mapped_move", "mapping_stale", "mapping_environment", "mapping_missing", "mapping_origin", "mapping_scale"] {
+            var m = measured
+            var viewport: [String: Double] = ["x":20,"y":30,"width":100,"height":90]
+            var row: [String: Double] = ["x":26,"y":36,"width":88,"height":18]
+            if name == "mapped_scroll" { row["y"] = -34 }
+            if name == "mapped_resize" { viewport["width"] = 200; row["width"] = 188 }
+            if name == "mapped_move" { viewport["x"] = 60; viewport["y"] = 50; row["x"] = 66; row["y"] = 56 }
+            m["scroll_layout_bounds"] = ["viewport":viewport,"row.0":row]
+            var mapping: [String: Any] = ["source":"swiftui_anchor_viewport_origin", "snapshot_request":1,
+                "source_revision":2, "environment_revision":"e1", "viewport":viewport, "display_scale":2.0]
+            if name == "mapping_stale" { mapping["snapshot_request"] = 2 }
+            if name == "mapping_environment" { mapping["environment_revision"] = "other-display-layout" }
+            if name == "mapping_origin" { mapping["viewport"] = ["x":0,"y":0,"width":100,"height":90] }
+            if name == "mapping_scale" { mapping["display_scale"] = 0 }
+            if name != "mapping_missing" { m["scroll_local_mapping"] = mapping }
+            var manifest = scroll; manifest["probe"] = m
+            let frame = try Collector.probe(data:JSONSerialization.data(withJSONObject:manifest),command:scrollCommand())
+            let bytes = frame.bytes { Data($0) }
+            try bytes.write(to:output.appendingPathComponent(name+".json"),options:.withoutOverwriting)
+            let result = ((((try JSONSerialization.jsonObject(with:bytes) as! [String:Any])["artifact"] as! [String:Any])["data"] as! [String:Any])["result"] as! [String:Any])
+            check(result["status"] as? String == "observed")
+            let node = ((result["data"] as! [String:Any])["nodes"] as! [[String:Any]])[0]
+            let geometry = (((node["properties"] as! [[String:Any]])[0]["state"] as! [String:Any])["value"] as! [String:Any])["value"] as! [String:Any]
+            check((geometry["transform"] as! [String:Any])["status"] as? String == (name.hasPrefix("mapped") ? "known" : "unknown"))
+        }
         var linkedRequest=request
         var linkedContext=context
         linkedContext["fields"]=["role","accessibility_name","enabled","accessibility_bounds","layout_bounds"]
@@ -173,6 +200,6 @@ import Darwin
         let ordinary=try linked("linked_ordinary",req:request)
         check(reads==beforeReads)
         check((ordinary["data"] as! NSDictionary).isEqual(((baseline["data"] as! [String:Any])["result"] as! [String:Any])["data"] as! NSDictionary))
-        print("{\"cases\":28,\"assertions\":\(assertions),\"live\":false}")
+        print("{\"cases\":37,\"assertions\":\(assertions),\"live\":false}")
     }
 }
