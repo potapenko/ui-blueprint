@@ -54,6 +54,14 @@ Git lane общий временный flock /tmp/ui-blueprint-master-git.lock; 
 соблюдает его. Native owns desktop; Web own headless; Graph no UI.
 Не выдавать каждому внутреннему шагу новый packet и не запускать подагентов.
 
+## W05 запущен
+
+«W05 — Web form workflow и E2E», local01a11ba1-9f72-7ee0-8e8b-2efd5cd32c87,
+base91cfb37, полный цикл. Native M02-N01a11b7c-eb18-7461-87ab-10bf966fabb7
+продолжается параллельно и получил actual shared Attach-status dependency W04.
+Сохранённое владение: Web/headless у W05; Native/shared host/CLI/desktop у M02.
+Новых reviewer/подагентов не запускалось. Завершённые W04/E03 уже archived.
+
 ## W04 и E03 остаток завершены
 
 W04d3f4723/final951bc01 pushed: явный DOM/AX component mapping, B04/B06 positive
