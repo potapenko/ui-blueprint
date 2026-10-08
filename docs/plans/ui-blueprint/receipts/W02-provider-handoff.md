@@ -1077,3 +1077,64 @@ copies matched owner SHA256: CLIe3eff19b73fae793b5f9c48a14bae2d124e5ba307a31e0d2
 worker7636e4bf7a2ae770a0ab520e0d6c2116f8aed2c5323b33bb93b7998db7778233.
 No rebuild or original-file change. After this prepared harness checkpoint, the
 single actual public CLI run is authorized; results/cleanup remain to be recorded.
+
+### A03/A04 actual public CLI result
+
+Prepared harness a8b3fbd857595fa312ad953d597eff527d02375c was saved/pushed before
+execution. One actual run2026-10-08T04:52:53.312Z–04:52:55.838Z PASSED all9calls
+with exits4/0/0/4/0/0/4/0/4 and10checks. Reused exact A04 binaries above; no build,
+API-only run, SetChecked rerun, quota/expectation change, retry or provider repair.
+Launcher SHA256630ef81fa4d0da5dd08fdcc205521f6e2ee9b44036be07dea7595e84974c3f4e.
+Source171-map and Core/CLI focused checks remain attributed to their owners.
+
+Real guarded public sequence and observed source facts:
+- Initial Observe: draft `L`, focus on owned `left`, applied/selected empty.
+- Prepare Focus: read-only, explicit PropertyEquals(Focused,true); Semantic method
+  `cdp.DOM.focus-native-text-control`. Execute0: Confirmed/Succeeded, fresh after
+  Snapshot and verification Observation; known keyboard focus exact web.dom:6.
+- Fresh Observe: draft still `L`, intended input focused, caret1→1.
+- Prepare Type: explicit delivery text `on`, independent PropertyEquals(Value,`Lon`);
+  Keyboard method `cdp.Input.insertText-native-ImeCommitText`. Execute0:
+  Confirmed/Succeeded, fresh after Snapshot; actual input `Lon`, caret3→3.
+- After authored suggestion readiness, fresh Observe still reports public draft
+  `Lon`. UI output/applied/selected remain empty, valid=false and commit count0;
+  unrelated rows and scroll unchanged. This verifies source draft, not business
+  completion, selection acceptance, hardware key events or IME composition.
+- Prepare Type `!` with explicit full expected `Lon!`, then ordinary fixture setup
+  focuses `left`. Execute4 returns NotDispatched/Failed, no after Snapshot or
+  verification Observation, completed_steps empty; focus stays `left`, draft `Lon`.
+  There was no implicit refocus, native text insertion or retry after this refusal.
+
+All canonical input/expectation files and all9 ACKed outputs matched original bytes
+after use. Each response retains its own original identities/times/coverage; no
+global cross-process ID uniqueness or atomic multi-command snapshot is claimed.
+Observe exits4 preserve partial coverage, never promoted to complete. Focus/Type
+execution each verifies its own fresh state; a later UI read is additional fixture
+evidence, not a substitute for the kernel's verification result.
+
+Single-call elapsed108.48ms initial Observe; Focus Prepare89.22/Execute96.16ms;
+fresh focused Observe88.32ms; Type Prepare88.43/Execute94.17ms; final Observe93.82ms;
+negative Prepare88.51/Execute86.26ms. Timings include worker lifecycle and are one
+run, not p50/p95/performance acceptance. Chromium145.0.7632.6, Node24.15.0,
+Playwright1.58.2, owned F01 at800×600/DPR1;32nodes/depth8/64KiB/250ms/120s unchanged.
+
+All CLI children ended without signals; exact copied-worker inventories empty after
+every call. Browser survived worker reaping; own context/driver/browser/profile/
+fixture server cleanup confirmed. Public CLI exposes no internal session counters;
+none are invented. No images were created, user page/profile/source app operated,
+or new dependencies installed. Read-only geometry/first-use paths unchanged.
+Both copied executable hashes matched after use; those two task-owned copies and
+their empty temporary directory were removed with absence verified. A04 originals
+were not modified or deleted by Web.
+
+Runtime report SHA25680426e3495fc06e3e03ba1882d16a2de0dd0dde3a54510ab1d7207e0db14a81c;
+Focus8813B465c31ff823130e4707f2bea73495ddde3421c32ed9777e99fafd547416d31c2;
+Type9205B4f083f1915cc4583d9a8fbb520394167813a12941961f62525b018e602172e79;
+final Observe7014B6471ad7efd113743f62e40646ccba2e1e629706ec548969e0500c7c6a444e209;
+refusal5053B7cc8b659a6011d688ad7bc6790482ef87bfc8b26a8cf60b92c702c4415c0c5bd.
+The26 run-owned canonical inputs/outputs/report remain temporarily at
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/743c700e-9eb5-456f-a6db-d92baeaa6ffb`
+for the requested grouped Core/CLI/Web changed-risk review. Web owns their cleanup
+after that immediate consumer finishes; they are not a persistent archive or live
+action authority. Runtime is author-attributed; independent review, full B02/P5/P7,
+broader editable-control/IME/hardware/business/Native outcomes remain separate.
