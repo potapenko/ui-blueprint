@@ -170,3 +170,148 @@ all seven response hashes still match handoff.json. Own build/log/bundle and oth
 raw evidence are absent; all six Web evidence directory names were checked absent
 (including the never-created popup-harness placeholder). Node reader mock suite,
 changed harness syntax, receipt local links and diff whitespace checks passed.
+
+## V02/A02 changed-scope independent recheck — 2026-10-08
+
+Latest verification pin `762f24418f80d17b5a8ae598c52e47b65ed0bd87` includes
+V02 source/spec `01b5a584351f257c0d20732b17667d99d2ed690d` and receipt-only
+`34e1c90c76cf84a1f16ed34c917ebc5d50c73027`, plus A02's two corrected manifest/
+generator labels. This section supersedes the corresponding open items above;
+it does not relabel earlier runs or claim a new full-suite/whole-goal acceptance.
+N03 source/WIP, Q03 docs and other current working files were excluded.
+
+The same reviewer first read registry30, NATIVE-SESSION@2/D03@4 in full and the
+V02 packet; checked unchanged closure against94724df and reused its fully read
+PRIVACY/FORMS/ACTIONS/IDENTITY/LIFECYCLE/CACHE/D02/D05/CLI/export contracts.
+Read saved Native reader/session/config, shared kernel/host admission, new fixture
+status and tests against their parents. Initial observations were returned BEFORE
+[V02 author receipt](V02-protected-input.md) was read. No actionable introduced
+source defect was found in that delta. Then reconciled that receipt, the
+[A02 correction](A02-analysis-expectations.md), and the already selected
+[P01 invariance profile](../packets/P01-invariance.md) with its
+[historical evidence](P01-invariance.md). Neither author execution nor contract
+statements of actual capability were treated as this reviewer's runtime proof.
+
+Source conclusions: existing FillSecret/opaque Id is preserved; only a permitted
+delivery opens the caller-owned bounded0600 source, consuming its binding before
+read. Real secure role/subrole and settable AXValue are checked; identity/input
+owner/deadline are rechecked after read. Parent nonce/order remain unchanged.
+Kernel requires a distinct held public result. Fixed trace/error codes contain no
+source value/path; buffer release does not promise universal physical zeroization.
+Monotonic checked resident revisions fix the producer, without weakening CacheStore.
+No schema/core0.1/analysis0.2/126-golden migration or new secret store occurred.
+
+### Own actual canary evidence
+
+Built an immutable762f244 source archive in system temp (image assets excluded),
+Rust1.96.0 CLI macos+web, worker web, validator; Swift6 helper/normal off fixture and
+existing P01_SAMPLE_HITS off/on variants. No moving source or author binaries used.
+Fresh CUA inventory showed no fixture/required handoff. Only the exact own normal
+fixture PID47282 was operated; independent CUA confirmed Name empty, secure empty,
+public status `Protected input: empty` BEFORE input. Source was fresh synthetic,
+same-uid0600; its value was never printed or included in argv/canonical commands.
+
+| Channel / condition | Own execution and result | Evidence boundary |
+| --- | --- | --- |
+| Supported protected input | Existing protected_input.py:6 records, CLI0, Confirmed/Succeeded; CUA subsequently shows masked value and `Protected input: received` | Actual AX setter path, no CUA secret setup. Public presence is NOT exact-secret equality or business success. |
+| Backend/source error | Actual missing source after permit:6 records, CLI4, action_outcome_unknown. Production withValue reader separately receives the canary and replaces an injected private backend exception with fixed request error | Injected error is labelled; no claim of an actual OS setter failure. Unknown effect was not automatically retried. |
+| Cancellation | Actual CLI termination after protected Prepare:5 records, exit−15, both registered descendants disappear within3s. Production reader expiry before read and injected cancel after reveal also pass | Not an interruption inside Apple's synchronous setter; no such stronger requirement is inferred. Existing kernel pre/post-Possible cancellation tests preserve uncertainty/no retry. |
+| Reference scope/lifetime | Wrong-ref Prepare:5 records/CLI4/Unsupported. Separate reuse case: first delivery succeeds, fresh Observe, reuse Prepare refuses;8 records/CLI4 | No second protected delivery; caller source preserved by product. All these runs started with observed empty presence. |
+| Graph/stdout/errors |30 actual canonical outputs validated;152 serialized output/command/history/export/fixture/diagnostic files scanned, canary absent | ASCII synthetic canary; not universal arbitrary-secret detection. Sensitive Value remains Redacted, public Name remains Known empty. |
+| Cache/history | Explicit actual_protected_snapshots_cache_history_and_export test passed using THIS run's before/after records; actual revisions1→8 | Real CacheStore under unchanged limits, Recorded reads; reparsed history equals original snapshots, not restamped/synthetic substitutes. |
+| Export/prompt | Both actual historical snapshots compiled to six files each, all bytes scanned, nonempty prompt includes redacted | Model-free local compiler; no image generation/approval. |
+| Enabled trace | Production reader with trace=true emitted all5 nonempty fixed stage codes: source_open/source_read/dispatch/error/released; captured stdout/stderr canary-free | Actual helper also configured trace=true; normal host discards helper stderr. Standalone reader verifies emitter bytes, not merely an unexecuted/disabled trace. |
+| Source refusal/bounds | Production reader nine source refusals: absent/symlink/mode/empty/oversize/control/invalid-UTF8/directory/FIFO; three byte/copy-limit refusals and success/error/cancel cases pass | Same paired-copy admission before allocation; final-component no-follow contract, no claim of arbitrary path sandboxing. |
+| Pixels | New CUA screenshot inspected and displayed: masked field and safe presence status, no secret characters | Separate synthetic pixel evidence; no automatic real-user pixel export or universal masking claim. |
+
+V02 protected-input and prescribed canary-channel criteria are **accepted within
+this supported own-fixture Setter scope**, with the distinctions above. No new
+requirement for exact-secret equality, Keyboard/IME FillSecret or synchronous
+syscall cancellation was added. Ordinary public input/unsupported modalities and
+all legacy authority/effect rules remain protected.
+
+### Own affected integration checks and M05
+
+A02 source diff contains exactly match→mismatch labels for the two already
+inconsistent historical results, in manifest and generator. No test assertion,
+production arithmetic or historical JSON changed. Own engine analysis15/15 passed
+with zero filtered/ignored; schema manifest check passed all59 entries (one selected
+test,11 unrelated tests filtered); legacy golden4 tests passed. This closes the
+analysis failure recorded above, without a skip or a historical fixture rewrite.
+
+Own action-kernel13, host runtime26, public Web action CLI2 and typed Attach1 passed.
+Disposable child entry remains ignored in ordinary listing and exercised by its
+outer test. Actual cache/history/export consumer passed1/1 with --ignored explicitly
+activated and actual input paths. No unrelated whole-workspace/Web-pilot repetition.
+
+M05 uses the ALREADY approved own-window NSApplication.postEvent normal-queue
+profile, not a newly invented backend or physical-pointer gate. One bounded fresh
+pair on current fixture source: offPID49242, onPID49262, each retired before the
+next cohort. Existing sample-frame caller acquired current exact own AX frame;
+fixture checked window/process/generation/display through dispatch. Both frames
+(60,178,231.5,62)pt; same documented window-base inside/outside points. Actual
+counts on EACH build1→2→2; app_active/key/main true throughout, SwiftUI focus none,
+declared focused control null, SDK responder/focus identifiers unknown/null in both.
+This independently closes the sampled intrawindow hit/focus gap. Normal event
+routing was used, never AXPress/hitTest/direct callback as pointer evidence.
+
+Scope reconciliation: reuse prior accepted matched AX/layout/pixel/probe evidence
+for the unchanged sample/probe mechanism; V02 adds the same safe status row outside
+that component in both variants. Current exact sample frame and sampled routing
+are independently rechecked. Do not reinterpret the earlier Q01 full-window scroll
+mismatch as probe interference, claim equality merely from scroll_end=false, or
+claim a new full-window pixel/scroll equality from this finite sample test.
+M05's own-component feasibility is supported in its selected synthetic profile;
+external CUA/global WindowServer/physical-device hit qualification is not its gate.
+
+M01–M03 require pixels necessary for the selected scenario, not pixels from every
+window. Prior own A/popup captures plus independently unchanged B AX/input state
+suffice for those selected identity scenarios; an extra both-window-pixels gate was
+an overconstraint in the earlier matrix and is withdrawn. B−3801 is NOT retried or
+bypassed. Cross-display remains a separate unqualified capability, not ordinary M04
+failure. Controlled SDK/transport/permission faults may prove the product boundary;
+none is labelled an actual OS TCC revocation or dropped native notification.
+
+### Concrete remaining permission classification finding
+
+**P2, pre-existing on94724df and still present on762f244; not introduced by V02.**
+In plugins/macos/NativeFormSession.swift:127–137, current() groups a false
+AXIsProcessTrusted() with process/window identity mismatch and throws staleTarget.
+The process() catch at394 serializes that as stale_target/new_native_session before
+delivery. Reproducer at the boundary: establish resident session while permitted;
+make the permission result false before next Prepare, keeping identity otherwise
+unchanged. Fresh snapshot/current rejects, but its error says stale target instead
+of permission_required. NATIVE.CONTENT and EXCHANGE.CONTENT require that distinction.
+No TCC setting was changed to manufacture this test; this is direct source-path
+evidence, not a claimed actual OS-transition run. Safe no-input refusal is preserved.
+
+Owner: NativeFormSession permission preflight/error mapping, with focused boundary
+proof and post-Possible action_outcome_unknown behavior protected. No second writer
+was started and reviewer production source remains unchanged. Controlled permission
+classification is the concrete remaining M06 dependency; do not replace it with an
+unnecessary blanket demand for real TCC manipulation. Request-driven fresh reads,
+actual revalidation and existing controlled event-loss/resync/isolation proof remain
+valid; optional events are not silently promoted to a required polling backend.
+
+### Updated acceptance / resources
+
+Open Q01 functional dependencies are now the Native popup-action composition
+(assigned N03) and the concrete permission-classification finding above; preserve
+any affected integration proof on their saved candidate. V02 and A02 gaps are closed,
+M05 sampled evidence reconciled; no universal platform/reused-ID/pointer claim.
+Q02/D06 and Q03 remain separate acceptance work, not results of this recheck.
+
+Native lane released after both own profiles; exact executable/run-dir/PID checks
+and process absence verified for normal47282, off49242, on49262 and own helpers/
+workers. N03 may receive the lane through root. No real PlayPhrase.me application,
+TCC, display settings, other caller's sources or old Q03 records were touched.
+Only this Q01 receipt is changed. Synthetic source and all new consumed non-image
+builds/records/logs will be removed before scoped checkpoint; retained screenshot:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q01-v02-4p9itcg1/protected-input.png`.
+Image/containing directory and tool-managed inline originals remain untouched.
+
+Recheck cleanup completed:7806 own non-image files removed, including synthetic
+source, builds, trace captures, cache/history/export records and fixture metadata.
+Only protected-input.png remains under this new temp root; file and containing
+root retained. Older Q03 handoff/images were not cleaned. Receipt local-link and
+whitespace checks passed; scoped current-master checkpoint/push follows.
