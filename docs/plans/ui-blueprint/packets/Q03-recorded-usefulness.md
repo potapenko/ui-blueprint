@@ -73,3 +73,60 @@ Master без branch/worktree; общий /tmp/ui-blueprint-master-git.lock fcnt
 на exact-path commit+push. Final: вопросы/ответы/источники, correctness и ограничения,
 actual timings/calls/доступные метрики, applicability real cases, retained/cleanup,
 SHA+push. Это Q03 evidence, не все P7/D06 и не готовность универсального UI scanner.
+
+## Real-case continuation — user authorization 2026-10-09
+
+The latest direct user instruction permits necessary Mac/Web application launches
+and completing these real-case tasks; see execution.md. It supersedes the old
+no-real-app/no-new-capture limits above and in F03a/F03b. Existing accepted fixture
+Q03 evidence is reused. This continuation adds actual complex-case data and its
+usefulness assessment, not a new product feature or collector framework.
+
+Two existing advisors own disjoint finite datasets; no nested delegation. Both
+prepare their case/contract traversal now. Q02 owns desktop/quiet CPU first: no
+foreground operations, app launches or heavy builds during its cohort. After its
+terminal release, Mac collects RC03; Web can collect independently without foreground
+or otherwise follows Mac. Resource waits do not become user-approval questions.
+
+Mac owner01a1102f-791c-7e91-bec3-1877ea004d51: complete RC03 Search & Learn resize
+using F03b's source routes and protected state. Canonical PlayPhrase.me Mac may be
+launched/built through the project's supported route without source changes. Obtain
+actual internal bounds for panels/video/transport/learner tabs where available at
+two supported widths, scoped semantics and matched screenshots. Unknown geometry
+stays unknown; no hand-inferred pixel precision or fabricated tab overflow. Preserve
+query/clip/paused state and restore owned setup. Use RC02 only if an actual RC03
+availability limitation prevents an informative dataset; state reason and scope.
+Writes only existing fixtures/real-world/mac-resize/ and receipts/F03b.md; if RC02
+is required use existing mac-filters/ and receipts/F03a.md. Do not edit shared
+real-world-cases.md. Deliver raw measured sources plus separate task/answer key.
+
+Web owner01a1102f-e21d-7251-9597-c29a1c66d088: complete one real Director popover
+case in PlayPhrase.me Clip Search, two meaningful supported viewport sizes with
+trigger/popup/input/list/options bounds, source IDs/units/coverage and screenshots.
+Use its current source spec/QA routes named in platform-test-advice.md; record exact
+traversal before runtime. Open/close/resize are setup; do not select a director,
+change filters/settings/account data or invent a CSS declaration as measurement.
+No site code changes. Keep raw measurement dataset in unique system temp with
+manifest, task prompt and separate answer key; return its absolute path in final.
+UI Blueprint repository writes limited to receipts/platform-test-advice.md's new
+Web real-case section, if writable under the current project scope; otherwise
+return that text to root. No competing inventory/spec/registry changes.
+
+For both: existing supported tools/collectors first; build no new infrastructure.
+Use actual project runtime reservation and recorded source/build/target/state,
+report UI Blueprint canonical response separately from native/browser reference
+facts. A reference dataset alone does not prove the library consumed it. Keep
+unknowns, transforms and non-atomic timings explicit; exclude unrelated private
+content. All images/system-temp directories containing them are retained, never
+agent-deleted. Nonimage raw data retained for named Q03/root consumers through
+acceptance; no new persistent directories. No external service messages, purchases,
+credentials, app source/data/settings changes, TCC/display changes or mobile adapter
+claims. Existing F03 archival paths and per-checkpoint grants are obsolete: system
+temp and autonomous exact-path commit+push under the shared Git lock apply.
+
+Q03 consumer later receives these datasets to answer real geometry questions with
+existing CLI and separately check correctness against the answer key. Same question/
+conditions for semantic and screenshot comparisons; no fabricated model tokens or
+speedup. Final dataset receipt: actual case/state, measured fields and missing ones,
+source/image paths, reproduction, setup restoration, resource release, commit+push
+if tracked files changed. Model/reasoning inherit existing chat settings.

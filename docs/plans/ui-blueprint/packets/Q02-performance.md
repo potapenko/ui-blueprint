@@ -255,3 +255,45 @@ One complete off/on comparison in the matched context, or that exact blocker, th
 update the concrete workload proposal and save it. The real request-only structural
 delta remains explicit. No candidate timing, D06/.PROOF change, new threshold, N03
 rerun or unchanged Web/Rust-stage campaign is authorized by this continuation.
+
+## Full Native benchmark continuation — user authorization 2026-10-09
+
+This section supersedes the interim preflight-only/no-timing/fixtures-only and
+manual activation restrictions above. User explicitly said to do the benchmark
+and launch whatever applications are needed; exact quote is in execution.md.
+Resume the original complete Q02 outcome, not another preparatory microtask.
+Q01 accepted bounded Native functional composition in21e0abf and source7709067;
+I02 qualified combined063e709 inef45577. All old own fixture processes are retired.
+You hold Native desktop/quiet CPU now; other tasks prepare without UI/load until
+release. Validate fresh ownership for new operations; old PIDs/refs are provenance.
+
+Contract requirement: explicit requests, all data/cost, unchanged100/200/300/750ms
+Native gates,20cold/100warm per off/on and full quality reporting.
+Observed evidence: prepared53e6e6e request-only input adds Snapshot, shifts OpenB,
+and controlled017d85c has76nodes with all original fields retained. These are real
+input differences, not a proven old-baseline match. Prior inactive attempt063e709
+failed to establish context, not a measured performance failure.
+Selected engineering route under ROADMAP D06 and the user's instruction: separately
+version this complete request-only workload BEFORE candidate evaluation, with exact
+source/state/context/geometry/all fields and same thresholds; obtain a fresh direct
+API baseline for exactly it, then measure the candidate. Preserve historical75-node
+records and distinguish the new comparison. Use reproducible supported setup; active
+context is allowed when explicitly pinned equally in baseline/candidate. Do not
+spend another cycle forcing the old inactive context or disguising differences.
+
+Reconcile mode: permitted contract delta is only this honest workload registration
+and its acquisition.PROOF reference; same numerical gates, coverage preservation,
+privacy/limits/identity/freshness/observer-invariance remain protected. In addition
+to original ownership you own docs/specs/development/decisions/d06-performance.md,
+its necessary evidence reference, d05-native-acquisition.md's baseline reference,
+and docs/specs/README.md's corresponding registration/revision entry. Pin the exact
+closure through current registry/decision routes, distinguish registration from
+acceptance, checkpoint registration before candidate timing. Do not change unrelated
+clauses or requirements. Original75 equivalence is not claimed by passing new input.
+
+Complete setup, baseline, full off/on cohorts, affected self-checks, evidence and
+any necessary in-scope repair under the original packet. Reuse accepted Web/Rust
+results; no repeated full campaign unless their inputs change. A measured failure
+stays visible. No new framework, fixture reshaping, field pruning or loosened gate.
+Return one terminal result with counts/p50/p95/quality, source/conditions, actual
+limitations, commit+push and CPU/desktop release. No nested agents or chats.
