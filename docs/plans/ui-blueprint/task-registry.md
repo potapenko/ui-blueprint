@@ -41,10 +41,14 @@ handoff ниже — история, не текущее состояние и �
   All owned runtime processes absent, images and named review inputs retained.
   Resume this exact chat on real desktop/quiet CPU release after Mac collection.
   Earlier accepted Web/Rust results remain closed.
-- Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`: подготовка terminal
-  waiting_resource получена; после Q02 cursor297 передан Native desktop для
-  полного RC03 сбора. Existing chat resumed; самостоятельный setup→dataset→restore→
-  commit/push→release по [пакету](packets/Q03-recorded-usefulness.md).
+- Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`: terminal completed,
+  `b1b06fd9a6c9ed1f8f8676d6b4eae505c0867cce` pushed, new F03b receipt/dataset
+  contract read. Two original native_ax replies160nodes/partial at961/1920pt,
+  no source conversion; first incomplete_scope kept. Two Inspect/16Measure outputs
+  preserve original Snapshots. Exact restoration, own process/guards/tool binaries
+  cleanup and runtime release reported; raw inputs/images retained. Advisor kept.
+  Q03 receives neutral task/original observations before producer key; actual
+  consumer acceptance is separate. Runtime release cursor89; final cursor100.
 - Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: real Director dataset
   delivered, runtime released; no foreground or site tracked edits. Own tab closed,
   draft/URL/filters restored. Advisor remains available for product context.
@@ -60,13 +64,15 @@ handoff ниже — история, не текущее состояние и �
   Explicit imported reference binding is not live Target identity/Observe fidelity;
   paint/hit/freshness/atomicity and automatic real-browser ingestion remain unclaimed.
   Original22-file dataset/images retained; own consumed nonimages cleaned.
-  Same chat idle awaiting actual Mac dataset; retain for its remaining task.
+  Same chat resumed on actual Mac dataset through latest packet section. It reads
+  source records now; build/CLI batches wait for Q02 timed-series CPU release.
+  No product code/schema changes, original AX identity/context stay untouched.
 - Mac runtime: cursor89 confirms collection completed, two original native_ax
   Observe responses with160nodes each/partial coverage; actual961×1050 and
   1920×1050pt, same paused clip. First broader request incomplete_scope retained.
   Exact original frame/query/clip/paused restored; only own launched app closed;
   both runtime reservations/caffeinate released. No image cleanup.
-  Mac advisor now completes offline Inspect/Measure and dataset packaging.
+  Mac advisor has completed offline Inspect/Measure and dataset packaging inb1b06fd.
   Q02 same chat resumed with release binaries/full outcome; it may directly wait
   for Mac's short saved-data CPU work before timed series, no extra root grant.
   Q03 receives Mac original dataset on delivery; Web accepted portion stays closed.
