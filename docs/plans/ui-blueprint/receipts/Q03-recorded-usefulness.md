@@ -569,3 +569,299 @@ Original supplied dataset directory, manifest and all21 listed files (including 
 images) remain present with unchanged hashes. No retained Q03-created image or
 image directory was removed. Changed local links, route consistency and whitespace
 checks passed; exact-path master checkpoint/push is returned in the final chat.
+
+# Continuation — real Mac RC03, 2026-10-09
+
+Finishes the remaining Mac input in the same authorized Q03 outcome; Webc5a6e4f and
+fixturefff46985 are not rerun. Dataset checkpointb1b06fd9a6c9ed1f8f8676d6b4eae505c0867cce;
+current packet's “Q03 Mac consumer — RC03 original responses ready” is the finite
+authority. Scope remains saved-data verification, receipt-only permanent writer,
+single chat, no app/desktop operations or agents. Final consumer: root/P7 real
+Mac/Web usefulness assessment, distinct from whole-product release acceptance.
+
+Recovered task/packet and current status; comparison from c5a6e4f to current HEAD
+showed no changes to AGENTS/spec tree/RUST. Reused the fully read Q03 closure:
+PERFORMANCE/COMPLETION@1, MODEL/GEOMETRY/IDENTITY/PRIVACY/PROJECTIONS@1, EXCHANGE@2,
+NATIVE@2.AX-READ, CLI@16, ANALYSIS@2/types/validation@1 and CLI-GEOMETRY-DIFF@1 with
+its dependencies. No new product choices or contract delta. Actual different
+sessions/Surfaces rule out forced cross-request diff. Plan: consume originals,
+inspect and measure each independently; test truthful incompatible diff refusal;
+record own answers; only then open separate key; scoped checkpoint and push.
+Build and CLI batch were queued behind Q02's explicitly reserved quiet CPU lane;
+reading, raw-data selection and query preparation proceeded while waiting.
+
+## Original input and source observations
+
+Read neutral runtime-20261009-task.md, two original canonical Observe replies and
+allowed state-continuity/window metadata. Manifest hash
+f6d4374f8cdf4ce8fb07b92d34c5e9f6a1196578a4a0097b9d7ef5045b0c42ce matched.
+Parsed provenance/input metadata while explicitly excluding computed_measurements
+and evaluation; source-selected node metadata and stated limitations were visible.
+No answer-key, narrative runtime-20261009.md, producer F03b receipt,
+measured-summary or producer *-measurement files were read before own answers.
+Selection was checked directly against original nodes, not accepted solely by labels.
+
+Retained original root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559`.
+
+| Original input | Bytes | SHA-256 |
+| --- | ---: | --- |
+| narrow-geometry/observed.json | 477679 | 4ed4b8b1608be11246cb12e931bf4bdb7bbe3266dae4f9cf30cbaa5167039564 |
+| wide/observed.json | 477796 | c3754de65516ca6e2fbca665c9bea906d9b03ea06210430722f785b5e6d4b2ab |
+
+These are actual native_ax/external_semantics ChannelResponses, schema0.1.0,
+plugin macos0.1.0, design projection, scope selected-focused-window. Both have160
+nodes, partial coverage, unknown omitted/unknown counts; requested role,
+accessibility_name and accessibility_bounds only. No edited/extracted/rekeyed
+Snapshot, fabricated evaluation transform, merged observation or synthetic action ref.
+
+Exact Target macos-pid-51018, generation51018:1791542072.0498953;
+bundle playphraseme.Playphraseme. Canonical reused Release binary SHA-256
+0383188bc0e043d36d0ec00eb182e16807c973b3b6a569f545814516522b4446;
+its exact source revision is unknown. Producer source for tool:
+b5d4cde0f3ef922151821bdccf911457370ec492. No claim of newly built application QA.
+
+Narrow collected first: request d641a4242c384f85a53d58c7d7beb5e1, session/environment
+rc03-d641a4242c384f85a53d58c7d7beb5e1, Surface
+ax-focused-d641a4242c384f85a53d58c7d7beb5e1/generation equal request ID.
+AX interval398279.06697783334→398279.1815715834 seconds in
+helper-51796-monotonic. Wide follows: request e81f99211d70471582a6aafbe9ec68f9,
+session/environment rc03-e81f99211d70471582a6aafbe9ec68f9, its own ax-focused
+Surface/generation, interval398348.8856944167→398348.99083741667 seconds in
+helper-52564-monotonic. Do not subtract different helper clocks as elapsed time.
+Producer UTC request intervals:10:36:12.829773–10:36:13.334146 and
+10:37:22.632316–10:37:23.097552 on2026-10-09. Stored live/current describes their
+collection only; both preserve unknown consistency/separate_api_reads, not current
+freshness or atomic capture at Q03 consumption.
+
+Separate CG records identify window17205, same PID, (0,30,961,1050) then
+(0,30,1920,1050) screen pt. CG is reference corroboration, not a canonical AX→CG
+or pixel transform. Other CG entries in wide-window.json were not folded into scope.
+State-continuity.json is attributed normalized CUA output, not product Value:
+query “it's nice to meet you”, Bridge to Terabithia (2007) [00:30:26],4/1,650,
+Play, Learn Common Phrases and pre-existing Russian translation agree in its four
+records. This supports visible state continuity; no internal state invariance claim.
+
+Earlier narrow/observed.json SHA-256
+9182aac5206393208caebae7bcf570f7b7f520cf440b5d45f1f8f901f1089b82 remains a failed
+incomplete_scope result for the larger role/name/bounds/enabled/focused request.
+Its cause is not established. The two later geometry replies' producer exit4 means
+partial data; useful scoped measurements do not retroactively pass that failure.
+
+## Raw answer basis: named parts, no inferred panel
+
+All rectangles below are actual accessibility_bounds, ax-screen/screen/top_left/pt,
+from bounded_public_ax_attributes. Every geometry retains unknown transform reason
+ax_to_pixels_not_calibrated. Names/roles/AXIdentifier retain separate availability:
+e.g. window native_role AXWindow exists while normalized role is unknown and
+accessibility_name unsupported; AXTitle separately reports Search & Learn / English.
+
+Exact SourceKey namespace is macos.ax. Table key suffixes expand using
+N=`d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-` and
+W=`e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-`.
+Each tuple is(x,y,width,height)pt; these are not content/hit/paint/layout boxes.
+
+| Part / sourced identifier or name | N key; narrow rect | W key; wide rect |
+| --- | --- | --- |
+| AXWindow, learner | N0;(0,30,961,1050) | W0;(0,30,1920,1050) |
+| AXScrollArea, searchLearn.suggestedCommonPhrases.overlay | N18;(8.5,90.5,323.5,809) | W19;(8.5,90.5,513,809) |
+| AXScrollArea, searchLearn.learner.commonPhrases | N32;(555,133,463,766.5) | W34;(1391.5,133,520,766.5) |
+| AXGroup, searchLearn.transport | N20;(304.5,383,352,374.5) | W21;(784,383,352,374.5) |
+| AXButton, searchLearn.transport.toggle / Play | N35;(409.5,383,142,142) | W37;(889,383,142,142) |
+| AXGroup, searchLearn.query.band | N22;(0,1003,961,77) | W23;(0,1003,1920,77) |
+| AXButton, tabs / Learn Common Phrases | N27;(620.5,90.5,64.5,42.5) | W29;(1391.5,90.5,155.5,42.5) |
+| AXButton, tabs / Vocabulary | N28;(690,90.5,62,42.5) | W30;(1552,90.5,93,42.5) |
+| AXButton, tabs / Favorites | N29;(757,90.5,62,42.5) | W31;(1650,90.5,83,42.5) |
+| AXButton, tabs / Grammar | N30;(824,90.5,62,42.5) | W32;(1738,90.5,83.5,42.5) |
+| AXButton, tabs / Statistics | N31;(890.5,90.5,62,42.5) | W33;(1826.5,90.5,85,42.5) |
+
+All tabs share reported AXIdentifier searchLearn.learner.tabs; it alone is not a
+unique selector. Selected tabs additionally use exact name+AXButton; named regions
+are unique under the recorded identifier within these partial160-node responses.
+This is analytical correspondence in the supplied scope, not stable cross-request
+refs or proof of uniqueness in the whole app. A distinct video-only frame is not
+identified in this selected evidence; transport cannot substitute for that frame.
+
+Window origin and height are unchanged. Left-region width grows, right-region
+width/position changes, transport/Play retain sizes and move horizontally, query
+band widens, tab widths/positions change. This is not whole-window translation or
+uniform scaling. Relative-to-window questions use each observation's own AX window
+bound in the same screen space; no invented window-local Space/transform is needed.
+
+Before opening the key, viewed the two supplied native PNGs after reading AX:
+narrow-geometry/window.png1922×2100 and wide/window.png3840×2100. Tool presentation
+resized them to1504×1643 and2048×1120; no derivative file/crop/measurement was made.
+Qualitative image evidence: narrow learner tabs visibly wrap/abbreviate (first tab
+shows “Learn Com…”); left suggestion counts wrap beneath text where the wide view
+has inline counts; right-region text is visibly cut at its left boundary in narrow.
+These are image-only observations, not API text extents or measured clip geometry.
+Wide/narrow titlebar active appearance differs, so no pixel invariance comparison.
+Both depict the same paused scene and visible query/counter, consistent with the
+separate continuity metadata, not a proof of global atomic state.
+
+AX bounds alone do not establish intrinsic text width, clipping, hit regions,
+internal SwiftUI layout or padding. Narrow widths and image abbreviations justify
+focusing an investigation on learner tabs; they do not identify the implementation
+cause, an accepted repair, or compliance at every supported window size. AX-to-pixel
+mapping stays unknown despite the source images'2x outer-window size ratio.
+No pointer/keyboard action or reachability claim is made. This is a semantic-first
+qualitative hybrid inspection, not a blind screenshot-only experiment or speed trial.
+
+## Own public CLI answers, before key reconciliation
+
+After Q02 explicitly released quiet CPU at status cursor351, built the producer's
+fixed source b5d4cde and consumed both original ChannelResponses directly.
+Two Inspect JSON calls preserve the entire respective original Snapshot; selected
+right-region inspection is an exact observed SourceKey, no label lookup by CLI.
+Twenty-two known Measure results, one unavailable Measure and one refused geometry
+diff below were obtained before opening the key. No original data was changed.
+
+| Engine fact in ax-screen pt | Narrow | Wide |
+| --- | ---: | ---: |
+| left AX region width | 323.5 | 513 |
+| right AX region width | 463 | 520 |
+| transport AX width | 352 | 352 |
+| first tab AX width | 64.5 | 155.5 |
+| second tab AX width | 62 | 93 |
+| transport center minus window center, x | 0 | 0 |
+| first-tab right→second-tab left edge gap | 5 | 5 |
+| left-region right→transport left edge gap | -27.5 | 262.5 |
+
+Each Inside query uses the element as inner and that same observation's window as
+outer. Full Engine insets(L,T,R,B),pt:
+
+- left region: narrow(8.5,60.5,629,180.5), wide(8.5,60.5,1398.5,180.5);
+- right region: narrow(555,103,-57,180.5), wide(1391.5,103,8.5,180.5);
+- transport: narrow(304.5,353,304.5,322.5), wide(784,353,784,322.5).
+
+These same-space edge relations show changes relative to the reported window;
+no window movement is needed to explain them. Negative57 right inset means the
+reported narrow right-region AX rectangle extends57pt beyond the reported AX window
+right edge. Negative27.5 left→transport gap means these AX boxes overlap on x.
+Neither establishes paint occlusion, clipping behavior, hit regions or a design
+failure. Transport remains horizontally centered. The5pt tab edge gap is not
+inferred SwiftUI padding; equal gap does not prove readable labels.
+
+Requested right-region layout width returned unknown/not_requested, exit4, without
+a value: layout_bounds was not in the source request. Accessibility geometry was
+not substituted. `diff --geometry` on the original pair returned exit4,
+context_mismatch with empty stdout: session/Surface generations and exact keys differ.
+No repaired contexts, shared refs, fabricated transforms or cross-record displacement
+were emitted. Numerical side-by-side observations and within-record measurements
+are the actual supported result here; automated cross-request matching is not proved.
+
+## Separate key, correctness and limits
+
+Own answers including CLI results were fixed before the key at
+2026-10-09T11:06:52.073645Z; receipt SHA-256 then:
+1f4cdcafb84c9e733d5fc5dc537c41fef60ff63072be21a11ee0487ee9a40177.
+Then read runtime-20261009-answer-key.md. Producer narrative/F03b receipt and ready
+measurement outputs were not needed. The key is producer-authored interpretation
+checked using original data and the same Rust engine; agreement is not independent
+collector/engine implementation acceptance or an independent model comparison.
+
+All requested named rects and overlapping key relations agree exactly; no tolerance
+or revised criterion. Sixteen own scalar literals (including second-tab widths from
+raw/key bounds) passed exact assertions. Six same-record inset results preserve
+full source/evidence and distinguish rectangle overflow from visibility. The key's
+additional transport→right gap and root/learner.overlay discussion were not appended
+as if computed in our pre-key CLI batch. Our selected right region was the explicitly
+identified Common Phrases AXScrollArea, never the broad learner.overlay group.
+The key corroborates the narrow right-edge1018 versus AXWindow961 discrepancy;
+neither side clamps it or invents a root cause.
+
+All25 JSON outputs preserve the original source Snapshot by full parsed equality;
+Inspect explicitly saved/live_revalidated=false. Every known result is in ax-screen
+pt with original evidence. Unavailable layout contains no numeric measurement and
+reason not_requested; incompatible diff emits no partial report. All2 original
+positive-response hashes, earlier failed response hash and2 PNG hashes remain
+unchanged. This demonstrates genuine direct canonical input consumption here,
+without the manual reference conversion used for Web.
+
+Visual observations agree with the key within the named images; no independent
+pixel metric or clipping implementation is claimed. Cross-request semantic
+correspondence remains limited to reported identifiers/name/role plus attributed
+process/state continuity; public G12 matching does not accept this pair. Missing
+video-only/layout/hit/visible/paint/text-extents/AX-pixel mapping data stay missing.
+Partial bounded scope is not full application coverage.1440×900, other supported
+sizes, foreground invariance and app behavior/reachability were not accepted here.
+No tests/fixtures/manifests/product rules were altered to turn unknown or failure
+into pass. No product implementation change is required by this finite verification.
+
+## Actual commands, preparation and CPU release
+
+Consumer source fixed to producer revision b5d4cde0f3ef922151821bdccf911457370ec492,
+core-only default features. Source extraction0.081s; offline locked CLI dev build
+6.798s, successful. Binary SHA-256
+7ae1a6b624a824175e9251f7719a90d2c1daeca72c93d787b5318792312cadd9.
+No platform helper/worker/app was built or launched by Q03. Prior contract/build
+policy was reused, not a new dependency or benchmark decision.
+
+```text
+uiblueprint inspect --snapshot ORIGINAL_OBSERVED_JSON --ref EXACT_SOURCE_KEY_JSON --view design --max-input-bytes 2000000 --max-output-bytes 4000000 --json
+uiblueprint measure --snapshot ORIGINAL_OBSERVED_JSON --query QUERY_JSON --space ax-screen --max-input-bytes 2000000 --max-output-bytes 4000000 --json
+uiblueprint diff --geometry --before NARROW_ORIGINAL --after WIDE_ORIGINAL --ref NARROW_RIGHT_SOURCE_KEY_JSON --frame-kind accessibility_bounds --space ax-screen --max-input-bytes 2000000 --max-output-bytes 4000000 --json
+```
+
+Queries are ordinary analysis0.2 geometry_query, scope selected-focused-window,
+quantity_kind length, units pt, null applies_when. Exact observed keys are selected
+independently in each original, never transferred. All anchors use original
+ax-screen definition. Width has one anchor; Inside has inner then window;
+center gap uses window/transport x fractions.5/.5; tab and left→transport edge gaps
+use x fractions1/0. Only unavailable query asks layout_bounds; all others explicitly
+use accessibility_bounds. No fabricated Expectation/design pass/fail or transform.
+
+| Consumer group | Calls | Summed subprocess wall ms | stdout bytes |
+| --- | ---: | ---: | ---: |
+| Narrow Inspect,11 known measurements,1 unavailable measurement | 13 | 639.109 | 6232835 |
+| Wide Inspect,11 known measurements | 12 | 579.930 | 5756133 |
+| Incompatible cross-request diff | 1 | 38.126 | 0 |
+| Total | 26 | 1257.165 | 11988968 |
+
+24 exits0;2 expected exits4. Only stderr is17 bytes `context_mismatch` plus newline.
+First start2026-10-09T11:06:21.439045Z, last11:06:22.756025Z. Preparation/wait/query
+formulation/tool transport/reasoning are outside subprocess timings. No cold/warm,
+p95, token, accuracy-rate or speedup claim. Large repeated JSON payloads retain the
+full160-node sources, so this is not an optimal compact-context workflow benchmark.
+The two producer acquisitions' exit4 and earlier incomplete_scope failure remain
+producer evidence, separate from successful saved-data query delivery.
+
+Q02 actual resource release was observed at its status cursor351 before extraction/
+build/batch. Q03 completed build/CLI/verification and explicitly released quiet CPU
+at2026-10-09T11:07:18.099889Z (13:07:18 Europe/Podgorica), via current-chat status.
+Desktop and Q02 fixture stayed with Q02 throughout. Remaining receipt/Git/own-file
+cleanup does not reserve CPU; no live resource/process remains owned by Q03.
+
+## Final Mac + Web Q03 outcome
+
+Both real datasets now have bounded, source-attributed agent answers through existing
+Rust geometry consumers. Web's34 calls operate on explicitly imported browser
+reference facts and match a withheld arithmetic key; live Web ingestion remains
+unproved. Mac's26 calls operate directly on unmodified native_ax replies: useful
+widths, edge relations, centering and overflow can be answered despite partial data;
+unsupported cross-request diff and unavailable layout remain explicit.
+
+The facts identify where further product investigation is useful (narrow Mac learner
+region/tab sizing; Web zoom-dependent popup geometry) without inventing a required
+spacing, padding or repair. Screenshot appearance complements AX without converting
+pixels into unexplained geometry. Neither fluent descriptions nor correct negative
+results replace missing positive live/interaction/paint evidence.
+
+Within the Q03 packet, no remaining dataset dependency is open. Final outcome is
+real Mac/Web saved-data usefulness evidence with limitations, not universal-scanner
+readiness, full Q03 blind-model scoring, P7/D06 acceptance or changed PlayPhrase.me.
+Earlier unrelated A02-F/V02 statuses are historical; this task does not re-evaluate
+them. Web/fixture accepted results were reused, not rebuilt or rerun.
+
+Supplied RC03 originals, failed response, images and containing directories remain
+owned by root/Q03 through acceptance. This task has no grant to remove them;
+the old consumed-Q01 cleanup authority is inapplicable. Only own consumed support
+files/build extraction/query outputs are eligible for cleanup. No unrelated dirty
+paths are staged; checkpoint changes only this existing receipt in current master.
+
+Final cleanup verified: 1579 own nonimage files and empty
+uib-q03-mac-consumer-o0cbtkd9 removed. Supplied source responses/failed response,
+both PNGs and original root remain present; their unchanged hashes were checked
+before quiet-CPU release. No images or containing directories were deleted.
+Changed local links, route/scope consistency and whitespace checks passed.
+Exact-path commit/push under the shared Git lock is reported in the final chat.
