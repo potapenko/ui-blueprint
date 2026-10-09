@@ -1190,3 +1190,132 @@ Only this receipt is written. No CPU/UI/runtime resource was acquired beyond sma
 saved-file inspection; no process/app was launched, activated, reinstalled or closed.
 All existing retained resources/waits remain untouched. Checkpoint/push follows
 changed local-link/whitespace checks; this is not P7 completion or a new operation grant.
+
+
+## Native release sample quality — terminal diagnostic, 2026-10-09
+
+Finite diagnostic authorized by the last section of the
+[Q01 packet](../packets/Q01-integrated-acceptance.md#native-release-quality-diagnostic--finite-parallel-task-2026-10-09).
+Immediate consumers: Q02 quality outcome and root acceptance. Only this receipt is
+written; no product/spec/harness change, build, live request, app/UI operation,
+new agent/chat or new source-acceptance claim. Q02 remains sole product writer.
+
+Traversal receipt: registry33 → [D06@2](../../../specs/development/decisions/d06-performance.md)
+→ [D06-NATIVE-REQUEST@1.INPUT/METHOD/QUALITY](../../../specs/development/decisions/d06-native-request.md)
+and [D05-NATIVE-ACQUISITION@3.PROOF/OUTCOMES](../../../specs/development/decisions/d05-native-acquisition.md).
+Read the changed leaves completely; reused the already-read applicable explicit
+closure (PERFORMANCE/PILOTS/NATIVE-PILOTS, D02/D04/D05/evidence, NATIVE@2,
+MODEL/EXCHANGE@2/GEOMETRY/IDENTITY/PRIVACY and Q01 closure). New input authority
+9e08e0556b34e522fba09a75d8341e20fa83655d supersedes only the prior receipt's
+unresolved workload-selection step, not its historical observations. Required:
+complete registered76-node input/all fields, actual availability, partial coverage,
+no fabricated same-time oracle, unchanged100/200/300/750ms gates and all failures.
+
+### Exact evidence and method
+
+Evidence root R is
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q02-native-full-lh3jw_lj`.
+Started from original records and source predicates, without Q02 narrative/verdict.
+`R/q01-quality-handoff.json` SHA-256
+`af5953d68d377efae5e4f048b907d11c9dc4991f1ed2a9a9c6e411a18a3a363a`
+pins all four reports, five failed sample files, configs, witnesses and artifacts.
+All four report and five sample SHA-256 values match that handoff. Actual release
+helper/witness/baseline binaries match release-products.json; environment records
+macOS27.0.1/26A434, arm64, Swift6.4/SDK27, Rust1.96,12CPU/24GiB. No new run.
+Product source is770906798e1326fed3dd0edec40dc59b13772b3a. The later diagnostic
+harness must not be falsely attributed to that product commit:
+ReadonlyFacts.swift, DirectBaseline.swift and cohorts.cjs are committed at
+b3ea40c6add3afd660d9d96628e4f2e7d892f66a; performance.cjs last changed at
+017d85c609aef708e835f17c8cbd9523852405b8. All four inspected working files equal
+b3ea40c6 bytes. Source pin/hash metadata establishes attribution, not reproducible
+binary compilation proof. Product WindowAX.swift was read from7709067 directly.
+
+Decoded actual candidate frame strings, not report summaries. Compared failure
+records against each group's before/after raw witness and both adjacent successful
+samples: baseline-on cold12/14 and warm97/99; candidate-on warm20/22;
+candidate-off warm21/23 and64/66. Raw witnesses use individual attribute calls;
+candidate uses classification/value/Title batches and canonical state encoding.
+`cohorts.cjs` compares EVERY sample to the group's initial witness, not a concurrent
+raw read. Each group's before.json and after.json is byte-identical. This proves
+endpoint equality only, not every intermediate read's representation/invariance.
+Raw witnesses lack observation timestamps; baseline samples contain durations,
+not absolute AX intervals. Candidate AX observations have per-helper monotonic
+clock domains, `consistency:unknown/separate_api_reads`, partial coverage and
+unknown omitted/unknown counts. No cross-clock subtraction or atomic-state claim.
+
+### Per-failure decisions
+
+| Original sample (under R) | Contract criterion and established bytes/source | Unproved / minimum actual dependency; owner |
+| --- | --- | --- |
+| release-baseline-on/cold-13 | INPUT/QUALITY complete76-node tree fails: observed75 nodes/74 edges versus76/75. Exact raw arrays differ solely by absent old node70, parent28 children[] versus[70], and subsequent index shifts. Every retained node property, action/error and edge is equal under that explicit index map; omitted0/refused_values0. Own before/after identity metadata matches the group reference. cold12/14 contain the full reference. | Different-time raw representation difference is proved; source mutation, collector loss and its cause are not. ReadonlyFacts/nativeAXElements do not preserve the relevant child-count return code/value. Q02 needs that bounded acquisition-boundary evidence for parent28 if resolving cause; no candidate conclusion follows from a baseline failure. |
+| release-baseline-on/warm-98 | METHOD/QUALITY failed request: exact sample is only kind=sample,status=failed,code=baseline_acquisition_failed. outer18.423ms is a failed call, never a fast success. warm97/99 are complete76-node observed samples matching reference. | DirectBaseline.swift's common catch collapses identity, AX, capture, artifact, encoding and output errors. No AX facts, stage/error code or PNG survives in this sample directory. The record cannot identify timeout, permission, stale ownership, SDK error or budget refusal. Q02's minimum diagnostic repair is bounded stage + typed refusal code in this existing baseline path; no raw UI/error text or automatic retry. This does not recover the historical missing reason. |
+| release-candidate-on/warm-21 | INPUT/QUALITY fails76→75 nodes/75→74 edges. Both channel frames observed, Completed/committed3/missing0; nine requested fields retained. Same absent anonymous node70 under28 as the explicit edit below; all other75 canonical node data/action/edge records equal adjacent warm20 under the index map. warm20/22 both match the full76-node raw reference. | Not demonstrated publication loss: sidecar says discovered=visited=returned75, queued/unreturned/known-unread/unknown-child-lists/duplicates/refused all0. Yet no per-node count/status trace proves why the extra child was not discovered. Q02 owns minimal parent28 count/ranged-read status + observation-local handle relation evidence; accepting75 or dropping the node from criteria is forbidden. |
+| release-candidate-off/warm-22 | Same complete-input failure, independently observed in off mode. Completed/committed3/missing0, two observed frames and nine fields; all retained75 canonical records equal warm21 under the explicit index map; warm21/23 have the full76. Same75 discovered/visited/returned and zero truncation/error counters above. | Same precise missing acquisition evidence, not an on-mode-only explanation, cache diagnosis or excuse from baseline. Q02 must retain the failure and resolve actual acquisition/input behavior before claiming full quality. No source repair is justified from node count alone. |
+| release-candidate-off/warm-65 | QUALITY known/unavailable distinctions and complete requested result fail.76 nodes/75 edges remain, but node70 Title, Description/name, Value, Placeholder, Enabled, Focused and Actions are unknown with ax_error_-25202; bounds unknown/ax_bounds_unavailable. Identity batch still reports AXGroup/Identifier noValue/Subrole unsupported. Sidecar unknown_children_lists1, refused_values0; all other75 node records equal warm64, and warm64/66 match the full reference. | Explicit API availability failure, not a demonstrated known-value conversion bug. Local SDK AXError.h identifies -25202 as invalidUIElement, NOT unsupported(-25205) or noValue(-25212). WindowAX preserves the error as unknown and partial; identity is read before value/Title/actions/children. Invalidity during these reads is evidenced, but object lifetime cause and exact failed child call are not retained. Q02 owns source-handle lifetime/acquisition diagnosis; minimum is bounded per-call status/order and child-count evidence for this node, before choosing any repair. Do not substitute prior known values or relabel unknown as unsupported. |
+
+For the three75-node records, absent node70 in the76-node reference is an
+identifier-less AXGroup at(95,99,14,14), child of another AXGroup28 at the same
+bounds. It is NOT the registered Snapshot addition. Literal diagnostic removal
+of reference70 plus inverse index adjustment establishes the relationship only;
+no file/criterion was changed, no node was pruned from acquisition, and no persistent
+identity/action ref is inferred. Candidate retained75 compare as607 known scalar
+components,368 unavailable states,75 action lists,74 edges versus reference76's
+613/375/76/75. These counts describe this mapping, not a reduced passing workload.
+
+Recomputing the full unchanged sourceFidelity predicate yields27 errors for each
+75-node candidate: most subsequent role/value/geometry differences are index-shift
+comparisons, not27 established corruptions. warm65 has EIGHT predicate errors,
+not just the first two shown by cohorts.cjs `errors.slice(0,2)`: Title, Description,
+Value, Enabled, Focused, Placeholder, bounds and actions. Name mirrors Description.
+Focused false and four geometry scalars were known in the separate reference;
+they are genuinely unavailable in this returned sample, not demonstrated discarded
+known values from the same AX call. Other75 records are unaffected. Honest unknown
+reporting satisfies availability semantics but cannot qualify this positive sample.
+
+Relevant source boundary: nativeAXElements returns no children for unsupported/
+noValue count results as well as successful zero count; those alternatives are not
+retained in the sidecar. Other non-success errors throw; candidate increments
+unknown_children_lists, whereas the baseline propagates into its general catch.
+Thus zero omission/error counters narrow the75-node explanation but do not prove
+an atomic source tree or distinguish all source outcomes. No evidence establishes
+wrong window ownership in these records. The invalid node handle in warm65 is not
+proof of whole-window stale binding, nor can endpoint owner equality rule out every
+intermediate event. No caret, SwiftUI, focus, user-input or observer-effect cause
+is assigned without evidence.
+
+### Acceptance boundary and handoff
+
+All four cohort reports retain20 cold +100 warm, plus one separately recorded
+initial call each. Reported quality failures remain baseline-off0/120,
+baseline-on2/120, candidate-on1/120, candidate-off2/120; all initial calls pass the
+existing predicate. The denominator remains480 timed requests with five failures,
+not475 selected successes. No timing recomputation, threshold change, missing-stage
+imputation, retry-to-pass or quality/latency acceptance is performed here.
+Candidate failures include correctly attributed isolated1100×1050 PNGs with both
+observed channel contexts matching their recorded target/surface. PNG dimensions
+and bytes were checked; visual/pixel invariance is NOT inferred from that fact.
+
+The harness's equality across separate reads is stronger than evidence that a
+single collector faithfully published its own API returns; it cannot by itself
+prove collector corruption or causal UI mutation. Nevertheless the registered
+full76-node/known-data quality requirement is real, so these mismatches remain
+failures, not waived “strict harness” residuals. Endpoint invariance=true and
+Completed are not positive-quality verdicts. No changed acceptance predicate is
+recommended. No demonstrated same-call source fact loss/misreport was found within
+these five samples; the records do establish three incomplete registered inputs,
+one explicit node API-unavailability event and one opaque baseline failure.
+
+Contract requirement: preserve complete input, failure denominators, truthful
+availability and all frozen budgets. Observed implementation: the source/records
+above. Q01 proposal (not a new authority or executed change): Q02 add only the
+missing bounded diagnostics at the existing failing boundaries if causal repair
+is needed, then obtain the narrowly necessary authorized evidence. Adjacent live
+reads alone cannot retroactively answer the missing same-call question. A future
+positive cohort cannot erase these originals; changed product code still requires
+its own focused review. No broad Native/N03 campaign is requested by this diagnosis.
+
+Terminal diagnostic complete. Native source acceptance, Native D06 quality/timing
+pass and P7 completion remain separate and are NOT granted. Shared evidence/images,
+processes and waits were neither changed nor cleaned. No new transient files or
+images were created. Own receipt-only link/route/whitespace checks and scoped
+master commit/push preserve this result for Q02/root.
