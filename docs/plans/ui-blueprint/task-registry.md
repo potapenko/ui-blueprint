@@ -4,7 +4,7 @@
 - Правила исполнения и восстановления: [ранбук](execution.md); этот реестр хранит
   текущее состояние, а не вторую копию правил. Прямой запрос пользователя требует
   сохранять правила push, чатов/параллельности и архивирования в файлах.
-- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` подтверждён `active` после прямого указания пользователя 2026-10-09 продолжить benchmark и запускать необходимые приложения. Объём P0–P7 и master сохранены.
+- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` подтверждён `blocked` после трёх последовательных проверок одного ограничения handoff 2026-10-09. Объём P0–P7 и master сохранены; это не completion и не пользовательская pause.
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
 - Объём: P0–P7, рабочие чаты и follow-up по плану; root не реализует и не проверяет продукт.
@@ -21,6 +21,17 @@
 ## Текущее продолжение — 2026-10-09
 
 ### Remaining Native execution handoff
+
+Host update_goal returned blocked after the third consecutive identical audit:
+old Q02 still active/inProgress427; Q02-R idle and has performed no takeover.
+No exposed direct stop tool; Computer Use explicitly denies com.openai.codex.
+Only pending dependency is operator Stop (or old task's natural terminal state)
+followed by host-supported goal continuation and fresh whole-thread/resource check.
+User prompt is already pending; do not repeat denied controls or restart by timeout.
+Accepted e641543 source/Q019675c0b, installed6ff4943 and Q03b014cd4 remain preserved.
+Native final timing/quality is NOT accepted; all old failures remain. Resume Q02-R
+01a12127-5b94-7801-95cd-c35cf2c3ceab only after old executor ownership is retired.
+
 
 - Accepted source e641543/Q019675c0b, current installation6ff4943 and Q03b014cd4
   remain closed in their scopes. Native full timing/quality is still open.
