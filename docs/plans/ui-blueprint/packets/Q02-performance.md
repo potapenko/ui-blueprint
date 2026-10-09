@@ -232,3 +232,26 @@ shared contracts and other owners are protected. Plan, implement the necessary
 bounded driver adjustments, complete safe setup/preflight, record quality and
 limitations, preserve images, clean only own consumed nonimages, commit+push and
 return ONE terminal result/resource handoff. No internal-step root grants needed.
+
+## Preserve original context before choosing a revised workload
+
+Controlled017d85c proves complete field preservation off/on but not equivalence:
+76nodes/extra Snapshot/OpenB shift plus active/key/main differs from the original
+inactive/nonkey/nonmain. Root does not accept the proposed active context merely
+for easier setup. Active input ownership for setup and inactive read-only collection
+are distinct; the latter has already worked in the actual retained Native case.
+
+Continue the same qualification using original F02 setup evidence and existing
+allowed UI controls to establish the original context AFTER safe setup, if possible.
+Keep all state/Name focus/fields/layout/window/pixels and extras; no fixture edits,
+new backend, permission/display change or data reduction. Normal foreground return
+to the application that was frontmost immediately before this own setup is allowed
+only after exact PID/incarnation validation, without inspecting or otherwise
+interacting with its content. No other real application operation is authorized.
+If the required context cannot be established safely, return the concrete observed
+precondition or conflict; do not manufacture a easier substitute or loop blindly.
+
+One complete off/on comparison in the matched context, or that exact blocker, then
+update the concrete workload proposal and save it. The real request-only structural
+delta remains explicit. No candidate timing, D06/.PROOF change, new threshold, N03
+rerun or unchanged Web/Rust-stage campaign is authorized by this continuation.

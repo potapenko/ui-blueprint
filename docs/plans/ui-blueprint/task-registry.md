@@ -120,11 +120,20 @@ Root получает итог или конкретный блокер; про�
   requested before error. Resumed owner reports onPID82360 and completed Compare;
   fresh owner/window validation remains required before Snapshot. Do not repeat off.
   No new timing/gate claim.
+- Controlled Q02 result `017d85c` terminal/pushed: off/on76nodes, matching current
+  trees/values/actions/edges and invariance; original75nodes/396known/208unavailable/
+ 75actions/74edges all mapped, one OpenB position delta and retained Snapshot extra.
+  Contextactive/key/main differs, PNG128pixels differ in caretarea (no full equality).
+  Both owned fixtures retired, shared files/images kept; no timed Native cohorts.
+  Concrete F02 request-only76 proposal remains NOT Active. Root declined merely
+  convenient active-context substitution and assigned the same Q02 to establish
+  original inactive/nonkey/nonmain after safe setup if feasible, or exact blocker.
+  Only bounded matching-context qualification/proposal; no spec/threshold edits.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02 controlled Native input comparison; documentary reconciliation и консультация завершены.
+  Q02 original-context qualification; controlled active-context result и консультация сохранены.
   Native live/performance
   и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.
