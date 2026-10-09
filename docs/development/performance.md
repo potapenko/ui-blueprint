@@ -256,3 +256,20 @@ not removed or silently accepted as a smaller workload. Same100/200/300/750ms ga
 The first Onone campaign remains explicitly exploratory and failed; its reports
 cannot accept the optimized installed distribution. Correcting the build profile
 requires a new complete comparable baseline/candidate campaign after resource release.
+
+For Native Rust diagnostics run the existing finite replay against a saved successful
+canonical sample and host-config from that same cohort. The root is the owned Q02
+system-temp source/target directory at7709067; no other checkout is used:
+
+```sh
+python3 tests/bridges/native/rust-stages.py prepare --root "$Q02_TMP" --sample "$SAMPLE" --config "$CONFIG"
+python3 tests/bridges/native/rust-stages.py build --root "$Q02_TMP"
+python3 tests/bridges/native/rust-stages.py run --root "$Q02_TMP"
+```
+
+The cfg(test) appendix calls actual begin_observation/receive_channel/finish under
+the worker allocator, with exact saved dispatch1 and fresh canonical session outside
+each timer.20fresh processes and100reused-process calls; no live collection or new
+latency threshold. Native response serialization is not dispatched in Rust; do not
+replace that observation with an invented0ms measurement or Web stage estimate.
+Keep this diagnostic binary distinct from the unmodified live caller/worker.
