@@ -24,17 +24,22 @@ Authority: прямое разрешение пользователя запис
 Ожидания разрешения на запуск/real-case collection сняты. Предыдущий blocked
 handoff ниже — история, не текущее состояние и не препятствие работе.
 
-- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: running, turn
-  `01a11ffd-4e3c-7001-bf41-e419285d859c`. Workload registration `9e08e05`
-  pushed before timing: D06@2 / Native request-only@1 / acquisition@3.
-  Первые серии завершены; author reports candidate-on combined warm p95
-  362.73ms при300ms. Затем установил harness build mismatch: Swift helper без
-  `-O`, distribution использует `-O`. Неудачные серии сохранены, это не pass и
-  пока не доказанный product bottleneck. Нужны полные release-profile серии;
-  production source не менялся. Полный receipt/остальные числа ещё ожидаются.
-  Cursor297 подтверждает release: оба own fixture процесса/helpers/callers закрыты.
-  Сейчас только offline подготовка; build/live возобновляются после Mac/Web release.
-  Ранее принятые Web/Rust результаты сохранены.
+- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal waiting_resource,
+  completed turn `01a11ffd-4e3c-7001-bf41-e419285d859c`, cursor312; retain chat.
+  Registration9e08e05 precedes timing: D06@2 / Native request-only@1 / acquisition@3.
+  Full new receipt sections read: b3ea40c/efe228f pushed. Onone baseline/candidate
+  each off/on20cold+100warm retained. Candidate off/on combined warm p95
+  436.586/362.735ms >300ms; AX72.089/67.806≤100, capture187.112/148.122≤200,
+  cold428.763/383.050≤750. Quality: baseline-off2failed warm requests;
+  candidate-off1unknown-vs-unsupported anonymous-group attribute failure;
+  on120/120 clean. No censoring or overall pass. Shipping recipe uses Swift `-O`;
+  harness initially did not. Same-source release binaries are now ready, no product
+  source change. Must run fresh release direct baseline BEFORE release candidate
+  full off/on; retain old failed results and same thresholds/full coverage.
+  Native Rust stage120replays/480spans passed; stage reporting only, not outer pass.
+  All owned runtime processes absent, images and named review inputs retained.
+  Resume this exact chat on real desktop/quiet CPU release after Mac collection.
+  Earlier accepted Web/Rust results remain closed.
 - Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`: подготовка terminal
   waiting_resource получена; после Q02 cursor297 передан Native desktop для
   полного RC03 сбора. Existing chat resumed; самостоятельный setup→dataset→restore→
