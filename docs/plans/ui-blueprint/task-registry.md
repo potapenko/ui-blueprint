@@ -120,8 +120,13 @@ handoff ниже — история, не текущее состояние и �
   relaxation or performance acceptance follows from source candidate or diagnosis.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
-- I02 `ef45577` завершён и архивирован: combined source063e709 проверен,
-  packaging blockers нет. Не повторять неизменившиеся builds/QA.
+- I02 `01a11bdd-8f38-7943-a91f-3621a70a994c` restored for accepted e641543
+  installed-candidate qualification under latest I02 packet. Prior ef45577/063e709
+  remains valid historical delivery, not proof of changed host/helper binaries.
+  Source/recipe/feature/doc preparation runs now; builds/heavy checks wait for actual
+  Q02 CPU release. Same owned recipe/docs/receipt paths; product source protected.
+  Reuse verified unchanged license/recovery/consumer work. No P7/D06 acceptance or
+  publication implied. Whole finite delivery result, own temp cleanup, commit+push.
 - Root write set этого продолжения: execution.md, task-registry.md,
   packets/Q02-performance.md, packets/Q03-recorded-usefulness.md. Проверка:
   изменённые локальные ссылки/маршруты и diff --check; checkpoint+push exact paths.

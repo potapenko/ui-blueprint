@@ -121,3 +121,44 @@ on master, with exact-path commit+push and retained image/shared-input protectio
 All CPU/build resources are released by Q02; own system-temp installs only. Full
 plan/necessary edits/affected verification/docs/commit+push/result in this chat,
 without root grants for internal steps. Archive on complete once handoff is saved.
+
+## Accepted AX-reuse source delivery — e641543, 2026-10-09
+
+Continue the same finite I02 installed-candidate outcome on immutable
+`e64154349bc93e9c7a4a91bab7698cef84b8eb7a`. Q01 accepted its changed Native
+lifetime/binding boundary in9675c0b; Q03 actual Mac/Web usefulness completed in
+b014cd4. Neither source acceptance nor Q03 is a Native D06 pass; current timing/
+quality work remains Q02. No new public API/schema/Cargo/dependency policy was
+selected by this delta. Registry33 and the original applicable I02 closure govern;
+D02@2/WORK@1/Native acquisition@3 and NATIVE-SESSION@3 are current affected boundaries.
+
+One full outcome: qualify the affected installed CLI/worker/helper selections for
+this accepted source, correct necessary owned packaging/docs/smoke artifacts,
+verify source/recipe/feature correspondence and existing model-free usage, then
+save exact evidence/limitations with scoped commit+push. Root's Git metadata shows
+changed shipping owners native_broker.rs/supervisor.rs and HostHelper.swift/
+HostProtocol.swift. Inspect the actual recipe/feature graph before selecting the
+smallest sufficient builds/checks; test-only diagnostics must not silently enter
+shipping inputs. Reuse unchanged license/recovery/manager/consumer evidence where
+applicability is established; no blanket rebuild of old campaigns for a new SHA.
+Prior I02ef45577 qualifies063e709 and cannot label this new host/helper tested.
+
+Same exact writable ownership as original I02 (README, distribution recipe/check,
+distribution/dependencies/notices docs, own receipt); product/specs/Cargo and Q02's
+performance recipe/receipt remain protected. Return any real product dependency to
+Q02/root instead of fixing another owner's code. Source accepted does not freeze
+future repairs: keep your immutable pin and state any later source delta explicitly.
+No release/P7 pass, publication, UI/apps, home/PATH install, agents or new directories.
+Only own system-temp installation/outputs; images and shared artifacts untouched.
+
+Prepare source/recipe/delta analysis and own documentation now. Q02
+01a11c77-25bf-7072-8cf6-a255fa4dc11c owns the next quiet CPU/live interval. Builds
+and heavy checks wait for its actual resource release; use compact status or root
+handoff, then continue autonomously without another permission. Do not infer release
+from a quiet commentary interval. Root coordinates if ownership changes.
+
+Final report: exact source+recipe, actually verified versus reused selection evidence,
+usable current install/use/recovery procedure and remaining qualification limits.
+No speed claim from a build or absent performance result. This finite task does not
+wait to rewrite the whole product plan; complete affected local delivery within its
+scope while root separately tracks D06 and overall acceptance.
