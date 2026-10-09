@@ -10,11 +10,18 @@ not relabelled as rerun. Required Web Rust normalization/formatting is separatel
 measured by exact-owner saved-input diagnostics below. Native remains open; opaque
 SDK/syscall/cache-peak counters remain unavailable without invented zeroes.
 **No overall D06/P7 acceptance.** Historical8e3dba2 geometry2.688ms remains recorded.
-2026-10-09 Native one-shot read-only preflight on accepted7709067 succeeded while
-the retained fixture stayed inactive/off-screen:78 canonical nodes and1100×1050
-pixels. Current source facts match the after witness, but original75-node workload
+2026-10-09 retained Native one-shot preflight on accepted7709067 succeeded while
+the fixture stayed inactive: actual raw/producer/raw bracket on_screen=true,
+earlier metadata-only check=false (no visibility cause inferred).78 canonical nodes
+and1100×1050 pixels. Current source facts match the after witness, but original75-node workload
 does not: extra controls and Open B x displacement−89.5pt. Exact AX tree invariance
 also differs by one anonymous group; no Native timing or setup was performed.
+Subsequent explicitly authorized controlled53e6e6e off/on setup/preflight is complete:
+76stable nodes each; all75 original nodes/396known/208unavailable facts and old
+actions/edges compared. Only added Snapshot and OpenB x−89.5pt differ structurally;
+new active/key/main context differs from original inactive/nonkey/nonmain. Both
+modes match each other's full raw tree/data and natural1100×1050 output. Versioned
+76-node workload proposal awaits D06 owner; no timing or gate edit performed.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are
@@ -142,6 +149,18 @@ leases and poison/abandonment flags are sampled at each ACK and after cleanup.
 They are attributed reservations/owned layouts, not worker usage or SDK/RSS peaks.
 
 ## Native comparability before timing
+
+The completed controlled continuation supersedes the earlier no-launch assignment
+only for own lifecycle/setup. It used N04's EXACT53e6e6e bundles serially, fresh
+owner-only witness before every Compare/Snapshot action and CUA for all UI input.
+ReadonlyFacts `owner` mode validates explicit PID/bundle/incarnation/executable,
+exact A focused-window object, frontmost/active state and focused element PID;
+it reads only metadata and never establishes focus by itself. After Snapshot, the
+same manifest/identity-bound source witness and7709067 shipping collector run.
+Historical comparison checks known AND unavailable states/actions plus rooted
+tree correspondence; extra identifiers are retained in output/cost and recorded
+for alignment only. No75-node trimming or title/geometry target matching.
+Current task outcomes/proposal are in the receipt; D06/.PROOF remain unchanged.
 
 The current authorized continuation uses ONLY Q01's already-running retained F02
 after fresh process incarnation/executable/window/identity validation. Historical

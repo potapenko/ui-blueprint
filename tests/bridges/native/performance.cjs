@@ -62,6 +62,35 @@ function historicalComparison(baseline,current){
   return {baseline_nodes:old.length,current_nodes:current.nodes.length,compared_known_facts_on_unique_reported_identifiers:compared,differences,missing_identifiers:missing,added_identifiers:added,
     anonymous_nodes:'not heuristically joined across different historical/live trees; full live tree is separately compared with current canonical output'};
 }
+function historicalTreeComparison(baseline,current){
+  const old=baseline.external_semantics.nodes,live=current.nodes;
+  const children=old.map(()=>[]);old.forEach((n,i)=>{if(i)children[n.parent_index].push(i);});
+  const id=n=>n.properties.AXIdentifier?.availability==='known'?n.properties.AXIdentifier.value:null;
+  const oldIds=new Set(old.map(id).filter(Boolean));
+  const result={paired_nodes:0,known_facts:0,unavailable_facts:0,action_lists:0,baseline_edges:old.length-1,extra_nodes:[],differences:[],unpaired:[],method:'ordered rooted tree alignment with explicit added identifiers recorded, never omitted from collection or timing; not action identity'};
+  const extra=i=>{result.extra_nodes.push({index:i,identifier:id(live[i]),role:live[i].properties.AXRole});for(const child of live[i].children)extra(child);};
+  function pair(a,b){
+    const x=old[a],y=live[b];
+    if(!y||id(x)!==id(y)||x.properties.AXRole.value!==y.properties.AXRole.value){result.unpaired.push({baseline:a,current:b,baseline_id:id(x),current_id:y?id(y):null});return;}
+    result.paired_nodes++;
+    for(const [name,p]of Object.entries(x.properties)){
+      if(name==='AXF02Unsupported')continue;const q=y.properties[name];
+      if(p.availability==='known')result.known_facts++;else result.unavailable_facts++;
+      if(!q||p.availability!==q.availability||(p.availability==='known'&&!isDeepStrictEqual(p.value,q.value)))result.differences.push({baseline:a,current:b,identifier:id(x),field:name,expected:p,actual:q});
+    }
+    if(x.actions_error===0){result.action_lists++;if(y.actions_error!==0||!isDeepStrictEqual(x.actions,y.actions))result.differences.push({baseline:a,current:b,identifier:id(x),field:'actions',expected:x.actions,actual:y.actions});}
+    let cursor=0;
+    for(const child of y.children){
+      const childId=id(live[child]);
+      if(childId&&!oldIds.has(childId)){extra(child);continue;}
+      if(cursor<children[a].length)pair(children[a][cursor++],child);else result.unpaired.push({baseline:null,current:child});
+    }
+    for(const child of children[a].slice(cursor))result.unpaired.push({baseline:child,current:null});
+  }
+  pair(0,0);result.all_original_nodes_paired=result.paired_nodes===old.length&&result.unpaired.length===0;
+  result.comparability=result.all_original_nodes_paired&&result.differences.length===0&&result.extra_nodes.length===0?'equal':'not_equivalent';
+  return result;
+}
 function invariance(before,after){
   const a=before.facts.nodes,b=after.facts.nodes,metadata=isDeepStrictEqual(before.before,before.after)&&isDeepStrictEqual(before.before,after.before)&&isDeepStrictEqual(after.before,after.after);
   let insertion=null;
@@ -112,7 +141,7 @@ async function run(){
   const manifestPath=process.env.UIB_Q02_MANIFEST,manifest=read(manifestPath),baselinePath=process.env.UIB_Q02_NATIVE_BASELINE,baseline=read(baselinePath);
   assert.equal(manifest.role,'a');assert.equal(manifest.window_identifier,'a');
   assert.equal(manifest.collection_mode,'explicit_request_only');assert(manifest.snapshot_request>0);
-  assert.equal(manifest.bundle_id,'local.uiblueprint.f02.on'); // only the trusted retained Q01 instance
+  assert(['local.uiblueprint.f02.off','local.uiblueprint.f02.on'].includes(manifest.bundle_id)); // exact executable/incarnation remains mandatory
   const executable=process.env.UIB_Q02_EXECUTABLE,helper=process.env.UIB_Q02_HELPER;
   for(const [file,hash] of [[executable,process.env.UIB_Q02_EXECUTABLE_SHA256],[helper,process.env.UIB_Q02_HELPER_SHA256]]){assert(path.isAbsolute(file||''));assert.equal(digest(file),hash);}
   const output=process.env.UIB_Q02_OUTPUT;assert(path.resolve(output).startsWith(fs.realpathSync(os.tmpdir())+path.sep));fs.mkdirSync(output,{mode:0o700});
@@ -157,6 +186,7 @@ async function run(){
     const ax=responses.find(r=>r.channel==='external_semantics');
     if(ax?.result.status==='observed')report.source_fidelity={before:sourceFidelity(before.facts,ax.result.data),after:sourceFidelity(after.facts,ax.result.data)};
     report.historical_comparison=historicalComparison(baseline,after.facts);
+    report.historical_tree_comparison=historicalTreeComparison(baseline,after.facts);
     report.matrix=matrix(sample,baseline,context);
     if(report.historical_comparison.differences.length||report.historical_comparison.added_identifiers.length||report.historical_comparison.missing_identifiers.length)report.matrix.comparability='incompatible';
     if(!report.invariance.metadata||!report.invariance.exact_tree_and_values||!report.invariance.retained_manifest)report.matrix.readonly_invariance='not_fully_established';
@@ -169,4 +199,4 @@ if(process.argv.includes('--baseline-only')){
   const baseline=read(process.env.UIB_Q02_NATIVE_BASELINE);const value=inventory(baseline);
   console.log(JSON.stringify({nodes:value.nodes,coverage:value.coverage,attributes:value.attributes}));
 }else if(require.main===module)run().catch(error=>{console.error(error.message);process.exitCode=1;});
-module.exports={inventory,matrix,sourceFidelity,historicalComparison,invariance};
+module.exports={inventory,matrix,sourceFidelity,historicalComparison,historicalTreeComparison,invariance};

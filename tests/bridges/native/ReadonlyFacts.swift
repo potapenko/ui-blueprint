@@ -20,7 +20,7 @@ import Darwin
     }
     @MainActor static func identity(_ manifest: [String: Any], executable: String) throws -> [String: Any] {
         guard let pid = manifest["pid"] as? Int32, let bundle = manifest["bundle_id"] as? String,
-              bundle == "local.uiblueprint.f02.on", let launch = manifest["launch_time"] as? Double,
+              ["local.uiblueprint.f02.off", "local.uiblueprint.f02.on"].contains(bundle), let launch = manifest["launch_time"] as? Double,
               let window = manifest["window_id"] as? UInt32, manifest["window_identifier"] as? String == "a",
               let identity = manifest["identity_path"] as? String else { throw Refusal.invalid_trusted_input }
         guard let app = NSRunningApplication(processIdentifier: pid), !app.isTerminated else { throw Refusal.process_missing }
@@ -38,6 +38,37 @@ import Darwin
                 "app_active": app.isActive, "app_hidden": app.isHidden,
                 "frontmost_pid": NSWorkspace.shared.frontmostApplication?.processIdentifier ?? -1,
                 "window_frame": bounds, "on_screen": rows[0][kCGWindowIsOnscreen as String] ?? false]
+    }
+    @MainActor static func owner(_ expected: [String: Any], executable: String,
+                                limits: NativeAcquisitionLimits) throws -> [String: Any] {
+        guard let pid = expected["pid"] as? Int32, let bundle = expected["bundle_id"] as? String,
+              ["local.uiblueprint.f02.off", "local.uiblueprint.f02.on"].contains(bundle),
+              let launch = expected["launch_time"] as? Double else { throw Refusal.invalid_trusted_input }
+        guard let app = NSRunningApplication(processIdentifier: pid), !app.isTerminated else { throw Refusal.process_missing }
+        guard app.bundleIdentifier == bundle, app.launchDate?.timeIntervalSince1970 == launch else { throw Refusal.process_incarnation_changed }
+        guard let actual = app.executableURL,
+              actual.resolvingSymlinksInPath().path == URL(fileURLWithPath: executable).resolvingSymlinksInPath().path else { throw Refusal.executable_changed }
+        guard AXIsProcessTrusted() else { throw NativeAcquisitionError.invalidValue }
+        let admission = try NativeAcquisition(limits, deadline: ProcessInfo.processInfo.systemUptime + 1)
+        let root = AXUIElementCreateApplication(pid)
+        let window = try Collector.resolveWindow(root, identifier: "a", admission: admission)
+        let focusedWindow = try nativeAXAttribute(root, kAXFocusedWindowAttribute, admission: admission)
+        let ownsWindow = focusedWindow.map { CFEqual(window, $0) } ?? false
+        let focused = try nativeAXAttribute(root, kAXFocusedUIElementAttribute, admission: admission)
+        var focusPID: pid_t = -1
+        var identifier: String?
+        if let focused, CFGetTypeID(focused) == AXUIElementGetTypeID() {
+            let element = unsafeDowncast(focused, to: AXUIElement.self)
+            if AXUIElementGetPid(element, &focusPID) == .success, focusPID == pid,
+               let raw = try nativeAXAttribute(element, kAXIdentifierAttribute, admission: admission) {
+                identifier = try? admission.text(raw)
+            }
+        }
+        let front = NSWorkspace.shared.frontmostApplication?.processIdentifier ?? -1
+        return ["pid":pid,"bundle_id":bundle,"launch_time":launch,"executable":actual.resolvingSymlinksInPath().path,
+                "app_active":app.isActive,"frontmost_pid":front,"exact_a_is_focused_window":ownsWindow,
+                "focused_element_pid":focusPID,"focused_identifier":identifier ?? "unavailable",
+                "input_owner":app.isActive && front == pid && ownsWindow && focusPID == pid]
     }
     static func unavailable(_ code: AXError, _ json: NativeJSON) throws -> [String: Any] {
         try json.object(["availability", "ax_error"]) {
@@ -130,9 +161,16 @@ import Darwin
         DispatchQueue.global().asyncAfter(deadline: .now() + 4) { _exit(124) }
         do {
             let args = CommandLine.arguments
-            guard args.count == 5, ["identity","facts"].contains(args[4]) else { _exit(2) }
+            guard args.count == 5, ["identity","facts","owner"].contains(args[4]) else { _exit(2) }
             let manifest = try JSONSerialization.jsonObject(with: read(args[1], cap: 524288)) as! [String: Any]
             let limits = try JSONDecoder().decode(NativeAcquisitionLimits.self, from: read(args[3], cap: 4032))
+            if args[4] == "owner" {
+                let report = try owner(manifest, executable: args[2], limits: limits)
+                let json = NativeJSON(limits)
+                let frame = try NativeJSONFrame(capacity: 16384, deadline: ProcessInfo.processInfo.systemUptime + 1)
+                try frame.encode(json.borrowed(report)); try frame.write(to: STDOUT_FILENO, deadline: ProcessInfo.processInfo.systemUptime + 1)
+                return
+            }
             let before = try identity(manifest, executable: args[2])
             let json = NativeJSON(limits), deadline = ProcessInfo.processInfo.systemUptime + 1
             let data = args[4] == "facts" ? try facts(manifest, limits: limits, json: json, deadline: deadline) : [:]
