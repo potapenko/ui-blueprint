@@ -1,5 +1,15 @@
 # Resolved dependency inventory — T01 and S01 Stage A
 
+## I02 final source reconciliation (2026-10-09)
+
+Current candidate `063e709cce4407aed2a2578620b645cf7b554f29` changes only the
+shipping Native WindowAX collector relative to `a7c0416`; manifests, lockfile,
+toolchain, selected features and third-party material are unchanged. The fresh
+combined build rechecks its39-package graph and notice fingerprints against I02's
+existing values. Core17/Native18/Web39 inventory and scoped license review remain
+applicable; no new audit or licensing policy is introduced. See the
+[current I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md#final-current-source-063e709).
+
 ## I02 current candidate continuation (2026-10-08)
 
 Candidate `a7c04164df08441cfbbaa61b501aa64d29290732` keeps the same manifests,

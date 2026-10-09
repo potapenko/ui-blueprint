@@ -8,7 +8,7 @@ To build a local bundle into an existing directory:
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --destination "$BUNDLE"
+python3 distribution.py build --modules combined --revision 063e709cce4407aed2a2578620b645cf7b554f29 --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 "$BUNDLE/uiblueprint" --help
 ```
@@ -21,8 +21,10 @@ The [distribution guide](docs/development/distribution.md) contains prerequisite
 examples, artifact layout, limitations and safe removal/recovery. See
 [CLI details](docs/development/cli.md), [dependency notices](THIRD_PARTY_NOTICES.md)
 and the [specification registry](docs/specs/README.md).
-I02 qualifies current Web/Native/combined bundles at product source `a7c0416`;
-unchanged core evidence is reused from `94724df`. The current candidate includes
-Native protected-input/popup sessions and explicit Web Documents selection. See the
+I02 qualifies the current combined installation at product source `063e709`,
+including accepted Native collector `7709067`; unchanged Core/Web and module
+selection/recovery evidence is reused. See the
 [I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current-distribution.md)
-for exact pins and limits. Integrated pilots and release acceptance remain separate.
+for exact pins and scope. Scoped Native/Web geometry and bounded functional paths
+have applicable evidence; Web latency gates are measured. Native benchmark
+comparability/timing and Q03 remain open, so this is not full P7 or release acceptance.

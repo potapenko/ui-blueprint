@@ -1,7 +1,7 @@
 # I02 — current local distribution qualification
 
-Current continuation: see [a7c0416 qualification](#current-candidate-a7c0416).
-The original94724df record below remains historical evidence.
+Current delivery: see [063e709 reconciliation](#final-current-source-063e709).
+The original94724df and a7c0416 records below remain historical evidence.
 
 ## Authority and plan
 
@@ -315,4 +315,108 @@ Native foreground/comparability and full P7/release remain outside I02 acceptanc
 No signed/notarized publication, global/home/PATH install, new persistent output
 directory, arbitrary-app support or new platform qualification is claimed.
 
+
+
+## Final current-source 063e709
+
+2026-10-09 continuation of the same I02 P6 outcome, directly assigned through
+[the final packet section](../packets/I02-current-distribution.md#final-current-source-delivery-reconciliation--2026-10-09).
+Current selected source063e709cce4407aed2a2578620b645cf7b554f29 includes accepted
+production Native770906798e1326fed3dd0edec40dc59b13772b3a. Initial master is063e709;
+root's packet/task-registry WIP and after-title-spacing.png are protected.
+No agents/chats/worktrees/branches, UI/SDK/input, real applications or shared cleanup.
+Q02 terminal063e709 and the initiating instruction release CPU/build resources.
+
+Full applicable AGENTS and the complete updated packet were read. Reused the
+current full governance/spec closure above after confirming no spec delta from
+a7c0416: registry32, CLI16, NATIVE-SESSION3/POPUP1, D03@4, WEB-DOCUMENTS1,
+COMPLETION/BOUNDARIES/D01/D02/D07 and their explicit dependency closure remain.
+No new material product choice or contract delta. Requirement: coherent current
+installed helper/pair and honest current usage/limitations. Observed evidence:
+shipping source delta is ONLY tests/bridges/native/WindowAX.swift; other changed
+files are docs, test/benchmark consumers or I02's prior harness. Recipe already
+archives that exact file. New ReadonlyFacts.swift is a Q02 witness, not a missing
+shipping dependency. No packaging defect was found.
+
+WindowAX adds selected raw Title extension distinct from Description and admits
+Title in a singleton batch after the original fields. Q01's accepted7709067 and
+terminal21e0abf reconcile field preservation and reusable bounded N03 whole-chain
+functional evidence with explicit residuals. Read Q01's full terminal section,
+Q02 actual readonly40f201d section and latest063e709 inactive-context result.
+These are attributed acceptance/runtime inputs, never an I02 live rerun. Web
+numeric evidence remains valid; Native source fidelity is not workload equivalence,
+unchanged AX tree, verified input context or a D06 pass. Q03 remains separate/open.
+
+Plan stated before edits: update exact four files README, distribution guide,
+dependency inventory and this receipt; one fresh combined install from063e709;
+existing installed smoke, exact source/features/recipe/notice/dylib checks,
+no-overwrite/verify/remove/foreign preservation; own non-image cleanup; links/diff;
+current-master exact-path checkpoint+push, then archive this completed chat.
+No distribution.py or distribution_check.py correction is necessary.
+
+Minimal verification basis: all Rust product sources/manifests, Web, schemas,
+actually bundled examples, lock/toolchain and manager are unchanged a7c0416→063e709.
+All ten Swift input files were compared; only WindowAX differs. Native-only and
+combined invoke the IDENTICAL helper source list/flags, independently of Rust
+feature selection. A new combined installation exercises the changed helper with
+matching current-source CLI/worker. Prior native-only Rust/feature proof applies;
+Core/Web and detailed rollback/reinstall/license evidence need no replay. No fresh
+core/web/native-only installation on063e709 is claimed.
+
+### Actual current installation and handoff
+
+Classification **verification**; recipe/harness unchanged. Exactly ONE new build:
+`python3 distribution.py build --modules combined --revision 063e709cce4407aed2a2578620b645cf7b554f29 --destination EXISTING_TASK_TEMP`.
+It succeeded with the existing locked/offline Rust1.96.0 release profile and
+Swift6/arm64-macos14 helper on macOS27.0.1. System-temp source/target/module cache
+and installation only; PATH contained existing rustup plus system tools, no
+browser/Node. No downloads, home/PATH installation or persistent output directory.
+
+Manifest source063e709 and CLI[web,macos]/worker[web] matched. All shipped file
+hashes/types/modes verified; otool -L on all four executables resolved only system
+/usr/lib and /System/Library dependencies. The installed binary SHA-256 values:
+
+| Binary | SHA-256 |
+| --- | --- |
+| native-host-helper | 80db2a0b2160a4c232d96b5d2c455ff46c64ed72fc7a11cf0feb10e5e93724a5 |
+| session-worker | 442978474b00dff00d0ac189eaca59a688a7456ef9a56f6f5e33dd0bef9d3776 |
+| uiblueprint | be7e22fa90ed580004ac3ceb9dec159f6f454d2d06d1e80f7dcf6a84fd9957b1 |
+| uiblueprint-validate | 35e945ca310b91fd11f26e0416cdf7d7a916e0b1c3748acc8f247666bdfd300e |
+
+WindowAX source at063e709 equals accepted7709067, SHA-256
+15ed43c3c966b0156db8d76b670c8c64f921c3cf986c00d012dc7e6f8614406e.
+Recipe remains6a5bec23b8d15e4cc825aaff6105ac001a9a17bb, hash62fcf2f4… as recorded
+fully above. Graph39, Cargo.lock, DEPENDENCY_LICENSES and Rust notices fingerprints
+exactly match the prior recorded values. This is current material verification,
+not a new licensing audit or reproducible-bit-identical-build claim.
+
+Existing smoke passed from cwd /, no model credentials/build-tool PATH: four
+canonical validators; Native session entry, Web Documents strict parse-before-attach;
+measure8 css_px; check-pass; document/propose0.1 and compare0.2 six-file packages
+with literal width30→34/dwidth4; missing-input refusal/empty stdout. No SDK/AX/
+UI/browser/secret/input runtime occurred. No harness correction was necessary.
+No general Rust suite or unchanged injected-failure/reinstall campaign was replayed.
+
+Fresh build-over-existing refused before compilation. Copied manager verify/remove
+passed and left the foreign sentinel/destination intact. After consuming the
+bundle, only own sentinel/tool link and empty task directories were removed;
+uib-I02-final-j2nny0nx absence verified. Recipe/smoke owners cleaned their own
+non-image stages. Every shared file, image and image-containing directory remained
+untouched. No raw logs/build products were committed.
+
+README and the guide now use/identify063e709 and give current build/install/use/
+recovery steps, explicit trusted live setup links and limitation handoff. Scoped
+Native/Web geometry and bounded functional evidence remain applicable; bounded
+Native functional composition is accepted with Q01 residuals, not freshly rerun
+here. Web numeric gates are measured on their exact workload/pins. Native original
+benchmark structure/placement/context equivalence and eligible timed cohorts,
+strict general AX-tree invariance, and Q03 real-case scope remain unresolved.
+No background-input/IME/physical-pointer/arbitrary-app/other-platform or P7/release
+promise was added. These are acceptance dependencies, not a packaging blocker.
+
+All changed local Markdown targets AND anchors, route consistency and git diff
+--check pass. Four exact task paths are checkpointed/pushed in current master under
+/tmp/ui-blueprint-master-git.lock; final chat records actual SHA and remote check.
+The finite I02 handoff is complete after that push; archive this chat as requested
+by the packet. No persistent goal/P7 status is changed.
 

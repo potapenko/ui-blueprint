@@ -36,11 +36,12 @@ no destination directory and never changes PATH, home settings or permissions.
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision HEAD --destination "$BUNDLE"
+python3 distribution.py build --modules combined --revision 063e709cce4407aed2a2578620b645cf7b554f29 --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 ```
 
-Replace `HEAD` with a full saved commit to repeat source selection. All product
+The example pins the qualified current source; use another full saved commit
+only when intentionally selecting another candidate. All product
 binaries, schemas and example inputs come from that revision, ignoring checkout
 WIP. Builds use a private system-temp source archive, Cargo target and Swift module
 cache; there is no branch/worktree change. The chosen release profile is optimized.
@@ -58,12 +59,16 @@ newer than `--revision`. Reproduce both the source pin and the recipe revision f
 this repository. Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
-I02 qualifies product source `a7c04164df08441cfbbaa61b501aa64d29290732` with the
-recipe last changed at `6a5bec2` (including Native form session helper sources).
-Use that exact product pin to reproduce I02; `HEAD` selects whatever is committed
-when you run. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
-records fresh Web/Native/combined checks, source-equivalent core reuse and the
-separate documentation/checkpoint revision. Earlier `94724df` results are historical.
+I02 qualifies product source `063e709cce4407aed2a2578620b645cf7b554f29` with the
+recipe last changed at `6a5bec2`. The current Native collector includes accepted
+`7709067`: selected raw AXTitle remains separate from AXDescription, and an
+inadmissible Title cannot discard other independently admitted fields.
+One fresh combined installation verifies the current helper/CLI/worker set.
+Native-only uses the identical helper source list and compile command; its Rust
+binaries/features and the Core/Web production inputs are unchanged, so prior
+module checks remain applicable. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
+distinguishes new installed evidence from reused `a7c0416`/`94724df` results and
+records the separate documentation checkpoint. Never replace only one executable.
 
 ## Flat artifact layout
 
@@ -219,3 +224,24 @@ isolation/privacy V01, integrated Q01/Q02 and P7 release acceptance are separate
 No signed/notarized/archive release, global installation or project license grant
 is implied. The source checkout remains necessary for rebuilding and full developer
 fixtures; the delivered saved-data commands need only the selected executable set.
+
+## Capability and acceptance handoff
+
+Scoped Native AX/Web geometry, saved-data analysis/export and bounded own-fixture
+form/popup paths have applicable functional evidence. Q01's
+[Native reconciliation](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#terminal-native-evidence-reconciliation--reuse-current-fidelity-and-exact-gaps)
+accepts bounded Native functional composition by explicit change-driven reuse,
+with evidence residuals; it is not a newly rerun whole chain on this installed set.
+Read-only access does not imply permission or current input ownership for mutation.
+No unverified background-input, IME, physical-pointer, arbitrary-app or other-platform
+support follows from installing the modules.
+
+[Q02 results](../plans/ui-blueprint/receipts/Q02-performance.md) retain measured
+passing Web latency gates on their exact workloads/pins. Native current source
+fidelity is evidenced, but original benchmark tree/placement/context equivalence
+is unresolved; the latest inactive-context return attempt did not establish the
+required context, and no eligible Native timed cohort followed. A reported AXGroup
+insertion also prevents a general unchanged-tree claim; its cause is not established.
+Native D06 workload reconciliation/timing and Q03 real-case evaluation remain open.
+These limits do not prevent the qualified local installation and saved-data usage,
+and cannot be relabelled full P7/release acceptance. I02 performs no UI/SDK/input run.
