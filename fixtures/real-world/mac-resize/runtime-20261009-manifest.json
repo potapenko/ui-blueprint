@@ -1,0 +1,851 @@
+{
+  "case": "RC03",
+  "run": "2026-10-09",
+  "status": "actual_internal_AX_bounds_pair",
+  "raw_root": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559",
+  "authority": "Q03-recorded-usefulness.md Real-case continuation 2026-10-09",
+  "consumer": [
+    "Q03",
+    "root coordinator"
+  ],
+  "application": {
+    "metadata_version": "1.0.0",
+    "process": {
+      "bundle_id": "playphraseme.Playphraseme",
+      "launch_time": 1791542072.0498953,
+      "pid": 51018
+    },
+    "status": "known",
+    "target": {
+      "generation": "51018:1791542072.0498953",
+      "id": "macos-pid-51018"
+    },
+    "executable": "/Users/eugenepotapenko/Library/Developer/Xcode/DerivedData/PlayphrasemeApp-cfwbwxubxwecqkfoiaormkljzhki/Build/Products/Release/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe",
+    "sha256": "0383188bc0e043d36d0ec00eb182e16807c973b3b6a569f545814516522b4446",
+    "version": "1.0",
+    "build": "1",
+    "observed_utc": "2026-10-09T10:34:59.723755+00:00",
+    "started_by_this_task": true,
+    "source_revision_of_binary": "unknown; reused existing canonical Release artifact, no fresh build by this task",
+    "os": "ProductName:\t\tmacOS\nProductVersion:\t\t27.0.1\nBuildVersion:\t\t26A434\n"
+  },
+  "tool_build": {
+    "native-host-helper": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/tools/native-host-helper",
+      "sha256": "d0e9e857b4a371cb112c73c2dbca0a1ab1170fa20ecd0d7d9fcf03ad17a81c49"
+    },
+    "uiblueprint": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/tools/uiblueprint",
+      "sha256": "8059f9c2dde2383a1f5b80033dde08b86a8a00269d67ee0a74ce22c37c50c812"
+    },
+    "session-worker": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/tools/session-worker",
+      "sha256": "5938e48100e693c5ff8162cfb646c60e2cd0546f908be87ccb77178aa3538bea"
+    }
+  },
+  "tool_source_revision": "b5d4cde0f3ef922151821bdccf911457370ec492",
+  "scope": "explicit PID, its public AXFocusedWindow, design fields role/accessibility_name/accessibility_bounds, cap160/depth9; no other-window fallback",
+  "units": "AX accessibility_bounds: ax-screen/screen/pt/top_left",
+  "states": [
+    {
+      "id": "narrow-geometry",
+      "collection_order": 1,
+      "original_observe": {
+        "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/narrow-geometry/observed.json",
+        "bytes": 477679,
+        "sha256": "4ed4b8b1608be11246cb12e931bf4bdb7bbe3266dae4f9cf30cbaa5167039564"
+      },
+      "acquisition": {
+        "state": "narrow-geometry",
+        "started_utc": "2026-10-09T10:36:12.829773+00:00",
+        "ended_utc": "2026-10-09T10:36:13.334146+00:00",
+        "exit_code": 4,
+        "wall_ms": 503.6001250264235,
+        "bytes": 477679,
+        "sha256": "4ed4b8b1608be11246cb12e931bf4bdb7bbe3266dae4f9cf30cbaa5167039564",
+        "producer": "existing public CLI native_ax",
+        "source_revision": "b5d4cde0f3ef922151821bdccf911457370ec492"
+      },
+      "context": {
+        "environment_revision": "rc03-d641a4242c384f85a53d58c7d7beb5e1",
+        "fields": [
+          "role",
+          "accessibility_name",
+          "accessibility_bounds"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "projection": "design",
+        "schema_version": "0.1.0",
+        "scope_id": "selected-focused-window",
+        "session_id": "rc03-d641a4242c384f85a53d58c7d7beb5e1",
+        "surfaces": [
+          {
+            "generation": "d641a4242c384f85a53d58c7d7beb5e1",
+            "id": "ax-focused-d641a4242c384f85a53d58c7d7beb5e1"
+          }
+        ],
+        "target": {
+          "generation": "51018:1791542072.0498953",
+          "id": "macos-pid-51018"
+        }
+      },
+      "observations": [
+        {
+          "answer_source": "live",
+          "channel": "external_semantics",
+          "clock_domain": "helper-51796-monotonic",
+          "consistency": "unknown",
+          "consistency_reason": "separate_api_reads",
+          "coverage": {
+            "fields": [
+              "role",
+              "accessibility_name",
+              "accessibility_bounds"
+            ],
+            "omitted_count": null,
+            "scope_id": "selected-focused-window",
+            "status": "partial",
+            "unknown_count": null
+          },
+          "end": 398279.1815715834,
+          "freshness": "current",
+          "freshness_basis": "live_read",
+          "id": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics",
+          "last_verified": 398279.1815715834,
+          "source_namespace": "macos.ax",
+          "start": 398279.06697783334,
+          "time_unit": "seconds"
+        }
+      ],
+      "node_count": 160,
+      "coverage": {
+        "fields": [
+          "role",
+          "accessibility_name",
+          "accessibility_bounds"
+        ],
+        "omitted_count": null,
+        "scope_id": "selected-focused-window",
+        "status": "partial",
+        "unknown_count": null
+      },
+      "image": {
+        "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/narrow-geometry/window.png",
+        "bytes": 3811902,
+        "sha256": "91c037dd788b8114ad0167a31a85e9f1afab1f1c6b1168ed65d05c476074d972",
+        "pixel_size": [
+          1922,
+          2100
+        ],
+        "capture_file_mtime_utc": "2026-10-09T10:36:29.070474+00:00",
+        "capture_command": "/usr/sbin/screencapture -x -o -l17205 -t png OUTPUT",
+        "resampled": false
+      },
+      "cg_reference": {
+        "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/original-window.json",
+        "bytes": 455,
+        "sha256": "09e35363289d16cf4752a68a8c4600fd42dd5abe15988f4d89289a7af83e5282"
+      },
+      "selected_nodes": [
+        {
+          "label": "window",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-0",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "learner",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 1050,
+                "width": 961,
+                "x": 0,
+                "y": 30
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "left",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-18",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.suggestedCommonPhrases.overlay",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 809,
+                "width": 323.5,
+                "x": 8.5,
+                "y": 90.5
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "right",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-32",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.learner.commonPhrases",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 766.5,
+                "width": 463,
+                "x": 555,
+                "y": 133
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "transport",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-20",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.transport",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 374.5,
+                "width": 352,
+                "x": 304.5,
+                "y": 383
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "play",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-35",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.transport.toggle",
+          "reported_name": "Play",
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 142,
+                "width": 142,
+                "x": 409.5,
+                "y": 383
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "query",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-22",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.query.band",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 77,
+                "width": 961,
+                "x": 0,
+                "y": 1003
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "first_tab",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-27",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.learner.tabs",
+          "reported_name": "Learn Common Phrases",
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 42.5,
+                "width": 64.5,
+                "x": 620.5,
+                "y": 90.5
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "second_tab",
+          "source_key": {
+            "key": "d641a4242c384f85a53d58c7d7beb5e1-external_semantics-handle-28",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.learner.tabs",
+          "reported_name": "Vocabulary",
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 42.5,
+                "width": 62,
+                "x": 690,
+                "y": 90.5
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "wide",
+      "collection_order": 2,
+      "original_observe": {
+        "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/wide/observed.json",
+        "bytes": 477796,
+        "sha256": "c3754de65516ca6e2fbca665c9bea906d9b03ea06210430722f785b5e6d4b2ab"
+      },
+      "acquisition": {
+        "state": "wide",
+        "started_utc": "2026-10-09T10:37:22.632316+00:00",
+        "ended_utc": "2026-10-09T10:37:23.097552+00:00",
+        "exit_code": 4,
+        "wall_ms": 464.617958990857,
+        "bytes": 477796,
+        "sha256": "c3754de65516ca6e2fbca665c9bea906d9b03ea06210430722f785b5e6d4b2ab",
+        "producer": "existing public CLI native_ax",
+        "source_revision": "b5d4cde0f3ef922151821bdccf911457370ec492"
+      },
+      "context": {
+        "environment_revision": "rc03-e81f99211d70471582a6aafbe9ec68f9",
+        "fields": [
+          "role",
+          "accessibility_name",
+          "accessibility_bounds"
+        ],
+        "plugin": {
+          "id": "macos",
+          "version": "0.1.0"
+        },
+        "projection": "design",
+        "schema_version": "0.1.0",
+        "scope_id": "selected-focused-window",
+        "session_id": "rc03-e81f99211d70471582a6aafbe9ec68f9",
+        "surfaces": [
+          {
+            "generation": "e81f99211d70471582a6aafbe9ec68f9",
+            "id": "ax-focused-e81f99211d70471582a6aafbe9ec68f9"
+          }
+        ],
+        "target": {
+          "generation": "51018:1791542072.0498953",
+          "id": "macos-pid-51018"
+        }
+      },
+      "observations": [
+        {
+          "answer_source": "live",
+          "channel": "external_semantics",
+          "clock_domain": "helper-52564-monotonic",
+          "consistency": "unknown",
+          "consistency_reason": "separate_api_reads",
+          "coverage": {
+            "fields": [
+              "role",
+              "accessibility_name",
+              "accessibility_bounds"
+            ],
+            "omitted_count": null,
+            "scope_id": "selected-focused-window",
+            "status": "partial",
+            "unknown_count": null
+          },
+          "end": 398348.99083741667,
+          "freshness": "current",
+          "freshness_basis": "live_read",
+          "id": "e81f99211d70471582a6aafbe9ec68f9-external_semantics",
+          "last_verified": 398348.99083741667,
+          "source_namespace": "macos.ax",
+          "start": 398348.8856944167,
+          "time_unit": "seconds"
+        }
+      ],
+      "node_count": 160,
+      "coverage": {
+        "fields": [
+          "role",
+          "accessibility_name",
+          "accessibility_bounds"
+        ],
+        "omitted_count": null,
+        "scope_id": "selected-focused-window",
+        "status": "partial",
+        "unknown_count": null
+      },
+      "image": {
+        "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/wide/window.png",
+        "bytes": 6993394,
+        "sha256": "3bc45e00f9522c7881fb9b65084e7c6ac2720ed7ee081390a51fd95e0f792bf0",
+        "pixel_size": [
+          3840,
+          2100
+        ],
+        "capture_file_mtime_utc": "2026-10-09T10:37:23.362957+00:00",
+        "capture_command": "/usr/sbin/screencapture -x -o -l17205 -t png OUTPUT",
+        "resampled": false
+      },
+      "cg_reference": {
+        "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/wide-window.json",
+        "bytes": 1604,
+        "sha256": "5b2cdae6a32c83b01296c3d3717e2b7c309059969d4afdf2cc7410e4c49aff5f"
+      },
+      "selected_nodes": [
+        {
+          "label": "window",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-0",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "learner",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 1050,
+                "width": 1920,
+                "x": 0,
+                "y": 30
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "left",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-19",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.suggestedCommonPhrases.overlay",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 809,
+                "width": 513,
+                "x": 8.5,
+                "y": 90.5
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "right",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-34",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.learner.commonPhrases",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 766.5,
+                "width": 520,
+                "x": 1391.5,
+                "y": 133
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "transport",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-21",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.transport",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 374.5,
+                "width": 352,
+                "x": 784,
+                "y": 383
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "play",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-37",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.transport.toggle",
+          "reported_name": "Play",
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 142,
+                "width": 142,
+                "x": 889,
+                "y": 383
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "query",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-23",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.query.band",
+          "reported_name": null,
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 77,
+                "width": 1920,
+                "x": 0,
+                "y": 1003
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "first_tab",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-29",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.learner.tabs",
+          "reported_name": "Learn Common Phrases",
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 42.5,
+                "width": 155.5,
+                "x": 1391.5,
+                "y": 90.5
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        },
+        {
+          "label": "second_tab",
+          "source_key": {
+            "key": "e81f99211d70471582a6aafbe9ec68f9-external_semantics-handle-30",
+            "namespace": "macos.ax"
+          },
+          "reported_identifier": "searchLearn.learner.tabs",
+          "reported_name": "Vocabulary",
+          "geometry": {
+            "coordinate_space": {
+              "id": "ax-screen",
+              "kind": "screen",
+              "origin": "top_left",
+              "units": "pt"
+            },
+            "frame_kind": "accessibility_bounds",
+            "shape": {
+              "shape": "rect",
+              "value": {
+                "height": 42.5,
+                "width": 93,
+                "x": 1552,
+                "y": 90.5
+              }
+            },
+            "transform": {
+              "reason": "ax_to_pixels_not_calibrated",
+              "status": "unknown"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "failed_request": {
+    "artifact": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/narrow/observed.json",
+      "bytes": 479,
+      "sha256": "9182aac5206393208caebae7bcf570f7b7f520cf440b5d45f1f8f901f1089b82"
+    },
+    "acquisition": {
+      "state": "narrow",
+      "started_utc": "2026-10-09T10:35:37.170163+00:00",
+      "ended_utc": "2026-10-09T10:35:37.418119+00:00",
+      "exit_code": 4,
+      "wall_ms": 247.50066600972787,
+      "bytes": 479,
+      "sha256": "9182aac5206393208caebae7bcf570f7b7f520cf440b5d45f1f8f901f1089b82",
+      "producer": "existing public CLI native_ax",
+      "source_revision": "b5d4cde0f3ef922151821bdccf911457370ec492"
+    },
+    "fields": [
+      "role",
+      "accessibility_name",
+      "accessibility_bounds",
+      "enabled",
+      "focused"
+    ],
+    "outcome": "failed incomplete_scope; no geometry; cause not established. A new explicit geometry-only request succeeded without changing limits or app state."
+  },
+  "state_continuity": {
+    "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/state-continuity.json",
+    "bytes": 1758,
+    "sha256": "3b792b5f8a69b5ec13d3a80966088d7b1e188890d7abc9d4340c6aae9bc588bc"
+  },
+  "selected_nodes": {
+    "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/selected-nodes.json",
+    "bytes": 13934,
+    "sha256": "69496dbfe8a0a2ff71da4b94ff5f00df54547fdf8228be70ad473cf3e10ac822"
+  },
+  "computed_measurements": {
+    "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/measured-summary.json",
+    "bytes": 14319,
+    "sha256": "92f4c58aa58341e090a3f74581a55a131702a5891593be2d6399f94e8a0ed161"
+  },
+  "limits": [
+    "coverage partial at 160 nodes; omitted/unknown counts not quantified",
+    "accessibility bounds are not layout/hit/paint/visible bounds",
+    "video-only frame not distinctly identified in selected source; transport cannot substitute for it",
+    "AX-to-pixel transform uncalibrated; observed 2x window/buffer ratio is not proof of full mapping",
+    "observation-scoped Surface IDs differ; comparison uses unique native identifier or identifier+name+role, not stable action refs",
+    "AX/CG/CUA/PNG clocks and calls separate; no atomic snapshot",
+    "narrow titlebar appears inactive and wide active; exact foreground context was not instrumented, no pixel parity/invariance claim",
+    "binary hash known; source-commit correspondence unverified; canonical reused, not rebuilt by this task",
+    "no text intrinsic sizes, clipping geometry, padding, complete visible-region or action-reachability proof",
+    "not a code change before/after, not whole-app QA or D06 benchmark"
+  ],
+  "restoration": {
+    "initial": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/original-window.json",
+      "bytes": 455,
+      "sha256": "09e35363289d16cf4752a68a8c4600fd42dd5abe15988f4d89289a7af83e5282"
+    },
+    "intermediate_system_previous_size": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/restored-window.json",
+      "bytes": 1604,
+      "sha256": "835b9b1fd84a70fc8bd800452b4f986dfd1acb8d90e8de2df8e368f2fde0e336"
+    },
+    "final": {
+      "path": "/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-rc03-20261009-r775a559/final-restored-window.json",
+      "bytes": 1603,
+      "sha256": "eb244961d9c66284feaac84ad9d746cbb438427eee1ef30251695fd2ea24c58a"
+    },
+    "exact_original_frame_verified": true,
+    "query_clip_pause_preserved": true,
+    "actions": [
+      "launch exact existing canonical Release through CUA getApp",
+      "Window Fill",
+      "Return to Previous Size gave 1901x1032, so Window Move & Resize Left restored exact961x1050",
+      "terminate only proved task-launched PID51018 after restoration"
+    ],
+    "task_owned_process_exited": true,
+    "desktop_released": true,
+    "macos_product_released": true,
+    "caffeinate_stopped": true
+  },
+  "retention": {
+    "images": "system temp; never agent-deleted, including containing directories",
+    "raw_nonimages": "root/Q03 through acceptance; do not remove before consumer finishes",
+    "tool_binaries": "removed after local analysis; hashes retained"
+  },
+  "evaluation": {
+    "real_UI_Blueprint_observe": true,
+    "local_inspect_calls": 2,
+    "local_measure_calls": 16,
+    "separate_evaluated_agent_run": false,
+    "independent_acceptance": false
+  }
+}

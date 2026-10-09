@@ -1,5 +1,7 @@
 # Real Mac resize reference pair
 
+New measured internal-bounds dataset: [2026-10-09 continuation](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/fixtures/real-world/mac-resize/runtime-20261009.md). The historical record below is preserved.
+
 F03b / RC03, 2026-10-06. Two explicitly collected paused Search states, no
 continuous observation. This is a real-app data pack, not collector or agent QA.
 
