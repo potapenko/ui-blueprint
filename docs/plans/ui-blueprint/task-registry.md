@@ -33,10 +33,14 @@
   «Q02-R — Native замеры принятой сборки», local project0cb10b16, inherits model
   with medium reasoning for the prepared execution. Fresh finite packet:
   [Q02-native-final-execution](packets/Q02-native-final-execution.md).
-- State: handoff-only pending verified old-turn terminal status. New worker has
-  authority to stop exactly old Q02 using supported Codex UI, then verify terminal
-  state/remaining owned resources. No benchmark/build/source writer takeover before
-  that gate. Unsupported UI control returns an exact limitation, no competing run.
+- State: handoff waiting external control. Q02-R first run attempted supported
+  cua.getApp("Codex") and was denied: “Computer Use is not allowed to use the app
+  'com.openai.codex' for safety reasons.” Follow-up verified old Q02 still active/
+  inProgress427. No benchmark/build/file mutation or takeover occurred.
+  Root requested operator Stop of old «Q02 — D06 performance gates» via async input,
+  alternatively natural terminal completion. No direct stop-thread tool is exposed;
+  do not bypass the Computer Use denial or use handoff/worktree/process-kill tricks.
+  New worker remains idle until whole old chat is inactive and resources reconciled.
 - After safe handoff new Q02-R completes all required Native cohorts/quality report
   using accepted source, exact shipping correspondence and unchanged gates. Product
   code remains protected; any proved repair returns an exact owner dependency.

@@ -127,3 +127,14 @@ recipe/binary/environment/input pins, all counts/p50/p95/quality/bytes/memory/ca
 actual observations versus inference and unavailable telemetry, original failures,
 checks/reuse, commit+push, raw evidence and precise resource release. Archive only
 through root after result is saved. Keep the full original P0–P7 goal intact.
+
+## Actual handoff probe — control unavailable
+
+The first Q02-R run verified old Q02 active/inProgress and received an explicit
+Computer Use denial from cua.getApp("Codex"):
+“Computer Use is not allowed to use the app 'com.openai.codex' for safety reasons.”
+No benchmark/build/file mutation occurred. Do not retry that denied app control or
+switch mechanisms to bypass it. Root requested an operator Stop of the old Q02 chat,
+or its natural terminal completion. Verify the WHOLE old chat inactive afterward,
+including queued turns, then perform the existing ownership/resource gate and full
+Q02-R execution. No new implementation approval is needed once that fact is true.
