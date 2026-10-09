@@ -49,8 +49,9 @@ handoff ниже — история, не текущее состояние и �
   absolute profile/repository cwd, prior refusal cause not established. No bypass.
   Cursor351 confirms no off timed cohort, quiet CPU released for Q03; Q02 retains
   desktop/own fixture and continues its authorized full performance task.
-  Q03 received CPU grant for Mac build/CLI/checks now, releases it before light
-  receipt/Git work when possible; then Q02 continues timed off and needed repair.
+  Q03 used the CPU grant, completed its checks and released11:07:18UTC. Root
+  returned quiet CPU to Q02; remaining off timing and needed performance repair
+  continue in that same task with the original thresholds.
 - Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`: terminal completed,
   `b1b06fd9a6c9ed1f8f8676d6b4eae505c0867cce` pushed, new F03b receipt/dataset
   contract read. Two original native_ax replies160nodes/partial at961/1920pt,
@@ -65,18 +66,18 @@ handoff ниже — история, не текущее состояние и �
 - Очередь ресурсов: Q02 Native benchmark сейчас; Mac только saved-data work
   release-profile timing. Web runtime больше не занимает ресурс. Offline Q03,
   Native release builds и Mac preparation продолжаются независимо.
-- Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: Web portion terminal completed,
-  `c5a6e4f7ffdfa884bb0a33e64bdc475752b8ef34` pushed; new receipt read in full.
-  Accepted within saved-data usefulness scope:34 public CLI calls, exact key match
-  for bounds/gaps/insets/containment/eight geometry deltas; unknowns and raw inputs
-  preserved. Answers recorded before key. Total232.936ms subprocess time and
-  1404492stdout bytes are neither end-to-end agent latency nor a token/speedup claim.
-  Explicit imported reference binding is not live Target identity/Observe fidelity;
-  paint/hit/freshness/atomicity and automatic real-browser ingestion remain unclaimed.
-  Original22-file dataset/images retained; own consumed nonimages cleaned.
-  Same chat resumed on actual Mac dataset through latest packet section. It reads
-  source records now; build/CLI batches wait for Q02 timed-series CPU release.
-  No product code/schema changes, original AX identity/context stay untouched.
+- Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: terminal completed,
+  Mac+Web bounded usefulness accepted; `b014cd444c6797adb9872b73c1b126ce3c50e8b0`
+  pushed, full new receipt read. Webc5a6e4f34calls reused; Mac26calls on unchanged
+  original native_ax ChannelResponses,24known/success and2expected exits4
+  (layout not_requested and incompatible cross-request context_mismatch).
+  Exact separate-key reconciliation, source preservation and qualitative semantic/
+  image distinction pass. Same source AX rectangles are not layout/hit/pixel proof;
+  no forced cross-request refs/transforms, arbitrary-app/full coverage, model-token
+  saving or blind screenshot speedup claimed. Mac1257.165ms summed subprocess time,
+  11988968stdout bytes is not agent latency/context efficiency. Consumer inputs and
+  images retained; own consumed nonimages cleaned. No remaining Q03 dataset gap.
+  CPU released11:07:18UTC, no runtime owned; archive completed consumer chat.
 - Mac runtime: cursor89 confirms collection completed, two original native_ax
   Observe responses with160nodes each/partial coverage; actual961×1050 and
   1920×1050pt, same paused clip. First broader request incomplete_scope retained.
