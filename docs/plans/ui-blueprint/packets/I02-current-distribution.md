@@ -95,3 +95,29 @@ Final result identifies exact product and recipe pins, newly verified versus
 reused checks, usable current installation instructions and any real remaining
 packaging dependency. Existing source/runtime/performance verdicts are separate;
 this task cannot declare P0–P7 complete.
+
+## Final current-source delivery reconciliation — 2026-10-09
+
+Continue the same P6 installation/delivery outcome on saved candidate
+`063e709` (resolve its full SHA before building), whose production Native collector
+includes accepted7709067. Current Q01 source/functional reconciliation21e0abf and
+Q02 actual readonly source-fidelity40f201d are evidence inputs, not a Native D06 pass.
+The earlier a7c0416 bundle remains historical qualification; do not mislabel it as a
+newly tested current binary.
+
+Inspect the exact production/recipe/feature delta and choose the smallest sufficient
+installed qualification. Reuse all unchanged Core/Web/dependency/recovery evidence;
+verify any materially changed Native/combined installed helper/CLI pairing and its
+current source provenance. Correct only an actual packaging/docs/smoke defect in
+existing I02 ownership. No product code, schema/Cargo, runtime UI or new audits.
+No need to replay every prior build or unrelated safety check simply for a new SHA.
+
+Deliver current reproducible build/install/use/recovery instructions and an honest
+capability/limitation handoff: supported scoped Native/Web geometry and applicable
+functional evidence, completed Web latency, Native workload/timing and Q03 still
+pending. Do not mark goal/P7/release complete, change benchmark conditions or promise
+unverified background/IME/pointer/other-platform support. Current source must remain
+on master, with exact-path commit+push and retained image/shared-input protections.
+All CPU/build resources are released by Q02; own system-temp installs only. Full
+plan/necessary edits/affected verification/docs/commit+push/result in this chat,
+without root grants for internal steps. Archive on complete once handoff is saved.

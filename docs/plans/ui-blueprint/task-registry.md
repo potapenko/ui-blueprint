@@ -129,11 +129,24 @@ Root получает итог или конкретный блокер; про�
   convenient active-context substitution and assigned the same Q02 to establish
   original inactive/nonkey/nonmain after safe setup if feasible, or exact blocker.
   Only bounded matching-context qualification/proposal; no spec/threshold edits.
+- Q02 context correction terminal `063e709` pushed: one app-bound Cmd+Tab did
+  not confirm foreground return; own fixture stayed active/frontmost/AXMaintrue.
+  Required inactive context not established; no retry/backend switch/on comparison/
+  timing. Own process retired, CPU/UI released, shared data unchanged.
+- Concrete user decision requested via async input: approve separately versioned
+  request-only76-node Native workload with unchanged100/200/300/750ms and fresh
+  baseline, choosing inactive with operator help, active as different context, or
+  keep original benchmark. This changes frozen acceptance conditions; proposal is
+  in Q02 receipt017d85c/063e709, NOT silently registered/accepted. No answer yet.
+- I02,01a11bdd-8f38-7943-a91f-3621a70a994c, unarchived for one complete current-source
+  delivery reconciliation on063e709/production7709067, per packet continuation.
+  Own packaging/docs/affected installed checks only, reuse unchanged evidence;
+  no UI/source/schema/D06 changes, no P7 complete. CPU free; finalcommit+push required.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q02 original-context qualification; controlled active-context result и консультация сохранены.
+  I02 current-source delivery; Native benchmark decision and Q03 scope await user.
   Native live/performance
   и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.
