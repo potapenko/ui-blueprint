@@ -1319,3 +1319,132 @@ pass and P7 completion remain separate and are NOT granted. Shared evidence/imag
 processes and waits were neither changed nor cleaned. No new transient files or
 images were created. Own receipt-only link/route/whitespace checks and scoped
 master commit/push preserve this result for Q02/root.
+
+
+## Focused AX SDK-reuse source acceptance — e641543, 2026-10-09
+
+**ACCEPT the changed Native lifetime/binding source boundary** at
+`e64154349bc93e9c7a4a91bab7698cef84b8eb7a` against
+`70c3ddb3286b50e7da3ba70f3b402fe781138625`. No blocking source finding remains
+within this finite scope. This is not D06 quality/numeric acceptance, a new whole
+Native/N03 qualification, or proof that the previous five sample failures are fixed.
+
+Authority and traversal: approved PLAN.UIB@1 and the
+[focused Q01 packet](../packets/Q01-integrated-acceptance.md#focused-ax-sdk-reuse-source-acceptance--e641543-2026-10-09).
+Registry33 → D02@2.CONTENT/WORKER/PUBLICATION/LIFECYCLE → D05-WORK@1 and MEMORY@2,
+with their previously read explicit closure; Native acquisition@3, NATIVE@2,
+NATIVE-SESSION@3/PROTECTED/popup affected adjacency, EXCHANGE@2/IDENTITY/PRIVACY,
+D06@2/request-only@1; current RUST/DEV.RUST@2 governs focused checks. D02/D05-work/
+memory/lifecycle/native/identity/privacy and Rust rules were recovered as necessary;
+previously read unchanged closure was reused. No new product choice or criterion.
+
+Two-stage independence preserved: actual code/test diff and necessary owners were
+read before Q02 narrative. Initial observations/criterion coverage were returned in
+turn01a120e7-6245-7b50-9b32-c9fe2f8cecee, then root supplied the matching evidence
+in this same chat. Only afterward read Q02 receipt section “Release campaign and
+bounded SDK reuse candidate”, stopping before Actual Native Rust-stage replay.
+Q02 is the author; Q01 owns this source review and the independent checks below.
+Only this receipt changed. No nested agent/chat, UI, live collection or app input.
+
+### Provenance correction resolved with independent binary reproduction
+
+Shared root R remains
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q02-native-full-lh3jw_lj`.
+Handoff `sdk-reuse-source-handoff.json` SHA-256
+`8fc57a4bf89af7958e54201890b94336b53d590ea0efe5981e06011d675a79ae`.
+Prepared/executable JSON alone is not complete source/binary correspondence:
+prepared points to a staging tree, executable JSON contains a path without a hash.
+Actual staging Rust broker/supervisor/performance driver and unchanged collector/
+WindowAX/form files match e641543; staging HostHelper has the earlier8s next-command
+bootstrap, and staging HostProtocol lacks the final flags128 read-only admission.
+Those staging bytes must not be called the exact final Swift source.
+
+Q01 independently built all11 actual helper compilation inputs after comparing each
+with immutable e641543: Swift -O, Swift6, arm64-apple-macos14.0, CAPTURE_LIBRARY/
+HOST_HELPER, task-owned system-temp module cache/output. The resulting
+`sdk-reuse-helper-v3` is **byte-for-byte identical** to retained products/helper-v3:
+SHA-256 `3f84b3a03a77498a94c3571508ba40a93c110822919d538fa45ac80851a33862`.
+A second bounded build with only the staged earlier HostHelper plus final remaining
+inputs exactly reproduces retained helper-v2, SHA-256
+`752db1f5a79103680e72fefc9cdfaf55006cc02ed5f2c767b21922a16ebc4404`.
+Thus v2 smoke/closure is evidence for the same acquisition/reply/cleanup body with
+shorter next-command wait; v3 freshness is the exact reviewed helper. No binary was
+executed for these comparisons. Rust source matches the staged changed files;
+retained compiler-artifact records identify release host/performance executables
+and successful build. This is not a claimed independent Rust binary rebuild.
+
+Q01 also independently compiled/executed ReadonlyProtocolChecks against final
+HostProtocol/NativeJSON/acquisition: **7 checks, live_calls0**. Accepted ordinary and
+resident read-only flags; invalid phase/channel/mutation rejected. It is protocol
+admission proof, not SDK execution, sequence-loop or cleanup proof. All own nonimage
+build scratch was removed and removal verified; no retained author data was changed.
+
+### Original author execution inspected, not relabelled Q01 execution
+
+Decoded all three smoke and both successful freshness samples' canonical frames,
+plus original expiry sample and acquisition sidecars. Smoke report SHA-256
+`7d57784c48999ca09eefa9ed82a75ac10a514675d107bdaa3a59970a46441914`:
+three Completed/committed3/missing0 calls,76 AX nodes each; same AX helper2815,
+distinct current observation IDs/intervals; capture helpers2816/2818/2819. Fixed
+parent-owned9530680bytes, completion_groups1 during samples; closure records
+cleanup_confirmed=true, groups0/sessions0, retained_reserved192, no abandoned or
+reaping_poisoned flag. This closure is v2 evidence, not a fabricated v3 closure.
+
+Freshness report SHA-256
+`759b356e65d7c16fe40ba7a712a0c8e6b63b093fce4541663b716ae7f905db6c`:
+actual canonical f02.count changes Count:1→Count:2 under helper9794 with distinct
+fresh-0/fresh-1 observations; AX starts406457.268382 and406626.291498 in that SAME
+helper clock (about169s apart). Both responses commit AX+capture,76nodes, original
+nine fields, partial coverage/unknown consistency. Sidecars report discovered=
+returned76, refused/queued/unknown-child-lists0; neither response substitutes the
+previous observed Count. New capture helpers9797/10876 remain separate. These records
+prove changed-value current collection, not universal absence of every SDK cache.
+
+Expiry call-2 SHA-256
+`e617bf846425693377f7220d2d6662be62e5e3ca1ef7eb061febf42f21d846f4`
+is Failed(ResyncRequired), committed0/missing3/frames[], no stale fallback. Parent
+configuration uses180000ms residency; author attributes this call to its expiry.
+The sample itself lacks an absolute call timestamp/reap cause, so it does not prove
+an exact180s kill instant independently. v3 closure.json is absent; do not manufacture
+its resource counters. The freshness wrapper expects committed3, so the retained
+expiry refusal also explains why its positive report contains only two entries.
+
+Original host-checks-serial.txt SHA-256
+`a1b9535daa66ca7b93e126d2350b8de78f0fb04a12076721f2203236b6f2c656`
+shows author executions of publication/late-control, helper deadline, capture lease,
+independent AX, root-grant/reap, cancellation/deadline with preserved AX, actual
+ACK-before-capture, parent allocations and lifecycle cases passing. Read the actual
+relevant test bodies as well as outputs. Live fixtures/performance remain explicitly
+ignored in that suite; the suite is not live proof. Earlier host-checks.txt retains
+FD-census failure34 versus15 under parallel execution; serial original output passes
+that same check. No expectation was weakened. Clippy success is author-reported,
+not independently executed here or claimed from this serial test log.
+
+### Mandatory criterion coverage and decision
+
+| Criterion | Evidence and scope decision |
+| --- | --- |
+| Current identity/permission/source | Same Collector entry per request, fresh process/window/identity/permission checks and publication revalidation; immutable Collector unchanged. Exact v3 changed Count evidence confirms new requests use current data. No new identity oracle or relaxed guard. Accepted source boundary. |
+| Observation-local objects, refs, frames | New loop invokes Collector inside per-iteration scope; collector creates AX root/window, graph, admission and frame anew. No native action refs/result stored on the resident loop. Distinct IDs/current intervals and changed Count support freshness. Opaque SDK internal memory remains explicitly outside Rust/RSS claims. |
+| Read-only phase/channel/collection | Exact flags128/Observe8/channel0/window-ax, same epoch and strictly increasing operation are enforced before collection; fixtureCommand validates canonical context/request. Own7-case protocol check confirms affected admission. No form/PROTECTED delivery in this branch. |
+| Cross-channel binding/reconfiguration | New capture binding is parent-owned fixed setup, epoch-bound; only channel1 selects it. Configure requires Attached and only the registered resident helper may remain; running operation/other helper/shutdown still refuse. Existing AX binding is not replaced. Swift validates capture's target/surface/scope against the same canonical request, preventing mismatched configured content. Actual smoke/freshness contain separate capture processes and destinations alongside reused AX. |
+| Fixed storage/precharge/repetition | Extra4 binding slots are included in existing RuntimeState size/capacity accounting; no growing parent map/queue/JSON decode. Actual parent counter grows by32704bytes once versus previous9497976, then stays9530680 across repeated calls. Existing buffer/root allocation tests pass in author output; per-request counters reset within existing caps, not a session-wide SDK/RSS guarantee. |
+| Original canonical fields/limits | Collector/WindowAX/NativeJSON/acquisition unchanged. Same selected fields, normalization/privacy/unknown distinctions and bounded frame/publication paths. The accepted boundary does not claim the historical anonymous-node/invalidUIElement failures disappeared; future full quality cohorts still required. |
+| Deadlines, expiry, cancel, EOF, reap | Existing parent Helper deadline/io_ready/poll_cleanup, owned termination, quarantine and reap remain the enforcement path; no new helper entitlement. New loop has per-call watchdog and bounded input read, handles EOF/expiry by return, and cannot dispatch another accepted call after parent residency expiry. Quiet300s is a local read bound, not an extension of parent authority or independent absolute300s expiry proof. Exact v3 supports long quiet reuse and later refusal; unchanged parent cancellation/late-frame/cleanup tests and v2 closure supply change-driven inherited coverage. No fresh full SDK cancellation campaign required for this unchanged enforcement mechanism. |
+| Late replies/ACK and independent Target | NativeBroker still checks active deadline; existing publication correlation/commit/ACK and terminal rejection remain unchanged. Capture HelperRequest still requires prior AX committed/failed accounting; one-shot capture lease survives until reap. Author actual host fault tests exercise ACKed AX preservation, late response refusal, independent AX/Target and delayed reap; no new global queue introduced. |
+| Legacy/ordinary/form consumers | Flags0 branch, focused provider, NativeFormSession/PROTECTED/popup and their collectors unchanged. New resident loop is selected only for exact read-only window-ax. New capture setup requires explicit trusted parent binding; it does not grant form input or arbitrary Surface permission. Existing accepted adjacency proof reused, not requalified wholesale. |
+
+The initial gaps are resolved by this combination of independent source/protocol/
+binary checks, actual author records and unchanged accepted enforcement evidence.
+No source defect is inferred merely from missing fresh duplicates of old tests.
+Resource-history precision limits above remain explicit; they do not stand in for
+missing functionality or relax a mandatory positive gate. No source change or
+new live/UI operation is requested by this review. Q02 can proceed to its already
+authorized same-source complete measurement/quality work after root's resource
+coordination; the five historical quality failures and all frozen thresholds remain.
+
+Terminal scoped source verdict: ACCEPT e641543 lifetime/binding implementation;
+no blocking findings in the reviewed delta. Only this receipt is checkpointed on
+master and pushed after link/route/whitespace checks. Q01 CPU/build resources are
+released, no owned helper/app process remains, shared artifacts/images untouched.
+This grants no D06 timing/quality pass, new operation authority or P7 completion.
