@@ -305,3 +305,267 @@ Cleanup verified: eight handoff nonimages and their empty q03 directory absent;
 images remain byte-identical; parent uib-q01-lkmmvfvu remains. Local receipt links
 and route scope checked; git diff whitespace check passed. No new evidence consumer
 or persistent raw-data copy remains.
+
+# Continuation — real Web Director, 2026-10-09
+
+This continuation is separate from the accepted controlled-fixture evidence above.
+Authority: the same Q03 task's explicit resume instruction and packet section
+“Q03 consumer continuation — real Web input ready, 2026-10-09”. No live operation,
+new agent/chat, product change or new user permission gate. Permanent write set:
+this receipt only. Mac dataset remains a separate dependency, not a reason to defer Web.
+
+Recovered AGENTS/current packet; traversed registry33 → product branch/CLI@16 and
+reused the previous fully read acceptance PERFORMANCE/COMPLETION@1 plus ANALYSIS@2,
+types/validation@1, GEOMETRY/MODEL/IDENTITY/PRIVACY/PROJECTIONS/EXCHANGE@2 and
+selected-space diff closure. Git comparison with fff46985 established the reused
+leaves unchanged; current CLI only routes Native-session@3, excluded here. Live
+D06@2, Native, Web collector and their new routes are outside this saved-data run.
+The previous build-policy closure applies unchanged. No specification delta.
+Contract requirement: preserve facts, identity scope, units, unknowns and provenance.
+Observed input: browser-reference records, not a canonical response. Task-authorized
+technical choice: minimal one-off recorded representation, with explicit reference
+binding below, consumed by the unchanged CLI. It is not a new collector/import API.
+
+## Input/order and reference binding
+
+Original read-only dataset:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q03-director-SYpdJ9`.
+Manifest SHA-2560ea1bdbcf5fa56977fe1dbb891450661b346c004cc3bbf0a830a0038304fe320
+matched; all21 listed file sizes/hashes verified without decoding the withheld
+answer-key or receipt. First read task/manifest/capture metadata/source provenance,
+then wide-dom-detail.json, narrow-dom.json, both node-identity and AX arrays.
+Producer receipt/platform advice/answer-key were not read before the answers below.
+Prior Oct8 advice remains historical context already seen, not a blind-model claim.
+
+Geometry raw hashes: wide-dom-detail.json
+2b63e707ea7ce1a1234b3915e50df8e2a233f1e795137ec2cf01b2f813d5ec48;
+narrow-dom.json571586b7628baf89c8e421876fbef6b7df9bd887d62821e9bdc21d8fbfca0fc1.
+Both report browser-reference DOM/CSSOM, viewport css_px, top-left coordinates,
+DPR1/visualViewport scale1, scroll0. Actual viewport1280×900→1024×768.
+Tool identity browser2/tab1; frame EE40AF10F11C03EC66E1E8C575695F10;
+loader BEE294456DF24BFD21E167A9EF932D92; document backendNodeId11 remain recorded.
+CDP Target ID and browser/process incarnation are unavailable; none is invented.
+Frontend node IDs change; backend IDs for selected nodes remain the same.
+Source checkout1954c9cd6c11464cd9529699552178854764e0d1 is attributed packaging
+context, not verified correspondence to the loaded bundle; no other project opened.
+
+Temporary core0.1 imported Snapshot carries only11 geometry nodes per side:8 measured
+DOM boxes, viewport rect context, and2 reported hidden-overflow ancestor border boxes.
+SourceKey namespace browser.reference.dom, actual backendNodeId strings for8 nodes.
+Context-only nodes have explicitly prefixed reference keys, no guessed backend ID.
+The local reference Target binding is
+`reference-browser-2-tab-1-frame-EE40AF10F11C03EC66E1E8C575695F10` with
+`recorded-loader-BEE294456DF24BFD21E167A9EF932D92-document-11` generation label.
+This names the supplied document observation boundary, NOT the unavailable live CDP
+Target/incarnation or a reusable tab generation. Surface uses actual frame/loader.
+All nodes also declare imported_document_reference_not_live_target and the unknown
+CDP Target ID. Snapshot IDs/revision1/plugin q03.reference-record-carrier0.1.0 are
+local carrier metadata, never browser/plugin revision or negotiated session evidence.
+Session label is the supplied case ID; per-side environment IDs include state/raw hash.
+
+Only layout_bounds is requested. getBoundingClientRect x/y/width/height are copied
+exactly; raw DOM/computed fields are preserved as attributed source declarations,
+not converted into normalized semantics or normative expectations. SourceEvidence
+reported/imported_browser_reference_DOM_CSSOM_rect resolves to each original DOM
+interval: wide156165→156165.69999998808ms, narrow181745.5→181745.89999997616ms,
+clock domain identified by actual performance.timeOrigin1791539680312.2ms.
+UTC wide09:57:16.476–.477, narrow09:57:42.057, on2026-10-09. No AX/image interval
+is assigned to these DOM facts. All observations cache/unverified/unknown consistency,
+coverage partial with unknown omitted/unknown counts. No transform, live response,
+action ref, inferred component or full graph is produced. Unimported focus/relations/
+children are outside selected fields; empty carrier arrays do not assert absence.
+The single common Space is the recorded frame's viewport css_px; distinct per-side
+environments retain the changed zoom. No inverse/zoom/pixel conversion is introduced.
+
+## Own answers fixed before opening answer-key
+
+Criteria fixed by task.md before answers: correct identity, units and source; no
+invented padding/transform/current freshness; unknown≠zero; factual change≠design
+failure. The following came from raw facts and34 successful public CLI calls, not
+from the producer's answer key. Bounds table is the unchanged recorded geometry
+carried by public Inspect JSON; calculated relations and deltas below are Engine
+outputs through public Measure and `diff --geometry`.
+
+All table tuples are (x,y,width,height), viewport css_px.
+
+| Node / backendNodeId | Wide1280×900 | Narrow1024×768 |
+| --- | --- | --- |
+| wrapper /968 | (24.59375,277.1796875,179.703125,42.90625) | (19.765625,221.921875,143.578125,34.3203125) |
+| trigger /974 | (24.59375,291.4765625,179.703125,28.609375) | (19.765625,233.359375,143.578125,22.8828125) |
+| popup /1201 | (24.59375,326.109375,194.2578125,143.2734375) | (19.765625,261.0546875,155.40625,114.8125) |
+| input /1205 | (32.6171875,351.4453125,178.2109375,25.59375) | (26.2890625,281.421875,142.359375,20.4765625) |
+| listbox /1208 | (32.6171875,383.0625,178.2109375,78.296875) | (26.2890625,306.7109375,142.359375,62.6328125) |
+| Steven Spielberg /1215 | (32.6171875,383.0625,178.2109375,24.09375) | (26.2890625,306.7109375,142.359375,19.2734375) |
+| Kurtis Spieler /1218 | (32.6171875,410.1640625,178.2109375,24.09375) | (26.2890625,328.390625,142.359375,19.2734375) |
+| Steven Spiel /1221 | (32.6171875,437.265625,178.2109375,24.09375) | (26.2890625,350.0703125,142.359375,19.2734375) |
+
+| Engine measurement, css_px | Wide | Narrow |
+| --- | ---: | ---: |
+| trigger bottom→popup top gap | 6.0234375 | 4.8125 |
+| wrapper left→popup left | 0 | 0 |
+| trigger left→popup left | 0 | 0 |
+| input bottom→listbox top gap | 6.0234375 | 4.8125 |
+| three option-left anchors spread | 0 | 0 |
+| input inset from popup left/right | 8.0234375 each | 6.5234375 each |
+| input inset from popup top | 25.3359375 | 20.3671875 |
+| input inset from popup bottom | 92.34375 | 73.96875 |
+
+Insets are border-box distances, not CSS padding. Raw computed popup padding10px
+is a separate declaration; the top distance also spans content above the field.
+Gap is not silently normalized to8px. Ancestor layout-container reports
+zoom0.752941→0.602353 while each selected node reports zoom1/transform none.
+Observed sizes and relative spacings change; this is not only translation. The
+reported ancestor zoom is relevant context, not proof of a complete causal account,
+a universal reflow rule, or an accepted design defect.
+
+| Engine narrow-minus-wide (dx,dy,dwidth,dheight), css_px | Result |
+| --- | --- |
+| wrapper | (-4.828125,-55.2578125,-36.125,-8.5859375) |
+| trigger | (-4.828125,-58.1171875,-36.125,-5.7265625) |
+| popup | (-4.828125,-65.0546875,-38.8515625,-28.4609375) |
+| input | (-6.328125,-70.0234375,-35.8515625,-5.1171875) |
+| listbox | (-6.328125,-76.3515625,-35.8515625,-15.6640625) |
+| option0 | (-6.328125,-76.3515625,-35.8515625,-4.8203125) |
+| option1 | (-6.328125,-81.7734375,-35.8515625,-4.8203125) |
+| option2 | (-6.328125,-87.1953125,-35.8515625,-4.8203125) |
+
+Engine Inside outputs for all3 options have nonnegative insets: left/right0;
+wide top/bottom(0,54.203125),(27.1015625,27.1015625),(54.203125,0);
+narrow(0,43.359375),(21.6796875,21.6796875),(43.359375,0).
+Thus the supplied option rectangles fit the listbox rectangle, including edge
+contact. It is a rect-containment fact, not verified paint or hit accessibility.
+Popup Inside viewport insets(L,T,R,B): wide(24.59375,326.109375,1061.1484375,
+430.6171875); narrow(19.765625,261.0546875,848.828125,392.1328125).
+Inside clip-search-content border box: wide(24.59375,283.9453125,1061.1484375,
+371.3984375); narrow(19.765625,227.328125,848.828125,344.65625).
+Inside clip-search-page border box: same L/T/R as content, bottom430.6171875/
+392.1328125. Both ancestors report hidden overflow; these are their recorded border
+boxes, not a measured paint clip polygon. The popup extends beyond some suggestions
+ancestor right edges, whose overflow is visible, so that alone is not clipping.
+No negative tested inset or rectangle overflow; masks/occlusion/hit remain unmeasured.
+
+Raw DOM/AX agree on focused combobox Director name and draft `spiel` in both states.
+Input aria-activedescendant points to Steven Spielberg/backend1215; DOM/AX selected
+is true for that option and false for the other two. All3 DOM aria-pressed values
+are false; trigger says Any director; recorded URL has only language=en, filters
+field is null. This supports no applied Director indicated by these saved markers;
+active suggestion is not applied membership, and no selection/submit/server outcome
+is claimed. Null filters is preserved as source null, not converted into known empty
+persistent state. Counts/text are source content, not independently validated data.
+Raw AX was read for this semantic answer, not merged into a fabricated atomic DOM
+Snapshot; unknown AX timing prevents such an attribution.
+
+No screenshot was needed to answer these sourced geometry questions. Wide screenshot
+interval09:56:55.854–.893 precedes wide DOM-detail09:57:16.476–.477; narrow screenshot
+09:57:42.252–.322 follows its DOM interval. No screenshot-only/hybrid speed or accuracy
+comparison is claimed, and no image-based pixel measurement was performed.
+
+## Separate-key reconciliation and checks
+
+Own answers were recorded at2026-10-09T10:07:42.520069Z before opening the key;
+receipt SHA-256 at that boundary:
+eecd0f345b6b204559702d8fb1f2819f42aa6535cbb49217531b53ba838f198d.
+Then read answer-key.json, SHA-256
+cffa99628c1c5e2cdf8bd62059b93819407821e75eccddb9b5b0b0ddb953d622.
+No producer receipt/platform-advice continuation was needed or read.
+
+Exact comparison passed:16 raw rectangles;10 requested scalar measurements;
+2 four-sided input inset sets;6 option/listbox and6 popup/context containment
+results;8 four-value displacement vectors. All34 CLI outputs retained the supplied
+imported Snapshot(s) by full parsed equality. No entry requires tolerance/rounding.
+Draft/active/pressed/filter interpretation agrees with the raw AX/DOM and key;
+our narrower “no applied Director indicated by these markers” wording deliberately
+does not turn raw null into proof of persistent application state. The key also
+contains option vertical-gap numbers, outside the requested spread question; those
+were not added to this run's CLI claims after seeing the key.
+
+Classification: accurate within recorded rectangular geometry and stated scope.
+The key is producer-authored reference arithmetic over the same capture, not a
+second capture implementation or independent-model acceptance. This run adds actual
+UI Blueprint saved-data consumption where the key originally said it was unknown;
+it does not establish live canonical ingestion/collector fidelity. No contradiction
+requiring a product change or new contract was found. Unknown paint/hit/glyph/atomicity/
+intermediate-animation/freshness/build correspondence remain unknown.
+
+## Actual public CLI use and cost
+
+Pinned the current canonical master source at extraction:
+`efe228f1f5a733553a1b5b65320d34a60237e81e`. Concurrent task documentation advanced
+HEAD during preparation; all commands use this fixed archive, not later WIP.
+Only core CLI/default features were built. Source extraction0.080s; offline locked
+`cargo build --locked --offline -p uiblueprint-cli` succeeded in6.906s, dev profile.
+Binary SHA-2562f81b61981ba2cba8d94b8185912ebdde45a922c2b1fc71a9beb33e2672164a8.
+Host matches the earlier macOS27.0.1 arm64/M4 Pro environment; no runtime/desktop lane
+was acquired. Prep is separate from query-output costs; no collector was invoked.
+
+One-off temporary conversion copied numeric facts only; all geometric arithmetic
+was the existing Rust engine. Temporary inputs (local metadata included):
+
+| Input | Bytes | SHA-256 |
+| --- | ---: | --- |
+| wide.snapshot.json | 33102 | 19392125689bdbd6f604df6db6ba315c67973df8aa70ef4a0eb2edf9d6921225 |
+| narrow.snapshot.json | 33116 | a96fa68145816ec9c0f8639befad8be3536c052daed775deba61cd764d3b9660 |
+
+Reproduction recipe uses the original manifest/raw fields and the exact mapping
+above. Source hash alone does not authorize changing any identity attribution.
+Each query is analysis0.2 geometry_query with scope
+recorded-director-eight-nodes-and-rect-context, explicit SourceKeys and anchors,
+units css_px, quantity_kind length, and null platform/input_mode/text_scale.
+No Expectation/pass-fail or fabricated accepted spacing was supplied.
+
+```text
+uiblueprint inspect --snapshot STATE.snapshot.json --ref '{"namespace":"browser.reference.dom","key":"1201"}' --view design --max-input-bytes 1000000 --max-output-bytes 3000000 --json
+uiblueprint measure --snapshot STATE.snapshot.json --query QUERY.json --space recorded-frame-EE40AF10F11C03EC66E1E8C575695F10-viewport --max-input-bytes 1000000 --max-output-bytes 3000000 --json
+uiblueprint diff --geometry --before wide.snapshot.json --after narrow.snapshot.json --ref SOURCE_KEY_JSON --frame-kind layout_bounds --space recorded-frame-EE40AF10F11C03EC66E1E8C575695F10-viewport --max-input-bytes 1000000 --max-output-bytes 3000000 --json
+```
+
+Per state,12 measure queries: gap(trigger,popup,y,1→0), gap(wrapper,popup,x,0→0),
+gap(trigger,popup,x,0→0), inside(input,popup), gap(input,listbox,y,1→0),
+aligned(option0/1/2,x,0), inside(each option,listbox), inside(popup,viewport),
+inside(popup,clip-search-content), inside(popup,clip-search-page).
+Inside arguments are inner then outer; x-axis/fraction0 anchors, full insets retained.
+Diff uses each of the8 sourced backend keys. Rect-context identities are used only
+within their own observation; no guessed ancestor matching across states.
+
+| Calls | Count | Summed subprocess wall ms | stdout bytes |
+| --- | ---: | ---: | ---: |
+| Wide inspect +12 measurements | 13 | 92.188 | 438671 |
+| Narrow inspect +12 measurements | 13 | 82.873 | 438922 |
+| Eight selected-node geometry diffs | 8 | 57.875 | 526899 |
+| Total | 34 | 232.936 | 1404492 |
+
+All34 exited0; zero stderr bytes, no CLI errors/retries. First process start
+2026-10-09T10:06:02.529097Z, last10:06:02.781662Z. Individual durations range
+5.105–17.817ms. Timed interval covers spawn/read/validate/calculate/serialize;
+query formulation, conversion, build, tool transport and agent reasoning are outside
+it. One sample per different query is not a cold/warm benchmark or p50/p95 population.
+No model token telemetry, memory benchmark, speedup or accuracy percentage is claimed.
+Tooling/source discovery initially hit an unmatched shell glob; no product/data
+failure or changed acceptance criterion resulted.
+
+Useful outcome: the existing public engine calculated real PlayPhrase.me Director
+geometry with explicit source attribution, preserved changed viewport/zoom context,
+and agreed with the separately withheld key. Structured records answered exact gaps,
+insets and local size-change questions that the old historical Director data could
+not. Limits: manual bounded import is still preparation work; no automatic browser→
+canonical Observe integration was established. JSON retains full evidence, so1.40MB
+across34 calls is not a minimal agent-context workflow or claimed token saving.
+No screenshot comparison, action, live ref, paint/hit proof or product design pass.
+
+## Continuation ownership and remaining dependency
+
+Original dataset, all21 manifest files and images remain byte-identical and retained
+for root/Q03 until explicit acceptance; root owns later nonimage cleanup. The old
+Q01 eight-file deletion authority does not apply. No other task's changed/untracked
+files were touched or staged. No app/desktop/runtime process/session was opened.
+Mac RC03 new original dataset is the only unfulfilled input to the requested real
+Mac/Web continuation; this independent Web portion is complete and saved now.
+P7/D06, live collector acceptance, real-target generation and full visibility claims
+remain separate and are not closed by imported-data results.
+
+Verified cleanup: 1597 own temporary nonimage source/build/query/output files
+and their empty uib-q03-web-consumer-fvptpqvz directory removed after consumption.
+Original supplied dataset directory, manifest and all21 listed files (including both
+images) remain present with unchanged hashes. No retained Q03-created image or
+image directory was removed. Changed local links, route consistency and whitespace
+checks passed; exact-path master checkpoint/push is returned in the final chat.
