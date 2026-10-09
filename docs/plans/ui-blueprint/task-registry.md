@@ -120,16 +120,19 @@ handoff ниже — история, не текущее состояние и �
   relaxation or performance acceptance follows from source candidate or diagnosis.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
-- I02 `01a11bdd-8f38-7943-a91f-3621a70a994c` restored for accepted e641543
-  installed-candidate qualification under latest I02 packet. Prior ef45577/063e709
-  remains valid historical delivery, not proof of changed host/helper binaries.
-  Source/recipe/feature/doc preparation finished. Root now grants I02 CPU for its
-  affected installed qualification: last Q02 handoff released runtime, and current
-  visible Q02 execution supplied no new timed run handle. Q02 explicitly notified
-  to defer new timed cohorts until I02 actual release. Preserve any actual overlap
-  rather than claim a quiet measurement. Same owned paths; product source protected.
-  Reuse verified unchanged license/recovery/consumer work. No P7/D06 acceptance or
-  publication implied. Whole finite delivery result, own temp cleanup, commit+push.
+- I02 `01a11bdd-8f38-7943-a91f-3621a70a994c`: terminal accepted within
+  installed-candidate scope, `6ff4943089025f87f15eb622475c401796c9645f` pushed;
+  root read full128-line current receipt. Fresh native+combined e641543 installs,
+  source/feature/notices/dylib/provenance, model-free smoke and verify/remove/foreign
+  preservation PASS. Recipe6a5bec2 unchanged; Core inputs unchanged, web-enabled
+  shared Host covered in combined; prior web-only feature-isolation/consumer and
+  unchanged recovery/license evidence explicitly reused. No P7/D06 claim.
+  Shipping helper has10Swift inputs (diagnostic ones excluded), identical native/
+  combined SHA2560c0517fa9c3764220b07ce83ebdbd2d12f07e217edb22c40e145ba6f4e087f8c;
+  Q01's11-input v3 reproduction is distinct provenance. This distinction handed to
+  Q02 for honest final timing artifact qualification. CPU released16:34 local,
+  own temporary bundles cleaned, all shared/images preserved, no packaging blocker.
+  Completed I02 archived; Q02 explicitly received quiet CPU back for remaining work.
 - Root write set этого продолжения: execution.md, task-registry.md,
   packets/Q02-performance.md, packets/Q03-recorded-usefulness.md. Проверка:
   изменённые локальные ссылки/маршруты и diff --check; checkpoint+push exact paths.
