@@ -1009,3 +1009,184 @@ was intentionally not tested by Q01 here. If fresh validation/preflight fails, r
 that concrete failure without touching the retained app. Comparability differences
 must remain reported; neither this provenance nor accepted source/recorded fidelity
 establishes whole-Native runtime, performance, pixel or input acceptance.
+
+## Terminal Native evidence reconciliation — reuse, current fidelity and exact gaps
+
+Read-only documentary outcome,2026-10-09. No new test/runtime/AX/capture campaign,
+app operation, activation, input, installation, setup, close or runtime re-query.
+Only saved source, historical execution outputs, raw/canonical files and retained
+PNGs were inspected. Native/Q03 questions were not treated as answered. Existing
+NATIVE@2, COMPLETION Native E2E, NATIVE-SESSION@3/NATIVE-POPUP@1 and change-driven
+QA/acceptance meaning is unchanged; this is evidence reconciliation, not a new spec.
+
+**Decision:** the complete controlled N03 Semantic-AX E2E positive evidence is
+reusable for Native source770906798e1326fed3dd0edec40dc59b13772b3a with the explicit
+limits below. Accept that bounded functional composition **with evidence residuals**;
+there is no demonstrated affected result requiring a fresh full-chain replay merely
+because the SHA changed. This supersedes the earlier broad Q01 requirement for
+another positive chain before recognizing N03. It does NOT assert that the whole
+chain was independently rerun on7709067, that the retained inactive fixture is ready
+for new input, or that Native D06/P7 is complete.
+
+### Evidence inspected beyond receipt narrative
+
+Historical chat **N03 — Native popup workflow и E2E**,
+01a11c53-168d-78e3-a2ff-08c985596e51, completed original turn
+01a11c53-1914-7853-80ea-f98f75f83b94, retains actual command bodies/exit status/output.
+These were read, not re-executed. Key output IDs:
+
+- exec-9bc87460-4eda-4858-bc28-bc30a3fed69a: product open,3records/exit0,
+  Confirmed/Succeeded. This successful earlier caller had NO separate Focus step.
+- exec-cf725fb8-3313-480c-8e0d-abe5113b6a40: product resize,3records/exit0,
+  Confirmed/Succeeded.
+- exec-93545493-ac65-4a3d-833b-4bd6961d3e95: actual retired/reopened Act transition
+  has NotDispatched/Failed, empty completed_steps, stopped_at, no after Snapshot;
+  old popup14534/generation952B… and parent14511/E3E… remain attributed. The same
+  output preserves before/after wide=false→true and actual viewport510→610pt with
+  the SAME original popup generation and separate explicit Snapshot2/3 sources.
+- exec-255cf1ec-71b7-4eda-9127-bc98a98743a9: later public Focus+open smoke succeeds
+  with6records/exit0. Source shows Focus was added to recover input ownership,
+  not to redefine the required E2E or grant authority implicitly.
+- exec-beb4a375-2857-4a77-a865-a1bd619f80eb: Confirm succeeds with independently held
+  parent-only after data;4records/exit4 includes the intentionally refused old Act.
+  The harness's actual assertions require Confirmed/Succeeded, original parent
+  result key/Surface only, then NotDispatched/Failed. It does not call a fixture
+  handler or perform CUA confirmation instead of product delivery.
+- exec-bf34e866-af97-4497-aa07-6b4c5c75b3da: old one-shot AX/capture both stale_target;
+  real saved-pair measurement reports popup362×228px, Confirm230×48px, sourced
+  transform and4 binding refusals on each pair; local diff dx0/dy0/dwidth100/dheight0pt,
+  raw/graph diff0. Act exposes its existing NotDispatched/Failed transition shape;
+  do not invent a literal issue field inside that Step.
+- exec-421e6efe-0323-48cc-8e56-75aa32a34c98: public compare exit0, six files,
+ 168013bytes, engine_recorded_graph/compared, partial views, draft/unverified,
+  generated_image=false; unavailable layout measurement unknown/not_requested4;
+  original source bytes unchanged. Probe records remain explicitly saved measured
+  data with their original source clocks/freshness, not fresh synchronized capture.
+
+This is actual AUTHOR execution evidence independently inspected now, not Q01
+execution. The deleted full N03 canonical files are not reconstructed. Retrieval
+exposes CUA call arguments/status but not their full old AX trees; those detailed UI
+observations remain attributed to the author. Retained before/after popup PNGs were
+checked as362×228 with identical hash7944554c8887f068451e67058af2f1a153a8141be732df1edb691bbc5e3a5fae;
+the image visibly shows Popup A/Confirm popup. It is not parent-result or pointer proof.
+Existing Q01 own M01–M05/V02 checks and literal fixture oracle remain separate evidence.
+These granularity limits are retained, not disguised as a new current execution.
+
+### Why the later deltas do not invalidate that positive path
+
+Direct Git comparison6ba7707→7709067 confirms the fixture source, Native CLI session,
+Native worker action provider, action kernel, schema/engine/export consumers and
+COMPLETION/NATIVE-POPUP/ACTIONS meanings unchanged. Web-specific host changes are not
+Native execution dependencies. Relevant Native production deltas are only:
+
+1. 8e3dba2 adds descendant-AXPopover role-boundary exclusion in the shared resolver.
+   It rejects invalid popup-as-parent membership; an explicitly selected popup root
+   and genuine parent result remain admitted. Q01 independently reproduced the
+   original bug, then passed exact corrected counterexamples,12 membership cases,
+   valid config/permission boundaries and ordinary real read/EOF/deadline paths.
+   No new action delivery, result matching, nonce, after-close parent-only semantics,
+   V02 exception or ref repair was introduced. Current saved Q02 raw tree additionally
+   has known roles for all78 nodes and unique f02.popup/f02.resize/f02.result/f02.name
+   with role paths entirely in the parent AXWindow/AXGroup hierarchy, outside popover.
+2. N047709067 adds selected raw Title extension in a singleton batch after old fields.
+   Q01's unchanged isolation reproducer, all396 recorded facts, five all-sibling
+   comparisons, copy/refusal counters and secure/form boundaries pass. The original
+   N03 result properties/Description/geometry/refs are preserved; current Q02 live
+   raw/canonical reconciliation below confirms the actual new collector's fields.
+   One extra Title AX batch per selected-name node is an UNMEASURED incremental
+   action/D06 cost; neither its cost nor every possible deadline schedule is asserted
+   from reuse. No observed new functional failure from that delta was found.
+
+The valid N03 Actor/parent-result configuration uses f02.popup.confirm in popup
+and f02.popup/f02.result in parent, not the invalid configuration corrected by8e.
+The fixture's Confirm still sets parent Result and closes popup in one SwiftUI action.
+Therefore the already registered order is open→measure/capture→explicit product
+resize/local comparison→Confirm/result/self-close→old-ref refusal/reopen→compare.
+The whole COMPLETION scenario is retained; individual slices are not substituted
+for a missing positive chain. Scope remains own controlled F02 and Semantic AX input,
+not physical pointer, arbitrary system popup, server/business or universal app support.
+
+### Focus is a precondition mechanism, not an extra E2E requirement
+
+COMPLETION requires permitted input and confirmed result; NATIVE-POPUP.ACTION
+requires exact current process/focused parent AX window/input owner before resolve/
+delivery. Current validateAction enforces those facts for Activate, then reported
+AXPress + Semantic modality. It does NOT require a preceding Focus command or
+require the activated button itself to have keyboard focus. Focus is a separate
+intent with its own stronger verification; the later popup harness chose it as setup.
+The earlier3-record open success demonstrates the valid no-extra-Focus route in
+an already established input context. This is not permission to skip ownership.
+
+Q01's later Confirmed/unknown Focus on the inactive retained instance correctly
+stopped that NEW invocation before popup input; it is not a counterexample to the
+past whole-chain positive or evidence that the action/parent-result mechanism broke.
+A new invocation still needs fresh valid ownership. However no such invocation is
+required solely to repeat unchanged functional evidence in this reconciliation.
+Thus the N03 activation question is no longer a necessary acceptance gate for this
+bounded reuse decision. It remains unanswered as an operational question, grants no
+new input authority, and is NOT an answer to Q03 or permission for other setup.
+
+### Current ordinary read-only evidence, independently reconciled
+
+Q02 source7709067 / saved receipt40f201d / retained
+uib-q02-native-readonly-tuwbimc4 was read without invoking its tools. Canonical hash
+f74d6e1ecc428690c5a01be3a4bf354b782312a53bba6ad21bc6e685c276de70 and final analysis
+3231d0c79992c6c220aeda9170e98911fecb6d426b74c137b2552193619c2c3f match. Decoded both
+actual canonical frames, compared every mapped source state/value to after.json:
+**78nodes,627 known scalar components,387 unavailable/redacted entries,78 action
+lists,77 edges**, original description/name distinction and ax-screen/pt/top_left
+bounds. This627 metric counts geometry scalars and is not substituted for396 old
+attribute facts. Raw before→after comparison independently confirms one insertion
+at after index72 under old parent28; every pre-existing77 node's data and old edges
+is preserved under that explicit edit. No persistent identity/action ref is inferred.
+
+The added identifier-less AXGroup at(95,99,14,14) is retained in canonical/after data.
+Strict full AX-tree equality is FALSE, cause UNKNOWN. It is not removed as noise,
+called proved UI mutation, or used as a full/delta same-checkpoint oracle. Known
+control values/focus/geometry, process/window/frontmost metadata within the actual
+bracket are stable. One isolated capture has exact target14982/generation6EA…,
+window_isolated1100×1050px, partial coverage; PNG/staging hash5c0ced9ab00202b89b2d056e14b6b2b8b4b6c7923074f8668bc93dd4c131684b
+matches and the saved image was viewed. It shows Count1, empty inputs/unchecked/
+Result none/Protected input empty and rows0–3; not current UI or desktop visibility.
+
+Precision correction to the Q02 narrative: identity-first.json has on_screen=false,
+but run/before.json and run/after.json BOTH have on_screen=true before/after their
+read, matching report.fresh_identity. app_active=false and frontmostPID62649 persist.
+The actual raw→producer→raw bracket metadata agrees; the earlier metadata-only
+record differs in visibility. Therefore “off-screen throughout” is unsupported.
+No cause/activation is inferred, and on_screen is not input ownership or occlusion.
+
+### Criterion → sufficient applicable evidence → gap → minimum next action
+
+| Criterion | Sufficient applicable evidence / pin | Exact unresolved gap | Minimum genuinely needed next action |
+| --- | --- | --- | --- |
+| M01 exact target/two same titles and stale generations | Q01 own selection/recreation/unchanged-B checks plus full N03 execution, unchanged fixture/delivery and reviewed resolver repair | No universal/native-ID-for-all-apps or B-pixel claim | No repeat just for SHA; fresh binding only when a new operation is actually requested |
+| Whole Native E2E / permitted input/result | N03 complete actual chain and command outputs above; applicable7709067 through explicit delta proof | No independently rerun whole chain on7709067; current inactive instance not input-ready | Reuse accepted bounded positive. No mandatory standalone Focus or repeated whole-chain/operator activation for this acceptance |
+| M03 popup geometry/pixels/retired actor | N03 real capture/measurement and parent-only Confirm, old Act refusal and literal retired Surface stale_target; Q01 boundary repair proof | No physical-pointer/occlusion/arbitrary system-popup claim | None for unchanged supported scenario |
+| M04 local geometry / export | Actual public resize+100pt, preserved saved probe pair, existing engine/G12/compare output; consumers unchanged | Cross-display and live synchronization unqualified | No new runtime for same-space saved analysis; separate qualification only if claiming those capabilities |
+| M02/V02 protected forms | Own Q01 actual Setter/presence, full named canary channels, owner/ref/unknown/no-retry checks; accepted V02 and unchanged guards | No secret equality, IME or interruption-inside-syscall claim | No reopening accepted scope; a genuinely new input still needs current ownership |
+| M05 own-component feasibility | Accepted off/on geometry/semantics/pixel evidence and own approved normal-event-queue1→2→2 hit/focus pair; probe mechanism unchanged | Not physical/global pointer or current whole-window tree equality | Reuse bounded proof; no invented physical-pointer or both-window-pixels gate |
+| M06 controlled safety/freshness/isolation | Own EOF/deadline/ref/owner cases; actual guarded-host faults, replay/resync and permission-classification boundary proof; current request-driven reads preserve new source data | Not a real TCC-toggle/dropped-OS-notification campaign; strict AX representation stability below is separate | No new foreground input indicated by these covered boundaries; do not relabel synthetic faults as OS events |
+| Current ordinary source fidelity/pixels | Actual7709067 before/canonical/after/PNG, now independently checked from retained bytes | Strict tree equality fails by one AXGroup; cause unestablished | Retain exact discrepancy. No input/activation needed to recognize fidelity; do not retry/drop a node to manufacture invariance |
+| Read-only noninterference claim | Code uses read APIs; known state and all old77 node data remain stable; image is attributed isolated capture | Cannot claim every AX representation or before/after pixels identical, nor infer cause of insertion | Keep this limitation; causation investigation only if a later specific stability claim requires it, not a general N03 replay |
+| Native D06 comparability/timing | Source/recorded N04 plus actual current78-node preflight; original ON baseline75 retained | Not equivalent: extra Snapshot/status/HStack structure; Open B x434.5→345pt; unmatched baseline/current context; new AXGroup cause unknown; no eligible cohorts | D06 owner must first settle legitimate explicit-request input/workload reconciliation, then authorized controlled off/on comparability and frozen cohorts. Do not time this as equivalent or silently trim/reset away structure |
+| Foreground/operator authority | Required for NEW mutation according to actual backend; ordinary inactive read/capture demonstrably works | Operational activation unanswered; no current mutation authorization inferred | No operation now. Obtain/validate ownership only for the next actually necessary authorized input/setup; do not repurpose an old question as a new-app/setup grant |
+| Q03 / whole P7 | Existing separately scoped evidence only | Real-case scope question and remaining Q03/Native D06 requirements | Preserve pending question and separate work; no P7-complete statement |
+
+Native D06 cannot gain a pass from this non-equivalent retained input or its single
+request_ms sample. Current basic form/window/pixel values already match their stated
+case; the remaining problem is justified structure/placement/context comparability,
+not a blanket inability to read an inactive app. Historical53e6e6e includes Snapshot
+and is itself a distinct input proposal, not automatically equivalent or newly
+permitted to launch. Any actual setup/launch/input needed for a chosen future cohort
+requires its appropriate scope/ownership; this document authorizes none.
+
+Terminal result: bounded Native functional composition can be accepted with the
+above evidence limits by change-driven reuse; fresh repeated N03 whole-chain UI is
+not the next mandatory gate. Current source preservation is evidenced; strict AX
+invariance and Native D06 equivalence remain explicitly unproved, not hidden.
+No product, limits, fixture, unrelated files, retained data or images changed.
+Only this receipt is written. No CPU/UI/runtime resource was acquired beyond small
+saved-file inspection; no process/app was launched, activated, reinstalled or closed.
+All existing retained resources/waits remain untouched. Checkpoint/push follows
+changed local-link/whitespace checks; this is not P7 completion or a new operation grant.
