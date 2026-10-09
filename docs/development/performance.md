@@ -273,3 +273,19 @@ each timer.20fresh processes and100reused-process calls; no live collection or n
 latency threshold. Native response serialization is not dispatched in Rust; do not
 replace that observation with an invented0ms measurement or Web stage estimate.
 Keep this diagnostic binary distinct from the unmodified live caller/worker.
+
+## Bounded SDK reuse source candidate
+
+The current candidate uses the existing bounded session primitive for a dedicated
+read-only window-AX helper and an independent capture binding. It adds no public
+API/configuration flag and does not expand the form-only Native session contract.
+Each Observe revalidates identity/permissions and releases its AX handles/graph;
+idle waiting performs no collection. Capture dispatch still waits for AX ACK and
+holds its lease until confirmed reap. New source needs focused Q01 lifetime/binding
+acceptance plus complete same-input off/on cohorts before any D06 pass.
+
+The driver creates one trusted AX artifact root per caller process, with numeric
+parent-operation subdirectories; capture uses a fresh per-call output root. This
+prevents repeated artifact overwrite while reusing only the SDK connection. The
+new private protocol check verifies strict flags/channels/Observe routing; old form,
+PROTECTED, capture and ordinary focused-AX paths remain separate.

@@ -170,12 +170,22 @@ fn requested_series() {
         {
             host.configure_native_helpers(
                 session,
-                NativeHelperBinding::authorized(
+                NativeHelperBinding::form_session(
                     SpawnSpec::new(Path::new(helper))?,
-                    *channels,
                     configuration.as_bytes(),
+                    180_000,
                 )?,
             )?;
+            if channels & 2 != 0 {
+                host.configure_native_helpers(
+                    session,
+                    NativeHelperBinding::authorized(
+                        SpawnSpec::new(Path::new(helper))?,
+                        2,
+                        configuration.as_bytes(),
+                    )?,
+                )?;
+            }
         }
         emit(
             serde_json::json!({"kind":"attached","setup_ms":started.elapsed().as_secs_f64()*1000.0}),
@@ -215,7 +225,7 @@ fn requested_series() {
                 loop {
                     let binding = NativeHelperBinding::authorized(
                         SpawnSpec::new(Path::new(helper))?,
-                        *channels,
+                        if channels & 2 != 0 { 2 } else { *channels },
                         configuration.as_bytes(),
                     )?;
                     match host.configure_native_helpers(session, binding) {

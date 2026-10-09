@@ -17,7 +17,7 @@ enum Stage {
     Body,
 }
 pub(super) struct NativeBroker<'a> {
-    channel: u8,
+    pub(super) channel: u8,
     ticket: u64,
     helper: Option<HelperHandle<'a>>,
     stage: Stage,

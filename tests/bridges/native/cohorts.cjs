@@ -32,7 +32,12 @@ async function run(){
  const native=dir=>JSON.stringify({binding,scope_id:context.scope_id,collection:'window-ax',identity_path:manifest.identity_path,acquisition_limits:profile,acquisition_evidence:true,artifact_directory:dir,pixel_policy:'owned_synthetic_fixture'});
  const descriptor={schema_version:'0.1.0',artifact:{kind:'session',data:{session_id:context.session_id,plugin:context.plugin,supported_versions:['0.1.0'],target:context.target,surfaces:context.surfaces,allowed_scopes:[context.scope_id],capabilities:['external_semantics','rendered_capture'].map(channel=>({channel,operation:'observe',status:'partial',reason:'owned-F02-Q02'}))}}};
  const configPath=path.join(output,'host-config.json');save(configPath,{descriptor,provider:{backend:'native',helper,configuration:native(path.join(output,'unused')),channels:3}});
- function launch(){return phase==='baseline'?directClient(baseline,[manifestPath,fixture,path.join(__dirname,'acquisition/profile.json')]):client(executable,configPath);}
+ let peerNumber=0,axRoot;
+ function launch(){
+  if(phase==='baseline')return directClient(baseline,[manifestPath,fixture,path.join(__dirname,'acquisition/profile.json')]);
+  axRoot=path.join(output,`ax-peer-${peerNumber++}`);const local=path.join(output,`peer-${peerNumber}.json`);
+  save(local,{descriptor,provider:{backend:'native',helper,configuration:native(axRoot),channels:3}});return client(executable,local);
+ }
  const observations=new Set();
  async function one(driver,cohort,index,coldStart){
   const sampleDir=path.join(output,`${cohort}-${index}`);fs.mkdirSync(sampleDir,{mode:0o700});const images=path.join(sampleDir,'images'),start=now();let sample,row={index};
@@ -50,7 +55,7 @@ async function run(){
     const stages={};for(const o of [...ax.observations,...pixels.observations]){assert.equal(o.freshness,'current');assert.equal(o.answer_source,'live');assert(!observations.has(o.id));observations.add(o.id);stages[o.channel]=(o.end-o.start)*(o.time_unit==='seconds'?1000:1);}
     assert.equal(pixels.captures.length,1);const capture=pixels.captures[0];assert.equal(capture.capture_kind,'window_isolated');assert.deepEqual(capture.capture_target,context.surfaces[0]);assert.equal(capture.pixel_width,1100);assert.equal(capture.pixel_height,1050);
     const image=path.join(images,'capture','capture.png'),metadata=read(path.join(images,'capture','capture-metadata.json'));
-    Object.assign(row,{ax_ms:stages.external_semantics,capture_ms:stages.rendered_capture,capture_api_png_ms:(metadata.capture_call_end-metadata.capture_call_start)*1000,request_ms:sample.request_ms,domain_usage:sample.domain_usage,fidelity:fidelity.counts,response_bytes:sample.frames.reduce((a,f)=>a+Buffer.byteLength(f.canonical),0),png_bytes:fs.statSync(image).size,image,acquisition:read(path.join(images,'ax','acquisition.json'))});
+    Object.assign(row,{ax_ms:stages.external_semantics,capture_ms:stages.rendered_capture,capture_api_png_ms:(metadata.capture_call_end-metadata.capture_call_start)*1000,request_ms:sample.request_ms,domain_usage:sample.domain_usage,fidelity:fidelity.counts,response_bytes:sample.frames.reduce((a,f)=>a+Buffer.byteLength(f.canonical),0),png_bytes:fs.statSync(image).size,image,acquisition:read(path.join(axRoot,`observe-${sample.number}`,'ax','acquisition.json'))});
     assert.equal(fidelity.matched,true,JSON.stringify(fidelity.errors.slice(0,2)));assert.equal(ax.nodes.length,76);assert.deepEqual(ax.coverage.fields,fields);for(const node of ax.nodes)assert.deepEqual(node.properties.map(p=>p.field),fields);
    }
    const png=fs.readFileSync(row.image);assert.equal(png.readUInt32BE(16),1100);assert.equal(png.readUInt32BE(20),1050);row.png_sha256=hash(row.image);row.quality='passed';

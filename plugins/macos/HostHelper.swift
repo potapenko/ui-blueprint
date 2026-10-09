@@ -27,6 +27,11 @@ import Darwin
             let io = try NativeDescriptorIO()
             let input = try NativeHostProtocol.receiveInput(io)
             if input.control.flags >= 128 {
+                if input.control.flags == 128,
+                   (try? NativeConfiguration.decode(input.configurationBytes).collection) == "window-ax" {
+                    try await collectWindowSession(io: io, first: input)
+                    return
+                }
                 try NativeFormSession.run(io: io, first: input)
                 return
             }
@@ -115,6 +120,54 @@ import Darwin
             // No raw error/UI data on stderr or private status. Missing FD5 status
             // is a generic helper failure; it must not mimic a Rust quota record.
             _exit(2)
+        }
+    }
+
+    // Read-only SDK lifetime only: every Observe owns and releases its AX handles,
+    // graph and frame. Waiting for the next bounded command performs no UI work.
+    @MainActor private static func collectWindowSession(io: NativeDescriptorIO, first: NativeInbound) async throws {
+        let epoch = first.control.epoch
+        var previous: UInt64 = 0
+        var input = first
+        while true {
+            guard input.control.flags == 128, input.control.operationClass == 8,
+                  input.control.channel == 0, input.control.epoch == epoch,
+                  input.control.operation > previous else { throw NativeProtocolError.control }
+            do {
+                let command = try NativeHostProtocol.fixtureCommand(input)
+                guard command.configuration.collection == "window-ax" else { throw NativeProtocolError.configuration }
+                let remaining = command.deadline - NativeDescriptorIO.now
+                guard remaining > 0 else { throw NativeProtocolError.expired }
+                let watchdog = DispatchWorkItem { _exit(124) }
+                DispatchQueue.global().asyncAfter(deadline: .now() + remaining, execute: watchdog)
+                defer { watchdog.cancel() }
+                var manifest = command.configuration.binding.manifest
+                manifest["identity_path"] = command.configuration.identity_path
+                let base = command.configuration.artifact_directory.map { URL(fileURLWithPath: $0, isDirectory: true) }
+                let directory = base.map { $0.appendingPathComponent("observe-\(input.control.operation)", isDirectory: true) }
+                if let base {
+                    // Trusted setup plus numeric parent control, never UI text.
+                    if mkdir(base.path, mode_t(0o700)) != 0 && errno != EEXIST { throw NativeAcquisitionError.io }
+                    let fd = open(base.path, O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC)
+                    guard fd >= 0 else { throw NativeAcquisitionError.io }
+                    defer { close(fd) }
+                    var info = stat()
+                    guard fstat(fd, &info) == 0, info.st_uid == geteuid(), info.st_mode & 0o077 == 0 else { throw NativeAcquisitionError.io }
+                }
+                try await Collector.collect(document: command.document, manifest: manifest,
+                    directory: directory, mode: "window-ax", sequence: command.control.ticket,
+                    limits: command.configuration.acquisition_limits,
+                    evidence: command.configuration.acquisition_evidence == true,
+                    wireCap: command.replyCap, selectedChannel: "external_semantics", deadline: command.deadline) { frame in
+                        try io.reply(frame, cap: command.replyCap, deadline: command.deadline)
+                    }
+            }
+            previous = input.control.operation
+            // Existing parent session lifetime is explicitly capped at300s.
+            // Its shorter caller deadline/detach still owns termination/reap.
+            do { input = try NativeHostProtocol.receiveInput(io, until: NativeDescriptorIO.now + 300) }
+            catch NativeProtocolError.closed { return }
+            catch NativeProtocolError.expired { return }
         }
     }
 }

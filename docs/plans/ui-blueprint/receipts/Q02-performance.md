@@ -1,5 +1,101 @@
 # Q02 performance — Web/Rust complete, Native release-profile verification pending
 
+## Release campaign and bounded SDK reuse candidate — 2026-10-09
+
+Authority remains the full Q02 packet/user benchmark instruction; D02@2 permits
+multiple explicit requests/no idle collection and process lifetime by session.
+Root confirmed this implementation boundary, preserving one channel/helper,
+all actual data/identity/permission/deadline/cancel/EOF/reap/ACK and resource gates.
+No form-only NATIVE-SESSION@3 scope expansion, public API/CLI/schema/Cargo change.
+Reuse concerns the SDK process/connection, never a Snapshot or observation handle.
+Source7709067 release (-O) campaign completed after Mac CPU/runtime release;
+fresh direct API baseline off/on preceded both candidate modes. Historical Onone
+and all release failures remain unchanged. Four groups each20cold/100warm plus
+separate first warm call; no censoring/retry-to-pass. Registry33/D06@2/input@1 basis.
+
+| Phase | cold/warm n | warm AX p50/p95 ms | capture | outer | cold outer | failures |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| release-baseline-off-complete |20/100 | 33.842/39.772 | 90.811/102.859 | 132.193/149.238 | 264.602/270.753 | 0 |
+| release-baseline-on |20/100 | unavailable | unavailable | 133.027/149.509 | 280.099/304.962 | 2 |
+| release-candidate-on |20/100 | 58.055/63.417 | 141.683/147.823 | 338.365/348.917 | 374.195/469.939 | 1 |
+| release-candidate-off |20/100 | 57.801/63.761 | 145.762/157.810 | 353.027/389.613 | 355.024/363.672 | 2 |
+
+Release candidate numeric AX/capture/cold gates pass, combined fails in BOTH modes.
+Native quality remains open: baseline-on cold13 loses one anonymous group;
+warm98 opaque acquisition failure; candidate-on warm21/off warm22 lose the same
+group; off warm65 reports invalidUIElement. Full arrays, original samples/PNGs and
+all five failures retained. On cold max830.335 and off warm max531.872 remain.
+Q01 independent diagnostic18eeceb retains all five failures; it establishes no
+same-call lost/misreported known data and requests minimal boundary evidence.
+[q01-quality-handoff.json] is retained in the shared task-temp root for Q01/root;
+exact docs/pins and all paths are in that file, without an agent verdict.
+
+Source-local timing: three test-only live helper traces measure CG window-owner
+query34–39ms PER helper, file/process metadata<1ms and permission7–9ms. Actual
+NativeJSONFrame.encode about9ms AX/<0.4ms capture; SDK input/decode<1ms. All clocks
+helper-local, no percentile subtraction/sum or replacement live gate. Direct public
+CG description-array alternative also costs30–40ms in three fresh processes;
+no identity check/API replacement justified. Actual codec20fresh/100reused per
+variant: native Swift sorted p95 7.912ms, unsorted6.540ms, all values/array order/LF
+match. Sorting change rejected, production Foundation codec unchanged. All trace
+binaries/deltas/raw evidence remain separate from unmodified source7709067 cohorts.
+
+Needed minimal quality diagnostics: AXBoundary.swift wraps actual NativeAXAccess
+only in task-temp diagnostic copies; parent28/node70 operation-local aliases,
+count/range/batch/action status/order, no UI values/raw pointers,64-entry cap.
+Forty explicit AX-only calls stop on first anomalous result; all40 returned76nodes,
+so the original failures were NOT reproduced or reclassified as passes. Trace data
+is in ax-boundary-run; no whole Native/N03/Web campaign repeated. DirectBaseline's
+existing catch now records bounded stage+typed refusal and refuses a second frame
+after output failure. Malformed-command check verifies command/invalid_value and
+orderly close; it cannot recover historical warm98's missing reason.
+
+Chosen source repair candidate: existing bounded AX resident-session machinery plus
+independent one-shot capture binding. No new public Rust API/flag/config field.
+Capture configuration may change only while no operation is active and the sole
+remaining helper is the registered resident AX peer; AX executable/configuration
+is untouched. Parent root includes fixed extra binding storage through existing
+size_of precharge (+32,704bytes in this profile), still below32MiB. Parent still
+requires earlier AX ACK before capture; global capture lease remains until reap.
+
+HostHelper's separate read-only window-AX loop accepts ONLY phase0 Observe/channel0/
+window-ax with same epoch and increasing parent operation; action/form/PROTECTED
+branches unchanged. Existing protocol guard accepts flag128 only in this bounded
+case. Each call invokes actual Collector, all identity/permission checks and fresh
+AX traversal; do-scope releases graph/AX handles/frame before waiting. No idle UI
+collection or retained result. Per-call watchdog/deadline remains, parent explicit
+session lifetime<=300s/detach owns termination/reap; bounded quiet input wait300s
+uses that existing maximum, not the one-shot8s bootstrap cutoff. Numeric operation
+names under trusted private artifact root keep exclusive writes, not UI filenames.
+Current form contracts/one-shot capture/focused provider and historical collectors
+remain protected. This is a source candidate, not accepted release or D06 pass.
+
+Owned write set: supervisor.rs/native_broker.rs, HostHelper.swift/HostProtocol.swift,
+existing performance.rs/cohorts driver, DirectBaseline/AXBoundary/private protocol
+check bridge, recipe and this receipt. Temporary new observation_session constructor
+was discarded: public API unchanged. Exact source diff/pins retained for Q01 review.
+
+Verification: Swift -O/macOS14 build; three actual AX+capture calls retain76nodes,
+same AX helper PID, distinct current observations, and close all workers/helpers/
+reservations. Changed Count1→2 is observed on same SDK process; restored Count1/
+Name focus through own controls. A later call after explicit180s session expiry
+returns ResyncRequired with committed0/missing3, never stale fallback. Freshness
+wrapper initially had closed stdin (test setup issue); only proved own wrapper was
+terminated, child EOF/shutdown retained. Second PTY wrapper closed explicitly.
+Protocol checks7/7 cover ordinary/resident read-only acceptance and invalid phases/
+channels/mutation refusal; they use decoded JSON just like the real receiver.
+Host suite+Clippy pass after CLI web built and FD-sensitive suite ran serial.
+Initial missing CLI prerequisite and parallel FD census failure are retained as
+verification setup evidence; no product test expectation weakened. No full old
+Web/N03 pilot repetition. Root/Q01 focused affected lifetime/binding acceptance and
+new same-source complete Native cohorts remain necessary; task is still active.
+
+All task images/staging/directories remain in system temp without agent deletion.
+Own trace F02 process71517 was retired only after fresh exact identity verification;
+CPU/desktop released while preparing source acceptance. Build/diagnostic nonimages
+retained for Q02/Q01/root consumption, no other project/user resource altered.
+
+
 ## Actual Native Rust-stage replay — 2026-10-09
 
 The same approved full Q02 packet covers the remaining source-specific Rust report.

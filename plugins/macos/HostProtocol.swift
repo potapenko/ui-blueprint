@@ -274,9 +274,12 @@ struct NativeDescriptorIO {
     }
 
     static func fixtureCommand(_ input: NativeInbound) throws -> NativeCommand {
-        guard input.control.operationClass == 8, input.control.flags == 0 else { throw NativeProtocolError.control }
+        guard input.control.operationClass == 8, [0,128].contains(input.control.flags) else { throw NativeProtocolError.control }
         let configuration = try NativeConfiguration.decode(input.configurationBytes)
         guard configuration.collection != "form" else { throw NativeProtocolError.configuration }
+        if input.control.flags == 128 {
+            guard input.control.channel == 0, configuration.collection == "window-ax" else { throw NativeProtocolError.control }
+        }
         let doc = input.document, submit = input.control, start = input.started, deadline = input.deadline
         guard
               doc["schema_version"] as? String == "0.1.0",

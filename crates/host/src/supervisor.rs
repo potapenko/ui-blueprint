@@ -80,6 +80,7 @@ struct RuntimeState<'a, P: ProcessPlatform> {
     workers: [Option<Worker<'a, P::Child>>; 4],
     shutting_down: bool,
     native_bindings: [Option<(u64, NativeHelperBinding)>; 4],
+    capture_bindings: [Option<(u64, NativeHelperBinding)>; 4],
     _root: RuntimeRoot<'a>,
 }
 pub struct RuntimeHost<'a, P: ProcessPlatform + 'static> {
@@ -106,6 +107,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
             workers: std::array::from_fn(|_| None),
             shutting_down: false,
             native_bindings: std::array::from_fn(|_| None),
+            capture_bindings: std::array::from_fn(|_| None),
             _root: root,
         });
         Ok(Self { domain, state })
@@ -413,16 +415,31 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
         if worker.web {
             return Err(HostError::PermissionDenied);
         }
+        let capture_only = binding.channels == 2
+            && state.native_bindings[session.slot]
+                .as_ref()
+                .is_some_and(|(epoch, prior)| {
+                    *epoch == session.epoch && prior.channels == 1 && prior.residency.is_some()
+                });
         if state.shutting_down
             || slot.phase != SlotPhase::Attached
-            || worker.helpers.iter().any(Option::is_some)
+            || worker
+                .helpers
+                .iter()
+                .flatten()
+                .any(|helper| !capture_only || worker.resident != Some(helper.handle))
         {
             return Err(HostError::Busy);
         }
         if binding.bytes().len() + CONTROL_BYTES > self.domain.limits.control_bytes {
             return Err(HostError::ResourceLimit);
         }
-        state.native_bindings[session.slot] = Some((session.epoch, binding));
+        if capture_only {
+            state.capture_bindings[session.slot] = Some((session.epoch, binding));
+        } else {
+            state.capture_bindings[session.slot] = None;
+            state.native_bindings[session.slot] = Some((session.epoch, binding));
+        }
         Ok(())
     }
     pub fn submit_native_observe(
@@ -552,6 +569,7 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                     worker.reservation.child_reaped();
                     state.workers[index] = None;
                     state.native_bindings[index] = None;
+                    state.capture_bindings[index] = None;
                     return Ok(HostEvent::Closed { session: handle });
                 }
                 if worker
@@ -571,12 +589,17 @@ impl<'a, P: ProcessPlatform + 'static> RuntimeHost<'a, P> {
                 .as_ref()
                 .filter(|(epoch, _)| *epoch == worker.reservation.epoch)
                 .map(|(_, b)| b);
+            let capture_binding = state.capture_bindings[index]
+                .as_ref()
+                .filter(|(epoch, _)| *epoch == worker.reservation.epoch)
+                .map(|(_, b)| b);
             match pump::<P>(
                 worker,
                 now,
                 self.domain.limits.cleanup_ms,
                 &mut state.platform,
                 binding,
+                capture_binding,
             ) {
                 Ok(Some(event)) => return Ok(event),
                 Ok(None) => (),
@@ -818,6 +841,7 @@ fn pump<'a, P: ProcessPlatform>(
     cleanup_ms: u64,
     platform: &mut P,
     binding: Option<&NativeHelperBinding>,
+    capture_binding: Option<&NativeHelperBinding>,
 ) -> Result<Option<HostEvent<'a>>, HostError> {
     // The authoritative deadline was checked before this bounded nonblocking step.
     if let Some(terminal) = read_fatal_status(worker)? {
@@ -826,10 +850,15 @@ fn pump<'a, P: ProcessPlatform>(
         ))));
     }
     if let Some(mut broker) = worker.broker.take() {
+        let selected_binding = if broker.channel == 1 {
+            capture_binding.or(binding)
+        } else {
+            binding
+        };
         let done = broker.advance::<P>(
             worker,
             platform,
-            binding.ok_or(HostError::InvalidState)?,
+            selected_binding.ok_or(HostError::InvalidState)?,
             now,
         )?;
         if !done {
