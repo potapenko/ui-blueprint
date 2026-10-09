@@ -24,19 +24,28 @@ Authority: прямое разрешение пользователя запис
 Ожидания разрешения на запуск/real-case collection сняты. Предыдущий blocked
 handoff ниже — история, не текущее состояние и не препятствие работе.
 
-- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: running, turn `01a11ffd-4e3c-7001-bf41-e419285d859c`; полный Native D06
-  outcome по последнему разделу [пакета](packets/Q02-performance.md). Владеет
-  Native desktop/тихим CPU до terminal resource release. Web thresholds и
-  Rust-stage evidence сохранены; Native timing ещё не выполнен.
-- Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51` и Web advisor
-  `01a1102f-e21d-7251-9597-c29a1c66d088`: параллельная подготовка реальных
-  RC03/Director наборов для Q03 по [продолжению](packets/Q03-recorded-usefulness.md).
-  Live collection после release Q02; источник требований — их текущие проекты.
-  Раздельные receipts/data paths; общий desktop последовательно Mac, затем Web,
-  если Web не может использовать независимый browser без foreground.
-  Dispatch подтверждён: Mac turn `01a11ffd-5543-7973-8eeb-ed9f13636269`,
-  Web turn `01a11ffd-5ad1-7d10-ae2d-78eb4f6a2609`; оба active. Web сообщил
-  готовность подготовки и waiting_resource для live-сбора после Q02 release.
+- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: running, turn
+  `01a11ffd-4e3c-7001-bf41-e419285d859c`. Workload registration `9e08e05`
+  pushed before timing: D06@2 / Native request-only@1 / acquisition@3.
+  Первые серии завершены; author reports candidate-on combined warm p95
+  362.73ms при300ms. Затем установил harness build mismatch: Swift helper без
+  `-O`, distribution использует `-O`. Неудачные серии сохранены, это не pass и
+  пока не доказанный product bottleneck. Нужны полные release-profile серии;
+  production source не менялся. Полный receipt/остальные числа ещё ожидаются.
+  Cursor297 подтверждает release: оба own fixture процесса/helpers/callers закрыты.
+  Сейчас только offline подготовка; build/live возобновляются после Mac/Web release.
+  Ранее принятые Web/Rust результаты сохранены.
+- Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`: подготовка terminal
+  waiting_resource получена; после Q02 cursor297 передан Native desktop для
+  полного RC03 сбора. Existing chat resumed; самостоятельный setup→dataset→restore→
+  commit/push→release по [пакету](packets/Q03-recorded-usefulness.md).
+- Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: подготовка завершена,
+  Q02 release передан. Полный Director dataset собирает параллельно в независимом
+  background browser. Foreground принадлежит Mac; при его необходимости ждёт
+  Mac release. Site tracked write set пуст, receipt/data handoff вернёт root.
+- Очередь ресурсов: Mac desktop + Web independent browser сейчас; после обоих
+  release вернуть Q02 quiet CPU/desktop для полного release-profile benchmark.
+  Разрешение пользователя на запуски действует; новых permission gates нет.
 - Q03 saved-data consumer `01a11c24-e7cd-7982-a070-c05e0721ad81` пока архивирован;
   возобновить на готовых raw datasets, без повторения принятой fixture работы.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
