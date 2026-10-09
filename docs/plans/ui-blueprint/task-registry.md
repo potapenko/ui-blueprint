@@ -4,7 +4,7 @@
 - Правила исполнения и восстановления: [ранбук](execution.md); этот реестр хранит
   текущее состояние, а не вторую копию правил. Прямой запрос пользователя требует
   сохранять правила push, чатов/параллельности и архивирования в файлах.
-- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` снова подтверждён `active` при продолжении цели. Исторические записи active ниже не являются текущим статусом.
+- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` подтверждён `blocked` 2026-10-09 после трёх последовательных проверок отсутствия ответов на обязательные решения. Объём P0–P7 не уменьшен; это не completion и не пользовательская pause.
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
 - Объём: P0–P7, рабочие чаты и follow-up по плану; root не реализует и не проверяет продукт.
@@ -149,21 +149,23 @@ Root получает итог или конкретный блокер; про�
   read. Commit/push command exit0 includes verified remoteSHA. Thread ended
   interrupted/notLoaded after saved delivery; no unfinished owned changes/resources.
   Root archived it explicitly; no resume merely to obtain another final message.
-- Remaining goal audit, first complete dependency wait (2026-10-09): all current
-  execution chats terminal, internal subagent inventory contains root only. Native
-  D06 input/context decision is awaiting user response to concrete76-node proposal;
-  Q03 real-case data/scope question remains unanswered. Final whole-P7 acceptance/
-  compatibility handoff depends on those results, not another general audit now.
-  No new runtime/contract change is authorised by elapsed time. Goal stays active;
-  this is blocking-condition observation1, not goal completion or pause.
+- Remaining goal audit: три последовательных goal turns подтвердили один и тот же
+  реальный blocker после завершения всех готовых задач. Q02/Q01 idle/completed,
+  I02 archived/saved; внутренние subagents отсутствуют. Native D06 workload/context
+  decision и Q03 real-case authority остаются без ответа, новых ready работ нет.
+  Host update_goal вернул `blocked` 2026-10-09. Не создавать циклы повторных QA,
+  новые tasks или обходить pending authority; P0–P7 не объявлен complete.
+  Возобновление после конкретных ответов и поддержанного host resume: Q02 принимает
+  утверждённые Native условия, регистрирует только разрешённый delta/baseline ДО
+  candidate timing и завершает Native gates; Q03 получает только разрешённый объём
+  данных. Затем итоговая whole-P7/compatibility acceptance по реальным результатам.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
-- Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
-  не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Native benchmark decision and Q03 scope await user; current I02 delivery complete.
-  Native live/performance
-  и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
-  Native поставка учитывает принятый N04 delta при итоговом candidate.
+- Все task-owned изменения сохранены/pushed. Current delivery ef45577 подтверждает
+  установку source063e709 с accepted Native7709067; ранее упомянутый a7c0416 —
+  историческая квалификация. В working tree только чужой after-title-spacing.png,
+  он не прочитан/изменён/staged. Следующий полезный вход — ответы пользователя,
+  а не очередное повторение завершённых проверок.
 
 ## История предыдущей группы самостоятельных задач
 
