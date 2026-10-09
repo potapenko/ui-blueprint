@@ -325,3 +325,16 @@ steps. A demonstrated need to change a protected public/semantic contract is an
 exact dependency, not implied authority. Coherent saved delta requires focused
 independent Q01 review for changed lifetime/binding risks; unchanged work stays closed.
 All original quality failures, full workload and numeric D06 gates remain mandatory.
+
+## Remaining-phase ownership handoff — 2026-10-09
+
+Source e641543 and focused Q01 acceptance9675c0b are saved; I02 current installed
+qualification6ff4943 and Q03b014cd4 are complete. Root transfers remaining Native
+measurement/quality execution to fresh visible task01a12127-5b94-7801-95cd-c35cf2c3ceab
+under [Q02-R packet](Q02-native-final-execution.md), preserving the full P0–P7 goal.
+Old Q02 must stop new source/runtime/timed work and finish/retain its exact state.
+It is still treated active until actual terminal status; timeout is not a failure.
+The new worker first stops ONLY the old Q02 turn through supported Codex UI if
+necessary, verifies terminal/resource ownership and preserves all work. No competing
+execution before that gate, no branch/worktree or process-kill workaround. No goals
+are paused/cleared. Required gates and historical failures remain unchanged.

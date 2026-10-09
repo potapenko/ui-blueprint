@@ -20,6 +20,29 @@
 
 ## Текущее продолжение — 2026-10-09
 
+### Remaining Native execution handoff
+
+- Accepted source e641543/Q019675c0b, current installation6ff4943 and Q03b014cd4
+  remain closed in their scopes. Native full timing/quality is still open.
+- Old Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c` remains authoritatively active
+  (turn01a1203f); no failed/stopped inference from a timeout. Root deliberately
+  retires its execution ownership at the saved accepted implementation boundary
+  because its large context and prolonged inter-step latency delay the prepared
+  remaining phase. It was explicitly told to stop new work and preserve handoff.
+- New visible task `01a12127-5b94-7801-95cd-c35cf2c3ceab`,
+  «Q02-R — Native замеры принятой сборки», local project0cb10b16, inherits model
+  with medium reasoning for the prepared execution. Fresh finite packet:
+  [Q02-native-final-execution](packets/Q02-native-final-execution.md).
+- State: handoff-only pending verified old-turn terminal status. New worker has
+  authority to stop exactly old Q02 using supported Codex UI, then verify terminal
+  state/remaining owned resources. No benchmark/build/source writer takeover before
+  that gate. Unsupported UI control returns an exact limitation, no competing run.
+- After safe handoff new Q02-R completes all required Native cohorts/quality report
+  using accepted source, exact shipping correspondence and unchanged gates. Product
+  code remains protected; any proved repair returns an exact owner dependency.
+  Root stays coordination-only, goal active; no new product scope or branch/worktree.
+
+
 Authority: прямое разрешение пользователя записано в [ранбуке](execution.md).
 Ожидания разрешения на запуск/real-case collection сняты. Предыдущий blocked
 handoff ниже — история, не текущее состояние и не препятствие работе.
