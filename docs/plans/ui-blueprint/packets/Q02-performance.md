@@ -165,3 +165,70 @@ only already-ready existing-task work; retain the still-open off/on/capture/cold
 rows rather than narrowing the goal. Read relevant Apple/QA/runtime routes before
 operations. Save the complete scoped result with checks, pins, invariance/cleanup,
 commit+push and exact remaining dependency, without per-command root grants.
+
+## Controlled request-only Native input comparison — 2026-10-09
+
+Q01 terminal21e0abf independently accepts the bounded whole N03 functional chain
+on current7709067 by explicit source-delta/evidence reuse. Repeating it or a separate
+Focus command is not a new acceptance requirement. New mutations still require
+fresh input ownership. The old operator activation question is not being answered
+or used as permission for this task.
+
+Authority for this distinct continuation is the original approved PLAN.UIB@1 P0/P7
+own-fixture setup/Native Q02 execution, and ROADMAP's delegated engineering choices.
+Root explicitly assigns Q02 the Native fixture/UI resource for this finite outcome.
+Prior no-launch/no-setup restrictions governed only the completed retained-instance
+read-only preflight; this paragraph replaces them ONLY within the scope below.
+Real applications, TCC/displays, global installation, input-owner bypasses and new
+branches/worktrees remain forbidden. Read applicable runtime/Apple/Computer Use
+routes before operation; use allowed established setup methods, no new input backend.
+
+Complete one autonomous outcome: qualify the already prepared historical
+explicit-request53e6e6e F02 off/on as a Native D06 comparison input, or return its
+exact measured incompatibility and a concrete justified workload proposal. This is
+not a benchmark framework or a request to repeat Web/Rust-stage tests. Read the
+Mac coauthor consultation in receipts/platform-test-advice.md and21e0abf's remaining
+D06 criteria. Original reactive d33eac88 is historical evidence, not the collector
+or fixture execution model to restore.
+
+Resource handoff: Q02 may retire ONLY Q01's task-created retained F02-on process
+under uib-q01-final-5w3j1hkw after fresh exact executable/PID/incarnation validation
+against the trusted Q01 handoff (historical68614). Preserve every retained file and
+image/containing directory; do not remove that shared tree or touch any foreign
+process. This transfers lifecycle ownership of that synthetic process, not its old
+refs or permission to interact with other apps. If identity is uncertain, stop that
+operation and report it. No new input to this historical instance is needed.
+
+Use N04's pinned source/bundles/provenance or reproduce them by its existing recipe
+in task-owned system temp. Never modify/delete controls in current Fixture.swift,
+use old observation IDs as live authority, launch a real project, or silently make
+another input. Run the off/on fixture instances serially, one exact owned target
+at a time; own launch/normal setup/cleanup are authorized. Establish the documented
+expanded/Count1/name-empty/unchecked/Result-none/scroll-top state and actual window/
+focus context with existing fixture controls. Every necessary action requires fresh
+exact process/window/input ownership and its own allowed modality. Unknown delivery
+or lost ownership stops dependent input; do not automatically retry or bypass it.
+If setup cannot establish the needed state, report the exact precondition instead
+of substituting data or claiming the old question was answered.
+
+Before ANY candidate timing: compare each original known/unavailable fact, all
+requested fields/actions/edges, layout/placement and context, natural550×525pt/
+1100×1050px,160/depth9 and unchanged budgets. Keep and explain every extra node and
+explicit-request cost. A75-node equality trick, field omission, proxy observer,
+clipping/resizing input to fit, or changed epsilon/latency ceiling is forbidden.
+Use current accepted7709067 shipping host/helper and independent source witnesses;
+keep exact source/fixture/config/environment pins and no hidden polling.
+
+Do not launch Native timed cohorts yet. Return the complete preflight/baseline input
+result to the D06 owner: either demonstrated comparability under D06@1 with exact
+proof, or the exact remaining mismatch and a concrete versioned workload proposal
+(full source/layout/context/coverage/quality and same numeric gates) to be resolved
+legitimately BEFORE evaluation. Do not edit D06/.PROOF or label new-workload success
+as the old comparison inside this task. Original records, gates and all open Native
+performance requirements remain. Q03's real-case authority question is separate.
+
+Scope stays Q02's owned performance driver/bridges/recipe/receipt; product/fixture/
+shared contracts and other owners are protected. Plan, implement the necessary
+bounded driver adjustments, complete safe setup/preflight, record quality and
+limitations, preserve images, clean only own consumed nonimages, commit+push and
+return ONE terminal result/resource handoff. No internal-step root grants needed.

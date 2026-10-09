@@ -93,11 +93,26 @@ Root получает итог или конкретный блокер; про�
  40f201d. Требуется доказанная reuse applicability либо точные genuinely affected
   runtime gaps, без blanket reruns/новойкампании/предрешённогоpass. No UI/SDK/input.
   Native E2E и D06 scope сохраняются; pending questions не считаются ответом.
+- Q01 reconciliation terminal `21e0abf` pushed: whole Native N03 functional
+  composition ACCEPT_WITH_RESIDUAL на7709067 через independently checked actual
+  execution outputs и applicability deltas. Standalone Focus/full rerun не gate.
+  Current readonly source/pixels independently reconciled; full AX-tree equality
+  отсутствует, insertion causeunknown. Initial metadata on_screen=false, actual
+  before/producer/after bracket on_screen=true; appinactive/frontmost stable.
+  Старый вопрос активации не нужен для этого bounded acceptance, но не ответ/грант.
+- Q02 получил explicit controlled53e6e6e off/on comparability continuation по
+  original approved P0/P7 own-fixture scope; packet фиксирует lifecycle transfer
+  retained Q01 exactownedprocess с freshidentity check и no file/image deletion,
+  serial own-fixture launch/setup, fresh input ownership, stop on unknown.
+  Результат — complete comparability proof или exact mismatch/versioned proposal
+  ДО timing. No D06/.PROOF edits/no timed Native cohorts/no threshold relaxation.
+  Предыдущий read-only-only envelope заменён лишь в этом ограниченном continuation;
+  real projects, чужие процессы, TCC/displays и обход guard запрещены.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Q01 documentary Native evidence reconciliation; консультация и readonly preflight завершены.
+  Q02 controlled Native input comparison; documentary reconciliation и консультация завершены.
   Native live/performance
   и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.
