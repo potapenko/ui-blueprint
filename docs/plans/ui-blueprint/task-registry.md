@@ -105,6 +105,11 @@ handoff ниже — история, не текущее состояние и �
   no new live/UI run and no D06 quality/timing pass. CPU/build resources released.
   Completed reviewer can be archived; restore same context only for actual new delta.
 - Q02 received ACCEPT/CPU release and continues its same full outcome on e641543.
+  Same-chat continuation sent with gpt-6.1-sol/medium for the prepared execution
+  phase after prolonged inter-step latency. Same model as its capacity-recovery
+  setting; task-specific reasoning override only, no app defaults or scope change.
+  Host supports medium; official model page fetched2026-10-09 confirms it. Existing
+  active handle is not replaced/restarted merely for observation timeout.
   Required complete Native cohorts/quality still open; historical5failures retained.
   No grant to change gates or repeat closed Web/Q03. Current shipping source now
   e641543 (accepted boundary), so final delivery must qualify affected installed
