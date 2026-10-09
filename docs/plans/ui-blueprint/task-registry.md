@@ -45,16 +45,22 @@ handoff ниже — история, не текущее состояние и �
 - Очередь ресурсов: внешний владелец «PiP», затем Mac real-case сбор и Q02
   release-profile timing. Web runtime больше не занимает ресурс. Offline Q03,
   Native release builds и Mac preparation продолжаются независимо.
-- Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: restored for the same finite
-  real-case usefulness outcome. Web22-file dataset delivered by advisor; source
-  path/manifest and neutral first-answer instructions in latest [packet section](packets/Q03-recorded-usefulness.md).
-  Runtime released, site unchanged, no producer commit because only temp outputs.
-  Producer receipt retained in [platform advice](receipts/platform-test-advice.md).
-  Web answers/actual CLI consumption proceed now; Mac inputs follow when ready.
+- Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: Web portion terminal completed,
+  `c5a6e4f7ffdfa884bb0a33e64bdc475752b8ef34` pushed; new receipt read in full.
+  Accepted within saved-data usefulness scope:34 public CLI calls, exact key match
+  for bounds/gaps/insets/containment/eight geometry deltas; unknowns and raw inputs
+  preserved. Answers recorded before key. Total232.936ms subprocess time and
+  1404492stdout bytes are neither end-to-end agent latency nor a token/speedup claim.
+  Explicit imported reference binding is not live Target identity/Observe fidelity;
+  paint/hit/freshness/atomicity and automatic real-browser ingestion remain unclaimed.
+  Original22-file dataset/images retained; own consumed nonimages cleaned.
+  Same chat idle awaiting actual Mac dataset; retain for its remaining task.
 - Mac runtime now waiting_resource: external «PiP» owns macos-product and desktop;
   Mac advisor has queued and released its own desktop claim. Rechecks owner every
-  three minutes. Its current-source CLI build is prepared. Q02 may perform offline
-  release-profile builds now; timed/live requests wait for actual desktop release.
+  three minutes. Its current-source CLI build is prepared. Q02 release-profile binaries and Native Rust-stage replay are now ready: author
+  checkpoints b3ea40c/efe228f pushed,120 replay calls passed, AX/capture validation
+  warm p95 2.53/0.043ms respectively; no new outer latency pass. Timed/live requests
+  still wait for actual desktop release. Mac advisor revalidated external PiP active.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,
