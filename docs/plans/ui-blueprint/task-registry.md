@@ -41,6 +41,16 @@ handoff ниже — история, не текущее состояние и �
   All owned runtime processes absent, images and named review inputs retained.
   Resume this exact chat on real desktop/quiet CPU release after Mac collection.
   Earlier accepted Web/Rust results remain closed.
+- Latest Q02 release-profile progress (interim, no pass): baseline-off120/120 clean;
+  baseline-on2quality failures preserved. Candidate-on warm combined p95
+  348.92ms >300ms, one75-node warm failure and cold max830.34ms retained;
+  remaining AX/capture/cold p95 gates reported within limits. Off setup initially
+  refused owner acquisition; exact unchanged witness subsequently succeeded using
+  absolute profile/repository cwd, prior refusal cause not established. No bypass.
+  Cursor351 confirms no off timed cohort, quiet CPU released for Q03; Q02 retains
+  desktop/own fixture and continues its authorized full performance task.
+  Q03 received CPU grant for Mac build/CLI/checks now, releases it before light
+  receipt/Git work when possible; then Q02 continues timed off and needed repair.
 - Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`: terminal completed,
   `b1b06fd9a6c9ed1f8f8676d6b4eae505c0867cce` pushed, new F03b receipt/dataset
   contract read. Two original native_ax replies160nodes/partial at961/1920pt,
