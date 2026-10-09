@@ -123,8 +123,11 @@ handoff ниже — история, не текущее состояние и �
 - I02 `01a11bdd-8f38-7943-a91f-3621a70a994c` restored for accepted e641543
   installed-candidate qualification under latest I02 packet. Prior ef45577/063e709
   remains valid historical delivery, not proof of changed host/helper binaries.
-  Source/recipe/feature/doc preparation runs now; builds/heavy checks wait for actual
-  Q02 CPU release. Same owned recipe/docs/receipt paths; product source protected.
+  Source/recipe/feature/doc preparation finished. Root now grants I02 CPU for its
+  affected installed qualification: last Q02 handoff released runtime, and current
+  visible Q02 execution supplied no new timed run handle. Q02 explicitly notified
+  to defer new timed cohorts until I02 actual release. Preserve any actual overlap
+  rather than claim a quiet measurement. Same owned paths; product source protected.
   Reuse verified unchanged license/recovery/consumer work. No P7/D06 acceptance or
   publication implied. Whole finite delivery result, own temp cleanup, commit+push.
 - Root write set этого продолжения: execution.md, task-registry.md,
