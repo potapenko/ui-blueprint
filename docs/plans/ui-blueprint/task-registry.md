@@ -108,6 +108,18 @@ Root получает итог или конкретный блокер; про�
   ДО timing. No D06/.PROOF edits/no timed Native cohorts/no threshold relaxation.
   Предыдущий read-only-only envelope заменён лишь в этом ограниченном continuation;
   real projects, чужие процессы, TCC/displays и обход guard запрещены.
+- Q02 controlled input comparison: off phase reported full75original-node mapping,
+ 396known/208unavailable/75actions/74edges; extraSnapshot/OpenB434.5→345pt, stable
+  bracket/window/pixels. Two turns failed with HOST «Selected model is at capacity»
+  (01a11e21-ce2b-7492-9eac-f5f88f49cc16,01a11e32-2520-7702-bec3-ea8843e6553c).
+  Same-chat inherit retry failed again; no replacement/task duplication. Task-specific
+  fallback gpt-6.1-sol/high chosen under Model policy for observed availability and
+  bounded remaining work; host supports this pair, application defaults untouched.
+  Current turn01a11e37-7add-77d1-a6fc-827b4d124895 confirmed inProgress. First duty:
+  fresh process/resource reconciliation; last known offPID81620 exited, on launch
+  requested before error. Resumed owner reports onPID82360 and completed Compare;
+  fresh owner/window validation remains required before Snapshot. Do not repeat off.
+  No new timing/gate claim.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
