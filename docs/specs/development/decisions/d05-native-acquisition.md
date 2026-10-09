@@ -1,5 +1,5 @@
 # D05 Native acquisition profile
-- Node type: leaf; domain: `uib.development.d05-native-acquisition`; contract: `UIB.D05-NATIVE-ACQUISITION@2`; supersedes @1 image ownership only.
+- Node type: leaf; domain: `uib.development.d05-native-acquisition`; contract: `UIB.D05-NATIVE-ACQUISITION@3`; supersedes @2 baseline reference only; @2 image ownership preserved.
 - Clauses: `.METRICS`, `.CEILINGS`, `.ADMISSION`, `.OWNERSHIP`, `.OUTCOMES`, `.PROOF` (prefix `UIB.D05-NATIVE-ACQUISITION`).
 - Authority: Active / Evolving; accepted/released implementation: none.
 - Authority source: ROADMAP D05/PLAN.UIB@1, root selection of45c2667649c347202dfc64b6d5d978c3e47271f0 through [registration packet](../../../plans/ui-blueprint/packets/M01-acquisition-registration.md); @2 reconciles the explicit user all-task-images rule via [M03 packet](../../../plans/ui-blueprint/packets/M03-popup-capture.md), delta D05-NATIVE-IMAGE-002.
@@ -7,7 +7,6 @@
 - Do not read when: pure Rust H01/retained/allocator work without a Native acquisition dependency.
 - Requires: [D02@2](d02-boundaries.md), [D04@1](d04-identity.md), [NATIVE-PILOTS@1](../../acceptance/native-pilots.md), [NATIVE@1](../../product/native.md), [PRIVACY@1](../../product/privacy.md), [D06@1](d06-performance.md) and their explicit closure.
 - Owner: Native; source implementation and SDK/H01 proof follow registration. [Selected mechanism/evidence](../../../development/native-acquisition.md), not an implemented guarantee.
-
 ## UIB.D05-NATIVE-ACQUISITION.METRICS
 
 Bounds apply per selected helper/channel; KiB=1024, MiB=1,048,576. Count every owned
@@ -89,11 +88,12 @@ prior ACKed AX survives capture failure. No new public errors, automatic retries
 permission expansion; recorded B−3801 remains stopped.
 
 ## UIB.D05-NATIVE-ACQUISITION.PROOF
-
 Offline boundary/overflow/Unicode/type/array/batch/stream/pixel/PNG/cleanup checks must
 precede live qualification; source and synthetic checks do not prove SDK lifetime.
-Preserve actual F02 known fields/values/coverage,160/depth9 and1100×1050px baseline;
-never lower quality or fabricate nodes to fit. Preserve all D06@1 and positive pilots.
+Preserve actual F02 known fields/values/coverage,160/depth9 and1100×1050px;
+[D06@2 request-only@1](d06-native-request.md) selects the honest76-node input with
+all original facts/extras and same gates; original75 records remain historical.
+Never lower quality/fabricate nodes; all positive pilots stay protected.
 Later authorized H01 proof covers actual acquisition/copy/encoding costs, callbacks/
 handles/images/helpers after cancel/detach/timeout, AX ACK survival and another Target's
 AX progress; parent capture lease ends only on reap. SDK/codec unknowns remain explicit.

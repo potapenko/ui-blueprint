@@ -2,12 +2,13 @@
 
 - Domain: `uib.development.d06`; accepted/released baseline: none.
 - Authority source: [C01-DEC-001](README.md#meaning-and-precedence).
-- Node type: leaf; contract: `UIB.D06@1`; clause: `UIB.D06.CONTENT`.
+- Node type: leaf; contract: `UIB.D06@2`; clauses: `UIB.D06.CONTENT`, `UIB.D06.REQUEST-INPUT`; supersedes @1 workload routing only.
 - Authority: Active / Stability: Evolving; **P0 decision closed**, no candidate pass.
 - Read when: instrumenting W01/M01 or performing Q02 comparison.
 - Do not read when: proposing periodic monitoring or an unrelated workload.
 - Requires: [PERFORMANCE@1](../../acceptance/performance.md),
   [PILOTS@1](../../acceptance/pilots.md), [D05](d05-limits.md), [evidence](evidence.md).
+- Conditional Native request input: [UIB.D06-NATIVE-REQUEST@1](d06-native-request.md).
 - Owner/deadline: C01 freezes thresholds before candidate evaluation; Q02 evaluates
   fixed post-Q01 candidate; adapter owners expose timing/quality evidence.
 
@@ -79,3 +80,12 @@ equal tasks; semantic+crop usefulness/agent tokens need F03/Q03 evidence, no mad
 speedup/accuracy percentage now. New workloads need a separately versioned baseline
 and thresholds before their candidate evaluation; these gates cannot be silently
 expanded or relaxed after failure. Any change records reason, authority and revision.
+
+## UIB.D06.REQUEST-INPUT — Q02-NATIVE-REQUEST-001
+Explicit user benchmark/launch instruction2026-10-09 and ROADMAP D06 register
+[Native request-only@1](d06-native-request.md) BEFORE candidate evaluation.
+Controlled017d85c proves a real76-node/Snapshot/OpenB/context delta; original75-node
+evidence is preserved, not called equivalent. New input receives fresh direct API
+baseline, complete off/on cohorts and ALL SAME100/200/300/750ms numeric gates.
+This registration changes only selected workload/reference; protected CONTENT
+quality/cost/privacy/bounds and all Web results remain. No runtime acceptance.

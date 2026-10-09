@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 32.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 33.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -28,7 +28,6 @@ mobile implementations or unrelated products. Plan status is not runtime evidenc
 Historical authority delta `UIB-AUTH-001`: Draft 1.3 / Draft 1.0 → Active 1.4 / 1.1
 on user confirmation; no wire schema or released behavior changed. Field-level
 `draft` and historical statements remain meaningful. C00 adds routing only.
-
 C01 engineering choices under ROADMAP D01–D07 are registered in
 [UIB.DECISIONS@1](development/decisions/README.md). `C01-DEC-001` selects development
 policy (`DEV.RUST@2`) and initial candidate interfaces/gates; it does not accept
@@ -73,6 +72,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 ## Select a route
 `W06-FIDELITY-001`: [WEB-DOCUMENTS@1](product/web-documents.md) registers raw AX focusability and explicit bounded whole-document selection under [W06](../plans/ui-blueprint/packets/W06-web-fidelity.md), preserving core0.1/analysis0.2/ordinary Web scopes/D06; registration is not runtime acceptance.
+`Q02-NATIVE-REQUEST-001`: [D06@2](development/decisions/d06-performance.md)/[Native request-only@1](development/decisions/d06-native-request.md) registers honest76-node input and fresh direct baseline under explicit user benchmark authorization, same100/200/300/750ms gates and unchanged historical75 records; acquisition@3.PROOF reference reconciled, no candidate pass.
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
 `L01-ACTIONS-001`: [CLI-ACTIONS@1](product/cli-actions.md)/CLI@6 registers first single-step Prepare/Execute syntax, exact trusted target authority, canonical compact/JSON outcome and truthful exits under [selected packet](../plans/ui-blueprint/packets/L01-actions-contract.md). Registration precedes implementation; core0.1/analysis0.2/connection1.0.0 and existing commands unchanged, private producer metadata and CLI runtime acceptance pending.
 `L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
@@ -86,7 +86,6 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 | Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@2](development/rust.md) | Active / Evolving; C01 setup choices, product builds still unaccepted |
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
-
 ## Routing invariants
 `UIB.ROUTING.NODES`: every new node is at most 100 physical lines. Stable clause
 IDs identify meaning; source line ranges aid fidelity checks and do not replace
