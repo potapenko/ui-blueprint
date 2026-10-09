@@ -172,3 +172,64 @@ minimal next dependency. Do not label this diagnostic a fresh independent source
 acceptance or full Q01/P7 pass. Ordinary new product deltas later retain their own
 required focused review. Check changed links/whitespace, scoped commit+push under
 shared Git lock; no root grant. Do not delete/rewrite any shared evidence or images.
+
+## Focused AX SDK-reuse source acceptance — e641543, 2026-10-09
+
+Classification verification. Finite outcome: independent acceptance or exact blocking
+findings for the changed Native helper lifetime/binding implementation in immutable
+`e64154349bc93e9c7a4a91bab7698cef84b8eb7a` against parent70c3ddb. Source and canonical
+remote master were verified by root. Q02 is author/sole product writer; this Q01
+reviewer is non-author. No nested delegation, new chats, new criteria or old-suite
+requalification. Immediate consumer: final Q02 measured candidate and local delivery.
+Economy basis: inspect the actual small changed boundary, reuse unchanged accepted
+source evidence, execute only checks needed for its demonstrated risks.
+
+Authority/Spec Basis: existing approved PLAN.UIB@1 plus D02@2.CONTENT/WORKER/
+PUBLICATION/LIFECYCLE, D05-WORK@1 PROFILE/GUARD/SUPERVISOR/PROOF and its explicit
+MEMORY@2/lifecycle/privacy/D07 closure; Native acquisition@3 admission/ownership/
+outcomes; NATIVE@2, NATIVE-SESSION@3 (popup/PROTECTED only affected adjacency),
+EXCHANGE@2/IDENTITY/PRIVACY and current RUST/DEV.RUST@2 for actual checks.
+D06@2/request-only@1 applies to unchanged quality/latency obligations, not a claim
+that those gates have passed. Root accepted internal process reuse only inside
+these existing semantics, in coordination checkpoint70c3ddb: session-owned process
+reuse, explicit fresh requests, no idle collection/result cache or public form/API
+expansion, Observe-local AX objects/refs, separate capture isolation and all caps.
+No changing contracts or grandfathering an implementation departure in this review.
+
+Initial independent observation: inspect ONLY code/test changes and their necessary
+callers/dependencies, not Q02 receipt, performance.md, builder chat or this task's
+registry success narrative. Initial paths:
+- crates/host/src/native_broker.rs and supervisor.rs;
+- plugins/macos/HostHelper.swift and HostProtocol.swift;
+- crates/host/tests/performance.rs and tests/bridges/native/host_helper/ReadonlyProtocolChecks.swift;
+- directly affected existing binding/worker/collector/lifecycle/stream tests as needed.
+Other test diagnostic files in the commit are supporting artifacts, not performance
+acceptance; inspect only when needed. No broad source audit, formatting findings or
+fresh review of unchanged Web/geometry/export/M05/action implementations.
+
+Mandatory review dimensions: exact current identity/permission/source correlation;
+observation-local objects/frames and per-call freshness; read-only phase/channel/
+collection admission and no action/form/PROTECTED expansion; cross-channel binding
+and reconfiguration authority/scope; original canonical values/limits; parent fixed
+storage/precharge and bounded repeated operation; deadline/expiry/cancel/EOF/reap,
+late response/ACK rejection, independent Target and capture lease-until-reap;
+AX publication ACK before capture and unchanged legacy/ordinary/form consumers.
+Production code stays read-only. Any material finding names criterion, actual
+scenario/evidence, affected owner and minimum repair/recheck. No speculative verdict.
+
+Two-stage independent protocol: first record and return initial observations and
+criterion coverage BEFORE consulting builder narrative; this is intermediate,
+not final acceptance. Root will then supply the matching builder receipt/evidence
+to this SAME context. Reconcile those artifacts and issue ONE scoped final verdict
+with actual independent versus author evidence, exact remaining gaps, commit+push.
+Do not turn author tests into your own execution or infer runtime proof from a build.
+Missing proof is not a demonstrated defect, but cannot be labelled accepted.
+
+CPU is available for focused checks before Q02 starts its next timed campaign;
+root coordinates that resource. No UI/SDK/app operation is assigned initially.
+If concrete risk truly needs fresh live evidence beyond retained artifacts, state
+the minimum operation/consumer first instead of rerunning Native/N03 by default.
+Source/build/test nonimages use system temp; shared images/evidence are not deleted.
+Only writable repository path: receipts/Q01-integrated-acceptance.md. Current master,
+exact-path commit+push/shared Git lock; preserve all other writers and untracked PNG.
+Model/reasoning inherit. Finish this one coherent acceptance task; no per-test grants.

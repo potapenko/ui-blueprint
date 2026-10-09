@@ -87,27 +87,23 @@ handoff ниже — история, не текущее состояние и �
   Q02 same chat resumed with release binaries/full outcome; it may directly wait
   for Mac's short saved-data CPU work before timed series, no extra root grant.
   Q03 receives Mac original dataset on delivery; Web accepted portion stays closed.
-- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: diagnostic terminal completed,
-  `18eeceb` pushed, new129-line receipt read completely; no runtime/CPU retained.
-  Five failures remain. Three75/76 cases omit the same anonymous node70/parent28;
-  other75 records match after explicit index-map comparison, not a criterion change.
-  warm65 invalidUIElement makes8predicate fields unavailable, not just2 truncated
-  assertion fields. baseline warm98 common catch preserves no failure stage/type.
-  No same-call source loss/misreport proved; different-time witnesses cannot settle
-  source variability/cause. Full registered76-node quality remains mandatory.
-  Exact dependency handed to Q02: bounded count/ranged-read status/handle-order
-  evidence for28/70 and bounded baseline stage/typed refusal, before choosing repair.
-  No generic rerun/relaxed predicate/new runtime campaign requested. Q01 retained
-  for any required affected-source review; this diagnostic grants no Native pass.
-- Q02 full release failures remain open. Diagnostics: codec sorting savings small,
-  both public CG lookups have similar30–45ms cold cost; no production substitution
-  accepted. Proposed session-local AX process reuse is permitted only inside existing
-  D02@2/WORK@1 semantics; exact boundary added to Q02 packet after full reread of
-  those plus NATIVE-SESSION@3/NATIVE@2. Form contract/Observe-local refs, fresh checks,
-  budgets/ACK/capture reap remain protected. Q02 declares actual source write set;
-  any genuine protected-contract delta returns before implementation. Same complete
-  task owns bounded quality diagnostics and performance repair, then affected Q01
-  review. No new performance or quality acceptance from this proposal.
+- Q02 coherent source `e64154349bc93e9c7a4a91bab7698cef84b8eb7a` saved/pushed;
+  root verified canonical remote master and clean tree except unrelated PNG.
+  Product delta: native_broker.rs, supervisor.rs, HostHelper.swift, HostProtocol.swift;
+  supporting driver/diagnostics/checks/docs included. Root read matching96-line
+  author receipt: claimed repeated fresh Observe/same helper, expiry/refusals,
+  cleanup and affected checks are author evidence, not independent acceptance.
+  No new Native D06 pass. Q02 keeps full task/sole writer; old failures retained.
+- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: started one focused source
+  acceptance on immutable e641543 versus70c3ddb under latest Q01 packet. Initial
+  code/test observation first; Q02 narrative/receipt withheld until it returns
+  initial coverage. Then same context reconciles source/runtime evidence and final
+  verdict. CPU granted for focused checks; no initial live/UI grant. Q02 notified
+  not to start competing timed cohorts. No old-suite or unrelated requalification.
+- Earlier Q01 quality diagnostic18eeceb remains: all5 failures preserved; missing
+  same-call boundary status/order and typed baseline stage evidence handed to Q02.
+  AX-only40calls did not reproduce them and does not close them. No criterion
+  relaxation or performance acceptance follows from source candidate or diagnosis.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,
