@@ -1,5 +1,14 @@
 # Resolved dependency inventory — T01 and S01 Stage A
 
+## I02 accepted AX-reuse delivery (2026-10-09)
+
+Current candidate `e64154349bc93e9c7a4a91bab7698cef84b8eb7a` changes only existing
+Host/Native production owners, without changing manifests, Cargo.lock, toolchain,
+features or third-party code. Fresh native/combined installations recheck their
+18/39-package graph and notice fingerprints; unchanged Core/Web dependency and
+license evidence is reused. No new dependency audit or license choice. See the
+[current I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md#accepted-ax-reuse-source-e641543).
+
 ## I02 final source reconciliation (2026-10-09)
 
 Current candidate `063e709cce4407aed2a2578620b645cf7b554f29` changes only the

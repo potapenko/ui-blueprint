@@ -8,7 +8,7 @@ To build a local bundle into an existing directory:
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision 063e709cce4407aed2a2578620b645cf7b554f29 --destination "$BUNDLE"
+python3 distribution.py build --modules combined --revision e64154349bc93e9c7a4a91bab7698cef84b8eb7a --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 "$BUNDLE/uiblueprint" --help
 ```
@@ -21,10 +21,11 @@ The [distribution guide](docs/development/distribution.md) contains prerequisite
 examples, artifact layout, limitations and safe removal/recovery. See
 [CLI details](docs/development/cli.md), [dependency notices](THIRD_PARTY_NOTICES.md)
 and the [specification registry](docs/specs/README.md).
-I02 qualifies the current combined installation at product source `063e709`,
-including accepted Native collector `7709067`; unchanged Core/Web and module
-selection/recovery evidence is reused. See the
+I02 qualifies current Native and combined installations at product source `e641543`,
+including the accepted Native AX helper lifetime/binding change. Unchanged
+Core/Web consumer and recovery evidence is reused; both Host feature selections
+are rebuilt. See the
 [I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current-distribution.md)
-for exact pins and scope. Scoped Native/Web geometry and bounded functional paths
-have applicable evidence; Web latency gates are measured. Native benchmark
-comparability/timing and Q03 remain open, so this is not full P7 or release acceptance.
+for exact pins and limits. Q03 real Mac/Web saved-data usefulness is completed;
+Web latency gates are measured. Native D06 qualification remains separate and no
+full P7 or release acceptance is implied.

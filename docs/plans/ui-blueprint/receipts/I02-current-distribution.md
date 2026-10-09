@@ -1,6 +1,6 @@
 # I02 — current local distribution qualification
 
-Current delivery: see [063e709 reconciliation](#final-current-source-063e709).
+Current delivery: see [e641543 qualification](#accepted-ax-reuse-source-e641543).
 The original94724df and a7c0416 records below remain historical evidence.
 
 ## Authority and plan
@@ -420,3 +420,129 @@ All changed local Markdown targets AND anchors, route consistency and git diff
 The finite I02 handoff is complete after that push; archive this chat as requested
 by the packet. No persistent goal/P7 status is changed.
 
+
+## Accepted AX-reuse source e641543
+
+Same finite I02 resumed by the direct root instruction and
+[accepted-source packet](../packets/I02-current-distribution.md#accepted-ax-reuse-source-delivery--e641543-2026-10-09).
+Product pin e64154349bc93e9c7a4a91bab7698cef84b8eb7a; initial current masterb04b71a.
+The previous checkpoint ef45577 successfully pushed063e709 qualification; archive
+attempt was interrupted and is not represented as a confirmed archival outcome.
+That prior binary is historical, not proof of the changed current host/helper.
+No new agents/chats/worktrees/branches, UI/apps/model service or shared cleanup.
+
+### Current basis, delta and bounded plan
+
+Recovered applicable full governance/spec closure from the same task. Read the full
+updated packet; registry33 and decision routes add Native acquisition@3, D06@2 and
+request-only@1, all read with unchanged D02@2/WORK@1/MEMORY@2/NATIVE-SESSION@3 and
+explicit closure retained. No product requirement is inferred from source. The
+registered76-node workload retains all old facts and original100/200/300/750ms
+thresholds; registration does not accept a candidate. No specification edit here.
+
+Requirement: current coherent Host/Swift installed pair. Actual063e709→e641543
+shipping delta: native_broker.rs exposes its channel internally; supervisor.rs adds
+fixed epoch-bound capture bindings beside resident AX; HostHelper.swift adds the
+bounded read-only window-ax loop; HostProtocol.swift admits only its exact flags128/
+Observe/channel0 case. All four are already included in distribution.py. Test-only
+performance.rs/diagnostic AXBoundary.swift must not become shipping inputs.
+Existing recipe remains ten Swift inputs plus Cargo --bins; no framework change.
+
+Read Q01's full focused acceptance9675c0b: ACCEPT exact e641543 source boundary,
+independent protocol/binary evidence and attributed author execution, with explicit
+v2/v3 provenance/cleanup residuals. This is not a fresh I02 live run or D06 pass.
+Q03b014cd4 final Mac+Web outcome is completed bounded saved-data usefulness with
+its own raw-import/live-ingestion/blind-scoring limits. No lingering Q03 dataset
+dependency is invented. Timing/quality remains Q02-owned and outside this install.
+
+Plan stated before edits: exactly README, distribution/dependencies docs and this
+receipt; fresh native+combined builds only after actual Q02 CPU release; existing
+model-free installed smoke, provenance/feature/notices/dylib verification and scoped
+remove/foreign-file preservation; reuse unchanged manager safety/reinstall/license
+and consumers; exact-path current-master commit+push under shared flock. No recipe
+or harness correction presently needed. Product/spec/Cargo/Q02 paths protected.
+
+Build selection rationale: changed shared Host is compiled with no features in
+native and with web in combined; changed Swift helper has the identical native/
+combined input list/flags. Both configurations need fresh installed proof. Core has
+no Host dependency and its complete inputs are unchanged. Web CLI/collector are
+unchanged; the current shared web-enabled Host/worker is built in combined. Prior
+web-only feature-isolation and consumer evidence is reused, not called a fresh
+web-only installation. Lock/manifests/toolchain/notice policy unchanged.
+
+Resource gate: initial compact Q02 status remained active without a new release;
+I02 did not compile. Root then explicitly transferred CPU to this prepared I02 task,
+confirmed the last saved runtime release and stated Q02 was notified not to start
+new timed cohorts until I02's actual release. This direct handoff satisfies the
+packet's coordinator resource boundary; it is not inferred from silence. Two own
+builds started only afterward. No additional internal grant is required.
+
+### Actual installed result and released resources
+
+Exactly TWO new complete installs passed, native and combined, from immutable
+e64154349bc93e9c7a4a91bab7698cef84b8eb7a. Recipe remains unchanged at
+6a5bec23b8d15e4cc825aaff6105ac001a9a17bb, SHA-256
+62fcf2f486d2b1ce8e69d87272089be20ab4bb52e53a7faaa077006c45027cd5.
+Classification is **verification**, with current handoff documentation; neither
+shipping_product correction nor a new runtime capability was implemented by I02.
+
+Built release/locked/offline with installed Rust1.96.0, aarch64-apple-darwin and
+Swift6/macOS14 helper target on the existing macOS27.0.1 host. Each recipe build
+used its own system-temp source archive, Cargo target and Swift cache. Build PATH
+held an existing rustup link plus system tools, no Node/browser stack. All ten
+Swift inputs were checked against063e709: only HostProtocol/HostHelper differ.
+No AXBoundary.swift, Q02 witness, performance test executable or diagnostic flag
+was added to shipping inputs. Q01's eleven-input diagnostic binary reproduction
+is distinct provenance; I02 does not claim binary equality with that artifact.
+
+Manifest product pin, features, file hashes/types/modes and complete inventory
+passed. Native CLI[macos]/worker[] and combined CLI[web,macos]/worker[web] match the
+selected build. All shipped executable dylibs resolve only to /usr/lib or
+/System/Library. The two freshly built helper hashes are identical:
+
+| Executable | Native SHA-256 | Combined SHA-256 |
+| --- | --- | --- |
+| native-host-helper | 0c0517fa9c3764220b07ce83ebdbd2d12f07e217edb22c40e145ba6f4e087f8c | 0c0517fa9c3764220b07ce83ebdbd2d12f07e217edb22c40e145ba6f4e087f8c |
+| session-worker | 53784e16d9165b91c758202282975e47aaec987c340c71bbc05851c7eb2f57c5 | 442978474b00dff00d0ac189eaca59a688a7456ef9a56f6f5e33dd0bef9d3776 |
+| uiblueprint | e7cc71153d9e7f81d9f6902b8b4acaba56cb2f83f6bcd62dd6c9d9397c0e4144 | c60be5d83b7f3ca272b7f73019b651e0f72fb4e5c3df9c9744ea58c4f124cdf0 |
+| uiblueprint-validate | 35e945ca310b91fd11f26e0416cdf7d7a916e0b1c3748acc8f247666bdfd300e | 35e945ca310b91fd11f26e0416cdf7d7a916e0b1c3748acc8f247666bdfd300e |
+
+Native18/combined39 graph fingerprints, complete dependency license hashes, Rust
+standard-library notice and Cargo.lock hash exactly match the historical values
+recorded above. No dependency/toolchain/license choice changed. This verifies
+actual shipped material while reusing the scoped earlier license review.
+
+Both installations passed existing smoke from cwd / with no model credentials:
+four validators, Native entry/gate, measure8 css_px, check-pass, document/propose0.1,
+compare0.2 and literal width30→34/dwidth4, missing-input empty-stdout refusal.
+Combined also passed the strict Documents parse-before-attach check. Actual files
+and receipt versions remain consistent. No app/browser/UI/AX/capture/input/secret
+source/model call occurred. SDK-lifetime/fault evidence is attributed to Q01's
+accepted exact source review and existing host tests, not claimed rerun by I02.
+
+**CPU/build/check resource released at16:34 Europe/Podgorica,2026-10-09**
+(clock confirmation14:34:04 UTC), explicitly announced in this chat immediately
+after the two builds and all smoke/provenance checks. All compiler/test calls had
+completed; no I02 runtime process remained. Remaining receipt/Git work held no quiet
+CPU lane, so Q02 could continue without waiting for the final checkpoint.
+
+Fresh affected install recovery: both build-over-existing attempts refused before
+compilation; copied manager verify/remove succeeded while preserving each foreign
+sentinel and directory. Historical fault injection/reinstall campaigns remain
+applicable to the unchanged manager; no gratuitous rebuild cycle. After consumption,
+only own bundles (via manager), sentinels, tool link, transient results/binary hashes
+and empty directories were removed. Own root uib-I02-axreuse-09foqv_y absence was
+verified. Recipe/smoke owners cleaned their non-image stages. No shared/Q02 artifact,
+image, image-containing directory or after-title-spacing.png was altered.
+
+README/guide now pin e641543 for reproduction and require the full matching set;
+no standalone helper substitution or new CLI syntax. Q03b014cd4 is completed
+bounded saved Mac/Web usefulness; Web numerical evidence remains on its exact
+accepted workloads. Native D06/current quality, any future source repairs and full
+P7/release remain separate. Builds and accepted source do not fix or excuse older
+quality failures. No packaging/compile blocker remains within this exact pin.
+
+Four-path current-master checkpoint/push under shared fcntl lock follows final
+local-target/anchor, route-consistency and git diff --check verification. The final
+chat reports the resulting SHA and remote confirmation. No product/spec/Cargo/Q02
+performance file is staged; no broader goal or acceptance state is changed.

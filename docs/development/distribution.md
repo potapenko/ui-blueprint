@@ -36,7 +36,7 @@ no destination directory and never changes PATH, home settings or permissions.
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision 063e709cce4407aed2a2578620b645cf7b554f29 --destination "$BUNDLE"
+python3 distribution.py build --modules combined --revision e64154349bc93e9c7a4a91bab7698cef84b8eb7a --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 ```
 
@@ -59,16 +59,17 @@ newer than `--revision`. Reproduce both the source pin and the recipe revision f
 this repository. Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
-I02 qualifies product source `063e709cce4407aed2a2578620b645cf7b554f29` with the
-recipe last changed at `6a5bec2`. The current Native collector includes accepted
-`7709067`: selected raw AXTitle remains separate from AXDescription, and an
-inadmissible Title cannot discard other independently admitted fields.
-One fresh combined installation verifies the current helper/CLI/worker set.
-Native-only uses the identical helper source list and compile command; its Rust
-binaries/features and the Core/Web production inputs are unchanged, so prior
-module checks remain applicable. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
-distinguishes new installed evidence from reused `a7c0416`/`94724df` results and
-records the separate documentation checkpoint. Never replace only one executable.
+I02 qualifies product source `e64154349bc93e9c7a4a91bab7698cef84b8eb7a` with the
+unchanged recipe last changed at `6a5bec2`. Q01 accepts its Native AX helper
+lifetime/binding boundary: explicit request-driven read-only AX reuse and separate
+capture binding, with the existing deadline, identity and cleanup requirements.
+This adds no installation flag or public schema version. Update CLI, worker and
+helper together from this exact source; an older helper/Host is not the tested pair.
+Fresh native/combined installations cover Host without and with Web. Core and Web
+consumer/collector sources are unchanged; the Web-enabled shared Host is newly
+built in combined. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
+separates those fresh checks from reused selection/recovery evidence and prior
+`063e709`/`a7c0416` results. No benchmark diagnostic is added to shipping inputs.
 
 ## Flat artifact layout
 
@@ -237,11 +238,16 @@ No unverified background-input, IME, physical-pointer, arbitrary-app or other-pl
 support follows from installing the modules.
 
 [Q02 results](../plans/ui-blueprint/receipts/Q02-performance.md) retain measured
-passing Web latency gates on their exact workloads/pins. Native current source
-fidelity is evidenced, but original benchmark tree/placement/context equivalence
-is unresolved; the latest inactive-context return attempt did not establish the
-required context, and no eligible Native timed cohort followed. A reported AXGroup
-insertion also prevents a general unchanged-tree claim; its cause is not established.
-Native D06 workload reconciliation/timing and Q03 real-case evaluation remain open.
-These limits do not prevent the qualified local installation and saved-data usage,
-and cannot be relabelled full P7/release acceptance. I02 performs no UI/SDK/input run.
+passing Web latency gates on their exact workloads/pins. Native request-only
+workload is now separately registered under D06@2 with the original numeric
+thresholds; its current quality/timing qualification remains Q02's responsibility.
+Source acceptance of AX reuse, a successful installed build and older samples are
+not a Native latency pass. Historical quality failures remain attributed to their
+original candidate; installing a newer pair does not itself prove them fixed.
+
+[Q03 Mac/Web usefulness](../plans/ui-blueprint/receipts/Q03-recorded-usefulness.md#final-mac--web-q03-outcome)
+is completed for the explicitly supplied saved datasets. It demonstrates useful
+Rust geometry answers with partial/unsupported outcomes preserved, not arbitrary
+live Web ingestion, universal scanning or full blind-model scoring.
+These bounded results support local installation and usage; Native D06 and overall
+P7/release acceptance remain separate. I02 performs no UI/SDK/input run.
