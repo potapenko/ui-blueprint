@@ -81,17 +81,23 @@ Root получает итог или конкретный блокер; про�
   и uib-q01-final-5w3j1hkw — только provenance, Q02 обязан freshvalidate incarnation/
   current identity/window. Q01 попросили передать read-only facts, не запускать UI.
   Pending activation question для N03 и Q03 scope question не отменены и не отвечены.
-- Mac-соавтор «Спроектировать UI Blueprint»,01a1102f-791c-7e91-bec3-1877ea004d51,
-  получил конечный read-only вопрос о минимальном D06 workload reconciliation:
-  original reactive75-node baseline versus required request-only/current additions.
-  Это разрешённая пользователем консультация; no app/code/real-project operation.
-  Ответ должен отделить действующий контракт от предложения; сам совет не меняет
-  D06 и не даёт runtime authority. Web-соавтор повторно не опрашивается без нового вопроса.
+- Mac-соавтор01a1102f-791c-7e91-bec3-1877ea004d51 завершил read-only консультацию
+  (turn01a11dd3-0694-7f83-90cc-941dbdfaf3d8). Полный ответ сохранён по смыслу в
+  [platform advice](receipts/platform-test-advice.md#native-d06-workload-reconciliation--2026-10-09).
+  53e6e6e остаётся кандидатом, не equivalence. До timing — original facts/geometry/
+  coverage/context и полная стоимость extras; иначе legitimate versioned D06 workload
+  +same numerical gates+fresh baseline до оценки, не скрытая смена исходной проверки.
+  Совет сам не меняет contract/authority. Консультант сохранён, не архивируется.
+- Q01 получил один конечный documentary Native acceptance reconciliation: existing
+  actual N03 positive evidence + reviewed8e3dba2/N047709067 deltas + live readonly
+ 40f201d. Требуется доказанная reuse applicability либо точные genuinely affected
+  runtime gaps, без blanket reruns/новойкампании/предрешённогоpass. No UI/SDK/input.
+  Native E2E и D06 scope сохраняются; pending questions не считаются ответом.
 - Q03: ограничение на новые данные из реальных приложений остаётся без ответа;
   прежний вопрос не повторять и не считать молчание разрешением.
 - Root меняет только coordination документы. WIP Q02 и `after-title-spacing.png`
   не входят в его checkpoint. Следующее событие — итог или конкретная зависимость
-  Mac-консультация по точному Native workload mismatch; readonly preflight завершён.
+  Q01 documentary Native evidence reconciliation; консультация и readonly preflight завершены.
   Native live/performance
   и Q03 human waits остаются. I02 packaging proof относится к a7c0416; финальная
   Native поставка учитывает принятый N04 delta при итоговом candidate.

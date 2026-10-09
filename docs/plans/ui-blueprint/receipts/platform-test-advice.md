@@ -273,3 +273,34 @@ CG-кандидат436×348pt с лишь temporal/visual correspondence, без
 Web Director QA содержит пересказ/style/source declarations, не исходные runtime
 rect records. F01 synthetic expectations не заменяют сайт. Новых запусков,
 измерений/файлов ни один advisor не делал. Q03 positive real-case data gap открыт.
+
+## Native D06 workload reconciliation — 2026-10-09
+
+Read-only Mac coauthor response, chat01a1102f-791c-7e91-bec3-1877ea004d51,
+turn01a11dd3-0694-7f83-90cc-941dbdfaf3d8. No files/runtime/real-app operation.
+Advisor read D06@1, Native acquisition.PROOF, N04 recipe and current Q02 evidence.
+This is advice, not a new contract or runtime authority.
+
+D06 already requires the corrected explicit-request model and uses the earlier
+reactive baseline to ground budgets. Exactly75 nodes is not a quota to enforce by
+removing data: node-count changes need explanation. However, explaining added
+controls is not proof of equivalent fields/geometry/coverage/context or workload.
+Current78nodes, moved OpenB and unexplained titlebar insertion cannot silently pass
+as the original input, and there has been no Native latency failure to optimize.
+
+Recommended smallest path: use the already prepared pinned53e6e6e only as a
+comparability candidate when its controlled setup is authorized. Before timing,
+reconcile original known/unavailable fields, actions/edges, state/placement/context,
+window/pixels off/on, retaining every extra node and its full cost. Without a
+contract delta, original required facts/geometry/coverage must be preserved and the
+D06 owner must explicitly accept comparability. Snapshot presence or matching
+window dimensions alone are insufficient.
+
+If that input still differs materially, do not reshape the fixture to force a pass.
+Register a versioned workload with exact source/composition/geometry/context/fields,
+quality criteria and a fresh baseline for THAT input before candidate evaluation;
+reconcile the original-workload reference in acquisition.PROOF through legitimate
+D06 engineering authority. Keep all numerical gates unchanged; never retrospectively
+call the new input equivalent or its pass the original comparison. Reuse the current
+driver/pinned inputs, no new benchmark framework. N03 foreground and Q03 authority
+questions are not resolved by this consultation.
