@@ -87,14 +87,18 @@ handoff ниже — история, не текущее состояние и �
   Q02 same chat resumed with release binaries/full outcome; it may directly wait
   for Mac's short saved-data CPU work before timed series, no extra root grant.
   Q03 receives Mac original dataset on delivery; Web accepted portion stays closed.
-- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: resumed for one finite Native
-  release-quality diagnostic under the latest Q01 packet section. Original pinned
-  source7709067, registry33/D06@2/request-only@1/acquisition@3; neutral handoff
-  `uib-q02-native-full-lh3jw_lj/q01-quality-handoff.json` lists exact reports/samples/
-  hashes/raw witnesses/config. Read-only data/source predicates, no live/build/stress
-  or product edits; Q02 sole writer. Consumer: distinguish actual mandatory quality
-  failure from representation/timing evidence gaps and identify smallest next owner.
-  No new source/P7 acceptance or threshold/quality change is authorized by diagnosis.
+- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: diagnostic terminal completed,
+  `18eeceb` pushed, new129-line receipt read completely; no runtime/CPU retained.
+  Five failures remain. Three75/76 cases omit the same anonymous node70/parent28;
+  other75 records match after explicit index-map comparison, not a criterion change.
+  warm65 invalidUIElement makes8predicate fields unavailable, not just2 truncated
+  assertion fields. baseline warm98 common catch preserves no failure stage/type.
+  No same-call source loss/misreport proved; different-time witnesses cannot settle
+  source variability/cause. Full registered76-node quality remains mandatory.
+  Exact dependency handed to Q02: bounded count/ranged-read status/handle-order
+  evidence for28/70 and bounded baseline stage/typed refusal, before choosing repair.
+  No generic rerun/relaxed predicate/new runtime campaign requested. Q01 retained
+  for any required affected-source review; this diagnostic grants no Native pass.
 - Q02 measured full release off combined warm p95389.61ms with2quality failures;
   on348.92ms with1quality failure; no Native pass. Original failures retained.
   JSON codec diagnostic240replays structural values identical; removing sorted keys
