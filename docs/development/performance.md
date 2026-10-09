@@ -226,3 +226,33 @@ preflight does not implement or claim completed Native statistical series.
 These facts do not authorize new product collection features or revised D06 gates.
 After actual preflight, return the smallest necessary compatibility decision within
 Q02's packet before evaluating an incompatible workload.
+
+## Registered request-only Native full driver
+
+[D06 request-only@1](../specs/development/decisions/d06-native-request.md) is committed
+before timing. Use `tests/bridges/native/cohorts.cjs --run-authorized` with
+UIB_Q02_ALLOW=1 and UIB_Q02_RUN_CONFIG pointing to an owned system-temp JSON config:
+phase baseline/candidate, exact manifest/fixture/witness/helper/executable/baseline
+absolute paths plus matching hashes, accepted7709067 pin, registration9e08e05,
+new temp output and build_profile. Candidate additionally requires two saved complete
+20cold/100warm baseline reports and records their hashes. No fixture launch/input
+is performed by this driver; establish literal state and fresh ownership first.
+
+Build Swift with the actual distribution.py release command including `-O`, Swift6,
+HOST_HELPER/CAPTURE_LIBRARY and macos14 arm64 target. DirectBaseline also links
+ReadonlyFacts.swift with Q02_BASELINE_LIBRARY to select its own main. Same source
+admissions/privacy are reused; baseline strategy uses scalar API reads and reports
+raw facts, not a canonical Rust response. All captures write whole natural PNGs.
+Every warm request is explicit stdin; no loop collects until it receives a command.
+20cold processes and100warm requests plus separate first call per off/on. Candidate
+reuses the actual Rust attachment, reaps prior channel helpers before configuring
+unique artifact destinations, and includes fresh helper startup on every request.
+
+Reports retain every failed/outlier request, raw canonical payload, exact PNG and
+acquisition metadata. Missing measurement makes percentile unavailable; numeric
+and quality gates are separate. Before/after witnesses compare graph/values/context
+and retained manifest bytes. Initial lazy titlebar structure is checked before timing,
+not removed or silently accepted as a smaller workload. Same100/200/300/750ms gates.
+The first Onone campaign remains explicitly exploratory and failed; its reports
+cannot accept the optimized installed distribution. Correcting the build profile
+requires a new complete comparable baseline/candidate campaign after resource release.

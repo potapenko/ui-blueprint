@@ -1,4 +1,110 @@
-# Q02 performance — Web and Rust-stage results, Native pending
+# Q02 performance — Web/Rust complete, Native release-profile verification pending
+
+## Full Native continuation: retained Onone campaign — 2026-10-09
+
+Authority: final Q02 packet section and actual human benchmark/launch instruction
+in execution.md supersede the historical preflight-only/inactive restrictions below.
+Registration checkpoint9e08e05 was pushed BEFORE baseline/candidate evaluation.
+Registry33 → decisions D06@2.REQUEST-INPUT → Native request-only@1.INPUT/METHOD/
+QUALITY and acquisition@3.PROOF; prior full unchanged PERFORMANCE@1, Native@2,
+D01/D02/D04/D05/MEMORY/WORK/D07 and product/acceptance closure reused. This is an
+honest separately versioned input, not75-node equivalence or P7 acceptance.
+Existing Web and actual Rust-stage results are not recollected.
+
+Write set: DirectBaseline.swift, ReadonlyFacts.swift, cohorts.cjs, performance recipe
+and this receipt. The helper entrypoint conditional permits one direct baseline main;
+its AX traversal/admissions remain identical. No product/fixture/wire/limit edits.
+Exact source7709067 archived into system temp; Rust caller/worker release builds;
+Swift6.4/SDK27/arm64-macos14 helper/witness/baseline initially built WITHOUT -O.
+Pin versus qualified063e709 has zero delta in shipping Rust/Swift collector owners.
+The later source inspection found distribution.py's actual shipping helper uses -O.
+Therefore this campaign is retained exploratory Onone evidence, not acceptance of
+that installed release build. This harness-profile mismatch must be corrected with
+same-source -O binaries and fresh baseline BEFORE release candidate evaluation;
+no numerical threshold, quality check or node/field reduction is justified.
+
+Exact fixture53e6e6e/source662c92db9fbf0b131e03c022053fc68ef8ab4126d39989da48b49da39f8c238d,
+off55b998850903304e7ba000cb59ad5c25a28a7bff5156fca64874ff35ace642ba/
+on8cfec387cc7ae080428cde56df7ec871185fdd35311f9fd00d63674de8f7a1e4 verified unchanged.
+Owned LaunchServices setup off22372/launch1791539133.080066/window16923, then
+on23264/launch1791539309.464232, then candidate off24157; fresh exact executable/
+PID/incarnation/input owner before Compare once and Snapshot once in each process.
+All matched active/frontmost/key/main, Count1/expanded/Name focus, empty/redacted/
+unchecked/Result none/popup false/scroll-top/normal,40,90,550,525pt and1100×1050px.
+No B opening or foreign application operation; no TCC/display/power change.
+
+Off's first raw preflight had75nodes and stopped BEFORE timing. One subsequent
+explicit raw witness demonstrated the registered76nodes: one anonymous AXGroup
+under titlebar28, all prior75 properties/actions/edges unchanged (settlement.json).
+The original control/Snapshot/layout coverage was not reduced. On initial witness76.
+Independent raw before/after plus every canonical sample enforce full source values,
+availability, native roles/IDs/title/subrole, actions/edges, nine selected fields,
+exact binding/context and read-only invariance. Request160/depth9/512KiB/3s, same
+acquisition profile and owned-synthetic pixel policy; all whole PNGs written freshly.
+
+Direct baseline uses bounded scalar public AX reads plus public capture/inventory/
+whole PNG sequentially in one explicit-request helper;100warm reuse that process.
+Candidate uses actual shipping batch collector and guarded Rust host/worker path;
+100warm reuse attachment but spawn fresh channel helpers. Raw baseline is not the
+canonical Rust format and no speedup equivalence is claimed. Every phase/mode has
+20 fresh caller processes and100warm calls; one initial reused-process call is
+separately retained. No cadence, OS cache flush, competing own builds or retries.
+Cold spans process spawn/attach through full stdout delivery, setup UI is separate.
+AX/capture clocks are helper-local; capture includes inventory/acquisition/PNG.
+Outer includes codecs, IPC, validation/ACK/stdout; no subtraction-based stage claim.
+
+Values below are p50/p95 milliseconds, nearest-rank p95, all requested denominators.
+The supplementary analysis recovers already recorded durations before a quality
+assertion; original reports and failed records remain unchanged. Unavailable is not0.
+
+| Phase/cohort | n | AX | Capture | Outer response | Process cold | Quality failures |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline-off-complete / cold | 20 | 84.836/89.590 | 170.184/192.383 | 308.074/326.710 | 315.999/334.756 | 0 |
+| baseline-off-complete / warm | 100 | unavailable | unavailable | 165.168/211.064 | unavailable | 2 |
+| baseline-on / cold | 20 | 78.915/82.867 | 141.639/146.058 | 265.383/272.077 | 271.312/278.389 | 0 |
+| baseline-on / warm | 100 | 35.222/37.238 | 84.483/89.662 | 128.597/133.317 | unavailable | 0 |
+| candidate-on / cold | 20 | 61.364/63.730 | 137.447/155.278 | 347.200/370.671 | 352.454/383.050 | 0 |
+| candidate-on / warm | 100 | 63.571/67.806 | 139.907/148.122 | 348.807/362.735 | unavailable | 0 |
+| candidate-off / cold | 20 | 63.746/74.265 | 156.927/186.096 | 396.284/420.955 | 402.983/428.763 | 0 |
+| candidate-off / warm | 100 | 66.148/72.089 | 164.099/187.112 | 398.221/436.586 | unavailable | 1 |
+
+Baseline off warm2 returned an explicit acquisition failure; warm3 returned75nodes,
+missing only that transient anonymous group; both fail quality. One stage duration
+is genuinely unavailable, so baseline off warm AX/capture percentiles stay unavailable.
+Candidate off warm28 retained76nodes but anonymous group70 AXTitle/AXDescription
+reported actual ax_error_-25202/unknown versus reference unsupported. It is retained
+as quality failure, not ignored/pruned or claimed missing known fixture content.
+All cohort end witnesses restore exact starting graph/context and manifest hash.
+Candidate on quality120/120, off119/120; both exploratory combined gates fail
+362.735/436.586ms >300; AX/capture p95 below100/200, cold383.050/428.763ms <750.
+Stage-only passes cannot override combined or quality failure. Capture off max261.733
+and outer555.314 retained; on outer max387.682 retained.
+
+Actual candidate successful source matrix613known scalar components/375unavailable,
+76actions/75edges, no known secret acquired. AX response about352KiB and both frames
+about357KiB; PNG whole108–112KiB in these captures. Per-request acquisition sidecars
+preserve all owned-copy/slot/string/pixel counters. Parent snapshot9,497,976 owned bytes,
+15,728,832 retained reserved bytes; these are reservations, not cache size/RSS/SDK cap.
+SDK allocations/syscall counters and cache high-water unavailable, not0. No cache
+substitution/full resync; two explicit channel acquisitions per request. D06's prior
+actual Rust-stage replay remains scoped to Web; Native actual receive-channel path
+validates/passes Swift canonical bytes, and requires source-specific diagnostic
+measurement before a claim about its Rust contribution.
+
+Evidence root is system-temp uib-q02-native-full-lh3jw_lj; Q01/root are named
+nonimage-review consumers. All images, hard-linked staging originals and containing
+directories remain without agent deletion; representative1100×1050 image viewed
+inline. All21 baseline and21 candidate caller closures per mode confirm cleanup,
+no abandoned/reaping-poisoned domain. Only freshly validated owned22372/23264/24157
+received SIGTERM once, each absence confirmed; old Q01/N04 files preserved.
+Desktop/quiet CPU released after off campaign for Mac/Web real-case collection.
+Heavy compilation and new live series wait for their resource release; light offline
+harness/profile correction continues. Q02 is NOT complete or accepted at this checkpoint.
+
+- baseline-off-complete/report.json SHA256 `5d5f0619939c00ba0cc9413a9fb6c09b0615fd1347f7da57b23fcf9990e51e96`.
+- baseline-on/report.json SHA256 `1c712c28a7b47c116ab6061f525396289256486ca24b8b40552e334de0683c9b`.
+- candidate-on/report.json SHA256 `b54848e941807de97ece7ff45ac15afe11fdfbfcf34f28f62d876f80e5d397d1`.
+- candidate-off/report.json SHA256 `c85f25bcb6f71e9fe0d6b8457d622dcf5082be4e674a8341c87a15dd76af2ccd`.
 
 ## Original inactive-context correction — 2026-10-09
 

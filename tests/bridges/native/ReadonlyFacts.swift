@@ -4,7 +4,10 @@ import ApplicationServices
 import Foundation
 import Darwin
 
-@main struct Q02ReadonlyFacts {
+#if !Q02_BASELINE_LIBRARY
+@main
+#endif
+struct Q02ReadonlyFacts {
     enum Refusal: String, Error {
         case invalid_trusted_input, process_missing, process_incarnation_changed,
              executable_changed, window_owner_changed, identity_record_changed
