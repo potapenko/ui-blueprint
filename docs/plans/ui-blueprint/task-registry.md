@@ -39,15 +39,22 @@ handoff ниже — история, не текущее состояние и �
   waiting_resource получена; после Q02 cursor297 передан Native desktop для
   полного RC03 сбора. Existing chat resumed; самостоятельный setup→dataset→restore→
   commit/push→release по [пакету](packets/Q03-recorded-usefulness.md).
-- Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: подготовка завершена,
-  Q02 release передан. Полный Director dataset собирает параллельно в независимом
-  background browser. Foreground принадлежит Mac; при его необходимости ждёт
-  Mac release. Site tracked write set пуст, receipt/data handoff вернёт root.
-- Очередь ресурсов: Mac desktop + Web independent browser сейчас; после обоих
-  release вернуть Q02 quiet CPU/desktop для полного release-profile benchmark.
-  Разрешение пользователя на запуски действует; новых permission gates нет.
-- Q03 saved-data consumer `01a11c24-e7cd-7982-a070-c05e0721ad81` пока архивирован;
-  возобновить на готовых raw datasets, без повторения принятой fixture работы.
+- Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: real Director dataset
+  delivered, runtime released; no foreground or site tracked edits. Own tab closed,
+  draft/URL/filters restored. Advisor remains available for product context.
+- Очередь ресурсов: внешний владелец «PiP», затем Mac real-case сбор и Q02
+  release-profile timing. Web runtime больше не занимает ресурс. Offline Q03,
+  Native release builds и Mac preparation продолжаются независимо.
+- Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: restored for the same finite
+  real-case usefulness outcome. Web22-file dataset delivered by advisor; source
+  path/manifest and neutral first-answer instructions in latest [packet section](packets/Q03-recorded-usefulness.md).
+  Runtime released, site unchanged, no producer commit because only temp outputs.
+  Producer receipt retained in [platform advice](receipts/platform-test-advice.md).
+  Web answers/actual CLI consumption proceed now; Mac inputs follow when ready.
+- Mac runtime now waiting_resource: external «PiP» owns macos-product and desktop;
+  Mac advisor has queued and released its own desktop claim. Rechecks owner every
+  three minutes. Its current-source CLI build is prepared. Q02 may perform offline
+  release-profile builds now; timed/live requests wait for actual desktop release.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,

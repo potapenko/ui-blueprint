@@ -304,3 +304,23 @@ D06 engineering authority. Keep all numerical gates unchanged; never retrospecti
 call the new input equivalent or its pass the original comparison. Reuse the current
 driver/pinned inputs, no new benchmark framework. N03 foreground and Q03 authority
 questions are not resolved by this consultation.
+
+
+## Q03 Web real Director dataset — 2026-10-09
+
+Owner: Research website UI blueprint / 01a1102f-e21d-7251-9597-c29a1c66d088.
+Authority: Q03-recorded-usefulness.md Real-case continuation; explicit root release after Q02 resource cleanup. Existing user authorization checked in root thread. Mac foreground untouched.
+
+Traversal: site AGENTS → docs/specs/README → discovery-playback → phrase-search-filters (surface-controls, mobile-source-and-response) and prior dependency closure; source picker_view/suggestions; QA runner/routing/IAB workflow and selected geometry/keyboard scope of desktop filters case. UI Blueprint packet/reference advice and existing geometry caller documentation. This is reference dataset collection, not whole QA-case acceptance.
+
+Own IAB background tab at http://localhost:3000/#/clip-search?language=en; viewport1280x900 then1024x768, DPR1, visualViewport scale1, page scroll0. Open Director, empty draft→spiel, three live suggestions, no option selection. Local filter-options API200. Recorded DOM/CSSOM measured border boxes for wrapper/trigger/popup/input/listbox/3options, ancestor clipping and computed CSS zoom; exact DOM backend IDs and addressed AX for every selected node. Source timestamps/loader/document and raw measurements are in attached JSON. Browser.getVersion and Target.getTargetInfo unavailable via IAB raw CDP; target identity is tool browser2/tab1 plus actual frame/loader/document. Never invented a canonical target generation or Snapshot.
+
+Wide popup194.2578125x143.2734375css_px; narrow155.40625x114.8125. trigger→popup6.0234375→4.8125; input→list same gaps; option-left spread0 in each. Ancestor layout CSS zoom0.752941→0.602353 is observed metadata, not browser zoom. Calculated distances live in separate answer-key.json and remain browser-reference arithmetic, not UI Blueprint output. No code/CSS number substituted for measured rects.
+
+All8 backend IDs and document/frame/loader unchanged across resize. Selected rects unchanged in checks bracketing screenshot/identity/AX collection within each state; capture not atomic. Full paint occlusion/hit region/glyph contours and exact source-build correspondence unknown. Known rectangular containment is not a complete visibility proof.
+
+Cleanup: original draft restored empty, Escape closes popup; URL unchanged, filters remain null; focus returned to main search; viewport override reset; owned tab closed. No site process launched/restarted/stopped, no account/settings/filter change. No source/Page/tracked receipt edits, so no commit/push applicable. All outputs in this system-temp directory. Images remain indefinitely under OS/user lifecycle without agent cleanup. Nonimages retained for named root/Q03 consumer through acceptance; root owns later explicit cleanup. No model-token/speedup claim.
+
+Dataset consumption through canonical UI Blueprint still belongs to Q03; no library pass inferred from reference records.
+
+Handoff path: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q03-director-SYpdJ9`; manifest SHA256 `0ea1bdbcf5fa56977fe1dbb891450661b346c004cc3bbf0a830a0038304fe320`. Producer reports22-file inventory/hash verification. Consumer receives task/raw data before answer-key/this narrative.
