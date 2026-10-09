@@ -297,3 +297,31 @@ results; no repeated full campaign unless their inputs change. A measured failur
 stays visible. No new framework, fixture reshaping, field pruning or loosened gate.
 Return one terminal result with counts/p50/p95/quality, source/conditions, actual
 limitations, commit+push and CPU/desktop release. No nested agents or chats.
+
+## Session-local AX process reuse boundary — 2026-10-09
+
+Q02 observed both public CG lookups at similar30–45ms cold cost; source replacement
+was not justified. Proposed next internal optimization: reuse the already existing
+session-owned resident non-capture helper machinery for explicit read-only Observe,
+with a separate one-shot capture helper. This is a proposal, not a performance pass.
+Root reread D02@2, WORK@1, NATIVE-SESSION@3 and NATIVE@2 before this clarification.
+
+Existing D02.CONTENT permits multiple explicit requests, no idle collection and
+process ownership by session. WORK.PROFILE permits two registered Native streams/
+helpers per session. The original Q02 outcome therefore permits this internal reuse
+when the selected implementation preserves those contracts. It does not authorize
+a new daemon, snapshot/cache layer, public CLI/schema/permissions or larger quotas.
+NATIVE-SESSION@3's held form objects/action refs and1..8identifier profile remain
+form-only; reuse of its machinery cannot silently broaden that public contract.
+NATIVE.AX-READ's selected AX object stays Observe-local, with observation-scoped
+Surface/refs and current owner validation before/after. Process reuse is not data,
+handle, permission or identity reuse. All clocks/source attribution remain truthful.
+
+Q02 remains sole source writer under the original observer/transport/host/publication
+scope; declare exact paths/plan before edits and preserve adjacent form/PROTECTED,
+one-shot, channel capabilities, cancellation/EOF/expiry, two-helper/ingress budgets,
+ACK-before-capture and capture lease-until-reap. No permission gate for internal
+steps. A demonstrated need to change a protected public/semantic contract is an
+exact dependency, not implied authority. Coherent saved delta requires focused
+independent Q01 review for changed lifetime/binding risks; unchanged work stays closed.
+All original quality failures, full workload and numeric D06 gates remain mandatory.

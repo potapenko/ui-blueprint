@@ -99,11 +99,15 @@ handoff ниже — история, не текущее состояние и �
   evidence for28/70 and bounded baseline stage/typed refusal, before choosing repair.
   No generic rerun/relaxed predicate/new runtime campaign requested. Q01 retained
   for any required affected-source review; this diagnostic grants no Native pass.
-- Q02 measured full release off combined warm p95389.61ms with2quality failures;
-  on348.92ms with1quality failure; no Native pass. Original failures retained.
-  JSON codec diagnostic240replays structural values identical; removing sorted keys
-  only changed warm p95 7.91→6.54ms on Swift containers. Encoder change rejected,
-  production remains7709067. Helper initialization/transport measurement continues.
+- Q02 full release failures remain open. Diagnostics: codec sorting savings small,
+  both public CG lookups have similar30–45ms cold cost; no production substitution
+  accepted. Proposed session-local AX process reuse is permitted only inside existing
+  D02@2/WORK@1 semantics; exact boundary added to Q02 packet after full reread of
+  those plus NATIVE-SESSION@3/NATIVE@2. Form contract/Observe-local refs, fresh checks,
+  budgets/ACK/capture reap remain protected. Q02 declares actual source write set;
+  any genuine protected-contract delta returns before implementation. Same complete
+  task owns bounded quality diagnostics and performance repair, then affected Q01
+  review. No new performance or quality acceptance from this proposal.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,
