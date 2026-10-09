@@ -98,7 +98,12 @@ handoff ниже — история, не текущее состояние и �
   acceptance on immutable e641543 versus70c3ddb under latest Q01 packet. Initial
   code/test observation first; Q02 narrative/receipt withheld until it returns
   initial coverage. Then same context reconciles source/runtime evidence and final
-  verdict. CPU granted for focused checks; no initial live/UI grant. Q02 notified
+  verdict. Initial source observation completed in turn01a120e7/cursor148 before
+  author narrative: no confirmed blocker, own7protocol checks, further evidence
+  reconciliation required for reconfiguration/lifetime/ACK/isolation. Root then
+  supplied matching e641543 receipt and sdk-reuse-source-handoff.json with exact
+  smoke/freshness/expiry files; same Q01 now completes stage2 and final verdict.
+  CPU granted for focused checks; no initial live/UI grant. Q02 notified
   not to start competing timed cohorts. No old-suite or unrelated requalification.
 - Earlier Q01 quality diagnostic18eeceb remains: all5 failures preserved; missing
   same-call boundary status/order and typed baseline stage evidence handed to Q02.
