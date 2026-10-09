@@ -60,8 +60,12 @@ handoff ниже — история, не текущее состояние и �
   paint/hit/freshness/atomicity and automatic real-browser ingestion remain unclaimed.
   Original22-file dataset/images retained; own consumed nonimages cleaned.
   Same chat idle awaiting actual Mac dataset; retain for its remaining task.
-- Mac runtime now waiting_resource: external «PiP» owns macos-product and desktop;
-  Mac advisor has queued and released its own desktop claim. Rechecks owner every
+- Mac runtime now waiting_resource: «PiP» (`01a11afd-227b-7003-98fa-26d059aef505`) owns macos-product; desktop
+  owner is «Исследовать перенос Guest Tour» (`01a11b4c-d590-78d2-a123-e863f8348fdb`).
+  Root directly verified both active: Guest Tour is operating its Mac UI checks,
+  PiP awaits desktop for its prepared Release. No circular resource wait observed.
+  Queue: Guest Tour → PiP → Mac RC03 → Q02. Mac advisor has queued and released
+  its own desktop claim. Rechecks owner every
   three minutes. Its current-source CLI build is prepared. Q02 release-profile binaries and Native Rust-stage replay are now ready: author
   checkpoints b3ea40c/efe228f pushed,120 replay calls passed, AX/capture validation
   warm p95 2.53/0.043ms respectively; no new outer latency pass. Timed/live requests
