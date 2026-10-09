@@ -161,9 +161,20 @@ import Darwin
         DispatchQueue.global().asyncAfter(deadline: .now() + 4) { _exit(124) }
         do {
             let args = CommandLine.arguments
-            guard args.count == 5, ["identity","facts","owner"].contains(args[4]) else { _exit(2) }
+            guard args.count == 5, ["identity","facts","owner","front"].contains(args[4]) else { _exit(2) }
             let manifest = try JSONSerialization.jsonObject(with: read(args[1], cap: 524288)) as! [String: Any]
             let limits = try JSONDecoder().decode(NativeAcquisitionLimits.self, from: read(args[3], cap: 4032))
+            if args[4] == "front" {
+                guard let app = NSWorkspace.shared.frontmostApplication,
+                      let bundle = app.bundleIdentifier, let launch = app.launchDate,
+                      let executable = app.executableURL else { throw Refusal.process_missing }
+                let report: [String: Any] = ["pid":app.processIdentifier,"bundle_id":bundle,
+                    "launch_time":launch.timeIntervalSince1970,"executable":executable.resolvingSymlinksInPath().path]
+                let json = NativeJSON(limits)
+                let frame = try NativeJSONFrame(capacity:16384,deadline:ProcessInfo.processInfo.systemUptime+1)
+                try frame.encode(json.borrowed(report));try frame.write(to:STDOUT_FILENO,deadline:ProcessInfo.processInfo.systemUptime+1)
+                return
+            }
             if args[4] == "owner" {
                 let report = try owner(manifest, executable: args[2], limits: limits)
                 let json = NativeJSON(limits)

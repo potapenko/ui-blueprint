@@ -22,6 +22,14 @@ actions/edges compared. Only added Snapshot and OpenB x−89.5pt differ structur
 new active/key/main context differs from original inactive/nonkey/nonmain. Both
 modes match each other's full raw tree/data and natural1100×1050 output. Versioned
 76-node workload proposal awaits D06 owner; no timing or gate edit performed.
+The active context proposal was subsequently rejected. A corrective owned off setup
+verified the immediately preceding application's PID/incarnation, then requested
+standard Cmd+Tab once. The subsequent owned AX observation and independent metadata
+still showed off active/frontmost and AXMain=true; no verified original-context
+transfer. Name/form/geometry stayed correct. Dependent matching-context comparison
+stopped, own off process retired, no new on/capture/timing run. This attempt does
+not establish that an inactive context is impossible; it identifies the unverified
+foreground-return step. Exact inactive/nonkey/nonmain remains required/proposed.
 Authority is [D06@1](../specs/development/decisions/d06-performance.md),
 [PERFORMANCE@1](../specs/acceptance/performance.md) and the approved
 [Q02 packet](../plans/ui-blueprint/packets/Q02-performance.md). Gates/quotas are

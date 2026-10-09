@@ -1,5 +1,71 @@
 # Q02 performance — Web and Rust-stage results, Native pending
 
+## Original inactive-context correction — 2026-10-09
+
+Root rejected active/key/main as a convenience replacement for original inactive/
+nonkey/nonmain, while accepting017d85c as measured not_equivalent. New direct scope
+allows ordinary UI return to only the application frontmost immediately BEFORE own
+fixture setup, after its PID/incarnation verification; no contents or other operation.
+Existing packet/source/Apple/QA/CUA constraints retained. No D06/.PROOF/gate/fixture/
+product edit, new UI/control/backend, Web/stage repeat or Native timing authorized.
+
+Source53e6e6e was inspected first: Snapshot is an explicit own button, publisher
+records context at that moment; there is no inactive publisher/notification or
+shortcut to invent. The prior active76-node results/structural Snapshot/OpenB delta
+remain intact. Rebuilt only accepted7709067 helper plus read-only witness; new
+`front` mode reads NSWorkspace process metadata ONLY, never that app's UI/content.
+Own temp root uib-q02-inactive-qzx50pu4. Immediately before LaunchServices off launch,
+frontmost PID59278/bundle com.apple.mail/launch1791399954.873536/executable exact
+Mail.app was recorded. It was revalidated by existing describe-process before the
+return action. No Mail window/content/value/state was read or changed.
+
+Off PID84661/launch1791509807.7660332/exact N04 binary was freshly validated.
+Input owner active/frontmost/exact A/focused-element PID held before each necessary
+Compare and Snapshot CUA action. Compare once established Count1/expanded/empty/
+unchecked/Result none/scroll-top/Name focus; Snapshot once published fresh binding.
+This is new owned setup under the correction, not a repeat of previous collection.
+
+One standard app-bound CUA `pressKey('super+Tab')` was requested, followed by the
+required owned-fixture AX observation. Both the AX state and independent front
+metadata failed to verify the intended transfer: frontmost remained84661, app_active
+true, raw AXMain=true, Name AXFocused=true. All form values and550×525pt frame stayed
+correct. The earlier return-target59278 still matched its recorded incarnation;
+there was no target substitution or read of its contents. Tool returned no explicit
+delivery failure, so the cause is UNKNOWN; this does not prove generic impossibility,
+that the key was delivered, or that a read restored focus. No causal workaround or
+automatic retry was inferred from the unchanged final state.
+
+Required inactive/nonkey/nonmain was NOT established. Key/main AppKit flags in the
+last active Snapshot are historical after the return attempt; raw AXMain remains
+attributed to its own API. No fake NSWindow flag or boolean conversion is used to
+force matching. Unknown/unverified context transfer stops dependent input and
+comparison under the packet. No new on launch, producer AX/capture comparison or
+timed cohort followed. The context witness is a bounded read, not substitute D06
+evidence. Existing complete017d85c off/on data was reused, never recollected/dropped.
+
+**Minimum fork:** establish a VERIFIABLE standard foreground return to the already
+validated preceding process while preserving fixture state/Name AX focus, then do
+read-only context/comparison without another input to the inactive fixture. The
+currently attempted app-bound CUA sequence did not verify that boundary; global
+launch_app capability is unavailable in this session. An operator's ordinary
+foreground switch or an explicitly supported same-target non-content activation
+route could resolve that operational step, subject to fresh identity/ownership;
+neither an old activation answer nor a new backend/fixture modification is implied.
+Only after actual matching context may the request-only76-node proposal retain
+original inactive/nonkey/nonmain rather than substitute active. Snapshot/OpenB
+source delta still requires D06 owner resolution/fresh baseline before timing.
+
+Evidence: off-prior-front.json, off-prior-revalidated.json, off-owner-before-return.json,
+off-return-attempt-front.json, off-context-after-return-attempt.json, off-live/a.json
+and cleanup.json under the own temp root. Actual prior/target identity values are
+metadata, not interaction rights to any other app. Only own84661 received one
+SIGTERM AFTER exact current identity validation; absence confirmed. No on process
+was launched. Own binaries/helpers have no surviving process; CPU/UI released.
+Consumed own build/source products are cleaned; minimal nonimage evidence retained
+for Q01/root. No screenshot/image was created in this correction; all earlier images/
+staging/shared roots unchanged. Source/Node checks and link/whitespace verification
+record the result; the incomplete context is not labelled a matching preflight/pass.
+
 ## Controlled53e6e6e off/on input result — 2026-10-09
 
 Root explicitly assigned the finite Native lifecycle/UI/setup resource under the
