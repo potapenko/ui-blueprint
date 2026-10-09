@@ -24,7 +24,7 @@ Authority: прямое разрешение пользователя запис
 Ожидания разрешения на запуск/real-case collection сняты. Предыдущий blocked
 handoff ниже — история, не текущее состояние и не препятствие работе.
 
-- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: возобновить полный Native D06
+- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: running, turn `01a11ffd-4e3c-7001-bf41-e419285d859c`; полный Native D06
   outcome по последнему разделу [пакета](packets/Q02-performance.md). Владеет
   Native desktop/тихим CPU до terminal resource release. Web thresholds и
   Rust-stage evidence сохранены; Native timing ещё не выполнен.
@@ -34,6 +34,9 @@ handoff ниже — история, не текущее состояние и �
   Live collection после release Q02; источник требований — их текущие проекты.
   Раздельные receipts/data paths; общий desktop последовательно Mac, затем Web,
   если Web не может использовать независимый browser без foreground.
+  Dispatch подтверждён: Mac turn `01a11ffd-5543-7973-8eeb-ed9f13636269`,
+  Web turn `01a11ffd-5ad1-7d10-ae2d-78eb4f6a2609`; оба active. Web сообщил
+  готовность подготовки и waiting_resource для live-сбора после Q02 release.
 - Q03 saved-data consumer `01a11c24-e7cd-7982-a070-c05e0721ad81` пока архивирован;
   возобновить на готовых raw datasets, без повторения принятой fixture работы.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный

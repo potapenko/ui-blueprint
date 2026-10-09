@@ -106,6 +106,9 @@ trigger/popup/input/list/options bounds, source IDs/units/coverage and screensho
 Use its current source spec/QA routes named in platform-test-advice.md; record exact
 traversal before runtime. Open/close/resize are setup; do not select a director,
 change filters/settings/account data or invent a CSS declaration as measurement.
+An autocomplete draft may be entered solely to show suggestions without selecting
+or applying a filter; preserve and restore the original draft. Proposed1280×900
+and1024×768 desktop viewports are allowed; record actual dimensions.
 No site code changes. Keep raw measurement dataset in unique system temp with
 manifest, task prompt and separate answer key; return its absolute path in final.
 UI Blueprint repository writes limited to receipts/platform-test-advice.md's new
