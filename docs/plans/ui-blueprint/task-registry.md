@@ -87,6 +87,19 @@ handoff ниже — история, не текущее состояние и �
   Q02 same chat resumed with release binaries/full outcome; it may directly wait
   for Mac's short saved-data CPU work before timed series, no extra root grant.
   Q03 receives Mac original dataset on delivery; Web accepted portion stays closed.
+- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: resumed for one finite Native
+  release-quality diagnostic under the latest Q01 packet section. Original pinned
+  source7709067, registry33/D06@2/request-only@1/acquisition@3; neutral handoff
+  `uib-q02-native-full-lh3jw_lj/q01-quality-handoff.json` lists exact reports/samples/
+  hashes/raw witnesses/config. Read-only data/source predicates, no live/build/stress
+  or product edits; Q02 sole writer. Consumer: distinguish actual mandatory quality
+  failure from representation/timing evidence gaps and identify smallest next owner.
+  No new source/P7 acceptance or threshold/quality change is authorized by diagnosis.
+- Q02 measured full release off combined warm p95389.61ms with2quality failures;
+  on348.92ms with1quality failure; no Native pass. Original failures retained.
+  JSON codec diagnostic240replays structural values identical; removing sorted keys
+  only changed warm p95 7.91→6.54ms on Swift containers. Encoder change rejected,
+  production remains7709067. Helper initialization/transport measurement continues.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,

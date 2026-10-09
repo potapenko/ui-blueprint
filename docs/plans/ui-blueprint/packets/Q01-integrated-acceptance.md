@@ -116,3 +116,59 @@ Task owns integration tests/harness/receipt, не product code. Если W04 har
 семантикой исправленного host; это correction устаревшего теста, не изменение нормы.
 I02 параллельно владеет только distribution recipe/docs/packaging checks, без UI.
 Не потреблять его незавершённые файлы; pin actual recipe при проверке установки.
+
+## Native release quality diagnostic — finite parallel task, 2026-10-09
+
+Classification: diagnostic. One outcome: determine precisely what the recorded
+release-cohort quality failures prove under the unchanged Native quality contract,
+and identify the smallest actual repair or missing-evidence dependency. Immediate
+consumer: Q02 full performance outcome and root's final quality acceptance. This
+is not another whole-source review, new runtime campaign or acceptance of timings.
+User-authorized parallel chats under PLAN.UIB@1; root remains coordination-only.
+No agents/nested chats, app operation, build, live API call or product/spec edit.
+Model/reasoning inherit this existing chat. Q02 remains sole product writer.
+
+Ready evidence, immutable original source770906798e1326fed3dd0edec40dc59b13772b3a:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q02-native-full-lh3jw_lj/q01-quality-handoff.json`.
+It lists exact release off/on baseline/candidate reports, hashes, individual sample
+files/artifact directories, before/after raw witnesses, source/binary/fixture/config
+pins and retention. Driver assertion output is data, not an authoritative verdict.
+Inspect these actual records first; do not start from Q02 receipt/narrative or infer
+cause from earlier anonymous-group observations. Source scopes are actual Native
+AX mapping/publication and witness/quality predicate owners needed to explain these
+records (pinned tests/bridges/native/WindowAX.swift, current ReadonlyFacts.swift,
+cohorts.cjs and their directly relevant native dependencies). No broad source audit.
+
+Spec Basis: registry33 → decision D06@2 plus D06-NATIVE-REQUEST@1.INPUT/METHOD/QUALITY,
+D05-NATIVE-ACQUISITION@3.PROOF/OUTCOMES and explicit dependencies; PERFORMANCE@1,
+NATIVE@2, MODEL/EXCHANGE@2/GEOMETRY/IDENTITY/PRIVACY and already-read applicable
+Q01 closure. Known source versus unknown/unsupported, partial coverage, all requested
+facts, full input/cost, read-only state and denominator/outlier requirements remain.
+No changed threshold, field pruning, extra tolerance, silent quota relief, retry-to-pass,
+reclassification of mandatory failure as a residual or fabricated same-time oracle.
+
+Compare exact failed versus appropriate successful source/canonical records, keeping
+collection times/clocks and baseline/candidate formats separate. Distinguish:
+- demonstrated lost/misreported requested source facts or wrong ownership;
+- actual explicit API/availability failure and its stated meaning;
+- representation/state differences between separate observations, with causal limits;
+- a driver assertion stricter/different than an actual contract criterion, if proven;
+- missing evidence that prevents choosing among those explanations.
+A raw witness at another time is not automatically a same-state ground truth. A
+baseline failure does not excuse candidate failure. A count difference alone does
+not establish either collector loss or benign source variability. Preserve complete
+samples/denominators; a quality diagnosis cannot grant latency acceptance.
+
+Economy basis: existing exact failed samples plus adjacent proof, no repeat live
+run or new framework. Read-only lightweight file/source comparisons may run beside
+Q02 offline optimization; no heavy build/stress/load. If a new live observation is
+truly necessary, return the exact unanswered question/minimum evidence, not a broad
+request to redo Native. Keep accepted unrelated Q01/Web/Q03 work closed.
+
+Write only a distinct diagnostic section in receipts/Q01-integrated-acceptance.md.
+Return one final compact result: per observed failure, contract criterion, what the
+original bytes/source establish, what remains unproved, exact affected owner and
+minimal next dependency. Do not label this diagnostic a fresh independent source
+acceptance or full Q01/P7 pass. Ordinary new product deltas later retain their own
+required focused review. Check changed links/whitespace, scoped commit+push under
+shared Git lock; no root grant. Do not delete/rewrite any shared evidence or images.
