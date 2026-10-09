@@ -24,8 +24,9 @@ Authority: прямое разрешение пользователя запис
 Ожидания разрешения на запуск/real-case collection сняты. Предыдущий blocked
 handoff ниже — история, не текущее состояние и не препятствие работе.
 
-- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: terminal waiting_resource,
-  completed turn `01a11ffd-4e3c-7001-bf41-e419285d859c`, cursor312; retain chat.
+- Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: resumed after Mac runtime release; prior terminal
+  turn `01a11ffd-4e3c-7001-bf41-e419285d859c`/cursor312 retained. Same full Q02
+  task now owns Native desktop for fresh release baseline and candidate.
   Registration9e08e05 precedes timing: D06@2 / Native request-only@1 / acquisition@3.
   Full new receipt sections read: b3ea40c/efe228f pushed. Onone baseline/candidate
   each off/on20cold+100warm retained. Candidate off/on combined warm p95
@@ -47,7 +48,7 @@ handoff ниже — история, не текущее состояние и �
 - Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: real Director dataset
   delivered, runtime released; no foreground or site tracked edits. Own tab closed,
   draft/URL/filters restored. Advisor remains available for product context.
-- Очередь ресурсов: Mac real-case сбор сейчас, затем Q02
+- Очередь ресурсов: Q02 Native benchmark сейчас; Mac только saved-data work
   release-profile timing. Web runtime больше не занимает ресурс. Offline Q03,
   Native release builds и Mac preparation продолжаются независимо.
 - Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: Web portion terminal completed,
@@ -60,14 +61,15 @@ handoff ниже — история, не текущее состояние и �
   paint/hit/freshness/atomicity and automatic real-browser ingestion remain unclaimed.
   Original22-file dataset/images retained; own consumed nonimages cleaned.
   Same chat idle awaiting actual Mac dataset; retain for its remaining task.
-- Mac runtime: cursor67/71 confirms both macos-product and desktop acquired by
-  advisor `01a1102f-791c-7e91-bec3-1877ea004d51`. Guest Tour development process
-  closed; canonical Release launch and ordinary CUA setup/native_ax collection
-  underway. No alternate backend or ownership bypass used. Root's previous queue
-  observation is historical; no user permission is pending.
-  On Mac runtime release: resume Q02 release baseline/candidate in its same chat;
-  on original dataset delivery: resume Q03 saved-data consumer for Mac portion.
-  Q02 release binaries and Native Rust replay are ready inb3ea40c/efe228f.
+- Mac runtime: cursor89 confirms collection completed, two original native_ax
+  Observe responses with160nodes each/partial coverage; actual961×1050 and
+  1920×1050pt, same paused clip. First broader request incomplete_scope retained.
+  Exact original frame/query/clip/paused restored; only own launched app closed;
+  both runtime reservations/caffeinate released. No image cleanup.
+  Mac advisor now completes offline Inspect/Measure and dataset packaging.
+  Q02 same chat resumed with release binaries/full outcome; it may directly wait
+  for Mac's short saved-data CPU work before timed series, no extra root grant.
+  Q03 receives Mac original dataset on delivery; Web accepted portion stays closed.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,
