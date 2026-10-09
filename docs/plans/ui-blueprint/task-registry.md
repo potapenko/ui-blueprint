@@ -47,7 +47,7 @@ handoff ниже — история, не текущее состояние и �
 - Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: real Director dataset
   delivered, runtime released; no foreground or site tracked edits. Own tab closed,
   draft/URL/filters restored. Advisor remains available for product context.
-- Очередь ресурсов: внешний владелец «PiP», затем Mac real-case сбор и Q02
+- Очередь ресурсов: desktop Guest Tour, затем Mac real-case сбор и Q02
   release-profile timing. Web runtime больше не занимает ресурс. Offline Q03,
   Native release builds и Mac preparation продолжаются независимо.
 - Q03 `01a11c24-e7cd-7982-a070-c05e0721ad81`: Web portion terminal completed,
@@ -60,16 +60,15 @@ handoff ниже — история, не текущее состояние и �
   paint/hit/freshness/atomicity and automatic real-browser ingestion remain unclaimed.
   Original22-file dataset/images retained; own consumed nonimages cleaned.
   Same chat idle awaiting actual Mac dataset; retain for its remaining task.
-- Mac runtime now waiting_resource: «PiP» (`01a11afd-227b-7003-98fa-26d059aef505`) owns macos-product; desktop
-  owner is «Исследовать перенос Guest Tour» (`01a11b4c-d590-78d2-a123-e863f8348fdb`).
-  Root directly verified both active: Guest Tour is operating its Mac UI checks,
-  PiP awaits desktop for its prepared Release. No circular resource wait observed.
-  Queue: Guest Tour → PiP → Mac RC03 → Q02. Mac advisor has queued and released
-  its own desktop claim. Rechecks owner every
-  three minutes. Its current-source CLI build is prepared. Q02 release-profile binaries and Native Rust-stage replay are now ready: author
-  checkpoints b3ea40c/efe228f pushed,120 replay calls passed, AX/capture validation
-  warm p95 2.53/0.043ms respectively; no new outer latency pass. Timed/live requests
-  still wait for actual desktop release. Mac advisor revalidated external PiP active.
+- Mac runtime waiting_resource обновлён по cursor60: macos-product уже передан
+  Mac advisor `01a1102f-791c-7e91-bec3-1877ea004d51`; он получил эту резервацию.
+  Desktop ещё у «Исследовать перенос Guest Tour»
+  (`01a11b4c-d590-78d2-a123-e863f8348fdb`), подтверждён active UI runtime.
+  Осталась очередь desktop Guest Tour → Mac RC03 → Q02. PiP больше не текущая
+  зависимость приложения. Mac current-source CLI подготовлен; оригинальные Observe
+  сохраняются без переписывания. Ранее root исключил наблюдаемый цикл ожидания.
+  Q02 release-profile binaries и Native Rust replay готовы вb3ea40c/efe228f;
+  возобновить same chat после actual desktop/quiet CPU release.
 - Q01 bounded Native functional reconciliation `21e0abf` принят; отдельный
   обязательный Focus rerun не нужен. Source7709067 принят, новых source deltas нет.
 - I02 `ef45577` завершён и архивирован: combined source063e709 проверен,
