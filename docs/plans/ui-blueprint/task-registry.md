@@ -94,17 +94,21 @@ handoff ниже — история, не текущее состояние и �
   author receipt: claimed repeated fresh Observe/same helper, expiry/refusals,
   cleanup and affected checks are author evidence, not independent acceptance.
   No new Native D06 pass. Q02 keeps full task/sole writer; old failures retained.
-- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: started one focused source
-  acceptance on immutable e641543 versus70c3ddb under latest Q01 packet. Initial
-  code/test observation first; Q02 narrative/receipt withheld until it returns
-  initial coverage. Then same context reconciles source/runtime evidence and final
-  verdict. Initial source observation completed in turn01a120e7/cursor148 before
-  author narrative: no confirmed blocker, own7protocol checks, further evidence
-  reconciliation required for reconfiguration/lifetime/ACK/isolation. Root then
-  supplied matching e641543 receipt and sdk-reuse-source-handoff.json with exact
-  smoke/freshness/expiry files; same Q01 now completes stage2 and final verdict.
-  CPU granted for focused checks; no initial live/UI grant. Q02 notified
-  not to start competing timed cohorts. No old-suite or unrelated requalification.
+- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185`: terminal ACCEPT e641543 Native
+  lifetime/binding boundary, receipt `9675c0b` pushed and read fully by root.
+  Two-stage observation/reconciliation preserved. Own7protocol checks; exact v3
+  binary reproduced byte-for-byte from11pinned inputs. Earlier staging tree differs
+  in2Swift files; v2 reproduced separately and reused only for unchanged cleanup body.
+  Source/correlation/caps/ACK/capture isolation/lifecycle accepted through explicit
+  independent source/binary/protocol checks plus attributed author raw records and
+  unchanged enforcement tests. Exact180s kill instant/v3 closure counters not claimed;
+  no new live/UI run and no D06 quality/timing pass. CPU/build resources released.
+  Completed reviewer can be archived; restore same context only for actual new delta.
+- Q02 received ACCEPT/CPU release and continues its same full outcome on e641543.
+  Required complete Native cohorts/quality still open; historical5failures retained.
+  No grant to change gates or repeat closed Web/Q03. Current shipping source now
+  e641543 (accepted boundary), so final delivery must qualify affected installed
+  sources after performance work is complete; prior I02 unchanged areas reusable.
 - Earlier Q01 quality diagnostic18eeceb remains: all5 failures preserved; missing
   same-call boundary status/order and typed baseline stage evidence handed to Q02.
   AX-only40calls did not reproduce them and does not close them. No criterion
