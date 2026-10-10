@@ -27,14 +27,15 @@
 - Old Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: host revision428,
   thread notLoaded, turn `01a1203f-b27e-7152-adc0-75da18a8e74d` failed with
   `context_length_exceeded`. This proves execution stopped; no timeout inference.
-  Its source checkpoint and handoff are preserved. Archive after resource handoff.
+  Its source checkpoint and handoff are preserved. Q02-R revision15 reports no
+  remaining old fixture/helper/worker processes; no cleanup/kill was needed.
+  Old Q02 archived through the chat tool after this resource handoff.
 - Q02-R `01a12127-5b94-7801-95cd-c35cf2c3ceab`,
   «Q02-R — Native замеры принятой сборки», is the sole next executor of the
   existing [finite packet](packets/Q02-native-final-execution.md).
   Dispatch confirmed active/inProgress, turn01a12399-7bf2-7020-bac7-034b30a3ba99,
-  revision5; worker acknowledged the revised boundary.
-  Next: reconcile actual retained resources, then complete Native timing/quality
-  autonomously. Root does not run QA or prescribe internal steps.
+  revision15. Resource handoff complete; worker prepares the existing harness
+  for the accepted source. Next: complete Native timing/quality autonomously. Root does not run QA or prescribe internal steps.
 - User rejected Codex Computer Use. Its former UI Stop instruction is revoked;
   manual Stop is unnecessary now. No control bypass or replacement chat.
 - Accepted e641543 source/Q019675c0b, installed6ff4943 and Q03b014cd4 remain closed
