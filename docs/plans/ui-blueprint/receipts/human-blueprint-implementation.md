@@ -279,3 +279,17 @@ reconciliation; Settings R4 image remains frozen on cd099a1/R4 prompt and is nei
 regenerated nor attributed to R7. Its14 dimensions and applicable criteria are unchanged.
 Receipt/source whitespace check passed; saved-source installed check follows checkpoint.
 Every previous image and original remains retained. Same critics own actual R7 review.
+
+
+R7 source checkpoint `9f5b9a867bcc80c9d019b14166e24b9f07fe95a8` pushed. Fresh core
+build/verify and installed reproduction of all six files of both R7 packages passed.
+Settings package is reconciliation only; accepted R4 image stays on its own source.
+Run-owned non-image installation removed and removal verified. All images retained.
+
+Author-reported compatibility concern (not independent C7 verdict): concise helper
+`geometry()` currently selects LayoutBounds only; `native_role()` prefers raw native
+text over an available canonical Role property. Existing observed inputs with known
+other frame kinds or native role vocabulary may lose useful human drawing evidence,
+although their machine records remain exact. Root requested bounded verification by
+the continuing content critic. No source change or Native/collector expansion made;
+hold for a finite reconciled packet with proportional generic export regression checks.
