@@ -831,3 +831,15 @@ in this cohort, but six samples cannot isolate causality or guarantee future out
 No image repair, source change or new generation is authorized by these judgments.
 All six results, including both failures, stay retained and reported. Only this
 receipt changed; `git diff --check` passed before the checkpoint.
+
+C4 Mobile1 reconciliation: HBP-V retains its scoped12-inset pass. In the Source
+fragment, the START is the single long exterior vertical segment left of all shown
+Source content; END aligns with the visibly printed Source label's left edge. All's
+own control-left outline is separately visible farther right. The complete-viewport
+overview supplies the matching outer-border → Source-label context, and the detail
+contains no additional Source-group enclosure to compete for that boundary. The
+viewport identity of START is therefore inferred from combined overview/detail
+context, not printed as an explicit caption. This is the limit of this acceptance;
+no mandatory extra edge-name rule is introduced and no exact raster coordinate is
+claimed. The independent content critic's concern about that inference is preserved
+by root; this visual pass does not overrule its verdict or establish joint acceptance.
