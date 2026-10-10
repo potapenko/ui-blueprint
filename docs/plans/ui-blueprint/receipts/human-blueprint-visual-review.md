@@ -124,3 +124,80 @@ candidate, compiler/privacy compatibility result or final acceptance is claimed.
 Documentation-only verification: local plan link resolves and `git diff --check`
 passes for this receipt. HBP-V remains available for subsequent candidates in this
 same critic role; no extra agents, chats, goals or visible apps were used.
+
+## R1 independent review — 2026-10-10
+
+Candidate pin: `43d62d46602929b485b3e136c19e69f5cb8a9af6`.
+Re-established route: registry 36 → EXPORT@2 and DRAWING-PACKAGE/STYLE/GEOMETRY/
+PROMPT-A/PROMPT-B/REVIEW@2 → their new explicit DRAWING@1.2 HBP-HUMAN-001 section;
+unchanged @1 source/model/privacy dependencies reused from the complete initial read.
+The updated presentation rule has explicit precedence over historical template text.
+
+Actual images: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/director-r1.png`
+and sibling `settings-r1.png`; both 1536 × 1024, declared delivery review at 100%.
+Inspected using original-resolution image view. Initial observations were sent to
+root before reading either literal `*-r1-package/prompt.txt`; no implementation
+receipt or author verdict read. E04 source images/raw nodes remain the comparator.
+
+**Verdict: R1 is not accepted.** The new composition fixes the large prior failures:
+no dark screenshot panels, no inventory/ID tables, no long decimals, no duplicated
+Director heading-as-control. Main forms and enlarged details are clearly separated;
+control/value/help labels are readable at this native size. Remaining defects are
+specific source geometry/anchor failures, not a request for more visual decoration.
+
+| Criterion | Director R1 | Settings R1 |
+| --- | --- | --- |
+| V1 | Pass for blue/white flat drawing grammar; no intentional gradient/panel treatment. | Near-pass, but filled white switch knobs violate the explicitly outlined-knob rule; use blue-interior white-outline knobs, retaining the left/off position. |
+| V2 | Fail: input and result rows no longer share left/right edges or equal width; popup and trigger no longer share their source left edge. Counts, text, one heading/input and three results are preserved. | Pass for visible composition/content/state: seven correct preference rows, content section, both off toggles, all helper text and Close remain. |
+| V3 | Pass: overview/details/notes hierarchy, ample space and no machine-data competition. | Pass: same; no new layout overhaul required. |
+| V4 | Pass at declared native 1536 × 1024: labels, dimensions and footer are readable; main problem is their meaning, not type size. | Pass at declared native size, including small helper text/footer. This is not a claim for reduced-size embeds/printing. |
+| V5 | Fail: several dimensions float without their named edge pair; Detail A spends space repeating already legible trigger geometry while carrying detached gap marks. | Fail: overall height ends at the wrong boundary; top inset and detail spacing marks are not associated with their named edges. |
+| V6 | Prepared rounded numbers/units/status are legible and no unsupported new values were found; cannot fully pass while displayed anchor meaning is wrong. | Same: correct numerical tokens do not make the depicted measurements correct. |
+
+Concrete blocking corrections:
+
+1. **Settings overall height:** the line labelled `≈618 (form height)` ends at
+   the top of the Close/footer region. It must span the complete form from top
+   boundary to bottom boundary; the existing ≈57 bottom-region dimension is a
+   subordinate span, not an extra height outside ≈618. Source FORM height is
+   617.7421875 CSS px and includes the footer. Keep the number; fix its endpoints.
+2. **Settings ≈43 and ≈8:** ≈43 means FORM top → content DIV top, but its short
+   line sits beside the header/first row without those endpoints. Detail A's
+   ≈8 above/below the select has no identifiable row bounds; the lower mark is
+   a one-ended arrow. Either explicitly identify the actual two source boundaries
+   or omit that weaker candidate and show the supplied ≈16 clear gap between two
+   adjacent select controls. Preserve the useful ≈198 × ≈33 control-size detail.
+3. **Director ≈14/≈4/≈5/≈8:** the ≈14 decoration above the title is not the
+   supplied wrapper-top → trigger-top inset. The ≈4 mark floats above the info
+   icon without extending to label-right and icon-left. The ≈5 mark does not
+   trace info-bottom → trigger-top. Detail B's left ≈8 is a detached arrow; its
+   right ≈8 has no depicted popup edge. Prefer fewer useful anchored dimensions:
+   trigger-to-popup ≈6, input-to-list ≈6, row gap ≈3, plus popup-to-input ≈8
+   where the popup boundary is actually visible. Omit unnecessary wrapper measures.
+4. **Director alignment:** source trigger/popup share x=24.59375; input and all
+   three result rows share x=32.6171875 and width=178.2109375. Re-establish those
+   alignments in overview and enlargement. This is a categorical relationship,
+   not a demand for CAD-accurate raster scale. The current enlargement repeats
+   the incorrect wider/left-shifted result row, so both views must be corrected.
+5. **Settings knobs:** replace the solid white circles with outlined circles;
+   do not change their position or add a checked state.
+
+Do not repeat the overall composition experiment: retain the accepted hierarchy,
+legibility, source labels and compact footer. Complete the useful geometry with a
+small selected set of correct dimensions; multiplying labels is not the remedy.
+Captions that uniquely name the actual repeated source control are sufficient;
+this review does not newly require decorative leader connections for every detail.
+
+Focused research revisit: [Onshape Drawing Dimensions](https://cad.onshape.com/help/Content/Drawing/drawing_dimensions.htm)
+explicitly describes association with geometric entities and identifies a detached
+association as a dangling dimension. That directly supports treating R1's floating
+arrows as communication failures. Our remedy applies this association principle;
+no Onshape colour convention, manufacturing unit or ISO requirement is imported.
+
+A read-only PNG sample check found only small ground-colour variation (a few RGB
+levels) in clear regions. This is not escalated into a separate gradient blocker:
+there is no intentional tonal UI treatment in R1. The outline-knob failure is
+plainly visible. Sampling used Python standard-library PNG decoding after the
+optional Pillow import proved unavailable; no image was transformed or created.
+Documentation verification: new prose/links reviewed and `git diff --check` passed.
+No code, source data, prompt, frozen PNG or author receipt was modified.
