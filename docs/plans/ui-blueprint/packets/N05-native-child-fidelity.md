@@ -70,7 +70,7 @@ node/depth/output cap. Actual original data and ordering remain authoritative.
 Original oldQ02 root and q01-quality-handoff.json are linked in the preceding
 receipt section; historical five failures remain.40 AX-only clean diagnostics do
 not reproduce this actual cold AX+capture path or close its failure.
-Existing owners: NativeAXElements/collectWindowAX in plugins/macos/WindowAX.swift;
+Existing owners: NativeAXElements/collectWindowAX in tests/bridges/native/WindowAX.swift;
 tests/bridges/native/AXBoundary.swift; existing native cohorts.cjs/performance.rs.
 Read exact bodies/types/tests before choosing any change. Reuse existing collector,
 not a second graph/serializer or broad source dump. Test instrumentation is separate
@@ -79,7 +79,8 @@ from the shipping binary and must have explicit bounded overhead/provenance.
 ## Ownership and complete delivery
 
 Allowed edits: directly necessary read-only AX acquisition/traversal implementation
-in plugins/macos, related native tests/bridges and performance consumer, existing
+in plugins/macos and the shipped tests/bridges/native/WindowAX.swift owner,
+related native tests/bridges and performance consumer, existing
 performance documentation and a new receipts/N05-native-child-fidelity.md. Declare
 exact files before edits. No product Rust/schema/Cargo/dependency changes unless a
 specific dependency is returned to root. Do not change fixtures, goldens, thresholds,
