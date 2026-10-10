@@ -8,6 +8,7 @@ use crate::{
 };
 use serde::Serialize;
 use std::collections::BTreeMap;
+use uiblueprint_engine::{self as engine, EvaluationContext, GeometryQuery, MeasurementResult};
 use uiblueprint_schema::{SchemaVersion, model::*, validation};
 const GUIDE: &str = "UIB.DRAWING@1.2";
 
@@ -431,251 +432,254 @@ fn component_name(c: &SceneComponent, index: usize) -> String {
         format!("record {} ({})", index + 1, label)
     }
 }
-fn drawing_alignment(v: &SceneView, limit: usize) -> Result<String> {
-    let mut out = String::new();
-    let rects: Vec<_> = v
-        .components
-        .iter()
-        .enumerate()
-        .filter_map(|(i, c)| {
-            geometry(c).and_then(|g| match &g.shape {
-                Shape::Rect(r) => Some((i, g, r)),
+fn visible_text(c: &SceneComponent) -> &str {
+    c.label.as_deref().unwrap_or_else(|| {
+        c.properties
+            .iter()
+            .find_map(|p| match p.known() {
+                Some(Value::Text(text)) if p.field() == Field::VisibleText => Some(text.as_str()),
                 _ => None,
             })
-        })
-        .collect();
-    for (position, (i, g, r)) in rects.iter().enumerate() {
-        for same_width in [false, true] {
-            let matches = |other: &&(usize, &Geometry, &Rect)| {
-                g.coordinate_space == other.1.coordinate_space
-                    && v.components[*i].surface == v.components[other.0].surface
-                    && g.frame_kind == other.1.frame_kind
-                    && r.x == other.2.x
-                    && (!same_width || r.width == other.2.width)
-            };
-            if rects[..position].iter().any(|other| matches(&other)) {
-                continue;
+            .unwrap_or("")
+    })
+}
+fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> Result<String> {
+    let c = &v.components[index];
+    let aggregate = !visible_text(c).is_empty()
+        && child_indices(v, index).iter().any(|&i| {
+            !visible_text(&v.components[i]).is_empty()
+                && visible_text(c).contains(visible_text(&v.components[i]))
+        });
+    let mut out = format!("Object {}: {}", index + 1, component_role(c));
+    if let Some(Availability::Known {
+        value: Value::Text(native),
+    }) = &c.native_role
+        && native != &component_role(c)
+    {
+        out.push_str(&format!(
+            " (native {})",
+            bounded_compact_json(native, limit)?
+        ));
+    }
+    if !aggregate && !visible_text(c).is_empty() {
+        out.push_str(&format!(
+            "; print {}",
+            bounded_compact_json(&visible_text(c), limit)?
+        ));
+    }
+    for field in [
+        Field::AccessibilityName,
+        Field::Placeholder,
+        Field::InputKind,
+    ] {
+        if let Some(Value::Text(value)) = c
+            .properties
+            .iter()
+            .find(|p| p.field() == field)
+            .and_then(Property::known)
+            && !value.is_empty()
+        {
+            out.push_str(&format!(
+                "; {:?}={}",
+                field,
+                bounded_compact_json(value, limit)?
+            ));
+        }
+    }
+    if input_control(c) {
+        out.push_str("; name is NOT field content; use only explicit caller draft, or placeholder when explicitly empty");
+    }
+    for p in &c.properties {
+        if let Some(Value::Flag(value)) = p.known()
+            && (matches!(
+                p.field(),
+                Field::Checked | Field::Selected | Field::Expanded
+            ) || p.field() == Field::Focused && *value)
+        {
+            out.push_str(&format!("; {:?}={value}", p.field()));
+            if p.field() == Field::Checked && !input_control(c) {
+                out.push_str("; indicator interior BLUE, WHITE OUTLINE only");
             }
-            let group = rects
-                .iter()
-                .filter(matches)
-                .map(|(index, _, _)| index + 1)
-                .collect::<Vec<_>>();
-            if group.len() > 1 {
-                append(
-                    &mut out,
-                    &format!(
-                        "Records {:?}: keep exactly shared {} in overview AND details.\n",
-                        group,
-                        if same_width {
-                            "left AND right edges (equal source width)"
-                        } else {
-                            "left edge"
-                        }
-                    ),
-                    limit,
-                )?;
+            if p.field() == Field::Selected && *value {
+                out.push_str("; double WHITE outline, BLUE interior; preserve caller distinction between active and applied");
             }
+        }
+    }
+    if let Some(g) = geometry(c) {
+        match &g.shape {
+            Shape::Rect(r) => out.push_str(&format!(
+                "; {:?} box[x {}, y {}, w {}, h {}] {} {:?}",
+                g.frame_kind,
+                display_number(r.x),
+                display_number(r.y),
+                display_number(r.width),
+                display_number(r.height),
+                unit_name(g.coordinate_space.units),
+                g.coordinate_space.origin
+            )),
+            _ => out.push_str("; reported nonrectangular geometry; do not invent a rectangle"),
+        }
+        for p in &c.properties {
+            if let Some(Value::Geometry(visible)) = p.known()
+                && p.field() == Field::VisibleRegion
+                && visible.shape != g.shape
+            {
+                out.push_str(&format!(
+                    "; {} reported visible-region {} (Space {} {:?}, {}, {:?})",
+                    if partial.get(index).copied().unwrap_or(false) {
+                        "CLIPPED LAYOUT: draw only"
+                    } else {
+                        "DISTINCT FRAME (clipping not established):"
+                    },
+                    bounded_compact_json(&visible.shape, limit)?,
+                    visible.coordinate_space.id.0,
+                    visible.coordinate_space.kind,
+                    unit_name(visible.coordinate_space.units),
+                    visible.coordinate_space.origin
+                ));
+            }
+        }
+    } else {
+        out.push_str("; geometry unavailable");
+    }
+    out.push('\n');
+    require(out.len() <= limit, E::OutputLimit)?;
+    Ok(out)
+}
+fn drawing_inventory(
+    v: &SceneView,
+    partial: &[bool],
+    anchors: &[usize],
+    limit: usize,
+) -> Result<String> {
+    let mut out = String::new();
+    append(
+        &mut out,
+        "OVERVIEW CONTENT (object keys/box coordinates are not printed). The reference guides appearance; these are the complete meaningful labels/controls.\n",
+        limit,
+    )?;
+    let mut contexts = Vec::new();
+    for g in v.components.iter().filter_map(geometry) {
+        let context = format!(
+            "{:?}; {} {:?}, {}, {:?}; transform {}",
+            g.frame_kind,
+            g.coordinate_space.id.0,
+            g.coordinate_space.kind,
+            unit_name(g.coordinate_space.units),
+            g.coordinate_space.origin,
+            match &g.transform {
+                TransformState::LocalOnly {} => "local only".into(),
+                TransformState::Unknown { .. } => "unknown".into(),
+                TransformState::Known { transform: t } => format!(
+                    "known {} -> {}, affine {:?}",
+                    t.from.id.0, t.to.id.0, t.affine
+                ),
+            }
+        );
+        if !contexts.contains(&context) {
+            append(
+                &mut out,
+                &format!("Coordinate context: {context}. No guessed conversions.\n"),
+                limit,
+            )?;
+            contexts.push(context);
+        }
+    }
+    for (i, c) in v.components.iter().enumerate() {
+        let text = !visible_text(c).is_empty()
+            && !child_indices(v, i).iter().any(|&j| {
+                !visible_text(&v.components[j]).is_empty()
+                    && visible_text(c).contains(visible_text(&v.components[j]))
+            });
+        let visual = matches!(
+            component_role(c).to_ascii_lowercase().as_str(),
+            "img" | "image" | "svg" | "canvas" | "media" | "custom"
+        );
+        if control(c) || text || visual || anchors.contains(&i) {
+            append(&mut out, &object_text(v, i, partial, limit)?, limit)?;
         }
     }
     Ok(out)
 }
-fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
+fn local_measures(
+    v: &SceneView,
+    measures: &[(&Dimension, usize, usize)],
+    limit: usize,
+) -> Result<String> {
     let mut out = String::new();
-    let mut contexts: Vec<&Geometry> = Vec::new();
-    for g in v.components.iter().filter_map(geometry) {
-        if contexts.iter().any(|other| {
-            other.coordinate_space == g.coordinate_space
-                && other.frame_kind == g.frame_kind
-                && other.transform == g.transform
-        }) {
+    let mut done = Vec::new();
+    for &(d, a, b) in measures {
+        if done.contains(&d.id) {
             continue;
         }
-        contexts.push(g);
-        let mapping = match &g.transform {
-            TransformState::LocalOnly {} => "local only; no cross-space mapping".into(),
-            TransformState::Unknown { .. } => "unknown; no cross-space mapping".into(),
-            TransformState::Known { transform: t } => format!(
-                "known {:?} {} {} {:?} -> {:?} {} {} {:?}, affine {:?}; source coordinates retained",
-                t.from.kind,
-                t.from.id.0,
-                unit_name(t.from.units),
-                t.from.origin,
-                t.to.kind,
-                t.to.id.0,
-                unit_name(t.to.units),
-                t.to.origin,
-                t.affine
-            ),
-        };
-        append(
-            &mut out,
-            &format!(
-                "Geometry context {}: {:?}; Space {} {:?}, {}, {:?}; transform {}.\n",
-                contexts.len(),
-                g.frame_kind,
-                g.coordinate_space.id.0,
-                g.coordinate_space.kind,
-                unit_name(g.coordinate_space.units),
-                g.coordinate_space.origin,
-                mapping
-            ),
-            limit,
-        )?;
-    }
-    for (i, c) in v.components.iter().enumerate() {
-        let label = c.label.as_deref().unwrap_or_else(|| {
-            c.properties
-                .iter()
-                .find_map(|p| match p.known() {
-                    Some(Value::Text(text)) if p.field() == Field::VisibleText => {
-                        Some(text.as_str())
-                    }
-                    _ => None,
-                })
-                .unwrap_or("")
-        });
-        let accessible_name = c
-            .properties
-            .iter()
-            .find_map(|p| match p.known() {
-                Some(Value::Text(text)) if p.field() == Field::AccessibilityName => {
-                    Some(text.as_str())
-                }
-                _ => None,
-            })
-            .unwrap_or("");
-        let field_content = if matches!(
-            component_role(c).to_ascii_lowercase().as_str(),
-            "input" | "textbox" | "searchbox"
-        ) {
-            format!(
-                " FIELD CONTENT: only the explicit reviewed draft from caller state ({}) may be drawn. Accessible name is identification, NEVER the field's content.",
-                v.state
+        let value = d.value.ok_or(E::InvalidGeometry)?;
+        if a == b
+            && matches!(
+                (d.anchors[0].edge, d.anchors[1].edge),
+                (Edge::Left, Edge::Right) | (Edge::Top, Edge::Bottom)
             )
-        } else {
-            String::new()
-        };
-        let mut display_facts = String::new();
-        for field in [Field::Placeholder, Field::InputKind] {
-            if let Some(Value::Text(value)) = c
-                .properties
-                .iter()
-                .find(|p| p.field() == field)
-                .and_then(Property::known)
-            {
+        {
+            let width = measures.iter().find(|(m, x, y)| {
+                *x == a
+                    && *y == a
+                    && m.anchors[0].edge == Edge::Left
+                    && m.anchors[1].edge == Edge::Right
+            });
+            let height = measures.iter().find(|(m, x, y)| {
+                *x == a
+                    && *y == a
+                    && m.anchors[0].edge == Edge::Top
+                    && m.anchors[1].edge == Edge::Bottom
+            });
+            if let (Some((w, _, _)), Some((h, _, _))) = (width, height) {
                 append(
-                    &mut display_facts,
+                    &mut out,
                     &format!(
-                        " {:?}={} (not a field value).",
-                        field,
-                        bounded_compact_json(value, limit)?
+                        "DIMENSIONED RECTANGLE {}: WIDTH {} {}; HEIGHT {} {}.\n",
+                        component_name(&v.components[a], a),
+                        display_number(w.value.ok_or(E::InvalidGeometry)?),
+                        unit_name(w.units),
+                        display_number(h.value.ok_or(E::InvalidGeometry)?),
+                        unit_name(h.units)
                     ),
                     limit,
                 )?;
+                done.extend([w.id.clone(), h.id.clone()]);
+                continue;
             }
         }
-        if clipped(c) {
-            for p in &c.properties {
-                if let Some(Value::Geometry(g)) = p.known()
-                    && p.field() == Field::VisibleRegion
-                {
-                    append(
-                        &mut display_facts,
-                        &format!(
-                            " CLIPPED: reported visible-region {}; show only this portion, never reinterpret full layout height as visible height.",
-                            bounded_compact_json(&g.shape, limit)?
-                        ),
-                        limit,
-                    )?;
-                }
-            }
-        }
-        // Container text that repeats a child's text is an aggregate, not another label/control.
-        let aggregate = !label.is_empty()
-            && c.children
-                .iter()
-                .filter_map(|id| v.components.iter().find(|x| &x.id == id))
-                .any(|child| {
-                    !public_label(child).is_empty() && label.contains(public_label(child))
-                });
-        let label = if aggregate { "" } else { label };
-        let bounds = geometry(c)
-            .map(|g| match &g.shape {
-                Shape::Rect(r) => format!(
-                    "context {}: x {}, y {}, w {}, h {}",
-                    contexts
-                        .iter()
-                        .position(|other| other.coordinate_space == g.coordinate_space
-                            && other.frame_kind == g.frame_kind
-                            && other.transform == g.transform)
-                        // Every geometry was collected into contexts above.
-                        .expect("geometry context collected above")
-                        + 1,
-                    display_number(r.x),
-                    display_number(r.y),
-                    display_number(r.width),
-                    display_number(r.height)
+        if a == b {
+            append(
+                &mut out,
+                &format!(
+                    "RECTANGLE EXTENT {}: {:?}→{:?}, {} {}.\n",
+                    component_name(&v.components[a], a),
+                    d.anchors[0].edge,
+                    d.anchors[1].edge,
+                    display_number(value),
+                    unit_name(d.units)
                 ),
-                _ => "nonrectangular geometry; do not invent a rectangle".into(),
-            })
-            .unwrap_or_else(|| "geometry unavailable".into());
-        let children = c
-            .children
-            .iter()
-            .filter_map(|id| v.components.iter().position(|x| &x.id == id).map(|n| n + 1))
-            .collect::<Vec<_>>();
-        let parent = c
-            .parent
-            .as_ref()
-            .and_then(|id| v.components.iter().position(|x| &x.id == id).map(|n| n + 1));
-        let states = c
-            .properties
-            .iter()
-            .filter_map(|p| match p.known() {
-                Some(Value::Flag(value))
-                    if matches!(
-                        p.field(),
-                        Field::Checked | Field::Selected | Field::Expanded | Field::Enabled
-                    ) || p.field() == Field::Focused && *value =>
-                {
-                    Some(format!("{:?}={value}", p.field()))
-                }
-                _ => None,
-            })
-            .collect::<Vec<_>>()
-            .join(", ");
+                limit,
+            )?;
+            done.push(d.id.clone());
+            continue;
+        }
+        let nested = d.anchors[0].edge == d.anchors[1].edge;
         append(
             &mut out,
             &format!(
-                "{}: {}{} | visible text {}{} | {} | children {:?}, parent {:?} {} {}{}\n",
-                i + 1,
-                component_role(c),
-                match &c.native_role {
-                    Some(Availability::Known {
-                        value: Value::Text(name),
-                    }) if name != &component_role(c) =>
-                        format!("; native {}", bounded_compact_json(name, limit)?),
-                    _ => String::new(),
-                },
-                bounded_compact_json(&label, limit)?,
-                if accessible_name.is_empty() || accessible_name == label {
-                    String::new()
-                } else {
-                    format!(
-                        " | accessible name (not field content) {}",
-                        bounded_compact_json(&accessible_name, limit)?
-                    )
-                },
-                bounds,
-                children,
-                parent,
-                states,
-                c.state_and_actions.as_deref().unwrap_or(""),
-                format_args!("{field_content}{display_facts}")
+                "TWO-BORDER FRAGMENT: {} box {:?} → {} box {:?}; {} {}; {}.\n",
+                component_name(&v.components[a], a),
+                d.anchors[0].edge,
+                component_name(&v.components[b], b),
+                d.anchors[1].edge,
+                display_number(value),
+                unit_name(d.units),
+                if nested { "nested" } else { "opposing" }
             ),
             limit,
         )?;
+        done.push(d.id.clone());
     }
     Ok(out)
 }
@@ -707,10 +711,93 @@ fn same_frame(a: &SceneComponent, b: &SceneComponent) -> bool {
             _ => false,
         }
 }
-fn clipped(c: &SceneComponent) -> bool {
-    let Some(g) = geometry(c) else { return false };
-    c.properties.iter().any(|p|matches!(p.known(),Some(Value::Geometry(visible))
-        if p.field()==Field::VisibleRegion && visible.coordinate_space==g.coordinate_space && visible.shape!=g.shape))
+fn partial_visibility(source: &SourceInput) -> Vec<bool> {
+    let SourceInput::Observed { snapshot, .. } = source else {
+        return vec![];
+    };
+    snapshot
+        .nodes
+        .iter()
+        .map(|node| {
+            let property = |field| node.properties.iter().find(|p| p.field() == field);
+            let (
+                Some(Property::Requested {
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(layout),
+                        },
+                    evidence: le,
+                    ..
+                }),
+                Some(Property::Requested {
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(visible),
+                        },
+                    evidence: ve,
+                    ..
+                }),
+            ) = (
+                property(Field::LayoutBounds),
+                property(Field::VisibleRegion),
+            )
+            else {
+                return false;
+            };
+            if layout.frame_kind != FrameKind::LayoutBounds
+                || visible.frame_kind != FrameKind::VisibleRegion
+                || layout.coordinate_space != visible.coordinate_space
+                || le.observation_id != ve.observation_id
+                || le.source_namespace != ve.source_namespace
+                || !matches!(layout.shape, Shape::Rect(_))
+                || !matches!(visible.shape, Shape::Rect(_))
+            {
+                return false;
+            }
+            let query = GeometryQuery {
+                id: Id("export-visible-subset".into()),
+                scope_id: snapshot.context.scope_id.clone(),
+                targets: vec![node.key.clone()],
+                operation: GeometryRelation::Inside,
+                anchors: [FrameKind::VisibleRegion, FrameKind::LayoutBounds]
+                    .map(|frame_kind| Anchor {
+                        element: node.key.clone(),
+                        frame_kind,
+                        coordinate_space: layout.coordinate_space.clone(),
+                        fraction: 0.0,
+                        axis: Id("x".into()),
+                    })
+                    .to_vec(),
+                quantity_kind: QuantityKind::Length,
+                units: layout.coordinate_space.units,
+                applies_when: ContextConditions {
+                    platform: None,
+                    input_mode: None,
+                    text_scale: None,
+                },
+            };
+            let context = EvaluationContext {
+                space: &layout.coordinate_space,
+                transforms: &[],
+                conditions: None,
+            };
+            match engine::measure_query(snapshot, &query, &context) {
+                Ok(MeasurementResult::Known { measurement }) => match measurement.details {
+                    engine::Details::Insets {
+                        left,
+                        top,
+                        right,
+                        bottom,
+                    } => {
+                        [left, top, right, bottom].iter().all(|x| *x >= 0.0)
+                            && [left, top, right, bottom].iter().any(|x| *x > 0.0)
+                    }
+                    _ => false,
+                },
+                _ => false,
+            }
+        })
+        .collect()
 }
 fn detail_caption(v: &SceneView, members: &[usize]) -> String {
     let parent = members.first().and_then(|first| {
@@ -748,11 +835,16 @@ fn detail_caption(v: &SceneView, members: &[usize]) -> String {
     }
     "Control dimensions and spacing".into()
 }
-fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) -> Result<String> {
+fn drawing_dimensions(
+    v: &SceneView,
+    dimensions: &ViewDimensions,
+    partial: &[bool],
+    limit: usize,
+) -> Result<String> {
     let index = |id: &str| v.components.iter().position(|c| c.id == id);
     let large = |i: usize| {
         control(&v.components[i])
-            && !clipped(&v.components[i])
+            && !partial.get(i).copied().unwrap_or(false)
             && rect(&v.components[i]).is_some_and(|r| r.width >= 12.0 && r.height >= 12.0)
     };
     let frame_matches = |d: &Dimension| {
@@ -916,7 +1008,7 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
         }
     }
     let owner = |i: usize| groups.iter().position(|(_, m)| m.contains(&i));
-    let mut lines: Vec<(Option<usize>, String)> = Vec::new();
+    let mut lines: Vec<(Option<usize>, &Dimension, usize, usize)> = Vec::new();
     let mut members = groups.iter().map(|(_, m)| m.clone()).collect::<Vec<_>>();
     for (group, (_, controls)) in groups.iter().enumerate() {
         for &control in controls {
@@ -1058,33 +1150,39 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                 }
             }
         }
-        lines.push((
-            destination,
-            format!(
-                "REQUIRED {}: start {} {:?} edge; end {} {:?} edge; label {} {}.\n",
-                d.label,
-                component_name(ca, a),
-                d.anchors[0].edge,
-                component_name(cb, b),
-                d.anchors[1].edge,
-                display_number(value),
-                unit_name(d.units)
-            ),
-        ));
+        lines.push((destination, d, a, b));
     }
     let mut out = String::new();
+    let anchor_objects = lines
+        .iter()
+        .flat_map(|(_, _, a, b)| [*a, *b])
+        .chain(insets.iter().flat_map(|(_, a, b)| [*a, *b]))
+        .collect::<Vec<_>>();
     append(
         &mut out,
-        "VIEW PLAN — draw ONLY the views listed here. Complete overview preserves all meaningful source controls; details are explicitly partial, not additional UI.\nOVERVIEW: full declared visible scope; no invented offscreen content.\n",
+        &drawing_inventory(v, partial, &anchor_objects, limit)?,
         limit,
     )?;
-    for (_, line) in lines.iter().filter(|(owner, _)| owner.is_none()) {
-        append(&mut out, line, limit)?;
-    }
+    append(
+        &mut out,
+        "VIEW PLAN: complete overview plus ONLY the following supported local details. Each label has one owner; never repeat measurements on another view.\nOVERVIEW MEASURES:\n",
+        limit,
+    )?;
+    let overview_measures = lines
+        .iter()
+        .filter(|(owner, _, _, _)| owner.is_none())
+        .map(|(_, d, a, b)| (*d, *a, *b))
+        .collect::<Vec<_>>();
+    append(
+        &mut out,
+        &local_measures(v, &overview_measures, limit)?,
+        limit,
+    )?;
     for (i, (title, controls)) in groups.iter().enumerate() {
         let owned = lines
             .iter()
-            .filter(|(owner, _)| *owner == Some(i))
+            .filter(|(owner, _, _, _)| *owner == Some(i))
+            .map(|(_, d, a, b)| (*d, *a, *b))
             .collect::<Vec<_>>();
         if owned.is_empty() {
             continue;
@@ -1092,42 +1190,30 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
         append(
             &mut out,
             &format!(
-                "DETAIL {} — {:?}, PARTIAL. Draw source controls {:?}; additional named anchor context {:?}. Do not turn an anchor context into another control or extra wrapper. No other controls in this detail.\n",
-                i + 1,
-                title,
-                controls.iter().map(|n| n + 1).collect::<Vec<_>>(),
-                members[i]
-                    .iter()
-                    .filter(|n| !controls.contains(n))
-                    .map(|n| n + 1)
-                    .collect::<Vec<_>>()
+                "LOCAL DETAIL {:?} — partial, only these source objects. State applies to EVERY repeated instance: {}.\n",
+                title, v.state
             ),
             limit,
         )?;
-        append(
-            &mut out,
-            "Draw only these controls on their recorded common axes; no enclosing parent frame or extra header. Gap arrows touch actual control borders, never an added separator. Any named text-layout edge is a short labelled construction edge, not the end of glyphs.\n",
-            limit,
-        )?;
-        if members[i].iter().any(|&n|matches!(&v.components[n].native_role,Some(Availability::Known {value:Value::Text(name)}) if name=="FOOTER")) {
-            append(&mut out,"This detail additionally needs the actual footer RIGHT and BOTTOM border fragments for its named insets; label those edges. Keep button WIDTH and HEIGHT present; no top inset or decorative enclosing frame.\n",limit)?;
+        for &object in &members[i] {
+            append(&mut out, &object_text(v, object, partial, limit)?, limit)?;
         }
-        for (_, line) in owned {
-            append(&mut out, line, limit)?;
+        if controls.len() > 1 {
+            append(
+                &mut out,
+                "Keep recorded row/column relationships. Do not add a wrapper/heading/control around these partial objects.\n",
+                limit,
+            )?;
         }
+        append(&mut out, &local_measures(v, &owned, limit)?, limit)?;
     }
     for (d, a, b) in insets {
         append(
             &mut out,
-            &format!(
-                "INSET DETAIL — source {} to {}. Show ONLY two nested source corner fragments (parent left border plus short top; control left border plus short top). A single double arrow joins these uninterrupted borders directly. No enclosing frame, unrelated guides, or duplicate inset in any other view. REQUIRED left inset label {} {}.\n",
-                component_name(&v.components[a], a),
-                component_name(&v.components[b], b),
-                display_number(d.value.unwrap_or(0.0)),
-                unit_name(d.units)
-            ),
+            "LOCAL INSET DETAIL — one magnified source edge relation, not another UI panel.\n",
             limit,
         )?;
+        append(&mut out, &local_measures(v, &[(d, a, b)], limit)?, limit)?;
     }
     Ok(out)
 }
@@ -1173,9 +1259,8 @@ fn prompt(
                 .collect::<Vec<_>>()
                 .join(", "),
         );
-        vars.insert("alignments", drawing_alignment(v, limit)?);
-        vars.insert("components", drawing_inventory(v, limit)?);
-        vars.insert("dimensions", drawing_dimensions(v, dims, limit)?);
+        let partial = partial_visibility(&b.views[index].source);
+        vars.insert("dimensions", drawing_dimensions(v, dims, &partial, limit)?);
         vars.insert(
             "sheets",
             selected
@@ -1185,11 +1270,13 @@ fn prompt(
                 .join("; "),
         );
         let mut rest = include_str!("prompt-template.txt");
-        append(
-            &mut result,
-            &format!("\nVIEW {} / {}\n", index + 1, s.views.len()),
-            limit,
-        )?;
+        if s.views.len() > 1 {
+            append(
+                &mut result,
+                &format!("\nSource view {} / {}\n", index + 1, s.views.len()),
+                limit,
+            )?;
+        }
         while let Some(start) = rest.find("{{") {
             append(&mut result, &rest[..start], limit)?;
             let end = rest[start + 2..].find("}}").ok_or(E::InvalidInput)? + start + 2;

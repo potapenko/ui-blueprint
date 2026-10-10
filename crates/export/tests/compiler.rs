@@ -536,7 +536,7 @@ fn prompt_details_follow_only_the_actual_sheet_plan() {
         sheets[2]["components"],
         serde_json::json!(["N06", "N07", "N08", "N09"])
     );
-    assert!(prompt.contains("10:"));
+    assert!(prompt.contains("Object 10:"));
 }
 
 #[test]
@@ -660,17 +660,19 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
     snapshot.nodes[0].children = [2, 4, 6].map(|i| snapshot.nodes[i].key.clone()).to_vec();
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("label ≈16 CSS px"));
-    assert!(prompt.contains("label 12 CSS px"));
-    assert!(prompt.lines().any(|line| line.starts_with("REQUIRED")
-        && line.contains("start record 5")
-        && line.contains("Bottom edge; end record 7")
-        && line.contains("Top edge; label ≈16 CSS px")));
-    assert!(prompt.contains("end record 7"));
-    assert!(prompt.contains("Geometry context 1: LayoutBounds; Space"));
+    assert!(prompt.contains("≈16 CSS px"));
+    assert!(prompt.contains("12 CSS px"));
+    assert!(
+        prompt
+            .lines()
+            .any(|line| line.starts_with("TWO-BORDER FRAGMENT")
+                && line.contains("record 5")
+                && line.contains("Bottom → record 7")
+                && line.contains("box Top; ≈16 CSS px"))
+    );
+    assert!(prompt.contains("Coordinate context: LayoutBounds;"));
     assert!(prompt.contains("Viewport, CSS px, TopLeft; transform local only"));
-    assert!(!prompt.contains("REQUIRED Measured top inset"));
-    assert!(prompt.contains("Records [5, 7]: keep exactly shared left AND right edges"));
+    assert!(prompt.contains("WIDTH ≈198 CSS px") && prompt.contains("HEIGHT ≈33 CSS px"));
     assert!(!prompt.contains("[\"css_px\"]"));
 }
 
@@ -734,11 +736,12 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     let input = prompt
         .lines()
-        .find(|line| line.starts_with("1: Textbox; native \"INPUT\""))
+        .find(|line| line.starts_with("Object 1: Textbox (native \"INPUT\")"))
         .unwrap();
-    assert!(input.contains("visible text \"\""));
-    assert!(input.contains("accessible name (not field content) \"Accessible search name\""));
-    assert!(input.contains("public draft orchard"));
+    assert!(!input.contains("; print"));
+    assert!(input.contains("AccessibilityName=\"Accessible search name\""));
+    assert!(prompt.contains("public draft orchard"));
+    assert!(input.contains("name is NOT field content"));
     assert!(!input.contains("visible text \"Accessible search name\""));
     let all = String::from_utf8(package.files().values().flatten().copied().collect()).unwrap();
     assert!(!all.contains("UNAPPROVED_RAW_VALUE_CANARY"));
@@ -790,30 +793,13 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
     snapshot.nodes[0].children = [2, 4, 6].map(|i| snapshot.nodes[i].key.clone()).to_vec();
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    let required = prompt
-        .lines()
-        .filter(|s| s.starts_with("REQUIRED"))
-        .collect::<Vec<_>>();
-    assert_eq!(
-        required
-            .iter()
-            .filter(|s| s.contains("Width LayoutBounds") && s.contains("label ≈198 CSS px"))
-            .count(),
-        1
-    );
-    assert_eq!(prompt.matches("INSET DETAIL").count(), 1);
-    let inset = prompt
-        .lines()
-        .find(|s| s.starts_with("INSET DETAIL"))
-        .unwrap();
-    assert!(inset.contains("record 3") && inset.contains("label 20 CSS px"));
-    assert!(
-        !required
-            .iter()
-            .any(|s| s.contains("Measured right inset") && s.contains("record 3"))
-    );
-    let overview = prompt.split("DETAIL 1").next().unwrap();
-    assert!(overview.contains("Width LayoutBounds") && overview.contains("label ≈238 CSS px"));
+    assert_eq!(prompt.matches("WIDTH ≈198 CSS px").count(), 1);
+    assert_eq!(prompt.matches("LOCAL INSET DETAIL").count(), 1);
+    let inset = prompt.split("LOCAL INSET DETAIL").nth(1).unwrap();
+    assert!(inset.contains("record 3") && inset.contains("20 CSS px"));
+    assert!(!inset.contains("Right"));
+    let overview = prompt.split("LOCAL DETAIL").next().unwrap();
+    assert!(overview.contains("WIDTH ≈238 CSS px"));
     let dimensions = data(&package, "dimensions.json");
     let all = dimensions[0]["dimensions"].as_array().unwrap();
     assert!(all.iter().any(|d| d["anchors"][0]["component"] == "N004"
@@ -868,9 +854,9 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     let package = compile(&brief, limits()).unwrap();
     assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("1: Button; native \"AXButton\""));
-    assert!(prompt.contains("Geometry context 1: AccessibilityBounds; Space"));
-    assert!(prompt.contains("REQUIRED Width AccessibilityBounds: start record 1"));
+    assert!(prompt.contains("Object 1: Button (native \"AXButton\")"));
+    assert!(prompt.contains("Coordinate context: AccessibilityBounds;"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE record 1"));
     assert!(!prompt.contains("LayoutBounds"));
     let dims = data(&package, "dimensions.json");
     assert_eq!(dims[0]["dimensions"][0]["value"], 97.296875);
@@ -914,9 +900,9 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     }
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("1: Button; native \"DIV\""));
-    assert!(prompt.contains("Geometry context 1: LayoutBounds; Space"));
-    assert!(prompt.contains("REQUIRED Width LayoutBounds: start record 1"));
+    assert!(prompt.contains("Object 1: Button (native \"DIV\")"));
+    assert!(prompt.contains("Coordinate context: LayoutBounds;"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE record 1"));
     assert!(!prompt.contains("REQUIRED Width AccessibilityBounds"));
     let dims = data(&package, "dimensions.json");
     assert!(
@@ -943,7 +929,7 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     assert!(
         std::str::from_utf8(&package.files()["prompt.txt"])
             .unwrap()
-            .contains("1: BUTTON |")
+            .contains("Object 1: BUTTON;")
     );
 }
 
@@ -1023,18 +1009,19 @@ fn public_placeholder_and_clipped_region_are_distinct_from_full_layout_and_value
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     let input = prompt
         .lines()
-        .find(|line| line.starts_with("1: Textbox"))
+        .find(|line| line.starts_with("Object 1: Textbox"))
         .unwrap();
-    assert!(input.contains("Placeholder=\"Type a query\" (not a field value)"));
+    assert!(input.contains("Placeholder=\"Type a query\""));
     assert!(
-        input.contains("CLIPPED: reported visible-region") && input.contains("\"height\":11.0")
+        input.contains("CLIPPED LAYOUT: draw only reported visible-region")
+            && input.contains("\"height\":11.0")
     );
     assert!(input.contains("h 32"));
     assert!(
         !prompt
             .lines()
-            .filter(|s| s.starts_with("REQUIRED"))
-            .any(|s| s.contains("start record 1 ") && s.contains("label 32 CSS px"))
+            .filter(|s| s.starts_with("DIMENSIONED RECTANGLE"))
+            .any(|s| s.contains("record 1 ") && s.contains("HEIGHT 32 CSS px"))
     );
     let scene = data(&package, "scene.json");
     assert_eq!(
@@ -1091,9 +1078,147 @@ fn control_detail_does_not_merge_equal_sizes_from_unrelated_spaces() {
         assert!(
             prompt
                 .lines()
-                .filter(|s| s.starts_with("REQUIRED Width"))
-                .any(|s| s.contains(&format!("start record {record} "))
-                    && s.contains("label 80 CSS px"))
+                .filter(|s| s.starts_with("DIMENSIONED RECTANGLE"))
+                .any(|s| s.contains(&format!("record {record} "))
+                    && s.contains("WIDTH 80 CSS px")
+                    && s.contains("HEIGHT 30 CSS px"))
         );
+    }
+}
+
+#[test]
+fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
+    for (field, kind, variant, clipped) in [
+        (Field::LayoutBounds, FrameKind::LayoutBounds, "subset", true),
+        (Field::LayoutBounds, FrameKind::LayoutBounds, "equal", false),
+        (
+            Field::LayoutBounds,
+            FrameKind::LayoutBounds,
+            "overlap",
+            false,
+        ),
+        (Field::LayoutBounds, FrameKind::LayoutBounds, "space", false),
+        (
+            Field::LayoutBounds,
+            FrameKind::LayoutBounds,
+            "unknown",
+            false,
+        ),
+        (
+            Field::AccessibilityBounds,
+            FrameKind::AccessibilityBounds,
+            "subset",
+            false,
+        ),
+        (Field::HitRegion, FrameKind::HitRegion, "subset", false),
+        (Field::PaintBounds, FrameKind::PaintBounds, "subset", false),
+    ] {
+        let mut brief = fixture("observed");
+        let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+            panic!()
+        };
+        for fields in std::iter::once(&mut snapshot.context.fields)
+            .chain(std::iter::once(&mut snapshot.coverage.fields))
+            .chain(
+                snapshot
+                    .observations
+                    .iter_mut()
+                    .map(|o| &mut o.coverage.fields),
+            )
+        {
+            for f in fields {
+                if *f == Field::LayoutBounds {
+                    *f = field;
+                } else if *f == field {
+                    *f = Field::PaintBounds;
+                }
+            }
+        }
+        for node in &mut snapshot.nodes {
+            if field == Field::HitRegion {
+                let Property::Requested { field: f, .. } = &mut node.properties[3] else {
+                    panic!()
+                };
+                *f = Field::PaintBounds;
+            }
+            for p in &mut node.properties {
+                if let Property::Requested {
+                    field: f, state, ..
+                } = p
+                    && *f == Field::LayoutBounds
+                {
+                    *f = field;
+                    if let Availability::Known {
+                        value: Value::Geometry(g),
+                    } = state
+                    {
+                        g.frame_kind = kind;
+                    }
+                }
+            }
+        }
+        let mut visible = snapshot.nodes[0].properties[2].clone();
+        let Property::Requested {
+            field: f, state, ..
+        } = &mut visible
+        else {
+            panic!()
+        };
+        *f = Field::VisibleRegion;
+        let Availability::Known {
+            value: Value::Geometry(g),
+        } = state
+        else {
+            panic!()
+        };
+        g.frame_kind = FrameKind::VisibleRegion;
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        if variant != "equal" {
+            r.height = if kind == FrameKind::PaintBounds {
+                20.0
+            } else {
+                11.0
+            };
+        }
+        if variant == "overlap" {
+            r.x -= 10.0;
+        }
+        if variant == "space" {
+            g.coordinate_space.id = Id("separate-visible-space".into());
+        }
+        if variant == "unknown" {
+            *state = Availability::Unknown {
+                reason: Id("not-collected".into()),
+            };
+        }
+        snapshot.nodes[0].properties[4] = visible;
+        let original = serde_json::to_vec(&brief).unwrap();
+        let p = compile(&brief, limits()).unwrap_or_else(|e| panic!("{kind:?}/{variant}: {e:?}"));
+        assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        let object = prompt.lines().find(|s| s.starts_with("Object 1:")).unwrap();
+        assert_eq!(
+            object.contains("CLIPPED LAYOUT"),
+            clipped,
+            "{kind:?}/{variant}"
+        );
+        if !clipped {
+            assert!(
+                prompt
+                    .lines()
+                    .any(|s| s.starts_with("DIMENSIONED RECTANGLE record 1 ")
+                        && s.contains(if kind == FrameKind::PaintBounds {
+                            "HEIGHT 20 CSS px"
+                        } else {
+                            "HEIGHT 32 CSS px"
+                        })),
+                "{kind:?}/{variant}"
+            );
+        }
+        if !clipped && kind != FrameKind::PaintBounds && !matches!(variant, "equal" | "unknown") {
+            assert!(object.contains("DISTINCT FRAME (clipping not established)"));
+        }
     }
 }

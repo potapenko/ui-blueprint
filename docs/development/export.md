@@ -454,8 +454,12 @@ are planned. Repetition is editorial, never a source-identity merge. Incompatibl
 Space/frame/Surface contexts cannot become one shared control detail.
 
 Public placeholders, accessible names, visible text and explicit caller draft remain
-separate. Reported clipping is included alongside the full layout rectangle; partial
-viewport content must not be completed into unseen controls. No input Value export,
+separate. Clipping is claimed only for a known rectangular LayoutBounds/VisibleRegion pair
+with matching Space/source observation and a proper subset proved by the existing
+engine. Equal, overlapping, unavailable or unrelated frames are not clipping.
+Distinct known visibility facts retain their attribution; they do not suppress
+control sizes. Proved partial viewport content must not be completed into unseen
+controls. No input Value export,
 new reference IO, model call, CLI flag, schema, geometry engine or collector is added.
 The complete machine records/measurements and existing limits/refusals remain intact.
 
@@ -464,3 +468,10 @@ separates two initial fresh baselines from the frozen three-real-form × two-req
 candidate cohort. Every first output/refusal counts; no history-image reference,
 manual prompt wrapper, edit or chosen reroll qualifies as a fresh cohort result.
 A passing cohort supports that declared set only, not universal one-shot reliability.
+
+C2 presentation puts render-needed content and local state beside each supported
+view, omitting empty helper-node and construction inventories from the model prompt.
+Every selected scalar has one view owner. A rectangle's width and height are one
+paired drawing assignment; gaps/insets use two named actual border fragments and
+a directly connecting arrow. The full overview, necessary text, state, dimensions
+and source limitations remain; the other five machine files are unchanged.

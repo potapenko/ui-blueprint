@@ -466,3 +466,43 @@ files of each frozen Director, Settings and mobile package byte-for-byte. Run-ow
 non-image installation removed and removal verified; all original/copied images,
 raw source, imported carrier and shared review packages remain retained. Source,
 criteria, prompts and cohort outputs held unchanged for the same critics' verdict.
+
+## FRESH01-C2 finite compact-prompt correction
+
+Root approved the six-point finite repair after C1 independently failed all six
+images. C1 applicability correction remains, but omitted/misattached dimensions
+and switch fill show that numeric presence was not image acceptance. C1 source,
+packages, images and failure records remain unchanged and count as failures.
+
+Exact write set: compile.rs, prompt-template.txt, compiler.rs tests, development
+export.md, this receipt. No new schema, flags, framework, collector or input source.
+C2 replaces per-node construction/context duplication with meaningful overview
+objects and self-contained supported local views. Each selected scalar has one
+owner. Rectangle W/H are paired; single extents remain attached to their rectangle;
+gap/inset fragments contain the two named actual source border corners and one
+connecting arrow. Local state repeats next to repeated controls. Labels, explicit
+caller draft, placeholders, coverage and true frame/Space provenance remain separate.
+
+The confirmed clipping regression is restored conservatively: only known rectangular
+LayoutBounds + VisibleRegion in the same Space/source observation can be clipping,
+and only when the existing engine Inside result proves a proper subset. AX/Hit/Paint
+fallbacks, equal/overlapping/unavailable/different-Space frames never acquire the
+CLIPPED claim through shape inequality. Distinct visible facts retain their Space;
+valid mobile Cast layout44 versus visible27 remains explicitly partial.
+
+Verification: 27 compiler tests passed, including positive subset and negative
+AX/Hit/Paint/equal/overlap/unknown/Space cases, exact historical machine fields,
+canonical/native role and label/value/privacy protections. Export all-target clippy,
+format check and diff check passed; CLI debug build passed. All five non-prompt
+files of each new Director/Settings/mobile package equal C1 byte-for-byte.
+No image prototype was generated. Prompt lengths are 7,633 / 9,993 / 12,035 chars.
+
+New C2 temp root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c2-2652yyb8`.
+`{director,settings,mobile}-frozen-command.json` and `*-frozen-package/` retain literal
+CLI output. A new immutable manifest will pin this checkpoint and original UI-only
+references before exactly six independent fresh calls. Same three qualified sources,
+same C1–C7/V1–V6, no wrapper/edit/history/reroll, all outputs retained and counted.
+Source snapshot/metadata, qualified mobile carrier and honest source limits remain
+those independently pinned for C1. The two critics receive all six neutrally before
+any author pass claim. Final installed-source reproduction follows the cohort.
