@@ -625,3 +625,16 @@ New immutable C6 committed source/three literal packages/same original refs and
 full6fresh outputs, no prototype/edit/history/wrapper/reroll selection. Same critics
 image-first plus bounded installed-source evidence. No new frameworks/schema/
 flags/agents/branches/worktrees/persistent dirs/collector/site/Computer Use work.
+
+
+### FRESH01-C6 freeze before images
+
+Sourced2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90 saved/pushed; new system-temp
+uib-fresh01-c6-q6xwk84w/frozen-cohort-manifest.json hash7b528ef95438c082ad72052e3781b219faf3ae2fd152996d8aaff552533d0859
+pins same qualified inputs/original refs and three new literal packages/six outputs.
+Author36focused tests/Clippy/formatting pass, five nonprompt files×3 unchanged.
+Scalar blocks no longer carry full object rectangles; footer is not a rendered
+member of Close size-view merely because it supplies an anchor. Underlying UI text
+retained; ambiguous multiline trigger caption falls back to expanded-button context.
+Mobile singleton input has its own size-view. Six fresh first calls, unchanged
+criteria; all previous cohorts remain immutable and visual acceptance is pending.

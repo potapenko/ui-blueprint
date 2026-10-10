@@ -127,7 +127,14 @@ C6-I fullfiniteplan approved/running: separatetruefullrender-members/sizeviews
 fromanchor-only minimal2edgefragments; singlegeometryrecipe; trustworthyhuman
 caption or role/contextfallback, no lexicalfilter; singletoninput ownsizeview
 forDirector366×44, root12preserved. Same5paths/facts/criteria, focusedtests.
-NextNEWC6freeze+all6freshcalls; allC1–C5retained, no imageedits/rerollselection.
+C6 FROZEN beforecall: sourced2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90,
+root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c6-q6xwk84w,
+frozen-cohort-manifest.json hash7b528ef95438c082ad72052e3781b219faf3ae2fd152996d8aaff552533d0859.
+36focusedtests/clippy/fmt passauthor; machine5files×3 exact. Sameinputs/originalrefs,
+newliteralpackages and6freshpaths. ScalarblocksnowseparatewithnofullObject/box;
+FooterexcludedfromClose size-view anchorcontext; sourceUITextretained, caption
+expandedbutton; singletonmobileinputsizeviewcreated. Generationrunning.
+Nextneutralall6→samecritics; allC1–C5retained, no imageedits/rerollselection.
 
 
 Старые R1–R8 не свежие испытания.
