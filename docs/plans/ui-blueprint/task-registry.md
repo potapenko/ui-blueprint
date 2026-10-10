@@ -20,6 +20,30 @@
 
 ## Текущее продолжение — 2026-10-10
 
+### E05 candidate complete; independent source/privacy review
+
+- E05 terminal revision41, turn01a123bb-0fb7-70d0-9aa3-937fb2e51983;
+  a0265843634fce8bc6a942fc1f276391a51c54c6 pushed. Root read full receipt and
+  exact changed-file metadata, not product source/visual output. Writer retained
+  idle for any real repair from independent review.
+- Author reproduced baseline prompt bytes on pinned build; candidate18653/29793
+  characters, all58components/116dimensions reconstructed, other5files byte-identical.
+  Exporter33 + public CLI20 tests, Clippy/fmt reported pass. Both literal prompts
+  submitted successfully to built-in ImageGen without caller rewriting.
+- Image results remain FAIL/unverified/draft: Director extra heading and wrong
+  leaders/empty annotation; Settings missing inventory/92dimensions. Output remains
+ 1672×941. No CAD/marketing effectiveness/human acceptance claim. All saved E04/E05
+  images retained; source-reference import limitation remains. Root already displayed
+  E04 originals/results; E05 absolute paths are in its receipt, not raw image QA here.
+- E05-R «E05-R — Проверка полноты и приватности промптов», chat
+  `01a123c9-2629-70d2-b2b4-0d75cb82855e` / local, fresh neutral
+  [review packet](packets/E05-prompt-review.md). Initial actual source/raw evidence
+  before author narrative, then same reviewer reconciliation. Writes only own
+  E05-prompt-review receipt; no runtime/ImageGen/generic audit. Product scope unchanged.
+- Native registry34 / request-only@2 registered e89cd0f; root read full revised
+  criterion and all changed reference diffs. N05 final qualification still running;
+  neither new registration nor positive local tests means Native acceptance.
+
 ### E04 completed; E05 exporter repair runs independently
 
 - E04 terminal revision40 / turn01a123ab-8613-7b52-985e-b1e9859a0494,
