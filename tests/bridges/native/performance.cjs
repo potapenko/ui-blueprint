@@ -199,4 +199,63 @@ if(process.argv.includes('--baseline-only')){
   const baseline=read(process.env.UIB_Q02_NATIVE_BASELINE);const value=inventory(baseline);
   console.log(JSON.stringify({nodes:value.nodes,coverage:value.coverage,attributes:value.attributes}));
 }else if(require.main===module)run().catch(error=>{console.error(error.message);process.exitCode=1;});
-module.exports={inventory,matrix,sourceFidelity,historicalComparison,historicalTreeComparison,invariance};
+// N05 prospective quality only. The complete reference is retained; the only
+// supported structural exception is the independently investigated anonymous leaf.
+// Every other difference is a failure, not an expanded allowed-count interval.
+function sourceFidelityWithBoundary(facts,snapshot,acquisition,context){
+  const method='N05-AX-BOUNDARY@2';
+  try{
+    assert.deepEqual(snapshot.context,context,'target/context mismatch');
+    assert.equal(snapshot.coverage.status,'partial');
+    assert.equal(snapshot.observations.length,1);
+    const observation=snapshot.observations[0],proof=acquisition.q02_boundary;
+    assert.equal(observation.consistency,'unknown');
+    assert.equal(observation.time_unit,'seconds');assert.equal(observation.freshness,'current');assert.equal(observation.answer_source,'live');
+    assert.equal(observation.source_namespace,'macos.ax');
+    assert.equal(proof?.method,method,'missing method');assert.equal(proof.complete,true,'incomplete proof');assert.equal(proof.truncated,false,'truncated proof');
+    assert.equal(proof.observation_id,observation.id,'wrong observation');assert.deepEqual(proof.surface,context.surfaces[0],'wrong surface');
+    const rows=proof.rows;assert(Array.isArray(rows)&&rows.length>0&&rows.length<64,'missing/truncated rows');
+    for(const [i,row]of rows.entries()){
+      assert.equal(row.order,i);assert([28,70].includes(row.node_alias));
+      assert(Number.isFinite(row.uptime)&&row.uptime>=observation.start&&row.uptime<=observation.end,'outside observation');
+    }
+    for(const name of ['refused_values','known_unread_child_entries','unknown_children_lists','remaining_queued_handles','unreturned_child_references','duplicate_handle_references'])assert.equal(acquisition[name],0,name);
+    assert.equal(acquisition.returned_nodes,snapshot.nodes.length);assert.equal(acquisition.visited_unique_nodes,snapshot.nodes.length);assert.equal(acquisition.discovered_unique_handles,snapshot.nodes.length);
+    assert.deepEqual(snapshot.coverage.fields,context.fields);
+    for(const node of snapshot.nodes){
+      assert.deepEqual(node.properties.map(p=>p.field),context.fields,'omitted selected field');
+      const role={AXButton:'button',AXCheckBox:'checkbox',AXTextField:'textbox',AXStaticText:'text',AXGroup:'group',AXScrollArea:'scrollarea',AXSlider:'slider'}[node.native_role.value?.value];
+      const state=node.properties.find(p=>p.field==='role').state;
+      if(role)assert.deepEqual(state,{availability:'known',value:{type:'role',value:role}},'lost canonical role');
+      else assert.equal(state.availability,'unknown');
+    }
+    const at=(n,op)=>rows.filter(r=>r.node_alias===n&&r.operation===op), counts=at(28,'count');
+    assert.equal(counts.length,1);assert.equal(counts[0].attribute,'AXChildren');assert.equal(counts[0].status,0,'error is not empty');
+    const ranges=at(28,'range'),edges=at(28,'child_alias'),visits=at(70,'visit');
+    assert.equal(visits.length,1,'missing handle mapping');
+    const finalCounts=at(70,'count');assert.equal(finalCounts.length,1,'missing final boundary');
+    assert.equal(finalCounts[0].attribute,'AXChildren');assert.equal(finalCounts[0].status,0);assert.equal(finalCounts[0].count,0);
+    assert.equal(finalCounts[0].order,rows.length-1,'incomplete trace tail');
+    // Pin the investigated relation to this full source reference, never just
+    // to a numeric alias or a role-based filter over the collected graph.
+    const parent=facts.nodes[28],child=facts.nodes[70];
+    assert.deepEqual(parent.children,[70]);assert.deepEqual(child.children,[]);
+    assert.deepEqual(facts.nodes.filter(n=>n.children.includes(70)).map(n=>n.index),[28]);
+    assert.equal(child.properties.AXRole.value,'AXGroup');
+    for(const name of ['AXIdentifier','AXTitle','AXDescription'])assert.notEqual(child.properties[name].availability,'known','required logical control cannot disappear');
+    if(counts[0].count===1){
+      assert.equal(ranges.length,1);assert.deepEqual([ranges[0].status,ranges[0].offset,ranges[0].asked,ranges[0].returned],[0,0,1,1]);
+      assert.equal(edges.length,1);assert.equal(edges[0].child_alias,70);assert.equal(visits[0].same_as_parent28_child,true,'wrong handle');
+      assert(counts[0].order<ranges[0].order&&ranges[0].order<edges[0].order&&edges[0].order<visits[0].order);
+      const result=sourceFidelity(facts,snapshot);return {...result,method,source_tree_variation:[]};
+    }
+    assert.equal(counts[0].count,0,'unexplained topology');assert.equal(ranges.length,0);assert.equal(edges.length,0);assert.equal(visits[0].same_as_parent28_child,false);
+    // This comparison view aligns surviving aliases. It never edits raw facts,
+    // stored samples, the source tree, or the requested collection scope.
+    const map=i=>i>70?i-1:i;
+    const available={...facts,nodes:facts.nodes.flatMap((node,i)=>i===70?[]:[{...node,index:map(i),children:node.children.filter(c=>c!==70).map(map)}])};
+    const result=sourceFidelity(available,snapshot);
+    return {...result,method,source_tree_variation:[{reference_parent:28,reference_child:70,source:'same_call_successful_empty_enumeration',proof_order:counts[0].order}],reference_nodes:facts.nodes.length,observed_nodes:snapshot.nodes.length};
+  }catch(error){return {matched:false,counts:{},errors:[{reason:String(error.message).slice(0,300)}],method,source_tree_variation:[]};}
+}
+module.exports={inventory,matrix,sourceFidelity,sourceFidelityWithBoundary,historicalComparison,historicalTreeComparison,invariance};

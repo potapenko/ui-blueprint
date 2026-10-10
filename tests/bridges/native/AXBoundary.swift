@@ -5,9 +5,18 @@ import ApplicationServices
     static var node = -1
     static var rows: [[String: Any]] = []
     static var parentChild: CFTypeRef?
-    static func reset() { node = -1; rows = []; parentChild = nil }
+    static var truncated = false
+    static func reset() { node = -1; rows = []; parentChild = nil; truncated = false }
+    // Test copy calls this before returning from collectWindowAX. The extra
+    // reference never outlives the collector's own handles, including warm calls.
+    static func release() { parentChild = nil; node = -1 }
+    static func proof(observation: String, surface: [String: Any]) -> [String: Any] {
+        ["method":"N05-AX-BOUNDARY@2", "observation_id":observation,
+         "surface":surface, "complete":true, "truncated":truncated, "rows":rows]
+    }
     static func add(_ operation: String, _ values: [String: Any]) {
-        guard [28,70].contains(node), rows.count < 64 else { return }
+        guard [28,70].contains(node) else { return }
+        guard rows.count < 64 else { truncated = true; return }
         rows.append(["order":rows.count,"node_alias":node,"operation":operation,
             "uptime":ProcessInfo.processInfo.systemUptime].merging(values,uniquingKeysWith:{$1}))
     }
