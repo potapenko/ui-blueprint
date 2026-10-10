@@ -765,3 +765,32 @@ Literal frozen CLI packages/commands have prompt chars9562/13065/15932. The immu
 manifest will pin this checkpoint and unchanged qualified input/original UIref hashes
 before exactly6fresh first requests. All earlier cohorts/images/originals retained;
 no edits/history/wrappers/rerolls. Neutral all6 handoff then installed source proof.
+
+## FRESH01-C6 frozen six-output handoff
+
+Source `d2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90` committed/pushed before first request.
+C6 `frozen-cohort-manifest.json` SHA256
+`7b528ef95438c082ad72052e3781b219faf3ae2fd152996d8aaff552533d0859`
+was saved before generation and remains immutable. All literal prompts, qualified
+inputs and original-only reference pins stayed unchanged through exactly6fresh
+first calls.6images returned;0refusals,0edits,0wrappers,0history refs,0rerolls. All count.
+
+| C6 image | Actual native100% raster |
+| --- | --- |
+| director-cohort-1.png |1536×1024|
+| director-cohort-2.png |1536×1024|
+| settings-cohort-1.png |1036×1518|
+| settings-cohort-2.png |1036×1518|
+| mobile-cohort-1.png |1236×1272|
+| mobile-cohort-2.png |1165×1350|
+
+C6 `cohort-results.json` maps every original/copy/hash/raster. Tool originals were
+copied and remain; no previous images/cohorts/packages were overwritten or deleted.
+All6were delivered neutrally to root for the same two critics before author verdict.
+Source/images held unchanged. Execution does not imply image acceptance.
+
+C6 installed proof: fresh core build/installed verification at exact source
+`d2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90` passed. Installed CLI reproduced all six
+files of all three frozen C6 packages byte-for-byte. Run-owned non-image install
+removed and absence verified; shared inputs/packages and every image original/copy
+remain. Author execution evidence is separate from independent C/V acceptance.
