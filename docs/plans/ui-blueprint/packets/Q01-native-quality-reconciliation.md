@@ -95,3 +95,70 @@ commit+push to existing canonical SSH remote. Empty index, no reset/stash/clean/
 force. Own doc link/route/diff checks only. Return commit/push and release status.
 This task must settle the smallest acceptance decision, not create speculative
 frameworks, new numerical thresholds or repeated unchanged review cycles.
+
+## Final current Native evidence reconciliation — 2026-10-10
+
+The earlier fixed76 phase is complete in a3029c9. Current source remains unchanged
+e641543 (export-only a026584 accepted independently). Registry34 and request-only@2
+were registered e89cd0f before predicate37a76fa and prospective full cohorts.
+This continuation evaluates those actual changes and the remaining binding refusal;
+no source repair, broader audit, new acceptance bar or repeat runtime is requested.
+Complete this decision in the SAME existing Q01 role/context.
+
+First phase: independently inspect actual registered clauses, predicate/harness diff,
+raw cohorts and source binding path. Do NOT first read the new N05 author section,
+N06 author receipt or Mac advisor conclusion; return initial observations/criterion
+coverage. Root then supplies those for final reconciliation. Previously accepted
+source/functional/privacy evidence stays closed unless actual new evidence affects it.
+Your earlier independent observations may be reused where applicable; do not repeat
+unchanged tests or demand a new full integration run merely for new documentation.
+
+Neutral artifact identities: e89cd0f spec5files,37a76fa test/harness4files,
+89ef8f0 N05 documentation and b5f94b5 N06 documentation. No shipping code delta.
+Spec scope: current D06@2/request-only@2/Native acquisition@3 plus original
+MODEL/NATIVE/IDENTITY/EXCHANGE/LIFECYCLE/PRIVACY/COMPLETION and previous full closure.
+Read revised clauses and explicit dependencies completely, not just this summary.
+
+Raw N05 root D2=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n05-qualification-6q0ncpe_.
+Configs/build pins/reports/acquisition records are evidence to verify. Full off/on
+20cold/100warm+initial each, with some structural discrepancies and failed AX
+ChannelResponses; don't infer a verdict from author summary.json. Source/test pins
+are in commits and actual files. Original Q02-R raw root remains unchanged.
+Additional raw N06 root D3=/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n06-binding-gsguqzod.
+source-pins.json/build-command.json/six configs and original per-call reports identify
+new temporary guard split and unchanged N05 control binaries. Treat summary/scripts
+as supporting artifacts, not independent truth. Diagnose source/evidence only; don't
+run more cohorts or spend effort trying to force a rare failure to recur.
+
+Questions to settle, without predetermined acceptance:
+- Does the enacted narrow criterion and actual predicate faithfully implement the
+  selected six provisions, including real negative data-loss/error/target cases?
+- Which prospective structural exceptions carry adequate same-call proof; which
+  failed requests remain failures, and what does each actual failure establish?
+- For binding, inspect expected identity provenance, actual OS metadata call order,
+  local object lifetime/consumer and guard semantics. Is there a demonstrated
+  implementation defect or a concrete unresolved correctness requirement, versus
+  an unproved deeper source cause? Nullable API documentation alone is not a causal
+  diagnosis; subsequent successful diagnostics don't repair historical calls.
+- Derive acceptance requirements from original contracts: distinguish zero wrong
+  targets/known-data loss/false pass from reported read unavailability. Do NOT invent
+  either a100%-availability SLA or a tolerated failure percentage. All six historical
+  failures remain actual failed AX reads and cannot be relabelled negative-test passes.
+  If source uncertainty is materially blocking, identify the exact normative clause,
+  missing fact and smallest justified action. If a bounded availability limitation
+  can be accepted under existing authority, state precisely why and what remains
+  unverified; never narrow the original product or claim those requests succeeded.
+- Distinguish old shipping numeric measurements, new diagnostic quality and their
+  source/input applicability. No arithmetic splice or diagnostic timing promotion.
+
+After root supplies receipts, reconcile all author/advisor claims and return one
+current Native verdict plus explicit criterion map. Existing accepted M01–M06,
+Native E2E, identity/privacy/lifecycle/source records must remain attributed to their
+pins; state whether these new facts invalidate any of them. Do not reopen whole
+Web/E05/Q03/export/distribution. Overall goal completion stays root's responsibility.
+
+Read-only all product/spec/raw artifacts; append one final coherent section to
+receipts/Q01-integrated-acceptance.md after phase2, commit+push under existing lock.
+No new synthetic runner/framework, UI, external messages, child agent or project.
+The output is the smallest evidence-based acceptance decision, not an open-ended
+search for perfect API reliability or a request for another generic audit.

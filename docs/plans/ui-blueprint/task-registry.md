@@ -20,6 +20,33 @@
 
 ## Текущее продолжение — 2026-10-10
 
+### N06 terminal; final Native acceptance question with Q01
+
+- N06 terminal revision46 / turn01a123d0-158a-71b2-b228-2211c1e9e8eb,
+  b5f94b5 pushed; full receipt read.625 actual diagnostic observed responses,
+  one separate pre-collection caller-cap rejection; no target_unresolved recurrence.
+  Includes original N05 binary controls.24 synthetic instrumentation guard cases
+  pass; these do not prove repair or qualify full product latency/quality.
+- No product source changed. Expected identity provenance and strong local object
+  lifetime inspected by author; no demonstrated own lifetime defect. Exact old
+  missing app vs missing bundle vs mismatch remains unavailable in old trace.
+  All original six failures remain; no new source policy, repeated retry or fake fix.
+ 105sessions closed,3ownfixtures quit, resources released. N06 retained idle for
+  immediate review questions; no new runtime series assigned.
+- Mac advisor read-only revision106 distinguishes original source-faithful safety
+  from guaranteed API availability: no100% SLA and no tolerated error-rate contract.
+  Honest refusal still failed request; positive pilots don't erase historical
+  refusals. Own binding defect vs unavailable metadata remains the material question.
+  Advice is not acceptance or authority to weaken gates.
+- Q01 same existing context receives final current Native evidence reconciliation:
+  independently inspect e89cd0f criterion/37a76fa predicate/raw N05+N06 records,
+  then author/advisor reconciliation. No new UI/cohorts or broader audit.
+  [Packet](packets/Q01-native-quality-reconciliation.md) defines exact questions:
+  source fidelity, negative cases, failure meaning, original acceptance clauses
+  and smallest remaining fact/action, without inventing an availability threshold.
+- Goal remains active/uncomplete. Current installs and exporter acceptance remain
+  closed. Root writes packet/registry only; Q01 owns final scoped receipt.
+
 ### I02 installed exporter accepted; Native remains the open outcome
 
 - I02 terminal revision85, turn01a123d1-10e0-74d1-8b8e-f7e6e1a82fd1,
