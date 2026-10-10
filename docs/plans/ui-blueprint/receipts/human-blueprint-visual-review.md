@@ -601,3 +601,70 @@ claim follows from this reference. Conversion limitations remain the builder's d
 
 All baseline results remain reported, separate from future cohort cells. Only this
 receipt changed; all images/data remain retained. `git diff --check` passed.
+
+## FRESH01-C1 — all six frozen fresh outputs, 2026-10-10
+
+Source `76f14ac5a2ce6cb45a54e9c16b64342492d361fb`; selected contract closure unchanged.
+Cohort root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-baseline-hhcyuw74/`.
+Read ALL six actual images before any literal prompt or author context, then read
+`cohort-results.json`, `frozen-cohort-manifest.json` and affected per-view/state/
+required-dimension text in the three `*-frozen-package/prompt.txt` files. All three
+literal prompt SHA-256 values match the frozen manifest. The neutral record reports
+six fresh calls, six returned images, zero edits/rerolls/wrappers/refusals; the two
+baseline outputs remain separate. No prior accepted edited image was substituted.
+
+**Final HBP-V cohort result: 0/6 complete passes.** Every cell is retained and reported.
+No new font threshold, CAD ratio, pixel tolerance or aesthetic preference was used.
+All six have readable type and a scannable overview/detail hierarchy (V3/V4 pass).
+The former Settings search/results hallucination is absent: the source-driven view
+plan fixed that baseline problem. The remaining findings concern actual edge meaning,
+required dimensions and the existing outline-only rule.
+
+| Cell / actual native review size | Verdict and precise blocking region |
+| --- | --- |
+| `director-cohort-1.png`, 1536 × 1024 | Fail V5/V6. Overview trigger-to-popup 6 and detail 6/3 gap arrows terminate on small detached ticks inside the gaps, not the named control borders. In the lower-right inset, the 8 dimension uses ticks above/right of the two actual corner borders. V1/source text/state remain sound; rejection is wrong association, not the length of the drawn gaps. |
+| `director-cohort-2.png`, 1536 × 1024 | Fail V5; inset association is not unambiguous enough for V6. Main overview/spacing detail are usable and source text/state preserved. In the right inset, a middle short corner/guide is labelled “Director filter options (parent)” while a separate lower corner is labelled input; the 8 arrow ends at the upper guide rather than a continuous identified input border. This contradicts the intended two-fragment parent/input explanation. Not a CAD-proportion failure; the parent/input attribution itself is ambiguous. |
+| `settings-cohort-1.png`, 1536 × 1024 | Fail V1/V5/V6. Both overview off-knobs are solid white despite blue-interior outline rule. Required Close height 30 is absent. Overview 22 arrows measure space outside the form rather than form-to-label/select inset. The Close right-15 starts on a detached guide to the right of the actual button. Content, left/off positions and readable composition are preserved. |
+| `settings-cohort-2.png`, 1223 × 1286 | Fail V1/V5/V6. Overview off-knobs are again filled white and Close height 30 is absent. In the upper-right select detail, width 198 starts inside the select instead of at its left border; the 12 label-gap guide is not identified as the source label-layout edge. Footer right-15 uses a detached right-of-button guide. These are not harmless differences in raster proportions. |
+| `mobile-cohort-1.png`, 1024 × 1536 | Fail V5/V6. In Genres detail the required vertical 8 (Action bottom → Animation top) appears below the second row as an unrelated mark. Bottom-left root-to-Source inset 12 ends at an unconnected short tick, not the separately drawn Source edge. All 14 genres, states and safe visible labels remain recognizable. Cast clipping is less explicit than the source/second sample, but that ambiguity is not needed to establish this failure. |
+| `mobile-cohort-2.png`, 1103 × 1426 | Fail V5 on omission: required Director input width366/height44 and root-to-Source left inset12 are absent from the sheet. These were frozen requirements, not additions after viewing it. Its 27-visible-pixel Cast annotation/broken lower edge, actual controls and useful Source/Years/Genres details are preserved. Visible numerical values and status wording show no separate V6 fabrication. |
+
+Director 2 was re-viewed narrowly before final judgment because it is the closest
+case. The issue is not that its 8 span looks too wide/narrow: its right endpoint and
+parent/input labels are distributed over an extra middle fragment, so the reader
+cannot trace one clear pair of named source borders. No stronger defect is inferred.
+A plain complete source overview is not enough to validate an ambiguous added detail.
+
+Literal reconciliation / attribution:
+
+- Both Settings outputs received explicit width52 AND height30 for Close, actual
+  footer right/bottom boundaries, and blue-interior off-knobs. These failures are
+  output deviations; the frozen planner did not omit those requirements.
+- Mobile's overview explicitly requires Director366 ×44 and root-to-Source12;
+  its Genres detail explicitly requires Action-bottom → Animation-top8. Missing/
+  misattached graphics are output deviations. Showing Director measurements in
+  another useful detail, as sample1 did, is not itself grounds for rejection.
+- Director explicitly requires gap arrows on actual borders and exactly two inset
+  fragments with one directly associated arrow. The failed corner/gap diagrams
+  contradict that wording. State repeats now remain correct, unlike the baseline.
+- Fresh-only and supported-view instructions are present; obsolete edit wording
+  and unconditional search/results views have been removed. There is no evidence
+  here of the old generic-template omission. More precise failure causes inside
+  the image model cannot be established from these six outputs alone.
+
+Smallest shared generic recommendation, not six manual image fixes: make each view
+an atomic drawing instruction that carries its primitives, state rendering and full
+size/gap tuple together (e.g. both width and height of the same control). Reduce
+competing dimension-guide/leader primitives; an inset may use a clearly named cropped
+strip of the two actual source borders, with its arrow directly between them, rather
+than extra projected corner fragments and separate annotation branches. Preserve the
+same measured facts and endpoint meanings; do not lower the acceptance threshold or
+silently discard useful required dimensions. This is a candidate prompt simplification,
+not a proven fix or authorization to retouch/reroll these six images.
+
+The cohort demonstrates improved source-specific composition but does not establish
+reliable fresh acceptance. Preserve all cells and distinguish this result from the
+older accepted Director R8 + Settings R4 edited pair. No universal generation claim,
+new statistical guarantee or hidden best-of selection is justified. Only this receipt
+changed; images/packages/source remain untouched. `git diff --check` passed.
