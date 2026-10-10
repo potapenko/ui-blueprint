@@ -49,9 +49,21 @@ manifest в baseline-temp frozen-cohort-manifest.json. Three *-frozen-package,
 commands/hashes/originalrefs pinned; outputs *-cohort-1.png/*-cohort-2.png.
 Director8790chars/Settings14496/Mobile17431; all5nonpromptfiles exactbaseline.
 Compiler26/CLI20/Clippy/fmt passed authorchecks; no candidatevisualclaim yet.
-Builder generating exactly6freshrequests now; criteria/inputqualification frozen.
-Next: neutralall6 handoff→sameC/V independentimage-first→boundedsource/installed
-reconciliation; no individualimageedits, no rerollselection.
+FRESH01-C1 complete/rejected:6outputs,0refusals/edits/rerolls/wrappers. Allhashes/
+input/ref/promptpins verified byC. V00c7a06 and Cinitialfinalmatrix agree0/6passes:
+D1/D2anchorambiguity;S1/S2Close30omitted/anchors+filledknobs;M1anchors/clipscope;
+M2missing REQUIREDDirector366×44/root12. All requirednumbers existed inliteralplan.
+Genericapplicability improved (no fabricatedSettingssearch/results), but nofresh
+cohortacceptance. Sourceinstalledbf70583 reproducedall6files ofall3packages; this
+is executionevidence, notC7acceptance. NewC7gap: clipped(c) conflates anyunequal
+VisibleRegion withclipping irrespective frame/space/subset; repairboundedselected
+helper to preserve non-DOMframe distinctions and validmobile27/44.
+Builder FRESH01-C2 preparation diagnostic/proposal running, source/imagehold.
+Proposedcompactlocal geometry+smallcomplete W/H/gap/insetbundles must preserve
+samefacts/criteria; sourceconcisenessis hypothesis, notprovedsolecause. Noappend-
+onlyprohibitions/manualretouch/blindreroll. Next: oneconsolidatedgenericrepairpacket,
+then newcomplete frozen6cohort with separateimmutablemanifest/outputpaths. C1all
+images/receiptsremain, neverreplacefailedcells.
 Старые R1–R8 не свежие испытания.
 
 

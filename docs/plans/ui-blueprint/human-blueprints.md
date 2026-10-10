@@ -395,3 +395,31 @@ five non-prompt files match prior baseline or qualified mobile carrier exactly.
 Author compiler26/CLI20/Clippy/formatting passed; this is not image acceptance.
 Matrix uses original UI references only, no history/edits/wrappers/rerolls. Both
 continuing critics inspect all actual images before author outcome narratives.
+
+
+### FRESH01-C1 disposition before further implementation
+
+All6 literal fresh requests returned images; none passed every mandatory criterion
+in either critic's scope. V00c7a06 records the six individual failures; content
+reconciled all required omissions/anchors against actual plans before declaring0/6.
+Do not reinterpret the frozen threshold after seeing these results. Settings no
+longer invents search/results, so applicability repair is useful but insufficient.
+Images fail mostly to carry explicit source-edge associations or full dimension
+bundles; required numbers were present. Compact local geometry/measurement bundles
+are an evidence-informed next hypothesis, not proof that prompt length alone caused
+failures. Any next candidate must preserve complete meaningful structure/state and
+same useful-size/anchor criteria, with no image retouch or cherry-picked reroll.
+
+Content additionally verified new clipped(c) inference conflates different frame
+meanings: any unequal VisibleRegion can mark AX/Hit/Paint fallback as CLIPPED and
+suppress dimensions. Next bounded Restore must require proved comparable layout/
+visible subset or report separate visibility without that claim. Mobile actual
+27visible/44layout remains valid, machine facts stay unchanged. Final C7 not accepted
+until this exact gap is repaired/verified. Saved-source installedbf70583 evidence
+is retained as successful execution, not a substitute for acceptance.
+
+Root requested a finite source/prompt proposal from same builder, while source and
+C1 artefacts remain frozen. A further implementation packet/new6-image cohort is
+not yet dispatched. Preserve separate immutable cohort manifests and all failed
+outputs; do not overwrite C1's frozen inputs/results. No new reviewer or product
+criterion is introduced to obtain a favourable verdict.
