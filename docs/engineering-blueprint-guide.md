@@ -370,3 +370,16 @@ column → control и footer → action имеют отдельные имено
 контур с голубой серединой. Footer использует человеческое CSS px, не JSON syntax.
 Краткая геометрическая основа сохраняет Space kind/id/origin/unit и transform status;
 одинаковые единицы не разрешают складывать несвязанные spaces.
+
+
+### HBP-HUMAN-001 R3 — текстовые каналы и контекст anchors
+
+Уточнение тех же C1/C3/C5 после R2: visible_text, accessibility_name и явный
+публичный draft из caller state имеют разные значения. Accessibility name не
+становится содержимым поля; raw value fields по-прежнему не экспортируются.
+Разрешённый caller draft показывается дословно во всех повторённых видах поля,
+keyboard-active state имеет явную подпись отдельно от applied selection.
+Gap соседних controls соединяет их края, не divider. Label-layout right edge
+подписывается именно на старте соответствующего gap. Footer inset показан только
+к именованным source footer right/bottom, без верхнего inset и без подмены рамкой
+детали. Вспомогательные рамки/разделители, конкурирующие с anchors, не добавляются.

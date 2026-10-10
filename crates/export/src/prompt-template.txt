@@ -52,10 +52,16 @@ The following dimensions are MANDATORY, not a candidate menu. Print every prepar
 once, grouped between overview and the relevant enlargement. No additional dimensions.
 Place outer form dimensions on the overview: height spans OUTERMOST TOP to OUTERMOST
 BOTTOM INCLUDING the entire footer/action area. It must not stop at a body/footer divider.
-For a preference form: enlarged TWO adjacent select rows with select width/height, clear
-gap, and label-layout-column → select gap. Show a short dotted construction boundary
-labelled “label layout edge” when a text-layout edge is needed; it is not a glyph edge.
-Also dimension the Close action's width/height and footer-right/footer-bottom insets.
+Preference detail: TWO adjacent selects, WITHOUT a row divider between them. The clear-gap
+arrows join first select BOTTOM to second select TOP, using extension lines from those
+control borders only. Show the label layout column's RIGHT boundary as a short dotted
+line named “label layout right edge”; the label-to-select dimension STARTS ON THIS LINE
+and ends at select LEFT. Place the two outer form insets on the OVERVIEW only, between
+actual form left→label-layout left and select right→actual form right.
+Footer detail: show only the actual source footer's solid RIGHT and BOTTOM boundaries,
+named “footer right edge” and “footer bottom edge”. Button right/bottom insets end on
+these source boundaries. NO arrow above the button and NO inset in the overview. Do
+not draw a decorative detail enclosure; it can be confused with a source boundary.
 For a popup: overview trigger and popup sizes; detail contains popup left/right BORDER
 segments, the search, first and second result rows. Show search→first-row and first→second
 clear gaps, plus popup-border→input insets. Preserve shared left/right alignments.
@@ -74,8 +80,10 @@ Keep text clear of lines. No unanchored numbers, crossed leaders or flow arrows.
 rounded chains sum exactly. Exact facts remain in the companion machine data.
 
 СОСТОЯНИЯ И ДЕЙСТВИЯ
-Use only the named state and known flags above. Do not invent hidden controls or transitions.
-Use public draft text only when explicitly present in the author’s state annotation.
+MANDATORY DRAWN STATE: {{state}}.
+Copy the explicitly reviewed public draft into its input in BOTH overview and enlargement;
+never substitute an accessibility name for it. If the state names a keyboard-active result,
+print exactly “Keyboard-active; not applied” beside that result. Do not infer an applied change.
 
 ОСНОВНАЯ НАДПИСЬ И ВЕДОМОСТЬ
 One small readable footer only: “{{source}} · {{coverage}} coverage · {{approval}} · image unverified”.

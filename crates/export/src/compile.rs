@@ -515,7 +515,38 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
         )?;
     }
     for (i, c) in v.components.iter().enumerate() {
-        let label = public_label(c);
+        let label = c.label.as_deref().unwrap_or_else(|| {
+            c.properties
+                .iter()
+                .find_map(|p| match p.known() {
+                    Some(Value::Text(text)) if p.field() == Field::VisibleText => {
+                        Some(text.as_str())
+                    }
+                    _ => None,
+                })
+                .unwrap_or("")
+        });
+        let accessible_name = c
+            .properties
+            .iter()
+            .find_map(|p| match p.known() {
+                Some(Value::Text(text)) if p.field() == Field::AccessibilityName => {
+                    Some(text.as_str())
+                }
+                _ => None,
+            })
+            .unwrap_or("");
+        let field_content = if matches!(
+            native_role(c).to_ascii_lowercase().as_str(),
+            "input" | "textbox" | "searchbox"
+        ) {
+            format!(
+                " FIELD CONTENT: only the explicit reviewed draft from caller state ({}) may be drawn. Accessible name is identification, NEVER the field's content.",
+                v.state
+            )
+        } else {
+            String::new()
+        };
         // Container text that repeats a child's text is an aggregate, not another label/control.
         let aggregate = !label.is_empty()
             && c.children
@@ -573,15 +604,24 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
         append(
             &mut out,
             &format!(
-                "{}: {} | text {} | {} | children {:?}, parent {:?} {} {}\n",
+                "{}: {} | visible text {}{} | {} | children {:?}, parent {:?} {} {}{}\n",
                 i + 1,
                 native_role(c),
                 bounded_compact_json(&label, limit)?,
+                if accessible_name.is_empty() || accessible_name == label {
+                    String::new()
+                } else {
+                    format!(
+                        " | accessible name (not field content) {}",
+                        bounded_compact_json(&accessible_name, limit)?
+                    )
+                },
                 bounds,
                 children,
                 parent,
                 states,
-                c.state_and_actions.as_deref().unwrap_or("")
+                c.state_and_actions.as_deref().unwrap_or(""),
+                field_content
             ),
             limit,
         )?;

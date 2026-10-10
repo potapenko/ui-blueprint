@@ -650,3 +650,86 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
     assert!(prompt.contains("Records [5, 7]: keep exactly shared left AND right edges"));
     assert!(!prompt.contains("[\"css_px\"]"));
 }
+
+#[test]
+fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
+    let mut brief = fixture("observed");
+    brief.views[0].state =
+        "Input open; public draft orchard; first suggestion keyboard-active; none applied".into();
+    let SourceInput::Observed {
+        snapshot,
+        public_text_fields,
+    } = &mut brief.views[0].source
+    else {
+        panic!()
+    };
+    *public_text_fields = vec![Field::VisibleText, Field::AccessibilityName];
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("INPUT".into()),
+    };
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Text("Accessible search name".into()),
+    };
+    for (field, text) in [
+        (Field::VisibleText, ""),
+        (Field::Value, "UNAPPROVED_RAW_VALUE_CANARY"),
+    ] {
+        let mut property = snapshot.nodes[0].properties[1].clone();
+        let Property::Requested {
+            field: f, state, ..
+        } = &mut property
+        else {
+            panic!()
+        };
+        *f = field;
+        *state = Availability::Known {
+            value: Value::Text(text.into()),
+        };
+        snapshot.nodes[0].properties.push(property);
+        for node in snapshot.nodes.iter_mut().skip(1) {
+            let mut unavailable = node.properties[1].clone();
+            let Property::Requested {
+                field: f, state, ..
+            } = &mut unavailable
+            else {
+                panic!()
+            };
+            *f = field;
+            *state = Availability::Unknown {
+                reason: Id("test-not-collected".into()),
+            };
+            node.properties.push(unavailable);
+        }
+        snapshot.context.fields.push(field);
+        snapshot.coverage.fields.push(field);
+        for observation in &mut snapshot.observations {
+            observation.coverage.fields.push(field);
+        }
+    }
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    let input = prompt
+        .lines()
+        .find(|line| line.starts_with("1: INPUT"))
+        .unwrap();
+    assert!(input.contains("visible text \"\""));
+    assert!(input.contains("accessible name (not field content) \"Accessible search name\""));
+    assert!(input.contains("public draft orchard"));
+    assert!(!input.contains("visible text \"Accessible search name\""));
+    let all = String::from_utf8(package.files().values().flatten().copied().collect()).unwrap();
+    assert!(!all.contains("UNAPPROVED_RAW_VALUE_CANARY"));
+    let SourceInput::Observed {
+        public_text_fields, ..
+    } = &mut brief.views[0].source
+    else {
+        panic!()
+    };
+    public_text_fields.clear();
+    let redacted = compile(&brief, limits()).unwrap();
+    let all = String::from_utf8(redacted.files().values().flatten().copied().collect()).unwrap();
+    assert!(!all.contains("Accessible search name"));
+    assert!(!all.contains("UNAPPROVED_RAW_VALUE_CANARY"));
+}

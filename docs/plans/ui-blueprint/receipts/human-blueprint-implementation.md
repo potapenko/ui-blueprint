@@ -121,3 +121,33 @@ accessible name with its displayed field content. Caller state can explicitly
 supply a public draft (Director: spiel); a bounded correction should distinguish
 these channels and give explicit caller draft precedence without exporting arbitrary
 private values. Source/images remain held for consolidated R2 critic observations.
+
+
+## Candidate R3 — neutral handoff
+
+Same retained temp root. Images: `director-r3.png`, `settings-r3.png`, each1536×1024;
+review at native100%. Literal packages `director-r3-package/`, `settings-r3-package/`,
+exact `*-r3-command.json`; prompts11,004 /15,459 Unicode characters. Both were sent
+verbatim to built-in ImageGen with the unchanged inspected E04 source references.
+Tool originals retained in the same generated_images directory:
+`exec-c67c60c5-ff47-4638-b587-8357f480a8c7.png` and
+`exec-8016f1b2-4373-4c1f-ab02-05d25ebc34ec.png`; system-temp images are copies.
+No author image verdict accompanies this candidate handoff.
+
+R3's pre-code clarification in original guide remains within HBP-HUMAN-001/C1/C3/C5.
+Rendering records distinguish visible text from accessible name. For an input they
+repeat the explicit reviewed caller draft/state, without reading/exporting Field::Value.
+Preference/footer instructions identify the source anchor boundaries and exclude
+competing detail dividers/enclosures or an invented above-button inset. Accepted
+blue/white hierarchy, off knobs and actual schematic acceptance remain unchanged.
+No numerical model/measurement/identity/privacy/CLI version change.
+
+Focused checks: compiler20 and CLI export20 passed, exporter/CLI Clippy -D warnings
+and formatting passed. New synthetic regression distinguishes an empty visible_text,
+reviewed accessible name and caller draft; raw Value canary is absent from ALL six
+package files, and clearing the text allowlist removes the accessible-name canary.
+It preserves canonical missing-field validation, not a permissive test-only parser.
+Five non-prompt files for both real cases remain byte-identical to R2. Prior exact
+machine-data and unchanged arithmetic/privacy/refusal evidence remains applicable.
+Installed reproduction follows the source checkpoint; independent image acceptance
+is pending the same two critics. All R1/R2/R3 images and shared review inputs remain.
