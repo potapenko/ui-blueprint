@@ -12,7 +12,8 @@ A reference image guides appearance/relative placement only; never paste it into
 ПРОЕКЦИЯ И ЛИСТ
 Use a clean landscape sheet: dominant complete overview on the left, generous space
 on the right for one or two useful enlarged details, linked by human-readable captions.
-Choose details that explain repeated-control size, edge gaps/insets or small controls.
+Details must explain the mandatory edge pairs below. For repeated controls draw TWO adjacent
+instances so their clear gap has two visible boundaries; do not show a detached gap arrow.
 These are enlargements of the SAME state, not extra UI. Keep the whole form visible.
 Existing scope sheets: {{sheets}}. If density needs several sheets, keep their full scope.
 Scale the form for readable labels, not the source browser pixel size. Keep ample white space.
@@ -25,8 +26,10 @@ Continuous solid cyan-blue #087AB5 ground and WHITE linework/text ONLY, includin
 all controls and details. Draw outlines, not UI panels. NO dark/grey/purple fills,
 white-filled cards, screenshot textures, gradients, shadows, glass, grid, perspective
 or decoration. Main outlines heavier; dimension/extension lines thin. Crisp simple type.
-Off switches use an outlined track and left-position outlined knob. A keyboard-active
-row may have an extra white outline; it must not look like an applied selection.
+Off switches use an outlined track and left-position OUTLINED CIRCLE: its interior MUST
+be the same blue as the ground. Never fill a knob white, including the enlargement.
+If the supplied state says a row is keyboard-active, draw its extra white outline and
+annotate exactly “Keyboard-active; not applied”. Preserve the un-applied trigger value.
 
 ОБЪЕКТЫ И ИЕРАРХИЯ
 The following short placement records are source data, not a table to print.
@@ -35,17 +38,31 @@ native-role codes or a component inventory. Preserve all labels and their hierar
 Placement coordinates are rounded UI units. They do not authorize new dimension labels.
 Native SVG/icon bounds do not reveal their path; use a reference only if provided.
 {{components}}
+EXACT ALIGNMENTS (construction instructions, not a legend to print):
+{{alignments}}
+Different Space identities/origins are not interchangeable. Use only explicitly supplied
+known transformations; unknown/local-only mapping does not authorize cross-space placement.
 
 ГЕОМЕТРИЯ
 Units: {{units}}. Prioritize form/popup size, principal controls, useful gaps and insets.
 A repeated control gets ONE dimensioned enlarged detail, while all instances remain in
 its overview. Avoid dimensions for every text box. An inset is measured edge separation,
 not declared CSS padding; text-box edges are not glyph edges. No invented radius/hit area.
-Dimension candidates below contain prepared labels and exact anchor meanings. Select the
-useful, nonredundant chain: overall extent; main controls; attachment/row gap; edge inset.
-For a preference form show select size/spacing, label-to-select gap, outer horizontal
-insets, switch size and Close size/footer insets. For a popup show trigger, popup,
-search and result-row size, trigger-to-popup gap, search-to-list gap and result rhythm.
+The following dimensions are MANDATORY, not a candidate menu. Print every prepared label
+once, grouped between overview and the relevant enlargement. No additional dimensions.
+Place outer form dimensions on the overview: height spans OUTERMOST TOP to OUTERMOST
+BOTTOM INCLUDING the entire footer/action area. It must not stop at a body/footer divider.
+For a preference form: enlarged TWO adjacent select rows with select width/height, clear
+gap, and label-layout-column → select gap. Show a short dotted construction boundary
+labelled “label layout edge” when a text-layout edge is needed; it is not a glyph edge.
+Also dimension the Close action's width/height and footer-right/footer-bottom insets.
+For a popup: overview trigger and popup sizes; detail contains popup left/right BORDER
+segments, the search, first and second result rows. Show search→first-row and first→second
+clear gaps, plus popup-border→input insets. Preserve shared left/right alignments.
+A detail must include BOTH anchor boundaries of every dimension drawn. Omit decorative
+wrapper/heading/icon insets. Do not draw a free-floating arrow or terminate it in air.
+Use captions naming the source region (e.g. “Preference rows”, “Search and results”,
+“Content switch”, “Footer action”); omit generic explanatory “Shows size...” prose.
 {{dimensions}}
 
 НАНЕСЕНИЕ РАЗМЕРОВ
@@ -62,7 +79,7 @@ Use public draft text only when explicitly present in the author’s state annot
 
 ОСНОВНАЯ НАДПИСЬ И ВЕДОМОСТЬ
 One small readable footer only: “{{source}} · {{coverage}} coverage · {{approval}} · image unverified”.
-Then “UI units {{units}}; rounded labels; schematic — do not measure image”.
+Then “{{units}}; rounded labels; schematic — do not measure image”.
 Do not print timestamps, JSON, raw IDs, status grids, evidence tables or unknown-property lists.
 Размеры по подписям; не измерять по изображению.
 

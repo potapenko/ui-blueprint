@@ -78,3 +78,32 @@ The run-owned non-image core bundle was removed and removal verified; candidate
 images/shared review inputs remain. This is the smallest affected installation path;
 no new all-platform or live-collector qualification is claimed. Independent
 image/source acceptance remains pending both critics.
+
+
+## Candidate R2 — neutral handoff
+
+Same retained system-temp root. Actual images: `director-r2.png`, `settings-r2.png`,
+1536×1024 each; declared review at native100%. Literal final packages:
+`director-r2-final-package/`, `settings-r2-final-package/`; exact arguments in
+`*-r2-final-command.json`. Prompts are9,741 /14,419 Unicode characters, sent verbatim
+without wrapper to built-in ImageGen with the same original E04 references.
+Tool-managed originals remain in the same generated_images directory:
+`exec-d48f3998-c641-4070-be02-77b3bdb15267.png` and
+`exec-3661a25c-051d-4747-a81a-3f2def22492c.png`; copied, never moved or deleted.
+No author image verdict accompanies this neutral handoff.
+
+R2 correction remains within HBP-HUMAN-001. Original guide's R2 clarification was
+written before implementation: a small mandatory dimension set, both visible edges,
+known exact alignments, active versus applied state, blue-interior outline knobs,
+human units and compact coordinate-space attribution. Root's historical documentary
+corrections also applied: October6 DRAWING1.1 versus October10 evolution1.2 and
+historical G09 CLI-EXPORT1. No new epoch, data arithmetic or machine output change.
+
+Focused changed-owner checks: compiler19 and CLI export20 passed; exporter/CLI Clippy
+with -D warnings and formatting passed. New synthetic test verifies anchored repeated
+control gap, label-column gap, retained frame/Space/origin/local-transform context
+and source-equal left/right alignment. All five non-prompt files of BOTH real cases
+are byte-identical to R1. Existing broader R1 arithmetic/privacy/comparison checks
+remain applicable; they were not repeated solely for these presentation changes.
+R2 installed-path check follows the source checkpoint. Both independent critics
+must review these actual images before acceptance; R1 remains rejected and retained.

@@ -7,7 +7,8 @@
 ## Authority and precedence
 `UIB.ROUTING.AUTHORITY`: user confirmation on 2026-10-06 made
 [UIB.TZ@1.4](../ui-blueprint-spec.md) and
-[UIB.DRAWING@1.2](../engineering-blueprint-guide.md) Active / Evolving.
+[UIB.DRAWING@1.1](../engineering-blueprint-guide.md) Active / Evolving on that date.
+Current DRAWING@1.2 follows the explicit 2026-10-10 HBP-HUMAN-001 evolution below.
 General specification governs product boundaries; drawing guide governs export
 within them. Neither overrides global safety. Active does not mean implemented,
 accepted or released. D01–D07, preliminary names and future phases retain their scope.
@@ -58,7 +59,7 @@ Existing locked version/policies remain; registration does not accept unsafe/run
 Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; common quotas/wire/permissions/F02/D06 and implementation/live gates remain unchanged.
 `D05-NATIVE-IMAGE-002`: [Native acquisition@2](development/decisions/d05-native-acquisition.md) reconciles explicit user system-temp/no-image-deletion authority via [M03 packet](../plans/ui-blueprint/packets/M03-popup-capture.md); staging/partial/final images remain, descriptors/helpers retire, incomplete/stale payloads stay unpublished. Non-image cleanup, quotas/privacy/wire/positive gates unchanged.
 `G03-NATIVE-AX-001`: [NATIVE@2](product/native.md)/[CLI@7](product/cli.md) adds explicit read-only ordinary-process AXFocusedWindow geometry; observation-scoped identity, no fixture files/CG mapping/capture/action authority; canonical formats and old providers unchanged.
-`G09-EXPORT-INPUT-001`: [CLI@8](product/cli.md)/[CLI-EXPORT@2](product/cli-export.md) adds explicit Snapshot or observed ChannelResponse plus caller metadata to document export under delegated P6; existing --brief, compiler versions, numerical/privacy/status contracts and other CLI commands preserved.
+`G09-EXPORT-INPUT-001`: [CLI@8](product/cli.md)/[CLI-EXPORT@1](product/cli-export.md) adds explicit Snapshot or observed ChannelResponse plus caller metadata to document export under delegated P6; existing --brief, compiler versions, numerical/privacy/status contracts and other CLI commands preserved.
 `G10-NEIGHBORS-001`: [CLI@9](product/cli.md)/[CLI-NEIGHBORS@1](product/cli-neighbors.md) exposes accepted G02 relation selection with explicit cap/source attribution under P3/P6; no engine/wire or existing-command change.
 `A04-CLI-001`: [CLI@10](product/cli.md)/[CLI-ACTIONS@2](product/cli-actions.md) connects Web Focus/Type to explicit canonical Expectation input under P5/P6; legacy SetChecked, geometry, authority/effect/ACK and canonical versions unchanged.
 `A05-CLI-001`: [CLI@11](product/cli.md)/[CLI-ACTIONS@3](product/cli-actions.md) adds the compiling Web native-button Activate port with explicit independently held public result identity under P5/P6; existing transport/permissions/canonical versions and other commands preserved.

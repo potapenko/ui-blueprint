@@ -406,16 +406,114 @@ fn control(c: &SceneComponent) -> bool {
             | "slider"
     )
 }
+fn unit_name(unit: Unit) -> &'static str {
+    match unit {
+        Unit::CssPx => "CSS px",
+        Unit::Px => "px",
+        Unit::Pt => "pt",
+        Unit::Dp => "dp",
+    }
+}
 fn component_name(c: &SceneComponent, index: usize) -> String {
     let label = public_label(c).replace('\n', " / ");
     if label.is_empty() || !c.children.is_empty() && label.len() > 80 {
-        format!("{} {}", native_role(c), index + 1)
+        format!("record {} ({})", index + 1, native_role(c))
     } else {
-        format!("{} {}", native_role(c), label)
+        format!("record {} ({})", index + 1, label)
     }
+}
+fn drawing_alignment(v: &SceneView, limit: usize) -> Result<String> {
+    let mut out = String::new();
+    let rects: Vec<_> = v
+        .components
+        .iter()
+        .enumerate()
+        .filter_map(|(i, c)| {
+            geometry(c).and_then(|g| match &g.shape {
+                Shape::Rect(r) => Some((i, g, r)),
+                _ => None,
+            })
+        })
+        .collect();
+    for (position, (i, g, r)) in rects.iter().enumerate() {
+        for same_width in [false, true] {
+            let matches = |other: &&(usize, &Geometry, &Rect)| {
+                g.coordinate_space == other.1.coordinate_space
+                    && v.components[*i].surface == v.components[other.0].surface
+                    && g.frame_kind == other.1.frame_kind
+                    && r.x == other.2.x
+                    && (!same_width || r.width == other.2.width)
+            };
+            if rects[..position].iter().any(|other| matches(&other)) {
+                continue;
+            }
+            let group = rects
+                .iter()
+                .filter(matches)
+                .map(|(index, _, _)| index + 1)
+                .collect::<Vec<_>>();
+            if group.len() > 1 {
+                append(
+                    &mut out,
+                    &format!(
+                        "Records {:?}: keep exactly shared {} in overview AND details.\n",
+                        group,
+                        if same_width {
+                            "left AND right edges (equal source width)"
+                        } else {
+                            "left edge"
+                        }
+                    ),
+                    limit,
+                )?;
+            }
+        }
+    }
+    Ok(out)
 }
 fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
     let mut out = String::new();
+    let mut contexts: Vec<&Geometry> = Vec::new();
+    for g in v.components.iter().filter_map(geometry) {
+        if contexts.iter().any(|other| {
+            other.coordinate_space == g.coordinate_space
+                && other.frame_kind == g.frame_kind
+                && other.transform == g.transform
+        }) {
+            continue;
+        }
+        contexts.push(g);
+        let mapping = match &g.transform {
+            TransformState::LocalOnly {} => "local only; no cross-space mapping".into(),
+            TransformState::Unknown { .. } => "unknown; no cross-space mapping".into(),
+            TransformState::Known { transform: t } => format!(
+                "known {:?} {} {} {:?} -> {:?} {} {} {:?}, affine {:?}; source coordinates retained",
+                t.from.kind,
+                t.from.id.0,
+                unit_name(t.from.units),
+                t.from.origin,
+                t.to.kind,
+                t.to.id.0,
+                unit_name(t.to.units),
+                t.to.origin,
+                t.affine
+            ),
+        };
+        append(
+            &mut out,
+            &format!(
+                "Geometry context {}: {:?}; Space {} {:?}, {}, {:?}; transform {}.\n",
+                contexts.len(),
+                g.frame_kind,
+                g.coordinate_space.id.0,
+                g.coordinate_space.kind,
+                unit_name(g.coordinate_space.units),
+                g.coordinate_space.origin,
+                mapping
+            ),
+            limit,
+        )?;
+    }
     for (i, c) in v.components.iter().enumerate() {
         let label = public_label(c);
         // Container text that repeats a child's text is an aggregate, not another label/control.
@@ -430,10 +528,15 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
         let bounds = geometry(c)
             .map(|g| match &g.shape {
                 Shape::Rect(r) => format!(
-                    "{:?} {:?} {:?}: x {}, y {}, w {}, h {}",
-                    g.frame_kind,
-                    g.coordinate_space.units,
-                    g.coordinate_space.origin,
+                    "context {}: x {}, y {}, w {}, h {}",
+                    contexts
+                        .iter()
+                        .position(|other| other.coordinate_space == g.coordinate_space
+                            && other.frame_kind == g.frame_kind
+                            && other.transform == g.transform)
+                        // Every geometry was collected into contexts above.
+                        .expect("geometry context collected above")
+                        + 1,
                     display_number(r.x),
                     display_number(r.y),
                     display_number(r.width),
@@ -531,40 +634,64 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                 if value <= 0.5 {
                     continue;
                 }
-                let span = [ca, cb]
-                    .iter()
-                    .filter_map(|c| geometry(c))
-                    .filter_map(|g| match &g.shape {
-                        Shape::Rect(r) => {
-                            Some(if matches!(d.anchors[0].edge, Edge::Left | Edge::Right) {
-                                r.width
-                            } else {
-                                r.height
-                            })
-                        }
-                        _ => None,
-                    })
-                    .fold(f64::INFINITY, f64::min);
-                if value > span {
-                    continue;
-                }
-                if d.label.starts_with("Root")
-                    && (native_role(&v.components[0]) != "FORM"
-                        || !control(ca)
-                            && !control(cb)
-                            && native_role(ca) != "LABEL"
-                            && native_role(cb) != "LABEL")
-                {
-                    continue;
-                }
-                if d.label.starts_with("Measured") && value > span / 2.0 {
-                    continue;
-                }
-                if !control(ca)
-                    && !control(cb)
-                    && !matches!(native_role(ca).as_str(), "FORM" | "FOOTER")
-                    && !matches!(native_role(cb).as_str(), "FORM" | "FOOTER")
-                {
+                let large_control = |c: &SceneComponent| {
+                    control(c)
+                        && geometry(c).is_some_and(|g| match &g.shape {
+                            Shape::Rect(r) => r.width >= 12.0 && r.height >= 12.0,
+                            _ => false,
+                        })
+                };
+                let has_input = |c: &SceneComponent| {
+                    c.children
+                        .iter()
+                        .filter_map(|id| v.components.iter().find(|x| &x.id == id))
+                        .any(|x| {
+                            matches!(
+                                native_role(x).to_ascii_lowercase().as_str(),
+                                "input" | "searchbox" | "textbox"
+                            )
+                        })
+                };
+                let required = match d.label.as_str() {
+                    "Vertical edge gap" => {
+                        large_control(ca)
+                            && (large_control(cb)
+                                || has_input(cb)
+                                || cb
+                                    .children
+                                    .iter()
+                                    .filter_map(|id| v.components.iter().find(|x| &x.id == id))
+                                    .any(control))
+                    }
+                    "Repeated control clear gap" => matches!(
+                        native_role(ca).to_ascii_lowercase().as_str(),
+                        "select" | "combobox"
+                    ),
+                    "Horizontal edge gap" => {
+                        native_role(ca) == "LABEL"
+                            && matches!(
+                                native_role(cb).to_ascii_lowercase().as_str(),
+                                "select" | "combobox"
+                            )
+                    }
+                    "Root left edge inset" => {
+                        native_role(ca) == "FORM" && native_role(cb) == "LABEL"
+                    }
+                    "Root right edge inset" => {
+                        native_role(cb) == "FORM"
+                            && matches!(
+                                native_role(ca).to_ascii_lowercase().as_str(),
+                                "select" | "combobox"
+                            )
+                    }
+                    "Measured left inset" => has_input(ca) && large_control(cb),
+                    "Measured right inset" => {
+                        large_control(ca) && (has_input(cb) || native_role(cb) == "FOOTER")
+                    }
+                    "Measured bottom inset" => large_control(ca) && native_role(cb) == "FOOTER",
+                    _ => false,
+                };
+                if !required {
                     continue;
                 }
             }
@@ -588,14 +715,14 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
         append(
             &mut out,
             &format!(
-                "{}: {} {:?} → {} {:?} = {} {:?}.\n",
+                "REQUIRED {}: start {} {:?} edge; end {} {:?} edge; label {} {}.\n",
                 d.label,
                 component_name(ca, a),
                 d.anchors[0].edge,
                 component_name(cb, b),
                 d.anchors[1].edge,
                 display_number(value),
-                d.units
+                unit_name(d.units)
             ),
             limit,
         )?;
@@ -632,7 +759,15 @@ fn prompt(
         vars.insert("state", v.state.clone());
         vars.insert("scope", v.scope.clone());
         vars.insert("requirements", v.requirements.join("; "));
-        vars.insert("units", bounded_compact_json(&units(v), limit)?);
+        vars.insert(
+            "units",
+            units(v)
+                .into_iter()
+                .map(unit_name)
+                .collect::<Vec<_>>()
+                .join(", "),
+        );
+        vars.insert("alignments", drawing_alignment(v, limit)?);
         vars.insert("components", drawing_inventory(v, limit)?);
         vars.insert("dimensions", drawing_dimensions(v, dims, limit)?);
         vars.insert(

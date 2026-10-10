@@ -599,3 +599,54 @@ fn derived_insets_use_source_anchors_and_engine_evidence() {
     assert!(!inset["evidence"].as_array().unwrap().is_empty());
     assert!(inset["check_tolerance"].is_null());
 }
+
+#[test]
+fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    for (i, role, x, y, width, height) in [
+        (0, "FORM", 10.0, 20.0, 400.0, 500.0),
+        (2, "LABEL", 30.0, 60.0, 160.0, 20.0),
+        (4, "SELECT", 202.0, 54.0, 198.25, 33.125),
+        (6, "SELECT", 202.0, 102.671875, 198.25, 33.125),
+    ] {
+        snapshot.nodes[i].native_role = Availability::Known {
+            value: Value::Text(role.into()),
+        };
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        *r = Rect {
+            x,
+            y,
+            width,
+            height,
+        };
+    }
+    snapshot.nodes[0].children = [2, 4, 6].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("label ≈16 CSS px"));
+    assert!(prompt.contains("label 12 CSS px"));
+    assert!(prompt.lines().any(|line| line.starts_with("REQUIRED")
+        && line.contains("start record 5")
+        && line.contains("Bottom edge; end record 7")
+        && line.contains("Top edge; label ≈16 CSS px")));
+    assert!(prompt.contains("end record 7"));
+    assert!(prompt.contains("Geometry context 1: LayoutBounds; Space"));
+    assert!(prompt.contains("Viewport, CSS px, TopLeft; transform local only"));
+    assert!(!prompt.contains("REQUIRED Measured top inset"));
+    assert!(prompt.contains("Records [5, 7]: keep exactly shared left AND right edges"));
+    assert!(!prompt.contains("[\"css_px\"]"));
+}

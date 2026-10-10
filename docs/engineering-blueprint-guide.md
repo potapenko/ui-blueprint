@@ -353,3 +353,20 @@ perspective или декоративных status grids. Иерархия: по
 units/rounding и schematic status; полные metadata остаются в manifest/brief.
 Generated images проверяются при фактическом delivery size по C1–C7/V1–V6.
 Красивый raster не доказывает CAD scale, source freshness или human approval.
+
+
+### HBP-HUMAN-001 R2 — обязательные привязанные размеры
+
+После независимого R1 review уточняется та же принятая политика, без новой epoch:
+compiler выбирает небольшой обязательный набор, а не меню необязательных dimensions.
+Общий размер заканчивается на внешней границе формы, включая footer. Числа между
+form и body не переименовываются в высоту header/footer. Detail обязан показывать
+обе границы каждого размера; несущественные wrapper/text/icon dimensions опускаются.
+Повторяющиеся controls показываются парой с размером и ясным edge gap; label-layout
+column → control и footer → action имеют отдельные именованные границы. Popup detail
+показывает border, input и две строки с их измеренными промежутками. Существующее
+точное совпадение x/width в одном Space сохраняется как выравнивание, а не identity.
+Клавиатурно-активный пункт явно отличается от applied selection; off knob — белый
+контур с голубой серединой. Footer использует человеческое CSS px, не JSON syntax.
+Краткая геометрическая основа сохраняет Space kind/id/origin/unit и transform status;
+одинаковые единицы не разрешают складывать несвязанные spaces.
