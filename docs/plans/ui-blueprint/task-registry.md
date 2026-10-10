@@ -10,15 +10,18 @@ Same authorized coordinated scope: root coordination-only, один исполн
 - `/root/blueprint_builder`: FRESH-01 baseline+bounded source diagnosis running;
   current literal CLI → fresh Director+Settings, original refs only; source edit
   ещё не разрешён первым пакетом. Own implementation receipt.
-- `/root/blueprint_content`: generic lessons + fair matrix criteria running;
+- `/root/blueprint_content`: proposal9aaba61 returned; ждёт нейтральный baseline;
   own content receipt, no code/generation.
-- `/root/blueprint_visual`: generic visual lessons + fair matrix criteria running;
+- `/root/blueprint_visual`: proposal97e0371 returned; ждёт нейтральный baseline;
   own visual receipt, no code/generation.
 - Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: один запрос существующей
   третьей real form/evidence, без разработки сайта/новых чатов.
 Baseline1599ce4/productb008a44; master, only unrelated untracked PNG protected.
-Планируется frozen3forms×2freshoutputs, все попытки учитываются; точный
-проверяемый claim/threshold закрепить до candidate generation после receipts.
+Protocol pinned: frozen3forms×2freshoutputs,6/6 substantivepasses плюсC7 для
+bounded cohortclaim, без universal/reproducible raster promise. Baseline отдельно;
+новый materiallychanged prompt → новаяполнаяcohort, прошлые failures сохраняются.
+Thirdcase selected beforeoutputs: mobileClipSearchFilters viewport390×844;
+webadvisor собирает original screenshot+runtimeDOM, exactpaths pending.
 Current next: получить2baseline images, критерии, третий реальный input;
 свести один generic implementation packet. Старые R1–R8 не свежие испытания.
 

@@ -311,3 +311,26 @@ All original system-temp/image retention, current master/shared Git lock/exact
 staging/commit+push, unrelated after-title-spacing.png protection, no new persistent
 directories/worktrees/branches, no Codex Computer Use constraints continue. Read
 only applicable missing instructions, don't repeat unchanged broad test/audit waves.
+
+
+### FRESH-01 protocol pinned before candidate images
+
+Root adopts the matched HBP-C9aaba61 / HBP-V97e0371 proposals. Final cohort is
+Director, Settings and mobile Clip Search Filters visible viewport (390×844,
+verified responsive UI) × two separate fresh ImageGen calls each. Third case was
+selected by the authorized web advisor before any candidate images; live reference
+capture and exact paths remain pending. Baseline Director/Settings fresh pair is
+separate diagnostic evidence, never a substitute for favourable candidate cells.
+
+All six outputs must pass unchanged substantive C1–C6/V1–V6, with bounded C7 on
+frozen source/packages, to support the final bounded cohort claim. No statistical
+independence/rate estimate, universal perfection, CAD or future-rerun guarantee.
+Every failure stays in its cohort; a materially changed prompt revision gets a new
+complete declared cohort, never replacement of only failed cells or image retouch.
+Source/question priorities and exact input paths are pinned before those calls.
+A runtime input gap is waiting_evidence, not permission to fabricate a holdout.
+
+This acceptance protocol is root's verification choice under the user's new prompt
+quality goal; it adds no product feature, schema or arbitrary raster precision gate.
+Existing user-approved image quality criteria remain. Prior image acceptance stays
+historical and is not silently relabelled as pipeline reliability.
