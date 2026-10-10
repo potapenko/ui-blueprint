@@ -378,3 +378,38 @@ unattached short guides closer together does not establish endpoint association.
 No new visual standard, numeric tolerance or optional design request is introduced.
 Only this receipt changes; image/source/package remain untouched. `git diff --check`
 passed before saving the checkpoint.
+
+## R6 Director-only review — 2026-10-10
+
+Source `5139f8eb0ce4e72ecc1c0e62f0f3e074490d1960`; no selected contract delta.
+Image `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/director-r6.png`,
+1536 × 1024, inspected at native size before author narrative. Then read affected
+presentation/required-dimension lines in `director-r6-package/prompt.txt`. Settings
+R4 remains accepted at its own `cd099a1`/R4 package, not attributed to R6 generation.
+
+**R6 rejected on two bounded defects.** V2/V3/V4 pass: source labels, `spiel`, three
+counts/results, “Directors”, explicit keyboard-active/not-applied state, hierarchy
+and native-size legibility are retained. The overview is again useful; ≈178 width
+and common control-column relationships are substantially clearer. No CAD precision
+claim or new ratio threshold is required. Remaining V1/V5/V6 issues:
+
+- V1 regression: both keyboard-active rows have a visibly lighter blue fill. Restore
+  continuous ground with only an extra white outline and the existing state note.
+- V5/V6: the named “popup left edge” is a separate line outside the actual popup;
+  the named “input left edge” is another line to the right of the true input-left.
+  Naming these lines does not make them source boundaries. The 8-px graphic still
+  does not measure popup-border → input-border. The literal prompt requests one
+  direct left inset at input mid-height and no detached guides; only this useful
+  inset must be fixed, not both former mirrored inset marks. Use prepared ≈8 label.
+
+Root's bounded remedy proposal is suitable: an isolated enlarged fragment titled
+“Popup-to-search inset” can show the two actual nested left borders, each with a
+short connected top segment to identify the nesting, and one ≈8 double arrow
+between them. It remains a same-source detail, not new geometry. Remove the false
+named guide lines from the larger view, preserve the complete overview and useful
+≈178/≈26/≈24/≈6/≈3 dimensions, and avoid an extra enclosing detail frame that could
+be mistaken for a source boundary. This resolves the existing association problem;
+it does not establish another style criterion or require another research wave.
+
+No unrelated check or Settings rerun. Only this receipt changed; frozen assets,
+source and literal packages remain untouched. `git diff --check` passed.
