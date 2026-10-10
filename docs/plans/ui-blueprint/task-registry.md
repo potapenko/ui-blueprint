@@ -11,14 +11,14 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: R2 получен и отклонён по тексту/привязкам; тот же исполнитель делает R3.
+Текущий шаг: R3 исправил основные подписи/anchors; три image defects остаются, исполнитель делает R4.
 Агенты запущены с fork_turns none, без model/effort override:
-- HBP-C `/root/blueprint_content`: R2 reject вd61931e,
-  [receipt](receipts/human-blueprint-content-review.md); R2 observations завершены; ждёт нейтральный R3.
-- HBP-V `/root/blueprint_visual`: R2 reject в650f87c,
-  [receipt](receipts/human-blueprint-visual-review.md); R2 observations завершены; ждёт нейтральный R3.
-- HBP-I `/root/blueprint_builder`: R3 running, единый repair packet передан;
-  R2 sourcec274c92 и installed proof0bc806d сохранены в
+- HBP-C `/root/blueprint_content`: R3 image reject/C7 accepted в985ec77,
+  [receipt](receipts/human-blueprint-content-review.md); R3 завершён; ждёт нейтральный R4.
+- HBP-V `/root/blueprint_visual`: R3 reject в70669ac,
+  [receipt](receipts/human-blueprint-visual-review.md); R3 завершён; ждёт нейтральный R4.
+- HBP-I `/root/blueprint_builder`: R4 running, единый repair packet передан;
+  R3 sourcebdd73d4 и installed proof2747803 сохранены в
   [receipt](receipts/human-blueprint-implementation.md).
 R1 сделал prompt короче, убрал длинные дроби и screenshot-панели, сохранил exact
 machine facts. Но обязательные размеры/состояния и несколько привязок стрелок
@@ -34,7 +34,7 @@ Spec Basis текущего цикла: registry36, DRAWING1.2, EXPORT/drawing l
 прочая выбранная closure и защищённые domains сохраняются. Root восстановил
 AGENTS → runbook/registry → spec registry; нового изменения product scope нет.
 R1 images/packages: system temp `uib-hbp-ebwz2bfy`, director/settings-r1,
-1536×1024 при100%. Старые изображения сохраняются. После R3 те же два критика
+1536×1024 при100%. Старые изображения сохраняются. После R4 те же два критика
 сначала независимо смотрят новый raster, затем сопоставляют author evidence;
 финальный C7 и installed proof должны соответствовать окончательному source.
 R2 visual receipt650f87c: V1/V3/V4 проходят у обоих; Director geometry schematic
@@ -45,6 +45,12 @@ accessible name вместо spiel и теряет keyboard-active/not-applied; 
 R3 устраняет label/value ambiguity без расширения private value export, делает
 существующие endpoints однозначными и сохраняет принятую композицию. R2 images
 retained; six-file installed reproduction прошло, но не заменяет visual acceptance.
+R3: spiel/state, Settings16/12/footer15 исправлены; C7 принят дляbdd73d4,
+focused privacy/value/name checks и installed package reproduction подтверждены.
+Оставшиеся три image defects: Director record4/5 в human captions, его detail
+popup/input dimension anchors/alignment, пропавшая Close height30. R4 исправляет
+literal prompt и использует R3 как ImageGen edit reference для сохранения принятой
+композиции; manual wrapper, новый framework/flag не вводятся. Все images retained.
 Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
 
 ## Предыдущая цель P0–P7 — завершена
