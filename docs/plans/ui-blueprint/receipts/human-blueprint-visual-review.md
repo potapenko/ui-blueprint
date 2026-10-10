@@ -843,3 +843,54 @@ context, not printed as an explicit caption. This is the limit of this acceptanc
 no mandatory extra edge-name rule is introduced and no exact raster coordinate is
 claimed. The independent content critic's concern about that inference is preserved
 by root; this visual pass does not overrule its verdict or establish joint acceptance.
+
+## FRESH01-C5 — all six frozen fresh outputs, 2026-10-11
+
+Source `405882351f90bb5e468c20989d7d4c3f0baed115`; selected contracts unchanged.
+Root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c5-5gew_bxr/`.
+All six actual images preceded literal prompt/manifest/ledger reconciliation. Three
+prompt hashes match. Ledger: six requests/returns; zero refusals, edits, rerolls or
+manual wrappers. Original UI references/inputs only; prior cohorts remain separate.
+
+**HBP-V result: 0/6 complete passes.** Important accepted aspects are preserved:
+all six remain blue/white, generally readable, and free of the old record-ID/large
+backend-note walls. Both Director outputs include popup194 and correctly explain
+keyboard-active versus applied state. Both Settings outputs retain Close52 ×30 and
+hollow off-knobs. Failures below are not a reversal of those successes or a new
+pixel/corner/casing preference.
+
+| Cell / native size | Final scoped verdict and concrete evidence |
+| --- | --- |
+| `director-cohort-1.png`, 1536 × 1024 | Fail V3: anchor captions repeatedly print the raw icon/ligature token `expand_more` as part of `BUTTON "Any director / expand_more"`. This is construction text rather than the displayed human control label/chevron. V1/V2/V4/V5/V6 otherwise pass in scope: full source content/state/counts and required values are retained, with useful explicitly named two-border fragments. |
+| `director-cohort-2.png`, 1536 × 1024 | Same V3 construction-token leak. Source overview, `spiel`, keyboard-active/not-applied distinction, all three results/counts, enclosing width194 and needed control/gap/inset dimensions remain usable; V1/V2/V4/V5/V6 otherwise pass. Focus emphasis on the input is consistent with its known focused state. |
+| `settings-cohort-1.png`, 1036 × 1518 | Fail V5. Under Close, bottom15 is drawn with two stacked arrow spans/additional ticks below the drawn footer: it does not present the specified single Close-bottom → footer-bottom pair. Right15 is also placed outside the drawn footer outline rather than clearly between Close-right and that footer edge. Named endpoint prose has not repaired the graphic association. Other source content/state, dimensions and compact global status remain. |
+| `settings-cohort-2.png`, 1036 × 1518 | Fail V5. Bottom15 starts at the drawn footer bottom and continues to a detached tick below; the nearby Close-bottom/footer-bottom words do not identify those as the actual two measured borders. The select16 graphic similarly accumulates stacked arrows/ticks rather than one clean edge pair. Correct numerical tokens and complete form content are preserved, but do not validate these relationships. |
+| `mobile-cohort-1.png`, 1024 × 1536 | Fail V5. Required Director366 ×44 and root-to-Source12 are missing. The Genres vertical8 graphic is below the Animation row rather than the stated Action-bottom → Animation-top relation. Source All state, all14 genres, safe placeholders and the partial Cast region remain recognizable; missing requirements are confirmed by the frozen prompt. |
+| `mobile-cohort-2.png`, 1024 × 1536 | Fail V5. The root12 fragment contains three vertical guides and competing arrow spans for one two-edge relation: adding both outer-container/Source-layout names did not remove the extra middle guide. The required Director size is present, and the explicit Cast27 clipped-region detail is truthful. No separate failure is imposed for supplying that useful source-derived clip detail. |
+
+The Director V3 judgment is specifically about a raw rendered-icon construction
+token, not the use of the words button/input/container or their capitalization.
+Human edge captions are legitimate and useful. The literal C5 instruction itself
+forces `PRINT ... exactly: BUTTON "Any director / expand_more" Bottom boundary`,
+so this regression originates in the printable-caption recipe rather than a model
+inventing metadata. The source control correctly shows a chevron, not that token.
+Existing human-caption/no-construction-metadata intent has not changed.
+
+Other literal findings: C5 still explicitly requires Director366 ×44/root12 for
+mobile, paired enclosing widths, one correctly directed arrow between exactly two
+named source boundaries, and the correct Close15/Genres8 endpoint pairs. Those
+omissions/extra spans are output deviations, not planner omissions or dimensions
+added after viewing the images. All three frozen prompt hashes were checked before
+attribution; no author pass narrative was used.
+
+Generic next issue to reconcile is narrow: printable endpoint captions should use
+safe human control names, not force the raw icon-token/role construction string
+verbatim. Preserve the exact source evidence in the package and retain all required
+edge meaning; do not broadly rewrite arbitrary UI strings. Separately, more endpoint
+prose has not made the generated two-border graphics reliable: C5 visibly contains
+extra spans. That observation does not prove caption length caused the geometry
+failures and does not authorize individual PNG repair or a relaxed anchor criterion.
+
+All six outcomes remain reported, including the accepted subscopes. No best-of
+replacement, universal reliability claim or new criterion. Only this receipt changed;
+images/packages/source remain untouched. `git diff --check` passed.
