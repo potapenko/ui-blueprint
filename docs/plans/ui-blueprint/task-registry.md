@@ -11,46 +11,34 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: R3 исправил основные подписи/anchors; три image defects остаются, исполнитель делает R4.
-Агенты запущены с fork_turns none, без model/effort override:
-- HBP-C `/root/blueprint_content`: R3 image reject/C7 accepted в985ec77,
-  [receipt](receipts/human-blueprint-content-review.md); R3 завершён; ждёт нейтральный R4.
-- HBP-V `/root/blueprint_visual`: R3 reject в70669ac,
-  [receipt](receipts/human-blueprint-visual-review.md); R3 завершён; ждёт нейтральный R4.
-- HBP-I `/root/blueprint_builder`: R4 running, единый repair packet передан;
-  R3 sourcebdd73d4 и installed proof2747803 сохранены в
-  [receipt](receipts/human-blueprint-implementation.md).
-R1 сделал prompt короче, убрал длинные дроби и screenshot-панели, сохранил exact
-machine facts. Но обязательные размеры/состояния и несколько привязок стрелок
-не проходят критерии; поэтому ни один новый кандидат пока не принят.
-R2 ввёл mandatory per-view размерный brief и исправил часть anchors/выравнивания,
-keyboard-active/not-applied Director, outline-only off switches Settings и
-человеческие units/captions. Дополнительно исполнитель восстанавливает обнаруженную
-им утрату compact Space/transform attribution и три исторические doc attribution.
-Источник требований — прямой запрос пользователя и HBP-HUMAN-001; конкретные
-расхождения — наблюдения критиков, Space omission — сообщение автора. Метод
-обязательного brief — согласованное средство выполнения этих требований.
-Spec Basis текущего цикла: registry36, DRAWING1.2, EXPORT/drawing leaves2;
-прочая выбранная closure и защищённые domains сохраняются. Root восстановил
-AGENTS → runbook/registry → spec registry; нового изменения product scope нет.
-R1 images/packages: system temp `uib-hbp-ebwz2bfy`, director/settings-r1,
-1536×1024 при100%. Старые изображения сохраняются. После R4 те же два критика
-сначала независимо смотрят новый raster, затем сопоставляют author evidence;
-финальный C7 и installed proof должны соответствовать окончательному source.
-R2 visual receipt650f87c: V1/V3/V4 проходят у обоих; Director geometry schematic
-приемлема, нового pixel-perfect требования нет. Реальные blockers: Director показывает
-accessible name вместо spiel и теряет keyboard-active/not-applied; Settings16/12/22
-и footer15 имеют неверные/неясные endpoints. Content подтвердил эти failures и
-смягчил первоначальное впечатление о равных raster widths — оно не CAD gate.
-R3 устраняет label/value ambiguity без расширения private value export, делает
-существующие endpoints однозначными и сохраняет принятую композицию. R2 images
-retained; six-file installed reproduction прошло, но не заменяет visual acceptance.
-R3: spiel/state, Settings16/12/footer15 исправлены; C7 принят дляbdd73d4,
-focused privacy/value/name checks и installed package reproduction подтверждены.
-Оставшиеся три image defects: Director record4/5 в human captions, его detail
-popup/input dimension anchors/alignment, пропавшая Close height30. R4 исправляет
-literal prompt и использует R3 как ImageGen edit reference для сохранения принятой
-композиции; manual wrapper, новый framework/flag не вводятся. Все images retained.
+Текущий шаг: Settings R4 принят; Director-only R5 image repair running.
+Агенты fork_turns none, настройки наследуются, без nesting:
+- HBP-C `/root/blueprint_content`: Settings C1–C6 accepted, C7 accepted cd099a1;
+  Director C3 inset anchors rejected; [receipt](receipts/human-blueprint-content-review.md) ecdaa2f.
+- HBP-V `/root/blueprint_visual`: Settings V1–V6 accepted при1536×1024;
+  Director detail alignment/178/8 anchors rejected; [receipt](receipts/human-blueprint-visual-review.md)81b41e5.
+- HBP-I `/root/blueprint_builder`: R5 только Director. Existing literal R4 prompt
+  уже требует верные endpoints; сначала image edit retry без нового исходника,
+  тестов или installed build. Конкретная найденная ambiguity может обосновать
+  малое template refinement, но не растущий dump/новый flag/framework.
+Product sourcecd099a19b73760f3a2144439b10e3a04b9daf79c; installed544260a.
+R3 value/name/privacy regression checks приняты; R4 менял только template.
+R4 core verify и оба six-file packages reproduced byte-for-byte. Accepted Settings:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/settings-r4.png`,
+1536×1024 при100%; literal settings-r4-final-package в том же каталоге.
+DirectorR4 там же, director-r4.png / director-r4-final-package; pending detail.
+R1/R2/R3 images и соответствующие review history сохранены. Теперь не пересоздавать
+Settings. Director text spiel, keyboard-active/not-applied и общий вид проходят;
+остаётся соединить detail width/inset dimension extensions с реальными краями и
+сохранить source alignment. Redundant popup194 detail может быть убран, поскольку
+его outer size уже есть на overview; единственную полезную inset demonstration
+удалять нельзя. Никакого нового CAD/pixel-perfect критерия не введено.
+Основание: прямой запрос пользователя и HBP-HUMAN-001, DRAWING1.2,
+EXPORT/drawing leaves2, registry36; прочая selected closure неизменна.
+Метод image-edit — средство сохранения уже принятых частей, не новый product scope.
+После нейтрального R5 оба тех же критика проверяют только Director и фактически
+изменённые criteria. C7 и Settings не переоткрываются без relevant change.
+Все images/tool originals retained; untracked after-title-spacing.png untouched.
 Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
 
 ## Предыдущая цель P0–P7 — завершена
