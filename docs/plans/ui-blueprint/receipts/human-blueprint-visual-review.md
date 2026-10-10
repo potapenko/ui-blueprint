@@ -546,3 +546,58 @@ This proposal evaluates the generic pipeline through a fixed collection of hones
 results. It does not pre-approve a future prompt or image. Await neutral baseline
 paths, then the root-pinned cohort; no fresh image has been reviewed for FRESH-01 yet.
 Only this receipt changed; `git diff --check` passed before its checkpoint.
+
+## FRESH-01 baseline pair and third-source scope — 2026-10-10
+
+Separate baseline, not the final 3 × 2 cohort pinned by root at `1bf96d7`.
+Source `b008a44`; actual fresh images in
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-baseline-hhcyuw74/`:
+`director-baseline.png`, `settings-baseline.png`, each 1536 × 1024, reviewed native.
+Per neutral packet: exactly one fresh call each, original E04 UI references only,
+no blueprint edit/history/wrapper/reroll. Images preceded literal baseline
+`director-package/prompt.txt` and `settings-package/prompt.txt`; no author plan used.
+
+**Baseline: 0/2 full visual passes.** Both remain blue/white, scannable and readable;
+these are material content/association failures, not a rejection of their style.
+
+| Case | Material observation | Prompt reconciliation |
+| --- | --- | --- |
+| Director | Source text/counts/complete overview are recognizable, but the first result loses its keyboard-active outline in the repeated partial view while retaining that state in the overview. Overview input and results also use different left edges. V2 therefore fails; principal size/gap graphics remain substantially useful. | The literal prompt explicitly requires the keyboard-active second outline and common source-equal edges. These are generation deviations. Duplicate overview inset and its awkward vertical text are secondary instruction deviations, not an added aesthetic gate. |
+| Settings | Invented search field, “Result 1”/“Result 2” and “Popup-to-search inset” have no source counterpart. The 16 gap measures row-container frames instead of adjacent select edges; Close insets have no actual footer boundaries and an incorrect top-side 15 appears. Required switch ≈39 × ≈24 is missing. V2/V5/V6 fail. | The generic literal prompt unconditionally requests a search/results partial view and popup corner fragment even for Settings. This is a demonstrated template mismatch. The generated 422-wide search and 49-high results misuse source numbers on invented objects. Required switch dimensions exist in the prompt but the image omits them: an additional generation deviation. |
+
+Both literal prompts also contain the old “If a blueprint reference is supplied,
+edit it” preamble. No blueprint was supplied here, so the output is still a fresh
+baseline, but that preamble does not belong in the generic fresh-document request.
+The Settings mismatch cannot be repaired by merely strengthening “do not invent”
+while simultaneously requiring nonexistent source regions.
+
+Bounded generic remedy: compile only detail relationships supported by this input's
+actual controls/anchors; omit recipes whose source roles/relations are absent. Map
+each chosen detail's source elements, state and dimensions together, rather than
+combining every historical repair recipe. Repeated source state must carry into
+each displayed instance. Preserve the useful simple partial/isolated-corner patterns
+where applicable, and remove image-repair language from ordinary document prompts.
+No baseline-image retouch or success reroll is requested.
+
+Third-source visual scope was pinned BEFORE its candidate generation from
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-mobile-filters-OBW93z/handoff.md`,
+original `mobile-filters.jpg`, capture metadata and bounded DOM/identity/AX facts.
+This is a responsive browser reference, not native iOS/mobile acceptance; 390 × 844
+CSS px, DPR 1, one viewport, non-atomic capture with reported stable frame/rect checks.
+Visible composition: Back/Filters header; Source with All active, Movies, Episodes;
+Years From/To empty; 14 genre buttons in two columns/seven rows; Director placeholder
+“Type a director” and “Type at least 2 characters”; Cast heading and clipped input.
+
+Cast INPUT bounds are y=817..861, but the recorded visible intersection ends at844.
+Preserve that partial coverage/clip boundary rather than showing a fully observed
+input or inventing lower Actor Voice, Apply/Clear, results or footer controls.
+Placeholder text is not an entered value. Full input bounds and visible intersection
+are different facts. Existing DOM grouping/dividers must not become invented buttons.
+Years and genre pairs provide legitimate measured size/gap relationships (179-wide
+controls, 44-high year fields, 40-high genre buttons, 8-pixel column gaps); these are
+examples for source-driven selection, not newly mandated extra views or constants.
+Lower content is omitted, not absent; no whole-app/source-bundle or canonical import
+claim follows from this reference. Conversion limitations remain the builder's duty.
+
+All baseline results remain reported, separate from future cohort cells. Only this
+receipt changed; all images/data remain retained. `git diff --check` passed.
