@@ -1,5 +1,16 @@
 # Q02 performance — final-source numeric gates pass, Native quality remains open
 
+## N06 binding continuation — 2026-10-10
+
+[N06 receipt](N06-native-target-binding.md) retains625 actual binding-only diagnostic
+responses without a reproduced target_unresolved, including unchanged N05 binary
+controls in both modes. One additional request hit the test caller's121-call cap
+before collection and remains a recorded diagnostic-driver failure. No shipping
+source changed, no repair is established and no diagnostic timing/quality result
+replaces Q02-R/N05. The actual failing call's app-absent/bundle-absent/mismatch
+distinction is still missing; Native quality/D06/P7 stays OPEN. All105 sessions and
+three owned fixtures are cleaned up; images remain retained in system temp.
+
 ## Q02-R measured final-source result — 2026-10-10
 
 **All numeric Native gates PASS; Native quality FAILS in off cold17. Overall
