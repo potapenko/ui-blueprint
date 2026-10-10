@@ -383,3 +383,15 @@ No prototype/reroll images between baseline and cohort. All outputs go to same t
 critics image-first before author narratives. Verify installed final source and
 literal packages; checkpoint/push under established lock. Later changes get a new
 cohort, preserving every previous failure. Root does not perform source/image QA.
+
+
+### Frozen cohort FRESH01-C1
+
+Source76f14ac5a2ce6cb45a54e9c16b64342492d361fb saved/pushed before first candidate
+call. Manifest `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-baseline-hhcyuw74/frozen-cohort-manifest.json`
+pins literal prompts, exact commands, snapshot/metadata/ref hashes and all6 planned
+output paths. Director8790 / Settings14496 / Mobile17431 prompt characters; all
+five non-prompt files match prior baseline or qualified mobile carrier exactly.
+Author compiler26/CLI20/Clippy/formatting passed; this is not image acceptance.
+Matrix uses original UI references only, no history/edits/wrappers/rerolls. Both
+continuing critics inspect all actual images before author outcome narratives.

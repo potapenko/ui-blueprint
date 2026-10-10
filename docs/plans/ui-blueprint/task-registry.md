@@ -44,6 +44,14 @@ mobile-metadata.json/mobile-import.py/mobile-import-limitations.json. Exact53nod
 AX remains separateactualevidence. Builder oldpreflightCLI succeeded. Confirmed
 oldpromptomits knownPlaceholder; fix distinctplaceholder emission in authorized
 rendererchange. No carrierrepair/collectorchange needed.
+FRESH01-C1 FROZEN beforefirstcall: source76f14ac5a2ce6cb45a54e9c16b64342492d361fb,
+manifest в baseline-temp frozen-cohort-manifest.json. Three *-frozen-package,
+commands/hashes/originalrefs pinned; outputs *-cohort-1.png/*-cohort-2.png.
+Director8790chars/Settings14496/Mobile17431; all5nonpromptfiles exactbaseline.
+Compiler26/CLI20/Clippy/fmt passed authorchecks; no candidatevisualclaim yet.
+Builder generating exactly6freshrequests now; criteria/inputqualification frozen.
+Next: neutralall6 handoff→sameC/V independentimage-first→boundedsource/installed
+reconciliation; no individualimageedits, no rerollselection.
 Старые R1–R8 не свежие испытания.
 
 
