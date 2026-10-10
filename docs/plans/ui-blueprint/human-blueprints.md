@@ -423,3 +423,32 @@ C1 artefacts remain frozen. A further implementation packet/new6-image cohort is
 not yet dispatched. Preserve separate immutable cohort manifests and all failed
 outputs; do not overwrite C1's frozen inputs/results. No new reviewer or product
 criterion is introduced to obtain a favourable verdict.
+
+
+### FRESH01-C2-I accepted finite repair
+
+Root accepted the builder's compact per-view plan under existing user authority,
+C1observations and C7helperfinding. Same five product write paths as FRESH-01-I.
+Use render-needed controls/text/state and indispensable anchor context per actual
+view; preserve full meaningful overview and all original machine/source records.
+One complete W/H bundle belongs to its shape; each scalar has one view owner.
+Gap/inset fragment contains two actual connected source-border pieces and one
+arrow, not detached badges/legend or an extra invented container. Keep state and
+layout/visible facts beside their affected object. Remove redundant construction
+IDs/coordinate dumps, not mandatory measurements or meaningful source content.
+
+Restore clipped() only for proved comparable known layout/visible proper subset;
+reuse existing engine Inside when narrow. Different/unknown/nonrect/overlapping
+or AX/Hit/Paint frames retain attributed visibility without CLIPPED/size suppression.
+Do not create a new conversion/visibility framework merely for this helper; safe
+conservative distinct-frame reporting is preferable to unsupported inference.
+Preserve valid source mobile27/44. Focused frame/containment negatives and positive,
+compact-plan/W-H ownership/content regressions and exact machine comparisons.
+
+After tests, freeze new source/three literal prompts/refs into a NEW immutable C2
+manifest and distinct system-temp outputs. Never overwrite C1. Same three inputs,
+same criteria, full new six fresh requests; no prototypes/edits/wrappers/historyrefs
+or cherry-picked rerolls. Freeze notification precedes calls; no microstep approval
+needed unless a real authority/data gap appears. Neutral all6 to same critics before
+author outcome narrative; saved-source installed reproduction. No broader features,
+new agents, branches/worktrees, website/collector edits or Codex Computer Use.
