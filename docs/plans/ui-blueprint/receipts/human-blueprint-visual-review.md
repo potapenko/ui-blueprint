@@ -894,3 +894,67 @@ failures and does not authorize individual PNG repair or a relaxed anchor criter
 All six outcomes remain reported, including the accepted subscopes. No best-of
 replacement, universal reliability claim or new criterion. Only this receipt changed;
 images/packages/source remain untouched. `git diff --check` passed.
+
+## FRESH01-C6 — final six-cell visual acceptance, 2026-10-11
+
+Source `d2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90`; selected V1–V6/contracts unchanged.
+Root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c6-q6xwk84w/`.
+All six images were inspected independently before literal prompt/ledger context;
+no author pass narrative supplied the findings. Then checked the frozen manifest,
+results, required sizes/edge pairs/state facts and printable-caption policy.
+
+Frozen literal prompt SHA-256 values, independently matched to actual prompt bytes:
+
+- Director: `9653f622e820352a57e3ec2b15e3c34e3986a8c72ad909732f110c990d2c59e0`.
+- Settings: `9cb8100b8216a39975f15f07f9fab87497d761f43c6c4fee1305ee1eebe918f3`.
+- Mobile: `387f9091e3398c118dd46008d76649d7a332143fed1c2a0183ed008c2040e480`.
+
+Ledger: six requests, six returned first fresh outputs; zero edits, rerolls,
+wrappers or refusals, same original UI references/input scopes. All prior cohorts
+remain separately reported; this is not a best-of combination of their images.
+
+**HBP-V accepts all six C6 cells against V1–V6 at their actual native sizes.**
+
+| Actual image / native review size | V1–V6 verdict and cell evidence |
+| --- | --- |
+| `director-cohort-1.png`, 1536 × 1024 | **Pass V1–V6.** Complete Director/info/Any director/open-popup/search/three-result composition; `spiel`, historical counts and keyboard-active/not-applied meaning preserved. Trigger180 ×29, popup194 ×143, input178 ×26, row24 and named6/6/3/8 relations are present. Raw icon-token captions are gone; scalar edges are separately attributable. |
+| `director-cohort-2.png`, 1536 × 1024 | **Pass V1–V6.** Same source/state/measurement set, readable overview and partial detail, clearly named two-border vertical fragments and horizontal inset. No omission of popup194; no false applied selection, construction ID or source-data wall. |
+| `settings-cohort-1.png`, 1036 × 1518 | **Pass V1–V6.** Full seven preferences, content section/help, two off switches and Close retained. Form422 ×618, select198 ×33, switch39 ×24, Close52 ×30, label gap12, select gap16, outer22 insets and Close15 right/bottom pairs are present. Isolated named fragments avoid the previous footer/arrow-stack ambiguity. |
+| `settings-cohort-2.png`, 1036 × 1518 | **Pass V1–V6.** Same meaningful content/current values, hollow off-knobs and complete dimension set. Grouped edge fragments identify each specific pair without substituting a decorative panel edge or height-dimension guide. Native-size labels and source note are readable. |
+| `mobile-cohort-1.png`, 1236 × 1272 | **Pass V1–V6.** Visible Back/Filters, Source/Years/14 genres/Director/helper/partial Cast scope preserved. All remains active, other source/genre controls inactive, placeholders remain empty-field placeholders. Viewport390 ×844, Source≈119 ×42/gap2, Years179 ×44/gap8, Genres179 ×40/horizontal+vertical8, Director366 ×44 and explicitly named root-to-Source12 all appear. |
+| `mobile-cohort-2.png`, 1165 × 1350 | **Pass V1–V6.** Same content/state/required dimensions, clearly attributed scalar fragments including root12, and visibly clipped Cast without invented lower controls. Compact human captions/status and continuous blue/white outline grammar remain. No extra acceptance demand is made for a copied viewport-state paragraph when the state is already faithfully depicted. |
+
+Shared observed basis: V1 solid blue ground/white drawing with outlined active/off
+states; V2 source content/order/state and declared partial coverage; V3 dominant
+complete overview, purposeful details and compact human annotations; V4 readable
+native-size meaningful text/numbers; V5 complete required measures tied to their
+actual named source edge pairs; V6 prepared values, CSS px, rounding/schematic and
+partial/stored/draft/image-unverified provenance without invented tolerance or scale.
+These are actual output observations, not source-code/test success substituted for QA.
+
+Minor residuals / limits, explicitly retained:
+
+- Director1's inset START is a very close double stroke but one named boundary and
+  one dimension span. It does not create the C5 ambiguity of a separate third guide
+  with competing spans. Exact stroke placement is not a newly introduced CAD gate.
+- Mobile overview does not repeat the per-view state-caption sentence verbatim.
+  All-active/other-inactive states are visually preserved there and stated in details.
+  Literal caption duplication is a prompt mechanism, not a new product acceptance
+  requirement where no state meaning has been lost. Director's semantically necessary
+  keyboard-active/not-applied distinction is explicitly present in both cases.
+- Mobile2's schematic cut line sits slightly inside the outer viewport frame; Cast
+  remains visibly cut and no full offscreen field/lower content is completed. This
+  is not proof of the exact pixel position/fraction of the27-pixel source intersection.
+  The original visible-region fact remains in the machine package; CAD-scale raster
+  reproduction was never promised. No native-mobile/whole-application claim follows.
+- Small extension/corner standoffs, duplicate enclosing-width wording and per-cell
+  layout variation are not hidden measurement/content errors or new taste gates.
+
+This is bounded six-cell visual/source-presentation acceptance at the listed sizes,
+not universal fresh-generation reliability, a statistical guarantee, smaller-size/
+print validation, live collection, behavior/privacy/compiler acceptance or human
+approval. The images' draft/unverified footer is preserved as generated; this receipt
+records the later independent visual review without rewriting frozen outputs.
+No more image generation or retouch is requested by HBP-V for this accepted cohort.
+Only this receipt changed; images/packages/source remain held. `git diff --check`
+passed before the checkpoint.
