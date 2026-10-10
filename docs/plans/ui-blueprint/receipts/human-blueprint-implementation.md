@@ -194,3 +194,19 @@ build/verify from that saved revision passed; installed CLI reproduced all six f
 of both R4 final packages byte-for-byte. Run-owned non-image installation removed,
 removal verified; all image originals/copies and shared review inputs retained.
 Source/images held unchanged for consolidated R4 critic observations.
+
+
+## Candidate R5 — Director-only neutral retry
+
+No product/source/prompt change. Source remains `cd099a19b73760f3a2144439b10e3a04b9daf79c`;
+installed proof544260a reused. Settings R4 is frozen and was not regenerated/retested.
+New Director image: same temp root `director-r5.png`,1536×1024, review native100%.
+Built-in ImageGen received ONLY inspected `director-r4.png` as edit target and the
+exact current `director-r4-final-package/prompt.txt`, without wrapper or modification.
+Prompt SHA256 `f7366d848a627ad57d15512a0cf3d5633f1ad0ad51d539d7250255da9ae3455f`
+was checked before and after. No source UI screenshot was attached for this retry.
+Tool-managed original `exec-7482df24-aa7f-4fe1-bb13-211afcf1be48.png` remains in the
+same generated_images directory; system-temp output is a copy. All prior images remain.
+No author visual verdict in this handoff. Existing source, test and installed evidence
+is unchanged and was not rerun to retry image generation. Receipt whitespace checked;
+independent Director image acceptance remains pending the same two critics.
