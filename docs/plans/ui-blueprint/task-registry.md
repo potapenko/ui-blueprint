@@ -94,7 +94,13 @@ mini-layout inside literalprompt (not newrasterrenderer), exactper-viewprintable
 statecaptions/repeatedstate, heightleftwhenrightinsetpreventscompetingguide.
 Samefacts/criteria; preserve signedzero/negative/unknownordering conservatively,
 no inventedseparation. Focusedformat/statechecks only, priorC7reuse. NextNEW
-immutableC4freeze+all6freshoutputs; C1/C2/C3retained, no retries/edits/selection.
+C4 FROZEN beforecall: source8db76ba7cf4d3298f5a5cd89388a97967595659d,
+root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c4-d3yemcfo,
+frozen-cohort-manifest.json hash79eb884fffe90a19481ae1daae98d4a076bd9ade599abf5edbcd6e4d69e290a9.
+Same3inputs/originalrefs/criteria; 31focusedtests/clippy/fmt passedauthor,
+5machinefiles eachcase exactC3. Symbolicsketches restrictedknownpositivepairs
+incommonTopLeftspace; nonpositive/unknownnotinvented. Exactly6freshcallsrunning.
+Nextneutralall6→samecritics; C1/C2/C3retained, no retries/edits/selection.
 
 
 Старые R1–R8 не свежие испытания.

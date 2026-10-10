@@ -540,3 +540,15 @@ Same five writable paths; focused changed-format/state tests, no broader audit.
 Freeze NEW source/literal packages/original refs in separate C4 system-temp manifest,
 then all6 fresh calls under unchanged protocol, no prototype/retouch/history/wrapper/
 reroll selection. Same two critics image-first and bounded installed reconciliation.
+
+
+### FRESH01-C4 freeze before images
+
+Source8db76ba7cf4d3298f5a5cd89388a97967595659d saved/pushed; separate system-temp
+uib-fresh01-c4-d3yemcfo/frozen-cohort-manifest.json hash79eb884fffe90a19481ae1daae98d4a076bd9ade599abf5edbcd6e4d69e290a9
+pins same original source/ref hashes, new literal packages and all six output paths.
+Author31focused compiler tests/Clippy/formatting pass; five nonprompt files per case
+equal C3. Known positive common-TopLeft scalar pairs get symbolic layouts; other
+cases retain conservative attribution. Both Director views carry exact declared
+state caption; mobile repeated-state clauses do not infer Applied from Selected.
+Six fresh requests execute under unchanged protocol; image/source acceptance pending.
