@@ -39,6 +39,25 @@
   recorded in runbook; existing EXPORT/DRAWING requirements unchanged. Actual
   generation is now required for this added task, with honest image QA/status.
 
+### Q01 — bounded Native quality reconciliation
+
+- Mac advisor returned read-only consultation, turn01a123ae-377a-7310-b09e-3f3de259cd62,
+  revision104; full response read. Original NATIVE@2/MODEL@1 requires faithful
+  partial available data, not invariant OS AX node count. Technical input@1.QUALITY
+  still requires76; no waiver/acceptance follows. Recommends examining whether that
+  anonymous-child stability is actually a supported fixture invariant before any
+  source change. Any justified versioned correction must still detect lost returned
+  children, expose variation/unknowns and preserve all old failures/no retroactive pass.
+- Q01 `01a11bdd-8a56-7f21-8435-953df4ce9185` unarchived for one scoped
+  [evidence reconciliation](packets/Q01-native-quality-reconciliation.md).
+  Initial neutral source/raw-trace observation before author/advisor conclusions;
+  then same reviewer reconciles N05 receipt. No runtime/code/spec edits/new cohort.
+  Outcome is exact criterion coverage and minimum justified next evidence or proposed
+  Contract Delta, not automatic independent acceptance of source instability.
+- Native source e641543 remains unchanged; N05 not a shipping fix. E04 continues
+  real form generation independently. Root owns registry/packet only; Q01 owns its
+  existing receipt. N05 retained only for imminent evidence questions.
+
 ### N05 terminal evidence and product reconciliation
 
 - N05 terminal completed revision30, commit2eaff80e2dc114a90aef78efa9ff2008fa5ffba4,
