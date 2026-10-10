@@ -100,7 +100,7 @@ frozen-cohort-manifest.json hash79eb884fffe90a19481ae1daae98d4a076bd9ade599abf5e
 Same3inputs/originalrefs/criteria; 31focusedtests/clippy/fmt passedauthor,
 5machinefiles eachcase exactC3. Symbolicsketches restrictedknownpositivepairs
 incommonTopLeftspace; nonpositive/unknownnotinvented. Exactly6freshcallsrunning.
-C4 complete: BOTHcritics4/6PASS(D1,S1,S2,M1). V5e790f2; Cfinalpendingreceipt
+C4 complete: BOTHcritics4/6PASS(D1,S1,S2,M1). V5e790f2; C96f64d9
 explicitM1correctionafterboundedcontextreconciliation (no newtext-namegate).
 D2missingREQUIREDpopupwidth194;M2root12endpointcontextabsent. Installedb57d9e4
 exact8db76ba3packagesreproduced. OneC7newhelpergap: CenterX/CenterY wronglytreated
@@ -109,7 +109,13 @@ C5-I approved/running samebuilder/same5paths: existingouteroverviewwidth gets
 explicitbelow-shapeslot; scalarfragments get exacthumanendpointcaptions/context;
 centers correct-axisnamed-anchorfallback, newcornerrecipesactual4borders only.
 Tinyfocusedformat/centereligibilitychecks, no design/auditexpansion. NextNEWC5
-freeze+all6freshoutputs; C1–C4retained, no retries/edits/selection.
+C5 FROZEN beforecall: source405882351f90bb5e468c20989d7d4c3f0baed115,
+root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c5-5gew_bxr,
+frozen-cohort-manifest.json hash12c83375746d5e2a41483032815b44b87b4b39d1aac2a2a1affefc6bc1e18037.
+33focusedtests/clippy/fmt passedauthor; machine5files×3 exactC4. Originalinput/ref
+hashes unchanged. Proposed absolute-distance pairs stay conservative namedanchors;
+positive alone does not establishSTART-left/upper. Sixfreshfirstcallsrunning.
+Nextneutralall6→sameC/V; C1–C4retained, no retries/edits/selection.
 
 
 Старые R1–R8 не свежие испытания.

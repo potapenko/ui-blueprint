@@ -580,3 +580,15 @@ Tiny focused center-axis/eligibility/slot regressions, exact machine comparisons
 then NEW frozen C5 six fresh outputs from the same original refs and unchanged
 criteria. All C1–C4 failures stay; no prototypes/retouches/reroll selection. Same
 critics image-first, bounded installed reconciliation, no expanded audit/features.
+
+
+### FRESH01-C5 freeze before images
+
+Source405882351f90bb5e468c20989d7d4c3f0baed115 saved/pushed; separate system-temp
+uib-fresh01-c5-5gew_bxr/frozen-cohort-manifest.json hash12c83375746d5e2a41483032815b44b87b4b39d1aac2a2a1affefc6bc1e18037
+pins unchanged qualified inputs/original refs, new literal packages and six paths.
+Author33focused tests/Clippy/formatting pass; five machine files×3 equal C4.
+Existing Proposed distances are absolute, so positive values alone do not prove
+source-edge ordering; those retain named-anchor fallback rather than a new corner
+recipe. Same full six fresh first calls/criteria, no previous image references,
+retouches/wrappers/rerolls; C1–C4 remain independent retained cohorts.
