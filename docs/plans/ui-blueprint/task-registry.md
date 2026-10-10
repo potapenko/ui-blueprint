@@ -20,6 +20,25 @@
 
 ## Текущее продолжение — 2026-10-10
 
+### E04 — отдельный ImageGen цикл, поручен пользователем 2026-10-10
+
+- «E04 — Реальные формы PlayPhrase.me и ImageGen», chat
+  `01a123ab-82e2-7ff0-83c4-07450d289892` / local; active/inProgress,
+  turn01a123ab-8613-7b52-985e-b1e9859a0494 revision1 подтверждён.
+  [Конечный packet](packets/E04-real-form-imagegen-cycle.md): реальные Director
+  и desktop Settings → eligible PNG + observed data → actual CLI prompt → built-in
+  ImageGen → проверка/ограничения и повторяемый workflow. Без product/site edits.
+- Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 дал DONE_READ_ONLY,
+  turn01a123a9-bf64-74c3-8246-3e93df9fe3c9/revision47. Полный ответ прочитан и
+  передан E04. Director draft spiel без выбора/Enter; Settings открыть/Close без
+  изменения select/toggle. Исторические JPG не разрешены как ImageGen asset.
+- E04 owns docs/development/export.md and own E04 receipt; output/images system
+  temp. N05 owns Native source and physical input until actual release. Isolated
+  Web, saved-data and ImageGen independent; no duplicate Native work or new audits.
+- Root write set: execution.md, this registry, E04 packet. Explicit user request
+  recorded in runbook; existing EXPORT/DRAWING requirements unchanged. Actual
+  generation is now required for this added task, with honest image QA/status.
+
 ### Native quality repair after completed measurement
 
 - Host goal remains active. Q02-R measurement completed at7788091febe62e94fab53a03aa142d298d2f4f98;
