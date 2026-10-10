@@ -602,3 +602,40 @@ C3 installed proof: fresh core build and installed verification at exact
 files of all three frozen C3 packages byte-for-byte. Run-owned non-image install
 removed and removal verified; shared source/packages and all original/copied images
 remain. This is attributed execution evidence, not independent C/V acceptance.
+
+## FRESH01-C4 finite symbolic-prompt cycle — 2026-10-11
+
+Root authorized C4 from both final C3 scopes: the same mobile2 is accepted by both;
+C3 full cohort remains1/6. C3 metadata/IDs/C7 corrections stay. Remaining failures
+are actual state-caption/edge attachment/Close-height adherence. No new criterion,
+product contract, renderer, flag, schema or source/collector audit.
+
+Same five write paths. Literal prompts now contain tiny symbolic two-border layouts,
+with actual START/END source names, prepared values and explicit horizontal/vertical
+orientation. They request only the corresponding source fragments redrawn in blueprint
+style. Eligible sketches require positive known values and the same TopLeft Space;
+zero/negative/unavailable cases do not gain invented positive separation. Source
+signed facts and original ordering remain untouched. Width/height is still one
+mandatory bundle, with height explicitly LEFT to avoid a right-inset guide collision.
+
+Exact printable per-view captions quote declared active/inactive/keyboard-active/
+applied clauses. The full caller state remains separately available. No Selected-to-
+Applied inference, new privacy channel or interpretation of redacted declarations.
+Director captions occur in both overview/detail; mobile state repeats in overview
+and each planned detail. Original C7 Enabled/proposed-actions/context links and
+proved clipping are unchanged.
+
+Verification:31focused compiler tests, export all-target clippy, format and diff
+checks passed; CLI build passed. Changed-format tests verify both axes, left height,
+nonpositive gap facts without false sketch, repeated literal declared caption and
+no caption inferred from Selected alone. All five non-prompt files of all three
+packages match C3 byte-for-byte. No prototype generation.
+
+New C4 root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c4-d3yemcfo`.
+Three `*-frozen-package/` + `*-frozen-command.json` contain actual literal CLI output.
+Prompt chars:9647/13158/15087 for Director/Settings/mobile. Before generation, a new
+immutable manifest will pin this source checkpoint, identical qualified input/ref
+hashes and six new paths. Exactly6fresh first calls, all counted; prior C1–C3 failure
+records and every image/tool original remain. Neutral all6 handoff precedes author
+verdict; final installed-source reproduction follows.

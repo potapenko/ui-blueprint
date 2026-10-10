@@ -673,6 +673,9 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
     assert!(prompt.contains("Placement context 1: LayoutBounds;"));
     assert!(prompt.contains("Viewport, CSS px, TopLeft; transform local only"));
     assert!(prompt.contains("WIDTH ≈198 CSS px") && prompt.contains("HEIGHT ≈33 CSS px"));
+    assert!(prompt.contains("↕ ≈16 CSS px"));
+    assert!(prompt.contains("│←─ 12 CSS px ─→│"));
+    assert!(prompt.contains("HEIGHT ≈33 CSS px on the LEFT"));
     assert!(!prompt.contains("[\"css_px\"]"));
 }
 
@@ -1316,4 +1319,85 @@ fn printable_channels_preserve_ui_words_but_omit_procedure_metadata() {
         );
     }
     assert!(!prompt.contains("record 1"));
+}
+
+#[test]
+fn state_captions_quote_declared_meaning_without_selected_inference() {
+    let mut brief = fixture("observed");
+    brief.views[0].state =
+        "Menu open; first suggestion keyboard-active; none applied; no input operation performed"
+            .into();
+    let p = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("PRINT THIS VIEW'S STATE CAPTION exactly: \"first suggestion keyboard-active; none applied\""));
+    assert!(!prompt.contains("CAPTION exactly: \"no input operation"));
+    assert!(prompt.matches("CAPTION exactly:").count() >= 2);
+    brief.views[0].state = "Menu open".into();
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        let mut property = node.properties[0].clone();
+        let Property::Requested { field, state, .. } = &mut property else {
+            panic!()
+        };
+        *field = Field::Selected;
+        *state = Availability::Known {
+            value: Value::Flag(true),
+        };
+        node.properties.push(property);
+    }
+    snapshot.context.fields.push(Field::Selected);
+    snapshot.coverage.fields.push(Field::Selected);
+    for observation in &mut snapshot.observations {
+        observation.coverage.fields.push(Field::Selected);
+    }
+    let p = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("Selected=true"));
+    assert!(!prompt.contains("CAPTION exactly:"));
+}
+
+#[test]
+fn nonpositive_gaps_do_not_receive_positive_symbolic_separation() {
+    for next_y in [40.0, 30.0] {
+        let mut brief = fixture("observed");
+        let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+            panic!()
+        };
+        for (i, role, y) in [(0, "DIV", 0.0), (2, "SELECT", 10.0), (4, "SELECT", next_y)] {
+            set_test_role(&mut snapshot.nodes[i], role);
+            let Property::Requested {
+                state:
+                    Availability::Known {
+                        value: Value::Geometry(g),
+                    },
+                ..
+            } = &mut snapshot.nodes[i].properties[2]
+            else {
+                panic!()
+            };
+            let Shape::Rect(r) = &mut g.shape else {
+                panic!()
+            };
+            *r = Rect {
+                x: 10.0,
+                y,
+                width: 80.0,
+                height: 30.0,
+            };
+        }
+        snapshot.nodes[0].children = [2, 4].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+        let p = compile(&brief, limits()).unwrap();
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert!(!prompt.contains("↕ 0 CSS px") && !prompt.contains("↕ −10 CSS px"));
+        let d = data(&p, "dimensions.json");
+        assert!(
+            d[0]["dimensions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|d| d["label"] == "Vertical edge gap" && d["value"] == next_y - 40.0)
+        );
+    }
 }

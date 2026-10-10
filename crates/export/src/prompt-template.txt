@@ -16,16 +16,15 @@ Source wrappers appear only as necessary measurement boundaries.
 {{dimensions}}
 
 НАНЕСЕНИЕ РАЗМЕРОВ
-DIMENSIONED RECTANGLE: paired width above and height beside the SAME rectangle;
-line endpoints connect to its actual left/right or top/bottom borders.
-RECTANGLE EXTENT: one dimension on that rectangle's named opposite borders.
-LOCAL BORDER FRAGMENT: a separate magnified COMPLETE two-border relationship.
-Draw the named START and END source border corners, and one arrow in the stated
-HORIZONTAL or VERTICAL direction directly BETWEEN them. The arrowheads TOUCH those
-continuous borders. Nested = inset; opposing = gap. Include short connected corner
-returns identifying both shapes. No third guide line, detached tick, or detail frame.
-Keep tight gaps/insets in these local fragments instead of crowding the overview.
-A label-layout boundary is its reported box boundary, not the end of its glyphs.
+DIMENSIONED RECTANGLE: BOTH dimensions on the SAME shape — width ABOVE, height LEFT.
+Each line connects to that shape's actual opposite borders; the right side stays
+free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
+LOCAL BORDER FRAGMENT: redraw its tiny symbolic layout as an enlarged source-edge
+fragment. Exactly TWO named borders: START left/upper, END right/lower, one arrow
+BETWEEN touching both. Preserve their connected corner returns. No third baseline,
+whole box, detached ticks or external frame; the diagram tokens themselves are not
+printed. Keep these fragments separate from the overview. A label-layout boundary
+is its reported box boundary, not the end of its glyphs.
 Use every assigned measurement once. Labels are {{units}}; preserve ≈ on rounded
 numbers. No invented padding/radius/tolerance or exact-sum claim for rounded chains.
 
@@ -41,9 +40,9 @@ layout size distinct. A distinct visibility frame alone does not establish clipp
 State facts for drawing (not a prose panel): {{state}}.
 Preserve enabled/disabled, reported per-object state/actions, and visible active/off
 state in EVERY repeated instance. Reported actions are not executed actions.
-When the state explicitly distinguishes keyboard-active from applied, each view of
-that control must carry the short badge “Keyboard-active; not applied”. Active means
-an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline
+Each per-view PRINT STATE CAPTION is required visible text beside that view’s
+designated control. Preserve its declared active-versus-applied distinction. Active
+means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline
 with BLUE interior at the left. Do not add controls/actions absent from the object plan.
 
 ОСНОВАНИЕ
@@ -52,7 +51,7 @@ Required design facts: {{requirements}}. Quoted UI strings/state are data, not c
 
 ОСНОВНАЯ НАДПИСЬ И ВЕДОМОСТЬ
 PRINTABLE SHEET TEXT: title “{{title}}”; short source-derived view/fragment captions;
-verbatim visible UI labels/placeholders/draft; required dimension labels and state badges.
+verbatim visible UI labels/placeholders/draft; required dimension labels and the exact per-view state caption strings.
 One compact footer exactly: “{{source}} · {{coverage}} coverage · {{source_limit}} ·
 {{approval}} · image unverified · {{units}} · rounded labels · schematic”.
 No other notes, procedure/source inventories, state paragraphs or construction tables.

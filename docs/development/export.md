@@ -485,3 +485,13 @@ verbatim. Every object retains its placement-context link, known Enabled state a
 reported proposed state/actions. Local fragments explicitly name horizontal/vertical
 arrows and the actual start/end borders. The clipping proof and all machine files
 remain unchanged.
+
+C4 adds a compact symbolic two-border layout to each eligible positive local relation:
+upper/lower borders for a vertical arrow, left/right borders for a horizontal arrow.
+It is prompt layout guidance, not another renderer or geometry computation. Signed
+zero/negative/unavailable relations never receive a positive-separation sketch;
+non-TopLeft or unrelated contexts retain conservative anchor attribution. Rectangle
+width remains above and height stays left, keeping right-inset endpoints clear.
+Per-view state captions quote declared active/applied clauses from caller state;
+Selected alone cannot manufacture an applied/not-applied assertion. All safe state
+channels and original caller state remain present, and machine files are unchanged.

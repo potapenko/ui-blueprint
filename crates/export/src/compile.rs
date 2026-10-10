@@ -489,6 +489,33 @@ fn visible_text(c: &SceneComponent) -> &str {
             .unwrap_or("")
     })
 }
+fn state_caption(v: &SceneView) -> String {
+    // Only quote declared state clauses. Selected alone never implies applied.
+    v.state
+        .split(';')
+        .map(str::trim)
+        .filter(|clause| {
+            clause
+                .split(|c: char| !c.is_alphabetic() && c != '-')
+                .any(|word| {
+                    matches!(
+                        word.to_ascii_lowercase().as_str(),
+                        "active" | "inactive" | "keyboard-active" | "applied" | "not-applied"
+                    )
+                })
+        })
+        .collect::<Vec<_>>()
+        .join("; ")
+}
+fn printable_state(v: &SceneView) -> String {
+    let caption = state_caption(v);
+    if caption.is_empty() {
+        return String::new();
+    }
+    format!(
+        "PRINT THIS VIEW'S STATE CAPTION exactly: {caption:?}. Keep the designated active object double-outlined in this view, with BLUE interior; repeated objects retain the SAME state.\n"
+    )
+}
 fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> Result<String> {
     let c = &v.components[index];
     let aggregate = !visible_text(c).is_empty()
@@ -611,6 +638,7 @@ fn drawing_inventory(
         "OVERVIEW CONTENT. Human object names below identify source shapes; only quoted UI text appears inside them. Placement references/coordinates are construction input, not captions.\n",
         limit,
     )?;
+    append(&mut out, &printable_state(v), limit)?;
     let mut contexts = Vec::new();
     for g in v.components.iter().filter_map(geometry) {
         let context = format!(
@@ -691,7 +719,7 @@ fn local_measures(
                 append(
                     &mut out,
                     &format!(
-                        "DIMENSIONED RECTANGLE {}: WIDTH {} {}; HEIGHT {} {}.\n",
+                        "DIMENSIONED RECTANGLE {}: WIDTH {} {} ABOVE; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to the real opposite borders.\n",
                         component_name(v, a),
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
@@ -740,6 +768,49 @@ fn local_measures(
             ),
             limit,
         )?;
+        // A symbolic positive separation is safe only for the ordinary top-left
+        // context. Other relations retain their signed, named anchor attribution.
+        if value > 0.0
+            && d.anchors[0].space.origin == Origin::TopLeft
+            && d.anchors[0].space == d.anchors[1].space
+        {
+            let label = format!("{} {}", display_number(value), unit_name(d.units));
+            let horizontal = matches!(d.anchors[0].edge, Edge::Left | Edge::Right);
+            let topology = if horizontal {
+                let arrow = format!("←─ {label} ─→");
+                let right = arrow.chars().count() + 3;
+                let mut corners = vec![' '; right + 2];
+                for (column, edge) in [(2, d.anchors[0].edge), (right, d.anchors[1].edge)] {
+                    if edge == Edge::Left {
+                        corners[column] = '┌';
+                        corners[column + 1] = '─';
+                    } else {
+                        corners[column] = '┐';
+                        corners[column - 1] = '─';
+                    }
+                }
+                format!("{}\n  │{arrow}│", corners.into_iter().collect::<String>())
+            } else {
+                let first = if d.anchors[0].edge == Edge::Top {
+                    "┌────────"
+                } else {
+                    "└────────"
+                };
+                let second = if d.anchors[1].edge == Edge::Top {
+                    "┌────────"
+                } else {
+                    "└────────"
+                };
+                format!("{first}\n    ↕ {label}\n{second}")
+            };
+            append(
+                &mut out,
+                &format!(
+                    "Symbolic layout: START border first (left/upper), END border second (right/lower). Redraw just these two actual source fragments in blueprint style:\n{topology}\n"
+                ),
+                limit,
+            )?;
+        }
         done.push(d.id.clone());
     }
     Ok(out)
@@ -1256,6 +1327,7 @@ fn drawing_dimensions(
             ),
             limit,
         )?;
+        append(&mut out, &printable_state(v), limit)?;
         for &object in &members[i] {
             append(&mut out, &object_text(v, object, partial, limit)?, limit)?;
         }
