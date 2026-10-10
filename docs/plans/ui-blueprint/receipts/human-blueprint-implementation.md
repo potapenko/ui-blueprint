@@ -70,4 +70,11 @@ from agent cleanup. Candidate visual/content verdict is reserved for the two cri
 - Existing privacy, sensitive input, source allowlist, output cap/new-destination,
   proposal arithmetic and compare tests pass. No ignored runtime proof is claimed.
 
-Installed-path reproduction and independent image/source acceptance remain pending.
+R1 source checkpoint `43d62d46602929b485b3e136c19e69f5cb8a9af6` pushed to the established SSH remote.
+The unchanged `distribution.py build --modules core --revision 43d62d46602929b485b3e136c19e69f5cb8a9af6`
+and installed `distribution.py verify` passed in a new system-temp destination.
+The installed core binary reproduced all six files of BOTH R1 packages byte-for-byte.
+The run-owned non-image core bundle was removed and removal verified; candidate
+images/shared review inputs remain. This is the smallest affected installation path;
+no new all-platform or live-collector qualification is claimed. Independent
+image/source acceptance remains pending both critics.
