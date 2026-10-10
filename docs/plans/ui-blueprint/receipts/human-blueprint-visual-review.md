@@ -668,3 +668,64 @@ reliable fresh acceptance. Preserve all cells and distinguish this result from t
 older accepted Director R8 + Settings R4 edited pair. No universal generation claim,
 new statistical guarantee or hidden best-of selection is justified. Only this receipt
 changed; images/packages/source remain untouched. `git diff --check` passed.
+
+## FRESH01-C2 — all six frozen fresh outputs, 2026-10-10
+
+Source `c32712a8c0ffd08e043cb86b48d2b1fb028b64ea`; selected contracts unchanged.
+Root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c2-2652yyb8/`.
+All six images were viewed first, before literal instructions or author narrative.
+Then read the frozen manifest/results and affected per-view, source-text, dimension
+and state instructions. All three prompt SHA-256 values match the frozen manifest.
+Ledger: six requests/returns, zero refusals/edits/rerolls/manual wrappers. C1 and the
+baseline pair remain separate; none of their failures was replaced by this cohort.
+
+**Result: 0/6 full V1–V6 passes, with material progress in accepted subscopes.**
+V1 passes all six: off-knob and active-row fills are fixed. Native-size meaningful
+text remains readable (V4); no typography-size, raster ratio or style-taste threshold
+was introduced. Mobile source coverage/dimensions are substantially improved.
+
+| Actual output / native size | Final bounded verdict and observed evidence |
+| --- | --- |
+| `director-cohort-1.png`, 1223 × 1286 | Fail V3: numerous printed `(record 4/5/7/9/10)` construction IDs in captions and endpoint prose. V2 state explanation is also incomplete: double-outline active rows are visible, but the required keyboard-active/not-applied distinction is absent from the sheet. Meaningful source labels, `spiel`, three results/counts and outline-only rendering are preserved. No extra failure is imposed for its choice of panel layout. |
+| `director-cohort-2.png`, 1225 × 1284 | Fail V5/V6: overview 6-px trigger-to-popup arrow floats above the popup-width dimension; its lower end reaches neither popup top nor an extension from that edge. This is endpoint association, not a demand for a proportional 6-pixel raster gap. Content/state, readable source overview, useful spacing detail and two-corner inset otherwise improve; the bottom state panel correctly explains keyboard-active/not-applied for all instances. V1/V2/V3/V4 pass. |
+| `settings-cohort-1.png`, 1036 × 1518 | Fail V5/V6: the 12-px label-right → select-left gap is drawn as a VERTICAL arrow near the select's upper-left corner, changing the measured relation. Fail V3: a large source-information block prints CDP identity, carrier-ID and unknown-property machinery rather than a compact client scope note. Close52 ×30 and hollow off-knobs are now present. Source form coverage and the main overview remain useful. |
+| `settings-cohort-2.png`, 1036 × 1518 | Fail V5/V6: footer right-15 begins at a detached guide to the right of Close rather than its actual right edge; bottom-15 is correctly associated. Fail V3: the Notes block exposes source-node/CDP identity and excluded-pixel implementation text, violating the existing no-construction-metadata/client-note boundary. Close width/height and off-state outline corrections are retained. |
+| `mobile-cohort-1.png`, 1024 × 1536 | Fail V3: the root-to-Source detail prints `(record 1)` and `(record 12)`, and the large Notes panel prints raw `filters_present` interpretation plus AX/CDP identity/collection machinery. V1/V2/V4/V5/V6 pass in the visual/source-presentation scope: all source groups/14 genres and active/empty states remain; Director366 ×44, root12 and visible Cast27 versus full44 are present with intelligible associations. |
+| `mobile-cohort-2.png`, 1024 × 1536 | Fail V3: the nine-item Notes wall includes raw `filters_present`, caller annotation/Snapshot provenance, AX/CDP identity and pixel-export implementation details. This is the pre-existing metadata-noise criterion, not a preference for fewer panels. V1/V2/V4/V5/V6 pass: safe visible content, Source All state, placeholders, required sizes/gaps/root inset and explicit partial Cast boundary are materially preserved. |
+
+The mobile successes are bounded visual subscopes, not a full-cell pass hidden behind
+an average score. Additional small rounding/raster deviations were not promoted into
+failures. Extra source-derived Cast size evidence is truthful; the failure is printing
+internal procedural machinery, not explaining the useful clipping boundary. Likewise,
+Settings' restored Close30 is accepted rather than repeatedly reopened.
+
+Literal reconciliation:
+
+- C2 explicitly says to print human captions, never object keys or construction
+  metadata, and to use one small footer with no metadata inventory. Therefore the
+  recorded ID/technical-note leaks are output deviations against an existing rule.
+- The same prompts nevertheless contain substantial source `Scope / Not depicted`
+  prose about CDP/AX identity, carrier records, unknown fields and raw flags. Outputs
+  reproduce that supplied material. This identifies content exposure, not proof
+  that total prompt length caused the leak or any other error.
+- Director explicitly requests keyboard-active/not-applied text; its sample1 omits
+  that meaning while sample2 preserves it. Settings12 is explicitly right→left,
+  not top→bottom; Director6 and Close15 also have the correct named pairs in the
+  frozen recipes. These are not planner omissions or new after-view requirements.
+- Width/height bundles and clipping instructions coincide with observed improvement,
+  but two outputs per case do not establish causality or universal reliability.
+
+Smallest generic next hypothesis: separate facts necessary to draw/understand the
+client artifact from internal source mechanics BEFORE forming the generation text.
+Keep complete machine evidence in its existing package, while the public drawing
+brief retains accurate units, state, partial scope and useful clipping limitations.
+Use human endpoint names in view recipes rather than printable-looking `record N`
+prose; do not rely solely on another “do not print metadata” sentence. Preserve every
+required source fact/measurement and the successful atomic size/state bundles.
+Remaining relation-direction/attachment failures still require the existing endpoint
+contract; deleting dimensions or relaxing it is not a remedy. This is a prompt/design
+hypothesis for a future declared cohort, not authorization to repair these six PNGs.
+
+All six outcomes are retained. No unchanged product-source audit, extra agent, image
+editing or generation was performed. Only this receipt changed; `git diff --check`
+passed before the checkpoint.
