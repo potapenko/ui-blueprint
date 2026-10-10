@@ -1,4 +1,4 @@
-# Human-readable blueprints — completed goal 2026-10-10
+# Human-readable blueprints — artefact acceptance and fresh-prompt goal
 
 ## Authority and outcome
 
@@ -248,3 +248,66 @@ paths and immutable revisions. Scope is the named schematic imported-reference
 artifacts and bounded source compatibility, not CAD scale or universal ImageGen
 reproducibility. Root saves the final checkpoint, delivers images inline and closes
 the verified goal; there is no further implementation or review packet to dispatch.
+
+
+## New active goal FRESH-01 — 2026-10-10
+
+Actual user authority after prior goal completion: «создавай себе новую цель» to
+improve the script's generated prompt from the observed R1–R8 problems, so ImageGen
+can produce the desired blueprints. Root explicitly explained that previous final
+images depended on editing prior generated images and did not establish first-pass
+reliability. The user then directed another full pass. This continues the same
+explicitly requested one-builder/two-continuing-critic scope; no new agent fan-out.
+Prior artefacts remain accepted as images; they are not fresh-generation evidence.
+
+Outcome: improve the existing generic CLI prompt/compiler and demonstrate its
+bounded fresh-generation quality on several real forms. An original UI screenshot
+may be a reference; a previous generated blueprint, hand-added prompt wrapper,
+manual image fix or cherry-picked reroll cannot qualify. Every attempted image is
+retained and its actual result reported. Perfect arbitrary future stochastic output
+is not promised; the final report must distinguish verified matrix from unknowns.
+
+Root recovered current global AGENTS/implementation, local AGENTS and
+spec registry36 → product branch → EXPORT2 and its previously fully read drawing/
+geometry/projections/model/identity/boundaries/privacy/example closure. Original
+DRAWING1.2 HBP-HUMAN-001 rules remain authoritative. CLI16/CLI-EXPORT2 and selected
+analysis/types/validation/exchange dependencies continue for source verification.
+RUST/DEV.RUST and prior installed workflow apply only to actually changed owners.
+Baseline product b008a44, final earlier coordination1599ce4. No authority/epoch drift.
+New requirement is fresh-prompt validation; source/schema/collector/privacy/core
+contracts remain protected. Plan is an execution record, not new product authority.
+
+First finite wave: HBP-I diagnoses current prompt and produces one baseline fresh
+Director and one baseline fresh Settings using exact current CLI output and only
+original E04 references. No source change in this first packet. HBP-C and HBP-V
+independently translate their existing observed defects into concise generic
+requirements and a fair frozen evaluation, not more optional image-style rules.
+Root requested one additional existing safe real form from authorized web advisor
+Research website UI blueprint (01a1102f-e21d-7251-9597-c29a1c66d088); no website code
+change, new project work, publication or synthetic substitute. Exact baseline paths
+and new-form availability are pending, not invented.
+
+Proposed evaluation, to pin after those bounded receipts: three real forms
+(Director, Settings, new form) with two independent fresh images each from a frozen
+source/prompt revision. Report all outcomes; do not edit failures into passes or
+pretend six samples establish universal reliability. Keep C1–C7/V1–V6 substantive
+facts/clarity/privacy while avoiding CAD precision/taste-only gates. First qualify
+input evidence/coverage/privacy; no unapproved private values. If source changes,
+recheck affected cases and explicitly distinguish earlier versions/results.
+
+Implementation then owns one complete generic repair and validation packet:
+register necessary contract clarification before code, edit existing template/
+selection only as supported by observed evidence, focused tests, literal CLI
+packages, fresh generation matrix, neutral evidence to same two critics, saved
+source install reproduction. No new flags/framework/renderer/dependencies or
+fixture-specific product constants. Review examines generator and matrix, not
+endless retouching of a selected image. Exact final threshold/claim must be pinned
+before candidate generation; cannot be weakened after viewing results.
+
+Root write set: this existing plan, task-registry, execution. HBP-I retains exact
+exporter/template/affected-test/spec ownership and own implementation receipt;
+critics write only their respective existing receipts. No nested delegation.
+All original system-temp/image retention, current master/shared Git lock/exact
+staging/commit+push, unrelated after-title-spacing.png protection, no new persistent
+directories/worktrees/branches, no Codex Computer Use constraints continue. Read
+only applicable missing instructions, don't repeat unchanged broad test/audit waves.

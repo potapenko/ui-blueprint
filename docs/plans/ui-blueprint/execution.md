@@ -430,3 +430,15 @@ Goal содержит результат P0–P7, критерии [приёмк
 Ни новый threshold измерений, ни потеря фактов/неизвестных в машинных данных,
 новая платформа/рендерер или публикация не разрешены. Current master, commit+push,
 system-temp/no-image-deletion и запрет Codex Computer Use сохраняются.
+
+
+## FRESH-01 continuation — 2026-10-10
+
+Пользователь после завершения image-iteration goal прямо поручил новую цель:
+улучшать сам script-generated prompt для получения результата с нуля. Это
+продолжение им явно запрошенного blueprint prompt/двух критиков scope, не
+разрешение fan-out в другие проекты. Reuse HBP-I/C/V, root координирует.
+Fresh evidence исключает предыдущие generated blueprints, ручные wrappers,
+ретушь и cherry-picked rerolls. Original safe UI reference разрешён.
+Приёмка выбранной картинки и доказательство bounded matrix prompt quality
+фиксируются отдельно. План/реестр содержат exact current packet and acceptance.

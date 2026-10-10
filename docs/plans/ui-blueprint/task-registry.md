@@ -1,5 +1,28 @@
 # Единый реестр задач
 
+## Активная цель FRESH-01 — надёжность промпта с нуля
+
+Пользователь2026-10-10 прямо запустил новую цель улучшения генератора после
+уточнения: прежняя приёмка картинок не доказывает качество первой генерации.
+[Новый раздел плана](human-blueprints.md#new-active-goal-fresh-01--2026-10-10).
+Same authorized coordinated scope: root coordination-only, один исполнитель и
+два прежних критика, no nesting/settings override. Goal active, budget не задан.
+- `/root/blueprint_builder`: FRESH-01 baseline+bounded source diagnosis running;
+  current literal CLI → fresh Director+Settings, original refs only; source edit
+  ещё не разрешён первым пакетом. Own implementation receipt.
+- `/root/blueprint_content`: generic lessons + fair matrix criteria running;
+  own content receipt, no code/generation.
+- `/root/blueprint_visual`: generic visual lessons + fair matrix criteria running;
+  own visual receipt, no code/generation.
+- Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: один запрос существующей
+  третьей real form/evidence, без разработки сайта/новых чатов.
+Baseline1599ce4/productb008a44; master, only unrelated untracked PNG protected.
+Планируется frozen3forms×2freshoutputs, все попытки учитываются; точный
+проверяемый claim/threshold закрепить до candidate generation после receipts.
+Current next: получить2baseline images, критерии, третий реальный input;
+свести один generic implementation packet. Старые R1–R8 не свежие испытания.
+
+
 ## Завершённая цель — понятные человеку blueprints, 2026-10-10
 
 Пользователь прямо запросил улучшить actual CLI prompt и реальные blueprints с
