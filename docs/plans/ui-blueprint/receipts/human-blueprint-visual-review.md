@@ -201,3 +201,58 @@ plainly visible. Sampling used Python standard-library PNG decoding after the
 optional Pillow import proved unavailable; no image was transformed or created.
 Documentation verification: new prose/links reviewed and `git diff --check` passed.
 No code, source data, prompt, frozen PNG or author receipt was modified.
+
+## R2 independent review — 2026-10-10
+
+Pin `c274c92321771ed0732b955eeefa8cf504491523`; same retained E04 sources.
+Images: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/director-r2.png`
+and sibling `settings-r2.png`, both 1536 × 1024, reviewed at declared native size.
+Read the changed registry/export provenance corrections and DRAWING@1.2 R2 anchor
+clarification; remaining R1 closure/criteria are unchanged. Actual images preceded
+literal `director-r2-final-package/prompt.txt` and `settings-r2-final-package/prompt.txt`.
+Initial observations sent before author reconciliation; implementation receipt not
+needed/read. This is the same independent HBP-V role, not a new reviewer.
+
+**Verdict: R2 not accepted.** Both pass V1/V3/V4: flat blue/white drawing, outlined
+off knobs, clear overview/detail hierarchy and readable native-size labels. Settings
+passes visible-content V2, with all controls/help text retained. Director fails V2:
+the source's entered `spiel` became `Director name` in both overview and enlargement.
+The first result is emphasized, but the mandated “Keyboard-active; not applied”
+note is absent. “Any director” remains unchanged, which should be preserved.
+
+Director's overview now restores trigger/popup left alignment and input/result
+alignment; the meaningful gap/inset detail is substantially clearer. HBP-V does
+not introduce a new pixel-perfect ratio gate for the small residual differences
+in schematic enlargement. Director V5's earlier detached wrapper/icon measures
+are removed and the main measurement relationships are now understandable.
+Settings V5/V6 still fail on dimension association, despite correct numeric tokens.
+Both retain truthful draft/unverified/schematic footer language and rounded labels;
+Settings should retain the supplied ≈ prefixes consistently in its details.
+
+Shortest corrective set for R3:
+
+1. **Director:** show `spiel` as the actual input value in both views, distinguishing
+   it from the accessible name `Director name`. Restore the explicit keyboard-active/
+   not-applied note on the first result. This is existing state fidelity, not new
+   input-value collection/export authority. Literal prompt currently lists the
+   accessible name as generic input text while its state annotation supplies `spiel`;
+   remove that ambiguity in the bounded presentation instructions.
+2. **Settings preference detail:** connect ≈16 from first select BOTTOM to second
+   select TOP; the current arrow starts at the row divider below the first select.
+   Put the named label-layout RIGHT boundary at the start of ≈12; the current named
+   dotted line runs through the label while ≈12 starts from a different unlabelled
+   line. Connect each ≈22 outer inset to its actual form-side boundary and named
+   label-left/select-right edge, not an arbitrary detail-frame segment.
+3. **Settings Close:** remove the overview's 15-px arrow ABOVE Close. The required
+   ≈15 values mean Close-right → footer-right and Close-bottom → footer-bottom;
+   they do not mean footer-top → Close-top (source ≈11). In the enlargement, bring
+   the right-inset extension to the actual Close right edge and identify the footer
+   right/bottom boundaries. A dashed detail enclosure alone is not an identified
+   source footer edge. Keep the now-correct whole-form ≈618 span including footer.
+
+Keep the accepted composition, readable helper text, outlined switches and useful
+content-switch dimensions. No extra decoration or mandatory new detail is requested.
+The existing official Onshape association evidence already resolves these same
+anchor errors; no new research question or speculative standard was introduced.
+Independent content-critic findings were not substituted for this visual assessment.
+`git diff --check` passed; only this receipt changed, all frozen inputs remain intact.
