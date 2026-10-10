@@ -639,3 +639,33 @@ immutable manifest will pin this source checkpoint, identical qualified input/re
 hashes and six new paths. Exactly6fresh first calls, all counted; prior C1–C3 failure
 records and every image/tool original remain. Neutral all6 handoff precedes author
 verdict; final installed-source reproduction follows.
+
+## FRESH01-C4 frozen six-output handoff
+
+Source `8db76ba7cf4d3298f5a5cd89388a97967595659d` committed/pushed before first request.
+C4 `frozen-cohort-manifest.json` SHA256
+`79eb884fffe90a19481ae1daae98d4a076bd9ade599abf5edbcd6e4d69e290a9`
+was saved before generation and remains immutable. All three literal prompts, input
+hashes and original-only reference pins stayed unchanged. Exactly6fresh independent
+first calls returned6images;0refusals,0edits,0wrappers,0history references,0rerolls.
+All outputs count, independently of whether the critics later accept any of them.
+
+| C4 image | Actual native100% raster |
+| --- | --- |
+| director-cohort-1.png |1536×1024|
+| director-cohort-2.png |1536×1024|
+| settings-cohort-1.png |1036×1518|
+| settings-cohort-2.png |1036×1518|
+| mobile-cohort-1.png |1024×1536|
+| mobile-cohort-2.png |1024×1536|
+
+C4 root `cohort-results.json` maps exact tool originals/copies/hashes. Every previous
+image and source/package remains; tool originals were copied, never moved or deleted.
+All6were handed to root neutrally before author verdict for the same two critics.
+Source/images are held unchanged; successful generation does not imply acceptance.
+
+C4 installed proof: fresh core build and installed verification at exact source
+`8db76ba7cf4d3298f5a5cd89388a97967595659d` passed. Installed CLI reproduced all six
+files of all three frozen C4 packages byte-for-byte. Run-owned non-image install
+removed and removal verified; shared packages/inputs and all original/copied images
+retained. This is author execution evidence, separate from independent C/V verdicts.
