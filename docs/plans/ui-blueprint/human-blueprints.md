@@ -552,3 +552,31 @@ equal C3. Known positive common-TopLeft scalar pairs get symbolic layouts; other
 cases retain conservative attribution. Both Director views carry exact declared
 state caption; mobile repeated-state clauses do not infer Applied from Selected.
 Six fresh requests execute under unchanged protocol; image/source acceptance pending.
+
+
+### C4 disposition and accepted FRESH01-C5-I — 2026-10-11
+
+Both critics accept D1/S1/S2/M1, 4/6. M1's initial content doubt was reconciled using
+its long exterior fragment, actual Source-label edge and overall viewport context;
+requiring an extra literal name would be a new gate. M2 lacks that endpoint context
+and remains ambiguous. D2 omits required popup width194. No output was replaced and
+no criterion weakened. V5e790f2 records its full scoped evidence. Installedb57d9e4
+reproduces all three exact8db76ba packages, separate from image acceptance.
+
+One new symbolic-helper compatibility gap: valid CenterX/CenterY anchors can be
+misclassified as vertical/bottom borders. This is within the assigned orientation
+scope. C5 restricts corner sketches to actual L/R/T/B border pairs and keeps centers,
+mixed/unsupported/nonpositive cases as correctly oriented named-anchor fallback.
+No new engine or meaning change; ordinary cohort inputs did not exercise this gap.
+
+Same builder/same five paths owns a small complete next correction: an explicit
+below-shape slot and exact label for the already selected outer/enclosing overview
+width, separate from contained/trigger widths; exact printable human captions and
+context for both source edges of every scalar fragment. Unpainted label-layout or
+scope boundaries must not be mistaken for another control's border. No added
+measurements, fixture constants, badge-only substitutes or restyling. Preserve the
+four accepted examples' semantics and existing source/state/privacy/context logic.
+Tiny focused center-axis/eligibility/slot regressions, exact machine comparisons,
+then NEW frozen C5 six fresh outputs from the same original refs and unchanged
+criteria. All C1–C4 failures stay; no prototypes/retouches/reroll selection. Same
+critics image-first, bounded installed reconciliation, no expanded audit/features.
