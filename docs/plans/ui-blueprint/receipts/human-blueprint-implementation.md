@@ -158,3 +158,32 @@ build and installed verification passed from this exact revision. Installed CLI
 reproduced all six files of both R3 packages byte-for-byte. The run-owned non-image
 installation was removed and removal verified; frozen images/review packages remain.
 Source and images now held for the same two independent critics' R3 observations.
+
+
+## Candidate R4 — neutral edit handoff
+
+Same system-temp root. Images `director-r4.png`, `settings-r4.png` are1536×1024;
+review at native100%. Literal CLI packages `director-r4-final-package/` and
+`settings-r4-final-package/`, exact `*-r4-final-command.json`; prompts12,217 /16,672
+Unicode characters. Built-in ImageGen received each literal prompt unchanged and
+TWO inspected reference paths: its retained R3 blueprint as edit target plus the
+original E04 UI reference as content/geometry reference. No handwritten transport
+wrapper, image postprocessor, new CLI flag or fixture-specific numeric constant.
+
+Tool originals retained in the same generated_images directory:
+`exec-e0ec9156-1344-4d0e-bb06-ea02b175fd70.png` and
+`exec-7afcfd12-5c7f-438d-93bc-6694b4d401f3.png`; temp copies preserve all originals.
+No author visual/content verdict accompanies the candidate handoff.
+
+Only product change: existing prompt-template.txt. Generic supplied-blueprint edit
+instruction preserves already correct areas while the current brief remains authority;
+human-only captions, continuous popup/input edge extensions and all four footer-action
+dimensions are emphasized. Same user-authorized C1–C7/V1–V6, no redundant spec epoch.
+No Rust logic, schema, numerical/source/privacy/limits change. C7's independent R3
+acceptance remains the basis for unchanged paths.
+
+Focused template/status and visible-text/accessibility/draft/value-canary tests passed;
+public CLI rebuilt and produced both actual packages. Five non-prompt files of both
+packages equal R3 byte-for-byte. No broad logic suite rerun for this text-only edit.
+Whitespace check passed. Installed proof follows the saved source checkpoint;
+actual image acceptance is reserved for the same two independent critics.

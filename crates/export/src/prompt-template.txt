@@ -1,6 +1,9 @@
 ЗАДАЧА
-Create one client-facing engineering drawing, titled “{{title}}”. Language: {{language}}.
+Produce one client-facing engineering drawing, titled “{{title}}”. Language: {{language}}.
 Purpose: {{purpose}}. This is a flat measured UI diagram, not a screenshot or redesign.
+If a blueprint image is supplied, EDIT THAT BLUEPRINT: preserve its composition, type,
+correct controls, text, state and dimensions. Repair only conflicts with this brief;
+do not recompose already correct regions. A separate UI screenshot is a content reference.
 
 ОСНОВАНИЕ
 {{source}}. Coverage: {{coverage}}. Scope: {{scope}}.
@@ -69,6 +72,17 @@ A detail must include BOTH anchor boundaries of every dimension drawn. Omit deco
 wrapper/heading/icon insets. Do not draw a free-floating arrow or terminate it in air.
 Use captions naming the source region (e.g. “Preference rows”, “Search and results”,
 “Content switch”, “Footer action”); omit generic explanatory “Shows size...” prose.
+Caption correction: use ONLY human captions. Strip parenthetical construction references
+such as record numbers from an existing blueprint. Captions may use source labels plus
+“select” or “Popup”; never append a record/key/ID to any caption.
+Popup detail: make input and result rows one aligned column with common left/right edges.
+Redraw popup width extensions from the actual outer popup borders; input width extensions
+from the actual input borders. Each inset joins popup border to that same input border.
+Extend lines CONTINUOUSLY from the real borders to the arrows; no detached short ticks.
+Footer detail must retain ALL FOUR required types: button width, button HEIGHT, right
+inset and bottom inset. Restore a missing height even if other dimensions are correct.
+Put its top/bottom extensions and height arrow LEFT of the button, leaving right/bottom
+insets undisturbed. Preserve the named footer boundaries and the existing correct layout.
 {{dimensions}}
 
 НАНЕСЕНИЕ РАЗМЕРОВ
