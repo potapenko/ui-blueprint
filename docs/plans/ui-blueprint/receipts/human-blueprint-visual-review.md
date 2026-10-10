@@ -349,3 +349,32 @@ only. The duplicate ≈194 in the enlarged detail may instead be removed, becaus
 the complete overview already supplies that outer dimension. Retain the useful
 ≈178 input width and both ≈8 insets with their correct boundary pairs; removing
 all of those relationships would not resolve the pending usefulness/anchor defect.
+
+## R5 Director-only review — 2026-10-10
+
+Image `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/director-r5.png`,
+1536 × 1024, inspected at native size before narrative. It edits Director R4;
+source `cd099a19b73760f3a2144439b10e3a04b9daf79c` and literal R4 final prompt remain
+unchanged. No new contract/data/code checks are needed. Settings R4 stays frozen
+and accepted by HBP-V; it was not reopened.
+
+**R5 rejected.** V1/V3/V4 retain the established style/hierarchy/readability pass;
+V2/V5 fail and V6 remains incomplete because the displayed measurement meaning is
+wrong. The field still has different left/right edges from the result rows. The
+≈8 guides remain detached from the actual popup border, and ≈194 still spans an
+interior line rather than both outer borders. This is the same pending R4 defect.
+
+The edit additionally changed the previously accepted overview: it inserted the
+same faulty width/inset chains and made the input visibly narrower than its result
+rows there too. The source heading “Directors” also disappeared from the enlarged
+popup, leaving only the drawing annotation “Popup container”. Correct `spiel`,
+counts, three results and “Keyboard-active; not applied” remain; do not disturb them.
+
+Required repair remains local and finite: restore the earlier overview, retain
+“Directors” in the enlarged source view, align input/results and correctly attach
+≈178 and both ≈8 to the actual input/popup boundaries. A redundant enlarged ≈194
+may be removed while its correct overview counterpart remains. Merely moving
+unattached short guides closer together does not establish endpoint association.
+No new visual standard, numeric tolerance or optional design request is introduced.
+Only this receipt changes; image/source/package remain untouched. `git diff --check`
+passed before saving the checkpoint.
