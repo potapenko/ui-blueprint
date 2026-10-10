@@ -187,3 +187,10 @@ public CLI rebuilt and produced both actual packages. Five non-prompt files of b
 packages equal R3 byte-for-byte. No broad logic suite rerun for this text-only edit.
 Whitespace check passed. Installed proof follows the saved source checkpoint;
 actual image acceptance is reserved for the same two independent critics.
+
+
+R4 source checkpoint `cd099a19b73760f3a2144439b10e3a04b9daf79c` pushed. Fresh core
+build/verify from that saved revision passed; installed CLI reproduced all six files
+of both R4 final packages byte-for-byte. Run-owned non-image installation removed,
+removal verified; all image originals/copies and shared review inputs retained.
+Source/images held unchanged for consolidated R4 critic observations.
