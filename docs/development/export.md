@@ -316,3 +316,60 @@ PYEXAMPLE
 This local example removes only its generated non-image input/package files.
 Independent privacy/input acceptance and any generated-image validation remain
 separate. E03 author proof is recorded in the [receipt](../plans/ui-blueprint/receipts/E03-observed-compare.md).
+
+## Real form → ImageGen verification (E04)
+
+The [E04 receipt](../plans/ui-blueprint/receipts/E04-real-form-imagegen.md)
+records Director and Settings from the real local PlayPhrase.me website. Both
+six-file packages passed local compilation and preserved the imported DOM sizes.
+**Direct delivery of either unmodified prompt to built-in ImageGen failed:** the
+service accepted at most32,000 characters; these prompts contained123,391 and
+529,860 characters. `package_written` does not establish model compatibility.
+No product code or schema was changed by this experiment.
+
+Reproduce the bounded workflow:
+
+1. Open a task-owned local browser tab. Director: Clip Search → Director → draft
+   `spiel`, without Enter or selecting a suggestion. Settings: Search → Settings,
+   without changing a select or switch. Restore draft/close only owned resources.
+2. Collect the selected real DOM/CSSOM structure, public text, state and rectangles
+   with source intervals/document identity. Prefer canonical Observe. The E04 IAB
+   surface lacked `Target.getTargetInfo` and an exposed page WebSocket endpoint,
+   so E04 used an explicitly attributed one-off browser-reference Snapshot carrier.
+   This is an imported-reference export experiment, not live collector acceptance.
+3. Capture an independent lossless PNG with `Page.captureScreenshot(format=png,
+   fromSurface=true)`; retain its original. Check actual browser DPR, CSS viewport,
+   CDP physical viewport and PNG IHDR dimensions. Crop without resizing from that
+   original and inspect the form before attaching it. CUA/JPEG observations do not
+   substitute for this reference. All images stay in system temp without deletion.
+4. Supply reviewed metadata and public text allowlist, then run the actual CLI:
+
+   ```sh
+   target/debug/uiblueprint imagegen-prompt \
+     --snapshot "$E04_CASE/snapshot.json" --metadata "$E04_CASE/metadata.json" \
+     --out "$E04_CASE/new-package" --purpose document \
+     --max-input-bytes 2000000 --max-output-bytes 4000000 \
+     --max-components 256 --max-views 8 --components-per-detail 64 --json
+   ```
+
+   `E04_CASE` denotes an explicitly selected system-temp case directory; the output
+   must not exist. Bounds are experiment parameters, not product defaults. E04's
+   exact filenames/arguments are retained in each `*-command.json` in the receipt.
+   Keep all six files, compare every emitted extent with the source, and inspect
+   privacy, coverage, unknowns and independent statuses before model submission.
+5. First submit `prompt.txt` verbatim with the clean source reference. Record an
+   input refusal as a failed direct export path. Do not silently shorten it or
+   remove components. E04's separately saved second-attempt transport variants
+   deduplicated repeated data; Settings used explicit compact tables. Those are
+   caller workarounds, not outputs of an improved product compiler.
+6. Compare the generated image with both reference and machine package: complete
+   controls/text/state, exact dimensions/units/anchors/IDs, coverage, title block,
+   unknowns, readability and actual output size. Preserve failures and exact prompt
+   deltas. A visually attractive image with missing controls stays unverified/draft.
+
+The package's document-level `max-output-bytes` is not a model prompt-character
+budget. Current `compile.rs::prompt` repeats full component JSON in inventory and
+state sections and embeds verbose dimensions; it also passes the general sheet
+through `detail_views`. A product fix needs a separate authorized exporter change.
+Do not replace real evidence with synthetic geometry or relabel a transport
+workaround as a successful unchanged CLI→ImageGen integration.
