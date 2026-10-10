@@ -213,11 +213,12 @@ and affirmative instability (`2491dec`); partial scope does not establish missin
 geometry for a named known anchor. Source coverage stays partial and consistency
 stays unknown. No new observation, complete scope or image validation is claimed.
 
-The current package regression retains comparison of all six files for both
-examples. Its independent literal extent inventory updates only expected numeric
-values and their unknown_reason fields in memory, including the exact embedded
-blocks in brief/prompt. All other bytes, evidence, anchors, privacy, source facts
-and statuses still match the historical outputs. A separate synthetic unstable
+The current package regression retains byte comparison of the five unchanged files
+for both examples. Its independent literal extent inventory updates only expected
+numeric values and their unknown_reason fields in memory, including the exact
+embedded block in drawing-brief. The prompt tables are decoded independently and
+compared with the historical component inventories and those same literal dimensions.
+Evidence, anchors, privacy, source facts and statuses remain preserved. A separate synthetic unstable
 variant verifies all 32 dimensions remain unknown with reached evidence. Historical
 files are never overwritten, and expected values are not captured from candidate
 compiler output. Run the existing commands above into a new destination for a
@@ -368,8 +369,42 @@ Reproduce the bounded workflow:
    deltas. A visually attractive image with missing controls stays unverified/draft.
 
 The package's document-level `max-output-bytes` is not a model prompt-character
-budget. Current `compile.rs::prompt` repeats full component JSON in inventory and
-state sections and embeds verbose dimensions; it also passes the general sheet
-through `detail_views`. A product fix needs a separate authorized exporter change.
+budget. The E04-era `compile.rs::prompt` repeated full component JSON in inventory and
+state sections and embedded verbose dimensions; it also passed the general sheet
+through `detail_views`. E05 repairs these findings as recorded below.
 Do not replace real evidence with synthetic geometry or relabel a transport
 workaround as a successful unchanged CLI→ImageGen integration.
+
+
+## Literal real-form prompts after E05
+
+The [E05 receipt](../plans/ui-blueprint/receipts/E05-usable-imagegen-prompts.md)
+records the same unchanged Director and Settings inputs on an attributed current
+build. Prompt formatting now emits one component/state inventory and one dimension
+inventory. Each is a text table with explicit nested field paths, common values
+that apply to every row, and ordered row values. All facts remain in the prompt;
+`absent` is distinct from JSON null, false, empty text and empty arrays. Common
+values are compared by exact JSON spelling, preserving signed zero. This is local
+presentation of already sanitized export records, not a new machine format, model
+API, source projection, size flag or implicit data-pruning policy.
+
+Other prompt JSON is compact. The source context includes the existing safe view,
+snapshot/revision and Surface records. State instructions refer back to the complete
+component inventory. Detail instructions list only actual detail sheet IDs; an empty
+list means no details, and the full sheet plan remains embedded in the prompt.
+The five other package files and all existing modes/versions remain unchanged.
+
+Director shrank from123,391 to18,653 characters; Settings from529,860 to29,793.
+Both literal CLI prompts were submitted unchanged, without a wrapper or manual
+summary, to built-in ImageGen with the same inspected lossless reference PNGs.
+Both generated images. All58 components and116 dimensions reconstruct exactly;
+all116 extents also match independent raw CSSOM numbers bit-for-bit.
+
+Model acceptance is distinct from image acceptance. Director contains an extra
+header row and misbound component leaders; Settings omits the component/dimension
+inventories. Both outputs are1672×941 despite requested3840×2160 and introduce dark
+fills/gradients. Both stay unverified/draft. The saved images and detailed comparison
+are in the receipt; no CAD accuracy, live acquisition, human approval or marketing
+acceptance follows. These two successful submissions do not establish a universal
+model input limit or guarantee that every larger scope fits; the existing explicit
+package byte bound still refuses overflow without silently deleting facts.

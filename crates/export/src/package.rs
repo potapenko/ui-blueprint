@@ -26,6 +26,14 @@ pub(crate) fn bounded_json(value: &impl Serialize, limit: usize) -> Result<Vec<u
     serde_json::to_writer_pretty(&mut writer, value).map_err(|_| E::OutputLimit)?;
     Ok(writer.bytes)
 }
+pub(crate) fn bounded_compact_json(value: &impl Serialize, limit: usize) -> Result<String> {
+    let mut writer = Bounded {
+        bytes: vec![],
+        limit,
+    };
+    serde_json::to_writer(&mut writer, value).map_err(|_| E::OutputLimit)?;
+    String::from_utf8(writer.bytes).map_err(|_| E::InvalidInput)
+}
 /// Fully validated immutable contents. Construction is through `compile` only.
 #[derive(Debug)]
 pub struct Package {

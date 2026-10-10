@@ -367,18 +367,6 @@ fn current_observed_dimensions() -> (String, String) {
     );
     (historical, current)
 }
-// Prompt embeds the single view object; drawing-brief embeds the full array.
-fn single_dimension_view(array: &str) -> String {
-    array
-        .strip_prefix("[\n")
-        .unwrap()
-        .strip_suffix("\n]")
-        .unwrap()
-        .lines()
-        .map(|line| line.strip_prefix("  ").unwrap())
-        .collect::<Vec<_>>()
-        .join("\n")
-}
 #[test]
 fn current_packages_preserve_history_except_accepted_known_anchor_results() {
     let (historical_dimensions, current_dimensions) = current_observed_dimensions();
@@ -389,6 +377,10 @@ fn current_packages_preserve_history_except_accepted_known_anchor_results() {
         assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
         assert_eq!(package.files().len(), 6);
         for (file, actual) in package.files() {
+            if file == "prompt.txt" {
+                // Prompt tables are independently decoded and checked below.
+                continue;
+            }
             let path = format!(
                 "{}/../../fixtures/export/{name}-package/{file}",
                 env!("CARGO_MANIFEST_DIR")
@@ -400,10 +392,6 @@ fn current_packages_preserve_history_except_accepted_known_anchor_results() {
                     "dimensions.json" | "drawing-brief.md" => {
                         Some((historical_dimensions.clone(), current_dimensions.clone()))
                     }
-                    "prompt.txt" => Some((
-                        single_dimension_view(&historical_dimensions),
-                        single_dimension_view(&current_dimensions),
-                    )),
                     _ => None,
                 };
                 if let Some((old, new)) = replacement {
@@ -415,7 +403,7 @@ fn current_packages_preserve_history_except_accepted_known_anchor_results() {
                     expected = expected.replacen(&old, &new, 1);
                 }
             }
-            // All six files, including every unrelated byte, remain checked.
+            // The other five files, including every unrelated byte, remain checked.
             // No normalization of source facts, privacy, evidence, anchors or statuses.
             assert!(actual == expected.as_bytes(), "{name}/{file}");
         }
@@ -494,4 +482,186 @@ fn factual_query_known_extents_keep_source_evidence_without_normative_fields() {
         data(&package, "manifest.json")["validation_status"],
         "unverified"
     );
+}
+
+// Independent reader for the human table notation. Reconstruct nested arrays/objects
+// from the documented paths, rather than using the exporter's field factoring code.
+fn prompt_tables(prompt: &str) -> Vec<Vec<serde_json::Value>> {
+    use serde_json::Value;
+    fn put(root: &mut Value, path: &[&str], value: Value) {
+        if path.is_empty() {
+            *root = value;
+        } else if let Ok(index) = path[0].parse::<usize>() {
+            if root.is_null() {
+                *root = Value::Array(vec![]);
+            }
+            let array = root.as_array_mut().expect("array offset");
+            array.resize(array.len().max(index + 1), Value::Null);
+            put(&mut array[index], &path[1..], value);
+        } else {
+            if root.is_null() {
+                *root = serde_json::json!({});
+            }
+            let key = path[0].replace("~1", "/").replace("~0", "~");
+            put(
+                root.as_object_mut()
+                    .expect("named field")
+                    .entry(key)
+                    .or_insert(Value::Null),
+                &path[1..],
+                value,
+            );
+        }
+    }
+    let mut tables = vec![];
+    for table in prompt.split("\nCOMMON ").skip(1) {
+        let (common, table) = table.split_once("\nCOLUMNS ").unwrap();
+        let common: serde_json::Map<String, Value> = serde_json::from_str(common).unwrap();
+        let (columns, table) = table.split_once("\nROWS\n").unwrap();
+        let columns: Vec<String> = serde_json::from_str(columns).unwrap();
+        let (rows, _) = table.split_once("END TABLE").unwrap();
+        let mut decoded = vec![];
+        for line in rows.lines() {
+            let mut fields = common.clone();
+            let mut rest = line.strip_prefix('[').unwrap();
+            for (i, path) in columns.iter().enumerate() {
+                if i > 0 {
+                    rest = rest.strip_prefix(',').unwrap();
+                }
+                if let Some(tail) = rest.strip_prefix("absent") {
+                    rest = tail;
+                } else {
+                    let mut decoder = serde_json::Deserializer::from_str(rest).into_iter::<Value>();
+                    let value = decoder.next().unwrap().unwrap();
+                    rest = &rest[decoder.byte_offset()..];
+                    assert!(
+                        fields.insert(path.clone(), value).is_none(),
+                        "no common override"
+                    );
+                }
+            }
+            assert_eq!(rest, "]");
+            let mut record = Value::Null;
+            for (path, value) in fields {
+                let path = path
+                    .strip_prefix('/')
+                    .unwrap()
+                    .split('/')
+                    .collect::<Vec<_>>();
+                put(&mut record, &path, value);
+            }
+            decoded.push(record);
+        }
+        tables.push(decoded);
+    }
+    tables
+}
+
+#[test]
+fn prompt_tables_preserve_independent_historical_inventory_and_exact_dimensions() {
+    for name in ["observed", "proposed"] {
+        let p = compile(&fixture(name), limits()).unwrap();
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        let tables = prompt_tables(prompt);
+        assert_eq!(tables.len(), 2, "single inventory, single dimension table");
+        let historical = |file: &str| {
+            std::fs::read_to_string(format!(
+                "{}/../../fixtures/export/{name}-package/{file}",
+                env!("CARGO_MANIFEST_DIR")
+            ))
+            .unwrap()
+        };
+        let scene: serde_json::Value = serde_json::from_str(&historical("scene.json")).unwrap();
+        let dimensions: serde_json::Value = serde_json::from_str(&if name == "observed" {
+            current_observed_dimensions().1
+        } else {
+            historical("dimensions.json")
+        })
+        .unwrap();
+        // String equality also protects signed zero and exact numeric representations.
+        assert_eq!(
+            serde_json::to_string(&tables[0]).unwrap(),
+            scene["views"][0]["components"].to_string()
+        );
+        assert_eq!(
+            serde_json::to_string(&tables[1]).unwrap(),
+            dimensions[0]["dimensions"].to_string()
+        );
+        let chains = prompt.split_once("Derived chains: ").unwrap().1;
+        let actual_chains = serde_json::Deserializer::from_str(chains)
+            .into_iter::<serde_json::Value>()
+            .next()
+            .unwrap()
+            .unwrap();
+        assert_eq!(actual_chains, dimensions[0]["chains"]);
+        assert!(prompt.contains("validation unverified; approval"));
+        assert!(!prompt.contains("{{"));
+    }
+}
+
+#[test]
+fn prompt_details_follow_only_the_actual_sheet_plan() {
+    let mut b = fixture("proposed");
+    b.details.clear();
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("Увеличенные детали со ссылками на G01: []."));
+    assert_eq!(data(&p, "sheets.json").as_array().unwrap().len(), 1);
+    let mut l = limits();
+    l.components_per_detail = 6;
+    let p = compile(&b, l).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("Увеличенные детали со ссылками на G01: [D01, D02]."));
+    let sheets = data(&p, "sheets.json");
+    assert_eq!(sheets[1]["parent_view"], "G01");
+    assert_eq!(
+        sheets[2]["components"],
+        serde_json::json!(["N06", "N07", "N08", "N09"])
+    );
+    assert_eq!(prompt_tables(prompt)[0].len(), 10);
+}
+
+#[test]
+fn prompt_tables_keep_property_order_presence_and_signed_zero() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    let mut expected: serde_json::Value = serde_json::from_slice(include_bytes!(
+        "../../../fixtures/export/observed-package/scene.json"
+    ))
+    .unwrap();
+    // These are source changes, not expectations copied from the candidate output.
+    for index in [0, 1] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[index * 2].properties[2]
+        else {
+            panic!()
+        };
+        let Shape::Rect(rect) = &mut g.shape else {
+            panic!()
+        };
+        rect.x = if index == 0 { -0.0 } else { 0.0 };
+        expected["views"][0]["components"][index * 2]["properties"][2]["state"]["value"]["value"]
+            ["shape"]["value"]["x"] = serde_json::json!(rect.x);
+    }
+    snapshot.nodes[2].properties.swap(0, 2);
+    expected["views"][0]["components"][2]["properties"]
+        .as_array_mut()
+        .unwrap()
+        .swap(0, 2);
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    let tables = prompt_tables(prompt);
+    assert_eq!(
+        serde_json::to_string(&tables[0]).unwrap(),
+        expected["views"][0]["components"].to_string()
+    );
+    assert!(prompt.contains("absent"));
+    assert!(prompt.contains("-0.0"));
+    assert!(prompt.contains("0.0"));
 }
