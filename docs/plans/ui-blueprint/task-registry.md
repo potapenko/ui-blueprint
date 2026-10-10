@@ -11,7 +11,7 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: Settings R4 принят; Director-only R7 isolated inset-detail repair running.
+Текущий шаг: Settings R4 принят; R8 partial-detail repair plus confirmed export frame/role compatibility fixes running.
 Агенты fork_turns none, настройки наследуются, без nesting:
 - HBP-C `/root/blueprint_content`: Settings C1–C6 accepted, C7 accepted cd099a1;
   Director C3 inset anchors rejected; [receipt](receipts/human-blueprint-content-review.md) ecdaa2f.
@@ -39,7 +39,7 @@ Settings. Director text spiel, keyboard-active/not-applied и общий вид 
 Основание: прямой запрос пользователя и HBP-HUMAN-001, DRAWING1.2,
 EXPORT/drawing leaves2, registry36; прочая selected closure неизменна.
 Метод image-edit — средство сохранения уже принятых частей, не новый product scope.
-После нейтрального R7 оба тех же критика проверяют только Director и фактически
+После нейтрального R8 оба тех же критика проверяют только Director и фактически
 изменённые criteria. C7 и Settings не переоткрываются без relevant change.
 Все images/tool originals retained; untracked after-title-spacing.png untouched.
 R6 source5139f8e / installedc38008f: prompt7827 chars, clearer width/alignment,
@@ -49,6 +49,17 @@ R7 remedy согласован с HBP-V: отдельный увеличенны
 без external detail frame/ложных guide lines. Полный overview и field/row sizes/gaps
 сохраняются; active state extra outline на том же синем фоне. Это presentation
 repair уже выбранных измерений, не новая geometry/feature/acceptance criterion.
+R7 source9f5b9a8: isolated inset8 и outlineactive прошли; большая detail оставила
+лишний8 и неверную width178/alignment. HBP-V4219d4e подтвердил R8 remedy: explicit
+partial Search/result spacing (input+2rows, sharedcolumn, width/heights/gaps),
+без popup frame/header/insets; full overview и accepted cornerdetail сохраняются.
+Отдельно HBP-C подтвердил2 author-reported C7 regressions в compact exporter:
+Layout-only geometry helper теряет known AX-only geometry; native-first role
+selection скрывает canonical control semantics. R8 исправляет существующие helpers
+с TRUE frame/Space attribution, canonicalrole и native attribution, focused
+AX-only/native/mixedframe checks. Это existing contract compatibility, не Native
+collector expansion. Старые C7passes были bounded DOM/source slice; новый gap
+явно открыт до исправления/verification, не выдан за принятую универсальность.
 Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
 
 ## Предыдущая цель P0–P7 — завершена
