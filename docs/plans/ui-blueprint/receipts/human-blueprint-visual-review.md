@@ -729,3 +729,62 @@ hypothesis for a future declared cohort, not authorization to repair these six P
 All six outcomes are retained. No unchanged product-source audit, extra agent, image
 editing or generation was performed. Only this receipt changed; `git diff --check`
 passed before the checkpoint.
+
+## FRESH01-C3 — all six frozen fresh outputs, 2026-10-10
+
+Source `e92dd7dfa0ac18b68bee9e9150bf1e420ff437ff`; selected contract closure unchanged.
+Root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c3-6cv0u75c/`.
+All six actual PNGs preceded literal prompt/manifest/result inspection and any author
+narrative. Three frozen prompt hashes match. Ledger records six requests/returns,
+zero edits/rerolls/manual wrappers/refusals. Native returned sizes are listed below;
+C1/C2 failures and the earlier edited pair remain separate evidence.
+
+**HBP-V result: 1/6 complete visual passes — mobile sample2.** C3 removes the printed
+construction-ID/technical-note problem. V1/V3 pass across the cohort; meaningful
+source text is generally readable. Failures below retain the existing state/anchor/
+required-dimension criteria, not a new layout taste or CAD-precision requirement.
+
+| Cell / native size | Final scoped verdict |
+| --- | --- |
+| `director-cohort-1.png`, 1536 × 1024 | Fail V2: no keyboard-active/not-applied badge or equivalent explanation anywhere on the sheet. Fail V5: separate lower-right vertical-gap fragment places both named source-border corners on its upper level, then measures to a third, unnamed lower line. Its 6 value therefore does not have the specified named start/end pair. Main overview, source text/counts, input width and normal spacing detail remain useful. |
+| `director-cohort-2.png`, 1536 × 1024 | Fail V2: keyboard-active/not-applied explanation is absent; the added third result in the partial spacing view also receives a double-outline treatment despite its inactive source state. Correct `spiel`, counts, full overview and most useful dimensions survive. No new failure is based on the schematic width ratios or fragment corner styling. |
+| `settings-cohort-1.png`, 1036 × 1518 | Fail V5: required Close height≈30 is absent. The rotated main-height annotation is malformed/not clearly readable as the supplied≈618, so that label does not receive V4/V6 acceptance; no precise alternate value is asserted. The form content, off-state contours, switch dimensions and compact footer remain substantially sound. |
+| `settings-cohort-2.png`, 1024 × 1536 | Fail V5: footer right-inset15 begins at the adjacent height-dimension guide rather than being unambiguously attached to the actual Close right border. Bottom15 and Close52 ×30 are present. Other source content/state, outline style, readability and compact presentation pass. This is the existing endpoint-association issue, not a rule about where details should be laid out. |
+| `mobile-cohort-1.png`, 1024 × 1536 | Fail V2: All is active in the overview, but the Source enlargement renders All like the inactive Movies/Episodes controls, losing the repeated active state. The Cast27 cut line is also drawn separately above the viewport's lower cut, making the source clipping relationship unclear. Required Director dimensions, root inset, all14 genres and safe placeholders remain. |
+| `mobile-cohort-2.png`, 1203 × 1307 | **Pass V1–V6 at native size.** Complete visible groups/text/14 genres and Source All state survive in overview/detail; empty-input placeholders stay placeholders. Cast terminates at the visibly cut viewport boundary, with no invented lower controls. Required390/844, Director366 ×44, root12, Source≈119 ×42/gap2, Years179 ×44/gap8 and Genres179 ×40/horizontal+vertical8 are present and relate unambiguously to their named neighboring objects. No construction IDs, metadata wall, dark/filled panels or false status claim. |
+
+The accepted mobile sample2 does not promise pixel-exact dimensions or touch targets.
+Small raster standoffs in otherwise unambiguous neighboring-control dimensions are
+not promoted into a new CAD gate; C2 already accepted that bounded geometric scope.
+The moved title and portrait composition are not failures. A literal27 annotation
+is not newly required: the source's partial Cast boundary is preserved visibly and
+the sheet declares partial coverage. The full44 layout is not falsely shown as visible.
+
+Literal reconciliation:
+
+- Both Director prompts explicitly require a short keyboard-active/not-applied badge
+  for each repeated active control. Omitting it is an output deviation, not removal
+  from the printable-text channel; that channel explicitly includes state badges.
+- Settings explicitly requires paired Close52 ×30 and form422 ×618, with right15
+  starting at Close-right and ending at footer-right. These failures are not planner
+  omissions. Numeric truth remains in the frozen package.
+- Mobile's state facts explicitly say All active and apply to every repeated view;
+  its Cast object carries the reported27-high visible region ending at viewport844.
+  The accepted sample satisfies those facts without inventing below-viewport content.
+- Compact printable captions/footer now exclude previous internal source mechanics.
+  This observed improvement does not prove that filtering alone caused all changes.
+
+Root's next-remedy hypothesis is compatible with unchanged V5: emit a compact
+symbolic illustration of exactly TWO actual named source-border fragments and their
+prepared scalar relation. For vertical relations: named upper START bottom border,
+arrow, named lower END top border. For horizontal relations: two named vertical
+fragments and the arrow between them. Keep labels outside, no third baseline or
+competing whole box/legend. Corners were an implementation choice, not an acceptance
+gate. This may address the observed Director1 third-line failure; effectiveness is
+unproven until a declared fresh cohort. It does not repair state-badge omissions or
+missing dimension labels by itself, and does not authorize editing these frozen PNGs.
+
+All six are reported without outcome weighting or best-of substitution. The accepted
+mobile cell is one bounded success, not whole-cohort or universal fresh reliability.
+No extra generation, source modification or agents. Only this receipt changed;
+`git diff --check` passed before the checkpoint.
