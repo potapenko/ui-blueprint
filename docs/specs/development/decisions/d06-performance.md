@@ -8,7 +8,7 @@
 - Do not read when: proposing periodic monitoring or an unrelated workload.
 - Requires: [PERFORMANCE@1](../../acceptance/performance.md),
   [PILOTS@1](../../acceptance/pilots.md), [D05](d05-limits.md), [evidence](evidence.md).
-- Conditional Native request input: [UIB.D06-NATIVE-REQUEST@1](d06-native-request.md).
+- Conditional Native request input: [UIB.D06-NATIVE-REQUEST@2](d06-native-request.md).
 - Owner/deadline: C01 freezes thresholds before candidate evaluation; Q02 evaluates
   fixed post-Q01 candidate; adapter owners expose timing/quality evidence.
 
@@ -87,5 +87,9 @@ Explicit user benchmark/launch instruction2026-10-09 and ROADMAP D06 register
 Controlled017d85c proves a real76-node/Snapshot/OpenB/context delta; original75-node
 evidence is preserved, not called equivalent. New input receives fresh direct API
 baseline, complete off/on cohorts and ALL SAME100/200/300/750ms numeric gates.
+N05-NATIVE-FIDELITY-002 subsequently reconciles only the prospective Native input
+quality method in request-only@2:76 is the recorded reference, every structural
+exception requires same-call evidence, all returned data/logical controls and
+numeric/sample budgets remain required. Historical failures retain their status.
 This registration changes only selected workload/reference; protected CONTENT
 quality/cost/privacy/bounds and all Web results remain. No runtime acceptance.

@@ -91,8 +91,8 @@ permission expansion; recorded B−3801 remains stopped.
 Offline boundary/overflow/Unicode/type/array/batch/stream/pixel/PNG/cleanup checks must
 precede live qualification; source and synthetic checks do not prove SDK lifetime.
 Preserve actual F02 known fields/values/coverage,160/depth9 and1100×1050px;
-[D06@2 request-only@1](d06-native-request.md) selects the honest76-node input with
-all original facts/extras and same gates; original75 records remain historical.
+[D06@2 request-only@2](d06-native-request.md) preserves the76-node reference input,
+all available facts/extras and same gates; proved variation follows its same-call criterion. Original75 records and failed @1 results remain historical.
 Never lower quality/fabricate nodes; all positive pilots stay protected.
 Later authorized H01 proof covers actual acquisition/copy/encoding costs, callbacks/
 handles/images/helpers after cancel/detach/timeout, AX ACK survival and another Target's

@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 33.
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 34.
 - Authority: Active; stability: Evolving; accepted/released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -71,6 +71,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `V02-PROTECTED-001`: [NATIVE-SESSION@2](product/native-session.md)/[D03@4](development/decisions/d03-data.md) reuses existing FillSecret through a private one-use Native delivery source under [V02](../plans/ui-blueprint/packets/V02-protected-input.md). No core/analysis/wire/legacy change; actual capability and privacy acceptance separate.
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 ## Select a route
+`N05-NATIVE-FIDELITY-002`: [Native request-only@2](development/decisions/d06-native-request.md) registers root-selected Q01 reconciliation under ROADMAP D06: keep logical controls/all available source data, require same-call proof for anonymous topology variation, preserve numerical/sample/field/privacy limits and old failures. Prospective diagnostic quality plus separately attributed unchanged shipping numeric evidence; no collector policy or product-source change, final acceptance pending.
 `W06-FIDELITY-001`: [WEB-DOCUMENTS@1](product/web-documents.md) registers raw AX focusability and explicit bounded whole-document selection under [W06](../plans/ui-blueprint/packets/W06-web-fidelity.md), preserving core0.1/analysis0.2/ordinary Web scopes/D06; registration is not runtime acceptance.
 `Q02-NATIVE-REQUEST-001`: [D06@2](development/decisions/d06-performance.md)/[Native request-only@1](development/decisions/d06-native-request.md) registers honest76-node input and fresh direct baseline under explicit user benchmark authorization, same100/200/300/750ms gates and unchanged historical75 records; acquisition@3.PROOF reference reconciled, no candidate pass.
 `L01-INSPECT-001` / `L01-OBSERVE-001` / `L01-DIFF-001/002`: [CLI@6](product/cli.md) preserves inspect/observe and reconciles [recorded diff@2](product/cli-diff.md) under [selected L01 packet](../plans/ui-blueprint/packets/L01-recorded-diff.md); distinct environments stay attributed, CACHE/Delta/core0.1/analysis0.2 and live gates unchanged.
@@ -87,8 +88,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 ## Routing invariants
-`UIB.ROUTING.NODES`: every new node is at most 100 physical lines. Stable clause
-IDs identify meaning; source line ranges aid fidelity checks and do not replace
+`UIB.ROUTING.NODES`: every new node is at most 100 physical lines. Stable clause IDs identify meaning; source line ranges aid fidelity checks and do not replace
 IDs. Original imported documents remain unchanged. Leaf `CONTENT` clauses retain
 normative distinctions and source-local examples; example numbers are not defaults.
 Explicit `Requires` links name semantic dependencies; navigation/provenance links
