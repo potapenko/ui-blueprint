@@ -107,3 +107,17 @@ are byte-identical to R1. Existing broader R1 arithmetic/privacy/comparison chec
 remain applicable; they were not repeated solely for these presentation changes.
 R2 installed-path check follows the source checkpoint. Both independent critics
 must review these actual images before acceptance; R1 remains rejected and retained.
+
+
+R2 source checkpoint `c274c92321771ed0732b955eeefa8cf504491523` pushed. Fresh core
+build/verify from that exact saved revision passed. Installed CLI reproduced all
+six files of both R2 final packages byte-for-byte. Run-owned non-image installation
+was removed and removal verified; all images/shared inputs remain unchanged.
+
+Author-reported R2 presentation ambiguity (not independent acceptance):
+`drawing_inventory` reuses `public_label`, which falls back from empty visible text
+to a reviewed accessibility name. Its generic `text` label may confuse a control's
+accessible name with its displayed field content. Caller state can explicitly
+supply a public draft (Director: spiel); a bounded correction should distinguish
+these channels and give explicit caller draft precedence without exporting arbitrary
+private values. Source/images remain held for consolidated R2 critic observations.
