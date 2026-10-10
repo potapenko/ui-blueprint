@@ -11,16 +11,19 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: Settings R4 принят; Director-only R5 image repair running.
+Текущий шаг: Settings R4 принят; Director-only R6 prompt simplification running.
 Агенты fork_turns none, настройки наследуются, без nesting:
 - HBP-C `/root/blueprint_content`: Settings C1–C6 accepted, C7 accepted cd099a1;
   Director C3 inset anchors rejected; [receipt](receipts/human-blueprint-content-review.md) ecdaa2f.
 - HBP-V `/root/blueprint_visual`: Settings V1–V6 accepted при1536×1024;
   Director detail alignment/178/8 anchors rejected; [receipt](receipts/human-blueprint-visual-review.md)81b41e5.
-- HBP-I `/root/blueprint_builder`: R5 только Director. Existing literal R4 prompt
-  уже требует верные endpoints; сначала image edit retry без нового исходника,
-  тестов или installed build. Конкретная найденная ambiguity может обосновать
-  малое template refinement, но не растущий dump/новый flag/framework.
+- HBP-I `/root/blueprint_builder`: R6 только Director. R5 unchanged-prompt edit rejected (C02b2dae/Vfb1f803):
+  malformed inset chains остались и были продублированы в overview. Теперь
+  упростить actual prompt до одного inset popup-left→input-left с continuous
+  border segments, убрать duplicate chains, сохранить размеры/content/state.
+  Не повторять same edit, не добавлять очередной instruction wall. Settings frozen;
+  если template меняет его prompt, явно сопоставить delta с принятой картинкой,
+  не приписывать старому raster новую source revision.
 Product sourcecd099a19b73760f3a2144439b10e3a04b9daf79c; installed544260a.
 R3 value/name/privacy regression checks приняты; R4 менял только template.
 R4 core verify и оба six-file packages reproduced byte-for-byte. Accepted Settings:
@@ -36,7 +39,7 @@ Settings. Director text spiel, keyboard-active/not-applied и общий вид 
 Основание: прямой запрос пользователя и HBP-HUMAN-001, DRAWING1.2,
 EXPORT/drawing leaves2, registry36; прочая selected closure неизменна.
 Метод image-edit — средство сохранения уже принятых частей, не новый product scope.
-После нейтрального R5 оба тех же критика проверяют только Director и фактически
+После нейтрального R6 оба тех же критика проверяют только Director и фактически
 изменённые criteria. C7 и Settings не переоткрываются без relevant change.
 Все images/tool originals retained; untracked after-title-spacing.png untouched.
 Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
