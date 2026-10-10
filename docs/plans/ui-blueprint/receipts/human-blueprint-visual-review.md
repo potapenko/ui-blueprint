@@ -480,3 +480,69 @@ coverage remains partial/imported. No residual visual blocker remains in this sc
 
 Only this receipt changed; frozen images/packages/source remain intact. Documentation
 `git diff --check` passed. No unrelated check, extra agent or further image was used.
+
+## FRESH-01 — generic prompt and bounded fresh-generation assessment
+
+New explicit user objective received 2026-10-10: the real CLI should prepare useful
+blueprints from scratch, rather than perfect selected images through editing. Same
+continuing HBP-V, V1–V6, receipt-only ownership and registry36/EXPORT@2/DRAWING@1.2
+closure. R1–R8 are prior observed evidence, not fresh-generation acceptance. No
+unchanged code re-audit, new agent, new standard or speculative research is needed.
+
+Generic recommendations from the repeated observed failures:
+
+- Resolve the displayed text channel explicitly: visible label, accessibility name
+  and permitted caller draft have different meanings. The finished drawing must
+  receive one unambiguous field-content instruction. A parent aggregate must not
+  become a duplicate control/header; editing instructions must not enter the normal
+  fresh-document prompt.
+- Use a complete overview for source coverage and named partial details for specific
+  relationships. A spacing detail needs only input/result rectangles in one common
+  column. Omit competing container frames when they do not provide a measured edge.
+  A small same-source corner fragment can own an inset without duplicating it in
+  the full detail. This is a general composition rule, not a hardcoded Director skin.
+- Supply a small deterministic set of useful measurements with explicit semantic
+  endpoint pairs and display labels. Separate drawing annotations from source text.
+  Put a dimension only in the view containing both its actual boundaries; naming
+  a disconnected guide does not establish association. Do not ask for optional
+  candidate tables, duplicate measurements or dimensions on every text node.
+- Preserve categorical geometry (nesting, order, common edges, equal-width control
+  columns) while identifying raster scale as schematic. Do not promise CAD accuracy.
+- State the graphic rule once clearly: continuous solid blue ground, white outlines/
+  type/dimensions, no source screenshot fills. Known keyboard-active state uses an
+  extra outline plus its explicit non-applied meaning; known off knobs stay outlined.
+  Keep all safe meaningful text, units/rounding and compact source/status notes.
+
+Proposed fixed assessment, for root to pin before candidate generation:
+
+1. Select Director, Settings and one additional authorized real form with original
+   UI image and measured source facts. The third form should introduce a different
+   useful relationship rather than being chosen after seeing successful output.
+2. Freeze one CLI revision and each literal prompt/source package. Run exactly two
+   independent fresh calls per form, original UI references only. Record every
+   resulting image's actual native size. No previous blueprint, image edit, manual
+   prompt wrapper, best-of selection or replacement of an unattractive result.
+3. Review all six actual images independently before author explanation. Check
+   V1–V6 against their own source/required labels at the declared delivery size.
+   Record each cell's pass/fail and exact blocking region; report source/prompt
+   omissions separately from generation deviations. The two current baseline
+   images are a separate baseline pair, not substitutes for favourable cohort cells.
+4. Report the full matrix and full-pass count out of six. Six successes support
+   only this bounded cohort, not universal reliability or statistical assurance.
+   Any failing cell remains visible and prevents an all-cohort success claim.
+   A later generic compiler revision may receive a newly declared fresh cohort;
+   it does not replace failed cells or trigger individual-image polishing.
+
+Fairness boundary: missing/changed source labels or state, invented controls,
+wrong or ambiguous endpoint association, missing required useful dimensions,
+screenshot-like fills and unreadable mandatory text are material failures.
+Schematic proportionality, small raster alignment variation, antialiasing and taste
+are not new gates. An obviously interior start of a width dimension is an anchor
+failure, not a minor proportionality issue. A valid partial detail does not omit
+scope when the full overview preserves it. Repeated known-source sizes may share
+one clear dimension rather than creating a new exhaustive-label requirement.
+
+This proposal evaluates the generic pipeline through a fixed collection of honest
+results. It does not pre-approve a future prompt or image. Await neutral baseline
+paths, then the root-pinned cohort; no fresh image has been reviewed for FRESH-01 yet.
+Only this receipt changed; `git diff --check` passed before its checkpoint.
