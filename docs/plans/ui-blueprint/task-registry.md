@@ -11,19 +11,19 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: R1 получен и отклонён обоими критиками; тот же исполнитель делает R2.
+Текущий шаг: R2 получен и отклонён по тексту/привязкам; тот же исполнитель делает R3.
 Агенты запущены с fork_turns none, без model/effort override:
-- HBP-C `/root/blueprint_content`: R1 reject в1a9200e,
-  [receipt](receipts/human-blueprint-content-review.md); ждёт нейтральный R2.
-- HBP-V `/root/blueprint_visual`: R1 reject в39c43f6,
-  [receipt](receipts/human-blueprint-visual-review.md); ждёт нейтральный R2.
-- HBP-I `/root/blueprint_builder`: R2 running, единый repair packet передан;
-  R1 source43d62d4 и installed proof8181a98 сохранены в
+- HBP-C `/root/blueprint_content`: R2 reject вd61931e,
+  [receipt](receipts/human-blueprint-content-review.md); R2 observations завершены; ждёт нейтральный R3.
+- HBP-V `/root/blueprint_visual`: R2 reject в650f87c,
+  [receipt](receipts/human-blueprint-visual-review.md); R2 observations завершены; ждёт нейтральный R3.
+- HBP-I `/root/blueprint_builder`: R3 running, единый repair packet передан;
+  R2 sourcec274c92 и installed proof0bc806d сохранены в
   [receipt](receipts/human-blueprint-implementation.md).
 R1 сделал prompt короче, убрал длинные дроби и screenshot-панели, сохранил exact
 machine facts. Но обязательные размеры/состояния и несколько привязок стрелок
 не проходят критерии; поэтому ни один новый кандидат пока не принят.
-R2 исправляет mandatory per-view размерный brief, видимые anchors/выравнивание,
+R2 ввёл mandatory per-view размерный brief и исправил часть anchors/выравнивания,
 keyboard-active/not-applied Director, outline-only off switches Settings и
 человеческие units/captions. Дополнительно исполнитель восстанавливает обнаруженную
 им утрату compact Space/transform attribution и три исторические doc attribution.
@@ -34,9 +34,17 @@ Spec Basis текущего цикла: registry36, DRAWING1.2, EXPORT/drawing l
 прочая выбранная closure и защищённые domains сохраняются. Root восстановил
 AGENTS → runbook/registry → spec registry; нового изменения product scope нет.
 R1 images/packages: system temp `uib-hbp-ebwz2bfy`, director/settings-r1,
-1536×1024 при100%. Старые изображения сохраняются. После R2 те же два критика
+1536×1024 при100%. Старые изображения сохраняются. После R3 те же два критика
 сначала независимо смотрят новый raster, затем сопоставляют author evidence;
 финальный C7 и installed proof должны соответствовать окончательному source.
+R2 visual receipt650f87c: V1/V3/V4 проходят у обоих; Director geometry schematic
+приемлема, нового pixel-perfect требования нет. Реальные blockers: Director показывает
+accessible name вместо spiel и теряет keyboard-active/not-applied; Settings16/12/22
+и footer15 имеют неверные/неясные endpoints. Content подтвердил эти failures и
+смягчил первоначальное впечатление о равных raster widths — оно не CAD gate.
+R3 устраняет label/value ambiguity без расширения private value export, делает
+существующие endpoints однозначными и сохраняет принятую композицию. R2 images
+retained; six-file installed reproduction прошло, но не заменяет visual acceptance.
 Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
 
 ## Предыдущая цель P0–P7 — завершена
