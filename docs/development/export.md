@@ -505,3 +505,12 @@ require real border pairs on one axis, a positive observed relation and common
 TopLeft Space. Proposed distances are absolute, so they conservatively keep named
 anchors without claiming start/end spatial ordering from a positive magnitude.
 All precise measurements and source semantics remain in the same machine records.
+
+C6 separates full-shape size views from scalar edge fragments. Anchor-only context
+no longer adds an entire parent rectangle to a control's size view. Every fragment
+contains only two source-edge captions, placement-context links, one prepared value
+and one symbolic topology; full meaningful objects/state/geometry remain in overview
+and size views. Singleton inputs get an explicit size view. Captions prefer reported
+accessibility names or supported single-line labels, otherwise plain role/topology
+context. Multiline source UI text stays verbatim render data; no ligature-token
+blacklist or invented icon classification is introduced.

@@ -21,15 +21,12 @@ slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
 Height LEFT. Never omit the enclosing width because another shape has a width.
 Each line connects to that shape's actual opposite borders; the right side stays
 free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
-LOCAL BORDER FRAGMENT: redraw its tiny symbolic layout as an enlarged source-edge
-fragment. Exactly TWO named borders: START left/upper, END right/lower, one arrow
-BETWEEN touching both. Preserve their connected corner returns. No third baseline,
-whole box, detached ticks or external frame; the diagram tokens themselves are not
-printed. Keep these fragments separate from the overview. Print BOTH exact source-
-anchor captions beside their respective fragments. A label-layout boundary is the
-layout boundary of the named text, even when the source has no painted box. Show
-that text beside its boundary so it cannot be mistaken for a neighboring control.
-A named outer source boundary is not an inner control/group boundary.
+EDGE FRAGMENT blocks are independent of the full-shape size views. Redraw ONLY
+their two named edge-corner fragments and the one dimension arrow, preserving
+orientation and named source boundaries. The two printed names are their captions.
+Do not import the full parent/control rectangles from other views into a fragment.
+An unpainted label-layout boundary belongs to the named text; include that short
+text context by the boundary. An outer boundary never means an inner control edge.
 NAMED-ANCHOR RELATION is conservative attribution, never a border-corner sketch.
 Use every assigned measurement once. Labels are {{units}}; preserve ≈ on rounded
 numbers. No invented padding/radius/tolerance or exact-sum claim for rounded chains.

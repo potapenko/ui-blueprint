@@ -730,3 +730,38 @@ C5 installed proof: fresh core build/installed verify at exact source
 files of all three frozen C5 packages byte-for-byte. Run-owned non-image install
 removed and absence verified; shared inputs/packages and every image original/copy
 retained. This execution receipt remains separate from independent C/V acceptance.
+
+## FRESH01-C6 isolated-fragment packet — 2026-10-11
+
+Root approved C6 after C5's content2/6 and visual0/6 with unchanged C7 pass. Confirmed
+source cause: scalar recipes were mixed with full render-member boxes (including
+Footer in Close detail), and a scalar repeated relation/caption/sketch prescriptions.
+Trigger source has multiline text and no captured accessibility/icon-leaf distinction;
+promoting that whole string into exact captions copied the ligature token to images.
+
+Same five write paths. Actual size/repeated-render members now remain separate from
+anchor-only context. Scalar relations emit in a dedicated edge section, without full
+Object/box records; each has two safe human edge names, context links, prepared value
+and one topology. No repeated parent rectangle or three redundant scalar recipes.
+Meaningful source/geometry/state remain in overview and size views. Singleton inputs
+get their own size view, including this cohort's Director366×44; root12 remains.
+
+Captions use reported accessibility names or supported single-line human labels,
+otherwise lowercase role and source-topology context (e.g. expanded button/control
+group). Original multiline UI text remains verbatim in render data and machine files;
+no word blacklist, source deletion, new icon classification or Value export. Tests
+show genuine single-line expand_more remains allowed. C5 centers/proposed fallback,
+C3 safe state/context/privacy and C2 clipping proof are unchanged.
+
+Verification:36focused compiler tests, export all-target clippy, formatting/diff
+checks and CLI build passed. New tests cover caption provenance versus preserved
+UI text, singleton-input size view, no full-object records in edge fragments and no
+Footer parent injected into Close size view. All5non-prompt files×3packages match C5
+byte-for-byte. No prototype generation or new input adaptation.
+
+New C6 root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c6-q6xwk84w`.
+Literal frozen CLI packages/commands have prompt chars9562/13065/15932. The immutable
+manifest will pin this checkpoint and unchanged qualified input/original UIref hashes
+before exactly6fresh first requests. All earlier cohorts/images/originals retained;
+no edits/history/wrappers/rerolls. Neutral all6 handoff then installed source proof.

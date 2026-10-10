@@ -665,28 +665,17 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
     assert!(
         prompt
             .lines()
-            .any(|line| line.starts_with("LOCAL BORDER FRAGMENT")
-                && line.contains("VERTICAL arrow")
-                && line.contains("Bottom boundary → END select")
-                && line.contains("Top boundary; ≈16 CSS px"))
+            .any(|line| line.starts_with("EDGE FRAGMENT (VERTICAL")
+                && line.contains("Bottom boundary")
+                && line.contains("Top boundary"))
     );
     let fragments = prompt
         .lines()
-        .filter(|line| line.starts_with("LOCAL BORDER FRAGMENT: ") && line.contains(" arrow;"))
+        .filter(|line| line.starts_with("EDGE FRAGMENT ("))
         .count();
     assert!(fragments > 0);
-    assert_eq!(
-        prompt
-            .matches("PRINT THIS FRAGMENT'S START CAPTION exactly:")
-            .count(),
-        fragments
-    );
-    assert_eq!(
-        prompt
-            .matches("PRINT THIS FRAGMENT'S END CAPTION exactly:")
-            .count(),
-        fragments
-    );
+    assert_eq!(prompt.matches("print START ").count(), fragments);
+    assert_eq!(prompt.matches("print END ").count(), fragments);
     assert!(prompt.contains("Placement context 1: LayoutBounds;"));
     assert!(prompt.contains("Viewport, CSS px, TopLeft; transform local only"));
     assert!(prompt.contains("WIDTH ≈198 CSS px") && prompt.contains("HEIGHT ≈33 CSS px"));
@@ -818,7 +807,7 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
     assert_eq!(prompt.matches("WIDTH ≈198 CSS px").count(), 1);
     assert_eq!(prompt.matches("LOCAL INSET DETAIL").count(), 1);
     let inset = prompt.split("LOCAL INSET DETAIL").nth(1).unwrap();
-    assert!(inset.contains("END input") && inset.contains("20 CSS px"));
+    assert!(inset.contains("print END \"input") && inset.contains("20 CSS px"));
     assert!(!inset.contains("Right"));
     let overview = prompt.split("LOCAL DETAIL").next().unwrap();
     assert!(overview.contains("WIDTH ≈238 CSS px"));
@@ -876,9 +865,9 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     let package = compile(&brief, limits()).unwrap();
     assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object Button: Button (native \"AXButton\")"));
+    assert!(prompt.contains("Object button: Button (native \"AXButton\")"));
     assert!(prompt.contains("Placement context 1: AccessibilityBounds;"));
-    assert!(prompt.contains("DIMENSIONED RECTANGLE Button"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE button"));
     assert!(!prompt.contains("LayoutBounds"));
     let dims = data(&package, "dimensions.json");
     assert_eq!(dims[0]["dimensions"][0]["value"], 97.296875);
@@ -922,9 +911,9 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     }
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object Button: Button (native \"DIV\")"));
+    assert!(prompt.contains("Object button: Button (native \"DIV\")"));
     assert!(prompt.contains("Placement context 1: LayoutBounds;"));
-    assert!(prompt.contains("DIMENSIONED RECTANGLE Button"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE button"));
     assert!(!prompt.contains("REQUIRED Width AccessibilityBounds"));
     let dims = data(&package, "dimensions.json");
     assert!(
@@ -951,7 +940,7 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     assert!(
         std::str::from_utf8(&package.files()["prompt.txt"])
             .unwrap()
-            .contains("Object BUTTON: BUTTON;")
+            .contains("Object button: BUTTON;")
     );
 }
 
@@ -1221,7 +1210,7 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
         let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
         let object = prompt
             .lines()
-            .find(|s| s.starts_with("Object Button:"))
+            .find(|s| s.starts_with("Object button:"))
             .unwrap();
         assert_eq!(
             object.contains("CLIPPED LAYOUT"),
@@ -1232,7 +1221,7 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             assert!(
                 prompt
                     .lines()
-                    .any(|s| s.starts_with("DIMENSIONED RECTANGLE Button:")
+                    .any(|s| s.starts_with("DIMENSIONED RECTANGLE button:")
                         && s.contains(if kind == FrameKind::PaintBounds {
                             "HEIGHT 20 CSS px"
                         } else {
@@ -1461,5 +1450,130 @@ fn enclosing_width_has_below_slot_and_fragments_have_exact_anchor_captions() {
     );
     assert!(prompt.contains("PRINT BELOW-SHAPE WIDTH LABEL exactly:"));
     assert!(prompt.contains("width 1200 CSS px"));
-    assert!(prompt.contains("layout boundary of the named text"));
+    assert!(prompt.contains("label-layout boundary belongs to the named text"));
+}
+
+#[test]
+fn multiline_ui_text_is_retained_but_not_promoted_to_anchor_caption() {
+    let mut b = fixture("proposed");
+    proposed(&mut b).components[9].label = "Open menu\nexpand_more".into();
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("; print \"Open menu\\nexpand_more\""));
+    assert!(
+        prompt
+            .lines()
+            .filter(|s| s.starts_with("DIMENSIONED RECTANGLE")
+                || s.starts_with("EDGE FRAGMENT")
+                || s.starts_with("NAMED-ANCHOR RELATION"))
+            .all(|s| !s.contains("expand_more"))
+    );
+    assert!(
+        std::str::from_utf8(&p.files()["scene.json"])
+            .unwrap()
+            .contains("Open menu\\nexpand_more")
+    );
+    proposed(&mut b).components[9].label = "expand_more".into();
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("DIMENSIONED RECTANGLE button \"expand_more\""));
+}
+
+#[test]
+fn singleton_input_gets_size_view_and_anchor_fragments_have_no_whole_objects() {
+    let mut b = fixture("proposed");
+    proposed(&mut b).components[9].role = Role::Textbox;
+    proposed(&mut b).components[9].label = "Standalone input".into();
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    let sizes = prompt.split("LOCAL DETAIL").skip(1).collect::<Vec<_>>();
+    assert!(
+        sizes
+            .iter()
+            .any(|s| s.contains("Object input \"Standalone input\"")
+                && s.contains("DIMENSIONED RECTANGLE input \"Standalone input\""))
+    );
+    let fragments = prompt
+        .split("LOCAL EDGE DETAILS")
+        .nth(1)
+        .unwrap()
+        .split("НАНЕСЕНИЕ РАЗМЕРОВ")
+        .next()
+        .unwrap();
+    assert!(!fragments.contains("Object ") && !fragments.contains("box[x"));
+    assert!(!fragments.contains("DIMENSIONED RECTANGLE"));
+}
+
+#[test]
+fn footer_anchor_does_not_become_whole_parent_in_control_size_view() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[0], "DIV");
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("FOOTER".into()),
+    };
+    set_test_role(&mut snapshot.nodes[2], "BUTTON");
+    let Property::Requested { state, .. } = &mut snapshot.nodes[2].properties[1] else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Text("Close".into()),
+    };
+    for (i, r) in [
+        (
+            0,
+            Rect {
+                x: 0.0,
+                y: 0.0,
+                width: 200.0,
+                height: 100.0,
+            },
+        ),
+        (
+            2,
+            Rect {
+                x: 140.0,
+                y: 50.0,
+                width: 40.0,
+                height: 30.0,
+            },
+        ),
+    ] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(r);
+    }
+    snapshot.nodes[0].children = vec![snapshot.nodes[2].key.clone()];
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    let detail = prompt
+        .split("LOCAL DETAIL \"Close — dimensions\"")
+        .nth(1)
+        .unwrap()
+        .split("LOCAL DETAIL")
+        .next()
+        .unwrap()
+        .split("LOCAL EDGE DETAILS")
+        .next()
+        .unwrap();
+    assert!(detail.contains("WIDTH 40 CSS px") && detail.contains("HEIGHT 30 CSS px"));
+    assert!(!detail.contains("Object container") && !detail.contains("native \"FOOTER\""));
+    let fragments = prompt
+        .split("LOCAL EDGE DETAILS")
+        .nth(1)
+        .unwrap()
+        .split("НАНЕСЕНИЕ РАЗМЕРОВ")
+        .next()
+        .unwrap();
+    assert!(fragments.contains("20 CSS px"));
+    assert!(!fragments.contains("box[x") && !fragments.contains("Object "));
 }

@@ -426,7 +426,7 @@ fn unit_name(unit: Unit) -> &'static str {
 }
 fn component_name(v: &SceneView, index: usize) -> String {
     let c = &v.components[index];
-    let role = component_role(c);
+    let role = component_role(c).to_ascii_lowercase();
     let human_role = match role.to_ascii_lowercase().as_str() {
         "div" | "group" => "container",
         "form" => "form outline",
@@ -442,27 +442,40 @@ fn component_name(v: &SceneView, index: usize) -> String {
         }
         _ => None,
     });
-    let label = if !c.children.is_empty() {
-        accessible.unwrap_or_else(|| public_label(c))
-    } else {
-        public_label(c)
-    };
-    let aggregate = accessible.is_none()
-        && child_indices(v, index).iter().any(|&i| {
-            let child_label = public_label(&v.components[i]);
-            !child_label.is_empty() && label.contains(child_label)
-        });
-    if !aggregate && !label.is_empty() && (c.children.is_empty() || label.len() <= 80) {
+    let visible = public_label(c);
+    let aggregate = child_indices(v, index).iter().any(|&i| {
+        let child_label = public_label(&v.components[i]);
+        !child_label.is_empty() && visible.contains(child_label)
+    });
+    let label =
+        accessible.or_else(|| (!aggregate && !visible.contains(['\n', '\r'])).then_some(visible));
+    if let Some(label) = label.filter(|label| !label.is_empty() && label.len() <= 80) {
         return format!("{human_role} {:?}", label.replace('\n', " / "));
     }
-    if let Some(child) = child_indices(v, index).into_iter().find(|&i| {
-        let text = public_label(&v.components[i]);
-        !text.is_empty() && text.len() <= 80
-    }) {
-        return format!(
-            "{human_role} containing {:?}",
-            public_label(&v.components[child]).replace('\n', " / ")
-        );
+    if control(c) {
+        if c.properties
+            .iter()
+            .any(|p| p.field() == Field::Expanded && matches!(p.known(), Some(Value::Flag(true))))
+        {
+            return format!("expanded {human_role}");
+        }
+        if let Some(parent) = v.components.iter().position(|p| p.children.contains(&c.id)) {
+            let siblings = child_indices(v, parent)
+                .into_iter()
+                .filter(|&i| control(&v.components[i]))
+                .collect::<Vec<_>>();
+            if let Some(position) = siblings.iter().position(|&i| i == index) {
+                return format!("{human_role}, item {} in its group", position + 1);
+            }
+        }
+    }
+    if human_role == "container"
+        && !c.children.is_empty()
+        && child_indices(v, index)
+            .iter()
+            .all(|&i| control(&v.components[i]))
+    {
+        return "control group".into();
     }
     if human_role == "container"
         && !c.children.is_empty()
@@ -828,20 +841,6 @@ fn local_measures(
             done.push(d.id.clone());
             continue;
         }
-        append(
-            &mut out,
-            &format!(
-                "LOCAL BORDER FRAGMENT: {direction} arrow; START {start} → END {end}; {} {}; {}.\nPRINT THIS FRAGMENT'S START CAPTION exactly: {start:?}.\nPRINT THIS FRAGMENT'S END CAPTION exactly: {end:?}.\n",
-                display_number(value),
-                unit_name(d.units),
-                if d.anchors[0].edge == d.anchors[1].edge {
-                    "nested"
-                } else {
-                    "opposing"
-                }
-            ),
-            limit,
-        )?;
         {
             let label = format!("{} {}", display_number(value), unit_name(d.units));
             let horizontal = matches!(d.anchors[0].edge, Edge::Left | Edge::Right);
@@ -875,7 +874,9 @@ fn local_measures(
             append(
                 &mut out,
                 &format!(
-                    "Symbolic layout: START border first (left/upper), END border second (right/lower). Redraw just these two actual source fragments in blueprint style:\n{topology}\n"
+                    "EDGE FRAGMENT ({direction}; placement contexts {} / {}): print START {start:?}; print END {end:?}. START is left/upper; END is right/lower.\n{topology}\n",
+                    geometry(&v.components[a]).map_or(0, |g| geometry_context(v, g)),
+                    geometry(&v.components[b]).map_or(0, |g| geometry_context(v, g))
                 ),
                 limit,
             )?;
@@ -1202,7 +1203,7 @@ fn drawing_dimensions(
                 && d.anchors[0].component == c.id
                 && index(&d.anchors[1].component).is_some_and(|j| input_containers.contains(&j))
         });
-        if input_control(c) || attachment {
+        if attachment {
             overview_controls.push(i);
         } else {
             groups.push((detail_caption(v, &[i]), vec![i]));
@@ -1344,13 +1345,6 @@ fn drawing_dimensions(
             continue;
         }
         seen.push(signature);
-        if let Some(group) = destination {
-            for node in [a, b] {
-                if !members[group].contains(&node) {
-                    members[group].push(node);
-                }
-            }
-        }
         lines.push((destination, d, a, b));
     }
     let mut out = String::new();
@@ -1371,7 +1365,7 @@ fn drawing_dimensions(
     )?;
     let overview_measures = lines
         .iter()
-        .filter(|(owner, _, _, _)| owner.is_none())
+        .filter(|(owner, _, a, b)| owner.is_none() && a == b)
         .map(|(_, d, a, b)| (*d, *a, *b))
         .collect::<Vec<_>>();
     append(
@@ -1382,7 +1376,7 @@ fn drawing_dimensions(
     for (i, (title, controls)) in groups.iter().enumerate() {
         let owned = lines
             .iter()
-            .filter(|(owner, _, _, _)| *owner == Some(i))
+            .filter(|(owner, _, a, b)| *owner == Some(i) && a == b)
             .map(|(_, d, a, b)| (*d, *a, *b))
             .collect::<Vec<_>>();
         if owned.is_empty() {
@@ -1409,6 +1403,21 @@ fn drawing_dimensions(
         }
         append(&mut out, &local_measures(v, &owned, limit)?, limit)?;
     }
+    append(
+        &mut out,
+        "LOCAL EDGE DETAILS — each block below is ONLY two source-edge fragments, never whole controls/parents.\n",
+        limit,
+    )?;
+    let scalar_fragments = lines
+        .iter()
+        .filter(|(_, _, a, b)| a != b)
+        .map(|(_, d, a, b)| (*d, *a, *b))
+        .collect::<Vec<_>>();
+    append(
+        &mut out,
+        &local_measures(v, &scalar_fragments, limit)?,
+        limit,
+    )?;
     for (d, a, b) in insets {
         append(
             &mut out,
