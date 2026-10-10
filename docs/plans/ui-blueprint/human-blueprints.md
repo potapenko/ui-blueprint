@@ -509,3 +509,34 @@ retain exact original inputs/refs, pin three literal packages and six new paths.
 Author29focused tests/Clippy/formatting passed; five machine files of each case equal
 C2. This does not assert visual acceptance or final C7. All6freshcalls follow same
 unchanged protocol; C1/C2 outputs and their failed verdicts remain immutable.
+
+
+### C3 disposition and accepted FRESH01-C4-I — 2026-10-11
+
+C68342bb/V76b4735 independently accept mobile2 only (1/6); no full cohort pass.
+ID/procedure/unknown-property pollution is gone. Remaining actual failures are
+missing required state badges, wrong source-border association and omitted Close
+height. The Director semantic badge exists in required printable instructions;
+its absence is not labelled missing source data. C7's bounded Enabled/state/actions/
+Space restoration passes; installedc312dbe reproduces all three frozen packages.
+
+Same builder now implements one bounded next hypothesis: symbolic ASCII/box-drawing
+mini-layouts inside literal prompt for scalar pairs. Exactly two actual source-edge
+fragments, prepared number and human endpoint names; vertical upper-start/arrow/
+lower-end, horizontal two verticals/arrow between. No third baseline/extra whole
+box/legend. Critics confirmed this preserves C3/V5; corners were a technique, not
+an acceptance gate. Redraw in blueprint linework; do not print construction tokens.
+Signed/zero/reversed/unknown cases must not imply invented positive separation;
+conservative existing attribution is preferable where a sketch cannot be truthful.
+No new geometry engine or metric-CAD promise.
+
+Use explicit per-view printable caption strings for required semantic states and
+retain state across repetitions. Keep source-derived meaning (selected is not
+silently applied). Put W/H height left when a right inset exists, so a height guide
+cannot stand in for the measured object edge. Both actual edge dimensions remain
+required; no badge-only fallback or removal of difficult scalar facts. Current
+noise filtering, safe states/context, clipping and all exact machine facts stay.
+Same five writable paths; focused changed-format/state tests, no broader audit.
+Freeze NEW source/literal packages/original refs in separate C4 system-temp manifest,
+then all6 fresh calls under unchanged protocol, no prototype/retouch/history/wrapper/
+reroll selection. Same two critics image-first and bounded installed reconciliation.

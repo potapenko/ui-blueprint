@@ -85,7 +85,16 @@ root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c3-6cv0u75c,
 frozen-cohort-manifest.json hash9c247e9647a62e2cecb30a578e9edaaf2ffeb39d9867a4e6c8fd5cab98a537c9.
 Samequalifiedinputs/originalrefs,3literalpackages,6freshoutputpaths; author29focused
 tests/clippy/fmt passed, all5machinefiles eachcase exactC2. Generationrunning.
-Next neutralall6→sameC/V image-first/source/installedreconciliation. C1/C2retained.
+C3 complete/rejected: C68342bb/V76b4735 both1/6fullpass(M2). Noisegone,
+remainingD1/D2statebadgeomissions/D1third-baselinegap;S1Close30omitted;
+S2footer15onheightguide;M1Allstateinrepeateddetail. Literalbadgewasrequired;
+no newgate. C7boundedrestorationPASS e92dd7d; installedc312dbe3packagesexact.
+C4-I approved/running on2026-10-11: samebuilder/5paths, symbolictwo-source-edge
+mini-layout inside literalprompt (not newrasterrenderer), exactper-viewprintable
+statecaptions/repeatedstate, heightleftwhenrightinsetpreventscompetingguide.
+Samefacts/criteria; preserve signedzero/negative/unknownordering conservatively,
+no inventedseparation. Focusedformat/statechecks only, priorC7reuse. NextNEW
+immutableC4freeze+all6freshoutputs; C1/C2/C3retained, no retries/edits/selection.
 
 
 Старые R1–R8 не свежие испытания.
