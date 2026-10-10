@@ -347,3 +347,81 @@ Settings R4 remains attributed to cd099a1/R4 prompt; this is not a new Settings 
 Run-owned non-image installation removed and removal verified. Every image/original
 and shared review package remains retained. No further source/template/image changes;
 root owns final reconciliation of the continuing critics' independent acceptance.
+
+
+# FRESH-01 — source-derived fresh generation goal
+
+New direct user follow-up2026-10-10, authorized root finite packet. Prior accepted
+R1–R8 images are historical iterative evidence, not fresh-generation generalization.
+Same current-master ownership, inherited model/settings, unchanged C/V substantive
+criteria and EXPORT2/DRAWING1.2 registry36 closure. Initial diagnostic scope was
+receipt/temp-input only; root then accepted the finite generic repair plan before
+product edits. Restore the existing self-contained/source-faithful contract; no new
+product epoch or feature. Explicit write set: compile.rs, prompt-template.txt,
+compiler.rs tests, docs/development/export.md and this existing receipt. No schema,
+engine, collector, configuration, new flag/framework, other-repository or UI changes.
+
+## Two neutral baseline outputs
+
+Root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-baseline-hhcyuw74`.
+Sourceb008a4408d3e5e5b73e9cd36da0932c217411d25; HEAD1599ce4 contained coordination-only
+changes. Actual CLI six-file packages matched saved R8 packages byte-for-byte.
+Exactly ONE fresh call each, original E04 UI references only; no previous generated
+image or edit/manual wrapper/retry. Images `director-baseline.png`,
+`settings-baseline.png`, each1536×1024, native100% review. Literal packages
+`director-package/`, `settings-package/` and `*-command.json` retained.
+Prompt SHA256: Director8de5e2f0db70f18c19ec2fbd8a7b5464c97dfc99f50623b990c96e32f4bc3b59;
+Settingsb3d4bdb2b5784ac84b48529d6daeaf9e0332d082824dd90f1276a6680659cd1c.
+Tool originals retained in the established generated_images directory:
+`exec-8e67bddb-f926-4384-8b93-17adbfbdd694.png` and
+`exec-27ae9b7e-67bc-46a0-88b9-ebb0068a2699.png`; temp files are copies.
+Neutral images preceded author diagnosis. Both critics independently identified the
+unconditional search/results/inset recipe leaking into Settings. Source inspection
+confirmed that same template was injected into every view, with an edit-history
+preamble. No new web research was needed for this concrete confirmed source defect.
+
+## Third real source qualification
+
+Advisor raw root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-mobile-filters-OBW93z`;
+original `mobile-filters.jpg`,390×844. Same FRESH temp root contains
+`mobile-snapshot.json`, `mobile-metadata.json`, `mobile-import.py`, and
+`mobile-import-limitations.json` with original source hashes and conversion limits.
+Public CLI preflight produced `mobile-preflight-package`, not an image.
+All53 DOM layouts/native roles and original timing preserved; partial coverage with17
+omitted. Actual26 targeted AX reads and backend identities remain separate evidence;
+no invented mapping, timestamp, canonical collector or native-mobile acceptance.
+Recorded visible-region intersection normalized to Rect with derived attribution;
+Cast layout height44 versus visible27 remains distinct. Pressed stays its own source
+declaration, never selected/checked. No Field::Value; placeholders separate and input
+empty status only. Raw filters_present=false means URL parameter absent, not closed
+panel. Continuing content critic independently qualified this carrier at500b044.
+
+## Accepted generic repair and focused evidence
+
+The per-view plan now owns its chosen dimensions and real source members. Supported
+input/adjacent-control structure can yield a partial spacing plus inset detail;
+actual repeated control collections yield representative spacing; distinct singleton
+controls retain their size/inset detail. No unsupported screen archetype is requested.
+The engine's existing parent/child inset results distinguish an overflowing wrapper
+from overview boundaries; no new geometric quantities or unions are computed here.
+Source-equal sizes may share a representative only within compatible contexts; exact
+source records/IDs/frames/units remain unmodified. Known placeholders and clipped
+visible-region facts now appear explicitly rather than relying on the screenshot.
+
+Compiler26 and CLI export20 passed; exporter/CLI Clippy -D warnings and formatting
+passed. New negatives cover no-input sources receiving no search/inset recipe and
+unrelated spaces not merging equal-size details. Placeholder/full-versus-clipped
+regression retains both original numeric facts; previous AX/canonical-role/privacy/
+raw-value/mode/refusal coverage remains. No extra prototype generation was performed.
+Actual preflight plans: Director1spacing+1inset; Settings3supported details;
+mobile3groups (Source,Years,Genres). Counts describe this evidence, not product defaults.
+
+## Frozen candidate cohort contract
+
+Freeze source revision, literal CLI prompts/commands, exact original reference paths
+and unchanged C/V criteria BEFORE generation. Three real cases (Director,Settings,
+mobileFilters), TWO independent fresh calls each, all6 outputs/refusals retained and
+counted. Original UI reference only; no prior blueprint, num_last_images, wrapper,
+image edit or best-of reroll. Baseline2 are separate. A6/6 pass would support only
+this exact declared cohort, not universal reliability. Root requested neutral all6
+handoff before author pass/interpretation, then installed current-source proof.

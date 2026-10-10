@@ -556,6 +556,41 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
         } else {
             String::new()
         };
+        let mut display_facts = String::new();
+        for field in [Field::Placeholder, Field::InputKind] {
+            if let Some(Value::Text(value)) = c
+                .properties
+                .iter()
+                .find(|p| p.field() == field)
+                .and_then(Property::known)
+            {
+                append(
+                    &mut display_facts,
+                    &format!(
+                        " {:?}={} (not a field value).",
+                        field,
+                        bounded_compact_json(value, limit)?
+                    ),
+                    limit,
+                )?;
+            }
+        }
+        if clipped(c) {
+            for p in &c.properties {
+                if let Some(Value::Geometry(g)) = p.known()
+                    && p.field() == Field::VisibleRegion
+                {
+                    append(
+                        &mut display_facts,
+                        &format!(
+                            " CLIPPED: reported visible-region {}; show only this portion, never reinterpret full layout height as visible height.",
+                            bounded_compact_json(&g.shape, limit)?
+                        ),
+                        limit,
+                    )?;
+                }
+            }
+        }
         // Container text that repeats a child's text is an aggregate, not another label/control.
         let aggregate = !label.is_empty()
             && c.children
@@ -637,203 +672,396 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
                 parent,
                 states,
                 c.state_and_actions.as_deref().unwrap_or(""),
-                field_content
+                format_args!("{field_content}{display_facts}")
             ),
             limit,
         )?;
     }
     Ok(out)
 }
-fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) -> Result<String> {
-    let mut out = String::new();
-    let mut repeated = Vec::new();
-    for d in &dimensions.dimensions {
-        let Some(value) = d.value else {
-            continue;
-        };
-        let Some(a) = v
-            .components
-            .iter()
-            .position(|c| c.id == d.anchors[0].component)
-        else {
-            continue;
-        };
-        let Some(b) = v
-            .components
-            .iter()
-            .position(|c| c.id == d.anchors[1].component)
-        else {
-            continue;
-        };
-        let ca = &v.components[a];
-        let cb = &v.components[b];
-        if [ca, cb].iter().zip(&d.anchors).any(|(c, anchor)| {
-            geometry(c).is_some_and(|g| {
-                g.frame_kind != anchor.frame_kind || g.coordinate_space != anchor.space
-            })
-        }) {
-            continue;
+fn child_indices(v: &SceneView, index: usize) -> Vec<usize> {
+    v.components[index]
+        .children
+        .iter()
+        .filter_map(|id| v.components.iter().position(|c| &c.id == id))
+        .collect()
+}
+fn input_control(c: &SceneComponent) -> bool {
+    matches!(
+        component_role(c).to_ascii_lowercase().as_str(),
+        "input" | "textbox" | "searchbox"
+    )
+}
+fn rect(c: &SceneComponent) -> Option<&Rect> {
+    geometry(c).and_then(|g| match &g.shape {
+        Shape::Rect(r) => Some(r),
+        _ => None,
+    })
+}
+fn same_frame(a: &SceneComponent, b: &SceneComponent) -> bool {
+    a.surface == b.surface
+        && match (geometry(a), geometry(b)) {
+            (Some(g), Some(h)) => {
+                g.coordinate_space == h.coordinate_space && g.frame_kind == h.frame_kind
+            }
+            _ => false,
         }
-        let extent = a == b;
-        if d.source_kind == SourceKind::Observed {
-            if extent {
-                let contains_input = ca
-                    .children
-                    .iter()
-                    .filter_map(|id| v.components.iter().find(|c| &c.id == id))
-                    .any(|c| {
-                        matches!(
-                            component_role(c).to_ascii_lowercase().as_str(),
-                            "input" | "searchbox" | "textbox"
-                        )
-                    });
-                if !component_role(ca).eq_ignore_ascii_case("form")
-                    && !control(ca)
-                    && !contains_input
-                {
-                    continue;
-                }
-                if value < 12.0 {
-                    continue;
-                }
-            } else {
-                if value <= 0.5 {
-                    continue;
-                }
-                let large_control = |c: &SceneComponent| {
-                    control(c)
-                        && geometry(c).is_some_and(|g| match &g.shape {
-                            Shape::Rect(r) => r.width >= 12.0 && r.height >= 12.0,
-                            _ => false,
-                        })
-                };
-                let has_input = |c: &SceneComponent| {
-                    c.children
-                        .iter()
-                        .filter_map(|id| v.components.iter().find(|x| &x.id == id))
-                        .any(|x| {
-                            matches!(
-                                component_role(x).to_ascii_lowercase().as_str(),
-                                "input" | "searchbox" | "textbox"
-                            )
-                        })
-                };
-                let footer = component_role(cb).eq_ignore_ascii_case("footer")
-                    || matches!(&cb.native_role,
-                    Some(Availability::Known {value:Value::Text(name)}) if name=="FOOTER");
-                let required = match d.label.as_str() {
-                    "Vertical edge gap" => {
-                        large_control(ca)
-                            && (large_control(cb)
-                                || has_input(cb)
-                                || cb
-                                    .children
-                                    .iter()
-                                    .filter_map(|id| v.components.iter().find(|x| &x.id == id))
-                                    .any(control))
-                    }
-                    "Repeated control clear gap" => matches!(
-                        component_role(ca).to_ascii_lowercase().as_str(),
-                        "select" | "combobox"
-                    ),
-                    "Horizontal edge gap" => {
-                        matches!(
-                            component_role(ca).to_ascii_lowercase().as_str(),
-                            "label" | "text"
-                        ) && matches!(
-                            component_role(cb).to_ascii_lowercase().as_str(),
-                            "select" | "combobox"
-                        )
-                    }
-                    "Root left edge inset" => {
-                        component_role(ca).eq_ignore_ascii_case("form")
-                            && matches!(
-                                component_role(cb).to_ascii_lowercase().as_str(),
-                                "label" | "text"
-                            )
-                    }
-                    "Root right edge inset" => {
-                        component_role(cb).eq_ignore_ascii_case("form")
-                            && matches!(
-                                component_role(ca).to_ascii_lowercase().as_str(),
-                                "select" | "combobox"
-                            )
-                    }
-                    "Measured left inset" => has_input(ca) && large_control(cb),
-                    "Measured right inset" => large_control(ca) && footer,
-                    "Measured bottom inset" => large_control(ca) && footer,
-                    _ => false,
-                };
-                if !required {
-                    continue;
-                }
+}
+fn clipped(c: &SceneComponent) -> bool {
+    let Some(g) = geometry(c) else { return false };
+    c.properties.iter().any(|p|matches!(p.known(),Some(Value::Geometry(visible))
+        if p.field()==Field::VisibleRegion && visible.coordinate_space==g.coordinate_space && visible.shape!=g.shape))
+}
+fn detail_caption(v: &SceneView, members: &[usize]) -> String {
+    let parent = members.first().and_then(|first| {
+        v.components
+            .iter()
+            .position(|p| p.children.contains(&v.components[*first].id))
+    });
+    let ancestor = parent.and_then(|parent| {
+        v.components
+            .iter()
+            .position(|p| p.children.contains(&v.components[parent].id))
+    });
+    if let Some(ancestor) = ancestor {
+        let near = child_indices(v, ancestor);
+        for i in near
+            .iter()
+            .copied()
+            .chain(near.iter().flat_map(|&i| child_indices(v, i)))
+        {
+            let c = &v.components[i];
+            if matches!(
+                component_role(c).to_ascii_lowercase().as_str(),
+                "label" | "text" | "heading"
+            ) && !public_label(c).is_empty()
+            {
+                return format!("{} — dimensions", public_label(c));
             }
         }
-        // One field-width annotation also describes source-equal aligned result controls.
-        // This is display selection only; all exact dimensions stay in the machine package.
-        if extent
-            && d.anchors[0].edge == Edge::Left
-            && d.anchors[1].edge == Edge::Right
-            && control(ca)
-            && v.components[..a].iter().any(|other| {
-                matches!(
-                    component_role(other).to_ascii_lowercase().as_str(),
-                    "input" | "textbox" | "searchbox"
-                ) && other.surface == ca.surface
-                    && match (geometry(other), geometry(ca)) {
-                        (Some(g), Some(h))
-                            if g.coordinate_space == h.coordinate_space
-                                && g.frame_kind == h.frame_kind =>
-                        {
-                            match (&g.shape, &h.shape) {
-                                (Shape::Rect(r), Shape::Rect(q)) => {
-                                    r.x == q.x && r.width == q.width
-                                }
-                                _ => false,
-                            }
-                        }
-                        _ => false,
-                    }
+    }
+    if members.len() == 1 && !public_label(&v.components[members[0]]).is_empty() {
+        return format!(
+            "{} — dimensions",
+            public_label(&v.components[members[0]]).replace('\n', " / ")
+        );
+    }
+    "Control dimensions and spacing".into()
+}
+fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) -> Result<String> {
+    let index = |id: &str| v.components.iter().position(|c| c.id == id);
+    let large = |i: usize| {
+        control(&v.components[i])
+            && !clipped(&v.components[i])
+            && rect(&v.components[i]).is_some_and(|r| r.width >= 12.0 && r.height >= 12.0)
+    };
+    let frame_matches = |d: &Dimension| {
+        d.anchors.iter().all(|a| {
+            index(&a.component).is_some_and(|i| {
+                geometry(&v.components[i])
+                    .is_some_and(|g| g.frame_kind == a.frame_kind && g.coordinate_space == a.space)
             })
+        })
+    };
+    let available: Vec<_> = dimensions
+        .dimensions
+        .iter()
+        .filter(|d| d.value.is_some() && frame_matches(d))
+        .collect();
+    // The engine's existing parent/child inset results identify an overflowing wrapper.
+    // No union, new quantity, source identity or invented container is calculated here.
+    let mut overview: Vec<usize> = v
+        .components
+        .iter()
+        .enumerate()
+        .filter(|(i, c)| {
+            !control(c)
+                && !c.children.is_empty()
+                && !v.components.iter().any(|p| p.children.contains(&c.id))
+                && !available.iter().any(|d| {
+                    d.label.starts_with("Measured")
+                        && d.value.is_some_and(|n| n < 0.0)
+                        && d.anchors.iter().any(|a| a.component == c.id)
+                        && d.anchors.iter().any(|a| c.children.contains(&a.component))
+                })
+                && rect(&v.components[*i]).is_some()
+        })
+        .map(|(i, _)| i)
+        .collect();
+    let mut groups: Vec<(String, Vec<usize>)> = Vec::new();
+    let mut input_containers = Vec::new();
+    for i in 0..v.components.len() {
+        let children = child_indices(v, i);
+        let input = children
+            .iter()
+            .copied()
+            .find(|&j| large(j) && input_control(&v.components[j]));
+        let direct_rows = children
+            .iter()
+            .copied()
+            .filter(|&j| large(j) && !input_control(&v.components[j]))
+            .collect::<Vec<_>>();
+        let rows = children.iter().find_map(|&j| {
+            let controls = child_indices(v, j)
+                .into_iter()
+                .filter(|&k| large(k) && !input_control(&v.components[k]))
+                .collect::<Vec<_>>();
+            (controls.len() >= 2).then_some(controls)
+        });
+        let rows = rows.or_else(|| (direct_rows.len() >= 2).then_some(direct_rows));
+        if let (Some(input), Some(rows)) = (input, rows) {
+            if !same_frame(&v.components[input], &v.components[rows[0]])
+                || !same_frame(&v.components[input], &v.components[rows[1]])
+            {
+                continue;
+            }
+            overview.push(i);
+            input_containers.push(i);
+            groups.push((
+                "Input and adjacent controls — partial spacing".into(),
+                vec![input, rows[0], rows[1]],
+            ));
+        }
+    }
+    for i in 0..v.components.len() {
+        let controls = child_indices(v, i)
+            .into_iter()
+            .filter(|&j| large(j))
+            .collect::<Vec<_>>();
+        if controls.len() < 2
+            || controls
+                .iter()
+                .any(|j| groups.iter().any(|(_, members)| members.contains(j)))
         {
             continue;
         }
-        let popup_extent = extent
-            && ca
-                .children
+        let first = controls[0];
+        let members = controls
+            .into_iter()
+            .filter(|&i| same_frame(&v.components[first], &v.components[i]))
+            .take(4)
+            .collect::<Vec<_>>();
+        if members.len() < 2 {
+            continue;
+        }
+        groups.push((detail_caption(v, &members), members));
+    }
+    for d in &available {
+        if d.label != "Repeated control clear gap" || d.value.is_none_or(|x| x <= 0.0) {
+            continue;
+        }
+        let (Some(a), Some(b)) = (
+            index(&d.anchors[0].component),
+            index(&d.anchors[1].component),
+        ) else {
+            continue;
+        };
+        if !matches!(
+            component_role(&v.components[a])
+                .to_ascii_lowercase()
+                .as_str(),
+            "select" | "combobox"
+        ) || !large(a)
+            || !large(b)
+            || groups.iter().flat_map(|(_, m)| m).any(|&i| {
+                component_role(&v.components[i]) == component_role(&v.components[a])
+                    && same_frame(&v.components[i], &v.components[a])
+                    && match (rect(&v.components[i]), rect(&v.components[a])) {
+                        (Some(r), Some(q)) => r.width == q.width && r.height == q.height,
+                        _ => false,
+                    }
+            })
+            || groups.iter().any(|(_, m)| m.contains(&a) || m.contains(&b))
+        {
+            continue;
+        }
+        let members = vec![a, b];
+        groups.push((detail_caption(v, &members), members));
+    }
+    let mut overview_controls = Vec::new();
+    for i in 0..v.components.len() {
+        if !large(i) || groups.iter().any(|(_, m)| m.contains(&i)) {
+            continue;
+        }
+        let c = &v.components[i];
+        let represented = groups
+            .iter()
+            .flat_map(|(_, m)| m)
+            .chain(overview_controls.iter())
+            .any(|&j| {
+                let other = &v.components[j];
+                component_role(other) == component_role(c)
+                    && match (geometry(other), geometry(c), rect(other), rect(c)) {
+                        (Some(g), Some(h), Some(a), Some(b)) => {
+                            g.coordinate_space == h.coordinate_space
+                                && g.frame_kind == h.frame_kind
+                                && a.width == b.width
+                                && a.height == b.height
+                        }
+                        _ => false,
+                    }
+            });
+        if represented {
+            continue;
+        }
+        let attachment = available.iter().any(|d| {
+            d.label == "Vertical edge gap"
+                && d.anchors[0].component == c.id
+                && index(&d.anchors[1].component).is_some_and(|j| input_containers.contains(&j))
+        });
+        if input_control(c) || attachment {
+            overview_controls.push(i);
+        } else {
+            groups.push((detail_caption(v, &[i]), vec![i]));
+        }
+    }
+    let owner = |i: usize| groups.iter().position(|(_, m)| m.contains(&i));
+    let mut lines: Vec<(Option<usize>, String)> = Vec::new();
+    let mut members = groups.iter().map(|(_, m)| m.clone()).collect::<Vec<_>>();
+    for (group, (_, controls)) in groups.iter().enumerate() {
+        for &control in controls {
+            if let Some(parent) = v
+                .components
                 .iter()
-                .filter_map(|id| v.components.iter().find(|c| &c.id == id))
-                .any(|c| {
-                    matches!(
-                        component_role(c).to_ascii_lowercase().as_str(),
-                        "input" | "textbox" | "searchbox"
-                    )
-                });
-        // Only exact equal values with the same role/edge pair share a representative.
-        // This never merges source components or claims equality from rounded labels.
+                .position(|p| p.children.contains(&v.components[control].id))
+            {
+                for label in child_indices(v, parent) {
+                    if matches!(
+                        component_role(&v.components[label])
+                            .to_ascii_lowercase()
+                            .as_str(),
+                        "label" | "text"
+                    ) && !members[group].contains(&label)
+                    {
+                        members[group].push(label);
+                    }
+                }
+            }
+        }
+    }
+    let mut insets: Vec<(&Dimension, usize, usize)> = Vec::new();
+    let mut seen = Vec::new();
+    for d in available {
+        let (Some(a), Some(b), Some(value)) = (
+            index(&d.anchors[0].component),
+            index(&d.anchors[1].component),
+            d.value,
+        ) else {
+            continue;
+        };
+        let (ca, cb) = (&v.components[a], &v.components[b]);
+        let extent = a == b;
+        let mut destination = owner(a).or_else(|| owner(b));
+        let mut admitted = d.source_kind == SourceKind::Proposed;
+        if extent {
+            admitted |=
+                overview.contains(&a) || overview_controls.contains(&a) || owner(a).is_some();
+            if overview.contains(&a) || overview_controls.contains(&a) {
+                destination = None;
+            }
+        } else if value > 0.0 {
+            let same_group = owner(a).is_some() && owner(a) == owner(b);
+            let horizontal = matches!(d.anchors[0].edge, Edge::Left | Edge::Right);
+            let aligned = match (rect(ca), rect(cb)) {
+                (Some(r), Some(q)) => {
+                    if horizontal {
+                        r.y == q.y
+                    } else {
+                        r.x == q.x
+                    }
+                }
+                _ => false,
+            };
+            let label_to_control = matches!(
+                component_role(ca).to_ascii_lowercase().as_str(),
+                "label" | "text"
+            ) && owner(b).is_some();
+            if d.label.contains("gap") && ((same_group && aligned) || label_to_control) {
+                admitted = true;
+            }
+            if d.label == "Vertical edge gap"
+                && overview_controls.contains(&a)
+                && input_containers.contains(&b)
+            {
+                admitted = true;
+                destination = None;
+            }
+            // A reported list's top may coincide with its first control's top. Keep
+            // the original dimension anchors, and include that source context in the detail.
+            if d.label == "Vertical edge gap"
+                && owner(a).is_some()
+                && child_indices(v, b).iter().any(|i| owner(*i) == owner(a))
+            {
+                admitted = true;
+            }
+            if d.label == "Measured left inset"
+                && input_containers.contains(&a)
+                && input_control(cb)
+            {
+                if !insets.iter().any(|(_, parent, _)| *parent == a) {
+                    insets.push((d, a, b));
+                }
+                continue;
+            }
+            let footer = matches!(&cb.native_role,Some(Availability::Known {value:Value::Text(name)}) if name=="FOOTER");
+            if footer
+                && owner(a).is_some()
+                && matches!(
+                    d.label.as_str(),
+                    "Measured right inset" | "Measured bottom inset"
+                )
+            {
+                admitted = true;
+            }
+            if d.label == "Root left edge inset"
+                && overview.contains(&a)
+                && matches!(
+                    component_role(cb).to_ascii_lowercase().as_str(),
+                    "label" | "text"
+                )
+            {
+                admitted = true;
+                destination = None;
+            }
+            if d.label == "Root right edge inset"
+                && overview.contains(&b)
+                && owner(a).is_some()
+                && matches!(
+                    component_role(ca).to_ascii_lowercase().as_str(),
+                    "select" | "combobox"
+                )
+            {
+                admitted = true;
+                destination = None;
+            }
+        }
+        if !admitted {
+            continue;
+        }
         let signature = format!(
-            "{}|{}|{:?}|{:?}|{:?}|{:?}|{}",
+            "{:?}|{}|{:?}|{:?}|{:?}|{}",
+            destination,
             d.label,
-            component_role(ca),
-            component_role(cb),
             d.anchors[0].edge,
             d.anchors[1].edge,
             d.units,
             value.to_bits()
         );
-        if repeated.contains(&signature) {
+        if seen.contains(&signature) {
             continue;
         }
-        repeated.push(signature);
-        append(
-            &mut out,
-            &format!(
-                "REQUIRED {}{}: start {} {:?} edge; end {} {:?} edge; label {} {}.\n",
-                if popup_extent {
-                    "OVERVIEW ONLY — "
-                } else {
-                    ""
-                },
+        seen.push(signature);
+        if let Some(group) = destination {
+            for node in [a, b] {
+                if !members[group].contains(&node) {
+                    members[group].push(node);
+                }
+            }
+        }
+        lines.push((
+            destination,
+            format!(
+                "REQUIRED {}: start {} {:?} edge; end {} {:?} edge; label {} {}.\n",
                 d.label,
                 component_name(ca, a),
                 d.anchors[0].edge,
@@ -842,11 +1070,68 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                 display_number(value),
                 unit_name(d.units)
             ),
+        ));
+    }
+    let mut out = String::new();
+    append(
+        &mut out,
+        "VIEW PLAN — draw ONLY the views listed here. Complete overview preserves all meaningful source controls; details are explicitly partial, not additional UI.\nOVERVIEW: full declared visible scope; no invented offscreen content.\n",
+        limit,
+    )?;
+    for (_, line) in lines.iter().filter(|(owner, _)| owner.is_none()) {
+        append(&mut out, line, limit)?;
+    }
+    for (i, (title, controls)) in groups.iter().enumerate() {
+        let owned = lines
+            .iter()
+            .filter(|(owner, _)| *owner == Some(i))
+            .collect::<Vec<_>>();
+        if owned.is_empty() {
+            continue;
+        }
+        append(
+            &mut out,
+            &format!(
+                "DETAIL {} — {:?}, PARTIAL. Draw source controls {:?}; additional named anchor context {:?}. Do not turn an anchor context into another control or extra wrapper. No other controls in this detail.\n",
+                i + 1,
+                title,
+                controls.iter().map(|n| n + 1).collect::<Vec<_>>(),
+                members[i]
+                    .iter()
+                    .filter(|n| !controls.contains(n))
+                    .map(|n| n + 1)
+                    .collect::<Vec<_>>()
+            ),
+            limit,
+        )?;
+        append(
+            &mut out,
+            "Draw only these controls on their recorded common axes; no enclosing parent frame or extra header. Gap arrows touch actual control borders, never an added separator. Any named text-layout edge is a short labelled construction edge, not the end of glyphs.\n",
+            limit,
+        )?;
+        if members[i].iter().any(|&n|matches!(&v.components[n].native_role,Some(Availability::Known {value:Value::Text(name)}) if name=="FOOTER")) {
+            append(&mut out,"This detail additionally needs the actual footer RIGHT and BOTTOM border fragments for its named insets; label those edges. Keep button WIDTH and HEIGHT present; no top inset or decorative enclosing frame.\n",limit)?;
+        }
+        for (_, line) in owned {
+            append(&mut out, line, limit)?;
+        }
+    }
+    for (d, a, b) in insets {
+        append(
+            &mut out,
+            &format!(
+                "INSET DETAIL — source {} to {}. Show ONLY two nested source corner fragments (parent left border plus short top; control left border plus short top). A single double arrow joins these uninterrupted borders directly. No enclosing frame, unrelated guides, or duplicate inset in any other view. REQUIRED left inset label {} {}.\n",
+                component_name(&v.components[a], a),
+                component_name(&v.components[b], b),
+                display_number(d.value.unwrap_or(0.0)),
+                unit_name(d.units)
+            ),
             limit,
         )?;
     }
     Ok(out)
 }
+
 fn prompt(
     b: &DrawingBrief,
     s: &Scene,
@@ -875,7 +1160,10 @@ fn prompt(
         );
         vars.insert("approval", format!("{:?}", b.metadata.approval.status));
         vars.insert("state", v.state.clone());
-        vars.insert("scope", v.scope.clone());
+        vars.insert(
+            "scope",
+            format!("{}. Not depicted: {}", v.scope, v.not_depicted.join("; ")),
+        );
         vars.insert("requirements", v.requirements.join("; "));
         vars.insert(
             "units",

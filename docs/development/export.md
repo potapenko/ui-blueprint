@@ -441,3 +441,26 @@ are retained in system temp and tool-managed originals remain unchanged.
 [HBP implementation receipt](../plans/ui-blueprint/receipts/human-blueprint-implementation.md)
 records actual prompt → image candidates and verification; it does not imply final
 image acceptance before both continuing critics approve.
+
+
+## Fresh source-derived drawing plans — FRESH-01
+
+The model-free compiler now emits a per-view drawing plan derived from sanitized
+roles, reported topology and known anchored dimensions. It no longer gives every
+form the same search/results/popup/footer recipe, or assumes an earlier generated
+blueprint exists. The overview preserves the complete meaningful selected scope;
+only supported control groups, representative spacing and measured inset details
+are planned. Repetition is editorial, never a source-identity merge. Incompatible
+Space/frame/Surface contexts cannot become one shared control detail.
+
+Public placeholders, accessible names, visible text and explicit caller draft remain
+separate. Reported clipping is included alongside the full layout rectangle; partial
+viewport content must not be completed into unseen controls. No input Value export,
+new reference IO, model call, CLI flag, schema, geometry engine or collector is added.
+The complete machine records/measurements and existing limits/refusals remain intact.
+
+The [FRESH-01 receipt](../plans/ui-blueprint/receipts/human-blueprint-implementation.md)
+separates two initial fresh baselines from the frozen three-real-form × two-request
+candidate cohort. Every first output/refusal counts; no history-image reference,
+manual prompt wrapper, edit or chosen reroll qualifies as a fresh cohort result.
+A passing cohort supports that declared set only, not universal one-shot reliability.

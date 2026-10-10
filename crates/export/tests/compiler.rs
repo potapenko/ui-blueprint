@@ -801,23 +801,19 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
             .count(),
         1
     );
-    assert_eq!(
-        required
-            .iter()
-            .filter(|s| s.contains("Measured left inset") && s.contains("record 3"))
-            .count(),
-        1
-    );
+    assert_eq!(prompt.matches("INSET DETAIL").count(), 1);
+    let inset = prompt
+        .lines()
+        .find(|s| s.starts_with("INSET DETAIL"))
+        .unwrap();
+    assert!(inset.contains("record 3") && inset.contains("label 20 CSS px"));
     assert!(
         !required
             .iter()
             .any(|s| s.contains("Measured right inset") && s.contains("record 3"))
     );
-    assert!(
-        required
-            .iter()
-            .any(|s| s.contains("OVERVIEW ONLY — Width") && s.contains("label ≈238 CSS px"))
-    );
+    let overview = prompt.split("DETAIL 1").next().unwrap();
+    assert!(overview.contains("Width LayoutBounds") && overview.contains("label ≈238 CSS px"));
     let dimensions = data(&package, "dimensions.json");
     let all = dimensions[0]["dimensions"].as_array().unwrap();
     assert!(all.iter().any(|d| d["anchors"][0]["component"] == "N004"
@@ -949,4 +945,155 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
             .unwrap()
             .contains("1: BUTTON |")
     );
+}
+
+#[test]
+fn non_input_source_never_gets_search_or_inset_recipes() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "BUTTON");
+    }
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("VIEW PLAN"));
+    assert!(!prompt.contains("Input and adjacent controls — partial spacing"));
+    assert!(!prompt.contains("INSET DETAIL"));
+    assert!(!prompt.contains("Search and result spacing"));
+    assert!(!prompt.contains("If a blueprint reference"));
+    assert!(!prompt.contains("REPLACE the conflicting"));
+}
+
+#[test]
+fn public_placeholder_and_clipped_region_are_distinct_from_full_layout_and_value() {
+    let mut brief = fixture("observed");
+    brief.views[0].state = "Input empty; no value entered".into();
+    let SourceInput::Observed {
+        snapshot,
+        public_text_fields,
+    } = &mut brief.views[0].source
+    else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[0], "INPUT");
+    public_text_fields.push(Field::Placeholder);
+    for node in &mut snapshot.nodes {
+        let mut p = node.properties[1].clone();
+        let Property::Requested { field, state, .. } = &mut p else {
+            panic!()
+        };
+        *field = Field::Placeholder;
+        *state = Availability::Known {
+            value: Value::Text("Type a query".into()),
+        };
+        node.properties.push(p);
+    }
+    snapshot.context.fields.push(Field::Placeholder);
+    snapshot.coverage.fields.push(Field::Placeholder);
+    for o in &mut snapshot.observations {
+        o.coverage.fields.push(Field::Placeholder);
+    }
+    let mut visible = snapshot.nodes[0].properties[2].clone();
+    let Property::Requested {
+        field,
+        state,
+        evidence,
+        ..
+    } = &mut visible
+    else {
+        panic!()
+    };
+    *field = Field::VisibleRegion;
+    evidence.provenance = Provenance::Derived;
+    let Availability::Known {
+        value: Value::Geometry(g),
+    } = state
+    else {
+        panic!()
+    };
+    g.frame_kind = FrameKind::VisibleRegion;
+    let Shape::Rect(r) = &mut g.shape else {
+        panic!()
+    };
+    r.height = 11.0;
+    snapshot.nodes[0].properties[4] = visible;
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    let input = prompt
+        .lines()
+        .find(|line| line.starts_with("1: Textbox"))
+        .unwrap();
+    assert!(input.contains("Placeholder=\"Type a query\" (not a field value)"));
+    assert!(
+        input.contains("CLIPPED: reported visible-region") && input.contains("\"height\":11.0")
+    );
+    assert!(input.contains("h 32"));
+    assert!(
+        !prompt
+            .lines()
+            .filter(|s| s.starts_with("REQUIRED"))
+            .any(|s| s.contains("start record 1 ") && s.contains("label 32 CSS px"))
+    );
+    let scene = data(&package, "scene.json");
+    assert_eq!(
+        scene["views"][0]["components"][0]["properties"][2]["state"]["value"]["value"]["shape"]["value"]
+            ["height"],
+        32.0
+    );
+    assert_eq!(
+        scene["views"][0]["components"][0]["properties"][4]["state"]["value"]["value"]["shape"]["value"]
+            ["height"],
+        11.0
+    );
+}
+
+#[test]
+fn control_detail_does_not_merge_equal_sizes_from_unrelated_spaces() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[0], "DIV");
+    for i in [2, 4] {
+        set_test_role(&mut snapshot.nodes[i], "SELECT");
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.coordinate_space.id = Id(format!("independent-space-{i}"));
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        *r = Rect {
+            x: 10.0,
+            y: 10.0,
+            width: 80.0,
+            height: 30.0,
+        };
+    }
+    snapshot.nodes[0].children = [2, 4].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    assert!(
+        !prompt
+            .lines()
+            .filter(|s| s.starts_with("DETAIL"))
+            .any(|s| s.contains("controls [3, 5]"))
+    );
+    for record in [3, 5] {
+        assert!(
+            prompt
+                .lines()
+                .filter(|s| s.starts_with("REQUIRED Width"))
+                .any(|s| s.contains(&format!("start record {record} "))
+                    && s.contains("label 80 CSS px"))
+        );
+    }
 }
