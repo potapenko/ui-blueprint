@@ -701,3 +701,32 @@ The new immutable manifest will pin this checkpoint plus unchanged qualified inp
 original UI references and six new output paths before generation. Exactly6fresh
 first requests; no wrapper/edit/history/reroll. All earlier images and failures remain.
 Neutral all6 handoff precedes author verdict; installed saved-source proof follows.
+
+## FRESH01-C5 frozen six-output handoff
+
+Source `405882351f90bb5e468c20989d7d4c3f0baed115` committed/pushed before first request.
+C5 `frozen-cohort-manifest.json` SHA256
+`12c83375746d5e2a41483032815b44b87b4b39d1aac2a2a1affefc6bc1e18037`
+was saved before generation and remains immutable. Three literal prompts, identical
+qualified inputs and original-only references stayed unchanged. Exactly6fresh first
+calls returned6images;0refusals,0edits,0history refs,0wrappers,0rerolls. All count.
+
+| C5 image | Actual native100% raster |
+| --- | --- |
+| director-cohort-1.png |1536×1024|
+| director-cohort-2.png |1536×1024|
+| settings-cohort-1.png |1036×1518|
+| settings-cohort-2.png |1036×1518|
+| mobile-cohort-1.png |1024×1536|
+| mobile-cohort-2.png |1024×1536|
+
+C5 `cohort-results.json` records exact original/copy/hash/size. Every tool original
+was copied and retained. Earlier cohorts, manifests, source packages and images
+remain unchanged. All6were delivered neutrally to root for both existing critics
+before author verdict. Source/images held; execution is not acceptance.
+
+C5 installed proof: fresh core build/installed verify at exact source
+`405882351f90bb5e468c20989d7d4c3f0baed115` passed. Installed CLI reproduced all six
+files of all three frozen C5 packages byte-for-byte. Run-owned non-image install
+removed and absence verified; shared inputs/packages and every image original/copy
+retained. This execution receipt remains separate from independent C/V acceptance.
