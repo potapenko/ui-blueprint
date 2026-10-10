@@ -458,3 +458,11 @@ retained FRESH system-temp root. No image deletion, substitution or ranking. All
 were handed to root neutrally before author visual interpretation. Rendered output
 is not acceptance: the same two critics own the frozen C/V verdict for each image.
 Current-source installed reproduction follows; no universal reliability claim.
+
+
+FRESH01-C1 installed proof: fresh core build and installed verification at exact
+`76f14ac5a2ce6cb45a54e9c16b64342492d361fb` passed. Installed CLI reproduced ALL six
+files of each frozen Director, Settings and mobile package byte-for-byte. Run-owned
+non-image installation removed and removal verified; all original/copied images,
+raw source, imported carrier and shared review packages remain retained. Source,
+criteria, prompts and cohort outputs held unchanged for the same critics' verdict.
