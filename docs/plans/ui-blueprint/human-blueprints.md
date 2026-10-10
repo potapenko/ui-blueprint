@@ -334,3 +334,52 @@ This acceptance protocol is root's verification choice under the user's new prom
 quality goal; it adds no product feature, schema or arbitrary raster precision gate.
 Existing user-approved image quality criteria remain. Prior image acceptance stays
 historical and is not silently relabelled as pipeline reliability.
+
+
+### FRESH-01 baseline reconciliation and third input
+
+Both critics independently rejected current b008a44 fresh Director/Settings pair.
+They confirmed an unconditional search/results/inset detail recipe and old edit
+preamble in the actual Settings CLI prompt; invented search/results in its image
+are thus supported template contamination, not speculation about ImageGen. Director
+also has redundant inset/state-detail failures. Baseline image directory is recorded
+in the registry. These observations authorize correction of the existing generic
+prompt within the approved scope, not fixture-specific exceptions.
+
+Third input was obtained by the authorized web advisor and independently read by
+both critics before candidate outputs. Source handoff in system-temp
+uib-mobile-filters-OBW93z documents non-atomic but bracket-stable viewport390×844,
+53visible/partialDOM/26addressedAX, zero saved raw input values, restoration and
+partial lower-content coverage. Full captured scope includes Back/Filters,Source
+modes,Years,14genres,Director and truncatedCast. Actual fullCast44height differs
+from visible27; do not confuse clipping with control height. There are no result
+rows/popup/Apply/Close/footer in this scope. Expected layout questions come from
+these measured facts, not generic recipes copied from the first two cases.
+
+
+### FRESH-01-I accepted implementation packet
+
+Root accepted the builder's finite plan after both independent baseline findings.
+Authority is the user's explicit new-goal execution request plus existing source-
+faithful/self-contained EXPORT2/DRAWING1.2 obligations (Restore), not an invention
+from an attractive image. The unconditional Director recipe/edit preamble is the
+confirmed implementation defect. Generic per-view selection is the chosen remedy.
+
+Exact product writes: crates/export/src/compile.rs, prompt-template.txt in that
+directory, crates/export/tests/compiler.rs, docs/development/export.md, existing
+implementation receipt. Reuse current roles/topology/anchors to emit one coherent
+view plan; supported control-size/repeated-adjacency/inset details only when source
+supports them. No new framework/model/schema/config/flag/dependency or screen-name
+constants. Preserve machine files/frame/Space/roles/privacy/refusals and distinguish
+placeholders/public draft, pressed/selected/checked and clipping. Temp third-case
+import must retain actual provenance and explicit limitations, not pretend to be
+canonical live acquisition. A genuinely missing contract is returned before coding.
+
+Focused positive/negative generic selection and protected-data tests; no unchanged
+full-platform checks. Freeze committed source, literal packages and exact original
+refs before first candidate call. Return short neutral manifest+adapter limitations,
+then execute entire predefined6 without microstep approval if no authority/data gap.
+No prototype/reroll images between baseline and cohort. All outputs go to same two
+critics image-first before author narratives. Verify installed final source and
+literal packages; checkpoint/push under established lock. Later changes get a new
+cohort, preserving every previous failure. Root does not perform source/image QA.

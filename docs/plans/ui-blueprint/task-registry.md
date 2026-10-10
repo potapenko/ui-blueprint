@@ -7,9 +7,9 @@
 [Новый раздел плана](human-blueprints.md#new-active-goal-fresh-01--2026-10-10).
 Same authorized coordinated scope: root coordination-only, один исполнитель и
 два прежних критика, no nesting/settings override. Goal active, budget не задан.
-- `/root/blueprint_builder`: FRESH-01 baseline+bounded source diagnosis running;
-  current literal CLI → fresh Director+Settings, original refs only; source edit
-  ещё не разрешён первым пакетом. Own implementation receipt.
+- `/root/blueprint_builder`: FRESH-01-I implementation running; finitegenericplan accepted after
+  baselinefindings. Exactsource/template/tests/docs set inplan; tempthirdadapter
+  and frozen6freshoutputs, nointermediateprototypes. Own implementationreceipt.
 - `/root/blueprint_content`: proposal9aaba61 returned; ждёт нейтральный baseline;
   own content receipt, no code/generation.
 - `/root/blueprint_visual`: proposal97e0371 returned; ждёт нейтральный baseline;
@@ -22,8 +22,23 @@ bounded cohortclaim, без universal/reproducible raster promise. Baseline от
 новый materiallychanged prompt → новаяполнаяcohort, прошлые failures сохраняются.
 Thirdcase selected beforeoutputs: mobileClipSearchFilters viewport390×844;
 webadvisor собирает original screenshot+runtimeDOM, exactpaths pending.
-Current next: получить2baseline images, критерии, третий реальный input;
-свести один generic implementation packet. Старые R1–R8 не свежие испытания.
+Baseline2 ready: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-baseline-hhcyuw74,
+director-baseline.png/settings-baseline.png,1536×1024 each, literalb008a44 packages.
+Bothcritics initialreject: Settings invents search/results/inset; literaltemplate
+unconditionally demands Director-shaped details + oldeditpreamble. Director has
+redundantinset/active-detail issues. This is confirmedgenerictemplateleak, not
+justmodelrandomness. No baseline mixed into finalcohort.
+Thirdsource ready: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-mobile-filters-OBW93z,
+handoff.md/mobile-filters.jpg+runtimeDOM/AX. Bothcritics pre-pinned visible390×844:
+Source3modes(Allactive),emptyYearsFrom/To,14genres2×7,emptyDirector+help,
+Castpartlyvisible;ActorVoice/loweromitted. No inventedfooter/results. Useful44vs40
+controlheights/pairedcolumns/gaps, noteverygenrelabeldimension. Builder adapts via
+existingobservedimport in systemtemp; no productioncollector/sitechange.
+Current next: genericper-viewplan implementation (Restore existingcontracts),
+thirdinputcarrier+limitations, frozenexactrevision/prompts, sixfreshcalls. Source
+planaccepted; no further microstepapproval unless concreteauthority/dataconflict.
+Vbaselinebecdda5 is0/2; Cbaselinependingreceipt, sameindependentfactsconfirmed.
+Старые R1–R8 не свежие испытания.
 
 
 ## Завершённая цель — понятные человеку blueprints, 2026-10-10
