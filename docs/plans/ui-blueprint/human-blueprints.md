@@ -1,0 +1,209 @@
+# Human-readable blueprints — active goal 2026-10-10
+
+## Authority and outcome
+
+The previous P0–P7 goal is complete at 5ff73b1. This is a new explicitly requested
+Evolve goal in the same project: improve the actual ImageGen prompt and generated
+blueprints for people, with one implementation owner and exactly two continuing
+critics. User requested: remove noisy text/long decimals; explain useful element
+sizes and details; decide what belongs on the drawing; only blue and white; never
+paste a screenshot-looking UI inside the blueprint; iterate images, use internet
+research, and work toward outstanding client-facing clarity. The Leonardo reference
+means care/detail/craft, not Renaissance styling, sepia, handwriting or decoration.
+User directly said to start the goal and agents and proceed; no reconfirmation of
+this supplied brief is needed. Root coordinates and does no product code or image QA.
+
+Final capability: a real CLI-generated, self-contained drawing prompt produces a
+clear faithful blueprint of Director and Settings from the existing real data.
+Useful overview and selected enlarged details, important dimensions and relationships
+are legible; no machine-data dump or screenshot panel. Raw numerical/source truth
+and privacy stay intact. Both critics must independently approve the final actual
+images in their scopes, not merely the prompt or compiler tests. Report actual limits
+honestly; perfection is an aspiration, not a promise of metrically exact raster.
+
+## Spec Basis and accepted change envelope
+
+Root recovered active AGENTS, implementation/root orchestration and the existing
+product-truth/QA routes. Repository HEAD 5ff73b1, registry 35; prior product source
+and installed baseline a026584, E05 source/privacy review a307bff and I02 b06f3b2.
+Read route: docs/specs/README → product/README → EXPORT@1, DRAWING-PACKAGE/STYLE/
+GEOMETRY/PROMPT-A/PROMPT-B/REVIEW@1, reference/DRAWING-EXAMPLE@1; CLI@16 and
+CLI-EXPORT@2 INPUT/BOUNDS; ANALYSIS@2/TYPES/VALIDATION@1 and explicit dependencies
+EXCHANGE@2, GEOMETRY/PROJECTIONS/MODEL/IDENTITY/BOUNDARIES/PRIVACY@1. Original
+UIB.DRAWING@1.1 in docs/engineering-blueprint-guide.md is the current visual authority.
+Full applicable closure was read by root in the preceding E04/E05 work and remains
+unchanged on this same saved HEAD; global implementation/root contracts reread now.
+RUST/DEV.RUST@2 and D01/D07 closure apply to implementation/build selection.
+
+New user authority supersedes old visual instructions requiring every raw decimal
+and inventory item on the drawing. It does NOT authorize rounding machine data,
+pruning observed controls from the source, changing units/measurements/identity,
+weakening privacy or relabelling unknown data. Register the precise presentation
+Contract Delta/revisions BEFORE implementation; update original guide and selected
+routed leaves/root references consistently. No unrelated Native/Web/host/schema/
+Cargo behavior, design of the site, dependencies, renderer or new feature platform.
+
+Provisional editorial policy, to refine with initial critic evidence before the
+first candidate: human labels use sensible rounding (e.g. 421.640625 CSS px becomes
+approximately 422 px), with a clear concise units/rounding note; exact raw values
+remain in machine artifacts. Avoid negative-zero/misleading zero, false precision
+or invented tolerances. Each visible measurement must have a reason and a clear
+pair of anchors. Explain overall extent, important controls, insets/gaps/alignment
+and a useful repeated-control detail. Do not demand a dimension for every DOM text
+box. Keep the full meaningful form visible; group repetition editorially, never
+merge source identities or infer unmeasured CSS padding/radius/hit geometry.
+
+Public visual language: flat solid blue/cyan ground, white outlines/text/dimensions,
+with line hierarchy and ample breathing room. No screenshot texture/native UI
+fills, black/grey/purple cards, gradients, glass, perspective or invented controls.
+No source IDs, M/N inventory walls, raw JSON, timestamps, internal status grids or
+large unknown-property lists on the picture. Keep necessary provenance/scale status
+compact and truthful; declared draft/checked/approval statuses remain separate.
+Human-readable component names and a few detail references are preferable to a
+legend requiring the client to decode dozens of IDs. Precise drawing criteria must
+be tied to user needs, not critic taste alone.
+
+## Baseline materials and research
+
+Saved real inputs/reference PNGs:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-e04-real-tbaWNv
+- director-reference.png, settings-reference-complete.png, original lossless PNGs;
+- director/settings-raw.json, -snapshot.json, -metadata.json, recorded command arrays.
+
+Prior generated images and literal packages:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-e05-1jq7290v
+- director-generated.png, settings-generated.png, corresponding *-package/prompt.txt.
+Use actual images and raw facts before prior author/reviewer narratives. The source
+is explicitly imported real browser data, not new live acquisition. Exact output
+is schematic, not CAD. No live website/Native input is needed for this new goal.
+Never inspect unrelated repository after-title-spacing.png.
+
+User requested ongoing internet research. Each critic researches its distinct
+question from primary expert/official sources initially, and revisits concrete
+uncertainties exposed by later images. Do not browse randomly or impose formal
+engineering standards not actually read. Keep short source-grounded rules with URLs.
+Initial leads (not product authority): NN/G visual hierarchy/progressive disclosure;
+Onshape official dimension precision/placement documentation. Native CSS measurements
+remain interface units, not manufacturing tolerances. Research informs presentation,
+not the underlying product facts or user-defined blue/white style.
+
+## Roles, ownership and cycle
+
+Exactly these three subagents, fork_turns none, inherited model/effort; no nesting.
+This direct user request authorizes internal critics for this goal, unlike the old
+P0–P7 ordinary visible-chat workflow. Reuse the SAME two critics for every candidate.
+Do not spawn replacements/extra reviewers to obtain a preferred verdict.
+
+- HBP-C: content/usefulness critic. Read-only product; own receipt
+  receipts/human-blueprint-content-review.md. Establish what the client needs to
+  learn, meaningful dimension/detail priorities, what to remove, what is missing.
+  Validate rounding, labels/anchors/units/state/source fidelity and final focused
+  implementation/privacy compatibility evidence. Internet research on information
+  hierarchy and useful dimensioning. No generation or product mutation.
+- HBP-V: visual critic. Read-only product; own receipt
+  receipts/human-blueprint-visual-review.md. Independently inspect actual images at
+  native and intended viewing size: strict blue/white drawing grammar, no screenshot
+  panels, hierarchy, typography/spacing/legibility, leaders, detail composition and
+  unnecessary decoration. Research primary drawing/visual-communication examples.
+  No generation, source code/spec edits or extra agents.
+- HBP-I: implementation/generation owner. Own crates/export source/template/tests,
+  directly affected export/CLI tests, original engineering-blueprint-guide and
+  corresponding drawing/export leaves plus spec-root routing, docs/development/export.md,
+  and receipts/human-blueprint-implementation.md. Declare exact write set before edits.
+  Preserve canonical schema/engine/data/collector and protected P0–P7 domains.
+  No new parameter/config/framework when editing an existing expression suffices.
+  Read source/plan independently while critics inspect the baseline; wait for root's
+  unified initial criteria before registering presentation choices and implementing.
+
+Root writes this coordination plan, task-registry and execution runbook only.
+Critics initially return their own artifact observations BEFORE seeing the builder's
+solution narrative. Root consolidates nonduplicated requirements; builder executes
+one complete iteration: spec delta → code/prompt → focused checks → actual ImageGen
+on both cases → checkpoint/push → neutral candidate handoff (source/data/image/prompt
+paths, revision, viewing size). Critics inspect that same candidate independently.
+Only after initial observations may root supply builder explanations for reconciliation.
+Return concrete blockers/remedies and acceptance by criterion, not vague ratings.
+
+Builder consumes both critiques and repairs the next actual candidate; keep prior
+images unchanged. No new research/QA round for unchanged accepted aspects. No fixed
+iteration quota and no endless optional perfection work: continue until user criteria
+and both critic scopes pass on actual outputs, or identify a precise genuine external
+blocker. Do not lower the target to an attractive but unreadable or incomplete image.
+At final checkpoint, reproduce through the public CLI and smallest affected installed
+path; preserve exact machine data, caller limits/refusals and public text safeguards.
+Keep imagegen-prompt model-free. Report source→prompt→image→critique coverage honestly.
+
+## Assets, operations and saving
+
+System imagegen skill, built-in image_gen default; no API key/CLI fallback without
+explicit new authority. Inspect local references before generation. An input source
+screenshot can guide geometry but must never appear as a raster UI panel in output.
+Use only current tool schema; no promised resolution that the returned image lacks.
+All images/variants and containing directories are retained in system temp forever
+from the agent's perspective (OS/user owns lifecycle); no deletion at any stage.
+Copy tool-managed originals to temp without moving/deleting originals; originals
+also remain. No Python/SVG replacement for the requested ImageGen output or image edit.
+Do not create persistent directories, run apps, modify the site or control Codex UI.
+
+Current master only. Shared fcntl.flock /tmp/ui-blueprint-master-git.lock for empty
+index check → exact own paths stage → commit → push established canonical SSH remote
+→ release. No git add ., reset/stash/clean/force, new keys, branches/worktrees.
+Own transient nonimages may be cleaned after acceptance; shared review inputs and
+all images are protected. Each completed coherent step and final receipt is committed
+and pushed. Source/visual judgments stay with workers; root receives bounded results.
+
+## Completion
+
+Both real cases have directly generated usable prompts and actual images approved
+by BOTH critics against explicit user-derived criteria; meaningful dimensions are
+readable and rounded for people, blue/white outline-only design holds, essential
+controls/data are correct, irrelevant noise is gone, details answer real questions.
+Affected code/compatibility/privacy/install checks pass; exact machine facts are
+preserved; source/rule changes and final receipts are saved/pushed. Root shows the
+best final images inline with concise outcome/limits and closes the goal only then.
+No claim of mathematical perfection, human approval or external publication.
+
+## Initial criteria selected by root — 2026-10-10
+
+Independent initial critiques are saved at content3c4730d and visualc55acfc;
+root read both full receipts before this decision. Adopt C1–C7 from
+[HBP-C](receipts/human-blueprint-content-review.md) and V1–V6 from
+[HBP-V](receipts/human-blueprint-visual-review.md) as the concrete user-derived
+acceptance map. They govern actual images as well as the source/prompt boundary.
+Visual critic corrected its tentative lower-anchor claim; do not treat that
+withdrawn observation as an established defect. The duplicate Director row and
+Settings screenshot panel are confirmed independent findings.
+
+First candidate must explain Director trigger/popup/search/result dimensions,
+attachment/list/row gaps and measured insets; Settings panel, select size and
+rhythm, measured column/edge insets, switch and Close size/position. Use a complete
+overview and purposeful enlarged detail(s), not every raw box on one crowded sheet.
+Exact reference values and anchors are in HBP-C's table; they are test expectations,
+not constants to hardcode into the generic compiler. Do not confuse the Director
+wrapper's42.90625 height with the whole open popup's extent. Both Settings switches
+stay off; Director keyboard-active suggestion is not an applied filter. Preserve
+public source labels; spiel remains explicitly reviewed caller metadata, never a
+reason to export arbitrary protected values.
+
+The prompt itself must be a concise human drawing assignment. Keeping the entire
+old metadata/inventory dump and merely naming it NONPRINTING is insufficient.
+Machine artifacts retain full exact source data; the prompt selects the information
+needed to draw the complete meaningful form and its approved dimensions/details.
+Any supplemental exact facts retained for placement must have a concrete consumer;
+no raw clock/evidence/status/ID walls. Output is blue ground/white drawing throughout,
+not screenshot recolouring. One compact factual footer replaces big provenance tables.
+
+HBP-I may extend its exact source set to observed.rs for required gap/inset values
+computed through the EXISTING engine::measure_query on explicit known anchors.
+This adds accurate derived dimensions without changing schema/engine arithmetic or
+altering existing raw dimensions. Additive derived output and editorial selection
+must be included in the pre-code Contract Delta. Do not promise byte-identical
+human artifacts when their authorized content changes; verify preservation of the
+underlying exact fields and existing compatibility/safety behavior instead.
+
+Builder now owns the full first iteration: refine exact plan, register visual rules,
+implement minimal generic formatting/selection/measurements, focused tests, literal
+public CLI prompts, actual ImageGen output and neutral candidate handoff. No further
+root grant needed for its internal steps. Actual raster size/viewing context must
+be stated and judged; do not claim unsupported4K or impose an arbitrary font quota.
+Both critics continue independently on the same revision/images after handoff.
