@@ -725,9 +725,7 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                             )
                     }
                     "Measured left inset" => has_input(ca) && large_control(cb),
-                    "Measured right inset" => {
-                        large_control(ca) && (has_input(cb) || native_role(cb) == "FOOTER")
-                    }
+                    "Measured right inset" => large_control(ca) && native_role(cb) == "FOOTER",
                     "Measured bottom inset" => large_control(ca) && native_role(cb) == "FOOTER",
                     _ => false,
                 };
@@ -736,6 +734,46 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                 }
             }
         }
+        // One field-width annotation also describes source-equal aligned result controls.
+        // This is display selection only; all exact dimensions stay in the machine package.
+        if extent
+            && d.anchors[0].edge == Edge::Left
+            && d.anchors[1].edge == Edge::Right
+            && control(ca)
+            && v.components[..a].iter().any(|other| {
+                matches!(
+                    native_role(other).to_ascii_lowercase().as_str(),
+                    "input" | "textbox" | "searchbox"
+                ) && other.surface == ca.surface
+                    && match (geometry(other), geometry(ca)) {
+                        (Some(g), Some(h))
+                            if g.coordinate_space == h.coordinate_space
+                                && g.frame_kind == h.frame_kind =>
+                        {
+                            match (&g.shape, &h.shape) {
+                                (Shape::Rect(r), Shape::Rect(q)) => {
+                                    r.x == q.x && r.width == q.width
+                                }
+                                _ => false,
+                            }
+                        }
+                        _ => false,
+                    }
+            })
+        {
+            continue;
+        }
+        let popup_extent = extent
+            && ca
+                .children
+                .iter()
+                .filter_map(|id| v.components.iter().find(|c| &c.id == id))
+                .any(|c| {
+                    matches!(
+                        native_role(c).to_ascii_lowercase().as_str(),
+                        "input" | "textbox" | "searchbox"
+                    )
+                });
         // Only exact equal values with the same role/edge pair share a representative.
         // This never merges source components or claims equality from rounded labels.
         let signature = format!(
@@ -755,7 +793,12 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
         append(
             &mut out,
             &format!(
-                "REQUIRED {}: start {} {:?} edge; end {} {:?} edge; label {} {}.\n",
+                "REQUIRED {}{}: start {} {:?} edge; end {} {:?} edge; label {} {}.\n",
+                if popup_extent {
+                    "OVERVIEW ONLY — "
+                } else {
+                    ""
+                },
                 d.label,
                 component_name(ca, a),
                 d.anchors[0].edge,

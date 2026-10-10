@@ -210,3 +210,42 @@ same generated_images directory; system-temp output is a copy. All prior images 
 No author visual verdict in this handoff. Existing source, test and installed evidence
 is unchanged and was not rerun to retry image generation. Receipt whitespace checked;
 independent Director image acceptance remains pending the same two critics.
+
+
+## Candidate R6 — neutral Director generation
+
+New `director-r6.png` in the same retained temp root,1536×1024, review native100%.
+Literal actual CLI package `director-r6-package/`, exact `director-r6-command.json`;
+prompt7,827 Unicode characters (R4 was12,217). Built-in ImageGen received that prompt
+verbatim with ONLY the inspected original E04 `director-reference.png` as source
+reference; no broken generated blueprint attached, no manual wrapper or postprocessor.
+Tool original `exec-d08ad760-60a5-4fdc-a32e-600b58c1d339.png` remains in the same
+ImageGen directory; temp output is a copy. No author image verdict in this handoff.
+
+Bounded editorial correction under existing HBP-HUMAN-001: remove repeated/competing
+instructions; one left popup/input inset, one shared width label for source-equal
+aligned input/result controls, popup extent explicitly overview-only. Director's
+required labels reduce13→11. Compiler still retains all underlying exact dimensions,
+including omitted right inset/row-width labels. No new model/geometry/schema/flag,
+fixture numeric constants or privacy changes. New synthetic test checks the display
+selection and proves both underlying exact source dimensions remain machine-visible.
+Compiler21 + CLI export20, exporter/CLI Clippy -D warnings, formatting and whitespace
+passed. No unaffected broad arithmetic/platform suites repeated.
+
+Settings R4 remains accepted and frozen; no new Settings image was generated.
+A `settings-r6-package/` plus command was produced for bounded shared-template
+reconciliation: its14 REQUIRED dimension lines are EXACTLY equal to R4; five
+non-prompt files for BOTH cases equal R4 byte-for-byte. Settings prompt is shorter
+(16,672→12,612 characters), keeping all source controls/help/state/units, blue/white
+style, complete overview, two-select gap/label edge and footer height/inset criteria.
+No criterion is intentionally changed. The accepted Settings R4 image remains
+attributed to sourcecd099a1 and its R4 literal prompt, never to this new revision.
+New source installation proof follows checkpoint; image acceptance stays separate.
+
+Narrow primary prompting evidence read 2026-10-10:
+[OpenAI Image prompting](https://developers.openai.com/api/docs/guides/image-prompting)
+advises explicit composition/required components and labelled organization; it also
+warns repeated edits can alter details intended for preservation. Applied here as
+simpler finite dimension instructions and a fresh original-reference generation,
+not as a guarantee of exact geometry or authority to change model/tool settings.
+No new reviewer criteria, CAD claim or unauthorized image postprocessing follows.

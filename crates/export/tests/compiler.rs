@@ -733,3 +733,79 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     assert!(!all.contains("Accessible search name"));
     assert!(!all.contains("UNAPPROVED_RAW_VALUE_CANARY"));
 }
+
+#[test]
+fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    for (i, role, x, y, width, height) in [
+        (0, "DIV", 10.0, 20.0, 238.25, 180.0),
+        (2, "INPUT", 30.0, 54.0, 198.25, 25.0),
+        (4, "BUTTON", 30.0, 85.0, 198.25, 24.0),
+        (6, "BUTTON", 30.0, 112.0, 198.25, 24.0),
+    ] {
+        snapshot.nodes[i].native_role = Availability::Known {
+            value: Value::Text(role.into()),
+        };
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        *r = Rect {
+            x,
+            y,
+            width,
+            height,
+        };
+    }
+    snapshot.nodes[0].children = [2, 4, 6].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    let required = prompt
+        .lines()
+        .filter(|s| s.starts_with("REQUIRED"))
+        .collect::<Vec<_>>();
+    assert_eq!(
+        required
+            .iter()
+            .filter(|s| s.contains("Width LayoutBounds") && s.contains("label ≈198 CSS px"))
+            .count(),
+        1
+    );
+    assert_eq!(
+        required
+            .iter()
+            .filter(|s| s.contains("Measured left inset") && s.contains("record 3"))
+            .count(),
+        1
+    );
+    assert!(
+        !required
+            .iter()
+            .any(|s| s.contains("Measured right inset") && s.contains("record 3"))
+    );
+    assert!(
+        required
+            .iter()
+            .any(|s| s.contains("OVERVIEW ONLY — Width") && s.contains("label ≈238 CSS px"))
+    );
+    let dimensions = data(&package, "dimensions.json");
+    let all = dimensions[0]["dimensions"].as_array().unwrap();
+    assert!(all.iter().any(|d| d["anchors"][0]["component"] == "N004"
+        && d["label"] == "Width LayoutBounds"
+        && d["value"] == 198.25));
+    assert!(all.iter().any(|d| d["anchors"][0]["component"] == "N002"
+        && d["anchors"][1]["component"] == "N000"
+        && d["label"] == "Measured right inset"
+        && d["value"] == 20.0));
+}
