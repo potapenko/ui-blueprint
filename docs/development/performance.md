@@ -233,7 +233,7 @@ Q02's packet before evaluating an incompatible workload.
 before timing. Use `tests/bridges/native/cohorts.cjs --run-authorized` with
 UIB_Q02_ALLOW=1 and UIB_Q02_RUN_CONFIG pointing to an owned system-temp JSON config:
 phase baseline/candidate, exact manifest/fixture/witness/helper/executable/baseline
-absolute paths plus matching hashes, accepted7709067 pin, registration9e08e05,
+absolute paths plus matching hashes, accepted e641543 pin, registration9e08e05,
 new temp output and build_profile. Candidate additionally requires two saved complete
 20cold/100warm baseline reports and records their hashes. No fixture launch/input
 is performed by this driver; establish literal state and fresh ownership first.
@@ -245,8 +245,11 @@ admissions/privacy are reused; baseline strategy uses scalar API reads and repor
 raw facts, not a canonical Rust response. All captures write whole natural PNGs.
 Every warm request is explicit stdin; no loop collects until it receives a command.
 20cold processes and100warm requests plus separate first call per off/on. Candidate
-reuses the actual Rust attachment, reaps prior channel helpers before configuring
-unique artifact destinations, and includes fresh helper startup on every request.
+reuses the actual Rust attachment and the accepted session-local AX SDK process.
+Capture remains a separately reaped helper with a unique per-call artifact destination;
+its startup stays in every request. Cold includes the initial AX helper startup too.
+Use the ten-input shipping helper from distribution.py, with no AXBoundary input;
+record its exact hash separately from the eleven-input diagnostic helper.
 
 Reports retain every failed/outlier request, raw canonical payload, exact PNG and
 acquisition metadata. Missing measurement makes percentile unavailable; numeric

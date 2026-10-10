@@ -1,4 +1,187 @@
-# Q02 performance — Web/Rust complete, Native release-profile verification pending
+# Q02 performance — final-source numeric gates pass, Native quality remains open
+
+## Q02-R measured final-source result — 2026-10-10
+
+**All numeric Native gates PASS; Native quality FAILS in off cold17. Overall
+D06 Native/P7 acceptance remains OPEN.** This is one complete final-source
+campaign, not a successful subset or a retry of the failed off cohort.
+
+Authority: approved PLAN.UIB@1 P0–P7 and explicit full benchmark/launch delegation,
+continued by [Q02-R packet](../packets/Q02-native-final-execution.md). No nested
+agent/chat/goal/branch/worktree. Current master only. Product source/specs/Cargo,
+other receipts, historical failures and after-title-spacing.png unchanged.
+Owned repository writes: this receipt, the literal accepted-pin check in
+[cohorts.cjs](../../../../tests/bridges/native/cohorts.cjs), and
+[performance recipe](../../../development/performance.md) pin/process description.
+
+Traversal receipt: AGENTS → docs/specs/README registry33 → decisions/README and
+acceptance/README → D06@2 CONTENT/REQUEST-INPUT and D06-NATIVE-REQUEST@1
+INPUT/METHOD/QUALITY → Native acquisition@3 METRICS/CEILINGS/ADMISSION/OWNERSHIP/
+OUTCOMES/PROOF. Complete selected closure read: PERFORMANCE/PILOTS/NATIVE-PILOTS@1,
+NATIVE@2, D02@2, D04@1, D05@4/MEMORY@2/WORK@1, D01@1/D03@4/D07@5/evidence@1;
+BOUNDARIES/ROADMAP/MODEL/IDENTITY/GEOMETRY/PROJECTIONS/FORMS/ACTIONS/CACHE/
+LIFECYCLE/PRIVACY/RUST-BOUNDARIES/REUSE/GOLDEN@1, EXCHANGE@2, RUST and DEV.RUST@2.
+Governance core/routing/coordination/evidence/delivery and QA/Computer Use read.
+Excluded: Web/analysis serialization changes, ordinary/form/PROTECTED/popup,
+new product contracts and whole Native/N03 campaign. Historical @1 dependency
+labels resolve to the registry's current additive revisions; no semantic delta.
+Requirement is complete current76-node input and original100/200/300/750ms gates.
+Observed source/records supply realization only; no new product choice was made.
+
+### Ownership and exact reproducibility
+
+Host wait_threads verified old Q02 thread01a11c77-25bf-7072-8cf6-a255fa4dc11c
+notLoaded, revision428, turn01a1203f-b27e-7152-adc0-75da18a8e74d failed with
+context_length_exceeded. No Codex UI control was attempted on this continuation.
+Fresh process census found no old fixture/helper/worker requiring retirement;
+historical71517 was never used as process authority. Root's three coordination
+files were observed/preserved; no overlapping unexpected WIP existed.
+
+Raw evidence R: `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q02-r-final-sjxmdxz7`.
+R/pins.json, build-pins.json, ownership-pins.json, environment.json,
+measurement-summary.json and quality-handoff.json retain exact commands/hashes/
+inputs and complete reports for Q01/root acceptance. All four config JSON files
+pin e64154349bc93e9c7a4a91bab7698cef84b8eb7a and registration9e08e05.
+Run from this repository with UIB_Q02_ALLOW=1 and UIB_Q02_RUN_CONFIG pointing to
+R/<phase>-<mode>-config.json: `node tests/bridges/native/cohorts.cjs --run-authorized`.
+Reproduction needs NEW output directories and freshly owned setup/manifest; saved
+PIDs are evidence only. Baselines completed before either candidate cohort.
+
+Shipping recipe6a5bec2 SHA-25662fcf2f486d2b1ce8e69d87272089be20ab4bb52e53a7faaa077006c45027cd5.
+Fresh immutable e641543 archive; actual ten-input distribution.py Swift command,
+-O/Swift6/HOST_HELPER/CAPTURE_LIBRARY/arm64-apple-macos14.0. No AXBoundary or
+NativeHeldAction diagnostic input added. Helper SHA-256
+`0c0517fa9c3764220b07ce83ebdbd2d12f07e217edb22c40e145ba6f4e087f8c`
+exactly equals both I02 installed native/combined helpers; diagnostic v3 is distinct.
+Witness SHA-256 `dc6f0b92b2eca16fc0a6356d814534f5aae97d69b65543b977139f89a31bacad`;
+typed baseline SHA-256 `7a7b5683214f43c0e46c7c68c14e8b3e6b13c80f3e66632a3829ad2328a2a8a0`.
+Both built from the same immutable source with the baseline-only main selection.
+Rust release caller SHA-256 `dc81989e973ec3d22633e35e26e875ae9f3b6cb6fb515a596c9aa0f6b990003e`;
+worker SHA-256 `959b3e0e0978f152a9ad69f18e3c341808e95be004d21ce4cda901bb7929ad48`.
+Reused Q01-reviewed prepared Rust binaries: ALL crates files/Cargo/toolchain match
+e641543; Cargo artifact/fingerprint records identify release/default+web consumer.
+This consumer is not the installed CLI and its worker hash is not claimed equal
+to I02. It exercises the actual combined-feature host/worker; separate native-only
+latency was not measured. Staged old Swift files were NOT used.
+
+Environment: Apple M4 Pro,12 logical CPUs,24GiB, arm64, macOS27.0.1/26A434,
+Swift6.4/SDK27.0, Rust1.96.0, Node24.15.0. No cache flushing/display/power/
+permission change. Per-cohort load averages retained; background OS load uncontrolled.
+Exact F02 source53e6e6e/source SHA662c92db9fbf0b131e03c022053fc68ef8ab4126d39989da48b49da39f8c238d;
+off executable55b998850903304e7ba000cb59ad5c25a28a7bff5156fca64874ff35ace642ba,
+on8cfec387cc7ae080428cde56df7ec871185fdd35311f9fd00d63674de8f7a1e4.
+Three fresh own launches: off15243, on15569, final off15957;
+exact recorded incarnations/manifests verified at cleanup. Compare then Snapshot via CUA only in
+own F02, outside timers. Count1/expanded,empty Name/secure,unchecked,Result none,
+normal stimulus,scroll-top40rows,popup/wide false,Name focus,active/key/main A;
+window40,90,550×525pt; whole isolated1100×1050 PNG, audio/children excluded.
+Before/after and cross-cohort raw76-node/75-edge facts are exactly equal.
+Baseline-off AXWindows inventory counted2 vs1 in the other cohorts; selected A
+facts/pixels match, but inventory work is not asserted identical or a speedup proof.
+
+### All counts and frozen numeric gates
+
+Each row has20 process-cold,100 warm and one separately reported initial warm
+response.484 requests total; no timeout, missing duration, unrun request or closure
+failure. All failure/outlier durations remain included. p50 median/p95 nearest-rank,
+ms; warm AX/capture/outer and cold startup-through-output are distinct spans.
+
+| Phase | cold/warm + initial | warm AX p50/p95 | capture p50/p95 | outer p50/p95 | cold outer p50/p95 | quality failures |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| baseline-off |20/100 +1 |33.507/37.620 |89.456/91.940 |129.224/133.466 |263.869/271.852 |0 |
+| baseline-on |20/100 +1 |33.447/37.791 |87.184/92.084 |126.644/134.073 |264.151/272.708 |0 |
+| candidate-on |20/100 +1 |26.737/29.230 |140.132/148.535 |257.789/269.993 |346.922/370.029 |0 |
+| candidate-off |20/100 +1 |26.566/29.425 |140.684/148.653 |258.039/271.087 |347.252/356.967 |1 |
+
+Candidate on and off pass unchanged AX≤100,capture≤200,outer≤300,cold≤750 p95.
+Off warm maximum355.918ms (capture196.029ms) remains in the report; the gate is p95.
+On cold maximum381.175ms; off cold maximum362.276ms. Stage spans retain their own
+clocks and are not summed/subtracted to invent transport or SDK timings. Baseline
+raw scalar API costs remain separate from canonical candidate costs.
+
+| Phase | warm response bytes p50/p95 | whole PNG bytes p50/p95 |
+| --- | ---: | ---: |
+| baseline-off |61393/61394 |116024/116024 |
+| baseline-on |61388/61389 |116024/116028 |
+| candidate-on |357034/357034 |116024/116028 |
+| candidate-off |357034/357034 |116024/116028 |
+
+All484 PNGs have1100×1050 dimensions and belong to the SAME five exact SHA-256
+variants in every cohort, including failed cold17. No crop/downscale/tolerance or
+same-time pixel assertion. Representative output was viewed and shown inline.
+Before/after nodes/state/focus/geometry and manifest bytes stayed unchanged in all
+four cohorts. Same byte variants across phases support matched rendered output;
+no causal probe overhead estimate or universal noninterference claim is made.
+
+Candidate success fidelity:613 known comparisons,375 unavailable comparisons,
+76 action lists and75 edges; all nine requested canonical fields on every node,
+native Role/Identifier/Subrole/Title and redacted/false/empty distinctions retained.
+Actual coverage remains partial; external AX is not a full design graph.
+
+### Measured counters and unavailable telemetry
+
+Candidate fixed parent-owned9530680bytes; every sample has one reserved session,
+one completion group,retained reservation15728832bytes; no abandonment/poison.
+All42 candidate closures report groups0/sessions0/reservation192 with confirmed
+cleanup; these are host ownership/reservation counters, not process/RSS/cache peak.
+Both baselines also confirm all42 closes. No leaked owned process found afterward.
+Successful candidate AX:76visited/returned,75child entries,8ranged array calls,
+4652copied UTF-8 bytes, max batch7/actions4,31653response slots. Refused/queued/
+unknown-child-list counts0. AXWindows1/read1. Capture row_bytes4480; source metadata
+records real capture interval/PNG cost and parent capture lease. Baseline scalar
+AX:9array calls, copied4658off/4654on bytes, batch0. Complete ranges/bytes and all
+sample counters remain in measurement-summary.json and original reports/sidecars.
+Array calls are NOT a total syscall count. SDK allocations/RSS peak/cache high-water,
+total syscalls, target CPU/frame responsiveness and model tokens unavailable;
+no zero estimates. Reuse accepted unchanged Native Rust-stage replay and Web/Q03
+results, separately attributed; no new Rust-stage threshold or fake stage sum.
+
+### Exact unresolved quality dependency
+
+Candidate-off cold17 returned Completed/committed3/missing0 with75AX nodes.
+Before/after witnesses have76, parent28→child70; failing canonical parent28 has[]:
+missing anonymous AXGroup at95,99,14×14pt, known focused=false. Sidecar confirms
+75visited/returned,74child entries,7array calls,0refused/unknown-child-lists/
+known-unread/queued/duplicate handles. It is not a configured node/depth/output cap.
+Original failing sample: R/candidate-off/cold-17/sample.json SHA-256
+`97381209847cbf3243b2d9a2784b987ddc8b3c037413cf1e93a2b7540f9ecf95`.
+Cold outer340.634ms, warm-style outer335.853ms, AX51.133ms/capture144.676ms;
+352436canonical bytes,116024PNG bytes. Timings are retained, quality remains FAIL.
+
+NativeAXElements in WindowAX.swift reads AXChildren count/range; unsupported/noValue
+returns zero, success count0 is also empty. collectWindowAX records that traversal.
+The failing payload/sidecar cannot distinguish an actual same-call API omission
+from collector loss. Witnesses are separate observations and do not prove same-time
+source truth. Do not label an OS cause or confirmed dropped known field without
+that boundary evidence. This recurrence is a concrete unresolved Native quality
+failure, not missing numeric performance and not proof of a new architecture need.
+
+Minimum next owner: Native collector/AX-boundary implementation owner with Q01
+acceptance. Obtain same-call parent28 count/range status on the exact cold AX+capture
+path, using the existing bounded AXBoundary mechanism; reconcile against actual
+canonical edges before deciding a narrow repair. Product Swift/Rust is protected
+in Q02-R. Existing40 AX-only successful diagnostics are not equivalent reproducer
+proof. No unchanged cohort rerun, threshold change, node pruning, fabricated node
+or silent source stabilization is authorized by this receipt. Other historical
+invalidUIElement/opaque-baseline failures remain retained, not declared fixed.
+
+### Release, checks and retention
+
+All84 caller sessions closed; all three fresh own fixture processes exited after
+CUA Quit, verified with fresh process census. No input lane/helper/worker/capture
+resource remains held by Q02-R. No historical process was killed or reused.
+Swift shipping/helper/witness/baseline builds passed; driver node --check passed;
+changed local links/route consistency and git diff --check passed. Offline validation
+of all242 candidate samples confirms nine fields on every returned node;241 have
+76nodes and one has75. Run-only compiler cleanup removed125 nonimage files and
+empty cache directories; absence verified, no image or image directory touched.
+No product implementation changed; broad logic/Web/Native suites were not repeated.
+Fresh source archive/binaries/raw reports retained for named Q01/root acceptance;
+run-only compiler logs/cache are cleaned separately, never images or their directories.
+All image/staging/partial files and containing directories remain in system temp.
+Checkpoint/push saves only the three named own repository files. Measurement is
+complete; remaining Native quality dependency prevents D06/P7 acceptance.
+
 
 ## Release campaign and bounded SDK reuse candidate — 2026-10-09
 
