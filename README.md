@@ -27,4 +27,9 @@ See the [I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current
 for exact pins, fresh checks and reused evidence. Director/Settings prompts can be
 submitted directly, but their generated images remain failed/unverified/draft and
 may omit or misbind facts. Compilation stays model-free. Q03 bounded usefulness is
-completed; open Native quality/binding work and full P7/release remain separate.
+completed. [Final Q01 acceptance](docs/plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10)
+accepts bounded Native correctness/source fidelity and separate shipping numeric
+evidence with limited availability: 236 observed / 6 failed AX requests out of 242.
+Those target_unresolved failures and diagnostic quality=false remain; capture can
+succeed independently. The cause is unknown. Recovery is a new explicit request,
+never automatic retry. Overall P7/release reconciliation remains with root.

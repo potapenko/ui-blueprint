@@ -63,8 +63,11 @@ I02 qualifies product source `a0265843634fce8bc6a942fc1f276391a51c54c6` with the
 unchanged recipe last changed at `6a5bec2`. E05 repairs the shared prompt compiler
 for complete literal Director/Settings prompts; no public schema, CLI flag or
 package version changes. It affects the CLI in every selection, so all four
-installations receive fresh build and literal-output checks. Native/Host shipping
-source is unchanged from accepted `e641543`; N05's quality harness is not bundled.
+installations received build and literal-output checks (I02 `b06f3b2`): core/web/native/
+combined on arm64 macOS 27.0.1, Rust 1.96.0. Accepted local source is the pin above;
+recipe `6a5bec23b8d15e4cc825aaff6105ac001a9a17bb` is unchanged. Core schema 0.1.0,
+analysis 0.2.0, document/propose packages 0.1.0 and compare packages 0.2.0 remain.
+Native/Host shipping source is unchanged from accepted `e641543`; N05's quality harness is not bundled.
 The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md) identifies
 actual current checks and reused safety/license evidence. Always update the full
 matching set from one source pin; independent future Native repairs need their own
@@ -253,18 +256,24 @@ Read-only access does not imply permission or current input ownership for mutati
 No unverified background-input, IME, physical-pointer, arbitrary-app or other-platform
 support follows from installing the modules.
 
-[Q02 results](../plans/ui-blueprint/receipts/Q02-performance.md) retain measured
-passing Web latency gates on their exact workloads/pins. Native request-only
-quality uses request-input@2 with the original numeric/sample gates and same-call
-source-fidelity requirements. Open Native quality and bundle-binding work remains
-with its assigned owners, including N06; installation does not resolve it.
-Source acceptance of AX reuse, a successful installed build and older samples are
-not a Native latency pass. Historical quality failures remain attributed to their
-original candidate; installing a newer pair does not itself prove them fixed.
+[Final Q01 acceptance](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10)
+(52930eb) accepts the current bounded Native capability, source fidelity and correct
+failure handling, with separately attributed shipping numeric PASS. It identifies
+no remaining mandatory correctness repair/proof in this scope and preserves prior
+M01–M06/E2E acceptance. It does not turn the diagnostic cohort into all-success:
+236 of 242 AX requests were observed; 6 remain failed target_unresolved with no AX
+graph, while capture succeeded independently. Diagnostic quality=false and all
+historical failures remain unchanged. The deeper cause is unknown, not an additional
+mandatory blocker or an established SDK/source defect. Handle the failed channel;
+existing recovery_class=new_explicit_request permits a NEW explicit request under
+existing authority, with no automatic retry or source-stabilization promise.
+No 100% availability, allowed error rate or broader support is promised.
+[Q02 results](../plans/ui-blueprint/receipts/Q02-performance.md) retain separate
+shipping numeric evidence; diagnostic durations/failures are not spliced into it.
 
 [Q03 Mac/Web usefulness](../plans/ui-blueprint/receipts/Q03-recorded-usefulness.md#final-mac--web-q03-outcome)
 is completed for the explicitly supplied saved datasets. It demonstrates useful
 Rust geometry answers with partial/unsupported outcomes preserved, not arbitrary
 live Web ingestion, universal scanning or full blind-model scoring.
-These bounded results support local installation and usage; Native D06 and overall
-P7/release acceptance remain separate. I02 performs no UI/SDK/input run.
+These bounded results support the accepted local installation and usage; root
+owns overall P7 reconciliation. Publication/signing is not claimed. I02 performs no UI/SDK/input run.

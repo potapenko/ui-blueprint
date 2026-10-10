@@ -1,5 +1,24 @@
 # Q02 fixed D06 evaluation
 
+## Current acceptance status
+
+2026-10-10: [Q01 final acceptance 52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10)
+accepts the current bounded Native capability/source fidelity and safe failure
+semantics, with separately attributed unchanged shipping numeric PASS. Of 242 AX
+requests, 236 were observed and 6 remain failed target_unresolved, without AX graphs;
+each failed AX request still had independent observed capture. Diagnostic
+quality=false and all historical failure rows remain, not an all-success verdict.
+The deeper cause is unknown and is not a separate mandatory correctness blocker.
+Recovery remains new_explicit_request under existing authority, without automatic
+retry. No 100% availability or permitted failure rate is introduced. Prior positive
+M01–M06/E2E and Web evidence remain applicable; root owns overall P7 reconciliation.
+
+### Historical status notes
+
+The OPEN/pending decisions below describe their original reporting stage; current
+bounded acceptance is stated above. Numbers, failures and historical conditions
+are preserved, not reclassified or rerun.
+
 2026-10-10 continuation: [Native request-only@2](../specs/development/decisions/d06-native-request.md)
 and N05-AX-BOUNDARY@2 are registered at e89cd0f; negative predicate proof37a76fa.
 Complete new off/on20cold/100warm+1initial cohorts retain242calls:236 fidelity passes

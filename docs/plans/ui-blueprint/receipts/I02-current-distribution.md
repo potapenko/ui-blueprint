@@ -1,6 +1,6 @@
 # I02 — current local distribution qualification
 
-Current delivery: see [a026584 E05 qualification](#accepted-e05-exporter-a026584).
+Current delivery: [a026584 E05 qualification](#accepted-e05-exporter-a026584); [final status reconciliation](#final-local-acceptance-status--2026-10-10).
 The original94724df and a7c0416 records below remain historical evidence.
 
 ## Authority and plan
@@ -678,3 +678,26 @@ Four exact task paths only, current master; final local targets/anchors, route a
 whitespace checks precede checkpoint+push under the shared fcntl Git lock. Final chat
 records actual SHA/remote confirmation. Product/exports/specs/Cargo/N06/Q02 files
 are not changed or staged. No packaging/compile blocker exists on the qualified pin.
+
+## Final local acceptance status — 2026-10-10
+
+Direct root instruction extends I02 ownership only to existing README/distribution,
+performance introduction, spec-root acceptance metadata and this short addendum.
+Read Q01 final52930eb7e2bb20a85a5934b4261e703eae5c9c67 with current applicable
+contract/evidence basis. Root accepts bounded Native capability/correctness/source
+proof and separately attributed shipping numeric gates; no mandatory repair remains
+identified in that finite scope.236 observed/6 failed AX out of242, target_unresolved,
+independent capture, diagnostic quality=false and all older failures are unchanged.
+Unknown deeper cause is a limitation, not a required speculative repair. Existing
+new_explicit_request recovery confers no automatic retry or availability/error-rate
+promise. Prior positive M01–M06/E2E evidence remains applicable.
+
+Accepted local sourcea0265843634fce8bc6a942fc1f276391a51c54c6, recipe6a5bec2 and
+I02b06f3b2 four-selection matrix/schema versions are reused as already verified.
+No shipping source changed; no build/test/QA/model call or new artifact directory.
+Old OPEN/failure narratives remain historical; current user-facing status links to
+Q01's final decision. E05 raster remains FAIL/unverified/draft, without marketing
+exactness. Spec registry35 changes acceptance metadata only, not semantic contracts.
+Root retains overall P7/goal reconciliation; publication/signing not claimed.
+Only local links/anchors, route consistency and git diff --check are verified before
+the exact five-path current-master checkpoint/push under the shared Git flock.
