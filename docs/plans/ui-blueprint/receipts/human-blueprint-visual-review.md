@@ -788,3 +788,46 @@ All six are reported without outcome weighting or best-of substitution. The acce
 mobile cell is one bounded success, not whole-cohort or universal fresh reliability.
 No extra generation, source modification or agents. Only this receipt changed;
 `git diff --check` passed before the checkpoint.
+
+## FRESH01-C4 — all six frozen fresh outputs, 2026-10-11
+
+Source `8db76ba7cf4d3298f5a5cd89388a97967595659d`; selected contracts unchanged.
+Root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c4-d3yemcfo/`.
+ALL six PNGs were inspected before literal prompt/ledger context or author narrative.
+Then checked assigned measurements, exact per-view state captions, symbolic border
+instructions and compact printable-text rules. Three prompt hashes match the frozen
+manifest. Ledger: six fresh requests/returns, zero edits/rerolls/wrappers/refusals.
+All earlier cohorts remain separate; none of these cells is a replacement reroll.
+
+**HBP-V C4 result: 4/6 full passes at each cell's native delivery size.**
+Accepted: Director1, Settings1, Settings2, Mobile1. Source-state captions now survive,
+outline-only controls remain consistent, and most two-border associations are clear.
+No new ratio, corner-shape, font-size, exact arrow-pixel or panel-layout gate was used.
+
+| Cell / native size | Final V1–V6 verdict and bounded evidence |
+| --- | --- |
+| `director-cohort-1.png`, 1536 × 1024 | **Pass V1–V6.** Full label/input/three-result composition and correct counts remain; both relevant views explicitly say first suggestion keyboard-active, none applied. Required trigger180 ×29, popup194 ×143, input178 ×26, row24, gaps6/3 and inset8 are present. Symbolic vertical fragments now have the two relevant opposing edges rather than a third baseline; inset is between identifiable container/input edges. Readable blue/white sheet, no machine-ID or technical-note wall. |
+| `director-cohort-2.png`, 1536 × 1024 | **Fail V5: required popup width≈194 is absent.** Popup143 height and trigger180 width do not substitute for it. Text/state/counts, main spacing detail, inset8, style, readable captions and compact footer pass; no other blocker is inferred from the schematic corner returns. |
+| `settings-cohort-1.png`, 1036 × 1518 | **Pass V1–V6.** Complete seven-row/settings-content/Close source view; correct safe values/help text and two outlined off switches. Form422 ×618, insets22, select198 ×33, label gap12, row gap16, switch39 ×24 and Close52 ×30/right+bottom15 are present and associated with the appropriate source shapes. The enclosing footer fragment is the measured footer context, not a new UI control. |
+| `settings-cohort-2.png`, 1036 × 1518 | **Pass V1–V6.** Same complete source content/state and required measurement set retained. Close right/bottom insets now visibly refer to its actual footer context; no missing Close30. Readable partial details and compact footer; no construction metadata. Minor corner/extension-line raster standoffs do not change the identifiable measured objects and are not a new CAD gate. |
+| `mobile-cohort-1.png`, 1024 × 1536 | **Pass V1–V6.** All active is preserved in overview/detail, all14 genre labels/order and empty-input placeholders remain. Director366 ×44, viewport390 ×844, Source≈119 ×42/gap2, Years179 ×44/gap8, Genres179 ×40/horizontal+vertical8 and root-to-Source12 are present. Here the moved12 fragment actually includes the Source label at its endpoint. Cast remains cut at the viewport boundary; no lower controls are invented. |
+| `mobile-cohort-2.png`, 1024 × 1536 | **Fail V5: root-to-Source12 lacks an identifiable source endpoint.** It is moved to the Source detail as two unnamed short guides, but that detail contains only the All/Movies/Episodes controls, not the Source label/layout boundary being measured. Thus12 could be read as a control/group inset instead of the specified viewport-left → Source-label-left relation. Other content/state, required sizes, clipping, outline grammar, legibility and compact printable text remain sound. |
+
+The mobile distinction is semantic, not a comparison of pixel lengths. Sample1
+shows the Source label and associates its left edge with the12 fragment; sample2
+omits that target while retaining the12 number. An explicit named fragment would
+also be valid; literal font glyph contours are not being substituted for layout
+bounds. Moving an otherwise correct measurement into a different useful detail is
+not by itself a failure. Director2's194 omission is confirmed against its frozen
+paired-width/height requirement, not added after seeing the image.
+
+All accepted cells preserve rounded source values, CSS-px units, partial/stored
+observation and draft/image-unverified status. Acceptance is the actual native-size
+visual/source-presentation scope; it is not CAD accuracy, behavior verification,
+whole-app/native-mobile acceptance, print/reduced-size proof or human approval.
+Symbolic two-border grammar and per-view state captions coincide with improvement
+in this cohort, but six samples cannot isolate causality or guarantee future outputs.
+
+No image repair, source change or new generation is authorized by these judgments.
+All six results, including both failures, stay retained and reported. Only this
+receipt changed; `git diff --check` passed before the checkpoint.
