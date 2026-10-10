@@ -1,5 +1,13 @@
 # Q02 fixed D06 evaluation
 
+2026-10-10 [N05 same-call diagnosis](../plans/ui-blueprint/receipts/N05-native-child-fidelity.md):
+the missing-child shape recurred on cold AX+capture call15. Parent28's public
+AXChildren count returned success/0 in that same call; no range was copied or
+child dropped afterward. The deeper app/OS cause and original cold17 API result
+remain unknown. No product/fixture/threshold change or retry policy was introduced.
+Q02-R numeric gates remain reported PASS; Native quality/D06/P7 stays OPEN pending
+the exact source-stability/acquisition decision described in the receipt.
+
 Status: all four frozen Web numeric rows meet their gates on the qualified host.
 Single-control semantic/geometry on9d715ee:100 warm each,p952.846/2.899ms≤20ms.
 Full2-document/97-node capture on accepted a7c0416:20cold, attach+response
