@@ -11,13 +11,13 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: Settings R4 принят; Director-only R6 prompt simplification running.
+Текущий шаг: Settings R4 принят; Director-only R7 isolated inset-detail repair running.
 Агенты fork_turns none, настройки наследуются, без nesting:
 - HBP-C `/root/blueprint_content`: Settings C1–C6 accepted, C7 accepted cd099a1;
   Director C3 inset anchors rejected; [receipt](receipts/human-blueprint-content-review.md) ecdaa2f.
 - HBP-V `/root/blueprint_visual`: Settings V1–V6 accepted при1536×1024;
   Director detail alignment/178/8 anchors rejected; [receipt](receipts/human-blueprint-visual-review.md)81b41e5.
-- HBP-I `/root/blueprint_builder`: R6 только Director. R5 unchanged-prompt edit rejected (C02b2dae/Vfb1f803):
+- HBP-I `/root/blueprint_builder`: R7 только Director. R5 unchanged-prompt edit rejected (C02b2dae/Vfb1f803):
   malformed inset chains остались и были продублированы в overview. Теперь
   упростить actual prompt до одного inset popup-left→input-left с continuous
   border segments, убрать duplicate chains, сохранить размеры/content/state.
@@ -39,9 +39,16 @@ Settings. Director text spiel, keyboard-active/not-applied и общий вид 
 Основание: прямой запрос пользователя и HBP-HUMAN-001, DRAWING1.2,
 EXPORT/drawing leaves2, registry36; прочая selected closure неизменна.
 Метод image-edit — средство сохранения уже принятых частей, не новый product scope.
-После нейтрального R6 оба тех же критика проверяют только Director и фактически
+После нейтрального R7 оба тех же критика проверяют только Director и фактически
 изменённые criteria. C7 и Settings не переоткрываются без relevant change.
 Все images/tool originals retained; untracked after-title-spacing.png untouched.
+R6 source5139f8e / installedc38008f: prompt7827 chars, clearer width/alignment,
+но inset8 именует ложные guide lines; active row получил недопустимую светлую заливку.
+R7 remedy согласован с HBP-V: отдельный увеличенный popup/input corner fragment,
+две реальные continuous vertical borders с короткими top edges и одной стрелкой8;
+без external detail frame/ложных guide lines. Полный overview и field/row sizes/gaps
+сохраняются; active state extra outline на том же синем фоне. Это presentation
+repair уже выбранных измерений, не новая geometry/feature/acceptance criterion.
 Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
 
 ## Предыдущая цель P0–P7 — завершена
