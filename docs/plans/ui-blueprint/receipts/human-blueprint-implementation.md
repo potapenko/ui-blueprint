@@ -572,3 +572,33 @@ New root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c3-6cv0u7
 prototype has been generated. The new manifest will freeze this source checkpoint,
 original-only references and six fresh output paths before the first of exactly six
 independent calls. Prior baseline/C1/C2/R1–R8 images and tool originals remain retained.
+
+## FRESH01-C3 frozen six-output handoff
+
+Source `e92dd7dfa0ac18b68bee9e9150bf1e420ff437ff` committed/pushed before first request.
+C3 `frozen-cohort-manifest.json` SHA256
+`9c247e9647a62e2cecb30a578e9edaaf2ffeb39d9867a4e6c8fd5cab98a537c9`
+was saved before generation and remains immutable. Three literal prompt/input/original
+UI reference pins stayed unchanged. Exactly6independent fresh calls returned6images;
+0refusals,0wrappers,0edits,0history-image references,0rerolls. Every output counts.
+
+| C3 image | Actual native100% raster |
+| --- | --- |
+| director-cohort-1.png |1536×1024|
+| director-cohort-2.png |1536×1024|
+| settings-cohort-1.png |1036×1518|
+| settings-cohort-2.png |1024×1536|
+| mobile-cohort-1.png |1024×1536|
+| mobile-cohort-2.png |1203×1307|
+
+The new C3 root's `cohort-results.json` records original/copy/hash/dimensions for all
+six. All retained temp copies and tool-managed originals remain; previous images and
+C1/C2 manifests/packages are untouched. All6were delivered neutrally to root for the
+same critics before author image interpretation. No acceptance or generalized fresh
+reliability claim follows from successful execution. Source/images held unchanged.
+
+C3 installed proof: fresh core build and installed verification at exact
+`e92dd7dfa0ac18b68bee9e9150bf1e420ff437ff` passed. Installed CLI reproduced all six
+files of all three frozen C3 packages byte-for-byte. Run-owned non-image install
+removed and removal verified; shared source/packages and all original/copied images
+remain. This is attributed execution evidence, not independent C/V acceptance.
