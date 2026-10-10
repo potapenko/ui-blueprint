@@ -338,3 +338,12 @@ prompt13,146 characters;14 dimensions and applicable criteria unchanged. Accepte
 Settings R4 image remains frozen/attributed cd099a1 and its R4 literal prompt, not R8.
 Installed current-source reproduction follows checkpoint; independent source/image
 reconciliation stays with the continuing critics. Every prior image remains retained.
+
+
+R8 final source checkpoint `b008a4408d3e5e5b73e9cd36da0932c217411d25` pushed. Fresh
+core build/verify from this exact revision passed; installed CLI reproduced all six
+files of Director R8 and Settings R8 compatibility packages byte-for-byte. Accepted
+Settings R4 remains attributed to cd099a1/R4 prompt; this is not a new Settings image.
+Run-owned non-image installation removed and removal verified. Every image/original
+and shared review package remains retained. No further source/template/image changes;
+root owns final reconciliation of the continuing critics' independent acceptance.
