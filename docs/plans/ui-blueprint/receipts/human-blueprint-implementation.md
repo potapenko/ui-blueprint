@@ -425,3 +425,36 @@ counted. Original UI reference only; no prior blueprint, num_last_images, wrappe
 image edit or best-of reroll. Baseline2 are separate. A6/6 pass would support only
 this exact declared cohort, not universal reliability. Root requested neutral all6
 handoff before author pass/interpretation, then installed current-source proof.
+
+
+## FRESH01-C1 frozen source and neutral six-output handoff
+
+Source checkpoint `76f14ac5a2ce6cb45a54e9c16b64342492d361fb` committed/pushed BEFORE
+first cohort generation. Immutable `frozen-cohort-manifest.json` in the FRESH temp root
+pins3literal CLI commands/prompts, input/ref hashes, criteria and six planned outputs.
+Prompts: Director8,790 chars/SHAe44555a0625c105d9efd401c440f79ac2e878202a9c9e3cb6e62698ed69e0526;
+Settings14,496/SHA62cbac0ecdf19a0a46c1302798fc8a0534252687e1828dc25dc6046fc29a2c43;
+mobile17,431/SHAbaeca3a222f90a89166575c48b7ba26225ae115d49e54aed85b8ac697583c58f.
+All five non-prompt files of all three frozen packages exactly equal their previous
+baseline/qualified imported-source counterparts. No source/criteria/prompt/reference
+changed during the series. No prototype generations occurred between baseline and freeze.
+
+Exactly6independent fresh built-in requests completed;6images returned,0refusals,
+0rerolls,0edits,0manual wrappers. Only original UI references were passed; no generated
+image or num_last_images context mechanism. Every result retained; baseline2 separate.
+`cohort-results.json` links the immutable manifest and every original/copy/hash:
+
+| Image in FRESH temp root | Actual raster; native100% review |
+| --- | --- |
+| director-cohort-1.png |1536×1024|
+| director-cohort-2.png |1536×1024|
+| settings-cohort-1.png |1536×1024|
+| settings-cohort-2.png |1223×1286|
+| mobile-cohort-1.png |1024×1536|
+| mobile-cohort-2.png |1103×1426|
+
+Tool originals remain in the established generated_images directory; copies use the
+retained FRESH system-temp root. No image deletion, substitution or ranking. All6
+were handed to root neutrally before author visual interpretation. Rendered output
+is not acceptance: the same two critics own the frozen C/V verdict for each image.
+Current-source installed reproduction follows; no universal reliability claim.
