@@ -667,8 +667,25 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
             .lines()
             .any(|line| line.starts_with("LOCAL BORDER FRAGMENT")
                 && line.contains("VERTICAL arrow")
-                && line.contains("Bottom border → END select")
-                && line.contains("Top border; ≈16 CSS px"))
+                && line.contains("Bottom boundary → END select")
+                && line.contains("Top boundary; ≈16 CSS px"))
+    );
+    let fragments = prompt
+        .lines()
+        .filter(|line| line.starts_with("LOCAL BORDER FRAGMENT: ") && line.contains(" arrow;"))
+        .count();
+    assert!(fragments > 0);
+    assert_eq!(
+        prompt
+            .matches("PRINT THIS FRAGMENT'S START CAPTION exactly:")
+            .count(),
+        fragments
+    );
+    assert_eq!(
+        prompt
+            .matches("PRINT THIS FRAGMENT'S END CAPTION exactly:")
+            .count(),
+        fragments
     );
     assert!(prompt.contains("Placement context 1: LayoutBounds;"));
     assert!(prompt.contains("Viewport, CSS px, TopLeft; transform local only"));
@@ -1400,4 +1417,49 @@ fn nonpositive_gaps_do_not_receive_positive_symbolic_separation() {
                 .any(|d| d["label"] == "Vertical edge gap" && d["value"] == next_y - 40.0)
         );
     }
+}
+
+#[test]
+fn center_anchors_keep_axis_without_border_corner_sketches() {
+    for (start, end, value, direction) in [
+        (Edge::CenterX, Edge::Right, 600.0, "HORIZONTAL"),
+        (Edge::CenterY, Edge::Bottom, 400.0, "VERTICAL"),
+        (Edge::Right, Edge::CenterX, 600.0, "HORIZONTAL"),
+        (Edge::CenterX, Edge::CenterX, 0.0, "HORIZONTAL"),
+    ] {
+        let mut b = fixture("proposed");
+        let layout = proposed(&mut b);
+        let mut d = layout.dimensions[0].clone();
+        d.anchors[0].edge = start;
+        d.anchors[1].edge = end;
+        d.value = Some(value);
+        layout.dimensions = vec![d];
+        layout.chains.clear();
+        let original = serde_json::to_vec(&b).unwrap();
+        let p =
+            compile(&b, limits()).unwrap_or_else(|e| panic!("{start:?}/{end:?}/{value}: {e:?}"));
+        assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert!(prompt.contains(&format!("NAMED-ANCHOR RELATION: {direction};")));
+        assert!(prompt.contains(&format!("{start:?} anchor → END")));
+        assert!(!prompt.contains("Symbolic layout: START border first"));
+        assert_eq!(
+            data(&p, "dimensions.json")[0]["dimensions"][0]["value"],
+            value
+        );
+    }
+}
+
+#[test]
+fn enclosing_width_has_below_slot_and_fragments_have_exact_anchor_captions() {
+    let b = fixture("proposed");
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(
+        prompt
+            .contains("WIDTH 1200 CSS px BELOW the enclosing shape; HEIGHT 800 CSS px on the LEFT")
+    );
+    assert!(prompt.contains("PRINT BELOW-SHAPE WIDTH LABEL exactly:"));
+    assert!(prompt.contains("width 1200 CSS px"));
+    assert!(prompt.contains("layout boundary of the named text"));
 }

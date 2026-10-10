@@ -495,3 +495,13 @@ width remains above and height stays left, keeping right-inset endpoints clear.
 Per-view state captions quote declared active/applied clauses from caller state;
 Selected alone cannot manufacture an applied/not-applied assertion. All safe state
 channels and original caller state remain present, and machine files are unchanged.
+
+C5 gives selected enclosing-shape widths a distinct below-shape slot with an exact
+human width label; contained/control widths retain the above slot. Every eligible
+local fragment includes exact printable captions for both actual source boundaries,
+including an unpainted label-layout boundary. CenterX/CenterY retain horizontal/
+vertical named-anchor attribution and never become a border corner. Corner sketches
+require real border pairs on one axis, a positive observed relation and common
+TopLeft Space. Proposed distances are absolute, so they conservatively keep named
+anchors without claiming start/end spatial ordering from a positive magnitude.
+All precise measurements and source semantics remain in the same machine records.

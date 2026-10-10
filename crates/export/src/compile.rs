@@ -464,6 +464,12 @@ fn component_name(v: &SceneView, index: usize) -> String {
             public_label(&v.components[child]).replace('\n', " / ")
         );
     }
+    if human_role == "container"
+        && !c.children.is_empty()
+        && !v.components.iter().any(|p| p.children.contains(&c.id))
+    {
+        return "outer source container".into();
+    }
     human_role.into()
 }
 fn geometry_context(v: &SceneView, g: &Geometry) -> usize {
@@ -716,23 +722,52 @@ fn local_measures(
                     && m.anchors[1].edge == Edge::Bottom
             });
             if let (Some((w, _, _)), Some((h, _, _))) = (width, height) {
+                let enclosing = !control(&v.components[a]) && !v.components[a].children.is_empty();
                 append(
                     &mut out,
                     &format!(
-                        "DIMENSIONED RECTANGLE {}: WIDTH {} {} ABOVE; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to the real opposite borders.\n",
+                        "DIMENSIONED RECTANGLE {}: WIDTH {} {} {}; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to the real opposite borders.\n",
                         component_name(v, a),
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
+                        if enclosing {
+                            "BELOW the enclosing shape"
+                        } else {
+                            "ABOVE"
+                        },
                         display_number(h.value.ok_or(E::InvalidGeometry)?),
                         unit_name(h.units)
                     ),
                     limit,
                 )?;
+                if enclosing {
+                    append(
+                        &mut out,
+                        &format!(
+                            "PRINT BELOW-SHAPE WIDTH LABEL exactly: {:?}. This is the width line's own label, not another note or dimension.\n",
+                            format!(
+                                "{} — width {} {}",
+                                component_name(v, a),
+                                display_number(w.value.ok_or(E::InvalidGeometry)?),
+                                unit_name(w.units)
+                            )
+                        ),
+                        limit,
+                    )?;
+                }
                 done.extend([w.id.clone(), h.id.clone()]);
                 continue;
             }
         }
-        if a == b {
+        if a == b
+            && matches!(
+                (d.anchors[0].edge, d.anchors[1].edge),
+                (Edge::Left, Edge::Right)
+                    | (Edge::Right, Edge::Left)
+                    | (Edge::Top, Edge::Bottom)
+                    | (Edge::Bottom, Edge::Top)
+            )
+        {
             append(
                 &mut out,
                 &format!(
@@ -748,31 +783,65 @@ fn local_measures(
             done.push(d.id.clone());
             continue;
         }
-        let nested = d.anchors[0].edge == d.anchors[1].edge;
+        let axis = |edge| match edge {
+            Edge::Left | Edge::Right | Edge::CenterX => "HORIZONTAL",
+            Edge::Top | Edge::Bottom | Edge::CenterY => "VERTICAL",
+        };
+        let direction = if axis(d.anchors[0].edge) == axis(d.anchors[1].edge) {
+            axis(d.anchors[0].edge)
+        } else {
+            "MIXED AXES"
+        };
+        let border_pair = matches!(
+            (d.anchors[0].edge, d.anchors[1].edge),
+            (Edge::Left | Edge::Right, Edge::Left | Edge::Right)
+                | (Edge::Top | Edge::Bottom, Edge::Top | Edge::Bottom)
+        );
+        // Proposed distances are absolute, so their sign cannot establish ordering.
+        let sketch = border_pair
+            && d.source_kind == SourceKind::Observed
+            && value > 0.0
+            && d.anchors[0].space.origin == Origin::TopLeft
+            && d.anchors[0].space == d.anchors[1].space;
+        let start = format!(
+            "{} {:?} {}",
+            component_name(v, a),
+            d.anchors[0].edge,
+            if border_pair { "boundary" } else { "anchor" }
+        );
+        let end = format!(
+            "{} {:?} {}",
+            component_name(v, b),
+            d.anchors[1].edge,
+            if border_pair { "boundary" } else { "anchor" }
+        );
+        if !sketch {
+            append(
+                &mut out,
+                &format!(
+                    "NAMED-ANCHOR RELATION: {direction}; START {start} → END {end}; {} {}. Preserve signed ordering; no border-corner sketch or invented straight separation.\n",
+                    display_number(value),
+                    unit_name(d.units)
+                ),
+                limit,
+            )?;
+            done.push(d.id.clone());
+            continue;
+        }
         append(
             &mut out,
             &format!(
-                "LOCAL BORDER FRAGMENT: {} arrow; START {} {:?} border → END {} {:?} border; {} {}; {}.\n",
-                if matches!(d.anchors[0].edge, Edge::Left | Edge::Right) {
-                    "HORIZONTAL"
-                } else {
-                    "VERTICAL"
-                },
-                component_name(v, a),
-                d.anchors[0].edge,
-                component_name(v, b),
-                d.anchors[1].edge,
+                "LOCAL BORDER FRAGMENT: {direction} arrow; START {start} → END {end}; {} {}; {}.\nPRINT THIS FRAGMENT'S START CAPTION exactly: {start:?}.\nPRINT THIS FRAGMENT'S END CAPTION exactly: {end:?}.\n",
                 display_number(value),
                 unit_name(d.units),
-                if nested { "nested" } else { "opposing" }
+                if d.anchors[0].edge == d.anchors[1].edge {
+                    "nested"
+                } else {
+                    "opposing"
+                }
             ),
             limit,
         )?;
-        // A symbolic positive separation is safe only for the ordinary top-left
-        // context. Other relations retain their signed, named anchor attribution.
-        if value > 0.0
-            && d.anchors[0].space.origin == Origin::TopLeft
-            && d.anchors[0].space == d.anchors[1].space
         {
             let label = format!("{} {}", display_number(value), unit_name(d.units));
             let horizontal = matches!(d.anchors[0].edge, Edge::Left | Edge::Right);

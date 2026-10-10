@@ -669,3 +669,35 @@ C4 installed proof: fresh core build and installed verification at exact source
 files of all three frozen C4 packages byte-for-byte. Run-owned non-image install
 removed and removal verified; shared packages/inputs and all original/copied images
 retained. This is author execution evidence, separate from independent C/V verdicts.
+
+## FRESH01-C5 final-gap packet — 2026-10-11
+
+Root authorized finite C5 after both critics agreed C4 is4/6: D1/S1/S2/M1pass;
+D2misses popup width, M2root inset lacks its actual Source-label endpoint context.
+No styling rewrite, extra criterion or source audit. Same five write paths.
+
+Existing selected enclosing dimensions get WIDTH BELOW the shape with their own
+source-derived exact printable label, retaining height LEFT and every other measure.
+Each eligible two-border fragment now prints its two exact source-anchor captions.
+An unpainted label layout remains the boundary of its named text, never an All/group
+control boundary. An unnamed selected root is called outer source container.
+
+C7 restoration: CenterX/CenterY use the proper axis in a named-anchor fallback,
+without invented border corners. Mixed-axis/nonpositive/unsupported-context cases
+also receive no new corner sketch. Existing Proposed distances are absolute; their
+positive magnitude cannot establish START-left/upper ordering, so they conservatively
+retain named attribution. Known positive observed proper-axis border pairs in the
+same TopLeft Space keep the tiny sketch. No second geometry engine or changed fact.
+Safe-state/context/privacy/clipping owners remain unchanged.
+
+Verification:33focused compiler tests, export all-target clippy, format/diff checks
+and CLI build passed. New checks cover center axes including reversed/zero cases,
+enclosing below slot, exact fragment caption pairs and existing positive-border
+schemes. All five non-prompt files of all three packages equal C4 byte-for-byte.
+No image prototypes. New root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c5-5gew_bxr`.
+Literal `*-frozen-package/` and `*-frozen-command.json` prompt chars are11171/14925/16673.
+The new immutable manifest will pin this checkpoint plus unchanged qualified inputs/
+original UI references and six new output paths before generation. Exactly6fresh
+first requests; no wrapper/edit/history/reroll. All earlier images and failures remain.
+Neutral all6 handoff precedes author verdict; installed saved-source proof follows.
