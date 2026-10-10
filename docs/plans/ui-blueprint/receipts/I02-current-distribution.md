@@ -1,6 +1,6 @@
 # I02 — current local distribution qualification
 
-Current delivery: see [e641543 qualification](#accepted-ax-reuse-source-e641543).
+Current delivery: see [a026584 E05 qualification](#accepted-e05-exporter-a026584).
 The original94724df and a7c0416 records below remain historical evidence.
 
 ## Authority and plan
@@ -546,3 +546,135 @@ Four-path current-master checkpoint/push under shared fcntl lock follows final
 local-target/anchor, route-consistency and git diff --check verification. The final
 chat reports the resulting SHA and remote confirmation. No product/spec/Cargo/Q02
 performance file is staged; no broader goal or acceptance state is changed.
+
+## Accepted E05 exporter a026584
+
+2026-10-10, same finite I02 outcome under the direct continuation and
+[E05 packet section](../packets/I02-current-distribution.md#e05-accepted-exporter-delivery--2026-10-10).
+Immutable product a0265843634fce8bc6a942fc1f276391a51c54c6; initial mastera307bff,
+independent E05-R a307bffa123c8ab58fd538961d8dc4d467b9957d accept_with_residual.
+Read both full E05 author/reviewer receipts before installed qualification, plus
+actual source/template/package delta and retained command/input identities. This
+is delivery verification, not another independent exporter/raster review.
+
+Current AGENTS/packet and prior complete applicable governance/export closure reused.
+Registry34/request-input@2 delta was read; Native acquisition@3/D06@2 links now
+select prospective same-call quality evidence without shipping changes. EXPORT@1,
+full Drawing closure, CLI@16/CLI-EXPORT@2, ANALYSIS2/types/validation1 and their
+explicit closure remain current; no exporter semantic revision conflict. Native
+quality changes neither authorize I02 runtime nor accept P7. No new product choice.
+
+Requirement: current installed literal prompts without manual summaries. Actual
+shipping delta frome641543 is only export/src/compile.rs, package.rs and template;
+CLI/engine/schema/host/Web/Native/manifests/lock/toolchain/fixtures and recipe are
+unchanged. Prompt-only tables/compact JSON follow existing public projection;
+five other package files/versions and bounds preserve their contracts. All four
+CLI feature selections link this shared code, so select four fresh installs once,
+then eight literal real-form exports. Reuse prior safety/reinstall/license campaigns
+and accepted exporter/privacy/consumer evidence; no broad audit or repeated model call.
+
+Plan stated before edits: exact four paths README, distribution guide, dependency
+inventory and this receipt; build/verify/smoke/literal reproduction/remove in owned
+system temp; exact provenance/fingerprints and final Native-delta check; cleanup,
+links/whitespace, scoped current-master commit+push. Recipe/harness need no correction
+unless a concrete defect appears. Product/export docs/specs/Cargo/N06 paths protected.
+CPU/build lane explicitly available from N05 terminal release. No apps/UI/ImageGen,
+model keys, shared-data/image cleanup, new agents/chats/goals/branches/worktrees.
+
+### Fresh installed evidence
+
+Exactly four fresh release installs succeeded on immutablea026584, one per
+core/web/native/combined. Existing recipe6a5bec23b8d15e4cc825aaff6105ac001a9a17bb
+remains sufficient and unchanged; SHA-256
+62fcf2f486d2b1ce8e69d87272089be20ab4bb52e53a7faaa077006c45027cd5.
+No harness/product correction required: classification **verification**.
+Each build used its own system-temp source/target/Swift cache and explicit source
+archive, pinned Rust1.96.0 locked/offline, aarch64-apple-darwin release, Swift6/macOS14
+helper where selected. Core/Web used refusing Swift/Xcode sentinels; all build PATHs
+contained existing rustup plus system tools, without Node/browser tooling.
+
+Manifest source/features and fixed file inventory/hashes/modes passed in all four.
+Graph17/39/18/39, license text, Cargo.lock and Rust standard-library notice hashes
+matched the complete fingerprints above. All executable dylibs resolve to system
+/usr/lib or /System/Library; no checkout/temporary dependency. CLI binary SHA-256:
+
+| Selection | uiblueprint SHA-256 |
+| --- | --- |
+| core | 5c1bd46a71d4d270c95f9ebf0dfbc0f2718eed132f716a8abc7ad49474f66dc3 |
+| web | 4c102d32ff59aed0b6a38a1fe39f1ff1de0eb1b121d0570136baa6897af503a0 |
+| native | 21665167b7c60eb0aaf52000dbf21d2fce4d3c0a3e93b64efc562c6371297774 |
+| combined | bc22f5b6e5a8ef41bfc7c22db3af4a8e93137f586abe68271dd519cc17dfd828 |
+
+Both Native helpers remain0c0517fa9c3764220b07ce83ebdbd2d12f07e217edb22c40e145ba6f4e087f8c.
+Native worker53784e16… and Web/combined worker44297847… match their full e641543
+hashes recorded above, as does validator35e945ca…. All ten actual helper sources
+were byte-compared e641543→a026584 and are unchanged. No test-only N05 diagnostics
+are linked or installed. Export repair reaches every CLI without replacing Native.
+
+### Literal real-form reproduction
+
+Original inputs read-only from system-temp uib-e04-real-tbaWNv; original reviewed
+packages from uib-e05-1jq7290v. Read retained command arrays and checks.json as data,
+then invoked each INSTALLED CLI from cwd / with PATH=/usr/bin:/bin and no credentials:
+
+```text
+ABSOLUTE_BUNDLE/uiblueprint imagegen-prompt --snapshot E04/CASE-snapshot.json
+  --metadata E04/CASE-metadata.json --out NEW_OWN_TASK_TEMP/SELECTION-CASE
+  --max-input-bytes 2000000 --max-output-bytes 4000000 --max-components 256
+  --max-views 8 --components-per-detail DENSITY --json
+```
+
+DENSITY12 for Director and64 for Settings, exactly the reviewed commands. Both
+snapshot/metadata plus raw evidence input hashes matched E05 checks.json before
+and after every invocation; no source was rewritten. Independent E05-R hash/count
+expectations were literal assertions, not inferred from new candidate output.
+
+| Case, on EACH of4 installed selections | Characters / UTF-8 bytes | prompt SHA-256 |
+| --- | --- | --- |
+| Director |18653 /21515|1ecc57f1936701b774d4c75b64d96d37d4c82d6e8cf546f2d25d9f62c499ac3a|
+| Settings |29793 /32657|c9b833e85f58dbee4ecb4595cff22efcd15ffb1e0ef35e424b7ddf62c9fd12dd|
+
+ALL SIX files of all8 exports were byte-identical to independently reviewed E05
+packages, not just the prompts. Receipts reported package_written, generated_image
+false, validation unverified and approval draft. Repeating each with output budget
+10000 refused2 with empty stdout and no destination. This is affected installed
+compiler/bounds proof, not rerun source/privacy/raster review or a model call.
+
+Existing smoke passed on all four: four canonical validators, help/Native feature
+gates, Web Documents parse where selected, gap8/check-pass, document/propose0.1,
+compare0.2 with literal displacement4, missing input refusal. Unchanged substantive
+logic, accepted E05 tables/privacy/shared-mode tests, license review and manager
+fault/reinstall campaigns are reused. No full workspace audit/suite or ImageGen/UI.
+
+### Resources, recovery, current Native scope and completion
+
+CPU/build/smoke/provenance completed and lane released in this chat at05:23
+Europe/Podgorica,2026-10-10 (clock03:23:10 UTC). All compiler/test calls had exited.
+Lightweight final manager checks: each existing bundle refuses overwrite before
+compilation; verify/remove preserves foreign sentinel and directory. Then own
+sentinels, tool guards/link, helper script, transient results/hashes and eight
+six-file export directories were removed. Own uib-I02-e05-a73m04ap root absence
+verified. Recipe/smoke owners cleaned their own nonimage stages. Original E04/E05
+inputs/packages, every image/containing directory, N06/shared artifacts and
+unrelated after-title-spacing.png remained untouched. No raw logs/build products
+are committed.
+
+Final committed AND working-tree delta check againsta026584 covered Host/src,
+plugins/macos, Observe.swift, Collector.swift and WindowAX.swift: no newer shipping
+Native delta was present at this inspection. Thus installed Native/combined is
+qualified precisely ona026584 with e641543 Native inputs. N06's separately owned
+bundle-binding failure is an OPEN Native quality dependency, not resolved by these
+no-UI installs. A later actual accepted N06 shipping delta needs new pairing review;
+no hypothetical future repair delayed the completed Core/Web outcome here.
+
+README/guide/dependency inventory now pin accepted E05 and explain literal prompt
+usage and failed-raster limits. E05's successful separate model submissions are
+attributed; both generated examples remain FAIL/unverified/draft (Director extra/
+misbound layout/IDs/state; Settings omitted inventory/dimensions; resolution/style
+limits). No universal prompt-size/image accuracy, Native quality/D06/P7 or release
+pass is implied. Model-free compiler and all previous format/privacy boundaries stay.
+
+Four exact task paths only, current master; final local targets/anchors, route and
+whitespace checks precede checkpoint+push under the shared fcntl Git lock. Final chat
+records actual SHA/remote confirmation. Product/exports/specs/Cargo/N06/Q02 files
+are not changed or staged. No packaging/compile blocker exists on the qualified pin.

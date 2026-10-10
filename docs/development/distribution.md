@@ -36,7 +36,7 @@ no destination directory and never changes PATH, home settings or permissions.
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision e64154349bc93e9c7a4a91bab7698cef84b8eb7a --destination "$BUNDLE"
+python3 distribution.py build --modules combined --revision a0265843634fce8bc6a942fc1f276391a51c54c6 --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 ```
 
@@ -59,17 +59,16 @@ newer than `--revision`. Reproduce both the source pin and the recipe revision f
 this repository. Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
-I02 qualifies product source `e64154349bc93e9c7a4a91bab7698cef84b8eb7a` with the
-unchanged recipe last changed at `6a5bec2`. Q01 accepts its Native AX helper
-lifetime/binding boundary: explicit request-driven read-only AX reuse and separate
-capture binding, with the existing deadline, identity and cleanup requirements.
-This adds no installation flag or public schema version. Update CLI, worker and
-helper together from this exact source; an older helper/Host is not the tested pair.
-Fresh native/combined installations cover Host without and with Web. Core and Web
-consumer/collector sources are unchanged; the Web-enabled shared Host is newly
-built in combined. The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md)
-separates those fresh checks from reused selection/recovery evidence and prior
-`063e709`/`a7c0416` results. No benchmark diagnostic is added to shipping inputs.
+I02 qualifies product source `a0265843634fce8bc6a942fc1f276391a51c54c6` with the
+unchanged recipe last changed at `6a5bec2`. E05 repairs the shared prompt compiler
+for complete literal Director/Settings prompts; no public schema, CLI flag or
+package version changes. It affects the CLI in every selection, so all four
+installations receive fresh build and literal-output checks. Native/Host shipping
+source is unchanged from accepted `e641543`; N05's quality harness is not bundled.
+The [I02 receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md) identifies
+actual current checks and reused safety/license evidence. Always update the full
+matching set from one source pin; independent future Native repairs need their own
+accepted pin and affected installation check.
 
 ## Flat artifact layout
 
@@ -134,6 +133,23 @@ Use the same export limits as above, replacing both the `--brief FILE` and
 The pair is analyzed locally. Comparison packages/receipts use version **0.2.0**;
 other exports retain **0.1.0**. Source coverage, unknown values and independent
 statuses remain explicit. No generated image or fresh observation is implied.
+
+## Literal real-form prompt use and image limits
+
+E05's [accepted exporter review](../plans/ui-blueprint/receipts/E05-prompt-review.md)
+confirms complete prompt-only fact tables after the existing safe projection.
+Director is18,653 characters/21,515 UTF-8 bytes; Settings is29,793/32,657.
+Installed CLI reproduces the reviewed bytes from the same saved snapshots and
+explicit metadata, with no handwritten summary or prompt editing. The six-file
+package and independent source/validation/approval statuses remain intact.
+See [the export workflow](export.md) for input metadata and explicit limits.
+
+E05 submitted those literal prompts successfully to ImageGen as a separate action;
+I02 does not generate images or require keys. Both resulting raster examples remain
+**visual FAIL, unverified/draft**: Director adds/misbinds some layout/IDs and state;
+Settings omits inventories and most dimensions/IDs. They also have resolution/style
+limitations. Do not call them checked blueprints or infer image accuracy from a
+successful package build. Larger scopes have no universal model-input-size guarantee.
 
 ## Live use and matching components
 
@@ -239,8 +255,9 @@ support follows from installing the modules.
 
 [Q02 results](../plans/ui-blueprint/receipts/Q02-performance.md) retain measured
 passing Web latency gates on their exact workloads/pins. Native request-only
-workload is now separately registered under D06@2 with the original numeric
-thresholds; its current quality/timing qualification remains Q02's responsibility.
+quality uses request-input@2 with the original numeric/sample gates and same-call
+source-fidelity requirements. Open Native quality and bundle-binding work remains
+with its assigned owners, including N06; installation does not resolve it.
 Source acceptance of AX reuse, a successful installed build and older samples are
 not a Native latency pass. Historical quality failures remain attributed to their
 original candidate; installing a newer pair does not itself prove them fixed.

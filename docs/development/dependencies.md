@@ -1,5 +1,15 @@
 # Resolved dependency inventory — T01 and S01 Stage A
 
+## I02 accepted E05 exporter delivery (2026-10-10)
+
+Candidate `a0265843634fce8bc6a942fc1f276391a51c54c6` changes only the existing shared
+exporter production source relative to I02's e641543 pin. Manifest/lock/toolchain,
+selected features, third-party material and Native shipping inputs are unchanged.
+All four fresh installations recheck the existing17/39/18/39 dependency/notice
+fingerprints. Earlier scoped license review and unchanged recovery proof remain
+applicable; no new audit, dependency or license choice. See the
+[E05 installation receipt](../plans/ui-blueprint/receipts/I02-current-distribution.md#accepted-e05-exporter-a026584).
+
 ## I02 accepted AX-reuse delivery (2026-10-09)
 
 Current candidate `e64154349bc93e9c7a4a91bab7698cef84b8eb7a` changes only existing

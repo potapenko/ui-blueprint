@@ -8,7 +8,7 @@ To build a local bundle into an existing directory:
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision e64154349bc93e9c7a4a91bab7698cef84b8eb7a --destination "$BUNDLE"
+python3 distribution.py build --modules combined --revision a0265843634fce8bc6a942fc1f276391a51c54c6 --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 "$BUNDLE/uiblueprint" --help
 ```
@@ -21,11 +21,10 @@ The [distribution guide](docs/development/distribution.md) contains prerequisite
 examples, artifact layout, limitations and safe removal/recovery. See
 [CLI details](docs/development/cli.md), [dependency notices](THIRD_PARTY_NOTICES.md)
 and the [specification registry](docs/specs/README.md).
-I02 qualifies current Native and combined installations at product source `e641543`,
-including the accepted Native AX helper lifetime/binding change. Unchanged
-Core/Web consumer and recovery evidence is reused; both Host feature selections
-are rebuilt. See the
-[I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current-distribution.md)
-for exact pins and limits. Q03 real Mac/Web saved-data usefulness is completed;
-Web latency gates are measured. Native D06 qualification remains separate and no
-full P7 or release acceptance is implied.
+I02 qualifies all four installed selections at product source `a026584`, including
+E05's complete literal real-form prompts; Native shipping source remains `e641543`.
+See the [I02 qualification receipt](docs/plans/ui-blueprint/receipts/I02-current-distribution.md)
+for exact pins, fresh checks and reused evidence. Director/Settings prompts can be
+submitted directly, but their generated images remain failed/unverified/draft and
+may omit or misbind facts. Compilation stays model-free. Q03 bounded usefulness is
+completed; open Native quality/binding work and full P7/release remain separate.
