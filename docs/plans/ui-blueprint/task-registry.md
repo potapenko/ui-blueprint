@@ -39,6 +39,28 @@
   recorded in runbook; existing EXPORT/DRAWING requirements unchanged. Actual
   generation is now required for this added task, with honest image QA/status.
 
+### N05 terminal evidence and product reconciliation
+
+- N05 terminal completed revision30, commit2eaff80e2dc114a90aef78efa9ff2008fa5ffba4,
+  author push reported; root read full receipt and observed saved HEAD/clean own tree.
+  Delivered diagnostic evidence, not a shipping repair: no code/spec/fixture changes.
+- New cold15 recurrence: same-call AXChildren success/count0 at parent28; no range
+  read, canonical empty children. All75 surviving nodes match after explicit local
+  alias adjustment. It establishes source-boundary emptiness for this recurrence,
+  not a macOS bug, cause inside target, or retroactive API fact for old cold17.
+  No ghost node/retry/pruning/quality relaxation. Native D06/P7 still open.
+- All16 diagnostic sessions reaped, own fixture quit, desktop/CPU released. E04
+  received this resource dependency; no new source/review/build campaign from N05.
+  Retain N05 chat temporarily for the immediate unresolved interpretation handoff.
+- Requested finite read-only product consultation from Mac author
+  «Спроектировать UI Blueprint»01a1102f-791c-7e91-bec3-1877ea004d51:
+  original faithful/partial AX intent versus fixed fixture count, exact remaining
+  requirement and minimal justified next action. Active turn01a123ae-377a-7310-b09e-3f3de259cd62,
+  revision101. No contract change/acceptance delegated to the advisor.
+- Next: reconcile advisor basis and N05 evidence without inventing product behavior;
+  E04 continues independently. State waiting_evidence for Native interpretation,
+  not awaiting user permission or goal-level stop.
+
 ### Native quality repair after completed measurement
 
 - Host goal remains active. Q02-R measurement completed at7788091febe62e94fab53a03aa142d298d2f4f98;
@@ -63,7 +85,7 @@
   Classification shipping_product, Restore, bounded Native acquisition ownership;
   full diagnosis→in-scope repair→affected proof→commit/push, no nested delegation.
   Exact same-call boundary evidence precedes repair; no invented policy/spec change.
-  Native runtime/quiet CPU assigned after fresh resource checks; no other active writer.
+  Historical assignment is now released by the terminal N05 receipt above.
 - Accepted source e641543/Q019675c0b, installed6ff4943 and Q03b014cd4 remain closed
   for unchanged behavior. Any actual N05 source delta requires affected proof/review
   and installed qualification, not repeating unaffected Web/Q03 or all pilots.
