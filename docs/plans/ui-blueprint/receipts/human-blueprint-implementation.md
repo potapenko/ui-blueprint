@@ -293,3 +293,48 @@ other frame kinds or native role vocabulary may lose useful human drawing eviden
 although their machine records remain exact. Root requested bounded verification by
 the continuing content critic. No source change or Native/collector expansion made;
 hold for a finite reconciled packet with proportional generic export regression checks.
+
+
+## Candidate R8 — neutral Director partial-spacing handoff
+
+Image `director-r8.png` in same system-temp root,1536×1024, review native100%.
+Literal actual CLI package `director-r8-final-package/`, exact
+`director-r8-final-command.json`, prompt8,361 Unicode characters. Built-in ImageGen
+received that literal prompt and ONLY inspected retained `director-r7.png` as edit
+target, preserving complete overview and isolated corner inset while the brief names
+the large spacing view as partial. No handwritten wrapper or pixel postprocessor.
+Tool original retained as `exec-5fc6e5f8-2080-4ec3-b89a-5a7c55c71833.png` in the same
+ImageGen directory. Temp image is a copy. No author image verdict in this handoff.
+
+Partial spacing view is the same source: input plus first two result rectangles,
+without popup frame/header/inset; complete overview retains every source result.
+No extra component/state, revised acceptance threshold or numerical tolerance.
+
+## R8 bounded compatibility restoration
+
+Root confirmed the continuing content critic independently verified both reported
+helper defects before author source edits. Existing EXPORT/MODEL/GEOMETRY require
+available source geometry and canonical semantics to retain their true attribution.
+This is a Restore within the accepted HBP envelope, not a new product contract/epoch.
+`geometry()` chooses known LayoutBounds, otherwise known AccessibilityBounds or an
+available other reported frame, retaining actual FrameKind/Space/origin/unit/transform.
+Dimension rendering uses that selected frame instead of attaching another frame's
+width to it; all other exact frames/dimensions stay in machine files.
+`component_role()` prefers canonical Role while separately preserving available native
+role text. Existing native fallback remains when canonical role is unavailable.
+No schema/engine/Native adapter/collector/host/config changes or new action authority.
+
+Focused compiler23 + CLI export20 passed. Added AX-only/native AXButton, raw DIV with
+canonical Button, mixed Layout/AX frame and unavailable-canonical/native-fallback
+regressions. They prove true frame labels, canonical size selection, raw native
+attribution and retained exact alternate-frame machine quantities. Synthetic role
+fixtures now explicitly set their intended canonical role instead of relying on
+inconsistent native-only overrides. Export/CLI Clippy -D warnings and formatting
+passed after one test-only collapsible-if repair; no lint suppression.
+
+All five non-prompt files and all required dimension lines remain byte-identical to
+R7 for BOTH real DOM cases. Settings R8 package is compatibility reconciliation only,
+prompt13,146 characters;14 dimensions and applicable criteria unchanged. Accepted
+Settings R4 image remains frozen/attributed cd099a1 and its R4 literal prompt, not R8.
+Installed current-source reproduction follows checkpoint; independent source/image
+reconciliation stays with the continuing critics. Every prior image remains retained.

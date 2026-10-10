@@ -1,5 +1,7 @@
 ЗАДАЧА
 Draw a client-facing engineering sheet “{{title}}”. {{language}}. Purpose: {{purpose}}.
+If a blueprint reference is supplied, edit it: preserve its complete overview and corner
+inset; REPLACE the conflicting large detail with the partial spacing view below.
 
 ГРАФИЧЕСКИЙ ЯЗЫК
 Solid blue #087AB5 everywhere, WHITE outlines/text/dimensions only. Flat front view,
@@ -15,9 +17,10 @@ Existing scope sheets: {{sheets}}. Detail names are human names of the source re
 ГЕОМЕТРИЯ
 Overview: exterior form/popup size, trigger size and attachment gap. A form's full
 height includes its footer. Keep popup width/height on overview only; keep insets in detail.
-Popup detail: show the heading, search and result rows; their left/right edges share
-one vertical column. Show input width once across its ACTUAL two edges, input/row
-height, search-to-first-row gap and row gap. No inset/edge-name guides in these full views.
+“Search and result spacing” is explicitly a PARTIAL detail: only the search input and
+FIRST TWO result rectangles, all sharing one left/right column. Show their common width
+once, input/result heights and the two clear gaps. NO enclosing popup frame, heading,
+inset, guide or stray mark here. The complete overview retains the heading and ALL results.
 ONE separate small enlargement, “Popup-to-search inset”, shows ONLY two nested upper-left
 corner fragments from the SAME popup and input: two uninterrupted vertical source borders,
 each joined to its own short top horizontal segment. No other vertical lines or enclosing

@@ -352,29 +352,38 @@ fn display_number(value: f64) -> String {
 }
 fn geometry(c: &SceneComponent) -> Option<&Geometry> {
     c.geometry.as_ref().or_else(|| {
-        c.properties.iter().find_map(|p| match p.known() {
-            Some(Value::Geometry(g)) if g.frame_kind == FrameKind::LayoutBounds => Some(g.as_ref()),
-            _ => None,
+        [
+            FrameKind::LayoutBounds,
+            FrameKind::AccessibilityBounds,
+            FrameKind::HitRegion,
+            FrameKind::VisibleRegion,
+            FrameKind::PaintBounds,
+        ]
+        .iter()
+        .find_map(|kind| {
+            c.properties.iter().find_map(|p| match p.known() {
+                Some(Value::Geometry(g)) if g.frame_kind == *kind => Some(g.as_ref()),
+                _ => None,
+            })
         })
     })
 }
-fn native_role(c: &SceneComponent) -> String {
+fn component_role(c: &SceneComponent) -> String {
     if let Some(role) = c.role {
         return format!("{role:?}");
     }
-    if let Some(Availability::Known {
-        value: Value::Text(role),
-    }) = &c.native_role
-    {
-        return role.clone();
+    if let Some(role) = c.properties.iter().find_map(|p| match p.known() {
+        Some(Value::Role(role)) if p.field() == Field::Role => Some(role),
+        _ => None,
+    }) {
+        return format!("{role:?}");
     }
-    c.properties
-        .iter()
-        .find_map(|p| match p.known() {
-            Some(Value::Role(role)) => Some(format!("{role:?}")),
-            _ => None,
-        })
-        .unwrap_or_else(|| "unknown role".into())
+    match &c.native_role {
+        Some(Availability::Known {
+            value: Value::Text(role),
+        }) => role.clone(),
+        _ => "unknown role".into(),
+    }
 }
 fn public_label(c: &SceneComponent) -> &str {
     c.label.as_deref().unwrap_or_else(|| {
@@ -393,7 +402,7 @@ fn public_label(c: &SceneComponent) -> &str {
 }
 fn control(c: &SceneComponent) -> bool {
     matches!(
-        native_role(c).to_ascii_lowercase().as_str(),
+        component_role(c).to_ascii_lowercase().as_str(),
         "button"
             | "select"
             | "input"
@@ -417,7 +426,7 @@ fn unit_name(unit: Unit) -> &'static str {
 fn component_name(c: &SceneComponent, index: usize) -> String {
     let label = public_label(c).replace('\n', " / ");
     if label.is_empty() || !c.children.is_empty() && label.len() > 80 {
-        format!("record {} ({})", index + 1, native_role(c))
+        format!("record {} ({})", index + 1, component_role(c))
     } else {
         format!("record {} ({})", index + 1, label)
     }
@@ -537,7 +546,7 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
             })
             .unwrap_or("");
         let field_content = if matches!(
-            native_role(c).to_ascii_lowercase().as_str(),
+            component_role(c).to_ascii_lowercase().as_str(),
             "input" | "textbox" | "searchbox"
         ) {
             format!(
@@ -604,9 +613,16 @@ fn drawing_inventory(v: &SceneView, limit: usize) -> Result<String> {
         append(
             &mut out,
             &format!(
-                "{}: {} | visible text {}{} | {} | children {:?}, parent {:?} {} {}{}\n",
+                "{}: {}{} | visible text {}{} | {} | children {:?}, parent {:?} {} {}{}\n",
                 i + 1,
-                native_role(c),
+                component_role(c),
+                match &c.native_role {
+                    Some(Availability::Known {
+                        value: Value::Text(name),
+                    }) if name != &component_role(c) =>
+                        format!("; native {}", bounded_compact_json(name, limit)?),
+                    _ => String::new(),
+                },
                 bounded_compact_json(&label, limit)?,
                 if accessible_name.is_empty() || accessible_name == label {
                     String::new()
@@ -651,6 +667,13 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
         };
         let ca = &v.components[a];
         let cb = &v.components[b];
+        if [ca, cb].iter().zip(&d.anchors).any(|(c, anchor)| {
+            geometry(c).is_some_and(|g| {
+                g.frame_kind != anchor.frame_kind || g.coordinate_space != anchor.space
+            })
+        }) {
+            continue;
+        }
         let extent = a == b;
         if d.source_kind == SourceKind::Observed {
             if extent {
@@ -660,11 +683,14 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                     .filter_map(|id| v.components.iter().find(|c| &c.id == id))
                     .any(|c| {
                         matches!(
-                            native_role(c).to_ascii_lowercase().as_str(),
+                            component_role(c).to_ascii_lowercase().as_str(),
                             "input" | "searchbox" | "textbox"
                         )
                     });
-                if native_role(ca) != "FORM" && !control(ca) && !contains_input {
+                if !component_role(ca).eq_ignore_ascii_case("form")
+                    && !control(ca)
+                    && !contains_input
+                {
                     continue;
                 }
                 if value < 12.0 {
@@ -687,11 +713,14 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                         .filter_map(|id| v.components.iter().find(|x| &x.id == id))
                         .any(|x| {
                             matches!(
-                                native_role(x).to_ascii_lowercase().as_str(),
+                                component_role(x).to_ascii_lowercase().as_str(),
                                 "input" | "searchbox" | "textbox"
                             )
                         })
                 };
+                let footer = component_role(cb).eq_ignore_ascii_case("footer")
+                    || matches!(&cb.native_role,
+                    Some(Availability::Known {value:Value::Text(name)}) if name=="FOOTER");
                 let required = match d.label.as_str() {
                     "Vertical edge gap" => {
                         large_control(ca)
@@ -704,29 +733,35 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                                     .any(control))
                     }
                     "Repeated control clear gap" => matches!(
-                        native_role(ca).to_ascii_lowercase().as_str(),
+                        component_role(ca).to_ascii_lowercase().as_str(),
                         "select" | "combobox"
                     ),
                     "Horizontal edge gap" => {
-                        native_role(ca) == "LABEL"
-                            && matches!(
-                                native_role(cb).to_ascii_lowercase().as_str(),
-                                "select" | "combobox"
-                            )
+                        matches!(
+                            component_role(ca).to_ascii_lowercase().as_str(),
+                            "label" | "text"
+                        ) && matches!(
+                            component_role(cb).to_ascii_lowercase().as_str(),
+                            "select" | "combobox"
+                        )
                     }
                     "Root left edge inset" => {
-                        native_role(ca) == "FORM" && native_role(cb) == "LABEL"
+                        component_role(ca).eq_ignore_ascii_case("form")
+                            && matches!(
+                                component_role(cb).to_ascii_lowercase().as_str(),
+                                "label" | "text"
+                            )
                     }
                     "Root right edge inset" => {
-                        native_role(cb) == "FORM"
+                        component_role(cb).eq_ignore_ascii_case("form")
                             && matches!(
-                                native_role(ca).to_ascii_lowercase().as_str(),
+                                component_role(ca).to_ascii_lowercase().as_str(),
                                 "select" | "combobox"
                             )
                     }
                     "Measured left inset" => has_input(ca) && large_control(cb),
-                    "Measured right inset" => large_control(ca) && native_role(cb) == "FOOTER",
-                    "Measured bottom inset" => large_control(ca) && native_role(cb) == "FOOTER",
+                    "Measured right inset" => large_control(ca) && footer,
+                    "Measured bottom inset" => large_control(ca) && footer,
                     _ => false,
                 };
                 if !required {
@@ -742,7 +777,7 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
             && control(ca)
             && v.components[..a].iter().any(|other| {
                 matches!(
-                    native_role(other).to_ascii_lowercase().as_str(),
+                    component_role(other).to_ascii_lowercase().as_str(),
                     "input" | "textbox" | "searchbox"
                 ) && other.surface == ca.surface
                     && match (geometry(other), geometry(ca)) {
@@ -770,7 +805,7 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
                 .filter_map(|id| v.components.iter().find(|c| &c.id == id))
                 .any(|c| {
                     matches!(
-                        native_role(c).to_ascii_lowercase().as_str(),
+                        component_role(c).to_ascii_lowercase().as_str(),
                         "input" | "textbox" | "searchbox"
                     )
                 });
@@ -779,8 +814,8 @@ fn drawing_dimensions(v: &SceneView, dimensions: &ViewDimensions, limit: usize) 
         let signature = format!(
             "{}|{}|{:?}|{:?}|{:?}|{:?}|{}",
             d.label,
-            native_role(ca),
-            native_role(cb),
+            component_role(ca),
+            component_role(cb),
             d.anchors[0].edge,
             d.anchors[1].edge,
             d.units,

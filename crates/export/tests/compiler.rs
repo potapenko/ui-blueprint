@@ -1,5 +1,30 @@
 use uiblueprint_export::*;
 use uiblueprint_schema::model::*;
+fn set_test_role(node: &mut Node, native: &str) {
+    node.native_role = Availability::Known {
+        value: Value::Text(native.into()),
+    };
+    let role = match native {
+        "FORM" => Role::Form,
+        "LABEL" => Role::Text,
+        "SELECT" => Role::Combobox,
+        "INPUT" => Role::Textbox,
+        "DIV" => Role::Group,
+        "BUTTON" => Role::Button,
+        _ => panic!("explicit test role"),
+    };
+    let Property::Requested {
+        field: Field::Role,
+        state,
+        ..
+    } = &mut node.properties[0]
+    else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Role(role),
+    };
+}
 fn limits() -> ExportLimits {
     ExportLimits {
         max_input_bytes: 2_000_000,
@@ -612,9 +637,7 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
         (4, "SELECT", 202.0, 54.0, 198.25, 33.125),
         (6, "SELECT", 202.0, 102.671875, 198.25, 33.125),
     ] {
-        snapshot.nodes[i].native_role = Availability::Known {
-            value: Value::Text(role.into()),
-        };
+        set_test_role(&mut snapshot.nodes[i], role);
         let Property::Requested {
             state: Availability::Known {
                 value: Value::Geometry(g),
@@ -664,9 +687,7 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
         panic!()
     };
     *public_text_fields = vec![Field::VisibleText, Field::AccessibilityName];
-    snapshot.nodes[0].native_role = Availability::Known {
-        value: Value::Text("INPUT".into()),
-    };
+    set_test_role(&mut snapshot.nodes[0], "INPUT");
     let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
         panic!()
     };
@@ -713,7 +734,7 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     let input = prompt
         .lines()
-        .find(|line| line.starts_with("1: INPUT"))
+        .find(|line| line.starts_with("1: Textbox; native \"INPUT\""))
         .unwrap();
     assert!(input.contains("visible text \"\""));
     assert!(input.contains("accessible name (not field content) \"Accessible search name\""));
@@ -746,9 +767,7 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
         (4, "BUTTON", 30.0, 85.0, 198.25, 24.0),
         (6, "BUTTON", 30.0, 112.0, 198.25, 24.0),
     ] {
-        snapshot.nodes[i].native_role = Availability::Known {
-            value: Value::Text(role.into()),
-        };
+        set_test_role(&mut snapshot.nodes[i], role);
         let Property::Requested {
             state: Availability::Known {
                 value: Value::Geometry(g),
@@ -808,4 +827,126 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
         && d["anchors"][1]["component"] == "N000"
         && d["label"] == "Measured right inset"
         && d["value"] == 20.0));
+}
+
+#[test]
+fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("AXButton".into()),
+    };
+    for fields in std::iter::once(&mut snapshot.context.fields)
+        .chain(std::iter::once(&mut snapshot.coverage.fields))
+        .chain(
+            snapshot
+                .observations
+                .iter_mut()
+                .map(|o| &mut o.coverage.fields),
+        )
+    {
+        for field in fields {
+            if *field == Field::LayoutBounds {
+                *field = Field::AccessibilityBounds;
+            }
+        }
+    }
+    for node in &mut snapshot.nodes {
+        for p in &mut node.properties {
+            if let Property::Requested { field, state, .. } = p
+                && *field == Field::LayoutBounds
+            {
+                *field = Field::AccessibilityBounds;
+                if let Availability::Known {
+                    value: Value::Geometry(g),
+                } = state
+                {
+                    g.frame_kind = FrameKind::AccessibilityBounds;
+                }
+            }
+        }
+    }
+    let original = serde_json::to_vec(&brief).unwrap();
+    let package = compile(&brief, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("1: Button; native \"AXButton\""));
+    assert!(prompt.contains("Geometry context 1: AccessibilityBounds; Space"));
+    assert!(prompt.contains("REQUIRED Width AccessibilityBounds: start record 1"));
+    assert!(!prompt.contains("LayoutBounds"));
+    let dims = data(&package, "dimensions.json");
+    assert_eq!(dims[0]["dimensions"][0]["value"], 97.296875);
+    assert_eq!(
+        dims[0]["dimensions"][0]["anchors"][0]["frame_kind"],
+        "accessibility_bounds"
+    );
+}
+
+#[test]
+fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("DIV".into()),
+    };
+    for node in &mut snapshot.nodes {
+        let mut ax = node.properties[2].clone();
+        let Property::Requested { field, state, .. } = &mut ax else {
+            panic!()
+        };
+        *field = Field::AccessibilityBounds;
+        if let Availability::Known {
+            value: Value::Geometry(g),
+        } = state
+        {
+            g.frame_kind = FrameKind::AccessibilityBounds;
+            let Shape::Rect(r) = &mut g.shape else {
+                panic!()
+            };
+            r.width = 201.5;
+        }
+        node.properties.push(ax);
+    }
+    snapshot.context.fields.push(Field::AccessibilityBounds);
+    snapshot.coverage.fields.push(Field::AccessibilityBounds);
+    for o in &mut snapshot.observations {
+        o.coverage.fields.push(Field::AccessibilityBounds);
+    }
+    let package = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("1: Button; native \"DIV\""));
+    assert!(prompt.contains("Geometry context 1: LayoutBounds; Space"));
+    assert!(prompt.contains("REQUIRED Width LayoutBounds: start record 1"));
+    assert!(!prompt.contains("REQUIRED Width AccessibilityBounds"));
+    let dims = data(&package, "dimensions.json");
+    assert!(
+        dims[0]["dimensions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|d| d["label"] == "Width AccessibilityBounds" && d["value"] == 201.5)
+    );
+    // A missing canonical role may use the existing reported HTML-native fallback.
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[0] else {
+        panic!()
+    };
+    *state = Availability::Unknown {
+        reason: Id("test-role-not-exposed".into()),
+    };
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("BUTTON".into()),
+    };
+    let package = compile(&brief, limits()).unwrap();
+    assert!(
+        std::str::from_utf8(&package.files()["prompt.txt"])
+            .unwrap()
+            .contains("1: BUTTON |")
+    );
 }
