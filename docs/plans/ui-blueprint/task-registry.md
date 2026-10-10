@@ -20,6 +20,39 @@
 
 ## Текущее продолжение — 2026-10-10
 
+### Current ready work — N06 binding and I02 delivery
+
+- E05-R terminal accept_with_residual, a307bffa123c8ab58fd538961d8dc4d467b9957d
+  pushed; full receipt read. Literal exporter source/data/privacy/bounds and all
+  mode formatting accepted for a026584. Author tests correctly attributed; reviewer
+  independently replayed retained binary with source hashes. Raster outputs remain
+  failed/unverified/draft, not an accepted residual image. E05 and E05-R archived
+  after complete source/evidence handoff; restore only for actual affected work.
+- I02 existing01a11bdd-8f38-7943-a91f-3621a70a994c unarchived to qualify accepted
+  exporter a026584 in current installed selections, via appended packet. Product
+  code protected; exact source pin and affected build/smoke/recovery applicability.
+  Core/Web ready now; don't mislabel any later Native delta as installed. No UI or
+  ImageGen; saved real input/literal prompt checks. Build lane available from N05.
+- N05 terminal revision72 / turn01a123b9-3086-7cc2-89a8-5f74d7252c2d;
+  e89cd0f registration,37a76fa predicate,89ef8f0 final evidence pushed. Root read
+  full new152-line receipt.242calls,236passes,3own same-call source variations,
+ 6target_unresolved; no shipping change. Independent review of final predicate/
+  quality still pending, batch with ensuing Native change rather than a new audit.
+- Separate trace located initial Collector.swift bundle guard before AXWindows;
+  actual missing app vs missing bundle vs mismatch not yet known. All original
+  failures retained.335totalqualification+diagnostic calls and45sessions accounted;
+  own fixtures/helpers retired, CPU/desktop released. N05 archived after handoff.
+- N06 «N06 — Надёжная привязка Native-окна», chat
+  `01a123d0-12c0-7033-b1c5-2286ba94e973` / local, active turn01a123d0-158a-71b2-b228-2211c1e9e8eb,
+  assigned [full exact-target repair](packets/N06-native-target-binding.md).
+  Task-wide semantic scope limited to read-only binding, strict identity preserved;
+  diagnose actual metadata branch→source-grounded repair→affected proof/quality+
+  latency→commit/push. No retries/weak binding/fabricated cause or adjacent redesign.
+  I02 owns README/distribution; actual quiet-CPU conflicts coordinated, disjoint
+  source work and Core/Web delivery parallel. Q01 retained for final Native review.
+- Root coordination writes: registry, N06 packet, I02 continuation. Source accepted
+  does not close Native D06/P7 or promise checked generated raster.
+
 ### E05 candidate complete; independent source/privacy review
 
 - E05 terminal revision41, turn01a123bb-0fb7-70d0-9aa3-937fb2e51983;

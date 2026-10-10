@@ -162,3 +162,43 @@ usable current install/use/recovery procedure and remaining qualification limits
 No speed claim from a build or absent performance result. This finite task does not
 wait to rewrite the whole product plan; complete affected local delivery within its
 scope while root separately tracks D06 and overall acceptance.
+
+## E05 accepted exporter delivery — 2026-10-10
+
+Continue the same installed-candidate outcome on immutable product source
+`a0265843634fce8bc6a942fc1f276391a51c54c6`. Independent E05-R review
+`a307bffa123c8ab58fd538961d8dc4d467b9957d` accepts literal export data/privacy/
+compatibility with explicit failed-raster residuals. Root read both complete receipts.
+Current Native helper remains accepted e641543; N05 changed specs/test harness only.
+Registry34/request-input@2 does not alter installation behavior. All prior I02
+recipe/safety/license proof remains reusable only after actual applicability check.
+
+One full outcome: deliver current installed core/web/native/combined selections
+including the accepted prompt repair, with smallest sufficient affected qualification,
+model-free use and current reproducible instructions/receipt/commit+push. Use your
+existing package manager and system-temp workflow, not a new framework. Inspect
+actual E05 source/feature inputs to determine affected builds. Verify installed
+literal prompt reproduction on saved real E04 inputs (prompt sizes/content/hash
+compared to independently reviewed outputs where environment-independent), and
+existing unaffected commands through sufficient reused evidence. Do not run
+ImageGen or any UI; E04/E05 already exercised generation and reported image failures.
+No claimed image accuracy or Native quality/P7 completion from installation.
+
+Native target binding is separately owned by N06
+01a123d0-12c0-7033-b1c5-2286ba94e973. Preserve the immutable pin and label any later
+Native source delta; don't rebuild repeatedly for documentation commits. If that
+source changes before your final result, complete unaffected Core/Web and return
+the exact Native/combined packaging delta instead of silently mixing binaries.
+Root can supply a later accepted helper pin in this same task. Do not wait on a
+hypothetical future repair before qualifying today's dependency-ready modules.
+
+Same original I02 writable ownership only; product/spec/export docs and N06 source
+are protected. README/distribution docs must preserve new generation limitations:
+public prompt now submits directly for Director/Settings, but generated raster
+remains unverified/draft and may omit/misbind data. Model-free compiler stays local.
+No source code, dependencies, manifests, system settings or publisher changes.
+
+CPU/build lane is available now from N05's terminal release. N06 may inspect/plan
+its independent binding repair; coordinate only actual timed runtime/quiet CPU
+collision through root. Existing target dirs stay task-local. Full internal cycle
+is authorized, no repeated root approval; exact source/recipe/build/push receipt.
