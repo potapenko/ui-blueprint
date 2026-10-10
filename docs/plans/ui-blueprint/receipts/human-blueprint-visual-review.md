@@ -256,3 +256,52 @@ The existing official Onshape association evidence already resolves these same
 anchor errors; no new research question or speculative standard was introduced.
 Independent content-critic findings were not substituted for this visual assessment.
 `git diff --check` passed; only this receipt changed, all frozen inputs remain intact.
+
+## R3 independent review — 2026-10-10
+
+Source `bdd73d40d90d26086f2aa6b279ac40b52413b1c9`; images in the same retained
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/` root:
+`director-r3.png`, `settings-r3.png`, both 1536 × 1024 at declared 100% native size.
+Read the sole applicable contract delta, DRAWING@1.2 HBP-HUMAN-001 R3 text-channel/
+anchor clarification, before images. Reused unchanged selected closure and V1–V6.
+Images preceded bounded literal `director-r3-package/prompt.txt` and
+`settings-r3-package/prompt.txt` inspection; author narrative was not needed/read.
+Initial observations were sent independently before root allowed reconciliation.
+
+**Verdict: R3 not yet accepted; retain the successful areas.** Director now correctly
+shows `spiel` in both views and explicitly identifies “Keyboard-active; not applied”.
+Settings now correctly connects ≈16 between adjacent selects, ≈12 from the named
+label-layout right edge, and both ≈15 insets to named footer right/bottom edges.
+The whole-form height includes Close/footer. These R2 defects are resolved.
+
+| Criterion | Director R3 | Settings R3 |
+| --- | --- | --- |
+| V1 | Pass: same blue/white outline grammar. | Pass, including blue-interior off knobs. |
+| V2 | Source text/state/counts pass; enlarged input/result alignment remains visibly inconsistent. | Pass: meaningful source controls, values and help text remain complete. |
+| V3 | Main hierarchy still passes, but “record 4” and “record 5” construction IDs have leaked into visible detail captions. | Pass. |
+| V4 | Pass at native delivery size. | Pass at native delivery size. |
+| V5 | Fail on enlarged width/inset anchor associations, detailed below. | Fail only on missing required Close height ≈30; repaired gaps/footer associations are useful and clear. |
+| V6 | Rounded labels/status remain honest, but wrong edge associations prevent full pass. | Visible labels/status pass; required-dimension omission remains V5. |
+
+Finite repair list:
+
+1. Remove `(record 4)` / `(record 5)` from Director's visible captions. These are
+   construction identifiers, expressly marked non-printing in the literal prompt.
+   Keep readable human captions; no new legend, heading system or detail is needed.
+2. Fix Director's enlarged popup dimensions against its actual drawn boundaries.
+   Its ≈178 width starts inside the search control rather than at its left edge;
+   ≈194 similarly uses an inset span inside the popup. Both ≈8 marks span short
+   free-standing guides instead of popup border → input edge. Place those extension
+   lines on the real popup/input boundaries and align input/results on common
+   left/right edges. The input is visibly shifted right relative to the result
+   column, so this is the existing relationship requirement, not a new raster
+   tolerance. Preserve the repaired text/state and the already readable ≈6/≈3 gaps.
+3. Restore the mandatory `≈30 px` Close height in the Settings footer detail,
+   connected to Close top/bottom. Keep ≈52 width and the now-correct named ≈15
+   right/bottom insets. The literal prompt explicitly requires height; it is absent
+   from both overview and detail, so the gap is not a new reviewer preference.
+
+No new palette, composition, typography, ornament, scale or research requirement.
+Existing primary-source dimension-association guidance covers the remaining defects.
+Do not redo accepted content, settings gap semantics or footer geometry to obtain
+these local repairs. `git diff --check` passed; only this receipt changed.
