@@ -20,33 +20,38 @@
 
 ## Текущее продолжение — 2026-10-10
 
-### Remaining Native execution handoff
+### Native quality repair after completed measurement
 
-- Host goal active. Previous goal turn was a status answer without progress;
-  this continuation obtains new authoritative terminal evidence.
-- Old Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: host revision428,
-  thread notLoaded, turn `01a1203f-b27e-7152-adc0-75da18a8e74d` failed with
-  `context_length_exceeded`. This proves execution stopped; no timeout inference.
-  Its source checkpoint and handoff are preserved. Q02-R revision15 reports no
-  remaining old fixture/helper/worker processes; no cleanup/kill was needed.
-  Old Q02 archived through the chat tool after this resource handoff.
-- Q02-R `01a12127-5b94-7801-95cd-c35cf2c3ceab`,
-  «Q02-R — Native замеры принятой сборки», is the sole next executor of the
-  existing [finite packet](packets/Q02-native-final-execution.md).
-  Dispatch confirmed active/inProgress, turn01a12399-7bf2-7020-bac7-034b30a3ba99,
-  revision15. Resource handoff complete; worker prepares the existing harness
-  for the accepted source. Next: complete Native timing/quality autonomously. Root does not run QA or prescribe internal steps.
-- User rejected Codex Computer Use. Its former UI Stop instruction is revoked;
-  manual Stop is unnecessary now. No control bypass or replacement chat.
-- Accepted e641543 source/Q019675c0b, installed6ff4943 and Q03b014cd4 remain closed
-  in their exact scopes. Native final timing/quality remains unaccepted; historical
-  failures retained. Contract gates/product scope unchanged; no new material choice.
-- Coordination-only write set: execution.md, task-registry.md,
-  packets/Q02-native-final-execution.md. Route: global implementation/root rules →
-  repository AGENTS → execution/registry → existing Q02-R packet. This action
-  changes executor ownership and removes rejected UI control, not product intent,
-  test selection or acceptance. Product registry33 and packet Spec Basis unchanged;
-  worker must read its complete selected closure before product work.
+- Host goal remains active. Q02-R measurement completed at7788091febe62e94fab53a03aa142d298d2f4f98;
+  canonical remote master verified, tree clean except protected unrelated PNG.
+  Root read its full new receipt (through Release/checks/retention), not raw QA.
+- All four cohorts20cold/100warm+1initial,484calls. Numeric candidate p95 off/on:
+  AX29.425/29.230ms, capture148.653/148.535ms, warm outer271.087/269.993ms,
+  cold356.967/370.029ms. These reported measurements satisfy frozen numeric limits;
+  overall Native D06/P7 remains OPEN because one quality failure persists.
+- candidate-off/cold17:75nodes vs76, parent28 missing anonymous child70. Before/after
+  witnesses are not same-call truth. Sidecar shows no configured cap/refusal; actual
+  collector loss versus source/API omission remains unproved. No OS-cause claim.
+  Original sample/pins and historical failures retained; no retry-to-pass.
+- Q02-R `01a12127-5b94-7801-95cd-c35cf2c3ceab` terminal completed revision58;
+  all84sessions closed and own processes/resources released in receipt.
+  Measurement task archived after transfer of saved result to N05.
+  Old Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c` remains archived after terminal
+  context_length_exceeded and verified no leftover processes. No Codex UI control.
+- N05 «N05 — Полнота Native AX-дерева», chat
+  `01a123a5-1fd4-7bc2-8a04-12c21a95a3d2` / local, owns the finite
+  [Native child fidelity task](packets/N05-native-child-fidelity.md).
+  Classification shipping_product, Restore, bounded Native acquisition ownership;
+  full diagnosis→in-scope repair→affected proof→commit/push, no nested delegation.
+  Exact same-call boundary evidence precedes repair; no invented policy/spec change.
+  Native runtime/quiet CPU assigned after fresh resource checks; no other active writer.
+- Accepted source e641543/Q019675c0b, installed6ff4943 and Q03b014cd4 remain closed
+  for unchanged behavior. Any actual N05 source delta requires affected proof/review
+  and installed qualification, not repeating unaffected Web/Q03 or all pilots.
+- Root coordination write set: this registry and N05 packet. Spec Basis closure
+  completely recovered for this exact Native quality task and recorded in packet;
+  source implementation and runtime QA remain worker-owned. Contract requirement,
+  observed failure and proposed investigation are explicitly separated.
 
 ### Historical continuation — 2026-10-09
 
