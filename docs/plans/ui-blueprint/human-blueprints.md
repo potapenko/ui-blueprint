@@ -1,4 +1,4 @@
-# Human-readable blueprints — artefact acceptance and fresh-prompt goal
+# Human-readable blueprints — completed artefact and fresh-prompt goals
 
 ## Authority and outcome
 
@@ -638,3 +638,37 @@ member of Close size-view merely because it supplies an anchor. Underlying UI te
 retained; ambiguous multiline trigger caption falls back to expanded-button context.
 Mobile singleton input has its own size-view. Six fresh first calls, unchanged
 criteria; all previous cohorts remain immutable and visual acceptance is pending.
+
+
+## FRESH-01 final acceptance — 2026-10-11
+
+Goal outcome verified: the actual generic CLI generator atd2b8daa produces source-
+applicable prompts; all six predeclared fresh outputs in FRESH01-C6 pass both
+unchanged C/V scopes. HBP-C13d3ce2 also accepts bounded C7. HBP-V2fa6ccc accepts
+V1–V6 at each actual native size. No generated blueprint reference, manual wrapper,
+retouch or favourable-cell substitution was used in this final cohort. Earlier
+baseline and five failed cohorts remain in their frozen manifests/receipts.
+
+Execution evidence d5e5caa:36focused compiler tests, lint/format/build checks and
+exact-source core installed verification passed; all six files of each of the three
+frozen packages reproduced byte-for-byte. Independent C source/package/hash review
+reconciled those author checks. No mandatory image/source/privacy/compatibility or
+installed-evidence gap remains. The task registry records final immutable source,
+image/package paths, ownership and actual output sizes; source work is in master.
+
+The accepted improvement is structural: choose supported views from actual source,
+keep each control-size bundle complete, separate edge-only fragments from full
+rendered objects, avoid raw construction/procedure captions, preserve safe states,
+placeholders/visibility and coordinate context. No fixture-name constants, new
+collector/schema/renderer or model call was introduced into the CLI. Original exact
+machine data is preserved. The UI reference may guide appearance, but all annotated
+measurements come from the data and existing engine.
+
+Scope of assurance: all six outputs passed on these three saved forms/revision,
+not universal/stats-based reliability or identical future pixels. Small strokes,
+wrapped-caption variation and schematic clipping positioning were not hidden as
+perfect raster/CAD output; neither critic found a remaining material criterion
+failure. Generated footer states remain as at generation, with later acceptance
+recorded separately. Future generated images still require checking under the
+existing drawing-review contract. The canonical goal is complete after the final
+coordination checkpoint and host close; no further worker/audit packet is needed.

@@ -1,144 +1,67 @@
 # Единый реестр задач
 
-## Активная цель FRESH-01 — надёжность промпта с нуля
+## FRESH-01 — завершено, 2026-10-11
 
-Пользователь2026-10-10 прямо запустил новую цель улучшения генератора после
-уточнения: прежняя приёмка картинок не доказывает качество первой генерации.
-[Новый раздел плана](human-blueprints.md#new-active-goal-fresh-01--2026-10-10).
-Same authorized coordinated scope: root coordination-only, один исполнитель и
-два прежних критика, no nesting/settings override. Goal active, budget не задан.
-- `/root/blueprint_builder`: FRESH-01-I implementation running; finitegenericplan accepted after
-  baselinefindings. Exactsource/template/tests/docs set inplan; tempthirdadapter
-  and frozen6freshoutputs, nointermediateprototypes. Own implementationreceipt.
-- `/root/blueprint_content`: baseline985dae4 + mobile-inputqualification500b044 accepted; ждёт cohort;
-  own content receipt, no code/generation.
-- `/root/blueprint_visual`: baselinebecdda5 + thirdscope pinned; ждёт cohort;
-  own visual receipt, no code/generation.
-- Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: один запрос существующей
-  третьей real form/evidence, без разработки сайта/новых чатов.
-Baseline1599ce4/productb008a44; master, only unrelated untracked PNG protected.
-Protocol pinned: frozen3forms×2freshoutputs,6/6 substantivepasses плюсC7 для
-bounded cohortclaim, без universal/reproducible raster promise. Baseline отдельно;
-новый materiallychanged prompt → новаяполнаяcohort, прошлые failures сохраняются.
-Thirdcase selected beforeoutputs: mobileClipSearchFilters viewport390×844;
-webadvisor собирает original screenshot+runtimeDOM, exactpaths pending.
-Baseline2 ready: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-baseline-hhcyuw74,
-director-baseline.png/settings-baseline.png,1536×1024 each, literalb008a44 packages.
-Bothcritics initialreject: Settings invents search/results/inset; literaltemplate
-unconditionally demands Director-shaped details + oldeditpreamble. Director has
-redundantinset/active-detail issues. This is confirmedgenerictemplateleak, not
-justmodelrandomness. No baseline mixed into finalcohort.
-Thirdsource ready: /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-mobile-filters-OBW93z,
-handoff.md/mobile-filters.jpg+runtimeDOM/AX. Bothcritics pre-pinned visible390×844:
-Source3modes(Allactive),emptyYearsFrom/To,14genres2×7,emptyDirector+help,
-Castpartlyvisible;ActorVoice/loweromitted. No inventedfooter/results. Useful44vs40
-controlheights/pairedcolumns/gaps, noteverygenrelabeldimension. Builder adapts via
-existingobservedimport in systemtemp; no productioncollector/sitechange.
-Current next: genericper-viewplan implementation (Restore existingcontracts),
-thirdinputcarrier+limitations, frozenexactrevision/prompts, sixfreshcalls. Source
-planaccepted; no further microstepapproval unless concreteauthority/dataconflict.
-Vbaselinebecdda5 is0/2; Cbaseline985dae4 confirms generictemplatefailure.
-Mobilecarrierqualified500b044: same baseline-temp root mobile-snapshot.json/
-mobile-metadata.json/mobile-import.py/mobile-import-limitations.json. Exact53nodes,
-17pressed separate/4visibleemptyflags/noValue/partial+17omitted,Cast44vs27;
-AX remains separateactualevidence. Builder oldpreflightCLI succeeded. Confirmed
-oldpromptomits knownPlaceholder; fix distinctplaceholder emission in authorized
-rendererchange. No carrierrepair/collectorchange needed.
-FRESH01-C1 FROZEN beforefirstcall: source76f14ac5a2ce6cb45a54e9c16b64342492d361fb,
-manifest в baseline-temp frozen-cohort-manifest.json. Three *-frozen-package,
-commands/hashes/originalrefs pinned; outputs *-cohort-1.png/*-cohort-2.png.
-Director8790chars/Settings14496/Mobile17431; all5nonpromptfiles exactbaseline.
-Compiler26/CLI20/Clippy/fmt passed authorchecks; no candidatevisualclaim yet.
-FRESH01-C1 complete/rejected:6outputs,0refusals/edits/rerolls/wrappers. Allhashes/
-input/ref/promptpins verified byC. V00c7a06 and C256fbbb agree0/6passes:
-D1/D2anchorambiguity;S1/S2Close30omitted/anchors+filledknobs;M1anchors/clipscope;
-M2missing REQUIREDDirector366×44/root12. All requirednumbers existed inliteralplan.
-Genericapplicability improved (no fabricatedSettingssearch/results), but nofresh
-cohortacceptance. Sourceinstalledbf70583 reproducedall6files ofall3packages; this
-is executionevidence, notC7acceptance. NewC7gap: clipped(c) conflates anyunequal
-VisibleRegion withclipping irrespective frame/space/subset; repairboundedselected
-helper to preserve non-DOMframe distinctions and validmobile27/44.
-Builder FRESH01-C2-I fullfinite implementation+validation approved/running;
-compact per-view W/H +two-borderfragment and boundedclippedRestore, same5paths.
-Proposedcompactlocal geometry+smallcomplete W/H/gap/insetbundles must preserve
-samefacts/criteria; sourceconcisenessis hypothesis, notprovedsolecause. Noappend-
-onlyprohibitions/manualretouch/blindreroll. Next: changed-riskchecks→newsourcefreeze→newcomplete6freshcohort in
-separateimmutablemanifest/outputpaths, then sameindependentcritics. C1all
-images/receiptsremain, neverreplacefailedcells.
-C2 FROZEN beforecalls: sourcec32712a8c0ffd08e043cb86b48d2b1fb028b64ea,
-newroot /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c2-2652yyb8,
-frozen-cohort-manifest.json. Sameexact3inputs/originalrefs/criteria; promptchars
-7633/9993/12035; priorC1manifest linked, immutable. Builder27focusedcompilerchecks
-passed inclclippingnegatives, all5nonpromptfiles×3 exactC1. C2 complete/rejected: sixfirstfreshoutputs,0edits/rerolls/wrappers/refusals.
-Cee7a45b:1/6contentpass(M2), othersfailstate/IDs/text/anchors. V9fca9be:0/6fullpasses;
-V1all6 and mobilesV2/V4/V5/V6 pass, but technicalIDs/metadata violateV3. Geometry
-improved, no thresholdchange. Installedd22d7b7 exactc32712a all3packagesreproduced.
-Clippingrepair independentlyaccepted. RemainingC7 only compact-objectloss of
-Enabled/state_and_actions and per-objectSpace/contextlink. No newbroadaudit.
-C3-I fullfinite repair+new6cohort authorized/running with samebuilder/5paths:
-source-derivedhumanaliases + explicitprintablecontent/footer, suppressgenerated
-recordkeys/CDPprocedure/unknownmetadata (not actualUIwords), restore safestates
-andcontextlinks, strengthen genericorientation/two-border scalarfragments.
-Preserve allrequireddata/criteria and clippingfix; focusedchangedrisks only.
-C3 FROZEN beforefirstcall: sourcee92dd7dfa0ac18b68bee9e9150bf1e420ff437ff,
-root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c3-6cv0u75c,
-frozen-cohort-manifest.json hash9c247e9647a62e2cecb30a578e9edaaf2ffeb39d9867a4e6c8fd5cab98a537c9.
-Samequalifiedinputs/originalrefs,3literalpackages,6freshoutputpaths; author29focused
-tests/clippy/fmt passed, all5machinefiles eachcase exactC2. Generationrunning.
-C3 complete/rejected: C68342bb/V76b4735 both1/6fullpass(M2). Noisegone,
-remainingD1/D2statebadgeomissions/D1third-baselinegap;S1Close30omitted;
-S2footer15onheightguide;M1Allstateinrepeateddetail. Literalbadgewasrequired;
-no newgate. C7boundedrestorationPASS e92dd7d; installedc312dbe3packagesexact.
-C4-I approved/running on2026-10-11: samebuilder/5paths, symbolictwo-source-edge
-mini-layout inside literalprompt (not newrasterrenderer), exactper-viewprintable
-statecaptions/repeatedstate, heightleftwhenrightinsetpreventscompetingguide.
-Samefacts/criteria; preserve signedzero/negative/unknownordering conservatively,
-no inventedseparation. Focusedformat/statechecks only, priorC7reuse. NextNEW
-C4 FROZEN beforecall: source8db76ba7cf4d3298f5a5cd89388a97967595659d,
-root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c4-d3yemcfo,
-frozen-cohort-manifest.json hash79eb884fffe90a19481ae1daae98d4a076bd9ade599abf5edbcd6e4d69e290a9.
-Same3inputs/originalrefs/criteria; 31focusedtests/clippy/fmt passedauthor,
-5machinefiles eachcase exactC3. Symbolicsketches restrictedknownpositivepairs
-incommonTopLeftspace; nonpositive/unknownnotinvented. Exactly6freshcallsrunning.
-C4 complete: BOTHcritics4/6PASS(D1,S1,S2,M1). V5e790f2; C96f64d9
-explicitM1correctionafterboundedcontextreconciliation (no newtext-namegate).
-D2missingREQUIREDpopupwidth194;M2root12endpointcontextabsent. Installedb57d9e4
-exact8db76ba3packagesreproduced. OneC7newhelpergap: CenterX/CenterY wronglytreated
-asvertical/bottomborders; ordinaryrealcohortdata unaffected, machinefilesexact.
-C5-I approved/running samebuilder/same5paths: existingouteroverviewwidth gets
-explicitbelow-shapeslot; scalarfragments get exacthumanendpointcaptions/context;
-centers correct-axisnamed-anchorfallback, newcornerrecipesactual4borders only.
-Tinyfocusedformat/centereligibilitychecks, no design/auditexpansion. NextNEWC5
-C5 FROZEN beforecall: source405882351f90bb5e468c20989d7d4c3f0baed115,
-root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c5-5gew_bxr,
-frozen-cohort-manifest.json hash12c83375746d5e2a41483032815b44b87b4b39d1aac2a2a1affefc6bc1e18037.
-33focusedtests/clippy/fmt passedauthor; machine5files×3 exactC4. Originalinput/ref
-hashes unchanged. Proposed absolute-distance pairs stay conservative namedanchors;
-positive alone does not establishSTART-left/upper. Sixfreshfirstcallsrunning.
-C5 complete/rejected: Cd2cd1912/6contentPASS(D1,D2),V3a0ceea0/6complete
-becausecaptionsforce rawiconligatureexpand_more. SourceC7PASS4058823,
-installed3c2b0503packagesexact. RemainingSfooterextra-frames/guides,M1missing
-mandatorysizes+misplacedgenre8,M2three-guide12. C5outerwidth194fixedbothD.
-C6diagnostic confirmed directconstructionmix: anchor-only context emits full
-Footer421×56 andClose52×30 pluscornerrecipes; eachscalar describedthreetimes.
-Triggercarrier hasonlymultilineaggregateAny director/expand_more, no reliable
-iconleaf/accessibilitydistinction, so mustnotclassify/filtertokenasUItext.
-C6-I fullfiniteplan approved/running: separatetruefullrender-members/sizeviews
-fromanchor-only minimal2edgefragments; singlegeometryrecipe; trustworthyhuman
-caption or role/contextfallback, no lexicalfilter; singletoninput ownsizeview
-forDirector366×44, root12preserved. Same5paths/facts/criteria, focusedtests.
-C6 FROZEN beforecall: sourced2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90,
-root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c6-q6xwk84w,
-frozen-cohort-manifest.json hash7b528ef95438c082ad72052e3781b219faf3ae2fd152996d8aaff552533d0859.
-36focusedtests/clippy/fmt passauthor; machine5files×3 exact. Sameinputs/originalrefs,
-newliteralpackages and6freshpaths. ScalarblocksnowseparatewithnofullObject/box;
-FooterexcludedfromClose size-view anchorcontext; sourceUITextretained, caption
-expandedbutton; singletonmobileinputsizeviewcreated. Generationrunning.
-Nextneutralall6→samecritics; allC1–C5retained, no imageedits/rerollselection.
+Пользователь2026-10-10 прямо запустил новую цель: улучшить actual script-generated
+prompt для хороших первых генераций, после уточнения ограничений прежней приёмки
+отредактированных картинок. Root координировал, тот же builder и два постоянных
+критика работали без nesting/model overrides. [План/история](human-blueprints.md).
+Предыдущие P0–P7 и image-iteration goals не переоткрывались.
 
+Доставлен generic source-applicable CLI prompt: отдельные size/repeated views и
+минимальные edge-only fragments, один понятный владелец каждого размера,
+без безусловных чужих search/results recipes/редактирования прошлого blueprint.
+Клиентские подписи отделены от raw role/ID/procedure text; нужные состояния,
+placeholder/clip semantics, coordinate contexts и exact machine facts сохранены.
+Исходный UI text не вырезается blacklist-ом; неоднозначный multiline caption
+получает безопасное human role/context имя. CLI остаётся model-free.
 
-Старые R1–R8 не свежие испытания.
+Финальный product source: `d2b8daa80f3fb0976f092ef3bd9d6ba1b2627c90`.
+Принятая FRESH01-C6: все6 заранее заданных FIRST fresh outputs проходят оба scope.
+Три сохранённые реальные формы PlayPhrase.me × две отдельные генерации: Director,
+Settings и mobile Clip Search Filters. Только ORIGINAL UI refs + literal CLI prompt;
+0edits/history images/manual wrappers/rerolls/refusals. Criteria не ослаблялись.
+- HBP-I `/root/blueprint_builder`: done; [receipt](receipts/human-blueprint-implementation.md)d5e5caa.
+- HBP-C `/root/blueprint_content`: C1–C6 all6 + C7 accepted;
+  [receipt](receipts/human-blueprint-content-review.md)13d3ce2.
+- HBP-V `/root/blueprint_visual`: V1–V6 all6 accepted;
+  [receipt](receipts/human-blueprint-visual-review.md)2fa6ccc.
+Новых заданий нет; source/prompts/images заморожены, обязательных gaps нет.
 
+C6 root: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c6-q6xwk84w`.
+`frozen-cohort-manifest.json` SHA256
+7b528ef95438c082ad72052e3781b219faf3ae2fd152996d8aaff552533d0859;
+`cohort-results.json` содержит все exact paths/hashes/original copies/native sizes.
+Изображения: director-cohort-1/2.png1536×1024; settings-cohort-1/2.png1036×1518;
+mobile-cohort-1.png1236×1272, mobile-cohort-2.png1165×1350. Оценка native100%.
+Три *-frozen-package содержат фактические CLI prompts и machine files.
+
+Source/code evidence:36focused compiler tests, lint/format/CLI build checks passed;
+exact-source core build/installed verify reproduced6files×3packages byte-for-byte.
+C независимо проверил frozen prompt/ref/input/image hashes, source delta и exact
+5nonpromptfiles×3 equality; executed checks остаются attributed author evidence.
+Это проверка временного installed build, не заявление об обновлении каждого
+операторского binary на PATH. Исходник текущей master и public CLI build доставлены.
+
+История честной оценки изображений (совместный C/V result, отдельно от sourceC7):
+baseline0/2; C1=0/6; C2=0/6; C3=1/6; C4=4/6; C5=0/6; C6=6/6.
+Каждая серия имела свой frozen source/manifest; ни один failed cell не заменён
+удачным reroll. Все исходные/сгенерированные изображения, tool originals и shared
+packages сохранены в system temp/их tool-owned originals без agent deletion.
+Mobile original: uib-mobile-filters-OBW93z, carrierqualified500b044 (53nodes,
+17omitted, DOM/AX separate, Cast44layout/27visible, no rawValues). Web advisor
+Research website UI blueprint завершил bounded reference capture, остаётся advisor.
+
+Граница результата:6/6 именно этой фиксированной серии на трёх сохранённых формах,
+не статистическая вероятность или гарантия любой новой генерации. Minor stroke/
+caption variations допустимы только без потери смысла; не заявлены CADscale,
+smaller-size/print readability, fresh live collector/native-mobile/human approval.
+Фактические source scopes partial/imported/non-atomic сохраняются в evidence.
+
+Current master, все coherent checkpoints pushed established SSH remote, exactpath
+staging под shared lock. Unrelated after-title-spacing.png не открыт/не изменён.
+Root final action: сохранить этот terminal checkpoint, закрыть host goal и сообщить
+самодостаточный результат с прямыми путями к real prompts/accepted images.
 
 ## Завершённая цель — понятные человеку blueprints, 2026-10-10
 
