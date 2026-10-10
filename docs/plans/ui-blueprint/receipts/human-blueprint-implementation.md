@@ -249,3 +249,11 @@ warns repeated edits can alter details intended for preservation. Applied here a
 simpler finite dimension instructions and a fresh original-reference generation,
 not as a guarantee of exact geometry or authority to change model/tool settings.
 No new reviewer criteria, CAD claim or unauthorized image postprocessing follows.
+
+
+R6 source checkpoint `5139f8eb0ce4e72ecc1c0e62f0f3e074490d1960` pushed. Fresh core
+build/verify passed; installed CLI reproduced all six files of Director R6 and the
+Settings R6 reconciliation package byte-for-byte. This does not regenerate or
+reattribute the accepted Settings R4 image. Run-owned non-image installation removed
+and removal verified; all shared review packages and every image remain retained.
+Source/images held for consolidated R6 review.
