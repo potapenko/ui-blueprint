@@ -69,8 +69,19 @@ C2 FROZEN beforecalls: sourcec32712a8c0ffd08e043cb86b48d2b1fb028b64ea,
 newroot /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c2-2652yyb8,
 frozen-cohort-manifest.json. Sameexact3inputs/originalrefs/criteria; promptchars
 7633/9993/12035; priorC1manifest linked, immutable. Builder27focusedcompilerchecks
-passed inclclippingnegatives, all5nonpromptfiles×3 exactC1. Exactly6freshcalls
-runningnow, no outputsaccepted. NextsameC/V all6image-first +boundedC7/installed.
+passed inclclippingnegatives, all5nonpromptfiles×3 exactC1. C2 complete/rejected: sixfirstfreshoutputs,0edits/rerolls/wrappers/refusals.
+Cee7a45b:1/6contentpass(M2), othersfailstate/IDs/text/anchors. V9fca9be:0/6fullpasses;
+V1all6 and mobilesV2/V4/V5/V6 pass, but technicalIDs/metadata violateV3. Geometry
+improved, no thresholdchange. Installedd22d7b7 exactc32712a all3packagesreproduced.
+Clippingrepair independentlyaccepted. RemainingC7 only compact-objectloss of
+Enabled/state_and_actions and per-objectSpace/contextlink. No newbroadaudit.
+C3-I fullfinite repair+new6cohort authorized/running with samebuilder/5paths:
+source-derivedhumanaliases + explicitprintablecontent/footer, suppressgenerated
+recordkeys/CDPprocedure/unknownmetadata (not actualUIwords), restore safestates
+andcontextlinks, strengthen genericorientation/two-border scalarfragments.
+Preserve allrequireddata/criteria and clippingfix; focusedchangedrisks only.
+Next newimmutableC3source/manifest+originalrefs then all6freshcalls; C1/C2retained.
+
 
 Старые R1–R8 не свежие испытания.
 

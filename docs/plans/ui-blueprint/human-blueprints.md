@@ -464,3 +464,38 @@ Manifest links retained C1 rather than replacing it. Same fixed criteria and ori
 UI-only generation policy; all six requests run without edits/rerolls/wrappers.
 Author27focused compiler checks pass, five nonprompt files of each case unchanged.
 Visual acceptance and final independent source/installed reconciliation pending.
+
+
+### C2 disposition and accepted FRESH01-C3-I
+
+All six C2 outputs retained. HBP-Cee7a45b accepts mobile2's C1–C6 only (1/6),
+HBP-V9fca9be records0/6 complete passes: technical source-ID/metadata blocks violate
+original V3 even where mobile geometry/state are correct. V1 passes all six; mobile
+V2/V4/V5/V6 pass. Other actual defects include missing Director not-applied state,
+misspelled Settings text and detached/wrong-axis scalar dimensions. No new gate or
+retrospective threshold change. Saved-source installerd22d7b7 reproduces all three
+C2 packages exactly, independently from acceptance.
+
+Clipping repair passes C7's reviewed scope. Three concrete compact-object losses
+remain: Enabled, state_and_actions and a per-object Space/context reference. They
+were present before compaction; global coordinate lists without object linkage do
+not preserve multi-Space attribution. This is bounded changed-owner repair, not a
+new audit programme.
+
+C3 same builder/same five write paths now owns one complete finite correction:
+resolve compiler-generated record references into source-derived human labels;
+explicit printable labels/captions and one compact truthful footer; leave CDP/AX
+procedure/unknown-property dumps in machine brief/manifest. Suppress by source
+channel/ownership, never regex-delete those words from genuine UI text. Restore
+safe meaningful states and compact object/context linkage without a metadata dump;
+state/actions remain reported or proposed, not claims of executed interaction.
+Keep true scope/partial/non-atomic/unit/status distinctions. Strengthen local
+source-border scalar orientation/complete geometry while preserving every required
+size/state and unambiguous anchors—no badge-only substitute or relaxed C3.
+
+Focused state/context/alias/privacy/output regressions, unchanged clipping evidence
+reused. New committed source/three literal prompts/original refs get a NEW immutable
+C3 manifest and six fresh outputs, no prototype/retouch/reroll/wrapper/history images.
+Preserve all C1/C2 failures. Same critics inspect all6 image-first, then bounded source
+and installed evidence. No extra planning approval needed or broader features,
+frameworks/schema/flags/agents/directories/branches/worktrees/collector/site changes.
