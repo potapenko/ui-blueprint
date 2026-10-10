@@ -10,9 +10,9 @@ Same authorized coordinated scope: root coordination-only, один исполн
 - `/root/blueprint_builder`: FRESH-01-I implementation running; finitegenericplan accepted after
   baselinefindings. Exactsource/template/tests/docs set inplan; tempthirdadapter
   and frozen6freshoutputs, nointermediateprototypes. Own implementationreceipt.
-- `/root/blueprint_content`: proposal9aaba61 returned; ждёт нейтральный baseline;
+- `/root/blueprint_content`: baseline985dae4 + mobile-inputqualification500b044 accepted; ждёт cohort;
   own content receipt, no code/generation.
-- `/root/blueprint_visual`: proposal97e0371 returned; ждёт нейтральный baseline;
+- `/root/blueprint_visual`: baselinebecdda5 + thirdscope pinned; ждёт cohort;
   own visual receipt, no code/generation.
 - Web advisor `01a1102f-e21d-7251-9597-c29a1c66d088`: один запрос существующей
   третьей real form/evidence, без разработки сайта/новых чатов.
@@ -37,7 +37,13 @@ existingobservedimport in systemtemp; no productioncollector/sitechange.
 Current next: genericper-viewplan implementation (Restore existingcontracts),
 thirdinputcarrier+limitations, frozenexactrevision/prompts, sixfreshcalls. Source
 planaccepted; no further microstepapproval unless concreteauthority/dataconflict.
-Vbaselinebecdda5 is0/2; Cbaselinependingreceipt, sameindependentfactsconfirmed.
+Vbaselinebecdda5 is0/2; Cbaseline985dae4 confirms generictemplatefailure.
+Mobilecarrierqualified500b044: same baseline-temp root mobile-snapshot.json/
+mobile-metadata.json/mobile-import.py/mobile-import-limitations.json. Exact53nodes,
+17pressed separate/4visibleemptyflags/noValue/partial+17omitted,Cast44vs27;
+AX remains separateactualevidence. Builder oldpreflightCLI succeeded. Confirmed
+oldpromptomits knownPlaceholder; fix distinctplaceholder emission in authorized
+rendererchange. No carrierrepair/collectorchange needed.
 Старые R1–R8 не свежие испытания.
 
 
