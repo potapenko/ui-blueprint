@@ -1,5 +1,15 @@
 # Q02 fixed D06 evaluation
 
+2026-10-10 continuation: [Native request-only@2](../specs/development/decisions/d06-native-request.md)
+and N05-AX-BOUNDARY@2 are registered at e89cd0f; negative predicate proof37a76fa.
+Complete new off/on20cold/100warm+1initial cohorts retain242calls:236 fidelity passes
+(three same-call-proved anonymous topology variations), six target_unresolved failures.
+Separate diagnosis localizes a new reproduction to the initial bundle-ID comparison,
+before AX dispatch. Native quality/P7 remains OPEN; this is now an exact-target
+binding dependency. Shipping source e641543 and prior numeric results are unchanged;
+instrumented durations are not shipping qualification. Full pins, all failures,
+source/timing reuse boundaries and cleanup are in the N05 receipt below.
+
 2026-10-10 [N05 same-call diagnosis](../plans/ui-blueprint/receipts/N05-native-child-fidelity.md):
 the missing-child shape recurred on cold AX+capture call15. Parent28's public
 AXChildren count returned success/0 in that same call; no range was copied or

@@ -1336,3 +1336,52 @@ No images created by Q02 at this checkpoint. Existing unrelated image and N03 WI
 remain untouched. No UI/focus/capture resource acquired; only offline build activity.
 Next: receive Q01 functional pin/release, actual comparability preflight, reconcile
 exact discrepancies before fixed series; then measured fixes only if in-scope.
+
+## N05 prospective request-only2 qualification — 2026-10-10
+
+Registered criterion e89cd0f / D06-NATIVE-REQUEST@2, predicate proof37a76fa and
+the [complete N05 continuation receipt](N05-native-child-fidelity.md#authorized-revision2-continuation--complete-cohorts-binding-dependency)
+supersede neither historical samples nor their quality verdicts. This section is
+the new method's outcome: **236/242 fidelity passes, six AX target_unresolved
+failures; Native quality/D06/P7 remains OPEN.** No shipping source changed.
+
+Raw R2=`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n05-qualification-6q0ncpe_`.
+Prospective method N05-AX-BOUNDARY@2: off/on each20cold/100warm+1initial, whole
+registered input, no row replacement/retry. Observer forwards the same AX calls,
+records bounded metadata and releases extra handles at traversal exit. Shipping
+e641543 ten-input source/binary recipe correspondence is pinned in build-pins.json;
+test-only helper4c18b120…657e81 is explicitly different from installed0c0517fa…087f8c.
+Its latency is diagnostic, not shipping qualification or a zero-overhead claim.
+
+Off:120/121 fidelity passes; cold10 has same-call successful empty parent28 child
+enumeration; warm19 failed target_unresolved. On:116/121 passes; cold9 and warm43
+have their own successful-empty traces; warm1–5 failed target_unresolved. None of
+the six failures is accepted by the anonymous-topology exception. All233 ordinary
+successes preserve613known/375unavailable facts/76action lists/75edges; the3 proved
+variations retain607known/368unavailable facts/75action lists/74edges.28 predicate
+cases and existing NativeAXAccess FlowChecks3suites/46assertions passed before live.
+All242 full1100×1050 PNGs exist, including failures, and belong to the original
+Q02-R pixel-variant set. Before/after/current/Q02-R raw reference facts agree.
+
+Only the ENTIRE unchanged Q02-R shipping numeric campaign is reused, separately:
+same fixture/state/fields/bounds/cost/source mapping verified. Off/on AX p95
+29.425/29.230, capture148.653/148.535, warm outer271.087/269.993, cold356.967/
+370.029ms remain reported PASS against100/200/300/750ms. Original cold17 remains
+failed/unexplained under@1. No diagnostic timing is spliced into those cohorts.
+New diagnostic warm outer p95304.234/300.125ms is retained as measured, not a
+shipping pass. Missing AX durations leave relevant stage percentiles unavailable.
+
+Separate bounded diagnosis, excluded from qualification, reproduces the new refusal
+before AX dispatch at the initial `app?.bundleIdentifier == bundle` comparison.
+Identity file verification passed; the stage does not distinguish nil app, nil
+bundle ID or another value. Exact same-call sample/sidecar SHA and source-only
+substitutions are in the N05 receipt and qualification-summary.json. No deeper cause
+or retrospective cause of the six cohort failures is claimed. Next owner is Native
+exact-target binding, with Q01 review; no permission to weaken identity or add retry.
+
+All original five older errors, Q02-R cold17, the new six failures and auxiliary
+preflight/harness failures remain retained.45 sessions/335calls include93 separate
+diagnostic calls; all owned callers/helpers reaped, two fixtures quit, fresh process
+census empty and desktop/CPU released. Shared proof stays root/Q01-owned; all images
+and containing directories remain system temp without agent cleanup. Only owned
+compiler cache/log nonimages are removed. Final Q01 acceptance remains separate.
