@@ -8,7 +8,7 @@
 - Requires: только выбранные ниже листья и их explicit closure.
 
 Исходники и будущие этапы не входят в каждый closure. Экспорт выбирается через
-`UIB.EXPORT@1`: он включает весь применимый DrawingBrief/стиль/шаблон/review.
+`UIB.EXPORT@2`: он включает весь применимый DrawingBrief/стиль/шаблон/review.
 Общие данные начинаются с MODEL/EXCHANGE; операции добавляют ACTIONS/CACHE.
 
 | Контракт | Read when / роль |
@@ -33,13 +33,13 @@
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |
 | [UIB.CLI-NEIGHBORS@1](cli-neighbors.md) | bounded explicit recorded relation context; contract |
 | [UIB.CLI-EXPORT@2](cli-export.md) | saved Snapshot/ChannelResponse → document or engine-attributed compare with explicit metadata; contract |
-| [UIB.EXPORT@1](export.md) | E01/E02, imagegen-prompt, человеческий экспорт; contract |
-| [UIB.DRAWING-STYLE@1](drawing-style.md) | компоновка документа и обозначения; contract |
-| [UIB.DRAWING-GEOMETRY@1](drawing-geometry.md) | scene/dimensions, responsive/flow/state views; contract |
-| [UIB.DRAWING-PACKAGE@1](drawing-package.md) | export compiler, manifest, ProposedLayout и validation; contract |
-| [UIB.DRAWING-PROMPT-A@1](drawing-prompt-a.md) | сборка self-contained prompt; первая последовательная часть; contract |
-| [UIB.DRAWING-PROMPT-B@1](drawing-prompt-b.md) | сборка self-contained prompt; вторая последовательная часть; contract |
-| [UIB.DRAWING-REVIEW@1](drawing-review.md) | export QA, checked/approval, baseline и retention; contract |
+| [UIB.EXPORT@2](export.md) | E01/E02, imagegen-prompt, человеческий экспорт; contract |
+| [UIB.DRAWING-STYLE@2](drawing-style.md) | компоновка документа и обозначения; contract |
+| [UIB.DRAWING-GEOMETRY@2](drawing-geometry.md) | scene/dimensions, responsive/flow/state views; contract |
+| [UIB.DRAWING-PACKAGE@2](drawing-package.md) | export compiler, manifest, ProposedLayout и validation; contract |
+| [UIB.DRAWING-PROMPT-A@2](drawing-prompt-a.md) | сборка self-contained prompt; первая последовательная часть; contract |
+| [UIB.DRAWING-PROMPT-B@2](drawing-prompt-b.md) | сборка self-contained prompt; вторая последовательная часть; contract |
+| [UIB.DRAWING-REVIEW@2](drawing-review.md) | export QA, checked/approval, baseline и retention; contract |
 
 Acceptance выбирается по [карте проверок](../acceptance/README.md), upstream — по
 [каталогу](../reference/README.md). Они не добавляются все по факту этой ссылки.

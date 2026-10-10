@@ -79,9 +79,11 @@ missing/ambiguous Space rejects2. Unknown frames and missing mappings retain typ
 Surface mismatch retains explicit incompatible status, without guessed conversion. Without selection, only literal geometry property changes
 are reported, no displacement.
 
-Packages containing comparisons and their CLI receipts use export version0.2.0; other packages/receipts stay0.1.0 byte-compatible.
+Packages containing comparisons and their CLI receipts use export version0.2.0; other packages/receipts stay0.1.0; HBP-HUMAN-001 changes presentation and adds derived dimensions without changing existing fields.
 comparisons retains its view/basis fields and aliases any selected Space ID; comparison_attribution is engine_recorded_graph, partially_compared or not_compared from actual results;
 no unresolved_g02. Core0.1/analysis0.2/raw diff1.0/G12/G13 stay. Six files, new destination, sanitized errors/exits0/1/2/5 and independent
 statuses remain. Independent privacy/input acceptance is separate from author verification.
 
 E03-EXPORT-COMPARE-001: Restore EXPORT/GOLDEN under approved PLAN.UIB@1 and [E03 packet](../../plans/ui-blueprint/packets/E03-observed-compare.md), delegated ROADMAP representation; CLI@14→15, CLI-EXPORT@1→2, registry27→28 before code. Requires for this clause: [G13](cli-graph-diff.md), [G12](cli-geometry-diff.md).
+
+HBP-HUMAN-001: existing document input/flags/limits remain; [DRAWING@1.2](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10) selects concise prompts, display rounding and additive engine-derived intervals. Source records, privacy and refusal semantics are protected.

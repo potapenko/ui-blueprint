@@ -1,14 +1,14 @@
 # Полный prompt: основание и лист
 
 - Node type: leaf; domain: `uib.drawing-prompt-a`.
-- Contract: `UIB.DRAWING-PROMPT-A@1`; stable clause: `UIB.DRAWING-PROMPT-A.CONTENT`.
+- Contract: `UIB.DRAWING-PROMPT-A@2`; stable clause: `UIB.DRAWING-PROMPT-A.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
-- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
+- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: сборка self-contained prompt; первая последовательная часть.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
-- Requires: [UIB.DRAWING-PACKAGE@1](drawing-package.md), [UIB.DRAWING-STYLE@1](drawing-style.md), [UIB.DRAWING-PROMPT-B@1](drawing-prompt-b.md).
+- Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md), [UIB.DRAWING-PROMPT-B@2](drawing-prompt-b.md).
 - Source mapping: DRAWING 158–205; [inverse map](../reference/source-map.md); source links are provenance, not requires.
-- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
+- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
 Шаблон разделён только по файлам: текстовые блоки A и B последовательно составляют один prompt. Обязательные placeholders заменяются данными или явным unknown.
 
@@ -59,7 +59,9 @@ approval={{approval_status}}.
 
 ОБЪЕКТЫ И ИЕРАРХИЯ
 Ниже приведена полная для этого листа ведомость.
-Сохрани ID, состав, вложенность, относительное расположение и заданные надписи.
+Сохрани состав, вложенность, относительное расположение и заданные надписи. ID нужны только для связи данных; не печатай их на рисунке.
 Не добавляй новые кнопки, окна, заголовки или декоративные элементы.
 {{component_table}}
 ```
+
+HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.

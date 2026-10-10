@@ -4,7 +4,7 @@
 `manifest.json`, `drawing-brief.md`, `scene.json`, `dimensions.json`, `sheets.json`
 and `prompt.txt`. It does not collect runtime data, open source references,
 generate an image, execute actions, or require a model, network or API key.
-This is an Evolving candidate under [EXPORT@1](../specs/product/export.md) and
+This is an Evolving candidate under [EXPORT@2](../specs/product/export.md) and
 its full [DrawingBrief closure](../specs/product/drawing-package.md).
 
 ## Entry points and integration
@@ -408,3 +408,36 @@ are in the receipt; no CAD accuracy, live acquisition, human approval or marketi
 acceptance follows. These two successful submissions do not establish a universal
 model input limit or guarantee that every larger scope fits; the existing explicit
 package byte bound still refuses overflow without silently deleting facts.
+
+
+## Human-readable drawing prompts — HBP-HUMAN-001
+
+[The current drawing guide](../engineering-blueprint-guide.md) is DRAWING@1.2.
+The earlier E05 section describes a historical lossless prompt table. The current
+prompt is a concise drawing assignment, not that full table with a do-not-print label.
+The six-file package still preserves complete sanitized source views and every
+existing exact dimension. Human placement records use rounded coordinates, safe
+labels, hierarchy and known state. Repeated source text is not drawn twice.
+Display numbers are rounded separately, with approximation signs, no negative zero,
+and explicit sub-half-unit notation. Units and source precision do not change.
+
+Observed export adds explicit parent/child and adjacent/aligned-control edge
+measurements using the existing engine's Gap query. Each retains exact quantity,
+anchors, Space, source evidence and typed unavailable result. These are measured
+insets, never CSS padding or inferred logical component identity. Existing widths/
+heights remain first, unchanged. Additive dimensions and presentation change package
+contents; package/schema versions, six filenames, CLI flags, limits, independent
+statuses and privacy rules stay unchanged. Output overflow still refuses; no pruning
+of the machine source occurs to fit the image. New image labels are not checked CAD.
+
+The prompt selects useful control sizes, gaps/insets and a full outline overview with
+related enlarged details. Machine aliases, timestamps, detailed evidence and unknown
+property lists stay in machine files/brief. Controls use the same solid blue ground
+as the sheet, with white outlines/text, no screenshot fills or decorative grid.
+Image generation remains a separately authorized built-in ImageGen call, followed
+by independent content and visual review at the actual returned size. All task images
+are retained in system temp and tool-managed originals remain unchanged.
+
+[HBP implementation receipt](../plans/ui-blueprint/receipts/human-blueprint-implementation.md)
+records actual prompt → image candidates and verification; it does not imply final
+image acceptance before both continuing critics approve.

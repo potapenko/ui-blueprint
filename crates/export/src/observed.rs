@@ -343,5 +343,166 @@ pub(crate) fn dimensions(s: &Snapshot, aliases: &mut Aliases) -> Result<Vec<Dime
             }
         }
     }
+    spacing_dimensions(s, aliases, &mut out)?;
     Ok(out)
+}
+
+/// Editorial edge pairs do not establish component identity or declared CSS padding.
+/// All quantities still come from the canonical engine, never export arithmetic.
+fn spacing_dimensions(s: &Snapshot, aliases: &mut Aliases, out: &mut Vec<Dimension>) -> Result<()> {
+    let rects: Vec<_> = s
+        .nodes
+        .iter()
+        .map(|n| {
+            n.properties.iter().find_map(|p| match p.known() {
+                Some(Value::Geometry(g))
+                    if g.frame_kind == FrameKind::LayoutBounds
+                        && g.coordinate_space.origin == Origin::TopLeft =>
+                {
+                    match &g.shape {
+                        Shape::Rect(r) => Some((g.as_ref(), r)),
+                        _ => None,
+                    }
+                }
+                _ => None,
+            })
+        })
+        .collect();
+    let mut pairs = Vec::new();
+    for (i, n) in s.nodes.iter().enumerate() {
+        let children: Vec<_> = n
+            .children
+            .iter()
+            .filter_map(|key| s.nodes.iter().position(|x| &x.key == key))
+            .collect();
+        for &j in &children {
+            pairs.extend([
+                (i, j, Edge::Left, Edge::Left, "Measured left inset"),
+                (j, i, Edge::Right, Edge::Right, "Measured right inset"),
+                (i, j, Edge::Top, Edge::Top, "Measured top inset"),
+                (j, i, Edge::Bottom, Edge::Bottom, "Measured bottom inset"),
+            ]);
+        }
+        for w in children.windows(2) {
+            pairs.extend([
+                (w[0], w[1], Edge::Right, Edge::Left, "Horizontal edge gap"),
+                (w[0], w[1], Edge::Bottom, Edge::Top, "Vertical edge gap"),
+            ]);
+        }
+        // Exterior horizontal offsets to the actual root rectangle, never a union.
+        if i > 0
+            && s.nodes
+                .first()
+                .is_some_and(|root| root.surface == n.surface)
+        {
+            pairs.extend([
+                (0, i, Edge::Left, Edge::Left, "Root left edge inset"),
+                (i, 0, Edge::Right, Edge::Right, "Root right edge inset"),
+            ]);
+        }
+        let role = match &n.native_role {
+            Availability::Known {
+                value: Value::Text(role),
+            } => role.as_str(),
+            _ => "",
+        };
+        if !["SELECT", "BUTTON", "INPUT"].contains(&role) {
+            continue;
+        }
+        let Some((g, r)) = rects[i] else {
+            continue;
+        };
+        if let Some(j) = (i + 1..s.nodes.len()).find(|&j| {
+            s.nodes[j].native_role == n.native_role
+                && s.nodes[j].surface == n.surface
+                && rects[j].is_some_and(|(other, q)| {
+                    g.coordinate_space == other.coordinate_space
+                        && r.x == q.x
+                        && r.width == q.width
+                        && q.y > r.y
+                })
+        }) {
+            pairs.push((i, j, Edge::Bottom, Edge::Top, "Repeated control clear gap"));
+        }
+    }
+    let mut seen = Vec::new();
+    for (a, b, first, last, label) in pairs {
+        if seen.contains(&(a, b, first, last)) {
+            continue;
+        }
+        seen.push((a, b, first, last));
+        let (Some((g, _)), Some((h, _))) = (rects[a], rects[b]) else {
+            continue;
+        };
+        if g.coordinate_space != h.coordinate_space || s.nodes[a].surface != s.nodes[b].surface {
+            continue;
+        }
+        let horizontal = matches!(first, Edge::Left | Edge::Right);
+        let fraction = |edge| {
+            if matches!(edge, Edge::Right | Edge::Bottom) {
+                1.0
+            } else {
+                0.0
+            }
+        };
+        let anchors: Vec<_> = [(a, first), (b, last)]
+            .into_iter()
+            .map(|(index, edge)| Anchor {
+                element: s.nodes[index].key.clone(),
+                frame_kind: g.frame_kind,
+                coordinate_space: g.coordinate_space.clone(),
+                fraction: fraction(edge),
+                axis: Id(if horizontal { "x" } else { "y" }.into()),
+            })
+            .collect();
+        let query = GeometryQuery {
+            id: Id("export-spacing".into()),
+            scope_id: s.context.scope_id.clone(),
+            targets: vec![s.nodes[a].key.clone(), s.nodes[b].key.clone()],
+            operation: GeometryRelation::Gap,
+            anchors,
+            quantity_kind: QuantityKind::Length,
+            units: g.coordinate_space.units,
+            applies_when: ContextConditions {
+                platform: None,
+                input_mode: None,
+                text_scale: None,
+            },
+        };
+        let context = EvaluationContext {
+            space: &g.coordinate_space,
+            transforms: &[],
+            conditions: None,
+        };
+        let (value, reason, evidence) =
+            match engine::measure_query(s, &query, &context).map_err(|_| E::InvalidGeometry)? {
+                MeasurementResult::Known { measurement: m } => {
+                    let Value::Quantity { amount, .. } = m.value else {
+                        return Err(E::InvalidGeometry);
+                    };
+                    (Some(amount), None, m.evidence)
+                }
+                MeasurementResult::Unknown { reason, evidence } => {
+                    (None, Some(reason.as_str().into()), evidence)
+                }
+            };
+        out.push(Dimension {
+            id: format!("M{:04}", out.len() + 1),
+            label: label.into(),
+            anchors: [(a, first), (b, last)].map(|(i, edge)| DimensionAnchor {
+                component: format!("N{i:03}"),
+                frame_kind: g.frame_kind,
+                space: aliases.space(&g.coordinate_space),
+                edge,
+            }),
+            value,
+            units: g.coordinate_space.units,
+            source_kind: SourceKind::Observed,
+            evidence: evidence.iter().map(|e| aliases.evidence(e)).collect(),
+            requirement_ref: None,
+            unknown_reason: reason,
+            check_tolerance: None,
+        });
+    }
+    Ok(())
 }

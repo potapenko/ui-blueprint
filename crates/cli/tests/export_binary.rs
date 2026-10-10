@@ -674,6 +674,9 @@ fn direct_observed_snapshot_and_response_compile_full_scope_without_geometry_ree
         assert_eq!(fs::read(c.root.join("source.json")).unwrap(), original);
         let prompt = fs::read_to_string(c.root.join("package/prompt.txt")).unwrap();
         assert!(prompt.contains("caller annotations"));
+        assert!(!prompt.contains("COMMON "));
+        assert!(!prompt.contains("observation_id"));
+        assert!(prompt.contains("rounded labels"));
         assert!(!prompt.contains("fixture-ref-"));
     }
 }

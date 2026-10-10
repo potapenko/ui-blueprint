@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 35 (acceptance metadata only).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 36 (HBP presentation evolution).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -7,7 +7,7 @@
 ## Authority and precedence
 `UIB.ROUTING.AUTHORITY`: user confirmation on 2026-10-06 made
 [UIB.TZ@1.4](../ui-blueprint-spec.md) and
-[UIB.DRAWING@1.1](../engineering-blueprint-guide.md) Active / Evolving.
+[UIB.DRAWING@1.2](../engineering-blueprint-guide.md) Active / Evolving.
 General specification governs product boundaries; drawing guide governs export
 within them. Neither overrides global safety. Active does not mean implemented,
 accepted or released. D01–D07, preliminary names and future phases retain their scope.
@@ -58,7 +58,7 @@ Existing locked version/policies remain; registration does not accept unsafe/run
 Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; common quotas/wire/permissions/F02/D06 and implementation/live gates remain unchanged.
 `D05-NATIVE-IMAGE-002`: [Native acquisition@2](development/decisions/d05-native-acquisition.md) reconciles explicit user system-temp/no-image-deletion authority via [M03 packet](../plans/ui-blueprint/packets/M03-popup-capture.md); staging/partial/final images remain, descriptors/helpers retire, incomplete/stale payloads stay unpublished. Non-image cleanup, quotas/privacy/wire/positive gates unchanged.
 `G03-NATIVE-AX-001`: [NATIVE@2](product/native.md)/[CLI@7](product/cli.md) adds explicit read-only ordinary-process AXFocusedWindow geometry; observation-scoped identity, no fixture files/CG mapping/capture/action authority; canonical formats and old providers unchanged.
-`G09-EXPORT-INPUT-001`: [CLI@8](product/cli.md)/[CLI-EXPORT@1](product/cli-export.md) adds explicit Snapshot or observed ChannelResponse plus caller metadata to document export under delegated P6; existing --brief, compiler versions, numerical/privacy/status contracts and other CLI commands preserved.
+`G09-EXPORT-INPUT-001`: [CLI@8](product/cli.md)/[CLI-EXPORT@2](product/cli-export.md) adds explicit Snapshot or observed ChannelResponse plus caller metadata to document export under delegated P6; existing --brief, compiler versions, numerical/privacy/status contracts and other CLI commands preserved.
 `G10-NEIGHBORS-001`: [CLI@9](product/cli.md)/[CLI-NEIGHBORS@1](product/cli-neighbors.md) exposes accepted G02 relation selection with explicit cap/source attribution under P3/P6; no engine/wire or existing-command change.
 `A04-CLI-001`: [CLI@10](product/cli.md)/[CLI-ACTIONS@2](product/cli-actions.md) connects Web Focus/Type to explicit canonical Expectation input under P5/P6; legacy SetChecked, geometry, authority/effect/ACK and canonical versions unchanged.
 `A05-CLI-001`: [CLI@11](product/cli.md)/[CLI-ACTIONS@3](product/cli-actions.md) adds the compiling Web native-button Activate port with explicit independently held public result identity under P5/P6; existing transport/permissions/canonical versions and other commands preserved.
@@ -70,6 +70,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `M02-N-SESSION-001`: [NATIVE-SESSION@1](product/native-session.md)/[CLI@16](product/cli.md) registers bounded attached Native form refs/private exchange/CLI under the assigned [M02-N packet](../plans/ui-blueprint/packets/M02-native-workflow.md). Existing wire, Web and ordinary AX behavior remain protected; runtime/review acceptance separate.
 `V02-PROTECTED-001`: [NATIVE-SESSION@2](product/native-session.md)/[D03@4](development/decisions/d03-data.md) reuses existing FillSecret through a private one-use Native delivery source under [V02](../plans/ui-blueprint/packets/V02-protected-input.md). No core/analysis/wire/legacy change; actual capability and privacy acceptance separate.
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
+`HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
 `N05-NATIVE-FIDELITY-002`: [Native request-only@2](development/decisions/d06-native-request.md) registers root-selected Q01 reconciliation under ROADMAP D06: keep logical controls/all available source data, require same-call proof for anonymous topology variation, preserve numerical/sample/field/privacy limits and old failures. Prospective diagnostic quality plus separately attributed unchanged shipping numeric evidence; no collector policy or product-source change. Registration itself was not acceptance; current bounded acceptance is recorded above.
 `W06-FIDELITY-001`: [WEB-DOCUMENTS@1](product/web-documents.md) registers raw AX focusability and explicit bounded whole-document selection under [W06](../plans/ui-blueprint/packets/W06-web-fidelity.md), preserving core0.1/analysis0.2/ordinary Web scopes/D06; registration is not runtime acceptance.

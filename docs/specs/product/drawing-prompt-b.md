@@ -1,14 +1,14 @@
 # Полный prompt: геометрия и результат
 
 - Node type: leaf; domain: `uib.drawing-prompt-b`.
-- Contract: `UIB.DRAWING-PROMPT-B@1`; stable clause: `UIB.DRAWING-PROMPT-B.CONTENT`.
+- Contract: `UIB.DRAWING-PROMPT-B@2`; stable clause: `UIB.DRAWING-PROMPT-B.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
-- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
+- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: сборка self-contained prompt; вторая последовательная часть.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
-- Requires: [UIB.DRAWING-PACKAGE@1](drawing-package.md), [UIB.DRAWING-STYLE@1](drawing-style.md).
+- Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md).
 - Source mapping: DRAWING 206–251; [inverse map](../reference/source-map.md); source links are provenance, not requires.
-- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
+- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
 <a id="uib-drawing-prompt-b-content"></a>
 
@@ -26,12 +26,12 @@
 
 НАНЕСЕНИЕ РАЗМЕРОВ
 Проведи размерные линии между указанными anchors с выносными линиями.
-Подписывай точные значения из ведомости. Не округляй и не пересчитывай их.
+Подписывай подготовленные округлённые display labels; точные source values остаются в машинном пакете. Не вычисляй новые размеры самостоятельно.
 Не придумывай допуски, неизвестные радиусы и размеры декоративных деталей.
 Не перекрывай число линией или стрелкой. Повторяющиеся размеры допускается
 свести к типовой детали/таблице согласно плану листа.
 Не измеряй ничего по pixels прикреплённого изображения.
-Неизвестные значения: {{unknown_properties}} — пометь ? и примечанием.
+Неизвестные значения: {{unknown_properties}} — не размеряй; существенное ограничение объясни одной короткой оговоркой.
 Режим масштаба: {{scale_mode}}.
 Если schematic, напиши «Размеры по подписям; не измерять по изображению».
 
@@ -57,3 +57,5 @@
 Не выдавай изображение за проверенный CAD-файл или утверждённую спецификацию.
 Не меняй статусы source/validation/approval.
 ```
+
+HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.

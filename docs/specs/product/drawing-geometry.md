@@ -1,14 +1,14 @@
 # Размеры, состояния и интерактивность
 
 - Node type: leaf; domain: `uib.drawing-geometry`.
-- Contract: `UIB.DRAWING-GEOMETRY@1`; stable clause: `UIB.DRAWING-GEOMETRY.CONTENT`.
+- Contract: `UIB.DRAWING-GEOMETRY@2`; stable clause: `UIB.DRAWING-GEOMETRY.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
-- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
+- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: scene/dimensions, responsive/flow/state views.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.GEOMETRY@1](geometry.md), [UIB.PROJECTIONS@1](projections.md).
 - Source mapping: DRAWING 91–130; [inverse map](../reference/source-map.md); source links are provenance, not requires.
-- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
+- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
 <a id="uib-drawing-geometry-content"></a>
 
@@ -51,3 +51,5 @@ UI px/pt/dp — единицы исходного интерфейса. Разм
 Responsive-виды указывают реальные или предложенные размеры окна, text-size class и ориентацию. Растяжение картинки не считается адаптивным вариантом. Если известно только два состояния, нельзя приписывать им точный breakpoint между ними.
 
 Для полного scroll-document показываются его границы, положение viewport и участки покрытия. Склейка из нескольких состояний явно помечается как составной вид и не выдаётся за один Observation. На листе flow доступная кнопка с неизвестным назначением имеет unknown destination; последовательность кадров без подтверждения действия не объявляется причинным переходом.
+
+HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.

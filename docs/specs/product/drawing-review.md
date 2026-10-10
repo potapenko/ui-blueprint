@@ -1,14 +1,14 @@
 # Проверка генерации и хранение документа
 
 - Node type: leaf; domain: `uib.drawing-review`.
-- Contract: `UIB.DRAWING-REVIEW@1`; stable clause: `UIB.DRAWING-REVIEW.CONTENT`.
+- Contract: `UIB.DRAWING-REVIEW@2`; stable clause: `UIB.DRAWING-REVIEW.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
-- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
+- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: export QA, checked/approval, baseline и retention.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
-- Requires: [UIB.DRAWING-PACKAGE@1](drawing-package.md), [UIB.DRAWING-STYLE@1](drawing-style.md).
+- Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md).
 - Source mapping: DRAWING 277–300; [inverse map](../reference/source-map.md); source links are provenance, not requires.
-- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
+- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
 <a id="uib-drawing-review-content"></a>
 
@@ -35,3 +35,5 @@ ImageGen создаёт графическую подачу и может оши
 Spec-first порядок сохраняется: accepted intent задаёт ожидание; runtime даёт факт; QA оценивает соответствие. Новый screenshot или generated blueprint не меняет намерение автоматически. При расхождении описать его и запросить нужное продуктовое решение, не обновлять baseline только ради pass.
 
 Документационный export — явное исключение из временности сессии: пользователь выбирает место и срок хранения, документ имеет owner. Не сохранять каждый кадр работы агента как постоянный артефакт. В целевом проекте предложены docs/ui/<surface>/<revision>/ для принятых документов и отдельное application-state хранилище для временных run observations; точное размещение следует правилам проекта.
+
+HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.

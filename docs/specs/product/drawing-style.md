@@ -1,14 +1,14 @@
 # Листы и Blue Engineering
 
 - Node type: leaf; domain: `uib.drawing-style`.
-- Contract: `UIB.DRAWING-STYLE@1`; stable clause: `UIB.DRAWING-STYLE.CONTENT`.
+- Contract: `UIB.DRAWING-STYLE@2`; stable clause: `UIB.DRAWING-STYLE.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
-- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
+- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: компоновка документа и обозначения.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.MODEL@1](model.md).
 - Source mapping: DRAWING 31–90; [inverse map](../reference/source-map.md); source links are provenance, not requires.
-- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
+- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
 Ссылки стандартов — происхождение собственного UI-профиля, не импорт закрытых стандартов.
 
@@ -73,3 +73,5 @@
 Точная толщина задаётся output preset и проверяется в итоговом размере; визуальная иерархия важнее универсальной толщины в пикселях. Контуры не должны спорить с размерными линиями. Цвет никогда не является единственным носителем статуса. Сетка второстепенна и может быть выключена ради читаемости.
 
 Подписи набираются чётким простым шрифтом. Обозначения N01, D03, X1 короткие; полные пояснения вынесены в ведомость компонентов. Белая надпись должна иметь достаточный контраст. Ограничение плотности решается отдельной деталью или листом, не микротекстом.
+
+HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.

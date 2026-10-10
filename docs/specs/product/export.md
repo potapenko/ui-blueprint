@@ -1,14 +1,14 @@
 # Документирование и пакет ImageGen
 
 - Node type: leaf; domain: `uib.export`.
-- Contract: `UIB.EXPORT@1`; stable clause: `UIB.EXPORT.CONTENT`.
+- Contract: `UIB.EXPORT@2`; stable clause: `UIB.EXPORT.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
-- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
+- Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: E01/E02, imagegen-prompt, человеческий экспорт.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
-- Requires: [UIB.DRAWING-PACKAGE@1](drawing-package.md), [UIB.DRAWING-STYLE@1](drawing-style.md), [UIB.DRAWING-GEOMETRY@1](drawing-geometry.md), [UIB.DRAWING-PROMPT-A@1](drawing-prompt-a.md), [UIB.DRAWING-REVIEW@1](drawing-review.md), [UIB.DRAWING-EXAMPLE@1](../reference/drawing-example.md).
+- Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md), [UIB.DRAWING-GEOMETRY@2](drawing-geometry.md), [UIB.DRAWING-PROMPT-A@2](drawing-prompt-a.md), [UIB.DRAWING-REVIEW@2](drawing-review.md), [UIB.DRAWING-EXAMPLE@1](../reference/drawing-example.md).
 - Source mapping: TZ 399–416; DRAWING 1–30; DRAWING 301–315; [inverse map](../reference/source-map.md); source links are provenance, not requires.
-- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
+- Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
 Вхождение полного руководства заменяется указанным requires closure; ссылка на оригинал в перенесённом тексте — provenance.
 
@@ -16,7 +16,7 @@
 
 ## Инженерная документация и ImageGen
 
-Основной человекочитаемый результат — полный инженерный blueprint выбранного интерфейса для документации, согласования с клиентом и фиксации QA. Команда imagegen-prompt локально собирает развёрнутый DrawingBrief, scene/dimensions, план листов, подробный self-contained prompt и разрешённые references. Она не вызывает модель и не требует ключа. Полный контракт, чертёжные правила и большой шаблон заданы в [руководстве инженерной визуализации и ImageGen](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/docs/engineering-blueprint-guide.md), версия 1.1 (`UIB.DRAWING@1.1`).
+Основной человекочитаемый результат — полный инженерный blueprint выбранного интерфейса для документации, согласования с клиентом и фиксации QA. Команда imagegen-prompt локально собирает развёрнутый DrawingBrief, scene/dimensions, план листов, подробный self-contained prompt и разрешённые references. Она не вызывает модель и не требует ключа. Полный контракт, чертёжные правила и большой шаблон заданы в [руководстве инженерной визуализации и ImageGen](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/docs/engineering-blueprint-guide.md), версия 1.2 (`UIB.DRAWING@1.2`).
 
 Режим document — полный вид текущего интерфейса, основной по умолчанию; explain может сохраниться как alias. propose — будущая схема с явно заданными требованиями; detail — увеличенный узел; flow — карта подтверждённых состояний/переходов. compare до/после остаётся дополнительным режимом. Полнота относится к объявленному scope и состоянию: весь viewport, scroll-document и всё приложение не взаимозаменяемы. Для сложного scope формируется комплект общего и детальных листов вместо нечитаемой одной картинки.
 
@@ -36,7 +36,7 @@ ImageGen оформляет пакет по отдельному запросу.
 
 Источник: [Page](https://chatgpt.com/space/page_16e9c03ad3848191ad03b89fefa0b9ee). Копия от 6 октября 2026 года.
 
-**Версия 1.1 · 6 октября 2026 года.** Контракт `UIB.DRAWING@1.1`, Authority: Active, Stability: Evolving. Пользователь подтвердил руководство вместе с ТЗ в чате подготовки разработки 6 октября 2026 года. Это нормативный контракт визуализации; подтверждение документа не означает готовности реализации или приёмки сгенерированных изображений. Руководство для подготовки инженерного изображения UI Blueprint, его машинного описания и подробного задания ImageGen. Основной результат — полная схема выбранного интерфейса для документации, проектного обсуждения и фиксации QA. Режим сравнения до и после дополнительный.
+**Версия 1.1 · 6 октября 2026 года.** Контракт `UIB.DRAWING@1.2`, Authority: Active, Stability: Evolving. Пользователь подтвердил руководство вместе с ТЗ в чате подготовки разработки 6 октября 2026 года. Это нормативный контракт визуализации; подтверждение документа не означает готовности реализации или приёмки сгенерированных изображений. Руководство для подготовки инженерного изображения UI Blueprint, его машинного описания и подробного задания ImageGen. Основной результат — полная схема выбранного интерфейса для документации, проектного обсуждения и фиксации QA. Режим сравнения до и после дополнительный.
 
 Связано с [общим ТЗ UI Blueprint](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/docs/ui-blueprint-spec.md). Это собственный профиль UI-документации, а не заявление о соответствии ISO, ЕСКД или AutoCAD. ImageGen остаётся основным каналом визуального оформления; его результат проверяется по исходным данным.
 
@@ -77,3 +77,5 @@ document — основной режим; explain может сохранять�
 Критерии P6: полный DrawingBrief и self-contained prompt; ссылка/ревизия этого руководства; согласованные scene/dimensions; один полный observed пример и один proposed пример; детали перегруженного вида; честные unknown; раздельные source/validation/approval; без модели работает подготовка пакета; compare не обязательный первый сценарий.
 
 Генерация готовой картинки не становится условием model-free работы CLI. Если она выполнена в рамках отдельного запроса, её проверка обязательна перед маркировкой checked. Полноценный CAD-export, dashboard и хранение атласа остаются отдельными этапами.
+
+HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.
