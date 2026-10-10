@@ -592,3 +592,36 @@ Existing Proposed distances are absolute, so positive values alone do not prove
 source-edge ordering; those retain named-anchor fallback rather than a new corner
 recipe. Same full six fresh first calls/criteria, no previous image references,
 retouches/wrappers/rerolls; C1–C4 remain independent retained cohorts.
+
+
+### C5 disposition and accepted FRESH01-C6-I — 2026-10-11
+
+C d2cd191 accepts D1/D2 content only (2/6); V3a0ceea gives0/6 complete because
+forced source-icon token expand_more appears in client captions. C7's center/
+proposed/signed fallback repair passes at4058823; installed3c2b050 reproduces all
+three exact packages. Popup194 omission is fixed, but footer and mobile scalar
+fragments acquire competing guides; mobile1 omits required standalone field sizes.
+No prior criterion changes or selective image replacement.
+
+Bounded builder diagnosis proves construction mixing in actual prompt: anchor-only
+footers are emitted as full421×56 parent boxes alongside Close52×30 and two scalar
+recipes; scalar relationship is described three times. Mobile singleton input size
+is buried in overview. Trigger carrier exposes only multiline aggregate text and
+no reliable icon/leaf/accessibility distinction, so compiler cannot safely classify
+an icon by keyword. These are concrete source observations, not assumed randomness.
+
+C6 same owner/five paths now separates true full rendered members/size or repeated
+views from anchor-only context. Scalar fragment contains only two named source
+anchors, compact Space/context, prepared value and one clear topology/orientation;
+no full parent/control rectangles or repeated recipes. Preserve meaningful source
+objects/states in overview/size views and all exact machine records. Captions use
+reliable labels where present, otherwise plain human role/context; never blacklist
+words or delete underlying UI text/claim unsupported icon semantics. Standalone
+input receives its own size-view; Director366×44/root12 and all pinned requirements
+remain. No additional drawings/measurements invented or difficult facts removed.
+
+Focused member/anchor-only/caption provenance/size-preservation tests, priorC7 reuse.
+New immutable C6 committed source/three literal packages/same original refs and
+full6fresh outputs, no prototype/edit/history/wrapper/reroll selection. Same critics
+image-first plus bounded installed-source evidence. No new frameworks/schema/
+flags/agents/branches/worktrees/persistent dirs/collector/site/Computer Use work.

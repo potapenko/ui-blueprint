@@ -115,7 +115,19 @@ frozen-cohort-manifest.json hash12c83375746d5e2a41483032815b44b87b4b39d1aac2a2a1
 33focusedtests/clippy/fmt passedauthor; machine5files×3 exactC4. Originalinput/ref
 hashes unchanged. Proposed absolute-distance pairs stay conservative namedanchors;
 positive alone does not establishSTART-left/upper. Sixfreshfirstcallsrunning.
-Nextneutralall6→sameC/V; C1–C4retained, no retries/edits/selection.
+C5 complete/rejected: Cd2cd1912/6contentPASS(D1,D2),V3a0ceea0/6complete
+becausecaptionsforce rawiconligatureexpand_more. SourceC7PASS4058823,
+installed3c2b0503packagesexact. RemainingSfooterextra-frames/guides,M1missing
+mandatorysizes+misplacedgenre8,M2three-guide12. C5outerwidth194fixedbothD.
+C6diagnostic confirmed directconstructionmix: anchor-only context emits full
+Footer421×56 andClose52×30 pluscornerrecipes; eachscalar describedthreetimes.
+Triggercarrier hasonlymultilineaggregateAny director/expand_more, no reliable
+iconleaf/accessibilitydistinction, so mustnotclassify/filtertokenasUItext.
+C6-I fullfiniteplan approved/running: separatetruefullrender-members/sizeviews
+fromanchor-only minimal2edgefragments; singlegeometryrecipe; trustworthyhuman
+caption or role/contextfallback, no lexicalfilter; singletoninput ownsizeview
+forDirector366×44, root12preserved. Same5paths/facts/criteria, focusedtests.
+NextNEWC6freeze+all6freshcalls; allC1–C5retained, no imageedits/rerollselection.
 
 
 Старые R1–R8 не свежие испытания.
