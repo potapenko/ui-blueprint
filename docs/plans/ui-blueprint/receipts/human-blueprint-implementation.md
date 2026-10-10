@@ -151,3 +151,10 @@ Five non-prompt files for both real cases remain byte-identical to R2. Prior exa
 machine-data and unchanged arithmetic/privacy/refusal evidence remains applicable.
 Installed reproduction follows the source checkpoint; independent image acceptance
 is pending the same two critics. All R1/R2/R3 images and shared review inputs remain.
+
+
+R3 source checkpoint `bdd73d40d90d26086f2aa6b279ac40b52413b1c9` pushed. Fresh core
+build and installed verification passed from this exact revision. Installed CLI
+reproduced all six files of both R3 packages byte-for-byte. The run-owned non-image
+installation was removed and removal verified; frozen images/review packages remain.
+Source and images now held for the same two independent critics' R3 observations.
