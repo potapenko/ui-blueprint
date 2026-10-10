@@ -11,20 +11,33 @@
 [План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
 Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
 product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Начальный шаг: независимая критика двух реальных результатов и профильные источники;
-исполнитель параллельно изучает применимый exporter, не меняя код до сводного brief.
+Текущий шаг: R1 получен и отклонён обоими критиками; тот же исполнитель делает R2.
 Агенты запущены с fork_turns none, без model/effort override:
-- HBP-C `/root/blueprint_content`: initial review3c4730d принят как критика baseline;
-  критерии C1–C7 и source measurements прочитаны; ждёт первый кандидат.
-- HBP-V `/root/blueprint_visual`: initial reviewc55acfc прочитан; критерии V1–V6,
-  исправленное tentative anchor замечание сохранены; ждёт первый кандидат.
-- HBP-I `/root/blueprint_builder`: read-only source plan получен, current exporter
-  умеет width/height, нужные gaps/insets — через существующий engine. Получает
-  объединённые критерии и полный первый implementation/generation цикл.
-Прежние картинки не проходят новый user scope. Root явно выбрал meaningful
-geometry/overview/details и короткий prompt, а не прежние таблицы под новым названием.
-Точные машинные значения/приватность остаются защищены. Ни одного нового кандидата
-ещё не принято; goal active, состояние/история P0–P7 ниже не переоткрываются.
+- HBP-C `/root/blueprint_content`: R1 reject в1a9200e,
+  [receipt](receipts/human-blueprint-content-review.md); ждёт нейтральный R2.
+- HBP-V `/root/blueprint_visual`: R1 reject в39c43f6,
+  [receipt](receipts/human-blueprint-visual-review.md); ждёт нейтральный R2.
+- HBP-I `/root/blueprint_builder`: R2 running, единый repair packet передан;
+  R1 source43d62d4 и installed proof8181a98 сохранены в
+  [receipt](receipts/human-blueprint-implementation.md).
+R1 сделал prompt короче, убрал длинные дроби и screenshot-панели, сохранил exact
+machine facts. Но обязательные размеры/состояния и несколько привязок стрелок
+не проходят критерии; поэтому ни один новый кандидат пока не принят.
+R2 исправляет mandatory per-view размерный brief, видимые anchors/выравнивание,
+keyboard-active/not-applied Director, outline-only off switches Settings и
+человеческие units/captions. Дополнительно исполнитель восстанавливает обнаруженную
+им утрату compact Space/transform attribution и три исторические doc attribution.
+Источник требований — прямой запрос пользователя и HBP-HUMAN-001; конкретные
+расхождения — наблюдения критиков, Space omission — сообщение автора. Метод
+обязательного brief — согласованное средство выполнения этих требований.
+Spec Basis текущего цикла: registry36, DRAWING1.2, EXPORT/drawing leaves2;
+прочая выбранная closure и защищённые domains сохраняются. Root восстановил
+AGENTS → runbook/registry → spec registry; нового изменения product scope нет.
+R1 images/packages: system temp `uib-hbp-ebwz2bfy`, director/settings-r1,
+1536×1024 при100%. Старые изображения сохраняются. После R2 те же два критика
+сначала независимо смотрят новый raster, затем сопоставляют author evidence;
+финальный C7 и installed proof должны соответствовать окончательному source.
+Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
 
 ## Предыдущая цель P0–P7 — завершена
 

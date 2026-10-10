@@ -207,3 +207,21 @@ public CLI prompts, actual ImageGen output and neutral candidate handoff. No fur
 root grant needed for its internal steps. Actual raster size/viewing context must
 be stated and judged; do not claim unsupported4K or impose an arbitrary font quota.
 Both critics continue independently on the same revision/images after handoff.
+
+
+## R1 disposition and R2 — 2026-10-10
+
+R1 source43d62d4 / installed proof8181a98 is saved, not accepted. Content1a9200e
+and visual39c43f6 independently reject incorrect/missing dimension anchors,
+Director alignment/state and Settings filled knobs. Hierarchy and native-size
+readability pass. One consolidated repair goes to the same HBP-I; the same critics
+wait for actual R2 images. Their receipts hold the exact source anchors/remedies.
+R2 makes a small required drawing brief per view, preserves useful context around
+arrows, corrects the above failures, restores author-reported Space/transform
+attribution, and repairs historical authority wording. No new feature, fixture
+constants, whole-layout redesign or additional agent is authorized. The source
+of each requirement remains the direct user brief and registered HBP-HUMAN-001;
+critic findings are observed evidence, and mandatory per-view selection is the
+chosen implementation remedy, not external research creating product authority.
+Root writes only this plan and the registry for this checkpoint. Final acceptance
+still requires both actual-image verdicts and final-source compatibility evidence.
