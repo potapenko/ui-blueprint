@@ -20,6 +20,24 @@
 
 ## Текущее продолжение — 2026-10-10
 
+### I02 installed exporter accepted; Native remains the open outcome
+
+- I02 terminal revision85, turn01a123d1-10e0-74d1-8b8e-f7e6e1a82fd1,
+  b06f3b2949efc7b87cb6a0788cd806df91377ad1 pushed. Root read full new132-line
+  section. Four release installs on immutablea026584, unchanged recipe6a5bec2;
+  all8real-formexports/all6files equal accepted E05 outputs, exact prompt hashes/
+  character counts. Four feature sets, smoke/limits/provenance/notices/verify/remove/
+  foreign preservation PASS; unchanged recovery/license evidence attributed.
+- Installed Native helper/worker hashes unchanged e641543; no new shipping Native
+  delta at I02's final committed+WIP inspection. Actual bundles cleaned after proof;
+  no permanent install path claimed. Shared inputs/images retained. I02 archived;
+  restore for an actual accepted Native source delta, not a documentation commit.
+- N06 still active. No reproduction/repair claim from diagnostic successes. Root
+  asked Mac advisor one bounded normative question: exact distinction between
+  zero wrong targets/known-data loss/false-pass and transient reported refusal;
+  no new error budget, changed gate or retroactive pass authorized. N06 continues
+  independently while the original product requirement is clarified.
+
 ### Current ready work — N06 binding and I02 delivery
 
 - E05-R terminal accept_with_residual, a307bffa123c8ab58fd538961d8dc4d467b9957d
