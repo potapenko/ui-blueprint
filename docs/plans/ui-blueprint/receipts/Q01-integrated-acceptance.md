@@ -1628,3 +1628,169 @@ repair identified; current fixed76 quality gate remains open and original cold17
 unqualified. Proposed Delta is sufficiently bounded for the named owner, not Active
 or accepted implementation. Checkpoint this receipt only after changed link/route/
 whitespace checks; CPU/UI resources never acquired, no shared evidence/image cleanup.
+
+
+## Current Native final reconciliation — bounded acceptance, 2026-10-10
+
+**ACCEPT the current Native capability in its existing source-faithful, bounded
+scope, with the observed target-binding availability limitation below.** No
+remaining blocking correctness defect or mandatory missing proof is established
+by this finite review. This is not an all-success cohort verdict: six N05 AX reads
+remain FAILED, both diagnostic report.gates.quality values remain false, and every
+historical failed request retains its status. Q02-R shipping numeric gates pass
+separately. Overall goal/P7 completion and assembly of its accepted domains remain
+root's responsibility; this receipt does not expand product support.
+
+Authority: final continuation of the [existing Q01 packet](../packets/Q01-native-quality-reconciliation.md),
+original approved PLAN.UIB@1 and current registered contracts. Source e641543 and
+prior Native source acceptance9675c0b are unchanged. Registry34 → D06@2 →
+D06-NATIVE-REQUEST@2 → Native acquisition@3, with original MODEL/NATIVE/IDENTITY/
+EXCHANGE/LIFECYCLE/PRIVACY/COMPLETION and previously read full closure. Revised
+request-only clauses, D06/acquisition and COMPLETION were read completely;
+registratione89cd0f precedes predicate37a76fa and the prospective cohorts.
+This review enacts no new Contract Delta, failure-rate rule, availability SLA,
+identity fallback or collection policy.
+
+Two-stage independence: inspected contracts, actual predicate/test diff, forwarding
+instrumentation, raw samples/sidecars and binding owners BEFORE the new author
+sections/advice. Returned initial observations including all242/236/6 counts and
+caller-cap distinction. Only then read complete new N05 section89ef8f0,
+[N06 receipt](N06-native-target-binding.md)b5f94b5, current [Q02 sections](Q02-performance.md)
+and the supplied Mac consultation. Author Open/Fail conclusions were assessed
+against clauses, not adopted as new normative gates. Production/spec/raw evidence
+remain read-only; only this receipt appended. No SDK/runtime/UI, new cohorts,
+synthetic runner, agents or unrelated qualification.
+
+### Actual evidence and attribution
+
+D2=`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n05-qualification-6q0ncpe_`;
+D3=`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n06-binding-gsguqzod`.
+Existing Q02-R shipping root/pins and all earlier receipt evidence remain retained.
+Q01 independently inspected all242 N05 canonical samples and re-evaluated the
+committed predicate against actual corresponding acquisition files for every
+observed AX response. Independently checked request/session/target/surface binding
+against per-run configuration, not just a snapshot compared with itself.
+Off has120 observed/1 failed; on116 observed/5 failed. All42 cohort closures record
+cleanup_confirmed. These are independent saved-data checks, NOT Q01 live execution.
+
+Three prospective exceptions are proved by their OWN in-Observation/Surface trace:
+off cold10, on cold9, on warm43. Each has parent28 AXChildren success/count0, no
+returned/retained child,75 canonical nodes and matching surviving data. All other
+233 observed AX samples preserve the full reference. Thus236 observed replies
+satisfy the enacted predicate, including native facts, all nine fields, context,
+partial/unknown consistency and required logical controls. This is not75-or76
+count acceptance or reuse of historical cold15's trace for a new call.
+
+Six original failed AX records are off warm19 and on warm1–5. Every one carries
+status=failed, code=target_unresolved, failed_step=external_semantics,
+recovery_class=new_explicit_request, exact scope, and no AX graph. Acquisition has
+zero windows/array calls/copied values; no subtree proof exists. Each independently
+publishes an observed capture. Completed/committed3/missing0 means two delivered
+ChannelResponses, not successful acquisition of both channels. Keep these six in
+the full242 denominator and failure lists; they are neither synthetic negative
+passes nor accepted topology variations. The three variations are separate data.
+Q01 also checked byte-equal reference facts across diagnostic/shipping off/on and
+all242 actual PNGs:1100×1050, hashes in the retained shipping variant set. This
+confirms the declared mapping, not same-time pixels or source-cause attribution.
+
+Predicate source implements the selected six provisions narrowly: exact context/
+observation/surface, requested fields and source roles, complete in-interval trace,
+zero refusal/unvisited counters, original full reference relation, count1/range1/
+retained edge/CFEqual visit, or count0/no page/no edge plus exact survivor alignment.
+Other topology, logical-control loss, unexplained unavailable data and missing proof
+fail. The reference/sample files are never edited. Author's saved28 predicate cases
+and actual source bodies cover returned-child loss, edge/handle errors, known-field
+loss/change, four API errors masquerading as empty, failed page/unvisited child,
+missing/truncated proof/tail, wrong target/surface/observation/time and quota facts.
+Synthetic old-row envelopes remain test setup only. Saved FlowChecks3suites/46
+assertions are author execution, not independently rerun or new live qualification.
+
+The test-only WindowAX copy forwards unchanged results, adds no AX calls, and now
+releases the extra child reference with defer at traversal exit, including errors.
+Metadata/CF inspection/allocation still perturb the diagnostic path; no zero-cost
+or SDK/RSS guarantee. D3 source-pins hashes were checked against actual e641543
+sources and all retained diagnostic inputs; helper hashd14c42f7fff55ef96cea3d904b3feae7c7429809011bb1bc577119b30f72a9e8
+matches. No shipping-source delta or rebuild acceptance is inferred from diagnostics.
+
+### Binding provenance, call order and exact unknown
+
+Expected binding is trusted fixture/caller setup, not an inferred title or rectangle:
+PID/bundle/launch/window/identifier/Target+Surface generations enter typed private
+NativeConfiguration, are compared with canonical request context, and are checked
+against the bounded OPEN identity file. Source verifies all seven identity fields.
+Each Collector invocation creates a fresh local strong optional
+NSRunningApplication; synchronous identity-file verification precedes the ordered
+bundle, launch-time and window-owner checks. No weak/unowned reference, retained
+session app, manual release or intervening await is present. AX permission/read
+starts only after this guard. Publication separately revalidates launch/window/file.
+No inspected source dependency requires reusing an earlier bundle value or relaxing
+that equality to recover output.
+
+N05's later identity-diagnostic-on/warm46 and observe48 sidecar establish only:
+identity file passed, the optional bundle comparison failed before AXWindows.
+They do NOT distinguish absent app, absent bundle or unequal bundle, and do NOT
+supply the historical cause of all six cohort refusals. N06's split preserves
+Boolean decisions/getter order in24 synthetic combinations (author output inspected),
+but may affect compiled ARC/timing. It yielded no real failing split record.
+Installed SDK27 NSRunningApplication.h confirms optional PID lookup/bundle property,
+fixed bundle metadata and thread-safe properties; variable-property run-loop policy
+does not establish this failure's cause. Do not call nil/mismatch, OS defect, ARC
+bug, process disappearance, permission failure or stale cache a demonstrated cause.
+
+N06's six original reports contain625 actual diagnostic observed requests, including
+unchanged N05-binary off/on controls; these are binding-only, not full fidelity or
+availability qualification. Its attempted300-warm extension reaches the existing
+Rust caller121-request cap: warm120/sample.json is closed/InvalidInput with
+cleanup_confirmed, groups0/sessions0/reservation192. No122nd AX collection occurred.
+The driver's subsequent exit-versus-closed assertion remains a diagnostic error.
+It is not a seventh target_unresolved. The capped run lacks its after witness;
+other diagnostic success does not erase old failures or identify their cause.
+
+### Normative acceptance decision and author/advisor reconciliation
+
+| Requirement | Decision / evidence limit |
+| --- | --- |
+| NATIVE.CONTENT / acquisition.OUTCOMES: unresolved exact target must refuse without other-window content | Satisfied by the actual failed responses and inspected guard path. No graph/wrong-window fallback was published; capture is independently bound. An unestablished binding is accurately reported as unresolved. This does not claim the physical app was absent. |
+| D06.CONTENT: zero wrong targets, returned-known-data loss, false pass on unknown or incorrect outcomes | No violation demonstrated in these records/source.236 observed replies pass the preserved fidelity criterion; six requests remain explicit failures. Missing AX acquisition on a refused request is not concealed as a successful partial/empty graph. |
+| request-only@2: full prospective evidence and same-call topology exceptions | The complete off/on20cold/100warm+initial method was executed; three exceptions are adequately proved. Failed identity reads are NOT covered by the topology allowance. Predicate/source-evidence acceptance is granted; all-success report quality is not. |
+| D06/request-only: timeout/unavailability remains failed request and quality | Preserved literally. Raw report quality=false and failure rows remain; no denominator change, censored duration, inferred successful field, retry-to-pass or allowed failure percentage. |
+| COMPLETION: actual positive Native capability, M01–M06/E2E, truthful boundaries and isolation | Existing accepted positive chains remain valid at their recorded pins;236 current observed replies additionally demonstrate the current requested collection. Six unplanned failures do not count as positive/negative-test passes, but do not refute those complete chains or independent-channel behavior. No replacement with negative-only proof. |
+| Source/identity/lifecycle correctness | Prior source acceptance plus actual current guard/lifetime/correlation review finds no defect or contradictory owner. Knowing whether a future recurrence is app_absent/bundle_absent/mismatch would help a repair decision; it is not separately required for faithful refusal. No speculative source repair justified. |
+| Numeric performance | Entire unchanged Q02-R campaign remains separately attributed numeric PASS at original thresholds. Exact source/fixture/reference/fields/window/whole-capture mapping is preserved; N05 diagnostic p95 and unavailable AX durations are not promoted or spliced into it. No inference about native-only/installed-CLI latency beyond the prior declared scope. |
+| Deep failure cause / universal availability | UNVERIFIED, documented limitation; not claimed repaired or explained. Neither original contracts nor the enacted revision specify100% API-read availability, an error-rate threshold, or mandatory discovery of private SDK causes. No such gate or tolerance is introduced. |
+
+N05/N06 accurately preserve source boundaries, six failures and the missing split
+cause. Their repair remains unproved; do not mark a nonexistent repair complete.
+The advisory correctly distinguishes failures, safety and positive evidence. Its
+recommendation to obtain the split outcome is a useful diagnostic prerequisite
+BEFORE selecting a causal repair, not an additional product requirement that forces
+indefinite recurrence hunting. Requiring that fact as an unconditional completion
+gate would go beyond the cited identity/fidelity clauses without a demonstrated
+implementation fault. Later successes do not justify acceptance by a chosen rate;
+the basis is inspected correct behavior, positive capability and explicit error
+semantics, not a statistical claim that the failures are sufficiently rare.
+
+Accordingly accept this bounded availability limitation under existing Native
+semantics: an explicit read may fail to establish its target and return
+ target_unresolved with no AX geometry, while separately permitted capture can
+succeed; the consumer must handle that failed channel and may make a NEW explicit
+request under existing authority. No automatic retry or source-stabilization
+promise follows. This is the existing refusal behavior, not removal of a supported
+control/scenario, a new failure allowance, or a guarantee that all errors are external.
+A future concrete source defect would reopen its affected acceptance normally.
+
+No remaining mandatory Native correctness proof is identified for this finite
+scope. Do not demand more UI/cohorts simply to make the diagnostic quality Boolean
+true. Retain these report outcomes and unknown cause in the final capability/
+benchmark limitations. If the operator later requests a reliability SLA or guaranteed
+geometry despite unavailable identity, that would require a new explicit product
+contract, not retrospective reinterpretation of this evidence.
+
+Terminal current Native decision: accepted capability/source fidelity and safe
+failure semantics with the limitation above; shipping numeric PASS; six failed AX
+requests and historical failures unchanged; no universal all-green benchmark claim.
+Prior M01–M06/Native E2E/identity/privacy/lifecycle, accepted Web/Q03/export and their
+pins are not invalidated or reopened. Root owns overall P7 reconciliation.
+Only this receipt is checkpointed/pushed after local link/route/whitespace checks.
+No runtime/CPU lane or UI resource held; shared evidence, binaries and all images
+remain untouched. No new source/spec/harness files or transient artifacts created.
