@@ -446,3 +446,37 @@ competing reference frames; it neither relaxes source fidelity nor adds a criter
 
 Only these existing errors remain; no new style, research, print-size or CAD gate.
 Frozen images, source and packages remain untouched; `git diff --check` passed.
+
+## R8 final Director visual acceptance — 2026-10-10
+
+Source `b008a4408d3e5e5b73e9cd36da0932c217411d25`; selected contracts unchanged.
+Actual image `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/director-r8.png`,
+1536 × 1024, inspected at declared native size before author narrative. Then checked
+all required dimension lines, state and rounding footer in the literal
+`director-r8-final-package/prompt.txt`; no author verdict used as visual evidence.
+
+**HBP-V accepts Director R8 against V1–V6 at this delivery size.**
+
+| Criterion | Final direct evidence |
+| --- | --- |
+| V1 | Blue ground continues through controls; white contours/type/dimensions; active row uses a double white outline, without the R6 lighter fill. No screenshot panel, grid, record-ID artefact or decorative dark marker. |
+| V2 | Overview preserves Director/info, Any director, one Directors heading, `spiel`, all three correct result names/counts and order. Partial detail preserves the first two results and explicit keyboard-active/not-applied state. Main input/results share the intended column; no CAD-precision claim. |
+| V3 | Complete overview, clearly named partial spacing detail, separate purposeful inset fragment and compact provenance footer. No construction-ID/inventory noise or competing popup frame in the spacing view. |
+| V4 | All source labels, counts, dimensions, state annotation and footer are readable at native 1536 × 1024. No material collision/clipping in the final corrected areas. |
+| V5 | ≈178 now spans actual input left/right edges; ≈26/≈24 heights and 6/3 gaps relate to the depicted controls. The sole inset joins the two actual nested corner borders. Overview retains trigger/popup sizes and attachment gap; obsolete duplicate inset guides are gone. |
+| V6 | Visible 180/29/194/143/178/26/24/6/8/3 values match the prepared rounded source-derived labels. CSS px and the all-label rounding/schematic note remain clear, with no tolerance or CAD-scale claim. Draft, partial coverage and image-unverified generation status are retained, not silently promoted to human approval. |
+
+The integer gap/inset labels rely on the explicit whole-sheet rounded-label note;
+this does not assert exact values or alter their source numbers. The accepted image
+is the actual R8 edit produced with its literal final CLI package, not evidence that
+an arbitrary rerun will reproduce the same raster. No new generation is requested.
+
+**Accepted visual pair:** Director R8 at `b008a44`/R8-final package plus unchanged
+Settings R4 at `cd099a1`/R4-final package. Settings is not attributed to the newer
+Director prompt revision. Both visual/source-presentation scopes pass HBP-V; this
+receipt does not substitute for HBP-C, installed/compiler/privacy checks, human
+approval, live collection or reduced-size/print validation. Existing E04 source
+coverage remains partial/imported. No residual visual blocker remains in this scope.
+
+Only this receipt changed; frozen images/packages/source remain intact. Documentation
+`git diff --check` passed. No unrelated check, extra agent or further image was used.
