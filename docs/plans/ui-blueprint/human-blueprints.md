@@ -1,4 +1,4 @@
-# Human-readable blueprints — active goal 2026-10-10
+# Human-readable blueprints — completed goal 2026-10-10
 
 ## Authority and outcome
 
@@ -225,3 +225,26 @@ critic findings are observed evidence, and mandatory per-view selection is the
 chosen implementation remedy, not external research creating product authority.
 Root writes only this plan and the registry for this checkpoint. Final acceptance
 still requires both actual-image verdicts and final-source compatibility evidence.
+
+
+## Final acceptance — 2026-10-10
+
+Definition of done satisfied by Director R8 + retained Settings R4, both1536×1024
+at native100%. HBP-C250efbd accepts C1–C7; HBP-V4bf5759 accepts V1–V6. Source
+b008a44 and implementation receiptfcc550d close the final frame/role restoration,
+focused23compiler/20CLI checks, Clippy/formatting and installed core reproduction.
+The installed final source reproduces all six files of both R8 packages exactly.
+Settings R4 remains attributed to cd099a1/R4 prompt; its R8 package reconciles final
+source compatibility, not a newly generated image. No remaining mandatory gap.
+
+The useful final composition is full overview → partial repeated-control spacing
+view → isolated real-border inset detail → compact factual note. This resolves the
+ambiguous duplicated size chains without removing meaningful controls or machine
+facts. Intermediate failures and their actual corrections remain in the two critic
+receipts; no criterion was weakened or replaced by a favourable new reviewer.
+
+All generated images/tool originals are retained. The task registry holds exact
+paths and immutable revisions. Scope is the named schematic imported-reference
+artifacts and bounded source compatibility, not CAD scale or universal ImageGen
+reproducibility. Root saves the final checkpoint, delivers images inline and closes
+the verified goal; there is no further implementation or review packet to dispatch.

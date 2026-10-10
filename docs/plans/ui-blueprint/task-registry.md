@@ -1,66 +1,54 @@
 # Единый реестр задач
 
-## Активная цель — понятные человеку blueprints, 2026-10-10
+## Завершённая цель — понятные человеку blueprints, 2026-10-10
 
-Пользователь прямо поручил новую цель и цикл с двумя агентами-критиками: убрать
-шум/длинные дроби, выделить нужные заказчику размеры и детали, только голубой/белый,
-без скриншота внутри чертежа; исследовать примеры в интернете и итеративно улучшать
-реальные изображения. Предыдущая P0–P7 цель завершена и сохраняется ниже.
-Режим coordinated: root только координирует; один исполнитель и ровно два постоянных
-критика через collaboration, без nested delegation; настройки наследуются.
-[План и границы](human-blueprints.md). Host goal active, numeric budget не задан.
-Root write set: этот реестр, execution.md и human-blueprints.md. Baseline HEAD5ff73b1,
-product a026584, registry35; защищённый after-title-spacing.png остаётся нетронутым.
-Текущий шаг: Settings R4 принят; R8 partial-detail repair plus confirmed export frame/role compatibility fixes running.
-Агенты fork_turns none, настройки наследуются, без nesting:
-- HBP-C `/root/blueprint_content`: Settings C1–C6 accepted, C7 accepted cd099a1;
-  Director C3 inset anchors rejected; [receipt](receipts/human-blueprint-content-review.md) ecdaa2f.
-- HBP-V `/root/blueprint_visual`: Settings V1–V6 accepted при1536×1024;
-  Director detail alignment/178/8 anchors rejected; [receipt](receipts/human-blueprint-visual-review.md)81b41e5.
-- HBP-I `/root/blueprint_builder`: R7 только Director. R5 unchanged-prompt edit rejected (C02b2dae/Vfb1f803):
-  malformed inset chains остались и были продублированы в overview. Теперь
-  упростить actual prompt до одного inset popup-left→input-left с continuous
-  border segments, убрать duplicate chains, сохранить размеры/content/state.
-  Не повторять same edit, не добавлять очередной instruction wall. Settings frozen;
-  если template меняет его prompt, явно сопоставить delta с принятой картинкой,
-  не приписывать старому raster новую source revision.
-Product sourcecd099a19b73760f3a2144439b10e3a04b9daf79c; installed544260a.
-R3 value/name/privacy regression checks приняты; R4 менял только template.
-R4 core verify и оба six-file packages reproduced byte-for-byte. Accepted Settings:
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/settings-r4.png`,
-1536×1024 при100%; literal settings-r4-final-package в том же каталоге.
-DirectorR4 там же, director-r4.png / director-r4-final-package; pending detail.
-R1/R2/R3 images и соответствующие review history сохранены. Теперь не пересоздавать
-Settings. Director text spiel, keyboard-active/not-applied и общий вид проходят;
-остаётся соединить detail width/inset dimension extensions с реальными краями и
-сохранить source alignment. Redundant popup194 detail может быть убран, поскольку
-его outer size уже есть на overview; единственную полезную inset demonstration
-удалять нельзя. Никакого нового CAD/pixel-perfect критерия не введено.
-Основание: прямой запрос пользователя и HBP-HUMAN-001, DRAWING1.2,
-EXPORT/drawing leaves2, registry36; прочая selected closure неизменна.
-Метод image-edit — средство сохранения уже принятых частей, не новый product scope.
-После нейтрального R8 оба тех же критика проверяют только Director и фактически
-изменённые criteria. C7 и Settings не переоткрываются без relevant change.
-Все images/tool originals retained; untracked after-title-spacing.png untouched.
-R6 source5139f8e / installedc38008f: prompt7827 chars, clearer width/alignment,
-но inset8 именует ложные guide lines; active row получил недопустимую светлую заливку.
-R7 remedy согласован с HBP-V: отдельный увеличенный popup/input corner fragment,
-две реальные continuous vertical borders с короткими top edges и одной стрелкой8;
-без external detail frame/ложных guide lines. Полный overview и field/row sizes/gaps
-сохраняются; active state extra outline на том же синем фоне. Это presentation
-repair уже выбранных измерений, не новая geometry/feature/acceptance criterion.
-R7 source9f5b9a8: isolated inset8 и outlineactive прошли; большая detail оставила
-лишний8 и неверную width178/alignment. HBP-V4219d4e подтвердил R8 remedy: explicit
-partial Search/result spacing (input+2rows, sharedcolumn, width/heights/gaps),
-без popup frame/header/insets; full overview и accepted cornerdetail сохраняются.
-Отдельно HBP-C подтвердил2 author-reported C7 regressions в compact exporter:
-Layout-only geometry helper теряет known AX-only geometry; native-first role
-selection скрывает canonical control semantics. R8 исправляет существующие helpers
-с TRUE frame/Space attribution, canonicalrole и native attribution, focused
-AX-only/native/mixedframe checks. Это existing contract compatibility, не Native
-collector expansion. Старые C7passes были bounded DOM/source slice; новый gap
-явно открыт до исправления/verification, не выдан за принятую универсальность.
-Goal active; прежняя P0–P7 история и её приёмка не переоткрываются.
+Пользователь прямо запросил улучшить actual CLI prompt и реальные blueprints с
+двумя постоянными критиками, убрать шум/длинные дроби, сохранить полезные размеры
+и голубую/белую графику. Scoped coordinated goal выполнен по
+[плану](human-blueprints.md); критерии не ослаблялись, P0–P7 не переоткрывался.
+Root coordination-only; один исполнитель и ровно два повторно используемых
+критика, fork_turns none, настройки наследовались, nested delegation не было.
+
+Принятая пара при1536×1024/native100%:
+- Director R8, sourceb008a4408d3e5e5b73e9cd36da0932c217411d25,
+  literal director-r8-final-package/prompt.txt.
+- Settings R4, sourcecd099a19b73760f3a2144439b10e3a04b9daf79c,
+  literal settings-r4-final-package/prompt.txt. Изображение не приписывается R8;
+  settings-r8-final-package — проверка совместимости окончательного exporter.
+Общий system-temp root:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy`;
+принятые изображения director-r8.png и settings-r4.png. Все предыдущие картинки,
+tool-managed originals и общие review packages сохраняются без agent cleanup.
+
+Финальные владельцы/доказательства:
+- HBP-I `/root/blueprint_builder`: done, product sourceb008a44,
+  [implementation receipt](receipts/human-blueprint-implementation.md)fcc550d.
+- HBP-C `/root/blueprint_content`: C1–C7 accepted,
+  [content receipt](receipts/human-blueprint-content-review.md)250efbd.
+- HBP-V `/root/blueprint_visual`: V1–V6 accepted,
+  [visual receipt](receipts/human-blueprint-visual-review.md)4bf5759.
+Новых заданий нет. Полные замечания/итерации остаются в receipts, не требуют
+повторного исполнения. Ни image, source, privacy, installation blocker не остался.
+
+Доставлено: короткий целевой prompt, human display rounding, обязательные
+полезные dimensions/details и ясные anchors, blue/white outline rendering;
+точные исходные machine records/units/privacy сохраняются. Available AX/other
+frames атрибутируются честно, canonical role не теряется за native vocabulary.
+Final compiler23/CLI20, Clippy/fmt и exact-source core build/verify прошли по
+reconciled author evidence; установленный CLI побайтно воспроизвёл6 файлов
+обоих R8 пакетов. Два критика независимо просмотрели реальные изображения,
+content critic проверил source/package delta и frame/role regressions.
+
+Authority: прямой user request, HBP-HUMAN-001, DRAWING1.2,
+EXPORT/drawing leaves2, registry36; protected selected closure unchanged.
+Root сверил определение готовности и final receipts. Изображения — проверенные
+schematic документы из сохранённых imported partial E04 references; нет claims
+CADscale, live collection, current freshness, printing/smaller-size или humanapproval.
+ImageGen rerun не обещает побайтно одинаковый raster; пакеты CLI воспроизводимы.
+Settings принят на своём исходном prompt, final shared-template/source compatibility
+отдельно подтверждена. Currentmaster, все этапы checkpoint+push; unrelated
+untracked after-title-spacing.png не открывался и не менялся. Финальный шаг:
+сохранить этот root checkpoint, показать обе картинки пользователю, закрыть host goal.
 
 ## Предыдущая цель P0–P7 — завершена
 
