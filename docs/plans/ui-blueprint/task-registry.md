@@ -4,7 +4,7 @@
 - Правила исполнения и восстановления: [ранбук](execution.md); этот реестр хранит
   текущее состояние, а не вторую копию правил. Прямой запрос пользователя требует
   сохранять правила push, чатов/параллельности и архивирования в файлах.
-- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` подтверждён `blocked` после трёх последовательных проверок одного ограничения handoff 2026-10-09. Объём P0–P7 и master сохранены; это не completion и не пользовательская pause.
+- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` подтверждён `active` 2026-10-10 после продолжения цели. Объём P0–P7 и master сохранены; прежнее blocked — история, не текущее препятствие.
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
 - Объём: P0–P7, рабочие чаты и follow-up по плану; root не реализует и не проверяет продукт.
@@ -18,44 +18,36 @@
 - Пользователь 2026-10-07: «Продолжаю работу, я включаю цель.» Host confirms active; same approved scope and explicit parallel-chat authorization continue, without reapproval.
 - Начальный checkpoint `358c757`; код продукта отсутствует; строки `queued`, если статус ниже не уточнён.
 
-## Текущее продолжение — 2026-10-09
+## Текущее продолжение — 2026-10-10
 
 ### Remaining Native execution handoff
 
-Host update_goal returned blocked after the third consecutive identical audit:
-old Q02 still active/inProgress427; Q02-R idle and has performed no takeover.
-No exposed direct stop tool; Computer Use explicitly denies com.openai.codex.
-Only pending dependency is operator Stop (or old task's natural terminal state)
-followed by host-supported goal continuation and fresh whole-thread/resource check.
-User prompt is already pending; do not repeat denied controls or restart by timeout.
-Accepted e641543 source/Q019675c0b, installed6ff4943 and Q03b014cd4 remain preserved.
-Native final timing/quality is NOT accepted; all old failures remain. Resume Q02-R
-01a12127-5b94-7801-95cd-c35cf2c3ceab only after old executor ownership is retired.
+- Host goal active. Previous goal turn was a status answer without progress;
+  this continuation obtains new authoritative terminal evidence.
+- Old Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c`: host revision428,
+  thread notLoaded, turn `01a1203f-b27e-7152-adc0-75da18a8e74d` failed with
+  `context_length_exceeded`. This proves execution stopped; no timeout inference.
+  Its source checkpoint and handoff are preserved. Archive after resource handoff.
+- Q02-R `01a12127-5b94-7801-95cd-c35cf2c3ceab`,
+  «Q02-R — Native замеры принятой сборки», is the sole next executor of the
+  existing [finite packet](packets/Q02-native-final-execution.md).
+  Dispatch confirmed active/inProgress, turn01a12399-7bf2-7020-bac7-034b30a3ba99,
+  revision5; worker acknowledged the revised boundary.
+  Next: reconcile actual retained resources, then complete Native timing/quality
+  autonomously. Root does not run QA or prescribe internal steps.
+- User rejected Codex Computer Use. Its former UI Stop instruction is revoked;
+  manual Stop is unnecessary now. No control bypass or replacement chat.
+- Accepted e641543 source/Q019675c0b, installed6ff4943 and Q03b014cd4 remain closed
+  in their exact scopes. Native final timing/quality remains unaccepted; historical
+  failures retained. Contract gates/product scope unchanged; no new material choice.
+- Coordination-only write set: execution.md, task-registry.md,
+  packets/Q02-native-final-execution.md. Route: global implementation/root rules →
+  repository AGENTS → execution/registry → existing Q02-R packet. This action
+  changes executor ownership and removes rejected UI control, not product intent,
+  test selection or acceptance. Product registry33 and packet Spec Basis unchanged;
+  worker must read its complete selected closure before product work.
 
-
-- Accepted source e641543/Q019675c0b, current installation6ff4943 and Q03b014cd4
-  remain closed in their scopes. Native full timing/quality is still open.
-- Old Q02 `01a11c77-25bf-7072-8cf6-a255fa4dc11c` remains authoritatively active
-  (turn01a1203f); no failed/stopped inference from a timeout. Root deliberately
-  retires its execution ownership at the saved accepted implementation boundary
-  because its large context and prolonged inter-step latency delay the prepared
-  remaining phase. It was explicitly told to stop new work and preserve handoff.
-- New visible task `01a12127-5b94-7801-95cd-c35cf2c3ceab`,
-  «Q02-R — Native замеры принятой сборки», local project0cb10b16, inherits model
-  with medium reasoning for the prepared execution. Fresh finite packet:
-  [Q02-native-final-execution](packets/Q02-native-final-execution.md).
-- State: handoff waiting external control. Q02-R first run attempted supported
-  cua.getApp("Codex") and was denied: “Computer Use is not allowed to use the app
-  'com.openai.codex' for safety reasons.” Follow-up verified old Q02 still active/
-  inProgress427. No benchmark/build/file mutation or takeover occurred.
-  Root requested operator Stop of old «Q02 — D06 performance gates» via async input,
-  alternatively natural terminal completion. No direct stop-thread tool is exposed;
-  do not bypass the Computer Use denial or use handoff/worktree/process-kill tricks.
-  New worker remains idle until whole old chat is inactive and resources reconciled.
-- After safe handoff new Q02-R completes all required Native cohorts/quality report
-  using accepted source, exact shipping correspondence and unchanged gates. Product
-  code remains protected; any proved repair returns an exact owner dependency.
-  Root stays coordination-only, goal active; no new product scope or branch/worktree.
+### Historical continuation — 2026-10-09
 
 
 Authority: прямое разрешение пользователя записано в [ранбуке](execution.md).

@@ -13,34 +13,29 @@ this prepared execution task. No app-wide model/settings change.
 
 ## Safe ownership handoff before execution
 
-Old Q02 chat `01a11c77-25bf-7072-8cf6-a255fa4dc11c`, title
-“Q02 — D06 performance gates”, is still reported active, NOT assumed failed/stopped.
-Its accepted source checkpoint is e641543; source review and package checks below
-are complete. Root is deliberately transferring the remaining phase at this saved
-boundary; an observation timeout is not proof of stopped work.
+On2026-10-10 the host authoritatively reported old Q02
+`01a11c77-25bf-7072-8cf6-a255fa4dc11c` notLoaded with latest turn
+`01a1203f-b27e-7152-adc0-75da18a8e74d` failed, revision428:
+`context_length_exceeded` (input exceeds model context window).
+This is terminal evidence, not an inference from elapsed time. Its accepted source
+checkpoint e641543 and saved handoff remain preserved. No manual Stop is required.
 
-Before running any benchmark, build, product/harness edit or app setup:
-1. Inspect that exact old chat's actual status and this repository's ownership/WIP.
-2. If its turn is still active, use documented supported Codex UI controls to stop
-   ONLY that Q02 turn, then verify authoritative interrupted/completed/idle status.
-   No direct stop-thread tool is available to root. Follow global Computer Use route
-   and applicable official Codex guidance; finite worker may operate the UI. Do not
-   use handoff/worktree tricks, kill app/server/model processes, change branches,
-   uninstall anything, or stop any other task. If supported UI control is unavailable,
-   return the exact limitation; do not create a competing executor or infer success.
-3. Preserve all saved/uncommitted work. Last root Git check was clean except unrelated
-   after-title-spacing.png; never view/edit/delete/stage that image. Source changes
-   are protected below. Do not discard unexpected WIP or re-run work already saved.
-4. Reconcile actual remaining old-run resources from its exact retained handoff.
-   Last explicit handoff said own trace fixture71517 retired and CPU/desktop released;
-   that PID is historical, not current kill/input authority. No new operation uses
-   old refs/PIDs without fresh validation. Only exactly proven old Q02-owned run
-   processes may be safely retired under transferred lifecycle ownership; otherwise
-   preserve and return the specific resource dependency. No unrelated process changes.
+The user explicitly forbids controlling Codex through Computer Use. The former UI
+Stop instruction is revoked. Do not use Codex UI control or another backend to
+bypass the denial; no worktree/handoff/process-kill workaround.
 
-Only after old execution is terminal and ownership safe do you own Q02-R CPU/runtime
-and the writable performance paths. Tell root the actual ownership handoff result;
-then execute the entire task autonomously. No further grants for internal steps.
+Before benchmark/build/edit/app setup, confirm old chat remains inactive and inspect
+only repository ownership/WIP and the actual resources described in its retained
+handoff. Last root Git check: clean except unrelated after-title-spacing.png; never
+view/edit/delete/stage it. Preserve all unexpected work. Historical fixture71517
+was reported retired; historical PIDs are not current process/input authority.
+Retire only freshly identified, proven task-owned leftover resources under this
+transferred lifecycle ownership. Preserve unrelated resources.
+
+Q02-R is the sole remaining execution owner for the existing finite measurement
+task. After this resource reconciliation, execute the whole task autonomously with
+its original scope and gates. No additional grants for internal steps are needed.
+Report any real resource conflict, not an assumed need for operator Stop.
 
 ## Exact accepted inputs
 
@@ -128,13 +123,9 @@ actual observations versus inference and unavailable telemetry, original failure
 checks/reuse, commit+push, raw evidence and precise resource release. Archive only
 through root after result is saved. Keep the full original P0–P7 goal intact.
 
-## Actual handoff probe — control unavailable
+## Historical handoff attempt
 
-The first Q02-R run verified old Q02 active/inProgress and received an explicit
-Computer Use denial from cua.getApp("Codex"):
-“Computer Use is not allowed to use the app 'com.openai.codex' for safety reasons.”
-No benchmark/build/file mutation occurred. Do not retry that denied app control or
-switch mechanisms to bypass it. Root requested an operator Stop of the old Q02 chat,
-or its natural terminal completion. Verify the WHOLE old chat inactive afterward,
-including queued turns, then perform the existing ownership/resource gate and full
-Q02-R execution. No new implementation approval is needed once that fact is true.
+The first Q02-R run received a Computer Use denial for com.openai.codex and did no
+benchmark/build/file mutation. The subsequent user rejection permanently cancels
+that control approach. The actual terminal host result above resolves the former
+executor-state dependency; it does not by itself prove runtime resource cleanup.
