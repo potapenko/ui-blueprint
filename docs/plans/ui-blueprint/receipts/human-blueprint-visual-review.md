@@ -305,3 +305,47 @@ No new palette, composition, typography, ornament, scale or research requirement
 Existing primary-source dimension-association guidance covers the remaining defects.
 Do not redo accepted content, settings gap semantics or footer geometry to obtain
 these local repairs. `git diff --check` passed; only this receipt changed.
+
+## R4 independent review — 2026-10-10
+
+Pin `cd099a19b73760f3a2144439b10e3a04b9daf79c`; no selected contract changes from R3.
+Images in retained `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/`:
+`director-r4.png` and `settings-r4.png`, 1536 × 1024, 100% native inspection.
+Actual images preceded bounded pending-dimension lines from each
+`*-r4-final-package/prompt.txt`; no author narrative read or needed. Same E04 source
+and previously established source measurements; no new acceptance criteria.
+
+**Settings R4: HBP-V accepts V1–V6 for this actual image at native delivery size.**
+The missing Close height ≈30 is now present with top/bottom association. Accepted
+complete content, outlined off switches, adjacent-select gap, named label edge,
+named footer right/bottom insets, whole-form height, readable labels and honest
+footer remain intact. This is visual/source-presentation acceptance, not compiler,
+privacy, whole-product, reduced-size/print or human approval. Preserve this image;
+no further Settings aesthetic iteration is requested.
+
+**Director R4: not accepted; V1/V3/V4 pass, V2/V5 remain partial/fail, V6 cannot
+fully pass the incorrect measurement meaning.** Record 4/5 text is removed and
+correct `spiel`/keyboard-active state is preserved. The single remaining repair
+is the enlarged popup geometry already identified in R3. The ≈194 span still
+starts/ends inside the popup rather than at its border; ≈178 starts inside the
+input; ≈8 spans short isolated guides rather than border-to-input edges. Input
+and result rows still use different left/right alignments in the enlargement.
+The literal R4 prompt continues to require the correct source boundaries and
+shared alignment, so this is an unchanged output defect, not a contract ambiguity.
+
+Repair only that detail: establish common input/result left/right edges, extend
+≈194 to both popup borders, extend ≈178 to the input sides, and terminate each
+≈8 between the corresponding popup and input side. Keep the correct overview,
+text/state, ≈6/≈3 vertical gaps, source labels and accepted composition. No new
+pixel tolerance or change to machine numbers is requested. R4 has closed two of
+R3's three corrections; it has not yet implemented the third.
+
+Only the receipt changed; frozen PNGs/source/packages untouched. Documentation
+`git diff --check` passed. Existing primary association guidance remains sufficient;
+no fresh research or design expansion was needed for the same unresolved defect.
+
+Root reconciliation: subsequent work may freeze Settings R4 and repair Director
+only. The duplicate ≈194 in the enlarged detail may instead be removed, because
+the complete overview already supplies that outer dimension. Retain the useful
+≈178 input width and both ≈8 insets with their correct boundary pairs; removing
+all of those relationships would not resolve the pending usefulness/anchor defect.
