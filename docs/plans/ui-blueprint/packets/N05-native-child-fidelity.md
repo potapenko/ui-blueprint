@@ -115,3 +115,74 @@ Final receipt: cause proved versus unknown; exact source/contracts/changed paths
 actual checks and live sample pins; all original failures; affected gates; commit
 SHA/push; resources released; any exact remaining dependency. Finish the whole task
 without asking root to prescribe each step. Return a real blocker when applicable.
+
+## Authorized reconciliation continuation — 2026-10-10
+
+This section supersedes the earlier no-spec-delta restriction ONLY for the exact
+Native D06 input criterion below. Same finite outcome: truthful complete available
+Native data with sufficient final quality proof. Reuse this owner/context rather
+than create another diagnostic/implementation microtask. Classification verification
+for this remaining criterion/harness/qualification work; no shipping source repair
+is established. No nested delegation. Full cycle is authorized without another
+root grant for registration, ordinary harness work, tests or qualification.
+
+Authority: original user-approved PLAN.UIB@1/ROADMAP D06 technical choices;
+original MODEL/NATIVE partial source-fidelity requirements; independent Q01
+reconciliation a3029c9d9f51270c9015700a1cecce2c8742855f and Mac product consultation.
+Root selects Q01's six-provision technical Contract Delta as the narrow Reconcile
+boundary, not a lower numerical or data-preservation standard. Q01 established
+no inspected source invariant for the anonymous child, proved actual success/count0
+and distinguished it from a dropped returned child. Fixed76 remains historical
+method; its failed outcomes are never retroactively accepted. No user request to
+guarantee a ghost76th object irrespective of source availability exists.
+
+Read the complete final Q01 section “Native child fidelity versus fixed76 criterion”
+of receipts/Q01-integrated-acceptance.md. Its proposed provisions1–6 define the
+maximum accepted technical change, with the original contracts remaining superior:
+keep exact fixture binaries/state/pixels/fields/bounds/authority/sample counts and
+100/200/300/750ms gates; no allowed75..76 count range, pruning or hidden retries;
+keep every actually returned native datum; separate logical-control requirements
+from anonymous source topology; require same-call evidence for each structural
+exception; keep partial/unknown and original failures; prove actual dropped child/
+edge/wrong handle/known-field loss and error-as-empty cannot pass.
+
+Before changed predicate implementation/evaluation, register the bounded semantic
+revision in docs/specs/development/decisions/d06-native-request.md and update only
+its affected D06/decision-root/spec-root/acquisition routing references. Keep the
+original revision available in Git and historical reports. Record the change ID,
+source authority and exact prospective evaluation/reuse method. No fresh product
+intent, public schema/API, collector policy, fixture rewrite or threshold change.
+Allowed spec paths: d06-native-request.md, d06-performance.md, d05-native-acquisition.md,
+development/decisions/README.md and docs/specs/README.md, only references/clauses
+necessary for this same decision. Announce exact write set before edits.
+
+Then implement the minimum necessary quality predicate/evidence in existing
+Native test/bridge/performance machinery and prove its required negative cases.
+Product source remains unchanged unless new evidence proves a separate defect,
+which returns an exact dependency. No production instrumentation framework.
+Register before running a complete affected off/on cohort with required20cold/
+100warm samples and per-exception source evidence. Preserve failed rows/outliers;
+no splice/retry-to-pass. Choose and record the evidence method BEFORE evaluation,
+including diagnostic-versus-shipping source/binary correspondence and observer
+cost/lifetime. Existing Q02-R numeric data can be reused only with exact unchanged
+input/source/criterion mapping; diagnostic timings cannot silently replace shipping
+qualification. Instrumentation that changes source/timing/lifetime must be explicit.
+If the evidence method cannot satisfy the criterion within this boundary, report
+that concrete gap; do not invent optimistic equivalence or stop at a generic plan.
+
+Additional allowed writes: directly necessary tests/bridges/native harness files,
+crates/host/tests/performance.rs if required, docs/development/performance.md,
+your existing N05 receipt and a new final section in Q02-performance.md. E04 owns
+docs/development/export.md and its receipt; root owns registry/packets. No overlap.
+No fixture/golden mutation, no unrelated Web/form/N03/Q03 campaign or new packages.
+Independent Q01 final acceptance follows your complete result; do not call self-
+checks independent. Source remains e641543 if only tests/spec/docs change, so prior
+installed6ff4943 does not need a new binary qualification without actual source delta.
+
+Physical input is currently available to E04's real-form cycle; check its exact
+resource status through root if you need that shared lane. Saved-data predicate
+work is independent. E04 reports it has closed the website tab/reset overrides;
+use fresh actual reservations, no old PID assumption. All original image-retention/
+Git/current-master rules apply. Final result must include registered revision,
+prospective method, all predicate cases, complete cohort/source evidence and scope,
+old failures retained, exact remaining gates, commit/push and released resources.

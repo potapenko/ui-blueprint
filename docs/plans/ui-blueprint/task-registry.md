@@ -20,6 +20,30 @@
 
 ## Текущее продолжение — 2026-10-10
 
+### E04 completed; E05 exporter repair runs independently
+
+- E04 terminal revision40 / turn01a123ab-8613-7b52-985e-b1e9859a0494,
+  commit4162a8d pushed; complete receipt read. Two actual website forms observed,
+  imported-reference inputs (not canonical live collection),116 exact source extents.
+  Raw/source-build limitations are explicit; no broader live/P6 acceptance.
+- Literal prompts123391/529860characters rejected by actual ImageGen32000 limit.
+  Caller-only shortened second attempts generated images, both unverified/draft:
+  Director missing input/wrong IDs and anchors; Settings24of94dimensions shown.
+  Source/template also misroutes G01 into enlarged details. These are concrete
+  next exporter issues, not success disguised by attractive images.
+- Own website tab closed, viewport override cleared, state restored; all images
+  retained at system temp uib-e04-real-tbaWNv (full path in receipt), originals in
+  tool image store also retained. Completed E04 chat archived after saved handoff.
+- E05 «E05 — Промпты ImageGen без повторов и ошибок листов», chat
+  `01a123bb-0c7e-7ff2-b6bf-5e15dccfd49f` / local, assigned full
+  [minimal exporter repair/retest](packets/E05-usable-imagegen-prompts.md).
+  Pinned-build reproduction first; truthful complete self-contained prompts,
+  correct sheet plan, scoped tests/privacy and literal ImageGen verification on
+  unchanged real inputs. No website/collector/schema/CLI/dependency/spec changes.
+  Own crates/export, existing export fixtures/docs and E05 receipt; disjoint N05.
+- Root owns registry plus N05 continuation/E05 packets. Independent Native and
+  export tasks proceed; resource contention serializes only actual shared timing.
+
 ### E04 — отдельный ImageGen цикл, поручен пользователем 2026-10-10
 
 - «E04 — Реальные формы PlayPhrase.me и ImageGen», chat
@@ -38,6 +62,27 @@
 - Root write set: execution.md, this registry, E04 packet. Explicit user request
   recorded in runbook; existing EXPORT/DRAWING requirements unchanged. Actual
   generation is now required for this added task, with honest image QA/status.
+
+### Native criterion reconciliation selected; same owner continues
+
+- Q01 terminal completed revision173 / turn01a123b3-9f4f-7533-bf43-9fbe26e70adf;
+  a3029c9d9f51270c9015700a1cecce2c8742855f pushed, full180-line section read.
+  Independent N05 finding accepted narrowly, Q02-R numeric p95 arithmetic checked;
+  source e641543 unchanged; fixed76/current quality remains FAIL/open.
+- Q01 found no demonstrated stable anonymous-child invariant; same-call success0
+  cannot justify a fabricated child. Original MODEL/NATIVE requires faithful partial
+  available data. Root selects Q01's six-provision technical Reconcile boundary under
+  already delegated ROADMAP D06, preserving original product outcome and all numeric,
+  workload, field, privacy, sample-count and negative-fidelity requirements.
+- N05 same chat01a123a5-1fd4-7bc2-8a04-12c21a95a3d2 receives the whole remaining
+  registration→predicate proof→prospective complete affected qualification→receipt
+  cycle via appended [authority section](packets/N05-native-child-fidelity.md).
+  Old no-spec-delta restriction superseded only for named Native criterion/routing.
+  Not an enacted revision yet; original cold17 and all failures remain unresolved
+  under their original method. No dropped-data tolerance, cached geometry, retries,
+  fixture edits or code change selected. Q01 final acceptance remains required.
+- Q01 retained idle for final evidence; E04 independently finishes its requested
+  real-image cycle. No new worker or audit chat. Root writes packet/registry only.
 
 ### Q01 — bounded Native quality reconciliation
 
