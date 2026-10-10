@@ -499,3 +499,13 @@ C3 manifest and six fresh outputs, no prototype/retouch/reroll/wrapper/history i
 Preserve all C1/C2 failures. Same critics inspect all6 image-first, then bounded source
 and installed evidence. No extra planning approval needed or broader features,
 frameworks/schema/flags/agents/directories/branches/worktrees/collector/site changes.
+
+
+### FRESH01-C3 frozen before images
+
+Sourcee92dd7dfa0ac18b68bee9e9150bf1e420ff437ff saved/pushed. New system-temp root
+uib-fresh01-c3-6cv0u75c and frozen-cohort-manifest.json (hash9c247e9647a62e2cecb30a578e9edaaf2ffeb39d9867a4e6c8fd5cab98a537c9)
+retain exact original inputs/refs, pin three literal packages and six new paths.
+Author29focused tests/Clippy/formatting passed; five machine files of each case equal
+C2. This does not assert visual acceptance or final C7. All6freshcalls follow same
+unchanged protocol; C1/C2 outputs and their failed verdicts remain immutable.

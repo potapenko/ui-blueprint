@@ -80,7 +80,12 @@ source-derivedhumanaliases + explicitprintablecontent/footer, suppressgenerated
 recordkeys/CDPprocedure/unknownmetadata (not actualUIwords), restore safestates
 andcontextlinks, strengthen genericorientation/two-border scalarfragments.
 Preserve allrequireddata/criteria and clippingfix; focusedchangedrisks only.
-Next newimmutableC3source/manifest+originalrefs then all6freshcalls; C1/C2retained.
+C3 FROZEN beforefirstcall: sourcee92dd7dfa0ac18b68bee9e9150bf1e420ff437ff,
+root /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c3-6cv0u75c,
+frozen-cohort-manifest.json hash9c247e9647a62e2cecb30a578e9edaaf2ffeb39d9867a4e6c8fd5cab98a537c9.
+Samequalifiedinputs/originalrefs,3literalpackages,6freshoutputpaths; author29focused
+tests/clippy/fmt passed, all5machinefiles eachcase exactC2. Generationrunning.
+Next neutralall6→sameC/V image-first/source/installedreconciliation. C1/C2retained.
 
 
 Старые R1–R8 не свежие испытания.
