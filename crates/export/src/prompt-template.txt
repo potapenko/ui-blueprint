@@ -17,11 +17,13 @@ Overview: exterior form/popup size, trigger size and attachment gap. A form's fu
 height includes its footer. Keep popup width/height on overview only; keep insets in detail.
 Popup detail: show the heading, search and result rows; their left/right edges share
 one vertical column. Show input width once across its ACTUAL two edges, input/row
-height, search-to-first-row gap and row gap. Show ONE LEFT inset: a short double arrow
-runs directly from the UNBROKEN popup-left border to the UNBROKEN input-left border.
-Label these two source edges “popup left edge” and “input left edge”. Put this arrow
-at mid-height of the input, in the empty gap between these borders. No extra guide
-ticks, no detached extensions and no right-hand inset. Keep this inset out of overview.
+height, search-to-first-row gap and row gap. No inset/edge-name guides in these full views.
+ONE separate small enlargement, “Popup-to-search inset”, shows ONLY two nested upper-left
+corner fragments from the SAME popup and input: two uninterrupted vertical source borders,
+each joined to its own short top horizontal segment. No other vertical lines or enclosing
+detail frame. BELOW the input's top segment, one double arrow touches these two actual
+vertical borders directly. Label it with the prepared left-inset value. This is the only
+inset graphic; do not repeat it in overview/full detail or add a right-hand counterpart.
 Preference detail: two adjacent selects, no row divider; gap joins their actual
 bottom/top borders. Label-column gap starts on the named label-layout RIGHT edge.
 Form-to-label/select outer insets belong on overview. Footer detail retains button
@@ -47,8 +49,9 @@ Keep different Space identities/origins distinct; no guessed coordinate conversi
 СОСТОЯНИЯ И ДЕЙСТВИЯ
 Caller state: {{state}}.
 Render an explicitly supplied public draft verbatim in every view of its field. If
-state names a keyboard-active result, outline that result and print “Keyboard-active;
-not applied” beside it. Preserve trigger value. Off switches have LEFT outlined knobs
+state names a keyboard-active result, add a second WHITE outline and print “Keyboard-active;
+not applied” beside it. Its interior stays the SAME BLUE as the sheet: no lighter fill.
+Preserve trigger value. Off switches have LEFT outlined knobs
 with BLUE interiors. Do not invent hidden controls, values, applied changes or flow.
 
 ОСНОВАНИЕ

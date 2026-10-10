@@ -257,3 +257,25 @@ Settings R6 reconciliation package byte-for-byte. This does not regenerate or
 reattribute the accepted Settings R4 image. Run-owned non-image installation removed
 and removal verified; all shared review packages and every image remain retained.
 Source/images held for consolidated R6 review.
+
+
+## Candidate R7 — neutral nested-corner detail handoff
+
+Image `director-r7.png` in same retained temp root,1536×1024, review native100%.
+Actual CLI package `director-r7-package/`, exact `director-r7-command.json`, literal
+prompt8,098 Unicode characters, sent unchanged to built-in ImageGen with only the
+original inspected E04 Director source reference. Tool original retained as
+`exec-a22be9f8-5ed0-4d82-8cb3-f8f809d770e4.png` in the same generated_images directory;
+new temp PNG is a copy. No author image verdict accompanies this handoff.
+
+Only product edit is existing prompt-template.txt: replace the failed full-view
+inset/guide instructions with one same-source nested-corner enlargement, and specify
+same-ground active interiors with an extra white outline. No new criteria, values,
+parameter, model setting or rendering framework. Accepted C7/R6 logic is unchanged.
+Focused template/status and single-inset/exact-data regression tests passed; public
+CLI rebuilt. All required dimension lines and all five other package files remain
+byte-identical to R6 for BOTH cases. Settings R7 package exists only as shared-template
+reconciliation; Settings R4 image remains frozen on cd099a1/R4 prompt and is neither
+regenerated nor attributed to R7. Its14 dimensions and applicable criteria are unchanged.
+Receipt/source whitespace check passed; saved-source installed check follows checkpoint.
+Every previous image and original remains retained. Same critics own actual R7 review.
