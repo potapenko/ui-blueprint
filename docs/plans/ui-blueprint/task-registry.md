@@ -65,6 +65,13 @@ samefacts/criteria; sourceconcisenessis hypothesis, notprovedsolecause. Noappend
 onlyprohibitions/manualretouch/blindreroll. Next: changed-riskchecks→newsourcefreeze→newcomplete6freshcohort in
 separateimmutablemanifest/outputpaths, then sameindependentcritics. C1all
 images/receiptsremain, neverreplacefailedcells.
+C2 FROZEN beforecalls: sourcec32712a8c0ffd08e043cb86b48d2b1fb028b64ea,
+newroot /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c2-2652yyb8,
+frozen-cohort-manifest.json. Sameexact3inputs/originalrefs/criteria; promptchars
+7633/9993/12035; priorC1manifest linked, immutable. Builder27focusedcompilerchecks
+passed inclclippingnegatives, all5nonpromptfiles×3 exactC1. Exactly6freshcalls
+runningnow, no outputsaccepted. NextsameC/V all6image-first +boundedC7/installed.
+
 Старые R1–R8 не свежие испытания.
 
 

@@ -452,3 +452,15 @@ or cherry-picked rerolls. Freeze notification precedes calls; no microstep appro
 needed unless a real authority/data gap appears. Neutral all6 to same critics before
 author outcome narrative; saved-source installed reproduction. No broader features,
 new agents, branches/worktrees, website/collector edits or Codex Computer Use.
+
+
+### FRESH01-C2 frozen before images
+
+Sourcec32712a8c0ffd08e043cb86b48d2b1fb028b64ea, new independent system-temp root
+uib-fresh01-c2-2652yyb8, frozen-cohort-manifest.json pins the same qualified source
+and original-reference hashes, three new literal prompts and all six output paths.
+Prompt lengths7633/9993/12035, without claiming length alone proves improvement.
+Manifest links retained C1 rather than replacing it. Same fixed criteria and original
+UI-only generation policy; all six requests run without edits/rerolls/wrappers.
+Author27focused compiler checks pass, five nonprompt files of each case unchanged.
+Visual acceptance and final independent source/installed reconciliation pending.
