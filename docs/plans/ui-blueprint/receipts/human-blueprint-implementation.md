@@ -506,3 +506,35 @@ same C1–C7/V1–V6, no wrapper/edit/history/reroll, all outputs retained and c
 Source snapshot/metadata, qualified mobile carrier and honest source limits remain
 those independently pinned for C1. The two critics receive all six neutrally before
 any author pass claim. Final installed-source reproduction follows the cohort.
+
+## FRESH01-C2 frozen six-output handoff
+
+Source `c32712a8c0ffd08e043cb86b48d2b1fb028b64ea` committed/pushed before first call.
+C2 root `frozen-cohort-manifest.json` SHA256
+`5b3b54940bd0f3f2344fd14bfe4b08a036db6ee05124b8201a4723772c15294d`
+was written before generation and remains immutable. Its3literal prompt/ref/input
+pins stayed unchanged through exactly6independent built-in requests. All6 returned;
+0refusals,0edits,0wrappers,0history references,0rerolls. All failures will count.
+`cohort-results.json` records exact tool originals, copies, hashes and dimensions.
+
+| C2 retained image | Native raster for review |
+| --- | --- |
+| director-cohort-1.png |1223×1286|
+| director-cohort-2.png |1225×1284|
+| settings-cohort-1.png |1036×1518|
+| settings-cohort-2.png |1036×1518|
+| mobile-cohort-1.png |1024×1536|
+| mobile-cohort-2.png |1024×1536|
+
+All originals remain in the established tool-managed generated_images directory;
+all copies are in the new C2 system-temp root. Nothing from baseline/C1/R1–R8 was
+overwritten, moved or removed. All six were supplied neutrally to root for the same
+two critics at native100%, before author image interpretation. No model acceptance,
+rendered-image acceptance or universal reliability claim is inferred here.
+
+C2 installed proof: fresh core build and installed verify at exact source
+`c32712a8c0ffd08e043cb86b48d2b1fb028b64ea` passed. Installed CLI reproduced all six
+files of all three frozen packages byte-for-byte. Run-owned non-image install
+bundle removed and removal verified. Shared inputs/packages and all image originals/
+copies retained. Source/prompts/references/images are held for independent C/V
+reconciliation; the C7 test/install receipt is execution evidence, not image approval.
