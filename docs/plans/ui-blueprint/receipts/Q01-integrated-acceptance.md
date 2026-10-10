@@ -1448,3 +1448,183 @@ no blocking findings in the reviewed delta. Only this receipt is checkpointed on
 master and pushed after link/route/whitespace checks. Q01 CPU/build resources are
 released, no owned helper/app process remains, shared artifacts/images untouched.
 This grants no D06 timing/quality pass, new operation authority or P7 completion.
+
+
+## Native child fidelity versus fixed76 criterion — terminal reconciliation, 2026-10-10
+
+**Accept N05's narrow same-call finding; Native D06 quality remains OPEN/FAIL
+under the current criterion.** No collector-loss repair is established. Source
+acceptance9675c0b for e641543 remains unchanged. The smallest next step is an
+explicit contract-owner reconciliation of the fixture criterion, not collector
+mutation or another run until a fixed count happens to pass.
+
+Authority: [finite Q01 packet](../packets/Q01-native-quality-reconciliation.md),
+approved PLAN.UIB@1. Read-only product/spec/evidence; this existing receipt is the
+only write. Two stages preserved: source, substitutions, raw samples/traces and
+contracts first; returned initial observations before receiving the author receipt
+and advisory Mac consultation. Then read full [N05 receipt](N05-native-child-fidelity.md)
+at2eaff80 and the Q02-R final section of [Q02 receipt](Q02-performance.md) at7788091.
+Their author/advisor conclusions are supporting evidence, not independent execution
+or authority to change a spec. No build, runtime/cohort, UI, image or agent operation.
+
+Spec Basis: AGENTS → registry33 → decisions/README + acceptance/README →
+D06@2.CONTENT/REQUEST-INPUT → D06-NATIVE-REQUEST@1.INPUT/METHOD/QUALITY → Native
+acquisition@3 and the existing full Q01 closure. Verified selected source/spec files
+unchanged from e641543; recovered MODEL@1/PERFORMANCE@1/request-only@1 and relevant
+routing/change-control text completely. NATIVE@2/IDENTITY/LIFECYCLE/PRIVACY and
+D02/D05 closure remain as already read. Normative distinction: MODEL reports source,
+time, availability, consistency and coverage separately; NATIVE permits partial AX.
+D06 still requires the registered76-node complete input and all original budgets.
+No Contract Delta is accepted or registered by this receipt.
+
+### Independent original evidence and instrumentation assessment
+
+D=`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-n05-child-fidelity-6ofta8lw`;
+R=`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-q02-r-final-sjxmdxz7`.
+Verified all ten shipping-input hashes in D/build.json against immutable e641543;
+all five binary hashes in diagnostic-config-2.json match actual files. Compared
+D/WindowAX.swift with shipping source and diagnostic-cohorts.cjs with its exact
+source driver. Changes wrap public calls, reset/bind aliases, record retained edges
+and append bounded metadata; driver changes pin/import locations and runs at most
+100 cold AX+capture calls, stopping at first failure, with no warm block.
+The wrapper returns the original API results, without extra AX reads/retry.
+
+Original diagnostic cold15 sample SHA-256
+`76a6524b2228c30ef6c073ca74b0cdd69f05060744c1e52a5cd79c78bf93eecd` and its
+ax-peer-15/observe-1/ax/acquisition.json SHA-256
+`aabe03aa3dfcb0f85297b9fca34761fb7797a9f274d480293ba3cf084ef92471` match.
+Verified ALL16 sidecars: cold0–14 each show parent28 success/count1, range asked1/
+returned1, child_alias70 and CFEqual-confirmed visit. Cold15 row4 shows success0/
+count0 at455782.0392286667, inside that AX observation's455782.003020542–
+455782.053325250 interval. No parent28 range or retained edge follows. Shipping
+nativeAXElements passes successful zero to NativeAcquisition.array; allowed0 makes
+no range/visit, returns omitted0, and canonical children stays[]. Thus that specific
+empty enumeration is faithfully preserved; neither a returned child nor a known
+same-call child geometry was discarded in this case.
+
+Cold15 returns75 nodes/74 edges, discovered=visited=returned75, no refused/queued/
+unknown-child-list/unread/duplicate counts, all nine selected fields. Later alias70
+is AXValueIndicator, not the absent anonymous group. Its trace false is the fallback
+for nil parentChild, NOT a CFEqual proof that two extant handles differ. Aliases are
+observation-local. Literal removal/index reconciliation against the separate76-node
+raw witness leaves all75 retained records matching607 known scalar components,
+368 unavailable states,75 action lists/74 edges. This is diagnostic alignment only,
+not sample pruning or proof that all other facts were read atomically.
+
+Trace bounds: maximum13rows/2850sidecar bytes, cold15 has11rows/2604bytes, below
+64rows/16384bytes. Rows contain codes/counts/known attribute names, not UI values
+or raw pointers. One extra CF child reference can survive until reset/helper exit
+in positive samples. Added metadata/CF inspection/retention may affect execution;
+no zero-observer-effect claim. Each cold run closes its process; all16 recorded
+closures say cleanup_confirmed. Diagnostic timings are not shipping qualification.
+Inactive preflight is retained separately (app_active=false, no measured cohort);
+measured before/after witnesses are byte-identical, active, full76-node A. Setup
+interruption/no-input-during-run and final app retirement remain author-attributed;
+endpoint equality alone cannot prove every intervening UI or AX state unchanged.
+
+Original uninstrumented R/candidate-off/cold-17/sample.json SHA-256
+`97381209847cbf3243b2d9a2784b987ddc8b3c037413cf1e93a2b7540f9ecf95` also matches.
+It has the same explicit75-node edit and preserved remaining records, but no API
+count/status trace. Its parent28 could not be causally explained retroactively by
+D/cold15. The five earlier failed samples also retain their earlier classifications;
+N05 does not repair unknown API availability or opaque baseline failure.
+
+### Criteria, discrepancy classification and reconciliation with author/advisor
+
+| Criterion | Result and remaining limit |
+| --- | --- |
+| Preserve this call's parent28 enumeration | PROVED for instrumented cold15 success/count0→children[], and cold0–14 count1/range1→retained/visited child. This closes the specific missing boundary fact for the new reproduction. |
+| Preserve all currently returned graph data | No demonstrated loss in the reproduced disputed edge; unchanged collection path and retained-node comparisons support it. This two-alias trace is not a universal same-call oracle for every field/node or every shipping call. |
+| Stable76-node fixture input | FAILED in this diagnostic; not established in original Q02-R cold17. Before/after76 and known state/pixels do not imply intermediate anonymous-child continuity. No inspected source invariant guarantees this anonymous count. |
+| Cause of source variation | UNKNOWN. Success/count0 is an API response, not proof of absence throughout the interval, a macOS bug, SwiftUI behavior, collector observer effect, actual UI deletion or a changed logical control. No such cause is selected. |
+| Missing geometry/relationships | Geometry requiring the unobserved anonymous child is unavailable for that observation; do not borrow prior bounds or infer deletion from partial coverage. Available bounds of other nodes remain separately useful and attributed. No new geometry calculation or acceptance claim. |
+| Original Q02-R cold17 quality | FAIL under current fixed76 criterion; same-call explanation still missing. Similar shape is not identity or historical proof. No retroactive pass. |
+| Current numeric limits | Independently recomputed nearest-rank p95 from all saved report rows: candidate-on AX29.230/capture148.535/outer269.993/cold370.029ms; off29.425/148.653/271.087/356.967ms. All are within100/200/300/750.20cold/100warm plus1initial per group,484 total retained, one current quality failure. This checks reported arithmetic, not a new benchmark or overall D06 acceptance. |
+| Diagnostic qualification |16cold/0warm, first failure retained. Not a substitute for the required full cohorts or shipping-binary latency. Instrumentation cost/lifetime remains attributed. |
+
+N05 and the advisory consultation agree with these results; no material factual
+contradiction found. Refine “originates at the boundary” to mean the recorded
+successful zero count, not a causal diagnosis of the app/service. The original
+quality criterion remains authoritative until explicitly reconciled.
+
+There is no logical contradiction merely because a benchmark demands a stable
+input while the general product supports partial data: the benchmark may require
+additional fixture proof. What is disproved is using this particular fixed count
+as sufficient evidence of collector loss in the reproduced case. Requiring a
+collector to manufacture76 despite a successful zero count would contradict
+MODEL/NATIVE provenance and faithful partial observation; no such repair is valid.
+The registered count was established by observations, without a demonstrated
+cross-call invariant for this anonymous child. That is an evidence-backed reason
+to propose technical acceptance reconciliation, not automatic permission to pass.
+
+### Concrete proposed Contract Delta — not enacted
+
+Recommended owner: Native/D06 contract owner under ROADMAP, with Q01 focused review
+and root coordination. Mode Reconcile; basis is accepted N05 same-call evidence
+plus original MODEL/NATIVE source-faithful intent. Change only the technical
+Native request-input criterion; advance D06-NATIVE-REQUEST@1.INPUT/QUALITY to a new
+semantic revision and update D06/request routing/acquisition references where they
+state fixed76 authority. Preserve the old revision and every failed report.
+No collector/schema/API/action/permission/limit change is justified by this evidence.
+
+Proposed provisions for that owner to register before evaluation:
+
+1. Keep exact fixture binaries/state/viewport/pixels, selected fields, bounds,
+   owner/generation/privacy, request-only operation and all numeric/sample budgets.
+   Record76/75edges as the controlled reference observation, not a universal native
+   anonymous-node count. Do not replace it with75 or an allowed-count interval.
+2. Keep required logical fixture controls and their specified known properties,
+   actions, geometry and relationships explicit. Anonymous source data is still
+   fully requested/collected: every actually returned child/edge/native property
+   must survive admission and canonical publication or be truthfully reported as
+   incomplete. No role/identifier-based pruning or free omission of acquisition cost.
+3. For a structural discrepancy, require bounded SAME-CALL source evidence linking
+   the disputed parent's count/status, ranged results and observation-local handle
+   mapping to retained canonical edges. Success/count0 may establish empty enumeration
+   for that call; unsupported/noValue/errors, page failures, quota/deadline exhaustion
+   and unvisited returned children must never become a positive empty-success proof.
+   Missing evidence leaves quality unresolved. A count alone cannot pass the request.
+4. Report source-tree variation separately from known logical state mutation and
+   collector fidelity. Keep partial coverage/unknown consistency and actual counts,
+   fields, bytes/work; no cached synthetic node/geometry or deletion inference.
+   Unavailable required logical facts and known-data loss remain quality failures.
+5. Prove the revised predicate rejects an actually returned child dropped before
+   publication, dropped edge, wrong handle binding, omitted known field, error
+   disguised as empty, trace truncation/missing proof and wrong target. Use the
+   existing bounded synthetic NativeAXAccess cases plus recorded cold14/count1 and
+   cold15/count0 as diagnostic cases; this is not a new framework or live campaign.
+   Matching success0→empty must be distinguished from these failures without changing
+   stored records or weakening the nine-field/source-evidence checks.
+6. Version the evaluation method and name the exact affected requalification slice
+   BEFORE running it. Retain original20cold/100warm off/on requirements and complete
+   failures/outliers. Reuse unchanged positive evidence only with exact input/source/
+   criterion mapping; do not splice passing rows into a replacement cohort. Every
+   unexplained structural exception in a qualifying cohort needs its own proof.
+   Untraced historical cold17 remains failed/unresolved under its original method.
+   Instrumented diagnostic durations cannot replace shipping durations; if evidence
+   instrumentation changes the shipped path, its cost and source review apply.
+
+Minimum next action is this bounded criterion decision and negative-predicate proof;
+no new runtime is needed to answer the reconciliation question itself. For final
+Native quality acceptance, the owner must then supply a prospectively defined,
+complete affected cohort with adequate same-call evidence for structural exceptions
+and preserve matched shipping timing/coverage. Existing Q02-R numbers remain valid
+reported numeric results, not sufficient quality proof. The exact evidence method/
+reuse boundary must be recorded before that qualification; repeated untraced runs
+until76 is observed do not answer the gap. No broad Native/N03/Web/Q03 retest follows.
+
+This recommendation preserves the original product outcome of truthful available
+geometry/semantics. It does not decide to guarantee geometry for an anonymous object
+when AX does not expose it. If the operator instead requires an invariant complete
+76-object representation irrespective of source availability, that is a material
+product/source-stability choice requiring explicit authority and a new mechanism;
+it cannot be disguised as an engineering collector fix or silently selected here.
+Within the existing source-faithful partial product, the proposed technical
+reconciliation can be decided by the delegated contract owner; no new user question
+is needed merely to recognize the established count0 fact.
+
+Terminal verdict: N05 evidence accepted in the exact scope above; no in-scope source
+repair identified; current fixed76 quality gate remains open and original cold17
+unqualified. Proposed Delta is sufficiently bounded for the named owner, not Active
+or accepted implementation. Checkpoint this receipt only after changed link/route/
+whitespace checks; CPU/UI resources never acquired, no shared evidence/image cleanup.
