@@ -413,3 +413,36 @@ it does not establish another style criterion or require another research wave.
 
 No unrelated check or Settings rerun. Only this receipt changed; frozen assets,
 source and literal packages remain untouched. `git diff --check` passed.
+
+## R7 Director-only review — 2026-10-10
+
+Source `9f5b9a867bcc80c9d019b14166e24b9f07fe95a8`; selected contracts unchanged.
+Viewed `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-hbp-ebwz2bfy/director-r7.png`
+at 1536 × 1024 native, then checked affected literal `director-r7-package/prompt.txt`
+lines. Initial observations preceded reconciliation; no author narrative used.
+Settings R4 remains accepted at its own R4 source/package and was not inspected again.
+
+**R7 not yet accepted.** The isolated “Popup-to-search inset” finally connects its
+8-px dimension to two real nested corner borders; active rows now use white double
+outlines with blue interiors. These R6 fixes pass and should be preserved. V3/V4
+hierarchy/readability and meaningful source text/state/counts remain adequate.
+
+The larger popup detail nevertheless repeats an unwanted 8-px graphic with false
+guides and a stray dark marker. Its ≈178 line still starts inside the input instead
+of at its left side, and the input remains narrower/right-shifted relative to the
+result column. Thus V2 alignment and V5/V6 measurement association remain unaccepted;
+V1's row-fill issue is resolved, while removing the redundant graphic also removes
+its dark artifact. The literal prompt expressly prohibits that duplicate inset.
+
+Root's proposed simplification is within the existing scope: make the large detail
+a clearly named partial “Search and result spacing” view containing the input and
+first two result rows on one shared left/right column, with ≈178/≈26/≈24/≈6/≈3.
+Omit the enclosing popup border/heading and all inset guides from that partial view.
+The complete overview still preserves every source control/heading/result, including
+the third result; the accepted separate corner detail alone owns ≈8. Keep `spiel`,
+the first two result names/counts and the keyboard-active/not-applied annotation.
+Attach ≈178 to the actual common control-left/control-right boundaries. This removes
+competing reference frames; it neither relaxes source fidelity nor adds a criterion.
+
+Only these existing errors remain; no new style, research, print-size or CAD gate.
+Frozen images, source and packages remain untouched; `git diff --check` passed.
