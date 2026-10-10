@@ -4,7 +4,7 @@
 - Правила исполнения и восстановления: [ранбук](execution.md); этот реестр хранит
   текущее состояние, а не вторую копию правил. Прямой запрос пользователя требует
   сохранять правила push, чатов/параллельности и архивирования в файлах.
-- Режим: самостоятельные чаты-задачи, root coordination-only; host goal `01a11088-e608-7801-bdfb-db5c9383af9d` подтверждён `active` 2026-10-10 после продолжения цели. Объём P0–P7 и master сохранены; прежнее blocked — история, не текущее препятствие.
+- Режим: самостоятельные чаты-задачи, root coordination-only; goal `01a11088-e608-7801-bdfb-db5c9383af9d`. Результат P0–P7 принят в исходном согласованном объёме; обязательной оставшейся работы нет. Host goal закрывается после сохранения этого итогового checkpoint. Текущая ветка `master`; прежние blocked/pending записи ниже — история.
 - Одобренный план: `358c757e7eab84a3989d150dbad57924d866601a`; ветка `master`.
 - Пользователь 2026-10-06: «Ну да, лучше, наверное, не писать код, только координация. Совсем согласен. Давай, это, начинай цель и делай по плану, по реестру и так далее. В остальном я согласен.»
 - Объём: P0–P7, рабочие чаты и follow-up по плану; root не реализует и не проверяет продукт.
@@ -18,7 +18,76 @@
 - Пользователь 2026-10-07: «Продолжаю работу, я включаю цель.» Host confirms active; same approved scope and explicit parallel-chat authorization continue, without reapproval.
 - Начальный checkpoint `358c757`; код продукта отсутствует; строки `queued`, если статус ниже не уточнён.
 
-## Текущее продолжение — 2026-10-10
+## Итоговая приёмка P0–P7 — 2026-10-10
+
+Root завершил сопоставление определения готовности с текущими принятыми
+результатами. Основание — исходный PLAN.UIB@1 в358c757, прямые уточнения
+пользователя и [критерии приёмки](acceptance.md), а не количество закрытых чатов.
+Доставлен локальный Rust engine/CLI и выбранные Mac/Web модули в согласованной
+области. Это локальная приёмка; внешняя публикация, signing и новые платформы
+не входили в цель и не заявляются.
+
+Product source: `a0265843634fce8bc6a942fc1f276391a51c54c6`; Native/host inputs
+неизменны относительно `e64154349bc93e9c7a4a91bab7698cef84b8eb7a`.
+Recipe: `6a5bec23b8d15e4cc825aaff6105ac001a9a17bb`. Четыре installation selections
+приняты вb06f3b2, финальная документация в90aebcd. Registry35 меняет metadata
+локальной приёмки, не продуктовые нормы. Core0.1/analysis0.2, document/propose0.1
+и compare0.2 сохранены. [Инструкция поставки](../../development/distribution.md).
+
+### Требование → доказательство → текущая оценка
+
+| Требование/этап | Проверенное основание | Оценка и предел |
+| --- | --- | --- |
+| P0, spec-first, Rust rules, D01–D07 | Исходный план/approval выше; [registry](../../specs/README.md), [R01](../../research/R01-web.md), [R02](../../research/R02-native.md), [R03](../../research/R03-core.md), C01 decisions и I02 dependency fingerprints | Принято: точные upstream revisions/dispositions, собственные реализации, выбранные зависимости/notices. Исследования не названы универсальным аудитом upstream. |
+| P1, GOLDEN01, MODEL/SEMANTICS | [Q01](receipts/Q01-integrated-acceptance.md):126 core fixtures/validator, false/empty/redacted, строгие envelopes; A02 recheck762f244:analysis15 и59 manifest entries без изменения arithmetic/historical JSON | Принято. Core/analysis версии и known/unknown/not_requested различаются; mocks не выданы за живые адаптеры. |
+| P2, M01/M03/M04, B01/B03/B04, scoped observe/inspect/measure | Q01 controlled Mac/Web positives, current Native source9675c0b, Web a7c0416 и финальная сверка52930eb; [Q03](receipts/Q03-recorded-usefulness.md) дополнительно использует реальные native_ax данные | Принято в указанных API/host/scopes: реальные runtime данные, geometry/units/transforms и честный partial. Нет обещания arbitrary apps/frames, полного paint/hit или cross-display. |
+| P3, M05, B06, PROJECTIONS | Q01 V02/M05 section:actual measured18pt, sourced AX↔probe mapping, matched off/on geometry/semantic/pixel evidence и normal-event-queue1→2→2 hit/focus; Web separate DOM/AX component proof | Принято для собственного составного компонента, без универсального SDK, physical-pointer или полного окна. |
+| P4, IDENTITY/FRESHNESS/CACHE/ISOLATION, M06/B05 | Q01 same-checkpoint replay, guarded host/allocator/publication/EOF/deadline/cancel, session/ref invalidation, независимый Target; permission mapping repair8e3dba2 и SDK-reuse9675c0b | Принято. Синтетические fault cases не названы actual TCC/event-loss; source observations не restamp/cached substitute. |
+| P5, M02/B02, ACTIONS и обе E2E | Q01 actual Web34-call form chain и N03 Native full product open→measure/capture→resize→Confirm/result/close→stale/reopen→compare, inspected actual commands с change-driven applicability; current source52930eb не опровергает прежнюю композицию | Принято для поддержанных semantic/setter modalities. Нет IME/physical gesture/server persistence обещаний или повторного unknown submit. |
+| PRIVACY и обязательный canary | Q01762f244 actual protected input; backend error/cancel/cache/history/export/enabled trace,152 serialized records canary-free; Web Documents source/runtime acceptance a7c0416; E05 independent privacy a307bff | Принято для названных защищённых каналов. Нет универсального распознавания неизвестных секретов или автоматического real-user pixel export. |
+| P6, EXPORT/MODEL_FREE, полный DrawingBrief и document/propose/compare | Q01 local exports без keys/model; E05 a026584 и [independent review](receipts/E05-prompt-review.md)a307bff: полная безопасная projection/таблицы/числа/статусы, все modes и6files; installed checks b06f3b2 | Принято. Промпт готовится локально и не запускает модель; generated raster не объявлен checked/CAD/accepted. |
+| D06/P7 numeric и source-quality evidence | [Q02](receipts/Q02-performance.md): frozen Web и Native shipping rows с полными counts/outliers; [Q01 final52930eb](receipts/Q01-integrated-acceptance.md) независимо проверяет новую prospective predicate/cohorts и исходные нормы | Приняты numeric gates и bounded source-fidelity/safe-refusal capability. Не all-success benchmark: шесть failed AX из242 сохранены, см. ниже. |
+| Q03, польза на реальных Mac/Web примерах | [Q03 b014cd4](receipts/Q03-recorded-usefulness.md):34 Web CLI calls на явно imported browser-reference и26 Mac calls на original native_ax; independent literal keys, unknown/refusal сохранены | Принята bounded usefulness. Не заявлены blind model score, token saving, live Web ingestion из IAB или поддержка mobile adapters. |
+| Поставка, recovery, support matrix, LICENSE/NOTICE | [I02 b06f3b2/90aebcd](receipts/I02-current-distribution.md):4 release installs,8 real-form exports/all6files equal reviewed E05, model-free smoke, provenance/features/notices, verify/remove/foreign preservation; неизменённая safety/reinstall proof reused | Принято на arm64 macOS27.0.1, pinned Rust1.96.0; Native compile minimum14 не обещает runtime14. Recipe/recovery воспроизводимы; temporary bundles удалены, постоянная PATH установка не заявляется. |
+| Дополнительный явный цикл реальных форм/ImageGen | [E04](receipts/E04-real-form-imagegen.md) Director/Settings real screenshots/data→literal prompt→generation→comparison; [E05](receipts/E05-usable-imagegen-prompts.md) исправил доказанные prompt-length/sheet defects, literal18653/29793 chars приняты ImageGen; review+installed proof выше | Цикл выполнен. Все58components/116dimensions сохранены; изображения остаются FAIL/unverified/draft с конкретными ошибками. Маркетинговая точность изображения не обещана. |
+| Current branch, checkpoints, orchestration/runbook | [execution](execution.md), сохранённые worker receipts и path-limited commit/push вmaster; роли и границы закреплены в runbook; terminal worker resources переданы/освобождены | Выполнено. Завершённые рабочие чаты архивированы; Mac/Web advisors сохранены. Никаких новых веток/worktrees, Codex Computer Use или publication. |
+
+### Явные ограничения, не скрытые незавершённые задачи
+
+Q01 final `52930eb7e2bb20a85a5934b4261e703eae5c9c67` принят root после чтения
+полного166-line verdict и сопоставления критериев выше.236 observed AX replies
+прошли текущую fidelity-проверку (три source variations имеют собственный same-call
+proof);6 AX replies остаются failed/target_unresolved без графа, при независимом
+успешном capture. Исходные diagnostic quality=false и все старые failure rows
+сохранены. Shipping numeric PASS основан на отдельной неизменённой полной кампании,
+не на diagnostic timings. Глубокая причина отказов не установлена; ни новый
+failure-rate allowance, ни100% API availability SLA не введены.
+
+N06 не создал repair:625 subsequent diagnostic observations не объясняют старые
+шесть запросов. По независимой текущей проверке нет установленного blocking
+binding/lifetime defect или отдельной нормы, требующей выяснить private SDK cause.
+Неисполненное предположение о необходимости source repair снято; существующая
+точная отказная семантика принята с ограничением доступности. Consumer обрабатывает
+failed channel; новый explicit request допустим в исходных полномочиях, automatic
+retry не добавлен. Будущий доказанный дефект открывает только затронутый scope.
+
+ImageGen-проверки установили реальные ошибки сгенерированных картинок (labels,
+leaders/anchors, неполные dimension inventories, output size/style). Эти изображения
+не приняты как инженерные/маркетинговые материалы. Завершён запрос на реальный
+цикл генерации/сравнения и исправлены подтверждённые дефекты самой утилиты;
+готовность произвольной картинки или метрический raster не добавлены к P6.
+Исходные/новые изображения показаны в рабочих чатах, E04 также в root; все image
+originals/temp copies сохранены без удаления. Результаты доступны по receipts.
+
+Все обязательные scoped source/review/runtime/privacy/installation результаты
+терминальны; нет оставшегося обязательного waiting_resource/evidence/authority.
+Связанные historical OPEN/rejected/blocked строки ниже не являются текущим state.
+Финальный root checkpoint сохраняет эту сборку приёмки; после успешного push
+host goal можно пометить complete. Критерии и исходный scope не сокращены.
+
+## История исполнения до итоговой приёмки
+
+
 
 ### N06 terminal; final Native acceptance question with Q01
 
