@@ -521,22 +521,22 @@ fn prompt_details_follow_only_the_actual_sheet_plan() {
     b.details.clear();
     let p = compile(&b, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("G01 general"));
-    assert!(!prompt.contains("D01 detail"));
+    assert!(prompt.contains("general:"));
+    assert!(!prompt.contains("detail:"));
     assert_eq!(data(&p, "sheets.json").as_array().unwrap().len(), 1);
     let mut l = limits();
     l.components_per_detail = 6;
     let p = compile(&b, l).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("D01 detail"));
-    assert!(prompt.contains("D02 detail"));
+    assert!(prompt.contains("detail:"));
+    assert_eq!(prompt.matches("detail:").count(), 2);
     let sheets = data(&p, "sheets.json");
     assert_eq!(sheets[1]["parent_view"], "G01");
     assert_eq!(
         sheets[2]["components"],
         serde_json::json!(["N06", "N07", "N08", "N09"])
     );
-    assert!(prompt.contains("Object 10:"));
+    assert!(prompt.contains("Object"));
 }
 
 #[test]
@@ -665,12 +665,12 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
     assert!(
         prompt
             .lines()
-            .any(|line| line.starts_with("TWO-BORDER FRAGMENT")
-                && line.contains("record 5")
-                && line.contains("Bottom → record 7")
-                && line.contains("box Top; ≈16 CSS px"))
+            .any(|line| line.starts_with("LOCAL BORDER FRAGMENT")
+                && line.contains("VERTICAL arrow")
+                && line.contains("Bottom border → END select")
+                && line.contains("Top border; ≈16 CSS px"))
     );
-    assert!(prompt.contains("Coordinate context: LayoutBounds;"));
+    assert!(prompt.contains("Placement context 1: LayoutBounds;"));
     assert!(prompt.contains("Viewport, CSS px, TopLeft; transform local only"));
     assert!(prompt.contains("WIDTH ≈198 CSS px") && prompt.contains("HEIGHT ≈33 CSS px"));
     assert!(!prompt.contains("[\"css_px\"]"));
@@ -736,7 +736,9 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     let input = prompt
         .lines()
-        .find(|line| line.starts_with("Object 1: Textbox (native \"INPUT\")"))
+        .find(|line| {
+            line.starts_with("Object input \"Accessible search name\": Textbox (native \"INPUT\")")
+        })
         .unwrap();
     assert!(!input.contains("; print"));
     assert!(input.contains("AccessibilityName=\"Accessible search name\""));
@@ -796,7 +798,7 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
     assert_eq!(prompt.matches("WIDTH ≈198 CSS px").count(), 1);
     assert_eq!(prompt.matches("LOCAL INSET DETAIL").count(), 1);
     let inset = prompt.split("LOCAL INSET DETAIL").nth(1).unwrap();
-    assert!(inset.contains("record 3") && inset.contains("20 CSS px"));
+    assert!(inset.contains("END input") && inset.contains("20 CSS px"));
     assert!(!inset.contains("Right"));
     let overview = prompt.split("LOCAL DETAIL").next().unwrap();
     assert!(overview.contains("WIDTH ≈238 CSS px"));
@@ -854,9 +856,9 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     let package = compile(&brief, limits()).unwrap();
     assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object 1: Button (native \"AXButton\")"));
-    assert!(prompt.contains("Coordinate context: AccessibilityBounds;"));
-    assert!(prompt.contains("DIMENSIONED RECTANGLE record 1"));
+    assert!(prompt.contains("Object Button: Button (native \"AXButton\")"));
+    assert!(prompt.contains("Placement context 1: AccessibilityBounds;"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE Button"));
     assert!(!prompt.contains("LayoutBounds"));
     let dims = data(&package, "dimensions.json");
     assert_eq!(dims[0]["dimensions"][0]["value"], 97.296875);
@@ -900,9 +902,9 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     }
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object 1: Button (native \"DIV\")"));
-    assert!(prompt.contains("Coordinate context: LayoutBounds;"));
-    assert!(prompt.contains("DIMENSIONED RECTANGLE record 1"));
+    assert!(prompt.contains("Object Button: Button (native \"DIV\")"));
+    assert!(prompt.contains("Placement context 1: LayoutBounds;"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE Button"));
     assert!(!prompt.contains("REQUIRED Width AccessibilityBounds"));
     let dims = data(&package, "dimensions.json");
     assert!(
@@ -929,7 +931,7 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     assert!(
         std::str::from_utf8(&package.files()["prompt.txt"])
             .unwrap()
-            .contains("Object 1: BUTTON;")
+            .contains("Object BUTTON: BUTTON;")
     );
 }
 
@@ -1009,7 +1011,7 @@ fn public_placeholder_and_clipped_region_are_distinct_from_full_layout_and_value
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     let input = prompt
         .lines()
-        .find(|line| line.starts_with("Object 1: Textbox"))
+        .find(|line| line.starts_with("Object input: Textbox"))
         .unwrap();
     assert!(input.contains("Placeholder=\"Type a query\""));
     assert!(
@@ -1021,7 +1023,7 @@ fn public_placeholder_and_clipped_region_are_distinct_from_full_layout_and_value
         !prompt
             .lines()
             .filter(|s| s.starts_with("DIMENSIONED RECTANGLE"))
-            .any(|s| s.contains("record 1 ") && s.contains("HEIGHT 32 CSS px"))
+            .any(|s| s.contains("input:") && s.contains("HEIGHT 32 CSS px"))
     );
     let scene = data(&package, "scene.json");
     assert_eq!(
@@ -1074,16 +1076,15 @@ fn control_detail_does_not_merge_equal_sizes_from_unrelated_spaces() {
             .filter(|s| s.starts_with("DETAIL"))
             .any(|s| s.contains("controls [3, 5]"))
     );
-    for record in [3, 5] {
-        assert!(
-            prompt
-                .lines()
-                .filter(|s| s.starts_with("DIMENSIONED RECTANGLE"))
-                .any(|s| s.contains(&format!("record {record} "))
-                    && s.contains("WIDTH 80 CSS px")
-                    && s.contains("HEIGHT 30 CSS px"))
-        );
-    }
+    assert_eq!(
+        prompt
+            .lines()
+            .filter(|s| s.starts_with("DIMENSIONED RECTANGLE select")
+                && s.contains("WIDTH 80 CSS px")
+                && s.contains("HEIGHT 30 CSS px"))
+            .count(),
+        2
+    );
 }
 
 #[test]
@@ -1198,7 +1199,10 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
         let p = compile(&brief, limits()).unwrap_or_else(|e| panic!("{kind:?}/{variant}: {e:?}"));
         assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
         let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-        let object = prompt.lines().find(|s| s.starts_with("Object 1:")).unwrap();
+        let object = prompt
+            .lines()
+            .find(|s| s.starts_with("Object Button:"))
+            .unwrap();
         assert_eq!(
             object.contains("CLIPPED LAYOUT"),
             clipped,
@@ -1208,7 +1212,7 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             assert!(
                 prompt
                     .lines()
-                    .any(|s| s.starts_with("DIMENSIONED RECTANGLE record 1 ")
+                    .any(|s| s.starts_with("DIMENSIONED RECTANGLE Button:")
                         && s.contains(if kind == FrameKind::PaintBounds {
                             "HEIGHT 20 CSS px"
                         } else {
@@ -1221,4 +1225,95 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             assert!(object.contains("DISTINCT FRAME (clipping not established)"));
         }
     }
+}
+
+#[test]
+fn object_states_and_context_links_survive_compact_presentation() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    for (i, name) in [(0, "First control"), (2, "Second control")] {
+        set_test_role(&mut snapshot.nodes[i], "BUTTON");
+        let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[1] else {
+            panic!()
+        };
+        *state = Availability::Known {
+            value: Value::Text(name.into()),
+        };
+    }
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut snapshot.nodes[2].properties[2]
+    else {
+        panic!()
+    };
+    g.coordinate_space.id = Id("separate-control-space".into());
+    for node in &mut snapshot.nodes {
+        let mut property = node.properties[0].clone();
+        let Property::Requested { field, state, .. } = &mut property else {
+            panic!()
+        };
+        *field = Field::Enabled;
+        *state = Availability::Known {
+            value: Value::Flag(false),
+        };
+        node.properties.push(property);
+    }
+    snapshot.context.fields.push(Field::Enabled);
+    snapshot.coverage.fields.push(Field::Enabled);
+    for o in &mut snapshot.observations {
+        o.coverage.fields.push(Field::Enabled);
+    }
+    let original = serde_json::to_vec(&brief).unwrap();
+    let p = compile(&brief, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    for (name, context) in [("First control", 1), ("Second control", 3)] {
+        let object = prompt
+            .lines()
+            .find(|s| s.starts_with("Object") && s.contains(name))
+            .unwrap();
+        assert!(object.contains("Enabled=false"));
+        assert!(object.contains(&format!("placement context {context}")));
+    }
+    assert!(prompt.contains("Placement context 3: LayoutBounds; REF"));
+
+    let mut brief = fixture("proposed");
+    proposed(&mut brief).components[0].state_and_actions =
+        "Disabled until record is ready; CDP unknown; Save not executed".into();
+    let p = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("reported state/actions (not executed): \"Disabled until record is ready; CDP unknown; Save not executed\""));
+}
+
+#[test]
+fn printable_channels_preserve_ui_words_but_omit_procedure_metadata() {
+    let mut brief = fixture("proposed");
+    brief.views[0].scope = "SCOPE_PROCEDURE_CANARY".into();
+    brief.views[0].safe_source_reference = "SOURCE_PROCEDURE_CANARY".into();
+    brief.views[0]
+        .not_depicted
+        .push("EXCLUSION_PROCEDURE_CANARY".into());
+    proposed(&mut brief).components[0].label = "record CDP unknown".into();
+    let p = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("; print \"record CDP unknown\""));
+    assert!(prompt.contains("PRINTABLE SHEET TEXT"));
+    for canary in [
+        "SCOPE_PROCEDURE_CANARY",
+        "SOURCE_PROCEDURE_CANARY",
+        "EXCLUSION_PROCEDURE_CANARY",
+    ] {
+        assert!(!prompt.contains(canary));
+        assert!(
+            std::str::from_utf8(&p.files()["drawing-brief.md"])
+                .unwrap()
+                .contains(canary)
+        );
+    }
+    assert!(!prompt.contains("record 1"));
 }

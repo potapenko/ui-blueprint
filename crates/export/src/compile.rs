@@ -424,13 +424,59 @@ fn unit_name(unit: Unit) -> &'static str {
         Unit::Dp => "dp",
     }
 }
-fn component_name(c: &SceneComponent, index: usize) -> String {
-    let label = public_label(c).replace('\n', " / ");
-    if label.is_empty() || !c.children.is_empty() && label.len() > 80 {
-        format!("record {} ({})", index + 1, component_role(c))
+fn component_name(v: &SceneView, index: usize) -> String {
+    let c = &v.components[index];
+    let role = component_role(c);
+    let human_role = match role.to_ascii_lowercase().as_str() {
+        "div" | "group" => "container",
+        "form" => "form outline",
+        "footer" => "footer",
+        "label" | "text" => "label layout",
+        "input" | "textbox" | "searchbox" => "input",
+        "select" | "combobox" => "select",
+        _ => &role,
+    };
+    let accessible = c.properties.iter().find_map(|p| match p.known() {
+        Some(Value::Text(text)) if p.field() == Field::AccessibilityName && !text.is_empty() => {
+            Some(text.as_str())
+        }
+        _ => None,
+    });
+    let label = if !c.children.is_empty() {
+        accessible.unwrap_or_else(|| public_label(c))
     } else {
-        format!("record {} ({})", index + 1, label)
+        public_label(c)
+    };
+    let aggregate = accessible.is_none()
+        && child_indices(v, index).iter().any(|&i| {
+            let child_label = public_label(&v.components[i]);
+            !child_label.is_empty() && label.contains(child_label)
+        });
+    if !aggregate && !label.is_empty() && (c.children.is_empty() || label.len() <= 80) {
+        return format!("{human_role} {:?}", label.replace('\n', " / "));
     }
+    if let Some(child) = child_indices(v, index).into_iter().find(|&i| {
+        let text = public_label(&v.components[i]);
+        !text.is_empty() && text.len() <= 80
+    }) {
+        return format!(
+            "{human_role} containing {:?}",
+            public_label(&v.components[child]).replace('\n', " / ")
+        );
+    }
+    human_role.into()
+}
+fn geometry_context(v: &SceneView, g: &Geometry) -> usize {
+    v.components
+        .iter()
+        .position(|c| {
+            geometry(c).is_some_and(|h| {
+                h.frame_kind == g.frame_kind
+                    && h.coordinate_space == g.coordinate_space
+                    && h.transform == g.transform
+            })
+        })
+        .map_or(0, |i| i + 1)
 }
 fn visible_text(c: &SceneComponent) -> &str {
     c.label.as_deref().unwrap_or_else(|| {
@@ -450,7 +496,7 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
             !visible_text(&v.components[i]).is_empty()
                 && visible_text(c).contains(visible_text(&v.components[i]))
         });
-    let mut out = format!("Object {}: {}", index + 1, component_role(c));
+    let mut out = format!("Object {}: {}", component_name(v, index), component_role(c));
     if let Some(Availability::Known {
         value: Value::Text(native),
     }) = &c.native_role
@@ -493,7 +539,7 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
         if let Some(Value::Flag(value)) = p.known()
             && (matches!(
                 p.field(),
-                Field::Checked | Field::Selected | Field::Expanded
+                Field::Checked | Field::Selected | Field::Expanded | Field::Enabled
             ) || p.field() == Field::Focused && *value)
         {
             out.push_str(&format!("; {:?}={value}", p.field()));
@@ -505,7 +551,14 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
             }
         }
     }
+    if let Some(state) = &c.state_and_actions {
+        out.push_str(&format!(
+            "; reported state/actions (not executed): {}",
+            bounded_compact_json(state, limit)?
+        ));
+    }
     if let Some(g) = geometry(c) {
+        out.push_str(&format!("; placement context {}", geometry_context(v, g)));
         match &g.shape {
             Shape::Rect(r) => out.push_str(&format!(
                 "; {:?} box[x {}, y {}, w {}, h {}] {} {:?}",
@@ -555,7 +608,7 @@ fn drawing_inventory(
     let mut out = String::new();
     append(
         &mut out,
-        "OVERVIEW CONTENT (object keys/box coordinates are not printed). The reference guides appearance; these are the complete meaningful labels/controls.\n",
+        "OVERVIEW CONTENT. Human object names below identify source shapes; only quoted UI text appears inside them. Placement references/coordinates are construction input, not captions.\n",
         limit,
     )?;
     let mut contexts = Vec::new();
@@ -579,7 +632,10 @@ fn drawing_inventory(
         if !contexts.contains(&context) {
             append(
                 &mut out,
-                &format!("Coordinate context: {context}. No guessed conversions.\n"),
+                &format!(
+                    "Placement context {}: {context}. No guessed conversions.\n",
+                    geometry_context(v, g)
+                ),
                 limit,
             )?;
             contexts.push(context);
@@ -636,7 +692,7 @@ fn local_measures(
                     &mut out,
                     &format!(
                         "DIMENSIONED RECTANGLE {}: WIDTH {} {}; HEIGHT {} {}.\n",
-                        component_name(&v.components[a], a),
+                        component_name(v, a),
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
                         display_number(h.value.ok_or(E::InvalidGeometry)?),
@@ -653,7 +709,7 @@ fn local_measures(
                 &mut out,
                 &format!(
                     "RECTANGLE EXTENT {}: {:?}→{:?}, {} {}.\n",
-                    component_name(&v.components[a], a),
+                    component_name(v, a),
                     d.anchors[0].edge,
                     d.anchors[1].edge,
                     display_number(value),
@@ -668,10 +724,15 @@ fn local_measures(
         append(
             &mut out,
             &format!(
-                "TWO-BORDER FRAGMENT: {} box {:?} → {} box {:?}; {} {}; {}.\n",
-                component_name(&v.components[a], a),
+                "LOCAL BORDER FRAGMENT: {} arrow; START {} {:?} border → END {} {:?} border; {} {}; {}.\n",
+                if matches!(d.anchors[0].edge, Edge::Left | Edge::Right) {
+                    "HORIZONTAL"
+                } else {
+                    "VERTICAL"
+                },
+                component_name(v, a),
                 d.anchors[0].edge,
-                component_name(&v.components[b], b),
+                component_name(v, b),
                 d.anchors[1].edge,
                 display_number(value),
                 unit_name(d.units),
@@ -1190,8 +1251,8 @@ fn drawing_dimensions(
         append(
             &mut out,
             &format!(
-                "LOCAL DETAIL {:?} — partial, only these source objects. State applies to EVERY repeated instance: {}.\n",
-                title, v.state
+                "LOCAL DETAIL {:?} — partial, only these source objects. Apply the same source state as the overview.\n",
+                title
             ),
             limit,
         )?;
@@ -1236,7 +1297,7 @@ fn prompt(
         vars.insert("title", b.metadata.title.clone());
         vars.insert("language", b.metadata.language.clone());
         vars.insert("purpose", format!("{:?}", b.purpose));
-        vars.insert("source", format!("{:?}; {}", v.source_kind, v.source));
+        vars.insert("source", format!("{:?}", v.source_kind));
         vars.insert(
             "coverage",
             v.coverage
@@ -1245,10 +1306,18 @@ fn prompt(
                 .unwrap_or_else(|| "proposed scope".into()),
         );
         vars.insert("approval", format!("{:?}", b.metadata.approval.status));
+        vars.insert(
+            "source_limit",
+            if v.observations.is_empty() {
+                "proposed, not observed".into()
+            } else {
+                "stored observation; atomicity not asserted".into()
+            },
+        );
         vars.insert("state", v.state.clone());
         vars.insert(
             "scope",
-            format!("{}. Not depicted: {}", v.scope, v.not_depicted.join("; ")),
+            "Selected source view only; content outside this coverage is omitted".into(),
         );
         vars.insert("requirements", v.requirements.join("; "));
         vars.insert(
@@ -1265,7 +1334,7 @@ fn prompt(
             "sheets",
             selected
                 .iter()
-                .map(|x| format!("{} {} {}", x.id, x.kind, x.title))
+                .map(|x| format!("{}: {}", x.kind, x.title))
                 .collect::<Vec<_>>()
                 .join("; "),
         );

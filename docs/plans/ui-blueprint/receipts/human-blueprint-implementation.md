@@ -538,3 +538,37 @@ files of all three frozen packages byte-for-byte. Run-owned non-image install
 bundle removed and removal verified. Shared inputs/packages and all image originals/
 copies retained. Source/prompts/references/images are held for independent C/V
 reconciliation; the C7 test/install receipt is execution evidence, not image approval.
+
+## FRESH01-C3 bounded channel/anchor/state correction
+
+Root authorized C3 after both final C2 scopes: C2 style/geometry improved, but no
+complete six-image acceptance. C2 failures remain recorded; no output is replaced.
+Same five write paths, same three inputs and C1–C7/V1–V6. No new product contract,
+model/renderer/framework/flag/schema or collector.
+
+Actual prompt references now use source-derived human names, never compiler record
+numbers. Anchor assignments explicitly pair START/END borders with horizontal or
+vertical direction in a complete local fragment. Tight relationships belong there,
+not in a crowded overview. The printable sheet channel contains source UI text,
+meaningful captions/state, dimensions and the finite compact footer. Raw caller
+source/scope/exclusion inventories stay intact in the machine brief; source kind,
+coverage and non-asserted atomicity provide the short honest drawing note. No words
+are blacklisted from genuine labels/placeholders/meaningful caller state. Context
+IDs remain linked construction data, not printable captions or extra metadata panels.
+
+Restored C7 channels: known Enabled including false; per-component reported proposed
+state/actions explicitly not executed; every object links its specific placement
+context, preserving distinct Spaces. The approved clipping proof is unchanged.
+Tests preserve literal UI words including record/CDP/unknown while excluding separate
+procedure metadata fields, and cover disabled state, proposed actions and two Spaces.
+Director caller draft and active/not-applied semantics remain present; the template
+requires the short badge in every displayed instance when that distinction is given.
+
+Verification: all29compiler tests, export all-target clippy, formatting and diff
+checks passed; CLI build passed. All five non-prompt files of all three final C3
+packages match C2 byte-for-byte. Prompt chars: Director8275, Settings11738, mobile12838.
+New root `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-fresh01-c3-6cv0u75c`;
+`*-frozen-package/` and `*-frozen-command.json` are literal final CLI outputs. No image
+prototype has been generated. The new manifest will freeze this source checkpoint,
+original-only references and six fresh output paths before the first of exactly six
+independent calls. Prior baseline/C1/C2/R1–R8 images and tool originals remain retained.

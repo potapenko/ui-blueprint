@@ -475,3 +475,13 @@ Every selected scalar has one view owner. A rectangle's width and height are one
 paired drawing assignment; gaps/insets use two named actual border fragments and
 a directly connecting arrow. The full overview, necessary text, state, dimensions
 and source limitations remain; the other five machine files are unchanged.
+
+C3 resolves object/anchor references to source-derived human names. Compiler keys
+and source/procedure inventories stay in the machine brief; they are not printable
+captions. The printable sheet uses title, meaningful source content/state, dimensions
+and a compact source-kind/coverage/atomicity/status/units note. This is channel-based
+selection, not a word blacklist: genuine UI text and meaningful caller state remain
+verbatim. Every object retains its placement-context link, known Enabled state and
+reported proposed state/actions. Local fragments explicitly name horizontal/vertical
+arrows and the actual start/end borders. The clipping proof and all machine files
+remain unchanged.
