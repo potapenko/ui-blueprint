@@ -32,7 +32,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
 | CW-B3 |same Web source owner|investigation accepted|6qualified pairs/packages/first images,6FAIL,0rerolls;14computed relations |
 | CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
-| CW-S2 |same Web source owner|running|Policy-supported Chrome/dev-browser capability fallback; one new qualified scoped source or exact dependency |
+| CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
