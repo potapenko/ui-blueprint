@@ -86,6 +86,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B10 |same Debug source owner, restored|dispatched full corpus cycle|Remaining safe wired C01/C03/C04/C05 catalog, up to12 meaningful untested states; no new wiring or duplicate configurations |
+| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|source preparation; waiting for desktop|Seven disjoint candidates from CN-B10 handoff; same frozen app, no capture until CN-B10 releases |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -399,6 +400,15 @@ candidates. IDs are not proof of unique UI. Root requested one stable selected-I
 remaining-catalog/frozen-app handoff so a disjoint next batch can reuse the build
 while CN-B10 generates offline. Debug app retention now has that named consumer;
 physical input/capture remains serialized, no second batch dispatched yet.
+The stable handoff is `uib-CN-B10-odbqso2x/coordination-handoff.json`; CN-B11 is
+now dispatched for bootstrap-empty/failed, four translation-state candidates and
+corpus-picker, none of CN-B10's selected12. Fixture novelty still needs runtime
+proof. Shared executable SHA256
+`94cdef601820e34c82ae7c9e4fbbd0311335a423a120505b4eae2a27cd5a5b3e`, at
+`/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphrase-cn-b10-debug.5ga6Do/DerivedData/Build/Products/Debug/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe`.
+CN-B10 holds desktop token ddfcb04abda84b7c9ef24d3e1baecd24 until source completion;
+CN-B11 may prepare only, then reserves its own lane after release. No borrowed-build
+cleanup until consumer release; no image/containing-directory deletion.
 On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
