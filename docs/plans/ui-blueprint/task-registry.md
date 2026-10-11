@@ -10,11 +10,11 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Nine completed primary batches produced101 evaluated images,0 fully independently accepted.
-Their97 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not101 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Ten completed primary batches produced153 evaluated images,0 fully independently accepted.
+Their149 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not153 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
-CN-B5 and CW-B5 totals remain pending
+CN-B5 adds8cases/52sheets. CW-B5 and CN-B7 totals remain pending
 their final handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13 images (31 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
@@ -43,11 +43,11 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner, restored|dispatched|One concise source-bound sheet assignment, fixed CW33/CW34/CW40 set; preserve facts/ownership and positive control |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
-| CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|initial review clear; final reconciliation|169assertions/54documents/hash/inspect verified; author receipt now delivered; no new live test |
+| CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
-| CA5 |same CA owner|author complete; independent review pending|source1af633c +cbbe317; same-state default0–27/visible42–75,34AXrects;169assertions/52documents |
+| CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
@@ -55,7 +55,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
 | CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
-| CN-B5 |same Native source owner, restored|running full corpus cycle|New learner/list/adaptive-grid cases; frozen b01aee4 delivered |
+| CN-B5 |same Native source owner|investigation accepted|8cases/52first sheets,10scoped author passes/42FAIL;701dimension checks,0complete cases |
+| CN-B7 |same Native source owner|dispatched offline corpus cycle|One new retained CA5 visible-grid source→export756dfca→first sheets, no live recapture |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
@@ -66,8 +67,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 
 Established source basis: registry40, NATIVE4/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
-CA5 registered its Native/CLI/routing delta before saved source1af633c; product
-acceptance awaits CR3. Existing source batches keep their pinned collector evidence.
+CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
+collector acceptance is complete through CR3. Existing batches keep their old pins.
 CP6 owns current exporter presentation; accepted compact baseline is756dfca.
 Root owns this registry,
 corpus-testing.md and coordination receipts. Source workers keep source-app repos
@@ -148,12 +149,22 @@ attributed relationships. No new schema/membership/density or arithmetic change.
 Same exporter owner executes one fixed seven-sheet-or-fewer changed-prompt experiment;
 old images remain pinned. Both critics wait for neutral saved candidate artifacts.
 
-**CN-B5:**8 qualified partial source states/52 required sheets. Six G01 were
-over32000chars; CP5 now unblocks their first calls. Eleven empty-dimension details
-received203c48a. Existing generations keep actual compiler pins; no rerolls or
-density/scope reduction. Input dependency:
-`uib-CN-B5-6jmj42i_/CP4-G01-length-dependency.json`.
-Its discarded scrolled-grid pair remains a collector witness, not a valid case.
+**CN-B5:** terminal `uib-CN-B5-6jmj42i_/handoff.md` and manifest:8qualified partial
+cases/52first sheets/0rerolls,10scoped author passes/42FAIL/0complete cases.
+Nine nonempty original Observe+PNG pairs include one negative grid-coverage witness,
+not9qualified cases.24relation groups/56operands verified;701required dimension IDs
+have one owner and one image check:688correct,7missing,4missing≈,2wrong values.
+Image pins:35b01aee4,11empty details203c48a,6G01 after length repair756dfca.
+All52images1536×1024; source/machine data retained, no wrappers/density workaround.
+Runtime/ownPID31721/storage released, original query/paused clip/window restored,
+user63105 and source repo changes untouched. Frozen negatives remain unchanged.
+
+**CN-B7:** same owner now consumes accepted CA5 `visible/observed.json` plus
+`visible/source.png` offline as one new scrolled-grid case. Qualify declared partial,
+non-atomic AX/source association; no pixel mapping inference or retired PID replay.
+Use frozen export756dfca and existing corpus conventions, one first call per sheet,
+no new capture/build/source edits. This is a new source identity, not replacement
+of the old failed B5-09. Final generation/evaluation handoff remains pending.
 
 **CN-B6:** final `playphraseme-cn-b6-h7jzxeiz/handoff.json` and manifest/reviews:
 7families/9source states/23first sheets/0rerolls. Six content-pass at returned size,
@@ -188,7 +199,12 @@ Actual same-state shipping CLI comparison: ordinary cards0–27, visible cards42
 34 known AX rects; both160nodes/partial/pt/unknown pixel mapping. Author reports
 169 focused assertions,52 canonical documents and both live responses/inspect pass.
 No inferred geometry, larger quotas or changed old collection modes. CR3 independently
-checks permission/compatibility/bounds and retained live evidence before acceptance.
+checked permission/compatibility/bounds and retained live evidence: final verdict
+accept_with_residual, no actionable finding or remaining gap in bounded collector
+scope.169 independent assertions/54canonical files/hashes/saved inspect support it;
+author optimized-build claim was not an additional independently repeated test.
+Partial caps, unspecified omissions, non-atomic source/image and unknown pixel
+mapping remain explicit. This is not ImageGen or all-source/full-view acceptance.
 [CA5 receipt](receipts/corpus-native-visible-children.md); frozen root
 `uib-CA5-9e2yhnfg/tools`, helper SHA256
 `1b711f9a907cba1eac9f2fb5ab39b365f30cd5aa39e8aee78be9dd03e1b2b6e7`.
