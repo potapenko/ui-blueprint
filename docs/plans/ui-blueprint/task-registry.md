@@ -25,6 +25,13 @@ and evaluated single combined-prompt attempt that omits required views is a fail
 rendering evaluation, not automatically an unexecuted case. Do not retroactively
 apply CP4/export0.4 standalone-sheet mechanics to older protocols. Ambiguous old
 obligations remain explicit count uncertainty; source qualification is never waived.
+CCOUNT1 corrected primary eligibility:98 proved cases (45Web+53Native), with three
+named uncertainties A02/B07 source qualification and C04 actual state novelty;
+upper bound101. Eleven proved cases are fixture/component-preview origin, not
+production observations. Its earlier91–93 total and22 supposedly missing old sheet
+calls are withdrawn: pre-CP4 combined attempts were executed and evaluated under
+their original protocol. Final cross-bucket check remains for any repair task that
+first completed an otherwise ungenerated unique source, without counting reruns twice.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -61,7 +68,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
-| CCOUNT1 |same CD1 owner, restored|dispatched read-only count reconciliation|Eligible unique completed cases/states versus181primary+40repair images; explicit duplicates/negatives/fixture origins |
+| CCOUNT1 |same CD1 owner, restored|primary count reconciled; final cross-bucket check|98proved primary cases,98–101 range; repair-first unique sources checked before final overall total |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
 | CW-B3 |same Web source owner|investigation accepted|6qualified pairs/packages/first images,6FAIL,0rerolls;14computed relations |
