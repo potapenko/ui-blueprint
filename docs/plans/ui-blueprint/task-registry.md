@@ -10,11 +10,12 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Eleven completed primary batches produced160 evaluated images,0 fully independently accepted.
-Their156 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not160 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Twelve completed primary batches produced165 evaluated images,0 fully independently accepted.
+Their161 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not165 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
-CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets. CW-B5/CN-B8 totals remain pending
+CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
+CN-B8 totals remain pending
 their final handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=7 images (38 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
@@ -60,7 +61,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B8 |same mobile source owner, restored|dispatched full corpus cycle|Up to12 meaningful larger-text states across real mobile families; reuse CN-B2 reversible Simulator setup and restore originals |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
-| CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
+| CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
+| CW-DOC1 |same Web source owner|dispatched read-only diagnosis|CW49 full2307-height versus visible666.5625; classify source/prompt/raster cause before any repair |
 | CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP6 reconciled; retained for one correction|4bounded successes/3visual failures; author CW33/D02 pass rejected by exact membership |
 | CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP6 reconciled; exact cause check complete|CW33 extra count absent from prompt; CW40 still has unmatched whole-view draft rule |
 
@@ -126,14 +128,19 @@ operand inventory noise and loss of trigger context. These feed CV2/CT2, not a
 reopening of accepted compiler privacy/bounds checks.
 CW36 mobile tense table unavailable; CW41 had no actual completion/clipping;
 CW42 changed scale rather than topology. Do not count these as completed cases.
-Next Web batch CW-B5 is dispatched with the8 recipes CW43–50 in
-[CW2 advice](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11),
-after this owner's terminal handoff/resources. No fresh source worker needed.
-CW44 clean mobile front remains unavailable after natural guest gate; CW47 tooltip
-is skipped for weak novelty. If a public guest-limit dialog naturally appears in
-remaining authorized flows, it may be qualified once as new CW51 with its own scope
-and source route. No gate forcing/bypass, login or quota reset; old invalid CW44
-front capture is never relabelled. This adds an actual form, not a substitute front.
+**CW-B5:** terminal `uib-cw-b5-NTbzfs/handoff.json`, manifest SHA256
+`8eaaf922739579c060c708d7fba8962c2fc4459484a59bc85d9af6b7d69743ae`.
+Five qualified cases/5first images/0rerolls, frozen756dfca; CW50 author pass,
+CW43/CW45/CW48/CW49 fail.140source frames/45required dimensions/80file hashes checked,
+11design requests. Controls/anchor/caption locality, menu proportions and full
+document versus visible-fragment height are retained witnesses. CW44/CW46 remain
+gated; CW47 low novelty skipped; CW51 did not naturally appear in remaining flows.
+Invalid CW44 preserved, not relabelled or generated. Own tabs closed/viewport
+restored, tracked repos unchanged, Chrome403 untouched. Recipe source remains
+[CW2 advice](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11).
+CW-DOC1 now diagnoses CW49 from retained fields/actual prompts, optionally one
+offline d9f3fff replay; no images or UI. It must distinguish missing/misbound data,
+literal instruction conflict and raster noncompliance before proposing a repair.
 Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
 initial observations precede author receipt. They do not create images or edit code.
 CV2 covers visible drawing quality; CT2 covers literal instructions and data.
