@@ -110,3 +110,58 @@ and synthetic compile/test root removed and absence verified. Storage cleanup:
 completed, with named frozen consumer handoff retained. Source app changes untouched.
 Residual: root-assigned independent review; Cast/Voice and broader platform coverage
 unqualified. No general precision/performance gate or complete native design claim.
+
+
+## CR1-F1 correction — 2026-10-11
+
+Root authorized Restore of [CR1-F1](corpus-independent-review1.md#cr1-f1--p1-retain-the-binding-through-actual-publication):
+collect returned encoded bytes after releasing its local AX binding, before the
+real HostHelper → NativeDescriptorIO.reply call. Independent0/4 weak-handle proof
+was accepted as an implementation defect; no contract relaxation or new feature.
+Final corrected source:203933a4395b9f1021d9b588221102f2ac440993 (implementation72df990
+plus explicit lifetime guard203933a). NATIVE@3/CLI@17 and all prior limits remain.
+
+NativeJSONFrame now retains the focused-AX publication validator, which strongly
+owns application/window/full popup chain and its original admission state, without
+capturing the frame. NativeDescriptorIO.reply explicitly withExtendedLifetime-holds
+the frame across the complete write call, including error return. The actual write
+loop runs validation AFTER poll readiness and before EVERY write attempt, under
+existing deadlines and cumulative quotas. A first-byte boundary change replaces
+only the unsent frame with the existing canonical failure. After any emitted prefix,
+replacement is forbidden: abort and latch failed so a later reply cannot revive the
+observation. Existing parent complete-frame/commit validation remains unchanged.
+Failed replies retain established bindings too. No raw handles enter JSON.
+The writer checks the caller's cap again after replacement and deadline after
+validation. MainActor affinity matches the existing helper/AX callers.
+
+Changed production files: NativeFocusedAX.swift, NativeJSON.swift, HostProtocol.swift.
+Existing FocusedAXChecks invokes new FocusedAXPublicationChecks.swift. Its public-AX
+substitute uses NSObject handles with only weak fixture references after collect;
+all transport is real socketpair → NativeDescriptorIO.reply → NativeJSONFrame.write.
+Verified4/4 retained handles after collect and through successful/closed-peer reply,
+then0/4 after frame release and Foundation autorelease drain; frame itself releases.
+A focus change between collect and reply yields canonical stale_target. A second
+case fills the socket, changes focus while reply waits in poll, drains it, and also
+receives stale_target rather than the encoded observation. A forced short-write case
+aborts its partial frame on the next boundary check and refuses a second reply.
+These reach the shipping caller's descriptor path, not just collect's internal check.
+
+Swift6/macOS14 target builds passed without warnings in default and -O modes;
+130 assertions passed in EACH (98 prior +32 new). All34 canonical outputs in EACH
+passed validation. New frozen Native Release distribution built from203933a,
+all file hashes verified; its validator also accepts the3 retained real-FD records.
+No live app/input/capture used for this ownership correction. Prior Genre/Director
+positive evidence remains attributed to8ebbd2c, not promoted to a new live run.
+Contracts, ceilings, wire, export and source-app files were not changed.
+
+Frozen handoff:
+/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CA3-F1-artifacts-vn1d3act/.
+tools/distribution-manifest.json pins source/binary hashes; handoff.json records
+checks. The3 publication-*.json files are actual descriptor-delivered canonical
+responses. CORPUS root/CR1 owns retention through follow-up acceptance. New helper
+SHA256: aa08a2b7bef1f981deea0a6a40efb007b74a7729599508212b7e9003ac9b7bfd.
+New test source SHA256:6fba263e9772cf8113b19229eba01f702a7f97e846beebda7316590579656764.
+Run-only compiler/test root removed and absence verified; earlier CA2/CA3 images
+and their directories untouched. No Mac resource reserved, userPID63105 untouched.
+Storage cleanup: completed with the named frozen review handoff retained.
+Independent follow-up acceptance remains pending with the same CR1 reviewer via root.
