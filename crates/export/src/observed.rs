@@ -1,4 +1,8 @@
-use crate::{ExportError as E, Result, types::*, validate::public_text};
+use crate::{
+    ExportError as E, Result,
+    types::*,
+    validate::{public_text, reviewed_visible_text},
+};
 use std::collections::BTreeMap;
 use uiblueprint_engine::{self as engine, EvaluationContext, GeometryQuery, MeasurementResult};
 use uiblueprint_schema::model::*;
@@ -114,6 +118,11 @@ impl Aliases {
                 evidence: self.evidence(evidence),
                 state: if *sensitivity == Sensitivity::Sensitive || *field == Field::Value {
                     Availability::Redacted {}
+                } else if *field == Field::VisibleText
+                    && allowed.contains(field)
+                    && matches!(state, Availability::Known { value: Value::Text(s) } if reviewed_visible_text(s))
+                {
+                    state.clone()
                 } else {
                     self.availability(state, allowed.contains(field))
                 },

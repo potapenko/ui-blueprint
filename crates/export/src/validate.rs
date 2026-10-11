@@ -14,14 +14,43 @@ pub(crate) fn identifier(text: &str) -> bool {
 }
 /// Defense in depth for explicitly reviewed public metadata. Not a secret detector.
 pub(crate) fn public_text(text: &str) -> bool {
+    text_syntax(text) && !text.contains('/')
+}
+fn text_syntax(text: &str) -> bool {
     !text.contains("{{")
         && !text.contains("}}")
         && !text.contains("://")
-        && !text.contains('/')
         && !text.contains('\\')
         && !text
             .chars()
             .any(|c| c.is_control() && c != '\n' && c != '\t')
+}
+/// Narrow symbolic/morphological alternatives in caller-reviewed public visible
+/// text. Metadata, accessible names, raw values and identifiers do not use this.
+/// Lexically ambiguous public notation still relies on the caller's review;
+/// this heuristic is not a secret detector or permission to publish private data.
+pub(crate) fn reviewed_visible_text(text: &str) -> bool {
+    text_syntax(text)
+        && text
+            .split_whitespace()
+            .filter(|s| s.contains('/'))
+            .all(|token| {
+                let parts = token.split('/').collect::<Vec<_>>();
+                let first = parts[0];
+                if parts.iter().any(|p| {
+                    p.is_empty()
+                        || !p.bytes().all(|c| c.is_ascii_alphanumeric())
+                        || !p.as_bytes()[0].is_ascii_uppercase()
+                }) {
+                    return false;
+                }
+                let inflections = parts.iter().all(|p| p.starts_with(first));
+                let symbols = parts.iter().all(|p| p.as_bytes()[0] == first.as_bytes()[0])
+                    && parts
+                        .iter()
+                        .any(|p| p.len() == 1 || p.bytes().any(|c| c.is_ascii_digit()));
+                inflections || symbols
+            })
 }
 pub(crate) fn text(text: &str) -> Result<()> {
     require(

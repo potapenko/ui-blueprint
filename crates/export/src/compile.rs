@@ -1000,38 +1000,46 @@ fn partial_visibility(source: &SourceInput) -> Vec<bool> {
         .collect()
 }
 fn detail_caption(v: &SceneView, members: &[usize]) -> String {
+    if let [index] = members {
+        let c = &v.components[*index];
+        if !public_label(c).is_empty() {
+            return format!("{} — dimensions", public_label(c).replace('\n', " / "));
+        }
+        let labels = v
+            .relations
+            .iter()
+            .filter(|r| {
+                r.kind == RelationKind::LabelledBy && c.source_key.as_ref() == Some(&r.from)
+            })
+            .filter_map(|r| {
+                v.components
+                    .iter()
+                    .find(|c| c.source_key.as_ref() == Some(&r.to))
+            })
+            .map(public_label)
+            .filter(|s| !s.is_empty())
+            .collect::<Vec<_>>();
+        if !labels.is_empty() {
+            return format!("{} — dimensions", labels.join(" ").replace('\n', " / "));
+        }
+    }
     let parent = members.first().and_then(|first| {
         v.components
             .iter()
             .position(|p| p.children.contains(&v.components[*first].id))
     });
-    let ancestor = parent.and_then(|parent| {
-        v.components
-            .iter()
-            .position(|p| p.children.contains(&v.components[parent].id))
-    });
-    if let Some(ancestor) = ancestor {
-        let near = child_indices(v, ancestor);
-        for i in near
-            .iter()
-            .copied()
-            .chain(near.iter().flat_map(|&i| child_indices(v, i)))
+    if let Some(parent) = parent {
+        let label = &v.components[parent];
+        // A reported HTML LABEL wrapping these controls is an association.
+        // A nearby text node under a common ancestor is not.
+        if matches!(&label.native_role, Some(Availability::Known { value: Value::Text(role) }) if role.eq_ignore_ascii_case("label"))
+            && members
+                .iter()
+                .all(|&i| label.children.contains(&v.components[i].id))
+            && !public_label(label).is_empty()
         {
-            let c = &v.components[i];
-            if matches!(
-                component_role(c).to_ascii_lowercase().as_str(),
-                "label" | "text" | "heading"
-            ) && !public_label(c).is_empty()
-            {
-                return format!("{} — dimensions", public_label(c));
-            }
+            return format!("{} — dimensions", public_label(label).replace('\n', " / "));
         }
-    }
-    if members.len() == 1 && !public_label(&v.components[members[0]]).is_empty() {
-        return format!(
-            "{} — dimensions",
-            public_label(&v.components[members[0]]).replace('\n', " / ")
-        );
     }
     "Control dimensions and spacing".into()
 }
