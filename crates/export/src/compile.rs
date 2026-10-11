@@ -544,17 +544,12 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
             !visible_text(&v.components[i]).is_empty()
                 && visible_text(c).contains(visible_text(&v.components[i]))
         });
-    let mut out = format!("Object {}: {}", component_name(v, index), component_role(c));
-    if let Some(Availability::Known {
-        value: Value::Text(native),
-    }) = &c.native_role
-        && native != &component_role(c)
-    {
-        out.push_str(&format!(
-            " (native {})",
-            bounded_compact_json(native, limit)?
-        ));
-    }
+    let mut out = format!(
+        "Object {}: {} [#{}]",
+        component_name(v, index),
+        component_role(c),
+        index + 1
+    );
     if !aggregate && !visible_text(c).is_empty() {
         out.push_str(&format!(
             "; print {}",
@@ -572,6 +567,9 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
             .find(|p| p.field() == field)
             .and_then(Property::known)
             && !value.is_empty()
+            // A short accessible name is already quoted in the object caption.
+            && !(field == Field::AccessibilityName
+                && component_name(v, index).contains(&format!("{value:?}")))
         {
             out.push_str(&format!(
                 "; {:?}={}",
@@ -579,9 +577,6 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
                 bounded_compact_json(value, limit)?
             ));
         }
-    }
-    if input_control(c) {
-        out.push_str("; name is NOT field content; use only explicit caller draft, or placeholder when explicitly empty");
     }
     for p in &c.properties {
         if let Some(Value::Flag(value)) = p.known()
@@ -609,14 +604,11 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
         out.push_str(&format!("; placement context {}", geometry_context(v, g)));
         match &g.shape {
             Shape::Rect(r) => out.push_str(&format!(
-                "; {:?} box[x {}, y {}, w {}, h {}] {} {:?}",
-                g.frame_kind,
+                "; box[x {}, y {}, w {}, h {}]",
                 display_number(r.x),
                 display_number(r.y),
                 display_number(r.width),
-                display_number(r.height),
-                unit_name(g.coordinate_space.units),
-                g.coordinate_space.origin
+                display_number(r.height)
             )),
             _ => out.push_str("; reported nonrectangular geometry; do not invent a rectangle"),
         }
@@ -656,7 +648,7 @@ fn drawing_inventory(
     let mut out = String::new();
     append(
         &mut out,
-        "OVERVIEW CONTENT. Human object names below identify source shapes; only quoted UI text appears inside them. Placement references/coordinates are construction input, not captions.\n",
+        "OVERVIEW CONTENT. Define each object once. #numbers are unprinted local references, not UI labels. Details reuse the referenced object's geometry, text and state. Placement context supplies frame kind, Space, units, origin and transform for every box; coordinates are construction input, not captions. Names identify objects, not field values or extra visible UI text. Preserve source icons/text styling: an accessibility Button is not evidence of a painted button border.\n",
         limit,
     )?;
     append(&mut out, &printable_state(v), limit)?;
@@ -700,7 +692,11 @@ fn drawing_inventory(
             component_role(c).to_ascii_lowercase().as_str(),
             "img" | "image" | "svg" | "canvas" | "media" | "custom"
         );
-        if control(c) || text || visual || anchors.contains(&i) {
+        let named_text = matches!(
+            component_role(c).to_ascii_lowercase().as_str(),
+            "text" | "heading" | "link"
+        ) && !public_label(c).is_empty();
+        if control(c) || text || named_text || visual || anchors.contains(&i) {
             append(&mut out, &object_text(v, i, partial, limit)?, limit)?;
         }
     }
@@ -1354,6 +1350,7 @@ fn drawing_dimensions(
         .iter()
         .flat_map(|(_, _, a, b)| [*a, *b])
         .chain(insets.iter().flat_map(|(_, a, b)| [*a, *b]))
+        .chain(members.iter().flatten().copied())
         .collect::<Vec<_>>();
     append(
         &mut out,
@@ -1387,15 +1384,23 @@ fn drawing_dimensions(
         append(
             &mut out,
             &format!(
-                "LOCAL DETAIL {:?} — partial, only these source objects. Apply the same source state as the overview.\n",
+                "LOCAL DETAIL {:?} — partial; reuse overview objects/state:\n",
                 title
             ),
             limit,
         )?;
-        append(&mut out, &printable_state(v), limit)?;
-        for &object in &members[i] {
-            append(&mut out, &object_text(v, object, partial, limit)?, limit)?;
-        }
+        append(
+            &mut out,
+            &format!(
+                "Reuse {}.\n",
+                members[i]
+                    .iter()
+                    .map(|i| format!("#{}", i + 1))
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            ),
+            limit,
+        )?;
         if controls.len() > 1 {
             append(
                 &mut out,
@@ -1448,6 +1453,8 @@ fn prompt(
         let mut vars = BTreeMap::new();
         vars.insert("title", b.metadata.title.clone());
         vars.insert("language", b.metadata.language.clone());
+        vars.insert("output_size", b.metadata.output_size.clone());
+        vars.insert("page_format", b.metadata.page_format.clone());
         vars.insert("purpose", format!("{:?}", b.purpose));
         vars.insert("source", format!("{:?}", v.source_kind));
         vars.insert(

@@ -1,6 +1,7 @@
 ЗАДАЧА
 Create a NEW engineering sheet from the original UI reference and this brief.
 Drawing language: {{language}}. Purpose: {{purpose}}. Sheet plan: {{sheets}}.
+Output: {{output_size}}; page format: {{page_format}}. UI units do not change.
 
 ГРАФИЧЕСКИЙ ЯЗЫК
 Solid BLUE #087AB5 ground; WHITE outlines/text. Every control and indicator interior
@@ -21,6 +22,10 @@ slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
 Height LEFT. Never omit the enclosing width because another shape has a width.
 Each line connects to that shape's actual opposite borders; the right side stays
 free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
+For AccessibilityBounds, dimension a separate WHITE dashed rectangle captioned
+“AX frame”, at the reported extent. It is not a measured glyph, painted border,
+layout box or hit region. Never attach a large accessibility-frame dimension to
+a small source icon; preserve the icon visually without inventing its size.
 EDGE FRAGMENT blocks are independent of the full-shape size views. Redraw ONLY
 their two named edge-corner fragments and the one dimension arrow, preserving
 orientation and named source boundaries. The two printed names are their captions.
@@ -36,6 +41,9 @@ Object names link shapes and measurements; they are human captions, not extra UI
 Placement contexts/coordinates describe positions only. Distinct Spaces stay distinct.
 Accessible names identify controls; they are NOT values. Draw sourced placeholders
 only for explicitly empty inputs, and caller draft only when explicitly reported.
+The name is NOT field content. Never replace visible public draft with its accessible
+name. Missing value/state is unknown, not empty/enabled. Accessibility rectangles
+are interaction geometry, not painted borders: keep plain clickable text unboxed.
 CLIPPED LAYOUT: draw only the reported visible portion with a cut edge, keeping full
 layout size distinct. A distinct visibility frame alone does not establish clipping.
 
@@ -43,6 +51,9 @@ layout size distinct. A distinct visibility frame alone does not establish clipp
 State facts for drawing (not a prose panel): {{state}}.
 Preserve enabled/disabled, reported per-object state/actions, and visible active/off
 state in EVERY repeated instance. Reported actions are not executed actions.
+Show known disabled controls with a dashed WHITE outline and a short “disabled”
+caption; do not infer disabled state from absent fields. Preserve caller-reported
+blocked background without changing its layout or inventing missing controls.
 Each per-view PRINT STATE CAPTION is required visible text beside that view’s
 designated control. Preserve its declared active-versus-applied distinction. Active
 means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline

@@ -34,6 +34,81 @@ fn limits() -> ExportLimits {
         components_per_detail: 12,
     }
 }
+
+#[test]
+fn dense_prompt_defines_objects_once_and_resolves_detail_references() {
+    let mut b = fixture("proposed");
+    b.views[0].state = "first suggestion keyboard-active; none applied".into();
+    let layout = proposed(&mut b);
+    let control = layout.components[9].clone();
+    for i in 10..160 {
+        let mut c = control.clone();
+        c.id = format!("dense-{i}");
+        c.label = format!("Public control {i}");
+        layout.components.push(c);
+    }
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    for i in 10..160 {
+        assert!(prompt.contains(&format!("Public control {i}")));
+    }
+    let definitions = prompt
+        .lines()
+        .filter(|l| l.starts_with("Object ") && l.contains(" [#"))
+        .collect::<Vec<_>>();
+    assert_eq!(definitions.len(), 160);
+    for line in prompt.lines().filter_map(|l| l.strip_prefix("Reuse ")) {
+        for reference in line.trim_end_matches('.').split(", ") {
+            assert_eq!(
+                definitions
+                    .iter()
+                    .filter(|l| l.contains(&format!("[{reference}]")))
+                    .count(),
+                1
+            );
+        }
+    }
+    assert_eq!(prompt.matches("CAPTION exactly:").count(), 1);
+    assert_eq!(
+        data(&p, "scene.json")["views"][0]["components"]
+            .as_array()
+            .unwrap()
+            .len(),
+        160
+    );
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+}
+
+#[test]
+fn accessible_help_text_survives_without_becoming_an_input_value() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed {
+        snapshot,
+        public_text_fields,
+    } = &mut b.views[0].source
+    else {
+        panic!()
+    };
+    public_text_fields.push(Field::AccessibilityName);
+    let node = &mut snapshot.nodes[0];
+    set_test_role(node, "LABEL");
+    let Property::Requested { state, .. } = &mut node.properties[1] else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Text("Public help kept verbatim".into()),
+    };
+    let p = compile(&b, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(
+        prompt
+            .lines()
+            .any(|l| l.starts_with("Object label layout \"Public help kept verbatim\""))
+    );
+    assert!(prompt.contains("name is NOT field content"));
+    assert!(prompt.contains("Missing value/state is unknown"));
+}
 fn fixture(name: &str) -> DrawingBrief {
     let path = format!(
         "{}/../../fixtures/export/{name}-brief.json",
@@ -745,14 +820,12 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     let input = prompt
         .lines()
-        .find(|line| {
-            line.starts_with("Object input \"Accessible search name\": Textbox (native \"INPUT\")")
-        })
+        .find(|line| line.starts_with("Object input \"Accessible search name\": Textbox"))
         .unwrap();
     assert!(!input.contains("; print"));
-    assert!(input.contains("AccessibilityName=\"Accessible search name\""));
+    assert_eq!(input.matches("Accessible search name").count(), 1);
     assert!(prompt.contains("public draft orchard"));
-    assert!(input.contains("name is NOT field content"));
+    assert!(prompt.contains("name is NOT field content"));
     assert!(!input.contains("visible text \"Accessible search name\""));
     let all = String::from_utf8(package.files().values().flatten().copied().collect()).unwrap();
     assert!(!all.contains("UNAPPROVED_RAW_VALUE_CANARY"));
@@ -865,7 +938,8 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     let package = compile(&brief, limits()).unwrap();
     assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object button: Button (native \"AXButton\")"));
+    assert!(prompt.contains("Object button: Button"));
+    assert!(prompt.contains("Never attach a large accessibility-frame dimension"));
     assert!(prompt.contains("Placement context 1: AccessibilityBounds;"));
     assert!(prompt.contains("DIMENSIONED RECTANGLE button"));
     assert!(!prompt.contains("LayoutBounds"));
@@ -911,7 +985,7 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     }
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object button: Button (native \"DIV\")"));
+    assert!(prompt.contains("Object button: Button"));
     assert!(prompt.contains("Placement context 1: LayoutBounds;"));
     assert!(prompt.contains("DIMENSIONED RECTANGLE button"));
     assert!(!prompt.contains("REQUIRED Width AccessibilityBounds"));
@@ -940,7 +1014,7 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     assert!(
         std::str::from_utf8(&package.files()["prompt.txt"])
             .unwrap()
-            .contains("Object button: BUTTON;")
+            .contains("Object button: BUTTON [#")
     );
 }
 
@@ -1337,7 +1411,8 @@ fn state_captions_quote_declared_meaning_without_selected_inference() {
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     assert!(prompt.contains("PRINT THIS VIEW'S STATE CAPTION exactly: \"first suggestion keyboard-active; none applied\""));
     assert!(!prompt.contains("CAPTION exactly: \"no input operation"));
-    assert!(prompt.matches("CAPTION exactly:").count() >= 2);
+    assert_eq!(prompt.matches("CAPTION exactly:").count(), 1);
+    assert!(prompt.contains("reuse overview objects/state"));
     brief.views[0].state = "Menu open".into();
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
         panic!()
@@ -1487,12 +1562,8 @@ fn singleton_input_gets_size_view_and_anchor_fragments_have_no_whole_objects() {
     let p = compile(&b, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     let sizes = prompt.split("LOCAL DETAIL").skip(1).collect::<Vec<_>>();
-    assert!(
-        sizes
-            .iter()
-            .any(|s| s.contains("Object input \"Standalone input\"")
-                && s.contains("DIMENSIONED RECTANGLE input \"Standalone input\""))
-    );
+    assert!(sizes.iter().any(|s| s.contains("Reuse #10.")
+        && s.contains("DIMENSIONED RECTANGLE input \"Standalone input\"")));
     let fragments = prompt
         .split("LOCAL EDGE DETAILS")
         .nth(1)
