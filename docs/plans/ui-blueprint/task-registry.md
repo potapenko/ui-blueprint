@@ -26,9 +26,9 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CP2 |same CP owner|accepted_with_residual by CR1|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL; reviewed public text required |
 | CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
-| CP4 |same CP owner|running|Structural source/artwork/AX separation and C10 per-sheet delivery; same difficult cases |
-| CP5 |same CP owner|queued after CP4 saved handoff/CR2|Six new CN-B5 G01 prompts exceed32000chars; exact unchanged input ready, no density/scope reduction |
-| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|F1 closed; reviewing F2 repair|203c48a conditions empty-dimension header; same reviewer delta check |
+| CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
+| CP5 |same CP owner|running|Six CN-B5 G01 prompts exceed32000chars; compact presentation, source/machine/ownership preserved |
+| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|F1/F2 closed; final receipt reconciliation|203c48a independently verified; aef13c6 author receipt delivered, no new raster tests |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
@@ -92,6 +92,13 @@ Binary `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP4-1k7n3t7t/uiblue
 SHA256 `17d1ae724228cfcb9c712d1e8ac2ce3be5bd7b96ed39de13fb338ba0f4def758`.
 Author reports38files across5packages unchanged from b01aee4; same CR2 checks
 the saved narrow delta. CP4 terminal receipt pending, long G01 remains CP5.
+CP4 terminal now saved aef13c6, [receipt](receipts/corpus-structural-export-repair4.md).
+13additional repair images (12first+1CW07rerun), not13newcorpus cases. B05 and
+C10/D02 pass bounded author checks only; wholecohort remains unaccepted, requested
+raster resolution not delivered. Existing primary corpus count remains65 pending
+new-batch terminal handoffs. Sameowner CP5 dispatched against203c48a; no duplicate
+ImageGen calls, sourceworkers consume final shortenedG01. CR2 only reconciles its
+already-verified saved candidate with authorreceipt, independent of newCP5 edits.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
