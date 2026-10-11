@@ -61,6 +61,14 @@ checks. New F2 affects only empty-dimension detail headers (compile.rs1636 versu
 source-detail selection at141); same CP4 owner repairs condition and focused test.
 All three corpus workers told to defer only affected empty-dimension sheets,
 continue nonempty sheets and preserve actual binary attribution. No density workaround.
+Batch preflight: CW-B4 has9sources/13required sheets,2empty-dimension details held
+(CW33/D02,CW40/D01),11ready. CN-B5 has8qualified partial sources/52sheets,
+11empty details held,6G01 prompts exceed32000chars,35nonempty sheets ready.
+CN-B5's scrolled-grid AX covers old offscreen cards0–27 while PNG shows28+;
+retained as acquisition witness, excluded from qualified sources. No primary
+image-count promotion before terminal generation/evaluation handoff.
+CN-B5 requested to provide minimal length-repair input for the same CP owner after
+F2; do not silently reduce scope/density or manually rewrite literal prompts.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
