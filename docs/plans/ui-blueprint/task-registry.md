@@ -16,7 +16,7 @@ this is not160 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets. CW-B5/CN-B8 totals remain pending
 their final handoffs. A split sheet is not a new source case.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13 images (31 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=7 images (38 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -41,7 +41,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
-| CP6 |same CP owner, restored|seven first images ready; author receipt pending|d9f3fff, fixed CW33/CW34/CW40 set; neutral index handed to both critics |
+| CP6 |same CP owner|implementation progress saved; CP6-F1 running|d9f3fff +41af560,4of7 bounded visual successes; fix only unmatched draft-rendering applicability |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -61,8 +61,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running independent CP6 comparison|Same seven images/criteria, neutral candidate first; author narrative withheld |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running independent CP6 comparison|Same prompt/data criteria and positive control; qualifier correction preserved |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP6 reconciled; retained for one correction|4bounded successes/3visual failures; author CW33/D02 pass rejected by exact membership |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP6 reconciled; exact cause check complete|CW33 extra count absent from prompt; CW40 still has unmatched whole-view draft rule |
 
 ### Current contracts and protected boundaries
 
@@ -162,6 +162,18 @@ CW40 29362/22358/6167). All seven declared first images now exist with hashes an
 actual sizes in the neutral index; both same critics received it before author
 verdicts. These are separate repair-validation images, not new primary source cases.
 Final generation/evaluation count and acceptance wait the scoped handoffs.
+CP6 terminal receipt41af560 reports62 focused checks and7first images,0rerolls;
+dimensions/membership/ownership unchanged, only14safe operand_labels change in CW33.
+Both critics confirmed targeted repairs and preserved CW34. Full visual set remains
+unaccepted: CW33/D02 adds N148/N149, CW40/G01 invents pill borders, CW40/D01 expands
+outside selected fragments. Both reject the author's coarse CW33/D02 pass.
+CT2's exact literal search finds11406/Lexical family absent from CW33 prompt:
+reference completion, not an observed compiler leak. CW40/D01 still contains the
+whole-view public draft annotation and generic draft-rendering instruction despite
+excluding its input. Root assigns only this applicability conflict as CP6-F1, with
+one changed CW40/D01 image, no membership broadening or generic prohibition wave.
+Original source/title/state facts and all previous images remain; remaining raster
+causality is unproved. Same critics will inspect only that delta and one new image.
 
 **CN-B5:** terminal `uib-CN-B5-6jmj42i_/handoff.md` and manifest:8qualified partial
 cases/52first sheets/0rerolls,10scoped author passes/42FAIL/0complete cases.
