@@ -10,14 +10,14 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:99; unresolved upper bound102; conservative remainder901.**
+**Proved eligible case count:107; unresolved upper bound110; conservative remainder893.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Fourteen completed primary batches produced181 evaluated images,0 fully independently accepted.
-Their177 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not181 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Fifteen completed primary batches produced230 evaluated images,0 fully independently accepted.
+Their226 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not230 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -36,7 +36,8 @@ upper bound101. Eleven proved cases are fixture/component-preview origin, not
 production observations. Its earlier91–93 total and22 supposedly missing old sheet
 calls are withdrawn: pre-CP4 combined attempts were executed and evaluated under
 their original protocol. Final cross-bucket check adds CP1/A06 exactly once and
-excludes the unchanged historical A01 baseline, giving99 proved overall cases.
+excludes the unchanged historical A01 baseline, giving99 proved cases before CN-B9.
+CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -83,7 +84,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B5 |same Native source owner|investigation accepted|8cases/52first sheets,10scoped author passes/42FAIL;701dimension checks,0complete cases |
 | CN-B7 |same Native source owner|investigation accepted; archived|1new visible-grid case/7first sheets;38labels match,1scoped author pass/6FAIL; no live recapture |
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
-| CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79, restored|dispatched full corpus cycle|Up to8 new already-wired non-C02 Mac Debug scenarios; fixture origin explicit, no new wiring |
+| CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -307,13 +308,20 @@ Filters values62pt while captions/flags do not scale uniformly. No norm inferred
 Renderer failures: added row boxes/dimensions, revealed clipped content, misplaced
 switches, missing disabled/caret indication. No new repair assigned to this owner.
 
-**CN-B9:** experienced CN-B3 Debug owner resumes for up to8 safe, genuinely new,
-already-wired c01…c05 app scenarios outside completed C02 renders. Source routes
-and fixture isolation must be verified before launch; dormant descriptors/no-op
-previews do not count. No new host/selector/source code, production mutations or
-synthetic geometry. Actual runtime app components may use fixture data, explicitly
-labelled as such. Native1af633c and export814af45 frozen consumers; current source
-branch/owned runtime/reservations, full first-image cycle and restoration required.
+**CN-B9:** terminal `uib-CN-B9-hf8xty_p/HANDOFF.txt` and manifest. Nine configurations/
+10own launches,9Observed responses plus1typed refusal;8qualified distinct actual
+fixture compositions/49first sheets/0rerolls. B907 duplicates B901 exactly and is
+excluded. Common/Vocabulary/Grammar/Statistics/failure/autoscroll/restoration states
+use existing wired local fixture services and no-op persistence, not production data.
+All qualified PNGs differ from CN-B3 and actual compositions were checked. Some
+families recur; not8new components.25scoped sheet passes/24FAIL/0full accepted cases.
+All582required IDs have one owner and individual review. Collector1af633c/export814af45,
+fixed density30; no source, data or quota changes. Failed expanded AX projection
+retained; a separately requested minimal role/name/bounds projection succeeds.
+Names of graph points sometimes become invented visible dates/hours; fragments
+expand to parents,≈/anchors change and artwork gets measurements. These are retained
+witnesses, not new source facts. Own app/build/guards/desktop released; user63105
+preserved; all source/generated images and tool originals remain. Owner archived.
 
 **CW-B6:** terminal `uib-cw-b6-dRaUXk/handoff.json`, manifest SHA256
 `41cc4b3ea19ff33c924eb5c1a5c34000a039f7a6ca8caf8019d9948ca2ff1b6e`.

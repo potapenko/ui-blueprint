@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 read-only terminal reconciliation, before CN-B9 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B9 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**99 proved eligible cases; range99–102 pending three named uncertainties.**
-The planning remainder is901 cases, potentially898 if all three are established.
-There are45 Web and54 Native cases in the proved minimum. Eleven are explicitly
+**107 proved eligible cases; range107–110 pending three named uncertainties.**
+The planning remainder is893 cases, potentially890 if all three are established.
+There are45 Web and62 Native cases in the proved minimum. Nineteen are explicitly
 fixture/component-preview origin;88 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets are unchanged:181 primary images =177 first outputs +4 rerolls;
-40 separate repair-validation images;221 images in total. Extra sheets, repaired
+Image buckets:230 primary images =226 first outputs +4 rerolls;
+40 separate repair-validation images;270 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -35,7 +35,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CW-B5 |5|5|Gated/no-novelty/unavailable candidates excluded |
 | CN-B8 |7|11|5 families; no-op Collections excluded |
 | CW-B6 |5|5|Natural guest dialog absent; qualifier verdict does not change execution count |
-| **Primary subtotal** |**98**|**181**| |
+| CN-B9 |8|49|Actual distinct wired fixture compositions; one exact in-batch duplicate excluded |
+| **Primary subtotal** |**106**|**230**| |
 
 ## One first completion in the repair bucket
 
@@ -59,7 +60,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in99
+## Three unresolved cases, not counted in107
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -104,12 +105,17 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CW-B5 | `uib-cw-b5-NTbzfs/handoff.json` |
 | CN-B8 | `playphraseme-cn-b8-6no3fnyn/handoff.json` |
 | CW-B6 | `uib-cw-b6-dRaUXk/handoff.json` |
+| CN-B9 | `uib-CN-B9-hf8xty_p/HANDOFF.txt` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
 Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1; CP5=0.
 Accepted repository receipts retain their source revisions and artifact roots.
 
-CN-B9 is still running and adds no terminal cases/images to this frozen count.
+CN-B9 completed9 attempted configurations/8 distinct qualified fixture compositions
+and49 evaluated first sheets,0rerolls. Its handoff verifies distinct actual
+compositions and source hashes against CN-B3; component families may recur and
+are not claimed as8 wholly new components. All582 required dimension IDs have one
+owner.25scoped author sheet passes/24failures do not constitute full-case acceptance.
 CW-S2/CW09 and CN5B remain source/host dependencies. CT3 changes interpretation of
 two image verdicts, not the number of executed evaluations.
