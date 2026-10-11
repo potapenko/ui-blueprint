@@ -316,7 +316,7 @@ document — основной режим; explain может сохранять�
 
 ## HBP-HUMAN-001 — клиентская подача (2026-10-10)
 
-Основание: пользователь прямо запустил [human-blueprint goal](plans/ui-blueprint/human-blueprints.md)
+Основание: пользователь прямо запустил [human-blueprint goal](/Users/eugenepotapenko/Projects/potapenko-github/ui-bluprint/docs/plans/ui-blueprint/human-blueprints.md)
 и критерии C1–C7/V1–V6; Evolve, без новой модели данных. Эти правила имеют
 приоритет над прежними требованиями печатать всю ведомость, IDs, точные дроби,
 большой штамп и unknown-списки. Исходные machine facts не меняются.
