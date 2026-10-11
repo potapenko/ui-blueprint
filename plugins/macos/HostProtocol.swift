@@ -216,7 +216,9 @@ struct NativeDescriptorIO {
     }
     @MainActor func reply(_ frame: NativeJSONFrame, cap: Int, deadline: Double) throws {
         guard frame.count > 1, frame.count <= cap, !frame.failed else { throw NativeProtocolError.limit }
-        try frame.write(to: output, deadline: deadline, cap: cap)
+        try withExtendedLifetime(frame) {
+            try frame.write(to: output, deadline: deadline, cap: cap)
+        }
     }
 
 }
