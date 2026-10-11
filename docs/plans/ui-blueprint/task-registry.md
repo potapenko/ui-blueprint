@@ -17,7 +17,7 @@ author-pass case, not independent acceptance. CN-B6 adds7families/9states/23shee
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
 generation/evaluation handoffs. A split sheet is not a new source case.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=7 images (38 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8 images (39 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -29,7 +29,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
 | CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
-| CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|dispatched fresh read-only consultation|Supported scoped keyboard show/dismiss and up to6 real geometry recipes; no app/device/settings/file operations |
+| CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
@@ -44,8 +44,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
-| CP6 |same CP owner|implementation progress saved; CP6-F1 running|d9f3fff +41af560,4of7 bounded visual successes; fix only unmatched draft-rendering applicability |
-| CP7 |same exporter owner|queued after CP6-F1|CW49 full-layout/visible-frame assignment conflict, correct source geometry and replay ready; no source/crop changes |
+| CP6 |same CP owner|CP6-F1 saved; single-image critique pending|734cedf +3198d03, one correction image retained; no full-set acceptance |
+| CP7 |same exporter owner|dispatched shipping repair|CW49 distinct full-layout/visible sketches and anchors, one fresh image; source facts unchanged |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -66,8 +66,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP6 reconciled; retained for one correction|4bounded successes/3visual failures; author CW33/D02 pass rejected by exact membership |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP6 reconciled; exact cause check complete|CW33 extra count absent from prompt; CW40 still has unmatched whole-view draft rule |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running single CP6-F1 image check|No full-set repeat; neutral observation then author reconciliation |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running CP6-F1 applicability check|One changed CW40/D01 image; other old images and pins preserved |
 
 ### Current contracts and protected boundaries
 
@@ -193,6 +193,15 @@ excluding its input. Root assigns only this applicability conflict as CP6-F1, wi
 one changed CW40/D01 image, no membership broadening or generic prohibition wave.
 Original source/title/state facts and all previous images remain; remaining raster
 causality is unproved. Same critics will inspect only that delta and one new image.
+CP6-F1 terminal734cedf/3198d03: three focused checks and Clippy pass; membership
+must contain input/all potential view inputs before generic draft rendering, with
+no prose binding inference. All machine facts/brief/state/ownership unchanged.
+Only CW40/D01 and CW33/D02 prompts change; only CW40/D01 rerendered once at1536×1024.
+Author still records unassigned lower-region reconstruction as FAIL. Neutral root
+`uib-CP6-F1-9qqz3gqd/neutral-index.json`, binary SHA256
+`86704783cba6c042ab3336806c3b6f5d0dab57ef15e1aa85bbe3dfbe73f0c96e`.
+Same critics check that one delta independently while CP7 implements the separate
+document-frame assignment; no new CP6 attempt or full-set acceptance is authorized.
 
 **CN-B5:** terminal `uib-CN-B5-6jmj42i_/handoff.md` and manifest:8qualified partial
 cases/52first sheets/0rerolls,10scoped author passes/42FAIL/0complete cases.
