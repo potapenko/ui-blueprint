@@ -157,15 +157,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
             } else {
                 String::new()
             };
-            let prompt = render_view(
-                brief,
-                v,
-                p.text,
-                instructions,
-                analysis,
-                p.assignment,
-                sheet_remaining,
-            )?;
+            let prompt = render_view(brief, v, &p, instructions, analysis, sheet_remaining)?;
             sheet_remaining = sheet_remaining
                 .checked_sub(prompt.len())
                 .ok_or(E::OutputLimit)?;
@@ -1899,6 +1891,10 @@ fn drawing_dimensions(
     })
 }
 
+const INPUT_ARTWORK_GUIDANCE: &str = r#"Accessible names identify controls; they are NOT values. Draw sourced placeholders
+only for explicitly empty inputs, and caller draft only when explicitly reported.
+The name is NOT field content. Never replace visible public draft with its accessible
+name. "#;
 const ARTWORK_GUIDANCE: &str = r#"Exact visible UI strings and source icons; readable typography.
 Source icons retain their silhouette as WHITE outlines, including Play triangles;
 never replace an icon with its semantic name or icon-font token. An active row/tab
@@ -1983,13 +1979,14 @@ NAMED-ANCHOR RELATION is conservative attribution, never a border-corner sketch.
 fn render_view(
     b: &DrawingBrief,
     v: &SceneView,
-    presentation: String,
+    plan: &Presentation,
     sheet_plan: String,
     design_analysis: String,
-    assignment: Assignment,
     limit: usize,
 ) -> Result<String> {
     let mut result = String::new();
+    let assignment = plan.assignment;
+    let presentation = &plan.text;
     let mut vars = BTreeMap::new();
     vars.insert("title", b.metadata.title.clone());
     vars.insert("language", b.metadata.language.clone());
@@ -2086,21 +2083,31 @@ fn render_view(
         Assignment::SourceDetail => "only the included source fragment's visible labels/text/icons and its declared state; no dimensions or unlisted source content",
         Assignment::Overview => "verbatim visible labels/draft, assigned dimensions/anchor captions and explicit state of the selected overview",
     }.into());
-    vars.insert("dimensions", presentation);
+    vars.insert("dimensions", presentation.clone());
     vars.insert("assignment", match assignment {
         Assignment::Overview => "One selected-scope overview with only this sheet's assigned measurements. Other source regions in the reference are context, not permission to extend the scope.",
         Assignment::SourceDetail => "SOURCE FRAGMENT ONLY. Render exactly the included records, preserving their relative source appearance and proved cuts. The parent screen/card and unlisted siblings are excluded even when visible in the reference. No measurements are assigned.",
         Assignment::Measurements => "MEASUREMENT ONLY. Draw the assigned EMPTY frame/edge sketches, with all semantic captions OUTSIDE. No UI artwork, screenshots, controls, text or icons inside frames. The original reference is attribution context only. Unassigned source objects, parents and siblings are not drawings on this sheet.",
     }.into());
-    vars.insert(
-        "artwork_guidance",
-        if assignment == Assignment::Measurements {
-            ""
-        } else {
-            ARTWORK_GUIDANCE
-        }
-        .into(),
-    );
+    let mut artwork_guidance = if assignment == Assignment::Measurements {
+        String::new()
+    } else {
+        ARTWORK_GUIDANCE.into()
+    };
+    if assignment == Assignment::SourceDetail
+        && (!v.components.iter().any(input_control)
+            || v.components
+                .iter()
+                .filter(|c| input_control(c))
+                .any(|c| !plan.component_ids.contains(&c.id)))
+    {
+        // Caller state has no structured field binding. Do not guess which
+        // omitted input its draft describes from prose or from the reference.
+        vars.insert("state", format!("NON-RENDERING WHOLE-VIEW PROVENANCE: {:?}. Input ownership is incomplete in this fragment; this provenance does not authorize draft or input artwork here", v.state));
+        artwork_guidance = artwork_guidance.replace(INPUT_ARTWORK_GUIDANCE,
+            "Accessible names are not field contents. Caller-draft rendering does not apply to this fragment: input ownership is incomplete. Whole-view state is non-rendering provenance, not permission to add an input, its draft or associated content.\n");
+    }
+    vars.insert("artwork_guidance", artwork_guidance);
     vars.insert("state_guidance", if assignment == Assignment::Measurements { "Only recorded flags or exact caller statements may be captioned outside the named frame. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }.into());
     vars.insert("design_analysis", design_analysis);
     vars.insert("sheets", sheet_plan);
@@ -2152,10 +2159,9 @@ fn prompt(
             &render_view(
                 b,
                 v,
-                presentation.text,
+                &presentation,
                 sheet_plan,
                 crate::design::text(&v.design_analysis, limit)?,
-                presentation.assignment,
                 limit,
             )?,
             limit,

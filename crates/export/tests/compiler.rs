@@ -1522,6 +1522,87 @@ fn clipped_empty_dimension_details_request_source_artwork_consistently() {
 }
 
 #[test]
+fn fragment_draft_rules_follow_input_membership_without_parsing_caller_state() {
+    let mut b = fixture("observed");
+    b.views[0].state = "Public draft orchard for the observed input; no action performed".into();
+    let original_state = b.views[0].state.clone();
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for n in &mut snapshot.nodes {
+        set_test_role(n, "DIV");
+        n.children.clear();
+    }
+    set_test_role(&mut snapshot.nodes[0], "INPUT");
+    set_test_role(&mut snapshot.nodes[2], "LABEL");
+    for index in [0, 2] {
+        let mut visible = snapshot.nodes[index].properties[2].clone();
+        let Property::Requested {
+            field,
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut visible
+        else {
+            panic!()
+        };
+        *field = Field::VisibleRegion;
+        g.frame_kind = FrameKind::VisibleRegion;
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        r.y += 4.;
+        r.height -= 4.;
+        snapshot.nodes[index].properties[4] = visible;
+    }
+    b.details = [0, 2]
+        .into_iter()
+        .map(|i| DetailRequest {
+            view: b.views[0].id.clone(),
+            components: vec![format!("N{i:03}")],
+            title: format!("Fragment {i}"),
+        })
+        .collect();
+    let before = serde_json::to_vec(&b).unwrap();
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let p = compile(&b, l).unwrap();
+    let included = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    let excluded = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
+    assert!(included.contains("Object input"));
+    assert!(included.contains("caller draft only when explicitly reported"));
+    assert!(!included.contains("NON-RENDERING WHOLE-VIEW PROVENANCE"));
+    assert!(!excluded.contains("Object input"));
+    assert!(!excluded.contains("caller draft only when explicitly reported"));
+    assert!(excluded.contains("NON-RENDERING WHOLE-VIEW PROVENANCE"));
+    assert!(excluded.contains("Caller-draft rendering does not apply"));
+    assert!(included.contains("orchard") && excluded.contains("orchard"));
+    assert_eq!(data(&p, "scene.json")["views"][0]["state"], original_state);
+    assert_eq!(
+        data(&p, "manifest.json")["sheet_prompts"][1]["component_ids"],
+        serde_json::json!(["N000"])
+    );
+    assert_eq!(
+        data(&p, "manifest.json")["sheet_prompts"][2]["component_ids"],
+        serde_json::json!(["N002"])
+    );
+    assert_eq!(serde_json::to_vec(&b).unwrap(), before);
+    // A second potential input outside the fragment makes a prose-only draft
+    // binding ambiguous. Preserve it as provenance, never guess a field owner.
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[3], "INPUT");
+    let p = compile(&b, l).unwrap();
+    assert!(
+        std::str::from_utf8(&p.files()["prompt-D01.txt"])
+            .unwrap()
+            .contains("NON-RENDERING WHOLE-VIEW PROVENANCE")
+    );
+}
+
+#[test]
 fn fragment_container_does_not_authorize_unselected_descendants() {
     let mut b = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
