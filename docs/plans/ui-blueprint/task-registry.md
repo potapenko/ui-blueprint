@@ -23,13 +23,15 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CP1 |01a12b6a-92a9-73c3-aec2-022e32651008|length repair accepted; image gate open|4d6e0bf +receipt01d2bfc,15sources under32000chars, machine files identical |
 | CP2 |same CP owner|accepted_with_residual by CR1|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL; reviewed public text required |
 | CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
-| CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|running independent diagnostic|Six fixed R2 cases: source/reference/representation conflicts and bounded next remedy |
+| CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
+| CP4 |same CP owner|running|Structural source/artwork/AX separation and C10 per-sheet delivery; same difficult cases |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
 | CW-B3 |same Web source owner|running|6new/lower-scroll/lookup Web states, complete source→CLI→image→QA |
+| CW-S1 |same Web source owner|queued after current capture|New matched play-control-slot source pair for CP4, no raster edits/no new generated count |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|running; source owner reused|12focused-popup/preview/context/download-form states, full source→CLI→image→QA |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
@@ -97,6 +99,13 @@ uib-CP3-r5v3_jgx/uiblueprint-b08ea04, SHA256
 Handoff sent to CN-B4/CW-B3 for not-yet-frozen cases. CP author stays idle for next
 coherent repair; CV1 fresh visual diagnostic receives neutral inputs/criteria and
 R2 artifacts before any author review. No new image calls or code edits in CV1.
+CV1 terminal independently confirms scope/reference and AX placement conflicts,
+C10 density plus direct model failures; no criterion weakening or image acceptance.
+CP4 assigned structural repair with existing multi-sheet intent, any actual format
+delta registered before code, old compatibility explicit. Source apps/Native/engine
+protected. CW-S1 new capture requested from source owner; original CW09 unchanged.
+No hand-cropped or ImageGen-reconstructed observational reference. B05 unknown
+AX-to-paint mapping stays unknown. Independent ready code/sheet work continues.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
