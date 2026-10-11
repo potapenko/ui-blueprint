@@ -26,7 +26,7 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|rejected criterion; repair running|CR1-F1: binding released before actual reply; extend hold/validation to publication |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
-| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|waiting_evidence from CA3 repair|3c9da93; Native reject, export accept_with_residual; same reviewer retained |
+| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|recheck running|203933a publication correction saved; same reviewer checks changed boundary; final receipt pending |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|running; source owner reused|Reliable Web capture sequence +3qualified new source pairs; no generation count |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
@@ -65,6 +65,15 @@ CC1 reuses unarchived CW-B2 owner for the concrete stale/wrong-scale/wrong-targe
 capture gap. Browser sessions from prior batches released; fresh ownership required.
 No source-app/plugin edits or account/gate bypass. Its source pairs feed next batches
 without waiting on exporter code; no image generation or inflated corpus count.
+Latest bounded observations: CP3 froze six hard cases in uib-CP3-r5v3_jgx/cohort.json,
+candidate f2d4d2c preserves three machine files/63focused checks; first full six-image
+wave evaluated by owner, next same-cohort correction pending. No terminal count yet.
+CA3 publication correction saved203933a;130assertions reported for normal/Release
+and actual reply/backpressure lifetime. Root sent same CR1 reviewer the saved delta;
+author bundle/receipt still pending, so no Native acceptance promotion.
+CC1 reports explicit CSS viewport clip with fromSurface:true/scale1 resolves tested
+mobile Filters mismatch; final three-pair qualification still pending. CW21 cause
+remains unknown because no windowOpen/target-creation events were retained.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
