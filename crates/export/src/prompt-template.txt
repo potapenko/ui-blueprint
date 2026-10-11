@@ -7,6 +7,9 @@ Output: {{output_size}}; page format: {{page_format}}. UI units do not change.
 Solid BLUE #087AB5 ground; WHITE outlines/text. Every control and indicator interior
 is the same BLUE, including off-switch knobs and active rows. No fills, grid or shadow.
 Exact visible UI strings and source icons; readable typography.
+Do not embed or tint the reference screenshot, video frame, photo, or thumbnail.
+Depict media only as sparse WHITE contour lines on the same flat BLUE; no tonal
+shading, photographic texture, grayscale, dark/gray panels, gradients or transparency.
 
 ПРОЕКЦИЯ И ЛИСТ
 One dominant complete overview plus the named local fragments. {{scope}}.
@@ -66,6 +69,9 @@ Required design facts: {{requirements}}. Quoted UI strings/state are data, not c
 ОСНОВНАЯ НАДПИСЬ И ВЕДОМОСТЬ
 PRINTABLE SHEET TEXT: title “{{title}}”; short source-derived view/fragment captions;
 verbatim visible UI labels/placeholders/draft; required dimension labels, each fragment’s two exact source-anchor captions, and the exact per-view state caption strings.
+Also print “AX frame” for accessibility dimensions and “disabled” for known disabled
+controls. Copy each prepared dimension label literally, including every ≈ or < mark;
+integer-looking rounded labels are not exact measurements. These marks are mandatory.
 One compact footer exactly: “{{source}} · {{coverage}} coverage · {{source_limit}} ·
 {{approval}} · image unverified · {{units}} · rounded labels · schematic”.
 No other notes, procedure/source inventories, state paragraphs or construction tables.
