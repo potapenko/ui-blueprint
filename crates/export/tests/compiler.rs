@@ -214,6 +214,10 @@ fn separate_prompts_cover_source_and_own_every_selected_dimension_once() {
     let d1 = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
     assert!(!d1.contains("VIEW PLAN: complete overview"));
     assert!(d1.contains("VIEW PLAN: ONLY this detail sheet's assigned measurement blocks"));
+    assert!(d1.contains("MEASUREMENT ONLY"));
+    assert!(!d1.contains("Use the original reference for artwork appearance"));
+    assert!(!d1.contains("visible-text payload") && !d1.contains("box[x"));
+    assert!(d1.contains("excludes its reported parent"));
     assert!(d1.contains("WIDTH 400 CSS px") && d1.contains("HEIGHT 48 CSS px"));
     let d2 = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
     assert!(d2.contains("WIDTH 120 CSS px") && d2.contains("HEIGHT 48 CSS px"));
@@ -1436,7 +1440,7 @@ fn clipping_is_component_scoped_directional_and_sheet_scoped() {
     }
     let source = serde_json::to_vec(&b).unwrap();
     let p = compile(&b, limits()).unwrap();
-    for file in ["prompt.txt", "prompt-G01.txt", "prompt-D01.txt"] {
+    for file in ["prompt.txt", "prompt-G01.txt"] {
         let text = std::str::from_utf8(&p.files()[file]).unwrap();
         let clips = text
             .lines()
@@ -1449,7 +1453,7 @@ fn clipping_is_component_scoped_directional_and_sheet_scoped() {
         assert!(clips[1].contains("known clipped edges [Right]"));
         assert!(clips.iter().all(|l| !l.contains("crop of the artwork")));
     }
-    for file in ["prompt-D02.txt", "prompt-D03.txt"] {
+    for file in ["prompt-D01.txt", "prompt-D02.txt", "prompt-D03.txt"] {
         assert!(
             !std::str::from_utf8(&p.files()[file])
                 .unwrap()
@@ -1509,6 +1513,9 @@ fn clipped_empty_dimension_details_request_source_artwork_consistently() {
         let prompt = std::str::from_utf8(&p.files()[sheet["file"].as_str().unwrap()]).unwrap();
         assert!(prompt.contains("Selected source detail only; no prepared measurements"));
         assert!(prompt.contains("VIEW PLAN: selected source-detail artwork only"));
+        assert!(prompt.contains("SOURCE FRAGMENT ONLY"));
+        assert!(prompt.contains("INCLUSION BOUNDARY"));
+        assert!(!prompt.contains("MEASUREMENT ONLY"));
         assert!(!prompt.contains("ONLY this detail sheet's assigned measurement blocks"));
         assert!(prompt.contains("known clipped edges [Top]"));
     }
@@ -1671,7 +1678,7 @@ fn state_captions_quote_declared_meaning_without_selected_inference() {
     assert!(prompt.contains("PRINT THIS VIEW'S STATE CAPTION exactly: \"first suggestion keyboard-active; none applied\""));
     assert!(!prompt.contains("CAPTION exactly: \"no input operation"));
     assert_eq!(prompt.matches("CAPTION exactly:").count(), 1);
-    assert!(prompt.contains("reuse overview objects/state"));
+    assert!(prompt.contains("assigned frames and source state"));
     brief.views[0].state = "Menu open".into();
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
         panic!()

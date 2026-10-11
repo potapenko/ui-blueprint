@@ -411,3 +411,23 @@ fn unreviewed_visible_text_cannot_leak_through_operand_labels() {
         assert!(!String::from_utf8_lossy(bytes).contains("UNREVIEWED-CANARY"));
     }
 }
+
+#[test]
+fn compact_family_note_retains_result_frame_and_exact_operand_evidence() {
+    let (mut b, q, e, _) = fixture(&[20.5; 7]);
+    pattern_request(&mut b, &q, &e);
+    let p = package(b);
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(text.contains("family \"Selected widths\""));
+    assert!(text.contains("7 source-selected operands in this family"));
+    assert!(text.contains("7 measured widths of ≈21 CSS px"));
+    assert!(text.contains("Frames: layout_bounds"));
+    assert!(!text.contains("Width x ("));
+    let facts = &insights(&p)[0]["facts"];
+    assert_eq!(facts["queries"].as_array().unwrap().len(), 7);
+    assert_eq!(facts["operand_labels"].as_array().unwrap().len(), 7);
+    assert_eq!(
+        facts["measurements"][0]["measurement"]["value"]["value"]["amount"],
+        20.5
+    );
+}

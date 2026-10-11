@@ -249,3 +249,49 @@ fn visible_control_payload_is_not_promoted_to_a_semantic_icon_caption() {
         );
     }
 }
+
+#[test]
+fn select_captions_bind_wrapping_labels_and_reviewed_display_text() {
+    let mut b = brief();
+    let s = &mut b["views"][0]["source"]["snapshot"];
+    for n in s["nodes"].as_array_mut().unwrap() {
+        n["children"] = json!([]);
+    }
+    for (i, native, role, label) in [
+        (0, "SELECT", "combobox", "Overall usefulness"),
+        (1, "LABEL", "text", "Sorting :"),
+        (2, "SELECT", "combobox", "A1"),
+        (3, "LABEL", "text", "Level :"),
+        (4, "SELECT", "combobox", "1-20"),
+        (5, "DIV", "group", ""),
+    ] {
+        s["nodes"][i]["native_role"] =
+            json!({"availability":"known","value":{"type":"text","value":native}});
+        s["nodes"][i]["properties"][0]["state"] =
+            json!({"availability":"known","value":{"type":"role","value":role}});
+        s["nodes"][i]["properties"][1]["state"] =
+            json!({"availability":"known","value":{"type":"text","value":label}});
+    }
+    for (parent, child) in [(1, 0), (3, 2), (5, 4)] {
+        s["nodes"][parent]["children"] = json!([s["nodes"][child]["key"]]);
+    }
+    let g = s["nodes"][0]["properties"][2]["state"].clone();
+    for (i, width) in [(0, 50.), (2, 60.), (4, 70.)] {
+        s["nodes"][i]["properties"][2]["state"] = g.clone();
+        s["nodes"][i]["properties"][2]["state"]["value"]["value"]["shape"]["value"]["width"] =
+            json!(width);
+    }
+    let p = package(&b);
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    for name in [
+        "select under \"Sorting :\", displaying \"Overall usefulness\"",
+        "select under \"Level :\", displaying \"A1\"",
+        "select displaying \"1-20\"",
+    ] {
+        assert!(
+            text.contains(&format!("DIMENSIONED RECTANGLE {name}:")),
+            "{name}"
+        );
+    }
+    assert!(!text.contains("pagination"));
+}

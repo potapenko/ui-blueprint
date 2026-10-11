@@ -135,7 +135,15 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
             let instructions = format!(
                 "Generate ONLY sheet {}: {}. {} No other sheets or montage.",
                 sheet.id,
-                sheet.title,
+                if sheet.title == "Scope detail; preserve every listed object" {
+                    if p.assignment == Assignment::Measurements {
+                        "Assigned frame measurements"
+                    } else {
+                        "Selected source fragment"
+                    }
+                } else {
+                    &sheet.title
+                },
                 if sheet.kind == "general" {
                     "Complete selected-scope artwork overview; only this sheet's assigned measurements. Other measurements belong to separate detail sheets."
                 } else if p.dimension_ids.is_empty() {
@@ -149,7 +157,15 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
             } else {
                 String::new()
             };
-            let prompt = render_view(brief, v, p.text, instructions, analysis, sheet_remaining)?;
+            let prompt = render_view(
+                brief,
+                v,
+                p.text,
+                instructions,
+                analysis,
+                p.assignment,
+                sheet_remaining,
+            )?;
             sheet_remaining = sheet_remaining
                 .checked_sub(prompt.len())
                 .ok_or(E::OutputLimit)?;
@@ -548,6 +564,24 @@ pub(crate) fn component_name(v: &SceneView, index: usize) -> String {
     if let Some(label) = label.filter(|label| !label.is_empty() && label.len() <= 80) {
         return format!("{human_role} {:?}", label.replace('\n', " / "));
     }
+    if human_role == "select" {
+        // A reviewed select's rendered text is source context, not a raw Value
+        // or an inferred product name. A wrapping LABEL is an explicit owner.
+        let displayed = visible_text(c);
+        let owner = v.components.iter().find(|p| p.children.contains(&c.id)
+            && matches!(&p.native_role, Some(Availability::Known { value: Value::Text(role) }) if role.eq_ignore_ascii_case("label")));
+        let label = owner.map(public_label).unwrap_or("");
+        if !displayed.is_empty() && displayed.len() <= 80 && !displayed.contains(['\n', '\r']) {
+            return if label.is_empty() {
+                format!("select displaying {displayed:?}")
+            } else {
+                format!("select under {label:?}, displaying {displayed:?}")
+            };
+        }
+        if !label.is_empty() {
+            return format!("select under {label:?}");
+        }
+    }
     if control(c) {
         if c.properties
             .iter()
@@ -854,6 +888,93 @@ fn drawing_inventory(
             || anchors.contains(&i)
         {
             append(&mut out, &object_text(v, i, partial, limit)?, limit)?;
+        }
+    }
+    Ok(out)
+}
+fn measurement_inventory(
+    v: &SceneView,
+    targets: &std::collections::BTreeSet<usize>,
+    limit: usize,
+) -> Result<String> {
+    let mut out = String::from(
+        "ASSIGNED MEASUREMENT TARGETS. Context is attribution only, not artwork or additional labels. Unassigned source facts remain in scene/dimensions. No absent property means empty or enabled.\n",
+    );
+    let mut contexts = Vec::new();
+    for &i in targets {
+        let c = &v.components[i];
+        if let Some(g) = geometry(c) {
+            let context = geometry_context(v, g);
+            if !contexts.contains(&context) {
+                append(
+                    &mut out,
+                    &format!(
+                        "Measurement context {context}: {:?}; Space {} {:?}, {}, {:?}; transform {}. No inferred conversion.\n",
+                        g.frame_kind,
+                        g.coordinate_space.id.0,
+                        g.coordinate_space.kind,
+                        unit_name(g.coordinate_space.units),
+                        g.coordinate_space.origin,
+                        match g.transform {
+                            TransformState::LocalOnly {} => "local only",
+                            TransformState::Unknown { .. } => "unknown",
+                            TransformState::Known { .. } => "supplied mapping",
+                        }
+                    ),
+                    limit,
+                )?;
+                contexts.push(context);
+            }
+            append(
+                &mut out,
+                &format!(
+                    "TARGET {}: {:?}, context {context}; this frame only.\n",
+                    component_name(v, i),
+                    g.frame_kind
+                ),
+                limit,
+            )?;
+        }
+        if let Some(parent) = v.components.iter().position(|p| p.children.contains(&c.id)) {
+            append(
+                &mut out,
+                &format!(
+                    "Boundary: {} excludes its reported parent {} and {} sibling source objects; they are context only, never contents of this sketch.\n",
+                    component_name(v, i),
+                    component_name(v, parent),
+                    child_indices(v, parent).len().saturating_sub(1)
+                ),
+                limit,
+            )?;
+        }
+        for p in &c.properties {
+            if let Some(Value::Flag(value)) = p.known()
+                && (matches!(
+                    p.field(),
+                    Field::Checked | Field::Selected | Field::Expanded | Field::Enabled
+                ) || p.field() == Field::Focused && *value)
+            {
+                append(
+                    &mut out,
+                    &format!(
+                        "Recorded {:?}={value} for {}; caption outside only.\n",
+                        p.field(),
+                        component_name(v, i)
+                    ),
+                    limit,
+                )?;
+            }
+        }
+        if let Some(state) = &c.state_and_actions {
+            append(
+                &mut out,
+                &format!(
+                    "Reported state/actions for {}: {}; not executed.\n",
+                    component_name(v, i),
+                    bounded_compact_json(state, limit)?
+                ),
+                limit,
+            )?;
         }
     }
     Ok(out)
@@ -1258,10 +1379,17 @@ fn detail_caption(v: &SceneView, members: &[usize]) -> String {
     }
     "Control dimensions and spacing".into()
 }
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Assignment {
+    Overview,
+    SourceDetail,
+    Measurements,
+}
 struct Presentation {
     text: String,
     component_ids: Vec<String>,
     dimension_ids: Vec<String>,
+    assignment: Assignment,
 }
 fn drawing_dimensions(
     v: &SceneView,
@@ -1598,6 +1726,15 @@ fn drawing_dimensions(
         .map(|(_, d, _, _)| d.id.clone())
         .chain(insets.iter().map(|(d, _, _)| d.id.clone()))
         .collect();
+    let assignment = if sheet.is_some_and(|s| s.kind == "detail") {
+        if dimension_ids.is_empty() {
+            Assignment::SourceDetail
+        } else {
+            Assignment::Measurements
+        }
+    } else {
+        Assignment::Overview
+    };
     let mut out = String::new();
     let anchor_objects = lines
         .iter()
@@ -1620,17 +1757,33 @@ fn drawing_dimensions(
         })
         .map(|(_, c)| c.id.clone())
         .collect::<Vec<_>>();
+    let measurement_targets = lines
+        .iter()
+        .flat_map(|(_, _, a, b)| [*a, *b])
+        .chain(insets.iter().flat_map(|(_, a, b)| [*a, *b]))
+        .collect::<std::collections::BTreeSet<_>>();
     append(
         &mut out,
-        &drawing_inventory(
-            v,
-            partial,
-            &anchor_objects,
-            sheet.map(|_| component_ids.as_slice()),
-            limit,
-        )?,
+        &if assignment == Assignment::Measurements {
+            measurement_inventory(v, &measurement_targets, limit)?
+        } else {
+            drawing_inventory(
+                v,
+                partial,
+                &anchor_objects,
+                sheet.map(|_| component_ids.as_slice()),
+                limit,
+            )?
+        },
         limit,
     )?;
+    if assignment == Assignment::SourceDetail {
+        append(
+            &mut out,
+            "INCLUSION BOUNDARY: reproduce only the SOURCE RECORDS above. The full reference and original view scope are orientation context, not included artwork. Do not restore a parent card, heading, controls or text outside this exact fragment; do not complete a partially selected record.\n",
+            limit,
+        )?;
+    }
     append(
         &mut out,
         if sheet.is_some_and(|s| s.kind == "detail") && !dimension_ids.is_empty() {
@@ -1664,7 +1817,7 @@ fn drawing_dimensions(
         append(
             &mut out,
             &format!(
-                "LOCAL DETAIL {:?} — partial; reuse overview objects/state:\n",
+                "LOCAL DETAIL {:?} — partial; assigned frames and source state:\n",
                 title
             ),
             limit,
@@ -1675,13 +1828,18 @@ fn drawing_dimensions(
                 "Reuse {}.\n",
                 members[i]
                     .iter()
+                    .copied()
+                    .filter(|index| assignment != Assignment::Measurements
+                        || measurement_targets.contains(index))
+                    .collect::<Vec<_>>()
+                    .iter()
                     .map(|i| format!("#{}", i + 1))
                     .collect::<Vec<_>>()
                     .join(", ")
             ),
             limit,
         )?;
-        if controls.len() > 1 {
+        if controls.len() > 1 && assignment != Assignment::Measurements {
             append(
                 &mut out,
                 "Keep recorded row/column relationships. Do not add a wrapper/heading/control around these partial objects.\n",
@@ -1719,15 +1877,69 @@ fn drawing_dimensions(
         text: out,
         component_ids,
         dimension_ids,
+        assignment,
     })
 }
 
+const ARTWORK_GUIDANCE: &str = r#"Exact visible UI strings and source icons; readable typography.
+Source icons retain their silhouette as WHITE outlines, including Play triangles;
+never replace an icon with its semantic name or icon-font token. An active row/tab
+uses an extra WHITE outline with the same BLUE interior, never a white-filled tile.
+Do not embed or tint the reference screenshot, video frame, photo, or thumbnail.
+Depict media only as sparse WHITE contour lines on the same flat BLUE; no tonal
+shading, photographic texture, grayscale, dark/gray panels, gradients or transparency.
+
+Draw only visible coverage, including its actual cut boundary. Plain text is not a box.
+Source wrappers appear only as necessary measurement boundaries.
+Use the original reference for artwork appearance. AX coordinates describe only
+accessibility measurements; they do not reposition painted text or glyphs. Never
+expose occluded controls in artwork just because their AX records are listed.
+The source text payload can contain clipped content. CLIPPING TAKES PRIORITY:
+apply each COMPONENT CLIP only to its named component and listed proved edges.
+Do not move, shrink, reflow or complete that component beyond those edges.
+A clipped child does not define an overall artwork crop or clip its neighbors.
+No unlisted edge or unproved component receives a clipping instruction.
+
+Visible-text payloads are source character data: render the text exactly where
+the original shows text. If the reference renders that payload as an icon-font
+glyph, reproduce its glyph instead of printing its token. Keep inline clickable
+words inline and unboxed; Button is a semantic role, not evidence of a button border.
+An unnamed Text record still has a place in the source composition; preserve its
+reference appearance without inventing a label, dimension or interaction.
+Accessible names identify controls; they are NOT values. Draw sourced placeholders
+only for explicitly empty inputs, and caller draft only when explicitly reported.
+The name is NOT field content. Never replace visible public draft with its accessible
+name. Missing value/state is unknown, not empty/enabled. Accessibility rectangles
+are reported accessibility geometry, not painted borders: keep clickable text unboxed.
+CLIPPED LAYOUT: draw only the reported visible portion with a cut edge, keeping full
+layout size distinct. A distinct visibility frame alone does not establish clipping.
+
+"#;
+const STATE_GUIDANCE: &str = r#"Preserve enabled/disabled, reported per-object state/actions, and visible active/off
+state in EVERY repeated instance. Reported actions are not executed actions.
+Show known disabled glyphs/text with dashed WHITE strokes and a short “disabled”
+caption outside the control; do not invent a surrounding button box, and do not
+infer disabled state from absent fields. Apply caller-declared disabled state only
+to the named control or named group, never to its neighbors. Do not print an
+“enabled” label for unreported enablement. Preserve caller-reported
+blocked background without changing its layout or inventing missing controls.
+Print no “State: Normal” or other invented state. If a repeated measurement block
+quotes an EXACT CALLER STATE, preserve that named disabled/blocked caption outside
+the corresponding empty frame; it remains caller-declared, not an Enabled field.
+Each per-view PRINT STATE CAPTION is required visible text beside that view’s
+designated control. Preserve its declared active-versus-applied distinction. Active
+means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline
+with BLUE interior at the left; a solid-white knob is forbidden even if the
+reference uses one. Do not add controls/actions absent from the object plan.
+
+"#;
 const FRAME_GUIDANCE: &str = r#"DIMENSIONED RECTANGLE: BOTH dimensions on the SAME shape. Use its assigned width
 slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
 Height LEFT. Never omit the enclosing width because another shape has a width.
 Each line connects to that shape's actual opposite borders; the right side stays
 free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
 "#;
+const MEASURED_FRAME_GUIDANCE: &str = "Draw only the assigned empty frame sketches. DIMENSIONED RECTANGLE pairs width and height on the SAME identified frame, width in its assigned slot and height LEFT; RECTANGLE EXTENT shows only its named edges. Captions stay outside. Never enclose a parent bar or sibling icons in a child's frame. CSS px and approximation marks stay literal.\n";
 const AX_GUIDANCE: &str = r#"AX FRAME MEASUREMENT or AX FRAME EXTENT is a separate measurement sketch, not a picture of a control.
 Draw an EMPTY WHITE dashed rectangle. Its interior is only flat BLUE: NO text,
 icon, button, word, glyph or UI reconstruction inside it. Put “AX frame” and the
@@ -1756,6 +1968,7 @@ fn render_view(
     presentation: String,
     sheet_plan: String,
     design_analysis: String,
+    assignment: Assignment,
     limit: usize,
 ) -> Result<String> {
     let mut result = String::new();
@@ -1805,7 +2018,11 @@ fn render_view(
         if presentation.lines().any(|line| {
             line.starts_with("DIMENSIONED RECTANGLE ") || line.starts_with("RECTANGLE EXTENT ")
         }) {
-            FRAME_GUIDANCE
+            if assignment == Assignment::Measurements {
+                MEASURED_FRAME_GUIDANCE
+            } else {
+                FRAME_GUIDANCE
+            }
         } else {
             ""
         }
@@ -1846,7 +2063,27 @@ fn render_view(
         }
         .into(),
     );
+    vars.insert("printable_content", match assignment {
+        Assignment::Measurements => "only assigned dimension labels, frame/anchor names and explicitly supplied state outside EMPTY sketches; no UI contents or source inventory",
+        Assignment::SourceDetail => "only the included source fragment's visible labels/text/icons and its declared state; no dimensions or unlisted source content",
+        Assignment::Overview => "verbatim visible labels/draft, assigned dimensions/anchor captions and explicit state of the selected overview",
+    }.into());
     vars.insert("dimensions", presentation);
+    vars.insert("assignment", match assignment {
+        Assignment::Overview => "One selected-scope overview with only this sheet's assigned measurements. Other source regions in the reference are context, not permission to extend the scope.",
+        Assignment::SourceDetail => "SOURCE FRAGMENT ONLY. Render exactly the included records, preserving their relative source appearance and proved cuts. The parent screen/card and unlisted siblings are excluded even when visible in the reference. No measurements are assigned.",
+        Assignment::Measurements => "MEASUREMENT ONLY. Draw the assigned EMPTY frame/edge sketches, with all semantic captions OUTSIDE. No UI artwork, screenshots, controls, text or icons inside frames. The original reference is attribution context only. Unassigned source objects, parents and siblings are not drawings on this sheet.",
+    }.into());
+    vars.insert(
+        "artwork_guidance",
+        if assignment == Assignment::Measurements {
+            ""
+        } else {
+            ARTWORK_GUIDANCE
+        }
+        .into(),
+    );
+    vars.insert("state_guidance", if assignment == Assignment::Measurements { "Only recorded flags or exact caller statements may be captioned outside the named frame. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }.into());
     vars.insert("design_analysis", design_analysis);
     vars.insert("sheets", sheet_plan);
     let mut rest = include_str!("prompt-template.txt");
@@ -1900,6 +2137,7 @@ fn prompt(
                 presentation.text,
                 sheet_plan,
                 crate::design::text(&v.design_analysis, limit)?,
+                presentation.assignment,
                 limit,
             )?,
             limit,
