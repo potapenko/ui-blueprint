@@ -15,8 +15,8 @@ Their172 first outputs by configuration/sheet include3 duplicate fixture renderi
 this is not176 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
-CN-B8 adds5families/7states/11sheets. No additional primary batch is complete
-their final handoffs. A split sheet is not a new source case.
+CN-B8 adds5families/7states/11sheets. Further batches count only after their final
+generation/evaluation handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=7 images (38 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
