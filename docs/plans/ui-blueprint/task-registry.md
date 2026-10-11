@@ -390,6 +390,14 @@ file operations. The original advisor remains preserved; other goal work continu
 
 ### Reuse, acceptance and continuation
 
+All currently dispatched corpus batches have terminal handoffs. On2026-10-12 root
+asked the user where the additional hundreds of UI cases are located (project,
+chat or stand paths), to expand beyond the known catalog without duplicate forms.
+This is a source-inventory question, not a request to reapprove existing work;
+no additional project scope is inferred while its answer is pending. Goal stays
+incomplete at107proved cases. CN5B still awaits host approval and CW-S2 awaits
+operator evidence; neither is bypassed or silently treated as source-ready.
+
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
 they remain preserved chats. New recipes are not runtime proof or a promise of1000
