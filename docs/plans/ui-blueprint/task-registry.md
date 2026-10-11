@@ -31,6 +31,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
+| CA4 |same CA owner, restored|running read-only diagnostic|CN-B5 scrolled grid shows28+ while partial AX retains0–27; existing selection or minimal source-backed remedy, no quota increase |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
