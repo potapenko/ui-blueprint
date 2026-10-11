@@ -27,6 +27,7 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CA3 |same CA owner|rejected criterion; repair running|CR1-F1: binding released before actual reply; extend hold/validation to publication |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|waiting_evidence from CA3 repair|3c9da93; Native reject, export accept_with_residual; same reviewer retained |
+| CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|running; source owner reused|Reliable Web capture sequence +3qualified new source pairs; no generation count |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
@@ -60,6 +61,10 @@ only changed evidence. No actor/data disclosure was observed; contract gap is pr
 Next: accept CA3 repair only after CR1; CP3 improves real visual fidelity using a
 fixed diverse cohort. CD1 findings are saved in receipts/corpus-relations-findings.md;
 not a universal grid/causal design rule and not new generated corpus cases.
+CC1 reuses unarchived CW-B2 owner for the concrete stale/wrong-scale/wrong-target
+capture gap. Browser sessions from prior batches released; fresh ownership required.
+No source-app/plugin edits or account/gate bypass. Its source pairs feed next batches
+without waiting on exporter code; no image generation or inflated corpus count.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
