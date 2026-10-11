@@ -10,9 +10,10 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Seven completed primary batches produced65 evaluated images,0 fully accepted.
-Their61 first outputs by configuration include3 duplicate fixture renderings;
-this is not65 distinct successful cases. New CW-B4/CN-B5/CN-B6 counts remain pending
+Eight completed primary batches produced78 evaluated images,0 independently accepted.
+Their74 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not78 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+author-pass case, not independent acceptance. CN-B5/CN-B6 totals remain pending
 their final handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13 images (31 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
@@ -53,7 +54,10 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 | CN-B5 |same Native source owner, restored|running full corpus cycle|New learner/list/adaptive-grid cases; frozen b01aee4 delivered |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|running full corpus cycle|8 new CN4 mobile recipes; existing Simulator ownership, frozen b01aee4 delivered |
-| CW-B4 |same Web source owner|running full corpus cycle|New responsive/list/grid cases; qualified IAB path, frozen b01aee4 delivered, independent of CW-S2 |
+| CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
+| CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running independent visual critic|CW33/CW34/CW40 retained first images; reader clarity, composition and scope |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running independent content critic|Same neutral artifacts; prompt/data/anchors/relationships, no code audit |
 
 ### Current contracts and protected boundaries
 
@@ -103,14 +107,26 @@ All short temp roots below share:
 
 ### Active consumers and exact remaining dependencies
 
-**CW-B4:** nine qualified sources,13 required first sheet calls completed by owner;
-final per-case/sheet evaluation and hash handoff pending. Uses original b01aee4
-plus203c48a for two empty-dimension details, with unaffected prompt equivalence.
+**CW-B4:** terminal at `uib-cw-b4-14K1nY/handoff.json`, manifest SHA256
+`e4e8c613e3da7e4e1b32e4f110b6e35aff25b7fa8924a6c2055cdd809b8b0bf3`.
+Nine qualified sources/13first sheets/16design requests/0rerolls; CW34 is the only
+full author-pass case, CW40/G01 the other passing sheet. Other8cases fail. Numeric
+and ownership proof retained; initial CW39 invalid capture retained. Eleven outputs
+use b01aee4, two empty-dimension details use203c48a, unchanged prompt bytes proved.
+Draft/viewport restored, no tabs or physical input, no preferences/Chrome403 changes.
+Observed failures include forced right-column stars instead of source-varying x,
+artwork inside measurement frames, source details exceeding assigned membership,
+operand inventory noise and loss of trigger context. These feed CV2/CT2, not a
+reopening of accepted compiler privacy/bounds checks.
 CW36 mobile tense table unavailable; CW41 had no actual completion/clipping;
 CW42 changed scale rather than topology. Do not count these as completed cases.
-Next ready Web batch is the8 recipes CW43–50 in
+Next Web batch CW-B5 is dispatched with the8 recipes CW43–50 in
 [CW2 advice](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11),
 after this owner's terminal handoff/resources. No fresh source worker needed.
+Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
+initial observations precede author receipt. They do not create images or edit code.
+CV2 covers visible drawing quality; CT2 covers literal instructions and data.
+Their immediate consumer is one bounded next exporter repair, not more review loops.
 
 **CN-B5:**8 qualified partial source states/52 required sheets. Six G01 were
 over32000chars; CP5 now unblocks their first calls. Eleven empty-dimension details
