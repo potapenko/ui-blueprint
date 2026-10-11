@@ -76,6 +76,16 @@ Representative B5-01 uses actual observed.json/metadata.json, b01aee4, density30
 G01 counts35027/35116/34403/34821/34190/34327. Original inputs/packages frozen.
 Next same-owner CP5 will compact supported presentation without dropping source
 coverage, assigned measurements, public text/privacy or machine precision.
+CN-B6 interim handoff at system-temp playphraseme-cn-b6-h7jzxeiz/handoff.json:
+1Actor-picker family/2states/6sheets,4generated (3contentFAIL,1content pass,
+all4resolution mismatch),2D02 await F2. Runtime restored; tracked repos unchanged.
+Six Reels recipes were not attempted because the worker treated the packet's
+value-selection ban as a ban on primary navigation. Root clarified existing
+user-authorized reversible UI scope: ordinary Reels navigation and pausing a
+public auto-started reel are allowed; changing collection/settings/access is not.
+Same CN-B6 resumes those recipes with fresh ownership; old Actor images unchanged.
+Context premium gate remains a real gap, not bypassed. No primary-count promotion
+until completed case sets and final receipt; interim four sheets remain retained.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
