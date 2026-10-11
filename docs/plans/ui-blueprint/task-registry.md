@@ -85,6 +85,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B7 |same Native source owner|investigation accepted; archived|1new visible-grid case/7first sheets;38labels match,1scoped author pass/6FAIL; no live recapture |
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
+| CN-B10 |same Debug source owner, restored|dispatched full corpus cycle|Remaining safe wired C01/C03/C04/C05 catalog, up to12 meaningful untested states; no new wiring or duplicate configurations |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -390,11 +391,15 @@ file operations. The original advisor remains preserved; other goal work continu
 
 ### Reuse, acceptance and continuation
 
-All currently dispatched corpus batches have terminal handoffs. On2026-10-12 root
+All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
+safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
+It must return actual new compositions or a source-backed safe-coverage ceiling.
+On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
 This is a source-inventory question, not a request to reapprove existing work;
-no additional project scope is inferred while its answer is pending. Goal stays
+no additional project scope is inferred while its answer is pending. Existing
+authorized source discovery and CN-B10 continue independently. Goal stays
 incomplete at107proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 
