@@ -21,11 +21,12 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CN-B2 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|8images,0accepted; installed builds/Pro13 distinct from Pro11 baseline |
 | CN-B3 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|16images incl4rerolls,9unique source PNGs,0accepted; fixture-origin |
 | CP1 |01a12b6a-92a9-73c3-aec2-022e32651008|length repair accepted; image gate open|4d6e0bf +receipt01d2bfc,15sources under32000chars, machine files identical |
-| CP2 |same CP owner|candidate ready; review pending|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL |
+| CP2 |same CP owner|accepted_with_residual by CR1|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL; reviewed public text required |
+| CP3 |same CP owner|running|Fixed diverse six-case visual-fidelity cohort; preserve hard cases and first failures |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
-| CA3 |same CA owner|candidate ready; review pending|8ebbd2c +d767d6c; Genre14/Director10 bounds through actual CLI; NATIVE3/CLI17/registry38 |
-| CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|running|Evidence-supported relationships/counterexamples from saved corpus; no new images |
-| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|running independent stage1|8ebbd2c Native boundary +1650d0c text handling; author receipts withheld until initial observation |
+| CA3 |same CA owner|rejected criterion; repair running|CR1-F1: binding released before actual reply; extend hold/validation to publication |
+| CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
+| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|waiting_evidence from CA3 repair|3c9da93; Native reject, export accept_with_residual; same reviewer retained |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
@@ -52,8 +53,13 @@ preserved.98assertions,31synthetic+6live validations; independent review pending
 CP2 receipt corpus-export-fidelity-repair2.md: Offensive label and4slash formulas
 restored,73focused checks;2fresh images verify these details but full imageFAIL.
 These2repair outputs are separate from47corpus outputs and4CP1validation images.
-Next: CR1 initial independent observations, then author receipt reconciliation;
-continue diverse batches on accepted repaired artifacts. CD1 extracts real relations.
+CR1 completed independent observation before author receipts, then reconciled both;
+one P1 finding: retained chain/window die between collect and HostHelper io.reply.
+Same CA owner now repairs actual reply lifetime/boundary proof; same CR1 rechecks
+only changed evidence. No actor/data disclosure was observed; contract gap is proved.
+Next: accept CA3 repair only after CR1; CP3 improves real visual fidelity using a
+fixed diverse cohort. CD1 findings are saved in receipts/corpus-relations-findings.md;
+not a universal grid/causal design rule and not new generated corpus cases.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
