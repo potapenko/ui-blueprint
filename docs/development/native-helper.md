@@ -611,7 +611,8 @@ AX-only channels are fixed; no channels field, fixture identity_path/probe file 
 F02 bundle/window identifier restriction. Build HostHelper with NativeFocusedAX.swift
 alongside its existing sources. Old native_fixture configuration remains unchanged.
 
-Private configuration is exactly collection="focused-ax", process={pid,bundle_id,
+Private configuration is exactly collection="focused-ax" (whole window) or
+collection="focused-popover-ax" (explicit focused popup), process={pid,bundle_id,
 launch_time}, scope_id and acquisition_limits. Obtain incarnation from public
 NSRunningApplication for the explicitly selected PID, not a UI label/title. Target
 id is macos-pid-PID; generation is PID:launch_time using its full reported value.
@@ -628,6 +629,22 @@ No activation/focus/scroll/input/TCC request, title/rect/order matching or other
 fallback. Unresolved selection/currentness refuses, denied AX yields permission_required.
 Secure AX values remain redacted through the existing WindowAX owner. Each requested
 property has its real availability; no hidden layout/paint/hit geometry is fabricated.
+
+The opt-in popup mode resolves public AXFocusedUIElement → AXParent to the nearest
+AXPopover and proves the complete chain reaches the held focused window. It reads
+only owner/structural role before binding, never focuses a control or searches other
+windows. Each chain has at most16 nodes; every focus/parent read, including repeated
+revalidation, consumes the existing child_entries allowance separately from child
+metrics. Role strings retain copied-value accounting. The held process/window/focus,
+chain and popup object are rechecked before/after collection and after encoding.
+Missing/foreign/cyclic/no-popup ancestry returns target_unresolved; changed binding
+stale_target; exhausted bounds incomplete_scope. No whole-window fallback occurs.
+The existing160-node/depth9 collector then starts at that popup. The Surface remains
+ax-focused-R (parent window), with partial coverage and unknown pixel mapping.
+To opt in, change ONLY the trusted configuration's collection value; the public
+observe invocation, canonical request/session and all limits are otherwise unchanged:
+`uiblueprint observe --connection CONNECTION --request REQUEST --worker WORKER --max-input-bytes 2097152 --max-output-bytes 524288`.
+This is a fresh observation-local binding, not reuse of any earlier popup handle.
 
 Feed original observed response to existing inspect design and measure; select exact
 SourceKey from that response. Accessibility bounds are ax-screen/screen/pt/top_left;

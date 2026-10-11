@@ -1,7 +1,7 @@
 # Нативное наблюдение и capture
 
 - Node type: leaf; domain: `uib.native`.
-- Contract: `UIB.NATIVE@2`; stable clauses: `UIB.NATIVE.CONTENT`, `UIB.NATIVE.AX-READ`; supersedes @1 additively.
+- Contract: `UIB.NATIVE@3`; stable clauses: `UIB.NATIVE.CONTENT`, `UIB.NATIVE.AX-READ`, `UIB.NATIVE.AX-POPOVER`; supersedes @2 additively.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
 - Read when: Mac AX, capture, оконное matching, probe.
@@ -63,3 +63,33 @@ AX properties/bounds and known process owner, partial coverage and unknown trans
 AX accessibility_bounds remain ax-screen/screen/pt/top_left; hidden layout/hit/paint
 not inferred. Existing canonical0.1 shape/limits/privacy/deadlines/cleanup preserved.
 Optional own measured probe is independent; ordinary windows gain no fabricated layout.
+
+## UIB.NATIVE.AX-POPOVER — explicitly selected focused popup
+
+`CA3-NATIVE-POPOVER-001`, Evolve: root's explicit shipping packet under the user's
+CORPUS-1000 repair mandate, after accepted [CA2](../../plans/ui-blueprint/receipts/corpus-native-acquisition-gap.md), authorizes this narrow opt-in. Existing CONTENT/AX-READ and default collection remain unchanged.
+Same native_ax config keys/provider; collection="focused-popover-ax" explicitly
+selects the focused element's nearest AXPopover (including itself) inside the
+held AXFocusedWindow. No arbitrary locator, other-window search or implicit fallback.
+Resolve at most16 chain nodes through public AXFocusedUIElement/AXParent. Verify
+each object's process owner BEFORE reading its role; read only structural roles
+until ancestry reaches the exact retained window. Foreign owner, another window,
+missing/cyclic/no-popover ancestry refuses target_unresolved; no content is acquired.
+Each focus/parent selection read reserves one entry from the existing child_entries
+allowance, separately counted from returned child entries. Repeated validation is
+charged again; role copies use existing copied-value budgets. This only tightens
+acquisition, adds no private config fields and preserves all Native/D05 ceilings.
+Retain the complete chain/root for this Observe. Revalidate process incarnation,
+focused-window/focused-element objects and every parent-chain object/root before
+collection, after collection and after encoding before publication. Changes refuse
+stale_target; resource exhaustion uses incomplete_scope, deadline/permission keep
+existing meanings. No retry, focus change, actions, pixels or probe authority.
+Reuse the existing bounded collector from the selected popup; max_elements≤160,
+max_depth≤9 now bound that subtree. Parent window remains the single observation-
+scoped Surface; no new popup Surface/anchor ownership, stable refs or CG mapping.
+AX bounds remain ax-screen/screen/pt/top_left, capture transform unknown, coverage
+honestly partial. Default focused-ax retains its exact behavior and wire versions.
+Required proof: unchanged default, real Genre options/Director controls, bounded
+entry/text/output limits, missing/foreign/cyclic/changed focus/window/ancestry/root,
+no prebinding content reads and canonical validation. Independent review remains
+separate; CA2 is binding evidence, not shipped geometry or whole-platform acceptance.

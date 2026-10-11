@@ -27,7 +27,7 @@ enum NativeFocusedAX {
     }
     static func isConfiguration(_ data: Data) throws -> Bool {
         guard let object = try JSONSerialization.jsonObject(with:data) as? [String:Any] else { throw NativeProtocolError.configuration }
-        return object["collection"] as? String == "focused-ax"
+        return ["focused-ax", "focused-popover-ax"].contains(object["collection"] as? String ?? "")
     }
     static func command(_ input: NativeInbound) throws -> Command {
         guard let object = try JSONSerialization.jsonObject(with:input.configurationBytes) as? [String:Any],
@@ -36,7 +36,7 @@ enum NativeFocusedAX {
         else { throw NativeProtocolError.configuration }
         let config = try JSONDecoder().decode(Configuration.self,from:input.configurationBytes)
         try config.acquisition_limits.validate()
-        guard config.collection == "focused-ax", config.process.pid > 0,
+        guard ["focused-ax", "focused-popover-ax"].contains(config.collection), config.process.pid > 0,
               !config.process.bundle_id.isEmpty, config.process.launch_time.isFinite, config.process.launch_time > 0,
               !config.scope_id.isEmpty, input.control.channel == 0,
               input.document["schema_version"] as? String == "0.1.0",
@@ -64,6 +64,43 @@ enum NativeFocusedAX {
         try NativeDescriptorIO.check(deadline)
         return Command(configuration:config,request:request,control:input.control,
             replyCap:min(input.replyCap,output),deadline:deadline)
+    }
+    private struct PopupBinding {
+        let chain: [CFTypeRef]
+        let rootIndex: Int
+        var root: CFTypeRef { chain[rootIndex] }
+    }
+    @MainActor private static func popupBinding(application: CFTypeRef, window: CFTypeRef,
+        pid: Int32, admission: NativeAcquisition, access: NativeAXAccess,
+        owner: (CFTypeRef) -> Int32?) throws -> PopupBinding {
+        func link(_ element: CFTypeRef, _ attribute: String) throws -> CFTypeRef {
+            try admission.reserveSelectionEntry()
+            guard let result = try nativeAXAttribute(element, attribute, admission: admission, access: access),
+                  access.isElement(result) else { throw NativeAcquisitionError.invalidValue }
+            return result
+        }
+        var current = try link(application, kAXFocusedUIElementAttribute)
+        var chain: [CFTypeRef] = []
+        var rootIndex: Int?
+        for _ in 0..<16 {
+            // Until the complete ancestry is bound, acquire no labels, values,
+            // descendants or geometry; even role reads follow the owner check.
+            guard owner(current) == pid, !chain.contains(where: { CFEqual($0, current) })
+            else { throw NativeAcquisitionError.invalidValue }
+            chain.append(current)
+            if CFEqual(current, window) {
+                guard let rootIndex else { throw NativeAcquisitionError.invalidValue }
+                return PopupBinding(chain: chain, rootIndex: rootIndex)
+            }
+            guard let rawRole = try nativeAXAttribute(current, kAXRoleAttribute, admission: admission, access: access)
+            else { throw NativeAcquisitionError.invalidValue }
+            let role = try admission.text(rawRole)
+            guard role != kAXWindowRole else { throw NativeAcquisitionError.invalidValue }
+            if role == "AXPopover", rootIndex == nil { rootIndex = chain.count - 1 }
+            guard chain.count < 16 else { throw NativeAcquisitionError.limit }
+            current = try link(current, kAXParentAttribute)
+        }
+        throw NativeAcquisitionError.limit
     }
     @MainActor static func collect(_ command: Command, access: NativeAXAccess = .live,
         processCurrent: (Process) -> Bool = { p in
@@ -99,18 +136,54 @@ enum NativeFocusedAX {
             return window
         }
         let window: CFTypeRef
-        do { window = try focused() } catch { try frame.encode(unresolved); return frame }
+        do { window = try focused() }
+        catch NativeAcquisitionError.limit where config.collection == "focused-popover-ax" {
+            try frame.encode(incomplete); return frame
+        } catch { try frame.encode(unresolved); return frame }
         func same() throws {
             try admission.check()
-            guard processCurrent(config.process), CFEqual(window,try focused()) else { throw SelectionError.changed }
+            guard processCurrent(config.process) else { throw SelectionError.changed }
+            let current: CFTypeRef
+            do { current = try focused() }
+            catch NativeAcquisitionError.limit { throw NativeAcquisitionError.limit }
+            catch NativeAcquisitionError.expired { throw NativeAcquisitionError.expired }
+            catch {
+                if config.collection == "focused-popover-ax" { throw SelectionError.changed }
+                throw error
+            }
+            guard CFEqual(window, current) else { throw SelectionError.changed }
         }
         do {
             try same()
+            let popup = config.collection == "focused-popover-ax"
+                ? try popupBinding(application: app, window: window, pid: config.process.pid,
+                    admission: admission, access: access, owner: windowOwner) : nil
+            func sameSelection() throws {
+                try same()
+                guard let popup else { return }
+                let current: PopupBinding
+                do {
+                    current = try popupBinding(application: app, window: window, pid: config.process.pid,
+                        admission: admission, access: access, owner: windowOwner)
+                } catch NativeAcquisitionError.limit { throw NativeAcquisitionError.limit }
+                catch NativeAcquisitionError.expired { throw NativeAcquisitionError.expired }
+                catch { throw SelectionError.changed }
+                guard current.rootIndex == popup.rootIndex, current.chain.count == popup.chain.count,
+                      zip(current.chain, popup.chain).allSatisfy({ CFEqual($0, $1) })
+                else { throw SelectionError.changed }
+                try admission.reserveSelectionEntry()
+                guard let focus = try nativeAXAttribute(app, kAXFocusedUIElementAttribute,
+                    admission: admission, access: access), access.isElement(focus),
+                    windowOwner(focus) == config.process.pid, CFEqual(focus, popup.chain[0])
+                else { throw SelectionError.changed }
+                try same()
+            }
+            if popup != nil { try sameSelection() }
             let oid = rid + "-external_semantics"
-            let collected = try collectWindowAX(window,surface:surface,observationID:oid,
+            let collected = try collectWindowAX(popup?.root ?? window,surface:surface,observationID:oid,
                 maxNodes:limits["max_elements"] as! Int,maxDepth:limits["max_depth"] as! Int,
                 deadline:command.deadline,admission:admission,fields:fields,json:json,access:access)
-            try same()
+            if popup != nil { try sameSelection() } else { try same() }
             var snapshot = try Collector.snapshot(context:context,surface:surface,target:target,scope:scope,
                 fields:fields,observation:oid,channel:"external_semantics",started:started,
                 nodes:collected.nodes,captures:try json.array{[]},json:json)
@@ -122,7 +195,8 @@ enum NativeFocusedAX {
             try frame.encode(json.response(request:request,ticket:command.control.ticket,channel:"external_semantics") {
                 try json.object(["status","data"]) { ["status":try json.scalar("observed"),"data":snapshot] }
             })
-            do { try same() } catch { frame.reset(); try frame.encode(stale) }
+            if popup != nil { try sameSelection() }
+            else { do { try same() } catch { frame.reset(); try frame.encode(stale) } }
         } catch {
             frame.reset()
             // Deadline/shape limits do not establish identity loss. The parent

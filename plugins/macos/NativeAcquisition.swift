@@ -55,6 +55,7 @@ final class NativeAcquisition {
     private(set) var actualUTF8 = 0
     private(set) var requestedUTF8 = 0
     private(set) var childEntries = 0
+    private(set) var selectionEntries = 0
     private(set) var arrayCalls = 0
     private(set) var maximumStringUnits = 0
     private(set) var refusedValues = 0
@@ -71,6 +72,14 @@ final class NativeAcquisition {
     }
     func check() throws {
         guard ProcessInfo.processInfo.systemUptime < deadline else { throw NativeAcquisitionError.expired }
+    }
+    // Focus/parent selection attempts share the existing entry allowance without
+    // misreporting them as returned AXChildren. Reserve before the system read.
+    func reserveSelectionEntry() throws {
+        try check()
+        let next = try nativeAdd(selectionEntries, 1)
+        guard try nativeAdd(childEntries, next) <= limits.child_entries else { throw NativeAcquisitionError.limit }
+        selectionEntries = next
     }
     // Inspect before bridging/copying. NULL-buffer CFStringGetBytes ignores its
     // maxBufLen: the UTF-16 guard MUST precede that bounded-work sizing pass.
@@ -180,7 +189,7 @@ final class NativeAcquisition {
             windowsCounted = count
             guard count <= limits.ax_windows else { throw NativeAcquisitionError.limit }
         }
-        let allowed = windows ? count : min(count, capacity, limits.child_entries - childEntries)
+        let allowed = windows ? count : min(count, capacity, limits.child_entries - childEntries - selectionEntries)
         var offset = 0
         while offset < allowed {
             try check()
