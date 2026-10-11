@@ -6,6 +6,7 @@ struct WindowAXResult {
     let metrics: [String: Any]
 }
 private enum AXReadIssue { case platform(AXError), shape, budget }
+private enum AXChildListIssue: Error { case platform(AXError) }
 
 // Exact public AX call boundary. Tests provide bounded CF handles/pages; this
 // internal executable type has no runtime selector, configuration or fault mode.
@@ -55,16 +56,24 @@ private enum AXReadIssue { case platform(AXError), shape, budget }
 
 @MainActor func nativeAXElements(_ element: CFTypeRef, _ attribute: String,
     windows: Bool, capacity: Int, admission: NativeAcquisition, access: NativeAXAccess,
+    requireAvailable: Bool = false,
     visit: (CFTypeRef) throws -> Void) throws -> Int {
     try admission.check()
     guard access.isElement(element) else { throw NativeAcquisitionError.invalidValue }
     access.prepare(element)
     let (status, count) = access.count(element, attribute)
-    if status == .attributeUnsupported || status == .noValue { return 0 }
-    guard status == .success else { throw NativeAcquisitionError.invalidValue }
+    if !requireAvailable && (status == .attributeUnsupported || status == .noValue) { return 0 }
+    guard status == .success else {
+        if requireAvailable { throw AXChildListIssue.platform(status) }
+        throw NativeAcquisitionError.invalidValue
+    }
     let omitted = try admission.array(count: count, windows: windows, capacity: capacity, read: { offset, amount in
         let (status, page) = access.page(element, attribute, offset, amount)
-        guard status == .success, let page else { throw NativeAcquisitionError.invalidValue }
+        guard status == .success else {
+            if requireAvailable { throw AXChildListIssue.platform(status) }
+            throw NativeAcquisitionError.invalidValue
+        }
+        guard let page else { throw NativeAcquisitionError.invalidValue }
         return page
     }, visit: { raw in
         guard access.isElement(raw) else { throw NativeAcquisitionError.invalidValue }
@@ -149,7 +158,8 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
 
 @MainActor func collectWindowAX(_ root: CFTypeRef, surface: [String: Any], observationID: String,
     maxNodes: Int, maxDepth: Int, deadline: Double, admission: NativeAcquisition,
-    fields: [String], json: NativeJSON, access: NativeAXAccess = .live) throws -> WindowAXResult {
+    fields: [String], json: NativeJSON, access: NativeAXAccess = .live,
+    visibleCollections: Bool = false, visibleOwner: ((CFTypeRef) -> Bool)? = nil) throws -> WindowAXResult {
     let selected = Set(fields)
     guard !fields.isEmpty, selected.count == fields.count,
           selected.isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "checked", "actions", "accessibility_bounds"]),
@@ -193,6 +203,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
     while nodes.count < handles.count && nodes.count < maxNodes && ProcessInfo.processInfo.systemUptime < deadline {
         try admission.check()
         let index = nodes.count, el = handles[nodes.count]
+        if visibleCollections, visibleOwner?(el) != true { throw NativeAcquisitionError.invalidValue }
         access.prepare(el)
         let identity = try batch(el, [kAXRoleAttribute, kAXSubroleAttribute, kAXIdentifierAttribute])
         let role = identity[kAXRoleAttribute] as? String
@@ -299,9 +310,20 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         })
         var childIndices: [Int] = []
         let capacity = depths[index] + 1 < maxDepth ? max(0, maxNodes - handles.count) : 0
-        do {
-            omitted = try nativeAdd(omitted, nativeAXElements(el, kAXChildrenAttribute, windows: false,
-                capacity: capacity, admission: admission, access: access) { child in
+        let opaqueCollection = role == "AXOpaqueProviderGroup"
+            && ["AXOpaqueProviderList", "AXOpaqueProviderGrid"].contains(subrole ?? "")
+        let visibleList = visibleCollections && (opaqueCollection
+            || ["AXList", "AXTable", "AXOutline", "AXGrid"].contains(role ?? ""))
+        let unclassified = visibleCollections && (role == nil || (role == "AXOpaqueProviderGroup" && !opaqueCollection))
+        var childSource: [String: Any]?
+        if unclassified {
+            unknownChildLists += 1
+            childSource = try json.unavailable("collection_classification_unavailable")
+        } else { do {
+            omitted = try nativeAdd(omitted, nativeAXElements(el,
+                visibleList ? kAXVisibleChildrenAttribute : kAXChildrenAttribute, windows: false,
+                capacity: capacity, admission: admission, access: access, requireAvailable: visibleList) { child in
+                    if visibleCollections, visibleOwner?(child) != true { throw NativeAcquisitionError.invalidValue }
                     if let existing = handles.firstIndex(where: { CFEqual($0, child) }) {
                         duplicateReferences += 1
                         if !childIndices.contains(existing) { childIndices.append(existing) }
@@ -309,8 +331,30 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
                         childIndices.append(handles.count); handles.append(child); depths.append(depths[index] + 1)
                     }
                 })
+            if visibleList { childSource = try json.known("text", "AXVisibleChildren") }
         } catch NativeAcquisitionError.expired { throw NativeAcquisitionError.expired }
-        catch { unknownChildLists += 1 }
+        catch {
+            unknownChildLists += 1
+            if visibleList {
+                let reason: String
+                if case AXChildListIssue.platform(let code) = error { reason = "ax_error_\(code.rawValue)" }
+                else if let issue = error as? NativeAcquisitionError, issue == .limit { reason = "native_acquisition_limit" }
+                else { reason = "ax_visible_children_invalid_value" }
+                childSource = try json.unavailable(reason)
+            }
+        } }
+        if let childSource {
+            let selection = try json.object(["namespace", "name", "property"]) {
+                ["namespace": try json.scalar("macos.ax"), "name": try json.scalar("AXChildrenSource"),
+                 "property": try json.object(["selection", "field", "sensitivity", "evidence", "state"]) {
+                    ["selection": try json.scalar("requested"), "field": try json.scalar("description"),
+                     "sensitivity": try json.scalar("public"),
+                     "evidence": try json.evidence(observationID, "macos.ax", "bounded_public_ax_visible_children"),
+                     "state": childSource]
+                 }]
+            }
+            nodes[index]["extensions"] = try json.array { try json.borrowed(extensions) + [selection] }
+        }
         edges.append(childIndices)
     }
     var omittedReferences = 0

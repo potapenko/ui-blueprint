@@ -612,7 +612,8 @@ F02 bundle/window identifier restriction. Build HostHelper with NativeFocusedAX.
 alongside its existing sources. Old native_fixture configuration remains unchanged.
 
 Private configuration is exactly collection="focused-ax" (whole window) or
-collection="focused-popover-ax" (explicit focused popup), process={pid,bundle_id,
+collection="focused-popover-ax" (explicit focused popup), or collection="focused-visible-ax"
+(source-visible collection children), process={pid,bundle_id,
 launch_time}, scope_id and acquisition_limits. Obtain incarnation from public
 NSRunningApplication for the explicitly selected PID, not a UI label/title. Target
 id is macos-pid-PID; generation is PID:launch_time using its full reported value.
@@ -645,6 +646,21 @@ To opt in, change ONLY the trusted configuration's collection value; the public
 observe invocation, canonical request/session and all limits are otherwise unchanged:
 `uiblueprint observe --connection CONNECTION --request REQUEST --worker WORKER --max-input-bytes 2097152 --max-output-bytes 524288`.
 This is a fresh observation-local binding, not reuse of any earlier popup handle.
+
+The explicit focused-visible-ax mode retains the same held focused window and
+publication lifetime/validator. Standard AXList/AXTable/AXOutline/AXGrid and reported
+AXOpaqueProviderGroup with AXOpaqueProviderList/AXOpaqueProviderGrid subroles read
+AXVisibleChildren through the existing bounded count/page/copy path. Structural
+ancestors and other ordinary nodes retain AXChildren. It is not a general paint or
+occlusion detector and never intersects frames to guess visibility. Unknown role or
+unclassified opaque group gets unknown child selection; no guessed traversal.
+For applicable collections, unsupported/noValue/count/page/type failures remain
+unknown, with no AXChildren fallback. Successful count0 is source-empty only.
+The macos.ax AXChildrenSource extension records known Text AXVisibleChildren or
+unknown with a bounded reason and bounded_public_ax_visible_children evidence.
+Partial coverage/node/depth/output/deadline limits remain; hidden children are not
+reported deleted. Node owner checks precede property reads in this mode. Existing
+whole-window/popup behavior and all config keys/CLI flags stay unchanged.
 
 Feed original observed response to existing inspect design and measure; select exact
 SourceKey from that response. Accessibility bounds are ax-screen/screen/pt/top_left;

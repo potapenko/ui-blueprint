@@ -27,7 +27,7 @@ enum NativeFocusedAX {
     }
     static func isConfiguration(_ data: Data) throws -> Bool {
         guard let object = try JSONSerialization.jsonObject(with:data) as? [String:Any] else { throw NativeProtocolError.configuration }
-        return ["focused-ax", "focused-popover-ax"].contains(object["collection"] as? String ?? "")
+        return ["focused-ax", "focused-popover-ax", "focused-visible-ax"].contains(object["collection"] as? String ?? "")
     }
     static func command(_ input: NativeInbound) throws -> Command {
         guard let object = try JSONSerialization.jsonObject(with:input.configurationBytes) as? [String:Any],
@@ -36,7 +36,7 @@ enum NativeFocusedAX {
         else { throw NativeProtocolError.configuration }
         let config = try JSONDecoder().decode(Configuration.self,from:input.configurationBytes)
         try config.acquisition_limits.validate()
-        guard ["focused-ax", "focused-popover-ax"].contains(config.collection), config.process.pid > 0,
+        guard ["focused-ax", "focused-popover-ax", "focused-visible-ax"].contains(config.collection), config.process.pid > 0,
               !config.process.bundle_id.isEmpty, config.process.launch_time.isFinite, config.process.launch_time > 0,
               !config.scope_id.isEmpty, input.control.channel == 0,
               input.document["schema_version"] as? String == "0.1.0",
@@ -197,7 +197,9 @@ enum NativeFocusedAX {
             let oid = rid + "-external_semantics"
             let collected = try collectWindowAX(popup?.root ?? window,surface:surface,observationID:oid,
                 maxNodes:limits["max_elements"] as! Int,maxDepth:limits["max_depth"] as! Int,
-                deadline:command.deadline,admission:admission,fields:fields,json:json,access:access)
+                deadline:command.deadline,admission:admission,fields:fields,json:json,access:access,
+                visibleCollections:config.collection == "focused-visible-ax",
+                visibleOwner:{ windowOwner($0) == config.process.pid })
             if popup != nil { try sameSelection() } else { try same() }
             var snapshot = try Collector.snapshot(context:context,surface:surface,target:target,scope:scope,
                 fields:fields,observation:oid,channel:"external_semantics",started:started,

@@ -1,6 +1,6 @@
 # CLI и bounded output
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@17`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @16 with explicit focused-popup selection; existing raw JSON/commands preserved.
+- Contract: `UIB.CLI@18`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @17 with explicit source-visible child lists; existing raw JSON/commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
 - Read when: CLI commands, compact/JSON и публикация.
@@ -16,7 +16,6 @@
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; INSPECT fixes its local representation; CLI-ACTIONS selects concrete syntax/authority/output/exits for its first single-step scope over preliminary CONTENT examples.
 <a id="uib-cli-content"></a>
 ## Консольный интерфейс
-
 Одна команда uiblueprint адресует собственный движок и выбранный плагин. Таблица сохраняет предварительный синтаксис CONTENT; конкретные интерфейсы inspect/observe/diff и [single-step actions](cli-actions.md) определены зарегистрированными контрактами ниже.
 
 | Команда | Результат |
@@ -90,6 +89,7 @@ Connection is a trusted operator capability (never UI/response-derived), strict 
 host_limits contains exactly existing HostLimits fields: workers, worker_bytes, publication_reserve, bootstrap_bytes, parent_bytes, input_bytes, ingress_bytes, output_bytes, request_output_bytes, completion_groups, control_bytes, cleanup_ms, retained_domain_bytes, retained_per_worker, main_stack_bytes, watchdog_stack_bytes. Validate all at/below D05; no hidden defaults.
 provider is tagged by backend: native_fixture {helper_executable:absolute path, configuration:opaque UTF-8 string≤4032 bytes, channels:nonzero mask≤7}; web {setup:existing WebSetup, selection:existing WebSelection}. All records reject duplicate/unknown fields; no private Rust layout serialized. Native fixture is trusted own-fixture binding; native_ax is explicit ordinary-process AXFocusedWindow selection under [NATIVE@2 AX-READ](native.md), never title/rectangle/CG matching; Web requires established exact CDP target/document.
 native_ax uses {backend:"native_ax",helper_executable:absolute path,configuration:opaque UTF-8 string≤4032}; channels fixed AX-only. Existing observe connection1.0.0 additive provider, no fixture file/capture/probe/mutation authority. Request Surface is observation-scoped per NATIVE.AX-READ; no stable refs across Observe calls.
+`CA5-NATIVE-VISIBLE-001`: same native_ax config may explicitly set collection="focused-visible-ax" under [NATIVE@4 AX-VISIBLE](native.md#uibnativeax-visible--explicit-source-visible-collection-children); no new CLI flag/provider key, quota or whole-view visibility guarantee.
 `CA3-NATIVE-POPOVER-001`: the same native_ax configuration may explicitly set collection="focused-popover-ax" under [NATIVE@3 AX-POPOVER](native.md#uibnativeax-popover--explicitly-selected-focused-popup). Existing CLI arguments, provider keys, default focused-ax and canonical versions stay unchanged; no fallback or new action authority.
 CLI features macos and web opt into existing host (web enables host/web); defaults empty. Supported live host is macOS; disabled/unsupported feature/platform refuses5. Core commands never spawn. Worker/helper placement is explicit until distribution selection; no installation or external dependency update.
 Request is canonical core0.1 Request Document, operation Observe only. Session/target/plugin/surfaces/scope/channel authority must agree before dispatch. Only request.clock_domain is rebound after actual Attached; original fields/limits/freshness/identity remain. Parent monotonic request/attach deadlines and existing bounded cleanup apply.
