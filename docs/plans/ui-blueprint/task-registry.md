@@ -27,7 +27,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|running|Structural source/artwork/AX separation and C10 per-sheet delivery; same difficult cases |
-| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|initial observation complete; repair pending|cfe1b5e top-only clipping repro produces unsupported bottom/left/global-crop instructions; CP4 owns correction |
+| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|reviewing saved repair|b01aee4 component-scoped edges and detail-header delta; original cfe1b5e F1 reproduction retained |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
@@ -37,21 +37,25 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
 | CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
-| CN-B5 |same Native source owner, restored|running source collection|Up to12 new learner/list/adaptive-grid cases; CP4 frozen export is next dependency |
-| CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|dispatched source collection|8 new CN4 mobile recipes; existing Simulator ownership, independent input only; corrected CP4 export pending |
-| CW-B4 |same Web source owner|dispatched source collection|Up to12 new responsive/list/grid cases; existing qualified IAB path, independent of CW-S2 |
+| CN-B5 |same Native source owner, restored|running full corpus cycle|New learner/list/adaptive-grid cases; frozen b01aee4 delivered |
+| CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|running full corpus cycle|8 new CN4 mobile recipes; existing Simulator ownership, frozen b01aee4 delivered |
+| CW-B4 |same Web source owner|running full corpus cycle|New responsive/list/grid cases; qualified IAB path, frozen b01aee4 delivered, independent of CW-S2 |
 
 Current source basis registry39/NATIVE3/CLI17/DESIGN-ANALYSIS1; CP4 adds
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 at cfe1b5e, visual gate still open.
-CN-B5/CW-B4 collect independent new sources now; generation awaits the frozen CP4
-handoff and selected changed-contract reading. No duplicate builds or old-source
+CN-B5/CW-B4/CN-B6 received frozen corrected CP4 binary b01aee4 for their full cycles;
+selected changed-contract reading remains required. No duplicate builds or old-source
 rerolls. New sheets count separately from new cases. CW-S2 alone awaits operator
 Chrome status; its403 cause remains unknown, no permission bypass authorized.
 CR2 independently passed82 focused checks and actual492139-byte CLI boundary;
 one P2 in compile.rs798–810 remains mandatory: partial_visibility does not prove
 bottom/left clipping or whole-artwork crop. Same CP4 owner receives bounded repair;
 current frozen images remain cfe1b5e evidence, unaffected checks/images are reused.
-Final CR2 reconciliation waits author receipt and saved corrected candidate.
+Saved corrected candidate b01aee4 is now under same-reviewer delta verification;
+full author receipt/one affected CW07 image remain pending. Artifact:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP4-1k7n3t7t/uiblueprint-b01aee4`,
+SHA256 `ed06e371057d560cb29e8706b530c964e05ae26b085ecc80f5466fb45a5ce85b`.
+Candidate testing does not claim final compatibility or visual acceptance.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
