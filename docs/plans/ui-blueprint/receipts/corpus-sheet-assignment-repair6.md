@@ -1,11 +1,6 @@
 # CP6 — one source-bound rendering assignment per sheet
 
-2026-10-11. Finite root-authorized shipping_product packet after CP5. Single worker,
-current master, no nested agents/new chats/goals, captures, flags or format changes.
-Diagnosis: [CV2/CT2](corpus-sheet-critics2.md), read before source inspection. Reused
-current EXPORT2/full Drawing/HBP R2/R3, PACKAGE3/SHEET-PROMPTS1/CLI-EXPORT3,
-DESIGN-ANALYSIS1 and source/geometry/privacy closure. Restore, not new product intent.
-Printed geometry-qualifier placement remains a recommendation, not a retroactive
+2026-10-11. Finite root-authorized shipping_product packet after CP5. Single worker, current master, no nested agents/new chats/goals, captures, flags or format changes. Diagnosis: [CV2/CT2](corpus-sheet-critics2.md), read before source inspection. Reused current EXPORT2/full Drawing/HBP R2/R3, PACKAGE3/SHEET-PROMPTS1/CLI-EXPORT3, DESIGN-ANALYSIS1 and source/geometry/privacy closure. Restore, not new product intent. Printed geometry-qualifier placement remains a recommendation, not a retroactive
 reason to reject the preserved CW34 positive control.
 
 ## Bounded implementation
@@ -65,8 +60,8 @@ author findings were published, for the two retained critics' independent inspec
 All seven generated originals copied to system temp without moving/deleting originals.
 `author-findings.json/.md` are separate, for reconciliation after initial critique.
 
-Scoped author findings: CW33 anchors now distinguish their owners; D01 empty frames
-retain15 assigned CSS px labels; D02 stays within lexical/collocation tail. CW34
+Historical coarse author findings: CW33 anchors distinguish owners; D01 empty frames
+retain15 assigned CSS px labels. D02's initial coarse pass is corrected below. CW34
 retains bounded scope, Next≈85×44 and exact-derived≈1.933. CW40/D02 uses an empty
 input-only≈260×40 frame, separate from parent/siblings, and preserves the other
 assigned Unlock frame≈150×32. Source flags remain outside frames. These are author
@@ -82,3 +77,24 @@ records six exact CP5 invocations; inputs.json/fixed-experiment.json retain the
 pre-generation scope. Selected packages/binary remain for root/two critics. Image-free
 build and unused pre-freeze duplicates removed. All images and containing directories
 retained; no package or image was promoted to checked/accepted by this author.
+
+## CP6-F1 — independent correction and one bounded attempt
+
+Both critics reject CW33/D02 exact membership: it adds unassigned N149 count11406.
+Its literal prompt contains neither11406 nor “Lexical family”; no compiler text leak
+is claimed. Raw d9f3fff author findings and all seven images remain unchanged.
+`734cedf44d30dc17df8afdcc36728593a7b5103a` fixes only draft-rule applicability:
+source-fragment membership must contain an input and all potential view inputs for
+generic draft rendering. Otherwise full caller state is explicitly non-rendering
+provenance; no English-prose binding inference. Partial multi-input ownership has
+no structured binding, so no field is guessed. Included complete input membership
+retains the exact authorized draft rule; measurements remain unchanged.
+Three focused checks pass: included/excluded/ambiguous inputs, authorized draft/raw
+value protection, and existing sheet/aggregate-bound invariants; Clippy/rustfmt pass.
+All machine files/brief/state/ownership unchanged. Only CW40/D01 and CW33/D02 prompt
+text changes, to22491/11170chars; CW33/D02 is unrendered, other six old images retain
+d9f3fff attribution. One new literal CW40/D01 call at1536×1024 still reconstructs
+unassigned suggestions/input/actions: FAIL, no full-set acceptance or causal claim.
+Neutral index, exact argv/hashes/pins and the image are in system temp
+`uib-CP6-F1-9qqz3gqd/neutral-index.json`; author-result.json is separate.
+Frozen binary `uiblueprint-734cedf`, SHA256 `86704783cba6c042ab3336806c3b6f5d0dab57ef15e1aa85bbe3dfbe73f0c96e`.
