@@ -17,7 +17,7 @@ author-pass case, not independent acceptance. CN-B6 adds7families/9states/23shee
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
 generation/evaluation handoffs. A split sheet is not a new source case.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8 images (39 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -45,7 +45,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
-| CP7 |same exporter owner|dispatched shipping repair|CW49 distinct full-layout/visible sketches and anchors, one fresh image; source facts unchanged |
+| CP7 |same exporter owner|source814af45/receipt507d190 saved; critics checking one image|Distinct full/visible assignment, machine data unchanged; no full raster acceptance yet |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -66,8 +66,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP6-F1 reconciled; retained for CP7|Literal conflict resolved, one image still fails membership; no new compiler defect inferred |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP6-F1 reconciled; retained for CP7|Applicability pass, raster membership fail; repeated image error does not justify more generic prohibitions |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running single CP7 image review|Neutral observation then author reconciliation; full/visible frame ownership |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running single CP7 prompt/data review|M0001–M0004 assignment and display policy; no code/test/image expansion |
 
 ### Current contracts and protected boundaries
 
@@ -153,6 +153,15 @@ explicit empty full-layout sketch for M0001/2, visible fragment/cut separately;
 never replace one value with the other or create viewport geometry. Exact replay
 `uib-cw-doc1-regqr6_f/replay.json` proves d9f3fff leaves this block unchanged;
 all14original CW49 files unchanged. No new capture/image or source edits.
+CP7 now saved814af45/507d190: existing clipped-edge evidence gates a separate
+empty full-layout width/height sketch; pairs require same full Space/frame kind.
+CW49 machine files/brief and all M0001–M0004 facts unchanged; CW34 complete package
+byte-identical. Five focused checks and Clippy pass. One literal first image at
+1536×1024 separates frames but author still marks raster FAIL for units, extra
+measurements and display precision. Neutral index in `uib-CP7-rxt9mdyg`, binary
+SHA256 `37f15bfd012cdcd91722a0fd11830d92d51ba8db5154677358f04eb437623101`.
+Both same critics inspect that one artifact before author records, then reconcile;
+no new image attempt or full-set review is assigned.
 Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
 initial observations precede author receipt. They do not create images or edit code.
 CV2 covers visible drawing quality; CT2 covers literal instructions and data.
