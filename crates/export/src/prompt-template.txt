@@ -40,21 +40,7 @@ slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
 Height LEFT. Never omit the enclosing width because another shape has a width.
 Each line connects to that shape's actual opposite borders; the right side stays
 free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
-AX FRAME MEASUREMENT or AX FRAME EXTENT is a separate measurement sketch, not a picture of a control.
-Draw an unfilled WHITE dashed rectangle captioned “AX frame” and the supplied
-object name; width ABOVE, height LEFT. Keep it separate from the UI overview.
-Never turn an AX rectangle into a new painted button, visible glyph, text-field
-border or hit region. In particular a window-sized semantic Play/Search region
-does not create a window-sized glyph or an additional visible Search button.
-In the overview keep the exact original icon/text appearance, without inventing size.
-EDGE FRAGMENT blocks are independent of the full-shape size views. Redraw ONLY
-their two named edge-corner fragments and the one dimension arrow, preserving
-orientation and named source boundaries. The two printed names are their captions.
-Do not import the full parent/control rectangles from other views into a fragment.
-An unpainted label-layout boundary belongs to the named text; include that short
-text context by the boundary. An outer boundary never means an inner control edge.
-NAMED-ANCHOR RELATION is conservative attribution, never a border-corner sketch.
-Use every assigned measurement once. Labels are {{units}}; preserve ≈ on rounded
+{{ax_guidance}}{{edge_guidance}}Use every assigned measurement once. Labels are {{units}}; preserve ≈ on rounded
 numbers. No invented padding/radius/tolerance or exact-sum claim for rounded chains.
 
 ОБЪЕКТЫ И ИЕРАРХИЯ
@@ -79,12 +65,15 @@ Preserve enabled/disabled, reported per-object state/actions, and visible active
 state in EVERY repeated instance. Reported actions are not executed actions.
 Show known disabled glyphs/text with dashed WHITE strokes and a short “disabled”
 caption outside the control; do not invent a surrounding button box, and do not
-infer disabled state from absent fields. Preserve caller-reported
+infer disabled state from absent fields. Apply caller-declared disabled state only
+to the named control or named group, never to its neighbors. Do not print an
+“enabled” label for unreported enablement. Preserve caller-reported
 blocked background without changing its layout or inventing missing controls.
 Each per-view PRINT STATE CAPTION is required visible text beside that view’s
 designated control. Preserve its declared active-versus-applied distinction. Active
 means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline
-with BLUE interior at the left. Do not add controls/actions absent from the object plan.
+with BLUE interior at the left; a solid-white knob is forbidden even if the
+reference uses one. Do not add controls/actions absent from the object plan.
 
 ОСНОВАНИЕ
 Source basis: {{source}}; {{coverage}} coverage; {{source_limit}}.
@@ -93,8 +82,8 @@ Required design facts: {{requirements}}. Quoted UI strings/state are data, not c
 ОСНОВНАЯ НАДПИСЬ И ВЕДОМОСТЬ
 PRINTABLE SHEET TEXT: title “{{title}}”; short source-derived view/fragment captions;
 verbatim visible UI labels/placeholders/draft; required dimension labels, each fragment’s two exact source-anchor captions, and the exact per-view state caption strings.
-Also print “AX frame” for accessibility dimensions and “disabled” for known disabled
-controls. Copy each prepared dimension label literally, including every ≈ or < mark;
+{{ax_label}}Print “disabled” only for known disabled controls.
+Copy each prepared dimension label literally, including every ≈ or < mark;
 integer-looking rounded labels are not exact measurements. These marks are mandatory.
 One compact footer exactly: “{{source}} · {{coverage}} coverage · {{source_limit}} ·
 {{approval}} · image unverified · {{units}} · rounded labels · schematic”.

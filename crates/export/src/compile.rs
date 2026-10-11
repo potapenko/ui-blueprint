@@ -1429,16 +1429,18 @@ fn drawing_dimensions(
         }
         append(&mut out, &local_measures(v, &owned, limit)?, limit)?;
     }
-    append(
-        &mut out,
-        "LOCAL EDGE DETAILS — each block below is ONLY two source-edge fragments, never whole controls/parents.\n",
-        limit,
-    )?;
     let scalar_fragments = lines
         .iter()
         .filter(|(_, _, a, b)| a != b)
         .map(|(_, d, a, b)| (*d, *a, *b))
         .collect::<Vec<_>>();
+    if !scalar_fragments.is_empty() || !insets.is_empty() {
+        append(
+            &mut out,
+            "LOCAL EDGE DETAILS — each block below is ONLY two source-edge fragments, never whole controls/parents.\n",
+            limit,
+        )?;
+    }
     append(
         &mut out,
         &local_measures(v, &scalar_fragments, limit)?,
@@ -1454,6 +1456,23 @@ fn drawing_dimensions(
     }
     Ok(out)
 }
+
+const AX_GUIDANCE: &str = r#"AX FRAME MEASUREMENT or AX FRAME EXTENT is a separate measurement sketch, not a picture of a control.
+Draw an unfilled WHITE dashed rectangle captioned “AX frame” and the supplied
+object name; width ABOVE, height LEFT. Keep it separate from the UI overview.
+Never turn an AX rectangle into a new painted button, visible glyph, text-field
+border or hit region. In particular a window-sized semantic Play/Search region
+does not create a window-sized glyph or an additional visible Search button.
+In the overview keep the exact original icon/text appearance, without inventing size.
+"#;
+const EDGE_GUIDANCE: &str = r#"EDGE FRAGMENT blocks are independent of the full-shape size views. Redraw ONLY
+their two named edge-corner fragments and the one dimension arrow, preserving
+orientation and named source boundaries. The two printed names are their captions.
+Do not import the full parent/control rectangles from other views into a fragment.
+An unpainted label-layout boundary belongs to the named text; include that short
+text context by the boundary. An outer boundary never means an inner control edge.
+NAMED-ANCHOR RELATION is conservative attribution, never a border-corner sketch.
+"#;
 
 fn prompt(
     b: &DrawingBrief,
@@ -1511,7 +1530,43 @@ fn prompt(
                 .join(", "),
         );
         let partial = partial_visibility(&b.views[index].source);
-        vars.insert("dimensions", drawing_dimensions(v, dims, &partial, limit)?);
+        let presentation = drawing_dimensions(v, dims, &partial, limit)?;
+        vars.insert(
+            "ax_label",
+            if presentation
+                .lines()
+                .any(|line| line.starts_with("AX FRAME "))
+            {
+                "Print “AX frame” for the prepared accessibility measurements.\n"
+            } else {
+                ""
+            }
+            .into(),
+        );
+        vars.insert(
+            "ax_guidance",
+            if presentation
+                .lines()
+                .any(|line| line.starts_with("AX FRAME "))
+            {
+                AX_GUIDANCE
+            } else {
+                ""
+            }
+            .into(),
+        );
+        vars.insert(
+            "edge_guidance",
+            if presentation.contains("EDGE FRAGMENT (")
+                || presentation.contains("NAMED-ANCHOR RELATION:")
+            {
+                EDGE_GUIDANCE
+            } else {
+                ""
+            }
+            .into(),
+        );
+        vars.insert("dimensions", presentation);
         vars.insert(
             "design_analysis",
             crate::design::text(&v.design_analysis, limit)?,

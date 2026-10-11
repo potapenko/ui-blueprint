@@ -1431,6 +1431,29 @@ fn unnamed_source_text_is_kept_without_fabricated_content_or_painted_bounds() {
 }
 
 #[test]
+fn unused_measurement_recipes_are_not_instructions_to_invent_details() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        node.children.clear();
+    }
+    let p = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(!prompt.contains("AX FRAME MEASUREMENT or AX FRAME EXTENT"));
+    assert!(!prompt.contains("Print “AX frame”"));
+    assert!(!prompt.contains("LOCAL EDGE DETAILS"));
+    assert!(!prompt.contains("EDGE FRAGMENT blocks are independent"));
+    assert!(prompt.contains("DIMENSIONED RECTANGLE"));
+    let mut proposed_brief = fixture("proposed");
+    proposed(&mut proposed_brief).components[0].label = "AX FRAME MEASUREMENT".into();
+    let p = compile(&proposed_brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(!prompt.contains("AX FRAME MEASUREMENT or AX FRAME EXTENT"));
+}
+
+#[test]
 fn state_captions_quote_declared_meaning_without_selected_inference() {
     let mut brief = fixture("observed");
     brief.views[0].state =
