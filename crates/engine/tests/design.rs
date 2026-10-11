@@ -86,6 +86,61 @@ fn duplicated_measurements_cannot_manufacture_support() {
     q[1] = q[0].clone();
     assert!(pattern(&s, &q, &e).is_err());
 }
+
+#[test]
+fn clear_gaps_identify_the_five_pixel_exception() {
+    let (mut s, q, e) = inputs(&[10.; 5]);
+    for (node, x) in s.nodes.iter_mut().zip([0., 14., 28., 42., 57.]) {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut node.properties[0]
+        else {
+            panic!()
+        };
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        r.x = x;
+    }
+    let gaps = q
+        .windows(2)
+        .map(|pair| {
+            let mut query = pair[0].clone();
+            query.operation = GeometryRelation::Gap;
+            query.targets.push(pair[1].targets[0].clone());
+            query.anchors[0].fraction = 1.;
+            query.anchors.push(pair[1].anchors[0].clone());
+            query.anchors[1].fraction = 0.;
+            query
+        })
+        .collect::<Vec<_>>();
+    let result = pattern(&s, &gaps, &e).unwrap();
+    assert_eq!(result.candidate, Some(4.));
+    assert_eq!(result.exceptions, vec![(3, 1.)]);
+}
+
+#[test]
+fn mixed_observations_unknown_spaces_and_overflow_do_not_create_advice() {
+    let (mut s, q, mut e) = inputs(&[4., 4., 5.]);
+    let mut observation = s.observations[0].clone();
+    observation.id = Id("other-observation".into());
+    s.observations.push(observation);
+    let Property::Requested { evidence, .. } = &mut s.nodes[2].properties[0] else {
+        panic!()
+    };
+    evidence.observation_id = Id("other-observation".into());
+    assert_eq!(pattern(&s, &q, &e).unwrap().candidate, None);
+    e.result_space.id = Id("unrelated-same-unit-space".into());
+    assert_eq!(compose(&s, &q, &e, Composition::Equal).unwrap().value, None);
+    let (s, q, e) = inputs(&[f64::MAX, f64::MAX, 1.]);
+    assert_eq!(
+        compose(&s, &q, &e, Composition::Balance).unwrap_err(),
+        GeometryError::NonFiniteCalculation
+    );
+}
 #[test]
 fn zero_unknown_and_uncertainty_have_no_invented_result() {
     let (s, q, e) = inputs(&[4., 0.]);

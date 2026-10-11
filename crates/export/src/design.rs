@@ -124,7 +124,7 @@ pub(crate) fn compile(
                     let labels = labels(&r.measurements);
                     match operation {
                         RelationOperation::Equal if r.residual == Some(0.0) => format!(
-                            "Equal measured values: {} operands at {} {unit}; equality holds in this observation.",
+                            "{} equal measurements of {} {unit} in this selected group.",
                             labels.len(),
                             labels[0]
                         ),
@@ -134,13 +134,23 @@ pub(crate) fn compile(
                             number(r.residual.unwrap_or_default())
                         ),
                         RelationOperation::Ratio => format!(
-                            "{} relative to {}: ratio {}. Designer intent unknown.",
+                            "{} {unit} relative to {} {unit}: {} times as large.",
                             labels[0],
                             labels[1],
                             ratio_label(r.value.unwrap_or_default())
                         ),
+                        RelationOperation::Balance
+                            if r.residual == Some(0.0)
+                                && labels.iter().all(|s| !s.contains('≈') && !s.contains('<')) =>
+                        {
+                            format!(
+                                "{} = {} {unit}. The measured parts match the total.",
+                                labels[..labels.len() - 1].join(" + "),
+                                labels[labels.len() - 1]
+                            )
+                        }
                         RelationOperation::Balance => format!(
-                            "{} compared with {} {unit}; residual {} {unit}. Values describe this observation, not a responsive rule.",
+                            "Displayed parts: {}; total {} {unit}. Exact-data difference: {} {unit}; rounded labels are not an exact sum.",
                             labels[..labels.len() - 1].join(" + "),
                             labels[labels.len() - 1],
                             number(r.residual.unwrap_or_default())
@@ -169,10 +179,15 @@ pub(crate) fn compile(
                     )
                 } else if let Some(candidate) = r.candidate {
                     if r.exceptions.is_empty() {
+                        let quantity = match queries[0].operation {
+                            GeometryRelation::Width => "widths",
+                            GeometryRelation::Height => "heights",
+                            _ => "gaps",
+                        };
                         (
                             "repeated_value",
                             format!(
-                                "All {} selected measurements share {} {unit}. Caller-selected family; no violation inferred.",
+                                "{} measured {quantity} of {} {unit}. No outlier in this selected group.",
                                 queries.len(),
                                 number(candidate)
                             ),

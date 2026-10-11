@@ -1,6 +1,6 @@
 # Единый реестр задач
 
-## RELATIONS-IMPLEMENTATION — active, 2026-10-11
+## RELATIONS-IMPLEMENTATION — выполнено, 2026-10-11
 
 Actual user authority: «Ну и продолжай, а что ты стоишь-то? План есть, создавай
 цель и делай.» Approved basis: design-relations.md at4cb6a6e, execution in this
@@ -17,12 +17,36 @@ actual CLI saved-form/fresh-image proof. Save coherent checkpoints and push.
 
 First source checkpoint: bound engine composition/pattern, existing sourced checks,
 safe per-view analysis facts and human prompt delivered through --brief or direct
-metadata. Engine6/export4 new focused cases pass; full export suite52pass/1explicit
+metadata. Engine6/export4 new focused cases pass; full export suite56pass/1explicit
 protected-runtime skip, CLI export21pass, affected Clippy clean. One stale CLI test
 expected old provenance prose on the sheet; now asserts it in scene/brief as HBP
 requires. Actual mobile legacy package is byte-identical across all6 files to C6.
 New actual mobile0.3 package explains179+179+8=366, ratio1.5 and6gaps8; no invented
 defect. Temp deliverables: uib-design-relations-uthrb5kw. Next: fresh image QA.
+
+Final result: source checkpoint beac04a pushed; final concise-caption delta and
+8engine/4export/21CLI checks passed, affected Clippy/fmt clean. Full export56pass
+plus1unrelated protected-runtime test explicitly skipped earlier; no new Native
+runtime claim. Two actual CLI real-form packages: mobile and Settings, explicit
+selected families. Mobile179+179+8=366, ratio1.5, gaps8; Settings7widths198.421875,
+6gaps15.546875. Both groups have no outliers; no fabricated defect. Synthetic
+4/4/4/5 identifies the last gap and deviation+1, without normative fail.
+Fresh built-in ImageGen: two first outputs from two successive literal CLI
+prompts, each using only original mobile reference. Second output displays the
+short mathematical block correctly; original source controls/state/clipping and
+size/gap labels inspected. Author visual QA, not independent critic/human approval,
+CAD accuracy, live remeasurement or a general success-rate claim. Generated images
+and packages remain unverified/draft in their manifests; no approval promotion.
+System-temp deliverables retained at uib-design-relations-uthrb5kw:
+mobile-readable-package/prompt.txt, mobile-metadata.json, settings-package and
+mobile-relations-first.png / mobile-relations-readable.png. Tool-managed originals
+also retained. These selected packages/inputs/images are explicit task deliverables
+for reproduction, not committed auxiliary run logs. No image cleanup.
+No required implementation items remain in the approved bounded scope. No new
+collectors, UI mutations, global scale inference or extra workers were introduced.
+No-request legacy mobile output matches accepted C6 byte-for-byte across6files.
+Final checkpoint saves this terminal state plus caption/test delta in master;
+close host goal after successful commit/push. Unrelated PNG remains untouched.
 
 ## RELATIONS — рекомендации согласованы, 2026-10-11
 
