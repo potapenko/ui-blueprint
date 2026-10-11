@@ -42,10 +42,11 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner, restored|dispatched|One concise source-bound sheet assignment, fixed CW33/CW34/CW40 set; preserve facts/ownership and positive control |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
+| CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|dispatched independent Native review|Saved1af633c and frozen CA5 bundle; initial observations before author receipt |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
-| CA5 |same CA owner|running implementation after live feasibility|AXVisibleChildren returned153 versus440 full entries, sampled cards42+; preserve caps and old modes |
+| CA5 |same CA owner|author complete; independent review pending|source1af633c +cbbe317; same-state default0–27/visible42–75,34AXrects;169assertions/52documents |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
@@ -62,11 +63,12 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 
 ### Current contracts and protected boundaries
 
-Established source basis: registry39, NATIVE3/CLI17, DESIGN-ANALYSIS1, EXPORT2,
+Established source basis: registry40, NATIVE4/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
-CA5 alone owns prospective Native/CLI/routing changes after the proven feasibility;
-read its saved revisions before future dependent dispatch. No other active worker
-writes these contracts. Finished exporter source is756dfca. Root owns this registry,
+CA5 registered its Native/CLI/routing delta before saved source1af633c; product
+acceptance awaits CR3. Existing source batches keep their pinned collector evidence.
+CP6 owns current exporter presentation; accepted compact baseline is756dfca.
+Root owns this registry,
 corpus-testing.md and coordination receipts. Source workers keep source-app repos
 tracked read-only; actual installed build revisions remain unknown where unproved.
 
@@ -170,12 +172,20 @@ Independent source state shows28–76. Existing AXChildren always begins at offs
 No existing supported selector solves it; focused-popover is inapplicable.
 A fresh owned diagnostic has now proved AXVisibleChildren support:153 entries
 versus440 full children, bounded84-entry sample starts at cards42; held-window
-ancestry unchanged and screenshot matches that region. This is feasibility,
-not shipped acceptance. Implement explicit focused-visible-ax under registered
-minimal Native/CLI delta; old modes,160/depth9, acquisition budgets, privacy,
-publication validation and canonical wire stay. Unsupported source is not empty
-success/fallback; no geometric visibility inference. One saved-source live comparison
-and scoped independent review remain before acceptance.
+ancestry unchanged and screenshot matches that region. CA5 then registered
+NATIVE4/CLI18/registry40 and saved source1af633c, receipt/checkpoint cbbe317.
+Actual same-state shipping CLI comparison: ordinary cards0–27, visible cards42–75,
+34 known AX rects; both160nodes/partial/pt/unknown pixel mapping. Author reports
+169 focused assertions,52 canonical documents and both live responses/inspect pass.
+No inferred geometry, larger quotas or changed old collection modes. CR3 independently
+checks permission/compatibility/bounds and retained live evidence before acceptance.
+[CA5 receipt](receipts/corpus-native-visible-children.md); frozen root
+`uib-CA5-9e2yhnfg/tools`, helper SHA256
+`1b711f9a907cba1eac9f2fb5ab39b365f30cd5aa39e8aee78be9dd03e1b2b6e7`.
+Ordinary response SHA256 `532e1ab2b905b557a94f9332eb735c1f992626b89feedf53287233c216515b4b`;
+visible `459378386028eebac57b675550cd08df55fd8d1d7d77793e4cded0a033415571`.
+Own PID55162 stopped, runtime/build storage released, user63105 preserved;
+future calls require fresh process/request identities. Source images retained.
 [Apple source semantics](https://developer.apple.com/documentation/applicationservices/kaxvisiblechildrenattribute).
 
 **CW-S2 / CW09:** waiting_evidence from operator. Local dev-browser CDP9222
