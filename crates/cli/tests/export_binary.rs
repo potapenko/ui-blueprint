@@ -77,6 +77,78 @@ fn success(out: Output) -> Value {
     assert!(out.stderr.is_empty());
     serde_json::from_slice(&out.stdout).unwrap()
 }
+
+#[test]
+fn design_analysis_direct_metadata_recomputes_and_versions_actual_package() {
+    let c = Case::new("observed");
+    let doc: Value = serde_json::from_str(include_str!(
+        "../../../fixtures/golden/GEO-SIZE-RATIO__width.json"
+    ))
+    .unwrap();
+    let snapshot = &doc["artifact"]["data"]["snapshot"];
+    let mut expectation = doc["artifact"]["data"]["expectation"].clone();
+    expectation["rule"]["expected"] = json!(29);
+    let evaluation = json!({"snapshot_id":snapshot["id"],"revision":snapshot["revision"],"context":snapshot["context"],"result_space":expectation["rule"]["anchors"][0]["coordinate_space"],"transforms":[],"conditions":null});
+    let v = &c.brief["views"][0];
+    let mut metadata = json!({"metadata":c.brief["metadata"],"state":v["state"],"scope":v["scope"],"environment":v["environment"],"safe_source_reference":v["safe_source_reference"],"not_depicted":v["not_depicted"],"public_text_fields":[],"design_analysis":[{"kind":"check","caption":"Selected width rule","expectation":expectation,"evaluation":evaluation}]});
+    fs::write(
+        c.root.join("snapshot.json"),
+        serde_json::to_vec(
+            &json!({"schema_version":"0.1.0","artifact":{"kind":"snapshot","data":snapshot}}),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    let run = || {
+        Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .arg("imagegen-prompt")
+            .arg("--snapshot")
+            .arg(c.root.join("snapshot.json"))
+            .arg("--metadata")
+            .arg(c.root.join("metadata.json"))
+            .arg("--out")
+            .arg(c.root.join("package"))
+            .args([
+                "--max-input-bytes",
+                "2000000",
+                "--max-output-bytes",
+                "4000000",
+                "--max-components",
+                "256",
+                "--max-views",
+                "8",
+                "--components-per-detail",
+                "12",
+                "--json",
+            ])
+            .output()
+            .unwrap()
+    };
+    metadata["design_analysis"][0]["evaluation"]["revision"] = json!(999);
+    fs::write(
+        c.root.join("metadata.json"),
+        serde_json::to_vec(&metadata).unwrap(),
+    )
+    .unwrap();
+    fail(run(), 2, "export_invalid_geometry");
+    assert!(!c.root.join("package").exists());
+    metadata["design_analysis"][0]["evaluation"]["revision"] = snapshot["revision"].clone();
+    fs::write(
+        c.root.join("metadata.json"),
+        serde_json::to_vec(&metadata).unwrap(),
+    )
+    .unwrap();
+    let receipt = success(run());
+    assert_eq!(receipt["result_version"], "0.3.0");
+    assert_eq!(c.package("manifest.json")["package_version"], "0.3.0");
+    assert_eq!(
+        c.package("scene.json")["views"][0]["design_analysis"][0]["status"],
+        "rule_violation"
+    );
+    let prompt = fs::read_to_string(c.root.join("package/prompt.txt")).unwrap();
+    assert!(prompt.contains("Measured 30 CSS px; required equal to 29"));
+    assert!(!prompt.contains("fixture_literal"));
+}
 fn check_files(c: &Case) {
     let mut names: Vec<_> = fs::read_dir(c.root.join("package"))
         .unwrap()
@@ -673,7 +745,13 @@ fn direct_observed_snapshot_and_response_compile_full_scope_without_geometry_ree
         assert_eq!(c.package("sheets.json").as_array().unwrap().len(), 4);
         assert_eq!(fs::read(c.root.join("source.json")).unwrap(), original);
         let prompt = fs::read_to_string(c.root.join("package/prompt.txt")).unwrap();
-        assert!(prompt.contains("caller annotations"));
+        // HBP keeps provenance in machine data and the brief, not as visible sheet noise.
+        assert!(v["not_depicted"].as_array().unwrap().iter().any(|note| {
+            note.as_str()
+                .is_some_and(|s| s.contains("caller annotations"))
+        }));
+        let brief = fs::read_to_string(c.root.join("package/drawing-brief.md")).unwrap();
+        assert!(brief.contains("caller annotations"));
         assert!(!prompt.contains("COMMON "));
         assert!(!prompt.contains("observation_id"));
         assert!(prompt.contains("rounded labels"));

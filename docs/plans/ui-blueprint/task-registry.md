@@ -1,5 +1,29 @@
 # Единый реестр задач
 
+## RELATIONS-IMPLEMENTATION — active, 2026-10-11
+
+Actual user authority: «Ну и продолжай, а что ты стоишь-то? План есть, создавай
+цель и делай.» Approved basis: design-relations.md at4cb6a6e, execution in this
+chat single-agent; no delegation. Host goal created. Scope: engine composition,
+explicit-family consistency signals and sourced checks → real export/CLI prompt.
+Spec Basis: registry37 → DESIGN-ANALYSIS@1 plus its ANALYSIS/EXPORT/CLI-EXPORT
+closure; current previously read closure reused, Rust/development/QA read.
+Concrete write set: selected spec/plan routes; crates/engine/src/{lib,design}.rs,
+crates/engine/tests/design.rs; crates/export/src/{lib,types,compile,design}.rs,
+prompt-template.txt; directly affected export/CLI tests and CLI export.rs.
+No dependency/core wire/source geometry change; unrelated PNG untouched.
+Next: implement bound calculation, integrate safe export, focused checks and
+actual CLI saved-form/fresh-image proof. Save coherent checkpoints and push.
+
+First source checkpoint: bound engine composition/pattern, existing sourced checks,
+safe per-view analysis facts and human prompt delivered through --brief or direct
+metadata. Engine6/export4 new focused cases pass; full export suite52pass/1explicit
+protected-runtime skip, CLI export21pass, affected Clippy clean. One stale CLI test
+expected old provenance prose on the sheet; now asserts it in scene/brief as HBP
+requires. Actual mobile legacy package is byte-identical across all6 files to C6.
+New actual mobile0.3 package explains179+179+8=366, ratio1.5 and6gaps8; no invented
+defect. Temp deliverables: uib-design-relations-uthrb5kw. Next: fresh image QA.
+
 ## RELATIONS — рекомендации согласованы, 2026-10-11
 
 Прямой ответ пользователя «Хорошо, согласен.» принят для предложенного подхода:

@@ -27,6 +27,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
     for v in &brief.views {
         let mut aliases = Aliases::default();
         let mut sv = SceneView {
+            design_analysis: vec![],
             snapshot_ref: None,
             snapshot_revision: None,
             id: v.id.clone(),
@@ -73,6 +74,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
                 (observed::dimensions(s, &mut aliases)?, vec![])
             }
         };
+        sv.design_analysis = crate::design::compile(v, &sv, &mut aliases, limits)?;
         dims.push(ViewDimensions {
             view: v.id.clone(),
             dimensions,
@@ -111,7 +113,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
         remaining = remaining.checked_sub(bytes.len()).ok_or(E::OutputLimit)?;
         files.insert(name.into(), bytes);
     }
-    let manifest = serde_json::json!({"package_version":if brief.comparisons.is_empty() {"0.1.0"} else {"0.2.0"},"guide":GUIDE,"guide_reference":"docs engineering-blueprint-guide.md revision 1.2",
+    let manifest = serde_json::json!({"package_version":if brief.views.iter().any(|v| !v.design_analysis.is_empty()) {"0.3.0"} else if brief.comparisons.is_empty() {"0.1.0"} else {"0.2.0"},"guide":GUIDE,"guide_reference":"docs engineering-blueprint-guide.md revision 1.2",
         "document":brief.metadata,"purpose":brief.purpose,"source_kinds":scene.views.iter().map(|v|v.source_kind).collect::<Vec<_>>(),
         "validation_status":"unverified","local_numeric_validation":"checked","approval_status":brief.metadata.approval.status,
         "scale_mode":"schematic","generated_image":false,"references":[],
@@ -338,7 +340,7 @@ fn json(value: &impl Serialize, limit: usize) -> Result<String> {
     String::from_utf8(bounded_json(value, limit)?).map_err(|_| E::InvalidInput)
 }
 // These labels are presentation only. No rounded number is written back to geometry.
-fn display_number(value: f64) -> String {
+pub(crate) fn display_number(value: f64) -> String {
     if value == 0.0 {
         return "0".into();
     }
@@ -416,7 +418,7 @@ fn control(c: &SceneComponent) -> bool {
             | "slider"
     )
 }
-fn unit_name(unit: Unit) -> &'static str {
+pub(crate) fn unit_name(unit: Unit) -> &'static str {
     match unit {
         Unit::CssPx => "CSS px",
         Unit::Px => "px",
@@ -424,7 +426,7 @@ fn unit_name(unit: Unit) -> &'static str {
         Unit::Dp => "dp",
     }
 }
-fn component_name(v: &SceneView, index: usize) -> String {
+pub(crate) fn component_name(v: &SceneView, index: usize) -> String {
     let c = &v.components[index];
     let role = component_role(c).to_ascii_lowercase();
     let human_role = match role.to_ascii_lowercase().as_str() {
@@ -1481,6 +1483,10 @@ fn prompt(
         let partial = partial_visibility(&b.views[index].source);
         vars.insert("dimensions", drawing_dimensions(v, dims, &partial, limit)?);
         vars.insert(
+            "design_analysis",
+            crate::design::text(&v.design_analysis, limit)?,
+        );
+        vars.insert(
             "sheets",
             selected
                 .iter()
@@ -1530,7 +1536,7 @@ fn prompt(
     }
     Ok(result)
 }
-fn append(out: &mut String, s: &str, limit: usize) -> Result<()> {
+pub(crate) fn append(out: &mut String, s: &str, limit: usize) -> Result<()> {
     require(s.len() <= limit.saturating_sub(out.len()), E::OutputLimit)?;
     out.push_str(s);
     Ok(())
@@ -1551,6 +1557,13 @@ fn drawing_brief(
         ),
         limit,
     )?;
+    for v in &s.views {
+        append(
+            &mut out,
+            &crate::design::text(&v.design_analysis, limit)?,
+            limit,
+        )?;
+    }
     for (heading, data) in [
         (
             "Identity, audience, approval, owner and retention",

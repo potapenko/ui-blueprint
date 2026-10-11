@@ -44,6 +44,7 @@ fn brief(
         },
         purpose: Purpose::Propose,
         views: vec![ViewInput {
+            design_analysis: vec![],
             id: "proposal".into(),
             title: "Two rectangles".into(),
             state: "proposed".into(),

@@ -13,6 +13,7 @@
 
 | Контракт | Read when / роль |
 | --- | --- |
+| [UIB.DESIGN-ANALYSIS@1](design-analysis.md) | Explicit mathematical relationships and consistency recommendations in export |
 | [UIB.BOUNDARIES@1](boundaries.md) | выбор архитектуры, platform/plugin/profile/extension boundaries; contract |
 | [UIB.MODEL@1](model.md) | schema, нормализация, свойства, роли, provenance; contract |
 | [UIB.EXCHANGE@2](exchange.md) | request/session/property/time/error/JSON envelopes and narrow explicit probe-wrapper composition; contract |

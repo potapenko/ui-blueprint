@@ -2,12 +2,14 @@
 #![forbid(unsafe_code)]
 mod compare;
 mod compile;
+mod design;
 mod observed;
 mod package;
 mod proposal;
 mod types;
 mod validate;
 pub use compile::compile;
+pub use design::{DeclaredException, DesignRequest, RelationOperation};
 pub use package::Package;
 pub use types::*;
 

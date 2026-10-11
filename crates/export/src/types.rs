@@ -1,3 +1,4 @@
+use crate::DesignRequest;
 use serde::{Deserialize, Serialize};
 use uiblueprint_schema::model::*;
 
@@ -63,6 +64,8 @@ pub struct Metadata {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ObservedDocumentMetadata {
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub design_analysis: Vec<DesignRequest>,
     pub metadata: Metadata,
     pub state: String,
     pub scope: String,
@@ -111,6 +114,8 @@ pub struct DrawingBrief {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ViewInput {
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub design_analysis: Vec<DesignRequest>,
     pub id: String,
     pub title: String,
     pub state: String,
@@ -232,6 +237,8 @@ pub struct Scene {
 }
 #[derive(Clone, Debug, Serialize)]
 pub struct SceneView {
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub design_analysis: Vec<crate::design::Insight>,
     pub snapshot_ref: Option<Id>,
     pub snapshot_revision: Option<u64>,
     pub id: String,

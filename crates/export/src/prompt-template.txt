@@ -13,7 +13,7 @@ Draw only visible coverage, including its actual cut boundary. Plain text is not
 Source wrappers appear only as necessary measurement boundaries.
 
 ГЕОМЕТРИЯ
-{{dimensions}}
+{{dimensions}}{{design_analysis}}
 
 НАНЕСЕНИЕ РАЗМЕРОВ
 DIMENSIONED RECTANGLE: BOTH dimensions on the SAME shape. Use its assigned width

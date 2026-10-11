@@ -5,6 +5,7 @@
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: E01/E02, imagegen-prompt, человеческий экспорт.
+- Conditional requires: [DESIGN-ANALYSIS@1](design-analysis.md) when design_analysis is selected; its additive0.3 representation and explicit printable explanations supersede older no-analysis presentation limits only for that input.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md), [UIB.DRAWING-GEOMETRY@2](drawing-geometry.md), [UIB.DRAWING-PROMPT-A@2](drawing-prompt-a.md), [UIB.DRAWING-REVIEW@2](drawing-review.md), [UIB.DRAWING-EXAMPLE@1](../reference/drawing-example.md).
 - Source mapping: TZ 399–416; DRAWING 1–30; DRAWING 301–315; [inverse map](../reference/source-map.md); source links are provenance, not requires.
