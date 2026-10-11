@@ -5,7 +5,7 @@
 Authority: user requested helpers across Mac/Web,1000diverse generated/evaluated
 blueprint cases, risk-first planning, discovery and improvement. Coordinated mode;
 root coordination-only. [Plan](corpus-testing.md), [first-wave terminal summary](receipts/corpus-wave1-summary.md).
-Goal remains incomplete.47generated/evaluated outputs across five batches,0accepted;
+Goal remains incomplete.59generated/evaluated primary outputs across six batches,0accepted;
 43first outputs by configuration include3duplicate fixture renderings.4CP1repair
 images are separate repeats, allFAIL. Do not call this47unique successful cases.
 
@@ -33,7 +33,7 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CW-B3 |same Web source owner|running|6new/lower-scroll/lookup Web states, complete source→CLI→image→QA |
 | CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
 | CW-S2 |same Web source owner|queued after CW-B3|Policy-supported Chrome/dev-browser capability fallback; one new qualified scoped source or exact dependency |
-| CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|running; source owner reused|12focused-popup/preview/context/download-form states, full source→CLI→image→QA |
+| CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
@@ -115,6 +115,13 @@ IAB clip offsets/paint did not qualify. Site qa/browser-routing.md explicitly pe
 real Chrome/dev-browser for demonstrated missing IAB capability; CW-S2 assigned on
 that basis, not to bypass permissions/gates. No old-source pixels altered, no new
 persistent profile/installation authorized. Its future source gets a new identity.
+CN-B4 terminal handoff: uib-CN-B4-kllqoe62/handoff.md and manifest.json. Native203933a,
+export1650d0c pinned before CP3 arrival. All12canonical responses validate,30/30AX
+operand amounts exact.7rooted popup states collected; no generation refusals/rerolls.
+Failures retained: out-of-scope background, AX versus paint, clipping, state,
+wrong endpoints/counts and pattern participant attribution. Shared with CP4 only as
+targeted witnesses, not an instruction to rerun12cases. Own process18535 ended,
+desktop released/user63105 preserved, no tracked source changes; worker archived.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
