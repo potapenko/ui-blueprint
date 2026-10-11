@@ -19,7 +19,8 @@ New generated/evaluated/accepted corpus cases:0/0/0; старые кейсы о�
 | CN-B1 | verification |01a12b45-a160-7192-86ca-e0bd99f4d49f|running|12Mac cases A01–12, full pipeline |
 | CN-B2 | verification |01a12b45-a69a-72b2-91f2-1f937304afae|running|8Simulator cases B05–08/B10–13, geometry evidence required |
 | CN2 | diagnostic |Mac advisor01a1102f-791c|accepted discovery|12wired C02 configurations; actual runtime distinctness pending |
-| CN-B3 | verification |unassigned|queued resource|CN2 existing Debug cases; Mac lane after CN-B1 or proved isolation |
+| CN-B3 | verification |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|running|12existing C02 configurations, actual component renders with explicit fixture-origin |
+| CW-B2 | verification |unassigned|queued resource|Clip Search CW13–24; await CW-B1 browser/controller release |
 
 Write ownership pinned in plan. Advisors remain read-only and available.
 Source receipts: [Web](receipts/corpus-web-advice.md), [Native](receipts/corpus-native-advice.md).
@@ -48,6 +49,17 @@ Current interim worker reports (not accepted terminal corpus counts): Web CW01/0
 source capture and stale screenshot mismatch recovery; Native A01 two real partial
 160node exports; Simulator More real AX frames available after MJPEG recovery.
 Sources/first invalid images retained; failures are not successful corpus entries.
+Continuation: prior turn classified progress (commits/repairs/source discoveries/
+dispatch). Live handles rechecked for all3batches; no replacement workers spawned.
+CN-B1 explicitly reports restored own UI and released reservation ownerCN-B1-01a12b45,
+token35ff1fae7a1c42b3876cb94988125ea3, holder:null; ownPID39446 ended, userPID63105
+untouched. CN-B3 now dispatched with mandatory fresh acquisition and no new wiring;
+source recipe pin c7d8e3d, compiler1661e88. Fixture-origin renderings are labelled
+separately from real production states and synthetic numeric vectors.
+CW-B1 asked for equivalent resource handoff after capture; its generation/QA continues.
+Workers explicitly reminded to include supported mathematical design_analysis in
+new representative family cases and report unknown/no-analysis reasons, without
+rebuilding old packages or inventing expected_from.
 All3 packets dispatched, local host, inherited settings, no nested delegation.
 Next: accept finite receipts, then medium complete generation batches from
 actual source handoffs, with disjoint ownership. No reviewer ping-pong or paper
