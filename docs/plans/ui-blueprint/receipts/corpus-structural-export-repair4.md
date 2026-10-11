@@ -1,26 +1,12 @@
 # CP4 — structural source/artwork/measurement and sheet repair
 
-2026-10-11. Finite root-authorized CP4 shipping_product packet, autonomous single
-worker, current master. [CV1](corpus-visual-diagnostic1.md) supplies diagnosis;
-authority is the explicit CP4 packet under user CORPUS-1000 and existing EXPORT.
-No nested agents/chats/goals, source-app/collector/engine/wire or Native edits.
+2026-10-11. Finite root-authorized CP4 shipping_product packet, autonomous single worker, current master. [CV1](corpus-visual-diagnostic1.md) supplies diagnosis; authority is the explicit CP4 packet under user CORPUS-1000 and existing EXPORT. No nested agents/chats/goals, source-app/collector/engine/wire or Native edits.
 
 ## Basis and implementation boundary
 
-Reused full prior EXPORT@2/drawing closure and DRAWING@1.2 HBP/R2/R3, geometry/
-source/privacy/analysis closure; read CV1 and actual package/CLI owners. Registry38
-to39 registers CP4-SHEETS-001 before code: [SHEET-PROMPTS@1](../../../specs/product/drawing-sheet-prompts.md),
-DRAWING-PACKAGE@3 and CLI-EXPORT@3. Existing CP2 privacy boundary remains protected.
-Restore source/frame separation; additive representation evolution only for split
-single-view document/propose/detail packages. Old inputs/flags/base files remain;
-0.4 must be recognized by consumers requiring an exact old file set/version.
+Reused full prior EXPORT@2/drawing closure and DRAWING@1.2 HBP/R2/R3, geometry/ source/privacy/analysis closure; read CV1 and actual package/CLI owners. Registry38 to39 registers CP4-SHEETS-001 before code: [SHEET-PROMPTS@1](../../../specs/product/drawing-sheet-prompts.md), DRAWING-PACKAGE@3 and CLI-EXPORT@3. Existing CP2 privacy boundary remains protected. Restore source/frame separation; additive representation evolution only for split single-view document/propose/detail packages. Old inputs/flags/base files remain; 0.4 must be recognized by consumers requiring an exact old file set/version.
 
-Write set: export compile/design/package/template and directly related tests,
-CLI export adapter/tests, three affected contract/routes plus new sheet leaf,
-this receipt. Root coordination, Native and unrelated working files untouched.
-Plan: separate artwork from AX sketches, preserve caller-state provenance/cut,
-implement concrete per-sheet ownership under existing limit, focused checks,
-freeze source, actual CLI, one fresh attempt per resulting sheet/case, review.
+Write set: export compile/design/package/template and directly related tests, CLI export adapter/tests, three affected contract/routes plus new sheet leaf, this receipt. Root coordination, Native and unrelated working files untouched. Plan: separate artwork from AX sketches, preserve caller-state provenance/cut, implement concrete per-sheet ownership under existing limit, focused checks, freeze source, actual CLI, one fresh attempt per resulting sheet/case, review.
 
 ## Fixed experiment and source dependency
 
@@ -44,9 +30,69 @@ AX coordinates are measurement-only, never artwork placement. AX sketches are
 empty, with semantic captions outside, width above and height left; no conflicting
 enclosing-below instruction. Existing caller disabled/blocked statements are copied
 into repeated measurement blocks without creating Enabled fields. No Normal default.
-CW07 has one explicit source cut rectangle and separates full layout extent from
-cut artwork. Unknown reference/AX alignment remains unknown, including B05.
+Initial CW07 cut wording was corrected by CR2 F1 below. Unknown reference/AX
+alignment remains unknown, including B05; no source geometry was remapped.
 Raw visible control text (CW30's grade witness) stays in source payload but requires
 an explicit semantic name/label owner before becoming a detail caption; no word
 blacklist. Computed notes retain existing safe participant names and frame/anchor
 caption with their result; no new relationship inference or source arithmetic.
+
+## Frozen candidates, CR2 and checks
+
+Image candidate `cfe1b5e14d62759dab8abe7ede5bb81b4b596468` was saved before12
+declared first calls: CW07/A12/B05/B08 and eight C10 sheets. Root-requested CR2 F1
+correction `b01aee48cbb203cf10ccd752e8e83bc089f7929e` replaces first/global cut
+with per-component edges from existing engine insets; Top-only/Right-only,
+multiple components, sheet scope and unknown/frame guards pass. CR2 independently
+closed F1. It also removes the inherited complete-overview instruction on measured
+detail sheets. Only CW07 clipping was rerun; old images remain attributed to cfe1b5e.
+
+CR2 F2 correction: `203c48a6f50a3206a9610c9ef927b001f41ea2f4` permits source
+artwork for detail sheets with zero assigned dimensions; measured details remain
+measurement-only. Explicit two-clipped-detail/density256 regression passes. All38
+files of the five ready current packages are byte-identical to b01aee4: no current
+sheet has empty dimensions, therefore no F2 image rerun or image relabelling.
+
+Focused checks: final compiler44 pass; unchanged corpus_fidelity4, design_corpus11
+and actual CLI export21 pass (80 distinct checks); Clippy export+CLI all-targets
+with -D warnings, rustfmt, changed local links and diff-check pass. Exact aggregate
+output refusal includes new prompt files; no prepublication partial destination.
+Source/metadata/reference hashes verified unchanged. Scene/dimensions unchanged
+for all five cases; C10 sheet plan changes only through explicit existing density
+limit. Final manifests and machine files match the first candidate after corrections.
+
+## Before/after criterion results
+
+13 images evaluated:12 first attempts +1 explicit CW07 correction attempt. No
+hidden rerolls, crops, source edits, generated references or image retouches.
+Every C10 sheet arrived separately at1672×941; CW07 at1536×1024. Requested3840×2160
+was not assumed delivered. Source clipping fixes do not imply correct raster clipping.
+
+| Case | Positive outcome versus CV1 | Residual / author result |
+| --- | --- | --- |
+| CW07 | Four formulas and prepared numbers retained; F1 prompt defect fixed | Both rasters complete cut text/border — FAIL |
+| CW09 | No invalid reference substituted | Qualified source/access dependency; not generated |
+| A12 | Empty large AX frame; Previous disabled/caller caption preserved | Small sketches contain glyphs, filled Play/toolbar state — FAIL |
+| C10 |8real sheets; five tabs,77pt and28pt restored; readable measurement pages|Rendered ownership/empty-frame/≈ failures; full set FAIL|
+| B05 | Empty sketches, outside semantic names, original word/actions retained | Selected-scope author pass; independent acceptance open |
+| B08 | Empty sketches, no Normal, qualified named relationships | Off knobs filled — FAIL |
+
+C10 compiler ownership counts G01/D01–D07:3/7/10/9/16/13/5/2 =65 unique required
+IDs. All78 source records covered. On rasters64/65 assigned labels correct; D04
+Phrase Context height loses≈. D01/D03/D04/D06 add or repeat unassigned dimensions;
+D04/D05/D06/D07 add artwork. D02's10labels/empty frames pass the bounded author
+sheet check. No full C10 or independent image acceptance; internal #refs also leak
+into D01 captions. Minimal remaining rendering issue: unowned numeric context can
+still be treated as drawable measurements despite assignment; do not count map-only
+uniqueness as image success. Corrected detail headers have not been rerendered.
+
+## Terminal artifacts
+
+Root: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP4-1k7n3t7t`.
+manifest.json/correction.json/final-equivalence.json retain exact argv, source and
+prompt/metadata/image identities, blobs, per-sheet assignments and binary hashes;
+review.json/review.md retain all13 images and criterion results. Final frozen binary
+`uiblueprint-203c48a`, SHA256 `17d1ae724228cfcb9c712d1e8ac2ce3be5bd7b96ed39de13fb338ba0f4def758`.
+Selected packages/binaries remain for root/CR2 and source workers. Image-free build
+and pre-freeze duplicates removed; every image, containing directory and tool-managed
+original retained. Full six-case acceptance remains open; no checked status invented.
