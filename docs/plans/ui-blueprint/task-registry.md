@@ -45,7 +45,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
-| CP7 |same exporter owner|source814af45/receipt507d190 saved; critics checking one image|Distinct full/visible assignment, machine data unchanged; no full raster acceptance yet |
+| CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -62,12 +62,13 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B5 |same Native source owner|investigation accepted|8cases/52first sheets,10scoped author passes/42FAIL;701dimension checks,0complete cases |
 | CN-B7 |same Native source owner|investigation accepted; archived|1new visible-grid case/7first sheets;38labels match,1scoped author pass/6FAIL; no live recapture |
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
+| CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79, restored|dispatched full corpus cycle|Up to8 new already-wired non-C02 Mac Debug scenarios; fixture origin explicit, no new wiring |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running single CP7 image review|Neutral observation then author reconciliation; full/visible frame ownership |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running single CP7 prompt/data review|M0001–M0004 assignment and display policy; no code/test/image expansion |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP7 reconciled; retained for future changed artifacts|Frame separation passes, raster display/style fails; no new compiler cause established |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP7 reconciled; retained for future changed artifacts|Source and literal assignment pass, extra/long-decimal/unit labels fail; no further generic repair |
 
 ### Current contracts and protected boundaries
 
@@ -75,7 +76,7 @@ Established source basis: registry40, NATIVE4/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance is complete through CR3. Existing batches keep their old pins.
-CP6 owns current exporter presentation; accepted compact baseline is756dfca.
+Current accepted exporter presentation baseline is814af45; raster acceptance remains separate.
 Root owns this registry,
 corpus-testing.md and coordination receipts. Source workers keep source-app repos
 tracked read-only; actual installed build revisions remain unknown where unproved.
@@ -93,7 +94,12 @@ selector values, collection/preferences, auth/access and production mutations ar
 All short temp roots below share:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/`.
 
-- Current export: `uib-CP5-f92uil63/uiblueprint-756dfca`,
+- Current export: `uib-CP7-rxt9mdyg/uiblueprint-814af45`,
+  SHA256 `37f15bfd012cdcd91722a0fd11830d92d51ba8db5154677358f04eb437623101`.
+  [CP7 receipt](receipts/corpus-document-frame-repair7.md): frame assignment and
+  unchanged numerical/ownership evidence accepted through both critics; one raster
+  remains failed on display policy/extra labels. This is not universal image acceptance.
+- Previous compact export: `uib-CP5-f92uil63/uiblueprint-756dfca`,
   SHA256 `050e6446eb73a7b61df3ea238c9444679f80048e034c0b8ecfe9eaedab6d61e4`.
   [CP5 receipt](receipts/corpus-prompt-length-repair5.md), source756dfca/receipt1a80290:
  6/6 G01 fit27194–28076chars;49 prompt files differ only by one repeated-phrase
@@ -162,6 +168,11 @@ measurements and display precision. Neutral index in `uib-CP7-rxt9mdyg`, binary
 SHA256 `37f15bfd012cdcd91722a0fd11830d92d51ba8db5154677358f04eb437623101`.
 Both same critics inspect that one artifact before author records, then reconcile;
 no new image attempt or full-set review is assigned.
+Both ordered reviews now confirm the literal and visible owner separation. Remaining
+px/CSS px, extra dimensions, internal captions and long-decimal artwork labels are
+raster noncompliance; 666.5625 remains a correct source value, not a math error.
+No further compiler conflict or causal fix established. Keep those failures and
+the unchanged CW34 control; no further CP7 attempt. Use814af45 for new cases.
 Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
 initial observations precede author receipt. They do not create images or edit code.
 CV2 covers visible drawing quality; CT2 covers literal instructions and data.
@@ -272,6 +283,14 @@ Actor96/48=2; Settings value96/48=2; Search49.5/36=1.375; Translation rows78pt;
 Filters values62pt while captions/flags do not scale uniformly. No norm inferred.
 Renderer failures: added row boxes/dimensions, revealed clipped content, misplaced
 switches, missing disabled/caret indication. No new repair assigned to this owner.
+
+**CN-B9:** experienced CN-B3 Debug owner resumes for up to8 safe, genuinely new,
+already-wired c01…c05 app scenarios outside completed C02 renders. Source routes
+and fixture isolation must be verified before launch; dormant descriptors/no-op
+previews do not count. No new host/selector/source code, production mutations or
+synthetic geometry. Actual runtime app components may use fixture data, explicitly
+labelled as such. Native1af633c and export814af45 frozen consumers; current source
+branch/owned runtime/reservations, full first-image cycle and restoration required.
 
 **CA5:** exact CA4 witness
 `uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
