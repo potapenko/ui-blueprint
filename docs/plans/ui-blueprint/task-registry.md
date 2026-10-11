@@ -31,7 +31,8 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
-| CA4 |same CA owner, restored|running read-only diagnostic|CN-B5 scrolled grid shows28+ while partial AX retains0–27; existing selection or minimal source-backed remedy, no quota increase |
+| CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
+| CA5 |same CA owner|dispatched bounded repair|Prove AX-reported visible children on owned grid, then conditional opt-in mode; no inferred visibility or quota changes |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
@@ -106,6 +107,18 @@ reconciled with aef13c6. Existing grammar/base files/version paths/privacy/exact
 numbers/coverage/unique dimension ownership preserved; no open finding in that
 scope. It does not accept rasters, corrected-header rendering or CW09 source.
 Same reviewer finished read-only with no retained task resources; archived.
+CA4 retained witness B5-09-grid-scroll-r2/observed.json is a successful partial
+response:160nodes/474819bytes, SHA256
+`5f57867e6fc83dd909158952483b130e0ca31ec733cc573c558e04c8f042db9c`.
+Grid handle55/clipSearch.resultsGrid enters with76handles used;84remaining slots
+retain28triples/cards0–27 while independent CUA reports cards28–76. Focus is window.
+WindowAX.swift301 reads AXChildren; NativeAcquisition.swift193 starts offset0.
+No supported existing selector fixes it. CA4 proposes explicit AXVisibleChildren
+mode, but this grid's support has not been observed. Apple documents a source-
+reported subset (https://developer.apple.com/documentation/applicationservices/kaxvisiblechildrenattribute),
+not permission to infer visibility from bounds. Root selects CA5 conditional on
+one owned live feasibility check, then minimal Native/CLI registration before code;
+old modes/160/depth9/budgets/window/publication/privacy/core remain protected.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
