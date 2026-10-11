@@ -10,6 +10,11 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
+**Proved eligible case count:99; unresolved upper bound102; conservative remainder901.**
+[CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
+explicit fixture origin, image buckets, duplicates and original execution protocols.
+This is completed evaluation count, not image-quality approval.
+
 Fourteen completed primary batches produced181 evaluated images,0 fully independently accepted.
 Their177 first outputs by configuration/sheet include3 duplicate fixture renderings;
 this is not181 distinct successful cases. CW-B4 adds9cases/13sheets and one full
@@ -68,7 +73,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
-| CCOUNT1 |same CD1 owner, restored|primary count reconciled; final cross-bucket check|98proved primary cases,98–101 range; repair-first unique sources checked before final overall total |
+| CCOUNT1 |same CD1 owner|accepted; archived|99proved cases,99–102 range; CP1/A06 first completion counted once, historical A01 baseline excluded |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
 | CW-B3 |same Web source owner|investigation accepted|6qualified pairs/packages/first images,6FAIL,0rerolls;14computed relations |
