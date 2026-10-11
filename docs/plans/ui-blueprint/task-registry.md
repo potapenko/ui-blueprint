@@ -27,7 +27,8 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
-| CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|running; source owner reused|Reliable Web capture sequence +3qualified new source pairs; no generation count |
+| CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
+| CW-B3 |same Web source owner|running|6new/lower-scroll/lookup Web states, complete source→CLI→image→QA |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|running; source owner reused|12focused-popup/preview/context/download-form states, full source→CLI→image→QA |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
@@ -82,6 +83,11 @@ uib-CA3-F1-artifacts-vn1d3act/tools; do not replay retired process identities.
 CA3/CR1 archived after handoff. CN-B4 reuses restored CN-B1 owner, new12-state finite
 packet, explicit rooted acquisition and fresh Mac reservation. Source acquisition
 can proceed independently of CP3, with frozen compiler/artifact identity per case.
+CC1 terminal: uib-cc1-capture-GzjhPA/handoff.json and workflow.json, manifest hash
+6383f88480961891ce0f1ecb00602e5ca34114cd95ca5972f4d077b556d53826.
+Own tab closed, viewport1280×720DPR2 restored. Not universal plugin/root-cause proof;
+CW21 cause/ownership unknown. CW-B3 now receives six distinct scrolled/lookup tasks
+with new capture qualification and explicit groups, no gate/account bypass.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
