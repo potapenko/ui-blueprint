@@ -7,7 +7,9 @@
 сначала план возможных проблем, затем тестирование. [План](corpus-testing.md).
 Mode coordinated, root coordination-only; previous single-agent goal complete,
 не возобновляется. Source c63b600 / registry37 / DESIGN-ANALYSIS@1.
-New generated/evaluated/accepted corpus cases:0/0/0; старые кейсы отдельно.
+Terminal-receipt generated/evaluated/accepted outputs:2/2/0 (CN-B1, both FAIL;
+partial sources and missing target coverage explicit). Other batches still running;
+their provisional outputs are not yet included. Старые кейсы отдельно.
 
 | Packet | Classification | Owner | Status | Consumer / next dependency |
 | --- | --- | --- | --- | --- |
@@ -16,11 +18,14 @@ New generated/evaluated/accepted corpus cases:0/0/0; старые кейсы о�
 | CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | accepted; archived |ed6c60d pushed;21tests,18pass/3explicit repro failures;0real cases |
 | CE1-FIX | shipping_product |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88 pushed;36tests pass/0ignored; two defects repaired |
 | CW-B1 | verification |01a12b42-f256-73b0-a694-014228af42b2|running|12Search/shell cases CW01–12, full capture→CLI→image→QA |
-| CN-B1 | verification |01a12b45-a160-7192-86ca-e0bd99f4d49f|running|12Mac cases A01–12, full pipeline |
+| CN-B1 | verification |01a12b45-a160-7192-86ca-e0bd99f4d49f|accepted investigation; cases incomplete|12attempted,14CLIpackages,5relations,2images FAIL;0accepted |
 | CN-B2 | verification |01a12b45-a69a-72b2-91f2-1f937304afae|running|8Simulator cases B05–08/B10–13, geometry evidence required |
 | CN2 | diagnostic |Mac advisor01a1102f-791c|accepted discovery|12wired C02 configurations; actual runtime distinctness pending |
 | CN-B3 | verification |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|running|12existing C02 configurations, actual component renders with explicit fixture-origin |
-| CW-B2 | verification |unassigned|queued resource|Clip Search CW13–24; await CW-B1 browser/controller release |
+| CW-B2 | verification |01a12b62-dbd8-7a42-8ddc-099c155d1291|running|12Clip Search cases CW13–24; CW-B1 browser/controller release confirmed |
+| CN3 | diagnostic |Mac advisor01a1102f-791c|running|Grid fractional widths: known layout policy vs inferred causes; recommendation consumer |
+| CP1 | shipping_product |01a12b6a-92a9-73c3-aec2-022e32651008|running|Bounded readable literal prompts for complex Native scopes, real image proof |
+| CA1 | diagnostic |01a12b6a-9746-7600-830d-b973f7b8e30b|running|Saved popup acquisition gap: cap/order/root/provider boundary |
 
 Write ownership pinned in plan. Advisors remain read-only and available.
 Source receipts: [Web](receipts/corpus-web-advice.md), [Native](receipts/corpus-native-advice.md).
@@ -57,6 +62,21 @@ untouched. CN-B3 now dispatched with mandatory fresh acquisition and no new wiri
 source recipe pin c7d8e3d, compiler1661e88. Fixture-origin renderings are labelled
 separately from real production states and synthetic numeric vectors.
 CW-B1 asked for equivalent resource handoff after capture; its generation/QA continues.
+CW-B1 subsequently confirmed own IAB tab closed,1280×720DPR2 restored, panels
+closed, Common Phrases restored; no physical input. CW-B2 dispatched with fresh
+resource/target check, new source pins and fixed1661e88 exporter, no shared build.
+CN3 is read-only product clarification for reported205.5/206/205.5pt grid widths;
+raw differences and rendered labels do not by themselves prove a design defect.
+CN-B1 terminal handoff accepted as bounded investigation, NOT successful full batch:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B1-_djmb16k/handoff.md`.
+Proved ImageGen HTTP400 max32000 actual44606; many80/160-node prompts overlimit.
+Scope acquisition gaps in A07–10 and A09 missing selected-tag precondition remain.
+Both images retained/rejected: A12 disabled-state loss; A02 query/composition error
+with popup source clipping. No app/source edits; own runtime restored/released.
+CP1 sole export-path writer, permitted applicable spec/CLI compatibility delta only
+if needed, own CARGO_TARGET_DIR and frozen images; no shared binary overwrite.
+CA1 read-only code/evidence plus its one diagnostic receipt; no runtime or collector
+mutation. Root did not run product diagnostics or judge images itself.
 Workers explicitly reminded to include supported mathematical design_analysis in
 new representative family cases and report unknown/no-analysis reasons, without
 rebuilding old packages or inventing expected_from.
