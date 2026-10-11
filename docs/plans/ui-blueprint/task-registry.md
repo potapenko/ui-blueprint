@@ -57,6 +57,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 | CN-B5 |same Native source owner|investigation accepted|8cases/52first sheets,10scoped author passes/42FAIL;701dimension checks,0complete cases |
 | CN-B7 |same Native source owner|dispatched offline corpus cycle|One new retained CA5 visible-grid source→export756dfca→first sheets, no live recapture |
+| CN-B8 |same mobile source owner, restored|dispatched full corpus cycle|Up to12 meaningful larger-text states across real mobile families; reuse CN-B2 reversible Simulator setup and restore originals |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
@@ -183,6 +184,14 @@ retained, tracked repos unchanged. Original destinations and pause restored;
 iPad's canonical Reels→Search handoff changed the active phrase, not claimed unchanged.
 No preferences, account or source code changed. Export/render witnesses remain
 available for generalization; no new repair or reroll assigned to this finished owner.
+
+**CN-B8:** same mobile owner receives a new finite larger-text variation batch,
+using the already qualified reversible Simulator text-size setup from CN-B2 and
+existing real source families. Only observed reflow/clipping/geometry changes count;
+no-op settings or identical rows do not. Original device text category/orientation/
+destination/pause must be restored. No app preference/locale/account/source changes.
+Frozen export756dfca, current source contracts, own device/input reservations and
+full first-image cycle; CP6 fixed-cohort work is independent. Final handoff pending.
 
 **CA5:** exact CA4 witness
 `uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
