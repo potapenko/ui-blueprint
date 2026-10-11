@@ -10,10 +10,11 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Eight completed primary batches produced78 evaluated images,0 independently accepted.
-Their74 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not78 distinct successful cases. CW-B4 adds9cases/13sheets and one full
-author-pass case, not independent acceptance. CN-B5/CN-B6 totals remain pending
+Nine completed primary batches produced101 evaluated images,0 fully independently accepted.
+Their97 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not101 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
+CN-B5 and CW-B5 totals remain pending
 their final handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13 images (31 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
@@ -55,7 +56,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 | CN-B5 |same Native source owner, restored|running full corpus cycle|New learner/list/adaptive-grid cases; frozen b01aee4 delivered |
-| CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|running full corpus cycle|8 new CN4 mobile recipes; existing Simulator ownership, frozen b01aee4 delivered |
+| CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
 | CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|diagnosis accepted; retained for CP6|Reconciled seven images; CW33/CW40 repair obligations, CW34 bounded positive control |
@@ -154,14 +155,23 @@ density/scope reduction. Input dependency:
 `uib-CN-B5-6jmj42i_/CP4-G01-length-dependency.json`.
 Its discarded scrolled-grid pair remains a collector witness, not a valid case.
 
-**CN-B6:** first interim at `playphraseme-cn-b6-h7jzxeiz/handoff.json` contains
-one Actor-picker family/two states/six sheets. Four b01aee4 images had three content
-failures and one bounded content pass, all below requested resolution. Two D02
-were subsequently generated with203c48a and exceeded their assigned detail scope.
-The same packet resumed Reels after root clarified that the value-selection ban
-does not forbid ordinary navigation. Sources for all six Reels recipes now exist;
-Search keyboard and Auto-advance visible content limitations remain explicit.
-Context premium gate remains an access gap. Final total handoff pending.
+**CN-B6:** final `playphraseme-cn-b6-h7jzxeiz/handoff.json` and manifest/reviews:
+7families/9source states/23first sheets/0rerolls. Six content-pass at returned size,
+14FAIL and3scope-unverified;0complete package acceptance. All23images1672×941
+instead of requested3840×2160. Four original ActorG01/D01 useb01aee4; ActorD02 and
+17Reels sheets use203c48a. No relabelled or repeated images.119known/7unknown AX
+frames,16design requests,4extra gap queries;65/68required labels correct.
+Useful exact evidence: Actor rows408×44pt, Translation rows358×52pt, Search
+editor→submit gap19pt, Reset→Apply gap8pt; no inferred layout/hit requirements.
+All six Reels recipes were exercised after ordinary-navigation clarification;
+the handoff's old interim prerequisite strings are superseded by final case_matrix
+and scope_reconciliation. Actual missing keyboard/Auto-advance paint and unknown
+fullscreen Exit frame remain explicit. Context premium gate remains an access gap.
+Runtime/own devices/mirrors/tabs released, source hashes/images/tool originals
+retained, tracked repos unchanged. Original destinations and pause restored;
+iPad's canonical Reels→Search handoff changed the active phrase, not claimed unchanged.
+No preferences, account or source code changed. Export/render witnesses remain
+available for generalization; no new repair or reroll assigned to this finished owner.
 
 **CA5:** exact CA4 witness
 `uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
