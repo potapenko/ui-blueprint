@@ -35,8 +35,8 @@ named uncertainties A02/B07 source qualification and C04 actual state novelty;
 upper bound101. Eleven proved cases are fixture/component-preview origin, not
 production observations. Its earlier91–93 total and22 supposedly missing old sheet
 calls are withdrawn: pre-CP4 combined attempts were executed and evaluated under
-their original protocol. Final cross-bucket check remains for any repair task that
-first completed an otherwise ungenerated unique source, without counting reruns twice.
+their original protocol. Final cross-bucket check adds CP1/A06 exactly once and
+excludes the unchanged historical A01 baseline, giving99 proved overall cases.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
