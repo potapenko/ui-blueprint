@@ -1,6 +1,6 @@
 # CP1 — literal corpus prompt repair, 2026-10-11
 
-Terminal result: **14/14 original CLI exports fit the observed 32,000-character
+Terminal result: **14/14 Native CLI exports plus CW14 Web holdout fit the observed 32,000-character
 ImageGen input limit; 4 fresh generations completed; 4 reviewed FAIL, 0 checked
 images.** The export-size blocker is repaired. Full image acceptance remains open;
 this checkpoint must not be counted as accepted corpus images.
@@ -63,6 +63,7 @@ Six files, old inputs/versions, privacy gates and byte-limit refusals remain.
 | A11 grid | 33311 | 17171 |
 | A11 narrow | 53836 | 27177 |
 | A12 viewer | 13923 | 11216 |
+| CW14 Web holdout | 35112 | 27410 |
 
 ## Verification and bounded image outcome
 
@@ -83,6 +84,8 @@ All four actual images are 1672×941, despite explicit 3840×2160 prompt request
 No raster is marked checked. No source-acquisition gap or incomplete popup is fixed.
 No guarantee is made that arbitrary larger scopes fit 32k; existing caller limits
 remain the boundary. Independent acceptance remains root-owned, not self-certified.
+Root-supplied CW-B2 holdout: same frozen binary, original inputs/limits; 215 nodes,
+65 omitted, partial preserved; three machine files byte-identical. No new generation; `web-holdout.json` retains exact command/hashes.
 
 ## Exact deliverable and retention
 
