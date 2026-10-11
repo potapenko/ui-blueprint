@@ -28,7 +28,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
-| CN5 |same Mac advisor|dispatched read-only source/QA consultation|Supported scoped software-keyboard setup and up to6 new geometry recipes; no device/global setting changes |
+| CN5 |same Mac advisor|reissued after off-task response|Keyboard recipe unanswered; old doc-copy response/link-only acd0b0e not treated as CN5 evidence; no further writes allowed |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
@@ -44,6 +44,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|implementation progress saved; CP6-F1 running|d9f3fff +41af560,4of7 bounded visual successes; fix only unmatched draft-rendering applicability |
+| CP7 |same exporter owner|queued after CP6-F1|CW49 full-layout/visible-frame assignment conflict, correct source geometry and replay ready; no source/crop changes |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -63,7 +64,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
-| CW-DOC1 |same Web source owner|dispatched read-only diagnosis|CW49 full2307-height versus visible666.5625; classify source/prompt/raster cause before any repair |
+| CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
 | CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP6 reconciled; retained for one correction|4bounded successes/3visual failures; author CW33/D02 pass rejected by exact membership |
 | CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP6 reconciled; exact cause check complete|CW33 extra count absent from prompt; CW40 still has unmatched whole-view draft rule |
 
@@ -142,6 +143,15 @@ restored, tracked repos unchanged, Chrome403 untouched. Recipe source remains
 CW-DOC1 now diagnoses CW49 from retained fields/actual prompts, optionally one
 offline d9f3fff replay; no images or UI. It must distinguish missing/misbound data,
 literal instruction conflict and raster noncompliance before proposing a repair.
+CW-DOC1 terminal: same nodeN000 has M0001/2 layout800×2307.0703125 and M0003/4
+derived visible intersection800×666.5625, CSS px/one viewport Space/local_only;
+partial/omitted38, no separate viewport node. Literal line43 requires a separate
+full frame, but OVERVIEW MEASURES lines55–57 assign≈2307 to the enclosing overview
+without that frame. Root queues a source-preserving presentation repair after CP6-F1:
+explicit empty full-layout sketch for M0001/2, visible fragment/cut separately;
+never replace one value with the other or create viewport geometry. Exact replay
+`uib-cw-doc1-regqr6_f/replay.json` proves d9f3fff leaves this block unchanged;
+all14original CW49 files unchanged. No new capture/image or source edits.
 Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
 initial observations precede author receipt. They do not create images or edit code.
 CV2 covers visible drawing quality; CT2 covers literal instructions and data.
@@ -275,6 +285,13 @@ asks for current status/message at chrome://inspect/#remote-debugging. No answer
 yet, no repeated connection or permission bypass. CW-S1 retained wrong-region and
 clipped/opacity-drift captures in `uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json`; neither
 qualifies. This local wait does not stop the other goal work.
+
+**CN5:** initial advisor turn answered an old documentation-copy task instead of
+the keyboard question. Its acd0b0e only makes one HBP source link absolute to the
+same target; root inspected and preserved it, no semantic epoch change. This is
+not accepted keyboard evidence. Same finite read-only packet reissued; advisor
+must distinguish any actual newer human steering from an old context/task and
+perform no additional document/code/Git/device changes. Other goal work continues.
 
 ### Reuse, acceptance and continuation
 
