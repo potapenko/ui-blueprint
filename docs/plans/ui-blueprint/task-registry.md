@@ -40,6 +40,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
+| CP6 |same CP owner, restored|dispatched|One concise source-bound sheet assignment, fixed CW33/CW34/CW40 set; preserve facts/ownership and positive control |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
@@ -56,8 +57,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|running full corpus cycle|8 new CN4 mobile recipes; existing Simulator ownership, frozen b01aee4 delivered |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|initial observations recorded; reconciling author handoff|Concrete CW40 input-owner substitution and CW33 ambiguous captions; CW34 positive control |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|initial observations recorded; reconciling author handoff|Same owner ambiguity; conflicting detail instructions, operand inventories and frame-basis qualifier |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|diagnosis accepted; retained for CP6|Reconciled seven images; CW33/CW40 repair obligations, CW34 bounded positive control |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|diagnosis accepted; retained for CP6|Compiler wording/context issues; no math defect; printed-qualifier requirement corrected |
 
 ### Current contracts and protected boundaries
 
@@ -135,6 +136,14 @@ and repeated operand inventories in the literal prompts. Source-detail flat slic
 also lack a clear readable boundary. These are initial findings; both critics now
 have the author handoff for final reconciliation. CW34 remains the positive control;
 no new image calls or source edits are part of criticism.
+Final reconciled evidence: [CV2/CT2 report](receipts/corpus-sheet-critics2.md).
+CT2 explicitly withdrew the claim that HBP R2 mandates printed placement of the
+geometry qualifier; retaining the basis is required, visible placement is proposed.
+Root selected CP6 within existing human presentation: distinct safe source captions,
+one applicable sheet instruction, explicit membership/context boundaries and concise
+attributed relationships. No new schema/membership/density or arithmetic change.
+Same exporter owner executes one fixed seven-sheet-or-fewer changed-prompt experiment;
+old images remain pinned. Both critics wait for neutral saved candidate artifacts.
 
 **CN-B5:**8 qualified partial source states/52 required sheets. Six G01 were
 over32000chars; CP5 now unblocks their first calls. Eleven empty-dimension details
