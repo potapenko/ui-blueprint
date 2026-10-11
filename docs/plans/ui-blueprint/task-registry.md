@@ -19,6 +19,12 @@ CN-B8 adds5families/7states/11sheets. Further batches count only after their fin
 generation/evaluation handoffs. A split sheet is not a new source case.
 CW-B6 adds5states/5first sheets; CT3 confirms two narrow prepared-caption omissions,
 not arithmetic errors or a mandatory machine-token/placement requirement.
+Case eligibility follows each original execution protocol and contract epoch.
+Unperformed independently assigned sheet calls are incomplete work. An executed
+and evaluated single combined-prompt attempt that omits required views is a failed
+rendering evaluation, not automatically an unexecuted case. Do not retroactively
+apply CP4/export0.4 standalone-sheet mechanics to older protocols. Ambiguous old
+obligations remain explicit count uncertainty; source qualification is never waived.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
