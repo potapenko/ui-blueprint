@@ -56,8 +56,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|running full corpus cycle|8 new CN4 mobile recipes; existing Simulator ownership, frozen b01aee4 delivered |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|dispatched full corpus cycle|CW43–50 new Reels/menu/public-document/not-found recipes; frozen756dfca |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running independent visual critic|CW33/CW34/CW40 retained first images; reader clarity, composition and scope |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running independent content critic|Same neutral artifacts; prompt/data/anchors/relationships, no code audit |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|initial observations recorded; reconciling author handoff|Concrete CW40 input-owner substitution and CW33 ambiguous captions; CW34 positive control |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|initial observations recorded; reconciling author handoff|Same owner ambiguity; conflicting detail instructions, operand inventories and frame-basis qualifier |
 
 ### Current contracts and protected boundaries
 
@@ -127,6 +127,14 @@ Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
 initial observations precede author receipt. They do not create images or edit code.
 CV2 covers visible drawing quality; CT2 covers literal instructions and data.
 Their immediate consumer is one bounded next exporter repair, not more review loops.
+Both initial observations independently identify CW40/D02:260.171875×40 belongs
+to inputN203, not enclosing366×42 shellN202 with three sibling icon groups.
+CW33's three distinct select insets print identical item1 captions. CT2 additionally
+finds conflicting measurement-only versus preserve-every-object/artwork instructions
+and repeated operand inventories in the literal prompts. Source-detail flat slices
+also lack a clear readable boundary. These are initial findings; both critics now
+have the author handoff for final reconciliation. CW34 remains the positive control;
+no new image calls or source edits are part of criticism.
 
 **CN-B5:**8 qualified partial source states/52 required sheets. Six G01 were
 over32000chars; CP5 now unblocks their first calls. Eleven empty-dimension details
