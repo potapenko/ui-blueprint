@@ -10,13 +10,15 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Thirteen completed primary batches produced176 evaluated images,0 fully independently accepted.
-Their172 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not176 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Fourteen completed primary batches produced181 evaluated images,0 fully independently accepted.
+Their177 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not181 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
 generation/evaluation handoffs. A split sheet is not a new source case.
+CW-B6 adds5states/5first sheets; two author qualifier-only failures are under CT3
+criterion attribution, not automatically elevated to mandatory product failures.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -66,10 +68,11 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
-| CW-B6 |same Web source owner, restored|dispatched full corpus cycle|Up to6 real empty-result/query-feedback states; no duplicate words, forced failures, preferences or access changes; export814af45 |
+| CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL, CT3 checking two qualifier-only judgments |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
 | CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP7 reconciled; retained for future changed artifacts|Frame separation passes, raster display/style fails; no new compiler cause established |
 | CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP7 reconciled; retained for future changed artifacts|Source and literal assignment pass, extra/long-decimal/unit labels fail; no further generic repair |
+| CT3 |same content critic|running narrow criterion check|CW54/CW56 missing layout_bounds: literal caption versus mandatory semantic basis; no new image/code/test wave |
 
 ### Current contracts and protected boundaries
 
@@ -293,13 +296,18 @@ synthetic geometry. Actual runtime app components may use fixture data, explicit
 labelled as such. Native1af633c and export814af45 frozen consumers; current source
 branch/owned runtime/reservations, full first-image cycle and restoration required.
 
-**CW-B6:** existing Web owner receives up to6 meaningful natural empty-result or
-query-local feedback states. Actual nonempty-query zero results differ from old
-empty-query shell; shared-picker/no-op/word-only duplicates do not count. Safe
-public query/draft setup and restore only, no code/state injection, network failure
-forcing, preference/account/access changes or Chrome403 retry. Same full source→
-canonical geometry→literal export814af45→first required sheets→evaluation cycle.
-Final counts and handoff pending; no new infrastructure or rerolls authorized.
+**CW-B6:** terminal `uib-cw-b6-dRaUXk/handoff.json`, manifest SHA256
+`41cc4b3ea19ff33c924eb5c1a5c34000a039f7a6ca8caf8019d9948ca2ff1b6e`.
+Five new sources/5first G01/0rerolls, frozen814af45;280layout frames/49required
+dimensions/73files checked,11relation requests. Author reports0PASS/5FAIL:
+CW52 imports header, CW53 changes prepared Year gap≈5 to≈3, CW55 incorrectly repairs
+the original text/control overlap; CW54/CW56 preserve composition/numbers but omit
+the requested layout_bounds qualifier. CT3 audits only that last criterion against
+actual prompt and source contracts, preserving earlier placement clarification.
+No guest dialog appeared; no manufactured gate, preference/access changes or source
+mutations. Task tab closed, source restoration complete, console/network failures0;
+all images/originals retained. Browser runtime through node_repl was supported;
+Chrome403 untouched. Source owner finished and archived, no reroll assigned.
 
 **CA5:** exact CA4 witness
 `uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
