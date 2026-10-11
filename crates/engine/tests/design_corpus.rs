@@ -297,7 +297,6 @@ fn overflow_is_typed_and_never_a_finite_recommendation() {
 }
 
 #[test]
-#[ignore = "CE1-001 unresolved: semantic duplicate width creates false majority; run explicitly with --ignored"]
 fn duplicate_width_with_different_fraction_cannot_manufacture_majority() {
     let (s, mut q, e) = inputs(&[4., 5.]);
     let mut duplicate = q[0].clone();
@@ -357,4 +356,85 @@ fn unresolved_target_is_unknown_and_height_uses_its_own_measurement() {
     }
     let r = pattern(&s, &q, &e).unwrap();
     assert_eq!((r.candidate, r.exceptions), (Some(8.), vec![(1, 1.)]));
+}
+
+#[test]
+fn duplicate_height_with_different_fraction_cannot_manufacture_majority() {
+    for fraction in [0., 0.25, 1.] {
+        let (mut s, mut q, e) = inputs(&[4., 5.]);
+        for (i, query) in q.iter_mut().enumerate() {
+            query.operation = GeometryRelation::Height;
+            query.anchors[0].axis = Id("y".into());
+            rect(&mut s, i).height = [8., 9.][i];
+        }
+        let mut duplicate = q[0].clone();
+        duplicate.id = Id("another-height-query".into());
+        duplicate.anchors[0].fraction = fraction;
+        q.insert(1, duplicate);
+        assert_eq!(pattern(&s, &q, &e).unwrap_err(), GeometryError::InvalidRule);
+    }
+}
+
+#[test]
+fn distinct_sizes_preserve_original_anchors_and_measurement_evidence() {
+    for operation in [GeometryRelation::Width, GeometryRelation::Height] {
+        let (mut s, mut q, e) = inputs(&[4., 4., 5.]);
+        for (i, query) in q.iter_mut().enumerate() {
+            query.operation = operation;
+            query.anchors[0].fraction = [0., 0.25, 1.][i];
+            if operation == GeometryRelation::Height {
+                query.anchors[0].axis = Id("y".into());
+                rect(&mut s, i).height = [4., 4., 5.][i];
+            }
+        }
+        let original = (s.clone(), q.clone(), e.clone());
+        let result = pattern(&s, &q, &e).unwrap();
+        assert_eq!(
+            (result.candidate, result.support, result.exceptions),
+            (Some(4.), 2, vec![(2, 1.)])
+        );
+        for (i, measurement) in result.measurements.iter().enumerate() {
+            let MeasurementResult::Known { measurement } = measurement else {
+                panic!("known size")
+            };
+            assert_eq!(
+                measurement.value,
+                Value::Quantity {
+                    amount: [4., 4., 5.][i],
+                    kind: QuantityKind::Length,
+                    source_units: Unit::CssPx
+                }
+            );
+            assert_eq!(measurement.evidence, vec![evidence(&mut s, i).clone()]);
+            assert_eq!(measurement.space, e.result_space);
+        }
+        assert_eq!((s, q, e), original);
+    }
+}
+
+#[test]
+fn gap_fractions_remain_distinct_measurements_on_the_same_elements() {
+    let (s, gaps, e) = gap_inputs(&[0., 14.]);
+    let queries = [(0., 0.), (0.5, 0.5), (1., 0.)]
+        .into_iter()
+        .enumerate()
+        .map(|(i, (from, to))| {
+            let mut q = gaps[0].clone();
+            q.id = Id(format!("gap-{i}"));
+            q.anchors[0].fraction = from;
+            q.anchors[1].fraction = to;
+            q
+        })
+        .collect::<Vec<_>>();
+    let result = pattern(&s, &queries, &e).unwrap();
+    assert_eq!(
+        (result.candidate, result.support, result.exceptions),
+        (Some(14.), 2, vec![(2, -10.)])
+    );
+    let mut duplicate = queries.clone();
+    duplicate[1] = queries[0].clone();
+    assert_eq!(
+        pattern(&s, &duplicate, &e).unwrap_err(),
+        GeometryError::InvalidRule
+    );
 }

@@ -132,7 +132,18 @@ pub fn pattern(
                     .iter()
                     .any(|a| Some(&a.axis) != first.anchors.first().map(|a| &a.axis))
                 || q.anchors.first().map(|a| &a.axis) != first.anchors.first().map(|a| &a.axis)
-                || queries[..i].iter().any(|other| q.anchors == other.anchors)
+                || queries[..i].iter().any(|other| {
+                    q.anchors.len() == other.anchors.len()
+                        && q.anchors.iter().zip(&other.anchors).all(|(a, b)| {
+                            a.element == b.element
+                                && a.frame_kind == b.frame_kind
+                                && a.coordinate_space == b.coordinate_space
+                                && a.axis == b.axis
+                                // Size measurements do not use the anchor position.
+                                && (matches!(q.operation, Width | Height)
+                                    || a.fraction == b.fraction)
+                        })
+                })
         })
     {
         return Err(GeometryError::InvalidRule);

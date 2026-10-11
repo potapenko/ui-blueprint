@@ -333,7 +333,10 @@ fn operand_name(q: &GeometryQuery, snapshot: &Snapshot, scene: &SceneView) -> St
 }
 
 fn ratio_label(value: f64) -> String {
-    if value != 0.0 && value.abs() < 0.001 {
+    if value == 0.0 {
+        return "0".into();
+    }
+    if value.abs() < 0.001 {
         return if value < 0.0 { "−<0.001" } else { "<0.001" }.into();
     }
     let label = format!("{value:.3}");

@@ -159,7 +159,10 @@ fn check_comparison_tolerance_source_and_exception_are_preserved() {
 
 #[test]
 fn aliases_join_queries_measurements_context_and_scene_without_private_text() {
-    let (mut b, q, e, _) = fixture(&[4., 4., 5.]);
+    let (mut b, mut q, e, _) = fixture(&[4., 4., 5.]);
+    for (query, fraction) in q.iter_mut().zip([0., 0.25, 1.]) {
+        query["anchors"][0]["fraction"] = json!(fraction);
+    }
     let s = &mut b["views"][0]["source"]["snapshot"];
     for node in s["nodes"].as_array_mut().unwrap() {
         node["properties"][0]["evidence"]["method"] = json!("private-method-canary");
@@ -180,6 +183,11 @@ fn aliases_join_queries_measurements_context_and_scene_without_private_text() {
         v["components"][0]["surface"]
     );
     for j in 0..3 {
+        assert_eq!(
+            facts["queries"][j]["anchors"][0]["fraction"],
+            q[j]["anchors"][0]["fraction"]
+        );
+        assert_eq!(facts["queries"][j]["operation"], "width");
         assert_eq!(
             facts["queries"][j]["anchors"][0]["element"],
             facts["queries"][j]["targets"][0]
@@ -294,7 +302,6 @@ fn every_public_analysis_annotation_uses_existing_privacy_gate() {
 }
 
 #[test]
-#[ignore = "CE1-001 unresolved: false majority reaches export; run explicitly with --ignored"]
 fn duplicate_width_does_not_ship_a_false_recommendation() {
     let (mut b, mut q, e, _) = fixture(&[4., 5.]);
     let mut duplicate = q[0].clone();
@@ -311,7 +318,6 @@ fn duplicate_width_does_not_ship_a_false_recommendation() {
 }
 
 #[test]
-#[ignore = "CE1-002 unresolved: ratio summary prints negative zero; run explicitly with --ignored"]
 fn signed_zero_ratio_is_printed_as_zero() {
     let (mut b, q, e, _) = fixture(&[10., 10., 10.]);
     for (node, x) in b["views"][0]["source"]["snapshot"]["nodes"]
@@ -337,7 +343,15 @@ fn signed_zero_ratio_is_printed_as_zero() {
     relation(&mut b, &gaps, &e, "ratio");
     let p = package(b);
     let i = insights(&p);
-    assert_eq!(i[0]["facts"]["result"]["value"], json!(-0.0));
+    assert_eq!(
+        i[0]["facts"]["result"]["value"].as_f64().unwrap().to_bits(),
+        (-0.0_f64).to_bits()
+    );
+    for file in ["prompt.txt", "drawing-brief.md"] {
+        let text = String::from_utf8_lossy(&p.files()[file]);
+        assert!(text.contains(": 0 times as large."));
+        assert!(!text.contains("-0 times"));
+    }
     assert!(
         !i[0]["summary"].as_str().unwrap().contains("-0 times"),
         "display signed zero must be 0; actual {}",
