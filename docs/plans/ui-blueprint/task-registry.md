@@ -66,6 +66,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
+| CW-B6 |same Web source owner, restored|dispatched full corpus cycle|Up to6 real empty-result/query-feedback states; no duplicate words, forced failures, preferences or access changes; export814af45 |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
 | CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP7 reconciled; retained for future changed artifacts|Frame separation passes, raster display/style fails; no new compiler cause established |
 | CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP7 reconciled; retained for future changed artifacts|Source and literal assignment pass, extra/long-decimal/unit labels fail; no further generic repair |
@@ -291,6 +292,14 @@ previews do not count. No new host/selector/source code, production mutations or
 synthetic geometry. Actual runtime app components may use fixture data, explicitly
 labelled as such. Native1af633c and export814af45 frozen consumers; current source
 branch/owned runtime/reservations, full first-image cycle and restoration required.
+
+**CW-B6:** existing Web owner receives up to6 meaningful natural empty-result or
+query-local feedback states. Actual nonempty-query zero results differ from old
+empty-query shell; shared-picker/no-op/word-only duplicates do not count. Safe
+public query/draft setup and restore only, no code/state injection, network failure
+forcing, preference/account/access changes or Chrome403 retry. Same full source→
+canonical geometry→literal export814af45→first required sheets→evaluation cycle.
+Final counts and handoff pending; no new infrastructure or rerolls authorized.
 
 **CA5:** exact CA4 witness
 `uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
