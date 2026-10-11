@@ -103,11 +103,11 @@ enum NativeFocusedAX {
         throw NativeAcquisitionError.limit
     }
     @MainActor static func collect(_ command: Command, access: NativeAXAccess = .live,
-        processCurrent: (Process) -> Bool = { p in
+        processCurrent: @escaping (Process) -> Bool = { p in
             guard let app = NSRunningApplication(processIdentifier:p.pid) else { return false }
             return app.bundleIdentifier == p.bundle_id && app.launchDate?.timeIntervalSince1970 == p.launch_time
         }, application: (Int32) -> CFTypeRef = { AXUIElementCreateApplication($0) },
-        windowOwner: (CFTypeRef) -> Int32? = { raw in
+        windowOwner: @escaping (CFTypeRef) -> Int32? = { raw in
             guard CFGetTypeID(raw) == AXUIElementGetTypeID() else { return nil }
             var pid: pid_t = 0
             return AXUIElementGetPid(unsafeDowncast(raw,to:AXUIElement.self),&pid) == .success ? pid : nil
@@ -178,6 +178,21 @@ enum NativeFocusedAX {
                 else { throw SelectionError.changed }
                 try same()
             }
+            var publishObserved = false
+            frame.publicationValidation = { [app, window, popup] in
+                withExtendedLifetime((app, window, popup)) {
+                    guard publishObserved else { return nil }
+                    do {
+                        if popup != nil { try sameSelection() } else { try same() }
+                        return nil
+                    } catch {
+                        publishObserved = false
+                        if !processCurrent(config.process) || error is SelectionError { return stale }
+                        if let issue = error as? NativeAcquisitionError, issue == .limit { return incomplete }
+                        return unresolved
+                    }
+                }
+            }
             if popup != nil { try sameSelection() }
             let oid = rid + "-external_semantics"
             let collected = try collectWindowAX(popup?.root ?? window,surface:surface,observationID:oid,
@@ -196,7 +211,10 @@ enum NativeFocusedAX {
                 try json.object(["status","data"]) { ["status":try json.scalar("observed"),"data":snapshot] }
             })
             if popup != nil { try sameSelection() }
-            else { do { try same() } catch { frame.reset(); try frame.encode(stale) } }
+            else { do { try same() } catch { frame.reset(); try frame.encode(stale); return frame } }
+            // Only a fully encoded, internally revalidated observation enables
+            // the final descriptor-boundary check. Failed replies retain owners.
+            publishObserved = true
         } catch {
             frame.reset()
             // Deadline/shape limits do not establish identity loss. The parent

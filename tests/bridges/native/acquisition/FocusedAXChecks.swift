@@ -70,6 +70,7 @@ import ApplicationServices
   bad=request;bad["operation"]=["operation":"observe","channels":["rendered_capture"]]
   do{_=try command(config,req:bad);preconditionFailure("capture not enabled")}catch{checks+=1}
   checks += try popupChecks(profile: profile, request: request, header: header, output: output)
+  checks += try FocusedAXPublicationChecks.run(profile: profile, request: request, header: header, output: output)
   print("{\"checks\":\(checks),\"ordinary_ax\":true,\"fixture_files\":false,\"live_sdk\":false}")
  }
  @MainActor static func popupChecks(profile: Any, request: [String: Any], header: NativeControl, output: URL) throws -> Int {

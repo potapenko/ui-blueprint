@@ -107,6 +107,9 @@ final class NativeJSONFrame: OutputStream {
     private var status: Stream.Status = .notOpen
     private let deadline: Double
     private var finished = false
+    // The closure owns the observation binding until this frame is released,
+    // including descriptor waits and failed writes. It must not capture frame.
+    @MainActor var publicationValidation: (@MainActor () throws -> [String: Any]?)?
     var count: Int { used }
 
     init(capacity: Int, deadline: Double) throws {
@@ -142,7 +145,7 @@ final class NativeJSONFrame: OutputStream {
         for i in 0..<used { storage[i] = 0 }
         used = 0; failed = false; finished = false; status = .notOpen
     }
-    func write(to fd: Int32, deadline: Double) throws {
+    @MainActor func write(to fd: Int32, deadline: Double, cap: Int? = nil) throws {
         guard finished, !failed else { throw NativeAcquisitionError.invalidValue }
         var offset = 0
         while offset < used {
@@ -152,6 +155,17 @@ final class NativeJSONFrame: OutputStream {
             let ready = poll(&interest, 1, Int32(min(1000, max(1, ceil(remaining * 1000)))))
             if ready == 0 || (ready < 0 && errno == EINTR) { continue }
             guard ready > 0 else { throw NativeAcquisitionError.io }
+            // Readiness may have waited after collection. Revalidate at every
+            // actual write attempt, retaining the binding through the IO call.
+            if let replacement = try publicationValidation?() {
+                // A prefix already sent cannot be replaced by a different JSON
+                // document. Abort; the receiver must not commit a partial frame.
+                guard offset == 0 else { failed = true; throw NativeAcquisitionError.invalidValue }
+                reset()
+                try encode(replacement)
+            }
+            guard used <= (cap ?? storage.count) else { throw NativeAcquisitionError.limit }
+            guard ProcessInfo.processInfo.systemUptime < deadline else { throw NativeAcquisitionError.expired }
             let n = storage.withUnsafeBufferPointer { Darwin.write(fd, $0.baseAddress!.advanced(by: offset), used - offset) }
             if n < 0 && (errno == EINTR || errno == EAGAIN) { continue }
             guard n > 0 else { throw NativeAcquisitionError.io }
