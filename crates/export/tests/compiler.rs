@@ -212,6 +212,8 @@ fn separate_prompts_cover_source_and_own_every_selected_dimension_once() {
         assert!(unique.contains(id), "{id}");
     }
     let d1 = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert!(!d1.contains("VIEW PLAN: complete overview"));
+    assert!(d1.contains("VIEW PLAN: ONLY this detail sheet's assigned measurement blocks"));
     assert!(d1.contains("WIDTH 400 CSS px") && d1.contains("HEIGHT 48 CSS px"));
     let d2 = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
     assert!(d2.contains("WIDTH 120 CSS px") && d2.contains("HEIGHT 48 CSS px"));
@@ -1383,6 +1385,63 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             assert!(object.contains("DISTINCT FRAME (clipping not established)"));
         }
     }
+}
+
+#[test]
+fn clipping_is_component_scoped_directional_and_sheet_scoped() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for (index, top) in [(0, true), (2, false)] {
+        let mut visible = snapshot.nodes[index].properties[2].clone();
+        let Property::Requested {
+            field,
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut visible
+        else {
+            panic!()
+        };
+        *field = Field::VisibleRegion;
+        g.frame_kind = FrameKind::VisibleRegion;
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        if top {
+            r.y += 4.0;
+            r.height -= 4.0;
+        } else {
+            r.width -= 4.0;
+        }
+        snapshot.nodes[index].properties[4] = visible;
+    }
+    let source = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    for file in ["prompt.txt", "prompt-G01.txt", "prompt-D01.txt"] {
+        let text = std::str::from_utf8(&p.files()[file]).unwrap();
+        let clips = text
+            .lines()
+            .filter(|l| l.starts_with("COMPONENT CLIP"))
+            .collect::<Vec<_>>();
+        assert_eq!(clips.len(), 2, "{file}");
+        assert!(clips[0].starts_with("COMPONENT CLIP #1"));
+        assert!(clips[0].contains("known clipped edges [Top]"));
+        assert!(clips[1].starts_with("COMPONENT CLIP #3"));
+        assert!(clips[1].contains("known clipped edges [Right]"));
+        assert!(clips.iter().all(|l| !l.contains("crop of the artwork")));
+    }
+    for file in ["prompt-D02.txt", "prompt-D03.txt"] {
+        assert!(
+            !std::str::from_utf8(&p.files()[file])
+                .unwrap()
+                .lines()
+                .any(|line| line.starts_with("COMPONENT CLIP #"))
+        );
+    }
+    assert_eq!(serde_json::to_vec(&b).unwrap(), source);
 }
 
 #[test]

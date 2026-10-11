@@ -109,7 +109,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
         )
     {
         let v = &scene.views[0];
-        let partial = partial_visibility(&brief.views[0].source);
+        let partial = clipped_edges(&brief.views[0].source);
         required_dimension_ids = drawing_dimensions(
             v,
             &dims[0],
@@ -631,7 +631,7 @@ fn printable_state(v: &SceneView) -> String {
         "PRINT THIS VIEW'S STATE CAPTION exactly: {caption:?}. Keep the designated active object double-outlined in this view, with BLUE interior; repeated objects retain the SAME state.\n"
     )
 }
-fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> Result<String> {
+fn object_text(v: &SceneView, index: usize, partial: &[Vec<Edge>], limit: usize) -> Result<String> {
     let c = &v.components[index];
     let aggregate = !visible_text(c).is_empty()
         && child_indices(v, index).iter().any(|&i| {
@@ -721,7 +721,7 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
             {
                 out.push_str(&format!(
                     "; {} reported visible-region {} (Space {} {:?}, {}, {:?})",
-                    if partial.get(index).copied().unwrap_or(false) {
+                    if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
                         "CLIPPED LAYOUT: draw only"
                     } else {
                         "DISTINCT FRAME (clipping not established):"
@@ -743,7 +743,7 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
 }
 fn drawing_inventory(
     v: &SceneView,
-    partial: &[bool],
+    partial: &[Vec<Edge>],
     anchors: &[usize],
     selected: Option<&[String]>,
     limit: usize,
@@ -795,31 +795,39 @@ fn drawing_inventory(
             contexts.push(context);
         }
     }
-    if let Some((i, c)) = v.components.iter().enumerate().find(|(i, c)| {
-        partial.get(*i).copied().unwrap_or(false) && selected.is_none_or(|s| s.contains(&c.id))
-    }) && let Some(Value::Geometry(visible)) = c
-        .properties
-        .iter()
-        .find(|p| p.field() == Field::VisibleRegion)
-        .and_then(Property::known)
-        && let Shape::Rect(r) = &visible.shape
-    {
-        append(
-            &mut out,
-            &format!(
-                "SOURCE CUT MASK (construction only): {} visible rectangle x {}, y {}, width {}, height {} {} in source Space {} ({:?}, {:?}). This is the crop of the artwork, not a dimensioned full layout outline. Keep partial glyphs at its bottom/left edge exactly as the original; no full final row or closing table border. Full-layout dimensions belong to a separate empty frame sketch, not this cut artwork.\n",
-                component_name(v, i),
-                r.x,
-                r.y,
-                r.width,
-                r.height,
-                unit_name(visible.coordinate_space.units),
-                visible.coordinate_space.id.0,
-                visible.coordinate_space.kind,
-                visible.coordinate_space.origin
-            ),
-            limit,
-        )?;
+    for (i, c) in v.components.iter().enumerate() {
+        let Some(edges) = partial.get(i).filter(|edges| !edges.is_empty()) else {
+            continue;
+        };
+        if selected.is_some_and(|s| !s.contains(&c.id)) {
+            continue;
+        }
+        if let Some(Value::Geometry(visible)) = c
+            .properties
+            .iter()
+            .find(|p| p.field() == Field::VisibleRegion)
+            .and_then(Property::known)
+            && let Shape::Rect(r) = &visible.shape
+        {
+            append(
+                &mut out,
+                &format!(
+                    "COMPONENT CLIP #{} (construction only), {}: known clipped edges {:?}; visible rectangle x {}, y {}, width {}, height {} {} in source Space {} ({:?}, {:?}). Apply this cut ONLY to this component, not a global crop of the generated sheet or unrelated components. Keep partial glyphs only at these proved edges; do not reflow or complete this component beyond them. Full-layout dimensions refer to its separate full frame, never to this visible intersection.\n",
+                    i + 1,
+                    component_name(v, i),
+                    edges,
+                    r.x,
+                    r.y,
+                    r.width,
+                    r.height,
+                    unit_name(visible.coordinate_space.units),
+                    visible.coordinate_space.id.0,
+                    visible.coordinate_space.kind,
+                    visible.coordinate_space.origin
+                ),
+                limit,
+            )?;
+        }
     }
     for (i, c) in v.components.iter().enumerate() {
         if selected.is_some_and(|s| !s.contains(&c.id)) {
@@ -1097,7 +1105,7 @@ fn same_frame(a: &SceneComponent, b: &SceneComponent) -> bool {
             _ => false,
         }
 }
-fn partial_visibility(source: &SourceInput) -> Vec<bool> {
+fn clipped_edges(source: &SourceInput) -> Vec<Vec<Edge>> {
     let SourceInput::Observed { snapshot, .. } = source else {
         return vec![];
     };
@@ -1128,7 +1136,7 @@ fn partial_visibility(source: &SourceInput) -> Vec<bool> {
                 property(Field::VisibleRegion),
             )
             else {
-                return false;
+                return vec![];
             };
             if layout.frame_kind != FrameKind::LayoutBounds
                 || visible.frame_kind != FrameKind::VisibleRegion
@@ -1138,7 +1146,7 @@ fn partial_visibility(source: &SourceInput) -> Vec<bool> {
                 || !matches!(layout.shape, Shape::Rect(_))
                 || !matches!(visible.shape, Shape::Rect(_))
             {
-                return false;
+                return vec![];
             }
             let query = GeometryQuery {
                 id: Id("export-visible-subset".into()),
@@ -1175,12 +1183,23 @@ fn partial_visibility(source: &SourceInput) -> Vec<bool> {
                         right,
                         bottom,
                     } => {
-                        [left, top, right, bottom].iter().all(|x| *x >= 0.0)
-                            && [left, top, right, bottom].iter().any(|x| *x > 0.0)
+                        if [left, top, right, bottom].iter().all(|x| *x >= 0.0) {
+                            [
+                                (Edge::Left, left),
+                                (Edge::Top, top),
+                                (Edge::Right, right),
+                                (Edge::Bottom, bottom),
+                            ]
+                            .into_iter()
+                            .filter_map(|(edge, inset)| (inset > 0.0).then_some(edge))
+                            .collect()
+                        } else {
+                            vec![]
+                        }
                     }
-                    _ => false,
+                    _ => vec![],
                 },
-                _ => false,
+                _ => vec![],
             }
         })
         .collect()
@@ -1247,7 +1266,7 @@ struct Presentation {
 fn drawing_dimensions(
     v: &SceneView,
     dimensions: &ViewDimensions,
-    partial: &[bool],
+    partial: &[Vec<Edge>],
     sheet: Option<&Sheet>,
     sheets: &[Sheet],
     limit: usize,
@@ -1255,7 +1274,7 @@ fn drawing_dimensions(
     let index = |id: &str| v.components.iter().position(|c| c.id == id);
     let large = |i: usize| {
         control(&v.components[i])
-            && !partial.get(i).copied().unwrap_or(false)
+            && partial.get(i).is_none_or(|edges| edges.is_empty())
             && rect(&v.components[i]).is_some_and(|r| r.width >= 12.0 && r.height >= 12.0)
     };
     let frame_matches = |d: &Dimension| {
@@ -1614,7 +1633,11 @@ fn drawing_dimensions(
     )?;
     append(
         &mut out,
-        "VIEW PLAN: complete overview plus ONLY the following supported local details. Each label has one owner; never repeat measurements on another view.\nOVERVIEW MEASURES:\n",
+        if sheet.is_some_and(|s| s.kind == "detail") {
+            "VIEW PLAN: ONLY this detail sheet's assigned measurement blocks, no overview or UI artwork. Each label has one owner; never repeat measurements from another sheet.\nASSIGNED MEASURES:\n"
+        } else {
+            "VIEW PLAN: complete overview plus ONLY the following supported local details. Each label has one owner; never repeat measurements on another view.\nOVERVIEW MEASURES:\n"
+        },
         limit,
     )?;
     let overview_measures = lines
@@ -1853,7 +1876,7 @@ fn prompt(
             .find(|x| x.view == v.id)
             .ok_or(E::InvalidReference)?;
         let selected = sheets.iter().filter(|x| x.view == v.id).collect::<Vec<_>>();
-        let partial = partial_visibility(&b.views[index].source);
+        let partial = clipped_edges(&b.views[index].source);
         let presentation = drawing_dimensions(v, dims, &partial, None, sheets, limit)?;
         if s.views.len() > 1 {
             append(

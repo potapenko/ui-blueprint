@@ -31,10 +31,11 @@ Source wrappers appear only as necessary measurement boundaries.
 Use the original reference for artwork appearance. AX coordinates describe only
 accessibility measurements; they do not reposition painted text or glyphs. Never
 expose occluded controls in artwork just because their AX records are listed.
-The source text payload can contain entire clipped lines. CLIPPING TAKES PRIORITY:
-cut glyphs and rows at the reported visible-region boundary as in the original;
-do not move, shrink, reflow or complete the last row to make its full text visible.
-Show the cut with a break mark; do not close an incomplete table/card at the cut.
+The source text payload can contain clipped content. CLIPPING TAKES PRIORITY:
+apply each COMPONENT CLIP only to its named component and listed proved edges.
+Do not move, shrink, reflow or complete that component beyond those edges.
+A clipped child does not define an overall artwork crop or clip its neighbors.
+No unlisted edge or unproved component receives a clipping instruction.
 
 ГЕОМЕТРИЯ
 {{dimensions}}{{design_analysis}}
