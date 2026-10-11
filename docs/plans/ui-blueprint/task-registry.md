@@ -394,6 +394,11 @@ file operations. The original advisor remains preserved; other goal work continu
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
 It must return actual new compositions or a source-backed safe-coverage ceiling.
+Its source pass found129 AppScenario IDs,21 prior dispositions and12 current
+candidates. IDs are not proof of unique UI. Root requested one stable selected-ID/
+remaining-catalog/frozen-app handoff so a disjoint next batch can reuse the build
+while CN-B10 generates offline. Debug app retention now has that named consumer;
+physical input/capture remains serialized, no second batch dispatched yet.
 On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
