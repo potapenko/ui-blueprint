@@ -28,7 +28,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
-| CN5 |same Mac advisor|reissued after off-task response|Keyboard recipe unanswered; old doc-copy response/link-only acd0b0e not treated as CN5 evidence; no further writes allowed |
+| CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
+| CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|dispatched fresh read-only consultation|Supported scoped keyboard show/dismiss and up to6 real geometry recipes; no app/device/settings/file operations |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
@@ -286,12 +287,13 @@ yet, no repeated connection or permission bypass. CW-S1 retained wrong-region an
 clipped/opacity-drift captures in `uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json`; neither
 qualifies. This local wait does not stop the other goal work.
 
-**CN5:** initial advisor turn answered an old documentation-copy task instead of
-the keyboard question. Its acd0b0e only makes one HBP source link absolute to the
-same target; root inspected and preserved it, no semantic epoch change. This is
-not accepted keyboard evidence. Same finite read-only packet reissued; advisor
-must distinguish any actual newer human steering from an old context/task and
-perform no additional document/code/Git/device changes. Other goal work continues.
+**CN5/CN5B:** the original advisor returned a document-copy answer and cited a
+separate direct-human task; no keyboard recipe was established. Its acd0b0e only
+makes one HBP source link absolute to the same target; root inspected and preserved
+it, no semantic epoch change. Root did not override that chat's human work or treat
+it as keyboard evidence. A fresh helper in the named Mac project now receives only
+the finite read-only keyboard capability/recipe packet, with no app/device/settings/
+file operations. The original advisor remains preserved; other goal work continues.
 
 ### Reuse, acceptance and continuation
 
