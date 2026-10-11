@@ -129,6 +129,11 @@ CW42 changed scale rather than topology. Do not count these as completed cases.
 Next Web batch CW-B5 is dispatched with the8 recipes CW43–50 in
 [CW2 advice](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11),
 after this owner's terminal handoff/resources. No fresh source worker needed.
+CW44 clean mobile front remains unavailable after natural guest gate; CW47 tooltip
+is skipped for weak novelty. If a public guest-limit dialog naturally appears in
+remaining authorized flows, it may be qualified once as new CW51 with its own scope
+and source route. No gate forcing/bypass, login or quota reset; old invalid CW44
+front capture is never relabelled. This adds an actual form, not a substitute front.
 Two fresh critics independently inspect7retained images across CW33/CW34/CW40;
 initial observations precede author receipt. They do not create images or edit code.
 CV2 covers visible drawing quality; CT2 covers literal instructions and data.
