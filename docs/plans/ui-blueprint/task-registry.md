@@ -44,7 +44,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
-| CP6 |same CP owner|CP6-F1 saved; single-image critique pending|734cedf +3198d03, one correction image retained; no full-set acceptance |
+| CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|dispatched shipping repair|CW49 distinct full-layout/visible sketches and anchors, one fresh image; source facts unchanged |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
@@ -66,8 +66,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|running single CP6-F1 image check|No full-set repeat; neutral observation then author reconciliation |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|running CP6-F1 applicability check|One changed CW40/D01 image; other old images and pins preserved |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP6-F1 reconciled; retained for CP7|Literal conflict resolved, one image still fails membership; no new compiler defect inferred |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP6-F1 reconciled; retained for CP7|Applicability pass, raster membership fail; repeated image error does not justify more generic prohibitions |
 
 ### Current contracts and protected boundaries
 
@@ -202,6 +202,11 @@ Author still records unassigned lower-region reconstruction as FAIL. Neutral roo
 `86704783cba6c042ab3336806c3b6f5d0dab57ef15e1aa85bbe3dfbe73f0c96e`.
 Same critics check that one delta independently while CP7 implements the separate
 document-frame assignment; no new CP6 attempt or full-set acceptance is authorized.
+Both same critics completed the ordered neutral-observation/author-reconciliation
+check. New CW40/D01 still imports N194–N209 and completes the fifth sentence; the
+literal draft applicability conflict is resolved. This is retained raster failure,
+not evidence for another compiler bug. No further CP6 attempt is assigned. CW33/D02
+revised text remains unrendered; all other d9f3fff image verdicts remain unchanged.
 
 **CN-B5:** terminal `uib-CN-B5-6jmj42i_/handoff.md` and manifest:8qualified partial
 cases/52first sheets/0rerolls,10scoped author passes/42FAIL/0complete cases.
