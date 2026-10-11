@@ -991,6 +991,7 @@ fn measurement_inventory(
 fn local_measures(
     v: &SceneView,
     measures: &[(&Dimension, usize, usize)],
+    clipped: &[Vec<Edge>],
     limit: usize,
 ) -> Result<String> {
     let mut out = String::new();
@@ -1009,16 +1010,64 @@ fn local_measures(
             let width = measures.iter().find(|(m, x, y)| {
                 *x == a
                     && *y == a
+                    && m.anchors[0].frame_kind == d.anchors[0].frame_kind
+                    && m.anchors[0].space == d.anchors[0].space
                     && m.anchors[0].edge == Edge::Left
                     && m.anchors[1].edge == Edge::Right
             });
             let height = measures.iter().find(|(m, x, y)| {
                 *x == a
                     && *y == a
+                    && m.anchors[0].frame_kind == d.anchors[0].frame_kind
+                    && m.anchors[0].space == d.anchors[0].space
                     && m.anchors[0].edge == Edge::Top
                     && m.anchors[1].edge == Edge::Bottom
             });
             if let (Some((w, _, _)), Some((h, _, _))) = (width, height) {
+                if w.anchors[0].frame_kind == FrameKind::LayoutBounds
+                    && clipped.get(a).is_some_and(|edges| !edges.is_empty())
+                {
+                    append(
+                        &mut out,
+                        &format!(
+                            "SEPARATE FULL-LAYOUT SKETCH — {} (LayoutBounds): EMPTY measurement rectangle, no UI contents. WIDTH {} {} ABOVE; HEIGHT {} {} LEFT. Both dimensions end on this full-layout frame's opposite edges, never on the visible overview. Caption outside: full layout frame.\n",
+                            component_name(v, a),
+                            display_number(w.value.ok_or(E::InvalidGeometry)?),
+                            unit_name(w.units),
+                            display_number(h.value.ok_or(E::InvalidGeometry)?),
+                            unit_name(h.units)
+                        ),
+                        limit,
+                    )?;
+                    if let Some(Property::Requested {
+                        state:
+                            Availability::Known {
+                                value: Value::Geometry(visible),
+                            },
+                        evidence,
+                        ..
+                    }) = v.components[a]
+                        .properties
+                        .iter()
+                        .find(|p| p.field() == Field::VisibleRegion)
+                    {
+                        append(
+                            &mut out,
+                            &format!(
+                                "OVERVIEW ASSIGNMENT — same component {}, different frame: {:?} VisibleRegion in Space {} ({:?}, {}, {:?}). Render only that sourced visible intersection with its proved component cut. It is not a standalone viewport, paint bounds or occlusion proof. Do not stretch the visible fragment to the full-layout height, complete offscreen content or attach the full-layout labels to it. Visible-frame data stays distinct even when its width equals the full-layout width.\n",
+                                component_name(v, a),
+                                evidence.provenance,
+                                visible.coordinate_space.id.0,
+                                visible.coordinate_space.kind,
+                                unit_name(visible.coordinate_space.units),
+                                visible.coordinate_space.origin
+                            ),
+                            limit,
+                        )?;
+                    }
+                    done.extend([w.id.clone(), h.id.clone()]);
+                    continue;
+                }
                 let enclosing = !control(&v.components[a]) && !v.components[a].children.is_empty();
                 let accessibility = w.anchors[0].frame_kind == FrameKind::AccessibilityBounds;
                 append(
@@ -1812,7 +1861,7 @@ fn drawing_dimensions(
         .collect::<Vec<_>>();
     append(
         &mut out,
-        &local_measures(v, &overview_measures, limit)?,
+        &local_measures(v, &overview_measures, partial, limit)?,
         limit,
     )?;
     for (i, (title, controls)) in groups.iter().enumerate() {
@@ -1856,7 +1905,7 @@ fn drawing_dimensions(
                 limit,
             )?;
         }
-        append(&mut out, &local_measures(v, &owned, limit)?, limit)?;
+        append(&mut out, &local_measures(v, &owned, partial, limit)?, limit)?;
     }
     let scalar_fragments = lines
         .iter()
@@ -1872,7 +1921,7 @@ fn drawing_dimensions(
     }
     append(
         &mut out,
-        &local_measures(v, &scalar_fragments, limit)?,
+        &local_measures(v, &scalar_fragments, partial, limit)?,
         limit,
     )?;
     for (d, a, b) in insets {
@@ -1881,7 +1930,11 @@ fn drawing_dimensions(
             "LOCAL INSET DETAIL — one magnified source edge relation, not another UI panel.\n",
             limit,
         )?;
-        append(&mut out, &local_measures(v, &[(d, a, b)], limit)?, limit)?;
+        append(
+            &mut out,
+            &local_measures(v, &[(d, a, b)], partial, limit)?,
+            limit,
+        )?;
     }
     Ok(Presentation {
         text: out,

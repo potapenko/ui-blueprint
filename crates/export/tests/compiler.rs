@@ -1603,6 +1603,107 @@ fn fragment_draft_rules_follow_input_membership_without_parsing_caller_state() {
 }
 
 #[test]
+fn clipped_document_layout_pair_owns_a_separate_empty_sketch() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for n in &mut snapshot.nodes {
+        n.children.clear();
+    }
+    set_test_role(&mut snapshot.nodes[0], "DIV");
+    set_test_role(&mut snapshot.nodes[1], "LABEL");
+    snapshot.nodes[0].children = vec![snapshot.nodes[1].key.clone()];
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut snapshot.nodes[0].properties[2]
+    else {
+        panic!()
+    };
+    g.shape = Shape::Rect(Rect {
+        x: 0.,
+        y: 0.,
+        width: 800.,
+        height: 2307.0703125,
+    });
+    let mut visible = snapshot.nodes[0].properties[2].clone();
+    let Property::Requested {
+        field,
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        evidence,
+        ..
+    } = &mut visible
+    else {
+        panic!()
+    };
+    *field = Field::VisibleRegion;
+    g.frame_kind = FrameKind::VisibleRegion;
+    evidence.provenance = Provenance::Derived;
+    let Shape::Rect(r) = &mut g.shape else {
+        panic!()
+    };
+    r.height = 666.5625;
+    snapshot.nodes[0].properties[4] = visible;
+    let source = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(
+        text.contains("SEPARATE FULL-LAYOUT SKETCH — outer source container (LayoutBounds): EMPTY")
+    );
+    assert!(text.contains("WIDTH 800 CSS px ABOVE; HEIGHT ≈2307 CSS px LEFT"));
+    assert!(text.contains("different frame: Derived VisibleRegion"));
+    assert!(!text.contains("DIMENSIONED RECTANGLE outer source container:"));
+    assert!(!text.contains("outer source container — width 800"));
+    let dims = data(&p, "dimensions.json");
+    let root = dims[0]["dimensions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|d| d["anchors"][0]["component"] == "N000")
+        .collect::<Vec<_>>();
+    for (kind, value) in [
+        ("layout_bounds", 2307.0703125),
+        ("visible_region", 666.5625),
+    ] {
+        assert!(
+            root.iter()
+                .any(|d| d["anchors"][0]["frame_kind"] == kind && d["value"] == value)
+        );
+        assert!(
+            root.iter()
+                .any(|d| d["anchors"][0]["frame_kind"] == kind && d["value"] == 800.)
+        );
+    }
+    assert_eq!(serde_json::to_vec(&b).unwrap(), source);
+    // Equal full/visible rectangles do not get the clipped-frame assignment.
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut snapshot.nodes[0].properties[4]
+    else {
+        panic!()
+    };
+    let Shape::Rect(r) = &mut g.shape else {
+        panic!()
+    };
+    r.height = 2307.0703125;
+    let p = compile(&b, limits()).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(!text.contains("SEPARATE FULL-LAYOUT SKETCH"));
+    assert!(text.contains("WIDTH 800 CSS px BELOW the enclosing shape; HEIGHT ≈2307 CSS px"));
+}
+
+#[test]
 fn fragment_container_does_not_authorize_unselected_descendants() {
     let mut b = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
