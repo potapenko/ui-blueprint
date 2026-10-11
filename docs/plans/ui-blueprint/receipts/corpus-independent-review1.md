@@ -1,6 +1,7 @@
 # CR1 — independent Native acquisition and export review
 
-2026-10-11. **Native: reject; export: accept_with_residual.** One coherent review,
+2026-10-11. **Final Native: accept_with_residual at203933a; export:
+accept_with_residual at1650d0c. CR1-F1 closed.** One coherent review,
 with initial independent observations recorded before the author handoff. This
 does not accept the complete corpus, any generated image, or a release.
 
@@ -30,7 +31,8 @@ tests, original CW06/CW07 DOM/canonical inputs, then the two author handoffs bel
 
 ## CR1-F1 — P1: retain the binding through actual publication
 
-**Implementation defect; reject this criterion.**
+**Historical implementation defect at8ebbd2c; initially rejected, corrected and
+closed in the follow-up below.** Source locations in this finding describe8ebbd2c.
 [NativeFocusedAX.swift](../../../../plugins/macos/NativeFocusedAX.swift):198–209
 performs final selection validation, then returns only `NativeJSONFrame`.
 `PopupBinding`, its complete retained chain, application and window are local to
@@ -56,7 +58,7 @@ keep final validation at that publication boundary, and prove handle lifetime pl
 no successful publication after an injected boundary identity change. No source
 fix or contract relaxation was made here; no user product decision is needed.
 
-## Independent checks and scoped decisions
+## Initial independent checks and scoped decisions
 
 | Criterion | Verdict | Evidence / limit |
 | --- | --- | --- |
@@ -120,7 +122,7 @@ author's stated bound. It must not be represented as automatic safety for arbitr
 private UI text. Known private IDs remain aliased and path/URL/template/control-byte
 canaries stay refused; no new permissions or metadata exception were found.
 
-## Disposition and saved state
+## Initial disposition and saved state
 
 One actionable finding, CR1-F1; no export correction requested. Native acceptance
 must remain open until the publication ownership fix and its focused proof return
@@ -129,3 +131,54 @@ The final handoff provides this receipt's exact checkpoint SHA and push result.
 Unrelated changes and every existing image were untouched. Run-owned non-image
 build/check/replay files are removed after their results are recorded; author
 handoff roots and original images remain under their existing retention ownership.
+
+## CR1-F1 correction reconciliation and final scoped verdict
+
+The initial receipt was saved/pushed as `3c9da936fb98a06006f474882b26b741da0d8da4`.
+Root subsequently assigned the bounded same-review correction check, with source
+read-only and the same receipt write set. No export re-review or old live-positive
+rerun was requested or performed. Its original1650d0c verdict does not accept later
+export commits or the unrelated working-tree export edits present at completion.
+
+Corrected Native source: `203933a4395b9f1021d9b588221102f2ac440993`, comprising
+`72df990` plus `203933a`. The unchanged NATIVE@3/CLI@17/acquisition basis was reused;
+no contract or quota delta was needed. Independent inspection preceded the final
+author correction receipt `c997300`. Production delta is confined to
+NativeFocusedAX, NativeJSONFrame and NativeDescriptorIO.reply. Frame ownership now
+retains application/window/full ancestry plus the original admission state without
+a frame capture cycle. Explicit withExtendedLifetime spans reply I/O; validation
+runs after poll readiness and before each write attempt. An unsent observation may
+be replaced by canonical failure; a changed binding after a sent prefix aborts and
+latches failure, preventing a second reply. Output cap and deadline are rechecked.
+
+Independent optimized Swift6/macOS14 compilation and real-socket regression passed
+**130 assertions**:4/4 handles remain after collect and through success/closed-peer
+reply,0/4 after frame release; changed focus before reply or during a full-socket
+poll wait yields stale_target; partial output aborts and cannot be revived. The three
+descriptor-delivered responses independently validated. A task-temp extension
+lowered child_entries to16, first asserted collect still produced an observation,
+then called real reply and required incomplete_scope when the final ancestry check
+spent the remaining allowance. **139 assertions passed**, and that failure response
+also validated. This adds quota-boundary proof, not a new product limit or source fix.
+
+Final author handoff reconciled at HEAD `ea18b6aba84b94d3d325d82377eee35ee169ff32`:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CA3-F1-artifacts-vn1d3act`.
+Manifest source is203933a, native Release/aarch64-apple-darwin; all17 listed file
+hashes match, including helper
+`aa08a2b7bef1f981deea0a6a40efb007b74a7729599508212b7e9003ac9b7bfd`.
+Publication test source SHA256 matches
+`6fba263e9772cf8113b19229eba01f702a7f97e846beebda7316590579656764`.
+The three retained real-descriptor records independently validate as observed,
+stale_target-before-reply and stale_target-during-wait. Author normal/-O130 and
+34 canonical outputs per build remain attributed; CR1 independently reran -O130
+and its added139 variant, not the author's complete normal-build campaign.
+
+**Final: CR1-F1 accept/closed; bounded Native candidate accept_with_residual.**
+No actionable finding remains in this correction. Existing Genre/Director/default/
+no-popup positives stay attributed to8ebbd2c; this I/O ownership correction has
+source and real-descriptor proof, not a new live app campaign. General SDK lifetime,
+whole-platform/performance/corpus/image acceptance remain outside this verdict.
+The export accept_with_residual decision and explicit public-review limitation are
+unchanged. Run-owned `uib-cr1-f1.nBxP91VIdI` non-image files were removed after recording
+results; the author handoff and every existing image remain untouched. The terminal
+handoff supplies this final receipt checkpoint SHA and verified push result.
