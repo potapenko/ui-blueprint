@@ -10,12 +10,12 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Twelve completed primary batches produced165 evaluated images,0 fully independently accepted.
-Their161 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not165 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Thirteen completed primary batches produced176 evaluated images,0 fully independently accepted.
+Their172 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not176 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
-CN-B8 totals remain pending
+CN-B8 adds5families/7states/11sheets. No additional primary batch is complete
 their final handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=7 images (38 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
@@ -58,7 +58,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 | CN-B5 |same Native source owner|investigation accepted|8cases/52first sheets,10scoped author passes/42FAIL;701dimension checks,0complete cases |
 | CN-B7 |same Native source owner|investigation accepted; archived|1new visible-grid case/7first sheets;38labels match,1scoped author pass/6FAIL; no live recapture |
-| CN-B8 |same mobile source owner, restored|dispatched full corpus cycle|Up to12 meaningful larger-text states across real mobile families; reuse CN-B2 reversible Simulator setup and restore originals |
+| CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -223,13 +223,20 @@ iPad's canonical Reels→Search handoff changed the active phrase, not claimed u
 No preferences, account or source code changed. Export/render witnesses remain
 available for generalization; no new repair or reroll assigned to this finished owner.
 
-**CN-B8:** same mobile owner receives a new finite larger-text variation batch,
-using the already qualified reversible Simulator text-size setup from CN-B2 and
-existing real source families. Only observed reflow/clipping/geometry changes count;
-no-op settings or identical rows do not. Original device text category/orientation/
-destination/pause must be restored. No app preference/locale/account/source changes.
-Frozen export756dfca, current source contracts, own device/input reservations and
-full first-image cycle; CP6 fixed-cohort work is independent. Final handoff pending.
+**CN-B8:** terminal `playphraseme-cn-b8-6no3fnyn/handoff.json` and manifest/reviews.
+Five families/7meaningful states/11first images/0rerolls, frozen756dfca. All68assigned
+labels correct;4content-pass/7FAIL, all11PNG1672×941 instead of3840×2160,0complete
+packages accepted.94known AXframes/11analysis requests. Collections excluded as no-op.
+Text category changed from large to accessibility-extra-large on owned devices,
+then restored and verified. Original orientation/destinations/pause restored;
+iPad phrase followed canonical Reels→Search handoff, exact old phrase not claimed.
+Apps/mirrors/tabs stopped, devices shutdown, disposable files removed, images and
+tool originals retained; source repos unchanged. Installed hashes match CN-B6,
+source revision unknown. Same-observation ratios are evidence, not global scale:
+Actor96/48=2; Settings value96/48=2; Search49.5/36=1.375; Translation rows78pt;
+Filters values62pt while captions/flags do not scale uniformly. No norm inferred.
+Renderer failures: added row boxes/dimensions, revealed clipped content, misplaced
+switches, missing disabled/caret indication. No new repair assigned to this owner.
 
 **CA5:** exact CA4 witness
 `uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
