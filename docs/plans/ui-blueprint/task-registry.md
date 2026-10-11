@@ -5,9 +5,9 @@
 Authority: user requested helpers across Mac/Web,1000diverse generated/evaluated
 blueprint cases, risk-first planning, discovery and improvement. Coordinated mode;
 root coordination-only. [Plan](corpus-testing.md), [first-wave terminal summary](receipts/corpus-wave1-summary.md).
-Goal remains incomplete.59generated/evaluated primary outputs across six batches,0accepted;
-55first outputs by configuration include3duplicate fixture renderings.4CP1repair
-images are separate repeats, allFAIL. Do not call this59unique successful cases.
+Goal remains incomplete.65generated/evaluated primary outputs across seven batches,0accepted;
+61first outputs by configuration include3duplicate fixture renderings.4CP1repair
+images are separate repeats, allFAIL. Do not call this65unique successful cases.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
@@ -30,9 +30,9 @@ images are separate repeats, allFAIL. Do not call this59unique successful cases.
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
-| CW-B3 |same Web source owner|running|6new/lower-scroll/lookup Web states, complete source→CLI→image→QA |
+| CW-B3 |same Web source owner|investigation accepted|6qualified pairs/packages/first images,6FAIL,0rerolls;14computed relations |
 | CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
-| CW-S2 |same Web source owner|queued after CW-B3|Policy-supported Chrome/dev-browser capability fallback; one new qualified scoped source or exact dependency |
+| CW-S2 |same Web source owner|running|Policy-supported Chrome/dev-browser capability fallback; one new qualified scoped source or exact dependency |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
@@ -122,6 +122,13 @@ Failures retained: out-of-scope background, AX versus paint, clipping, state,
 wrong endpoints/counts and pattern participant attribution. Shared with CP4 only as
 targeted witnesses, not an instruction to rerun12cases. Own process18535 ended,
 desktop released/user63105 preserved, no tracked source changes; worker archived.
+CW-B3 terminal handoff: uib-cw-b3-2k5Rlj/handoff.json, manifest hash
+8ea67cbe89b660899262aba80b5e5ac24cc1f433427e44af60759ca4e0b14bf4.
+Frozen b08ea04, six qualified sources/packages/first outputs/evaluations,0accepted;
+14computed design requests. New compiler witness: grade token becomes CW30 detail
+caption, sent to CP4 as source/artwork separation case. Other failures are clipping
+and detached/duplicated anchors. Runtime restored, no tracked writes. Owner continues
+separate CW-S2 dependency; CW-S1 invalid images never used for generation.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
