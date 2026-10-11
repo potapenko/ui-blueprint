@@ -6,8 +6,8 @@ Authority: user requested helpers across Mac/Web,1000diverse generated/evaluated
 blueprint cases, risk-first planning, discovery and improvement. Coordinated mode;
 root coordination-only. [Plan](corpus-testing.md), [first-wave terminal summary](receipts/corpus-wave1-summary.md).
 Goal remains incomplete.59generated/evaluated primary outputs across six batches,0accepted;
-43first outputs by configuration include3duplicate fixture renderings.4CP1repair
-images are separate repeats, allFAIL. Do not call this47unique successful cases.
+55first outputs by configuration include3duplicate fixture renderings.4CP1repair
+images are separate repeats, allFAIL. Do not call this59unique successful cases.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
