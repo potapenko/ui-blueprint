@@ -31,7 +31,7 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
 | CW-B3 |same Web source owner|running|6new/lower-scroll/lookup Web states, complete source→CLI→image→QA |
-| CW-S1 |same Web source owner|queued after current capture|New matched play-control-slot source pair for CP4, no raster edits/no new generated count |
+| CW-S1 |same Web source owner|waiting_evidence|2direct scoped captures unqualified: wrong region, then clipped Play/opacity drift; full handoff path requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|running; source owner reused|12focused-popup/preview/context/download-form states, full source→CLI→image→QA |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
@@ -106,6 +106,8 @@ delta registered before code, old compatibility explicit. Source apps/Native/eng
 protected. CW-S1 new capture requested from source owner; original CW09 unchanged.
 No hand-cropped or ImageGen-reconstructed observational reference. B05 unknown
 AX-to-paint mapping stays unknown. Independent ready code/sheet work continues.
+CW-S1 failure status sent to CP4; its CW09 matched-reference criterion remains open,
+not relabelled as pass. Other five cases and per-sheet implementation proceed.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
