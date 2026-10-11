@@ -31,7 +31,8 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
 | CW-B3 |same Web source owner|running|6new/lower-scroll/lookup Web states, complete source→CLI→image→QA |
-| CW-S1 |same Web source owner|waiting_evidence|2direct scoped captures unqualified: wrong region, then clipped Play/opacity drift; full handoff path requested |
+| CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
+| CW-S2 |same Web source owner|queued after CW-B3|Policy-supported Chrome/dev-browser capability fallback; one new qualified scoped source or exact dependency |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|running; source owner reused|12focused-popup/preview/context/download-form states, full source→CLI→image→QA |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
@@ -108,6 +109,12 @@ No hand-cropped or ImageGen-reconstructed observational reference. B05 unknown
 AX-to-paint mapping stays unknown. Independent ready code/sheet work continues.
 CW-S1 failure status sent to CP4; its CW09 matched-reference criterion remains open,
 not relabelled as pass. Other five cases and per-sheet implementation proceed.
+Exact CW-S1 handoff delivered; scope x576.75/y252.703125/w126.4921875/h158.109375
+CSSpx was derived from actual visible slot/overflow children, neighbors excluded.
+IAB clip offsets/paint did not qualify. Site qa/browser-routing.md explicitly permits
+real Chrome/dev-browser for demonstrated missing IAB capability; CW-S2 assigned on
+that basis, not to bypass permissions/gates. No old-source pixels altered, no new
+persistent profile/installation authorized. Its future source gets a new identity.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
