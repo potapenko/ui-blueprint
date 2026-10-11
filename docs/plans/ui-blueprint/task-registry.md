@@ -2,12 +2,23 @@
 
 ## CORPUS-1000 — active, 2026-10-11
 
-Authority: user requested helpers across Mac/Web,1000diverse generated/evaluated
-blueprint cases, risk-first planning, discovery and improvement. Coordinated mode;
-root coordination-only. [Plan](corpus-testing.md), [first-wave terminal summary](receipts/corpus-wave1-summary.md).
-Goal remains incomplete.65generated/evaluated primary outputs across seven batches,0accepted;
-61first outputs by configuration include3duplicate fixture renderings.4CP1repair
-images are separate repeats, allFAIL. Do not call this65unique successful cases.
+Authority: the user explicitly requested parallel helpers, broad real Mac/Web and
+available native mobile testing, about1000 genuinely generated/evaluated blueprint
+cases, risk-first planning and corpus-driven improvements. Root is coordination-only;
+workers finish finite tasks. [Accepted plan](corpus-testing.md) and
+[execution runbook](execution.md) govern. This goal is incomplete.
+
+### Current counts and acceptance
+
+Seven completed primary batches produced65 evaluated images,0 fully accepted.
+Their61 first outputs by configuration include3 duplicate fixture renderings;
+this is not65 distinct successful cases. New CW-B4/CN-B5/CN-B6 counts remain pending
+their final handoffs. A split sheet is not a new source case.
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13 images (31 total).
+These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
+[First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
+
+### Ownership and disposition
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
@@ -32,7 +43,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
-| CA5 |same CA owner|dispatched bounded repair|Prove AX-reported visible children on owned grid, then conditional opt-in mode; no inferred visibility or quota changes |
+| CA5 |same CA owner|running implementation after live feasibility|AXVisibleChildren returned153 versus440 full entries, sampled cards42+; preserve caps and old modes |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted bounded source qualification|3pairs/1control/0generations; explicit viewport clip; zero-scroll/scale1 only |
@@ -44,191 +55,118 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|running full corpus cycle|8 new CN4 mobile recipes; existing Simulator ownership, frozen b01aee4 delivered |
 | CW-B4 |same Web source owner|running full corpus cycle|New responsive/list/grid cases; qualified IAB path, frozen b01aee4 delivered, independent of CW-S2 |
 
-Current source basis registry39/NATIVE3/CLI17/DESIGN-ANALYSIS1; CP4 adds
-DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 at cfe1b5e, visual gate still open.
-CN-B5/CW-B4/CN-B6 received frozen corrected CP4 binary b01aee4 for their full cycles;
-selected changed-contract reading remains required. No duplicate builds or old-source
-rerolls. New sheets count separately from new cases. CW-S2 alone awaits operator
-Chrome status; its403 cause remains unknown, no permission bypass authorized.
-CR2 independently passed82 focused checks and actual492139-byte CLI boundary;
-one P2 in compile.rs798–810 remains mandatory: partial_visibility does not prove
-bottom/left clipping or whole-artwork crop. Same CP4 owner receives bounded repair;
-current frozen images remain cfe1b5e evidence, unaffected checks/images are reused.
-Saved corrected candidate b01aee4 is now under same-reviewer delta verification;
-full author receipt/one affected CW07 image remain pending. Artifact:
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP4-1k7n3t7t/uiblueprint-b01aee4`,
-SHA256 `ed06e371057d560cb29e8706b530c964e05ae26b085ecc80f5466fb45a5ce85b`.
-Candidate testing does not claim final compatibility or visual acceptance.
-CR2 verified F1 closure with independent actual CLI Top/Right/per-sheet/unknown
-checks. New F2 affects only empty-dimension detail headers (compile.rs1636 versus
-source-detail selection at141); same CP4 owner repairs condition and focused test.
-All three corpus workers told to defer only affected empty-dimension sheets,
-continue nonempty sheets and preserve actual binary attribution. No density workaround.
-Batch preflight: CW-B4 has9sources/13required sheets,2empty-dimension details held
-(CW33/D02,CW40/D01),11ready. CN-B5 has8qualified partial sources/52sheets,
-11empty details held,6G01 prompts exceed32000chars,35nonempty sheets ready.
-CN-B5's scrolled-grid AX covers old offscreen cards0–27 while PNG shows28+;
-retained as acquisition witness, excluded from qualified sources. No primary
-image-count promotion before terminal generation/evaluation handoff.
-CN-B5 requested to provide minimal length-repair input for the same CP owner after
-F2; do not silently reduce scope/density or manually rewrite literal prompts.
-Length dependency now received:
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B5-6jmj42i_/CP4-G01-length-dependency.json`.
-Representative B5-01 uses actual observed.json/metadata.json, b01aee4, density30;
-G01 counts35027/35116/34403/34821/34190/34327. Original inputs/packages frozen.
-Next same-owner CP5 will compact supported presentation without dropping source
-coverage, assigned measurements, public text/privacy or machine precision.
-CN-B6 interim handoff at system-temp playphraseme-cn-b6-h7jzxeiz/handoff.json:
-1Actor-picker family/2states/6sheets,4generated (3contentFAIL,1content pass,
-all4resolution mismatch),2D02 await F2. Runtime restored; tracked repos unchanged.
-Six Reels recipes were not attempted because the worker treated the packet's
-value-selection ban as a ban on primary navigation. Root clarified existing
-user-authorized reversible UI scope: ordinary Reels navigation and pausing a
-public auto-started reel are allowed; changing collection/settings/access is not.
-Same CN-B6 resumes those recipes with fresh ownership; old Actor images unchanged.
-Context premium gate remains a real gap, not bypassed. No primary-count promotion
-until completed case sets and final receipt; interim four sheets remain retained.
-F2 candidate203c48a delivered to all three corpus owners to unblock their held
-empty-dimension details; existing nonempty output attribution/bytes preserved.
-Binary `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP4-1k7n3t7t/uiblueprint-203c48a`,
-SHA256 `17d1ae724228cfcb9c712d1e8ac2ce3be5bd7b96ed39de13fb338ba0f4def758`.
-Author reports38files across5packages unchanged from b01aee4; same CR2 checks
-the saved narrow delta. CP4 terminal receipt pending, long G01 remains CP5.
-CP4 terminal now saved aef13c6, [receipt](receipts/corpus-structural-export-repair4.md).
-13additional repair images (12first+1CW07rerun), not13newcorpus cases. B05 and
-C10/D02 pass bounded author checks only; wholecohort remains unaccepted, requested
-raster resolution not delivered. Existing primary corpus count remains65 pending
-new-batch terminal handoffs. Sameowner CP5 dispatched against203c48a; no duplicate
-ImageGen calls, sourceworkers consume final shortenedG01. CR2 only reconciles its
-already-verified saved candidate with authorreceipt, independent of newCP5 edits.
-CR2 final verdict accept is bound to203c48a: independent initial82 checks,
-targeted repair tests/CLI reproductions, exact aggregate boundary and frozen hash
-reconciled with aef13c6. Existing grammar/base files/version paths/privacy/exact
-numbers/coverage/unique dimension ownership preserved; no open finding in that
-scope. It does not accept rasters, corrected-header rendering or CW09 source.
-Same reviewer finished read-only with no retained task resources; archived.
-CA4 retained witness B5-09-grid-scroll-r2/observed.json is a successful partial
-response:160nodes/474819bytes, SHA256
-`5f57867e6fc83dd909158952483b130e0ca31ec733cc573c558e04c8f042db9c`.
-Grid handle55/clipSearch.resultsGrid enters with76handles used;84remaining slots
-retain28triples/cards0–27 while independent CUA reports cards28–76. Focus is window.
-WindowAX.swift301 reads AXChildren; NativeAcquisition.swift193 starts offset0.
-No supported existing selector fixes it. CA4 proposes explicit AXVisibleChildren
-mode, but this grid's support has not been observed. Apple documents a source-
-reported subset (https://developer.apple.com/documentation/applicationservices/kaxvisiblechildrenattribute),
-not permission to infer visibility from bounds. Root selects CA5 conditional on
-one owned live feasibility check, then minimal Native/CLI registration before code;
-old modes/160/depth9/budgets/window/publication/privacy/core remain protected.
-CP5 frozen756dfca delivered to CN-B5 for six previously held first G01 calls.
-Artifact `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP5-f92uil63/uiblueprint-756dfca`,
-SHA256 `050e6446eb73a7b61df3ea238c9444679f80048e034c0b8ecfe9eaedab6d61e4`.
-Author proof: repeated AX caveat159–160times replaced by existing context legend
-reference; all49prompt changes are that substitution, machine/manifest/ownership
-bytes unchanged, Web holdout identical. Final receipt still pending. No new images
-by CP5; corpus owner generates only previously missing G01, preserves older pins.
-CP5 terminal [receipt](receipts/corpus-prompt-length-repair5.md) now accepted:
-source756dfca/receipt1a80290 pushed; one expression plus existing regression, all
-seven actual CLI replays exit0, 5focused tests, no changed budget/privacy/format.
-This deterministic presentation repair uses proportionate author verification;
-no additional independent review wave. Runtime/image acceptance stays with CN-B5.
-Finished exporter chat archived with its frozen artifacts retained for consumers.
-CA3 registered
-minimal additive Native evolution before code. CP2 remains export Restore.
-Shared route files have one owner; no concurrent
-registry edits. All source apps remain tracked read-only, current branches only.
-CA3 owns Native provider/integration/tests and relevant Native contracts. CP2 owns
-export code/tests and necessary export contracts. Root only coordination documents.
-Old raw sources/packages/images frozen; no relabel by moving HEAD or passing tests.
+### Current contracts and protected boundaries
 
-Artifacts:1661e88 geometry/export binary at system-temp uiblueprint-ce1-fix.SsmxEK/debug/uiblueprint,
-SHA25643eb93e7196de7be3ac889c55dc86f1e7d1e54ab372b58c629443abc08023717.
-CP1 frozen binary at uib-CP1-2v302h3b/uiblueprint-4d6e0bf,
-SHA2563d77ad518939c59247888a6b2c1641f97cbcf1c9c206c5191b70399751afe7e9.
-All named temp roots share /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/.
-Full commands/hashes/findings/resource restoration in linked wave summary/receipts.
-No shared target/debug overwrite. All images and tool originals retained, never cleaned.
-UserPID63105 and after-title-spacing.png protected; source-app unrelated changes retained.
+Established source basis: registry39, NATIVE3/CLI17, DESIGN-ANALYSIS1, EXPORT2,
+DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
+CA5 alone owns prospective Native/CLI/routing changes after the proven feasibility;
+read its saved revisions before future dependent dispatch. No other active worker
+writes these contracts. Finished exporter source is756dfca. Root owns this registry,
+corpus-testing.md and coordination receipts. Source workers keep source-app repos
+tracked read-only; actual installed build revisions remain unknown where unproved.
 
-Latest authoritative state: five corpus workers terminal/archived and resources
-released. CA3 and CP2 saved candidates ready; CR1 and CD1 confirmed dispatched.
-CA3 receipt corpus-native-popover-repair.md: Genre20nodes/14options, Director9idle
-and24with10results, all selected AX bounds known; old default160/no-popup refusal
-preserved.98assertions,31synthetic+6live validations; independent review pending.
-CP2 receipt corpus-export-fidelity-repair2.md: Offensive label and4slash formulas
-restored,73focused checks;2fresh images verify these details but full imageFAIL.
-These2repair outputs are separate from47corpus outputs and4CP1validation images.
-CR1 completed independent observation before author receipts, then reconciled both;
-one P1 finding: retained chain/window die between collect and HostHelper io.reply.
-Same CA owner now repairs actual reply lifetime/boundary proof; same CR1 rechecks
-only changed evidence. No actor/data disclosure was observed; contract gap is proved.
-Next: CN-B4 consumes the accepted Native repair; CP3 improves visual fidelity using a
-fixed diverse cohort. CD1 findings are saved in receipts/corpus-relations-findings.md;
-not a universal grid/causal design rule and not new generated corpus cases.
-CC1 reuses unarchived CW-B2 owner for the concrete stale/wrong-scale/wrong-target
-capture gap. Browser sessions from prior batches released; fresh ownership required.
-No source-app/plugin edits or account/gate bypass. Its source pairs feed next batches
-without waiting on exporter code; no image generation or inflated corpus count.
-Latest bounded observations: CP3 froze six hard cases in uib-CP3-r5v3_jgx/cohort.json,
-candidate f2d4d2c preserves three machine files/63focused checks; first full six-image
-wave evaluated by owner, next same-cohort correction pending. No terminal count yet.
-CA3 publication correction saved203933a;130assertions reported for normal/Release
-and actual reply/backpressure lifetime. Root sent same CR1 reviewer the saved delta;
-author bundle/receipt still pending, so no Native acceptance promotion.
-CC1 reports explicit CSS viewport clip with fromSurface:true/scale1 resolves tested
-mobile Filters mismatch; final three-pair qualification still pending. CW21 cause
-remains unknown because no windowOpen/target-creation events were retained.
-CR1 now closed F1 after independent optimized130+budget139 assertions and frozen
-artifact reconciliation. Corrected Native203933a accepted_with_residual; no observed
-disclosure, no whole-platform/image approval. New bundle in
-uib-CA3-F1-artifacts-vn1d3act/tools; do not replay retired process identities.
-CA3/CR1 archived after handoff. CN-B4 reuses restored CN-B1 owner, new12-state finite
-packet, explicit rooted acquisition and fresh Mac reservation. Source acquisition
-can proceed independently of CP3, with frozen compiler/artifact identity per case.
-CC1 terminal: uib-cc1-capture-GzjhPA/handoff.json and workflow.json, manifest hash
-6383f88480961891ce0f1ecb00602e5ca34114cd95ca5972f4d077b556d53826.
-Own tab closed, viewport1280×720DPR2 restored. Not universal plugin/root-cause proof;
-CW21 cause/ownership unknown. CW-B3 now receives six distinct scrolled/lookup tasks
-with new capture qualification and explicit groups, no gate/account bypass.
-CP3 terminal receipt corpus-visual-fidelity-repair3.md accepted as bounded progress,
-not fulfilled visual acceptance.4CP1+2CP2+12CP3 repair images are separate from47
-primary corpus outputs; no relabeling/cherry-picking. Final export binary:
-uib-CP3-r5v3_jgx/uiblueprint-b08ea04, SHA256
-42ef6be2783566e3919f45c002d5a210698d4987e8fd58b722c3f9c1c7b420c4.
-Handoff sent to CN-B4/CW-B3 for not-yet-frozen cases. CP author stays idle for next
-coherent repair; CV1 fresh visual diagnostic receives neutral inputs/criteria and
-R2 artifacts before any author review. No new image calls or code edits in CV1.
-CV1 terminal independently confirms scope/reference and AX placement conflicts,
-C10 density plus direct model failures; no criterion weakening or image acceptance.
-CP4 assigned structural repair with existing multi-sheet intent, any actual format
-delta registered before code, old compatibility explicit. Source apps/Native/engine
-protected. CW-S1 new capture requested from source owner; original CW09 unchanged.
-No hand-cropped or ImageGen-reconstructed observational reference. B05 unknown
-AX-to-paint mapping stays unknown. Independent ready code/sheet work continues.
-CW-S1 failure status sent to CP4; its CW09 matched-reference criterion remains open,
-not relabelled as pass. Other five cases and per-sheet implementation proceed.
-Exact CW-S1 handoff delivered; scope x576.75/y252.703125/w126.4921875/h158.109375
-CSSpx was derived from actual visible slot/overflow children, neighbors excluded.
-IAB clip offsets/paint did not qualify. Site qa/browser-routing.md explicitly permits
-real Chrome/dev-browser for demonstrated missing IAB capability; CW-S2 assigned on
-that basis, not to bypass permissions/gates. No old-source pixels altered, no new
-persistent profile/installation authorized. Its future source gets a new identity.
-CN-B4 terminal handoff: uib-CN-B4-kllqoe62/handoff.md and manifest.json. Native203933a,
-export1650d0c pinned before CP3 arrival. All12canonical responses validate,30/30AX
-operand amounts exact.7rooted popup states collected; no generation refusals/rerolls.
-Failures retained: out-of-scope background, AX versus paint, clipping, state,
-wrong endpoints/counts and pattern participant attribution. Shared with CP4 only as
-targeted witnesses, not an instruction to rerun12cases. Own process18535 ended,
-desktop released/user63105 preserved, no tracked source changes; worker archived.
-CW-B3 terminal handoff: uib-cw-b3-2k5Rlj/handoff.json, manifest hash
-8ea67cbe89b660899262aba80b5e5ac24cc1f433427e44af60759ca4e0b14bf4.
-Frozen b08ea04, six qualified sources/packages/first outputs/evaluations,0accepted;
-14computed design requests. New compiler witness: grade token becomes CW30 detail
-caption, sent to CP4 as source/artwork separation case. Other failures are clipping
-and detached/duplicated anchors. Runtime restored, no tracked writes. Owner continues
-separate CW-S2 dependency; CW-S1 invalid images never used for generation.
-Unaccepted images and incomplete sources remain open evidence, not successful cases.
-Previous turn is progress (new batches, defects, shipped repairs and new evidence),
-not a pause or completion. No replacement agents or new product framework authorized.
+Only the operator-selected current branches; no worktrees/new branches/persistent
+output directories. All images and tool originals remain in system temp, never
+agent-cleaned. Preserve unrelated after-title-spacing.png, user processes and other
+workers' runtime. Serialize actual shared input via existing source-project lanes.
+Current checkpoint/push uses exact owned paths and /tmp/ui-blueprint-master-git.lock.
+Ordinary primary navigation and pausing public auto-started content are authorized;
+selector values, collection/preferences, auth/access and production mutations are not.
+
+### Frozen artifacts and evidence
+
+All short temp roots below share:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/`.
+
+- Current export: `uib-CP5-f92uil63/uiblueprint-756dfca`,
+  SHA256 `050e6446eb73a7b61df3ea238c9444679f80048e034c0b8ecfe9eaedab6d61e4`.
+  [CP5 receipt](receipts/corpus-prompt-length-repair5.md), source756dfca/receipt1a80290:
+ 6/6 G01 fit27194–28076chars;49 prompt files differ only by one repeated-phrase
+ substitution,35 non-prompt files identical, Web holdout identical,5 focused tests.
+ Small deterministic repair accepted on proportionate author verification.
+- Prior export: `uib-CP4-1k7n3t7t/uiblueprint-203c48a`,
+  SHA256 `17d1ae724228cfcb9c712d1e8ac2ce3be5bd7b96ed39de13fb338ba0f4def758`.
+  [CP4 receipt](receipts/corpus-structural-export-repair4.md), saved aef13c6.
+ CR2 accepted203c48a compatibility/privacy/bounds after independent82 initial
+ checks, actual aggregate boundary and targeted F1/F2 repair reproductions.
+ F1 directional/component clipping and F2 empty-detail instructions are closed.
+ This does not accept images: C10 has64/65 correct assigned labels but extra
+ dimensions/artwork; B05 and D02 have only scoped author passes. CW09 remains open.
+ Original12 images are cfe1b5e; one CW07 rerun is b01aee4; do not relabel.
+- Accepted Native publication repair:203933a, bundle
+ `uib-CA3-F1-artifacts-vn1d3act/tools`; helper SHA256
+ `aa08a2b7bef1f981deea0a6a40efb007b74a7729599508212b7e9003ac9b7bfd`.
+ [CA3](receipts/corpus-native-popover-repair.md) and
+ [CR1](receipts/corpus-independent-review1.md) preserve bounded acceptance.
+ Positive older Genre/Director live evidence remains attributed to8ebbd2c.
+ Retired process identities are never reusable.
+
+### Active consumers and exact remaining dependencies
+
+**CW-B4:** nine qualified sources,13 required first sheet calls completed by owner;
+final per-case/sheet evaluation and hash handoff pending. Uses original b01aee4
+plus203c48a for two empty-dimension details, with unaffected prompt equivalence.
+CW36 mobile tense table unavailable; CW41 had no actual completion/clipping;
+CW42 changed scale rather than topology. Do not count these as completed cases.
+Next ready Web batch is the8 recipes CW43–50 in
+[CW2 advice](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11),
+after this owner's terminal handoff/resources. No fresh source worker needed.
+
+**CN-B5:**8 qualified partial source states/52 required sheets. Six G01 were
+over32000chars; CP5 now unblocks their first calls. Eleven empty-dimension details
+received203c48a. Existing generations keep actual compiler pins; no rerolls or
+density/scope reduction. Input dependency:
+`uib-CN-B5-6jmj42i_/CP4-G01-length-dependency.json`.
+Its discarded scrolled-grid pair remains a collector witness, not a valid case.
+
+**CN-B6:** first interim at `playphraseme-cn-b6-h7jzxeiz/handoff.json` contains
+one Actor-picker family/two states/six sheets. Four b01aee4 images had three content
+failures and one bounded content pass, all below requested resolution. Two D02
+were subsequently generated with203c48a and exceeded their assigned detail scope.
+The same packet resumed Reels after root clarified that the value-selection ban
+does not forbid ordinary navigation. Sources for all six Reels recipes now exist;
+Search keyboard and Auto-advance visible content limitations remain explicit.
+Context premium gate remains an access gap. Final total handoff pending.
+
+**CA5:** exact CA4 witness
+`uib-CN-B5-6jmj42i_/B5-09-grid-scroll-r2/observed.json`,
+SHA256 `5f57867e6fc83dd909158952483b130e0ca31ec733cc573c558e04c8f042db9c`.
+It is observed/partial,160nodes/474819bytes;76 handles already used before grid,
+84 remaining entries retain28 card/download/duration triples0–27.
+Independent source state shows28–76. Existing AXChildren always begins at offset0.
+No existing supported selector solves it; focused-popover is inapplicable.
+A fresh owned diagnostic has now proved AXVisibleChildren support:153 entries
+versus440 full children, bounded84-entry sample starts at cards42; held-window
+ancestry unchanged and screenshot matches that region. This is feasibility,
+not shipped acceptance. Implement explicit focused-visible-ax under registered
+minimal Native/CLI delta; old modes,160/depth9, acquisition budgets, privacy,
+publication validation and canonical wire stay. Unsupported source is not empty
+success/fallback; no geometric visibility inference. One saved-source live comparison
+and scoped independent review remain before acceptance.
+[Apple source semantics](https://developer.apple.com/documentation/applicationservices/kaxvisiblechildrenattribute).
+
+**CW-S2 / CW09:** waiting_evidence from operator. Local dev-browser CDP9222
+WebSocket returned403 before Page/inventory; cause unknown. A single async request
+asks for current status/message at chrome://inspect/#remote-debugging. No answer
+yet, no repeated connection or permission bypass. CW-S1 retained wrong-region and
+clipped/opacity-drift captures in `uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json`; neither
+qualifies. This local wait does not stop the other goal work.
+
+### Reuse, acceptance and continuation
+
+[Web advisor](receipts/corpus-web-advice.md) and
+[Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
+they remain preserved chats. New recipes are not runtime proof or a promise of1000
+available families. [CD1](receipts/corpus-relations-findings.md) retains12 supported
+examples/counterexamples,16sources/26requests/110 exact operands, no new images or
+universal design grid. Reuse accepted CE1/CP1/CP2/CA3/CR1 evidence via table receipts.
+
+Receive final task handoffs, reconcile actual inputs/outputs, dispatch dependency-ready
+work, and archive finished unneeded chats. Do not repeat unchanged checks, replace
+active owners, infer completion from tests, or count sheets/rerolls as new cases.
+The current goal remains active until its actual requested outcome or explicit
+user pause/clear. Earlier chronological coordination is retained in Git and linked
+receipts; the sections below are historical goals, not pending CORPUS tasks.
 
 ## RELATIONS-IMPLEMENTATION — выполнено, 2026-10-11
 
