@@ -2,88 +2,54 @@
 
 ## CORPUS-1000 — active, 2026-10-11
 
-Пользователь прямо запросил помощников по Mac/Web, широкий реальный корпус,
-тысячу blueprints, поиск проблем/закономерностей и улучшение утилиты; уточнил
-сначала план возможных проблем, затем тестирование. [План](corpus-testing.md).
-Mode coordinated, root coordination-only; previous single-agent goal complete,
-не возобновляется. Source c63b600 / registry37 / DESIGN-ANALYSIS@1.
-Terminal-receipt generated/evaluated/accepted outputs:2/2/0 (CN-B1, both FAIL;
-partial sources and missing target coverage explicit). Other batches still running;
-their provisional outputs are not yet included. Старые кейсы отдельно.
+Authority: user requested helpers across Mac/Web,1000diverse generated/evaluated
+blueprint cases, risk-first planning, discovery and improvement. Coordinated mode;
+root coordination-only. [Plan](corpus-testing.md), [first-wave terminal summary](receipts/corpus-wave1-summary.md).
+Goal remains incomplete.47generated/evaluated outputs across five batches,0accepted;
+43first outputs by configuration include3duplicate fixture renderings.4CP1repair
+images are separate repeats, allFAIL. Do not call this47unique successful cases.
 
-| Packet | Classification | Owner | Status | Consumer / next dependency |
-| --- | --- | --- | --- | --- |
-| CW1 | diagnostic | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes,2old captured families; no new runtime |
-| CN1 | diagnostic | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds; G/V/S readiness distinct; current leaf drift |
-| CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | accepted; archived |ed6c60d pushed;21tests,18pass/3explicit repro failures;0real cases |
-| CE1-FIX | shipping_product |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88 pushed;36tests pass/0ignored; two defects repaired |
-| CW-B1 | verification |01a12b42-f256-73b0-a694-014228af42b2|running|12Search/shell cases CW01–12, full capture→CLI→image→QA |
-| CN-B1 | verification |01a12b45-a160-7192-86ca-e0bd99f4d49f|accepted investigation; cases incomplete|12attempted,14CLIpackages,5relations,2images FAIL;0accepted |
-| CN-B2 | verification |01a12b45-a69a-72b2-91f2-1f937304afae|running|8Simulator cases B05–08/B10–13, geometry evidence required |
-| CN2 | diagnostic |Mac advisor01a1102f-791c|accepted discovery|12wired C02 configurations; actual runtime distinctness pending |
-| CN-B3 | verification |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|running|12existing C02 configurations, actual component renders with explicit fixture-origin |
-| CW-B2 | verification |01a12b62-dbd8-7a42-8ddc-099c155d1291|running|12Clip Search cases CW13–24; CW-B1 browser/controller release confirmed |
-| CN3 | diagnostic |Mac advisor01a1102f-791c|running|Grid fractional widths: known layout policy vs inferred causes; recommendation consumer |
-| CP1 | shipping_product |01a12b6a-92a9-73c3-aec2-022e32651008|running|Bounded readable literal prompts for complex Native scopes, real image proof |
-| CA1 | diagnostic |01a12b6a-9746-7600-830d-b973f7b8e30b|running|Saved popup acquisition gap: cap/order/root/provider boundary |
+| Packet | Owner / local thread | State | Evidence / next consumer |
+| --- | --- | --- | --- |
+| CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
+| CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
+| CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
+| CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
+| CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
+| CW-B2 |01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived|9images,0accepted; source/interaction gaps retained |
+| CN-B1 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|2images,0accepted; length and AX scope gaps |
+| CN-B2 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|8images,0accepted; installed builds/Pro13 distinct from Pro11 baseline |
+| CN-B3 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|16images incl4rerolls,9unique source PNGs,0accepted; fixture-origin |
+| CP1 |01a12b6a-92a9-73c3-aec2-022e32651008|length repair accepted; image gate open|4d6e0bf +receipt01d2bfc,15sources under32000chars, machine files identical |
+| CP2 |same CP owner|running|CW06 wrong label/CW07 public formula suppression; privacy review required if guard changes |
+| CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
+| CA3 |same CA owner|running|explicit bounded subtree opt-in; default/caps/identity/privacy preserved; independent review pending |
+| CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|running|Evidence-supported relationships/counterexamples from saved corpus; no new images |
 
-Write ownership pinned in plan. Advisors remain read-only and available.
-Source receipts: [Web](receipts/corpus-web-advice.md), [Native](receipts/corpus-native-advice.md).
-Runtime lanes: CW-B1 addressed browser only, no physical input; CN-B1 Mac physical
-lane only after actual existing reservation; CN-B2 isolated addressed existing
-Simulator only. No viewport/device stealing; contention→waiting_resource.
-Workers own only system-temp selected case deliverables, both source repos
-tracked read-only. B09syntheticAccount excluded. Repos/target/build must be pinned
-by each worker, historic source/PNG alone is not current acceptance.
-CE1-FIX owns only engine/export src/design.rs, two design_corpus tests and its
-repair receipt. No shared target/debug writes: own CARGO_TARGET_DIR in system temp.
-Capture workers notified to freeze existing compiled target/debug artifact attributed
-production c63b600 or own already pinned binary; never relabel by moving HEAD.
-Confirmed defects [CE1 receipt](receipts/corpus-analysis-wave1.md): fraction-only
-duplicate Width can fake2/3majority, and ratio -0 display. Current corpus passes
-must not conceal these; unrelated cases continue, fixed binary used for next batch.
-Both defects now repaired and accepted from [repair receipt](receipts/corpus-analysis-repair1.md).
-Fixed default-feature geometry/export binary:
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uiblueprint-ce1-fix.SsmxEK/debug/uiblueprint`,
-SHA25643eb93e7196de7be3ac889c55dc86f1e7d1e54ab372b58c629443abc08023717,
-production commit1661e88. Handoff sent to all3runtime workers; no blanket re-run.
-CE1 and CE1-FIX archived after accepted receipts/dependency transfer; advisors retained.
-CN2 source recipes are appended to Native advice; actual source app pin
-c7d8e3d, catalog IDs are not runtime evidence. No new fixture wiring authorized.
-Current interim worker reports (not accepted terminal corpus counts): Web CW01/02
-source capture and stale screenshot mismatch recovery; Native A01 two real partial
-160node exports; Simulator More real AX frames available after MJPEG recovery.
-Sources/first invalid images retained; failures are not successful corpus entries.
-Continuation: prior turn classified progress (commits/repairs/source discoveries/
-dispatch). Live handles rechecked for all3batches; no replacement workers spawned.
-CN-B1 explicitly reports restored own UI and released reservation ownerCN-B1-01a12b45,
-token35ff1fae7a1c42b3876cb94988125ea3, holder:null; ownPID39446 ended, userPID63105
-untouched. CN-B3 now dispatched with mandatory fresh acquisition and no new wiring;
-source recipe pin c7d8e3d, compiler1661e88. Fixture-origin renderings are labelled
-separately from real production states and synthetic numeric vectors.
-CW-B1 asked for equivalent resource handoff after capture; its generation/QA continues.
-CW-B1 subsequently confirmed own IAB tab closed,1280×720DPR2 restored, panels
-closed, Common Phrases restored; no physical input. CW-B2 dispatched with fresh
-resource/target check, new source pins and fixed1661e88 exporter, no shared build.
-CN3 is read-only product clarification for reported205.5/206/205.5pt grid widths;
-raw differences and rendered labels do not by themselves prove a design defect.
-CN-B1 terminal handoff accepted as bounded investigation, NOT successful full batch:
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B1-_djmb16k/handoff.md`.
-Proved ImageGen HTTP400 max32000 actual44606; many80/160-node prompts overlimit.
-Scope acquisition gaps in A07–10 and A09 missing selected-tag precondition remain.
-Both images retained/rejected: A12 disabled-state loss; A02 query/composition error
-with popup source clipping. No app/source edits; own runtime restored/released.
-CP1 sole export-path writer, permitted applicable spec/CLI compatibility delta only
-if needed, own CARGO_TARGET_DIR and frozen images; no shared binary overwrite.
-CA1 read-only code/evidence plus its one diagnostic receipt; no runtime or collector
-mutation. Root did not run product diagnostics or judge images itself.
-Workers explicitly reminded to include supported mathematical design_analysis in
-new representative family cases and report unknown/no-analysis reasons, without
-rebuilding old packages or inventing expected_from.
-All3 packets dispatched, local host, inherited settings, no nested delegation.
-Next: accept finite receipts, then medium complete generation batches from
-actual source handoffs, with disjoint ownership. No reviewer ping-pong or paper
-test count as product progress; count unique actual cases and failures honestly.
+Current declared source basis starts registry37/DESIGN-ANALYSIS1; CA3 registers
+minimal additive NATIVE/CLI evolution before code. CP2 stays export Restore unless
+an actual authority delta is proved. Shared route files have one owner; no concurrent
+registry edits. All source apps remain tracked read-only, current branches only.
+CA3 owns Native provider/integration/tests and relevant Native contracts. CP2 owns
+export code/tests and necessary export contracts. Root only coordination documents.
+Old raw sources/packages/images frozen; no relabel by moving HEAD or passing tests.
+
+Artifacts:1661e88 geometry/export binary at system-temp uiblueprint-ce1-fix.SsmxEK/debug/uiblueprint,
+SHA25643eb93e7196de7be3ac889c55dc86f1e7d1e54ab372b58c629443abc08023717.
+CP1 frozen binary at uib-CP1-2v302h3b/uiblueprint-4d6e0bf,
+SHA2563d77ad518939c59247888a6b2c1641f97cbcf1c9c206c5191b70399751afe7e9.
+All named temp roots share /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/.
+Full commands/hashes/findings/resource restoration in linked wave summary/receipts.
+No shared target/debug overwrite. All images and tool originals retained, never cleaned.
+UserPID63105 and after-title-spacing.png protected; source-app unrelated changes retained.
+
+Latest authoritative state: five corpus workers terminal and resources released;
+CA3 fresh runtime reservation required for its positive/negative proof. CP2 and CA3
+confirmed active. Next: receive saved repairs; run one coherent independent review
+of privacy/identity-sensitive deltas, then resume new diverse batches on fixed source.
+Unaccepted images and incomplete sources remain open evidence, not successful cases.
+Previous turn is progress (new batches, defects, shipped repairs and new evidence),
+not a pause or completion. No replacement agents or new product framework authorized.
 
 ## RELATIONS-IMPLEMENTATION — выполнено, 2026-10-11
 
