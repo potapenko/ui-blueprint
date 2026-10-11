@@ -1,4 +1,85 @@
-# CW1 — source advisor handoff
+# Web source advisor handoffs
+
+## CW2 — additional families, 2026-10-11
+
+Root received this read-only source handoff from Research website UI blueprint.
+Advisor-local IDs CW25–32 are remapped below to corpus IDs CW43–50 to avoid
+colliding with already captured CW-B3 and active CW-B4. No new runtime proof.
+The mistyped username in one QA link was corrected after checking the file exists.
+
+**CW2: `DONE_READ_ONLY`. Нашёл 8 дополнительных рецептов — примерно 7 семейств, не ещё 12 гарантированно доступных экранов.** Новых captures нет. CW01–24, нижние части прежних форм и текущая CW-B4 исключены.
+
+Pin всех перечисленных site-source/spec/QA: **`c23ef963e5be87195f80cef7173d537a5a146c74`**. Это source basis, не подтверждение загруженного build.
+
+База будущего сбора — существующий `http://localhost:3000`, собственный гостевой контекст. Канонический Reels URL: `/#/reels/en?source=common-phrases`. Старые QA-ссылки `/#/reels` — legacy entry, не новая рекомендация.
+
+| ID | Новый случай; вход → выход | Геометрическая польза и отличие | Доступность / ограничения |
+|---|---|---|---|
+| **CW43** | Reels desktop, один активный reel → зафиксировать paused state → закрыть свою вкладку | **Однорядная action bar**: icon group, spacer, translation/auto-advance selects, описание и side navigation. Общие края и распределение остаточной ширины. Это другой shell, не Clip Search viewer | Нужен реально загруженный reel. Не нажимать speed/repeat/Favorites/download/copy. Возможны autoplay и telemetry |
+| **CW44** | Тот же Reels в подтверждённой mobile layout → закрыть контекст | **Двухрядная action bar**: primary/secondary rows, правое выравнивание selects, video–description–toolbar spacing. Засчитывать только реальную смену композиции | Responsive browser, не native mobile. Не считать ещё одним случаем каждую ширину |
+| **CW45** | Reels → `Search phrase.` → наблюдать пустую открытую панель → `.reels-backside-close` | **Search backside**: heading/subtitle, autofocus input, submit и suggestion area внутри отдельной panel composition. Отличается от inline autocomplete CW-B4 | Не вводить и не выбирать подсказку. Loading/empty/results отмечать только фактически наблюдёнными |
+| **CW46** | Reels с source Common Phrases → `Open filters.` → закрыть крестиком **без Apply** | **Reels filter form**: pagination над grid полей, label/select pairs, footer. Отличается от learner-панели Search и mobile Clip Search Filters | **Условный рецепт:** QA применения требует authorized session; в прочитанном open-handler нет отдельного auth-gate. Доступность именно гостевого открытия не проверена. При gate — остановить, не логиниться |
+| **CW47** | Reels desktop → hover `Select collection` → убрать pointer | **Один контекстный tooltip action bar**, его anchor и fit относительно нижней части reel. Это не полный Guest Tour cluster | Слабее по разнообразию: общий tooltip-механизм уже встречался. Учитывать как новое состояние, не как независимое семейство или серию по всем иконкам |
+| **CW48** | Classic Search с доступным paused result → правый клик по player overlay → закрыть backdrop без выбора | **Video context menu**: две строки Speed/Repeat и группы option chips, выбранные состояния, позиционирование относительно точки открытия, viewport containment | Открытие и изменение значения разделены: premium-gate стоит на выборе speed/repeat. Ничего не выбирать. Это не modifier row из CW09 |
+| **CW49** | Открыть `/terms-of-use.html` → один заранее выбранный viewport/scroll position → закрыть вкладку | **Настоящий long-form document**: ограниченная колонка, H1/H2, paragraphs/lists, line wrapping и scroll. Ранее были Legal menus, не документ | Public, без auth. Не превращать Terms/Privacy/Fair Use с одинаковой вёрсткой в три новых семейства. Не кликать contact links |
+| **CW50** | Открыть существующий QA URL `/#/definitely-missing-route` → наблюдать SPA not-found → закрыть вкладку | **Dedicated route-fallback shell**: desktop header и отдельный heading/content region; placement/overlap/scroll. Это не пустая grid и не network-failure injection | Реальная предусмотренная route response, но runtime сейчас не проверен. Server 404 отдельно не предлагаю: в норме отмечен известный unresolved UX-дефект |
+
+## Точные маршруты
+
+**CW43–26**
+
+- Spec: [reels-shell.behavior@3](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/discovery-playback/reels-interaction-shell/behavior.md), [инварианты](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/discovery-playback/reels-interaction-shell/invariants-and-failure.md).
+- QA: [desktop/mobile action rows](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-action-bar-mobile-two-row-speed-repeat.md), [select alignment](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-action-bar-selects-right-aligned-with-spacer.md).
+- Source: [action_bar/view.cljs](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/views/action_bar/view.cljs:822).
+- Не переносить старый QA `force mobile` override как обязательный setup: сначала подтвердить естественную responsive composition.
+
+**CW45–28**
+
+- Spec: [reels-discovery.behavior](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/discovery-playback/reels-discovery/behavior.md), [reels-experience.behavior](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/discovery-playback/reels-experience/behavior.md).
+- QA: [empty focused Search panel](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-search-panel-empty-focused-input.md), [Common Phrases filters](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-common-phrases-filters-apply.md).
+- Source: [search panel](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/search/view.cljs:240), [filter form](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/collections/common_phrases/search_form.cljs:407), [panel mounting](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/view.cljs:1950), [Close](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/views/backside_close/view.cljs).
+
+**CW47**
+
+- Spec: `reels-shell.behavior@3`.
+- QA: [desktop hover tooltips](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-action-bar-desktop-hover-tooltips.md).
+- Source: [tooltip-wrapped action buttons](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/views/action_bar/view.cljs:463).
+
+**CW48**
+
+- Spec: [shared playback controls](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/surfaces-experience/playback-runtime/overview-and-behavior.md).
+- QA: [Reels action-bar case, right-click menu step](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-action-bar-mobile-two-row-speed-repeat.md).
+- Source: [Search mounts menu; gate applies to value changes](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/search/components/video/view.cljs:429), [menu rows/backdrop](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/video_menu/view.cljs:267).
+- Файл `tc-video-context-menu-global-speed-repeat.md` сейчас проверяет premium gating; его название не означает готовый geometry oracle.
+
+**CW49**
+
+- Spec: [public-policy.overview-behavior](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/discovery-playback/public-policy/overview-and-behavior.md), [routes/invariants](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/discovery-playback/public-policy/invariants-failure-state-and-qa.md).
+- QA: [public policy links](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-public-support-and-rights-links-expose-contact-and-fair-use-policy.md).
+- Source: [terms-of-use.html](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/resources/public/terms-of-use.html:46).
+
+**CW50**
+
+- Spec: [route-resolution-and-not-found](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/specs/route-resolution-and-not-found-spec.md).
+- QA: [unknown hash route](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-unknown-hash-route-falls-back-to-dedicated-not-found-page.md).
+- Source: [not_found/view.cljs](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/not_found/view.cljs).
+
+## Что сознательно не добавлено
+
+- **Download dialog:** существующий QA требует подписанную сессию; не подходит под запрет account/login.
+- **Daily Practice:** `daily-practice@10` — иной сложный modal, но вход сразу копирует prompt и читает browser-local study history. Без отдельного разрешённого чистого material-состояния это не безопасный recipe.
+- **Reels Collections:** source передаёт `favorites-query` и может раскрывать пользовательские коллекции; исключён при текущем запрете Favorites.
+- **Contact/help:** контракт описывает outbound contact, а не отдельную help-форму. Новой панели придумывать нельзя.
+- Новые слова, актёры, одинаковые жанровые chips, нижние части уже собранных панелей и очередные viewport не увеличивают число семейств автоматически.
+
+**Практический порядок:** сначала CW45, CW48, CW49, CW50; затем CW43–26 при доступном публичном reel; CW46 — только при фактически доступном guest opening; CW47 — низкоприоритетный дополнительный state.
+
+**Предел:** подтверждено ещё **8 source recipes**, из них один условный и один слабый по новизне. Ни один не captured в CW2. Вместе с прежними 24 это 32 каталожных сценария, а не 32 доказанно доступных состояния и тем более не основание обещать 1000 семантически разных кейсов одного сайта. Для дальнейшего расширения потребуется действительно новое семейство источников или отдельно разрешённый scope — не размножение этих форм.
+
+Все будущие размеры — из runtime в указанном Space/units; ни приведённые CSS, ни старые QA-числа не являются новым measured oracle.
+
+
+## CW1 — source advisor handoff
 
 Recorded by root from the terminal receipt of Research website UI blueprint, 2026-10-11. Read-only discovery accepted; recipes are not runtime acceptance.
 
