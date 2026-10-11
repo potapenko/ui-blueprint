@@ -211,5 +211,41 @@ fn detail_caption_uses_own_label_owner_or_relation_never_an_unrelated_neighbor()
     assert!(prompt(&b).contains("LOCAL DETAIL \"Offensive : — dimensions\""));
     let s = &mut b["views"][0]["source"]["snapshot"];
     s["nodes"][1]["properties"][1]["state"]["value"]["value"] = json!("Own sourced name");
+    for owner in ["context", "coverage"] {
+        for f in s[owner]["fields"].as_array_mut().unwrap() {
+            if f == "visible_text" {
+                *f = json!("accessibility_name");
+            }
+        }
+    }
+    for o in s["observations"].as_array_mut().unwrap() {
+        for f in o["coverage"]["fields"].as_array_mut().unwrap() {
+            if f == "visible_text" {
+                *f = json!("accessibility_name");
+            }
+        }
+    }
+    for n in s["nodes"].as_array_mut().unwrap() {
+        n["properties"][1]["field"] = json!("accessibility_name");
+    }
+    b["views"][0]["source"]["public_text_fields"] = json!(["accessibility_name"]);
     assert!(prompt(&b).contains("LOCAL DETAIL \"Own sourced name — dimensions\""));
+}
+
+#[test]
+fn visible_control_payload_is_not_promoted_to_a_semantic_icon_caption() {
+    for text in ["grade", "Continue"] {
+        let mut b = brief();
+        set_text(&mut b, text);
+        let p = package(&b);
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert!(prompt.contains(&format!("visible-text payload {text:?}")));
+        assert!(!prompt.contains(&format!("LOCAL DETAIL \"{text} — dimensions\"")));
+        assert!(!prompt.contains(&format!("DIMENSIONED RECTANGLE button {text:?}")));
+        let scene: Json = serde_json::from_slice(&p.files()["scene.json"]).unwrap();
+        assert_eq!(
+            scene["views"][0]["components"][0]["properties"][1]["state"]["value"]["value"],
+            text
+        );
+    }
 }

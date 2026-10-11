@@ -147,6 +147,7 @@ pub(crate) fn execute(args: Vec<OsString>) -> Result<(Vec<u8>, u8), Failure> {
         size,
         package.files().keys().collect(),
         package.comparison_attribution(),
+        package.version(),
     );
     let stdout = output::export_receipt(
         &receipt,
@@ -278,12 +279,13 @@ fn receipt(
     package_bytes: usize,
     files: Vec<&String>,
     attribution: &str,
+    version: &str,
 ) -> serde_json::Value {
     let views:Vec<_>=b.views.iter().map(|v| match &v.source {
         SourceInput::Observed {snapshot,..}=>serde_json::json!({"view_id":v.id,"source_kind":"observed","coverage":snapshot.coverage.status,"omitted_count":snapshot.coverage.omitted_count,"unknown_count":snapshot.coverage.unknown_count,"components":snapshot.nodes.len()}),
         SourceInput::Proposed {layout}=>serde_json::json!({"view_id":v.id,"source_kind":"proposed","coverage":"proposed","omitted_count":null,"unknown_count":null,"components":layout.components.len()}),
     }).collect();
-    serde_json::json!({"result_version":if b.views.iter().any(|v| !v.design_analysis.is_empty()) {"0.3.0"} else if b.comparisons.is_empty() {"0.1.0"} else {"0.2.0"},"command":"imagegen-prompt","status":"package_written","purpose":b.purpose,
+    serde_json::json!({"result_version":version,"command":"imagegen-prompt","status":"package_written","purpose":b.purpose,
         "views":views,"package_bytes":package_bytes,"files":files,"local_numeric_validation":"checked","validation_status":"unverified",
         "approval_status":b.metadata.approval.status,"generated_image":false,"references_count":0,
         "comparison_attribution":attribution})

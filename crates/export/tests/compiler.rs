@@ -129,7 +129,8 @@ fn proposed(b: &mut DrawingBrief) -> &mut ProposedLayout {
 fn exact_example_full_template_and_independent_statuses() {
     let b = fixture("proposed");
     let p = compile(&b, limits()).expect("compile");
-    assert_eq!(p.files().len(), 6);
+    assert_eq!(p.files().len(), 9);
+    assert_eq!(data(&p, "manifest.json")["package_version"], "0.4.0");
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     for section in [
         "ЗАДАЧА",
@@ -161,6 +162,72 @@ fn exact_example_full_template_and_independent_statuses() {
         1008.0
     );
     assert_eq!(data(&p, "sheets.json").as_array().unwrap().len(), 3);
+}
+
+#[test]
+fn separate_prompts_cover_source_and_own_every_selected_dimension_once() {
+    let b = fixture("proposed");
+    let p = compile(&b, limits()).unwrap();
+    let m = data(&p, "manifest.json");
+    let sheets = m["sheet_prompts"].as_array().unwrap();
+    assert_eq!(sheets.len(), 3);
+    assert_eq!(sheets[0]["sheet_id"], "G01");
+    let overview = sheets[0]["component_ids"].as_array().unwrap();
+    for i in 0..10 {
+        assert!(overview.contains(&serde_json::json!(format!("N{i:02}"))));
+    }
+    let mut owned = Vec::new();
+    for sheet in sheets {
+        let text = std::str::from_utf8(&p.files()[sheet["file"].as_str().unwrap()]).unwrap();
+        assert!(text.contains(&format!(
+            "Generate ONLY sheet {}",
+            sheet["sheet_id"].as_str().unwrap()
+        )));
+        assert!(!text.contains("{{"));
+        owned.extend(sheet["dimension_ids"].as_array().unwrap().iter().cloned());
+    }
+    let unique = owned
+        .iter()
+        .map(|x| x.as_str().unwrap())
+        .collect::<std::collections::BTreeSet<_>>();
+    assert_eq!(unique.len(), owned.len());
+    assert_eq!(
+        unique,
+        m["required_dimension_ids"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|x| x.as_str().unwrap())
+            .collect()
+    );
+    for id in [
+        "N00-width",
+        "N00-height",
+        "N06-width",
+        "N06-height",
+        "N09-width",
+        "N09-height",
+        "field-gap",
+    ] {
+        assert!(unique.contains(id), "{id}");
+    }
+    let d1 = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert!(d1.contains("WIDTH 400 CSS px") && d1.contains("HEIGHT 48 CSS px"));
+    let d2 = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
+    assert!(d2.contains("WIDTH 120 CSS px") && d2.contains("HEIGHT 48 CSS px"));
+    let bytes = p.files().values().map(Vec::len).sum();
+    let mut exact = limits();
+    exact.max_output_bytes = bytes;
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    let mut unsplit = b.clone();
+    unsplit.details.clear();
+    let old = compile(&unsplit, limits()).unwrap();
+    assert_eq!(old.version(), "0.1.0");
+    assert_eq!(old.files().len(), 6);
+    assert_eq!(old.files()["scene.json"], p.files()["scene.json"]);
+    assert_eq!(old.files()["dimensions.json"], p.files()["dimensions.json"]);
 }
 #[test]
 fn observed_full_scope_exact_fractional_geometry_and_unknowns() {
@@ -940,8 +1007,12 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     assert!(prompt.contains("Object button: Button"));
     assert!(prompt.contains("window-sized semantic Play/Search region"));
-    assert!(prompt.contains("Placement context 1: AccessibilityBounds;"));
+    assert!(prompt.contains("Measurement context 1: AccessibilityBounds;"));
     assert!(prompt.contains("AX FRAME MEASUREMENT (not painted UI) button"));
+    assert!(prompt.contains("AX measurement only, not artwork placement"));
+    assert!(prompt.contains("NO text,\nicon, button, word, glyph or UI reconstruction inside it"));
+    assert!(!prompt.contains("BELOW the enclosing shape"));
+    assert!(!prompt.contains("enclosing outline BELOW"));
     assert!(!prompt.contains("LayoutBounds"));
     let dims = data(&package, "dimensions.json");
     assert_eq!(dims[0]["dimensions"][0]["value"], 97.296875);
@@ -1291,6 +1362,7 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             clipped,
             "{kind:?}/{variant}"
         );
+        assert!(!prompt.contains("in context 0"));
         if !clipped {
             assert!(
                 prompt.lines().any(
@@ -1495,6 +1567,26 @@ fn state_captions_quote_declared_meaning_without_selected_inference() {
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     assert!(prompt.contains("Selected=true"));
     assert!(!prompt.contains("CAPTION exactly:"));
+}
+
+#[test]
+fn caller_disabled_statement_reaches_repeated_measurements_without_enabled_fields() {
+    let mut brief = fixture("observed");
+    brief.views[0].state = "Previous clip disabled. Other toolbar actions blocked.".into();
+    let before = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&before.files()["prompt.txt"]).unwrap();
+    assert!(prompt.matches("EXACT CALLER STATE").count() > 1);
+    assert!(prompt.contains("Previous clip disabled; Other toolbar actions blocked"));
+    assert!(prompt.contains("not an observed Enabled field"));
+    assert!(!prompt.contains("Enabled=false"));
+    brief.views[0].state = "Settings visible; off state declared; enablement unknown".into();
+    let after = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&after.files()["prompt.txt"]).unwrap();
+    assert!(!prompt.contains("EXACT CALLER STATE for"));
+    assert!(!prompt.contains("State: Normal ("));
+    let a = data(&before, "scene.json");
+    let b = data(&after, "scene.json");
+    assert_eq!(a["views"][0]["components"], b["views"][0]["components"]);
 }
 
 #[test]

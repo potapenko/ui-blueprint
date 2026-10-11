@@ -155,17 +155,31 @@ fn check_files(c: &Case) {
         .map(|e| e.unwrap().file_name().into_string().unwrap())
         .collect();
     names.sort();
-    assert_eq!(
-        names,
-        [
-            "dimensions.json",
-            "drawing-brief.md",
-            "manifest.json",
-            "prompt.txt",
-            "scene.json",
-            "sheets.json"
-        ]
-    );
+    let mut expected = vec![
+        "dimensions.json",
+        "drawing-brief.md",
+        "manifest.json",
+        "prompt.txt",
+        "scene.json",
+        "sheets.json",
+    ]
+    .into_iter()
+    .map(str::to_owned)
+    .collect::<Vec<_>>();
+    if let Some(sheets) = c.package("manifest.json")["sheet_prompts"].as_array() {
+        for sheet in sheets {
+            let file = sheet["file"].as_str().unwrap();
+            expected.push(file.into());
+            let prompt = fs::read_to_string(c.root.join("package").join(file)).unwrap();
+            assert!(prompt.contains(&format!(
+                "Generate ONLY sheet {}",
+                sheet["sheet_id"].as_str().unwrap()
+            )));
+            assert!(!prompt.contains("{{"));
+        }
+    }
+    expected.sort();
+    assert_eq!(names, expected);
     let prompt = fs::read_to_string(c.root.join("package/prompt.txt")).unwrap();
     for section in [
         "ЗАДАЧА",
@@ -224,7 +238,7 @@ fn proposed_public_command_writes_full_package_and_versioned_json_receipt() {
             "views"
         ]
     );
-    assert_eq!(receipt["result_version"], "0.1.0");
+    assert_eq!(receipt["result_version"], "0.4.0");
     assert_eq!(receipt["command"], "imagegen-prompt");
     assert_eq!(receipt["status"], "package_written");
     assert_eq!(receipt["purpose"], "propose");

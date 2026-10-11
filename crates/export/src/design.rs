@@ -428,8 +428,9 @@ pub(crate) fn text(insights: &[Insight], limit: usize) -> Result<String> {
         crate::compile::append(
             &mut out,
             &format!(
-                "Caption {}: {}\n",
+                "PRINT ONE ATTRIBUTED NOTE — caption {}. Named participants {}. Result {}. Keep the caption's frame/anchor qualifier and these participants with this result; do not substitute another equal-valued group.\n",
                 crate::package::bounded_compact_json(&i.caption, limit)?,
+                crate::package::bounded_compact_json(&i.facts["operand_labels"], limit)?,
                 crate::package::bounded_compact_json(&i.summary, limit)?
             ),
             limit,

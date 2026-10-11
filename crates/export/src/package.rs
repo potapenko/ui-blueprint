@@ -39,8 +39,12 @@ pub(crate) fn bounded_compact_json(value: &impl Serialize, limit: usize) -> Resu
 pub struct Package {
     pub(crate) files: BTreeMap<String, Vec<u8>>,
     pub(crate) comparison_attribution: &'static str,
+    pub(crate) version: &'static str,
 }
 impl Package {
+    pub fn version(&self) -> &'static str {
+        self.version
+    }
     pub fn comparison_attribution(&self) -> &'static str {
         self.comparison_attribution
     }

@@ -23,9 +23,14 @@ Depict media only as sparse WHITE contour lines on the same flat BLUE; no tonal
 shading, photographic texture, grayscale, dark/gray panels, gradients or transparency.
 
 ПРОЕКЦИЯ И ЛИСТ
-One dominant complete overview of the selected scope plus the named local fragments.
+Follow the assigned sheet: G01 has the complete selected-scope artwork; a separate
+measurement sheet has ONLY assigned empty frame sketches, no artwork or overview.
+A combined assignment may include overview and its assigned local measurements.
 Draw only visible coverage, including its actual cut boundary. Plain text is not a box.
 Source wrappers appear only as necessary measurement boundaries.
+Use the original reference for artwork appearance. AX coordinates describe only
+accessibility measurements; they do not reposition painted text or glyphs. Never
+expose occluded controls in artwork just because their AX records are listed.
 The source text payload can contain entire clipped lines. CLIPPING TAKES PRIORITY:
 cut glyphs and rows at the reported visible-region boundary as in the original;
 do not move, shrink, reflow or complete the last row to make its full text visible.
@@ -35,12 +40,7 @@ Show the cut with a break mark; do not close an incomplete table/card at the cut
 {{dimensions}}{{design_analysis}}
 
 НАНЕСЕНИЕ РАЗМЕРОВ
-DIMENSIONED RECTANGLE: BOTH dimensions on the SAME shape. Use its assigned width
-slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
-Height LEFT. Never omit the enclosing width because another shape has a width.
-Each line connects to that shape's actual opposite borders; the right side stays
-free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
-{{ax_guidance}}{{edge_guidance}}Use every assigned measurement once. Labels are {{units}}; preserve ≈ on rounded
+{{frame_guidance}}{{ax_guidance}}{{edge_guidance}}Use every assigned measurement once. Labels are {{units}}; preserve ≈ on rounded
 numbers. No invented padding/radius/tolerance or exact-sum claim for rounded chains.
 
 ОБЪЕКТЫ И ИЕРАРХИЯ
@@ -69,6 +69,9 @@ infer disabled state from absent fields. Apply caller-declared disabled state on
 to the named control or named group, never to its neighbors. Do not print an
 “enabled” label for unreported enablement. Preserve caller-reported
 blocked background without changing its layout or inventing missing controls.
+Print no “State: Normal” or other invented state. If a repeated measurement block
+quotes an EXACT CALLER STATE, preserve that named disabled/blocked caption outside
+the corresponding empty frame; it remains caller-declared, not an Enabled field.
 Each per-view PRINT STATE CAPTION is required visible text beside that view’s
 designated control. Preserve its declared active-versus-applied distinction. Active
 means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline

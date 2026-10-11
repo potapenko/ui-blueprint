@@ -98,6 +98,81 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
     scene.flow = flow(brief, &mut alias_maps)?;
     let sheets = sheets(brief, &scene, limits)?;
     let prompt = prompt(brief, &scene, &dims, &sheets, limits.max_output_bytes)?;
+    let mut sheet_prompts = Vec::new();
+    let mut sheet_files = Vec::new();
+    let mut required_dimension_ids = Vec::new();
+    if scene.views.len() == 1
+        && sheets.iter().any(|s| s.kind == "detail")
+        && matches!(
+            brief.purpose,
+            Purpose::Document | Purpose::Propose | Purpose::Detail
+        )
+    {
+        let v = &scene.views[0];
+        let partial = partial_visibility(&brief.views[0].source);
+        required_dimension_ids = drawing_dimensions(
+            v,
+            &dims[0],
+            &partial,
+            None,
+            &sheets,
+            limits.max_output_bytes,
+        )?
+        .dimension_ids;
+        let mut assigned = Vec::new();
+        let mut sheet_remaining = limits.max_output_bytes;
+        for sheet in &sheets {
+            let p = drawing_dimensions(
+                v,
+                &dims[0],
+                &partial,
+                Some(sheet),
+                &sheets,
+                limits.max_output_bytes,
+            )?;
+            assigned.extend(p.dimension_ids.clone());
+            let file = format!("prompt-{}.txt", sheet.id);
+            let instructions = format!(
+                "Generate ONLY sheet {}: {}. {} No other sheets or montage.",
+                sheet.id,
+                sheet.title,
+                if sheet.kind == "general" {
+                    "Complete selected-scope artwork overview; only this sheet's assigned measurements. Other measurements belong to separate detail sheets."
+                } else if p.dimension_ids.is_empty() {
+                    "Selected source detail only; no prepared measurements on this sheet."
+                } else {
+                    "Measurement sheet only: empty source-frame sketches and exact outside captions, no UI artwork or whole-window copy. All selected UI artwork remains on G01."
+                }
+            );
+            let analysis = if sheet.kind == "general" {
+                crate::design::text(&v.design_analysis, limits.max_output_bytes)?
+            } else {
+                String::new()
+            };
+            let prompt = render_view(brief, v, p.text, instructions, analysis, sheet_remaining)?;
+            sheet_remaining = sheet_remaining
+                .checked_sub(prompt.len())
+                .ok_or(E::OutputLimit)?;
+            sheet_prompts.push(serde_json::json!({"sheet_id":sheet.id,"view":v.id,"file":file,"component_ids":p.component_ids,"dimension_ids":p.dimension_ids}));
+            sheet_files.push((file, prompt.into_bytes()));
+        }
+        let mut required = required_dimension_ids.clone();
+        required.sort();
+        assigned.sort();
+        require(
+            assigned == required && assigned.windows(2).all(|w| w[0] != w[1]),
+            E::InvalidReference,
+        )?;
+    }
+    let version = if !sheet_prompts.is_empty() {
+        "0.4.0"
+    } else if brief.views.iter().any(|v| !v.design_analysis.is_empty()) {
+        "0.3.0"
+    } else if brief.comparisons.is_empty() {
+        "0.1.0"
+    } else {
+        "0.2.0"
+    };
     let mut files = BTreeMap::new();
     let mut remaining = limits.max_output_bytes;
     for (name, bytes) in [
@@ -113,12 +188,24 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
         remaining = remaining.checked_sub(bytes.len()).ok_or(E::OutputLimit)?;
         files.insert(name.into(), bytes);
     }
-    let manifest = serde_json::json!({"package_version":if brief.views.iter().any(|v| !v.design_analysis.is_empty()) {"0.3.0"} else if brief.comparisons.is_empty() {"0.1.0"} else {"0.2.0"},"guide":GUIDE,"guide_reference":"docs engineering-blueprint-guide.md revision 1.2",
+    for (name, bytes) in sheet_files {
+        remaining = remaining.checked_sub(bytes.len()).ok_or(E::OutputLimit)?;
+        files.insert(name, bytes);
+    }
+    let mut manifest = serde_json::json!({"package_version":version,"guide":GUIDE,"guide_reference":"docs engineering-blueprint-guide.md revision 1.2",
         "document":brief.metadata,"purpose":brief.purpose,"source_kinds":scene.views.iter().map(|v|v.source_kind).collect::<Vec<_>>(),
         "validation_status":"unverified","local_numeric_validation":"checked","approval_status":brief.metadata.approval.status,
         "scale_mode":"schematic","generated_image":false,"references":[],
         "files":["manifest.json","drawing-brief.md","scene.json","dimensions.json","sheets.json","prompt.txt"],
         "retention_owner":brief.metadata.owner,"retention_condition":brief.metadata.retention});
+    if !sheet_prompts.is_empty() {
+        let mut names = files.keys().cloned().collect::<Vec<_>>();
+        names.push("manifest.json".into());
+        names.sort();
+        manifest["files"] = serde_json::json!(names);
+        manifest["sheet_prompts"] = serde_json::json!(sheet_prompts);
+        manifest["required_dimension_ids"] = serde_json::json!(required_dimension_ids);
+    }
     files.insert("manifest.json".into(), bounded_json(&manifest, remaining)?);
     let compared = scene
         .comparison_results
@@ -137,6 +224,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
     Ok(Package {
         files,
         comparison_attribution,
+        version,
     })
 }
 fn flow(b: &DrawingBrief, aliases: &mut [Aliases]) -> Result<Vec<FlowLink>> {
@@ -444,7 +532,13 @@ pub(crate) fn component_name(v: &SceneView, index: usize) -> String {
         }
         _ => None,
     });
-    let visible = public_label(c);
+    // Visible control text can be an icon-font token; its payload is retained,
+    // but a semantic measurement caption needs an explicit name or label owner.
+    let visible = if control(c) && c.label.is_none() {
+        ""
+    } else {
+        public_label(c)
+    };
     let aggregate = child_indices(v, index).iter().any(|&i| {
         let child_label = public_label(&v.components[i]);
         !child_label.is_empty() && visible.contains(child_label)
@@ -601,7 +695,15 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
         ));
     }
     if let Some(g) = geometry(c) {
-        out.push_str(&format!("; placement context {}", geometry_context(v, g)));
+        out.push_str(&format!(
+            "; {} context {}",
+            if g.frame_kind == FrameKind::AccessibilityBounds {
+                "AX measurement only, not artwork placement; measurement"
+            } else {
+                "placement"
+            },
+            geometry_context(v, g)
+        ));
         match &g.shape {
             Shape::Rect(r) => out.push_str(&format!(
                 "; box[x {}, y {}, w {}, h {}]",
@@ -643,17 +745,23 @@ fn drawing_inventory(
     v: &SceneView,
     partial: &[bool],
     anchors: &[usize],
+    selected: Option<&[String]>,
     limit: usize,
 ) -> Result<String> {
     let mut out = String::new();
     append(
         &mut out,
-        "OVERVIEW CONTENT. Define each object once. #numbers are unprinted local references, not UI labels. Details reuse the referenced object's geometry, text and state. Placement context supplies frame kind, Space, units, origin and transform for every box; coordinates are construction input, not captions. Names identify objects, not field values or extra visible UI text. Preserve source icons/text styling: an accessibility Button is not evidence of a painted button border.\n",
+        "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n",
         limit,
     )?;
     append(&mut out, &printable_state(v), limit)?;
     let mut contexts = Vec::new();
-    for g in v.components.iter().filter_map(geometry) {
+    for g in v
+        .components
+        .iter()
+        .filter(|c| selected.is_none_or(|s| s.contains(&c.id)))
+        .filter_map(geometry)
+    {
         let context = format!(
             "{:?}; {} {:?}, {}, {:?}; transform {}",
             g.frame_kind,
@@ -674,7 +782,12 @@ fn drawing_inventory(
             append(
                 &mut out,
                 &format!(
-                    "Placement context {}: {context}. No guessed conversions.\n",
+                    "{} context {}: {context}. No guessed conversions.\n",
+                    if g.frame_kind == FrameKind::AccessibilityBounds {
+                        "Measurement"
+                    } else {
+                        "Placement"
+                    },
                     geometry_context(v, g)
                 ),
                 limit,
@@ -682,7 +795,36 @@ fn drawing_inventory(
             contexts.push(context);
         }
     }
+    if let Some((i, c)) = v.components.iter().enumerate().find(|(i, c)| {
+        partial.get(*i).copied().unwrap_or(false) && selected.is_none_or(|s| s.contains(&c.id))
+    }) && let Some(Value::Geometry(visible)) = c
+        .properties
+        .iter()
+        .find(|p| p.field() == Field::VisibleRegion)
+        .and_then(Property::known)
+        && let Shape::Rect(r) = &visible.shape
+    {
+        append(
+            &mut out,
+            &format!(
+                "SOURCE CUT MASK (construction only): {} visible rectangle x {}, y {}, width {}, height {} {} in source Space {} ({:?}, {:?}). This is the crop of the artwork, not a dimensioned full layout outline. Keep partial glyphs at its bottom/left edge exactly as the original; no full final row or closing table border. Full-layout dimensions belong to a separate empty frame sketch, not this cut artwork.\n",
+                component_name(v, i),
+                r.x,
+                r.y,
+                r.width,
+                r.height,
+                unit_name(visible.coordinate_space.units),
+                visible.coordinate_space.id.0,
+                visible.coordinate_space.kind,
+                visible.coordinate_space.origin
+            ),
+            limit,
+        )?;
+    }
     for (i, c) in v.components.iter().enumerate() {
+        if selected.is_some_and(|s| !s.contains(&c.id)) {
+            continue;
+        }
         let text = !visible_text(c).is_empty()
             && !child_indices(v, i).iter().any(|&j| {
                 !visible_text(&v.components[j]).is_empty()
@@ -696,7 +838,13 @@ fn drawing_inventory(
             component_role(c).to_ascii_lowercase().as_str(),
             "text" | "heading" | "link"
         );
-        if control(c) || text || semantic_text || visual || anchors.contains(&i) {
+        if selected.is_some()
+            || control(c)
+            || text
+            || semantic_text
+            || visual
+            || anchors.contains(&i)
+        {
             append(&mut out, &object_text(v, i, partial, limit)?, limit)?;
         }
     }
@@ -747,7 +895,7 @@ fn local_measures(
                         component_name(v, a),
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
-                        if enclosing {
+                        if enclosing && !accessibility {
                             "BELOW the enclosing shape"
                         } else {
                             "ABOVE"
@@ -757,7 +905,7 @@ fn local_measures(
                     ),
                     limit,
                 )?;
-                if enclosing {
+                if enclosing && !accessibility {
                     append(
                         &mut out,
                         &format!(
@@ -892,6 +1040,33 @@ fn local_measures(
         }
         done.push(d.id.clone());
     }
+    if !out.is_empty() {
+        let states = v
+            .state
+            .split([';', '.'])
+            .map(str::trim)
+            .filter(|s| {
+                s.split_whitespace().any(|w| {
+                    matches!(
+                        w.trim_matches(|c: char| !c.is_alphabetic())
+                            .to_ascii_lowercase()
+                            .as_str(),
+                        "disabled" | "blocked"
+                    )
+                })
+            })
+            .collect::<Vec<_>>();
+        if !states.is_empty() {
+            append(
+                &mut out,
+                &format!(
+                    "EXACT CALLER STATE for the named repeated controls (not an observed Enabled field): {:?}. Put the named disabled/blocked caption OUTSIDE its empty measurement sketch and preserve it in artwork; no inferred neighboring state.\n",
+                    states.join("; ")
+                ),
+                limit,
+            )?;
+        }
+    }
     Ok(out)
 }
 fn child_indices(v: &SceneView, index: usize) -> Vec<usize> {
@@ -1013,8 +1188,18 @@ fn partial_visibility(source: &SourceInput) -> Vec<bool> {
 fn detail_caption(v: &SceneView, members: &[usize]) -> String {
     if let [index] = members {
         let c = &v.components[*index];
-        if !public_label(c).is_empty() {
-            return format!("{} — dimensions", public_label(c).replace('\n', " / "));
+        let name = c.label.as_deref().or_else(|| {
+            c.properties.iter().find_map(|p| match p.known() {
+                Some(Value::Text(text))
+                    if p.field() == Field::AccessibilityName && !text.is_empty() =>
+                {
+                    Some(text.as_str())
+                }
+                _ => None,
+            })
+        });
+        if let Some(name) = name.filter(|s| !s.is_empty()) {
+            return format!("{} — dimensions", name.replace('\n', " / "));
         }
         let labels = v
             .relations
@@ -1054,12 +1239,19 @@ fn detail_caption(v: &SceneView, members: &[usize]) -> String {
     }
     "Control dimensions and spacing".into()
 }
+struct Presentation {
+    text: String,
+    component_ids: Vec<String>,
+    dimension_ids: Vec<String>,
+}
 fn drawing_dimensions(
     v: &SceneView,
     dimensions: &ViewDimensions,
     partial: &[bool],
+    sheet: Option<&Sheet>,
+    sheets: &[Sheet],
     limit: usize,
-) -> Result<String> {
+) -> Result<Presentation> {
     let index = |id: &str| v.components.iter().position(|c| c.id == id);
     let large = |i: usize| {
         control(&v.components[i])
@@ -1364,16 +1556,60 @@ fn drawing_dimensions(
         seen.push(signature);
         lines.push((destination, d, a, b));
     }
+    // Every selected scalar has one owner. Paired width/height share their
+    // component, so splitting cannot separate the two labels of one frame.
+    let owns = |owner: Option<usize>, a: usize| {
+        sheet.is_none_or(|sheet| {
+            let destination = if owner.is_some() {
+                sheets.iter().find(|s| {
+                    s.view == v.id
+                        && s.kind == "detail"
+                        && s.components.contains(&v.components[a].id)
+                })
+            } else {
+                None
+            };
+            destination.map_or(sheet.kind == "general", |s| s.id == sheet.id)
+        })
+    };
+    lines.retain(|(owner, _, a, _)| owns(*owner, *a));
+    insets.retain(|(_, a, _)| owns(Some(0), *a));
+    let dimension_ids = lines
+        .iter()
+        .map(|(_, d, _, _)| d.id.clone())
+        .chain(insets.iter().map(|(d, _, _)| d.id.clone()))
+        .collect();
     let mut out = String::new();
     let anchor_objects = lines
         .iter()
         .flat_map(|(_, _, a, b)| [*a, *b])
         .chain(insets.iter().flat_map(|(_, a, b)| [*a, *b]))
-        .chain(members.iter().flatten().copied())
+        .chain(
+            members
+                .iter()
+                .enumerate()
+                .filter(|(i, _)| lines.iter().any(|(owner, _, _, _)| *owner == Some(*i)))
+                .flat_map(|(_, m)| m.iter().copied()),
+        )
+        .collect::<Vec<_>>();
+    let component_ids = v
+        .components
+        .iter()
+        .enumerate()
+        .filter(|(i, c)| {
+            sheet.is_none_or(|s| s.components.contains(&c.id)) || anchor_objects.contains(i)
+        })
+        .map(|(_, c)| c.id.clone())
         .collect::<Vec<_>>();
     append(
         &mut out,
-        &drawing_inventory(v, partial, &anchor_objects, limit)?,
+        &drawing_inventory(
+            v,
+            partial,
+            &anchor_objects,
+            sheet.map(|_| component_ids.as_slice()),
+            limit,
+        )?,
         limit,
     )?;
     append(
@@ -1454,16 +1690,31 @@ fn drawing_dimensions(
         )?;
         append(&mut out, &local_measures(v, &[(d, a, b)], limit)?, limit)?;
     }
-    Ok(out)
+    Ok(Presentation {
+        text: out,
+        component_ids,
+        dimension_ids,
+    })
 }
 
+const FRAME_GUIDANCE: &str = r#"DIMENSIONED RECTANGLE: BOTH dimensions on the SAME shape. Use its assigned width
+slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
+Height LEFT. Never omit the enclosing width because another shape has a width.
+Each line connects to that shape's actual opposite borders; the right side stays
+free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
+"#;
 const AX_GUIDANCE: &str = r#"AX FRAME MEASUREMENT or AX FRAME EXTENT is a separate measurement sketch, not a picture of a control.
-Draw an unfilled WHITE dashed rectangle captioned “AX frame” and the supplied
-object name; width ABOVE, height LEFT. Keep it separate from the UI overview.
+Draw an EMPTY WHITE dashed rectangle. Its interior is only flat BLUE: NO text,
+icon, button, word, glyph or UI reconstruction inside it. Put “AX frame” and the
+semantic object name OUTSIDE BELOW the sketch; width ABOVE, height LEFT.
+This ABOVE rule applies to every AX sketch including enclosing/window frames.
+Keep sketches separate from artwork; never use AX coordinates to rearrange artwork.
 Never turn an AX rectangle into a new painted button, visible glyph, text-field
 border or hit region. In particular a window-sized semantic Play/Search region
 does not create a window-sized glyph or an additional visible Search button.
 In the overview keep the exact original icon/text appearance, without inventing size.
+Only explicitly prepared caller/observed state may be captioned outside the frame.
+No Normal/enabled/disabled default state exists.
 "#;
 const EDGE_GUIDANCE: &str = r#"EDGE FRAGMENT blocks are independent of the full-shape size views. Redraw ONLY
 their two named edge-corner fragments and the one dimension arrow, preserving
@@ -1473,6 +1724,120 @@ An unpainted label-layout boundary belongs to the named text; include that short
 text context by the boundary. An outer boundary never means an inner control edge.
 NAMED-ANCHOR RELATION is conservative attribution, never a border-corner sketch.
 "#;
+
+fn render_view(
+    b: &DrawingBrief,
+    v: &SceneView,
+    presentation: String,
+    sheet_plan: String,
+    design_analysis: String,
+    limit: usize,
+) -> Result<String> {
+    let mut result = String::new();
+    let mut vars = BTreeMap::new();
+    vars.insert("title", b.metadata.title.clone());
+    vars.insert("language", b.metadata.language.clone());
+    vars.insert("output_size", b.metadata.output_size.clone());
+    vars.insert("page_format", b.metadata.page_format.clone());
+    vars.insert("purpose", format!("{:?}", b.purpose));
+    vars.insert("source", format!("{:?}", v.source_kind));
+    vars.insert(
+        "coverage",
+        v.coverage
+            .as_ref()
+            .map(|x| format!("{:?}", x.status))
+            .unwrap_or_else(|| "proposed scope".into()),
+    );
+    vars.insert("approval", format!("{:?}", b.metadata.approval.status));
+    vars.insert(
+        "source_limit",
+        if v.observations.is_empty() {
+            "proposed, not observed".into()
+        } else {
+            "stored observation; atomicity not asserted".into()
+        },
+    );
+    vars.insert("state", v.state.clone());
+    vars.insert(
+        "scope",
+        format!(
+            "Declared scope: {}. Explicit exclusions: {}",
+            v.scope,
+            v.not_depicted.join("; ")
+        ),
+    );
+    vars.insert("requirements", v.requirements.join("; "));
+    vars.insert(
+        "units",
+        units(v)
+            .into_iter()
+            .map(unit_name)
+            .collect::<Vec<_>>()
+            .join(", "),
+    );
+    vars.insert(
+        "frame_guidance",
+        if presentation.lines().any(|line| {
+            line.starts_with("DIMENSIONED RECTANGLE ") || line.starts_with("RECTANGLE EXTENT ")
+        }) {
+            FRAME_GUIDANCE
+        } else {
+            ""
+        }
+        .into(),
+    );
+    vars.insert(
+        "ax_label",
+        if presentation
+            .lines()
+            .any(|line| line.starts_with("AX FRAME "))
+        {
+            "Print “AX frame” for the prepared accessibility measurements.\n"
+        } else {
+            ""
+        }
+        .into(),
+    );
+    vars.insert(
+        "ax_guidance",
+        if presentation
+            .lines()
+            .any(|line| line.starts_with("AX FRAME "))
+        {
+            AX_GUIDANCE
+        } else {
+            ""
+        }
+        .into(),
+    );
+    vars.insert(
+        "edge_guidance",
+        if presentation.lines().any(|line| {
+            line.starts_with("EDGE FRAGMENT (") || line.starts_with("NAMED-ANCHOR RELATION:")
+        }) {
+            EDGE_GUIDANCE
+        } else {
+            ""
+        }
+        .into(),
+    );
+    vars.insert("dimensions", presentation);
+    vars.insert("design_analysis", design_analysis);
+    vars.insert("sheets", sheet_plan);
+    let mut rest = include_str!("prompt-template.txt");
+    while let Some(start) = rest.find("{{") {
+        append(&mut result, &rest[..start], limit)?;
+        let end = rest[start + 2..].find("}}").ok_or(E::InvalidInput)? + start + 2;
+        append(
+            &mut result,
+            vars.get(&rest[start + 2..end]).ok_or(E::InvalidInput)?,
+            limit,
+        )?;
+        rest = &rest[end + 2..];
+    }
+    append(&mut result, rest, limit)?;
+    Ok(result)
+}
 
 fn prompt(
     b: &DrawingBrief,
@@ -1488,98 +1853,8 @@ fn prompt(
             .find(|x| x.view == v.id)
             .ok_or(E::InvalidReference)?;
         let selected = sheets.iter().filter(|x| x.view == v.id).collect::<Vec<_>>();
-        let mut vars = BTreeMap::new();
-        vars.insert("title", b.metadata.title.clone());
-        vars.insert("language", b.metadata.language.clone());
-        vars.insert("output_size", b.metadata.output_size.clone());
-        vars.insert("page_format", b.metadata.page_format.clone());
-        vars.insert("purpose", format!("{:?}", b.purpose));
-        vars.insert("source", format!("{:?}", v.source_kind));
-        vars.insert(
-            "coverage",
-            v.coverage
-                .as_ref()
-                .map(|x| format!("{:?}", x.status))
-                .unwrap_or_else(|| "proposed scope".into()),
-        );
-        vars.insert("approval", format!("{:?}", b.metadata.approval.status));
-        vars.insert(
-            "source_limit",
-            if v.observations.is_empty() {
-                "proposed, not observed".into()
-            } else {
-                "stored observation; atomicity not asserted".into()
-            },
-        );
-        vars.insert("state", v.state.clone());
-        vars.insert(
-            "scope",
-            format!(
-                "Declared scope: {}. Explicit exclusions: {}",
-                v.scope,
-                v.not_depicted.join("; ")
-            ),
-        );
-        vars.insert("requirements", v.requirements.join("; "));
-        vars.insert(
-            "units",
-            units(v)
-                .into_iter()
-                .map(unit_name)
-                .collect::<Vec<_>>()
-                .join(", "),
-        );
         let partial = partial_visibility(&b.views[index].source);
-        let presentation = drawing_dimensions(v, dims, &partial, limit)?;
-        vars.insert(
-            "ax_label",
-            if presentation
-                .lines()
-                .any(|line| line.starts_with("AX FRAME "))
-            {
-                "Print “AX frame” for the prepared accessibility measurements.\n"
-            } else {
-                ""
-            }
-            .into(),
-        );
-        vars.insert(
-            "ax_guidance",
-            if presentation
-                .lines()
-                .any(|line| line.starts_with("AX FRAME "))
-            {
-                AX_GUIDANCE
-            } else {
-                ""
-            }
-            .into(),
-        );
-        vars.insert(
-            "edge_guidance",
-            if presentation.lines().any(|line| {
-                line.starts_with("EDGE FRAGMENT (") || line.starts_with("NAMED-ANCHOR RELATION:")
-            }) {
-                EDGE_GUIDANCE
-            } else {
-                ""
-            }
-            .into(),
-        );
-        vars.insert("dimensions", presentation);
-        vars.insert(
-            "design_analysis",
-            crate::design::text(&v.design_analysis, limit)?,
-        );
-        vars.insert(
-            "sheets",
-            selected
-                .iter()
-                .map(|x| format!("{}: {}", x.kind, x.title))
-                .collect::<Vec<_>>()
-                .join("; "),
-        );
-        let mut rest = include_str!("prompt-template.txt");
+        let presentation = drawing_dimensions(v, dims, &partial, None, sheets, limit)?;
         if s.views.len() > 1 {
             append(
                 &mut result,
@@ -1587,17 +1862,23 @@ fn prompt(
                 limit,
             )?;
         }
-        while let Some(start) = rest.find("{{") {
-            append(&mut result, &rest[..start], limit)?;
-            let end = rest[start + 2..].find("}}").ok_or(E::InvalidInput)? + start + 2;
-            append(
-                &mut result,
-                vars.get(&rest[start + 2..end]).ok_or(E::InvalidInput)?,
+        let sheet_plan = selected
+            .iter()
+            .map(|x| format!("{}: {}", x.kind, x.title))
+            .collect::<Vec<_>>()
+            .join("; ");
+        append(
+            &mut result,
+            &render_view(
+                b,
+                v,
+                presentation.text,
+                sheet_plan,
+                crate::design::text(&v.design_analysis, limit)?,
                 limit,
-            )?;
-            rest = &rest[end + 2..];
-        }
-        append(&mut result, rest, limit)?;
+            )?,
+            limit,
+        )?;
     }
     if !s.flow.is_empty() {
         append(

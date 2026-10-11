@@ -1,10 +1,11 @@
 # Observed document and comparison export input
 
-- Node type: leaf; domain: `uib.cli.export`; contract: `UIB.CLI-EXPORT@2`.
+- Node type: leaf; domain: `uib.cli.export`; contract: `UIB.CLI-EXPORT@3`.
 - Authority: Active / Stability: Evolving; accepted/released implementation: none.
 - Authority source: G09-Export dispatch under approved PLAN.UIB@1 / ROADMAP P6 delegated concrete CLI choices; EXPORT.CONTENT already requires observed document packages.
 - Read when: connecting saved canonical observations to imagegen-prompt.
 - Conditional requires: [DESIGN-ANALYSIS@1](design-analysis.md) for optional design_analysis in direct observed metadata/ViewInput; opted-in packages/receipts0.3.0, existing flags and no-request behavior unchanged.
+- Conditional requires: [SHEET-PROMPTS@1](drawing-sheet-prompts.md) for a single-view plan with detail sheets: additive prompt files and package/receipt0.4.0 supersede version selection below only for this case; old flags/inputs and six base files remain.
 - Do not read when: unchanged collection/action/analysis commands suffice.
 - Requires: [EXPORT@1](export.md) and full drawing closure; [EXCHANGE@1](exchange.md), [PRIVACY@1](privacy.md), [ANALYSIS@2](analysis.md).
 - Precedence: [registry](../README.md); preserves CLI.CONTENT and existing --brief behavior.
