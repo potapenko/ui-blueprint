@@ -24,10 +24,11 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CP2 |same CP owner|accepted_with_residual by CR1|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL; reviewed public text required |
 | CP3 |same CP owner|running|Fixed diverse six-case visual-fidelity cohort; preserve hard cases and first failures |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
-| CA3 |same CA owner|rejected criterion; repair running|CR1-F1: binding released before actual reply; extend hold/validation to publication |
+| CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
-| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|recheck running|203933a publication correction saved; same reviewer checks changed boundary; final receipt pending |
+| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
 | CC1 |01a12b62-dbd8-7a42-8ddc-099c155d1291|running; source owner reused|Reliable Web capture sequence +3qualified new source pairs; no generation count |
+| CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|running; source owner reused|12focused-popup/preview/context/download-form states, full source→CLI→image→QA |
 
 Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
@@ -58,7 +59,7 @@ CR1 completed independent observation before author receipts, then reconciled bo
 one P1 finding: retained chain/window die between collect and HostHelper io.reply.
 Same CA owner now repairs actual reply lifetime/boundary proof; same CR1 rechecks
 only changed evidence. No actor/data disclosure was observed; contract gap is proved.
-Next: accept CA3 repair only after CR1; CP3 improves real visual fidelity using a
+Next: CN-B4 consumes the accepted Native repair; CP3 improves visual fidelity using a
 fixed diverse cohort. CD1 findings are saved in receipts/corpus-relations-findings.md;
 not a universal grid/causal design rule and not new generated corpus cases.
 CC1 reuses unarchived CW-B2 owner for the concrete stale/wrong-scale/wrong-target
@@ -74,6 +75,13 @@ author bundle/receipt still pending, so no Native acceptance promotion.
 CC1 reports explicit CSS viewport clip with fromSurface:true/scale1 resolves tested
 mobile Filters mismatch; final three-pair qualification still pending. CW21 cause
 remains unknown because no windowOpen/target-creation events were retained.
+CR1 now closed F1 after independent optimized130+budget139 assertions and frozen
+artifact reconciliation. Corrected Native203933a accepted_with_residual; no observed
+disclosure, no whole-platform/image approval. New bundle in
+uib-CA3-F1-artifacts-vn1d3act/tools; do not replay retired process identities.
+CA3/CR1 archived after handoff. CN-B4 reuses restored CN-B1 owner, new12-state finite
+packet, explicit rooted acquisition and fresh Mac reservation. Source acquisition
+can proceed independently of CP3, with frozen compiler/artifact identity per case.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
