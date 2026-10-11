@@ -22,7 +22,8 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CN-B3 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|16images incl4rerolls,9unique source PNGs,0accepted; fixture-origin |
 | CP1 |01a12b6a-92a9-73c3-aec2-022e32651008|length repair accepted; image gate open|4d6e0bf +receipt01d2bfc,15sources under32000chars, machine files identical |
 | CP2 |same CP owner|accepted_with_residual by CR1|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL; reviewed public text required |
-| CP3 |same CP owner|running|Fixed diverse six-case visual-fidelity cohort; preserve hard cases and first failures |
+| CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
+| CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|running independent diagnostic|Six fixed R2 cases: source/reference/representation conflicts and bounded next remedy |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
@@ -88,6 +89,14 @@ CC1 terminal: uib-cc1-capture-GzjhPA/handoff.json and workflow.json, manifest ha
 Own tab closed, viewport1280×720DPR2 restored. Not universal plugin/root-cause proof;
 CW21 cause/ownership unknown. CW-B3 now receives six distinct scrolled/lookup tasks
 with new capture qualification and explicit groups, no gate/account bypass.
+CP3 terminal receipt corpus-visual-fidelity-repair3.md accepted as bounded progress,
+not fulfilled visual acceptance.4CP1+2CP2+12CP3 repair images are separate from47
+primary corpus outputs; no relabeling/cherry-picking. Final export binary:
+uib-CP3-r5v3_jgx/uiblueprint-b08ea04, SHA256
+42ef6be2783566e3919f45c002d5a210698d4987e8fd58b722c3f9c1c7b420c4.
+Handoff sent to CN-B4/CW-B3 for not-yet-frozen cases. CP author stays idle for next
+coherent repair; CV1 fresh visual diagnostic receives neutral inputs/criteria and
+R2 artifacts before any author review. No new image calls or code edits in CV1.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
