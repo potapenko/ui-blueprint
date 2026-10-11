@@ -41,7 +41,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
-| CP6 |same CP owner, restored|dispatched|One concise source-bound sheet assignment, fixed CW33/CW34/CW40 set; preserve facts/ownership and positive control |
+| CP6 |same CP owner, restored|saved candidate; first images running|d9f3fff, fixed CW33/CW34/CW40 seven-sheet set; neutral artifact index ready, verdicts separate |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -154,6 +154,13 @@ one applicable sheet instruction, explicit membership/context boundaries and con
 attributed relationships. No new schema/membership/density or arithmetic change.
 Same exporter owner executes one fixed seven-sheet-or-fewer changed-prompt experiment;
 old images remain pinned. Both critics wait for neutral saved candidate artifacts.
+CP6 candidate d9f3fff is frozen; binary SHA256
+`01dddebc690abbc09801febe9feb9491cbf53f388d289c943f09bdc8a122392c`.
+Neutral index: `uib-CP6-gmyawxze/neutral-index.json` in the shared system-temp root.
+Seven literal prompts fit32000chars (CW33 30617/9993/11037, CW34 23892,
+CW40 29362/22358/6167). Author will append image identities without verdicts;
+critics receive this neutral index only after required images are ready.
+No completed-image count or visual acceptance is inferred from the saved candidate.
 
 **CN-B5:** terminal `uib-CN-B5-6jmj42i_/handoff.md` and manifest:8qualified partial
 cases/52first sheets/0rerolls,10scoped author passes/42FAIL/0complete cases.
