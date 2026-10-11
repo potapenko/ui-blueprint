@@ -17,8 +17,8 @@ author-pass case, not independent acceptance. CN-B6 adds7families/9states/23shee
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
 generation/evaluation handoffs. A split sheet is not a new source case.
-CW-B6 adds5states/5first sheets; two author qualifier-only failures are under CT3
-criterion attribution, not automatically elevated to mandatory product failures.
+CW-B6 adds5states/5first sheets; CT3 confirms two narrow prepared-caption omissions,
+not arithmetic errors or a mandatory machine-token/placement requirement.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -69,11 +69,11 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
-| CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL, CT3 checking two qualifier-only judgments |
+| CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
 | CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP7 reconciled; retained for future changed artifacts|Frame separation passes, raster display/style fails; no new compiler cause established |
 | CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP7 reconciled; retained for future changed artifacts|Source and literal assignment pass, extra/long-decimal/unit labels fail; no further generic repair |
-| CT3 |same content critic|running narrow criterion check|CW54/CW56 missing layout_bounds: literal caption versus mandatory semantic basis; no new image/code/test wave |
+| CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
 
@@ -305,6 +305,13 @@ CW52 imports header, CW53 changes prepared Year gap≈5 to≈3, CW55 incorrectly
 the original text/control overlap; CW54/CW56 preserve composition/numbers but omit
 the requested layout_bounds qualifier. CT3 audits only that last criterion against
 actual prompt and source contracts, preserving earlier placement clarification.
+CT3 terminal confirms the exact prepared-caption obligation in CW54 prompt71–73
+and CW56 prompt61–63; no equivalent frame basis appears elsewhere in the images.
+Record: prepared relationship frame qualifier omitted; source values, participants
+and CSS units retained. DRAWING-PROMPT-B23 and DESIGN-ANALYSIS59–62 require the
+distinction/statement meaning, not literal layout_bounds or fixed placement.
+Measured layout bounds in plain language would suffice. No arithmetic/unit-conversion
+error, actual frame substitution or compiler failure is established by this finding.
 No guest dialog appeared; no manufactured gate, preference/access changes or source
 mutations. Task tab closed, source restoration complete, console/network failures0;
 all images/originals retained. Browser runtime through node_repl was supported;
