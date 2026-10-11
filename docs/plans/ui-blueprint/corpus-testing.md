@@ -109,7 +109,9 @@ UI capture packets выдаются отдельно с собственной �
 Технические выводы и минимальные regression fixtures могут быть tracked.
 Текущая ветка, exact-path checkpoint+push; в UI Blueprint Git flock
 `/tmp/ui-blueprint-master-git.lock`. Чужой after-title-spacing.png не открывать.
-Root owns этот план и task-registry. Worker reports objective/route/evidence,
+Root owns этот план, task-registry и coordination-only source handoffs
+`receipts/corpus-web-advice.md` / `receipts/corpus-native-advice.md`.
+Worker reports objective/route/evidence,
 checks, limitations, changed paths/commit/push и конкретный next dependency.
 Waiting_resource освобождает lane и повторно проверяется до3мин; цель не закрывается
 из-за ожидания. Принятые ненужные worker chats архивируются, advisors сохраняются.

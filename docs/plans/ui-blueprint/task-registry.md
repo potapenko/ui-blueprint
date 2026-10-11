@@ -11,11 +11,30 @@ New generated/evaluated/accepted corpus cases:0/0/0; старые кейсы о�
 
 | Packet | Classification | Owner | Status | Consumer / next dependency |
 | --- | --- | --- | --- | --- |
-| CW1 | diagnostic | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | running | New Web corpus recipes/data |
-| CN1 | diagnostic | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | running | New Native corpus recipes/data |
-| CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | running | Concrete design-analysis regressions |
+| CW1 | diagnostic | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes,2old captured families; no new runtime |
+| CN1 | diagnostic | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds; G/V/S readiness distinct; current leaf drift |
+| CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | accepted defect discovery |ed6c60d pushed;21tests,18pass/3explicit repro failures;0real cases |
+| CE1-FIX | shipping_product |01a12b47-adb6-78e1-9fee-8daf614091e6|running|Semantic duplicate identity and signed-zero repair; unignore3repros |
+| CW-B1 | verification |01a12b42-f256-73b0-a694-014228af42b2|running|12Search/shell cases CW01–12, full capture→CLI→image→QA |
+| CN-B1 | verification |01a12b45-a160-7192-86ca-e0bd99f4d49f|running|12Mac cases A01–12, full pipeline |
+| CN-B2 | verification |01a12b45-a69a-72b2-91f2-1f937304afae|running|8Simulator cases B05–08/B10–13, geometry evidence required |
+| CN2 | diagnostic |Mac advisor01a1102f-791c|running|Existing Debug fixture launch wiring → next diverse component batch |
 
-Write ownership pinned in plan. No runtime UI lane yet; advisors read-only.
+Write ownership pinned in plan. Advisors remain read-only and available.
+Source receipts: [Web](receipts/corpus-web-advice.md), [Native](receipts/corpus-native-advice.md).
+Runtime lanes: CW-B1 addressed browser only, no physical input; CN-B1 Mac physical
+lane only after actual existing reservation; CN-B2 isolated addressed existing
+Simulator only. No viewport/device stealing; contention→waiting_resource.
+Workers own only system-temp selected case deliverables, both source repos
+tracked read-only. B09syntheticAccount excluded. Repos/target/build must be pinned
+by each worker, historic source/PNG alone is not current acceptance.
+CE1-FIX owns only engine/export src/design.rs, two design_corpus tests and its
+repair receipt. No shared target/debug writes: own CARGO_TARGET_DIR in system temp.
+Capture workers notified to freeze existing compiled target/debug artifact attributed
+production c63b600 or own already pinned binary; never relabel by moving HEAD.
+Confirmed defects [CE1 receipt](receipts/corpus-analysis-wave1.md): fraction-only
+duplicate Width can fake2/3majority, and ratio -0 display. Current corpus passes
+must not conceal these; unrelated cases continue, fixed binary used for next batch.
 All3 packets dispatched, local host, inherited settings, no nested delegation.
 Next: accept finite receipts, then medium complete generation batches from
 actual source handoffs, with disjoint ownership. No reviewer ping-pong or paper
