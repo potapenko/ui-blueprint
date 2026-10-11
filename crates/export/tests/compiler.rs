@@ -1439,6 +1439,12 @@ fn unused_measurement_recipes_are_not_instructions_to_invent_details() {
     for node in &mut snapshot.nodes {
         node.children.clear();
     }
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Text("EDGE FRAGMENT ( NAMED-ANCHOR RELATION:".into()),
+    };
     let p = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     assert!(!prompt.contains("AX FRAME MEASUREMENT or AX FRAME EXTENT"));

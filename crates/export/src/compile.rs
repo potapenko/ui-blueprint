@@ -1557,9 +1557,9 @@ fn prompt(
         );
         vars.insert(
             "edge_guidance",
-            if presentation.contains("EDGE FRAGMENT (")
-                || presentation.contains("NAMED-ANCHOR RELATION:")
-            {
+            if presentation.lines().any(|line| {
+                line.starts_with("EDGE FRAGMENT (") || line.starts_with("NAMED-ANCHOR RELATION:")
+            }) {
                 EDGE_GUIDANCE
             } else {
                 ""
