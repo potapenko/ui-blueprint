@@ -10,11 +10,11 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-Ten completed primary batches produced153 evaluated images,0 fully independently accepted.
-Their149 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not153 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Eleven completed primary batches produced160 evaluated images,0 fully independently accepted.
+Their156 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not160 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
-CN-B5 adds8cases/52sheets. CW-B5 and CN-B7 totals remain pending
+CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets. CW-B5/CN-B8 totals remain pending
 their final handoffs. A split sheet is not a new source case.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13 images (31 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
@@ -56,7 +56,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 | CN-B5 |same Native source owner|investigation accepted|8cases/52first sheets,10scoped author passes/42FAIL;701dimension checks,0complete cases |
-| CN-B7 |same Native source owner|dispatched offline corpus cycle|One new retained CA5 visible-grid source→export756dfca→first sheets, no live recapture |
+| CN-B7 |same Native source owner|investigation accepted; archived|1new visible-grid case/7first sheets;38labels match,1scoped author pass/6FAIL; no live recapture |
 | CN-B8 |same mobile source owner, restored|dispatched full corpus cycle|Up to12 meaningful larger-text states across real mobile families; reuse CN-B2 reversible Simulator setup and restore originals |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
@@ -160,12 +160,18 @@ All52images1536×1024; source/machine data retained, no wrappers/density workaro
 Runtime/ownPID31721/storage released, original query/paused clip/window restored,
 user63105 and source repo changes untouched. Frozen negatives remain unchanged.
 
-**CN-B7:** same owner now consumes accepted CA5 `visible/observed.json` plus
-`visible/source.png` offline as one new scrolled-grid case. Qualify declared partial,
-non-atomic AX/source association; no pixel mapping inference or retired PID replay.
-Use frozen export756dfca and existing corpus conventions, one first call per sheet,
-no new capture/build/source edits. This is a new source identity, not replacement
-of the old failed B5-09. Final generation/evaluation handoff remains pending.
+**CN-B7:** terminal `uib-CN-B7-_04jjev_/handoff.md`, manifest and per-sheet reviews.
+One new retained CA5 visible-grid source pair, one package,7first images/0rerolls;
+D04 scoped author pass,6FAIL,0complete cases. All38required labels match and have
+one owner;7exact operands/3relations preserved. Widths218.5/218/218.5pt imply an
+observed −0.5pt deviation, not a normative UI defect; gaps12pt and ratio≈1.776 remain
+AX-frame arithmetic, not CSS padding or painted16:9. First metadata export refused
+slash separators; prose rewritten without changing source or disabling validation.
+Actual frozen756dfca, original source PNG, same corpus limits/density;7images1536×1024.
+Failures are unowned dimensions, unclear Download owner, AX/artwork separation and
+whole-window source-detail expansion. Source acquisition is qualified in its partial,
+non-atomic/unknown-transform scope; render acceptance is separate. Old B5-09 untouched.
+No new capture/build/UI/source changes; only named deliverables retained. Owner archived.
 
 **CN-B6:** final `playphraseme-cn-b6-h7jzxeiz/handoff.json` and manifest/reviews:
 7families/9source states/23first sheets/0rerolls. Six content-pass at returned size,
