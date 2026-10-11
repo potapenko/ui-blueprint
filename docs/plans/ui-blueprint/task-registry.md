@@ -43,7 +43,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner, restored|dispatched|One concise source-bound sheet assignment, fixed CW33/CW34/CW40 set; preserve facts/ownership and positive control |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
-| CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|dispatched independent Native review|Saved1af633c and frozen CA5 bundle; initial observations before author receipt |
+| CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|initial review clear; final reconciliation|169assertions/54documents/hash/inspect verified; author receipt now delivered; no new live test |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
