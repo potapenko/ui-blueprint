@@ -25,6 +25,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|running|Structural source/artwork/AX separation and C10 per-sheet delivery; same difficult cases |
+| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|dispatched independent compatibility review|Saved cfe1b5e; new sheet ownership, versions, privacy and aggregate limits; no raster review |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
