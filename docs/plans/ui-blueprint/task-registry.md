@@ -13,12 +13,13 @@ New generated/evaluated/accepted corpus cases:0/0/0; старые кейсы о�
 | --- | --- | --- | --- | --- |
 | CW1 | diagnostic | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes,2old captured families; no new runtime |
 | CN1 | diagnostic | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds; G/V/S readiness distinct; current leaf drift |
-| CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | accepted defect discovery |ed6c60d pushed;21tests,18pass/3explicit repro failures;0real cases |
-| CE1-FIX | shipping_product |01a12b47-adb6-78e1-9fee-8daf614091e6|running|Semantic duplicate identity and signed-zero repair; unignore3repros |
+| CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | accepted; archived |ed6c60d pushed;21tests,18pass/3explicit repro failures;0real cases |
+| CE1-FIX | shipping_product |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88 pushed;36tests pass/0ignored; two defects repaired |
 | CW-B1 | verification |01a12b42-f256-73b0-a694-014228af42b2|running|12Search/shell cases CW01–12, full capture→CLI→image→QA |
 | CN-B1 | verification |01a12b45-a160-7192-86ca-e0bd99f4d49f|running|12Mac cases A01–12, full pipeline |
 | CN-B2 | verification |01a12b45-a69a-72b2-91f2-1f937304afae|running|8Simulator cases B05–08/B10–13, geometry evidence required |
-| CN2 | diagnostic |Mac advisor01a1102f-791c|running|Existing Debug fixture launch wiring → next diverse component batch |
+| CN2 | diagnostic |Mac advisor01a1102f-791c|accepted discovery|12wired C02 configurations; actual runtime distinctness pending |
+| CN-B3 | verification |unassigned|queued resource|CN2 existing Debug cases; Mac lane after CN-B1 or proved isolation |
 
 Write ownership pinned in plan. Advisors remain read-only and available.
 Source receipts: [Web](receipts/corpus-web-advice.md), [Native](receipts/corpus-native-advice.md).
@@ -35,6 +36,18 @@ production c63b600 or own already pinned binary; never relabel by moving HEAD.
 Confirmed defects [CE1 receipt](receipts/corpus-analysis-wave1.md): fraction-only
 duplicate Width can fake2/3majority, and ratio -0 display. Current corpus passes
 must not conceal these; unrelated cases continue, fixed binary used for next batch.
+Both defects now repaired and accepted from [repair receipt](receipts/corpus-analysis-repair1.md).
+Fixed default-feature geometry/export binary:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uiblueprint-ce1-fix.SsmxEK/debug/uiblueprint`,
+SHA25643eb93e7196de7be3ac889c55dc86f1e7d1e54ab372b58c629443abc08023717,
+production commit1661e88. Handoff sent to all3runtime workers; no blanket re-run.
+CE1 and CE1-FIX archived after accepted receipts/dependency transfer; advisors retained.
+CN2 source recipes are appended to Native advice; actual source app pin
+c7d8e3d, catalog IDs are not runtime evidence. No new fixture wiring authorized.
+Current interim worker reports (not accepted terminal corpus counts): Web CW01/02
+source capture and stale screenshot mismatch recovery; Native A01 two real partial
+160node exports; Simulator More real AX frames available after MJPEG recovery.
+Sources/first invalid images retained; failures are not successful corpus entries.
 All3 packets dispatched, local host, inherited settings, no nested delegation.
 Next: accept finite receipts, then medium complete generation batches from
 actual source handoffs, with disjoint ownership. No reviewer ping-pong or paper

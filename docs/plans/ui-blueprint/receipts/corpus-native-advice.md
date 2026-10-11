@@ -1,4 +1,83 @@
-# CN1 — source advisor handoff
+# Native source advisor handoffs
+
+## CN2 — existing debug routes, 2026-10-11
+
+**CN2 завершён, read-only. Pin: `c7d8e3dcda9fb5c03fc8c0a96c29420d76e450be`.** Проверенные catalog/composition owners без локальных изменений. Готовность сборок и rendering запуском не проверялась.
+
+**Главное: существуют три разных входа, их нельзя смешивать.**
+
+| Вход | Что действительно подключено |
+|---|---|
+| Mac Debug `--playphrase-scenario ID` | Отдельный `AppScenario` с IDs `c01…c05` → `MacAppComposition` → настоящая Search-композиция с fixture dependencies |
+| Именованные SwiftUI `#Preview` | Конкретные view owners, иногда с заглушками video/actions; не обычный app-launch маршрут |
+| Release `preview/search` URL | Три существующих Search-компонентных состояния; это специальный разрешённый preview, не универсальный fixture selector |
+
+Основание: [ACP launch contract](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/docs/specs/features/native-developer-agent-control-plane/acp-tool-003-playphraselaunchscenario.md), [Release boundary](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/docs/specs/features/native-developer-agent-control-plane/acp-rel-001-release-and-platform-invariants.md).
+
+**Для CN-B3: 12 source-wired Debug-входов без нового wiring**
+
+Общий существующий аргумент:
+
+```text
+--playphrase-scenario <ID>
+```
+
+Предпочтительный уже предусмотренный lifecycle — `playphrase.launch_scenario` с `{"scenario_id":"<ID>"}` на проверенном Debug artifact. Наличие работающего MCP-сервера сейчас не установлено. Эквивалентный launch-аргумент также разбирается самим приложением; не сохранять его в обычной схеме.
+
+| ID | Реально заданное fixture-состояние / компонент |
+|---|---|
+| `c02.search.suggestions` | Открытые suggestions с обычными строками |
+| `c02.search.suggestions-long-copy` | Две действительно длинные suggestion strings |
+| `c02.search.suggestions-rtl` | Arabic suggestions и RTL presentation flag |
+| `c02.search.loading-stable` | Новый запрос при сохранённых предыдущих результатах |
+| `c02.search.results-paused` | Загруженные результаты, paused composition |
+| `c02.search.results-long-copy` | `PhraseFixtures.longCopy` в результатах |
+| `c02.search.results-rtl` | Arabic phrase и RTL presentation |
+| `c02.search.empty-alternatives` | Пустые результаты с suggestions |
+| `c02.search.offline` | Сохранённый контекст с typed offline failure |
+| `c02.search.request-failed` | Сохранённый контекст с malformed-response failure |
+| `c02.search.recovery-long-copy` | Failure поверх длинного сохранённого контента |
+| `c02.search.recovery-rtl` | Failure поверх RTL-контента |
+
+Цепочка подтверждена исходниками:
+
+- [AppScenario IDs и parser](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/Packages/PlayPhraseScenarioCatalog/Sources/PlayPhraseScenarioCatalog/DeveloperAppScenario.swift)
+- [Debug selection → makeC02Fixture](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Application/Composition/MacAppComposition.swift)
+- [конкретные состояния и synthetic transport](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/Packages/PlayPhraseFixtures/Sources/PlayPhraseFixtures/SearchJourneyScenarios.swift)
+- [actual app root](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/MacApplicationRootView.swift)
+
+Это **12 достижимых конфигураций входа, не доказательство 12 различных финальных картинок**. Консервативно здесь восемь содержательных семейств: suggestions, длинные suggestions, RTL suggestions, retained loading, paused results, длинные results, RTL results, empty alternatives; failure/recovery добавляют варианты, если текущая presentation действительно их показывает. После запуска нужно подтвердить фактическое состояние, а не принять имя scenario за результат.
+
+**Дополнительные существующие пути**
+
+- **Mac Release, три preview states:**
+  `playphraseme://playphrase.me/preview/search?v=1&state=request-failed`
+  Аналогично `state=no-results` и `state=search-prompt`.
+  [Точный QA recipe](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/docs/qa/search-state-preview-links.md), [view owner](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/SearchLearn/Presentation/SearchStatePreviewView.swift). Retry здесь локальный; `request-failed-live` — другая, изменяющая текущий запрос операция. Эти три состояния уже были в CN1 — повторно не считать.
+- **iPad Debug `--account-preview`:** подключён из `PlayphrasemeTabletApp`; host предлагает **Premium / Free / Load failure** и монтирует настоящий `TabletAccountView` с synthetic dependencies. [Host и flag](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Account/TabletAccountPreviewHost.swift). Это не production auth и не QR-login; согласовать с CN-B2, чтобы не дублировать.
+- **Mac Debug `--playphrase-text-size large-200`:** parser и app entry подключены. Это специальный масштаб fixture, **не native Dynamic Type**. Один ID `…large-text` сам по себе не доказывает изменённый размер текста. [Parser](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/AppScenario.swift), [entry](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/PlayphrasemeMacApp.swift).
+
+**Что реально использует именно FeatureFixtures**
+
+| Fixture ID | Существующий renderer | Ограничение |
+|---|---|---|
+| `clip-normal` | [Mac grid: обычный/narrow previews](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/ClipSearch/Components/Grid/ClipSearchGridView.swift), [viewer preview](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/ClipSearch/Components/Viewer/ClipSearchViewerView.swift) | Preview callbacks частично no-op; viewer получает `content:nil` |
+| `clip-normal` | [iPhone inspector preview](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemePhone/Application/Views/ClipSearchInspector.swift), Phone/Tablet grid/card previews | Xcode preview, не доказанный launch selector |
+| `reels-loading` | [Mac Reels root preview](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Features/Reels/Components/Root/ReelsRootView.swift) | Synthetic transport, не реальная сеть |
+| `reels-paused` | [Mac slide preview](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Features/Reels/Components/Slide/ReelsSlideView.swift) | Video — `Color.black`, action bar — `EmptyView`; нельзя считать полным Reel |
+| `reels-normal` | [Tablet ordinary/fullscreen card previews](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Reels/Components/Slide/TabletReelsSlideView.swift) | Video/actions заменены preview content; только частичная композиция |
+
+**Что пока только данные**
+
+В выбранных Mac/iPad/iPhone owners не найден универсальный consumer `ComponentFixtureCatalog.descriptors`; `FeatureFixtures.search` не имеет прямого app/preview consumer. Большинство `clip-*` и `reels-*` loading/empty/error/long-copy/RTL IDs не подключены к generic launch selector. Нельзя передать `--playphrase-scenario clip-empty`: это другой каталог.
+
+Более того, [developerCatalog](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/Tools/PlayPhraseMCP/Sources/PlayPhraseMCPServer/DeveloperScenarioMetadata.swift) строится из `AppScenario.allCases` и маркирует их `search_and_learn`; наличие enum surface `clip_search`/`reels` не создаёт соответствующих scenarios.
+
+**Минимальный gap:** для неподключённых FeatureFixtures нужен отдельно разрешённый test-only selector/host, который выбирает существующий ID и передаёт его существующей production-композиции с полными безопасными dependencies. Для имеющихся `#Preview` сначала можно использовать текущий preview-host workflow, но маркировать заглушки и частичность. Универсальный renderer или новый benchmark framework для этого не требуется.
+
+Для следующей партии рекомендую **сначала перечисленные 12 Debug-входов C02**, после вычитания дублей CN-B1. Это расширение состояний настоящей Search-композиции; пока **source-wired synthetic cases, не runtime acceptance и не measured geometry**. Файлы, runtime и QR-login не затрагивались.
+
+## CN1 — source advisor handoff
 
 Recorded by root from the terminal receipt of Спроектировать UI Blueprint, 2026-10-11. Discovery accepted; runtime and source-version limitations retained.
 
