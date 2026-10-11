@@ -28,7 +28,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|running|Structural source/artwork/AX separation and C10 per-sheet delivery; same difficult cases |
 | CP5 |same CP owner|queued after CP4 saved handoff/CR2|Six new CN-B5 G01 prompts exceed32000chars; exact unchanged input ready, no density/scope reduction |
-| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|F1 closed; F2 repair pending|b01aee4 empty-dimension details request source artwork but measurement-only header forbids it; same CP owner |
+| CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|F1 closed; reviewing F2 repair|203c48a conditions empty-dimension header; same reviewer delta check |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
@@ -86,6 +86,12 @@ public auto-started reel are allowed; changing collection/settings/access is not
 Same CN-B6 resumes those recipes with fresh ownership; old Actor images unchanged.
 Context premium gate remains a real gap, not bypassed. No primary-count promotion
 until completed case sets and final receipt; interim four sheets remain retained.
+F2 candidate203c48a delivered to all three corpus owners to unblock their held
+empty-dimension details; existing nonempty output attribution/bytes preserved.
+Binary `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP4-1k7n3t7t/uiblueprint-203c48a`,
+SHA256 `17d1ae724228cfcb9c712d1e8ac2ce3be5bd7b96ed39de13fb338ba0f4def758`.
+Author reports38files across5packages unchanged from b01aee4; same CR2 checks
+the saved narrow delta. CP4 terminal receipt pending, long G01 remains CP5.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
