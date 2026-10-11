@@ -21,14 +21,15 @@ images are separate repeats, allFAIL. Do not call this47unique successful cases.
 | CN-B2 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|8images,0accepted; installed builds/Pro13 distinct from Pro11 baseline |
 | CN-B3 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|16images incl4rerolls,9unique source PNGs,0accepted; fixture-origin |
 | CP1 |01a12b6a-92a9-73c3-aec2-022e32651008|length repair accepted; image gate open|4d6e0bf +receipt01d2bfc,15sources under32000chars, machine files identical |
-| CP2 |same CP owner|running|CW06 wrong label/CW07 public formula suppression; privacy review required if guard changes |
+| CP2 |same CP owner|candidate ready; review pending|1650d0c +ac3d18a; deterministic defects repaired,2fresh images still fullFAIL |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
-| CA3 |same CA owner|running|explicit bounded subtree opt-in; default/caps/identity/privacy preserved; independent review pending |
+| CA3 |same CA owner|candidate ready; review pending|8ebbd2c +d767d6c; Genre14/Director10 bounds through actual CLI; NATIVE3/CLI17/registry38 |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|running|Evidence-supported relationships/counterexamples from saved corpus; no new images |
+| CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|running independent stage1|8ebbd2c Native boundary +1650d0c text handling; author receipts withheld until initial observation |
 
-Current declared source basis starts registry37/DESIGN-ANALYSIS1; CA3 registers
-minimal additive NATIVE/CLI evolution before code. CP2 stays export Restore unless
-an actual authority delta is proved. Shared route files have one owner; no concurrent
+Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
+minimal additive Native evolution before code. CP2 remains export Restore.
+Shared route files have one owner; no concurrent
 registry edits. All source apps remain tracked read-only, current branches only.
 CA3 owns Native provider/integration/tests and relevant Native contracts. CP2 owns
 export code/tests and necessary export contracts. Root only coordination documents.
@@ -43,10 +44,16 @@ Full commands/hashes/findings/resource restoration in linked wave summary/receip
 No shared target/debug overwrite. All images and tool originals retained, never cleaned.
 UserPID63105 and after-title-spacing.png protected; source-app unrelated changes retained.
 
-Latest authoritative state: five corpus workers terminal and resources released;
-CA3 fresh runtime reservation required for its positive/negative proof. CP2 and CA3
-confirmed active. Next: receive saved repairs; run one coherent independent review
-of privacy/identity-sensitive deltas, then resume new diverse batches on fixed source.
+Latest authoritative state: five corpus workers terminal/archived and resources
+released. CA3 and CP2 saved candidates ready; CR1 and CD1 confirmed dispatched.
+CA3 receipt corpus-native-popover-repair.md: Genre20nodes/14options, Director9idle
+and24with10results, all selected AX bounds known; old default160/no-popup refusal
+preserved.98assertions,31synthetic+6live validations; independent review pending.
+CP2 receipt corpus-export-fidelity-repair2.md: Offensive label and4slash formulas
+restored,73focused checks;2fresh images verify these details but full imageFAIL.
+These2repair outputs are separate from47corpus outputs and4CP1validation images.
+Next: CR1 initial independent observations, then author receipt reconciliation;
+continue diverse batches on accepted repaired artifacts. CD1 extracts real relations.
 Unaccepted images and incomplete sources remain open evidence, not successful cases.
 Previous turn is progress (new batches, defects, shipped repairs and new evidence),
 not a pause or completion. No replacement agents or new product framework authorized.
