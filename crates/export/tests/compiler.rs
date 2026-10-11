@@ -1522,6 +1522,32 @@ fn clipped_empty_dimension_details_request_source_artwork_consistently() {
 }
 
 #[test]
+fn fragment_container_does_not_authorize_unselected_descendants() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[0], "DIV");
+    snapshot.nodes[0].children = vec![snapshot.nodes[1].key.clone()];
+    b.details = vec![DetailRequest {
+        view: b.views[0].id.clone(),
+        components: vec!["N000".into()],
+        title: "Selected boundary".into(),
+    }];
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let p = compile(&b, l).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert!(text.contains("SOURCE FRAGMENT ONLY"));
+    assert!(text.contains("BOUNDARY CONTEXT [#1]"));
+    assert!(!text.contains("Object outer source container"));
+    assert_eq!(
+        data(&p, "manifest.json")["sheet_prompts"][1]["component_ids"],
+        serde_json::json!(["N000"])
+    );
+}
+
+#[test]
 fn object_states_and_context_links_survive_compact_presentation() {
     let mut brief = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {

@@ -780,6 +780,7 @@ fn drawing_inventory(
     partial: &[Vec<Edge>],
     anchors: &[usize],
     selected: Option<&[String]>,
+    assignment: Assignment,
     limit: usize,
 ) -> Result<String> {
     let mut out = String::new();
@@ -865,6 +866,22 @@ fn drawing_inventory(
     }
     for (i, c) in v.components.iter().enumerate() {
         if selected.is_some_and(|s| !s.contains(&c.id)) {
+            continue;
+        }
+        if assignment == Assignment::SourceDetail
+            && !control(c)
+            && visible_text(c).is_empty()
+            && selected.is_some_and(|s| c.children.iter().any(|id| !s.contains(id)))
+        {
+            append(
+                &mut out,
+                &format!(
+                    "BOUNDARY CONTEXT [#{}]: {}. Only listed descendant fragments are included; its unlisted children and complete parent region are not artwork on this sheet. Full geometry stays in machine evidence.\n",
+                    i + 1,
+                    component_name(v, i)
+                ),
+                limit,
+            )?;
             continue;
         }
         let text = !visible_text(c).is_empty()
@@ -1772,6 +1789,7 @@ fn drawing_dimensions(
                 partial,
                 &anchor_objects,
                 sheet.map(|_| component_ids.as_slice()),
+                assignment,
                 limit,
             )?
         },
