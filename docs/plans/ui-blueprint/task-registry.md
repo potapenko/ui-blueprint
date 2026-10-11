@@ -1,5 +1,26 @@
 # Единый реестр задач
 
+## CORPUS-1000 — active, 2026-10-11
+
+Пользователь прямо запросил помощников по Mac/Web, широкий реальный корпус,
+тысячу blueprints, поиск проблем/закономерностей и улучшение утилиты; уточнил
+сначала план возможных проблем, затем тестирование. [План](corpus-testing.md).
+Mode coordinated, root coordination-only; previous single-agent goal complete,
+не возобновляется. Source c63b600 / registry37 / DESIGN-ANALYSIS@1.
+New generated/evaluated/accepted corpus cases:0/0/0; старые кейсы отдельно.
+
+| Packet | Classification | Owner | Status | Consumer / next dependency |
+| --- | --- | --- | --- | --- |
+| CW1 | diagnostic | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | running | New Web corpus recipes/data |
+| CN1 | diagnostic | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | running | New Native corpus recipes/data |
+| CE1 | verification | 01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d | running | Concrete design-analysis regressions |
+
+Write ownership pinned in plan. No runtime UI lane yet; advisors read-only.
+All3 packets dispatched, local host, inherited settings, no nested delegation.
+Next: accept finite receipts, then medium complete generation batches from
+actual source handoffs, with disjoint ownership. No reviewer ping-pong or paper
+test count as product progress; count unique actual cases and failures honestly.
+
 ## RELATIONS-IMPLEMENTATION — выполнено, 2026-10-11
 
 Actual user authority: «Ну и продолжай, а что ты стоишь-то? План есть, создавай
