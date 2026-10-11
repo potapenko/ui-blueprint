@@ -698,7 +698,7 @@ fn object_text(v: &SceneView, index: usize, partial: &[Vec<Edge>], limit: usize)
         out.push_str(&format!(
             "; {} context {}",
             if g.frame_kind == FrameKind::AccessibilityBounds {
-                "AX measurement only, not artwork placement; measurement"
+                "measurement"
             } else {
                 "placement"
             },

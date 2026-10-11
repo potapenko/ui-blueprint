@@ -1011,7 +1011,23 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     assert!(prompt.contains("window-sized semantic Play/Search region"));
     assert!(prompt.contains("Measurement context 1: AccessibilityBounds;"));
     assert!(prompt.contains("AX FRAME MEASUREMENT (not painted UI) button"));
-    assert!(prompt.contains("AX measurement only, not artwork placement"));
+    assert_eq!(
+        prompt
+            .matches("AX measurement coordinates are NEVER artwork placement")
+            .count(),
+        1
+    );
+    let records = prompt
+        .lines()
+        .filter(|line| line.starts_with("Object ") && line.contains("box[x"))
+        .collect::<Vec<_>>();
+    assert!(!records.is_empty());
+    assert!(
+        records
+            .iter()
+            .all(|line| line.contains("measurement context ") && !line.contains("placement"))
+    );
+    assert!(!prompt.contains("AX measurement only, not artwork placement; measurement"));
     assert!(prompt.contains("NO text,\nicon, button, word, glyph or UI reconstruction inside it"));
     assert!(!prompt.contains("BELOW the enclosing shape"));
     assert!(!prompt.contains("enclosing outline BELOW"));
