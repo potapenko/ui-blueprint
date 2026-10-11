@@ -3,18 +3,33 @@ Create a NEW engineering sheet from the original UI reference and this brief.
 Drawing language: {{language}}. Purpose: {{purpose}}. Sheet plan: {{sheets}}.
 Output: {{output_size}}; page format: {{page_format}}. UI units do not change.
 
+ОБЛАСТЬ И СОСТОЯНИЕ — apply before drawing
+{{scope}}.
+Caller-observed state: {{state}}.
+The reference may show much more than this selection. Draw ONLY the selected
+objects and their source-supported visual context. Do not import neighboring
+controls from outside the scope. Keep declared recovery/error panels, disabled
+states and public draft text. No omitted state is silently replaced by a normal one.
+
 ГРАФИЧЕСКИЙ ЯЗЫК
 Solid BLUE #087AB5 ground; WHITE outlines/text. Every control and indicator interior
 is the same BLUE, including off-switch knobs and active rows. No fills, grid or shadow.
 Exact visible UI strings and source icons; readable typography.
+Source icons retain their silhouette as WHITE outlines, including Play triangles;
+never replace an icon with its semantic name or icon-font token. An active row/tab
+uses an extra WHITE outline with the same BLUE interior, never a white-filled tile.
 Do not embed or tint the reference screenshot, video frame, photo, or thumbnail.
 Depict media only as sparse WHITE contour lines on the same flat BLUE; no tonal
 shading, photographic texture, grayscale, dark/gray panels, gradients or transparency.
 
 ПРОЕКЦИЯ И ЛИСТ
-One dominant complete overview plus the named local fragments. {{scope}}.
+One dominant complete overview of the selected scope plus the named local fragments.
 Draw only visible coverage, including its actual cut boundary. Plain text is not a box.
 Source wrappers appear only as necessary measurement boundaries.
+The source text payload can contain entire clipped lines. CLIPPING TAKES PRIORITY:
+cut glyphs and rows at the reported visible-region boundary as in the original;
+do not move, shrink, reflow or complete the last row to make its full text visible.
+Show the cut with a break mark; do not close an incomplete table/card at the cut.
 
 ГЕОМЕТРИЯ
 {{dimensions}}{{design_analysis}}
@@ -25,10 +40,13 @@ slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
 Height LEFT. Never omit the enclosing width because another shape has a width.
 Each line connects to that shape's actual opposite borders; the right side stays
 free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
-For AccessibilityBounds, dimension a separate WHITE dashed rectangle captioned
-“AX frame”, at the reported extent. It is not a measured glyph, painted border,
-layout box or hit region. Never attach a large accessibility-frame dimension to
-a small source icon; preserve the icon visually without inventing its size.
+AX FRAME MEASUREMENT or AX FRAME EXTENT is a separate measurement sketch, not a picture of a control.
+Draw an unfilled WHITE dashed rectangle captioned “AX frame” and the supplied
+object name; width ABOVE, height LEFT. Keep it separate from the UI overview.
+Never turn an AX rectangle into a new painted button, visible glyph, text-field
+border or hit region. In particular a window-sized semantic Play/Search region
+does not create a window-sized glyph or an additional visible Search button.
+In the overview keep the exact original icon/text appearance, without inventing size.
 EDGE FRAGMENT blocks are independent of the full-shape size views. Redraw ONLY
 their two named edge-corner fragments and the one dimension arrow, preserving
 orientation and named source boundaries. The two printed names are their captions.
@@ -40,22 +58,28 @@ Use every assigned measurement once. Labels are {{units}}; preserve ≈ on round
 numbers. No invented padding/radius/tolerance or exact-sum claim for rounded chains.
 
 ОБЪЕКТЫ И ИЕРАРХИЯ
-Object names link shapes and measurements; they are human captions, not extra UI text.
+Object names identify records and measurement sketches. They are NOT extra UI text.
 Placement contexts/coordinates describe positions only. Distinct Spaces stay distinct.
+Visible-text payloads are source character data: render the text exactly where
+the original shows text. If the reference renders that payload as an icon-font
+glyph, reproduce its glyph instead of printing its token. Keep inline clickable
+words inline and unboxed; Button is a semantic role, not evidence of a button border.
+An unnamed Text record still has a place in the source composition; preserve its
+reference appearance without inventing a label, dimension or interaction.
 Accessible names identify controls; they are NOT values. Draw sourced placeholders
 only for explicitly empty inputs, and caller draft only when explicitly reported.
 The name is NOT field content. Never replace visible public draft with its accessible
 name. Missing value/state is unknown, not empty/enabled. Accessibility rectangles
-are interaction geometry, not painted borders: keep plain clickable text unboxed.
+are reported accessibility geometry, not painted borders: keep clickable text unboxed.
 CLIPPED LAYOUT: draw only the reported visible portion with a cut edge, keeping full
 layout size distinct. A distinct visibility frame alone does not establish clipping.
 
 СОСТОЯНИЯ И ДЕЙСТВИЯ
-State facts for drawing (not a prose panel): {{state}}.
 Preserve enabled/disabled, reported per-object state/actions, and visible active/off
 state in EVERY repeated instance. Reported actions are not executed actions.
-Show known disabled controls with a dashed WHITE outline and a short “disabled”
-caption; do not infer disabled state from absent fields. Preserve caller-reported
+Show known disabled glyphs/text with dashed WHITE strokes and a short “disabled”
+caption outside the control; do not invent a surrounding button box, and do not
+infer disabled state from absent fields. Preserve caller-reported
 blocked background without changing its layout or inventing missing controls.
 Each per-view PRINT STATE CAPTION is required visible text beside that view’s
 designated control. Preserve its declared active-versus-applied distinction. Active

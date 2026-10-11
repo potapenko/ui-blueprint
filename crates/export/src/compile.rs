@@ -552,7 +552,7 @@ fn object_text(v: &SceneView, index: usize, partial: &[bool], limit: usize) -> R
     );
     if !aggregate && !visible_text(c).is_empty() {
         out.push_str(&format!(
-            "; print {}",
+            "; visible-text payload {}",
             bounded_compact_json(&visible_text(c), limit)?
         ));
     }
@@ -692,11 +692,11 @@ fn drawing_inventory(
             component_role(c).to_ascii_lowercase().as_str(),
             "img" | "image" | "svg" | "canvas" | "media" | "custom"
         );
-        let named_text = matches!(
+        let semantic_text = matches!(
             component_role(c).to_ascii_lowercase().as_str(),
             "text" | "heading" | "link"
-        ) && !public_label(c).is_empty();
-        if control(c) || text || named_text || visual || anchors.contains(&i) {
+        );
+        if control(c) || text || semantic_text || visual || anchors.contains(&i) {
             append(&mut out, &object_text(v, i, partial, limit)?, limit)?;
         }
     }
@@ -734,10 +734,16 @@ fn local_measures(
             });
             if let (Some((w, _, _)), Some((h, _, _))) = (width, height) {
                 let enclosing = !control(&v.components[a]) && !v.components[a].children.is_empty();
+                let accessibility = w.anchors[0].frame_kind == FrameKind::AccessibilityBounds;
                 append(
                     &mut out,
                     &format!(
-                        "DIMENSIONED RECTANGLE {}: WIDTH {} {} {}; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to the real opposite borders.\n",
+                        "{} {}: WIDTH {} {} {}; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to this frame's opposite borders.\n",
+                        if accessibility {
+                            "AX FRAME MEASUREMENT (not painted UI)"
+                        } else {
+                            "DIMENSIONED RECTANGLE"
+                        },
                         component_name(v, a),
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
@@ -782,7 +788,12 @@ fn local_measures(
             append(
                 &mut out,
                 &format!(
-                    "RECTANGLE EXTENT {}: {:?}→{:?}, {} {}.\n",
+                    "{} {}: {:?}→{:?}, {} {}.\n",
+                    if d.anchors[0].frame_kind == FrameKind::AccessibilityBounds {
+                        "AX FRAME EXTENT (not painted UI)"
+                    } else {
+                        "RECTANGLE EXTENT"
+                    },
                     component_name(v, a),
                     d.anchors[0].edge,
                     d.anchors[1].edge,
@@ -1484,7 +1495,11 @@ fn prompt(
         vars.insert("state", v.state.clone());
         vars.insert(
             "scope",
-            "Selected source view only; content outside this coverage is omitted".into(),
+            format!(
+                "Declared scope: {}. Explicit exclusions: {}",
+                v.scope,
+                v.not_depicted.join("; ")
+            ),
         );
         vars.insert("requirements", v.requirements.join("; "));
         vars.insert(

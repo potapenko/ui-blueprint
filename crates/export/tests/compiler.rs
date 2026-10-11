@@ -822,7 +822,7 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
         .lines()
         .find(|line| line.starts_with("Object input \"Accessible search name\": Textbox"))
         .unwrap();
-    assert!(!input.contains("; print"));
+    assert!(!input.contains("visible-text payload"));
     assert_eq!(input.matches("Accessible search name").count(), 1);
     assert!(prompt.contains("public draft orchard"));
     assert!(prompt.contains("name is NOT field content"));
@@ -939,9 +939,9 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
     assert!(prompt.contains("Object button: Button"));
-    assert!(prompt.contains("Never attach a large accessibility-frame dimension"));
+    assert!(prompt.contains("window-sized semantic Play/Search region"));
     assert!(prompt.contains("Placement context 1: AccessibilityBounds;"));
-    assert!(prompt.contains("DIMENSIONED RECTANGLE button"));
+    assert!(prompt.contains("AX FRAME MEASUREMENT (not painted UI) button"));
     assert!(!prompt.contains("LayoutBounds"));
     let dims = data(&package, "dimensions.json");
     assert_eq!(dims[0]["dimensions"][0]["value"], 97.296875);
@@ -1293,14 +1293,17 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
         );
         if !clipped {
             assert!(
-                prompt
-                    .lines()
-                    .any(|s| s.starts_with("DIMENSIONED RECTANGLE button:")
-                        && s.contains(if kind == FrameKind::PaintBounds {
-                            "HEIGHT 20 CSS px"
-                        } else {
-                            "HEIGHT 32 CSS px"
-                        })),
+                prompt.lines().any(
+                    |s| s.starts_with(if kind == FrameKind::AccessibilityBounds {
+                        "AX FRAME MEASUREMENT (not painted UI) button:"
+                    } else {
+                        "DIMENSIONED RECTANGLE button:"
+                    }) && s.contains(if kind == FrameKind::PaintBounds {
+                        "HEIGHT 20 CSS px"
+                    } else {
+                        "HEIGHT 32 CSS px"
+                    })
+                ),
                 "{kind:?}/{variant}"
             );
         }
@@ -1374,7 +1377,7 @@ fn object_states_and_context_links_survive_compact_presentation() {
 }
 
 #[test]
-fn printable_channels_preserve_ui_words_but_omit_procedure_metadata() {
+fn scope_and_exclusions_guide_selection_without_becoming_printable_ui() {
     let mut brief = fixture("proposed");
     brief.views[0].scope = "SCOPE_PROCEDURE_CANARY".into();
     brief.views[0].safe_source_reference = "SOURCE_PROCEDURE_CANARY".into();
@@ -1384,21 +1387,47 @@ fn printable_channels_preserve_ui_words_but_omit_procedure_metadata() {
     proposed(&mut brief).components[0].label = "record CDP unknown".into();
     let p = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("; print \"record CDP unknown\""));
+    assert!(prompt.contains("; visible-text payload \"record CDP unknown\""));
     assert!(prompt.contains("PRINTABLE SHEET TEXT"));
-    for canary in [
-        "SCOPE_PROCEDURE_CANARY",
-        "SOURCE_PROCEDURE_CANARY",
-        "EXCLUSION_PROCEDURE_CANARY",
-    ] {
-        assert!(!prompt.contains(canary));
+    for canary in ["SCOPE_PROCEDURE_CANARY", "EXCLUSION_PROCEDURE_CANARY"] {
+        assert!(prompt.split("ГЕОМЕТРИЯ").next().unwrap().contains(canary));
+        assert!(
+            !prompt
+                .split("PRINTABLE SHEET TEXT")
+                .nth(1)
+                .unwrap()
+                .contains(canary)
+        );
         assert!(
             std::str::from_utf8(&p.files()["drawing-brief.md"])
                 .unwrap()
                 .contains(canary)
         );
     }
+    assert!(!prompt.contains("SOURCE_PROCEDURE_CANARY"));
+    assert!(prompt.find(&brief.views[0].state).unwrap() < prompt.find("ГЕОМЕТРИЯ").unwrap());
     assert!(!prompt.contains("record 1"));
+}
+
+#[test]
+fn unnamed_source_text_is_kept_without_fabricated_content_or_painted_bounds() {
+    let mut brief = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[0], "LABEL");
+    let p = compile(&brief, limits()).unwrap();
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    let text = prompt
+        .lines()
+        .find(|l| l.starts_with("Object label layout: Text [#1]"))
+        .unwrap();
+    assert!(!text.contains("visible-text payload"));
+    assert!(text.contains("box[x"));
+    assert!(prompt.contains("An unnamed Text record still has a place"));
+    assert!(prompt.contains("CLIPPING TAKES PRIORITY"));
+    assert!(prompt.contains("icon-font\nglyph"));
+    assert!(prompt.contains("Keep inline clickable\nwords inline and unboxed"));
 }
 
 #[test]
@@ -1534,7 +1563,7 @@ fn multiline_ui_text_is_retained_but_not_promoted_to_anchor_caption() {
     proposed(&mut b).components[9].label = "Open menu\nexpand_more".into();
     let p = compile(&b, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("; print \"Open menu\\nexpand_more\""));
+    assert!(prompt.contains("; visible-text payload \"Open menu\\nexpand_more\""));
     assert!(
         prompt
             .lines()
