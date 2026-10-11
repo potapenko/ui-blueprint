@@ -27,7 +27,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|implementation progress accepted; full visual gate open|203c48a +receipt aef13c6;13images, C10 64/65labels but fullsetFAIL; CW09 waiting source |
-| CP5 |same CP owner|running|Six CN-B5 G01 prompts exceed32000chars; compact presentation, source/machine/ownership preserved |
+| CP5 |same CP owner|saved candidate delivered; receipt pending|756dfca brings sixG01 to27194–28076chars;49prompt replacements only, all other files unchanged |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
@@ -119,6 +119,13 @@ reported subset (https://developer.apple.com/documentation/applicationservices/k
 not permission to infer visibility from bounds. Root selects CA5 conditional on
 one owned live feasibility check, then minimal Native/CLI registration before code;
 old modes/160/depth9/budgets/window/publication/privacy/core remain protected.
+CP5 frozen756dfca delivered to CN-B5 for six previously held first G01 calls.
+Artifact `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP5-f92uil63/uiblueprint-756dfca`,
+SHA256 `050e6446eb73a7b61df3ea238c9444679f80048e034c0b8ecfe9eaedab6d61e4`.
+Author proof: repeated AX caveat159–160times replaced by existing context legend
+reference; all49prompt changes are that substitution, machine/manifest/ownership
+bytes unchanged, Web holdout identical. Final receipt still pending. No new images
+by CP5; corpus owner generates only previously missing G01, preserves older pins.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
