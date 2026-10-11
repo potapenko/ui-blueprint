@@ -27,6 +27,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CP3 |same CP owner|implementation progress accepted; visual gate open|b08ea04 +9bd2df5;12images in2fixed waves,final0strict passes; machine facts identical |
 | CV1 |01a12bff-f41e-7a10-909c-844241c1cf7f|accepted diagnostic; archived|0d0d9f0; scope-matched refs, empty AX sketches, actual C10 separate sheets; effectiveness unproved |
 | CP4 |same CP owner|running|Structural source/artwork/AX separation and C10 per-sheet delivery; same difficult cases |
+| CP5 |same CP owner|queued after CP4 saved handoff/CR2|Six new CN-B5 G01 prompts exceed32000chars; exact unchanged input ready, no density/scope reduction |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|F1 closed; F2 repair pending|b01aee4 empty-dimension details request source artwork but measurement-only header forbids it; same CP owner |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
@@ -69,6 +70,12 @@ retained as acquisition witness, excluded from qualified sources. No primary
 image-count promotion before terminal generation/evaluation handoff.
 CN-B5 requested to provide minimal length-repair input for the same CP owner after
 F2; do not silently reduce scope/density or manually rewrite literal prompts.
+Length dependency now received:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B5-6jmj42i_/CP4-G01-length-dependency.json`.
+Representative B5-01 uses actual observed.json/metadata.json, b01aee4, density30;
+G01 counts35027/35116/34403/34821/34190/34327. Original inputs/packages frozen.
+Next same-owner CP5 will compact supported presentation without dropping source
+coverage, assigned measurements, public text/privacy or machine precision.
 CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
