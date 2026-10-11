@@ -1445,6 +1445,60 @@ fn clipping_is_component_scoped_directional_and_sheet_scoped() {
 }
 
 #[test]
+fn clipped_empty_dimension_details_request_source_artwork_consistently() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for index in [0, 2] {
+        let mut visible = snapshot.nodes[index].properties[2].clone();
+        let Property::Requested {
+            field,
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut visible
+        else {
+            panic!()
+        };
+        *field = Field::VisibleRegion;
+        g.frame_kind = FrameKind::VisibleRegion;
+        let Shape::Rect(r) = &mut g.shape else {
+            panic!()
+        };
+        r.y += 4.0;
+        r.height -= 4.0;
+        snapshot.nodes[index].properties[4] = visible;
+    }
+    b.details = [0, 2]
+        .into_iter()
+        .map(|i| DetailRequest {
+            view: b.views[0].id.clone(),
+            components: vec![format!("N{i:03}")],
+            title: format!("Clipped source {i}"),
+        })
+        .collect();
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let p = compile(&b, l).unwrap();
+    let m = data(&p, "manifest.json");
+    for sheet in m["sheet_prompts"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|s| s["sheet_id"] != "G01")
+    {
+        assert!(sheet["dimension_ids"].as_array().unwrap().is_empty());
+        let prompt = std::str::from_utf8(&p.files()[sheet["file"].as_str().unwrap()]).unwrap();
+        assert!(prompt.contains("Selected source detail only; no prepared measurements"));
+        assert!(prompt.contains("VIEW PLAN: selected source-detail artwork only"));
+        assert!(!prompt.contains("ONLY this detail sheet's assigned measurement blocks"));
+        assert!(prompt.contains("known clipped edges [Top]"));
+    }
+}
+
+#[test]
 fn object_states_and_context_links_survive_compact_presentation() {
     let mut brief = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {

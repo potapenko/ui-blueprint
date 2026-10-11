@@ -1593,7 +1593,7 @@ fn drawing_dimensions(
     };
     lines.retain(|(owner, _, a, _)| owns(*owner, *a));
     insets.retain(|(_, a, _)| owns(Some(0), *a));
-    let dimension_ids = lines
+    let dimension_ids: Vec<_> = lines
         .iter()
         .map(|(_, d, _, _)| d.id.clone())
         .chain(insets.iter().map(|(d, _, _)| d.id.clone()))
@@ -1633,8 +1633,10 @@ fn drawing_dimensions(
     )?;
     append(
         &mut out,
-        if sheet.is_some_and(|s| s.kind == "detail") {
+        if sheet.is_some_and(|s| s.kind == "detail") && !dimension_ids.is_empty() {
             "VIEW PLAN: ONLY this detail sheet's assigned measurement blocks, no overview or UI artwork. Each label has one owner; never repeat measurements from another sheet.\nASSIGNED MEASURES:\n"
+        } else if sheet.is_some_and(|s| s.kind == "detail") {
+            "VIEW PLAN: selected source-detail artwork only. This detail has no assigned measurements; do not invent measurement blocks or dimensions. Preserve this source selection and its proved component clipping.\n"
         } else {
             "VIEW PLAN: complete overview plus ONLY the following supported local details. Each label has one owner; never repeat measurements on another view.\nOVERVIEW MEASURES:\n"
         },
