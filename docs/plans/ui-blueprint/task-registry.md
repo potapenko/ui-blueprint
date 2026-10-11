@@ -13,7 +13,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | --- | --- | --- | --- |
 | CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
-| CN4 |same Mac advisor|running read-only discovery|Up to12 genuinely new Native/mobile families beyond current batches; exact routes and real availability limits |
+| CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
@@ -38,6 +38,7 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
 | CN-B5 |same Native source owner, restored|running source collection|Up to12 new learner/list/adaptive-grid cases; CP4 frozen export is next dependency |
+| CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae, restored|dispatched source collection|8 new CN4 mobile recipes; existing Simulator ownership, independent input only; corrected CP4 export pending |
 | CW-B4 |same Web source owner|dispatched source collection|Up to12 new responsive/list/grid cases; existing qualified IAB path, independent of CW-S2 |
 
 Current source basis registry39/NATIVE3/CLI17/DESIGN-ANALYSIS1; CP4 adds
