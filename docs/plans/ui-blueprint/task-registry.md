@@ -34,8 +34,16 @@ images are separate repeats, allFAIL. Do not call this65unique successful cases.
 | CW-S1 |same Web source owner|unqualified; evidence retained|uib-cw-b3-2k5Rlj/CW-S1-01/handoff.json; wrong region then clipped Play/opacity drift |
 | CW-S2 |same Web source owner|waiting_evidence from operator|dev-browser local CDP9222 WebSocket handshake403; no Page/inventory; Chrome remote-debug status requested |
 | CN-B4 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|12pairs/packages/first outputs,allFAIL;7rooted popup states,30/30exact quantities |
+| CN-B5 |same Native source owner, restored|running source collection|Up to12 new learner/list/adaptive-grid cases; CP4 frozen export is next dependency |
+| CW-B4 |same Web source owner|dispatched source collection|Up to12 new responsive/list/grid cases; existing qualified IAB path, independent of CW-S2 |
 
-Current source basis registry38/NATIVE3/CLI17/DESIGN-ANALYSIS1; CA3 registered
+Current source basis registry39/NATIVE3/CLI17/DESIGN-ANALYSIS1; CP4 adds
+DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 at cfe1b5e, visual gate still open.
+CN-B5/CW-B4 collect independent new sources now; generation awaits the frozen CP4
+handoff and selected changed-contract reading. No duplicate builds or old-source
+rerolls. New sheets count separately from new cases. CW-S2 alone awaits operator
+Chrome status; its403 cause remains unknown, no permission bypass authorized.
+CA3 registered
 minimal additive Native evolution before code. CP2 remains export Restore.
 Shared route files have one owner; no concurrent
 registry edits. All source apps remain tracked read-only, current branches only.
