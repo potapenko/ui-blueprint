@@ -81,7 +81,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
-| CTEXT1 |same exporter owner, restored|one immutable CA8 D03 generation dispatched|Accepted new static data through unchanged7723f09/approved package; repair-validation only, no code or new case |
+| CTEXT1 |same exporter owner|unqualified reference attempt; archive after receipt|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
+| CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79, restored|one qualified recapture/full validation dispatched|Fresh C01/CA8 text+independent native losslessPNG→literal one D03→evaluation; not a new case |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -609,6 +610,20 @@ checks improved source data on a represented UI state; repair-validation bucket
 only, not another case or a controlled A/B causal claim. Old source failures remain.
 Writer verifies actual membership/known text/unknowns and preserves privacy/frame
 limitations; no additional raw Value/Title approval, source capture or code edits.
+CTEXT1 neutral index contained impossible reference dimensions. Root requested
+format-aware/provenance verification before critic dispatch. Owner confirmed actual
+JPEG3840×2100 from cua.getScreenshot, wrongly parsed asPNG IHDR; index corrected
+without changing image/package/generated output. This ordinary QA frame is barred
+as a reusable design reference by screenshot-asset-governance. Root's selection of
+it for CTEXT1 was an error; CA8 code/data acceptance never claimed ImageGen-reference
+qualification and remains unchanged. One historical unqualified generation is
+retained separately, with no image acceptance or new case count.
+CTEXT2 now assigns the proven Native capture owner one fresh public C01 observation
+with accepted CA8 visible_text, independent native losslessPNG with actual signature/
+dimensions/provenance checked before generation, and one literal source-only detail.
+No JPEG conversion, CUA reference, prompt rewrite or reroll. Same code/limits; new
+source/state/scope differences remain explicit, no controlled A/B claim. This is
+source-quality/data validation, not another unique UI case or new source code.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
