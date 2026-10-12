@@ -1,12 +1,27 @@
 # Единый реестр задач
 
-## CORPUS-1000 — active, 2026-10-11
+## CORPUS-1000 — blocked on external access, 2026-10-12
 
 Authority: the user explicitly requested parallel helpers, broad real Mac/Web and
 available native mobile testing, about1000 genuinely generated/evaluated blueprint
 cases, risk-first planning and corpus-driven improvements. Root is coordination-only;
 workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 [execution runbook](execution.md) govern. This goal is incomplete.
+
+Host goal returned `blocked` on2026-10-12 after three consecutive goal turns
+verified the same external dependency, following completion of CP10 and both
+critics. This applies the host's mandatory blocked-audit policy, not completion
+or a user-requested pause. Original1000-case objective and accepted work remain.
+No ready independent packet is established. CN8 preview and CN5B keyboard handles
+are still live `waitingOnApproval`; neither was cancelled or replaced. Their
+pending operation/reason is unavailable to root, so no rejection reason or approval
+scope is inferred. Additional-source and existing-Chrome evidence questions remain
+unanswered. Host rechecks:05:43:20,05:46:34 and05:47:02UTC; same turn IDs below.
+Resume condition: user resolves a host gate/provides its exact card text or supplies
+another authorized source, then resumes this goal. Reconcile the same handles and
+preserve their state before new dispatch. Do not infer an approval from silence.
+Latest product checkpoint5e071f5, author receipt68e4e9e;147eligible cases,
+436generated images including47repair validations and1unqualified reference attempt.
 
 ### Current counts and acceptance
 
