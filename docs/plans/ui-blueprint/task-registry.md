@@ -75,6 +75,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
+| CP9 |same exporter owner, restored|bounded Native fragment task dispatched|New B12 long-copy raw-coordinate/ID/substitution witnesses; settle literal ambiguity and minimally repair if supported, no generic ban loop |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -445,6 +446,17 @@ failure; CT2 rejects the author's stronger blanket nonprinting interpretation.
 The [acceptance receipt](receipts/corpus-state-attribution-review8.md) preserves
 exact reviewer turns and evidence. CP8's one image now enters the repair bucket.
 No further CP8 attempt or source repair is needed on current evidence.
+CP9 is a separate bounded Restore task from new CN-B12/774ed6b first-image evidence:
+source fragments print construction coordinates/IDs or substitute unrelated content.
+Same owner diagnoses at most2affected Native long-copy sheets (B12-03/B12-08),
+checks literal human-assignment/source-membership rules and repairs only a supported
+generic ambiguity/noise issue. No causal compiler claim is preselected. Existing
+CP6-F1/CP7/CP8 behavior stays protected. Exact Native machine replays plus CW40 and
+accepted CW58 are controls; at most2fresh changed-sheet images if a repair exists.
+Own export source/tests and receipts/corpus-fragment-assignment-repair9.md only.
+No new fields/schema/collector/renderer/source-app/spec changes; no generic appended
+prohibitions or deletion of assigned facts. Current full export/data/HBP basis
+unchanged and reused. Existing CN-B13/B14/B15 keep frozen774ed6b independently.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
