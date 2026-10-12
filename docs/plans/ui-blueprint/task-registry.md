@@ -89,7 +89,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CA6 |same CA owner01a12b6a-9746-7600-830d-b973f7b8e30b|diagnosis accepted|3AXTitles already known but export-redacted;3StaticText values unrequested, no complete request-only export solution |
 | CA7 |same CA owner|runtime feasibility accepted|One69node/230403byte partial observation;3static Text values known, Name/Title NoValue; no export or code changes |
-| CA8 |same CA owner|scoped static-text capability task dispatched|Register then implement explicit visible_text for safely admitted AXStaticText only; Name/Title/Value/privacy/defaults preserved, independent review required |
+| CA8 |same CA owner|f26e121/030dfdf returned; CR4 pending|NATIVE5/static-text1/registry41; explicit role-limited text and actual allowlist proof, not accepted until independent review |
+| CR4 |reviewer01a12c83-017a-7b42-b657-3464f9a773dc, restored|initial independent source/privacy review|CA8 neutral diff/bundle/live records/withheld-approved exports; no author narrative yet |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CCOUNT1 |same CD1 owner|accepted; archived|99proved cases,99–102 range; CP1/A06 first completion counted once, historical A01 baseline excluded |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
@@ -120,7 +121,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 
 ### Current contracts and protected boundaries
 
-Established source basis: registry40, NATIVE4/CLI18, DESIGN-ANALYSIS1, EXPORT2,
+Established source basis: registry41, NATIVE5/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance is complete through CR3. Existing batches keep their old pins.
@@ -580,6 +581,19 @@ one fresh public live observation and unchanged-exporter explicit-allowlist proo
 No ImageGen until independent data/privacy/capability review. Root refreshed Native
 acquisition3 and D02/D03/D04/D05/D06/Pilots/Forms/Golden protected closure; host memory,
 actions/benchmark/calibration remain unchanged, not newly implemented or claimed.
+CA8 source f26e1212f451ab6c958f2c3091f358d99ca5eb51/receipt030dfdf is returned.
+Root read changed NATIVE5/static-text1 and registry41 routes completely; old frozen
+Native1af633c remains the accepted collection baseline pending CR4. Neutral index
+`uib-CA8-lbe7mxfu/neutral-index.json`, helper hash
+`17e14a2afc41022a6d9b51fea332d33038aa53f4fd6af784355fd72065665d2d`;
+saved observation hash `b2d3fc27e566c9c50ee3b9583eaf6b7246d9272a032a6a239594d11a5fecadd4`.
+Author reports270assertions/84documents each normal+optimized, one69node live
+observation with9known static texts and three target texts, unchanged exporter7723f09
+withholds9/9 without approval and publishes8/9 with it (1/1 still slash-guarded).
+RawValue69/knownTitle8 remain redacted; no ImageGen or case-count increment.
+CR4 same formerCA5 reviewer now inspects neutral source/evidence before author
+receipt. Root supplies corpus-native-static-text.md only after initial observations,
+then reconciles final privacy/capability verdict. Do not reuse retired live identities.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
