@@ -46,10 +46,10 @@ CN-B12 adds9 fixture-origin states, bringing it to135;
 CN-B15 adds4non-fixture Simulator states, bringing it to139;
 CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3 images (44 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1 images (45 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 adds1 unqualified reference attempt only:433 generated images overall,
-with no increase to eligible cases or the44 qualified repair-validation images.
+CTEXT1 adds1 unqualified reference attempt only:434 generated images overall,
+with no increase to eligible cases or the45 qualified repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -84,7 +84,7 @@ with no increase to eligible cases or the44 qualified repair-validation images.
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
 | CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
-| CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79, restored|one qualified recapture/full validation dispatched|Fresh C01/CA8 text+independent native losslessPNG→literal one D03→evaluation; not a new case |
+| CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, CV2/CT2 review running|Qualified native PNG,1first D03; author4texts/9items correct, layout fails; not a new case |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -626,6 +626,14 @@ dimensions/provenance checked before generation, and one literal source-only det
 No JPEG conversion, CUA reference, prompt rewrite or reroll. Same code/limits; new
 source/state/scope differences remain explicit, no controlled A/B claim. This is
 source-quality/data validation, not another unique UI case or new source code.
+Terminal evidence: `uib-CTEXT2-5kiuvihk/HANDOFF.md` and neutral-index.json under
+system temp. Native PNG3840×2100 from1920×1050pt, signature/decoder/density verified
+before generation; no AX pixel transform inferred. One literal D03 returned1672×941.
+Author finds4exact texts/9items, no extras/dimensions, but changed filter/spinner
+placement and simplified chevrons. G01/D01/D02 unrendered by this one-sheet packet.
+Same CV2/CT2 independently review only changed D03; no author verdict supplied.
+Own runtime/reservation released;14324non-image build files removed,68image assets
+and ancestors retained. Sources unchanged, source owner archived. Corpus stays147.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
