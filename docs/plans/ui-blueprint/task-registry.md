@@ -67,6 +67,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
+| CP8 |same exporter owner, restored|dispatched source-scoped state attribution task|B11-01 caller-state repetition witness; diagnose and minimally restore attribution, focused checks plus one changed-sheet image; frozen corpus continues |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -391,6 +392,26 @@ the finite read-only keyboard capability/recipe packet, with no app/device/setti
 file operations. The original advisor remains preserved; other goal work continues.
 
 ### Reuse, acceptance and continuation
+
+CP8 is a finite Restore task under the user's CORPUS prompt-improvement authority,
+not a new state model. Root refreshed registry40 → product → EXPORT2/full drawing
+closure, PACKAGE3/SHEET-PROMPTS1/CLI-EXPORT3 INPUT/BOUNDS, HBP1.2 R2/R3,
+DESIGN-ANALYSIS1/ANALYSIS2/TYPES1/VALIDATION1 and shared MODEL/EXCHANGE2/GEOMETRY/
+PROJECTIONS/IDENTITY/BOUNDARIES/PRIVACY; live/actions/compare siblings excluded.
+Contract: caller state is attributed annotation, not an observed property per node.
+CN-B11's bounded witness is `uib-CN-B11-a8cf7csy/B11-01/`: metadata.json,
+package-814af45/prompt-D01.txt49–81, cua-state.txt and D01-first.png. Source owner
+reports repeated zero-page disabled context beside unrelated blocks and extra
+disabled labels in the first image; canonical Observe did not request Enabled.
+Absence of a CUA disabled marker does not prove enabled=true. Compiler causality
+must be established by the existing exporter owner before a minimal repair.
+Proposed remedy is one attributed whole-view context separate from source states;
+no prose keyword binding, new fields, erased drafts or altered facts. Own export
+source/tests and receipts/corpus-state-attribution-repair8.md only; root keeps
+registry. Replay B11-01 and distinct CW34/CW40 controls, preserve machine files,
+then one changed B11-01/D01 first image if a repair is supported. Both continuing
+critics receive neutral changed artifacts later; no new review wave on old images.
+Current CN-B10/CN-B11 batches remain pinned to814af45 for comparable first results.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
