@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B13 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B14 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**144 proved eligible cases; range144–147 pending three named uncertainties.**
-The planning remainder is856 cases, potentially853 if all three are established.
-There are47 Web and97 Native cases in the proved minimum. Fifty-two are explicitly
+**147 proved eligible cases; range147–150 pending three named uncertainties.**
+The planning remainder is853 cases, potentially850 if all three are established.
+There are47 Web and100 Native cases in the proved minimum. Fifty-five are explicitly
 fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:377 primary images =373 first outputs +4 rerolls;
-43 separate repair-validation images;420 images in total. Extra sheets, repaired
+Image buckets:388 primary images =384 first outputs +4 rerolls;
+43 separate repair-validation images;431 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -42,7 +42,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CN-B12 |9|39|cold-paused duplicates B10 loading; other9 actual state/layout differences qualified |
 | CN-B15 |4|12|2families in intermediate Dynamic Type categories;7insufficient-novelty candidates excluded |
 | CN-B13 |5|22|3duplicates/text-only variations excluded; original failed attempts retained, fresh kids source qualified |
-| **Primary subtotal** |**143**|**377**| |
+| CN-B14 |3|11|7unwired/alias IDs and3runtime duplicates excluded; active current-item non-atomicity explicit |
+| **Primary subtotal** |**146**|**388**| |
 
 ## One first completion in the repair bucket
 
@@ -66,7 +67,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in144
+## Three unresolved cases, not counted in147
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -118,6 +119,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B12 | `uib-CN-B12-kh2ysteb/HANDOFF.txt` |
 | CN-B15 | `playphraseme-cn-b15-w5v_6mto/handoff.json` |
 | CN-B13 | `uib-CN-B13-4npljmu2/HANDOFF.md` |
+| CN-B14 | `uib-CN-B14-ocq6ve0f/handoff.md` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -199,3 +201,12 @@ runtime released; shared executable retired by guarded non-image cleanup, all68
 image assets/containers/ancestors remain. CP9 adds2repair images only: named mobile
 fragment passes both critics, unnamed B12 fragment fails; source candidate302f787
 still awaits evidentiary wording repair and concision reconciliation.
+
+CN-B14 adds3fixture states from13assigned IDs/6runtime candidates,11first sheets,
+0rerolls.5scoped passes/6failures/0full approvals;142rendered labels and9groups/
+21operands correct. Source c7d8e3d/Native1af633c/export774ed6b/density30 unchanged,
+all images1536×1024. Active untimed case qualifies stable controls/composition,
+not atomic phrase/counter text across CUA/AX/PNG. Other cases are paused second
+result with reversible Previous/Next and visible Unlock control (never activated).
+First target_unresolved and stale CUA refresh retained. Own runtime and borrowed
+build dependency released, repos unchanged, images/originals retained.

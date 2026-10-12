@@ -10,15 +10,15 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:144; unresolved upper bound147; conservative remainder856.**
+**Proved eligible case count:147; unresolved upper bound150; conservative remainder853.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty-one completed primary batches produced377 evaluated images; CW58 is the one
+Twenty-two completed primary batches produced388 evaluated images; CW58 is the one
 complete primary-case image independently accepted by both continuing critics.
-Their373 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not377 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their384 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not388 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -44,7 +44,8 @@ CN-B11 adds7 qualified fixture-origin cases, bringing it to124;
 CW-B7 adds2 demo-origin Web states, bringing it to126;
 CN-B12 adds9 fixture-origin states, bringing it to135;
 CN-B15 adds4non-fixture Simulator states, bringing it to139;
-CN-B13 adds5fixture states, bringing it to144.
+CN-B13 adds5fixture states, bringing it to144;
+CN-B14 adds3fixture states, bringing it to147.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=2 images (43 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -100,8 +101,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
-| CN-B13 |same Debug source owner|investigation accepted; archive after handoff|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
-| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline novelty/generation|6candidates captured, own runtime/desktop/build dependency released; final count pending |
+| CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archive after handoff|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
@@ -551,7 +552,7 @@ chat or stand paths), to expand beyond the known catalog without duplicate forms
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at144proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at147proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 CW3 found an existing loopback subscription demo with fictional fixed data and
 local-only toggle callbacks, two new meaningful states. There is no wider ready
@@ -617,6 +618,13 @@ Fresh kids108-node source qualified with byte-identical PNG; first empty-output
 attempt preserved.3duplicates/text-only variants excluded. Shared app/executable
 now retired after producer+consumer release;68image assets/containers and ancestors
 retained, user63105 preserved. No repo changes. Export774ed6b/Native1af633c fixed.
+CN-B14 terminal `uib-CN-B14-ocq6ve0f/handoff.md`:13IDs→6runtime candidates→3new
+fixture cases,11first images/0rerolls,5scoped passes/6FAIL/0full approvals.142labels
+and21operands/9groups correct. Active untimed case covers stable controls and
+composition, not atomic current phrase/counter across separately timed channels.
+Paused second result Previous/Next restored pause; Unlock only observed.7source
+aliases/unwired and3runtime duplicates excluded. All1536×1024, same frozen774ed6b
+andNative1af633c. Source repos unchanged, runtime/build dependency fully released.
 CN-B15 reuses B6/B8 mobile owner and installed devices, adding two supported
 untested intermediate Dynamic Type categories (prefer extra-large/accessibility-
 medium equivalents verified by actual tooling). Up to12meaningful reflow/clipping/
