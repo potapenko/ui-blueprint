@@ -1,5 +1,34 @@
 # Web source advisor handoffs
 
+## CW3 — existing isolated preview discovery, 2026-10-12
+
+Advisor01a1102f-e21d-7251-9597-c29a1c66d088, terminal turn
+01a12d8b-f244-74d3-a394-97b32b790c04. Source-only, no runtime or new cases.
+Source remains c23ef963e5be87195f80cef7173d537a5a146c74, branch new-banners-paywall;
+preexisting env/dev/resources/config.edn untouched. No general component gallery.
+
+One useful candidate: `http://localhost:3000/?demo=subscription`, two local
+autorenewal states. [Runbook](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/docs/ops/yookassa-subscription-demo.md),
+[dev entry](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/env/dev/cljs/playphraseme/app.cljs),
+[fixture](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/env/dev/cljs/playphraseme/subscription_demo.cljs).
+Existing loopback guard/dev entry bypasses core/init!, renders actual subscription
+content with fictional fixed data, and replaces actions with a local atom toggle;
+no billing, clipboard, Favorites or preference writes from those handlers. Enabled
+and disabled content differ meaningfully. Runtime/dev-build correspondence still
+must be proved before any click; a normal-app remount ends the fixture scenario.
+Shared home.html includes Google/Firebase analytics: this is not offline isolation.
+Ordinary page telemetry is already within earlier Web capture authority; it does
+not authorize any subscription/account operation. No network-bypass modification.
+
+Other findings are not ready isolated previews: show_ui paywall/login follows
+normal auth/preload/marketing; locale override persists preference. Search fixture
+replaces runtime transport/capabilities and storage. CLJS renewal/checkout render
+tests are data/code, not live gallery or captured geometry. No harness creation
+authorized. Discovery covered env/dev, startup registry, package/project config,
+templates, tests/fixtures and QA scripts, plus source spec/QA dependencies.
+Consumer: finite CW-B7 on the two already-existing demo states, using own context
+and source/geometry/image verification. No new release/billing acceptance claim.
+
 ## CW2 — additional families, 2026-10-11
 
 Root received this read-only source handoff from Research website UI blueprint.
