@@ -146,7 +146,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B17 |same mobile source owner|finite cycle accepted;3witness reviews complete|5qualified keyboard scenes/43first images;21author contentPASS/22FAIL,284of288labels; both critics2FAIL/1scopedPASS on3witnesses;155cases total |
-| CN-B18 |same mobile source owner, restored|full-cycle textcategory×keyboard batch dispatched|At most5accessibility-medium states, grounded B15category+B17keyboard recipes; qualify actual wrap/coverage changes vsB17, exact case-only metadata; no counts yet |
+| CN-B18 |same mobile source owner, restored|3new states qualified; export/generation pending|PhoneClip/PhoneSearch/iPadSearch reflow, iPadClip/Director excluded; approved CP12 may replaceCP11 only before any modelcall, wholebatch pin recorded; no counts yet |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
@@ -761,7 +761,11 @@ inspected diff/testdefinitions/hash/replay/privacy/limits, not a fulltestrerun.
 One repair image, no new case/reroll or generalcausalclaim. Frozen system-temp CLI
 `uib-CP12-qs733mhh/uiblueprint-cp12`, SHA256
 `357169ef1a35de4957d7b23233abb42b516ca9d7b4d2426eb14c0bfa409c4b15`.
-CN-B18 keeps frozenCP11; no inputs or image revisions relabelled.
+CN-B18 initially pinnedCP11. After its3state selection and CP12acceptance, root
+authorizes switching the whole batch to verifiedCP12 only if no modelcall has
+started. Preserve any priorCP11packages, compare exactmachine facts and record
+the effectivepin before generation. If any call alreadybegan, finishCP11 with
+no mixedversions/rerolls. Same inputs/source/criteria; no history relabelled.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
