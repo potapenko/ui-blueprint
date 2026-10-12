@@ -96,8 +96,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
-| CN-B13 |same Debug source owner|ready for dispatch|Remaining8C03 seeds, full qualified cycle; producer of one shared own Debug build for disjoint CN-B14 |
-| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|ready for source preparation|Remaining C02 candidates≤12qualified states; borrow CN-B13 build, physical capture after producer release |
+| CN-B13 |same Debug source owner|dispatched full eight-candidate cycle|Remaining8C03 seeds; producer of one shared own Debug build for disjoint CN-B14 |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|source preparation; waits shared build/desktop|Remaining13C02 candidates≤12qualified states; borrow CN-B13 build, physical capture after producer release |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
