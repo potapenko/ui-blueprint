@@ -92,11 +92,11 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
 | CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|consultation accepted; archived|5source-backed keyboard candidates; runtime toggle untested by read-only scope, no process conflict; [handoff](receipts/corpus-native-advice.md#cn5b--keyboard-candidates-2026-10-12) |
 | CN7 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only inventory accepted|453declarations, isolated candidate families, no UI package/gallery; [handoff](receipts/corpus-native-advice.md#cn7--existing-app-target-previews-2026-10-12) |
-| CN9 |same Mac advisor|read-only search-state consultation running|Existing temporary query/picker results and empty states; prove onChange/dismiss/persistence effects before future runtime, no app changes |
+| CN9 |same Mac advisor|accepted source-only consultation|6recipes Actor×3platforms/Director×2/MacReels; explicit restore and late-response guards; [handoff](receipts/corpus-native-advice.md#cn9--transient-lookup-recipes-2026-10-12) |
 | CN8 |01a12e68-26dc-7ba2-ab7a-6f8745f9e78a|host waitingOnApproval|One existing Mac Download Preview via Xcode Canvas; pending operation text unavailable, user clarification requested; no bypass |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|accepted read-only discovery|One existing subscription demo/two local states; ordinary analytics remains; [handoff](receipts/corpus-web-advice.md#cw3--existing-isolated-preview-discovery-2026-10-12) |
-| CW4 |same Web advisor|read-only search-state consultation running|Existing transient query/filter/picker results; safe public input/noApply/no persistence qualification, no runtime or source changes |
+| CW4 |same Web advisor|accepted source-only consultation|5desktop/mobile lookup recipes with complete restore; Actor excluded; [handoff](receipts/corpus-web-advice.md#cw4--temporary-filter-lookup-states-2026-10-12) |
 | CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived after review handoff|2demo states/2first images/0rerolls;both critics acceptCW58/rejectCW59 focus loss; [review](receipts/corpus-web-demo-review7.md) |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
@@ -150,6 +150,9 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B17 |same mobile source owner|finite cycle accepted;3witness reviews complete|5qualified keyboard scenes/43first images;21author contentPASS/22FAIL,284of288labels; both critics2FAIL/1scopedPASS on3witnesses;155cases total |
 | CN-B18 |same mobile source owner|finite cycle accepted; archived|3new states/26first images,14author contentPASS/12FAIL,201of212labels; CP12 pin before allcalls; critics inspect3witnesses;158cases total |
+| CN-B19 |Mac source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|full-cycle lookup batch dispatched|Mac Actor/Director/Reels; up to7new states, temporary public drafts and verified restore, CA8+CP12; no counts yet |
+| CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|full-cycle lookup batch dispatched|Phone/iPadActor and iPadDirector; up to8new states, exact CN9 safe paths, CP12; no counts yet |
+| CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|full-cycle lookup batch dispatched|CW4 D1/D2/M1/M2/M3, up to5actual states; ownIAB nativeDPR2, safe restore; no counts yet |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |

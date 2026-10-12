@@ -1,5 +1,55 @@
 # Native source advisor handoffs
 
+## CN9 — transient lookup recipes, 2026-10-12
+
+Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 completed source-only turns
+01a131e8-2e83-7bc0-86dd-548503984b7d and01a131eb-8cd9-7cb3-be08-e164d17f9374,
+c7d8e3d/beta-01. No runtime, requests or changes. Source route: Actor
+scope-selection@11, Clip popovers Mac@1/iPad@2, Reels discovery@2,
+native-ui-tools@1. Read-only callbacks supply restoration evidence; query strings
+and candidate states below are QA proposals, not promises of actual results.
+
+| Surface | Proposed temporary input | Required restoration |
+| --- | --- | --- |
+| Mac Actor | paused English Search, no Actor; tom → tom hardy → zzqvxxzzqvxx | Close clears picker query/candidates, cancels task and changes generation; reopen to verify fresh ready state |
+| iPad Actor | same preconditions, landscape anchored popover | neutral tap-away dismiss; onDisappear closes model; verify query/scope/pause |
+| iPhone Actor | same preconditions; More → Actors pushed view | Back closes picker; dismiss remaining More if needed, verify previous Search |
+| Mac Director | paused Clip, initial empty draft; steven → zzqvxxzzqvxx | select text/Backspace to empty, wait under-threshold with no options, Escape |
+| iPad Director | same initial empty draft, landscape Clip | restore empty and wait; visible Close only dismisses; no toolbar Clear/Return |
+| Mac Reels Search | paused active item, new empty search session; how are → zzqvxxzzqvxx | restore empty, Close, wait flip, verify source/item/phrase/pause |
+
+Actor input is isolated picker state, debounce300ms, minimum3normalized characters;
+empty asks for ready list. Lookup reads public actor data. Close clears/cancels and
+invalidates late responses. Do not select option/possible-matches or Clear, which
+would change Actor scope. Refresh retains previous rows until the new result: wait
+for the actual response, not just elapsed debounce.
+Director editor debounces250ms, threshold2, at most10options. Empty input cancels,
+bumps generation, clears options/active index and issues no lookup; stale responses
+fail identity/cancellation checks. iPad's separate in-memory draft is bound to that
+editor and restored too. Initial nonempty draft is excluded from these bounded
+recipes. Plain dismiss alone is insufficient. Filter selection/clear writes are
+separate operations and forbidden here. Reels search has a separate draft/session,
+250ms read-only relatedPhrases lookup; empty cancels and changes identity, Close
+clears results/phase and disables draft effects. User restoration projects source
+and current item, not search draft. Internal generation counters are not rolled back.
+Phone Clip Filters remains excluded because disappear applies drafts. No duplicate
+Cast/Voice families added just to fill a quota. Names alone are not case novelty;
+actual populated/narrowed/empty/overflow composition must differ from the corpus.
+
+Source owners: [Actor model](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Features/SearchLearn/Model/SearchControls/ActorPickerModel.swift:37),
+[Actor state](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/Packages/PlayPhraseDomain/Sources/PlayPhraseDomain/Search/ActorPickerState.swift:146),
+[Mac dismissal](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/MacApplicationRootView.swift:424),
+[Mac view](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/ActorSelect/View/ActorPickerView.swift:44),
+[iPad presentation](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Search/Actor/TabletActorPickerSearchOverlay.swift:44),
+[phone callbacks](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemePhone/Application/Views/Search/ActorSelectionView.swift:49).
+Director: [editor](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Features/ClipSearch/Model/ClipSearchFilterEditorModel.swift:213),
+[iPad draft](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/ClipSearch/Model/TabletClipSearchFilterQueryDrafts.swift:4),
+[binding](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/ClipSearch/Composition/TabletClipSearchFeatureComposition.swift:90).
+Reels: [close](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Features/Reels/Components/BacksideClose/ReelsBacksideView.swift:104),
+[restoration projection](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Features/Reels/Model/ReelsCatalogRouteProjection.swift:37).
+CN-B19 consumes the Mac subset; CN-B20 consumes the phone/tablet subset. Standard
+runtime/source qualification, isolated ownership and explicit restore still apply.
+
 ## CN-B17 — keyboard runtime qualification, 2026-10-12
 
 The later authorized runtime packet resolves CN5B's scoped-control uncertainty

@@ -1,5 +1,51 @@
 # Web source advisor handoffs
 
+## CW4 — temporary filter lookup states, 2026-10-12
+
+Web advisor01a1102f-e21d-7251-9597-c29a1c66d088, source-only turns
+01a131e8-315a-77a1-b35b-1559a7024267 and01a131eb-8db6-7593-a00f-dc89f6970531;
+c23ef963/new-banners-paywall. No runtime/requests/changes. Specs root selects
+Phrase Search Filters surface-controls/mobile-source-and-response/option-lookup/
+gateway/QA, Header/Corpus and relevant external adapter/mobile shell/layout leaves.
+
+| Recipe | Proposed public input | Candidate novelty |
+| --- | --- | --- |
+| D1 desktop Director | tarantino → zzqxzzqx, await each result | successful empty instead of counted rows; actual popover height change |
+| D2 desktop Director | an, optional lower scroll after response | real limited-height inner-list overflow distinct from prior spiel |
+| M1 mobile Director | tarantino → zzqxzzqx | inline empty-state moves following sections upward |
+| M2 mobile Director | an | long inline result expands outer panel scroll and pushes Cast below |
+| M3 mobile composite | Director tarantino, Cast brad, Voice arnold, sequential settled responses | simultaneous lists change shared composition; one case, not one per name/scroll |
+
+Own guest Clip Search English tab, empty main query/no filters/initially empty
+entity input; actual desktop/mobile layout, no settings override or auth bypass.
+Queries are proposals, not guaranteed results. Failure/loading is not empty. Prior
+single Cast/Voice results remain duplicates unless composition actually differs.
+Input edits change local draft;250ms debounce, length≥2, GET public filter-options
+with limit10. Gateway POST is a read-only Search Engine lookup, not filter apply.
+Normal network reads/logs remain; no offline/no-network claim.
+
+Desktop exit requires editing the field back to empty, waiting debounce and
+under-threshold, Escape, then reopening. on-open synchronously increments request-id
+and clears options/active/loading/error with no HTTP; stale responses are ignored.
+Verify empty input, no option buttons/aria-activedescendant, unchanged URL/filters,
+then Escape. The immediate minimum-length hint alone is insufficient proof.
+Mobile waits for all current lookups, Back until unmounted, reopen to verify empty
+entity inputs/no pills and unchanged URL/filter/badge, then Back. Back destroys local
+query/options but does not cancel pending HTTP/debounce, hence waiting before exit.
+Never use filter Clear/selected pills/options/Enter to restore. Web Actor lacks
+late-response protection and its cross changes Actor/URL; excluded. Years/IMDb
+auto-apply complete values; excluded. Native Phone lifecycle is not inferred from Web.
+
+Source owners: [desktop draft/requests](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/suggestions/view.cljs:933),
+[input](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/suggestions/view.cljs:1078),
+[open/close](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/filters/picker_view.cljs:397),
+[mobile query](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/mobile_filters/view.cljs:795),
+[panel lifecycle](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/mobile_view/components/navigation_view/view.cljs:76),
+[REST](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/rest_api.cljs:897).
+QA: [desktop](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-clip-search-desktop-filters-and-suggestions-panel.md),
+[mobile](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-clip-search-mobile-filters-navigation-panel.md).
+CW-B9 consumes these five candidates after loaded-handler and source/novelty proof.
+
 ## CW3 — existing isolated preview discovery, 2026-10-12
 
 Advisor01a1102f-e21d-7251-9597-c29a1c66d088, terminal turn
