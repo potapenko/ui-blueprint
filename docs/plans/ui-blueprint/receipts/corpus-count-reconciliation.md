@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CW-B9 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CN-B19/CN-B20 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**162 proved eligible cases; range162–165 pending three named uncertainties.**
-The planning remainder is838 cases, potentially835 if all three are established.
-There are54 Web and108 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;105 are non-fixture observations. Fixture UI is
+**174 proved eligible cases; range174–177 pending three named uncertainties.**
+The planning remainder is826 cases, potentially823 if all three are established.
+There are54 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;117 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:464 primary images =460 first outputs +4 rerolls;
+Completed-batch image buckets:496 primary images =492 first outputs +4 rerolls;
 49 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-517 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+549 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -68,7 +68,9 @@ and AX/status meaning. [Receipt](corpus-literal-captions12.md), neutral index in
 | CN-B17 |5|43|Five real keyboard states; caller conditional-scope leakage remains an explicit failed-input/output finding |
 | CN-B18 |3|26|Real wrapping/coverage differences at accessibility-medium with keyboard;2no-novelty cases excluded |
 | CW-B9 |4|4|D1/CW63 duplicates CW54;4actual inner/outer scroll and lookup states |
-| **Primary subtotal** |**161**|**464**| |
+| CN-B19 |6|26|Ordinary Debug composition, not fixture launch; partial target geometry independently confirmed;1Director duplicate excluded |
+| CN-B20 |6|6|4Actor cases and2Director states; failed scroll candidate excluded, actual selection/recovery incident retained separately |
+| **Primary subtotal** |**173**|**496**| |
 
 ## One first completion in the repair bucket
 
@@ -92,7 +94,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in162
+## Three unresolved cases, not counted in174
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -149,6 +151,8 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B17 | `playphraseme-cn-b17-7ekvw3ou/handoff.json` |
 | CN-B18 | `playphraseme-cn-b18-2_us3owt/handoff.json` |
 | CW-B9 | `uib-cw-b9-CyxypA/handoff.json` |
+| CN-B19 | `uib-CN-B19-bway_om4/HANDOFF.md` |
+| CN-B20 | `playphraseme-cn-b20-xjpgtodg/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -341,3 +345,54 @@ is not needed for the common plan-residual verdict. Both validate CW64 capture
 qualification and find no concrete compiler contradiction. Missing frame meaning,
 not the literal token layout_bounds, is the qualifier criterion. No full image is
 jointly accepted and no resolution-only rejection or automatic code repair follows.
+
+CN-B19 adds6partial ordinary Mac states: Actor populated16rows/narrowed1/empty,
+Director returnedempty, Reels populated20records/returnedempty. Director populated
+duplicates B4 and is excluded. One own Debug c7d8e3d build launched without fixture
+arguments, NativeCA8f26e121 and CP12 172a080.26first images,0rerolls,6author scoped
+passes/20fails,0fullcases.305assigned source dimensions/unique owners validated;
+rendered-label failures remain distinct from source arithmetic. Ten acquisitions:
+7partial observations,2canonical incomplete_scope,1empty-output failure. CT2 verified
+actual Actor query321.5×16,Close/Clear/checkbox,resultscroll392×360 and16named result
+buttons or TomHardy392×36 or anonymous emptystatus97.5×16 before truncated background.
+All6cases eligible; not completeActor semantics. Actor visible_text/values/state
+unrequested in final160node responses; counts/drafts/status wording keep reference/
+caller attribution. Surrounding AXGroup is window-sized, not a painted popup border.
+
+CT2turn01a1321e-58bc-7120-b92c-0a35366152a5: two four-field failures at258/217ms
+have no recorded exact limit subcause.477KB three-field payload makes output pressure
+plausible, not proven. Empty stdout at1054ms is consistent with the1000ms deadline,
+not a precise diagnosis. A smaller supported node budget retaining the Actor branch
+is a bounded next diagnostic; no collector change/quota increase is justified yet.
+CV2turn01a1321e-5a34-7f01-b5be-985004034a68 agrees all3reviewed G01 retain issues:
+Actor/Reels AXwindow dimensions surround artwork instead of empty sketches; Actor77pt
+container height is misanchored; Reels adds unassigned52pt. Director content/6labels
+are correct but Clear gains a forbidden box. No literal compiler conflict found.
+
+Allsource PNGs independentnativeRetina, noresample. Actor/Director drafts restored;
+Reels Search Close preserves active paused reel. Destination return hands WorldWarZ
+into Search5/426 instead of priorTarzan121/426 under source-feed/QUERY.CONTINUITY.
+Exact Search rollback/persistence inspection not claimed; CN10 separately checks
+storage consequences. OwnPID90325 stopped, protected Release incarnation retained;
+nonimage build cleanup completed with68image assets/containers preserved.
+
+CN-B20 adds6qualified mobile states: one-row and returnedempty Actor on phone/tablet,
+Director top and returnedempty on iPad. Two tom longlists duplicate prior composition;
+failed bottomscroll excluded.41selected AXnodes,6firstG01,0rerolls,42assignedlabels
+reported correct,author2contentPASS/4FAIL at1672×941(5) and1672×940(1). Independent
+images pending. NativePNG3xphone/2xiPad qualified; original snapshots/prompt/hash chain
+retained. Public draft casing comes from actual editor, not the suggested input.
+
+Runtime incident: a CUA scroll on a selectable Director row selected Spielberg.
+Selection toggled off and query/default filters/grid215 restored; ownprocess restart
+discarded changed in-memory history according to source, visible arrows were disabled.
+No direct app data/history clearing. Actor cases unaffected; Director top captured
+before incident, empty after filter recovery but before restart. CommonPhrases viewport
+ended atrow5 instead ofrow1. No clean runtime-protocol or exact restoration claim.
+Read-only follow-up establishes scroll's3 argument is pages, notpixels/rows; documented
+distance conversion and no-tap guarantee are absent. A preliminarytap is unproved.
+Do not repeat that method over selectable rows as qualified; documented drag/gesture
+still needs safe live qualification. Devices/processes stopped,images retained, no
+trackedchanges. An export annotation refusal and6copy-helper orchestration rejections
+are preserved; all6model calls succeeded once and originalimages were recovered,
+not regenerated. The incident does not erase independently qualified case chronology.
