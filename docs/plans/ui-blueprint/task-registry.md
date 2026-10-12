@@ -36,16 +36,16 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:158; unresolved upper bound161; conservative remainder842.**
+**Proved eligible case count:162; unresolved upper bound165; conservative remainder838.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty-five completed primary batches produced460 qualified evaluated images;
+Twenty-six completed primary batches produced464 qualified evaluated images;
 CW58,CW60,CW61 are the three complete primary-case images independently accepted
 by both continuing critics.
-Their456 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not460 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their460 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not464 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -75,10 +75,11 @@ CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147;
 corrected CW-B8 adds3responsive states, bringing it to150;
 CN-B17 adds5keyboard states, bringing it to155;
-CN-B18 adds3textcategory×keyboard states, bringing it to158.
+CN-B18 adds3textcategory×keyboard states, bringing it to158;
+CW-B9 adds4lookup/overflow states, bringing it to162.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1 images (49 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:513counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:517counted generated images
 overall, with no increase to eligible cases or the49repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -152,7 +153,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN-B18 |same mobile source owner|finite cycle accepted;3witness reviews complete|3new states/26first images,14author contentPASS/12FAIL,201of212labels; both critics G01FAIL/D04scopedPASS/D05FAIL;158cases total |
 | CN-B19 |Mac source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|full-cycle lookup batch dispatched|Mac Actor/Director/Reels; up to7new states, temporary public drafts and verified restore, CA8+CP12; no counts yet |
 | CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|full-cycle lookup batch dispatched|Phone/iPadActor and iPadDirector; up to8new states, exact CN9 safe paths, CP12; no counts yet |
-| CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|full-cycle lookup batch dispatched|CW4 D1/D2/M1/M2/M3, up to5actual states; ownIAB nativeDPR2, safe restore; no counts yet |
+| CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|cycle accepted; archived, image critics running|4new states/4firstG01/author4FAIL; D1duplicate excluded;201frames/33labels,10responses/6restore cycles;162cases total |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |

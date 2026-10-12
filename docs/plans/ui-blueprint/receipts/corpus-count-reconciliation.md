@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B18 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CW-B9 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**158 proved eligible cases; range158–161 pending three named uncertainties.**
-The planning remainder is842 cases, potentially839 if all three are established.
-There are50 Web and108 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;101 are non-fixture observations. Fixture UI is
+**162 proved eligible cases; range162–165 pending three named uncertainties.**
+The planning remainder is838 cases, potentially835 if all three are established.
+There are54 Web and108 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;105 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:460 primary images =456 first outputs +4 rerolls;
+Completed-batch image buckets:464 primary images =460 first outputs +4 rerolls;
 49 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-513 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+517 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -67,7 +67,8 @@ and AX/status meaning. [Receipt](corpus-literal-captions12.md), neutral index in
 | CW-B8 |3|3|Corrected nativeDPR2 sources;3earlier1xreference images excluded into separate bucket |
 | CN-B17 |5|43|Five real keyboard states; caller conditional-scope leakage remains an explicit failed-input/output finding |
 | CN-B18 |3|26|Real wrapping/coverage differences at accessibility-medium with keyboard;2no-novelty cases excluded |
-| **Primary subtotal** |**157**|**460**| |
+| CW-B9 |4|4|D1/CW63 duplicates CW54;4actual inner/outer scroll and lookup states |
+| **Primary subtotal** |**161**|**464**| |
 
 ## One first completion in the repair bucket
 
@@ -91,7 +92,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in158
+## Three unresolved cases, not counted in162
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -147,6 +148,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CW-B8 | `uib-cw-b8-retina-N53ttw/handoff.json` |
 | CN-B17 | `playphraseme-cn-b17-7ekvw3ou/handoff.json` |
 | CN-B18 | `playphraseme-cn-b18-2_us3owt/handoff.json` |
+| CW-B9 | `uib-cw-b9-CyxypA/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -310,3 +312,19 @@ Shift50 instead of≈50 for49.666666666666664, unlike exact Delete50; other7labe
 remain correct. Actual-size readability supports D04's scoped pass despite requested
 resolution mismatch. Lower output resolution alone is not an added failure gate;
 no full26-image/package acceptance or generic compiler-repair mandate follows.
+
+CW-B9 adds4real states CW64–67 from5executed recipes. D1/CW63 has the same
+194.2578125×85empty popup asCW54 and is excluded. D2 actual inner scroll166.015625
+changes lower membership/clipping versus prior top0; mobile empty lookup is distinct
+from under-threshold;10inline rows expand the outer panel; simultaneous2/10/3lists
+make one composite state. Source/pair qualification corrects a premature scroll0
+read: preserved pre/post DOM and originalPNG already agree on bottomscroll, so no
+capture was replaced or falsely relabelled.201frames/33required dimensions,
+8analysis requests,10lookup responses and6restore cycles checked. Four requiredG01
+first calls/evaluations,0rerolls, author0PASS/4FAIL at1536×1024; independent critics
+pending. NativeDPR2 directlosslessPNG2560×1440 desktop and780×1688mobile, noresample.
+CP12source172a080/sitec23ef963, actual loaded handlers matched reviewed owners;
+no whole-bundle Git equivalence claim. Drafts cleared and verified by reopen,
+query/URL/filters unchanged,1280×720/DPR2/scroll0 restored and own tab closed.
+No trackedchanges; all originals/images retained. Manifest SHA256
+`002e2be191670b42559742a99fb79fa9523bf9a847ddb1d04c5511e6d4c109d0`.
