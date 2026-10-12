@@ -10,14 +10,14 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:107; unresolved upper bound110; conservative remainder893.**
+**Proved eligible case count:117; unresolved upper bound120; conservative remainder883.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Fifteen completed primary batches produced230 evaluated images,0 fully independently accepted.
-Their226 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not230 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Sixteen completed primary batches produced271 evaluated images,0 fully independently accepted.
+Their267 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not271 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -37,7 +37,8 @@ production observations. Its earlier91–93 total and22 supposedly missing old s
 calls are withdrawn: pre-CP4 combined attempts were executed and evaluated under
 their original protocol. Final cross-bucket check adds CP1/A06 exactly once and
 excludes the unchanged historical A01 baseline, giving99 proved cases before CN-B9.
-CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107.
+CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107;
+CN-B10 adds10 qualified fixture-origin cases, bringing it to117.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -86,7 +87,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B7 |same Native source owner|investigation accepted; archived|1new visible-grid case/7first sheets;38labels match,1scoped author pass/6FAIL; no live recapture |
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
-| CN-B10 |same Debug source owner, restored|captures finished; offline export/generation/evaluation|Desktop released; loading Context geometry unresolved, all-hidden duplicate excluded; final case count pending |
+| CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline full cycle continues|Seven captures; own runtime and desktop released, borrowed app hash unchanged; novelty/generation/evaluation pending |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
@@ -436,14 +437,22 @@ CN-B11 then completed all seven captures, stopped its own apps/caffeinate and
 released desktop; unchanged borrowed app hash and end of its build dependency
 reported. Root notified producer CN-B10 for ownership-guarded non-image transient
 cleanup at task end. Never delete images or their containing directories.
-Final novelty/package/image counts for both batches remain pending.
+CN-B10 terminal `uib-CN-B10-odbqso2x/HANDOFF.txt` proves10distinct fixture cases,
+41first sheets/0rerolls/534unique dimension owners;18scoped author passes/23FAIL,
+0full-case approvals. Source c7d8e3d, Native1af633c/export814af45/density30 unchanged.
+T03 caller ambiguity is not source-state authority; other failures include omitted
+dimensions/approximation marks, expanded fragments and invented borders/controls.
+After CN-B11 released its consumer, CN-B10 removed only non-image build transients;
+68image assets/containers and ancestor directories remain. Executable retired.
+The remaining catalog has safe_unverified_remainder entries, not an exhaustion
+finding. CN-B11 final novelty/package/image counts remain pending.
 On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at107proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at117proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 
 [Web advisor](receipts/corpus-web-advice.md) and

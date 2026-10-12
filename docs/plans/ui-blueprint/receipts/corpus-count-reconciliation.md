@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B9 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B10 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**107 proved eligible cases; range107–110 pending three named uncertainties.**
-The planning remainder is893 cases, potentially890 if all three are established.
-There are45 Web and62 Native cases in the proved minimum. Nineteen are explicitly
+**117 proved eligible cases; range117–120 pending three named uncertainties.**
+The planning remainder is883 cases, potentially880 if all three are established.
+There are45 Web and72 Native cases in the proved minimum. Twenty-nine are explicitly
 fixture/component-preview origin;88 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:230 primary images =226 first outputs +4 rerolls;
-40 separate repair-validation images;270 images in total. Extra sheets, repaired
+Image buckets:271 primary images =267 first outputs +4 rerolls;
+40 separate repair-validation images;311 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -36,7 +36,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CN-B8 |7|11|5 families; no-op Collections excluded |
 | CW-B6 |5|5|Natural guest dialog absent; qualifier verdict does not change execution count |
 | CN-B9 |8|49|Actual distinct wired fixture compositions; one exact in-batch duplicate excluded |
-| **Primary subtotal** |**106**|**230**| |
+| CN-B10 |10|41|T01 loading geometry gap and T07 byte-identical duplicate excluded; all sheets evaluated |
+| **Primary subtotal** |**116**|**271**| |
 
 ## One first completion in the repair bucket
 
@@ -60,7 +61,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in107
+## Three unresolved cases, not counted in117
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -106,6 +107,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B8 | `playphraseme-cn-b8-6no3fnyn/handoff.json` |
 | CW-B6 | `uib-cw-b6-dRaUXk/handoff.json` |
 | CN-B9 | `uib-CN-B9-hf8xty_p/HANDOFF.txt` |
+| CN-B10 | `uib-CN-B10-odbqso2x/HANDOFF.txt` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -119,3 +121,14 @@ are not claimed as8 wholly new components. All582 required dimension IDs have on
 owner.25scoped author sheet passes/24failures do not constitute full-case acceptance.
 CW-S2/CW09 and CN5B remain source/host dependencies. CT3 changes interpretation of
 two image verdicts, not the number of executed evaluations.
+
+CN-B10 completed12 configurations/13own captures,11canonical observations and
+2refusals. Ten new fixture compositions produced41required first sheets with
+534unique dimension owners,0rerolls.18scoped author sheet passes/23failures and
+0full-case approvals. Native1af633c/export814af45/density30 stayed fixed.
+Ten source hashes differ from CN-B3/CN-B9, with actual composition novelty checked
+separately. Caller ambiguity in T03 is retained, not promoted to observed state.
+T01 target_unresolved twice and T07 duplicate remain excluded. All owned runtime
+released; producer removed non-image build transients after CN-B11 release while
+retaining68image assets/containers and their ancestor directories. Executable is
+retired, never reused. CN-B11's pending31sheets and CP8 correction are not yet counted.
