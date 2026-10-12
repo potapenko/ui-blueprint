@@ -264,6 +264,11 @@ records and was wrongly promoted in3non-Director details. This is explicit calle
 risk/output failure, not an exporter arithmetic or source-app defect. Firstinputs
 and outputs remain immutable. Both current critics inspect3selected witnesses;
 this does not establish independent acceptance of43images or all5packages.
+Both critics completed those3witnesses: phoneClipD04FAIL for invented information
+gloss on i; iPadSearchD12FAIL for promoted inapplicable Director condition; actual
+DirectorD02scopedPASS with all8labels and exact95vs≈95 distinction. No mandatory
+exporter computation/assignment defect found. CV2turn01a13199-2973-7be0-9560-32de82e28742;
+CT2turn01a13199-2aba-7c23-871e-97aa67f5e6bd. Subsequent caller metadata is case-only.
 Queries/destinations/pause/orientations restored, ownapps/mirrors/devicesshutdown,
 desktoplane released. Task-launched DeviceHub ignoredSIGTERM; executable/starttime
 revalidated beforeSIGKILL and absence verified. Otherowners/ProMax retained.
