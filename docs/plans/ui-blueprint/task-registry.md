@@ -97,9 +97,9 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
-| CN-B13 |same Debug source owner|4cases/17sheets generating; kids reobserve waits CN-B14 release|Two duplicates excluded; shared build retained for consumer and producer's final fresh kids request |
-| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|own desktop captures in progress|6runtime candidates; initial playing refusal retained, fresh Raise-bound request yielded partial Snapshot |
-| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|4new states selected; restoration/export in progress|2families/7no-op exclusions; extra-large/accessibility-medium verified, frozenCP8 |
+| CN-B13 |same Debug source owner|17sheets evaluated; kids dependency released|CN-B14 release delivered; producer reacquires fresh lane for one remaining kids request before cleanup |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline novelty/generation|6candidates captured, own runtime/desktop/build dependency released; final count pending |
+| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|12first sheets evaluated; final handoff/cleanup|4states/2families; one lost approximation mark, source-fragment/noise failures retained; count pending terminal |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -568,6 +568,11 @@ build until that producer request and all consumer processes finish; no early cl
 CN-B14's playing source initially refused target_unresolved; after owned-window Raise
 a fresh request yielded partial Snapshot. Dynamic phrase/counter from separately
 timed PNG is not promoted into canonical state; final qualification stays pending.
+CN-B14 subsequently reported6captures complete, own app/caffeinate stopped, desktop
+free and borrowed-build dependency released (thread cursor:148). Root delivered
+that dependency to CN-B13; its last fresh kids request no longer waits for the
+consumer's offline generation turn. Cleanup still waits for producer's own retry
+and all actual consumers; never delete images/containing directories.
 CN-B15 reuses B6/B8 mobile owner and installed devices, adding two supported
 untested intermediate Dynamic Type categories (prefer extra-large/accessibility-
 medium equivalents verified by actual tooling). Up to12meaningful reflow/clipping/
