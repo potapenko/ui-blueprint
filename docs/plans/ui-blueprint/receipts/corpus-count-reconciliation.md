@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B10 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B11 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**117 proved eligible cases; range117–120 pending three named uncertainties.**
-The planning remainder is883 cases, potentially880 if all three are established.
-There are45 Web and72 Native cases in the proved minimum. Twenty-nine are explicitly
+**124 proved eligible cases; range124–127 pending three named uncertainties.**
+The planning remainder is876 cases, potentially873 if all three are established.
+There are45 Web and79 Native cases in the proved minimum. Thirty-six are explicitly
 fixture/component-preview origin;88 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:271 primary images =267 first outputs +4 rerolls;
-41 separate repair-validation images;312 images in total. Extra sheets, repaired
+Image buckets:302 primary images =298 first outputs +4 rerolls;
+41 separate repair-validation images;343 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -37,7 +37,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CW-B6 |5|5|Natural guest dialog absent; qualifier verdict does not change execution count |
 | CN-B9 |8|49|Actual distinct wired fixture compositions; one exact in-batch duplicate excluded |
 | CN-B10 |10|41|T01 loading geometry gap and T07 byte-identical duplicate excluded; all sheets evaluated |
-| **Primary subtotal** |**116**|**271**| |
+| CN-B11 |7|31|Observed bootstrap-failed is loading, not verified failure; no duplicate compositions |
+| **Primary subtotal** |**123**|**302**| |
 
 ## One first completion in the repair bucket
 
@@ -61,7 +62,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in117
+## Three unresolved cases, not counted in124
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -108,6 +109,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CW-B6 | `uib-cw-b6-dRaUXk/handoff.json` |
 | CN-B9 | `uib-CN-B9-hf8xty_p/HANDOFF.txt` |
 | CN-B10 | `uib-CN-B10-odbqso2x/HANDOFF.txt` |
+| CN-B11 | `uib-CN-B11-a8cf7csy/handoff.md` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -131,7 +133,17 @@ separately. Caller ambiguity in T03 is retained, not promoted to observed state.
 T01 target_unresolved twice and T07 duplicate remain excluded. All owned runtime
 released; producer removed non-image build transients after CN-B11 release while
 retaining68image assets/containers and their ancestor directories. Executable is
-retired, never reused. CN-B11's pending31sheets are not yet counted. CP8's one D01
+retired, never reused. CN-B11's completed31sheets are now counted. CP8's one D01
 correction is included only in repair images; it does not complete a separate case.
 Both continuing critics accept that bounded correction at774ed6b; other sheets
 remain outside that image acceptance.
+
+CN-B11 completed7own source captures/7distinct fixture compositions/31first sheets,
+0rerolls.10scoped author sheet passes/21failures,0full-case approvals. Direct source
+arithmetic matches21analysis groups/49operands;445unique dimension owners include
+441matching labels,3missing and1wrong. Novelty checked against CN-B3/B9/B10 by
+semantic/geometry sets and actual composition, not labels/hashes alone. B11-02
+qualifies observed Vocabulary loading only; named bootstrap-failed remains a gap.
+Source c7d8e3d, Native1af633c/export814af45/density30; all images1536×1024. Own
+runtime released, source repos unchanged, image originals/copies retained. This
+baseline supplied the CP8 witness; its old first failures remain unchanged.

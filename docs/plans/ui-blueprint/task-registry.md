@@ -10,14 +10,14 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:117; unresolved upper bound120; conservative remainder883.**
+**Proved eligible case count:124; unresolved upper bound127; conservative remainder876.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Sixteen completed primary batches produced271 evaluated images,0 fully independently accepted.
-Their267 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not271 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Seventeen completed primary batches produced302 evaluated images,0 fully independently accepted.
+Their298 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not302 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -38,7 +38,8 @@ calls are withdrawn: pre-CP4 combined attempts were executed and evaluated under
 their original protocol. Final cross-bucket check adds CP1/A06 exactly once and
 excludes the unchanged historical A01 baseline, giving99 proved cases before CN-B9.
 CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107;
-CN-B10 adds10 qualified fixture-origin cases, bringing it to117.
+CN-B10 adds10 qualified fixture-origin cases, bringing it to117;
+CN-B11 adds7 qualified fixture-origin cases, bringing it to124.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1 images (41 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -68,7 +69,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
-| CP8 |same exporter owner|bounded source/presentation accepted; archive after handoff|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
+| CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -88,7 +89,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
-| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline full cycle continues|Seven captures; own runtime and desktop released, borrowed app hash unchanged; novelty/generation/evaluation pending |
+| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archive after handoff|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|dispatched full next batch|Up to12 meaningful safe_unverified_remainder C01/C03 states from saved catalog; no B10/B11/previous duplicates, same frozen tools |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
@@ -473,18 +474,26 @@ of at most12 existing C01/C03 candidates, full capture/export/first-image/evalua
 cycle, explicit fixture provenance and cross-batch novelty. Source repos stay
 tracked read-only, current branches; one fresh owned temp Debug build is allowed
 because the prior executable retired. Runtime reservation must be acquired anew.
-Collector1af633c/export814af45/density30 remain frozen while CP8 is unaccepted.
+CN-B12 confirmed no images had started when CP8 acceptance arrived; its entire
+new batch adopts exporter774ed6b. Collector1af633c and density30 stay unchanged.
 Root refreshed NATIVE4/LIFECYCLE1/Computer Use and prior complete export/data closure;
 worker revalidates only applicable source ACP/C01/C03 dependencies. No protected
-access/download actions, source wiring, new modes or quota changes. CN-B11 final
-novelty/package/image counts remain pending.
+access/download actions, source wiring, new modes or quota changes.
+CN-B11 terminal `uib-CN-B11-a8cf7csy/handoff.md`:7distinct fixture cases/31first
+sheets/0rerolls;10author passes/21FAIL/0full-case approvals.445dimension owners,
+441matching labels/3missing/1wrong;21analysis groups/49operands match original AX
+arithmetic. B11-02 is actual Vocabulary loading, not a verified bootstrap failure.
+Semantic/geometry and visual novelty checked against B3/B9/B10. Source c7d8e3d,
+Native1af633c/export814af45/density30 and1536×1024 images remain attributed.
+Own runtime/resources released, repositories unchanged. Baseline failures remain;
+CP8's one accepted D01 correction is separately counted, never another source case.
 On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at117proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at124proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 
 [Web advisor](receipts/corpus-web-advice.md) and
