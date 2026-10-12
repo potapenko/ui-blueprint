@@ -1680,6 +1680,80 @@ fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
         "keep first 1 level of previous context → container \"Same parent\" (child 2 of 3)"
     ));
     assert!(text.contains("return to first 1 level of previous context."));
+    // Source-only AX arrangement uses exact same-space bounds, without requiring
+    // or claiming an AX-to-image transform. Non-AX artwork remains unchanged.
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        node.children.clear();
+    }
+    for (i, x, y) in [(2, 100.0, 10.0), (4, 0.0, 30.0), (6, 100.0, 30.0)] {
+        set_test_role(&mut snapshot.nodes[i], "LABEL");
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.transform = TransformState::Unknown {
+            reason: Id("no-image-mapping".into()),
+        };
+        let Shape::Rect(rect) = &mut g.shape else {
+            panic!()
+        };
+        rect.x = x;
+        rect.y = y;
+        rect.width = 20.0;
+        rect.height = 10.0;
+    }
+    b.details[0].components = [2, 4, 6].into_iter().map(|i| format!("N{i:03}")).collect();
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, l).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert!(text.contains("preceding Draw item: below; left"));
+    assert!(text.contains("preceding Draw item: vertical spans overlap; right"));
+    assert!(text.contains("transform unknown; same Surface and Observation"));
+    assert!(!text.contains("WIDTH") && !text.contains("box[x"));
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let mut exact = l;
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    for mismatch in ["space", "units", "transform", "unknown"] {
+        let mut variant = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut variant.views[0].source else {
+            panic!()
+        };
+        let Property::Requested { state, .. } = &mut snapshot.nodes[4].properties[2] else {
+            panic!()
+        };
+        if mismatch == "unknown" {
+            *state = Availability::Unknown {
+                reason: Id("not-collected".into()),
+            };
+        } else {
+            let Availability::Known {
+                value: Value::Geometry(g),
+            } = state
+            else {
+                panic!()
+            };
+            match mismatch {
+                "space" => g.coordinate_space.id = Id("unrelated-space".into()),
+                "units" => g.coordinate_space.units = Unit::Pt,
+                "transform" => g.transform = TransformState::LocalOnly {},
+                _ => unreachable!(),
+            }
+        }
+        let p = compile(&variant, l).unwrap();
+        let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+        assert!(!text.contains("Unprinted AX-frame order"), "{mismatch}");
+    }
 }
 
 #[test]

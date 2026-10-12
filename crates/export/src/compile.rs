@@ -772,6 +772,80 @@ fn object_text(
     require(out.len() <= limit, E::OutputLimit)?;
     Ok(out)
 }
+fn ax_fragment_order(previous: &SceneComponent, current: &SceneComponent) -> Option<String> {
+    let a = geometry(previous)?;
+    let b = geometry(current)?;
+    if a.frame_kind != FrameKind::AccessibilityBounds
+        || b.frame_kind != a.frame_kind
+        || a.coordinate_space != b.coordinate_space
+        || a.coordinate_space.origin != Origin::TopLeft
+        || a.transform != b.transform
+        || previous.surface != current.surface
+    {
+        return None;
+    }
+    let observation = |c: &SceneComponent, g: &Geometry| {
+        c.properties.iter().find_map(|p| match p {
+            Property::Requested {
+                evidence,
+                state:
+                    Availability::Known {
+                        value: Value::Geometry(value),
+                    },
+                ..
+            } if value.as_ref() == g => Some(evidence.observation_id.clone()),
+            _ => None,
+        })
+    };
+    if observation(previous, a)? != observation(current, b)? {
+        return None;
+    }
+    let (Shape::Rect(a_rect), Shape::Rect(b_rect)) = (&a.shape, &b.shape) else {
+        return None;
+    };
+    if a_rect.width <= 0.0 || a_rect.height <= 0.0 || b_rect.width <= 0.0 || b_rect.height <= 0.0 {
+        return None;
+    }
+    let (ar, ab, br, bb) = (
+        a_rect.x + a_rect.width,
+        a_rect.y + a_rect.height,
+        b_rect.x + b_rect.width,
+        b_rect.y + b_rect.height,
+    );
+    if ![ar, ab, br, bb].iter().all(|n| n.is_finite()) {
+        return None;
+    }
+    let horizontal = if b_rect.x >= ar {
+        "right"
+    } else if br <= a_rect.x {
+        "left"
+    } else {
+        "horizontal spans overlap"
+    };
+    let vertical = if b_rect.y >= ab {
+        "below"
+    } else if bb <= a_rect.y {
+        "above"
+    } else {
+        "vertical spans overlap"
+    };
+    if horizontal == "horizontal spans overlap" && vertical == "vertical spans overlap" {
+        return None;
+    }
+    let transform = match b.transform {
+        TransformState::Unknown { .. } => "unknown",
+        TransformState::LocalOnly {} => "local only",
+        TransformState::Known { .. } => "supplied",
+    };
+    Some(format!(
+        "  Unprinted AX-frame order relative to preceding Draw item: {vertical}; {horizontal}. Same Space {} ({:?}, {}, {:?}), transform {transform}; same Surface and Observation.\n",
+        b.coordinate_space.id.0,
+        b.coordinate_space.kind,
+        unit_name(b.coordinate_space.units),
+        b.coordinate_space.origin
+    ))
+}
+
 fn drawing_inventory(
     v: &SceneView,
     partial: &[Vec<Edge>],
@@ -867,6 +941,7 @@ fn drawing_inventory(
             )?;
         }
     }
+    let mut previous_fragment_item = None;
     let mut previous_fragment_parent = None;
     let mut previous_fragment_path: Vec<(usize, String)> = Vec::new();
     for (i, c) in v.components.iter().enumerate() {
@@ -977,6 +1052,14 @@ fn drawing_inventory(
                 &object_text(v, i, partial, assignment, limit)?,
                 limit,
             )?;
+            if assignment == Assignment::SourceDetail {
+                if let Some(previous) = previous_fragment_item
+                    && let Some(hint) = ax_fragment_order(&v.components[previous], c)
+                {
+                    append(&mut out, &hint, limit)?;
+                }
+                previous_fragment_item = Some(i);
+            }
         }
     }
     Ok(out)
