@@ -59,6 +59,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
 | CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
 | CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
+| CN7 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only preview inventory requested|Existing SwiftUI PreviewProvider/targets/packages outside129AppScenario catalog; no harness, build, runtime or edits |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|accepted read-only discovery|One existing subscription demo/two local states; ordinary analytics remains; [handoff](receipts/corpus-web-advice.md#cw3--existing-isolated-preview-discovery-2026-10-12) |
 | CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived after review handoff|2demo states/2first images/0rerolls;both critics acceptCW58/rejectCW59 focus loss; [review](receipts/corpus-web-demo-review7.md) |
@@ -78,7 +79,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
-| CP9 |same exporter owner|7723f09 bounded accepted; archive after handoff|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
+| CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -105,7 +106,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
-| CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|new finite C04/C05 task dispatched|13existing safe/alias candidates; source proof then≤12novel full cycles; borrow CA7 build only after release |
+| CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archive after handoff|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -538,6 +539,17 @@ CA7's fresh Debug product now has this named consumer; root notified producer to
 retain it if still present, publish path/hash/release, then guarded cleanup after
 consumer release. No resurrection of a retired build or duplicate build. Source
 prep proceeds while CA7 completes its separate one-fixture local diagnostic.
+CN-B16 terminal `uib-CN-B16-szp1sqpb/handoff.md` completes all13 source dispositions:
+C04 base already represented, metadata filters dormant under donor boundary;
+C05 vocabulary already settled in B902; other startup/localization/context flags
+unwired or aliases, continuation differences internal with same visible payload.
+No runtime, build, reservation, numeric/image check or new source case. Current
+c7d8e3d/beta-01 and prior source evidence pinned; both repos unchanged. CA7 build
+dependency released without borrowing; root notified producer. This is not whole-
+app exhaustion. CN7 asks the explicitly authorized Mac advisor about EXISTING
+SwiftUI previews/component examples beyond AppScenario IDs: exact source/target,
+isolation and supported rendering route, source-only. No new harness, project scope,
+build, UI or mutation; this does not resume old CN5 or replace direct human work.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
