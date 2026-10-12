@@ -13,7 +13,7 @@ fixture/component-preview origin;88 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Image buckets:271 primary images =267 first outputs +4 rerolls;
-40 separate repair-validation images;311 images in total. Extra sheets, repaired
+41 separate repair-validation images;312 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -111,7 +111,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
-Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1; CP5=0.
+Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1; CP5=0.
 Accepted repository receipts retain their source revisions and artifact roots.
 
 CN-B9 completed9 attempted configurations/8 distinct qualified fixture compositions
@@ -131,4 +131,7 @@ separately. Caller ambiguity in T03 is retained, not promoted to observed state.
 T01 target_unresolved twice and T07 duplicate remain excluded. All owned runtime
 released; producer removed non-image build transients after CN-B11 release while
 retaining68image assets/containers and their ancestor directories. Executable is
-retired, never reused. CN-B11's pending31sheets and CP8 correction are not yet counted.
+retired, never reused. CN-B11's pending31sheets are not yet counted. CP8's one D01
+correction is included only in repair images; it does not complete a separate case.
+Both continuing critics accept that bounded correction at774ed6b; other sheets
+remain outside that image acceptance.

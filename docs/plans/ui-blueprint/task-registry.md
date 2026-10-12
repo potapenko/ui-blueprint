@@ -39,7 +39,7 @@ their original protocol. Final cross-bucket check adds CP1/A06 exactly once and
 excludes the unchanged historical A01 baseline, giving99 proved cases before CN-B9.
 CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107;
 CN-B10 adds10 qualified fixture-origin cases, bringing it to117.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1 images (40 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1 images (41 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -68,7 +68,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
-| CP8 |same exporter owner|implementation returned; critic acceptance pending|774ed6b/4f32bbd;47author checks,3machine-identical replays,1new D01; two retained critics inspect neutral artifact first |
+| CP8 |same exporter owner|bounded source/presentation accepted; archive after handoff|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -95,8 +95,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP8 initial independent observation running|One changed B11-01/D01 image, visual/source fidelity; no author narrative yet |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP8 initial independent observation running|Same changed image/prompt plus bounded source/three-package protection; no author narrative yet |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP8 reconciled; retained|Bounded D01 visual pass; extra whole-view header is minor editorial residual |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP8 reconciled; retained|Source/prompt and D01 content pass; no new mandatory failure, no global reliability claim |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -105,7 +105,8 @@ Established source basis: registry40, NATIVE4/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance is complete through CR3. Existing batches keep their old pins.
-Current accepted exporter presentation baseline is814af45; raster acceptance remains separate.
+Current accepted exporter presentation baseline is774ed6b; only the reviewed D01
+repair image is additionally accepted, not full corpus or universal raster quality.
 Root owns this registry,
 corpus-testing.md and coordination receipts. Source workers keep source-app repos
 tracked read-only; actual installed build revisions remain unknown where unproved.
@@ -123,7 +124,12 @@ selector values, collection/preferences, auth/access and production mutations ar
 All short temp roots below share:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/`.
 
-- Current export: `uib-CP7-rxt9mdyg/uiblueprint-814af45`,
+- Current export: `uib-CP8-qseai8mh/uiblueprint-774ed6b`, SHA256
+  `a5e6a6310a3b515db475d27aeedeba5507ac8bb3935c77943ff1f08e6d84040c`.
+  [CP8 acceptance](receipts/corpus-state-attribution-review8.md): both continuing
+  critics accept caller-state attribution and one D01; exact3case machine replays.
+  Older in-flight batches retain their pinned814af45 protocol.
+- Prior export: `uib-CP7-rxt9mdyg/uiblueprint-814af45`,
   SHA256 `37f15bfd012cdcd91722a0fd11830d92d51ba8db5154677358f04eb437623101`.
   [CP7 receipt](receipts/corpus-document-frame-repair7.md): frame assignment and
   unchanged numerical/ownership evidence accepted through both critics; one raster
@@ -424,7 +430,12 @@ image1536×1024 hash `1e8354659b2ee3322bcc0af2d5f3e96f7540e90126b520b59cc3ec1996
 Same CV2/CT2 now inspect the changed artifact before builder narrative. Send them
 corpus-state-attribution-repair8.md and author-review.json only after their initial
 observations; then reconcile final verdict without redoing unaffected checks.
-CP8's single repair image awaits ledger inclusion with this review disposition.
+Both critics completed that ordering and accepted bounded source/presentation plus
+the reviewed D01. Header redundancy is not a new per-target state or mandatory
+failure; CT2 rejects the author's stronger blanket nonprinting interpretation.
+The [acceptance receipt](receipts/corpus-state-attribution-review8.md) preserves
+exact reviewer turns and evidence. CP8's one image now enters the repair bucket.
+No further CP8 attempt or source repair is needed on current evidence.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
