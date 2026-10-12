@@ -10,15 +10,15 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:139; unresolved upper bound142; conservative remainder861.**
+**Proved eligible case count:144; unresolved upper bound147; conservative remainder856.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty completed primary batches produced355 evaluated images; CW58 is the one
+Twenty-one completed primary batches produced377 evaluated images; CW58 is the one
 complete primary-case image independently accepted by both continuing critics.
-Their351 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not355 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their373 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not377 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -43,8 +43,9 @@ CN-B10 adds10 qualified fixture-origin cases, bringing it to117;
 CN-B11 adds7 qualified fixture-origin cases, bringing it to124;
 CW-B7 adds2 demo-origin Web states, bringing it to126;
 CN-B12 adds9 fixture-origin states, bringing it to135;
-CN-B15 adds4non-fixture Simulator states, bringing it to139.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1 images (41 total).
+CN-B15 adds4non-fixture Simulator states, bringing it to139;
+CN-B13 adds5fixture states, bringing it to144.
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=2 images (43 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -76,7 +77,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
-| CP9 |same exporter owner|source302f787 and2images ready; author finishing|Two same critics inspect neutral B12-03/D03 and AM-translation/D02 before author narrative; source/raster acceptance separate |
+| CP9 |same exporter owner|F1 wording/concision correction running|302f787 data protection passes;AMfragment passes/B12fails; one mandatory source-binding wording fix, CW40 growth usability concern |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -98,16 +99,16 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
-| CN-B13 |same Debug source owner|17sheets evaluated; kids dependency released|CN-B14 release delivered; producer reacquires fresh lane for one remaining kids request before cleanup |
+| CN-B13 |same Debug source owner|investigation accepted; archive after handoff|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline novelty/generation|6candidates captured, own runtime/desktop/build dependency released; final count pending |
-| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archive after handoff|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
+| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP9 initial independent observation|2changed Native fragments; source-faithful membership/readability/unknowns, no author narrative |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP9 initial independent observation|Same images plus bounded source/five replay invariants; no full audit or author narrative |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP9 reconciled; retained for changed artifact|AMtwo-row fragment passes;B12adds unassigned controls, fails; unnamed visual binding unproved |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP9 reconciled; F1 recheck pending|Data/limits/public projection pass; source-path wording overclaims visual binding; CW40 growth unresolved |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -471,6 +472,20 @@ CV2/CT2 for initial source/image/assignment observations. Author receipt/finding
 stay withheld until each initial report. CT2 additionally checks the bounded parent-
 context/source-text/budget changes and five replay packages; no broad audit.
 Candidate is not accepted yet; existing source batches keep774ed6b.
+Both critics completed initial→author reconciliation. CV2 final
+01a12dd5-d68d-7d50-b592-4a70d4b4107d and CT2 final
+01a12dd9-97c3-7243-80fe-4852d1512a1c accept AM-translation/D02; B12-03/D03 still
+adds unassigned Actors/Previous/Next/Play and fails. Unnamed source-to-pixel binding
+is unproved, including the author's source-title interpretation. CT2 independently
+preserves five replay invariants, existing public projection, bounded append and
+cyclic-input refusal. Required wording repair: hierarchy gives structural context,
+not proof it identifies pixels in a reference. CW40/D01 grows22525→51424chars with
+111context lines; a real concision concern, not a proven package-budget violation
+or new magic threshold. Same owner now fixes wording and redundant context within
+the existing user concise-prompt scope, preserves data/controls and freezes F1.
+One new CW40/D01 image allowed only if changed assignment warrants it; no B12 reroll
+or AM rerender solely for provenance wording. Old two images stay302f787. Same CT2
+checks only remaining source issues; CV2 only any newly changed image. No new agents.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
@@ -527,7 +542,7 @@ chat or stand paths), to expand beyond the known catalog without duplicate forms
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at139proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at144proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 CW3 found an existing loopback subscription demo with fictional fixed data and
 local-only toggle callbacks, two new meaningful states. There is no wider ready
@@ -587,6 +602,12 @@ free and borrowed-build dependency released (thread cursor:148). Root delivered
 that dependency to CN-B13; its last fresh kids request no longer waits for the
 consumer's offline generation turn. Cleanup still waits for producer's own retry
 and all actual consumers; never delete images/containing directories.
+CN-B13 terminal `uib-CN-B13-4npljmu2/HANDOFF.md`:8seeds→5newfixture cases,
+22first images/0rerolls,14scoped passes/8FAIL,288source dimensions,0full approvals.
+Fresh kids108-node source qualified with byte-identical PNG; first empty-output
+attempt preserved.3duplicates/text-only variants excluded. Shared app/executable
+now retired after producer+consumer release;68image assets/containers and ancestors
+retained, user63105 preserved. No repo changes. Export774ed6b/Native1af633c fixed.
 CN-B15 reuses B6/B8 mobile owner and installed devices, adding two supported
 untested intermediate Dynamic Type categories (prefer extra-large/accessibility-
 medium equivalents verified by actual tooling). Up to12meaningful reflow/clipping/

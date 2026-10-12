@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B15 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B13 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**139 proved eligible cases; range139–142 pending three named uncertainties.**
-The planning remainder is861 cases, potentially858 if all three are established.
-There are47 Web and92 Native cases in the proved minimum. Forty-seven are explicitly
+**144 proved eligible cases; range144–147 pending three named uncertainties.**
+The planning remainder is856 cases, potentially853 if all three are established.
+There are47 Web and97 Native cases in the proved minimum. Fifty-two are explicitly
 fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:355 primary images =351 first outputs +4 rerolls;
-41 separate repair-validation images;396 images in total. Extra sheets, repaired
+Image buckets:377 primary images =373 first outputs +4 rerolls;
+43 separate repair-validation images;420 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -41,7 +41,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CW-B7 |2|2|One existing isolated demo family/two states; caller refusals preserved, no rerolls |
 | CN-B12 |9|39|cold-paused duplicates B10 loading; other9 actual state/layout differences qualified |
 | CN-B15 |4|12|2families in intermediate Dynamic Type categories;7insufficient-novelty candidates excluded |
-| **Primary subtotal** |**138**|**355**| |
+| CN-B13 |5|22|3duplicates/text-only variations excluded; original failed attempts retained, fresh kids source qualified |
+| **Primary subtotal** |**143**|**377**| |
 
 ## One first completion in the repair bucket
 
@@ -65,7 +66,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in139
+## Three unresolved cases, not counted in144
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -116,10 +117,11 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CW-B7 | `uib-cw-b7-wLKJHA/handoff.json` |
 | CN-B12 | `uib-CN-B12-kh2ysteb/HANDOFF.txt` |
 | CN-B15 | `playphraseme-cn-b15-w5v_6mto/handoff.json` |
+| CN-B13 | `uib-CN-B13-4npljmu2/HANDOFF.md` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
-Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1; CP5=0.
+Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=2; CP5=0.
 Accepted repository receipts retain their source revisions and artifact roots.
 
 CN-B9 completed9 attempted configurations/8 distinct qualified fixture compositions
@@ -187,3 +189,13 @@ but source revision remains unknown. Both categories restored tolarge, portrait,
 original destinations/query/pause; iPad current phrase changed via Reels return,
 explicitly not exact initial-phrase restoration. Own apps/mirrors/tabs/devices
 stopped/shutdown; other owners and all images retained, repositories unchanged.
+
+CN-B13 adds5new fixture states from8assigned seeds,9captures incl fresh kids retry,
+7canonical partial observations and2empty-output attempts (not typed failures).
+22first sheets/0rerolls,14scoped author passes/8failures,0full approvals.288source
+dimensions verified; rendered138→128 error remains.3duplicates/text-only variants
+excluded. Native1af633c/export774ed6b/density30 unchanged. Both producer/consumer
+runtime released; shared executable retired by guarded non-image cleanup, all68
+image assets/containers/ancestors remain. CP9 adds2repair images only: named mobile
+fragment passes both critics, unnamed B12 fragment fails; source candidate302f787
+still awaits evidentiary wording repair and concision reconciliation.
