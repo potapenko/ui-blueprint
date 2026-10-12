@@ -59,7 +59,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
 | CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
 | CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
-| CN7 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only preview inventory requested|Existing SwiftUI PreviewProvider/targets/packages outside129AppScenario catalog; no harness, build, runtime or edits |
+| CN7 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only inventory accepted|453declarations, isolated candidate families, no UI package/gallery; [handoff](receipts/corpus-native-advice.md#cn7--existing-app-target-previews-2026-10-12) |
+| CN8 |01a12e68-26dc-7ba2-ab7a-6f8745f9e78a|host waitingOnApproval|One existing Mac Download Preview via Xcode Canvas; pending operation text unavailable, user clarification requested; no bypass |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|accepted read-only discovery|One existing subscription demo/two local states; ordinary analytics remains; [handoff](receipts/corpus-web-advice.md#cw3--existing-isolated-preview-discovery-2026-10-12) |
 | CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived after review handoff|2demo states/2first images/0rerolls;both critics acceptCW58/rejectCW59 focus loss; [review](receipts/corpus-web-demo-review7.md) |
@@ -107,7 +108,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
-| CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archive after handoff|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
+| CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -551,6 +552,15 @@ app exhaustion. CN7 asks the explicitly authorized Mac advisor about EXISTING
 SwiftUI previews/component examples beyond AppScenario IDs: exact source/target,
 isolation and supported rendering route, source-only. No new harness, project scope,
 build, UI or mutation; this does not resume old CN5 or replace direct human work.
+CN7 now confirms453Preview declarations, not453cases, with isolated Phone Favorites,
+Tablet Grammar, Mac Download and passive-notice examples. No importable UI gallery
+or ready app-target renderer beyond unqualified Xcode Canvas. CN8 is a fresh
+finite diagnostic on one existing Mac Download unavailable Preview, original
+source/project/settings read-only, no custom harness/private APIs/new devices.
+Its host reports waitingOnApproval after completed cua.getState(); pending operation
+and reason are not exposed in read_thread. Root asked worker/user for exact card
+text, no rejection reason inferred or alternate backend used. Keep same handle;
+CA8 proceeds independently. A host gate does not prove preview tools unavailable.
 CA7 terminal `uib-CA7-2ky1vki4/handoff.json`: fresh request
 121aae14d17c49c8bdecc141b03282ae with Role/Name/Bounds/Value yields69nodes,
 230403bytes, canonical-valid partial/exit4. StaticText handles62/64/67 report typed

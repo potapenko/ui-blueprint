@@ -1,5 +1,35 @@
 # Native source advisor handoffs
 
+## CN7 — existing app-target previews, 2026-10-12
+
+Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 terminal
+01a12e22-e720-79c3-b2ca-e8bd2d220fb1, source-only on c7d8e3d/beta-01.
+453Preview/PreviewProvider declarations:187Mac,117Phone,143Tablet,6Learner;
+not453unique or rendered cases. No UI Preview in Packages or dedicated gallery
+target found. App-target Xcode Canvas is an existing entry, not runtime proof.
+Package-based simulator preview tooling does not directly run these app targets.
+
+- [Phone Favorites results](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemePhone/Application/Views/PhoneFavoritesResultsView.swift:300):
+  5states in3Preview declarations, fixed items/paging, empty callbacks, no AppModel.
+  Some states share one VStack; neither wrappers nor grouped states count twice.
+- [Tablet Grammar](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Search/Learner/Grammar/TabletGrammarPageView.swift:193):
+  home+12tense pages, fixed English and empty navigation/search callbacks, often
+  ScrollView520×760. Distinct geometry remains unverified; no double-counted tables.
+- [Mac Download](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/DownloadVideo/DownloadVideoPreview.swift:60):
+  4declared states, example.invalid, memory option store, unavailable service and
+  no-op pause. No real download/export actions needed or authorized.
+- Phone Download nil-model unavailable and Russian low-storage card are additional
+  source candidates, not proof of actual system sheet/app-shell geometry.
+
+Tablet Vocabulary filters/details use makeAppModel production composition and
+UserDefaultsDataStore; excluded from this isolated-preview slice. Empty view
+callbacks alone do not establish initializer/lifecycle isolation.
+Source route: platform-shells r7, ACP-3/list_scenarios, learner/Favorites/state,
+shared download@4, low-storage@1 and native-ui-tools@1. Original files/project dirty
+state untouched. No build/UI/network/mutation or new corpus case.
+Consumer CN8 qualifies one existing Mac unavailable Download Preview via supported
+Xcode Canvas, without a new harness or source/project/settings changes.
+
 ## CN4 — additional Native mobile families, 2026-10-11
 
 Root accepted this source-only handoff. Recipes CN4-1 through CN4-8 are new
