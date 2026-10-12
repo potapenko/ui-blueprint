@@ -299,3 +299,14 @@ Ownruntime/devicesshut down, sameidentity DeviceHub killed only after SIGTERMfai
 otherowners protected. No trackedsourcechanges; nonimage transientcleanup verified.
 Both current critics inspect only iPadSearchG01, phoneClipD04/D05 for responsible
 layer and scoped acceptance; do not infer verdicts for the other23images.
+Both reviews completed: CV2turn01a131e9-42c9-7621-be40-a04d2d19dc6e and CT2
+turn01a131e9-43b9-79f1-b6d3-17a80f56e4cf agree on G01FAIL/D04scopedPASS/D05FAIL.
+G01 assigns no dimensions but raster places AX-sized arrows on painted controls;
+one width68 uses the source height67.5 rather than width158.5. Boxed suggestions,
+missing keyboard legends and yellow highlight also violate the assignment. Literal
+prompt and caller scope explicitly separate AX/paint and visible coverage, so no
+compiler conflict is established. D04 preserves literal i and≈38×54pt. D05 prints
+Shift50 instead of≈50 for49.666666666666664, unlike exact Delete50; other7labels
+remain correct. Actual-size readability supports D04's scoped pass despite requested
+resolution mismatch. Lower output resolution alone is not an added failure gate;
+no full26-image/package acceptance or generic compiler-repair mandate follows.

@@ -149,7 +149,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B17 |same mobile source owner|finite cycle accepted;3witness reviews complete|5qualified keyboard scenes/43first images;21author contentPASS/22FAIL,284of288labels; both critics2FAIL/1scopedPASS on3witnesses;155cases total |
-| CN-B18 |same mobile source owner|finite cycle accepted; archived|3new states/26first images,14author contentPASS/12FAIL,201of212labels; CP12 pin before allcalls; critics inspect3witnesses;158cases total |
+| CN-B18 |same mobile source owner|finite cycle accepted;3witness reviews complete|3new states/26first images,14author contentPASS/12FAIL,201of212labels; both critics G01FAIL/D04scopedPASS/D05FAIL;158cases total |
 | CN-B19 |Mac source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|full-cycle lookup batch dispatched|Mac Actor/Director/Reels; up to7new states, temporary public drafts and verified restore, CA8+CP12; no counts yet |
 | CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|full-cycle lookup batch dispatched|Phone/iPadActor and iPadDirector; up to8new states, exact CN9 safe paths, CP12; no counts yet |
 | CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|full-cycle lookup batch dispatched|CW4 D1/D2/M1/M2/M3, up to5actual states; ownIAB nativeDPR2, safe restore; no counts yet |
