@@ -1014,7 +1014,9 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     assert!(prompt.contains("Object button: Button"));
     assert!(prompt.contains("window-sized semantic Play/Search region"));
     assert!(prompt.contains("Measurement context 1: AccessibilityBounds;"));
-    assert!(prompt.contains("AX FRAME MEASUREMENT (not painted UI) button"));
+    assert!(
+        prompt.contains("AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"button\"")
+    );
     assert_eq!(
         prompt
             .matches("AX measurement coordinates are NEVER artwork placement")
@@ -1041,6 +1043,61 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     assert_eq!(
         dims[0]["dimensions"][0]["anchors"][0]["frame_kind"],
         "accessibility_bounds"
+    );
+    for label in ["x", "?", "ID", "a \"quoted\" label"] {
+        let mut named = brief.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut named.views[0].source else {
+            panic!()
+        };
+        let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+            panic!()
+        };
+        *state = Availability::Known {
+            value: Value::Text(label.into()),
+        };
+        let p = compile(&named, limits()).unwrap();
+        let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        let caption = serde_json::to_string(&format!("button {label:?}")).unwrap();
+        assert!(text.contains(&format!("EXACT OUTSIDE CAPTION {caption}: WIDTH")));
+        for line in text.lines().filter(|line| {
+            line.starts_with("AX FRAME MEASUREMENT (") || line.starts_with("AX FRAME EXTENT (")
+        }) {
+            assert!(line.contains("EXACT OUTSIDE CAPTION \""));
+        }
+        let mut exact = limits();
+        exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+        assert!(compile(&named, exact).is_ok());
+        exact.max_output_bytes -= 1;
+        assert_eq!(
+            compile(&named, exact).unwrap_err(),
+            ExportError::OutputLimit
+        );
+    }
+    let mut private = brief.clone();
+    let SourceInput::Observed {
+        snapshot,
+        public_text_fields,
+    } = &mut private.views[0].source
+    else {
+        panic!()
+    };
+    public_text_fields.clear();
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Text("CAPTION_PRIVATE_CANARY".into()),
+    };
+    let p = compile(&private, limits()).unwrap();
+    assert!(
+        p.files()
+            .values()
+            .all(|bytes| !String::from_utf8_lossy(bytes).contains("CAPTION_PRIVATE_CANARY"))
+    );
+    assert!(
+        std::str::from_utf8(&p.files()["prompt.txt"])
+            .unwrap()
+            .contains("EXACT OUTSIDE CAPTION \"button\": WIDTH")
     );
 }
 
@@ -1390,7 +1447,7 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             assert!(
                 prompt.lines().any(
                     |s| s.starts_with(if kind == FrameKind::AccessibilityBounds {
-                        "AX FRAME MEASUREMENT (not painted UI) button:"
+                        "AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"button\":"
                     } else {
                         "DIMENSIONED RECTANGLE button:"
                     }) && s.contains(if kind == FrameKind::PaintBounds {

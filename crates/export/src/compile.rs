@@ -1250,11 +1250,15 @@ fn local_measures(
                     &format!(
                         "{} {}: WIDTH {} {} {}; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to this frame's opposite borders.\n",
                         if accessibility {
-                            "AX FRAME MEASUREMENT (not painted UI)"
+                            "AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION"
                         } else {
                             "DIMENSIONED RECTANGLE"
                         },
-                        component_name(v, a),
+                        if accessibility {
+                            bounded_compact_json(&component_name(v, a), limit)?
+                        } else {
+                            component_name(v, a)
+                        },
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
                         if enclosing && !accessibility {
@@ -1300,11 +1304,15 @@ fn local_measures(
                 &format!(
                     "{} {}: {:?}→{:?}, {} {}.\n",
                     if d.anchors[0].frame_kind == FrameKind::AccessibilityBounds {
-                        "AX FRAME EXTENT (not painted UI)"
+                        "AX FRAME EXTENT (not painted UI), EXACT OUTSIDE CAPTION"
                     } else {
                         "RECTANGLE EXTENT"
                     },
-                    component_name(v, a),
+                    if d.anchors[0].frame_kind == FrameKind::AccessibilityBounds {
+                        bounded_compact_json(&component_name(v, a), limit)?
+                    } else {
+                        component_name(v, a)
+                    },
                     d.anchors[0].edge,
                     d.anchors[1].edge,
                     display_number(value),
@@ -2156,7 +2164,10 @@ const MEASURED_FRAME_GUIDANCE: &str = "Draw only the assigned empty frame sketch
 const AX_GUIDANCE: &str = r#"AX FRAME MEASUREMENT or AX FRAME EXTENT is a separate measurement sketch, not a picture of a control.
 Draw an EMPTY WHITE dashed rectangle. Its interior is only flat BLUE: NO text,
 icon, button, word, glyph or UI reconstruction inside it. Put “AX frame” and the
-semantic object name OUTSIDE BELOW the sketch; width ABOVE, height LEFT.
+EXACT OUTSIDE CAPTION below the sketch; width ABOVE, height LEFT.
+Use that exact caption for every reference to its measured object,
+without an explanatory suffix or category.
+Recorded state captions remain separate.
 This ABOVE rule applies to every AX sketch including enclosing/window frames.
 Keep sketches separate from artwork; never use AX coordinates to rearrange artwork.
 Never turn an AX rectangle into a new painted button, visible glyph, text-field
