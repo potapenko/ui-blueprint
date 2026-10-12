@@ -36,17 +36,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:174; unresolved upper bound177; conservative remainder826.**
+**Proved eligible case count:176; unresolved upper bound179; conservative remainder824.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty-eight completed primary batches produced496 qualified evaluated images;
+Twenty-nine completed primary batches produced498 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their492 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not496 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their494 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not498 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -79,10 +79,11 @@ CN-B17 adds5keyboard states, bringing it to155;
 CN-B18 adds3textcategory×keyboard states, bringing it to158;
 CW-B9 adds4lookup/overflow states, bringing it to162;
 CN-B19 adds6Mac lookup states, bringing it to168;
-CN-B20 adds6mobile lookup states, bringing it to174, with a runtime incident retained.
+CN-B20 adds6mobile lookup states, bringing it to174, with a runtime incident retained;
+CW-B10 adds2Web Actor states, bringing it to176.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1 images (49 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:549counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:551counted generated images
 overall, with no increase to eligible cases or the49repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -102,7 +103,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN12 |same Mac advisor|read-only identity search complete; ID unresolved|No retained/passive/wiredcopy/log ID; no unauthorized beyond-free lookup, no writes. Narrow patch not ready |
 | CN13 |Mac source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|source check complete; proposed changes unapproved|No fully isolated livebootstrap; scenario fixtures still share window persistence; no new runtime allowed |
 | CN14 |same Mac advisor|normal-save plan prepared; awaiting_authority|User choice pending for full live-session lifecycle save, including normal side effects; no UI/prefs action until explicit response |
-| CN8 |01a12e68-26dc-7ba2-ab7a-6f8745f9e78a|host waitingOnApproval|One existing Mac Download Preview via Xcode Canvas; pending operation text unavailable, user clarification requested; no bypass |
+| CN8 |01a12e68-26dc-7ba2-ab7a-6f8745f9e78a|runtime withdrawn; turn interrupted, archive waiting_resource|Bootstrap isolation unproved; no further Preview run. Host idle/interrupted; archive refuses active writer, no Codex UI workaround |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|accepted read-only discovery|One existing subscription demo/two local states; ordinary analytics remains; [handoff](receipts/corpus-web-advice.md#cw3--existing-isolated-preview-discovery-2026-10-12) |
 | CW4 |same Web advisor|accepted source-only consultation|5desktop/mobile lookup recipes with complete restore; Actor excluded; [handoff](receipts/corpus-web-advice.md#cw4--temporary-filter-lookup-states-2026-10-12) |
@@ -130,6 +131,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|5e071f5 bounded accepted; archived|Both critics accept source hints/AM image, reject CTEXT2 wrong-column layout; [receipt](receipts/corpus-arrangement-repair10.md) |
 | CP11 |same exporter owner|7f767d5 bounded accepted; archived|Both critics accept formatting/machine preservation; newCW62stillFAIL for unassigned≈791/coordinate inventory; [receipt](receipts/corpus-construction-presentation11.md) |
 | CP12 |same exporter owner|172a080 bounded+oneimage accepted; archived|Both critics accept literal button i caption and≈38×54pt; machine/owner/privacy/limits unchanged; [receipt](receipts/corpus-literal-captions12.md) |
+| CP13 |same exporter owner, restored|full-cycle wrapper-frame wording task running|CW69 wrapper98×24 is not popup241; remove unsupported enclosing-shape implication, preserve exact owner/values; one new image, no live apps |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -163,7 +165,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN-B19 |Mac source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|6partial source cases accepted; images remain failed|26firstimages,305source dimensions; CT2 confirms actualActor geometry before truncated background; field-failure subcauseunknown; CN10 checks persistence/restoration effect |
 | CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|evaluation complete with runtime incident; archived|6cases/6images; both critics2phonePASS/4iPadFAIL,42labels correct; incident/restorationgap remain, no cleanruntime pass |
 | CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|cycle accepted; archived, reviews complete|4new states/4firstG01 retain mandatory issues; CW66 content/numbers pass but explicit annotation-plan residual; no compiler conflict;162cases total |
-| CW-B10 |same Web source owner, restored|full-cycle own-tab Actor batch running|Two qualified narrowed/empty states, nativeDPR2 captures and own tabs closed; canonical export/first images pending, no counts yet |
+| CW-B10 |same Web source owner|cycle accepted; archived, both reviews complete|2new states/2firstimages/2FAIL;37frames/18dimensions; wrapper owner correct, narrow wording risk feedsCP13;176cases total |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |

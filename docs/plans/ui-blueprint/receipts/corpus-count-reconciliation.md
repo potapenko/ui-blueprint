@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CN-B19/CN-B20 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B10 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**174 proved eligible cases; range174–177 pending three named uncertainties.**
-The planning remainder is826 cases, potentially823 if all three are established.
-There are54 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;117 are non-fixture observations. Fixture UI is
+**176 proved eligible cases; range176–179 pending three named uncertainties.**
+The planning remainder is824 cases, potentially821 if all three are established.
+There are56 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;119 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:496 primary images =492 first outputs +4 rerolls;
+Completed-batch image buckets:498 primary images =494 first outputs +4 rerolls;
 49 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-549 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+551 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -70,7 +70,8 @@ and AX/status meaning. [Receipt](corpus-literal-captions12.md), neutral index in
 | CW-B9 |4|4|D1/CW63 duplicates CW54;4actual inner/outer scroll and lookup states |
 | CN-B19 |6|26|Ordinary Debug composition, not fixture launch; partial target geometry independently confirmed;1Director duplicate excluded |
 | CN-B20 |6|6|4Actor cases and2Director states; failed scroll candidate excluded, actual selection/recovery incident retained separately |
-| **Primary subtotal** |**173**|**496**| |
+| CW-B10 |2|2|Actual Actor one-row and successful empty; initial20row scope is not counted or oldCW02 relabelled |
+| **Primary subtotal** |**175**|**498**| |
 
 ## One first completion in the repair bucket
 
@@ -94,7 +95,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in174
+## Three unresolved cases, not counted in176
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -153,6 +154,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CW-B9 | `uib-cw-b9-CyxypA/handoff.json` |
 | CN-B19 | `uib-CN-B19-bway_om4/HANDOFF.md` |
 | CN-B20 | `playphraseme-cn-b20-xjpgtodg/handoff.json` |
+| CW-B10 | `uib-cw-b10-b41ZcL/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -409,3 +411,22 @@ emitted annotation adds a sentence terminator; no parsed field-value rewrite or
 unique cause is proven. Future inputs delimit exact draft strings explicitly.
 Review at actual output sizes gives no resolution-only failure. These image passes
 do not qualify the incident, restore gap, source ownership or pixel mapping.
+
+CW-B10 adds2Web Actor states:20ready rows become1TomHardy row or successful[];
+popup height590.1328125 becomes132.5 or105.40625 at fixed240.9375width. OldCW02
+occluded source remains excluded. Two own guest tabs, matching HTTP200 responses
+settled before capture, then exact tabs closed without Actor/checkbox/URL/mainquery
+changes. Actor model/view loaded scripts match local compiled bytes and reviewed
+owners; no whole-bundle equivalence claim or zero normalbootstrap effects. Native
+PNG2560×1440/DPR2,37frames/18required dimensions/4analysis requests, CP12 172a080.
+Two firstG01/0rerolls, author and both critics2FAIL. Manifest SHA256
+`e83d47251c6950bab363ec87421fdd8db166348c6d6fb7a8c8ba6355dea11281`.
+CV2turn01a13282-a6ae-70d1-abea-c6de0c2a2e5d and CT2
+turn01a13282-a7a6-7583-a9b1-11c9878a40b2 confirm CW68's missing identified rootpair,
+focus/caret loss and extra measurement table; CW69 attaches≈98 to the≈241popup and
+changes checkbox silhouette. Correct source: N000 wrapper98.15625×24.0859375 owns
+M0001/M0002, popupN006 is240.9375×105.40625. No false numerical source/anchor is
+established. CT2 identifies a bounded wording risk: BELOW the enclosing shape is
+selected for non-control withchildren without geometric enclosure proof. CP13
+clarifies wording only; it may not substitute popup/union geometry. All artifacts
+retained, source repos unchanged. Actual1536×1024, no resolution-only gate.
