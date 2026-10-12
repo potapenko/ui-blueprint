@@ -10,14 +10,14 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:124; unresolved upper bound127; conservative remainder876.**
+**Proved eligible case count:126; unresolved upper bound129; conservative remainder874.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Seventeen completed primary batches produced302 evaluated images,0 fully independently accepted.
-Their298 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not302 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Eighteen completed primary batches produced304 evaluated images,0 fully independently accepted.
+Their300 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not304 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -39,7 +39,8 @@ their original protocol. Final cross-bucket check adds CP1/A06 exactly once and
 excludes the unchanged historical A01 baseline, giving99 proved cases before CN-B9.
 CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107;
 CN-B10 adds10 qualified fixture-origin cases, bringing it to117;
-CN-B11 adds7 qualified fixture-origin cases, bringing it to124.
+CN-B11 adds7 qualified fixture-origin cases, bringing it to124;
+CW-B7 adds2 demo-origin Web states, bringing it to126.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1 images (41 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -55,7 +56,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|accepted read-only discovery|One existing subscription demo/two local states; ordinary analytics remains; [handoff](receipts/corpus-web-advice.md#cw3--existing-isolated-preview-discovery-2026-10-12) |
-| CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291, restored|dispatched full two-state cycle|Existing loopback subscription demo enabled/disabled; verify fixture mount before local toggle; source repos read-only, CP8 frozen |
+| CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; image critics pending|2demo states/2first images/0rerolls;1authorPASS/1FAIL;27frames/8labels, own runtime restored |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
 | CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
@@ -98,8 +99,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP8 reconciled; retained|Bounded D01 visual pass; extra whole-view header is minor editorial residual |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP8 reconciled; retained|Source/prompt and D01 content pass; no new mandatory failure, no global reliability claim |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CW-B7 independent initial observation|Two new Web demo images/source/assignment, no author narrative yet; CP8 stays accepted |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CW-B7 independent initial observation|Same2images/data/prompt, no unchanged compiler audit; CP8 stays accepted |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -495,7 +496,7 @@ chat or stand paths), to expand beyond the known catalog without duplicate forms
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at124proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at126proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 CW3 found an existing loopback subscription demo with fictional fixed data and
 local-only toggle callbacks, two new meaningful states. There is no wider ready
@@ -505,6 +506,16 @@ CW-B7 receives the complete two-state source→geometry→prompt→ImageGen→ev
 task after verifying actual fixture mount; normal app/remount stops dependent clicks.
 Source pin c23ef963, exact runbook/entry/fixture in the CW3 handoff. CN-B12 continues
 independently. Other discovered startup/test helpers remain outside this packet.
+CW-B7 terminal `uib-cw-b7-wLKJHA/handoff.json`, manifest hash
+`3a4287f93b6fcd343d35c476f0b7456093d537667f3a1ee3d873da5759161feb`:
+2qualified demo states/2first images,1authorPASS/1FAIL,27frames/8labels/4relations.
+Source and mounted local atom callbacks qualified, no toggle requests recorded;
+normal page-load analytics remains possible. Two initial metadata slash refusals
+preserved, equivalent caller wording corrected, original geometry/PNG unchanged.
+Demo restored/tab closed/repos unchanged. Same two critics now inspect neutral
+CW58/CW59 images and packages before handoff/manifest/sheet-reviews author claims;
+root supplies those only after each initial observation, then final reconciliation.
+Actual image sizes1469×1071 and1536×1024; frozen774ed6b. No billing acceptance.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
