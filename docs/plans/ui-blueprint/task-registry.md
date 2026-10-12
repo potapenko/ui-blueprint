@@ -81,6 +81,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
+| CTEXT1 |same exporter owner, restored|one immutable CA8 D03 generation dispatched|Accepted new static data through unchanged7723f09/approved package; repair-validation only, no code or new case |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -89,8 +90,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CA6 |same CA owner01a12b6a-9746-7600-830d-b973f7b8e30b|diagnosis accepted|3AXTitles already known but export-redacted;3StaticText values unrequested, no complete request-only export solution |
 | CA7 |same CA owner|runtime feasibility accepted|One69node/230403byte partial observation;3static Text values known, Name/Title NoValue; no export or code changes |
-| CA8 |same CA owner|f26e121 accepted_with_residual; archive after handoff|NATIVE5/static-text1/registry41; explicit role-limited text/private-default proof accepted through [CR4](receipts/corpus-native-static-text-review.md) |
-| CR4 |reviewer01a12c83-017a-7b42-b657-3464f9a773dc|accepted_with_residual; archive after receipt|270independent assertions/95records/3inspect reproductions/2exact exports; no mandatory gap in scope |
+| CA8 |same CA owner|f26e121 accepted_with_residual; archived|NATIVE5/static-text1/registry41; explicit role-limited text/private-default proof accepted through [CR4](receipts/corpus-native-static-text-review.md) |
+| CR4 |reviewer01a12c83-017a-7b42-b657-3464f9a773dc|accepted_with_residual; archived|270independent assertions/95records/3inspect reproductions/2exact exports; no mandatory gap in scope |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CCOUNT1 |same CD1 owner|accepted; archived|99proved cases,99–102 range; CP1/A06 first completion counted once, historical A01 baseline excluded |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
@@ -602,6 +603,12 @@ gap in this bounded data/privacy/capability scope. [Acceptance](receipts/corpus-
 retains limits; current Native bundle is `uib-CA8-lbe7mxfu/tools`, no ImageGen proof.
 The three static strings are real source content, not paint/visibility/mapping or
 semantic Name. Existing1/1 slash filtering and rawValue/Title redaction remain.
+CTEXT1 uses immutable `uib-CA8-lbe7mxfu/approved-package/prompt-D03.txt` and source.png
+for exactly1first generation/evaluation, no metadata/prompt/source changes. This
+checks improved source data on a represented UI state; repair-validation bucket
+only, not another case or a controlled A/B causal claim. Old source failures remain.
+Writer verifies actual membership/known text/unknowns and preserves privacy/frame
+limitations; no additional raw Value/Title approval, source capture or code edits.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
