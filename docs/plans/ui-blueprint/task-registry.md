@@ -84,7 +84,7 @@ with no increase to eligible cases or the45 qualified repair-validation images.
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
 | CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
-| CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, CV2/CT2 review running|Qualified native PNG,1first D03; author4texts/9items correct, layout fails; not a new case |
+| CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, both critics agree|Qualified native PNG,1first D03;4texts/9items correct, layout fails; no demonstrated literal compiler defect; not a new case |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -634,6 +634,20 @@ placement and simplified chevrons. G01/D01/D02 unrendered by this one-sheet pack
 Same CV2/CT2 independently review only changed D03; no author verdict supplied.
 Own runtime/reservation released;14324non-image build files removed,68image assets
 and ancestors retained. Sources unchanged, source owner archived. Corpus stays147.
+CV2 turn01a12e8d-3504-7550-b031-1374572064b6 and CT2
+turn01a12e8d-362d-7410-a428-714d9d56f928 independently confirm all9members/4texts,
+readability, no extra controls or invented dimensions, with source/semantic-name
+and unknown-mapping boundaries preserved. Both reject one-row flattening of the
+source's multi-row filters/spinner, contrary to the literal preservation instruction.
+No concrete compiler defect is demonstrated; no speculative patch or reroll issued.
+CV2 read author verdict only after independent observations; CT2 did not use it.
+Critics retained idle for genuinely new evidence. CN8 and CN5B were re-polled:
+same live handles remain waitingOnApproval, no pending-operation detail exposed.
+CW-S2 still needs existing Chrome connection evidence; optional additional-source
+question remains unanswered. No ready new qualified source batch is established.
+Next: continue the same preview/keyboard handles when their host gates release,
+or qualify an explicitly supplied additional source. This is an incomplete goal,
+not an exhaustion claim about all PlayPhrase.me interfaces.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.

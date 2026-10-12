@@ -16,8 +16,9 @@ Image buckets:388 primary images =384 first outputs +4 rerolls;
 45 separate repair-validation images;1 unqualified reference attempt (CTEXT1);
 434 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
-repeat image, no new case: author reports all4texts/9items preserved but layout
-fails. Independent critics are pending. Evidence: `uib-CTEXT2-5kiuvihk/HANDOFF.md`
+repeat image, no new case: both independent critics confirm all4texts/9items
+preserved but layout fails; no concrete literal compiler defect demonstrated.
+Evidence: `uib-CTEXT2-5kiuvihk/HANDOFF.md`
 and its neutral index under the system-temp prefix listed below.
 Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
