@@ -114,6 +114,7 @@ overall, with no increase to eligible cases or the47repair-validation images.
 | CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
 | CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, both critics agree|Qualified native PNG,1first D03;4texts/9items correct, layout fails; no demonstrated literal compiler defect; not a new case |
 | CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|5e071f5 bounded accepted; archived|Both critics accept source hints/AM image, reject CTEXT2 wrong-column layout; [receipt](receipts/corpus-arrangement-repair10.md) |
+| CP11 |same exporter owner, restored|full-cycle construction-presentation improvement dispatched|Repeated CP7/CW62 unassigned exact-number noise; HBP concise/schematic presentation, unchanged machine truth/selected dimensions; at most2new images, controls by exact replay |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
