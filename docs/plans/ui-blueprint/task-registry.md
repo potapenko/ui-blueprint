@@ -84,6 +84,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA3 |same CA owner|accept_with_residual; archived|203933a +c997300 corrected publication; CR1 f0bba6e closes F1 |
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
+| CA6 |same CA owner01a12b6a-9746-7600-830d-b973f7b8e30b, restored|read-only missing-text diagnosis|B12-03 seven unnamed records: distinguish field selection/Native mapping/export projection/source gap; no live calls or changes |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CCOUNT1 |same CD1 owner|accepted; archived|99proved cases,99–102 range; CP1/A06 first completion counted once, historical A01 baseline excluded |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
@@ -486,6 +487,14 @@ the existing user concise-prompt scope, preserves data/controls and freezes F1.
 One new CW40/D01 image allowed only if changed assignment warrants it; no B12 reroll
 or AM rerender solely for provenance wording. Old two images stay302f787. Same CT2
 checks only remaining source issues; CV2 only any newly changed image. No new agents.
+CA6 is a separate bounded read-only source-availability question to the accepted
+Native owner: trace B12-03's actual requested fields/unknown names through frozen
+1af633c mapping and existing public projection. Identify an already supported safe
+request path if any, or exact missing domain/contract evidence. No source title,
+pixel mapping, AXValue semantics or text equivalence is assumed. No live runtime,
+source-app inspection, edits or privacy expansion; this does not reopen accepted
+CA5. Consumer is a concrete next capture configuration or separately scoped repair,
+not an invented semantic-binding workaround in the prompt compiler.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
