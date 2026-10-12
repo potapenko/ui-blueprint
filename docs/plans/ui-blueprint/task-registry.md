@@ -85,6 +85,7 @@ with no increase to eligible cases or the45 qualified repair-validation images.
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
 | CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
 | CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, both critics agree|Qualified native PNG,1first D03;4texts/9items correct, layout fails; no demonstrated literal compiler defect; not a new case |
+| CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, restored|full-cycle arrangement improvement dispatched|Test grounded existing geometry as clearer internal prompt guidance on2qualified families; hypothesis, not established compiler defect |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -648,6 +649,31 @@ question remains unanswered. No ready new qualified source batch is established.
 Next: continue the same preview/keyboard handles when their host gates release,
 or qualify an explicitly supplied additional source. This is an incomplete goal,
 not an exhaustion claim about all PlayPhrase.me interfaces.
+CP10 now supplies independent ready work while those source gates wait. The user
+requested reliable actual prompts, so correct generic preservation wording alone
+does not exhaust improvement. Contract requirement: preserve relative arrangement
+without invented measurements or pixel mapping. Observed evidence: both CTEXT2
+critics reject multi-row flattening despite correct literal preservation wording.
+Agent proposal, not product fact: existing safely exported same-space geometry may
+support clearer internal arrangement guidance. Exporter owns the complete bounded
+implementation/validation task if supported, otherwise returns the exact conflict.
+Spec Basis: registry41→product→EXPORT2/DRAWING-PACKAGE3→PROMPT-A/B2,STYLE2,
+GEOMETRY2,SHEET-PROMPTS1,CLI-EXPORT3,HBP-HUMAN-001; existing source/privacy/model/
+exchange/identity/boundaries and NATIVE5/static-text1 remain protected. Root reread
+prompt/geometry/package/sheet leaves and CP9 receipt; unchanged closure is reused.
+No new input/API/setting/derived semantic relation/collector; no assigning dimensions
+to source-only sheets, no AX-to-pixel claim or raster measurement. Same-space facts
+must remain attributed, unknown/incompatible geometry must remain unknown. Existing
+G01 relation ownership, privacy and exact machine files are preserved. Writer may
+change exporter prompt compilation, directly related focused tests and optionally
+receipts/corpus-arrangement-repair10.md; root owns registry/plan/ledger.
+Consumer is actual CLI output, validated on immutable CTEXT2 D03 plus one genuinely
+different retained qualified source family, one first ImageGen call each, no rerolls.
+Second-reference qualification precedes generation; no CUA/JPEG substitution. Frozen
+7723f09 comparison, focused regressions/machine equality and literal CLI prompts are
+required. All images remain in system temp, source repos read-only, exact checkpoint
+and push on master. This is empirical presentation evolution within CORPUS, not an
+accepted outcome, new case count or guaranteed model fix. No nested delegation.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
