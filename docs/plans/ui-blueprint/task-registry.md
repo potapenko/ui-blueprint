@@ -76,7 +76,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
-| CP9 |same exporter owner, restored|bounded Native fragment task dispatched|New B12 long-copy raw-coordinate/ID/substitution witnesses; settle literal ambiguity and minimally repair if supported, no generic ban loop |
+| CP9 |same exporter owner|source302f787 and2images ready; author finishing|Two same critics inspect neutral B12-03/D03 and AM-translation/D02 before author narrative; source/raster acceptance separate |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -106,8 +106,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CW-B7 reconciled; retained|CW58 pass/CW59 focus failure; extra scope text editorial; no compiler omission |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CW-B7 reconciled; retained|Same verdict; correct literal focus instruction, raster noncompliance; CP8 stays accepted |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP9 initial independent observation|2changed Native fragments; source-faithful membership/readability/unknowns, no author narrative |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP9 initial independent observation|Same images plus bounded source/five replay invariants; no full audit or author narrative |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -463,6 +463,14 @@ explicitly assigned Bangla/Bosnian became whole-list artwork. Root permits this 
 the second affected Native image slot instead of unaffected B12-08, only if generic
 CP9 assignment changes apply; still≤2fresh calls total. B12-08 remains a replay
 control. No assumed common compiler cause, source change or new collector scope.
+CP9 neutral candidate now source302f787dcdd0117a1b8ed51a59c1c38a85457b91,
+index `uib-CP9-67wwptro/neutral-index.json`; frozenCLI hash
+`18d60d845c3bae487e0ec60e22f8d6002df8468d8e5d5622bd978471390ca845`.
+Two1672×941 first outputs, B12-03/D03 and AM-translation/D02, are handed to the same
+CV2/CT2 for initial source/image/assignment observations. Author receipt/findings
+stay withheld until each initial report. CT2 additionally checks the bounded parent-
+context/source-text/budget changes and five replay packages; no broad audit.
+Candidate is not accepted yet; existing source batches keep774ed6b.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
