@@ -87,7 +87,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA4 |same CA owner|accepted diagnostic|No supported existing selection; AXChildren offset0 fills160 nodes before visible cards; AXVisibleChildren feasibility unproved |
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CA6 |same CA owner01a12b6a-9746-7600-830d-b973f7b8e30b|diagnosis accepted|3AXTitles already known but export-redacted;3StaticText values unrequested, no complete request-only export solution |
-| CA7 |same CA owner|one public-fixture Value feasibility dispatched|Fresh C01 long-copy, existing supported Value request only; no code/allowlist/export change or privacy bypass |
+| CA7 |same CA owner|runtime feasibility accepted|One69node/230403byte partial observation;3static Text values known, Name/Title NoValue; no export or code changes |
+| CA8 |same CA owner|scoped static-text capability task dispatched|Register then implement explicit visible_text for safely admitted AXStaticText only; Name/Title/Value/privacy/defaults preserved, independent review required |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CCOUNT1 |same CD1 owner|accepted; archived|99proved cases,99–102 range; CP1/A06 first completion counted once, historical A01 baseline excluded |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
@@ -550,6 +551,25 @@ app exhaustion. CN7 asks the explicitly authorized Mac advisor about EXISTING
 SwiftUI previews/component examples beyond AppScenario IDs: exact source/target,
 isolation and supported rendering route, source-only. No new harness, project scope,
 build, UI or mutation; this does not resume old CN5 or replace direct human work.
+CA7 terminal `uib-CA7-2ky1vki4/handoff.json`: fresh request
+121aae14d17c49c8bdecc141b03282ae with Role/Name/Bounds/Value yields69nodes,
+230403bytes, canonical-valid partial/exit4. StaticText handles62/64/67 report typed
+Text Polarity:/Topic:/public fixture source title; Name/Title remain NoValue.
+Within-observation structure/evidence only; no old identity, pixel/paint binding or
+public-export authority. No exporter/ImageGen call. Own58474/runtime released,
+68image assets/ancestors retained; executable retired before late consumer assignment.
+CA8 now selects a narrow additive Native capability under user CORPUS utility-
+improvement authority: existing visible_text explicitly requested, only exact
+AXStaticText plus existing successful sensitivity/type/ownership admission, sourced
+from its typed string AXValue. It means reported static text content, never current
+pixel visibility/clipping/semantic Name. Role failures/private/nontext/budgets keep
+typed refusals; Raw Value export and AXTitle projection remain unchanged. No new
+fields/flags/engine/schema/host/source-app changes. Register Native/routing delta
+before code, preserve defaults and all current bounds; focused adversarial tests,
+one fresh public live observation and unchanged-exporter explicit-allowlist proof.
+No ImageGen until independent data/privacy/capability review. Root refreshed Native
+acquisition3 and D02/D03/D04/D05/D06/Pilots/Forms/Golden protected closure; host memory,
+actions/benchmark/calibration remain unchanged, not newly implemented or claimed.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
