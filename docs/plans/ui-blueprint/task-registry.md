@@ -86,7 +86,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B10 |same Debug source owner, restored|captures finished; offline export/generation/evaluation|Desktop released; loading Context geometry unresolved, all-hidden duplicate excluded; final case count pending |
-| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|desktop dependency released; full cycle continues|Seven disjoint candidates, same frozen app; takes its own current reservation |
+| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline full cycle continues|Seven captures; own runtime and desktop released, borrowed app hash unchanged; novelty/generation/evaluation pending |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -411,8 +411,11 @@ CN-B10 released desktop token ddfcb04abda84b7c9ef24d3e1baecd24 at
 Root passed this dependency to CN-B11, which takes its own current reservation;
 CN-B10 continues offline. Loading Context returned target_unresolved twice with
 fresh identities; all-hidden was byte-identical to hidden-paused and excluded.
-Final novelty/package/image counts remain pending. No borrowed-build cleanup until
-consumer release; no image/containing-directory deletion.
+CN-B11 then completed all seven captures, stopped its own apps/caffeinate and
+released desktop; unchanged borrowed app hash and end of its build dependency
+reported. Root notified producer CN-B10 for ownership-guarded non-image transient
+cleanup at task end. Never delete images or their containing directories.
+Final novelty/package/image counts for both batches remain pending.
 On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
