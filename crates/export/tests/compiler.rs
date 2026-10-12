@@ -1522,6 +1522,114 @@ fn clipped_empty_dimension_details_request_source_artwork_consistently() {
 }
 
 #[test]
+fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "DIV");
+        node.children.clear();
+        for property in &mut node.properties {
+            if let Property::Requested { field, state, .. } = property
+                && *field == Field::LayoutBounds
+            {
+                *field = Field::AccessibilityBounds;
+                if let Availability::Known {
+                    value: Value::Geometry(g),
+                } = state
+                {
+                    g.frame_kind = FrameKind::AccessibilityBounds;
+                }
+            }
+        }
+    }
+    for fields in std::iter::once(&mut snapshot.context.fields)
+        .chain(std::iter::once(&mut snapshot.coverage.fields))
+        .chain(
+            snapshot
+                .observations
+                .iter_mut()
+                .map(|o| &mut o.coverage.fields),
+        )
+    {
+        for field in fields.iter_mut() {
+            if *field == Field::LayoutBounds {
+                *field = Field::AccessibilityBounds;
+            }
+        }
+        fields.push(Field::Enabled);
+    }
+    for (i, name) in [
+        (0, "Fragment parent"),
+        (2, "Included label"),
+        (6, "Excluded parent"),
+    ] {
+        let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[1] else {
+            panic!()
+        };
+        *state = Availability::Known {
+            value: Value::Text(name.into()),
+        };
+    }
+    set_test_role(&mut snapshot.nodes[4], "LABEL");
+    set_test_role(&mut snapshot.nodes[2], "LABEL");
+    let children = vec![snapshot.nodes[2].key.clone(), snapshot.nodes[4].key.clone()];
+    snapshot.nodes[0].children = children;
+    for (i, node) in snapshot.nodes.iter_mut().enumerate() {
+        let mut flag = node.properties[0].clone();
+        let Property::Requested { field, state, .. } = &mut flag else {
+            panic!()
+        };
+        *field = Field::Enabled;
+        *state = if i == 2 {
+            Availability::Known {
+                value: Value::Flag(false),
+            }
+        } else {
+            Availability::Unknown {
+                reason: Id("not-collected".into()),
+            }
+        };
+        node.properties.push(flag);
+    }
+    b.details = vec![DetailRequest {
+        view: b.views[0].id.clone(),
+        components: vec!["N002".into()],
+        title: "Source fragment".into(),
+    }];
+    let original = serde_json::to_vec(&b).unwrap();
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let p = compile(&b, l).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert!(text.contains("DRAW THIS SOURCE FRAGMENT"));
+    assert!(text.contains("- Draw label layout \"Included label\""));
+    assert!(text.contains("container \"Fragment parent\""));
+    assert!(text.contains("source child 1 of 2"));
+    assert!(text.contains("Enabled=false"));
+    for excluded in ["box[x", "[#", "Measurement context", "Excluded parent"] {
+        assert!(!text.contains(excluded), "{excluded}");
+    }
+    assert_eq!(
+        data(&p, "manifest.json")["sheet_prompts"][1]["component_ids"],
+        serde_json::json!(["N002"])
+    );
+    assert!(
+        data(&p, "manifest.json")["sheet_prompts"][1]["dimension_ids"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    assert!(
+        data(&p, "scene.json")["views"][0]["components"][2]["properties"]
+            .to_string()
+            .contains("accessibility_bounds")
+    );
+}
+
+#[test]
 fn fragment_draft_rules_follow_input_membership_without_parsing_caller_state() {
     let mut b = fixture("observed");
     b.views[0].state = "Public draft orchard for the observed input; no action performed".into();
@@ -1570,10 +1678,12 @@ fn fragment_draft_rules_follow_input_membership_without_parsing_caller_state() {
     let p = compile(&b, l).unwrap();
     let included = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
     let excluded = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
-    assert!(included.contains("Object input"));
+    assert!(included.contains("Draw input"));
+    assert!(included.contains("COMPONENT CLIP #1") && included.contains("clipping reference [#1]"));
+    assert!(excluded.contains("COMPONENT CLIP #3") && excluded.contains("clipping reference [#3]"));
     assert!(included.contains("caller draft only when explicitly reported"));
     assert!(!included.contains("NON-RENDERING WHOLE-VIEW PROVENANCE"));
-    assert!(!excluded.contains("Object input"));
+    assert!(!excluded.contains("Draw input"));
     assert!(!excluded.contains("caller draft only when explicitly reported"));
     assert!(excluded.contains("NON-RENDERING WHOLE-VIEW PROVENANCE"));
     assert!(excluded.contains("Caller-draft rendering does not apply"));
@@ -1721,7 +1831,7 @@ fn fragment_container_does_not_authorize_unselected_descendants() {
     let p = compile(&b, l).unwrap();
     let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
     assert!(text.contains("SOURCE FRAGMENT ONLY"));
-    assert!(text.contains("BOUNDARY CONTEXT [#1]"));
+    assert!(text.contains("BOUNDARY CONTEXT: "));
     assert!(!text.contains("Object outer source container"));
     assert_eq!(
         data(&p, "manifest.json")["sheet_prompts"][1]["component_ids"],

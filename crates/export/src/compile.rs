@@ -630,19 +630,45 @@ fn visible_text(c: &SceneComponent) -> &str {
             .unwrap_or("")
     })
 }
-fn object_text(v: &SceneView, index: usize, partial: &[Vec<Edge>], limit: usize) -> Result<String> {
+fn object_text(
+    v: &SceneView,
+    index: usize,
+    partial: &[Vec<Edge>],
+    assignment: Assignment,
+    limit: usize,
+) -> Result<String> {
     let c = &v.components[index];
     let aggregate = !visible_text(c).is_empty()
         && child_indices(v, index).iter().any(|&i| {
             !visible_text(&v.components[i]).is_empty()
                 && visible_text(c).contains(visible_text(&v.components[i]))
         });
-    let mut out = format!(
-        "Object {}: {} [#{}]",
-        component_name(v, index),
-        component_role(c),
-        index + 1
-    );
+    let mut out = if assignment == Assignment::SourceDetail {
+        let position =
+            if let Some(parent) = v.components.iter().position(|p| p.children.contains(&c.id)) {
+                let siblings = child_indices(v, parent);
+                let position = siblings
+                    .iter()
+                    .position(|&i| i == index)
+                    .ok_or(E::InvalidInput)?;
+                format!(", source child {} of {}", position + 1, siblings.len())
+            } else {
+                String::new()
+            };
+        format!("- Draw {}{position}", component_name(v, index))
+    } else {
+        format!(
+            "Object {}: {} [#{}]",
+            component_name(v, index),
+            component_role(c),
+            index + 1
+        )
+    };
+    if assignment == Assignment::SourceDetail
+        && partial.get(index).is_some_and(|edges| !edges.is_empty())
+    {
+        out.push_str(&format!(", unprinted clipping reference [#{}]", index + 1));
+    }
     if !aggregate && !visible_text(c).is_empty() {
         out.push_str(&format!(
             "; visible-text payload {}",
@@ -694,24 +720,30 @@ fn object_text(v: &SceneView, index: usize, partial: &[Vec<Edge>], limit: usize)
         ));
     }
     if let Some(g) = geometry(c) {
-        out.push_str(&format!(
-            "; {} context {}",
-            if g.frame_kind == FrameKind::AccessibilityBounds {
-                "measurement"
-            } else {
-                "placement"
-            },
-            geometry_context(v, g)
-        ));
-        match &g.shape {
-            Shape::Rect(r) => out.push_str(&format!(
-                "; box[x {}, y {}, w {}, h {}]",
-                display_number(r.x),
-                display_number(r.y),
-                display_number(r.width),
-                display_number(r.height)
-            )),
-            _ => out.push_str("; reported nonrectangular geometry; do not invent a rectangle"),
+        // AX-only source fragments have no assigned dimensions or proved paint
+        // mapping. Their tree membership identifies the fragment; coordinates
+        // remain exact in the machine records, not an alternate drawing plan.
+        if assignment != Assignment::SourceDetail || g.frame_kind != FrameKind::AccessibilityBounds
+        {
+            out.push_str(&format!(
+                "; {} context {}",
+                if g.frame_kind == FrameKind::AccessibilityBounds {
+                    "measurement"
+                } else {
+                    "placement"
+                },
+                geometry_context(v, g)
+            ));
+            match &g.shape {
+                Shape::Rect(r) => out.push_str(&format!(
+                    "; box[x {}, y {}, w {}, h {}]",
+                    display_number(r.x),
+                    display_number(r.y),
+                    display_number(r.width),
+                    display_number(r.height)
+                )),
+                _ => out.push_str("; reported nonrectangular geometry; do not invent a rectangle"),
+            }
         }
         for p in &c.properties {
             if let Some(Value::Geometry(visible)) = p.known()
@@ -751,7 +783,11 @@ fn drawing_inventory(
     let mut out = String::new();
     append(
         &mut out,
-        "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n",
+        if assignment == Assignment::SourceDetail {
+            "DRAW THIS SOURCE FRAGMENT. Each Draw item is included artwork. Its source hierarchy identifies the item in the reference; ancestors and child positions are orientation only, not extra artwork or captions. Preserve the listed items' reference appearance. AX frames do not establish painted geometry; their exact measurements remain in the machine package.\n"
+        } else {
+            "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n"
+        },
         limit,
     )?;
     let mut contexts = Vec::new();
@@ -760,6 +796,9 @@ fn drawing_inventory(
         .iter()
         .filter(|c| selected.is_none_or(|s| s.contains(&c.id)))
         .filter_map(geometry)
+        .filter(|g| {
+            assignment != Assignment::SourceDetail || g.frame_kind != FrameKind::AccessibilityBounds
+        })
     {
         let context = format!(
             "{:?}; {} {:?}, {}, {:?}; transform {}",
@@ -828,6 +867,7 @@ fn drawing_inventory(
             )?;
         }
     }
+    let mut previous_fragment_parent = None;
     for (i, c) in v.components.iter().enumerate() {
         if selected.is_some_and(|s| !s.contains(&c.id)) {
             continue;
@@ -840,8 +880,7 @@ fn drawing_inventory(
             append(
                 &mut out,
                 &format!(
-                    "BOUNDARY CONTEXT [#{}]: {}. Only listed descendant fragments are included; its unlisted children and complete parent region are not artwork on this sheet. Full geometry stays in machine evidence.\n",
-                    i + 1,
+                    "BOUNDARY CONTEXT: {}. Only listed descendant fragments are included; its unlisted children and complete parent region are not artwork on this sheet. Full geometry stays in machine evidence.\n",
                     component_name(v, i)
                 ),
                 limit,
@@ -868,7 +907,54 @@ fn drawing_inventory(
             || visual
             || anchors.contains(&i)
         {
-            append(&mut out, &object_text(v, i, partial, limit)?, limit)?;
+            if assignment == Assignment::SourceDetail {
+                let parent = v.components.iter().position(|p| p.children.contains(&c.id));
+                if parent != previous_fragment_parent {
+                    let mut location = Vec::new();
+                    let mut current = parent;
+                    while let Some(index) = current {
+                        let name = component_name(v, index);
+                        let ancestor = v
+                            .components
+                            .iter()
+                            .position(|p| p.children.contains(&v.components[index].id));
+                        if let Some(ancestor) = ancestor {
+                            let siblings = child_indices(v, ancestor);
+                            let position = siblings
+                                .iter()
+                                .position(|&i| i == index)
+                                .ok_or(E::InvalidInput)?;
+                            location.push(format!(
+                                "{name} (child {} of {})",
+                                position + 1,
+                                siblings.len()
+                            ));
+                        } else {
+                            location.push(name);
+                        }
+                        current = ancestor;
+                    }
+                    location.reverse();
+                    append(
+                        &mut out,
+                        &format!(
+                            "Source hierarchy for the following items (orientation only): {}.\n",
+                            if location.is_empty() {
+                                "top level".into()
+                            } else {
+                                location.join(" → ")
+                            }
+                        ),
+                        limit,
+                    )?;
+                    previous_fragment_parent = parent;
+                }
+            }
+            append(
+                &mut out,
+                &object_text(v, i, partial, assignment, limit)?,
+                limit,
+            )?;
         }
     }
     Ok(out)
@@ -1784,7 +1870,7 @@ fn drawing_dimensions(
     if assignment == Assignment::SourceDetail {
         append(
             &mut out,
-            "INCLUSION BOUNDARY: reproduce only the SOURCE RECORDS above. The full reference and original view scope are orientation context, not included artwork. Do not restore a parent card, heading, controls or text outside this exact fragment; do not complete a partially selected record.\n",
+            "INCLUSION BOUNDARY: reproduce only the Draw items above. The full reference and original view scope are orientation context, not included artwork. Do not restore a parent card, heading, controls or text outside this exact fragment; do not complete a partially selected record.\n",
             limit,
         )?;
     }
