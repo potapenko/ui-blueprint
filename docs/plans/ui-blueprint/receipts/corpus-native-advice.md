@@ -1,5 +1,37 @@
 # Native source advisor handoffs
 
+## CN11 — current saved/live discrepancy, 2026-10-13
+
+Advisor turn01a13245-ca5e-7aa3-b157-86e720f5fd7e performed only authorized exact-key
+and passive targeted AX reads. ReleasePID63105 original Oct11 03:29:03 launch and
+executable revalidated; actual bundle playphraseme.Playphraseme, sandbox signing
+identity matched the shared store route. Window stayed inactive, no screenshot/UI
+dump, focus, clicks, writes or restart. Relevant container was identified from that
+process's open paths; no broad preferences inspection.
+
+The stored version1 snapshot is searchAndLearn, search.activeIndex4 and
+activePhraseID67503d06a9e09c213cf104e1. Query matches known CN-B19 identity, English/
+General/Grammar-off. Passive Release still shows original Tarzan121/426 and Play
+toggle. Key bytes unchanged on repeated read. This matches Debug's final index5
+and differs from live original selection, but absence of pre-run bytes prevents
+proving the last writer or reconstructing all previous stored fields.
+
+Only this key was backed up:633bytes, file0600/directory0700, SHA256
+`9dd5b4c3328c50c11d435c5b963be7b306dd2114dbae0062ad911bc577d93219`.
+Correct private recovery path:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN11-recovery-q6ahofml/restoration-key.data`.
+Root/user are retention owners until incident resolution; contents are not printed
+or committed. The advisor's first hyperlink had a temp-prefix typo; only this
+corrected exact path is used.
+
+No rollback was performed. Proposed minimal correction would be activeIndex4→120
+and exact original phraseID, preserving every other field and checking current key
+hash immediately before any future write. The original ID is still unknown;121
+alone is not enough, and a full Release checkpoint can overwrite sibling payloads.
+CN12 now seeks exact identity from retained/passive evidence or a bounded supported
+read-only application lookup. It cannot write or operate Release. Ordinary Debug
+and app-target Preview remain subject to whole-bootstrap storage-isolation proof.
+
 ## CN10 — ordinary Debug shares restoration storage, 2026-10-13
 
 Advisor01a1102f-791c-7e91-bec3-1877ea004d51, turn01a13237-b8ac-7f63-b3c8-5978130fc83e,
