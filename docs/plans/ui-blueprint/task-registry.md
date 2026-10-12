@@ -141,6 +141,7 @@ with no increase to eligible cases or the47 qualified repair-validation images.
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B17 |same mobile source owner, restored|full-cycle keyboard batch dispatched|Qualify owned-device software keyboard, then5safe surfaces/source→geometry→literalCP10→images→evaluation; no new counted cases yet |
+| CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291, restored|bounded responsive/overflow batch dispatched|Up to8 genuinely unrepresented compositions; prior-manifest novelty gate, actual source→CP10→first images→evaluation; zero candidates allowed |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
