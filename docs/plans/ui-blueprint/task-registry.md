@@ -96,8 +96,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
-| CN-B13 |same Debug source owner|dispatched full eight-candidate cycle|Remaining8C03 seeds; producer of one shared own Debug build for disjoint CN-B14 |
-| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|shared build ready; source prep/waits desktop|Remaining13C02 candidates≤12qualified states; borrowed pin handed off, physical capture after producer release |
+| CN-B13 |same Debug source owner|captures finished; offline qualification/generation|8captures,6canonical AX and2unpublished gaps; desktop released, shared build retained for CN-B14 |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|desktop dependency ready; own reservation/capture starting|6runtime candidates after source exclusions; borrowed pin verified, no completed cases yet |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|dispatched complete accessibility batch|Two supported untested Dynamic Type categories, prior iPad/iPhone forms≤12meaningful states; own addressed devices, frozenCP8 |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
@@ -541,9 +541,13 @@ CN-B13 shared build is ready; root delivered the stable handoff
 `uib-CN-B13-4npljmu2/coordination-handoff.json` to CN-B14. Source c7d8e3d/Debug,
 executable `/private/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphrase-cn-b13-debug.JoxawB/DerivedData/Build/Products/Debug/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe`,
 SHA256 `ef4f0a18b173c8a5657d7d24fd9c990f09a08588bb7a274c880a6fb63fa19ac0`.
-Producer currently captures; this is not desktop release. Consumer acquires its
-own reservation after explicit release. Producer cleanup waits for consumer release,
-live-process guards and preserves all images/image-container ancestors.
+Producer released desktop at2026-10-12T01:22:36.637904Z; own app/caffeinate stopped,
+holder:null observed, build hash reverified. Consumer independently read the same
+handoff and starts its own reservation/captures. Source preparation excludes
+unwired layout flags, delay-only and duplicate initial seeds;6runtime candidates
+remain, not6proved new cases. CN-B13 has6canonical captures and2unpublished AX gaps
+(timing-malformed/kids), pending novelty/evaluation. Producer cleanup waits for
+consumer release/live-process guards and preserves all images/container ancestors.
 CN-B15 reuses B6/B8 mobile owner and installed devices, adding two supported
 untested intermediate Dynamic Type categories (prefer extra-large/accessibility-
 medium equivalents verified by actual tooling). Up to12meaningful reflow/clipping/
