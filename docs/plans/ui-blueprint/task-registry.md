@@ -36,15 +36,15 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:147; unresolved upper bound150; conservative remainder853.**
+**Proved eligible case count:150; unresolved upper bound153; conservative remainder850.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty-two completed primary batches produced388 evaluated images; CW58 is the one
+Twenty-three completed primary batches produced391 qualified evaluated images; CW58 is the one
 complete primary-case image independently accepted by both continuing critics.
-Their384 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not388 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their387 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not391 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -71,11 +71,12 @@ CW-B7 adds2 demo-origin Web states, bringing it to126;
 CN-B12 adds9 fixture-origin states, bringing it to135;
 CN-B15 adds4non-fixture Simulator states, bringing it to139;
 CN-B13 adds5fixture states, bringing it to144;
-CN-B14 adds3fixture states, bringing it to147.
+CN-B14 adds3fixture states, bringing it to147;
+corrected CW-B8 adds3responsive states, bringing it to150.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2 images (47 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 adds1 unqualified reference attempt only:436 generated images overall,
-with no increase to eligible cases or the47 qualified repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:442generated images
+overall, with no increase to eligible cases or the47repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -141,7 +142,7 @@ with no increase to eligible cases or the47 qualified repair-validation images.
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B17 |same mobile source owner, restored|full-cycle keyboard batch dispatched|Qualify owned-device software keyboard, then5safe surfaces/source→geometry→literalCP10→images→evaluation; no new counted cases yet |
-| CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|3state cycle returned; native-density correction in progress|3first images/authorFAIL; actual reflow proved, but initialDPR2→captureDPR1 requires screenshot-asset reconciliation before counting; originals retained |
+| CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|corrected-source cycle accepted; CV2/CT2 running|3new states/3qualified first images; initial3images unqualified density, separately retained; author1PASS/2FAIL;150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |

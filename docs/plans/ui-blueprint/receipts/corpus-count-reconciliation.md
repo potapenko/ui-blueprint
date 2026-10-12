@@ -1,20 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B14 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after corrected CW-B8 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**147 proved eligible cases; range147–150 pending three named uncertainties.**
-The planning remainder is853 cases, potentially850 if all three are established.
-There are47 Web and100 Native cases in the proved minimum. Fifty-five are explicitly
-fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
+**150 proved eligible cases; range150–153 pending three named uncertainties.**
+The planning remainder is850 cases, potentially847 if all three are established.
+There are50 Web and100 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;93 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:388 primary images =384 first outputs +4 rerolls;
-47 separate repair-validation images;1 unqualified reference attempt (CTEXT1);
-436 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+Image buckets:391 primary images =387 first outputs +4 rerolls;
+47 separate repair-validation images;4 unqualified reference attempts
+(CTEXT1 and the first3CW-B8 images before native-density correction);
+442 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -55,7 +56,8 @@ Evidence: [CP10 receipt](corpus-arrangement-repair10.md) and neutral index in
 | CN-B15 |4|12|2families in intermediate Dynamic Type categories;7insufficient-novelty candidates excluded |
 | CN-B13 |5|22|3duplicates/text-only variations excluded; original failed attempts retained, fresh kids source qualified |
 | CN-B14 |3|11|7unwired/alias IDs and3runtime duplicates excluded; active current-item non-atomicity explicit |
-| **Primary subtotal** |**146**|**388**| |
+| CW-B8 |3|3|Corrected nativeDPR2 sources;3earlier1xreference images excluded into separate bucket |
+| **Primary subtotal** |**149**|**391**| |
 
 ## One first completion in the repair bucket
 
@@ -79,7 +81,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in147
+## Three unresolved cases, not counted in150
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -132,6 +134,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B15 | `playphraseme-cn-b15-w5v_6mto/handoff.json` |
 | CN-B13 | `uib-CN-B13-4npljmu2/HANDOFF.md` |
 | CN-B14 | `uib-CN-B14-ocq6ve0f/handoff.md` |
+| CW-B8 | `uib-cw-b8-retina-N53ttw/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -223,3 +226,16 @@ not atomic phrase/counter text across CUA/AX/PNG. Other cases are paused second
 result with reversible Previous/Next and visible Unlock control (never activated).
 First target_unresolved and stale CUA refresh retained. Own runtime and borrowed
 build dependency released, repos unchanged, images/originals retained.
+
+CW-B8 adds3meaningfully reflowed states versus CW58/CW59/CW49: two existing demo
+states at320CSSpx and public Terms at390CSSpx. Same font sizes/text-tag sequences;
+main heights476→551 and502→616, Terms column800→326 with changed wrapping/coverage.
+Initial override reducedDPR2→1, so its3first images remain unqualified historical
+attempts in `uib-cw-b8-V6wS4z`, all52files unchanged. Corrected nativeDPR2 direct
+Page.captureScreenshot PNGs are640×1440,640×1440,780×1688; all CSSframes unchanged,
+fresh DOM/AX/canonical inputs and CP10 packages retained. Three corrected-source
+first images,0later rerolls,36frames/10required dimensions/6analysis requests.
+Author1PASS/2FAIL; same independent critics pending. Sitec23ef963/export5e071f5;
+demo callbacks matched prior qualified evidence, no whole-bundle equivalence claim.
+Restored1280×720/DPR2/scroll0, own tab closed, repos unchanged. Corrected manifest
+SHA256 `c3c1f4e603ed7ec3a531f1195bdbabafada1c43daa48d6536245f44eed6ad588`.
