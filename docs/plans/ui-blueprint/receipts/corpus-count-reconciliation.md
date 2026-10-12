@@ -235,7 +235,10 @@ attempts in `uib-cw-b8-V6wS4z`, all52files unchanged. Corrected nativeDPR2 direc
 Page.captureScreenshot PNGs are640×1440,640×1440,780×1688; all CSSframes unchanged,
 fresh DOM/AX/canonical inputs and CP10 packages retained. Three corrected-source
 first images,0later rerolls,36frames/10required dimensions/6analysis requests.
-Author1PASS/2FAIL; same independent critics pending. Sitec23ef963/export5e071f5;
+Author1PASS/2FAIL; both independent critics acceptCW60/CW61 and rejectCW62.
+CW61 preserves frame meaning without the literal machine token; CW62 prints an
+unassigned exact construction height. [Reconciliation](corpus-web-responsive-review8.md).
+Sitec23ef963/export5e071f5;
 demo callbacks matched prior qualified evidence, no whole-bundle equivalence claim.
 Restored1280×720/DPR2/scroll0, own tab closed, repos unchanged. Corrected manifest
 SHA256 `c3c1f4e603ed7ec3a531f1195bdbabafada1c43daa48d6536245f44eed6ad588`.
