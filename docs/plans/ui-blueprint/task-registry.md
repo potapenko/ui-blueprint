@@ -89,8 +89,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CA5 |same CA owner|accept_with_residual; archived|source1af633c +cbbe317 accepted through CR3; default0–27/visible42–75,34AXrects, partial scope |
 | CA6 |same CA owner01a12b6a-9746-7600-830d-b973f7b8e30b|diagnosis accepted|3AXTitles already known but export-redacted;3StaticText values unrequested, no complete request-only export solution |
 | CA7 |same CA owner|runtime feasibility accepted|One69node/230403byte partial observation;3static Text values known, Name/Title NoValue; no export or code changes |
-| CA8 |same CA owner|f26e121/030dfdf returned; CR4 pending|NATIVE5/static-text1/registry41; explicit role-limited text and actual allowlist proof, not accepted until independent review |
-| CR4 |reviewer01a12c83-017a-7b42-b657-3464f9a773dc, restored|initial independent source/privacy review|CA8 neutral diff/bundle/live records/withheld-approved exports; no author narrative yet |
+| CA8 |same CA owner|f26e121 accepted_with_residual; archive after handoff|NATIVE5/static-text1/registry41; explicit role-limited text/private-default proof accepted through [CR4](receipts/corpus-native-static-text-review.md) |
+| CR4 |reviewer01a12c83-017a-7b42-b657-3464f9a773dc|accepted_with_residual; archive after receipt|270independent assertions/95records/3inspect reproductions/2exact exports; no mandatory gap in scope |
 | CD1 |01a12bc9-dc06-7702-8d00-e86f619db33f|accepted; archived|9f7b33e,12examples/counterexamples,16sources/26requests/110measurements;0images |
 | CCOUNT1 |same CD1 owner|accepted; archived|99proved cases,99–102 range; CP1/A06 first completion counted once, historical A01 baseline excluded |
 | CR1 |01a12bd1-e110-7dc0-8374-5d9815ac470e|complete; archived|f0bba6e, corrected Native/export accepted_with_residual; no image/corpus acceptance |
@@ -124,7 +124,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 Established source basis: registry41, NATIVE5/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
-collector acceptance is complete through CR3. Existing batches keep their old pins.
+collector acceptance remains through CR3. CA8f26e121 adds explicit static text,
+now accepted through CR4; existing completed batches keep their original pins.
 Current accepted exporter presentation baseline is7723f09; source/prompt protection
 is bounded accepted. Individual image verdicts remain pinned to their actual sources,
 not full corpus or universal raster quality.
@@ -594,6 +595,13 @@ RawValue69/knownTitle8 remain redacted; no ImageGen or case-count increment.
 CR4 same formerCA5 reviewer now inspects neutral source/evidence before author
 receipt. Root supplies corpus-native-static-text.md only after initial observations,
 then reconciles final privacy/capability verdict. Do not reuse retired live identities.
+CR4 final01a12e76-9dc0-7720-bff7-e01587bc4c73 now accepts_with_residual after
+ordered author reconciliation. Independent270assertions/95canonical validations,
+3exact inspections and2byte-identical exports supplement source review. No mandatory
+gap in this bounded data/privacy/capability scope. [Acceptance](receipts/corpus-native-static-text-review.md)
+retains limits; current Native bundle is `uib-CA8-lbe7mxfu/tools`, no ImageGen proof.
+The three static strings are real source content, not paint/visibility/mapping or
+semantic Name. Existing1/1 slash filtering and rawValue/Title redaction remain.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
