@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B12 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B15 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**135 proved eligible cases; range135–138 pending three named uncertainties.**
-The planning remainder is865 cases, potentially862 if all three are established.
-There are47 Web and88 Native cases in the proved minimum. Forty-seven are explicitly
-fixture/component-preview origin;88 are non-fixture observations. Fixture UI is
+**139 proved eligible cases; range139–142 pending three named uncertainties.**
+The planning remainder is861 cases, potentially858 if all three are established.
+There are47 Web and92 Native cases in the proved minimum. Forty-seven are explicitly
+fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:343 primary images =339 first outputs +4 rerolls;
-41 separate repair-validation images;384 images in total. Extra sheets, repaired
+Image buckets:355 primary images =351 first outputs +4 rerolls;
+41 separate repair-validation images;396 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -40,7 +40,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CN-B11 |7|31|Observed bootstrap-failed is loading, not verified failure; no duplicate compositions |
 | CW-B7 |2|2|One existing isolated demo family/two states; caller refusals preserved, no rerolls |
 | CN-B12 |9|39|cold-paused duplicates B10 loading; other9 actual state/layout differences qualified |
-| **Primary subtotal** |**134**|**343**| |
+| CN-B15 |4|12|2families in intermediate Dynamic Type categories;7insufficient-novelty candidates excluded |
+| **Primary subtotal** |**138**|**355**| |
 
 ## One first completion in the repair bucket
 
@@ -64,7 +65,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in135
+## Three unresolved cases, not counted in139
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -114,6 +115,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B11 | `uib-CN-B11-a8cf7csy/handoff.md` |
 | CW-B7 | `uib-cw-b7-wLKJHA/handoff.json` |
 | CN-B12 | `uib-CN-B12-kh2ysteb/HANDOFF.txt` |
+| CN-B15 | `playphraseme-cn-b15-w5v_6mto/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -174,3 +176,14 @@ is a factual candidate27/deviation+1, with intentional-selection caveat, not a
 normative defect. Build/runtime cleaned except all image assets/containers and
 ancestor dirs; user process protected. Eight C03 candidates remain unqualified,
 not an exhaustion claim. CN-B13/CN-B14 will count only after their terminal cycles.
+
+CN-B15 adds4real Simulator states in2families: accessibility-medium Translation and
+extra-large/AM Settings top/bottom.12first images/0rerolls,4author content passes/
+8fails,0full accepted packages;75AX frames,65of66labels and all10mathematical
+statements preserved. Translation exact heights split5/5 with no strict majority;
+Settings changes wrapping/overflow/coverage, not simple rescaling.7no-op candidates
+excluded. All images1672×941, not requested3840×2160. Installed hashes match B6/B8
+but source revision remains unknown. Both categories restored tolarge, portrait,
+original destinations/query/pause; iPad current phrase changed via Reels return,
+explicitly not exact initial-phrase restoration. Own apps/mirrors/tabs/devices
+stopped/shutdown; other owners and all images retained, repositories unchanged.

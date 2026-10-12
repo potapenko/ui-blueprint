@@ -10,15 +10,15 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:135; unresolved upper bound138; conservative remainder865.**
+**Proved eligible case count:139; unresolved upper bound142; conservative remainder861.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Nineteen completed primary batches produced343 evaluated images; CW58 is the one
+Twenty completed primary batches produced355 evaluated images; CW58 is the one
 complete primary-case image independently accepted by both continuing critics.
-Their339 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not343 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their351 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not355 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -42,7 +42,8 @@ CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107;
 CN-B10 adds10 qualified fixture-origin cases, bringing it to117;
 CN-B11 adds7 qualified fixture-origin cases, bringing it to124;
 CW-B7 adds2 demo-origin Web states, bringing it to126;
-CN-B12 adds9 fixture-origin states, bringing it to135.
+CN-B12 adds9 fixture-origin states, bringing it to135;
+CN-B15 adds4non-fixture Simulator states, bringing it to139.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1 images (41 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -99,7 +100,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
 | CN-B13 |same Debug source owner|17sheets evaluated; kids dependency released|CN-B14 release delivered; producer reacquires fresh lane for one remaining kids request before cleanup |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline novelty/generation|6candidates captured, own runtime/desktop/build dependency released; final count pending |
-| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|12first sheets evaluated; final handoff/cleanup|4states/2families; one lost approximation mark, source-fragment/noise failures retained; count pending terminal |
+| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archive after handoff|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -457,6 +458,11 @@ Own export source/tests and receipts/corpus-fragment-assignment-repair9.md only.
 No new fields/schema/collector/renderer/source-app/spec changes; no generic appended
 prohibitions or deletion of assigned facts. Current full export/data/HBP basis
 unchanged and reused. Existing CN-B13/B14/B15 keep frozen774ed6b independently.
+New completed B15 supplies AM-translation/D02 in `playphraseme-cn-b15-w5v_6mto`:
+explicitly assigned Bangla/Bosnian became whole-list artwork. Root permits this as
+the second affected Native image slot instead of unaffected B12-08, only if generic
+CP9 assignment changes apply; still≤2fresh calls total. B12-08 remains a replay
+control. No assumed common compiler cause, source change or new collector scope.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
@@ -513,7 +519,7 @@ chat or stand paths), to expand beyond the known catalog without duplicate forms
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at135proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at139proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 CW3 found an existing loopback subscription demo with fictional fixed data and
 local-only toggle callbacks, two new meaningful states. There is no wider ready
@@ -588,7 +594,12 @@ Mobile owner confirmed original binaries and free devices, selected actual suppo
 extra-large/accessibility-medium categories, original large retained for restore.
 Four new states remain:3Settings reflow/coverage states and1Translation fractional
 AX sample without strict majority. Actor/Filters/Search no-op variants excluded
-(7diagnostic exclusions). Final source/package/image counts await terminal receipt.
+(7diagnostic exclusions). Terminal `playphraseme-cn-b15-w5v_6mto/handoff.json`
+now proves4states/12first images/0rerolls,4content-pass/8FAIL,65of66labels and10math
+statements correct;0full packages accepted. All1672×941, no4K claim. Original
+categories/destinations/queries/orientations/pause restored, exact own runtime
+shutdown. iPad current phrase follows Reels return, not initial Being There;
+this mismatch remains explicit. Repositories unchanged, source revision unknown.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
