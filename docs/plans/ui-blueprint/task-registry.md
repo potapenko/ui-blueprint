@@ -96,9 +96,9 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
-| CN-B13 |same Debug source owner|captures finished; offline qualification/generation|8captures,6canonical AX and2unpublished gaps; desktop released, shared build retained for CN-B14 |
-| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|desktop dependency ready; own reservation/capture starting|6runtime candidates after source exclusions; borrowed pin verified, no completed cases yet |
-| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|dispatched complete accessibility batch|Two supported untested Dynamic Type categories, prior iPad/iPhone forms≤12meaningful states; own addressed devices, frozenCP8 |
+| CN-B13 |same Debug source owner|4cases/17sheets generating; kids reobserve waits CN-B14 release|Two duplicates excluded; shared build retained for consumer and producer's final fresh kids request |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|own desktop captures in progress|6runtime candidates; initial playing refusal retained, fresh Raise-bound request yielded partial Snapshot |
+| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|4new states selected; restoration/export in progress|2families/7no-op exclusions; extra-large/accessibility-medium verified, frozenCP8 |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -548,6 +548,14 @@ unwired layout flags, delay-only and duplicate initial seeds;6runtime candidates
 remain, not6proved new cases. CN-B13 has6canonical captures and2unpublished AX gaps
 (timing-malformed/kids), pending novelty/evaluation. Producer cleanup waits for
 consumer release/live-process guards and preserves all images/container ancestors.
+CN-B13 classified english-offensive/revealed as previous-composition duplicates.
+Four ready sources now generate17first sheets; kids has meaningful missing Grammar/
+GR but no canonical geometry yet. Producer plans one fresh request with unchanged
+limits after CN-B14 releases desktop/build, while continuing offline work. Keep
+build until that producer request and all consumer processes finish; no early cleanup.
+CN-B14's playing source initially refused target_unresolved; after owned-window Raise
+a fresh request yielded partial Snapshot. Dynamic phrase/counter from separately
+timed PNG is not promoted into canonical state; final qualification stays pending.
 CN-B15 reuses B6/B8 mobile owner and installed devices, adding two supported
 untested intermediate Dynamic Type categories (prefer extra-large/accessibility-
 medium equivalents verified by actual tooling). Up to12meaningful reflow/clipping/
@@ -559,6 +567,11 @@ protect ProMax and other owners. Prior source revision unknown remains unknown.
 Restore original per-device text/orientation/state and exact owned runtime. Existing
 serve-sim/tab-scoped isolation can parallelize only when actual tools support it;
 shared input otherwise queues. Keyboard/global-setting gap is not bypassed.
+Mobile owner confirmed original binaries and free devices, selected actual supported
+extra-large/accessibility-medium categories, original large retained for restore.
+Four new states remain:3Settings reflow/coverage states and1Translation fractional
+AX sample without strict majority. Actor/Filters/Search no-op variants excluded
+(7diagnostic exclusions). Final source/package/image counts await terminal receipt.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
