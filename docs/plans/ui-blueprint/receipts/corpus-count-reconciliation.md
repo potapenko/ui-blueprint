@@ -153,8 +153,10 @@ baseline supplied the CP8 witness; its old first failures remain unchanged.
 CW-B7 adds two completed demo-origin states CW58/CW59, two first images, no repeats.
 Actual dev-entry/content/callback identities qualified before local toggles; no
 real billing flow or whole-bundle Git equivalence claimed.27DOM frames/8required
-labels/4analysis requests verified. Author1PASS/1FAIL; independent image review
-pending. Two initial CLI refusals were caller slash syntax, retained separately;
+labels/4analysis requests verified. Author1PASS/1FAIL; both continuing critics
+independently accept CW58 and reject CW59's omitted sourced focus. This establishes
+one complete primary-case image acceptance, not full corpus acceptance. Two initial
+CLI refusals were caller slash syntax, retained separately;
 equivalent metadata wording only, original data/PNG/geometry unchanged. Current
 export774ed6b, actual images1469×1071/1536×1024. Demo restored, own tab closed,
 source repos unchanged. Manifest SHA256

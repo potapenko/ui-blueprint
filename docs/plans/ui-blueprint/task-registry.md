@@ -15,7 +15,8 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Eighteen completed primary batches produced304 evaluated images,0 fully independently accepted.
+Eighteen completed primary batches produced304 evaluated images; CW58 is the one
+complete primary-case image independently accepted by both continuing critics.
 Their300 first outputs by configuration/sheet include3 duplicate fixture renderings;
 this is not304 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
@@ -56,7 +57,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
 | CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|accepted read-only discovery|One existing subscription demo/two local states; ordinary analytics remains; [handoff](receipts/corpus-web-advice.md#cw3--existing-isolated-preview-discovery-2026-10-12) |
-| CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; image critics pending|2demo states/2first images/0rerolls;1authorPASS/1FAIL;27frames/8labels, own runtime restored |
+| CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived after review handoff|2demo states/2first images/0rerolls;both critics acceptCW58/rejectCW59 focus loss; [review](receipts/corpus-web-demo-review7.md) |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
 | CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
@@ -99,8 +100,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CW-B7 independent initial observation|Two new Web demo images/source/assignment, no author narrative yet; CP8 stays accepted |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CW-B7 independent initial observation|Same2images/data/prompt, no unchanged compiler audit; CP8 stays accepted |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CW-B7 reconciled; retained|CW58 pass/CW59 focus failure; extra scope text editorial; no compiler omission |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CW-B7 reconciled; retained|Same verdict; correct literal focus instruction, raster noncompliance; CP8 stays accepted |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -516,6 +517,12 @@ Demo restored/tab closed/repos unchanged. Same two critics now inspect neutral
 CW58/CW59 images and packages before handoff/manifest/sheet-reviews author claims;
 root supplies those only after each initial observation, then final reconciliation.
 Actual image sizes1469×1071 and1536×1024; frozen774ed6b. No billing acceptance.
+Both critics then independently accepted CW58 and rejected CW59 for missing sourced
+focus in both button drawings. Extra selector is literal inventory noise, not a
+privacy leak; correct prompt already supplies state/preservation and restrictions.
+No compiler defect or speculative repair follows. [Final review](receipts/corpus-web-demo-review7.md)
+preserves original observations/author reconciliation and exact scoped acceptance.
+CW58 adds one independently accepted complete primary-case image; counts remain126.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
