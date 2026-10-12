@@ -757,7 +757,19 @@ fn object_text(
                     } else {
                         "DISTINCT FRAME (clipping not established):"
                     },
-                    bounded_compact_json(&visible.shape, limit)?,
+                    if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
+                        format!("from COMPONENT CLIP #{}", index + 1)
+                    } else if let Shape::Rect(r) = &visible.shape {
+                        format!(
+                            "rectangle[x {}, y {}, w {}, h {}]",
+                            display_number(r.x),
+                            display_number(r.y),
+                            display_number(r.width),
+                            display_number(r.height)
+                        )
+                    } else {
+                        bounded_compact_json(&visible.shape, limit)?
+                    },
                     visible.coordinate_space.id.0,
                     visible.coordinate_space.kind,
                     unit_name(visible.coordinate_space.units),
@@ -924,14 +936,14 @@ fn drawing_inventory(
             append(
                 &mut out,
                 &format!(
-                    "COMPONENT CLIP #{} (construction only), {}: known clipped edges {:?}; visible rectangle x {}, y {}, width {}, height {} {} in source Space {} ({:?}, {:?}). Apply this cut ONLY to this component, not a global crop of the generated sheet or unrelated components. Keep partial glyphs only at these proved edges; do not reflow or complete this component beyond them. Full-layout dimensions refer to its separate full frame, never to this visible intersection.\n",
+                    "COMPONENT CLIP #{} (construction only), {}: known clipped edges {:?}; schematic visible rectangle x {}, y {}, width {}, height {} {} in source Space {} ({:?}, {:?}). Apply this cut ONLY to this component, not a global crop of the generated sheet or unrelated components. Keep partial glyphs only at these proved edges; do not reflow or complete this component beyond them. Full-layout dimensions refer to its separate full frame, never to this visible intersection.\n",
                     i + 1,
                     component_name(v, i),
                     edges,
-                    r.x,
-                    r.y,
-                    r.width,
-                    r.height,
+                    display_number(r.x),
+                    display_number(r.y),
+                    display_number(r.width),
+                    display_number(r.height),
                     unit_name(visible.coordinate_space.units),
                     visible.coordinate_space.id.0,
                     visible.coordinate_space.kind,

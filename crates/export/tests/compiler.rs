@@ -1192,9 +1192,10 @@ fn public_placeholder_and_clipped_region_are_distinct_from_full_layout_and_value
     assert!(input.contains("Placeholder=\"Type a query\""));
     assert!(
         input.contains("CLIPPED LAYOUT: draw only reported visible-region")
-            && input.contains("\"height\":11.0")
+            && input.contains("from COMPONENT CLIP #1")
     );
     assert!(input.contains("h 32"));
+    assert!(prompt.contains("schematic visible rectangle") && prompt.contains("height 11 CSS px"));
     assert!(
         !prompt
             .lines()
@@ -1894,6 +1895,16 @@ fn clipped_document_layout_pair_owns_a_separate_empty_sketch() {
     );
     assert!(text.contains("WIDTH 800 CSS px ABOVE; HEIGHT ≈2307 CSS px LEFT"));
     assert!(text.contains("different frame: Derived VisibleRegion"));
+    assert!(text.contains("height ≈667 CSS px"));
+    assert_eq!(text.matches("height ≈667 CSS px").count(), 1);
+    assert!(text.contains("reported visible-region from COMPONENT CLIP #1"));
+    assert!(!text.contains("666.5625") && !text.contains("2307.0703125"));
+    assert!(!text.contains("\"shape\":\"rect\""));
+    let mut exact = limits();
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
     assert!(!text.contains("DIMENSIONED RECTANGLE outer source container:"));
     assert!(!text.contains("outer source container — width 800"));
     let dims = data(&p, "dimensions.json");
@@ -1917,6 +1928,45 @@ fn clipped_document_layout_pair_owns_a_separate_empty_sketch() {
         );
     }
     assert_eq!(serde_json::to_vec(&b).unwrap(), source);
+    for (x, clipped) in [(-0.0_f64, true), (-0.125, false)] {
+        let mut fractional = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut fractional.views[0].source else {
+            panic!()
+        };
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[0].properties[4]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x,
+            y: 0.125,
+            width: 0.25,
+            height: 0.375,
+        });
+        let original = serde_json::to_vec(&fractional).unwrap();
+        let p = compile(&fractional, limits()).unwrap();
+        let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert!(!text.contains("-0") && !text.contains("0.125") && !text.contains("0.375"));
+        if clipped {
+            assert!(text.contains(
+                "schematic visible rectangle x 0, y <0.5, width <0.5, height <0.5 CSS px"
+            ));
+            assert!(text.contains("reported visible-region from COMPONENT CLIP #1"));
+        } else {
+            assert!(text.contains("DISTINCT FRAME (clipping not established): reported visible-region rectangle[x −<0.5, y <0.5, w <0.5, h <0.5]"));
+        }
+        let scene = data(&p, "scene.json");
+        let raw = &scene["views"][0]["components"][0]["properties"][4]["state"]["value"]["value"]["shape"]
+            ["value"];
+        assert_eq!(raw["x"].as_f64().unwrap().to_bits(), x.to_bits());
+        assert_eq!(raw["height"], 0.375);
+        assert_eq!(serde_json::to_vec(&fractional).unwrap(), original);
+    }
     // Equal full/visible rectangles do not get the clipped-frame assignment.
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
         panic!()
