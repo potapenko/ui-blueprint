@@ -86,7 +86,7 @@ with no increase to eligible cases or the47 qualified repair-validation images.
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
 | CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
-| CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
+| CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|consultation accepted; archived|5source-backed keyboard candidates; runtime toggle untested by read-only scope, no process conflict; [handoff](receipts/corpus-native-advice.md#cn5b--keyboard-candidates-2026-10-12) |
 | CN7 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only inventory accepted|453declarations, isolated candidate families, no UI package/gallery; [handoff](receipts/corpus-native-advice.md#cn7--existing-app-target-previews-2026-10-12) |
 | CN8 |01a12e68-26dc-7ba2-ab7a-6f8745f9e78a|host waitingOnApproval|One existing Mac Download Preview via Xcode Canvas; pending operation text unavailable, user clarification requested; no bypass |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
@@ -140,6 +140,7 @@ with no increase to eligible cases or the47 qualified repair-validation images.
 | CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
+| CN-B17 |same mobile source owner, restored|full-cycle keyboard batch dispatched|Qualify owned-device software keyboard, then5safe surfaces/source→geometry→literalCP10→images→evaluation; no new counted cases yet |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |

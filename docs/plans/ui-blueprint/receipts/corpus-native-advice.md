@@ -1,5 +1,38 @@
 # Native source advisor handoffs
 
+## CN5B — keyboard candidates, 2026-10-12
+
+Consultation owner01a12cf2-87fe-79a0-9d2e-0191367de38f completed resumed turn
+01a1314c-6d75-75d1-aad1-747580509e5c. Read-only source inspection on
+c7d8e3d/beta-01, not installed-build or runtime proof. No interfering process
+or reservation was found. Previous host wait is no longer the task's current state.
+The gap is observed device-scoped Toggle Software Keyboard show/hide capability;
+it was never attempted because this consultation prohibited runtime interaction.
+
+Five candidates: iPhone Search & Learn floating query; iPhone Clip Search query
+over grid; landscape iPad Search & Learn query/action band; landscape iPad Clip
+Search queryband/rail/grid; iPad Director entity-popover anchor/field/list clipping.
+Source contract route: features→Platform composition iphone-behavior,
+iphone-query-glass3,iphone-more-menu7,ipad-behavior; Clip Search
+iphone-clip-query3,cross-destination-query1,ipad-filter-popover2.
+Primary fields are focus-only with text/selections preserved; Done submits and
+must not be used for dismissal. Director Close only dismisses, whereas Return
+selects the active option. Exclude Phone Clip Filters: onDisappear applies drafts.
+Keyboard dismissal for primary fields still requires a proven targeted operation.
+
+Apple documents Toggle Software Keyboard separately from Connect Hardware Keyboard.
+Consultant reports Xcode27RC issue178432770 for iPad/iOS27, not a demonstrated
+failure of the owned runtime. UDID mirroring/HID metadata alone does not prove a
+supported keyboard toggle. No global defaults, hardware-keyboard setting changes,
+invented shortcuts/private APIs or protected ProMax operation. Exact device/runtime,
+enabled targeted menu, visible effect and restoration must be qualified live.
+
+CN-B17 assigns that missing bounded live qualification and the complete five-case
+corpus cycle to the existing mobile owner, with normal source-project reservations,
+current ownership and installed-build revalidation. Thus the former read-only
+consultation limit is not a new user-approval requirement. This is a proposed
+source batch, not five accepted or generated cases. No source-app edits authorized.
+
 ## CN7 — existing app-target previews, 2026-10-12
 
 Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 terminal
