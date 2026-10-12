@@ -1,5 +1,43 @@
 # Native source advisor handoffs
 
+## CN10 — ordinary Debug shares restoration storage, 2026-10-13
+
+Advisor01a1102f-791c-7e91-bec3-1877ea004d51, turn01a13237-b8ac-7f63-b3c8-5978130fc83e,
+read source c7d8e3d/beta-01 and CN-B19 receipts only. Selected source-feed →
+query-continuity@1, Search navigation@3/data contracts and persistence-registry@1.
+No prefs, processes or UI were read/changed in that consultation.
+
+The observed Reels→Search change is not only session-local by implementation:
+[handoff](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Application/AppModel/Search/AppModelSearchDestinationHandoff.swift:66)
+saves Search restoration with activePhraseID and activeIndex. Destination switching
+saves the entire NativeRestorationState, including Search/Clip/Reels, through
+[AppCommands](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Application/Commands/AppCommands.swift:311).
+Source Debug and Release both use bundleID playphraseme.Playphraseme and the same
+sandbox route; ordinary Debug has production composition. [Store injection](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/AppCompositionLearnerContinuation.swift:4)
+uses [UserDefaultsDataStore](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/Packages/PlayPhrasePersistence/Sources/PlayPhrasePersistence/UserDefaultsDataStore.swift:7),
+UserDefaults.standard, namespace PlayPhrase, key PlayPhrase.native-restoration-v1.
+
+Thus Debug could overwrite the shared snapshot, including sibling state different
+from the current Release. Serialization is only per repository instance. A later
+Release checkpoint could overwrite it again. Actual signing/build overrides, exact
+current stored value and whether the write completed are NOT established by source.
+Save errors use try?. Stopping Debug does not roll back storage. Source's cached
+lastRestoration and lack of an observed cross-process apply listener do not prove
+the live Release UI changed automatically. The reported custom-search handoff does
+not establish a catalog-offset/preferences/account/server mutation.
+
+CN11 now performs narrowly authorized read-only comparison of the exact restoration
+key and passively available Release identity/state, without activation or writes.
+No ordinary Debug relaunch or blind snapshot reconstruction is allowed. Bare index121
+is insufficient to reconstruct the original phrase. Any proposed correction needs
+exact identity and must account for full-snapshot writes and concurrent Release state.
+No user preference contents are published or committed; a minimal private recovery
+copy of only this key may be retained in system temp for root/user until resolution.
+
+Future Mac runtime must prove storage isolation for the entire bootstrap, not merely
+for a view's MemoryOptionsStore. CN8 received this dependency before any Preview run.
+Current checks do not authorize broad preferences, credentials or memory inspection.
+
 ## CN9 — transient lookup recipes, 2026-10-12
 
 Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 completed source-only turns
