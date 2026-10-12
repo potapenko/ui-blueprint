@@ -1,19 +1,19 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CW-B7 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B12 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**126 proved eligible cases; range126–129 pending three named uncertainties.**
-The planning remainder is874 cases, potentially871 if all three are established.
-There are47 Web and79 Native cases in the proved minimum. Thirty-eight are explicitly
+**135 proved eligible cases; range135–138 pending three named uncertainties.**
+The planning remainder is865 cases, potentially862 if all three are established.
+There are47 Web and88 Native cases in the proved minimum. Forty-seven are explicitly
 fixture/component-preview origin;88 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:304 primary images =300 first outputs +4 rerolls;
-41 separate repair-validation images;345 images in total. Extra sheets, repaired
+Image buckets:343 primary images =339 first outputs +4 rerolls;
+41 separate repair-validation images;384 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -39,7 +39,8 @@ still complete its declared test protocol; missing source qualification cannot.
 | CN-B10 |10|41|T01 loading geometry gap and T07 byte-identical duplicate excluded; all sheets evaluated |
 | CN-B11 |7|31|Observed bootstrap-failed is loading, not verified failure; no duplicate compositions |
 | CW-B7 |2|2|One existing isolated demo family/two states; caller refusals preserved, no rerolls |
-| **Primary subtotal** |**125**|**304**| |
+| CN-B12 |9|39|cold-paused duplicates B10 loading; other9 actual state/layout differences qualified |
+| **Primary subtotal** |**134**|**343**| |
 
 ## One first completion in the repair bucket
 
@@ -63,7 +64,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in126
+## Three unresolved cases, not counted in135
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -112,6 +113,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B10 | `uib-CN-B10-odbqso2x/HANDOFF.txt` |
 | CN-B11 | `uib-CN-B11-a8cf7csy/handoff.md` |
 | CW-B7 | `uib-cw-b7-wLKJHA/handoff.json` |
+| CN-B12 | `uib-CN-B12-kh2ysteb/HANDOFF.txt` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -161,3 +163,14 @@ equivalent metadata wording only, original data/PNG/geometry unchanged. Current
 export774ed6b, actual images1469×1071/1536×1024. Demo restored, own tab closed,
 source repos unchanged. Manifest SHA256
 `3a4287f93b6fcd343d35c476f0b7456093d537667f3a1ee3d873da5759161feb`.
+
+CN-B12 completed10source configurations/9new fixture states/39first sheets,0rerolls.
+All515required dimension IDs have one owner;25scoped author sheet passes/14failures,
+0full cases accepted. Source c7d8e3d/Native1af633c/export774ed6b/density30;38images
+1672×941 and1at1672×940. Novelty includes genuine long-copy reflow, RTL states,
+value-bearing modifiers, selected Focus, normal-scale untimed footer and second
+Context selection. cold-paused duplicates B10/T12 and is excluded. Pattern27/27/28
+is a factual candidate27/deviation+1, with intentional-selection caveat, not a
+normative defect. Build/runtime cleaned except all image assets/containers and
+ancestor dirs; user process protected. Eight C03 candidates remain unqualified,
+not an exhaustion claim. CN-B13/CN-B14 will count only after their terminal cycles.

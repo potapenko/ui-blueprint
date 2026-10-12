@@ -10,15 +10,15 @@ workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 
 ### Current counts and acceptance
 
-**Proved eligible case count:126; unresolved upper bound129; conservative remainder874.**
+**Proved eligible case count:135; unresolved upper bound138; conservative remainder865.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Eighteen completed primary batches produced304 evaluated images; CW58 is the one
+Nineteen completed primary batches produced343 evaluated images; CW58 is the one
 complete primary-case image independently accepted by both continuing critics.
-Their300 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not304 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their339 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not343 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -41,7 +41,8 @@ excludes the unchanged historical A01 baseline, giving99 proved cases before CN-
 CN-B9 adds8 qualified fixture-origin cases, bringing the proved total to107;
 CN-B10 adds10 qualified fixture-origin cases, bringing it to117;
 CN-B11 adds7 qualified fixture-origin cases, bringing it to124;
-CW-B7 adds2 demo-origin Web states, bringing it to126.
+CW-B7 adds2 demo-origin Web states, bringing it to126;
+CN-B12 adds9 fixture-origin states, bringing it to135.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1 images (41 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
@@ -94,7 +95,9 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
-| CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|dispatched full next batch|Up to12 meaningful safe_unverified_remainder C01/C03 states from saved catalog; no B10/B11/previous duplicates, same frozen tools |
+| CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
+| CN-B13 |same Debug source owner|ready for dispatch|Remaining8C03 seeds, full qualified cycle; producer of one shared own Debug build for disjoint CN-B14 |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|ready for source preparation|Remaining C02 candidates≤12qualified states; borrow CN-B13 build, physical capture after producer release |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -497,7 +500,7 @@ chat or stand paths), to expand beyond the known catalog without duplicate forms
 This is a source-inventory question, not a request to reapprove existing work;
 no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
-incomplete at126proved cases. CN5B still awaits host approval and CW-S2 awaits
+incomplete at135proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
 CW3 found an existing loopback subscription demo with fictional fixed data and
 local-only toggle callbacks, two new meaningful states. There is no wider ready
@@ -522,7 +525,17 @@ focus in both button drawings. Extra selector is literal inventory noise, not a
 privacy leak; correct prompt already supplies state/preservation and restrictions.
 No compiler defect or speculative repair follows. [Final review](receipts/corpus-web-demo-review7.md)
 preserves original observations/author reconciliation and exact scoped acceptance.
-CW58 adds one independently accepted complete primary-case image; counts remain126.
+CW58 adds one independently accepted complete primary-case image; no extra case.
+CN-B12 terminal `uib-CN-B12-kh2ysteb/HANDOFF.txt`:10configured/9newfixture states,
+39first images/0rerolls,25scoped passes/14FAIL,515dimension owners,0full approvals.
+cold-paused duplicates B10/T12 and is excluded. Entire batch774ed6b/Native1af633c,
+density30. Modifier sample27/27/28 retains candidate27 and+1exception with selection
+caveat; not a design requirement. All runtime/non-image transients retired, image
+assets/containers and ancestors retained; user63105 protected. Eight source-only
+C03 candidates remain. Next ready work separates those8(CN-B13) from untested C02
+catalog entries(CN-B14). One fresh owned Debug build has the second named consumer;
+source prep runs in parallel, actual shared desktop serialized. No new wiring,
+protected access/download flow, quota or product contract change is authorized.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
