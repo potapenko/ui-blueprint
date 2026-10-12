@@ -328,3 +328,16 @@ no whole-bundle Git equivalence claim. Drafts cleared and verified by reopen,
 query/URL/filters unchanged,1280×720/DPR2/scroll0 restored and own tab closed.
 No trackedchanges; all originals/images retained. Manifest SHA256
 `002e2be191670b42559742a99fb79fa9523bf9a847ddb1d04c5511e6d4c109d0`.
+Independent CV2turn01a1320a-2f70-7c30-a12a-b150a099e468 and CT2
+turn01a1320a-30db-7301-9359-21b0148cc6a1 complete all4reviews at actual1536×1024.
+CW64 exposes clipped preceding-row glyphs, loses explicit active-vs-applied meaning
+and shortens units; CW65 loses focused-input distinction; CW67 reconstructs clipped
+row text and loses ActorVoice focus. Prepared numerical amounts are correct. CW66
+preserves content/numerical meaning according to CT2, but both find the same gaps
+repeated across views despite their explicit one-owner/no-repeat assignment. This
+is not a blanket ban on equal values: equal366CSSpx for distinct frames is valid.
+CV2 additionally flags an extra Director heading; this additional content judgement
+is not needed for the common plan-residual verdict. Both validate CW64 capture
+qualification and find no concrete compiler contradiction. Missing frame meaning,
+not the literal token layout_bounds, is the qualifier criterion. No full image is
+jointly accepted and no resolution-only rejection or automatic code repair follows.
