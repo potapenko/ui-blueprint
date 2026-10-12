@@ -1,5 +1,38 @@
 # Web source advisor handoffs
 
+## CW5 — Actor in a disposable own tab, 2026-10-13
+
+Advisor turn01a13263-dd27-78f0-a156-3b5ecb6379ff, c23ef963/new-banners-paywall,
+source-only. Route: Header/Corpus selectors/state QA → Actor/deeplink contract →
+server-api.discovery-playback. Two candidates: Tom Hardy narrowed response and
+zzqxzzqx successful empty[]. Each uses a new own guest desktop Search tab, no
+selected Actor. Empty UI has no separate no-results message; do not invent one.
+
+Actor query/results use ordinary reg-event-db assoc without model-store-md or the
+explicit persistence interceptor. Global save-model persists locale fields, not all
+app-db. No Actor storage-event/BroadcastChannel/shared-worker/unload persistence
+was found in the selected source roots. Closing the entire own tab destroys that
+JS context, so late responses cannot update its UI or another tab's Actor state.
+It does not revoke server requests or remove normal logs/cache. Query is logged, so
+only public test strings are permitted. Browser origin storage is NOT isolated by
+new tabs: bootstrap locale normalization, value-for-test feature detection and
+ordinary analytics remain existing page-start effects, not Actor persistence.
+
+Entry localhost Search English → await initial Actor lookup → Select Actor → fill
+whole public string once where supported → await successful matching response and
+all prior pending Actor calls → capture → verify unchanged main query/Actor/URL →
+close exact own tab. No option/Enter/Clear/checkbox/app-close restoration. If gate
+or persistent/shared effect appears, exclude rather than bypass. Actual short/empty
+composition must differ from old ready/open-empty; runtime remains a separate gate.
+
+Owners: [Actor input](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/actor_select/view.cljs:192),
+[Actor model](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/actor_select/model.cljs:15),
+[persistence interceptor](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/localstorage.cljs:34),
+[global save](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/model.cljs:70),
+[REST](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/rest_api.cljs:1650),
+[server lookup](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/clj/playphraseme/api/route_functions/search/search_actors.clj:39).
+CW-B10 consumes these two recipes; consultation itself adds no cases or runtime proof.
+
 ## CW4 — temporary filter lookup states, 2026-10-12
 
 Web advisor01a1102f-e21d-7251-9597-c29a1c66d088, source-only turns

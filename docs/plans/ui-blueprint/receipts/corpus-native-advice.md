@@ -1,5 +1,47 @@
 # Native source advisor handoffs
 
+## CN12–CN14 — recovery choices and isolation boundary, 2026-10-13
+
+CN12 did not recover the original phraseID from retained observations or passive
+AX metadata. Current controls expose text/source/counter, not that ID. Normal lookup
+for position121 is beyond the free batch and was not used without an authorized
+client/credential route. No credential extraction or gate bypass. Copy Phrase copies
+text, Copy Source copies source text, and internal copySourceLink is an external
+source URL; no wired current-phrase-link action was found. SearchLinkCodec capability
+alone is not a user command. No corresponding Release selection/restore log producer
+was found; DEBUG CompositionTrace requires flags and was not enabled. Old CN-B19
+stdout logs were absent; no broad system log search followed.
+
+CN13 source-only check: ordinary Debug is production composition. Existing
+--playphrase-scenario/PLAYPHRASE_SCENARIO choose fixtures with normally disabled
+restoration and fixed/no-op prefs, but replace live services and retain shared window
+persistence. Preview fixture selection does not protect @main bootstrap, which has
+no XCODE_RUNNING_FOR_PREVIEWS guard. The scene always attaches
+[window persistence](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Platform/LearnerWindowFrameRestoration.swift:60).
+DEBUG_SESSION_READ_ONLY protects only debug session bookkeeping. No existing live
+isolated bootstrap found; UserDefaultsDataStore suiteName is not wired to launch
+configuration. MemoryDataStore is a private test actor; MemoryDownloadVideoOptionsStore
+is Download-only, and a general MemoryOptionsStore symbol was not found.
+
+CN13's proposed source changes are NOT approved or implemented: explicit Debug-only
+isolated entry; one memory store for relevant repositories, exclusion of production
+credentials/library/statistics/analytics/shared caches; disable shared window saves;
+protect app-target Preview bootstrap. Public lookup clients could remain real.
+No new targets/bundle IDs/harness required by that proposal. Source app edits need
+separate authority; neither the running goal nor this record authorizes them.
+
+CN14 source-only lifecycle plan has no save-only action (standard Save is Download).
+Activation has no direct Play command, but access restoration may update credentials,
+account/bootstrap or Search. Deactivation pauses, may update translation, writes the
+full restoration snapshot, checkpoints learner continuation and flushes pending
+statistics/practice. This is NOT a two-field patch or no-network operation. An async
+user choice is pending: leave data unchanged, or authorize one normal full live-session
+save with passive identity/hash/state prechecks and postchecks, no automatic repeat.
+No operation has been authorized by silence. The advisor's proposed return to Codex
+is NOT adopted as automation: the user forbids Codex Computer Use. Any approved
+deactivation must use an ordinary non-Codex surface or the user's own interaction.
+Recovery snapshot remains private and unchanged; ordinary Debug still prohibited.
+
 ## CN11 — current saved/live discrepancy, 2026-10-13
 
 Advisor turn01a13245-ca5e-7aa3-b157-86e720f5fd7e performed only authorized exact-key
