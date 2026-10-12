@@ -48,6 +48,8 @@ CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3 images (44 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
+CTEXT1 adds1 unqualified reference attempt only:433 generated images overall,
+with no increase to eligible cases or the44 qualified repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -81,7 +83,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
-| CTEXT1 |same exporter owner|unqualified reference attempt; archive after receipt|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
+| CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
 | CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79, restored|one qualified recapture/full validation dispatched|Fresh C01/CA8 text+independent native losslessPNG→literal one D03→evaluation; not a new case |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |

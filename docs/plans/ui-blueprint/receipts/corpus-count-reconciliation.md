@@ -13,7 +13,10 @@ fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Image buckets:388 primary images =384 first outputs +4 rerolls;
-44 separate repair-validation images;432 images in total. Extra sheets, repaired
+44 separate repair-validation images;1 unqualified reference attempt (CTEXT1);
+433 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+excluded from qualified validation and case counts. CTEXT2 remains pending.
+Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
