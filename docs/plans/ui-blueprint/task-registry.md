@@ -105,6 +105,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
+| CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|new finite C04/C05 task dispatched|13existing safe/alias candidates; source proof then≤12novel full cycles; borrow CA7 build only after release |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -527,6 +528,16 @@ Same bounds/fresh identities/owned runtime; source data remains local and scoped
 One own temp Debug build only if needed, current source-project guards; all old
 executables/refs retired. This provides missing evidence for a later narrow
 contract decision, not permission to publish values or broaden public projection.
+CN-B16 is a fresh visible task in the authorized Mac project for the remaining
+C04controls-base/filters-geometry-baseline and C05vocabulary-live plus10model/alias
+candidates from the saved129-ID catalog. Source proof precedes any runtime; no new
+fixtures, access/auth/download or continuation persistence. If no distinct wired
+safe source exists, return that bounded result without building. It uses accepted
+7723f09 and original role/name/bounds capture, never CA7 Value projection.
+CA7's fresh Debug product now has this named consumer; root notified producer to
+retain it if still present, publish path/hash/release, then guarded cleanup after
+consumer release. No resurrection of a retired build or duplicate build. Source
+prep proceeds while CA7 completes its separate one-fixture local diagnostic.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
