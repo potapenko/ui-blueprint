@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B17 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B18 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**155 proved eligible cases; range155–158 pending three named uncertainties.**
-The planning remainder is845 cases, potentially842 if all three are established.
-There are50 Web and105 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;98 are non-fixture observations. Fixture UI is
+**158 proved eligible cases; range158–161 pending three named uncertainties.**
+The planning remainder is842 cases, potentially839 if all three are established.
+There are50 Web and108 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;101 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:434 primary images =430 first outputs +4 rerolls;
+Completed-batch image buckets:460 primary images =456 first outputs +4 rerolls;
 49 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-487 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+513 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -66,7 +66,8 @@ and AX/status meaning. [Receipt](corpus-literal-captions12.md), neutral index in
 | CN-B14 |3|11|7unwired/alias IDs and3runtime duplicates excluded; active current-item non-atomicity explicit |
 | CW-B8 |3|3|Corrected nativeDPR2 sources;3earlier1xreference images excluded into separate bucket |
 | CN-B17 |5|43|Five real keyboard states; caller conditional-scope leakage remains an explicit failed-input/output finding |
-| **Primary subtotal** |**154**|**434**| |
+| CN-B18 |3|26|Real wrapping/coverage differences at accessibility-medium with keyboard;2no-novelty cases excluded |
+| **Primary subtotal** |**157**|**460**| |
 
 ## One first completion in the repair bucket
 
@@ -90,7 +91,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in155
+## Three unresolved cases, not counted in158
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -145,6 +146,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B14 | `uib-CN-B14-ocq6ve0f/handoff.md` |
 | CW-B8 | `uib-cw-b8-retina-N53ttw/handoff.json` |
 | CN-B17 | `playphraseme-cn-b17-7ekvw3ou/handoff.json` |
+| CN-B18 | `playphraseme-cn-b18-2_us3owt/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -277,3 +279,23 @@ Queries/destinations/pause/orientations restored, ownapps/mirrors/devicesshutdow
 desktoplane released. Task-launched DeviceHub ignoredSIGTERM; executable/starttime
 revalidated beforeSIGKILL and absence verified. Otherowners/ProMax retained.
 No trackedchanges or commit byproducer; allimages/tooloriginals retained.
+
+CN-B18 adds3accessibility-medium×keyboard states against the exact B17baselines:
+phoneClip horizontal query/title clipping and reduced card coverage; phoneSearch
+multiline translation/occlusion and changed phrase wrapping; iPadSearch subtitle
+wrap/title truncation/tighter paging. Keyboard/query frames partly stayfixed,
+demonstrating more than uniformscaling. iPadClip and Director had no meaningful
+new wrapping/coverage and are excluded.258selected AXnodes,26first images/0rerolls,
+14author contentPASS/12FAIL and201of212assignedlabels correct. Allactual1672×941;
+requestedresolution is not claimed. No fullpackage or independentwholebatch pass.
+Case-only metadata replaces the prior unnecessary Directorcondition. One initial
+query/action annotation refusal is retained; equivalent query and action wording
+was used before allmodelcalls, with rawgeometry unchanged. ApprovedCP12repin before
+anymodelcall: identical fixedinputs exported onCP11/CP12, exactscene/dimensions/
+sheets/manifest equality; onlyCP12generatedimages. Originals/nativePNG3xphone/2xiPad
+retained; unknown installedsource/mapping/atomicity/ownership remain. Queries,
+destinations, pausedscene, large text, orientations and sidebar expansion restored.
+Ownruntime/devicesshut down, sameidentity DeviceHub killed only after SIGTERMfailed,
+otherowners protected. No trackedsourcechanges; nonimage transientcleanup verified.
+Both current critics inspect only iPadSearchG01, phoneClipD04/D05 for responsible
+layer and scoped acceptance; do not infer verdicts for the other23images.
