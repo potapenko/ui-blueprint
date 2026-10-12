@@ -1,6 +1,6 @@
 # Единый реестр задач
 
-## CORPUS-1000 — blocked on external access, 2026-10-12
+## CORPUS-1000 — active after resume, 2026-10-12
 
 Authority: the user explicitly requested parallel helpers, broad real Mac/Web and
 available native mobile testing, about1000 genuinely generated/evaluated blueprint
@@ -8,7 +8,7 @@ cases, risk-first planning and corpus-driven improvements. Root is coordination-
 workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 [execution runbook](execution.md) govern. This goal is incomplete.
 
-Host goal returned `blocked` on2026-10-12 after three consecutive goal turns
+Historical state: host goal returned `blocked` on2026-10-12 after three consecutive goal turns
 verified the same external dependency, following completion of CP10 and both
 critics. This applies the host's mandatory blocked-audit policy, not completion
 or a user-requested pause. Original1000-case objective and accepted work remain.
@@ -22,6 +22,17 @@ another authorized source, then resumes this goal. Reconcile the same handles an
 preserve their state before new dispatch. Do not infer an approval from silence.
 Latest product checkpoint5e071f5, author receipt68e4e9e;147eligible cases,
 436generated images including47repair validations and1unqualified reference attempt.
+
+Current host state is active after resume. CN5B new turn
+01a1314c-6d75-75d1-aad1-747580509e5c is live without an approval flag; CN8 new turn
+01a1314c-6fd5-7080-bff2-8c55d7fd586d is live with waitingOnApproval. Old turn handles
+above are history, not current waits. Reset the blocked audit for this resumed run.
+User explicitly reiterated: close processes that interfere and continue; routine
+process/resource contention is not a reason to block the goal. Both existing owners
+received that direction: identify the real conflict, safely close its interfering
+process/release stale own resources and continue the whole task. Preserve unrelated
+work/unsaved data; host approval status alone does not identify an OS process and
+does not authorize bypassing a tool/OS gate. No replacement task or nested agents.
 
 ### Current counts and acceptance
 
