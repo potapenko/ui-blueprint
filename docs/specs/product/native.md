@@ -1,11 +1,12 @@
 # Нативное наблюдение и capture
 - Node type: leaf; domain: `uib.native`.
-- Contract: `UIB.NATIVE@4`; stable clauses: `UIB.NATIVE.CONTENT`, `UIB.NATIVE.AX-READ`, `UIB.NATIVE.AX-POPOVER`, `UIB.NATIVE.AX-VISIBLE`; supersedes @3 additively.
+- Contract: `UIB.NATIVE@5`; stable clauses: `UIB.NATIVE.CONTENT`, `UIB.NATIVE.AX-READ`, `UIB.NATIVE.AX-POPOVER`, `UIB.NATIVE.AX-VISIBLE`; supersedes @4 additively.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 faithful routing only.
 - Read when: Mac AX, capture, оконное matching, probe.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.GEOMETRY@1](geometry.md), [UIB.PROJECTIONS@1](projections.md), [UIB.LIFECYCLE@1](lifecycle.md).
+- Conditional requires: [Native static text@1](native-static-text.md) for explicitly requested visible_text; CA8 adds this role-limited capability, preserving old modes/fields.
 - Source mapping: TZ 76–105; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
 <a id="uib-native-content"></a>
@@ -24,7 +25,6 @@ Popup, меню и системный ввод могут принадлежат
 Связь AX bounds с capture frame проверяется по Target/Surface generation, времени и преобразованиям. При неизвестном mapping не выдаются точный overlay и координатный click. Несколько мониторов, разные scale contexts и перенос окна не сводятся к одному DPR. Отсутствие image mapping не запрещает отдельно разрешённое семантическое AX-действие по однозначно установленной актуальной native-цели; такой результат не используется как проверка попадания указателя.
 Opt-in probe сообщает измеренный output, а не значение modifier из исходника. Связь с файлом и измеренные bounds — разные поля. Probe не меняет accessibility, focus, hit area, layout или продуктовые данные. Приёмка проверяет это сравнением instrumented/uninstrumented fixture; private API не становятся неоговорённым основанием. SDK-кадр не заменяет внешнее наблюдение канонической сборки.
 Для обычной проверки нужен именно размер/состояние проверяемого сценария. Нет общего требования максимального окна, физического монитора или 2x. Поддержанный виртуальный дисплей пригоден там, где сценарий не требует конкретного физического свойства. Изменять конфигурацию дисплеев только ради удобного захвата не требуется.
-
 ## UIB.NATIVE.AX-READ — explicit ordinary-window geometry
 Root selected G03 ordinary-window extension under approved PLAN.UIB@1/user geometry
 priority. Existing CONTENT unchanged. `native_ax` is read-only external_semantics:

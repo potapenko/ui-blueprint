@@ -662,6 +662,18 @@ Partial coverage/node/depth/output/deadline limits remain; hidden children are n
 reported deleted. Node owner checks precede property reads in this mode. Existing
 whole-window/popup behavior and all config keys/CLI flags stay unchanged.
 
+An ordinary native_ax request may explicitly include visible_text. Only admitted
+AXStaticText string AXValue becomes Known(Text), with its own
+bounded_public_ax_static_text_value evidence; this is source text content, not a
+visibility/clipping/pixel-mapping claim. Known empty remains empty. Ownership and
+existing role/subrole/identifier sensitivity checks precede AXValue. Protected
+sources are redacted; missing classification unknown; other roles unsupported;
+wrong types and API/budget failures stay unavailable. No extra Value property is
+emitted unless requested, and a combined value/visible_text request shares one
+bounded AXValue read. Old requests gain no reads; Name and AXTitle are unchanged.
+Collection is not disclosure approval: the unchanged exporter requires reviewed
+public_text_fields=["visible_text"]. Raw Value and AXTitle extensions stay excluded.
+
 Feed original observed response to existing inspect design and measure; select exact
 SourceKey from that response. Accessibility bounds are ax-screen/screen/pt/top_left;
 pixel transform unknown. NativeFocusedAX collects no images/probe/CG metadata and

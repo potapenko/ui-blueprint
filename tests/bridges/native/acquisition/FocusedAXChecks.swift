@@ -72,6 +72,7 @@ import ApplicationServices
   checks += try popupChecks(profile: profile, request: request, header: header, output: output)
   checks += try FocusedAXPublicationChecks.run(profile: profile, request: request, header: header, output: output)
   checks += try VisibleChildrenChecks.run(profile: profile, request: request, header: header, output: output)
+  checks += try StaticTextChecks.run(profile: profile, request: request, header: header, output: output)
   print("{\"checks\":\(checks),\"ordinary_ax\":true,\"fixture_files\":false,\"live_sdk\":false}")
  }
  @MainActor static func popupChecks(profile: Any, request: [String: Any], header: NativeControl, output: URL) throws -> Int {

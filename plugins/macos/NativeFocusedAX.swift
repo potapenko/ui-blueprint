@@ -51,7 +51,7 @@ enum NativeFocusedAX {
               surfaces[0]["id"] as? String == "ax-focused-\(rid)", surfaces[0]["generation"] as? String == rid,
               let plugin = context["plugin"] as? [String:Any], plugin["id"] as? String == "macos",
               let fields = context["fields"] as? [String], !fields.isEmpty, Set(fields).count == fields.count,
-              Set(fields).isSubset(of:["role","accessibility_name","description","value","placeholder","enabled","focused","actions","accessibility_bounds"]),
+              Set(fields).isSubset(of:["role","accessibility_name","visible_text","description","value","placeholder","enabled","focused","actions","accessibility_bounds"]),
               request["freshness_policy"] as? String == "current_required",
               let operation = request["operation"] as? [String:Any], operation["operation"] as? String == "observe",
               operation["channels"] as? [String] == ["external_semantics"],
@@ -115,6 +115,7 @@ enum NativeFocusedAX {
         let config = command.configuration, request = command.request
         let context = request["context"] as! [String:Any], target = context["target"] as! [String:Any]
         let surface = (context["surfaces"] as! [[String:Any]])[0], fields = context["fields"] as! [String]
+        let staticTextRequested = fields.contains("visible_text")
         let limits = request["limits"] as! [String:Any], scope = context["scope_id"] as! String
         let rid = request["request_id"] as! String, started = ProcessInfo.processInfo.systemUptime
         let admission = try NativeAcquisition(config.acquisition_limits,deadline:command.deadline)
@@ -137,7 +138,7 @@ enum NativeFocusedAX {
         }
         let window: CFTypeRef
         do { window = try focused() }
-        catch NativeAcquisitionError.limit where config.collection == "focused-popover-ax" {
+        catch NativeAcquisitionError.limit where config.collection == "focused-popover-ax" || staticTextRequested {
             try frame.encode(incomplete); return frame
         } catch { try frame.encode(unresolved); return frame }
         func same() throws {
@@ -148,7 +149,7 @@ enum NativeFocusedAX {
             catch NativeAcquisitionError.limit { throw NativeAcquisitionError.limit }
             catch NativeAcquisitionError.expired { throw NativeAcquisitionError.expired }
             catch {
-                if config.collection == "focused-popover-ax" { throw SelectionError.changed }
+                if config.collection == "focused-popover-ax" || staticTextRequested { throw SelectionError.changed }
                 throw error
             }
             guard CFEqual(window, current) else { throw SelectionError.changed }
@@ -199,7 +200,7 @@ enum NativeFocusedAX {
                 maxNodes:limits["max_elements"] as! Int,maxDepth:limits["max_depth"] as! Int,
                 deadline:command.deadline,admission:admission,fields:fields,json:json,access:access,
                 visibleCollections:config.collection == "focused-visible-ax",
-                visibleOwner:{ windowOwner($0) == config.process.pid })
+                nodeOwner:{ windowOwner($0) == config.process.pid })
             if popup != nil { try sameSelection() } else { try same() }
             var snapshot = try Collector.snapshot(context:context,surface:surface,target:target,scope:scope,
                 fields:fields,observation:oid,channel:"external_semantics",started:started,
@@ -213,6 +214,7 @@ enum NativeFocusedAX {
                 try json.object(["status","data"]) { ["status":try json.scalar("observed"),"data":snapshot] }
             })
             if popup != nil { try sameSelection() }
+            else if staticTextRequested { try same() }
             else { do { try same() } catch { frame.reset(); try frame.encode(stale); return frame } }
             // Only a fully encoded, internally revalidated observation enables
             // the final descriptor-boundary check. Failed replies retain owners.

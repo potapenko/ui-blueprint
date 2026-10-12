@@ -159,16 +159,17 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
 @MainActor func collectWindowAX(_ root: CFTypeRef, surface: [String: Any], observationID: String,
     maxNodes: Int, maxDepth: Int, deadline: Double, admission: NativeAcquisition,
     fields: [String], json: NativeJSON, access: NativeAXAccess = .live,
-    visibleCollections: Bool = false, visibleOwner: ((CFTypeRef) -> Bool)? = nil) throws -> WindowAXResult {
+    visibleCollections: Bool = false, nodeOwner: ((CFTypeRef) -> Bool)? = nil) throws -> WindowAXResult {
     let selected = Set(fields)
     guard !fields.isEmpty, selected.count == fields.count,
-          selected.isSubset(of: ["role", "accessibility_name", "description", "value", "placeholder", "enabled", "focused", "checked", "actions", "accessibility_bounds"]),
+          selected.isSubset(of: ["role", "accessibility_name", "visible_text", "description", "value", "placeholder", "enabled", "focused", "checked", "actions", "accessibility_bounds"]),
           access.isElement(root) else { throw NativeAcquisitionError.invalidValue }
     var handles = [root], depths = [0]
     var nodes: [[String: Any]] = try json.array { [] }
     var edges: [[Int]] = []
     var omitted = 0, unknownChildLists = 0, duplicateReferences = 0
     var availabilityCounts: [String: Int] = [:]
+    let requiresOwnedNodes = visibleCollections || selected.contains("visible_text")
     func key(_ index: Int) throws -> [String: Any] {
         try json.object(["namespace", "key"]) {
             ["namespace": try json.scalar("macos.ax"), "key": try json.scalar("\(observationID)-handle-\(index)")]
@@ -203,7 +204,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
     while nodes.count < handles.count && nodes.count < maxNodes && ProcessInfo.processInfo.systemUptime < deadline {
         try admission.check()
         let index = nodes.count, el = handles[nodes.count]
-        if visibleCollections, visibleOwner?(el) != true { throw NativeAcquisitionError.invalidValue }
+        if requiresOwnedNodes, nodeOwner?(el) != true { throw NativeAcquisitionError.invalidValue }
         access.prepare(el)
         let identity = try batch(el, [kAXRoleAttribute, kAXSubroleAttribute, kAXIdentifierAttribute])
         let role = identity[kAXRoleAttribute] as? String
@@ -232,7 +233,11 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
         if selected.contains("enabled") { names.append(kAXEnabledAttribute) }
         if selected.contains("focused") { names.append(kAXFocusedAttribute) }
         if selected.contains("accessibility_bounds") { names += [kAXPositionAttribute, kAXSizeAttribute] }
-        if (selected.contains("value") || selected.contains("checked")) && nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { names.append(kAXValueAttribute) }
+        let readsStaticText = selected.contains("visible_text") && role == "AXStaticText"
+        if (selected.contains("value") || selected.contains("checked") || readsStaticText)
+            && nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) {
+            names.append(kAXValueAttribute)
+        }
         let values = names.isEmpty ? [:] : try batch(el, names)
         // An inadmissible Title must not discard the independently admitted
         // original fields. The same per-value/batch/aggregate checks still apply.
@@ -245,7 +250,8 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
             let property = try json.object(["selection", "field", "sensitivity", "evidence", "state"]) {
                 ["selection": try json.scalar("requested"), "field": try json.scalar(field),
                  "sensitivity": try json.scalar(sensitive ? "sensitive" : "public"),
-                 "evidence": try json.evidence(observationID, "macos.ax", "bounded_public_ax_attributes"), "state": try state()]
+                 "evidence": try json.evidence(observationID, "macos.ax",
+                    field == "visible_text" ? "bounded_public_ax_static_text_value" : "bounded_public_ax_attributes"), "state": try state()]
             }
             let status = (property["state"] as? [String: Any])?["availability"] as? String ?? "unknown"
             availabilityCounts[status, default: 0] += 1
@@ -262,6 +268,17 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
                     if secure { return try json.redacted() }
                     if !nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) { return try json.unavailable("identity_classification_unavailable") }
                     return try nativeAXScalar(values[kAXValueAttribute], json: json)
+                }
+            case "visible_text":
+                try append(field, sensitive: secure) {
+                    if secure { return try json.redacted() }
+                    if !nativeMayReadValue(role: role, subrole: subrole, identifier: identifier, complete: safeIdentity) {
+                        return try json.unavailable("identity_classification_unavailable")
+                    }
+                    guard role == "AXStaticText" else {
+                        return try json.unavailable("visible_text_not_exposed_for_role", status: "unsupported")
+                    }
+                    return try typed(values[kAXValueAttribute], expected: "text")
                 }
             case "checked":
                 try append(field) {
@@ -323,7 +340,7 @@ func nativeAXGeometry(_ position: Any?, _ size: Any?, json: NativeJSON) throws -
             omitted = try nativeAdd(omitted, nativeAXElements(el,
                 visibleList ? kAXVisibleChildrenAttribute : kAXChildrenAttribute, windows: false,
                 capacity: capacity, admission: admission, access: access, requireAvailable: visibleList) { child in
-                    if visibleCollections, visibleOwner?(child) != true { throw NativeAcquisitionError.invalidValue }
+                    if requiresOwnedNodes, nodeOwner?(child) != true { throw NativeAcquisitionError.invalidValue }
                     if let existing = handles.firstIndex(where: { CFEqual($0, child) }) {
                         duplicateReferences += 1
                         if !childIndices.contains(existing) { childIndices.append(existing) }
