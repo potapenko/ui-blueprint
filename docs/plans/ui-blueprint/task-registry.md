@@ -74,10 +74,10 @@ CN-B15 adds4non-fixture Simulator states, bringing it to139;
 CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147;
 corrected CW-B8 adds3responsive states, bringing it to150.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2 images (47 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1 images (48 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:442generated images
-overall, with no increase to eligible cases or the47repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:443generated images
+overall, with no increase to eligible cases or the48repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -114,7 +114,7 @@ overall, with no increase to eligible cases or the47repair-validation images.
 | CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
 | CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, both critics agree|Qualified native PNG,1first D03;4texts/9items correct, layout fails; no demonstrated literal compiler defect; not a new case |
 | CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|5e071f5 bounded accepted; archived|Both critics accept source hints/AM image, reject CTEXT2 wrong-column layout; [receipt](receipts/corpus-arrangement-repair10.md) |
-| CP11 |same exporter owner, restored|full-cycle construction-presentation improvement dispatched|Repeated CP7/CW62 unassigned exact-number noise; HBP concise/schematic presentation, unchanged machine truth/selected dimensions; at most2new images, controls by exact replay |
+| CP11 |same exporter owner|7f767d5 bounded accepted; archived|Both critics accept formatting/machine preservation; newCW62stillFAIL for unassigned≈791/coordinate inventory; [receipt](receipts/corpus-construction-presentation11.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -722,6 +722,24 @@ constrain nonadjacent alignment; no generic further fix assumed. Frozen binary
 `uib-CP10-wt2sd9z0/uiblueprint-cp10`, SHA256
 `eb9ef263fc20e2a42a524a435ca4d9d43a68b3acf34da2fd7bc3eb3e2102062e` under system temp.
 This is the current bounded exporter baseline; old images keep original revisions.
+
+CP11 supersedes CP10 for future rectangular construction-presentation exports:
+source7f767d5b2017d6b8c6dfa2cb7f473701ad78fdc7, author receipta3ce594, currentmaster
+checkpoint/push. Same CV2 turn01a13185-860a-7eb1-8a49-702b34cabab5 and CT2
+turn01a13185-8713-7812-9ae2-4c94f077c908 independently accept bounded source/prompt
+change. One schematic clipped-rectangle declaration replaces exactdecimal/JSON
+duplication; original machine bounds326×3829.921875 and326×790.5625 stay exact.
+All non-prompt files and entire CW60/CW61/NativeCTEXT2 controls remain byte-identical.
+48compiler tests/build/scopedClippy/format checks are author evidence; CT2 inspected
+focused test definitions/diff and independently checked hashes/replay invariants,
+without claiming a rerun. Both critics and author reject the new1536×1024CW62:
+long decimals disappeared and CSSpx/≈ are correct, but unassigned≈791 and x/y/w/h
+still print. Full-layout326×≈3830 stays separate. No additional mandatory compiler
+defect or automatic generic repair established; no general/causal success claim.
+One repair image, no new case or reroll. Frozen binary under system temp
+`uib-CP11-13io0tsu/uiblueprint-cp11`, SHA256
+`6c5910debcf4ce21793feb8c4840d9d79a01e23142f66fbdd835b1dafa2ee25a`.
+CN-B17 keeps its original frozenCP10 inputs/binary; old images never relabelled.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.

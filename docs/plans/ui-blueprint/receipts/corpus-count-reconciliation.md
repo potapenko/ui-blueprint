@@ -13,9 +13,9 @@ fixture/component-preview origin;93 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Image buckets:391 primary images =387 first outputs +4 rerolls;
-47 separate repair-validation images;4 unqualified reference attempts
+48 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-442 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+443 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -29,6 +29,10 @@ AM-translation/D02 and reject CTEXT2/D03's remaining wrong-column arrangement.
 The narrower source/prompt change is accepted separately from image fidelity.
 Evidence: [CP10 receipt](corpus-arrangement-repair10.md) and neutral index in
 `uib-CP10-wt2sd9z0` under the system-temp prefix below. No causal/general guarantee.
+CP11 adds1qualified CW62 repeat at7f767d5, no new case. Both critics accept source
+rounding/deduplication and exact machine/control preservation, but the raster still
+prints unassigned≈791 and construction coordinates. [Author receipt](corpus-construction-presentation11.md)
+and `uib-CP11-13io0tsu/neutral-index.json` retain the failed first image and provenance.
 
 ## Completed primary batches
 
