@@ -68,7 +68,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP5 |same CP owner|accepted; archived after handoff|756dfca +1a80290;6/6G01 fit,49prompt replacements only,35non-prompt files identical,5focused tests |
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
-| CP8 |same exporter owner, restored|dispatched source-scoped state attribution task|B11-01 caller-state repetition witness; diagnose and minimally restore attribution, focused checks plus one changed-sheet image; frozen corpus continues |
+| CP8 |same exporter owner|implementation returned; critic acceptance pending|774ed6b/4f32bbd;47author checks,3machine-identical replays,1new D01; two retained critics inspect neutral artifact first |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -95,8 +95,8 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP7 reconciled; retained for future changed artifacts|Frame separation passes, raster display/style fails; no new compiler cause established |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP7 reconciled; retained for future changed artifacts|Source and literal assignment pass, extra/long-decimal/unit labels fail; no further generic repair |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP8 initial independent observation running|One changed B11-01/D01 image, visual/source fidelity; no author narrative yet |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP8 initial independent observation running|Same changed image/prompt plus bounded source/three-package protection; no author narrative yet |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -414,6 +414,17 @@ registry. Replay B11-01 and distinct CW34/CW40 controls, preserve machine files,
 then one changed B11-01/D01 first image if a repair is supported. Both continuing
 critics receive neutral changed artifacts later; no new review wave on old images.
 Current CN-B10/CN-B11 batches remain pinned to814af45 for comparable first results.
+CP8 returned source774ed6b0fbdc458f5c9aa1120d3610e6ad039770/receipt4f32bbd:
+removed keyword extraction/repetition of caller state, retained once per sheet
+separate from actual source flags. Author47focused tests and three real replays
+report unchanged machine files; one new D01 sample, no general image acceptance.
+Neutral index `uib-CP8-qseai8mh/neutral-index.json`, frozen CLI hash
+`a5e6a6310a3b515db475d27aeedeba5507ac8bb3935c77943ff1f08e6d84040c`;
+image1536×1024 hash `1e8354659b2ee3322bcc0af2d5f3e96f7540e90126b520b59cc3ec199687ac33`.
+Same CV2/CT2 now inspect the changed artifact before builder narrative. Send them
+corpus-state-attribution-repair8.md and author-review.json only after their initial
+observations; then reconcile final verdict without redoing unaffected checks.
+CP8's single repair image awaits ledger inclusion with this review disposition.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
