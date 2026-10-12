@@ -54,6 +54,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN5 |same Mac advisor|retired without keyboard evidence|Advisor cited separate direct-human doc-copy task; preserved acd0b0e link-only change, no keyboard claim |
 | CN5B |01a12cf2-87fe-79a0-9d2e-0191367de38f|host waitingOnApproval|Pending operation/reason requested; finish from available docs if possible, no bypass or permission expansion |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
+| CW3 |same Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|read-only source discovery running|Existing isolated preview/fixture/catalog or saved datasets beyond CW1/CW2; no runtime, new harness, auth or source mutation |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
 | CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
@@ -89,7 +90,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B8 |same mobile source owner|investigation accepted; archived|5families/7states/11first images;68of68labels correct,4content-pass/7FAIL; settings/runtime restored |
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
-| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archive after handoff|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
+| CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|dispatched full next batch|Up to12 meaningful safe_unverified_remainder C01/C03 states from saved catalog; no B10/B11/previous duplicates, same frozen tools |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
@@ -495,6 +496,12 @@ no additional project scope is inferred while its answer is pending. Existing
 authorized source discovery and CN-B10 continue independently. Goal stays
 incomplete at124proved cases. CN5B still awaits host approval and CW-S2 awaits
 operator evidence; neither is bypassed or silently treated as source-ready.
+CW3 now asks the existing Web advisor one new source-only question: whether already
+present isolated previews/fixtures/catalogs or saved datasets expose additional
+forms beyond the exercised CW1/CW2 public routes. Native fixture utility motivates
+this bounded discovery; it does not authorize constructing a Web harness, login,
+mutation or another project. Concrete entry/isolation/spec evidence or an honest
+negative result feeds the next Web batch decision. CN-B12 continues independently.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
