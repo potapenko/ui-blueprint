@@ -396,3 +396,16 @@ still needs safe live qualification. Devices/processes stopped,images retained, 
 trackedchanges. An export annotation refusal and6copy-helper orchestration rejections
 are preserved; all6model calls succeeded once and originalimages were recovered,
 not regenerated. The incident does not erase independently qualified case chronology.
+Both six-image reviews are complete: CV2turn01a1323a-7761-7242-8180-c0e106b10238
+and CT2turn01a1323a-785b-71d0-bb05-536f97fe0583 agree on2phone scopedPASS/4iPadFAIL.
+All42assigned labels, owners,≈ and pt units are correct in separate AX sketches.
+Phone narrowed/empty preserve exact publicdrafts and off checkbox. iPad narrowed
+and empty Director preserve content/numbers but clear-icon white fill violates the
+prescribed blue interior; iPad Actor-empty additionally appends a period, Director
+top loses active-vs-applied distinction. CV2 also finds grouping/pointer/disabled
+style deviations. No extra exporter numeric/privacy defect established. Caller
+sentence punctuation around the unquoted empty-query draft is ambiguous and the
+emitted annotation adds a sentence terminator; no parsed field-value rewrite or
+unique cause is proven. Future inputs delimit exact draft strings explicitly.
+Review at actual output sizes gives no resolution-only failure. These image passes
+do not qualify the incident, restore gap, source ownership or pixel mapping.

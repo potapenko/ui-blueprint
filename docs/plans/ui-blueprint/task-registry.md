@@ -42,8 +42,9 @@ explicit fixture origin, image buckets, duplicates and original execution protoc
 This is completed evaluation count, not image-quality approval.
 
 Twenty-eight completed primary batches produced496 qualified evaluated images;
-CW58,CW60,CW61 are the three complete primary-case images independently accepted
-by both continuing critics.
+CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
+images independently accepted by both critics within their declared drawing scope.
+Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
 Their492 first outputs by configuration/sheet include3 duplicate fixture renderings;
 this is not496 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
@@ -97,7 +98,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN7 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only inventory accepted|453declarations, isolated candidate families, no UI package/gallery; [handoff](receipts/corpus-native-advice.md#cn7--existing-app-target-previews-2026-10-12) |
 | CN9 |same Mac advisor|accepted source-only consultation|6recipes Actor×3platforms/Director×2/MacReels; explicit restore and late-response guards; [handoff](receipts/corpus-native-advice.md#cn9--transient-lookup-recipes-2026-10-12) |
 | CN10 |same Mac advisor|source finding accepted; current value unproved|Ordinary Debug/Release share restoration key by source config; handoff saves full snapshot, no rollback on exit; [finding](receipts/corpus-native-advice.md#cn10--ordinary-debug-shares-restoration-storage-2026-10-13) |
-| CN11 |same Mac advisor|read-only discrepancy confirmed|Actual same namespace; saved Search index4 vs live Release121/426, same query; exact-key600/700 temp backup, no writes/activation; original phraseID still unknown |
+| CN11 |same Mac advisor|read-only discrepancy confirmed|Actual same namespace; saved Search index4 vs live Release121/426, same query; exact-key0600/0700 temp backup, no writes/activation; original phraseID still unknown |
 | CN12 |same Mac advisor|read-only exact-identity recovery running|Retained/passive evidence first, bounded supported app lookup only if needed; prepare exact two-field proposal, no writes/Debug launch/Release mutation |
 | CN8 |01a12e68-26dc-7ba2-ab7a-6f8745f9e78a|host waitingOnApproval|One existing Mac Download Preview via Xcode Canvas; pending operation text unavailable, user clarification requested; no bypass |
 | CW2 |same Web advisor|accepted read-only discovery|8 recipes/~7 families, remapped CW43–50; no captures, conditional guest filter and low-novelty tooltip explicit; [handoff](receipts/corpus-web-advice.md#cw2--additional-families-2026-10-11) |
@@ -157,7 +158,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CN-B17 |same mobile source owner|finite cycle accepted;3witness reviews complete|5qualified keyboard scenes/43first images;21author contentPASS/22FAIL,284of288labels; both critics2FAIL/1scopedPASS on3witnesses;155cases total |
 | CN-B18 |same mobile source owner|finite cycle accepted;3witness reviews complete|3new states/26first images,14author contentPASS/12FAIL,201of212labels; both critics G01FAIL/D04scopedPASS/D05FAIL;158cases total |
 | CN-B19 |Mac source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|6partial source cases accepted; images remain failed|26firstimages,305source dimensions; CT2 confirms actualActor geometry before truncated background; field-failure subcauseunknown; CN10 checks persistence/restoration effect |
-| CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|evaluation complete with runtime incident; archived|6source cases/6firstimages,42labels,author2PASS/4FAIL; Spielberg selection undone,viewportresidual retained; no cleanruntime pass; imagecriticsrunning |
+| CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|evaluation complete with runtime incident; archived|6cases/6images; both critics2phonePASS/4iPadFAIL,42labels correct; incident/restorationgap remain, no cleanruntime pass |
 | CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|cycle accepted; archived, reviews complete|4new states/4firstG01 retain mandatory issues; CW66 content/numbers pass but explicit annotation-plan residual; no compiler conflict;162cases total |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
