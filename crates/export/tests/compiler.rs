@@ -1627,6 +1627,59 @@ fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
             .to_string()
             .contains("accessibility_bounds")
     );
+    assert!(text.contains("structural orientation only, not proved visual correspondence"));
+    assert!(!text.contains("identifies the item in the reference"));
+    // Repeated ancestor labels are not identities. Exercise descent, siblings,
+    // ascent and a distinct root with the same name, retaining every Draw item.
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        node.children.clear();
+        set_test_role(node, "DIV");
+    }
+    for (i, name) in [
+        (0, "Root"),
+        (16, "Root"),
+        (2, "Same parent"),
+        (4, "Same parent"),
+    ] {
+        let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[1] else {
+            panic!()
+        };
+        *state = Availability::Known {
+            value: Value::Text(name.into()),
+        };
+    }
+    for (parent, children) in [
+        (0, vec![2, 4, 12]),
+        (2, vec![6]),
+        (4, vec![8]),
+        (6, vec![10]),
+        (16, vec![14]),
+    ] {
+        snapshot.nodes[parent].children = children
+            .iter()
+            .map(|&i| snapshot.nodes[i].key.clone())
+            .collect();
+    }
+    b.details[0].components = [2, 4, 6, 8, 10, 12, 14]
+        .into_iter()
+        .map(|i| format!("N{i:03}"))
+        .collect();
+    let p = compile(&b, l).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert_eq!(text.lines().filter(|l| l.starts_with("- Draw ")).count(), 7);
+    assert_eq!(
+        text.matches("Source hierarchy (orientation only): container \"Root\".")
+            .count(),
+        2
+    );
+    assert!(text.contains("within previous context → container \"Same parent\" (child 1 of 3)"));
+    assert!(text.contains(
+        "keep first 1 level of previous context → container \"Same parent\" (child 2 of 3)"
+    ));
+    assert!(text.contains("return to first 1 level of previous context."));
 }
 
 #[test]

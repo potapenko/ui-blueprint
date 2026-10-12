@@ -784,7 +784,7 @@ fn drawing_inventory(
     append(
         &mut out,
         if assignment == Assignment::SourceDetail {
-            "DRAW THIS SOURCE FRAGMENT. Each Draw item is included artwork. Its source hierarchy identifies the item in the reference; ancestors and child positions are orientation only, not extra artwork or captions. Preserve the listed items' reference appearance. AX frames do not establish painted geometry; their exact measurements remain in the machine package.\n"
+            "DRAW THIS SOURCE FRAGMENT. Each Draw item is included artwork. Source hierarchy provides structural orientation only, not proved visual correspondence. Ancestors and child positions are not extra artwork or captions. Preserve the listed items' reference appearance. AX frames do not establish painted geometry; their exact measurements remain in the machine package.\n"
         } else {
             "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n"
         },
@@ -868,6 +868,7 @@ fn drawing_inventory(
         }
     }
     let mut previous_fragment_parent = None;
+    let mut previous_fragment_path: Vec<(usize, String)> = Vec::new();
     for (i, c) in v.components.iter().enumerate() {
         if selected.is_some_and(|s| !s.contains(&c.id)) {
             continue;
@@ -924,29 +925,50 @@ fn drawing_inventory(
                                 .iter()
                                 .position(|&i| i == index)
                                 .ok_or(E::InvalidInput)?;
-                            location.push(format!(
-                                "{name} (child {} of {})",
-                                position + 1,
-                                siblings.len()
+                            location.push((
+                                index,
+                                format!("{name} (child {} of {})", position + 1, siblings.len()),
                             ));
                         } else {
-                            location.push(name);
+                            location.push((index, name));
                         }
                         current = ancestor;
                     }
                     location.reverse();
-                    append(
-                        &mut out,
-                        &format!(
-                            "Source hierarchy for the following items (orientation only): {}.\n",
-                            if location.is_empty() {
-                                "top level".into()
+                    // Reuse structure by source identity, never by equal labels.
+                    let shared = location
+                        .iter()
+                        .zip(&previous_fragment_path)
+                        .take_while(|(a, b)| a.0 == b.0)
+                        .count();
+                    let suffix = location[shared..]
+                        .iter()
+                        .map(|(_, name)| name.as_str())
+                        .collect::<Vec<_>>()
+                        .join(" → ");
+                    let levels = if shared == 1 { "level" } else { "levels" };
+                    let context = if shared == 0 {
+                        format!(
+                            "Source hierarchy (orientation only): {}.\n",
+                            if suffix.is_empty() {
+                                "top level"
                             } else {
-                                location.join(" → ")
+                                &suffix
                             }
-                        ),
-                        limit,
-                    )?;
+                        )
+                    } else if suffix.is_empty() {
+                        format!(
+                            "Source hierarchy: return to first {shared} {levels} of previous context.\n"
+                        )
+                    } else if shared == previous_fragment_path.len() {
+                        format!("Source hierarchy: within previous context → {suffix}.\n")
+                    } else {
+                        format!(
+                            "Source hierarchy: keep first {shared} {levels} of previous context → {suffix}.\n"
+                        )
+                    };
+                    append(&mut out, &context, limit)?;
+                    previous_fragment_path = location;
                     previous_fragment_parent = parent;
                 }
             }
