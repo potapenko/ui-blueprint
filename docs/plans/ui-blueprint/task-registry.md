@@ -36,16 +36,16 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:150; unresolved upper bound153; conservative remainder850.**
+**Proved eligible case count:155; unresolved upper bound158; conservative remainder845.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty-three completed primary batches produced391 qualified evaluated images;
+Twenty-four completed primary batches produced434 qualified evaluated images;
 CW58,CW60,CW61 are the three complete primary-case images independently accepted
 by both continuing critics.
-Their387 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not391 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their430 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not434 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -73,10 +73,11 @@ CN-B12 adds9 fixture-origin states, bringing it to135;
 CN-B15 adds4non-fixture Simulator states, bringing it to139;
 CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147;
-corrected CW-B8 adds3responsive states, bringing it to150.
+corrected CW-B8 adds3responsive states, bringing it to150;
+CN-B17 adds5keyboard states, bringing it to155.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1 images (48 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:443generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:486counted generated images
 overall, with no increase to eligible cases or the48repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -143,7 +144,7 @@ overall, with no increase to eligible cases or the48repair-validation images.
 | CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
-| CN-B17 |same mobile source owner, restored|full-cycle keyboard batch dispatched|Qualify owned-device software keyboard, then5safe surfaces/source→geometry→literalCP10→images→evaluation; no new counted cases yet |
+| CN-B17 |same mobile source owner|finite cycle accepted; archive after handoff|5qualified keyboard scenes/43first images;21author contentPASS/22FAIL,284of288labels; CV2/CT2 inspect3witnesses only;155cases total |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |

@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-12. CCOUNT1 terminal reconciliation, updated by root after corrected CW-B8 completion.
+2026-10-12. CCOUNT1 terminal reconciliation, updated by root after CN-B17 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**150 proved eligible cases; range150–153 pending three named uncertainties.**
-The planning remainder is850 cases, potentially847 if all three are established.
-There are50 Web and100 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;93 are non-fixture observations. Fixture UI is
+**155 proved eligible cases; range155–158 pending three named uncertainties.**
+The planning remainder is845 cases, potentially842 if all three are established.
+There are50 Web and105 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;98 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Image buckets:391 primary images =387 first outputs +4 rerolls;
+Completed-batch image buckets:434 primary images =430 first outputs +4 rerolls;
 48 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-443 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+486 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -61,7 +61,8 @@ and `uib-CP11-13io0tsu/neutral-index.json` retain the failed first image and pro
 | CN-B13 |5|22|3duplicates/text-only variations excluded; original failed attempts retained, fresh kids source qualified |
 | CN-B14 |3|11|7unwired/alias IDs and3runtime duplicates excluded; active current-item non-atomicity explicit |
 | CW-B8 |3|3|Corrected nativeDPR2 sources;3earlier1xreference images excluded into separate bucket |
-| **Primary subtotal** |**149**|**391**| |
+| CN-B17 |5|43|Five real keyboard states; caller conditional-scope leakage remains an explicit failed-input/output finding |
+| **Primary subtotal** |**154**|**434**| |
 
 ## One first completion in the repair bucket
 
@@ -85,7 +86,7 @@ CP1 A01-wide and CW14 were exported but not generated. CP2–CP7 use already
 represented source cases. Evidence: CP1 images.json/corpus-verified.json/review.md
 and CN-B1 manifest. No case is excluded merely because its image is called a repair.
 
-## Three unresolved cases, not counted in150
+## Three unresolved cases, not counted in155
 
 - **A02:** executed/evaluated, but parent image cuts off the separate menu and menu
   geometry is not covered. A bounded parent-window observation cannot silently
@@ -139,6 +140,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 | CN-B13 | `uib-CN-B13-4npljmu2/HANDOFF.md` |
 | CN-B14 | `uib-CN-B14-ocq6ve0f/handoff.md` |
 | CW-B8 | `uib-cw-b8-retina-N53ttw/handoff.json` |
+| CN-B17 | `playphraseme-cn-b17-7ekvw3ou/handoff.json` |
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
@@ -246,3 +248,23 @@ Sitec23ef963/export5e071f5;
 demo callbacks matched prior qualified evidence, no whole-bundle equivalence claim.
 Restored1280×720/DPR2/scroll0, own tab closed, repos unchanged. Corrected manifest
 SHA256 `c3c1f4e603ed7ec3a531f1195bdbabafada1c43daa48d6536245f44eed6ad588`.
+
+CN-B17 adds5real software-keyboard states on owned phone/tablet, distinct from
+B6/B8/B15 without keyboards: two phonequery surfaces, two iPadquery surfaces and
+empty Director popup.43first sheet calls/0rerolls,429AXrecords,288assignedlabels
+with284correct,10prepared mathematical statements preserved. Author21content-pass/
+22FAIL at actual1672×941(41images) or1672×940(2); no full packages accepted.
+All source references are independent simctl nativePNG: phone1170×2532 at3x,
+iPad2752×2064 at2x, decoder/hash verified. AXscreen/pt is not paint/hit/visibility
+or calibratedimage geometry; providerownership/acquisitionatomicity remain unknown.
+Installed binaries match B15 hashes, not proven source revision. Export5e071f5
+remained frozen throughout; laterCP11 does not relabel these images.
+Excessive conditional caller wording about Director appeared in all five metadata
+records and was wrongly promoted in3non-Director details. This is explicit caller
+risk/output failure, not an exporter arithmetic or source-app defect. Firstinputs
+and outputs remain immutable. Both current critics inspect3selected witnesses;
+this does not establish independent acceptance of43images or all5packages.
+Queries/destinations/pause/orientations restored, ownapps/mirrors/devicesshutdown,
+desktoplane released. Task-launched DeviceHub ignoredSIGTERM; executable/starttime
+revalidated beforeSIGKILL and absence verified. Otherowners/ProMax retained.
+No trackedchanges or commit byproducer; allimages/tooloriginals retained.

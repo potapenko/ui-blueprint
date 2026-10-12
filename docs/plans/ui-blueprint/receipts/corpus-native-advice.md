@@ -1,5 +1,29 @@
 # Native source advisor handoffs
 
+## CN-B17 — keyboard runtime qualification, 2026-10-12
+
+The later authorized runtime packet resolves CN5B's scoped-control uncertainty
+for the exact owned iPhone17e and iPadPro13M5 on iOS/iPadOS27.0 build24A434.
+DeviceHub com.apple.dt.Devices → unique owned device/window → Device → Keyboard →
+Toggle Software Keyboard was observed enabled and proved show/hide on all5surfaces.
+No hardware-keyboard preference, globaldefaults, Done/Return or filterselection.
+This is exact runtime evidence, not a universalresolution of Appleissue178432770.
+
+Stale phone foreground interruption was discarded then retried with exactwindow
+Raise and fresh AX menu indices. iPad mirrororientation was repaired through its
+own supported Rotate before capture; a noWindowsAvailable coordinate action was
+not accepted, and supported AX/addressedtouch supplied the operation. Own resources
+were restored/released, including guarded termination of unresponsive task-launched
+DeviceHub after normaltermination failed. No protected otherdevice was operated.
+
+Consumer evidence: `playphraseme-cn-b17-7ekvw3ou/handoff.json`, manifest.json and
+source-qualification.json under `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/`.
+Five qualifiedreal keyboardcompositions produced43first images, no rerolls.
+Sourcegeometry remains external AXscreen/pt with mapping/atomicity/owner unknown;
+sourcePNGnative3xphone/2xiPad. Installedbuild hashesmatchB15, source revisionunknown.
+The current batch is complete; new cases still require scoped ownership and their
+own source qualification. Its successful keyboardroute need not be rediscovered.
+
 ## CN5B — keyboard candidates, 2026-10-12
 
 Consultation owner01a12cf2-87fe-79a0-9d2e-0191367de38f completed resumed turn
