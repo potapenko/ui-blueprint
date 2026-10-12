@@ -89,6 +89,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B9 |01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted; archived|8distinct fixture compositions/49first sheets;25scoped author passes/24FAIL,582dimension IDs,0full cases accepted |
 | CN-B10 |same Debug source owner|investigation accepted; retained for catalog continuation|10distinct fixture cases/41first sheets;18author sheet passes/23FAIL;534dimension IDs;0full cases accepted |
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|captures finished; offline full cycle continues|Seven captures; own runtime and desktop released, borrowed app hash unchanged; novelty/generation/evaluation pending |
+| CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|dispatched full next batch|Up to12 meaningful safe_unverified_remainder C01/C03 states from saved catalog; no B10/B11/previous duplicates, same frozen tools |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -445,7 +446,16 @@ dimensions/approximation marks, expanded fragments and invented borders/controls
 After CN-B11 released its consumer, CN-B10 removed only non-image build transients;
 68image assets/containers and ancestor directories remain. Executable retired.
 The remaining catalog has safe_unverified_remainder entries, not an exhaustion
-finding. CN-B11 final novelty/package/image counts remain pending.
+finding. Root dispatched CN-B12 to the same terminal owner: source-proved subset
+of at most12 existing C01/C03 candidates, full capture/export/first-image/evaluation
+cycle, explicit fixture provenance and cross-batch novelty. Source repos stay
+tracked read-only, current branches; one fresh owned temp Debug build is allowed
+because the prior executable retired. Runtime reservation must be acquired anew.
+Collector1af633c/export814af45/density30 remain frozen while CP8 is unaccepted.
+Root refreshed NATIVE4/LIFECYCLE1/Computer Use and prior complete export/data closure;
+worker revalidates only applicable source ACP/C01/C03 dependencies. No protected
+access/download actions, source wiring, new modes or quota changes. CN-B11 final
+novelty/package/image counts remain pending.
 On2026-10-12 root
 asked the user where the additional hundreds of UI cases are located (project,
 chat or stand paths), to expand beyond the known catalog without duplicate forms.
