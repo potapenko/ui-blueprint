@@ -98,6 +98,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
 | CN-B13 |same Debug source owner|dispatched full eight-candidate cycle|Remaining8C03 seeds; producer of one shared own Debug build for disjoint CN-B14 |
 | CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f, restored|source preparation; waits shared build/desktop|Remaining13C02 candidates≤12qualified states; borrow CN-B13 build, physical capture after producer release |
+| CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae, restored|dispatched complete accessibility batch|Two supported untested Dynamic Type categories, prior iPad/iPhone forms≤12meaningful states; own addressed devices, frozenCP8 |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
@@ -536,6 +537,17 @@ C03 candidates remain. Next ready work separates those8(CN-B13) from untested C0
 catalog entries(CN-B14). One fresh owned Debug build has the second named consumer;
 source prep runs in parallel, actual shared desktop serialized. No new wiring,
 protected access/download flow, quota or product contract change is authorized.
+CN-B15 reuses B6/B8 mobile owner and installed devices, adding two supported
+untested intermediate Dynamic Type categories (prefer extra-large/accessibility-
+medium equivalents verified by actual tooling). Up to12meaningful reflow/clipping/
+state cases from prior Actor/Settings/Filters/Search/Translation forms; no-op or
+simple rescale is excluded. Same full source→canonical import→literalCP8→first
+image→evaluation cycle; no new collector/build/install. Revalidate ownership of
+phoneFB2193E5-B8F8-49CE-8A44-8B702940E93A/iPad71F8E4AC-87A4-4F38-AB61-588444DB6BD7;
+protect ProMax and other owners. Prior source revision unknown remains unknown.
+Restore original per-device text/orientation/state and exact owned runtime. Existing
+serve-sim/tab-scoped isolation can parallelize only when actual tools support it;
+shared input otherwise queues. Keyboard/global-setting gap is not bypassed.
 
 [Web advisor](receipts/corpus-web-advice.md) and
 [Native advisor](receipts/corpus-native-advice.md) supply explicit source recipes;
