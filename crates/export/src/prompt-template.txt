@@ -5,7 +5,9 @@ Output: {{output_size}}; page format: {{page_format}}. UI units do not change.
 
 ОБЛАСТЬ И СОСТОЯНИЕ — source attribution, not a rendering assignment
 {{scope}}.
-Caller-observed state: {{state}}.
+Whole-view caller context (annotation, not observed per-control properties): {{state}}.
+Keep its stated scope; never assign state by proximity to a measurement block.
+If a control binding is ambiguous, leave that control’s state unknown.
 {{assignment}}
 
 ГРАФИЧЕСКИЙ ЯЗЫК

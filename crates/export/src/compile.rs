@@ -630,33 +630,6 @@ fn visible_text(c: &SceneComponent) -> &str {
             .unwrap_or("")
     })
 }
-fn state_caption(v: &SceneView) -> String {
-    // Only quote declared state clauses. Selected alone never implies applied.
-    v.state
-        .split(';')
-        .map(str::trim)
-        .filter(|clause| {
-            clause
-                .split(|c: char| !c.is_alphabetic() && c != '-')
-                .any(|word| {
-                    matches!(
-                        word.to_ascii_lowercase().as_str(),
-                        "active" | "inactive" | "keyboard-active" | "applied" | "not-applied"
-                    )
-                })
-        })
-        .collect::<Vec<_>>()
-        .join("; ")
-}
-fn printable_state(v: &SceneView) -> String {
-    let caption = state_caption(v);
-    if caption.is_empty() {
-        return String::new();
-    }
-    format!(
-        "PRINT THIS VIEW'S STATE CAPTION exactly: {caption:?}. Keep the designated active object double-outlined in this view, with BLUE interior; repeated objects retain the SAME state.\n"
-    )
-}
 fn object_text(v: &SceneView, index: usize, partial: &[Vec<Edge>], limit: usize) -> Result<String> {
     let c = &v.components[index];
     let aggregate = !visible_text(c).is_empty()
@@ -781,7 +754,6 @@ fn drawing_inventory(
         "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n",
         limit,
     )?;
-    append(&mut out, &printable_state(v), limit)?;
     let mut contexts = Vec::new();
     for g in v
         .components
@@ -1226,33 +1198,6 @@ fn local_measures(
             )?;
         }
         done.push(d.id.clone());
-    }
-    if !out.is_empty() {
-        let states = v
-            .state
-            .split([';', '.'])
-            .map(str::trim)
-            .filter(|s| {
-                s.split_whitespace().any(|w| {
-                    matches!(
-                        w.trim_matches(|c: char| !c.is_alphabetic())
-                            .to_ascii_lowercase()
-                            .as_str(),
-                        "disabled" | "blocked"
-                    )
-                })
-            })
-            .collect::<Vec<_>>();
-        if !states.is_empty() {
-            append(
-                &mut out,
-                &format!(
-                    "EXACT CALLER STATE for the named repeated controls (not an observed Enabled field): {:?}. Put the named disabled/blocked caption OUTSIDE its empty measurement sketch and preserve it in artwork; no inferred neighboring state.\n",
-                    states.join("; ")
-                ),
-                limit,
-            )?;
-        }
     }
     Ok(out)
 }
@@ -1990,11 +1935,9 @@ infer disabled state from absent fields. Apply caller-declared disabled state on
 to the named control or named group, never to its neighbors. Do not print an
 “enabled” label for unreported enablement. Preserve caller-reported
 blocked background without changing its layout or inventing missing controls.
-Print no “State: Normal” or other invented state. If a repeated measurement block
-quotes an EXACT CALLER STATE, preserve that named disabled/blocked caption outside
-the corresponding empty frame; it remains caller-declared, not an Enabled field.
-Each per-view PRINT STATE CAPTION is required visible text beside that view’s
-designated control. Preserve its declared active-versus-applied distinction. Active
+Print no “State: Normal” or other invented state. Whole-view caller context is
+separate from per-object source flags; proximity to a measurement is not a state
+binding. Preserve explicitly attributed active-versus-applied meaning. Active
 means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline
 with BLUE interior at the left; a solid-white knob is forbidden even if the
 reference uses one. Do not add controls/actions absent from the object plan.
@@ -2161,7 +2104,7 @@ fn render_view(
             "Accessible names are not field contents. Caller-draft rendering does not apply to this fragment: input ownership is incomplete. Whole-view state is non-rendering provenance, not permission to add an input, its draft or associated content.\n");
     }
     vars.insert("artwork_guidance", artwork_guidance);
-    vars.insert("state_guidance", if assignment == Assignment::Measurements { "Only recorded flags or exact caller statements may be captioned outside the named frame. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }.into());
+    vars.insert("state_guidance", if assignment == Assignment::Measurements { "Caption only recorded per-target flags or caller statements that explicitly identify that target, outside its empty frame. Whole-view context is not a state for every target; never spread group state to other frames. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }.into());
     vars.insert("design_analysis", design_analysis);
     vars.insert("sheets", sheet_plan);
     let mut rest = include_str!("prompt-template.txt");

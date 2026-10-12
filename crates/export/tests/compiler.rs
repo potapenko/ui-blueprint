@@ -69,7 +69,7 @@ fn dense_prompt_defines_objects_once_and_resolves_detail_references() {
             );
         }
     }
-    assert_eq!(prompt.matches("CAPTION exactly:").count(), 1);
+    assert_eq!(prompt.matches(&b.views[0].state).count(), 1);
     assert_eq!(
         data(&p, "scene.json")["views"][0]["components"]
             .as_array()
@@ -1732,6 +1732,8 @@ fn fragment_container_does_not_authorize_unselected_descendants() {
 #[test]
 fn object_states_and_context_links_survive_compact_presentation() {
     let mut brief = fixture("observed");
+    brief.views[0].state =
+        "Page controls disabled; enablement of other controls is not declared".into();
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
         panic!()
     };
@@ -1754,14 +1756,19 @@ fn object_states_and_context_links_survive_compact_presentation() {
         panic!()
     };
     g.coordinate_space.id = Id("separate-control-space".into());
-    for node in &mut snapshot.nodes {
+    for (i, node) in snapshot.nodes.iter_mut().enumerate() {
         let mut property = node.properties[0].clone();
         let Property::Requested { field, state, .. } = &mut property else {
             panic!()
         };
         *field = Field::Enabled;
-        *state = Availability::Known {
-            value: Value::Flag(false),
+        *state = match i {
+            0 | 2 => Availability::Known {
+                value: Value::Flag(i == 2),
+            },
+            _ => Availability::Unknown {
+                reason: Id("not-collected".into()),
+            },
         };
         node.properties.push(property);
     }
@@ -1779,10 +1786,40 @@ fn object_states_and_context_links_survive_compact_presentation() {
             .lines()
             .find(|s| s.starts_with("Object") && s.contains(name))
             .unwrap();
-        assert!(object.contains("Enabled=false"));
+        assert!(object.contains(if name == "First control" {
+            "Enabled=false"
+        } else {
+            "Enabled=true"
+        }));
         assert!(object.contains(&format!("placement context {context}")));
     }
     assert!(prompt.contains("Placement context 3: LayoutBounds; REF"));
+    for object in prompt.lines().filter(|s| {
+        s.starts_with("Object") && !s.contains("First control") && !s.contains("Second control")
+    }) {
+        assert!(!object.contains("Enabled=true") && !object.contains("Enabled=false"));
+    }
+    for bytes in p
+        .files()
+        .iter()
+        .filter(|(n, _)| n.ends_with(".txt"))
+        .map(|(_, b)| b)
+    {
+        let prompt = std::str::from_utf8(bytes).unwrap();
+        for target in prompt
+            .lines()
+            .filter(|s| s.starts_with("Recorded Enabled="))
+        {
+            assert_eq!(
+                target.contains("Enabled=false"),
+                target.contains("First control")
+            );
+            assert_eq!(
+                target.contains("Enabled=true"),
+                target.contains("Second control")
+            );
+        }
+    }
 
     let mut brief = fixture("proposed");
     proposed(&mut brief).components[0].state_and_actions =
@@ -1876,16 +1913,15 @@ fn unused_measurement_recipes_are_not_instructions_to_invent_details() {
 }
 
 #[test]
-fn state_captions_quote_declared_meaning_without_selected_inference() {
+fn caller_context_preserves_declared_meaning_without_selected_inference() {
     let mut brief = fixture("observed");
     brief.views[0].state =
         "Menu open; first suggestion keyboard-active; none applied; no input operation performed"
             .into();
     let p = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("PRINT THIS VIEW'S STATE CAPTION exactly: \"first suggestion keyboard-active; none applied\""));
-    assert!(!prompt.contains("CAPTION exactly: \"no input operation"));
-    assert_eq!(prompt.matches("CAPTION exactly:").count(), 1);
+    assert_eq!(prompt.matches(&brief.views[0].state).count(), 1);
+    assert!(!prompt.contains("PRINT THIS VIEW'S STATE CAPTION"));
     assert!(prompt.contains("assigned frames and source state"));
     brief.views[0].state = "Menu open".into();
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
@@ -1914,23 +1950,35 @@ fn state_captions_quote_declared_meaning_without_selected_inference() {
 }
 
 #[test]
-fn caller_disabled_statement_reaches_repeated_measurements_without_enabled_fields() {
+fn whole_view_caller_context_is_not_duplicated_into_measurement_blocks() {
     let mut brief = fixture("observed");
-    brief.views[0].state = "Previous clip disabled. Other toolbar actions blocked.".into();
+    brief.views[0].state = "Page controls disabled; first suggestion keyboard-active; none applied. Other actions blocked. Public input draft orchard.".into();
+    let original = serde_json::to_vec(&brief).unwrap();
     let before = compile(&brief, limits()).unwrap();
-    let prompt = std::str::from_utf8(&before.files()["prompt.txt"]).unwrap();
-    assert!(prompt.matches("EXACT CALLER STATE").count() > 1);
-    assert!(prompt.contains("Previous clip disabled; Other toolbar actions blocked"));
-    assert!(prompt.contains("not an observed Enabled field"));
-    assert!(!prompt.contains("Enabled=false"));
+    assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
+    for (name, bytes) in before.files().iter().filter(|(n, _)| n.ends_with(".txt")) {
+        let prompt = std::str::from_utf8(bytes).unwrap();
+        assert_eq!(prompt.matches(&brief.views[0].state).count(), 1, "{name}");
+        let geometry = prompt.split("ГЕОМЕТРИЯ").nth(1).unwrap();
+        for clause in [
+            "Page controls disabled",
+            "first suggestion keyboard-active",
+            "Other actions blocked",
+            "Public input draft orchard",
+        ] {
+            assert!(!geometry.contains(clause), "{name}: {clause}");
+        }
+        assert!(prompt.contains("annotation, not observed per-control properties"));
+        assert!(!prompt.contains("Enabled=false") && !prompt.contains("Enabled=true"));
+    }
     brief.views[0].state = "Settings visible; off state declared; enablement unknown".into();
     let after = compile(&brief, limits()).unwrap();
-    let prompt = std::str::from_utf8(&after.files()["prompt.txt"]).unwrap();
-    assert!(!prompt.contains("EXACT CALLER STATE for"));
-    assert!(!prompt.contains("State: Normal ("));
     let a = data(&before, "scene.json");
     let b = data(&after, "scene.json");
     assert_eq!(a["views"][0]["components"], b["views"][0]["components"]);
+    for file in ["dimensions.json", "manifest.json"] {
+        assert_eq!(before.files()[file], after.files()[file], "{file}");
+    }
 }
 
 #[test]
