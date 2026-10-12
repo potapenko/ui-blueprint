@@ -46,7 +46,7 @@ CN-B12 adds9 fixture-origin states, bringing it to135;
 CN-B15 adds4non-fixture Simulator states, bringing it to139;
 CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=2 images (43 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3 images (44 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -78,7 +78,7 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CP6 |same CP owner|literal repairs verified; full visual set rejected|734cedf +3198d03, draft applicability fixed; single correction still expands scope; no further generic repair justified |
 | CP7 |same exporter owner|bounded presentation repair accepted; raster still failed|814af45/507d190; both critics confirm full/visible owner separation, no remaining literal conflict |
 | CP8 |same exporter owner|bounded source/presentation accepted; archived|774ed6b/4f32bbd;47author checks,3machine-identical replays,1D01 passes both critics; [acceptance](receipts/corpus-state-attribution-review8.md) |
-| CP9 |same exporter owner|F1 wording/concision correction running|302f787 data protection passes;AMfragment passes/B12fails; one mandatory source-binding wording fix, CW40 growth usability concern |
+| CP9 |same exporter owner|7723f09 bounded accepted; archive after handoff|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -103,15 +103,15 @@ These repeats do not enlarge the primary scenario corpus. CP5 generated no image
 | CN-B11 |01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|7cases/31first sheets;10author passes/21FAIL;445dimensions/49operands,0full-case approvals |
 | CN-B12 |same Debug source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|investigation accepted|9cases/39first images;25scoped passes/14FAIL,515dimension owners;0full-case approvals |
 | CN-B13 |same Debug source owner|investigation accepted; archived|5cases/22first images/14scoped passes/8FAIL;288source dimensions,0full approvals; shared build retired |
-| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archive after handoff|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
+| CN-B14 |Native source owner01a12b45-a160-7192-86ca-e0bd99f4d49f|investigation accepted; archived|3cases/11first sheets,5scoped passes/6FAIL;142labels/21operands correct; active current-item scope limited |
 | CN-B15 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|4states/2families/12first images;4content-pass/8FAIL,65of66labels,0full accepted cases; runtime restored |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
 | CW-B4 |same Web source owner|investigation accepted|9cases/13first sheets/0rerolls;1author-pass case/8FAIL; resources restored |
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP9 reconciled; retained for changed artifact|AMtwo-row fragment passes;B12adds unassigned controls, fails; unnamed visual binding unproved |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP9 reconciled; F1 recheck pending|Data/limits/public projection pass; source-path wording overclaims visual binding; CW40 growth unresolved |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP9-F1 reconciled; retained|NewCW40 still completes excluded text; no new literal defect; oldAMpass/B12fail unchanged |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP9-F1 reconciled; retained|Wording and exact context compaction pass, no mandatory code/prompt issue; newCW40 raster fails |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -120,8 +120,9 @@ Established source basis: registry40, NATIVE4/CLI18, DESIGN-ANALYSIS1, EXPORT2,
 DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance is complete through CR3. Existing batches keep their old pins.
-Current accepted exporter presentation baseline is774ed6b; only the reviewed D01
-repair image is additionally accepted, not full corpus or universal raster quality.
+Current accepted exporter presentation baseline is7723f09; source/prompt protection
+is bounded accepted. Individual image verdicts remain pinned to their actual sources,
+not full corpus or universal raster quality.
 Root owns this registry,
 corpus-testing.md and coordination receipts. Source workers keep source-app repos
 tracked read-only; actual installed build revisions remain unknown where unproved.
@@ -139,7 +140,12 @@ selector values, collection/preferences, auth/access and production mutations ar
 All short temp roots below share:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/`.
 
-- Current export: `uib-CP8-qseai8mh/uiblueprint-774ed6b`, SHA256
+- Current export: `uib-CP9-F1-9cf509s5/uiblueprint-cp9-f1`, SHA256
+  `80748926dbd9a5de81b868933e0308298e89db5e2db5bf5ae0f0bb6b079ff77d`.
+  [CP9 acceptance](receipts/corpus-fragment-review9.md): corrected structural
+  wording and identity-preserving context compaction, five machine replays.
+  Named AM image passes on302f787; B12 and newCW40 remain failed raster evidence.
+- Previous export: `uib-CP8-qseai8mh/uiblueprint-774ed6b`, SHA256
   `a5e6a6310a3b515db475d27aeedeba5507ac8bb3935c77943ff1f08e6d84040c`.
   [CP8 acceptance](receipts/corpus-state-attribution-review8.md): both continuing
   critics accept caller-state attribution and one D01; exact3case machine replays.
@@ -489,6 +495,14 @@ the existing user concise-prompt scope, preserves data/controls and freezes F1.
 One new CW40/D01 image allowed only if changed assignment warrants it; no B12 reroll
 or AM rerender solely for provenance wording. Old two images stay302f787. Same CT2
 checks only remaining source issues; CV2 only any newly changed image. No new agents.
+F1 now source7723f09c3217708132df39a1051825c1c17f8012/receipt4addfff. Same CT2
+independently reconstructs111CW40/2B12 relative paths and accepts source/prompt
+protection; mandatory wording issue resolved. CW40D01 is31115chars, no discarded
+assigned facts. Both critics reject its new1536×1024 raster's completed fifth text
+beyond assigned “yourself”. Correct literal boundary remains, no further generic
+code repair justified. [Review receipt](receipts/corpus-fragment-review9.md) pins
+independent ordering and exact turns. Root accepts bounded7723f09 baseline only;
+oldAM/B12 images stay302f787. CP9 family has3repair images, no new corpus case.
 CA6 is a separate bounded read-only source-availability question to the accepted
 Native owner: trace B12-03's actual requested fields/unknown names through frozen
 1af633c mapping and existing public projection. Identify an already supported safe

@@ -13,7 +13,7 @@ fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Image buckets:388 primary images =384 first outputs +4 rerolls;
-43 separate repair-validation images;431 images in total. Extra sheets, repaired
+44 separate repair-validation images;432 images in total. Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
 
@@ -123,7 +123,7 @@ Manifests are adjacent to handoffs unless their handoff points elsewhere.
 
 Generation/submission records and literal prompts establish the old combined-call
 protocol; individual package manifests/prompt hashes establish later per-sheet calls.
-Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=2; CP5=0.
+Repair buckets: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3; CP5=0.
 Accepted repository receipts retain their source revisions and artifact roots.
 
 CN-B9 completed9 attempted configurations/8 distinct qualified fixture compositions
@@ -198,9 +198,10 @@ CN-B13 adds5new fixture states from8assigned seeds,9captures incl fresh kids ret
 dimensions verified; rendered138→128 error remains.3duplicates/text-only variants
 excluded. Native1af633c/export774ed6b/density30 unchanged. Both producer/consumer
 runtime released; shared executable retired by guarded non-image cleanup, all68
-image assets/containers/ancestors remain. CP9 adds2repair images only: named mobile
-fragment passes both critics, unnamed B12 fragment fails; source candidate302f787
-still awaits evidentiary wording repair and concision reconciliation.
+image assets/containers/ancestors remain. CP9 adds2initial repair images plus1F1:
+named mobile fragment passes both critics at302f787, unnamed B12 fails; corrected
+source7723f09 is bounded accepted after wording/concision review, new CW40 raster
+still fails membership. No new case or universal image acceptance follows.
 
 CN-B14 adds3fixture states from13assigned IDs/6runtime candidates,11first sheets,
 0rerolls.5scoped passes/6failures/0full approvals;142rendered labels and9groups/
