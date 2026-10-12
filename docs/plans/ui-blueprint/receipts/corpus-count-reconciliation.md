@@ -13,8 +13,8 @@ fixture/component-preview origin;92 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Image buckets:388 primary images =384 first outputs +4 rerolls;
-45 separate repair-validation images;1 unqualified reference attempt (CTEXT1);
-434 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+47 separate repair-validation images;1 unqualified reference attempt (CTEXT1);
+436 generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -23,6 +23,11 @@ and its neutral index under the system-temp prefix listed below.
 Extra sheets, repaired
 prompts and repeated renders are not extra cases. A failed visual evaluation can
 still complete its declared test protocol; missing source qualification cannot.
+CP10 adds2 qualified repeat images at5e071f5, no new cases: both critics accept
+AM-translation/D02 and reject CTEXT2/D03's remaining wrong-column arrangement.
+The narrower source/prompt change is accepted separately from image fidelity.
+Evidence: [CP10 receipt](corpus-arrangement-repair10.md) and neutral index in
+`uib-CP10-wt2sd9z0` under the system-temp prefix below. No causal/general guarantee.
 
 ## Completed primary batches
 

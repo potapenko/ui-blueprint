@@ -46,10 +46,10 @@ CN-B12 adds9 fixture-origin states, bringing it to135;
 CN-B15 adds4non-fixture Simulator states, bringing it to139;
 CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1 images (45 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2 images (47 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 adds1 unqualified reference attempt only:434 generated images overall,
-with no increase to eligible cases or the45 qualified repair-validation images.
+CTEXT1 adds1 unqualified reference attempt only:436 generated images overall,
+with no increase to eligible cases or the47 qualified repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -85,7 +85,7 @@ with no increase to eligible cases or the45 qualified repair-validation images.
 | CP9 |same exporter owner|7723f09 bounded accepted; archived|Wording/context compaction accepted;AMimage302pass,B12/CW40fail; [review](receipts/corpus-fragment-review9.md) |
 | CTEXT1 |same exporter owner|unqualified reference attempt; archived|CA8 ordinary QA frame isJPEG/CUA despite.png; no reusable-asset/image acceptance; original generation retained |
 | CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, both critics agree|Qualified native PNG,1first D03;4texts/9items correct, layout fails; no demonstrated literal compiler defect; not a new case |
-| CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, restored|full-cycle arrangement improvement dispatched|Test grounded existing geometry as clearer internal prompt guidance on2qualified families; hypothesis, not established compiler defect |
+| CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|5e071f5 bounded accepted; final handoff pending|Both critics accept source hints/AM image, reject CTEXT2 wrong-column layout; [receipt](receipts/corpus-arrangement-repair10.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -674,6 +674,23 @@ Second-reference qualification precedes generation; no CUA/JPEG substitution. Fr
 required. All images remain in system temp, source repos read-only, exact checkpoint
 and push on master. This is empirical presentation evolution within CORPUS, not an
 accepted outcome, new case count or guaranteed model fix. No nested delegation.
+CP10 implementation5e071f5 and author receipt68e4e9e are committed/pushed.48author
+compiler checks, locked CLI build, scoped Clippy/rustfmt pass. CV2 independent turn
+01a12e9e-ef66-7b10-9eb8-b07fd05cb32e and CT2
+01a12e9e-f053-79e3-a003-216029b629d2 accept the bounded source/prompt change;
+CT2 inspected tests/diff and independently checked hashes, exact hint arithmetic,
+baseline reproduction, unchanged machine files/ownership and full CW40 equality.
+The48test run remains author evidence, not an independently rerun suite. Eight
+CTEXT2 and one AM adjacent-frame cues retain AX attribution and unknown transform;
+no false literal hint, privacy/limits or mandatory code defect established.
+Both image verdicts agree with author: AM D02 scopedPASS; CTEXT2 D03 FAIL despite
+now separate rows/spinner below, because Emotion sits above Polarity instead of
+right-column Topic. All9items/4texts remain; no invented dimensions. Both1672×941,
+two first calls/no rerolls, repair bucket only. Adjacent relations don't fully
+constrain nonadjacent alignment; no generic further fix assumed. Frozen binary
+`uib-CP10-wt2sd9z0/uiblueprint-cp10`, SHA256
+`eb9ef263fc20e2a42a524a435ca4d9d43a68b3acf34da2fd7bc3eb3e2102062e` under system temp.
+This is the current bounded exporter baseline; old images keep original revisions.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
