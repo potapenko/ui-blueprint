@@ -13,9 +13,9 @@ fixture/component-preview origin;98 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:434 primary images =430 first outputs +4 rerolls;
-48 separate repair-validation images;4 unqualified reference attempts
+49 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-486 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+487 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -33,6 +33,10 @@ CP11 adds1qualified CW62 repeat at7f767d5, no new case. Both critics accept sour
 rounding/deduplication and exact machine/control preservation, but the raster still
 prints unassigned≈791 and construction coordinates. [Author receipt](corpus-construction-presentation11.md)
 and `uib-CP11-13io0tsu/neutral-index.json` retain the failed first image and provenance.
+CP12 adds1qualified i-keyD04repeat at172a080, no new case. Both critics accept the
+literal button i caption without invented information function, correct≈38×54pt
+and AX/status meaning. [Receipt](corpus-literal-captions12.md), neutral index in
+`uib-CP12-qs733mhh`; one1672×941first output, no reroll or globalreliabilityclaim.
 
 ## Completed primary batches
 

@@ -75,10 +75,10 @@ CN-B13 adds5fixture states, bringing it to144;
 CN-B14 adds3fixture states, bringing it to147;
 corrected CW-B8 adds3responsive states, bringing it to150;
 CN-B17 adds5keyboard states, bringing it to155.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1 images (48 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1 images (49 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:486counted generated images
-overall, with no increase to eligible cases or the48repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:487counted generated images
+overall, with no increase to eligible cases or the49repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -116,7 +116,7 @@ overall, with no increase to eligible cases or the48repair-validation images.
 | CTEXT2 |Native source owner01a12b5d-c8b5-7df0-8ac9-68fef78aed79|completed; archived, both critics agree|Qualified native PNG,1first D03;4texts/9items correct, layout fails; no demonstrated literal compiler defect; not a new case |
 | CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|5e071f5 bounded accepted; archived|Both critics accept source hints/AM image, reject CTEXT2 wrong-column layout; [receipt](receipts/corpus-arrangement-repair10.md) |
 | CP11 |same exporter owner|7f767d5 bounded accepted; archived|Both critics accept formatting/machine preservation; newCW62stillFAIL for unassigned≈791/coordinate inventory; [receipt](receipts/corpus-construction-presentation11.md) |
-| CP12 |same exporter owner, restored|full-cycle literal-caption improvement dispatched|B17i-key falsely expanded to information; clearer existing caption presentation, no guessed semantics/new naming system; at most2first images and exact machine/control checks |
+| CP12 |same exporter owner|172a080 bounded+oneimage accepted; archived|Both critics accept literal button i caption and≈38×54pt; machine/owner/privacy/limits unchanged; [receipt](receipts/corpus-literal-captions12.md) |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -743,6 +743,25 @@ One repair image, no new case or reroll. Frozen binary under system temp
 `uib-CP11-13io0tsu/uiblueprint-cp11`, SHA256
 `6c5910debcf4ce21793feb8c4840d9d79a01e23142f66fbdd835b1dafa2ee25a`.
 CN-B17 keeps its original frozenCP10 inputs/binary; old images never relabelled.
+
+CP12 is the current accepted exporter baseline for future tasks:
+172a0801c54f39b42b6351f09b1b92eac4886214, author receiptc66d686, committed/pushed.
+Existing projected captions become JSON-quoted exactoutsidecaption declarations
+once per AXmeasurement; semantic-object-name wording removed, recordedstate stays
+separate. No source-name/function inference or callerprose rewriting. Both CV2
+turn01a131bc-a789-7ea2-93c1-78ca9cf093c7 and CT2
+turn01a131bc-a8c6-7e73-bc6d-cb916f28bd9a independently accept bounded source/prompt
+change and the one1672×941i-keyD04 image. Caption button i remains literal with no
+information expansion;≈38×54pt/anchors/AXmeaning/statuses preserved. Source exact
+width38.333333333333314 remains in machinefacts. Decoded declarations reproduce
+all previous owner/measurement strings; four replay machinepackages and whole
+CW60/CW61 unchanged. DirectorD02 numbers/owners retained, changedprompt has no new
+rasteracceptance.48checks/build/scopedlint are author evidence; CT2 independently
+inspected diff/testdefinitions/hash/replay/privacy/limits, not a fulltestrerun.
+One repair image, no new case/reroll or generalcausalclaim. Frozen system-temp CLI
+`uib-CP12-qs733mhh/uiblueprint-cp12`, SHA256
+`357169ef1a35de4957d7b23233abb42b516ca9d7b4d2426eb14c0bfa409c4b15`.
+CN-B18 keeps frozenCP11; no inputs or image revisions relabelled.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
