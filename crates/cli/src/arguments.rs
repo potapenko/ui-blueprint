@@ -209,6 +209,7 @@ impl DiffArguments {
 }
 
 pub(crate) struct ObserveArguments {
+    pub diagnostic_bytes: Option<usize>,
     pub connection: PathBuf,
     pub request: PathBuf,
     pub worker: PathBuf,
@@ -294,9 +295,21 @@ impl ObserveArguments {
         let (mut connection, mut request, mut worker, mut max_input, mut max_output) =
             (None, None, None, None, None);
         let invalid = Failure::invalid("invalid_arguments");
+        let (mut diagnostics, mut diagnostic_bytes) = (false, None);
         while let Some(flag) = args.next() {
+            if flag == "--diagnostics-json" && !diagnostics {
+                diagnostics = true;
+                continue;
+            }
             let value = args.next().ok_or(invalid)?;
             match flag.to_str() {
+                Some("--max-diagnostic-bytes") if diagnostic_bytes.is_none() => {
+                    let n = limit(value)?;
+                    if !(1024..=4096).contains(&n) {
+                        return Err(invalid);
+                    }
+                    diagnostic_bytes = Some(n);
+                }
                 Some("--connection") if connection.is_none() => {
                     connection = Some(PathBuf::from(value))
                 }
@@ -309,7 +322,11 @@ impl ObserveArguments {
                 _ => return Err(invalid),
             }
         }
+        if diagnostics != diagnostic_bytes.is_some() {
+            return Err(invalid);
+        }
         Ok(Self {
+            diagnostic_bytes,
             connection: connection.ok_or(invalid)?,
             request: request.ok_or(invalid)?,
             worker: worker.ok_or(invalid)?,

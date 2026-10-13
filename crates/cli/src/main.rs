@@ -11,6 +11,7 @@ mod input;
 #[cfg(all(target_os = "macos", feature = "macos"))]
 mod native_session;
 mod observe;
+mod observe_diagnostic;
 mod output;
 
 use arguments::{
@@ -34,6 +35,7 @@ Graph diff: diff --graph --before FILE --after FILE --max-input-bytes N --max-ou
 Geometry diff: diff --geometry --before FILE --after FILE --ref SOURCE_KEY_JSON --frame-kind KIND --space ID --max-input-bytes N --max-output-bytes N [--before-evaluation FILE] [--after-evaluation FILE] [--json]\n\
 Diff reports recorded node/property differences; missing records do not imply deletion. Entry cap0 is allowed; complete report0, truncated/context mismatch4.\n\
 Observe: uiblueprint observe --connection FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N\n\
+Observe diagnostic option: --diagnostics-json --max-diagnostic-bytes D (1024..4096); fixed terminal/cause/count JSON on stderr, no source text or inferred cause. Default output unchanged.\n\
 Observe needs a selected macos/web build and explicit trusted connection; emits committed canonical NDJSON and cleans only owned workers/helpers.\n\
 Action: uiblueprint action prepare --connection FILE --snapshot FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--expectation FILE] [--json]\n\
 Action: uiblueprint action execute --connection FILE --plan FILE --request FILE --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N [--expectation FILE] [--json]\n\
@@ -302,8 +304,34 @@ fn main() -> ExitCode {
         };
     }
     if args.first().is_some_and(|arg| arg == "observe") {
-        let result = arguments::ObserveArguments::parse(args.into_iter().skip(1))
-            .and_then(|args| observe::execute(args, &mut io::stdout().lock()));
+        let args = match arguments::ObserveArguments::parse(args.into_iter().skip(1)) {
+            Ok(args) => args,
+            Err(error) => {
+                let _ = writeln!(io::stderr().lock(), "{}", error.code);
+                return ExitCode::from(error.exit);
+            }
+        };
+        let diagnostic_bytes = args.diagnostic_bytes;
+        let mut diagnostic = observe_diagnostic::ObserveDiagnostic::new();
+        let result = observe::execute(args, &mut io::stdout().lock(), &mut diagnostic);
+        if let Some(limit) = diagnostic_bytes {
+            diagnostic.exit_code = match result {
+                Ok(code) => code,
+                Err(error) => error.exit,
+            };
+            diagnostic.caller_error = result.err().map(|error| error.code);
+            let written = output::observe_diagnostic(&diagnostic, limit).and_then(|bytes| {
+                io::stderr()
+                    .lock()
+                    .write_all(&bytes)
+                    .map_err(|_| Failure::io())
+            });
+            if written.is_err() {
+                let _ = writeln!(io::stderr().lock(), "diagnostic_output_failed");
+                return ExitCode::from(1);
+            }
+            return ExitCode::from(diagnostic.exit_code);
+        }
         return match result {
             Ok(code) => ExitCode::from(code),
             Err(error) => {

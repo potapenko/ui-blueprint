@@ -426,3 +426,49 @@ retained for Web's one actual public selection→apply/unexpected-stop sequence.
 That runtime consumer and grouped acceptance are pending here. Prior accepted
 A03/A04 and geometry/export/neighbors remain protected; full B02/P5/P7 is not
 inferred from this port, preflight checks or registration.
+
+
+## Opt-in safe Observe refusal diagnostics
+
+[OBSERVE-DIAGNOSTICS1](../specs/product/cli-observe-diagnostics.md) adds
+`--diagnostics-json --max-diagnostic-bytes D` only to Observe; both options are
+required together, with explicit independent D1024..4096. Example:
+
+```text
+uiblueprint observe --connection C --request R --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N --diagnostics-json --max-diagnostic-bytes 1024
+```
+
+Stdout remains original ACKed canonical NDJSON. Stderr becomes one bounded
+observe_diagnostic1.0 JSON line even on success; the existing default invocation
+keeps its bytes and exit mapping. Invalid option syntax/bounds reject2 before
+input/dispatch and retain constant invalid_arguments stderr. Do not forward raw
+worker/collector stderr or exception text. The helper should strictly allowlist
+this version/kind, fixed enum names/masks/counts and nullable fields; unexpected
+members/values or multiple records are not a trusted diagnostic.
+
+The report distinguishes final exit/caller phase/error, actual attach/observe
+terminal and terminal HostError, requested/committed/missing/incomplete channel
+masks, confirmed/unconfirmed owned-worker cleanup and optional validated Host
+stage/cause/code/selection visited-count/remote cleanup/send progress. Host metadata
+is copied through the existing getter, never from parsing a Snapshot in the parent.
+Publication masks are unavailable/null when no publication inventory was reported;
+a null mask is not zero. Worker cleanup and remote object-group cleanup are different.
+Physical stdout IO and unconfirmed cleanup retain their established precedence.
+
+Missing host_diagnostic means underlying cause/stage/code unavailable. A parent
+timeout/worker death or Native peer can have no validated record. Even a known
+collector_limit/timeout category does not identify a specific quota or source stage
+unless that fact is actually present. Do not diagnose popup/list failure from
+exit4 or larger configured limits. Numeric code depends on its cause: Host fixed
+code, protocol error number or trusted malformed-site code; zero can be unspecified.
+Selection visited-count applies only to selection causes; it is not returned UI
+node count. Source partial/failure flags are not evidence of complete UI coverage.
+
+Synthetic numeric-loopback peer proof (not Director/browser acceptance): a missing
+selection yielded collect/selection_missing/count3 with released remote cleanup;
+a protocol error yielded collect/collector_protocol/code−32000 with no selection
+count. A canary URL/selector/message was absent from both reports. Actual production
+worker/parent ran, no fake ACK and no source app. Native peer success/partial/failure/
+timeout retained exact default NDJSON while opt-in emitted typed outcomes; no absent
+subcause was guessed. Web owner must repeat the real Director popup/list with its
+combined helper/core build; this caller does not repair collector scope or limits.

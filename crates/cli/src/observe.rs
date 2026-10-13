@@ -1,9 +1,13 @@
 //! Explicit operator-capability caller; canonical observation bodies stay opaque.
-use crate::{Failure, arguments::ObserveArguments};
+use crate::{Failure, arguments::ObserveArguments, observe_diagnostic::ObserveDiagnostic};
 use std::io::Write;
 
 #[cfg(not(all(target_os = "macos", any(feature = "macos", feature = "web"))))]
-pub(crate) fn execute(args: ObserveArguments, _: &mut impl Write) -> Result<u8, Failure> {
+pub(crate) fn execute(
+    args: ObserveArguments,
+    _: &mut impl Write,
+    _: &mut ObserveDiagnostic,
+) -> Result<u8, Failure> {
     let _ = (
         args.connection,
         args.request,
@@ -38,7 +42,12 @@ mod supported {
 
     use crate::connection::*;
 
-    pub(crate) fn execute(args: ObserveArguments, output: &mut impl Write) -> Result<u8, Failure> {
+    pub(crate) fn execute(
+        args: ObserveArguments,
+        output: &mut impl Write,
+        diagnostic: &mut ObserveDiagnostic,
+    ) -> Result<u8, Failure> {
+        diagnostic.caller_phase = "read_inputs";
         let mut remaining = args.max_input;
         let connection = load(&args.connection, &mut remaining)?;
         let request_bytes = crate::input::read(&args.request, &mut remaining)?;
@@ -51,6 +60,7 @@ mod supported {
         let Operation::Observe { channels } = &r.operation else {
             return Err(Failure::invalid("invalid_request"));
         };
+        diagnostic.caller_phase = "validate";
         let session = &connection.session;
         if session.target != connection.target
             || r.context.target != connection.target
@@ -71,6 +81,8 @@ mod supported {
                 Channel::OptInLayoutProbe => 4,
             }
         });
+        diagnostic.requested_channels = Some(mask);
+        diagnostic.caller_phase = "prepare";
         let deadline_ms = r.limits.deadline_ms;
         let request_output = r.limits.max_output_bytes as usize;
         let limits = connection.host_limits.limits()?;
@@ -158,7 +170,9 @@ mod supported {
         };
         let domain = HostDomain::new::<DarwinPlatform>(limits).map_err(host_error)?;
         let mut host = RuntimeHost::new(&domain, worker, DarwinPlatform).map_err(host_error)?;
+        diagnostic.worker_cleanup = "unconfirmed";
         let result = (|| -> Result<HostCompletion<'_>, Failure> {
+            diagnostic.caller_phase = "attach";
             let target = TargetLease::authorized(&connection.target, false).map_err(host_error)?;
             #[cfg(feature = "web")]
             let attached = if let Some((setup, _)) = &web_bytes {
@@ -189,10 +203,12 @@ mod supported {
             let clock = match next(&mut host, event_end)? {
                 HostEvent::Attached { session, clock } if session == attached => clock,
                 HostEvent::Complete(c) => {
+                    diagnostic.capture(&c);
                     return Err(completion_error(&c).unwrap_or(host_error(HostError::WorkerFailed)));
                 }
                 _ => return Err(host_error(HostError::WorkerFailed)),
             };
+            diagnostic.caller_phase = "configure_helpers";
             if let Some(binding) = native {
                 host.configure_native_helpers(attached, binding)
                     .map_err(host_error)?;
@@ -203,6 +219,7 @@ mod supported {
             r.clock_domain = Id(clock.as_str().into());
             let request = encoded(&request, limits.input_bytes)?;
             let end = until(deadline_ms)?;
+            diagnostic.caller_phase = "submit";
             #[cfg(feature = "web")]
             if let Some((_, selection)) = &web_bytes {
                 let parts = [&request[..], &selection[..]];
@@ -232,24 +249,41 @@ mod supported {
             let event_end = end
                 .checked_add(Duration::from_millis(limits.cleanup_ms))
                 .ok_or(Failure::invalid("invalid_deadline"))?;
+            diagnostic.caller_phase = "wait_terminal";
             match next(&mut host, event_end)? {
-                HostEvent::Complete(c) => Ok(c),
+                HostEvent::Complete(c) => {
+                    diagnostic.capture(&c);
+                    Ok(c)
+                }
                 _ => Err(host_error(HostError::WorkerFailed)),
             }
         })();
         let mut terminal_during_shutdown = None;
         let cleanup = shutdown(&mut host, limits.cleanup_ms, &mut terminal_during_shutdown);
+        diagnostic.worker_cleanup = if cleanup.is_ok() {
+            "confirmed"
+        } else {
+            "unconfirmed"
+        };
         let (completion, failure) = match result {
             Ok(c) => (Some(c), None),
             Err(error) => (terminal_during_shutdown, Some(error)),
         };
         if let Some(c) = &completion {
-            crate::output::observation_lines(c, args.max_output, output)?;
+            diagnostic.capture(c);
+            if let Err(error) = crate::output::observation_lines(c, args.max_output, output) {
+                diagnostic.caller_phase = "publish_stdout";
+                return Err(error);
+            }
         }
-        cleanup?;
+        if let Err(error) = cleanup {
+            diagnostic.caller_phase = "shutdown";
+            return Err(error);
+        }
         if let Some(error) = failure.or_else(|| completion.as_ref().and_then(completion_error)) {
             return Err(error);
         }
+        diagnostic.caller_phase = "complete";
         Ok(0)
     }
     fn completion_error(c: &HostCompletion<'_>) -> Option<Failure> {

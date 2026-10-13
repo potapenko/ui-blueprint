@@ -1422,3 +1422,13 @@ fn graph_fact(
         FocusComposition => writeln!(buffer, "{:?}", snapshot.focus.composition_state),
     }
 }
+
+pub(crate) fn observe_diagnostic(
+    report: &crate::observe_diagnostic::ObserveDiagnostic,
+    limit: usize,
+) -> Result<Vec<u8>, Failure> {
+    let mut output = Bounded::new(limit);
+    serde_json::to_writer(&mut output, report).map_err(|_| output.error())?;
+    output.write_all(b"\n").map_err(|_| output.error())?;
+    Ok(output.bytes)
+}

@@ -513,6 +513,50 @@ fn observe_cli_uses_real_guarded_peer_and_preserves_failed_partial_and_timed_out
         if exit == 0 {
             assert!(output.stderr.is_empty());
         }
+        let diagnostic = Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .arg("observe")
+            .arg("--connection")
+            .arg(&connection_file)
+            .arg("--request")
+            .arg(&request_file)
+            .arg("--worker")
+            .arg(&worker)
+            .args([
+                "--max-input-bytes",
+                "65536",
+                "--max-output-bytes",
+                "65536",
+                "--diagnostics-json",
+                "--max-diagnostic-bytes",
+                "1024",
+            ])
+            .output()
+            .unwrap();
+        assert_eq!(diagnostic.status.code(), Some(exit));
+        assert_eq!(
+            diagnostic.stdout, output.stdout,
+            "opt-in must not change canonical channel bytes"
+        );
+        assert!(diagnostic.stderr.len() <= 1024);
+        let record: serde_json::Value = serde_json::from_slice(&diagnostic.stderr).unwrap();
+        assert_eq!(record["kind"], "observe_diagnostic");
+        assert_eq!(record["exit_code"], exit);
+        assert_eq!(record["worker_cleanup"], "confirmed");
+        assert_eq!(record["operation"], "observe");
+        assert_eq!(record["requested_channels"], channels);
+        assert!(
+            record["host_diagnostic"].is_null(),
+            "Native peer has no validated Web diagnostic record"
+        );
+        assert_eq!(record["committed_channels"], if lines == 2 { 3 } else { 1 });
+        if mode == "J" {
+            assert_eq!(record["incomplete_channels"], 1);
+        }
+        if mode == "D" {
+            assert_eq!(record["terminal"], "timed_out");
+            assert_eq!(record["missing_channels"], 2);
+        }
+
         if backend == "native_ax" {
             connection["provider"]["channels"] = json!(1);
             fs::write(&connection_file, serde_json::to_vec(&connection).unwrap()).unwrap();
@@ -537,6 +581,35 @@ fn observe_cli_uses_real_guarded_peer_and_preserves_failed_partial_and_timed_out
     )
     .unwrap();
     assert_error(run(&worker, 1), 2, "output_limit");
+    let attached_failure = Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+        .arg("observe")
+        .arg("--connection")
+        .arg(&connection_file)
+        .arg("--request")
+        .arg(&request_file)
+        .arg("--worker")
+        .arg("/usr/bin/false")
+        .args([
+            "--max-input-bytes",
+            "65536",
+            "--max-output-bytes",
+            "65536",
+            "--diagnostics-json",
+            "--max-diagnostic-bytes",
+            "1024",
+        ])
+        .output()
+        .unwrap();
+    assert_eq!(attached_failure.status.code(), Some(1));
+    assert!(attached_failure.stdout.is_empty());
+    let record: serde_json::Value = serde_json::from_slice(&attached_failure.stderr).unwrap();
+    assert_eq!(record["operation"], "attach");
+    assert_eq!(record["terminal"], "failed");
+    assert_eq!(record["terminal_error"], "worker_failed");
+    assert_eq!(record["worker_cleanup"], "confirmed");
+    assert!(record["host_diagnostic"].is_null());
+    assert!(record["committed_channels"].is_null());
+
     assert_error(
         run(&case.directory.join("missing-worker"), 65536),
         1,
@@ -559,6 +632,32 @@ fn observe_cli_uses_real_guarded_peer_and_preserves_failed_partial_and_timed_out
                 .unwrap()
                 .contains("CANARY_CONNECTION")
         );
+        let diagnostic = Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+            .arg("observe")
+            .arg("--connection")
+            .arg(&connection_file)
+            .arg("--request")
+            .arg(&request_file)
+            .arg("--worker")
+            .arg(case.directory.join("must-not-spawn"))
+            .args([
+                "--max-input-bytes",
+                "65536",
+                "--max-output-bytes",
+                "65536",
+                "--diagnostics-json",
+                "--max-diagnostic-bytes",
+                "1024",
+            ])
+            .output()
+            .unwrap();
+        assert_eq!(diagnostic.status.code(), Some(2));
+        assert!(diagnostic.stdout.is_empty());
+        assert!(!String::from_utf8_lossy(&diagnostic.stderr).contains("CANARY_CONNECTION"));
+        let record: serde_json::Value = serde_json::from_slice(&diagnostic.stderr).unwrap();
+        assert!(record["host_diagnostic"].is_null());
+        assert!(record["terminal"].is_null());
+        assert_eq!(record["worker_cleanup"], "not_started");
     }
     let duplicate = serde_json::to_string(&base_connection).unwrap().replacen(
         "{",
@@ -1381,4 +1480,73 @@ fn design_without_declared_parts_is_not_exposed_without_inference() {
     let path = case.directory.clone();
     drop(case);
     assert!(!path.exists());
+}
+
+#[test]
+fn observe_diagnostic_options_are_explicit_bounded_and_do_not_dispatch_on_bad_syntax() {
+    for flags in [
+        vec!["--diagnostics-json"],
+        vec!["--max-diagnostic-bytes", "1024"],
+        vec!["--diagnostics-json", "--max-diagnostic-bytes", "1023"],
+        vec!["--diagnostics-json", "--max-diagnostic-bytes", "4097"],
+        vec![
+            "--diagnostics-json",
+            "--diagnostics-json",
+            "--max-diagnostic-bytes",
+            "1024",
+        ],
+        vec![
+            "--diagnostics-json",
+            "--max-diagnostic-bytes",
+            "1024",
+            "--max-diagnostic-bytes",
+            "1024",
+        ],
+    ] {
+        let mut command = Command::new(env!("CARGO_BIN_EXE_uiblueprint"));
+        command.args([
+            "observe",
+            "--connection",
+            "PRIVATE_DIAGNOSTIC_CANARY",
+            "--request",
+            "PRIVATE_DIAGNOSTIC_CANARY",
+            "--worker",
+            "PRIVATE_DIAGNOSTIC_CANARY",
+            "--max-input-bytes",
+            "65536",
+            "--max-output-bytes",
+            "65536",
+        ]);
+        command.args(flags);
+        assert_error(command.output().unwrap(), 2, "invalid_arguments");
+    }
+    let output = Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+        .args([
+            "observe",
+            "--connection",
+            "PRIVATE_DIAGNOSTIC_CANARY",
+            "--request",
+            "PRIVATE_DIAGNOSTIC_CANARY",
+            "--worker",
+            "PRIVATE_DIAGNOSTIC_CANARY",
+            "--max-input-bytes",
+            "65536",
+            "--max-output-bytes",
+            "65536",
+            "--diagnostics-json",
+            "--max-diagnostic-bytes",
+            "1024",
+        ])
+        .output()
+        .unwrap();
+    assert!(output.stdout.is_empty());
+    assert!(!String::from_utf8_lossy(&output.stderr).contains("PRIVATE_DIAGNOSTIC_CANARY"));
+    let data: serde_json::Value = serde_json::from_slice(&output.stderr).unwrap();
+    assert_eq!(data["kind"], "observe_diagnostic");
+    assert!(data["host_diagnostic"].is_null());
+    assert!(data["terminal"].is_null());
+    #[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
+    assert_eq!(output.status.code(), Some(1));
+    #[cfg(not(all(target_os = "macos", any(feature = "macos", feature = "web"))))]
+    assert_eq!(output.status.code(), Some(5));
 }
