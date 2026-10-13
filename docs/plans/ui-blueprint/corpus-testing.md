@@ -152,3 +152,31 @@ assessment and scoped commit+push. Existing two critics assess the same frozen o
 These are repair-validation images, not additional primary corpus cases. No nested
 agents. After that finite outcome return to root; future work requires a new decision
 based on the result, not an automatic wording loop.
+
+## CE2 — saved real-snapshot relationship verification, 2026-10-13
+
+Existing user-authorized corpus verification, not a new feature or source-app edit.
+After CE1's synthetic adversarial vectors, the real corpus expanded to194cases.
+CP18 exposed a carrier-dependent omission (lowercase native select role), motivating
+one finite actual-data verification of the existing DESIGN-ANALYSIS capability.
+Immediate consumer: accurate mathematical explanations and grounded recommendations;
+confirmed defects feed bounded implementation repairs, not speculative infrastructure.
+
+Reuse CE1 owner. Select8–12qualified saved snapshots across at least6meaningful
+families and both Web/Native from the ledger, recording unavailable/duplicate inputs.
+Exercise existing equal/ratio/balance/pattern through actual engine/CLI with explicit
+caller-selected families, public captions and bound evaluations. Preserve source
+snapshots, compare independent source literals, exact facts/evidence and no-request
+compatibility. Mixed observations/unknowns remain unavailable; no guessed intent,
+tokens, global scale or normative check. Test-only mutations are never source cases.
+Use current accepted da306a2, DESIGN-ANALYSIS1 and its current selected closure;
+EXPORT2/HBP1.2R2R3, CLI18/CLI-EXPORT3, ANALYSIS2/TYPES1/VALIDATION1 and shared contracts.
+
+Write authority: existing engine/export tests/design_corpus.rs only for genuinely
+missing regression coverage, plus receipts/corpus-analysis-wave2.md. No product code,
+source-app edits, specs, runtime/UI, modelcalls, new dependencies/crates/frameworks or
+persistent dirs. Original datasets/images protected; task-temp inputs/build/evidence.
+Return actual results and minimal confirmed defect repros; focused checks only,
+scoped commit/push when files change. No new primary corpus cases or image counts.
+One complete verification task; inherit settings, no nested agents. Root owns plan
+and registry; CN16 human-authority dependency remains limited to source-app changes.
