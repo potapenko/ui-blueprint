@@ -85,7 +85,13 @@ system-temp prefix below. NeutralSHA2566570120c106a1aeaebcbcf6858ebf9db0e1a4821c
 Two nativeDPR2 PNG2560×1440 sources; successful count/suggestions responses qualify
 both states against prior empty-draftCW45. First outputs1691×930/1672×941, no rerolls.
 Author: R1 loses source-visible last-row subtitle/detail membership; R2 loses
-disabled custom-card state and repeats≈6gap; focus absent. Independent review pending.
+disabled custom-card state and repeats≈6gap; focus absent. Both critics confirm
+these failures after independent observation then author reconciliation:
+CV2 final01a132b6-c2e6-7a91-ad7a-de508e91db86,
+CT2 final01a132b5-7eb4-7c50-902e-5d7a88a07f26. All21numeric amounts/rounding/units
+remain correct. R2 caller-verified disabled class/handler meaning is separate from
+canonical Enabled unknown; unknown does not mean enabled. No contradictory or
+missing literal compiler instruction was established. Neither image is accepted.
 Own tabs closed, URL/source preserved after ordinary bootstrap; no submission or
 selection. Relevant loaded scripts match local source, whole-bundleGitunknown.
 Initial DOM carrier included exact approved public draft as input value; removed
