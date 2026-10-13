@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after CW-B26 and overview-presentation final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after real whole-chooser SCOPE4 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**212 proved eligible cases; range212–215 pending three named uncertainties.**
-The planning remainder is788 cases, potentially785 if all three are established.
-There are87 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;155 are non-fixture observations. Fixture UI is
+**213 proved eligible cases; range213–216 pending three named uncertainties.**
+The planning remainder is787 cases, potentially784 if all three are established.
+There are88 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;156 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:547 primary images =543 first outputs +4 rerolls;
+Completed-batch image buckets:550 primary images =546 first outputs +4 rerolls;
 83 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-634 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+637 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -145,7 +145,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B24 |1|1|Five-item AcceptableUse component below earlierTermsviewport; firstimage evaluated, fullFAIL |
 | USE-WEB-ADDRESS3 |2|2|Distinct whole Privacy/FairUse lists, actual new ordinal helper source chain; metadata-only correction, both firstimages evaluated, fullFAIL |
 | CW-B26 |3|3|Distinct whole Payments/Purposes/Retention lists enabled by ordinal selection; actual source chains and firstimages evaluated, fullFAIL |
-| **Primary subtotal** |**211**|**547**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:212 total cases |
+| USE-WEB-SCOPE4 |1|3|New live whole provider chooser,24nodes; earlier CW21 whole attempt published nothing. Existing subcomponents not recounted;3first sheets evaluated, fullFAIL |
+| **Primary subtotal** |**212**|**550**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:213 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1272,3 +1273,41 @@ failure because evidence cannot establish a new source-control contour. The auth
 stricter disagreement remains explicit, without inventing a ban on editorial panels.
 No universal reliability claim or retrospective primary-image pass. Two repairimages
 added:212cases,547primaryimages,83repairimages,4unqualifiedimages=634total.
+
+
+## USE-WEB-SCOPE4 — real whole provider chooser
+
+Neutral `/tmp/uib-scope4-xaugop5j/neutral-index.json` and separate author-assessment.json
+retain the source3bf0b562/abd8878 actual24-node observation, including STYLE with
+unknown layout,115276original bytes, partial34unknowns and validator0. Five semantic
+parts have separate read-only backend-ID bindings; these identify existing nodes,
+not a second geometry source, canonical parent graph or atomicity claim. Six Rust
+measure results embed the same original Snapshot:391.515625×353.546875CSSpx root,
+copy→list and list→guest18.0625 each, Close top/right insets7.015625 each.
+Three fields remain geometry-only; text and focus/disabled state are caller/reference.
+Own Login/Close flow caused no provider/Email/Submit operation; browser/profile closed,
+no repository changes. Old failed whole chooser had no Snapshot; measured provider,
+FORM and tab fragments are not counted anew. The new whole composition supplies
+copy/icon, Close and guest action with cross-part relations, qualifying one new case.
+
+Exporter691ce41 produced3literal first images1536×1024,0rerolls. All13 assigned
+quantities/≈/units/anchors and separate empty frames pass. All fullsheets FAIL:
+G01 printsContainer#1 and filled Google/Patreon icons; D01 assigns Google focus to
+Apple/item2 rather than Google/item3; D02 prints#17/#20/#24. Close is item1. Equal
+button sizes do not equate identities or states. Apple disabled meaning is visually
+recognizable in G01's dashed border/Notavailableyet; missing external caption is a
+literal residual. Detail focus error is substantive. Rounded empty-frame corners
+without a numerical radius do not establish a new measured-radius claim. C7/privacy
+or canonical-data failure is not inferred from these rendering mistakes.
+
+CV2 initial01a136fa-cf4b-7ab1-bbc2-bbfe17aa0e61/final
+01a136ff-4d99-7d23-b688-a71375649381; CT2 initial
+01a136fa-d194-7951-af85-d9b7e4f9ed63/final
+01a136ff-85a1-79d1-b654-b818f6083d4b inspected neutral evidence first, then reconciled
+author claims without repeating checks. The consumer's extra18/7 measurements are
+useful feedback but were not assigned to these images; omission alone is not a new
+compiler defect. Generic-label state attribution remains a diagnostic question.
+One primarycase and3firstimages added:213cases(88Web+125Native;
+57fixture+156nonfixture),47primarybatches,550primaryimages(546first+4rerolls),
+83repairimages,4unqualifiedimages=637total. Remainder787; original3uncertainties
+unchanged. No new fullimage acceptance.
