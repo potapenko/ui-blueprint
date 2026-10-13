@@ -98,3 +98,33 @@ relaxation, parser/collector/UI/app/profile change or full live acceptance is cl
 Source checkpoint and ready Web binary/bundle pins follow below; root coordinates
 the one stable schema/option/source handoff with I02. Prior Native/core bundles,
 correspondence inputs and images remain untouched. No raw logs are committed.
+
+## Pinned Web handoff
+
+Source checkpoint `ea06095bf311e7e33af90e8d72fe822690a3223e` saved/pushed exact8 paths;
+registration04d5076 is separate. Web bundle build/verify0, release/arm64, no Swift:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-OBS-DIAGNOSTICS1-6p1rb0a2/web-bundle`.
+CLI SHA256 `67915c399931e1a02bb11b4d9f566c6ddbad8901e2a85e3cb508d70decd5d1d8`;
+worker `4c633949d210323b2c630a7a548ba0ee84ce97edcbfa3e4082ef005f2aaf4a03`.
+Recipe last committed3e143199; actual copied script126fe895…a2684c041 and separate
+RUN.md0b671146…fc884b0 match the prior recorded recipe/doc material. Lock stays
+8084aeea…b672841. Helper files in this bundle are the then-current separate owner's
+material, not a claim that USE-WEB-DIRECTOR2 is accepted. I02 owns final combined
+helper/core distribution and should archive product sources from this coherent pin.
+
+The pinned CLI/worker reran both synthetic Web refusal cases with exactly the
+494B/512B report and canary exclusion above. Ready minimal invocation:
+`python3 /var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-OBS-DIAGNOSTICS1-6p1rb0a2/web-peer-proof.py`.
+It starts only its own numeric-loopback protocol peer, uses bundled production
+executables, asserts fields/exit/stdout/privacy and bounded thread/socket shutdown,
+then removes its own generated connection/request files. No user browser/app.
+For real consumer use, retain its trusted original C/R/worker paths and append
+`--diagnostics-json --max-diagnostic-bytes 1024`; preserve stdout separately and
+strictly parse this single stderr record. No source URLs/selectors/errors in report.
+
+Private Cargo target removed with image guard and absence verified; generated
+proof inputs absent. Only Web bundle and reproducible proof script remain under
+root/I02 ownership through helper integration/Director retry, then root releases
+these non-image artifacts. Prior bundles/C/images untouched. Receipt-only checkpoint
+records final delivery; it does not change the bundle's source pin or establish
+real Director acceptance. Worker stops after this stable handoff.
