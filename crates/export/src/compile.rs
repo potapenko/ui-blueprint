@@ -658,7 +658,7 @@ fn object_text(
             } else {
                 String::new()
             };
-        format!("- Draw {}{position}", component_name(v, index))
+        format!("- Source member {}{position}", component_name(v, index))
     } else {
         format!(
             "Object {}: {} [#{}]",
@@ -867,7 +867,7 @@ fn ax_fragment_order(previous: &SceneComponent, current: &SceneComponent) -> Opt
         TransformState::Known { .. } => "supplied",
     };
     Some(format!(
-        "  Unprinted AX-frame order relative to preceding Draw item: {vertical}; {horizontal}. Same Space {} ({:?}, {}, {:?}), transform {transform}; same Surface and Observation.\n",
+        "  Unprinted AX-frame order relative to preceding source member: {vertical}; {horizontal}. Same Space {} ({:?}, {}, {:?}), transform {transform}; same Surface and Observation.\n",
         b.coordinate_space.id.0,
         b.coordinate_space.kind,
         unit_name(b.coordinate_space.units),
@@ -887,7 +887,7 @@ fn drawing_inventory(
     append(
         &mut out,
         if assignment == Assignment::SourceDetail {
-            "DRAW THIS SOURCE FRAGMENT. Each Draw item is included artwork. Source hierarchy provides structural orientation only, not proved visual correspondence. Ancestors and child positions are not extra artwork or captions. Preserve the listed items' reference appearance. AX frames do not establish painted geometry; their exact measurements remain in the machine package.\n"
+            "SOURCE FRAGMENT MEMBERS. Each listed member is a source record assigned to this sheet, not proof of visible artwork. Depict only portions permitted by the declared scope, original reference and supplied visibility/cut constraints; keep unknown visibility unknown. Source hierarchy provides structural orientation only, not proved visual correspondence. Ancestors and child positions are not extra artwork or captions. AX frames do not establish painted geometry; their exact measurements remain in the machine package.\n"
         } else {
             "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n"
         },
@@ -978,7 +978,7 @@ fn drawing_inventory(
             append(
                 &mut out,
                 &format!(
-                    "BOUNDARY CONTEXT: {}. Only listed descendant fragments are included; its unlisted children and complete parent region are not artwork on this sheet. Full geometry stays in machine evidence.\n",
+                    "BOUNDARY CONTEXT: {}. Only listed descendant records belong to this sheet, subject to its artwork scope; its unlisted children and complete parent region are not artwork on this sheet. Full geometry stays in machine evidence.\n",
                     component_name(v, i)
                 ),
                 limit,
@@ -2231,7 +2231,7 @@ fn drawing_dimensions(
     if assignment == Assignment::SourceDetail {
         append(
             &mut out,
-            "INCLUSION BOUNDARY: reproduce only the Draw items above. The full reference and original view scope are orientation context, not included artwork. Do not restore a parent card, heading, controls or text outside this exact fragment; do not complete a partially selected record.\n",
+            "INCLUSION BOUNDARY: only listed source members are candidates for artwork. Original scope, offscreen exclusions and known cuts still apply. The full reference constrains visible appearance; it does not authorize unlisted parents or siblings. Do not complete clipped or excluded content.\n",
             limit,
         )?;
     }
@@ -2535,7 +2535,7 @@ fn render_view(
     vars.insert("dimensions", presentation.clone());
     vars.insert("assignment", match assignment {
         Assignment::Overview => "One selected-scope overview with only this sheet's assigned measurements. Other source regions in the reference are context, not permission to extend the scope.",
-        Assignment::SourceDetail => "SOURCE FRAGMENT ONLY. Render exactly the included records, preserving their relative source appearance and proved cuts. The parent screen/card and unlisted siblings are excluded even when visible in the reference. No measurements are assigned.",
+        Assignment::SourceDetail => "SOURCE FRAGMENT ONLY. Listed members bound this sheet's source scope, not their visible paint. Apply original scope/offscreen exclusions and supplied reference/known-cut constraints before depicting any portion. The parent screen/card and unlisted siblings remain excluded. No measurements are assigned.",
         Assignment::Measurements => "MEASUREMENT ONLY. Draw the assigned EMPTY frame/edge sketches, with all semantic captions OUTSIDE. No UI artwork, screenshots, controls, text or icons inside frames. The original reference is attribution context only. Unassigned source objects, parents and siblings are not drawings on this sheet.",
     }.into());
     let mut artwork_guidance = if assignment == Assignment::Measurements {

@@ -2169,8 +2169,8 @@ fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
     l.components_per_detail = 256;
     let p = compile(&b, l).unwrap();
     let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
-    assert!(text.contains("DRAW THIS SOURCE FRAGMENT"));
-    assert!(text.contains("- Draw label layout \"Included label\""));
+    assert!(text.contains("SOURCE FRAGMENT MEMBERS"));
+    assert!(text.contains("- Source member label layout \"Included label\""));
     assert!(text.contains("container \"Fragment parent\""));
     assert!(text.contains("source child 1 of 2"));
     assert!(text.contains("Enabled=false"));
@@ -2196,7 +2196,7 @@ fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
     assert!(text.contains("structural orientation only, not proved visual correspondence"));
     assert!(!text.contains("identifies the item in the reference"));
     // Repeated ancestor labels are not identities. Exercise descent, siblings,
-    // ascent and a distinct root with the same name, retaining every Draw item.
+    // ascent and a distinct root with the same name, retaining every source member.
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
         panic!()
     };
@@ -2235,7 +2235,12 @@ fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
         .collect();
     let p = compile(&b, l).unwrap();
     let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
-    assert_eq!(text.lines().filter(|l| l.starts_with("- Draw ")).count(), 7);
+    assert_eq!(
+        text.lines()
+            .filter(|l| l.starts_with("- Source member "))
+            .count(),
+        7
+    );
     assert_eq!(
         text.matches("Source hierarchy (orientation only): container \"Root\".")
             .count(),
@@ -2280,8 +2285,8 @@ fn ax_source_fragment_uses_tree_membership_without_construction_coordinates() {
     let original = serde_json::to_vec(&b).unwrap();
     let p = compile(&b, l).unwrap();
     let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
-    assert!(text.contains("preceding Draw item: below; left"));
-    assert!(text.contains("preceding Draw item: vertical spans overlap; right"));
+    assert!(text.contains("preceding source member: below; left"));
+    assert!(text.contains("preceding source member: vertical spans overlap; right"));
     assert!(text.contains("transform unknown; same Surface and Observation"));
     assert!(!text.contains("WIDTH") && !text.contains("box[x"));
     assert_eq!(serde_json::to_vec(&b).unwrap(), original);
@@ -2371,12 +2376,12 @@ fn fragment_draft_rules_follow_input_membership_without_parsing_caller_state() {
     let p = compile(&b, l).unwrap();
     let included = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
     let excluded = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
-    assert!(included.contains("Draw input"));
+    assert!(included.contains("Source member input"));
     assert!(included.contains("COMPONENT CLIP #1") && included.contains("clipping reference [#1]"));
     assert!(excluded.contains("COMPONENT CLIP #3") && excluded.contains("clipping reference [#3]"));
     assert!(included.contains("caller draft only when explicitly reported"));
     assert!(!included.contains("NON-RENDERING WHOLE-VIEW PROVENANCE"));
-    assert!(!excluded.contains("Draw input"));
+    assert!(!excluded.contains("Source member input"));
     assert!(!excluded.contains("caller draft only when explicitly reported"));
     assert!(excluded.contains("NON-RENDERING WHOLE-VIEW PROVENANCE"));
     assert!(excluded.contains("Caller-draft rendering does not apply"));
