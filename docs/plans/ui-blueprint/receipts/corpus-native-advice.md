@@ -1,5 +1,46 @@
 # Native source advisor handoffs
 
+## CN15 — orientation and iPad keyboard candidate, 2026-10-13
+
+Advisor turn01a132c5-678b-7301-892c-3cdd495eafe9, beta-01/c7d8e3dc source-only.
+Route: native-platform composition iPhone27/iPad behavior, Actor scope-selection11,
+Simulator/runtime/UI-tool rules; deduplicated B13–15/B17–20 and count ledger.
+Phone target supports portrait only; do not force landscape. iPad width changes
+must remain landscape; opposite landscape rotation alone is not a new case.
+
+One source-backed candidate: existing paused English Search/no Actor → toolbar
+Actors → focus empty existing field → software keyboard. Prior B20 Actor lacked
+keyboard, B17–18 keyboard covered other queries/Director. Count only actual popup
+movement/compression or changed list coverage, not the keyboard's presence alone.
+No typing, option/Clear/possible-matches selection. Opening does public ready lookup;
+focus does not change query/history. Hide keyboard, dismiss popup, verify original
+query/scope/phrase/pause; onDisappear cancels picker lookup.
+
+Existing compact-width branches: tablet toolbar replaces two selectors with one;
+Actor popover adapts to sheet. A supported already-available window resize route
+requires runtime qualification; no Stage Manager/windowing-preference change or new
+host is authorized. Reels adaptive action bar exists but no prepared safe state/
+resize path is established; Search↔Reels handoff is not harmless by assumption.
+
+Local Simulator storage is per UDID, no App Groups in checked entitlements. Mobile
+bootstrap uses ordinary production session/persistence/library owners, not memory-only.
+Normal startup network/storage effects remain explicit. Actual installed source
+revision is unknown; earlier matching binary hashes do not establish it. Revalidate
+own device/container and state before operating. Protected Mac Release and ProMax
+remain untouched; ordinary Mac Debug stays prohibited.
+
+Root correction: advisor's proposed requirement for a non-CUA keyboard path does
+not follow the user's ban on controlling Codex. CN-B17 proves the separate Apple
+DeviceHub com.apple.dt.Devices keyboard menu, not Codex UI. Reuse that historical
+recipe with fresh exact device/window attribution and current tool instructions;
+do not rediscover capability from scratch or toggle global hardware-keyboard prefs.
+
+Owners: [Actor overlay](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Search/Actor/TabletActorPickerSearchOverlay.swift:44),
+[tablet navigation](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Navigation/TabletNavigationShell.swift:287),
+[adaptive Reels bar](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeTablet/Reels/Components/ActionBar/TabletReelsActionBarView.swift:24),
+[orientation declaration](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp.xcodeproj/project.pbxproj:1561).
+No launches, file changes, UI actions or completed cases from this consultation.
+
 ## CN12–CN14 — recovery choices and isolation boundary, 2026-10-13
 
 CN12 did not recover the original phraseID from retained observations or passive
