@@ -1,5 +1,39 @@
 # Web source advisor handoffs
 
+## CW-B18 — runtime isolation qualified, candidates excluded, 2026-10-13
+
+Worker01a133fc-3106-75d2-8510-442d523b3260, terminal turn
+01a133ff-674b-73f0-8afa-48651f16be75. `/tmp/uib18-b8w_lnv0/neutral-manifest.json`
+pins @playwright/cli0.1.19/core1.63.0-alpha-2026-08-31 and existing Chrome for Testing
+Chromium145.0.7632.6, headless/unmodifiedUA. New isolated context, no attach/imported
+profile/operator cookies. Freshguest/emptyClipSearch/corpusen verified; only interface
+locale changed through ordinary UI. Five loadedowner functions match local source,
+not a full-bundle claim. CP17binary hash verified but no export executed.
+
+Version-pinned implementation hooks: PWTEST_DAEMON_SESSION_DIR, PWTEST_SOCKETS_DIR,
+PWTEST_SERVER_REGISTRY, PWTEST_CLI_GLOBAL_CONFIG point into owned `/tmp/uib18-b8w_lnv0`;
+TMPDIR directs temporary profile/artifacts there, NO_UPDATE_NOTIFIER prevents notifier
+cache/network. Resolver earlyreturn and inherited daemon env verified, actual daemon
+files/sockets/registry/browser profile observed under that root. No HOME/CODEX_HOME,
+package or global preference edits. This is not a public API compatibility promise
+or all-host filesystem/zero-network claim. Exact session closed; owned process/profile/
+sockets removed, seven QA/native images and their ancestors retained. Reuse requires
+fresh ownroot/session and current path/version checks, not reused closed handles.
+
+All3candidates excluded BEFORE imports/exports/ImageGen: Arabic Filters remained
+English/LTR despite rootlocale ar; GermanSettings had no extra wrapping/reflow or
+coverage difference (213nodes; changed rectangles text/header-only); Arabicpicker
+matches existing172-node layout/group rows, only headertext/spacers change. Existing
+native-name/English direction separation is not new. SourcePNG observations include
+nativeDPR2 and one CSS-scale QA image, none promoted to generationreference.
+Zero cases/prompts/modelcalls/rerolls; corpus count unchanged.
+
+Startup included Firebase config/installationPOST and ordinary configs/common-content
+reads; three analyticsPOSTs recorded. No search/filter-option/translation/media requests
+seen. Only summarized paths/counters retained, no auth headers/body or operator storage.
+Initial undocumented-hook prerequisite receipt remains at its original temp path;
+root's later technical clarification superseded it without erasing history.
+
 ## CW11 — one mixed Settings switch state, 2026-10-13
 
 Advisor turn01a1340a-2eb9-7de2-8ad9-ec5ccc7eb98c, c23ef963, source-only.
