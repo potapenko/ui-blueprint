@@ -36,17 +36,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:183; unresolved upper bound186; conservative remainder817.**
+**Proved eligible case count:184; unresolved upper bound187; conservative remainder816.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Thirty-two completed primary batches produced505 qualified evaluated images;
+Thirty-three completed primary batches produced506 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their501 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not505 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their502 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not506 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -84,9 +84,10 @@ CW-B10 adds2Web Actor states, bringing it to176.
 CW-B11 adds2qualified desktop/mobile ready Actor states, bringing it to178.
 CW-B12 adds2qualified Reels Search states, bringing it to180.
 CW-B13 adds3qualified selected-filter compositions, bringing it to183.
+CN-B21 adds1qualified iPad Actor keyboard composition, bringing it to184.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3 images (53 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:562counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:563counted generated images
 overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -136,7 +137,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CP12 |same exporter owner|172a080 bounded+oneimage accepted; archived|Both critics accept literal button i caption and≈38×54pt; machine/owner/privacy/limits unchanged; [receipt](receipts/corpus-literal-captions12.md) |
 | CP13 |same exporter owner|61bd8cb bounded accepted; archived|Both critics confirm owner correction, image stillFAIL for placement/repeats/focus; [receipt](receipts/corpus-wrapper-frame13.md); no source app/prefs access |
 | CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662 bounded accepted; receipt8c6276c|CT2 accepts editorial source/unchanged facts and limits. CW70/CW71 remainFAIL; CW60 scoped visual pass with literal-placement residual, not strict assignment pass.3repair images, no newcases/cohort acceptance/causal reliability claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
-| CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, restored|full-cycle useful-geometry selection repair running|Confirmed C2 omissions: desktop popup/result sizes and meaningful gaps/inset; Voice principal tile366×42 unassigned. Fix existing export selection, preserve raw facts/no inferred union or mapping. D/MV plus CW60 control; focused tests/CLI/first images, no newcases until none expected |
+| CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, restored|full-cycle useful-geometry selection repair running|Confirmed C2 omissions: desktop popup/result sizes and meaningful gaps/inset; Voice principal tile366×42 unassigned. Fix existing export selection, preserve raw facts/no inferred union or mapping. D/MV plus CW60 control; focused tests/CLI/first images, repair validation only, no newcases |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -175,7 +176,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW6 |Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|source-only receipt accepted; retained|Two Reels Search candidates: positive suggestions/custom card and successful zero count/empty suggestions. No other safe new family established; [handoff](receipts/corpus-web-advice.md#cw6--two-remaining-reels-search-states-2026-10-13); no counts |
 | CW7 |same Web advisor|source-only receipt accepted; retained|Empty-main-query Clip Search entity apply/remove is realm+tab-history only, no phrase search/shared filter persistence;3new composition candidates. Actor/Reels apply remain excluded. [Effects/recipe](receipts/corpus-web-advice.md#cw7--empty-query-clip-search-selection-boundary-2026-10-13); no counts |
 | CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only receipt accepted; retained|Phone portrait-only; one conditional iPad Actor keyboard candidate plus unqualified compact-width branch. [Receipt](receipts/corpus-native-advice.md#cn15--orientation-and-ipad-keyboard-candidate-2026-10-13); root rejects overbroad non-CUA requirement: Apple DeviceHub is not Codex |
-| CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local|full-cycle iPad Actor keyboard task running|Existing own iPad71F8E4AC… only, target/storage/state requalification, no Mac bootstrap/user Release. Count only real layout/coverage change; optional existing compact app-window path without mode/preference changes. Frozen CP14, no tracked writes; no cases counted yet |
+| CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local, archived|cycle accepted; both critics first observations running|1newcase/1firstimage/authorFAIL, frozen CP14;6rows with keyboard vs9full+partial,20AXsizes/6labels. playphraseme-cn-b21-1v2u48gc manifest/HANDOFF; actual scoped restoration/shutdown. Optionalresize disabled; no Mac bootstrap/user Release |
 | CW-B12 |01a132a6-3de5-7b72-820f-b5853a8cc992/local, archived|cycle accepted; both critics confirm2FAIL|2newstates/2firstimages,94frames/21dimensions, frozen CP13; uib-cw-b12-0RRqDd HANDOFF/neutral-manifest; tabs closed, source read-only; numeric success separate from visual acceptance, no literal compiler conflict established |
 | CW-B13 |01a132ba-030e-7a81-be76-f4b024ab1794/local, archived|cycle accepted; both critics confirm3FAIL|3newcases/3firstimages, frozen CP13;69layout+69visible frames/18CLI measures; uib-cw-b13-2Q5Tmo HANDOFF/neutral-manifest. Own selections removed/tabs closed. Confirmed desktop C2 plan gap and Voice principal tile omission feedCP15, separate from raster failures |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |

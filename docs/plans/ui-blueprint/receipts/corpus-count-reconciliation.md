@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B13 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CN-B21 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**183 proved eligible cases; range183–186 pending three named uncertainties.**
-The planning remainder is817 cases, potentially814 if all three are established.
-There are63 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;126 are non-fixture observations. Fixture UI is
+**184 proved eligible cases; range184–187 pending three named uncertainties.**
+The planning remainder is816 cases, potentially813 if all three are established.
+There are63 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;127 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:505 primary images =501 first outputs +4 rerolls;
+Completed-batch image buckets:506 primary images =502 first outputs +4 rerolls;
 53 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-562 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+563 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -90,7 +90,23 @@ dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 | CW-B11 |2|2|New qualified desktop20row ready state and mobile full-screen ready topology; no oldCW02 relabelling; both first outputs evaluated as failures by author |
 | CW-B12 |2|2|Reels Search positive custom/suggestions and successful empty;94frames/21required labels, both first outputs authorFAIL; numeric success is not image acceptance |
 | CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
-| **Primary subtotal** |**182**|**505**| |
+| CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; first image authorFAIL, independent review pending |
+| **Primary subtotal** |**183**|**506**| |
+
+CN-B21 evidence: `playphraseme-cn-b21-1v2u48gc/HANDOFF.md`, neutral `manifest.json`,
+runtime/source-qualification/numeric-check/cleanup records under system-temp prefix.
+ManifestSHA25661336dd0486f87db9ef997dce4fd677911b7f106d33ecb32238c5b6401ed2434.
+Native simctl source2752×2064/1376×1032pt/native2x;10selected AX nodes,
+20source sizes and6assignedlabels checked. First output1672×941 atCP14, no reroll.
+Author missing popup arrow/focus and caption-placement deviations remain unaccepted.
+Original and returned image bytes hash-identical; blank preview was inconsistent
+display, not a second generation or differing image file. All originals/copies retained.
+Installedbinary matchesB20, sourceGitunknown. AX per-node owner/acquisitiontime/
+pixelmappingunknown and non-atomic partial scope preserved. Own device containers
+and empty entitlements requalified; ordinary startup persistence/network not denied.
+Original query/scope/phrase/pause restored, keyboard hidden/Actor dismissed, app
+stopped/Homeportrait restored/device shutdown. Mirror/port/guard/reservation released.
+Only own npm-cache400files removed; existing installation/app data retained.
 
 CW-B13 evidence: `uib-cw-b13-2Q5Tmo/HANDOFF.md`, `neutral-manifest.json`,
 `numeric-and-ownership-proof.json`, `literal-invocation-proof.json`, states/exit records.
