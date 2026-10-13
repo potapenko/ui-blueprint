@@ -20,8 +20,10 @@ node "$UIB_BUNDLE/web-geometry.cjs" --help
   `input.search` or `[role="dialog"][aria-label="Settings"]`, naming exactly one
   component. These are examples, not targets to assume exist.
 
-The helper supports root-document light DOM only. No selector combinators, lists,
-pseudo-selectors, escapes, frames, template/slot traversal or authored shadow hosts.
+The helper supports root-document light DOM only. A compound selector may end with
+one `:nth-of-type(N)`, where N is a canonical integer from 1 to 2048; it counts
+same-type siblings within their parent. No other pseudo-selectors, combinators,
+lists, escapes, frames, template/slot traversal or authored shadow hosts.
 Do not add IDs to the app to make a selector work. Missing connection/selection is
 a prerequisite to resolve through the authorized caller, not a reason to scan
 profiles, guess ports, launch/navigate a browser or change application configuration.
@@ -64,7 +66,7 @@ do not infer labels from selectors or promise text inventory from these fields.
 ## Limits and failures
 
 The caller is deliberately bounded: URL-mode collection requests 32 output nodes,
-depth 8, 128 KiB and 1000 ms, with a 16-node collector cap. Selection walks allow
+depth 8, 128 KiB and 1000 ms, with a 32-node / 109-method collector cap. Selection walks allow
 2048 visits/depth 64. `--max-visited-nodes` can lower, not raise, the visit limit.
 Large components can remain partial or refuse. Do not automatically retry or enlarge
 limits; a newly selected smaller scope must still answer the user's authorized task.
