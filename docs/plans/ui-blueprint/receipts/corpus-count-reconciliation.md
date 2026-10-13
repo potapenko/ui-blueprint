@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after CW-B27 and human-owner prompt final reviews.
+2026-10-14. CCOUNT1 reconciliation, updated after CW-B28 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**216 proved eligible cases; range216–219 pending three named uncertainties.**
-The planning remainder is784 cases, potentially781 if all three are established.
-There are91 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;159 are non-fixture observations. Fixture UI is
+**218 proved eligible cases; range218–221 pending three named uncertainties.**
+The planning remainder is782 cases, potentially779 if all three are established.
+There are93 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;161 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:561 primary images =557 first outputs +4 rerolls;
+Completed-batch image buckets:568 primary images =564 first outputs +4 rerolls;
 85 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-650 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+657 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -147,7 +147,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B26 |3|3|Distinct whole Payments/Purposes/Retention lists enabled by ordinal selection; actual source chains and firstimages evaluated, fullFAIL |
 | USE-WEB-SCOPE4 |1|3|New live whole provider chooser,24nodes; earlier CW21 whole attempt published nothing. Existing subcomponents not recounted;3first sheets evaluated, fullFAIL |
 | CW-B27 |3|11|Whole Email/Register/Recovery dialogs add navigation/Close/header/footer and cross-part geometry beyond old FORM fragments;11first sheets evaluated, RegisterD03 scopedPASS |
-| **Primary subtotal** |**215**|**561**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:216 total cases |
+| CW-B28 |2|7|Responsive Email/Recovery bottom sheets with separate Close; both full cases FAIL, Recovery D01 scoped PASS; Register excluded |
+| **Primary subtotal** |**217**|**568**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:218 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1389,3 +1390,33 @@ remains a literal abbreviation residual, not a demonstrated conversion; rounded 
 frames alone are not measured-radius claims. No fullsheet approval or general
 reliability claim. Two repairimages added:216cases,561primaryimages,85repairimages,
 4unqualifiedimages=650total. Source/firstfailures/tool originals remain unchanged.
+
+
+## CW-B28 — responsive Email and Recovery, final reconciliation
+
+Neutral source: `/tmp/uib-b28-yl69v8s8/neutral-index.json`. Actual desktop Chromium
+390×844 CSS px/DPR2, not iPhone/Safari: bottom-sheet body and separate full-width
+Close provide composition differences from CW27, not a width-only extra case.
+Email27/Recovery21 nodes,17 same-Snapshot measurements,2 packages/7 first images,
+0 rerolls. Source coverage remains partial geometry-only; caller state is separate.
+CV2 final01a13745-59df-7112-a806-a9b9cb549325 and CT2 final
+01a13755-4a35-7213-a1ff-2ccdc2a09813 qualify both cases. The unrelated old Cast
+response from CT2 was not used; the same critic completed the correct CW28 review.
+
+Both complete cases FAIL. Recovery D01 is scoped PASS; six other sheets fail.
+29/30 assigned quantities are represented with their assigned values. Recovery D02
+lacks the required Back-to-sign-in44 CSS px height. Email D01/D03 misname dimension
+owners; D02 adds an unassigned318×46 block (source height44); overview internal IDs
+and Recovery focus loss remain. Footer-qualified px is a literal residual, not a
+proved conversion; rounded empty outlines do not establish a measured radius.
+
+Register produced no Snapshot/package/image and adds no case. Subsequent separate
+[USE-WEB-LIMIT1 diagnosis](consumer-web-limit1.md), checkpointa50190bb, identifies
+the frozen collector's canonical JSON cap131072bytes by guard elimination. Exact
+full size is unknown; no cap/code/runtime change or new observation was made.
+
+Current total:218cases (93Web+125Native;57fixture+161nonfixture),49primary batches,
+568primary images (564first+4rerolls),85repair images and4unqualified attempts =
+657images. Remainder782; the three historical uncertainties remain separate.
+AUTO-DETAIL2's one repair image awaits final independent qualification and is not
+yet added here. All first failures, source images and tool originals remain retained.

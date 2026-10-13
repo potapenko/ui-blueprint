@@ -1,5 +1,25 @@
 # Единый реестр задач
 
+## Current closeout assessment — 2026-10-14
+
+The user asks to stop expanding development and identify what remains before
+transitioning to real use and bug reports. Root recommended removing1000 as a
+completion gate, but that proposal has NOT changed the active goal or established
+completion. No new corpus batches, images, research or cap expansion are dispatched.
+Finish already-produced CW-B28 reconciliation and existing AUTO-DETAIL2 acceptance.
+The same CT2/CV2 chats have one terminal read-only review packet, no nested workers,
+new images, builds or runtime. Scope: source11de0ce/de105e38 against c0d6 baseline
+and one retained EmailG01 repair image; distinguish source acceptance from raster
+FAIL. Direct HUMAN approval is exporter turn01a1373c-da8c-7e50-89c8-8c57808a4230,
+userMessage01a1373c-daaf-7e93-962a-2cc3955d7238 approving plan02219e9 before code.
+
+Known Register131072-byte refusal is recorded by USE-WEB-LIMIT1; no fix selected.
+Public release is absent; installer/skill isolated checks are separate existing
+work. No release publication, signing, installation or unrelated worker takeover
+is authorized by the user's status question. The previous turn made progress by
+establishing this delivery gap; this turn records accepted existing results.
+Root write set: this registry, corpus-testing.md and the existing count receipt.
+
 ## CORPUS-1000 — resumed after Codex restart, 2026-10-13
 
 The user explicitly resumed: «Я перегрузил кодекс, поэтому можешь начинать
@@ -10,7 +30,7 @@ terminal before redispatch; no duplicate workers were created. Nativecaption
 Both CW21 critics resume only author reconciliation from their completed initial
 observations. Web source owner remains idle because its three-form batch is done.
 The prior pause below is historical, not a current execution gate. Scope and
-Current post-resume corpus:216cases/650images after human-owner prompt acceptance.
+Current post-resume corpus:218cases/657images after CW-B28 final reconciliation.
 
 ### Preserved pre-restart handoff
 
@@ -82,7 +102,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-216proved eligible primarycases,784remaining,85validationimages/650totalimages.
+218proved eligible primarycases,782remaining,85validationimages/657totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -213,10 +233,10 @@ root does not redirect or archive its unrelated application work.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
-| USE-WEB-LIMIT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|finite readonly frozen-guard diagnosis running|Mapabd8878 collector_limit/code0 againstactualCW28Registerrecord/config; no guessedbytebudget fromneighbor sizes. Return exactguard or minimumsingle-diagnosticplan withsafe numericfacts; no code/cap/runtime/spec change now. Sharedspeclease remainsAUTO-DETAIL2 |
+| USE-WEB-LIMIT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|terminal diagnosis a50190bb; no code or cap changes|Mapabd8878 collector_limit/code0 againstactualCW28Registerrecord/config; no guessedbytebudget fromneighbor sizes. Confirmed bounded_document canonical JSON exceeds131072bytes; exact full size unknown. Not64KiB CDP reply budget or method preflight. No further diagnostic/runtime task dispatched. Sharedspeclease remainsAUTO-DETAIL2 |
 | USE-WEB-NARROW-REGISTER1 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal exactsource/diagnostic handoff; specificguard unknown|ExactCW28 Registerdiagnostic/stage andsource nodes/depth/state-vs-transition reconciliation; no freshbrowser/Observe/cap/sourcechanges. Final01a13739-b797-7cb2-a416-1419ee9ff7fb, /tmp/uib-b28-yl69v8s8/narrow-register-handoff.json: collect/collector_limit/code0,0publication; static29Elements/depth5, no form-stack found. Animation relation and particular budget unproved; no newruntime/case. Handed toI02 finiteguardmapping |
-| CW-B28 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal2cases/7firstimages plusRegisterrefusal; samecritics review running|Up to3 narrow Web Email/Register/Recovery cases only where actual mode/composition/reflow/fit/coverage differs meaningfully from CW27; no width-only quota. Existing safe local empty-field transitions, no Submit/source/accountwrites. Pinned3bf0b562/abd8878 +691ce41, unchangedcaps; Neutral /tmp/uib-b28-yl69v8s8/neutral-index.json: actualbottomsheet+separateClose at390×844,27/21nodes,17measurements,2packages/7firstimages/0rerolls. Registerresource_limit hasnoSnapshot/case. Author29of30assignedamounts retained/allrasterFAIL; finalqualificationpending. CT2 turn01a13739-b69a-7520-b3d7-4d123f0ccd06 returned unrelatedoldCast aftercompaction; samecritic resumed exactCW28initial withauthorassessment withheld, no replacement/acceptance. Browser/profileclosed, reposreadonly |
-| USE-AUTO-DETAIL2 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|full bounded planner implementation authorized|[Plan](corpus-testing.md#use-auto-detail2--omit-an-uninformative-automatic-tail): registerSHEET-PROMPTS2 then omit only eligible short auto tail from extraDsheet, preserving allsource/G01/unknowns/density/requiredowners and explicit/analysis inputs. Email25node replay, RegisterD03 control, focused counterexamples, onefirstEmailG01 repair image. No nodepruning/newflags/renderer framework |
+| CW-B28 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|qualified2cases/7firstimages counted; both full cases FAIL|Up to3 narrow Web Email/Register/Recovery cases only where actual mode/composition/reflow/fit/coverage differs meaningfully from CW27; no width-only quota. Existing safe local empty-field transitions, no Submit/source/accountwrites. Pinned3bf0b562/abd8878 +691ce41, unchangedcaps; Neutral /tmp/uib-b28-yl69v8s8/neutral-index.json: actualbottomsheet+separateClose at390×844,27/21nodes,17measurements,2packages/7firstimages/0rerolls. Registerresource_limit hasnoSnapshot/case. Final CV2 01a13745-59df-7112-a806-a9b9cb549325 and CT2 01a13755-4a35-7213-a1ff-2ccdc2a09813:29/30assignedamounts represented, RecoveryD01 scopedPASS, sixsheetFAIL;218cases/657images. CT2 turn01a13739-b69a-7520-b3d7-4d123f0ccd06 returned unrelatedoldCast aftercompaction; samecritic resumed exactCW28initial withauthorassessment withheld, no replacement/acceptance. Browser/profileclosed, reposreadonly |
+| USE-AUTO-DETAIL2 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source11de0ce pushed; final same-critic acceptance running|[Plan](corpus-testing.md#use-auto-detail2--omit-an-uninformative-automatic-tail): registerSHEET-PROMPTS2 then omit only eligible short auto tail from extraDsheet, preserving allsource/G01/unknowns/density/requiredowners and explicit/analysis inputs. Email25node replay, RegisterD03 control, focused counterexamples, onefirstEmailG01 repair image. No nodepruning/newflags/renderer framework |
 | USE-AUTO-DETAIL1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|terminalplan02219e9 accepted as bounded Evolve basis|CW27 EmailD03 owns onlyN024/unavailable geometry and0dimensions; whole-dialog reconstruction is a renderer scope failure. Whether this automatic detail is useful is a separate HBP presentation question, not an established compilerbug. Preserve scene/fulloverview/unknowns and explicit requests; inspect actual planning evidence before any selection change. HUMAN-OWNERS1 accepted/closed before this dispatch. Inspect sourceinfo andauto-density/explicit-detail distinction, preserve useful RegisterD03; no code/spec/density/ImageGen changes. Receipt consumer-auto-detail1.md:25→12+12+1; N024DIV has onlythreeUnknowngeometryprops and no publiccontent/state/structuralcontext, not provedempty/invisible. Registertail retains knownBUTTON/zeroheightDIV and2dimensions. Rootadopts fourconservativeguards plus analysis-input exclusion in AUTO-DETAIL2 |
 | USE-HUMAN-OWNERS1 |original export owner01a12b6a-92a9-73c3-aec2-022e32651008|sourcec0d6fd8 accepted;2repairimages counted,0fullsheetPASS|[Plan](corpus-testing.md#use-human-owners1--readable-owners-and-truthful-detail-state). SCOPE4D01/D02 first-output proof, public literal labels preserved; no invented name/binding/canonical state or input/collector redesign. [Author receipt](receipts/consumer-human-owners1.md); neutral uib-HUMAN-OWNERS1-xw0ivqxk/neutral-index.json SHA315177cd, CLIcec0befd. Exactmachine/inputs/metadata and Privacy/A11D03 controls preserved byauthorproof; onecandidate/2firstrepairimages1536×1024/0rerolls. CV2final01a13720-51e8-7ef0-b9c0-2d7ae4782ff9/CT2final01a13724-12b7-7d63-a217-483583ffb0da accept scopedsource/captionimprovement. D01 neededcallercontextloss and D02unsupported1:1 remainFAIL; off-sheet state omission and roundedframes not new mandatorydefects.2repairimages counted,216cases/650images. Sameowner needed next finite planner question |
 | CW-B27 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|qualified3wholecases/11firstimages counted;1scoped sheetPASS|Full Email/Register/Recovery only if existing local guest-tab transitions are source-confirmed safe; no Submit/provider/account writes, fields empty. Scope must add real whole-dialog cross-part geometry beyond old CW21FORM fragments; exclude duplicates/unsupported rather than prune. Ready3bf0b562/abd8878 +691ce41, no new caps/code; Neutral /tmp/uib-b27-3_q0peqx/neutral-index.json, separateauthor-assessment.json. Actual25/27/19nodes,23sameSnapshotmeasurements,3packages/11literalfirstimages/0rerolls. Bothcritics final01a13713-bcb9-73d3-94c0-220679aee05d/01a1370f-06a5-7422-912d-b52710e1fe96:46assignedamounts preserved, RegisterD03PASS/10fail,0fullcases; count216/648. IDs, scope/focus/unassignedsize failures retained; literalunit/placement/attribution residuals do not invent new geometry defects; fullroot/Close/header/footer add scope beyondoldFORM. Ownbrowserclosed, fields empty, no Submit/repochanges |

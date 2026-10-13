@@ -567,3 +567,17 @@ candidate and images retained with tool originals. No nested agents, worktree or
 persistent output directory. Neutral index precedes author assessment. If actual
 implementation encounters a protected dependency, return it rather than broaden
 eligibility or silently weaken source fidelity.
+
+
+## Finite closeout assessment — user steering 2026-10-14
+
+The user requests an end to indefinite development expansion and asks what remains
+before moving to actual library use and bug reports. Root recommends retiring the
+1000-case target as a release gate; this is a proposal, not an approved replacement
+of CORPUS-1000 or a completion claim. No new batches/generations or investigations
+are dispatched during this reconciliation. Already-completed CW-B28 adds2qualified
+cases/7first images; AUTO-DETAIL2 finishes its existing independent acceptance using
+one retained image and focused author evidence, without new tests or generations.
+Known128KiB Register refusal and raster fidelity failures stay explicit. Final
+delivery needs one matching pinned toolset and clear use/limitations, while public
+publication has its separate scope. No source-application changes are implied.
