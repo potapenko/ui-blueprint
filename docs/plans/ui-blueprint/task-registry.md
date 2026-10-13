@@ -27,7 +27,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-197proved eligible primarycases,803remaining,74validationimages/599totalimages.
+197proved eligible primarycases,803remaining,75validationimages/600totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -118,10 +118,10 @@ CW-B19 adds1qualified mixed Settings state, bringing it to194.
 CW-B20 Cast and CN-B22 Guest Tour add2qualified cases, bringing it to196.
 Previously excluded CW14 now has its first qualified image, bringing it to197;
 it is counted once under CW-B2, not a new live state or repair reroll.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2 images (74 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1 images (75 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:599counted generated images
-overall; unqualified attempts increase neither eligible cases nor the74repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:600counted generated images
+overall; unqualified attempts increase neither eligible cases nor the75repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -145,7 +145,7 @@ root does not redirect or archive its unrelated application work.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
-| USE-CAST-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source600c6ab/receiptad7005b delivered; same2critics initial review running|[Receipt](receipts/consumer-cast-dimensions1.md). Sole-source known rectangular layout/AX scope retained generically; original M0001/M0002 assigned, no newmeasurement. Author exactCastmachine/otherfamilies equality and6focused checks. Neutral uib-CAST-DIMENSIONS1-38ihdj55/neutral-index.json SHAdb7305ff; CLI f5f627b7. One1619×971 repairimage produced, pending acceptance/count checkpoint, no newprimarycase; oldfailure preserved |
+| USE-CAST-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source600c6ab accepted; dimension presentation passes, fullrasterFAIL|[Receipt](receipts/consumer-cast-dimensions1.md). CT2completedreview01a13619-1715-7962-9aa2-e93f0a4ad1c7 reused; CV2initial01a13619-14d3-7a02-b47a-3365e100cb26/final01a1361b-8ed0-74b0-bd7b-8e50a1c2267d. Correct≈175×≈42/anchors, no invented304/R12. Unsupported pointer remains; footer-qualified px is formatting residual perCV2. One qualified repairimage, no newcase. Owner continues Nativecaptions, no Cast reroll loop |
 | USE-WEB-EXPORT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source863dcdb accepted; owner archived|[Receipt](receipts/consumer-web-export1.md). CT2 initial01a135e6-f917-7610-905d-a9770c6a19db/final01a135ee-0692-7ed2-92d6-a200fb95342e accepts publication boundary; actual Webconsumer01a135e6-f83d-7263-8635-d7928ac5120a confirms Cast→canonicalJSON→export without adapter. Candidate retained uib-web-export1-h1iqyuk2/candidate. Raster/assignment failures separate from accepted handoff |
 | CW-B20 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal1live case/1first image; two-critic review pending|Cast tooltip original7357B SHA5783653b..., acquisition863dcdb/ea06095, exporter2ed8fee, source partial. Neutral /tmp/uib-cw-b20-qg6pyl7o/neutral-index.json live_cases. Author reports missing prompt assignments and raster invented dimensions/radius; verify independently before repair. Earlier CW14 HTTP400 produced0images and remains separate USE-PROMPT-LENGTH1. No reroll/source-app changes |
 | USE-PROMPT-LENGTH1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source7b7d454 accepted; same owner continues Cast repair|[Receipt](receipts/consumer-prompt-length1.md). CT2final01a13607-47be-71d0-b905-ee5b3a32f09a independently confirms exact non-prompt bytes and equivalent notation/content/assignment; author tests reused. Literal40197→31611 accepted by ImageGen, first1536×1024 raster stillFAIL. Provenance supplement94b314e8 resolves mutable priorindex; verified reconstruction disclosed. No universal length/raster claim |

@@ -13,9 +13,9 @@ fixture/component-preview origin;140 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:521 primary images =517 first outputs +4 rerolls;
-74 separate repair-validation images;4 unqualified reference attempts
+75 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-599 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+600 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -893,3 +893,28 @@ Current total:197qualified cases (75Web+122Native;57fixture+140non-fixture),
 599generated images overall. The original3case uncertainties are unchanged;
 range197–200, conservative remainder803. Retained images and containing directories
 are never agent-cleaned.
+
+## USE-CAST-DIMENSIONS1 — accepted source repair, raster residual
+
+Source600c6ab6642f9e1dc0bd35f9f64b25a49a212688, authorreceiptad7005b;
+[repair receipt](consumer-cast-dimensions1.md). One first repairimage1619×971,
+zero newprimarycases/rerolls. Neutral index
+`$T/uib-CAST-DIMENSIONS1-38ihdj55/neutral-index.json`, SHA
+db7305ff1fa3b0145a0ad8b90ec5f3447581deb4b535f24dad247f79af0bdb4b.
+Existing M0001/M0002 layout174.671875×42.3125CSSpx now assigned≈175×≈42 once;
+sole known layout/AX root may be selected without children, with no invented role,
+measurement or hit/visible fallback. Cast machinefiles and complete CW14/Director/
+Reels packages unchanged; source tests/limits/generalization verified by author.
+
+CT2 completedreview01a13619-1715-7962-9aa2-e93f0a4ad1c7 is reused, not claimed as
+a new blind run: non-author frozenpredicate/test/hash/byte review accepts source;
+no code/test rerun. CV2initial01a13619-14d3-7a02-b47a-3365e100cb26 and final
+01a1361b-8ed0-74b0-bd7b-8e50a1c2267d independently accept dimension presentation.
+Both corrected values and≈marks/anchors appear; old invented304×102/R12 absent.
+Full raster stillFAIL: new downward pointer absent from reference. CV2disagrees
+with author's stronger units failure: px is a formatting residual because footer
+explicitly identifies CSSpx, not conversion or V5/V6failure. No new fullimageacceptance,
+universal rendering claim or automatic wording/reroll loop. Earlier failedimage retained.
+
+Current counts:197eligiblecases,521primaryimages,75repair-validationimages,
+4unqualifiedimages,600counted generatedimages; conservative remainder803.
