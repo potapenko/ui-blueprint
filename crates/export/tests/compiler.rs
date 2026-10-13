@@ -1345,6 +1345,138 @@ fn popup_prompt_preserves_distinct_input_and_result_width_owners() {
 }
 
 #[test]
+fn repeated_controls_share_existing_gap_only_with_source_context() {
+    for role in ["BUTTON", "SELECT", "INPUT"] {
+        let mut b = fixture("observed");
+        let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+            panic!()
+        };
+        snapshot.nodes.truncate(7);
+        snapshot.relations.clear();
+        snapshot.components.clear();
+        let known = snapshot.nodes[0].properties[2].clone();
+        for n in &mut snapshot.nodes {
+            set_test_role(n, "DIV");
+            n.children.clear();
+            n.properties[2] = known.clone();
+            let Property::Requested { state, .. } = &mut n.properties[1] else {
+                panic!()
+            };
+            *state = Availability::Unknown {
+                reason: Id("not-collected".into()),
+            };
+        }
+        for i in [3, 6] {
+            set_test_role(&mut snapshot.nodes[i], role);
+        }
+        for (i, x, y, w, h) in [
+            (0, 0., 0., 300., 200.),
+            (3, 0., 10., 300., 40.),
+            (6, 0., 56.015625, 300., 40.),
+        ] {
+            let Property::Requested {
+                state:
+                    Availability::Known {
+                        value: Value::Geometry(g),
+                    },
+                ..
+            } = &mut snapshot.nodes[i].properties[2]
+            else {
+                panic!()
+            };
+            g.shape = Shape::Rect(Rect {
+                x,
+                y,
+                width: w,
+                height: h,
+            });
+        }
+        let original = serde_json::to_vec(&b).unwrap();
+        let p = compile(&b, limits()).unwrap();
+        assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+        let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert_eq!(text.matches("↕ ≈6 CSS px").count(), 1, "{role}");
+        let ds = data(&p, "dimensions.json");
+        let gap = ds[0]["dimensions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|d| d["label"] == "Repeated control clear gap")
+            .unwrap();
+        assert_eq!(gap["value"], 6.015625);
+        assert_eq!(gap["anchors"][0]["component"], "N003");
+        assert_eq!(gap["anchors"][0]["edge"], "bottom");
+        assert_eq!(gap["anchors"][1]["component"], "N006");
+        assert_eq!(gap["anchors"][1]["edge"], "top");
+        let mut exact = limits();
+        exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+        assert!(compile(&b, exact).is_ok());
+        exact.max_output_bytes -= 1;
+        assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+        for variant in [
+            "other-space",
+            "other-group",
+            "unknown",
+            "redacted",
+            "wrong-frame",
+        ] {
+            let mut v = b.clone();
+            let SourceInput::Observed { snapshot, .. } = &mut v.views[0].source else {
+                panic!()
+            };
+            if variant == "other-group" {
+                snapshot.nodes[1].children = vec![snapshot.nodes[3].key.clone()];
+                snapshot.nodes[2].children = vec![snapshot.nodes[6].key.clone()];
+            } else if variant == "wrong-frame" {
+                let mut hit = snapshot.nodes[6].properties[2].clone();
+                let Property::Requested {
+                    field,
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(g),
+                        },
+                    ..
+                } = &mut hit
+                else {
+                    panic!()
+                };
+                *field = Field::HitRegion;
+                g.frame_kind = FrameKind::HitRegion;
+                snapshot.nodes[6].properties[3] = hit;
+                let Property::Requested { state, .. } = &mut snapshot.nodes[6].properties[2] else {
+                    panic!()
+                };
+                *state = Availability::Unknown {
+                    reason: Id("not-collected".into()),
+                };
+            } else {
+                let Property::Requested { state, .. } = &mut snapshot.nodes[6].properties[2] else {
+                    panic!()
+                };
+                if variant == "other-space" {
+                    let Availability::Known {
+                        value: Value::Geometry(g),
+                    } = state
+                    else {
+                        panic!()
+                    };
+                    g.coordinate_space.id = Id("foreign-space".into());
+                } else if variant == "redacted" {
+                    *state = Availability::Redacted {};
+                } else {
+                    *state = Availability::Unknown {
+                        reason: Id("not-collected".into()),
+                    };
+                }
+            }
+            let p = compile(&v, limits()).unwrap();
+            let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+            assert!(!text.contains("↕ ≈6 CSS px"), "{role} {variant}");
+        }
+    }
+}
+
+#[test]
 fn flat_observation_selects_a_recorded_element_frame_not_a_scope_union() {
     let mut b = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
@@ -1669,7 +1801,12 @@ fn flat_selected_form_uses_existing_frame_and_input_gap_without_children() {
         }
         let p = compile(&v, limits()).unwrap();
         let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-        assert!(!text.contains("↕ ≈36 CSS px"), "{variant}");
+        if matches!(variant, "ordinary-root" | "form-not-first") {
+            // Pair context is the flat observed view, not a FORM-tag requirement.
+            assert!(text.contains("↕ ≈36 CSS px"), "{variant}");
+        } else {
+            assert!(!text.contains("↕ ≈36 CSS px"), "{variant}");
+        }
         if matches!(
             variant,
             "unknown-root" | "ordinary-root" | "form-not-first" | "reported-parent"

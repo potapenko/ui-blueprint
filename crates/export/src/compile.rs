@@ -2013,19 +2013,26 @@ fn drawing_dimensions(
         ) else {
             continue;
         };
-        if !matches!(
-            component_role(&v.components[a])
-                .to_ascii_lowercase()
-                .as_str(),
-            "select" | "combobox"
-        ) && !(input_control(&v.components[a])
-            && input_control(&v.components[b])
-            && overview.contains(&0)
-            && component_role(&v.components[0]).eq_ignore_ascii_case("form")
-            && v.components.iter().all(|c| c.children.is_empty())
-            && same_frame(&v.components[0], &v.components[a])
-            && same_frame(&v.components[a], &v.components[b])
-            && geometry(&v.components[a]).is_some_and(|g| g.frame_kind == FrameKind::LayoutBounds))
+        let parent = |i: usize| {
+            v.components
+                .iter()
+                .position(|p| p.children.contains(&v.components[i].id))
+        };
+        let related_context = match (parent(a), parent(b)) {
+            (None, None) => flat_element_frame,
+            (Some(p), Some(q)) if p == q => true,
+            (Some(p), Some(q)) => v.components.iter().any(|container| {
+                container
+                    .children
+                    .windows(2)
+                    .any(|pair| pair[0] == v.components[p].id && pair[1] == v.components[q].id)
+            }),
+            _ => false,
+        };
+        if !related_context
+            || !same_frame(&v.components[a], &v.components[b])
+            || !component_role(&v.components[a])
+                .eq_ignore_ascii_case(&component_role(&v.components[b]))
             || !large(a)
             || !large(b)
             || groups.iter().flat_map(|(_, m)| m).any(|&i| {
