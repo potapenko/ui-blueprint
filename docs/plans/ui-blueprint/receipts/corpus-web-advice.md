@@ -1,5 +1,46 @@
 # Web source advisor handoffs
 
+## CW8 — numeric filter states, 2026-10-13
+
+Advisor turn01a132ff-1413-7490-94b3-840bc58e0fd5, c23ef963/new-banners-paywall,
+source-only. Route: Phrase Filters surface-controls/mobile-source-and-response →
+Clip Search filter-context and CW7 ctrl/storage chain. Years/IMDb use local drafts,
+app-db filters and history.replaceState (not entity pushState). With empty main
+query no phrase search/count or shared filter storage is invoked. Normal bootstrap,
+logs and browser history remain; fresh tabs are not origin-storage isolation.
+
+Years debounce350ms: each nonempty endpoint needs four digits, one-sided range
+allowed, reversed values normalized min/max with no app error message. Incomplete
+draft retains prior applied values. Empty removes range.0000 is a parser edge,
+not a proposed valid-year or invented validation case. IMDb trims/lowercases and
+accepts tt plus at least7digits; format only, no metadata/existence lookup. Invalid
+nonempty draft retains prior ID; empty removes. Same350ms debounce; submit sameapply.
+No separate app validation message exists for either field in inspected markup.
+
+Ready candidate: own guest empty-query/filter Clip Search, Source=All, mobileFilters;
+year-from1980/year-to1989 → settled year.min/max URL. A separate Clear row appears
+below inputs and shifts following sections, unlike desktop's inline Clear. Capture
+only if actual structure differs from prior empty mobileYears. Wait pending apply
+BEFORE Clear; verify empty inputs/no Clear row/no year URL, Back and exact tabclose.
+Clear/Back do not cancel old debounce; early exit could reapply stale values.
+
+Desktop partialYears alreadyCW20; complete years without structural change are
+not a newcase. IMDb is absent under Source=All and requires movie/episode context.
+Two conditional candidates: desktop MovieIMDb tt7131622 with disabled generic
+controls; mobile selected-source row/ID/removal and disabled fieldset, no duplicate
+IMDb input. CW8 did not qualify switching the Clip Search Source filter and did not
+authorize a runtime action. A worker may investigate that exact prerequisite and
+use it only if proved to fit the user's existing safe own-tab state scope; global
+corpus/source preferences remain protected. No prefilled URL injection or gate bypass.
+Entity lookup drafts must stay empty to avoid incidental option refreshes.
+
+Owners: [draft rules](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/filters/free_text.cljs),
+[desktop apply/clear](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/suggestions/view.cljs:554),
+[mobile apply/clear](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/mobile_filters/view.cljs:482),
+[empty-query execution](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/ctrl.cljs:350),
+[mobile QA](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-clip-search-mobile-filters-navigation-panel.md).
+Dedup evidence CW20/CW53/CW-B3/CW-B13. No runtime, changes or new completed cases.
+
 ## CW7 — empty-query Clip Search selection boundary, 2026-10-13
 
 Advisor turn01a132b5-475f-7281-a320-d6c61799c4c9, source-only,

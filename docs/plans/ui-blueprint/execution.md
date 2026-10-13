@@ -497,6 +497,14 @@ query и исходно пустыми filters. Выбор/снятие entity �
 могут сохраняться. Nonempty query, Actor/Reels apply, account/preferences/server
 writes этим уточнением не разрешены. Нативная общая persistence из CN10 независима.
 
+CW8 дополняет эту квалификацию числовыми Years/IMDb handlers: при пустом основном
+query они меняют app-db и replaceState, не делают phrase search/count. Debounce
+350ms должен завершиться до Clear/Back и проверки восстановления. Для IMDb требуется
+Source=Movies внутри Clip Search. CW-B14 сначала проверяет конкретный filter handler
+и разрешает штатный выбор только при доказанном том же own-tab/no-persistent-user-write
+условии. Это не разрешение менять глобальный corpus/source или preferences и не
+подмена недоказанного источника. MobileYears не ждёт условных IMDb-кандидатов.
+
 ## Изоляция Mac restoration storage — CN10, 2026-10-13
 
 Обычная Debug-композиция PlayPhrase.me не считается изолированной только потому,
