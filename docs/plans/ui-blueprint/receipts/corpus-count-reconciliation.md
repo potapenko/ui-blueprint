@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CN-B21 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B14 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**184 proved eligible cases; range184–187 pending three named uncertainties.**
-The planning remainder is816 cases, potentially813 if all three are established.
-There are63 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;127 are non-fixture observations. Fixture UI is
+**187 proved eligible cases; range187–190 pending three named uncertainties.**
+The planning remainder is813 cases, potentially810 if all three are established.
+There are66 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;130 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:506 primary images =502 first outputs +4 rerolls;
+Completed-batch image buckets:509 primary images =505 first outputs +4 rerolls;
 56 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-566 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+569 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -106,7 +106,24 @@ eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 | CW-B12 |2|2|Reels Search positive custom/suggestions and successful empty;94frames/21required labels, both first outputs authorFAIL; numeric success is not image acceptance |
 | CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
 | CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
-| **Primary subtotal** |**183**|**506**| |
+| CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts checked, full authorFAIL, independent review pending |
+| **Primary subtotal** |**186**|**509**| |
+
+CW-B14 evidence: `uib-cw-b14-XUdZ9Y/HANDOFF.md`, neutral-manifest, required-dimension
+proof, literal-invocation proof and state/resource records. NeutralSHA256
+26c4ecd47c39b2f6317efda8ced85bed102b661b6eb93b6a28b869572a0700ba.
+FrozenCP14;135rawsubtree records,112canonicalnodes/layout+visible frames and448size
+values checked;36actual measurement reruns (15/13/8). FullnativeDPR2 sources retained;
+qualified mobile bounds780×322/780×1582 used as refs. Fractional desktop406×770
+capture excluded before model call; full2560×1440 used. No extra generation/reroll.
+Source-kind handler→empty-query branch qualified before own SourceMovies selection;
+9loaded functions match in initialtab, not a whole-bundle or per-mobile-realm proof.
+Actionnetwork records show no phrase/count/entitylookup; own filters cleared after
+debounce, viewports restored/tabsclosed. Y panel-absence not separately proven after
+Back; no stronger restoration assertion. Ordinary bootstrap/history effects remain.
+Author failures: D imports out-of-scope header/Suggestions and misattaches root frame;
+M loses selectedAll and repeats size labels; Y adds unassigned sizes/white spinner
+interiors. Sources and numbers remain distinct from image acceptance.
 
 CN-B21 evidence: `playphraseme-cn-b21-1v2u48gc/HANDOFF.md`, neutral `manifest.json`,
 runtime/source-qualification/numeric-check/cleanup records under system-temp prefix.
