@@ -10,7 +10,7 @@ terminal before redispatch; no duplicate workers were created. Nativecaption
 Both CW21 critics resume only author reconciliation from their completed initial
 observations. Web source owner remains idle because its three-form batch is done.
 The prior pause below is historical, not a current execution gate. Scope and
-Current post-resume corpus:213cases/637images after real whole-chooser qualification.
+Current post-resume corpus:216cases/648images after CW-B27 whole-dialog qualification.
 
 ### Preserved pre-restart handoff
 
@@ -82,7 +82,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-213proved eligible primarycases,787remaining,83validationimages/637totalimages.
+216proved eligible primarycases,784remaining,83validationimages/648totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -116,17 +116,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:213; unresolved upper bound216; conservative remainder787.**
+**Proved eligible case count:216; unresolved upper bound219; conservative remainder784.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Forty-seven completed primary batches produced550 qualified evaluated images;
+Forty-eight completed primary batches produced561 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their546 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not550 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their557 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not561 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -185,9 +185,10 @@ CN-B24 completes original CN-B1 A03/A11wide and ADDRESS3 adds2wholeWeblists:
 CW-B26 adds3distinct whole-list cases and3firstimages:212cases/632images.
 SCOPE4 adds1real wholechooser and3firstimages after2separateoverview repairimages:
 213cases/637images; previous fragment cases not duplicated.
+CW-B27 adds3whole auth-dialog cases/11firstimages:216cases/648images.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1, CAST-OUTLINE1=1, USE-NATIVE-CAPTIONS1=1, USE-FORM-DIMENSIONS1=1, USE-NAMED-CAPTIONS1=1, USE-PRINCIPAL-FRAME1=1, USE-REPEATED-GAPS1=1, USE-MEASUREMENT-PANELS1=2 images (83 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:637counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:648counted generated images
 overall; unqualified attempts increase neither eligible cases nor the83repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -212,8 +213,9 @@ root does not redirect or archive its unrelated application work.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
+| Auto-detail usefulness feedback |export owner after current HUMAN-OWNERS1|queued question; no implementation authority assigned|CW27 EmailD03 owns onlyN024/unavailable geometry and0dimensions; whole-dialog reconstruction is a renderer scope failure. Whether this automatic detail is useful is a separate HBP presentation question, not an established compilerbug. Preserve scene/fulloverview/unknowns and explicit requests; inspect actual planning evidence before any selection change. Do not overlap current prompt writer or create another audit now |
 | USE-HUMAN-OWNERS1 |original export owner01a12b6a-92a9-73c3-aec2-022e32651008|bounded owner/state prompt candidate authorized|[Plan](corpus-testing.md#use-human-owners1--readable-owners-and-truthful-detail-state). SCOPE4D01/D02 first-output proof, public literal labels preserved; no invented name/binding/canonical state or input/collector redesign. Exact machine assignments and passingPrivacy/A11 detail controls protected; onecandidate/twofirstimages/no rerolls |
-| CW-B27 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal3wholecases/11firstimages; samecritics initial review running|Full Email/Register/Recovery only if existing local guest-tab transitions are source-confirmed safe; no Submit/provider/account writes, fields empty. Scope must add real whole-dialog cross-part geometry beyond old CW21FORM fragments; exclude duplicates/unsupported rather than prune. Ready3bf0b562/abd8878 +691ce41, no new caps/code; Neutral /tmp/uib-b27-3_q0peqx/neutral-index.json, separateauthor-assessment.json. Actual25/27/19nodes,23sameSnapshotmeasurements,3packages/11literalfirstimages/0rerolls. Author46assignedamounts preserved,1sheetpass/10fail pendingcritics; fullroot/Close/header/footer add scope beyondoldFORM. Ownbrowserclosed, fields empty, no Submit/repochanges |
+| CW-B27 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|qualified3wholecases/11firstimages counted;1scoped sheetPASS|Full Email/Register/Recovery only if existing local guest-tab transitions are source-confirmed safe; no Submit/provider/account writes, fields empty. Scope must add real whole-dialog cross-part geometry beyond old CW21FORM fragments; exclude duplicates/unsupported rather than prune. Ready3bf0b562/abd8878 +691ce41, no new caps/code; Neutral /tmp/uib-b27-3_q0peqx/neutral-index.json, separateauthor-assessment.json. Actual25/27/19nodes,23sameSnapshotmeasurements,3packages/11literalfirstimages/0rerolls. Bothcritics final01a13713-bcb9-73d3-94c0-220679aee05d/01a1370f-06a5-7422-912d-b52710e1fe96:46assignedamounts preserved, RegisterD03PASS/10fail,0fullcases; count216/648. IDs, scope/focus/unassignedsize failures retained; literalunit/placement/attribution residuals do not invent new geometry defects; fullroot/Close/header/footer add scope beyondoldFORM. Ownbrowserclosed, fields empty, no Submit/repochanges |
 | USE-WEB-SCOPE4 |same Web source owner01a1102f-e21d-7251-9597-c29a1c66d088|qualified1whole-case/3firstimages counted;0fullsheet passes|Candidate3bf0b562/abd8878 and acceptedexporter691ce41. One own safe Login chooser, no provider/Email/Submit/account writes. Actualcanonical→validator→cross-partmeasure→export→literalfirstsheets→neutralindex/assessment; static24 not actualproof. Terminal01a136ef-1270-7f02-ba0b-7e5a713bd465 and neutral /tmp/uib-scope4-xaugop5j/neutral-index.json. Actual24inclSTYLE,115276bytes/partial34unknowns/validator0; binding bybackendIDs, no secondgeometryreads. SameSnapshot root391.515625×353.546875CSSpx, two18.0625gaps and two7.015625Closeinsets. Export691ce41,3literalfirst1536×1024images/0rerolls. Author13labels pass, IDs/focus-to-wrong-owner/palette fail; CV2final01a136ff-4d99-7d23-b688-a71375649381/CT2final01a136ff-85a1-79d1-b654-b818f6083d4b qualify1case/3images and retain state/IDs/fill failures. No new numerical/compiler/privacy defect established; useful unassigned18/7measurements are consumerfeedback. Count213/637. Ownbrowser/profile released, reposreadonly |
 | USE-WEB-SCOPE3 |same I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source3bf0b562 and real whole-chooser acquisition accepted; author archived|[Plan](corpus-testing.md#use-web-scope3--explicit-method-allowance-for-the-selected-profile). Verify existing ceilings then registerWEB-FIRST-USE7: URL nodes32/methods109; legacy16/100 and all other bounds/fields unchanged. Preserve preflight/counters, no Rust rewrite/build. [Receipt](receipts/consumer-web-scope2.md): registration0c97ff5/WEB-FIRST-USE7 precedes behavior. Author actual24inclSTYLE→112838originalbytes/validator/384×420+16/24gaps/export passed;32display:none elements admitted with unavailable geometry,33refused; no32visible-box guarantee. Legacy/small/cleanup preserved. Ready uib-web-scope3-owkxkbyw, helperSHA58ed08d9, noRustbuild. CT2initial01a136ed-c84a-70d0-8b5e-f5b6845e3fa0/final01a136f0-1ee4-79d0-8274-a6b1fe700194 ACCEPT changedprofile/compatibility; authorF01 distinct from realconsumer. PriorfailedSCOPE2 retained |
 | USE-WEB-SCOPE2 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|terminal: profile-only candidate rejected; working16 restored|[Plan](corpus-testing.md#use-web-scope2--whole-selected-chooser-within-the-existing-request-envelope): URL collector.max_nodes16→32, aligning existing request32. RegisterWEB-FIRST-USE6 beforecode; all other fields/caps/deadlines/guards/legacy unchanged. Actual24-element ownF01 chain and32cliff proof; reuseabd8878pair. Receipt12c7ff2: actualsmallF01 rejected beforeselection; frozen preflight3×cap+13 requires109 atcap32 againstgrant100. Whole24/32cliff not reached. Unqualifiedcandidate retained, workinghelper16 restored, @6 unimplemented. ProposedRustrewrite is not adopted; explicitprofile grant follows SCOPE3 |

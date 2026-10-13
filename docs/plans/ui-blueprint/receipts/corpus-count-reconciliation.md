@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after real whole-chooser SCOPE4 final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after whole-auth-dialog CW-B27 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**213 proved eligible cases; range213–216 pending three named uncertainties.**
-The planning remainder is787 cases, potentially784 if all three are established.
-There are88 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;156 are non-fixture observations. Fixture UI is
+**216 proved eligible cases; range216–219 pending three named uncertainties.**
+The planning remainder is784 cases, potentially781 if all three are established.
+There are91 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;159 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:550 primary images =546 first outputs +4 rerolls;
+Completed-batch image buckets:561 primary images =557 first outputs +4 rerolls;
 83 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-637 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+648 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -146,7 +146,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | USE-WEB-ADDRESS3 |2|2|Distinct whole Privacy/FairUse lists, actual new ordinal helper source chain; metadata-only correction, both firstimages evaluated, fullFAIL |
 | CW-B26 |3|3|Distinct whole Payments/Purposes/Retention lists enabled by ordinal selection; actual source chains and firstimages evaluated, fullFAIL |
 | USE-WEB-SCOPE4 |1|3|New live whole provider chooser,24nodes; earlier CW21 whole attempt published nothing. Existing subcomponents not recounted;3first sheets evaluated, fullFAIL |
-| **Primary subtotal** |**212**|**550**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:213 total cases |
+| CW-B27 |3|11|Whole Email/Register/Recovery dialogs add navigation/Close/header/footer and cross-part geometry beyond old FORM fragments;11first sheets evaluated, RegisterD03 scopedPASS |
+| **Primary subtotal** |**215**|**561**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:216 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1311,3 +1312,49 @@ One primarycase and3firstimages added:213cases(88Web+125Native;
 57fixture+156nonfixture),47primarybatches,550primaryimages(546first+4rerolls),
 83repairimages,4unqualifiedimages=637total. Remainder787; original3uncertainties
 unchanged. No new fullimage acceptance.
+
+
+## CW-B27 — three whole authentication dialogs
+
+Neutral `/tmp/uib-b27-3_q0peqx/neutral-index.json` and separate author-assessment.json
+pin source3bf0b562/abd8878 acquisition and exporter691ce41. Email/Register/Recovery
+contain25/27/19nodes with STYLE unknown and geometry-only partial/non-atomic coverage.
+Separate selector/backend-ID bindings identify existing parts, not canonical parents.
+Each of23measure results embeds its own source Snapshot; observations are not merged.
+Caller/reference supplies text, empty fields, active tab and focus, not canonical
+state. Local guest-tab transitions only; no submitted fields/provider/account action,
+source repositories unchanged and own browser closed.
+
+Whole roots/Close/header/tabs where present/footer and cross-part geometry were
+excluded from old CW21 FORM fragments(10/12/7nodes), so these are three distinct
+whole-component cases, not three repetitions of their nested forms. No subcase
+multiplication. Containers display≈392×≈412,≈392×≈464,≈392×≈305CSSpx; ≈22insets
+are bound edge differences, not claimed CSS padding. Eleven first sheets,0rerolls;
+all46assigned scalar amounts and≈marks preserved. RegisterD03 passes scoped review;
+other10sheets fail and no complete case is visually accepted.
+
+Failures: internal source IDs in all G01/D01 and several details; EmailD02 turns
+source-record18/22/24 into misleading human item ordinals; RegisterD02 adds a second
+input's unassigned size pair; RecoveryG01 loses Email focus and prints placement
+context. EmailD03 owns only N024/unavailable geometry and no dimensions yet draws
+the entire unassigned dialog. That is a renderer scope failure; usefulness of the
+automatic detail remains a separate question, not an established compiler defect.
+Register's second input is legitimate Reuse context; only its extra measurements
+violate the assignment. Correctrequired values are not reclassified as wrong.
+
+CV2 initial01a1370a-faa2-7371-b271-47daafdbade4/final
+01a13713-bcb9-73d3-94c0-220679aee05d; CT2 initial
+01a1370a-fb89-7b21-a5f2-90fa7f711ccc/final
+01a1370f-06a5-7422-912d-b52710e1fe96 reviewed neutral artifacts before author claims.
+EmailG01 differentiated border preserves visible focus; missing explicit caller tag
+is an attribution/wording residual, not proof of total focus loss. Recovery width
+below instead of requested above remains a literal placement deviation; footer-
+qualified px is not demonstrated unit conversion. No additional cross-part task
+measurement becomes a mandatory rendered assignment merely because it is available.
+No repeated checks on reconciliation and no new compiler/helper defect established.
+
+Threecases/11firstimages added:216cases(91Web+125Native;57fixture+159nonfixture),
+48primarybatches,561primaryimages(557first+4rerolls),83repairimages and4unqualified
+images=648total. Remainder784; original3uncertainties unchanged. All first failures,
+source images and tool originals retained. HUMAN-OWNERS1 repair images are separate
+pending work and are not included in these counters.
