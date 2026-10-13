@@ -1243,7 +1243,7 @@ fn local_measures(
                     done.extend([w.id.clone(), h.id.clone()]);
                     continue;
                 }
-                let enclosing = !control(&v.components[a]) && !v.components[a].children.is_empty();
+                let container = !control(&v.components[a]) && !v.components[a].children.is_empty();
                 let accessibility = w.anchors[0].frame_kind == FrameKind::AccessibilityBounds;
                 append(
                     &mut out,
@@ -1261,8 +1261,8 @@ fn local_measures(
                         },
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
-                        if enclosing && !accessibility {
-                            "BELOW the enclosing shape"
+                        if container && !accessibility {
+                            "BELOW this measured source frame"
                         } else {
                             "ABOVE"
                         },
@@ -1271,13 +1271,13 @@ fn local_measures(
                     ),
                     limit,
                 )?;
-                if enclosing && !accessibility {
+                if container && !accessibility {
                     append(
                         &mut out,
                         &format!(
-                            "PRINT BELOW-SHAPE WIDTH LABEL exactly: {:?}. This is the width line's own label, not another note or dimension.\n",
+                            "PRINT BELOW-FRAME WIDTH LABEL exactly: {:?}. Both extents belong only to this measured source frame. Descendants may overflow it; keep their frames separate.\n",
                             format!(
-                                "{} — width {} {}",
+                                "{} — measured frame width {} {}",
                                 component_name(v, a),
                                 display_number(w.value.ok_or(E::InvalidGeometry)?),
                                 unit_name(w.units)
@@ -2154,9 +2154,10 @@ with BLUE interior at the left; a solid-white knob is forbidden even if the
 reference uses one. Do not add controls/actions absent from the object plan.
 
 "#;
-const FRAME_GUIDANCE: &str = r#"DIMENSIONED RECTANGLE: BOTH dimensions on the SAME shape. Use its assigned width
-slot: enclosing outline BELOW with its exact printed label; other widths ABOVE.
-Height LEFT. Never omit the enclosing width because another shape has a width.
+const FRAME_GUIDANCE: &str = r#"DIMENSIONED RECTANGLE: BOTH dimensions on the SAME measured source frame.
+Use its assigned width slot: container frame BELOW with its exact printed label;
+other widths ABOVE. Height LEFT. A container frame need not enclose its descendants;
+keep its labels on its own borders, even when descendants extend beyond them.
 Each line connects to that shape's actual opposite borders; the right side stays
 free for a sourced right inset. RECTANGLE EXTENT: one named opposite-edge dimension.
 "#;

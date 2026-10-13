@@ -1035,7 +1035,7 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     );
     assert!(!prompt.contains("AX measurement only, not artwork placement; measurement"));
     assert!(prompt.contains("NO text,\nicon, button, word, glyph or UI reconstruction inside it"));
-    assert!(!prompt.contains("BELOW the enclosing shape"));
+    assert!(!prompt.contains("BELOW this measured source frame"));
     assert!(!prompt.contains("enclosing outline BELOW"));
     assert!(!prompt.contains("LayoutBounds"));
     let dims = data(&package, "dimensions.json");
@@ -2044,7 +2044,9 @@ fn clipped_document_layout_pair_owns_a_separate_empty_sketch() {
     let p = compile(&b, limits()).unwrap();
     let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     assert!(!text.contains("SEPARATE FULL-LAYOUT SKETCH"));
-    assert!(text.contains("WIDTH 800 CSS px BELOW the enclosing shape; HEIGHT ≈2307 CSS px"));
+    assert!(
+        text.contains("WIDTH 800 CSS px BELOW this measured source frame; HEIGHT ≈2307 CSS px")
+    );
 }
 
 #[test]
@@ -2401,17 +2403,53 @@ fn center_anchors_keep_axis_without_border_corner_sketches() {
 }
 
 #[test]
-fn enclosing_width_has_below_slot_and_fragments_have_exact_anchor_captions() {
+fn container_frame_width_has_below_slot_without_claiming_enclosure() {
     let b = fixture("proposed");
     let p = compile(&b, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(
-        prompt
-            .contains("WIDTH 1200 CSS px BELOW the enclosing shape; HEIGHT 800 CSS px on the LEFT")
-    );
-    assert!(prompt.contains("PRINT BELOW-SHAPE WIDTH LABEL exactly:"));
+    assert!(prompt.contains(
+        "WIDTH 1200 CSS px BELOW this measured source frame; HEIGHT 800 CSS px on the LEFT"
+    ));
+    assert!(prompt.contains("PRINT BELOW-FRAME WIDTH LABEL exactly:"));
     assert!(prompt.contains("width 1200 CSS px"));
     assert!(prompt.contains("label-layout boundary belongs to the named text"));
+    for (x, y) in [(1300.0, 900.0), (40.0, 40.0)] {
+        let mut witness = b.clone();
+        let layout = proposed(&mut witness);
+        let mut child = layout.components[9].clone();
+        child.id = "extra-descendant".into();
+        child.parent = Some(layout.components[0].id.clone());
+        child.role = Role::Text;
+        child.label = "Unmeasured descendant".into();
+        child.geometry.shape = Shape::Rect(Rect {
+            x,
+            y,
+            width: 200.,
+            height: 100.,
+        });
+        layout.components.push(child);
+        let original = serde_json::to_vec(&witness).unwrap();
+        let candidate = compile(&witness, limits()).unwrap();
+        let text = std::str::from_utf8(&candidate.files()["prompt.txt"]).unwrap();
+        assert!(
+            text.contains("WIDTH 1200 CSS px BELOW this measured source frame; HEIGHT 800 CSS px")
+        );
+        assert!(text.contains("Descendants may overflow it; keep their frames separate."));
+        assert!(!text.contains("enclosing shape") && !text.contains("enclosing outline"));
+        assert_eq!(
+            data(&candidate, "dimensions.json"),
+            data(&p, "dimensions.json")
+        );
+        assert_eq!(serde_json::to_vec(&witness).unwrap(), original);
+        let mut exact = limits();
+        exact.max_output_bytes = candidate.files().values().map(Vec::len).sum();
+        assert!(compile(&witness, exact).is_ok());
+        exact.max_output_bytes -= 1;
+        assert_eq!(
+            compile(&witness, exact).unwrap_err(),
+            ExportError::OutputLimit
+        );
+    }
 }
 
 #[test]
