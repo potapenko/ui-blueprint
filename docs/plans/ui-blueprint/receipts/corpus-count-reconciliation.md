@@ -56,8 +56,16 @@ dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 CP15 adds3first repair images atdd160c0, no newcases/rerolls: desktop/Voice1536×1024,
 CW601448×1086.49author checks pass, desktop338old facts and allVoice/CW60 facts
 preserved;2same-space engine additions independently recomputed. Human plans12/16/4
-quantities. Author reports repaired C2 selection with allnewamounts visible, separate
-raster failures remain; independent acceptance pending. [Receipt](corpus-useful-selection15.md),
+quantities. C2 selection accepted after independent-first then author reconciliation:
+CT2 final01a13317-11a6-7850-8274-e20fe6f30910 and CV2 final01a13317-69d3-7301-952f-3d5914a90160.
+CT2 verifies old facts, bound baseline-engine recomputation, public-field guards,
+owner-preserving grouping and changed tests; no broader selection gap remains in scope.
+All3images remain unaccepted: desktop repeated gaps/floating anchor/focus and missing
+explicit active-AND-applied meaning; Voice draft substitution/missing assigned row/
+unclear container anchors; CW60 printed construction reference#13 despite unchanged
+package. CT2 rejects author's stronger desktop active/applied retention claim; mere
+emphasis does not distinguish the two states. No cohort/general reliability claim.
+[Receipt](corpus-useful-selection15.md),
 `uib-CP15-a9tb_k2m/neutral-index.json`, frozen binarySHA256
 eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 
