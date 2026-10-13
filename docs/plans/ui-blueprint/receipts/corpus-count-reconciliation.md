@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B16 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B17 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**191 proved eligible cases; range191–194 pending three named uncertainties.**
-The planning remainder is809 cases, potentially806 if all three are established.
-There are70 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;134 are non-fixture observations. Fixture UI is
+**193 proved eligible cases; range193–196 pending three named uncertainties.**
+The planning remainder is807 cases, potentially804 if all three are established.
+There are72 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;136 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:513 primary images =509 first outputs +4 rerolls;
+Completed-batch image buckets:515 primary images =511 first outputs +4 rerolls;
 59 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-576 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+578 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -122,7 +122,23 @@ binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 | CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
 | CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs fail independent reviews |
 | CW-B16 |2|2|Desktop applied Genre tags/Clear/popup and mobile applied chips/Clear;17amounts correct, both first1536×1024 outputs fail independent review; literal inset selection gap feedsCP17 |
-| **Primary subtotal** |**190**|**513**| |
+| CW-B17 |2|2|Fixed-width/data desktop height720→480 changes Actor/Genres visible coverage; baselines not cases;44assigned source measurements checked, both first images authorFAIL |
+| **Primary subtotal** |**192**|**515**| |
+
+CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
+literal/state/resource records. NeutralSHA256
+960ad017da2b92f1fd0fb1802457a02b8efeb852a480b4d48319d1eb3eb3e51d.
+FrozenCP16;95rawrecords→78nodes,78layout+visible frames/312source sizes,44required
+measurements (36/8) rerun. No scroll/flip/position change; Actor20fullrows→14full+
+blanktopsliver row15, Genres14full→8full+partialFantasy/Horror under known clipbottom
+420.78125CSSpx. Only actual coverage change counts, not viewport size alone.
+Four fullnativeDPR2 sources retained (two2560×1440baseline/two2560×960compact).
+Four bounded attempts had wrong origins and were excluded before generation, not
+extra modelcalls. Two first1536×1024 images used qualified fullcompactrefs.
+Author: source-hidden actor name exposed/rows boxed; Genres losesAction cue,
+over-completes clipped text, prints selector/adds dimensions. Amounts don't prove
+all paired owners. Independent review pending. State/viewport restored/tabsclosed;
+Actor stayed paused at recordedchecks; bounded interactionnetwork no requests/errors.
 
 CW-B16 evidence: `uib-cw-b16-Ganih2/HANDOFF.md`, neutral-manifest, novelty/state,
 numeric/literal and resource records. NeutralSHA256

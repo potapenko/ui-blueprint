@@ -36,17 +36,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:191; unresolved upper bound194; conservative remainder809.**
+**Proved eligible case count:193; unresolved upper bound196; conservative remainder807.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Thirty-six completed primary batches produced513 qualified evaluated images;
+Thirty-seven completed primary batches produced515 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their509 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not513 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their511 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not515 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -88,9 +88,10 @@ CN-B21 adds1qualified iPad Actor keyboard composition, bringing it to184.
 CW-B14 adds3qualified Years/MovieIMDb compositions, bringing it to187.
 CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
+CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3 images (59 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:576counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:578counted generated images
 overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -189,7 +190,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B14 |01a1330a-4a7f-7461-9e24-cd45919c234a/local, reused forB15|cycle accepted; both critics confirm3FAIL|3newcases/3firstimages, frozen CP14;112canonical nodes/36correct amounts. SourceMovies qualified, own filters cleared/viewports restored/tabsclosed; uib-cw-b14-XUdZ9Y HANDOFF/neutral-manifest. Scope/frame, selectedAll and spinner-fill failures; no new compiler defect |
 | CW-B15 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, reused forB16|cycle accepted; both critics confirm2FAIL|2newcases/2firstimages, frozenCP15;102canonical nodes/38correct amounts.16loaded functions match eachrealm, safeemptyquerySourceEpisodes, nativeboundedrefs qualified. uib-cw-b15-7A6OTi HANDOFF/neutral-manifest; focus/anchors/detail membership/clipping fail, no new compiler defect |
 | CW-B16 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, reused forB17|cycle accepted; both critics reject2images|17amounts correct; DlosesAction cue/popup alignment-width; MomitsAdventure/reflowsdetail/boxesClear. CT2 separately confirms known useful inset omitted fromliteral plan, feedingCP17. uib-cw-b16-Ganih2 HANDOFF/neutral-manifest; capture union notUIframe |
-| CW-B17 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a|full-cycle compact-height popup qualification running|Actor ready/selectedGenres, fresh1280×720baseline→one1280×480target (source valid minimum takes precedence), nativeDPR2/data constant. Only actual placement/scroll/clipping/coverage differences count; negatives/duplicates excluded. FrozenCP16, no source edits or newcases yet |
+| CW-B17 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, archived|cycle accepted; critic first observations running|2newcoverage cases/2firstimages/full authorFAIL, frozenCP16;78nodes/44required measurements. Fixeddata/width, height720→480 clipsActor/Genres; baselines and4faultybounded captures notcases/modelcalls. uib-cw-b17-sSkxRL HANDOFF/neutral-manifest; state restored/tabsclosed |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
