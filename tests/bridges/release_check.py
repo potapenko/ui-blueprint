@@ -283,6 +283,20 @@ def skill_checks(stage, versions):
     run(command, env=env, ok=False)
     assert not current.exists() and not skill.is_symlink()
     archive.write_bytes(original_archive)
+    # Failure at the final activation removes only the newly registered public links.
+    mv = stage / 'shims/mv'
+    mv.write_text('''#!/bin/sh
+for destination do :; done
+case "$destination" in
+  */current) [ "${FAIL_ACTIVATION:-}" != yes ] || exit 1 ;;
+esac
+exec /bin/mv "$@"
+''')
+    mv.chmod(0o755)
+    run(command, env=dict(env, FAIL_ACTIVATION='yes'), ok=False)
+    assert not current.exists() and not skill.is_symlink()
+    assert not (root / '.skill-link').exists()
+    assert not (prefix / 'bin/uiblueprint').is_symlink()
     run(command, env=env)
     run([*base, '--uninstall'], env=env)
     print('PASS skill: opt-in, matching bytes, repeat, registered update/rollback, modified/foreign/symlink/missing paths, partial-download refusal, legacy refusal, owned removal')
@@ -525,7 +539,7 @@ esac
             for name in ('agents', 'references', ''):
                 (bundle / 'skill' / name).rmdir()
         homebrew_formula(folder, bundle, stage)
-        print('PASS actual candidate: provenance, signed bundle smoke, real install/run/remove; transport is local')
+        print(f'PASS actual candidate: provenance, signing={record["signing"]}, skill={with_skill}, saved-data smoke, real install/run/remove; transport is local')
     finally:
         dist.clean_stage(stage)
         assert not stage.exists()
