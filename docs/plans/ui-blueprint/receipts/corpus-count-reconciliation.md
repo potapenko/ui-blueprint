@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after CN-B24 and ADDRESS3 final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after CW-B26 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**209 proved eligible cases; range209–212 pending three named uncertainties.**
-The planning remainder is791 cases, potentially788 if all three are established.
-There are84 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;152 are non-fixture observations. Fixture UI is
+**212 proved eligible cases; range212–215 pending three named uncertainties.**
+The planning remainder is788 cases, potentially785 if all three are established.
+There are87 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;155 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:544 primary images =540 first outputs +4 rerolls;
+Completed-batch image buckets:547 primary images =543 first outputs +4 rerolls;
 81 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-629 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+632 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -144,7 +144,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B23 |2|4|Provider choices and mode-tabs distinct from earlier form bodies;4firstsheets evaluated,0fullpass |
 | CW-B24 |1|1|Five-item AcceptableUse component below earlierTermsviewport; firstimage evaluated, fullFAIL |
 | USE-WEB-ADDRESS3 |2|2|Distinct whole Privacy/FairUse lists, actual new ordinal helper source chain; metadata-only correction, both firstimages evaluated, fullFAIL |
-| **Primary subtotal** |**208**|**544**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:209 total cases |
+| CW-B26 |3|3|Distinct whole Payments/Purposes/Retention lists enabled by ordinal selection; actual source chains and firstimages evaluated, fullFAIL |
+| **Primary subtotal** |**211**|**547**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:212 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1212,3 +1213,33 @@ completed cases and10firstimages added. Totals209cases(84Web+125Native;
 81repairimages and4unqualifiedimages =629generated images;791cases remain.
 Five scoped sheet passes do not become four complete-case approvals. New corpus
 preparation and a bounded overview-prompt experiment are separate pending work.
+
+
+## CW-B26 — three newly addressable list compositions
+
+Neutral `/tmp/uib-b26-adz5lr9a/neutral-index.json` and separate
+`author-assessment.json` retain the actual source→canonical→validator/measure→
+export9a3308→literal first-image chains. Helperfad3dbe3/abd8878pair observes3/7/7nodes,
+geometry-only and partial; text/emphasis are caller/reference facts. Independent
+nativeDPR2 PNG crops are unresampled; outside marker context is not new geometry.
+Payments has two plain items with a long first item, Purposes six single-line items,
+Retention three wrapped items with bold prefixes. These are whole meaningful lists,
+distinct from ADDRESS3's four legal-basis items/three requirements and CW24's five
+AcceptableUse items. Shared full-page capture for different selected lists is not
+a duplicate case; filename differences alone would not establish novelty.
+
+Three first images,0rerolls:1744×902,1683×935,1536×1024. All11items and6assigned
+labels pass. Payments828×76.78125→828×≈77CSSpx; other lists828×153.5625→828×≈154CSSpx.
+All three fullimages FAIL because artwork occupies the explicit separate empty
+LayoutBounds sketch. Different wraps are nonblocking absent exact-wrap authority.
+CT2 corrects author's old FairUse comparison:1+1+2lines, not2+1+1; novelty still holds.
+No new compiler/helper defect or source-app mutation; own browser/profile closed.
+
+CV2 initial01a136d0-5348-72c2-9eac-9e004cb28c67/final
+01a136d3-4155-7fb2-b8ec-0b02d9e3d26d and CT2 initial
+01a136d0-540f-7343-83a3-b88355453d84/final
+01a136d1-e27b-79b0-afc2-33ca3c34cb87 examined neutral artifacts before author claims;
+final reconciliation did not repeat checks. Three qualified cases and3firstimages
+added:212cases(87Web+125Native;57fixture+155nonfixture),46primarybatches,
+547primaryimages(543first+4rerolls),81repairimages,4unqualifiedimages=632total.
+Remainder788; original3uncertainties unchanged. Zero fullimage approvals.
