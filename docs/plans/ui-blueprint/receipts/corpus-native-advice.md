@@ -60,6 +60,20 @@ change, preserving exact JSON/logic. Mapping-authoring ergonomics is recorded fo
 later concrete request, not silently added. This is a consumer workflow acceptance,
 not livecollection/wholeUI identity or a new primary imagecase.
 
+### USE-MAC-COMPACT1 retry — accepted presentation
+
+Consumer turn01a1353b-94b3-7321-8d6e-4cfb9404c803 ran one ordinary compare using
+corebundle e3ab912 and the same original inputs/C. Exit0,11092bytes; consumer says
+it is noticeably easier and sufficient for the original Actor QA question. All
+bounds/counts/positions and caller-declared/partial/unknowntransform/unmapped/155
+unexamined-per-side caveats remain easy to find. The source's JSON byte-equality
+proof was not redundantly repeated by this narrow consumer trial. No app/files
+or sharedartifacts changed. Metadata still precedes useful pair facts; recorded as
+nonblocking feedback, not a new immediate cosmetic task. The substantial comparison
+and compact-presentation outcomes are accepted separately from future input-authoring
+convenience. Approved bundles remain current goal tool deliverables for consumer
+workflow until a replacement is supplied; no permanent archive is created.
+
 ## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
 
 **Отклонено пользователем2026-10-13. Не реализовывать как задачу UI Blueprint.**
