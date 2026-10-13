@@ -1,12 +1,32 @@
 # Единый реестр задач
 
-## CORPUS-1000 — active after resume, 2026-10-12
+## CORPUS-1000 — blocked awaiting source-app authority, 2026-10-13
 
 Authority: the user explicitly requested parallel helpers, broad real Mac/Web and
 available native mobile testing, about1000 genuinely generated/evaluated blueprint
 cases, risk-first planning and corpus-driven improvements. Root is coordination-only;
 workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 [execution runbook](execution.md) govern. This goal is incomplete.
+
+Current host status: `blocked`, confirmed by update_goal on2026-10-13 after three
+consecutive post-CP20 goal turns revalidated the same genuine authority/source gap.
+CP20 exporter turn01a1348a-2d14-7cf1-ab4a-020027a5d343 and both final critic turns
+01a13496-4535-7cc2-9c07-eab46bb48528 /01a13498-1db5-7c03-8e09-fa40f94d8cdd are
+terminal; advisors remain at completed CN16 /CW13 with no newer authorization/source.
+All known ready independent work (CE2, CMATH1/2 and CP20) finished. No process
+contention is the stopping reason, and no task was restarted from an observation timeout.
+The missing condition is explicit user approval for the prepared CN16 source-app
+isolation change, or a genuinely new qualified source within the existing authority.
+CN16 approval has been requested and not received. Generic automatic continuation
+is not approval to change source apps. No new raw logs or source snapshots are created.
+
+Resume: user approves [CN16-ISOLATION@1](receipts/corpus-native-advice.md#cn16--конкретный-план-изолированного-mac-запуска-2026-10-13)
+and resumes the goal through the host; reconcile source revision/ownership before
+assigning its complete implementation task to the authorized source-project owner.
+The pending Release-session recovery decision remains separate. Preserve all accepted
+source/data/image work and the unchanged1000-case objective:194proved eligible cases,
+806remaining,74validationimages/594totalimages. No completion or user pause is claimed.
+Reset the blocked audit only on a genuine user resume; do not reopen old goals.
 
 Historical state: host goal returned `blocked` on2026-10-12 after three consecutive goal turns
 verified the same external dependency, following completion of CP10 and both
@@ -23,7 +43,7 @@ preserve their state before new dispatch. Do not infer an approval from silence.
 Latest product checkpoint5e071f5, author receipt68e4e9e;147eligible cases,
 436generated images including47repair validations and1unqualified reference attempt.
 
-Current host state is active after resume. CN5B new turn
+Historical 2026-10-12 resume state was active. CN5B new turn
 01a1314c-6d75-75d1-aad1-747580509e5c is live without an approval flag; CN8 new turn
 01a1314c-6fd5-7080-bff2-8c55d7fd586d is live with waitingOnApproval. Old turn handles
 above are history, not current waits. Reset the blocked audit for this resumed run.
@@ -227,7 +247,8 @@ goal continuations are not that approval. No new generic wording or unchanged-te
 round is queued merely to occupy a slot. No OS-process contention prevents progress;
 CN8 archive's active-writer error is an unrelated host metadata limitation.
 Continue CN16 on approval or another actually qualified authorized source. Do not
-inflate cases with replays or silently modify source apps. Goal active/incomplete:
+inflate cases with replays or silently modify source apps. Goal blocked/incomplete
+after the three-turn audit above:
 194proved primarycases,806remainder;74separate validationimages/594totalimages.
 
 
