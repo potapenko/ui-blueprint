@@ -21,6 +21,8 @@ import distribution as dist
 ROOT = Path(__file__).resolve().parent
 REPOSITORY = 'https://github.com/potapenko/ui-blueprint'
 BINARIES = ('uiblueprint', 'uiblueprint-validate', 'session-worker', 'native-host-helper')
+SKILL_FILES = ('SKILL.md', 'agents/openai.yaml', 'references/analysis.md',
+               'references/export.md', 'references/macos.md', 'references/web.md')
 VERSION = re.compile(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?\Z')
 
 
@@ -41,6 +43,27 @@ def archive_name(version):
     if not VERSION.fullmatch(version):
         raise ValueError('expected a SemVer release version without a v prefix')
     return f'uiblueprint-v{version}-{dist.TARGET}.tar.gz'
+
+
+def skill_archive_name(version):
+    archive_name(version)  # Same release-version validation.
+    return f'ui-blueprint-skill-v{version}.tar.gz'
+
+
+def committed_skill(revision):
+    return {name: committed(revision, f'skills/ui-blueprint/{name}') for name in SKILL_FILES}
+
+
+def make_skill_archive(output, files):
+    if set(files) != set(SKILL_FILES):
+        raise ValueError('invalid skill inventory')
+    with output.open('xb') as stream, gzip.GzipFile(fileobj=stream, mode='wb', mtime=0) as compressed:
+        with tarfile.open(fileobj=compressed, mode='w', format=tarfile.USTAR_FORMAT) as archive:
+            for name in sorted(files):
+                entry = tarfile.TarInfo(name)
+                entry.size, entry.mode = len(files[name]), 0o644
+                archive.addfile(entry, io.BytesIO(files[name]))
+    return {name: dist.digest(data) for name, data in files.items()}
 
 
 def make_archive(bundle, output):
@@ -68,21 +91,26 @@ def render(template, replacements):
 
 
 def write_candidates(bundle, output, *, version, revision, minimum, signing,
-                     installer_template, formula_template):
+                     installer_template, formula_template, skill_files):
     archive = output / archive_name(version)
     hashes = make_archive(bundle, archive)
     archive_hash = dist.digest(archive.read_bytes())
+    skill_archive = output / skill_archive_name(version)
+    skill_hashes = make_skill_archive(skill_archive, skill_files)
     replacements = {'VERSION': version, 'ARCHIVE_SHA256': archive_hash, 'MIN_MACOS': minimum,
                     'FILES': '\n'.join(sorted(hashes)),
-                    'FILE_HASHES': '\n'.join(f'{hashes[name]}  {name}' for name in sorted(hashes))}
+                    'FILE_HASHES': '\n'.join(f'{hashes[name]}  {name}' for name in sorted(hashes)),
+                    'SKILL_ARCHIVE_SHA256': dist.digest(skill_archive.read_bytes()),
+                    'SKILL_FILES': '\n'.join(sorted(skill_hashes)),
+                    'SKILL_HASHES': '\n'.join(f'{skill_hashes[name]}  {name}' for name in sorted(skill_hashes))}
     for name, template in [('install.sh', installer_template), ('uiblueprint.rb', formula_template)]:
         with (output / name).open('xb') as stream:
             stream.write(render(template, replacements))
-    names = [archive.name, 'install.sh', 'uiblueprint.rb']
+    names = [archive.name, skill_archive.name, 'install.sh', 'uiblueprint.rb']
     assets = {name: dist.digest((output / name).read_bytes()) for name in names}
     with (output / 'SHA256SUMS').open('x') as stream:
         stream.write(''.join(f'{assets[name]}  {name}\n' for name in names))
-    record = {'format': 'ui-blueprint-release-candidate-1', 'version': version,
+    record = {'format': 'ui-blueprint-release-candidate-2', 'version': version,
               'source_revision': revision, 'target': dist.TARGET, 'minimum_macos': minimum,
               'modules': 'combined', 'signing': signing, 'notarization': 'not_submitted',
               'publication': 'not_published', 'project_license': 'pending_owner_decision',
@@ -119,7 +147,8 @@ def prepare(args):
     if not re.fullmatch(r'[0-9]+\.[0-9]+(?:\.[0-9]+)?', minimum):
         raise ValueError('unrecognized macOS version')
     with dist.destination(args.destination) as destination:
-        dist.absent(destination, {name, 'install.sh', 'uiblueprint.rb', 'SHA256SUMS', 'release.json'})
+        dist.absent(destination, {name, skill_archive_name(args.version), 'install.sh',
+                                  'uiblueprint.rb', 'SHA256SUMS', 'release.json'})
         stage = Path(tempfile.mkdtemp(prefix='uib-release-'))
         try:
             bundle, output = stage / 'bundle', stage / 'output'
@@ -134,7 +163,8 @@ def prepare(args):
             record = write_candidates(bundle, output, version=args.version, revision=revision,
                                       minimum=minimum, signing=signing,
                                       installer_template=committed(revision, 'install.sh').decode(),
-                                      formula_template=committed(revision, 'uiblueprint.rb').decode())
+                                      formula_template=committed(revision, 'uiblueprint.rb').decode(),
+                                      skill_files=committed_skill(revision))
             # Reuse exclusive publication/rollback, with release.json as completion marker.
             products = {p.name: (p.read_bytes(), 0o644) for p in output.iterdir() if p.name != 'release.json'}
             publish_candidates(destination, products, record)
@@ -168,7 +198,12 @@ def read_candidate(folder):
         raw, _ = dist.read_regular(fd, 'release.json')
         record = json.loads(raw)
         name = archive_name(record['version'])
-        if record.get('format') != 'ui-blueprint-release-candidate-1' or set(record['assets']) != {name, 'install.sh', 'uiblueprint.rb'}:
+        names = [name, 'install.sh', 'uiblueprint.rb']
+        if record.get('format') == 'ui-blueprint-release-candidate-2':
+            names.insert(1, skill_archive_name(record['version']))
+        elif record.get('format') != 'ui-blueprint-release-candidate-1':
+            raise ValueError('invalid release format')
+        if set(record['assets']) != set(names):
             raise ValueError('invalid release inventory')
         for asset, expected in record['assets'].items():
             data, _ = dist.read_regular(fd, asset)
@@ -176,7 +211,7 @@ def read_candidate(folder):
                 raise ValueError(f'changed candidate: {asset}')
         checksums, _ = dist.read_regular(fd, 'SHA256SUMS')
         expected_checksums = ''.join(f'{record["assets"][asset]}  {asset}\n'
-                                    for asset in (name, 'install.sh', 'uiblueprint.rb')).encode()
+                                    for asset in names).encode()
         if checksums != expected_checksums:
             raise ValueError('changed candidate: SHA256SUMS')
     return record
@@ -196,6 +231,20 @@ def extract_candidate(folder, bundle, record):
         manifest, _ = dist.verify(fd)
     if manifest['source_revision'] != record['source_revision'] or manifest['modules'] != 'combined':
         raise ValueError('release source/module mismatch')
+    if record['format'] == 'ui-blueprint-release-candidate-2':
+        skill = bundle / 'skill'
+        with tarfile.open(folder / skill_archive_name(record['version']), 'r:gz') as archive:
+            members = archive.getmembers()
+            if (len(members) != len(SKILL_FILES) or {m.name for m in members} != set(SKILL_FILES)
+                    or any(not m.isfile() or m.mode != 0o644 for m in members)):
+                raise ValueError('invalid skill archive inventory')
+            skill.mkdir()
+            for member in members:
+                path = skill / member.name
+                path.parent.mkdir(exist_ok=True)
+                with path.open('xb') as stream:
+                    stream.write(archive.extractfile(member).read())
+                path.chmod(0o644)
 
 
 def notarize(args):

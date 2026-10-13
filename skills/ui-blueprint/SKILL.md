@@ -10,7 +10,10 @@ selected component, observation or requirement; choose the smallest useful scope
 
 ## Establish the bundle and task
 
-Locate an already supplied or installed bundle. Use its recorded absolute path;
+Locate an already supplied or installed bundle. With the shell installer, resolve
+the installed skill symlink: its real `<version>/skill` directory sits beside the
+matching CLI, so use that parent as `UIB_BUNDLE`. Otherwise use the supplied bundle's
+recorded absolute path;
 if locating `uiblueprint` on PATH, resolve its symlink to the real bundle before
 choosing sibling files. Keep CLI, worker, helper, schemas and examples from the same
 verified distribution. Read its manifest/installation receipt and `uiblueprint --help`;

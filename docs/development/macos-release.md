@@ -32,9 +32,14 @@ signing. The selected identity must actually be available.
 `prepare` never uploads, tags, pushes or changes Homebrew. Outputs:
 
 - `uiblueprint-vVERSION-aarch64-apple-darwin.tar.gz`, the flat combined bundle;
+- `ui-blueprint-skill-vVERSION.tar.gz`, the portable skill from the same commit;
 - rendered `install.sh`, with a pinned version and hashes;
 - `SHA256SUMS` and rendered `uiblueprint.rb`;
 - local `release.json`, recording source/platform/signing and pending gates.
+
+Skill-capable candidates use `ui-blueprint-release-candidate-2`; verification also
+accepts legacy candidate-1 archives. `SHA256SUMS` covers both archives, the rendered
+installer and formula. The CLI archive and Homebrew installation remain unchanged.
 
 Existing files cannot be overwritten. `release.json` is the last completion marker.
 Keep a selected candidate only for its pending owner review; remove run-owned
@@ -76,6 +81,15 @@ selects a different prefix. No sudo, shell-profile edit or UI access occurs.
 If necessary, it prints a shell-quoted PATH command for the current shell;
 add that path to your preferred shell configuration yourself for persistence.
 Node24+ remains needed only for the optional Web first-use caller.
+
+For the matching skill, pass `--skill-dir ABSOLUTE_SKILL_PATH` along with the prefix.
+The installer has no agent-specific default or discovery mechanism. It records that
+one authorized destination in `share/uiblueprint/.skill-link` and creates a symlink
+to `current/skill`. Updates reuse it; both payloads validate before `current` switches.
+Skill files live in `versions/VERSION/skill`, with a `.skill-sha256` receipt. Edited
+or foreign files refuse replacement/removal. Older installers lacking skill support
+are rejected during version dispatch when a skill is registered. See the
+[agent installation guide](../install.md) for host paths and the one-prompt workflow.
 
 Repeat the command to update, or use `sh install.sh --version VERSION` to select
 an exact published release (including rollback). Stop sessions first and use

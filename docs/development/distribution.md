@@ -287,37 +287,34 @@ fixtures; the delivered saved-data commands need only the selected executable se
 
 ## Agent skill and prompt installation
 
-The portable [ui-blueprint skill](../../skills/ui-blueprint/SKILL.md) and its
-references are maintained in `skills/ui-blueprint/`. Its ordinary recipes require
-the selected executable bundle and operation-specific inputs, not this checkout.
-The [agent-skill contract](../specs/development/agent-skill.md) records the approved
-plan, actual current-stage authorization and acceptance boundaries.
+Follow the [agent installation guide](../install.md) for the canonical prompt,
+current host-specific discovery paths and publication prerequisites. Reading this
+or that guide is not permission to install. The installer takes an explicit
+`--skill-dir ABSOLUTE_PATH`; it has no Codex/Claude default and does not scan or
+migrate legacy configurations.
 
-Current status: skill and documentation preparation only. The existing local v1/v2
-bundle inventory above does **not** include the skill. The README prompt is a
-documented target workflow, not a claim that combined installation or publication
-has happened. Do not run an unrendered release installer template, infer a release
-from source files, or report a skill-only copy as a complete installation.
+The [portable skill](../../skills/ui-blueprint/SKILL.md) is a separate release asset
+from the same committed source as the CLI archive. The local v1/v2 bundle inventory
+above stays unchanged. [Release preparation](macos-release.md) produces a matching
+skill archive and rendered installer with both hashes; candidate-2 verification
+checks both, while legacy candidate-1 verification remains supported.
 
-When installer integration resumes, supply the complete skill directory and binary
-set from one pinned release source. Verify their integrity and compatibility before
-activation. Preserve repeat-install behavior, ownership boundaries and user edits;
-do not mix a new skill from a moving branch with an arbitrary old CLI. Resolve source
-repository/release URLs against the actual publication destination before rendering
-the installer and README release links.
+The shell installer stores skill files in `versions/VERSION/skill`, verifies their
+`.skill-sha256` receipt, and registers one external symlink through `current/skill`.
+The matching binary version is the real skill directory's parent, even if commands
+are absent from PATH. Subsequent updates reuse the recorded destination; explicit
+version dispatch forwards it and rejects installers unable to preserve the skill.
+All selected payloads validate before switching `current`. Repeat installation is
+idempotent; modified/foreign files stop replacement and removal. Uninstall removes
+only verified owned files/links and leaves the shared host skill directory intact.
+A failed download can leave a verified inactive version; it is not an active or
+successful combined installation. Never run the unrendered installer template.
 
-The installation prompt must explicitly name the authorized binary prefix and skill
-destination. The README example chooses managed files under `~/.local` and the
-default Codex skill path `~/.codex/skills/ui-blueprint`; custom locations must be
-substituted explicitly. Reading this guide is not permission to install into those
-directories. No sudo, shell-profile edit, UI launch, permission grant or automatic
-source build belongs to that prompt's operation.
-
-Completion requires the installed skill's relative references to resolve outside
-the checkout and the [saved-data smoke example](../../skills/ui-blueprint/references/analysis.md#known-result-smoke-example)
-to produce validator valid, gap **8 css_px**, and check pass. Check each exit and
-payload. Local checks do not prove published downloads or Codex skill discovery;
-verify those separately when publication and a real installation are authorized.
+The [agent-skill contract](../specs/development/agent-skill.md) separates integration
+checks from public installation and host discovery. Temp-prefix tests substitute
+local transport; they do not prove a published URL, Gatekeeper or automatic skill
+loading. The [saved-data smoke example](../../skills/ui-blueprint/references/analysis.md#known-result-smoke-example)
+expects validator valid, gap **8 css_px**, and check pass. Check each exit/payload.
 
 For live first use, Web still needs Node24+ and an already-authorized browser CDP
 connection. Ordinary macOS observation still needs prepared trusted connection and

@@ -47,7 +47,9 @@ def candidate_at(folder, bundle, version):
     return release.write_candidates(bundle, folder, version=version, revision='a' * 40,
                                     minimum='27.0.1', signing='unsigned',
                                     installer_template=(ROOT / 'install.sh').read_text(),
-                                    formula_template=(ROOT / 'uiblueprint.rb').read_text())
+                                    formula_template=(ROOT / 'uiblueprint.rb').read_text(),
+                                    skill_files={name: (ROOT / 'skills/ui-blueprint' / name).read_bytes()
+                                                 for name in release.SKILL_FILES})
 
 
 def install_checks(stage, versions):
@@ -189,6 +191,134 @@ def hostile_archive_checks(stage, bundle, versions):
     print('PASS archive: traversal, link and duplicate entries refused before extraction')
 
 
+def skill_checks(stage, versions):
+    env = dict(os.environ, PATH=f'{stage / "shims"}:/usr/bin:/bin:/usr/sbin:/sbin',
+               FIXTURE_RELEASES=str(versions), TMPDIR=str(stage))
+    prefix = stage / 'skill prefix'
+    skill = stage / "host skills with 'quote/ui-blueprint"
+    installer = versions / '0.1.0/install.sh'
+    base = ['sh', installer, '--prefix', prefix]
+    command = [*base, '--skill-dir', skill]
+    root = prefix / 'share/uiblueprint'
+    current = root / 'current'
+    run([*base, '--skill-dir', 'relative'], env=env, ok=False)
+    run([*base, '--skill-dir', ''], env=env, ok=False)
+    run([*base, '--skill-dir', root / 'nested'], env=env, ok=False)
+    run([*base, '--skill-dir', root.resolve() / 'nested'], env=env, ok=False)
+    assert not prefix.exists()
+    # A foreign directory or symlink is not adopted, even if its text is identical.
+    skill.mkdir(parents=True)
+    (skill / 'keep').write_text('foreign')
+    run(command, env=env, ok=False)
+    assert (skill / 'keep').read_text() == 'foreign' and not prefix.exists()
+    (skill / 'keep').unlink()
+    skill.rmdir()
+    skill.symlink_to(stage / 'foreign-target')
+    run(command, env=env, ok=False)
+    assert skill.is_symlink() and not prefix.exists()
+    skill.unlink()
+    # CLI-only installation remains available; adding a skill needs only its archive.
+    run(base, env=env)
+    assert not (current / 'skill').exists() and not skill.exists()
+    run(command, env=env)
+    assert skill.is_symlink() and os.readlink(skill) == str(root / 'current/skill')
+    assert (root / '.skill-link').read_text() == str(skill) + '\n'
+    first_skill = root / 'versions/0.1.0/skill'
+    original = (first_skill / 'SKILL.md').read_bytes()
+    for name in release.SKILL_FILES:
+        assert (skill / name).read_bytes() == (ROOT / 'skills/ui-blueprint' / name).read_bytes()
+    run(command, env=dict(env, DOWNLOAD_FAILURE='yes'))
+    run([*base, '--skill-dir', stage / 'another-skill'], env=env, ok=False)
+    assert not (stage / 'another-skill').exists()
+    # Local edits block activation and removal, including an update without --skill-dir.
+    (first_skill / 'SKILL.md').write_bytes(original + b'\nlocal edit\n')
+    run([*base, '--version', '0.2.0'], env=env, ok=False)
+    run([*base, '--uninstall'], env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0' and skill.is_symlink()
+    (first_skill / 'SKILL.md').write_bytes(original)
+    (first_skill / 'extra.txt').write_text('keep')
+    run([*base, '--version', '0.2.0'], env=env, ok=False)
+    (first_skill / 'extra.txt').unlink()
+    (first_skill / 'references/web.md').chmod(0o600)
+    run(command, env=env, ok=False)
+    (first_skill / 'references/web.md').chmod(0o644)
+    web = (first_skill / 'references/web.md').read_bytes()
+    (first_skill / 'references/web.md').unlink()
+    (first_skill / 'references/web.md').symlink_to(stage / 'outside')
+    run([*base, '--uninstall'], env=env, ok=False)
+    (first_skill / 'references/web.md').unlink()
+    (first_skill / 'references/web.md').write_bytes(web)
+    # Missing/misbound registration cannot be silently repaired over another owner.
+    skill.unlink()
+    run(base, env=env, ok=False)
+    skill.symlink_to(stage / 'foreign-target')
+    run(base, env=env, ok=False)
+    skill.unlink()
+    skill.symlink_to(root / 'current/skill')
+    # Corrupt only the next skill archive: old CLI and skill stay selected.
+    archive = versions / '0.2.0' / release.skill_archive_name('0.2.0')
+    archive_bytes = archive.read_bytes()
+    archive.write_bytes(archive_bytes + b'corrupt')
+    run([*base, '--version', '0.2.0'], env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
+    archive.write_bytes(archive_bytes)
+    run([*base, '--version', '0.2.0'], env=env)
+    assert os.readlink(current) == 'versions/0.2.0'
+    assert skill.resolve() == (root / 'versions/0.2.0/skill').resolve()
+    run(base, env=env)  # registered skill survives rollback without repeating its path
+    assert skill.resolve() == first_skill.resolve()
+    legacy = versions / '0.4.0'
+    legacy.mkdir()
+    (legacy / 'install.sh').write_text("VERSION='0.4.0'\nexit 0\n")
+    run([*base, '--version', '0.4.0'], env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
+    foreign = skill.parent / 'other-skill'
+    foreign.write_text('keep')
+    run([*base, '--uninstall'], env=env)
+    assert not skill.is_symlink() and not root.exists() and foreign.read_text() == 'keep'
+    # First install with a failed skill download never activates a partial set.
+    archive = versions / '0.1.0' / release.skill_archive_name('0.1.0')
+    original_archive = archive.read_bytes()
+    archive.unlink()
+    run(command, env=env, ok=False)
+    assert not current.exists() and not skill.is_symlink()
+    archive.write_bytes(original_archive)
+    run(command, env=env)
+    run([*base, '--uninstall'], env=env)
+    print('PASS skill: opt-in, matching bytes, repeat, registered update/rollback, modified/foreign/symlink/missing paths, partial-download refusal, legacy refusal, owned removal')
+
+
+def hostile_skill_checks(stage, versions):
+    folder = versions / '0.1.0'
+    archive = folder / release.skill_archive_name('0.1.0')
+    original = archive.read_bytes()
+    original_script = (folder / 'install.sh').read_text()
+    for kind in ('traversal', 'symlink', 'duplicate'):
+        data = io.BytesIO()
+        with tarfile.open(fileobj=io.BytesIO(original), mode='r:gz') as src, tarfile.open(fileobj=data, mode='w:gz') as dst:
+            for member in src.getmembers():
+                if kind == 'symlink' and member.name == 'SKILL.md':
+                    member.type, member.linkname, member.size = tarfile.SYMTYPE, '../../escape', 0
+                    dst.addfile(member)
+                else:
+                    dst.addfile(member, src.extractfile(member))
+            if kind != 'symlink':
+                extra = tarfile.TarInfo('../escape' if kind == 'traversal' else 'SKILL.md')
+                extra.size = 1
+                dst.addfile(extra, io.BytesIO(b'x'))
+        archive.write_bytes(data.getvalue())
+        script = stage / f'bad-skill-{kind}.sh'
+        script.write_text(original_script.replace(dist.digest(original), dist.digest(data.getvalue())))
+        env = dict(os.environ, PATH=f'{stage / "shims"}:/usr/bin:/bin:/usr/sbin:/sbin',
+                   FIXTURE_RELEASES=str(versions), TMPDIR=str(stage))
+        prefix, skill = stage / f'skill-bad-{kind}', stage / f'skill-link-{kind}'
+        run(['sh', script, '--prefix', prefix, '--skill-dir', skill], env=env, ok=False)
+        assert not (prefix / 'share/uiblueprint/current').exists() and not skill.is_symlink()
+        assert not (stage / 'escape').exists()
+    archive.write_bytes(original)
+    print('PASS skill archive: traversal, symlink and duplicate members rejected before activation')
+
+
 def recipe_checks(stage, bundle, versions):
     record = release.read_candidate(versions / '0.1.0')
     assert record['publication'] == 'not_published' and record['notarization'] == 'not_submitted'
@@ -197,6 +327,26 @@ def recipe_checks(stage, bundle, versions):
     release.extract_candidate(versions / '0.1.0', unpacked, record)
     for name in dist.files_for('combined') | {dist.MANIFEST}:
         assert (unpacked / name).read_bytes() == (bundle / name).read_bytes()
+    for name in release.SKILL_FILES:
+        assert (unpacked / 'skill' / name).read_bytes() == (ROOT / 'skills/ui-blueprint' / name).read_bytes()
+    with patch.object(release, 'committed', return_value=b'pinned bytes') as source:
+        assert set(release.committed_skill('c' * 40).values()) == {b'pinned bytes'}
+        assert [call.args for call in source.call_args_list] == [
+            ('c' * 40, f'skills/ui-blueprint/{name}') for name in release.SKILL_FILES]
+    # Legacy candidate-1 still verifies/extracts without a skill asset or directory.
+    legacy = stage / 'legacy-candidate'
+    legacy.mkdir()
+    old = dict(record, format='ui-blueprint-release-candidate-1', assets=dict(record['assets']))
+    del old['assets'][release.skill_archive_name(old['version'])]
+    for name in old['assets']:
+        (legacy / name).write_bytes((versions / '0.1.0' / name).read_bytes())
+    (legacy / 'release.json').write_bytes(dist.encoded(old))
+    (legacy / 'SHA256SUMS').write_text(''.join(f'{old["assets"][name]}  {name}\n'
+        for name in (release.archive_name(old['version']), 'install.sh', 'uiblueprint.rb')))
+    old_bundle = stage / 'legacy-unpacked'
+    old_bundle.mkdir()
+    release.extract_candidate(legacy, old_bundle, release.read_candidate(legacy))
+    assert not (old_bundle / 'skill').exists()
     run(['ruby', '-c', versions / '0.1.0/uiblueprint.rb'])
     with patch.object(release.dist, 'run') as command:
         command.side_effect = [b'b' * 40 + b'\n', b'foreign recipe']
@@ -229,7 +379,7 @@ def recipe_checks(stage, bundle, versions):
         release.sign_bundle(bundle, identity)
     with dist.destination(bundle) as fd:
         dist.verify(fd)
-    print('PASS recipe: archive round trip, template syntax, source-pin guard, local publication rollback, post-signing manifest')
+    print('PASS recipe: CLI/skill archive round trip, committed skill source, legacy candidate, template syntax, source-pin guard, local publication rollback, post-signing manifest')
 
 
 def notarization_checks(folder):
@@ -310,6 +460,10 @@ def real_candidate(folder):
                              'web-geometry.cjs': 'tests/bridges/web/geometry.cjs',
                              'WEB-FIRST-USE.md': 'docs/development/web-first-use.md'}.items():
             assert (bundle / name).read_bytes() == release.committed(record['source_revision'], source)
+        with_skill = record['format'] == 'ui-blueprint-release-candidate-2'
+        if with_skill:
+            for name, data in release.committed_skill(record['source_revision']).items():
+                assert (bundle / 'skill' / name).read_bytes() == data
         spec = importlib.util.spec_from_file_location('distribution_check', ROOT / 'tests/bridges/distribution_check.py')
         checks = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(checks)
@@ -329,22 +483,47 @@ for arg do
   if [ "$arg" = --output ]; then out=next; fi
   url=$arg
 done
-[ "$url" = "$EXPECTED_URL" ]
-cp "$LOCAL_ARCHIVE" "$out"
+case "$url" in
+  "$EXPECTED_URL") cp "$LOCAL_ARCHIVE" "$out" ;;
+  "$EXPECTED_SKILL_URL") cp "$LOCAL_SKILL_ARCHIVE" "$out" ;;
+  *) exit 2 ;;
+esac
 ''')
         (shims / 'curl').chmod(0o755)
         archive = release.archive_name(record['version'])
         env = dict(os.environ, PATH=f'{shims}:/usr/bin:/bin:/usr/sbin:/sbin', TMPDIR=str(stage),
                    EXPECTED_URL=f'{release.REPOSITORY}/releases/download/v{record["version"]}/{archive}',
-                   LOCAL_ARCHIVE=str(folder / archive))
+                   LOCAL_ARCHIVE=str(folder / archive),
+                   EXPECTED_SKILL_URL=f'{release.REPOSITORY}/releases/download/v{record["version"]}/{release.skill_archive_name(record["version"])}',
+                   LOCAL_SKILL_ARCHIVE=str(folder / release.skill_archive_name(record['version'])))
         prefix = stage / 'real installed prefix'
         command = ['sh', folder / 'install.sh', '--prefix', prefix]
+        skill = stage / 'real host skills/ui-blueprint'
+        if with_skill:
+            command += ['--skill-dir', skill]
         run(command, env=env)
         run([prefix / 'bin/uiblueprint', '--help'], env=env)
         installed = prefix / 'share/uiblueprint/versions' / record['version']
+        if with_skill:
+            assert skill.resolve().parent == installed.resolve()
+            for name in release.SKILL_FILES:
+                assert (skill / name).read_bytes() == (bundle / 'skill' / name).read_bytes()
+            # All Markdown references stay inside the installed skill, outside checkout.
+            import re
+            for path in skill.resolve().rglob('*.md'):
+                for link in re.findall(r'\]\(([^)]+)\)', path.read_text()):
+                    resolved = (path.parent / link).resolve()
+                    assert resolved.is_relative_to(skill.resolve()) and resolved.is_file(), link
         checks.smoke(installed)
         run([*command, '--uninstall'], env=env)
         assert not (prefix / 'share/uiblueprint').exists()
+        assert not skill.is_symlink()
+        if with_skill:
+            # Homebrew receives the unchanged CLI archive, not the separate skill asset.
+            for name in release.SKILL_FILES:
+                (bundle / 'skill' / name).unlink()
+            for name in ('agents', 'references', ''):
+                (bundle / 'skill' / name).rmdir()
         homebrew_formula(folder, bundle, stage)
         print('PASS actual candidate: provenance, signed bundle smoke, real install/run/remove; transport is local')
     finally:
@@ -365,6 +544,8 @@ def main():
         for version in ('0.1.0', '0.2.0'):
             candidate_at(versions / version, bundle, version)
         install_checks(stage, versions)
+        skill_checks(stage, versions)
+        hostile_skill_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)
         recipe_checks(stage, bundle, versions)
         notarization_checks(versions / '0.1.0')

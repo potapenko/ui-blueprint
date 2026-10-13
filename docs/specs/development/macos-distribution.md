@@ -1,7 +1,7 @@
 # Mac distribution
 
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@1`.
+- Contract: `UIB.MAC-DISTRIBUTION@2`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -31,7 +31,9 @@ committed revision. Release version is separate from schema/package versions.
 Build the existing combined selection. Final file hashes follow code signing.
 Preserve complete dependency notices; a missing project license is explicit
 and prevents presenting preparation as a public release approval.
-Use a flat tar.gz, a SHA256SUMS file and a version-pinned install.sh.
+Use a flat CLI tar.gz, a SHA256SUMS file and a version-pinned install.sh.
+Skill-capable candidates add a separate versioned skill tar.gz from the same commit;
+legacy candidates remain verifiable. [AGENT-SKILL@2](agent-skill.md) governs opt-in installation.
 Record source revision, build host, conservative minimum OS and signature status.
 The initial OS floor is the actual build/test host version; older OS support
 requires its own qualification, never inference from Swift's deployment target.
@@ -42,6 +44,9 @@ not a notarized/public release. Existing local v1/v2 verification/removal stays 
 
 Default prefix is ~/.local; --prefix selects an absolute alternative.
 Own share/uiblueprint/versions/<version>, the current symlink and two bin links.
+Optional --skill-dir ABS selects one externally discoverable skill symlink through
+current/skill, with destination ownership recorded under the install root. Updates
+keep the registered skill and CLI together; uninstall verifies and removes both.
 No sudo, shell-profile edit, Python/Node/Rust/Xcode prerequisite, UI collection,
 permission grant or launch. The optional Web caller still needs Node24+ separately.
 Detect unsupported OS/architecture, pin a release before fetching its archive,
@@ -84,3 +89,7 @@ Broader native/Web product acceptance remains separate from packaging checks.
 MAC-DIST-001, 2026-10-13: user-authorized additive release preparation, from local
 bundles to the archive and installation contract above. This contract's registration
 precedes implementation through D01; it does not select a license or publish.
+
+MAC-DIST-002, 2026-10-13: explicit user continuation in the skill chat authorizes
+matching skill packaging/installation and temp-only tests. Existing CLI archive and
+Homebrew behavior stay unchanged; no publication, real installation or notarization.

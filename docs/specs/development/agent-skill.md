@@ -1,11 +1,11 @@
 # Agent skill and prompt installation
 
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@1`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@2`.
 - Authority: Active; stability: Evolving; released baseline: none.
-- Authority source: the operator approved this chat's six-step skill/installer/README
-  plan on 2026-10-13, then directed: “Начни со skill и документации, существующие
-  незакоммиченные изменения установщика пока не трогай. Без публикации и установки
-  в мои реальные каталоги.” This narrower execution boundary governs this stage.
+- Authority source: the operator approved this chat's six-step plan on 2026-10-13;
+  the later instruction “Теперь давай подключим skill к установщику” authorizes
+  integration after inspecting existing work, with temp-only checks and no publication
+  or real installation. The earlier documentation-only stage is checkpoint2afd3a01.
 - Read when: maintaining the distributed skill or its prompt installation path.
 - Do not read when: using unchanged engine or collector internals.
 - Requires: [BOUNDARIES@1](../product/boundaries.md), [CLI@20](../product/cli.md).
@@ -20,12 +20,11 @@ current branch. The six steps are: register this contract; author the portable
 skill; integrate it into versioned distribution; document the installation prompt;
 check installation lifecycle and examples; checkpoint only task-owned changes.
 
-Current execution covers the skill and documentation only. Existing uncommitted
-installer, release builder, distribution manager, formula and their tests remain
-untouched. Integrating them is deferred, not accepted or cancelled. Publication,
-license selection, pushes and installation into real user directories are excluded.
-The original plan and actual approval remain in this chat; this record does not
-grant new authority or resume the older coordinated development goal.
+Current execution adds installer/release integration and isolated lifecycle checks.
+Unrelated changes remain untouched; publication, licensing, pushes, real installation
+and host UI discovery remain excluded. The original approval stays in this chat;
+this does not resume the older coordinated goal. README and the canonical agent
+installation guide are concurrently owned by the installation-documentation chat.
 
 ## AGENT-SKILL.WORKFLOW — Portable operating instructions
 
@@ -48,19 +47,26 @@ do not advertise a shipped PID-to-connection bootstrap or developer test helper.
 Observation, coverage, units, frame kinds, identity and unavailable results retain
 their product meanings. Examples do not create UI requirements or action authority.
 
-## AGENT-SKILL.INSTALL — Integration contract, pending implementation
+## AGENT-SKILL.INSTALL — Opt-in matching release
 
-One reviewed release revision supplies compatible executable and skill resources.
-The installation prompt names the trusted source and explicitly authorizes the
-binary prefix and skill directory. Check platform, inventory, integrity and
-compatibility before reporting readiness. Do not treat schema versions as a CLI
-release identifier or assume that an existing command on PATH is compatible.
-Repeated installation of the same unchanged set is harmless; modified or foreign
-files refuse replacement. Updates preserve user edits and keep a matching set.
-No automatic shell-profile edit, privilege escalation, UI access or permission grant.
-First target is Codex on qualified Apple Silicon macOS; other hosts are unqualified.
-Until release integration/publication is complete, README labels the prompt as
-preparation and directs the agent to stop when no matching published release exists.
+One committed revision supplies the flat CLI archive plus a separate versioned
+skill archive and both pinned hashes. `--skill-dir ABSOLUTE_PATH` explicitly opts
+into installation at that exact host-selected location; there is no Codex/Claude
+path default, discovery or duplicate installation in the installer. Host documentation
+selects its current discovery directory; this machine's legacy `.codex` path is not
+promoted to a universal default. Custom locations remain caller-authorized.
+Store skill files inside the corresponding managed version's `skill` directory;
+the external skill symlink points through the same `current` link as the CLI.
+Register its exact destination, reuse it on updates and forward it in version dispatch.
+Refuse an incompatible legacy installer when a skill is registered. Verify existing
+managed skill hashes/inventory/modes before activation or removal; preserve edits,
+foreign destinations and unrelated files. Uninstall removes only the owned link,
+receipt and verified files, never the shared skill parent. Never recursively delete.
+An interrupted install may leave a verified inactive version, but no successful
+combined-install claim or active switch before both payloads are ready.
+The prompt names the trusted release and authorizes both locations. No source build,
+profile edit, privilege escalation, permission grant or UI access. First target is
+qualified Apple Silicon macOS. Public URL/discovery acceptance stays unclaimed.
 
 ## AGENT-SKILL.RETENTION
 
@@ -76,22 +82,18 @@ require explicit authorization for their location and purpose.
 | Stage | Required evidence |
 | --- | --- |
 | Skill/documentation | Frontmatter/UI metadata valid; internal links portable; examples match current command inputs; changed links/routes and diff whitespace checked |
-| Installation, deferred | Temp-prefix fresh/repeat/update/conflict checks, damaged archive/platform/path failures, matching installed CLI known-result example and skill resources outside checkout |
+| Installation | Temp-prefix fresh/repeat/update/conflict checks, damaged archive/platform/path failures, matching installed CLI known-result example and skill resources outside checkout |
 | Publication, excluded | Real published URL installation and actual Codex discovery in a new chat; never inferred from local file checks |
 
-No new scripts, Rust changes, image generation, live collection or independent-agent
-evaluation are needed for the current documentation stage. Static checks are not
-behavioral skill acceptance, installed-host discovery or release acceptance.
+No Rust changes, image generation, live collection or independent-agent evaluation
+are authorized here. Synthetic lifecycle and real saved-data checks stay separate
+from installed-host discovery, downloaded Gatekeeper and public release acceptance.
 
 ## Change record
 
-Traversal: registry → product routes → CLI@20, ANALYSIS@2, CLI-DIFF@2,
-WEB-FIRST-USE@4, NATIVE@5, CLI-EXPORT@3 → explicit data/identity/privacy/geometry,
-lifecycle/cache, D01/D02/D03/D05/D07 and drawing dependencies, including
-DRAWING-PACKAGE@3, SHEET-PROMPTS@1 and DRAWING@1.2 human presentation precedence.
-Existing CLI help source, packaged examples and consumer guides supply syntax
-evidence. Engine changes, live QA, action recipes and release execution are excluded.
-
-AGENT-SKILL-001: user-approved additive Evolve from developer-facing instructions
-to a portable agent workflow and a planned prompt-installation contract. Existing
-CLI/wire/analysis/export semantics, release ownership and qualifications are protected.
+Traversal: registry → AGENT-SKILL@2 / MAC-DISTRIBUTION@2; reuse their unchanged
+BOUNDARIES/CLI/development dependency closure. Evidence: committed installer,
+release builder and isolated release tests; current unrelated Rust edits excluded.
+AGENT-SKILL-001 established the portable workflow. AGENT-SKILL-002 is the explicit
+user-approved additive installation integration above; CLI/wire/analysis/export
+semantics, ordinary no-skill installs and legacy candidate verification stay protected.
