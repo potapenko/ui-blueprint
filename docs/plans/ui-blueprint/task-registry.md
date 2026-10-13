@@ -194,6 +194,14 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B16 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, reused forB17|cycle accepted; both critics reject2images|17amounts correct; DlosesAction cue/popup alignment-width; MomitsAdventure/reflowsdetail/boxesClear. CT2 separately confirms known useful inset omitted fromliteral plan, feedingCP17. uib-cw-b16-Ganih2 HANDOFF/neutral-manifest; capture union notUIframe |
 | CW-B17 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, archived|cycle accepted; both critics confirm2FAIL|78nodes/source measurements preserved; no36/36Actor rendered-owner pass. Hidden text exposed, rows boxed/owners collapsed; Genres state/clip/selector/assignment failures. Compact existing-inset M0233/M0229 witness feedssameCP17, no extra generation. uib-cw-b17-sSkxRL HANDOFF/neutral-manifest; state restored/tabsclosed |
 | CW-B18 |01a133fc-3106-75d2-8510-442d523b3260/local|full-cycle isolated-browser locale qualification running|Qualify CLI-owned temp paths/version and fresh isolated guest before any preference write. Up to3source-backed Arabic/German state/layout cases, corpusen/emptyClipSearch. No operator profile/Chrome403 bypass/source edits; no counts yet. FrozenCP17 |
+
+CW-B18 path refinement: pinned CLI0.1.19 defaults daemon metadata/stderr beneath
+Library/Caches/ms-playwright/daemon. Source exposes PWTEST_DAEMON_SESSION_DIR.
+Root withdraws its own documented-options-only preference: a pinned source-proved
+per-process override is admissible if all paths/env propagation are verified and
+actual writes remain task-temp. No package edits, HOME/CODEX_HOME override, persistent
+dirs, operator-profile access or permission bypass. Undocumented status alone is
+not a blocking condition; incomplete path coverage would remain a concrete gap.
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
