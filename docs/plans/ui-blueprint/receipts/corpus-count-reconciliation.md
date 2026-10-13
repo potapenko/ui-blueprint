@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after CW-B20/CN-B22 and CW14 first output.
+2026-10-13. CCOUNT1 reconciliation, updated after CW-B21 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**197 proved eligible cases; range197–200 pending three named uncertainties.**
-The planning remainder is803 cases, potentially800 if all three are established.
-There are75 Web and122 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;140 are non-fixture observations. Fixture UI is
+**200 proved eligible cases; range200–203 pending three named uncertainties.**
+The planning remainder is800 cases, potentially797 if all three are established.
+There are78 Web and122 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;143 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:521 primary images =517 first outputs +4 rerolls;
+Completed-batch image buckets:524 primary images =520 first outputs +4 rerolls;
 76 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-601 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+604 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -139,7 +139,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B19 |1|1|Qualified mixed Settings state; earlier receipt retained below |
 | CW-B20 |1|1|New live Cast tooltip; canonical handoff works, first image fails; CW14 counted once under CW-B2 |
 | CN-B22 |1|3|New passive Release Guest Tour32AXnodes/24callouts; G01/D01/D02 evaluated, no rerolls |
-| **Primary subtotal** |**196**|**521**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:197 total cases |
+| CW-B21 |3|3|Distinct empty sign-in/register/recovery subforms; source-qualified first images, all fullrasterFAIL; providerchooser excluded |
+| **Primary subtotal** |**199**|**524**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:200 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -939,3 +940,41 @@ wholecorpus quality claim. Its separate wait was disabled by its owner.
 
 One repairimage, zero newprimarycases. Totals197cases,521primaryimages,
 76repair-validation images,4unqualifiedimages,601counted generatedimages.
+
+## CW-B21 — final three-form qualification after restart
+
+Immutable source handoff `/tmp/uib-cw-b21-76jwxzy4/neutral-index-r2.json` retains
+three actual empty guest subforms: Email10nodes, Register12nodes, Recovery7nodes.
+Acquisition863dcdb/ea06095, exporter600c6ab; original source/limits/allowlist remain
+unchanged. Five slash-separated callerannotation phrases were rewritten as ordinary
+prose in separate metadata copies. Prior export_private_content refusals remain;
+the correction does not prove sensitive Snapshot content or weaken the privacy guard.
+Chooser selection_incomplete/noSnapshot is not a fourth case. No credentials,
+provider/submit operations or application source changes occurred.
+
+Three first G01 images: Email1536×1024, Register1469×1071, Recovery1536×1024;
+zero rerolls. All18assigned scalar labels/approximation marks pass both reviews;
+all three fullimages fail technicalIDs/selectors, missing repeated focus attribution
+and Register source-width alignment. Register differentiated border preserves visible
+focus; missing caller-reported text is an attribution residual, not total state loss.
+Parent dialog/header/tabs/providers/Close are excluded from the declared subform scope.
+
+CV2initial01a1363b-e834-7082-b60c-73684498a9be/final
+01a1364a-ef96-7082-98cb-10803a399f59; CT2initial
+01a1363b-ea3f-7843-8d97-41c0a34ade68/final
+01a1364a-f655-7f12-a3a4-7f802bc49c92. Final author reconciliation after restart
+reused initial artifact/hash/numeric checks; no repeated runtime/build/images.
+Prior privacy-diagnosis context was known, so reviews are not called fully blind.
+Both qualify three materially different compositions with no matching prior auth
+form entries in the bounded ledger lookup. Original references/observations retain
+partial/non-atomic and caller/reference-versus-canonical state distinctions.
+
+Separate confirmed preparation gap: known N000 FORM frames M0001/M0002 remain in
+machine data but are excluded from overview under flat children=[]; Register
+existing M0045=35.734375CSSpx N003.bottom→N006.top is unassigned. This does not
+authorize guessed hierarchy, whole-dialog dimensions, union/painted borders or
+new gaps. The same export owner receives the finite repair after its current task.
+
+Totals:200eligiblecases (78Web+122Native;57fixture+143non-fixture),41primary
+batches,524primaryimages (520first+4rerolls),76repairimages,4unqualifiedimages,
+604generatedimages. Remaining800; originalA02/B07/C04 uncertainties unchanged.
