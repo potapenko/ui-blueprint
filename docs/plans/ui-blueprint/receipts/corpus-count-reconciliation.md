@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B12 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B13 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**180 proved eligible cases; range180–183 pending three named uncertainties.**
-The planning remainder is820 cases, potentially817 if all three are established.
-There are60 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;123 are non-fixture observations. Fixture UI is
+**183 proved eligible cases; range183–186 pending three named uncertainties.**
+The planning remainder is817 cases, potentially814 if all three are established.
+There are63 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;126 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:502 primary images =498 first outputs +4 rerolls;
+Completed-batch image buckets:505 primary images =501 first outputs +4 rerolls;
 53 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-559 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+562 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -89,7 +89,24 @@ dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 | CW-B10 |2|2|Actual Actor one-row and successful empty; initial20row scope is not counted or oldCW02 relabelled |
 | CW-B11 |2|2|New qualified desktop20row ready state and mobile full-screen ready topology; no oldCW02 relabelling; both first outputs evaluated as failures by author |
 | CW-B12 |2|2|Reels Search positive custom/suggestions and successful empty;94frames/21required labels, both first outputs authorFAIL; numeric success is not image acceptance |
-| **Primary subtotal** |**179**|**502**| |
+| CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images authorFAIL, independent review pending |
+| **Primary subtotal** |**182**|**505**| |
+
+CW-B13 evidence: `uib-cw-b13-2Q5Tmo/HANDOFF.md`, `neutral-manifest.json`,
+`numeric-and-ownership-proof.json`, `literal-invocation-proof.json`, states/exit records.
+NeutralSHA2561c5c639e6827b34beb584bfb2fc0351bb5ad4ae15e18b82ba0494049cc8b1396.
+FrozenCP13;69layout/69visible frames exact,276width-height values checked and18CLI
+measurements. Three requiredG01 first outputs1536×1024/1536×1024/1448×1086, no rerolls.
+NativeDPR2 references2560×1440/780×1688; one mobile compositor-tiling source failure
+retained/excluded before model call and recaptured correctly, not another generation.
+Author failures: desktop extra scope/popup boundary/input anchor; mobile Director
+missing30height/duplicate relations/anchors; Voice draft substitution/missing260height.
+Main query/results/viewer remained empty during qualified entity selection/removal;
+no phrase search in bounded action records; own filters removed and tabs closed.
+Wrong desktop center-trigger click removed own tag, then safely restored; retained.
+Mobile guest:false reflects missing desktop LoginDOM, not proven auth state. Desktop
+caller clip wording was inaccurate; actual capture/bounds preserved. No frozen input
+rewrite or scope/acceptance upgrade follows from these attribution cautions.
 
 CW-B12 evidence: `uib-cw-b12-0RRqDd/HANDOFF.md`, `neutral-manifest.json`,
 `literal-invocation-proof.json`, per-case records and qualification under the

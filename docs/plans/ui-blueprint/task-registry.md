@@ -36,17 +36,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:180; unresolved upper bound183; conservative remainder820.**
+**Proved eligible case count:183; unresolved upper bound186; conservative remainder817.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Thirty-one completed primary batches produced502 qualified evaluated images;
+Thirty-two completed primary batches produced505 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their498 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not502 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their501 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not505 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -83,9 +83,10 @@ CN-B20 adds6mobile lookup states, bringing it to174, with a runtime incident ret
 CW-B10 adds2Web Actor states, bringing it to176.
 CW-B11 adds2qualified desktop/mobile ready Actor states, bringing it to178.
 CW-B12 adds2qualified Reels Search states, bringing it to180.
+CW-B13 adds3qualified selected-filter compositions, bringing it to183.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3 images (53 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:559counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:562counted generated images
 overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -175,7 +176,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only receipt accepted; retained|Phone portrait-only; one conditional iPad Actor keyboard candidate plus unqualified compact-width branch. [Receipt](receipts/corpus-native-advice.md#cn15--orientation-and-ipad-keyboard-candidate-2026-10-13); root rejects overbroad non-CUA requirement: Apple DeviceHub is not Codex |
 | CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local|full-cycle iPad Actor keyboard task running|Existing own iPad71F8E4AC… only, target/storage/state requalification, no Mac bootstrap/user Release. Count only real layout/coverage change; optional existing compact app-window path without mode/preference changes. Frozen CP14, no tracked writes; no cases counted yet |
 | CW-B12 |01a132a6-3de5-7b72-820f-b5853a8cc992/local, archived|cycle accepted; both critics confirm2FAIL|2newstates/2firstimages,94frames/21dimensions, frozen CP13; uib-cw-b12-0RRqDd HANDOFF/neutral-manifest; tabs closed, source read-only; numeric success separate from visual acceptance, no literal compiler conflict established |
-| CW-B13 |01a132ba-030e-7a81-be76-f4b024ab1794/local|full-cycle selected-filter batch running|CW7 narrow empty-main-query/own guest boundary; desktop multi-Director, mobile multi-Director and single Voice; qualify actual handlers/effects first. Frozen CP13, no tracked writes, no counts before completed evidence |
+| CW-B13 |01a132ba-030e-7a81-be76-f4b024ab1794/local, archived|cycle accepted; both critics first observations running|3newcases/3firstimages/3authorFAIL, frozen CP13;69layout+69visible frames/18CLI measures; uib-cw-b13-2Q5Tmo HANDOFF/neutral-manifest. Own selections removed/tabs closed; literal-usefulness and raster issues separated in review |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
