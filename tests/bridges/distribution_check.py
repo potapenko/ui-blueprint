@@ -47,6 +47,13 @@ for(const key of ['stat','access','mkdtemp','open','readFile','unlink','rmdir'])
         result = call([node, '--require', guard, helper, '--help', '--endpoint',
                        'PRIVATE_ENDPOINT_CANARY'], 2)
         assert not result.stdout and result.stderr == b'invalid_arguments\n'
+        result = call([node, '--require', guard, helper, '--url', 'http://localhost/',
+                       '--component', '#form'], 2)
+        assert not result.stdout and result.stderr.startswith(b'connection_required:')
+        result = call([node, '--require', guard, helper, '--connection',
+                       'ws://127.0.0.1:9222/devtools/browser/test', '--url',
+                       'http://localhost/?token=PRIVATE_CANARY', '--component', '#form'], 2)
+        assert not result.stdout and result.stderr == b'private_page_url\n'
         print('PASS Web help: --help/-h, no metadata/CLI/file effects, sanitized invalid input')
     finally:
         dist.clean_stage(stage)

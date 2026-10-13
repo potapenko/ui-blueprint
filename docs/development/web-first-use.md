@@ -1,108 +1,123 @@
-# First Web observation with UI Blueprint
+# Web first use: existing connection, URL and component
 
-Use this path for an **already authorized, existing CDP page and selected component**.
-It is read-only. It does not launch a browser, change a profile, navigate, select a
-page, focus anything, modify the site or require a model. Node.js 24+ is needed
-only for this optional helper; the Rust CLI/worker do not require Node/Playwright.
+The optional Node.js 24+ caller selects an existing permitted page and component,
+then invokes the real Rust Observe → Inspect → Measure path. You do not prepare
+connection/request JSON or target/frame/loader/backend IDs. Core and low-level Web
+CLI/worker remain Node-free; nothing is installed or configured by this command.
 
-## 1. Check the bundle and read help
+## Run from a verified Web or combined bundle
 
-Set BUNDLE to the absolute Web or combined bundle directory you built. The following
-works from any cwd, including `/`, without the source checkout:
+Reproduce the tested Web binaries with the current recipe from the checkout:
+
+```sh
+BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-web-first-use.XXXXXX")"
+python3 distribution.py build --modules web --revision 3e995ec5ab4fbf9160c6fc45e12c72fb32e5c0ed --destination "$BUNDLE"
+```
+
+The helper/guide are versioned recipe assets; the manifest records their hashes
+separately from that immutable Rust product pin. Keep the full set together.
 
 ```sh
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 node "$BUNDLE/web-geometry.cjs" --help
-```
-
-The help command exits 0 without connecting, validating executable paths or
-creating temporary files. `-h` is equivalent. Keep CLI and worker from the same
-verified bundle. Core/Native-only bundles do not include this Web helper.
-Old `ui-blueprint-local-1` bundles do not contain it; build a new bundle with the
-current distribution recipe rather than copying files into an old inventory.
-
-## 2. Establish the existing connection and exact identity bundle
-
-A browser being open, a URL, or an existing browser-tool session does **not** by
-itself establish an accessible CDP page endpoint. Your authorized caller must
-supply the following facts from one current page/document and selected element:
-
-| Shell variable / helper flag | Required fact / supported source |
-| --- | --- |
-| CDP_PAGE_WS / --endpoint | Existing `ws://127.0.0.1:PORT/devtools/page/TARGET` (or numeric IPv6 loopback) endpoint for the exact authorized page; not a browser endpoint |
-| TARGET_ID / --target-id | `Target.getTargetInfo` result `targetInfo.targetId`, type `page`, matching the endpoint |
-| FRAME_ID / --frame-id | Root `Page.getFrameTree` result `frameTree.frame.id` |
-| LOADER_ID / --loader-id | The same frame's original `loaderId` |
-| DOCUMENT_BACKEND_ID / --document-backend-id | `DOM.getDocument` with `{"depth":0,"pierce":false}` → `root.backendNodeId`, nodeType 9 |
-| ROOT_BACKEND_ID / --root-backend-id | An element chosen through the caller's existing authorized CDP node picker/selection; `DOM.describeNode` with `{"backendNodeId":ID,"depth":0,"pierce":false}` confirms it is an Element, nodeType 1 |
-
-These are **protocol metadata requests**, not a manual geometry/snapshot adapter.
-The helper does not take CSS selectors, names, screen coordinates, a browser-tab
-index, or another tool's node IDs. The root must have been selected in that original
-frame/loader/document. Never combine an old root with newly fetched loader metadata
-or guess a backend ID from a DOM `id`. Navigation/remount requires fresh authorized
-selection. The helper and worker revalidate continuity; they never repair stale refs.
-
-**If your current caller cannot supply this identity bundle, stop here.** UI Blueprint
-currently has no shipped first-connection/page/root discovery or picker command.
-This is an explicit utility bootstrap dependency, not evidence that the collector
-failed. Return the missing prerequisite to the UI Blueprint owner. Do not change
-PlayPhrase.me, add application IDs, start a different browser/profile, expose a debug
-port or install infrastructure merely to satisfy this guide. Such operations need
-their own established scope and are not part of this recipe.
-
-## 3. Run the existing supported helper
-
-Once the trusted caller has supplied all six identity variables, run:
-
-```sh
 node "$BUNDLE/web-geometry.cjs" \
-  --cli "$BUNDLE/uiblueprint" --worker "$BUNDLE/session-worker" \
-  --endpoint "${CDP_PAGE_WS:?existing authorized CDP page endpoint required}" \
-  --target-id "${TARGET_ID:?selected page target required}" \
-  --frame-id "${FRAME_ID:?original root frame required}" \
-  --loader-id "${LOADER_ID:?original document loader required}" \
-  --document-backend-id "${DOCUMENT_BACKEND_ID:?original document backend ID required}" \
-  --root-backend-id "${ROOT_BACKEND_ID:?selected element backend ID required}"
+  --connection "$CDP_BROWSER_WS" \
+  --url 'http://localhost:3000/#/clip-search?language=en' \
+  --component '#SELECTED_EXISTING_COMPONENT'
 ```
 
-You do **not** write connection/request JSON or copy Rust structs. The helper reads
-bounded identity metadata, creates those inputs in its own system-temp directory,
-and invokes the real Rust `observe`, `inspect --view design`, and `measure` commands.
-Its session/observation-scoped nonce is caller bookkeeping, not a fabricated browser
-identity. Rust collects and computes geometry; the helper formats the actual result.
-It removes its own temporary inputs after use, never the browser or application.
-No helper setting expands the fixed small-component profile: 32 output nodes,
-depth 8, 64 KiB output, 250 ms request deadline; collector cap 16 nodes and finite
-metadata/visit limits. This is not a whole-form/page completeness promise.
+Replace the illustrative URL and component with your explicitly selected existing
+page/component. CLI and worker default to siblings of the helper, so these are the
+only consumer inputs. For a checkout caller, --cli and --worker may override both
+with absolute paths from one matching verified bundle. Commands work from any cwd.
+Help/-h alone is offline; it performs no connection, executable check or temporary IO.
 
-## 4. Interpret the result and refusal
+## One-time connection prerequisite
 
-Successful reads print design inspection, reported component layout bounds,
-width/height measurements with original units/evidence, and coverage/observations.
-Names/roles are not requested by this geometry example. Layout bounds do not stand
-in for hit/visible regions, inferred padding or unavailable transforms.
+CDP_BROWSER_WS must be an **already authorized browser DevTools WebSocket**, for
+example the shape `ws://127.0.0.1:PORT/devtools/browser/ID` (numeric IPv6 loopback is
+also supported). It is a browser connection supplied by your permitted caller,
+not a page URL, page WebSocket or credentials. Do not guess a port. A URL does not
+grant browser access. If this connection is unavailable, the helper reports a fixed
+connection-required/connection-failure diagnostic: return that prerequisite to the
+UI Blueprint owner/caller. This guide does not prescribe browser/profile changes.
+No browser registry, profile/process scanning, app integration, launch, navigation,
+focus, input or model key is involved. In particular, do not modify PlayPhrase.me
+or expose a debug port merely to follow this guide.
 
-- Exit 0: complete result within the requested scope.
-- Exit 4: partial/unknown/unresolved. Useful sourced measurements may still be
-  present; inspect coverage. Never count missing facts as success.
-- Exit 2: invalid arguments/identity format or a bound refusal.
-- Exit 1: IO, connection setup timeout or unconfirmed owned cleanup.
-- Other product exits are preserved; diagnostics contain fixed codes, not UI text.
+Once that connection is supplied, per-observation runtime identities are obtained
+and checked by the helper, not by the user. The browser/page stays open after use.
 
-`stale_document`, `stale_target`, `target_unresolved` and `root_unresolved` require
-checking the exact current binding with the authorized caller; do not substitute
-another page or retry with weaker checks. Connection availability and permission
-must already exist. A new explicit request is a new operation, not automatic retry.
-The helper performs no action and produces no durable observation file for replay;
-for saved canonical data use the existing explicit Observe connection/request API.
+## Exact selection, not a first match
 
-## Current delivery boundary
+URL comparison uses WHATWG URL.href serialization, including query AND fragment.
+Scheme/host case and default ports normalize; path/query/SPA fragment differences
+remain meaningful. There is no title, substring or reordered-query match. HTTP(S)
+URLs only, without credentials, control characters or known credential query keys.
+Zero permitted page matches returns target_unresolved; multiple returns
+ambiguous_target. The helper never navigates to create a match.
 
-Safe help and packaging are qualified separately from live application acceptance.
-The existing helper has own-fixture first-use evidence; this guide does not claim
-that PlayPhrase.me has been observed through the new installed bundle. The USE-WEB1
-consumer stopped before Observe and still needs its authorized CDP identity handoff.
-A future bootstrap command must retain exact target selection, stale/ambiguous
-refusal, budgets/privacy and the existing Rust collector. Documentation cannot
-create those missing runtime capabilities.
+Component is one compound CSS selector: optional tag or *, plus #id, .class,
+[attribute] or [attribute="value"] terms. Examples: `#picker`, `input.search`,
+`[role="dialog"][aria-label="Director"]`. Simple ASCII identifiers and quoted
+Unicode attribute values are supported. Combinators/whitespace between terms,
+selector lists, escapes and pseudo selectors (including :has) are unsupported.
+Selector text is data passed separately from the fixed selection function.
+No IDs have to be added to the application; use its existing public selection.
+
+Search covers the root document's light DOM only, under a bounded complete walk.
+It does not enter frame/shadow/template contents. A selected boundary element or
+shadow host refuses. Multiple matches, missing roots or exhausted traversal refuse;
+finding one element before reaching a limit does not prove uniqueness.
+
+## What the operation does
+
+The helper derives the actual page target, root frame/loader/document and element
+backend ID, retaining the original document/root/parent objects. It builds private
+temporary connection/request records and calls the installed Rust collector.
+After Observe it checks URL/page uniqueness, document identity and the SAME selected
+root again before printing results. Navigation, remount, reparent or changed selector
+binding refuses; it never substitutes a new same-label/selector element.
+
+All geometry comes from the canonical Rust observation/analysis. Output contains
+design inspection, sourced width/height and component layout bounds, units/evidence,
+coverage and unavailable fields. Names/roles are not requested by this geometry
+profile. Layout bounds do not prove hit/visible bounds, padding or atomicity.
+Temporary files and remote handles/connections are owned and cleaned; source apps
+and their data are not cleanup targets. This caller creates no durable observation
+file; existing low-level Observe remains available for explicitly managed saved data.
+
+## Limits and outcomes
+
+Preparation:10s overall,2s per CDP call,32 calls,128 targets,64KiB per text reply,
+256KiB total per connection and16 events. Both selection walks have at most2048
+visited nodes, depth64 and1s each. --max-visited-nodes may lower (not raise) the2048
+limit. Browser/WebSocket internals are opaque tooling costs, not an RSS guarantee.
+Rust collection retains32 output nodes/depth8/64KiB/250ms, collector16 nodes/256
+visits and existing host/transport bounds. These limits do not promise whole-form
+completeness; a large selected subtree can still return a truthful partial/refusal.
+
+- 0: complete result within requested scope.
+- 4: partial, unresolved/ambiguous/stale, unsupported source scope or deadline.
+  Useful dimensions can accompany partial output; inspect coverage and unknowns.
+- 2: invalid/missing arguments, unsupported selector syntax or a quota refusal.
+- 1: IO or unconfirmed cleanup. Other Rust exits retain their meanings.
+
+Preparation/revalidation failures print no result. Diagnostics use fixed codes,
+never raw URLs/selectors/UI text. Make a new explicit request only under current
+authority; there is no automatic retry, relaxed guard or source stabilization.
+
+## Legacy exact-ID mode
+
+The previous invocation remains available and cannot be mixed with the new mode:
+--cli/--worker, --endpoint (page WebSocket), --target-id, --frame-id, --loader-id,
+--document-backend-id and --root-backend-id. Every identity must come from the SAME
+original document/selection. See --help for the complete signature. Legacy mode
+also constructs its own temporary connection/request JSON.
+
+## Qualification boundary
+
+The installed URL+component route is checked on the existing controlled F01 fixture,
+with independent geometry and failure/state/cleanup checks. That is not real
+PlayPhrase.me acceptance. The USE-WEB1 owner performs the independent Director retry
+with its already permitted browser connection and actual URL/component.

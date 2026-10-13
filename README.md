@@ -13,12 +13,13 @@ python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 "$BUNDLE/uiblueprint" --help
 ```
 
-For a first external Web observation, start with the
-[Web first-use guide](docs/development/web-first-use.md). New Web/combined bundles
-include `web-geometry.cjs` and `WEB-FIRST-USE.md`; `node "$BUNDLE/web-geometry.cjs" --help`
-is safe offline. The helper prepares connection/request JSON, but still requires
-an already authorized CDP page and exact selected-root identity. Page/root discovery
-is not currently shipped; an open browser or URL alone is insufficient.
+For a first external Web observation, use the
+[URL + component guide](docs/development/web-first-use.md). The optional shipped
+Node24+ caller prepares runtime identities and JSON internally:
+`node "$BUNDLE/web-geometry.cjs" --connection "$CDP_BROWSER_WS" --url "$PAGE_URL" --component "$COMPONENT_SELECTOR"`.
+The browser connection must already be authorized; there is no browser launch,
+profile setup or app integration. Exact URL/component ambiguity refuses. Core and
+low-level Rust Web commands remain Node-free.
 
 Choose `core`, `web`, `native` or `combined`. Requires an already prepared pinned
 Rust toolchain/cache; Native adds Swift/Xcode. Current tested host: arm64 macOS

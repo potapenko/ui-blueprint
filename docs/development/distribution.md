@@ -161,10 +161,12 @@ New Web/combined bundles include `web-geometry.cjs` and `WEB-FIRST-USE.md`.
 Follow the [first-use guide](web-first-use.md), or open its bundled Markdown copy,
 then run `node "$BUNDLE/web-geometry.cjs" --help`. Node.js 24+ is optional helper
 tooling, not a new Rust runtime/build prerequisite. No browser/profile is launched
-or changed. The helper prepares connection/request inputs for an exact existing CDP
-binding; it does not discover/select targets or replace the Rust collector with
-manual extraction. Missing endpoint or selection is a named prerequisite, not a
-request to read Rust source or modify the application.
+or changed. The caller now selects a unique existing page by exact URL and a bounded unique
+root-document component selector, derives/revalidates runtime identities and prepares
+connection/request inputs internally. Supply only an already-authorized loopback CDP
+browser WebSocket, URL and selector; sibling CLI/worker paths default automatically.
+No app change, launch/profile setup, guessed port or manual geometry extraction.
+Core/low-level Web remain Node-free. Legacy exact-ID mode stays available.
 
 Bundle format `ui-blueprint-local-2` adds those two owned files only for Web/combined.
 The current manager also verifies/removes complete legacy `ui-blueprint-local-1`

@@ -1,5 +1,5 @@
-// Developer example only: explicit existing CDP target -> public Rust CLI.
-// No browser launch/navigation, selector scan, application input or JS geometry.
+// Optional shipped first-use caller: authorized CDP + URL/component -> Rust CLI.
+// Bounded selection only; no browser launch/navigation, app input or JS geometry.
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const os = require('node:os');
@@ -8,54 +8,44 @@ const {spawn} = require('node:child_process');
 const assert = require('node:assert/strict');
 
 const FRAME=65536;
-const HELP=`UI Blueprint Web geometry helper (Node.js 24+)
+const HELP=`UI Blueprint Web geometry helper (optional Node.js 24+ caller)
 
-Usage: node web-geometry.cjs --cli ABSOLUTE_CLI --worker ABSOLUTE_WORKER
+URL + selected component, no manual JSON or runtime IDs:
+  node "$BUNDLE/web-geometry.cjs" --connection "$CDP_BROWSER_WS" \\
+    --url 'http://127.0.0.1:PORT/page#route' --component '#selected-component'
+
+--connection  Already authorized ws://127.0.0.1:PORT/devtools/browser/ID
+              (numeric IPv6 loopback also supported). No default/guessed port.
+--url         Exact existing http(s) URL; query and SPA fragment participate.
+              Multiple matching pages refuse; this never navigates a page.
+--component   One compound selector: optional tag/*, #id, .class, [attr],
+              [attr="value"]. No combinators, lists, escapes or pseudo selectors.
+              Unique root-document light-DOM match only; no frame/shadow descent.
+--max-visited-nodes  Optional lower selection bound, 1..2048 (default 2048).
+--cli / --worker     Optional matching absolute binaries (defaults: siblings).
+
+Core and low-level guarded Web CLI remain Node-free. This caller does not discover
+browsers, scan profiles, launch/reconfigure, navigate/focus, or change applications.
+An already authorized connection is required; URL alone is not authority.
+Selection is bounded metadata, not JS geometry or a manual snapshot adapter.
+Real Rust Observe -> Inspect -> Measure(width,height) supplies facts and coverage.
+Preparation uses a 10s deadline; collection keeps 32 nodes/depth8/64KiB/250ms
+(collector cap16 nodes). Large/unsupported scopes refuse rather than broaden.
+
+Legacy exact-ID mode is unchanged (cannot mix modes):
+  --cli ABSOLUTE_CLI --worker ABSOLUTE_WORKER
   --endpoint ws://127.0.0.1:PORT/devtools/page/TARGET --target-id TARGET
   --frame-id FRAME --loader-id LOADER --document-backend-id DOCUMENT
   --root-backend-id ELEMENT
 
-Required inputs, from ONE currently authorized CDP page/document:
-  --cli                  Absolute Web-enabled uiblueprint executable.
-  --worker               Absolute matching session-worker from the same bundle.
-  --endpoint             Existing numeric-loopback ws page endpoint; no browser
-                         endpoint, remote host, credentials, query or fragment.
-  --target-id            Exact CDP page target ID, matching the endpoint.
-  --frame-id             Root frame ID from Page.getFrameTree.
-  --loader-id            Original loaderId from that same frame/document.
-  --document-backend-id  DOM.getDocument(depth:0,pierce:false) root.backendNodeId.
-  --root-backend-id      Selected Element backendNodeId in that document, verified
-                         with DOM.describeNode(depth:0,pierce:false).
-
-Example after an authorized CDP caller has supplied those identities:
-  node "$BUNDLE/web-geometry.cjs" --cli "$BUNDLE/uiblueprint" \\
-    --worker "$BUNDLE/session-worker" --endpoint "$CDP_PAGE_WS" \\
-    --target-id "$TARGET_ID" --frame-id "$FRAME_ID" --loader-id "$LOADER_ID" \\
-    --document-backend-id "$DOCUMENT_BACKEND_ID" --root-backend-id "$ROOT_BACKEND_ID"
-
-You do not hand-write connection/request JSON: this helper prepares temporary
-inputs after identity revalidation, runs Rust Observe -> Inspect -> Measure
-(width/height), then removes only its own non-image inputs. Geometry is computed
-by Rust, not extracted or calculated by this script. Output includes source
-coverage, units and evidence. Fixed small-component profile: 32 output nodes,
-depth 8, 64 KiB, 250 ms request deadline (collector cap 16 nodes).
-
-Prerequisite: an already authorized CDP page connection AND exact selected-root
-identity. This helper revalidates them; it does not discover/select tabs or roots,
-launch a browser, change a profile, navigate, focus or act on an application.
-Do not invent IDs, use IDs from another tool, or combine an old root with a new
-loader after navigation. If no supported caller provides this binding, stop:
-the missing first-connection bootstrap must be supplied by UI Blueprint's owner.
-No app changes, browser/profile setup recipe or manual snapshot adapter is implied.
-
-Exit: 0 complete; 4 partial/unknown/unresolved (inspect output); 2 invalid/bounded
-input; 1 IO/cleanup failure; other product exits are preserved. Never retry with
-weakened identity/limits. --help and -h alone exit 0 without connecting or file IO.
-See WEB-FIRST-USE.md in Web/combined bundles, or docs/development/web-first-use.md.
+Exit 0 complete; 4 partial/unresolved/ambiguous/stale/deadline; 2 invalid or bound;
+1 IO/cleanup failure; underlying Rust exits preserved. Inspect partial results.
+No automatic retry or guessed identity. --help/-h alone performs no connection,
+executable check or temporary-file creation. See WEB-FIRST-USE.md.
 `;
 function failure(code,exit=4){return Object.assign(new Error(code),{code,exit});}
-function bounded(promise,ms,code){
-  let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(failure(code,1)),ms);})]).finally(()=>clearTimeout(timer));
+function bounded(promise,ms,code,exit=1){
+  let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(failure(code,exit)),ms);})]).finally(()=>clearTimeout(timer));
 }
 async function argumentsFor(argv){
   const allowed=new Set(['--cli','--worker','--endpoint','--target-id','--frame-id','--loader-id','--document-backend-id','--root-backend-id']);
@@ -124,6 +114,198 @@ async function metadata(args){
   }
 }
 
+function normalizePageUrl(value){
+  if(typeof value!=='string'||Buffer.byteLength(value)>4096||/[\x00-\x1f\x7f]/.test(value))throw failure('invalid_page_url',2);
+  let url;try{url=new URL(value);}catch{throw failure('invalid_page_url',2);}
+  if(!['http:','https:'].includes(url.protocol)||url.username||url.password)throw failure('invalid_page_url',2);
+  const fragment=url.hash.slice(1),fragmentQuery=fragment.includes('?')?fragment.slice(fragment.indexOf('?')+1):fragment;
+  for(const query of [url.searchParams,new URLSearchParams(fragmentQuery.includes('=')?fragmentQuery:'')])
+    for(const key of query.keys())if(/token|secret|password|authorization|api[_-]?key|signature/i.test(key))throw failure('private_page_url',2);
+  return url.href;
+}
+function parseFirstUse(argv){
+  const allowed=new Set(['--connection','--url','--component','--max-visited-nodes','--cli','--worker']),args={};
+  for(let i=0;i<argv.length;i+=2){
+    if(!allowed.has(argv[i])||argv[i] in args||!argv[i+1])throw failure('invalid_arguments',2);
+    args[argv[i]]=argv[i+1];
+  }
+  if(!args['--connection'])throw failure('connection_required',2);
+  if(('--cli' in args)!==('--worker' in args))throw failure('matching_executables_required',2);
+  let connection;try{connection=new URL(args['--connection']);}catch{throw failure('invalid_connection',2);}
+  if(Buffer.byteLength(args['--connection'])>1024||connection.protocol!=='ws:'||!['127.0.0.1','[::1]'].includes(connection.hostname)
+    ||!connection.port||connection.username||connection.password||connection.search||connection.hash
+    ||!/^\/devtools\/browser\/[A-Za-z0-9_-]{1,256}$/.test(connection.pathname))throw failure('invalid_connection',2);
+  const url=normalizePageUrl(args['--url']),selector=args['--component'];
+  // Deliberately narrow compound grammar: native matches never scans relatives/:has.
+  const compound=/^(?:[A-Za-z][A-Za-z0-9_-]*|\*)?(?:(?:[#.][A-Za-z_][A-Za-z0-9_-]*)|(?:\[[A-Za-z_][A-Za-z0-9_-]*(?:=(?:"[^"\\\]\r\n]*"|'[^'\\\]\r\n]*'|[A-Za-z0-9_-]+))?\]))*$/;
+  if(typeof selector!=='string'||!selector||Buffer.byteLength(selector)>512||/[\x00-\x1f\x7f]/.test(selector)||!compound.test(selector))throw failure('unsupported_selector',2);
+  const cap=args['--max-visited-nodes']??'2048';
+  if(!/^[1-9][0-9]*$/.test(cap)||Number(cap)>2048)throw failure('invalid_selection_limit',2);
+  return {connection:connection.href,url,selector,maxVisited:Number(cap),
+    cli:args['--cli']??path.join(__dirname,'uiblueprint'),worker:args['--worker']??path.join(__dirname,'session-worker')};
+}
+
+// Bounded control-plane metadata, not a graph parser or browser launcher.
+class BootstrapCdp{
+  constructor(endpoint,deadline,budget={calls:0,events:0}){
+    this.budget=budget;
+    this.deadline=deadline;this.sequence=0;this.bytes=0;this.events=0;this.pending=null;this.fatal=null;
+    this.socket=new WebSocket(endpoint);
+    this.closed=new Promise(resolve=>this.socket.addEventListener('close',resolve,{once:true}));
+    this.ready=new Promise((resolve,reject)=>{
+      this.socket.addEventListener('open',resolve,{once:true});
+      this.socket.addEventListener('error',()=>reject(failure('cdp_connection_failed',1)),{once:true});
+      this.socket.addEventListener('close',()=>reject(failure('cdp_connection_closed',1)),{once:true});
+    });
+    const fail=error=>{this.fatal??=error;this.pending?.reject(error);};
+    this.socket.addEventListener('error',()=>fail(failure('cdp_connection_failed',1)));
+    this.socket.addEventListener('close',()=>fail(failure('cdp_connection_closed',1)));
+    this.socket.addEventListener('message',event=>{
+      if(typeof event.data!=='string')return fail(failure('cdp_invalid_reply'));
+      const bytes=Buffer.byteLength(event.data);this.bytes+=bytes;
+      if(bytes>65536||this.bytes>262144)return fail(failure('bootstrap_limit',2));
+      let reply;try{reply=JSON.parse(event.data);}catch{return fail(failure('cdp_invalid_reply'));}
+      if(!reply||typeof reply!=='object'||Array.isArray(reply))return fail(failure('cdp_invalid_reply'));
+      if(!('id' in reply)){if(++this.budget.events>16)fail(failure('bootstrap_limit',2));return;}
+      if(!this.pending||reply.id!==this.pending.id)return fail(failure('cdp_uncorrelated_reply'));
+      if(reply.error)this.pending.reject(failure('target_unresolved'));
+      else this.pending.resolve(reply.result);
+    });
+  }
+  remaining(){const left=this.deadline-performance.now();if(left<=0)throw failure('bootstrap_deadline');return Math.min(2000,left);}
+  static async open(endpoint,deadline,budget){
+    const owner=new BootstrapCdp(endpoint,deadline,budget);
+    try{await bounded(owner.ready,owner.remaining(),'bootstrap_deadline',4);return owner;}
+    catch(error){await owner.close();throw error;}
+  }
+  async send(method,params={}){
+    if(this.fatal)throw this.fatal;
+    if(++this.budget.calls>32)throw failure('bootstrap_limit',2);
+    const id=++this.sequence,wire=JSON.stringify({id,method,params});
+    if(Buffer.byteLength(wire)>16384)throw failure('bootstrap_limit',2);
+    // Teardown gets its own bounded allowance; it performs no collection.
+    const timeout=method==='Runtime.releaseObjectGroup'?1000:this.remaining();
+    try{return await bounded(new Promise((resolve,reject)=>{
+      this.pending={id,resolve,reject};this.socket.send(wire);
+    }),timeout,'bootstrap_deadline',4);}finally{this.pending=null;}
+  }
+  async close(){
+    if(!this.closeStarted){this.closeStarted=true;this.socket.close();}
+    await bounded(this.closed,1000,'cdp_cleanup_unconfirmed');
+  }
+}
+
+// Fixed source code, invoked in an isolated world. Selector/options are JSON data.
+function selectComponent(options){
+  'use strict';
+  const expected=this instanceof Document?this:this.document;
+  if(expected!==document)return {status:'stale'};
+  const end=performance.now()+options.remainingMs;
+  let node=expected,depth=0,visited=0,found=null;
+  while(node){
+    if(performance.now()>=end)return {status:'timeout'};
+    if(visited>=options.maxVisited)return {status:'incomplete'};
+    visited++;
+    if(node instanceof Element&&Element.prototype.matches.call(node,options.selector)){
+      if(found)return {status:'ambiguous'};
+      if(node.shadowRoot||['iframe','frame','template','slot'].includes(node.localName))return {status:'unsupported'};
+      found=node;
+    }
+    const child=node.firstChild;
+    if(child){if(depth>=64)return {status:'incomplete'};node=child;depth++;continue;}
+    while(node!==expected&&!node.nextSibling){
+      if(performance.now()>=end)return {status:'timeout'};
+      node=node.parentNode;depth--;
+    }
+    if(node===expected)break;
+    node=node.nextSibling;
+  }
+  if(!found)return {status:'missing'};
+  if(!(this instanceof Document))return {status:found===this.root&&found.isConnected&&found.ownerDocument===expected&&found.parentNode===this.parent?'selected':'stale'};
+  return {status:'selected',root:found,document:expected,parent:found.parentNode};
+}
+function heldCurrent(){
+  'use strict';
+  return {current:this.document===document&&this.root instanceof Element&&this.root.isConnected
+    &&this.root.ownerDocument===document&&this.root.parentNode===this.parent};
+}
+
+async function openBootstrap(options){
+  const deadline=performance.now()+10000,group=`uib-first-use-${crypto.randomUUID()}`,budget={calls:0,events:0};
+  let browser=null,page=null,groupOwned=false,closed=false;
+  const code={ambiguous:'ambiguous_component',missing:'component_unresolved',incomplete:'selection_limit',timeout:'selection_deadline',unsupported:'unsupported_scope',stale:'stale_target'};
+  function selected(status){if(status!=='selected')throw failure(typeof status==='string'&&Object.hasOwn(code,status)?code[status]:'cdp_invalid_reply',status==='incomplete'?2:4);}
+  function identity(value){if(typeof value!=='string'||!(/^[A-Za-z0-9_-]{1,256}$/).test(value))throw failure('cdp_invalid_reply');return value;}
+  async function target(){
+    const result=await browser.send('Target.getTargets');
+    if(!Array.isArray(result?.targetInfos))throw failure('cdp_invalid_reply');
+    if(result.targetInfos.length>128)throw failure('bootstrap_limit',2);
+    const matches=result.targetInfos.filter(t=>{
+      if(t?.type!=='page'||typeof t.url!=='string')return false;
+      try{return normalizePageUrl(t.url)===options.url;}catch{return false;}
+    });
+    if(matches.length!==1)throw failure(matches.length?'ambiguous_target':'target_unresolved');
+    return identity(matches[0].targetId);
+  }
+  async function metadata(){
+    const {targetInfo}=await page.send('Target.getTargetInfo');
+    let sameUrl=false;try{sameUrl=normalizePageUrl(targetInfo?.url)===options.url;}catch{}
+    if(targetInfo?.targetId!==args.target||targetInfo?.type!=='page'||!sameUrl)throw failure('stale_target');
+    const {frameTree}=await page.send('Page.getFrameTree');
+    const frame=frameTree?.frame;
+    const {root}=await page.send('DOM.getDocument',{depth:0,pierce:false});
+    if(root?.nodeType!==9||!Number.isInteger(root.backendNodeId)||root.backendNodeId<=0||root.backendNodeId>2147483647)throw failure('cdp_invalid_reply');
+    return {surface:{id:identity(frame?.id),generation:identity(frame?.loaderId)},document:root.backendNodeId};
+  }
+  async function invoke(objectId,fn,byValue){
+    const result=await page.send('Runtime.callFunctionOn',{objectId,functionDeclaration:fn.toString(),
+      arguments:[{value:{selector:options.selector,maxVisited:options.maxVisited,remainingMs:Math.min(1000,page.remaining())}}],
+      // Chromium145 rejects these fixed readers in debug side-effect mode (F01).
+      // They only read native DOM metadata; input is arguments, never source code.
+      returnByValue:byValue,silent:true,userGesture:false,awaitPromise:false,throwOnSideEffect:false,objectGroup:group});
+    if(result?.exceptionDetails||!result?.result)throw failure('selection_unavailable');
+    return result.result;
+  }
+  async function close(){
+    if(closed)return;closed=true;let bad=false;
+    if(page&&groupOwned){try{await page.send('Runtime.releaseObjectGroup',{objectGroup:group});}catch{bad=true;}}
+    for(const owner of [page,browser])if(owner){try{await owner.close();}catch{bad=true;}}
+    if(bad)throw failure('bootstrap_cleanup_unconfirmed',1);
+  }
+  let args,binding,container;
+  try{
+    browser=await BootstrapCdp.open(options.connection,deadline,budget);
+    const id=await target(),endpoint=new URL(options.connection);endpoint.pathname=`/devtools/page/${id}`;
+    args={cli:options.cli,worker:options.worker,target:id,endpoint:endpoint.href};
+    page=await BootstrapCdp.open(args.endpoint,deadline,budget);binding=await metadata();
+    const {executionContextId}=await page.send('Page.createIsolatedWorld',{frameId:binding.surface.id,worldName:'ui-blueprint-first-use',grantUniveralAccess:false});
+    if(!Number.isInteger(executionContextId)||executionContextId<=0)throw failure('cdp_invalid_reply');
+    groupOwned=true;
+    const document=await page.send('Runtime.evaluate',{expression:'document',contextId:executionContextId,returnByValue:false,silent:true,objectGroup:group});
+    if(document?.exceptionDetails||typeof document?.result?.objectId!=='string')throw failure('cdp_invalid_reply');
+    const result=await invoke(document.result.objectId,selectComponent,false);
+    if(typeof result.objectId!=='string')throw failure('cdp_invalid_reply');container=result.objectId;
+    const properties=await page.send('Runtime.getProperties',{objectId:container,ownProperties:true,accessorPropertiesOnly:false,generatePreview:false});
+    if(!Array.isArray(properties?.result)||properties.result.length>4)throw failure('cdp_invalid_reply');
+    const status=properties.result.find(p=>p.name==='status')?.value?.value;selected(status);
+    const root=properties.result.find(p=>p.name==='root')?.value?.objectId;
+    if(typeof root!=='string')throw failure('cdp_invalid_reply');
+    const described=await page.send('DOM.describeNode',{objectId:root,depth:0,pierce:false});
+    const backend=described?.node?.backendNodeId;
+    if(described?.node?.nodeType!==1||!Number.isInteger(backend)||backend<=0||backend>2147483647)throw failure('cdp_invalid_reply');
+    args={...args,surface:binding.surface,document:binding.document,root:backend};
+    const current=await metadata();
+    if(JSON.stringify(current)!==JSON.stringify(binding)||(await invoke(container,heldCurrent,true)).value?.current!==true)throw failure('stale_target');
+    return {args,binding,close,remaining:()=>{
+      const left=deadline-performance.now();if(left<=0)throw failure('bootstrap_deadline');return left;
+    },revalidate:async()=>{
+      if(await target()!==args.target)throw failure('stale_target');
+      if(JSON.stringify(await metadata())!==JSON.stringify(binding))throw failure('stale_target');
+      selected((await invoke(container,selectComponent,true)).value?.status);
+    }};
+  }catch(error){await close();throw error;}
+}
+
 function inputs(args,binding){
   const nonce=crypto.randomUUID(),mib=1048576;
   const target={id:args.target,generation:nonce},sessionId=`web-geometry-${nonce}`,scope='selected-component';
@@ -147,26 +329,29 @@ function inputs(args,binding){
   return {connection,request};
 }
 
-async function example(args){
-  const binding=await metadata(args),input=inputs(args,binding);
+async function example(args,bootstrap=null){
+  const binding=bootstrap?bootstrap.binding:await metadata(args),input=inputs(args,binding);
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-web-geometry-')),owned=[];let child=null,closed=null;
   const started=performance.now();
   async function save(name,bytes){const file=path.join(temp,name),handle=await fs.open(file,'wx',0o600);owned.push(file);try{await handle.writeFile(bytes);}finally{await handle.close();}return file;}
   async function json(name,value){return save(name,JSON.stringify(value));}
   async function call(argv){
     if(performance.now()-started>=120000)throw failure('example_deadline',1);
+    const bracket=bootstrap&&argv[0]==='observe';
+    const timeout=bracket?Math.min(5000,bootstrap.remaining()):5000;
     child=spawn(args.cli,argv,{stdio:['ignore','pipe','pipe']});const chunks=[];let total=0,diagnostics=0,over=false;
     child.stdout.on('data',chunk=>{total+=chunk.length;if(total>FRAME){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
     child.stderr.on('data',chunk=>{diagnostics+=chunk.length;if(diagnostics>FRAME){over=true;child.kill('SIGKILL');}});
     closed=new Promise((resolve,reject)=>{child.once('error',()=>reject(failure('cli_spawn_failed',1)));child.once('close',(code,signal)=>resolve({code,signal}));});
-    const result=await bounded(closed,5000,'cli_timeout');
+    const result=await bounded(closed,timeout,bracket?'bootstrap_deadline':'cli_timeout',bracket?4:1);
     if(over||result.signal)throw failure('cli_output_or_cleanup_failure',1);
     return {code:result.code,bytes:Buffer.concat(chunks)};
   }
   try{
     const connection=await json('connection.json',input.connection),request=await json('request.json',input.request);
     const observed=await call(['observe','--connection',connection,'--request',request,'--worker',args.worker,'--max-input-bytes','131072','--max-output-bytes',String(FRAME)]);
-    if(![0,4].includes(observed.code)||!observed.bytes.length)throw failure(`observe_refused_exit_${observed.code}`,[0,1,2,3,4,5].includes(observed.code)?observed.code:1);
+    if(![0,4].includes(observed.code)||!observed.bytes.length)throw failure(`observe_refused_exit_${observed.code}`,[1,2,3,4,5].includes(observed.code)?observed.code:1);
+    if(bootstrap){await bootstrap.revalidate();await bootstrap.close();}
     const source=JSON.parse(observed.bytes),snapshot=source.artifact?.data?.result?.data;
     if(source.artifact?.kind!=='channel_response'||source.artifact.data.result.status!=='observed'||!snapshot)throw failure('snapshot_unavailable');
     const file=await save('observe.json',observed.bytes),key={namespace:'web.dom',key:String(args.root)};
@@ -212,7 +397,21 @@ async function main(){
   if(process.argv.length===3&&['--help','-h'].includes(process.argv[2])){
     process.stdout.write(HELP);return;
   }
-  try{process.exitCode=await example(await argumentsFor(process.argv.slice(2)));}
-  catch(error){console.error(error.code&&Number.isInteger(error.exit)?error.code:'example_io_or_validation_failure');process.exitCode=error.exit??1;}
+  try{
+    const argv=process.argv.slice(2);
+    if(argv.includes('--endpoint'))process.exitCode=await example(await argumentsFor(argv));
+    else{
+      const options=parseFirstUse(argv);
+      for(const key of ['cli','worker']){
+        if(!path.isAbsolute(options[key])||!(await fs.stat(options[key])).isFile())throw failure('invalid_executable',2);
+        await fs.access(options[key],require('node:fs').constants.X_OK);
+      }
+      const bootstrap=await openBootstrap(options);
+      try{process.exitCode=await example(bootstrap.args,bootstrap);}
+      finally{await bootstrap.close();}
+    }
+  }
+  catch(error){const code=error.code&&Number.isInteger(error.exit)?error.code:'example_io_or_validation_failure';console.error(code==='connection_required'?'connection_required: provide an already authorized loopback CDP browser WebSocket via --connection; see --help':code);process.exitCode=error.exit??1;}
 }
 if(require.main===module)main();
+module.exports={parseFirstUse,normalizePageUrl,selectComponent,heldCurrent,openBootstrap,BootstrapCdp,example};
