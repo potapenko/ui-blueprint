@@ -398,3 +398,44 @@ Source-current master, own-path checkpoint/push under existing Git lock; all ima
 in system temp retained, no branches/worktrees/new persistent directories or nested
 agents. Economy: one shared recurring overview failure across Native and Web; existing
 saved inputs and accepted binary evidence avoid fresh runtime collection or broad QA.
+
+## USE-WEB-SCOPE2 — whole selected chooser within the existing request envelope
+
+Consumer evidence `/tmp/uib-scope1-vnenkhh4/handoff.json` ties one useful whole
+component to source89ab294 and the saved CW21 failure. The chooser has24 source
+Elements (including STYLE), maximum element depth3; the separately observed provider
+list has15. Whole-root acquisition returned resource_limit/selection_incomplete,
+visited25 including text nodes, no publication and confirmed cleanup. The fixed
+collector16-element selection cap, reconciled with source shape and request32,
+prevents same-observation relationships across copy/list/guest action. This is a
+specific capability gap, not a new full-runtime count or a rect-resync diagnosis.
+
+User authority is the approved standalone selected-component utility and corpus-driven
+improvement goal. Agent-selected Evolve delta: align only URL-mode collector.max_nodes
+with the already explicit request.max_elements=32. Register WEB-FIRST-USE@6 before
+behavior edits. Thirty-two is a bounded caller-profile choice accommodating the known
+24-element component, not a universal count or source fact. Keep the existing request
+32/depth8/128KiB/1000ms and collector256 visits, bootstrap/revalidation limits, fields,
+identity, privacy, cleanup and old exact-ID profile. No new flags, pruning, merging
+subfragment observations, automatic retries or dynamic budget growth. Other bounds
+may still refuse a request; do not raise them to obtain success in this packet.
+
+I02 owns the complete finite shipping task: helper profile and directly affected
+existing checks, WEB-FIRST-USE/direct route links/usage documentation and one receipt
+`receipts/consumer-web-scope2.md`. No Rust/collector implementation/Host/wire/dependency,
+app source, export or unrelated product change. Reuse the matching abd8878 pair in a
+fresh task-temp candidate without rebuilding or overwriting accepted bundles.
+Focused proof includes an actual owned24-element F01 selection through unchanged
+Observe bytes/validator/measure/export, exact node preservation and useful unknowns,
+new32-element selection boundary/refusal beyond it, unchanged remaining budgets,
+privacy, identity revalidation and cleanup. Legacy and <=16-node behavior stay
+protected; relevant fixed inputs use exact-byte comparison without live-identity
+claims. Return any actual different resource dependency, not another hidden change.
+
+Same Web consumer owns the later whole chooser runtime validation and complete
+corpus cycle under its existing safe public Login/close route, with no provider
+activation/login submission/account write. Static24 and visited25 are not that proof.
+One focused changed-profile review, no repeat of accepted ordinal/RECT2 internals.
+Current branch, scoped commit/push and existing Git lock; no nested agents, worktrees,
+new persistent directories or image deletion. Economy: one existing limit choice
+blocks a specific useful complete component; reuse all accepted lower-layer work.
