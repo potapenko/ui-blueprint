@@ -7,6 +7,8 @@ engine works with UI structure and geometry to measure spacing, check alignment,
 and compare states. The same observations become ImageGen prompts for annotated
 blueprints that help people understand the interface and discuss changes.
 
+[Install with Codex or Claude Code →](#install-through-your-agent)
+
 ![UI Blueprint of the PlayPhrase.me Director picker, with control dimensions and spacing details](docs/readme-director.png)
 
 *An observed PlayPhrase.me Director picker: the open popup, search results,
@@ -111,33 +113,36 @@ still need review and are not pixel-exact exports.
 
 ## Install through your agent
 
-**Preparation stage:** the [Codex skill](skills/ui-blueprint/SKILL.md) is available
-in this repository. Combined CLI + skill installation is not integrated yet, and
-no public release is advertised here. The following is the intended installation
-prompt; it must stop if a matching published release is unavailable.
+Copy one prompt into **Codex** or **Claude Code** with access to your Mac's files
+and terminal. The linked guide contains the installation steps and checks;
+the skill teaches the agent how to use the utility afterward.
+
+**Codex**
 
 ```text
-Install UI Blueprint and its ui-blueprint skill for Codex from
-https://github.com/potapenko/ui-bluprint.
-Read the distribution instructions and use one matching published release for
-the CLI and skill. I authorize the managed UI Blueprint files under ~/.local
-and the skill directory ~/.codex/skills/ui-blueprint. Preserve unrelated or
-locally modified files. Verify the bundle and run its saved-data example.
-Do not build from source, change shell profiles or grant UI permissions.
-If combined installation is not ready or no matching release is published,
-stop and report that prerequisite without installing a partial set.
+Install UI Blueprint and its Codex skill following https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
+Use ~/.local for the utility and ~/.agents/skills/ui-blueprint for the skill.
+Verify the bundled example and load the skill.
 ```
 
-For a custom Codex home or installation location, replace the two destinations in
-the prompt explicitly. The skill contains conditional instructions for saved-data
-analysis, Web, macOS and drawing export. It needs a compatible executable bundle;
-copying the skill alone does not install the utility or grant access to an app.
-See [installation readiness and acceptance](docs/development/distribution.md#agent-skill-and-prompt-installation).
+**Claude Code**
 
-Once the matching bundle and skill are installed and discovered by Codex, try:
+```text
+Install UI Blueprint and its Claude Code skill following https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
+Use ~/.local for the utility and ~/.claude/skills/ui-blueprint for the skill.
+Verify the bundled example and load the skill.
+```
 
-> Use $ui-blueprint to measure the gaps between these controls and explain any
-> missing data. Use the authorized browser connection and selected component.
+**Release status:** no public release is available yet. These prompts are prepared
+for the first matching CLI + skill release; the agent must stop before installing
+if that release is unavailable. Claude Code's discovery path is documented, but
+actual host discovery is not yet verified.
+
+[Installation guide, manual commands, and update prompt →](docs/install.md)
+
+After setup, ask: “Use UI Blueprint to measure the gaps between these controls.”
+The agent selects the relevant skill instructions. Live observation still needs
+access to the particular app or browser; installation does not grant that access.
 
 ## Try it locally
 
