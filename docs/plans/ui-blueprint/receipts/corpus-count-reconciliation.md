@@ -13,9 +13,9 @@ fixture/component-preview origin;143 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:524 primary images =520 first outputs +4 rerolls;
-76 separate repair-validation images;4 unqualified reference attempts
+77 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-604 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+605 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -978,3 +978,26 @@ new gaps. The same export owner receives the finite repair after its current tas
 Totals:200eligiblecases (78Web+122Native;57fixture+143non-fixture),41primary
 batches,524primaryimages (520first+4rerolls),76repairimages,4unqualifiedimages,
 604generatedimages. Remaining800; originalA02/B07/C04 uncertainties unchanged.
+
+## USE-NATIVE-CAPTIONS1 — accepted human-caption repair
+
+Source4ac37a7b558e73636100b626914fc13034492fd9, finalreceipt5a4f7a9;
+[receipt](consumer-native-captions1.md). One D01 repair PNG1672×941, no newcase/reroll.
+Neutral `$T/uib-NATIVE-CAPTIONS1-f7r0vndc/neutral-image-handoff.json`, SHA
+767dd9a1237d7efecc3039621370f5d29ea10c73dd933686b4d4d8326ce398ba; pausedindex
+preserved separately. ImageSHA2d60e7c0f15c81b19db306106108695f92ed348e52a3d60200d6a0929506fa17.
+
+CV2initial01a13650-4613-73b0-b51f-d385b9f54bb4/final
+01a13652-3f38-75b3-9183-5ad1cdd8bb40 and CT2initial
+01a13650-4a93-7851-8527-11232ffdfc94/final
+01a13652-aeb4-78b1-bb39-45b39d1efcf5 accept targeted repair. All16owner captions
+distinct; group ordinals correspond to recorded parents without creating semantic
+identity. Literal Unicode is preserved by human JSON escaping, separate unchanged
+machine formatter. GuestTour/Cast/CW14/Reels machineJSON/assignments are unchanged.
+Unicode scalar/variation-selector equality is text evidence, not a pixel claim.
+All30D01scalars/pt/anchors/emptyAXframes pass. Fullimage stillFAIL from colored
+emoji; extra window subtitle is a printable-scope residual, not new geometry/state
+failure. No rerun of accepted builds/tests on resume or final reconciliation.
+
+Totals200cases,524primaryimages,77repairimages,4unqualifiedimages,605generated;
+no newfullvisualacceptance. Oldfailedimages/tooloriginals remain retained.
