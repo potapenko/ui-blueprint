@@ -1426,7 +1426,9 @@ fn resync_sites_cross_real_worker_host_cli_without_source_output() {
                     assert_eq!(snapshot.coverage.status, CoverageStatus::Partial);
                     if mode == 5 {
                         let node = &snapshot.nodes[0];
-                        let Value::Geometry(layout) = node.properties[0].known().unwrap() else {
+                        let uiblueprint_schema::model::Value::Geometry(layout) =
+                            node.properties[0].known().unwrap()
+                        else {
                             panic!("layout")
                         };
                         assert_eq!(
