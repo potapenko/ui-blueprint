@@ -581,3 +581,14 @@ one retained image and focused author evidence, without new tests or generations
 Known128KiB Register refusal and raster fidelity failures stay explicit. Final
 delivery needs one matching pinned toolset and clear use/limitations, while public
 publication has its separate scope. No source-application changes are implied.
+
+
+### User-directed closeout
+
+The subsequent direct instruction on2026-10-14 authorizes finishing existing
+work and pushing ready changes, without expanding development. Host goal is
+paused and stays paused;1000 has not been achieved. CT2 accepts AUTO-DETAIL2
+source preservation (final01a1375c-ff11-7322-a58d-b254a8c278d2); CV2 finishes
+its existing first-image review. No follow-up generation or repair is dispatched
+for known raster failures. Source-project advisors remain available for actual
+use and later bug reports; no mandatory source-app integration is introduced.
