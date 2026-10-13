@@ -143,7 +143,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662 bounded accepted; receipt8c6276c|CT2 accepts editorial source/unchanged facts and limits. CW70/CW71 remainFAIL; CW60 scoped visual pass with literal-placement residual, not strict assignment pass.3repair images, no newcases/cohort acceptance/causal reliability claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
 | CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcedd160c0 bounded accepted; receiptd63a089|Both critics confirm C2 omissions closed; CT2 accepts role/group/owner selection and guarded engine additions.49author checks, old facts preserved, human selection12/16/4. All3images remainFAIL; no general reliability claim. [Receipt](receipts/corpus-useful-selection15.md); uib-CP15-a9tb_k2m neutral-index |
 | CP16 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcefdaca3e bounded accepted; experiment closed without focus-success claim|CT2 accepts attribution/knownfalse/unknown/privacy/byte guards and unchanged machine data. D/Native focus and fullimageFAIL; CW60 negativecontrol/scopedPASS both critics. Dcaller metadata has no focus assertion: its tag invents caller attribution despite reportedN013true. [Receipt](receipts/corpus-focus-presentation16.md); no further focus round authorized by this packet |
-| CP17 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source8f18a1e/receiptc169856 pushed; review running|Selects existing positive direct-child inset for no-input principaldialog; B16M0245/B17M0229, exact8.0234375. Allmachine files unchanged, B13entirepackage identical. Targeted checks/build/lint pass;2first images retain full visual failures. [Receipt](receipts/corpus-popup-inset17.md); uib-CP17-90f_l0xz neutral-index |
+| CP17 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source8f18a1e bounded accepted; receiptc169856|CT2 accepts guarded existing-inset selection B16M0245/B17M0229=8.0234375; input priority/data/limits preserved. Both fullimagesFAIL; CV2 inset-anchor clarity qualified by competing lines, CT2 ownership identifiable. [Receipt](receipts/corpus-popup-inset17.md); no renderer-reliability claim |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -200,8 +200,8 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP17 initial observations running|Two first images and useful inset ownership, full failures separate; author narrative withheld |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP17 initial observations running|Images then bounded known-inset selection/source-test diff, preserved facts/limits/input priority; author narrative withheld |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP17 reconciled; idle retained|New inset useful but endpoint clarity qualified; both fullimagesFAIL, unchangedcontrol not causalregression |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP17 reconciled; idle retained|Bounded selection accepted; exactdata/input priority/guards verified; both fullimagesFAIL including explicit active-and-applied distinction |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -211,7 +211,7 @@ DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance remains through CR3. CA8f26e121 adds explicit static text,
 now accepted through CR4; existing completed batches keep their original pins.
-Current accepted exporter presentation baseline isfdaca3e; source/prompt protection
+Current accepted exporter presentation baseline is8f18a1e; source/prompt protection
 is bounded accepted. Individual image verdicts remain pinned to their actual sources,
 not full corpus or universal raster quality.
 Root owns this registry,

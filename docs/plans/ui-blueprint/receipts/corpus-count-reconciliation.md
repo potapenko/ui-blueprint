@@ -84,7 +84,13 @@ binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 CP17 adds2first repair images at8f18a1e, both1536×1024, no cases/rerolls. B16M0245
 and model-free B17M0229 existing8.0234375 inset selected; machine files exact and
 B13control package unchanged. Author targeted tests/build/lint/format pass. New≈8
-appears, full image failures remain; independent acceptance pending.
+appears, full image failures remain. CT2 final01a133e0-f4f8-7a42-a0bf-b3fde94fa6ab
+accepts bounded source selection after independent-first and author reconciliation;
+CV2 final01a133e0-0cbd-7ad2-9ec6-bd7b85710822 supports useful relation but qualifies
+rendered anchor clarity because solid/dashed lines compete. CT2 identifies owners;
+neither grants fullimage acceptance. Input-control package identical, no causal
+regression claim. State/focus/repetitions/internalIDs and chip-width anchors remain;
+Director explicit keyboard-active AND applied meaning is still not established.
 [Receipt](corpus-popup-inset17.md), `uib-CP17-90f_l0xz/neutral-index.json`
 SHA25632bb11156bc54d80db0ffd47e2dfbbf3a34ec98b5b6f2780b04d55b699473575,
 binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
