@@ -13,9 +13,9 @@ fixture/component-preview origin;136 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:515 primary images =511 first outputs +4 rerolls;
-59 separate repair-validation images;4 unqualified reference attempts
+61 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-578 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+580 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -81,6 +81,13 @@ not successful preservation. Native focus remains omitted. No consistent per-vie
 focus benefit, causal/reliability claim or further experiment round follows.
 [Receipt](corpus-focus-presentation16.md), `uib-CP16-fbrtvb6c/neutral-index.json`,
 binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
+CP17 adds2first repair images at8f18a1e, both1536×1024, no cases/rerolls. B16M0245
+and model-free B17M0229 existing8.0234375 inset selected; machine files exact and
+B13control package unchanged. Author targeted tests/build/lint/format pass. New≈8
+appears, full image failures remain; independent acceptance pending.
+[Receipt](corpus-popup-inset17.md), `uib-CP17-90f_l0xz/neutral-index.json`
+SHA25632bb11156bc54d80db0ffd47e2dfbbf3a34ec98b5b6f2780b04d55b699473575,
+binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 
 ## Completed primary batches
 

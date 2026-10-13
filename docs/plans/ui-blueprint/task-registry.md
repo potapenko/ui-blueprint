@@ -89,9 +89,9 @@ CW-B14 adds3qualified Years/MovieIMDb compositions, bringing it to187.
 CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3 images (59 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2 images (61 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:578counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:580counted generated images
 overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -143,7 +143,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662 bounded accepted; receipt8c6276c|CT2 accepts editorial source/unchanged facts and limits. CW70/CW71 remainFAIL; CW60 scoped visual pass with literal-placement residual, not strict assignment pass.3repair images, no newcases/cohort acceptance/causal reliability claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
 | CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcedd160c0 bounded accepted; receiptd63a089|Both critics confirm C2 omissions closed; CT2 accepts role/group/owner selection and guarded engine additions.49author checks, old facts preserved, human selection12/16/4. All3images remainFAIL; no general reliability claim. [Receipt](receipts/corpus-useful-selection15.md); uib-CP15-a9tb_k2m neutral-index |
 | CP16 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcefdaca3e bounded accepted; experiment closed without focus-success claim|CT2 accepts attribution/knownfalse/unknown/privacy/byte guards and unchanged machine data. D/Native focus and fullimageFAIL; CW60 negativecontrol/scopedPASS both critics. Dcaller metadata has no focus assertion: its tag invents caller attribution despite reportedN013true. [Receipt](receipts/corpus-focus-presentation16.md); no further focus round authorized by this packet |
-| CP17 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, restored|bounded popup-inset selection repair running|CT2-confirmed CW-B16-D C2 gap: select one existing8.0234375 inset M0249 to chip-grid or M0245 to header, exact anchors preserved. No new arithmetic/padding/union/mapping. Genre plus already-complete input-popup control,2first repair outputs, no cases |
+| CP17 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source8f18a1e/receiptc169856 pushed; review running|Selects existing positive direct-child inset for no-input principaldialog; B16M0245/B17M0229, exact8.0234375. Allmachine files unchanged, B13entirepackage identical. Targeted checks/build/lint pass;2first images retain full visual failures. [Receipt](receipts/corpus-popup-inset17.md); uib-CP17-90f_l0xz neutral-index |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -199,8 +199,8 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CW-B17 reconciled; idle retained forCP17|Both compact images fail clipping/state/ownership; focus labels work in these samples only, no general claim |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CW-B17 reconciled; idle retained forCP17|Bounded source checks pass, raster ownership/clip failures; compact inset M0233/M0229 is same known selection defect |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP17 initial observations running|Two first images and useful inset ownership, full failures separate; author narrative withheld |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP17 initial observations running|Images then bounded known-inset selection/source-test diff, preserved facts/limits/input priority; author narrative withheld |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
