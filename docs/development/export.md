@@ -467,6 +467,18 @@ records actual prompt → image candidates and verification; it does not imply f
 image acceptance before both continuing critics approve.
 
 
+## Concise literal prompt records
+
+Repeated rules for clipping and paired dimensions are stated once per applicable
+sheet, with per-object geometry, clipped edges and measurement anchors retained.
+`text` in an object record is its reviewed visible-text payload, not an input Value.
+`P1` / `M1` refer to the numbered placement / measurement contexts printed above;
+AX measurement coordinates still cannot position artwork. A clipped record links
+to its component-specific `COMPONENT CLIP` entry rather than repeating that frame.
+Known flags, public strings, source membership, assigned dimensions and machine
+files remain unchanged. No provider character limit is added to the CLI contract;
+actual downstream acceptance must be checked with its emitted literal prompt.
+
 ## Fresh source-derived drawing plans — FRESH-01
 
 The model-free compiler now emits a per-view drawing plan derived from sanitized

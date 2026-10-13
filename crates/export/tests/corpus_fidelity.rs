@@ -239,7 +239,7 @@ fn visible_control_payload_is_not_promoted_to_a_semantic_icon_caption() {
         set_text(&mut b, text);
         let p = package(&b);
         let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-        assert!(prompt.contains(&format!("visible-text payload {text:?}")));
+        assert!(prompt.contains(&format!("; text {text:?}")));
         assert!(!prompt.contains(&format!("LOCAL DETAIL \"{text} — dimensions\"")));
         assert!(!prompt.contains(&format!("DIMENSIONED RECTANGLE button {text:?}")));
         let scene: Json = serde_json::from_slice(&p.files()["scene.json"]).unwrap();

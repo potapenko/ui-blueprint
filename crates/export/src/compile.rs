@@ -674,7 +674,7 @@ fn object_text(
     }
     if !aggregate && !visible_text(c).is_empty() {
         out.push_str(&format!(
-            "; visible-text payload{} {}",
+            "; text{} {}",
             if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
                 " (draw only its proved clipped fragment)"
             } else {
@@ -718,7 +718,7 @@ fn object_text(
         {
             out.push_str(&format!("; {:?}={value}", p.field()));
             if p.field() == Field::Focused && *value {
-                out.push_str("; print a separate outside state tag meaning \"Focused\" in the document language in every view containing this object");
+                out.push_str("; outside \"Focused\" tag in every view of this object");
             }
             if p.field() == Field::Checked && !input_control(c) {
                 out.push_str(
@@ -743,11 +743,11 @@ fn object_text(
         if assignment != Assignment::SourceDetail || g.frame_kind != FrameKind::AccessibilityBounds
         {
             out.push_str(&format!(
-                "; {} context {}",
+                "; {}{}",
                 if g.frame_kind == FrameKind::AccessibilityBounds {
-                    "measurement"
+                    "M"
                 } else {
-                    "placement"
+                    "P"
                 },
                 geometry_context(v, g)
             ));
@@ -767,30 +767,20 @@ fn object_text(
                 && p.field() == Field::VisibleRegion
                 && visible.shape != g.shape
             {
+                if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
+                    out.push_str(&format!(
+                        "; CLIPPED LAYOUT: use COMPONENT CLIP #{}",
+                        index + 1
+                    ));
+                    continue;
+                }
                 out.push_str(&format!(
-                    "; {} reported visible-region {} (Space {} {:?}, {}, {:?})",
-                    if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
-                        "CLIPPED LAYOUT: draw only"
-                    } else {
-                        "DISTINCT FRAME (clipping not established):"
-                    },
-                    if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
-                        format!("from COMPONENT CLIP #{}", index + 1)
-                    } else if let Shape::Rect(r) = &visible.shape {
-                        format!(
-                            "rectangle[x {}, y {}, w {}, h {}]",
-                            display_number(r.x),
-                            display_number(r.y),
-                            display_number(r.width),
-                            display_number(r.height)
-                        )
-                    } else {
-                        bounded_compact_json(&visible.shape, limit)?
-                    },
-                    visible.coordinate_space.id.0,
-                    visible.coordinate_space.kind,
-                    unit_name(visible.coordinate_space.units),
-                    visible.coordinate_space.origin
+                    "; DISTINCT FRAME (clipping not established): reported visible-region {} (Space {} {:?}, {}, {:?})",
+                    if let Shape::Rect(r) = &visible.shape {
+                        format!("rectangle[x {}, y {}, w {}, h {}]", display_number(r.x), display_number(r.y), display_number(r.width), display_number(r.height))
+                    } else { bounded_compact_json(&visible.shape, limit)? },
+                    visible.coordinate_space.id.0, visible.coordinate_space.kind,
+                    unit_name(visible.coordinate_space.units), visible.coordinate_space.origin
                 ));
             }
         }
@@ -889,7 +879,7 @@ fn drawing_inventory(
         if assignment == Assignment::SourceDetail {
             "SOURCE FRAGMENT MEMBERS. Each listed member is a source record assigned to this sheet, not proof of visible artwork. Depict only portions permitted by the declared scope, original reference and supplied visibility/cut constraints; keep unknown visibility unknown. Source hierarchy provides structural orientation only, not proved visual correspondence. Ancestors and child positions are not extra artwork or captions. AX frames do not establish painted geometry; their exact measurements remain in the machine package.\n"
         } else {
-            "SOURCE RECORDS. #numbers are unprinted local references. Placement context is only for the reported layout/visible frame. AX measurement coordinates are NEVER artwork placement: use the original reference for painted composition and keep AX rectangles in separate EMPTY sketches. Source/reference disagreement stays explicit; no guessed transform. Semantic names are outside measurement captions, never new visible UI.\n"
+            "SOURCE RECORDS. Unprinted #IDs identify objects. Boxes position layout/visible frames only; AX coordinates are measurement-only: retain separate EMPTY AX sketches and reference artwork. Keep source/reference disagreement explicit; no guessed transform. Names identify records, not new UI text.\n"
         },
         limit,
     )?;
@@ -954,7 +944,7 @@ fn drawing_inventory(
             append(
                 &mut out,
                 &format!(
-                    "COMPONENT CLIP #{} (construction only), {}: known clipped edges {:?}; schematic visible rectangle x {}, y {}, width {}, height {} {} in source Space {} ({:?}, {:?}). Apply this cut ONLY to this component, not a global crop of the generated sheet or unrelated components. Keep partial glyphs only at these proved edges; do not reflow or complete this component beyond them. Full-layout dimensions refer to its separate full frame, never to this visible intersection.\n",
+                    "COMPONENT CLIP #{} (construction only), {}: known clipped edges {:?}; visible rect[x {}, y {}, w {}, h {}] {} in Space {} ({:?}, {:?}).\n",
                     i + 1,
                     component_name(v, i),
                     edges,
@@ -1216,7 +1206,7 @@ fn local_measures(
                 if w.anchors[0].frame_kind != FrameKind::AccessibilityBounds {
                     append(
                         &mut out,
-                        &format!("FRAME OWNER (unprinted): source record #{}.\n", a + 1),
+                        &format!("FRAME OWNER (unprinted): #{}.\n", a + 1),
                         limit,
                     )?;
                 }
@@ -1269,7 +1259,7 @@ fn local_measures(
                 append(
                     &mut out,
                     &format!(
-                        "{} {}: WIDTH {} {} {}; HEIGHT {} {} on the LEFT. BOTH lines required, each attached to this frame's opposite borders.\n",
+                        "{} {}: WIDTH {} {} {}; HEIGHT {} {} LEFT.\n",
                         if accessibility {
                             "AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION"
                         } else {
@@ -1296,7 +1286,7 @@ fn local_measures(
                     append(
                         &mut out,
                         &format!(
-                            "PRINT BELOW-FRAME WIDTH LABEL exactly: {:?}. Both extents belong only to this measured source frame. Descendants may overflow it; keep their frames separate.\n",
+                            "PRINT BELOW-FRAME WIDTH LABEL exactly: {:?}.\n",
                             format!(
                                 "{} — measured frame width {} {}",
                                 component_name(v, a),
@@ -2256,7 +2246,7 @@ fn drawing_dimensions(
         &local_measures(v, &overview_measures, partial, limit)?,
         limit,
     )?;
-    for (i, (title, controls)) in groups.iter().enumerate() {
+    for (i, (title, _)) in groups.iter().enumerate() {
         let owned = lines
             .iter()
             .filter(|(owner, _, a, b)| *owner == Some(i) && a == b)
@@ -2268,7 +2258,7 @@ fn drawing_dimensions(
         append(
             &mut out,
             &format!(
-                "LOCAL DETAIL {:?} — partial; assigned frames and source state:\n",
+                "LOCAL DETAIL {:?} — partial; source state retained:\n",
                 title
             ),
             limit,
@@ -2290,13 +2280,6 @@ fn drawing_dimensions(
             ),
             limit,
         )?;
-        if controls.len() > 1 && assignment != Assignment::Measurements {
-            append(
-                &mut out,
-                "Keep recorded row/column relationships. Do not add a wrapper/heading/control around these partial objects.\n",
-                limit,
-            )?;
-        }
         append(&mut out, &local_measures(v, &owned, partial, limit)?, limit)?;
     }
     let scalar_fragments = lines
@@ -2341,6 +2324,8 @@ only for explicitly empty inputs, and caller draft only when explicitly reported
 The name is NOT field content. Never replace visible public draft with its accessible
 name. "#;
 const ARTWORK_GUIDANCE: &str = r#"Exact visible UI strings and source icons; readable typography.
+P#/M# refer to the numbered placement/measurement contexts.
+Partial details retain recorded rows/columns, without new wrappers/headings/controls.
 Source icons retain their silhouette as WHITE outlines, including Play triangles;
 never replace an icon with its semantic name or icon-font token. An active row/tab
 uses an extra WHITE outline with the same BLUE interior, never a white-filled tile.
@@ -2361,7 +2346,7 @@ Do not move, shrink, reflow or complete that component beyond those edges.
 A clipped child does not define an overall artwork crop or clip its neighbors.
 No unlisted edge or unproved component receives a clipping instruction.
 
-Visible-text payloads are source character data: render the text exactly where
+Record text is source-visible character data: render it exactly where
 the original shows text. If the reference renders that payload as an icon-font
 glyph, reproduce its glyph instead of printing its token. Keep inline clickable
 words inline and unboxed; Button is a semantic role, not evidence of a button border.
@@ -2404,6 +2389,8 @@ const AX_GUIDANCE: &str = r#"AX FRAME MEASUREMENT or AX FRAME EXTENT is a separa
 Draw an EMPTY WHITE dashed rectangle. Its interior is only flat BLUE: NO text,
 icon, button, word, glyph or UI reconstruction inside it. Put “AX frame” and the
 EXACT OUTSIDE CAPTION below the sketch; width ABOVE, height LEFT.
+AX FRAME MEASUREMENT requires BOTH dimensions on its opposite borders;
+AX FRAME EXTENT requires only its named dimension.
 Use that exact caption for every reference to its measured object,
 without an explanatory suffix or category.
 Recorded state captions remain separate.
@@ -2557,7 +2544,7 @@ fn render_view(
             "Accessible names are not field contents. Caller-draft rendering does not apply to this fragment: input ownership is incomplete. Whole-view state is non-rendering provenance, not permission to add an input, its draft or associated content.\n");
     }
     vars.insert("artwork_guidance", artwork_guidance);
-    vars.insert("state_guidance", format!("{}For an assigned object with reported Focused=true, print a separate outside state annotation meaning ‘Focused’ in the document language in each view containing it. For caller-only focus explicitly identifying an included input, annotate ‘Focused (caller-reported)’ in that language instead; it remains caller attribution, not a reported flag. Keep the source caption unchanged and AX interiors empty. Focusable or selected alone does not establish focus. Unknown/withheld focus is not reported true; reported Focused=false or conflicting statements must not become an unconditional Focused tag. Preserve the disagreement. No inferred caret position or focus shape.\n", if assignment == Assignment::Measurements { "Caption only recorded per-target flags or caller statements that explicitly identify that target, outside its empty frame. Whole-view context is not a state for every target; never spread group state to other frames. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }));
+    vars.insert("state_guidance", format!("{}Reported Focused=true: outside ‘Focused’ tag in every view of that object, in the document language. Explicit caller-only input focus: ‘Focused (caller-reported)’. Keep source captions and EMPTY AX interiors. Focusable/selected alone is not focus. Unknown/withheld/false or conflicting focus never becomes an unconditional Focused tag; preserve conflicts. No inferred caret or focus shape.\n", if assignment == Assignment::Measurements { "Caption only recorded per-target flags or caller statements that explicitly identify that target, outside its empty frame. Whole-view context is not a state for every target; never spread group state to other frames. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }));
     vars.insert("design_analysis", design_analysis);
     vars.insert("sheets", sheet_plan);
     let mut rest = include_str!("prompt-template.txt");

@@ -216,7 +216,7 @@ fn separate_prompts_cover_source_and_own_every_selected_dimension_once() {
     assert!(d1.contains("VIEW PLAN: ONLY this detail sheet's assigned measurement blocks"));
     assert!(d1.contains("MEASUREMENT ONLY"));
     assert!(!d1.contains("Use the original reference for artwork appearance"));
-    assert!(!d1.contains("visible-text payload") && !d1.contains("box[x"));
+    assert!(!d1.contains("; text ") && !d1.contains("box[x"));
     assert!(d1.contains("excludes its reported parent"));
     assert!(d1.contains("WIDTH 400 CSS px") && d1.contains("HEIGHT 48 CSS px"));
     let d2 = std::str::from_utf8(&p.files()["prompt-D02.txt"]).unwrap();
@@ -859,7 +859,7 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
     assert!(prompt.contains("WIDTH ≈198 CSS px") && prompt.contains("HEIGHT ≈33 CSS px"));
     assert!(prompt.contains("↕ ≈16 CSS px"));
     assert!(prompt.contains("│←─ 12 CSS px ─→│"));
-    assert!(prompt.contains("HEIGHT ≈33 CSS px on the LEFT"));
+    assert!(prompt.contains("HEIGHT ≈33 CSS px LEFT"));
     assert!(!prompt.contains("[\"css_px\"]"));
 }
 
@@ -1055,7 +1055,7 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
         .lines()
         .find(|line| line.starts_with("Object input \"Accessible search name\": Textbox"))
         .unwrap();
-    assert!(!input.contains("visible-text payload"));
+    assert!(!input.contains("; text "));
     assert_eq!(input.matches("Accessible search name").count(), 1);
     assert!(prompt.contains("public draft orchard"));
     assert!(prompt.contains("name is NOT field content"));
@@ -1105,9 +1105,10 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
         .position(|l| l.starts_with("COMPONENT CLIP #1"))
         .unwrap();
     assert!(lines[clip + 1].starts_with("Object input"));
-    assert!(lines[clip + 1].contains(
-        "visible-text payload (draw only its proved clipped fragment) \"Three partial words\""
-    ));
+    assert!(
+        lines[clip + 1]
+            .contains("text (draw only its proved clipped fragment) \"Three partial words\"")
+    );
     assert_eq!(serde_json::to_vec(&clipped).unwrap(), original);
     let SourceInput::Observed {
         public_text_fields, ..
@@ -1557,7 +1558,7 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     );
     assert_eq!(
         prompt
-            .matches("AX measurement coordinates are NEVER artwork placement")
+            .matches("AX coordinates are measurement-only")
             .count(),
         1
     );
@@ -1569,7 +1570,7 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     assert!(
         records
             .iter()
-            .all(|line| line.contains("measurement context ") && !line.contains("placement"))
+            .all(|line| line.contains("; M") && !line.contains("; P"))
     );
     assert!(!prompt.contains("AX measurement only, not artwork placement; measurement"));
     assert!(prompt.contains("NO text,\nicon, button, word, glyph or UI reconstruction inside it"));
@@ -1786,11 +1787,10 @@ fn public_placeholder_and_clipped_region_are_distinct_from_full_layout_and_value
         .unwrap();
     assert!(input.contains("Placeholder=\"Type a query\""));
     assert!(
-        input.contains("CLIPPED LAYOUT: draw only reported visible-region")
-            && input.contains("from COMPONENT CLIP #1")
+        input.contains("CLIPPED LAYOUT: use COMPONENT CLIP") && input.contains("COMPONENT CLIP #1")
     );
     assert!(input.contains("h 32"));
-    assert!(prompt.contains("schematic visible rectangle") && prompt.contains("height 11 CSS px"));
+    assert!(prompt.contains("visible rect[") && prompt.contains("h 11] CSS px"));
     assert!(
         !prompt
             .lines()
@@ -2495,9 +2495,9 @@ fn clipped_document_layout_pair_owns_a_separate_empty_sketch() {
     );
     assert!(text.contains("WIDTH 800 CSS px ABOVE; HEIGHT ≈2307 CSS px LEFT"));
     assert!(text.contains("different frame: Derived VisibleRegion"));
-    assert!(text.contains("height ≈667 CSS px"));
-    assert_eq!(text.matches("height ≈667 CSS px").count(), 1);
-    assert!(text.contains("reported visible-region from COMPONENT CLIP #1"));
+    assert!(text.contains("h ≈667] CSS px"));
+    assert_eq!(text.matches("h ≈667] CSS px").count(), 1);
+    assert!(text.contains("CLIPPED LAYOUT: use COMPONENT CLIP #1"));
     assert!(!text.contains("666.5625") && !text.contains("2307.0703125"));
     assert!(!text.contains("\"shape\":\"rect\""));
     let mut exact = limits();
@@ -2553,10 +2553,8 @@ fn clipped_document_layout_pair_owns_a_separate_empty_sketch() {
         let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
         assert!(!text.contains("-0") && !text.contains("0.125") && !text.contains("0.375"));
         if clipped {
-            assert!(text.contains(
-                "schematic visible rectangle x 0, y <0.5, width <0.5, height <0.5 CSS px"
-            ));
-            assert!(text.contains("reported visible-region from COMPONENT CLIP #1"));
+            assert!(text.contains("visible rect[x 0, y <0.5, w <0.5, h <0.5] CSS px"));
+            assert!(text.contains("CLIPPED LAYOUT: use COMPONENT CLIP #1"));
         } else {
             assert!(text.contains("DISTINCT FRAME (clipping not established): reported visible-region rectangle[x −<0.5, y <0.5, w <0.5, h <0.5]"));
         }
@@ -2701,18 +2699,18 @@ fn object_states_and_context_links_survive_compact_presentation() {
         } else {
             "Enabled=true"
         }));
-        assert!(object.contains(&format!("placement context {context}")));
+        assert!(object.contains(&format!("P{context}")));
     }
     assert!(prompt.contains("Placement context 3: LayoutBounds; REF"));
     assert_eq!(
         prompt
-            .matches("print a separate outside state tag meaning \"Focused\" in the document language in every view containing this object")
+            .matches("outside \"Focused\" tag in every view of this object")
             .count(),
         1
     );
     assert!(prompt.lines().any(|l| l.starts_with("Object")
         && l.contains("First control")
-        && l.contains("Focused=true; print a separate outside state tag")));
+        && l.contains("Focused=true; outside")));
     for object in prompt.lines().filter(|s| {
         s.starts_with("Object") && !s.contains("First control") && !s.contains("Second control")
     }) {
@@ -2780,7 +2778,7 @@ fn object_states_and_context_links_survive_compact_presentation() {
             .lines()
             .find(|l| l.starts_with("Object") && l.contains("First control"))
             .unwrap();
-        assert!(!object.contains("print a separate outside state tag"));
+        assert!(!object.contains("outside \"Focused\" tag"));
         assert_eq!(
             object.contains("Focused=false"),
             matches!(
@@ -2838,7 +2836,7 @@ fn scope_and_exclusions_guide_selection_without_becoming_printable_ui() {
     proposed(&mut brief).components[0].label = "record CDP unknown".into();
     let p = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("; visible-text payload \"record CDP unknown\""));
+    assert!(prompt.contains("; text \"record CDP unknown\""));
     assert!(prompt.contains("PRINTABLE SHEET TEXT"));
     for canary in ["SCOPE_PROCEDURE_CANARY", "EXCLUSION_PROCEDURE_CANARY"] {
         assert!(prompt.split("ГЕОМЕТРИЯ").next().unwrap().contains(canary));
@@ -2873,7 +2871,7 @@ fn unnamed_source_text_is_kept_without_fabricated_content_or_painted_bounds() {
         .lines()
         .find(|l| l.starts_with("Object label layout: Text [#1]"))
         .unwrap();
-    assert!(!text.contains("visible-text payload"));
+    assert!(!text.contains("; text "));
     assert!(text.contains("box[x"));
     assert!(prompt.contains("An unnamed Text record still has a place"));
     assert!(prompt.contains("CLIPPING TAKES PRIORITY"));
@@ -2920,7 +2918,7 @@ fn caller_context_preserves_declared_meaning_without_selected_inference() {
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
     assert_eq!(prompt.matches(&brief.views[0].state).count(), 1);
     assert!(!prompt.contains("PRINT THIS VIEW'S STATE CAPTION"));
-    assert!(prompt.contains("assigned frames and source state"));
+    assert!(prompt.contains("source state retained"));
     brief.views[0].state = "Menu open".into();
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
         panic!()
@@ -3059,14 +3057,13 @@ fn container_frame_width_has_below_slot_without_claiming_enclosure() {
     let b = fixture("proposed");
     let p = compile(&b, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains(
-        "WIDTH 1200 CSS px BELOW this measured source frame; HEIGHT 800 CSS px on the LEFT"
-    ));
-    let owner = prompt
-        .find("FRAME OWNER (unprinted): source record #1.")
-        .unwrap();
+    assert!(
+        prompt
+            .contains("WIDTH 1200 CSS px BELOW this measured source frame; HEIGHT 800 CSS px LEFT")
+    );
+    let owner = prompt.find("FRAME OWNER (unprinted): #1.").unwrap();
     let measure = prompt[owner..].find("DIMENSIONED RECTANGLE").unwrap();
-    assert!(!prompt[owner..owner + measure].contains("source record #2"));
+    assert!(!prompt[owner..owner + measure].contains("FRAME OWNER (unprinted): #2"));
     assert!(prompt.contains("PRINT BELOW-FRAME WIDTH LABEL exactly:"));
     assert!(prompt.contains("width 1200 CSS px"));
     assert!(prompt.contains("label-layout boundary belongs to the named text"));
@@ -3091,7 +3088,7 @@ fn container_frame_width_has_below_slot_without_claiming_enclosure() {
         assert!(
             text.contains("WIDTH 1200 CSS px BELOW this measured source frame; HEIGHT 800 CSS px")
         );
-        assert!(text.contains("Descendants may overflow it; keep their frames separate."));
+        assert!(text.contains("A container frame need not enclose its descendants;"));
         assert!(!text.contains("enclosing shape") && !text.contains("enclosing outline"));
         assert_eq!(
             data(&candidate, "dimensions.json"),
@@ -3115,7 +3112,7 @@ fn multiline_ui_text_is_retained_but_not_promoted_to_anchor_caption() {
     proposed(&mut b).components[9].label = "Open menu\nexpand_more".into();
     let p = compile(&b, limits()).unwrap();
     let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("; visible-text payload \"Open menu\\nexpand_more\""));
+    assert!(prompt.contains("; text \"Open menu\\nexpand_more\""));
     assert!(
         prompt
             .lines()
