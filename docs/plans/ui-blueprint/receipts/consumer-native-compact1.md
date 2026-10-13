@@ -76,3 +76,27 @@ A pinned small core bundle follows the source checkpoint; Native rebuild unneces
 for this saved-data retry. Root owns the candidate through consumer retry, then
 releases non-image deliverables. Run-owned Cargo target is removed after use; images
 are neither created nor deleted. Final bundle/pins/checks are recorded below.
+
+## Pinned core bundle
+
+Source checkpoint `e3ab912d223fd8689962050d0bb6e952cf35a800` saved/pushed exact4 files.
+Core bundle: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-MAC-COMPACT1-4ynh3gg5/core-bundle`.
+Build/verify0, release/aarch64-apple-darwin, no Native/Swift build. CLI SHA256
+`663ae2c543936d445423ec708bc930ce0c6cc64ed6833f0d01f4305df2e6f9ed`.
+Recipe last committed3e143199, copied script hash126fe895…a2684c041;
+separate copied RUN.md hash0b671146…fc884b0 and unchanged lock8084aeea…b672841
+match COMPARE2's recorded actual recipe/doc material. No recipe/doc mutation.
+
+Bundled CLI from working directory `/` repeated the exact Actor proof: compare0,
+compact11092B versus accepted29326B; diagnose4, compact798B versus756B. Both JSON
+streams remain byte-identical at985180B and853B respectively, with the SHA256 values
+above. Accepted Native CLI/C hashes were checked unchanged. Private task-temp Cargo
+target removed with image guard and absence verified; only core-bundle remains,
+root-owned through same consumer retry. No image/shared-artifact cleanup.
+
+Use the earlier COMPARE2 command and retained actor-correspondence.json; replace
+only the executable with this core-bundle/uiblueprint and omit --json for compact.
+No new flags, inputs, settings, wrappers or matching work. Root returns the candidate
+and concise factual result to the same consumer. This receipt-only saved checkpoint
+records the bundle; it does not change its product source pin or claim a new consumer
+acceptance round. Correspondence authoring ergonomics remains separately recorded.
