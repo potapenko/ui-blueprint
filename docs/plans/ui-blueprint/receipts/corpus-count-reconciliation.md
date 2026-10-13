@@ -13,9 +13,9 @@ fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
-65 separate repair-validation images;4 unqualified reference attempts
+69 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-585 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+589 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -765,3 +765,26 @@ Dense text alone is not established as unreadable; no new mandatory density gate
 No demonstrated new compiler defect; no automatic CP20 or repeated unchanged tests.
 Owner archived after receipt transfer. Candidate2f90deb→da306a2 accepted in bounded
 presentation scope, not as fullimage/corpus acceptance or a reliability guarantee.
+
+## CMATH1 — mathematical explanation visual validation, 2026-10-13
+
+[Author receipt](corpus-math-visual1.md),810d65f, frozenCLI da306a2; four first
+validation images and zero primarycases/rerolls. Director/Genres/Episodes1536×1024,
+iPadActor1672×941. Neutralindex `$T/uib-CMATH1-gbuq7dt9/neutral-index.json`,
+SHA7811b1f991784ee0d2e7401c442f4ced8031c5ae98a13fd52a41631b6f6d1c58;
+$T is the system-temp prefix documented above. Actual31queries/17requests use CE2
+source literals; all123nodes and original metadata bytes protected. Four0.3packages,
+one G01each. Scenes differ only by analysis; dimensions/sheets exact. No code edits.
+
+CV2final01a13472-9d67-7613-98dc-e4abeab26a1b and CT2initial01a1346f-570c-77b3-b4a2-8f25f9da9699
+confirm Web12/12core mathematical results and Native0/5; allfourfullimagesFAIL.
+Genre unequal widths stay distinct beneath approximate labels, ratio≈1 is not exact
+identity, 2:2sample has no preferred value. Episodes keeps exact Years balance and
+rounded-chain caveat. iPadomits knownAX relations and unknownlayout/no-recommendation
+notes despite their literal presence. EmptyAX sketches do not replace explanations.
+Focus provenance, appliedselection, clipping and repeated/unassigned dimensions remain
+separate fullimage failures. CSSpx shorthand and below/above slot residuals do not
+establish unit conversion or numerical source defects. CT2independently checked all
+operands/requests/package hashes and preservation; final01a13474-b824-7821-87a5-a6e899083971 accepts bounded source/math after author reconciliation, retaining all four fullimage failures.
+No new compiler contradiction found. These reused-source validations increase only
+image bucket:194primarycases,69validationimages,589counted generated images.

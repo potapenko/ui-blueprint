@@ -90,10 +90,10 @@ CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
 CW-B19 adds1qualified mixed Settings state, bringing it to194.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2 images (65 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4 images (69 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:585counted generated images
-overall; unqualified attempts increase neither eligible cases nor the65repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:589counted generated images
+overall; unqualified attempts increase neither eligible cases nor the69repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -119,7 +119,8 @@ overall; unqualified attempts increase neither eligible cases nor the65repair-va
 | CW5 |same Web advisor|accepted source-only own-tab recipe|Actor draft/results page-local; exact own-tab close disposes callbacks, normal startup/log/cache effects retained; [handoff](receipts/corpus-web-advice.md#cw5--actor-in-a-disposable-own-tab-2026-10-13) |
 | CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived after review handoff|2demo states/2first images/0rerolls;both critics acceptCW58/rejectCW59 focus loss; [review](receipts/corpus-web-demo-review7.md) |
 | CE2 |CE1 owner01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|completed; no new defects|[Receipt](receipts/corpus-analysis-wave2.md),862b76d.11snapshots/7families/76measurements/47requests;3expected refusal cases. Original449nodes/geometry/state/no-request compatibility preserved; zero newcases/images. No extra tests or repair required |
-| CMATH1 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|four-case math visual verification dispatched|Director/Genres/Episodes/iPadActor, CE2exact operands+frozenCP19. Actual CLI math→literal firstimages, source apps untouched; no wording loop/newprimary cases. Receipt corpus-math-visual1.md only |
+| CMATH1 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|complete; math/source accepted, all4imagesFAIL|[Receipt](receipts/corpus-math-visual1.md),810d65f.31operands/17requests independently checked; Web12/12core math, Native0/5. Focus/state/clip/assignment defects separate; no compilerbug.4validationimages/0newcases |
+| CMATH2 |same exporter owner|Native split math verification dispatched|CN-B19-Reels recordedsource only, originaldensity30+CE2fourrequests. Actual standalone firstimage per requiredsheet; G01-onlymath/ownership. Receipt corpus-math-visual2.md, no runtime/source/code edits or newprimarycases |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
 | CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
@@ -210,19 +211,20 @@ overall; unqualified attempts increase neither eligible cases nor the65repair-va
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP19 reconciled; idle retained|Final01a13447-2f76-7e41-96ee-623653d9cf81: sample hollowknobs pass, both imagesFAIL, E04Topboundary caption confirmed |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP19 reconciled; idle retained|Final01a13448-2aab-7aa0-ae5d-7df5e33f36e6: bounded source wording accepted, all machine/selection facts exact; both imagesFAIL, author E04anchor complaint not confirmed |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CMATH1 reconciled; idle retained|Final01a13472-9d67-7613-98dc-e4abeab26a1b: Web12/12coremath/Native0of5, all4fullFAIL; literal unit/slot residuals separated |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CMATH1 reconciled; idle retained|Final01a13474-b824-7821-87a5-a6e899083971:31operands/17requests exact; source/math accepted, imagefailures remain; no compilerbug |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
 
 After CP19 no implementation/review remained; CE2 has completed mathematical analysis on the expanded saved corpus; CMATH1
-now verifies four real-family mathematical image explanations independently. CN16's complete
+completed four single-sheet mathematical images; CMATH2 independently verifies the
+remaining split-sheet Native math path from a qualified saved source. CN16's complete
 Mac source-isolation proposal still awaits explicit human approval; re-presented
 2026-10-13 after confirmed source-storage risk. Automatic goal continuations are not
 that approval. No OS-process contention blocks the accepted CP18/19 outcomes; CN8
 archive still reports active writer and is an unrelated host metadata limitation.
-Continue CMATH1 independently and CN16 on approval or another qualified authorized source; do not fill
+Continue CMATH2 independently and CN16 on approval or another qualified authorized source; do not fill
 case counts with repeated renders or silently modify the source app. Goal active,
 194proved cases,806remainder; this is not completion or a user pause.
 

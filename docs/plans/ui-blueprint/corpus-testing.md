@@ -200,3 +200,27 @@ originals retained. Neutral index precedes author evaluation; existing critics v
 prepared math, source-fidelity and readable explanations. Source snapshots are reused,
 so no new primarycase count; report actual validation-image count independently.
 Stop after finite four-case outcome, report honest failures and scoped commit/push.
+
+## CMATH2 — split-sheet Native mathematical explanations, 2026-10-13
+
+CMATH1 exercised four single-sheet0.3outputs. CE2 proved split0.4 math placement in
+machine packages, but its Native Mac case has no corresponding actual image proof.
+Verify that distinct existing path with CN-B19 B19-06-reels-populated saved source.
+Original nativePNG3840×2100/2× and observed ChannelResponse are qualified in the
+source neutralmanifest; AX-to-pixel mapping/atomicity remain unknown, historical
+storage incident remains. No source-app/runtime action is needed or authorized.
+
+Reuse same exporter owner, current da306a2 frozenCLI, CE2exact four requests/operands.
+Use original source density30, not a lower cap to increase sheets. Reconstruct only
+explicit caller metadata in tasktemp; validate math/source preservation and actual
+sheet ownership/G01-only relationships. Generate exactly one literal first output
+for every actual required standalone sheet. No concatenation, missing details,
+wrappers/rerolls/code/template edits or subsequent wording round. Height ratio is
+an AXheight comparison, not measured visible percentage or paint containment.
+
+DESIGN-ANALYSIS1 and current full drawing/analysis/common privacy closure apply;
+SHEET-PROMPTS1 and PACKAGE3/CLI-EXPORT3 split representation/ownership are explicit.
+Only tracked write receipts/corpus-math-visual2.md; images/selected packages/index in
+systemtemp, originals retained. Neutral artifacts before author assessment, same
+critics finish scoped acceptance. Report actual calls/sheets separately; zero new
+primarycases. Scoped currentbranch commit/push, no nested delegation, terminal fulltask.
