@@ -1,8 +1,9 @@
 # CORPUS-1000 — разнообразие интерфейсов и поиск дефектов
 
-Дата: 2026-10-11. Статус: incomplete; host blocked2026-10-13 в ожидании отдельного
-разрешения CN16 после трёх проверок. Точное состояние и возобновление
-сохранено в [реестре](task-registry.md). Объём и критерии плана неизменны.
+Дата: 2026-10-11. Статус: active после прямого уточнения пользователя2026-10-13.
+CN16 отменён. Следующий цикл — самостоятельное использование инструмента владельцами
+Mac/Web и исправления UI Blueprint по их фидбэку; [правила ответственности](execution.md#проектные-агенты-как-пользователи-утилиты--решение-2026-10-13).
+Исходная цель1000кейсов не объявлена выполненной; история/счётчики сохранены в [реестре](task-registry.md).
 Пользователь прямо поручил создать помощников
 по Mac и Web, тестировать широкий пласт интерфейсов, довести объём до тысячи
 blueprints, находить закономерности и проблемы и улучшать продукт. Затем уточнил:
@@ -180,7 +181,8 @@ persistent dirs. Original datasets/images protected; task-temp inputs/build/evid
 Return actual results and minimal confirmed defect repros; focused checks only,
 scoped commit/push when files change. No new primary corpus cases or image counts.
 One complete verification task; inherit settings, no nested agents. Root owns plan
-and registry; CN16 human-authority dependency remains limited to source-app changes.
+and registry. Historical CN16 dependency was subsequently rejected by the user;
+consumer-owned integration/feedback now supplies the next authorized work.
 
 ## CMATH1 — actual image explanations on four real families, 2026-10-13
 
@@ -249,3 +251,17 @@ wrappers/rerolls/runtime/source-app changes or autonomous further round. Full or
 Nativepackage is recompiled, but image acceptance scope is those two chosen sheets.
 Systemtemp/imagesretained, neutral index before authorassessment, scoped master
 commit/push. Samecritics/no nested agents. Zero newprimarycases; repairimages separate.
+
+## USE-MAC1 / USE-WEB1 — потребительская проверка, 2026-10-13
+
+Прямое пользовательское поручение: агенты сами используют UI Blueprint в своей
+разработке/задачах/тестировании и возвращают запросы владельцу утилиты. Одновременно
+идут два конечных task в существующих Mac/Web чатах. Они выбирают до трёх реальных
+полезных сценариев самостоятельно; root не предписывает UI приложения или внутреннюю
+инфраструктуру. Точный build/команда/результат/ожидание/repro обязательны в отчёте;
+неудача установки или внешнего подключения возвращается как продуктовая обратная связь,
+а не закрывается ручной подменой пути. Владельцы сами решают вопросы интеграции в
+собственный проект по прямому разрешению пользователя; UI Blueprint у них read-only.
+Root исправляет свой инструмент по подтверждённым запросам и возвращает его тому же
+потребителю. CN16 не реализуется и не блокирует этот цикл. Без вложенной делегации
+для этих первых конечных задач. Настройки модели наследуются.

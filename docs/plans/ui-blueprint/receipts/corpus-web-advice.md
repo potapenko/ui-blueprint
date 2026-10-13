@@ -1,5 +1,30 @@
 # Web source advisor handoffs
 
+## USE-WEB1 — actual consumer first-use feedback, 2026-10-13
+
+Terminal01a134b3-edfa-7c92-8059-85dc74114a4c. Web owner attempted a real task:
+measure Director popup/input and list alignment in PlayPhrase.me without app changes.
+Built modules=web at3e995ec5ab4fbf9160c6fc45e12c72fb32e5c0ed; build, distribution
+verify and uiblueprint --help succeeded. Retained bundle:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-use-web1.OTL0dI`.
+README's older a026584 pin was not claimed as this build.
+
+Live observe did not run. Concrete first-use friction: caller must prepare connection/
+request JSON and session/target/surface identities/limits, with docs pointing into
+Rust source. tests/bridges/web/geometry.cjs requires CDP endpoint and target/frame/
+loader/document/root IDs obtained elsewhere; helper is absent from flat bundle.
+Safe repro `node tests/bridges/web/geometry.cjs --help` returns invalid_arguments
+rather than parameter help. Consumer requests a documented supported first external
+connection path and usable helper diagnostics; packaging/discovery design must be
+reconciled in UI Blueprint, not imposed on the site.
+
+This establishes onboarding/usability feedback, not a measured engine/collector bug
+or inability to work externally. No manual geometry/JSON adapter was substituted.
+No browser/app launch, source changes, images or new corpus cases. Both repositories
+left unchanged by this consumer. Next consumer is the UI Blueprint owner; follow
+through with a coherent first-use repair and return it to the same Web agent.
+
+
 ## CW13 — isolated storage does not isolate backend effects, 2026-10-13
 
 Advisor terminal01a13423-0637-7740-8e90-acf2549e0697, sourcec23ef963; bounded

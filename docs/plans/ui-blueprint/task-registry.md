@@ -1,6 +1,6 @@
 # Единый реестр задач
 
-## CORPUS-1000 — blocked awaiting source-app authority, 2026-10-13
+## CORPUS-1000 — active; consumer-owned usage and feedback, 2026-10-13
 
 Authority: the user explicitly requested parallel helpers, broad real Mac/Web and
 available native mobile testing, about1000 genuinely generated/evaluated blueprint
@@ -8,25 +8,30 @@ cases, risk-first planning and corpus-driven improvements. Root is coordination-
 workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 [execution runbook](execution.md) govern. This goal is incomplete.
 
-Current host status: `blocked`, confirmed by update_goal on2026-10-13 after three
-consecutive post-CP20 goal turns revalidated the same genuine authority/source gap.
-CP20 exporter turn01a1348a-2d14-7cf1-ab4a-020027a5d343 and both final critic turns
-01a13496-4535-7cc2-9c07-eab46bb48528 /01a13498-1db5-7c03-8e09-fa40f94d8cdd are
-terminal; advisors remain at completed CN16 /CW13 with no newer authorization/source.
-All known ready independent work (CE2, CMATH1/2 and CP20) finished. No process
-contention is the stopping reason, and no task was restarted from an observation timeout.
-The missing condition is explicit user approval for the prepared CN16 source-app
-isolation change, or a genuinely new qualified source within the existing authority.
-CN16 approval has been requested and not received. Generic automatic continuation
-is not approval to change source apps. No new raw logs or source snapshots are created.
+Current host status: `active`, verified after the user's direct2026-10-13 steering.
+User rejected CN16 and explicitly answered «Не менять Mac-приложение». Root's earlier
+assumption that a new app-internal Debug mode was the prerequisite is withdrawn.
+User then authorized Mac/Web project agents to integrate UI Blueprint into their own
+workflows/development/tasks/testing at their own project responsibility. Root must
+not modify those projects or dictate their architecture; it owns UI Blueprint only.
 
-Resume: user approves [CN16-ISOLATION@1](receipts/corpus-native-advice.md#cn16--конкретный-план-изолированного-mac-запуска-2026-10-13)
-and resumes the goal through the host; reconcile source revision/ownership before
-assigning its complete implementation task to the authorized source-project owner.
-The pending Release-session recovery decision remains separate. Preserve all accepted
-source/data/image work and the unchanged1000-case objective:194proved eligible cases,
-806remaining,74validationimages/594totalimages. No completion or user pause is claimed.
-Reset the blocked audit only on a genuine user resume; do not reopen old goals.
+USE-MAC1 and USE-WEB1 were dispatched in parallel to the existing project advisors
+with the user's permission copied verbatim. Each is now a consumer: select up to
+three natural tasks, use the actual documented utility, report version/command/result/
+expectation/repro and actionable feedback. Root fixes the utility based on these
+requests, then returns it to the same consumer. No mandatory instrumentation or
+manual data adapter may conceal an external-mode onboarding/functionality gap.
+Source-project integration is decided/performed by that project's owner under its
+own authority; this is not approval for root's rejected CN16 implementation plan.
+See [current runbook](execution.md#проектные-агенты-как-пользователи-утилиты--решение-2026-10-13).
+
+The preceding blocked status and three-turn audit are history, not a current wait
+for CN16 approval. All accepted work, data and original objective remain preserved:
+194proved eligible primarycases,806remaining,74validationimages/594totalimages.
+Consumer attempts do not change image/source counts until actual evidence qualifies.
+The historical Release-state recovery issue remains a separate decision; no write
+or activation is authorized by this coordinator handoff. Restart from these consumer
+handles/results, not from the rejected source-app proposal.
 
 Historical state: host goal returned `blocked` on2026-10-12 after three consecutive goal turns
 verified the same external dependency, following completion of CP10 and both
@@ -120,6 +125,8 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
+| USE-MAC1 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|consumer trial dispatched|Use actual UI Blueprint in own real tasks; project integration decisions owned locally. Version/commands/results/repro/requests to utility owner; no root source-app edits/CN16 |
+| USE-WEB1 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|first trial completed; onboarding feedback received|Build/verify3e995ec Web bundle pass; first observe blocked by manual target/connection setup, helper absent frombundle/--help invalid_arguments. [Feedback](receipts/corpus-web-advice.md#use-web1--actual-consumer-first-use-feedback-2026-10-13). No app changes/live-collector proof; utility first-use repair next |
 | CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
 | CN4 |same Mac advisor|accepted read-only discovery|8 wired Native/mobile recipes; no installed/runtime proof; [handoff](receipts/corpus-native-advice.md#cn4--additional-native-mobile-families-2026-10-11) |
@@ -215,7 +222,7 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 | CP18 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|source2f90deb accepted; both full images rejected|[Receipt](receipts/corpus-select-spacing18.md), ef73da6. Existing engine adds6gaps/retains536old B19facts; E04/B13packages exact.2repairimages,0newcases. Both show≈16; fullimagesFAIL, source repair accepted CT2final01a13438-6dc3-78d0-b612-d288a3dbce29; CV2targeted spacing confirmed |
 | CP19 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source da306a2 accepted; two images rejected|[Receipt](receipts/corpus-outline-presentation19.md),93ee41a; machinefiles/assignments exact. Both critics confirm hollowknobs, B19IDs/extra dims; E04source-chevron mismatch. Author Top/Bottom claim rejected by both; all assigned amounts pass. Experiment complete, no automatic next round |
 | CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only receipt accepted; retained|Phone portrait-only; one conditional iPad Actor keyboard candidate plus unqualified compact-width branch. [Receipt](receipts/corpus-native-advice.md#cn15--orientation-and-ipad-keyboard-candidate-2026-10-13); root rejects overbroad non-CUA requirement: Apple DeviceHub is not Codex |
-| CN16 |same Mac advisor|plan ready; awaiting_authority for source-app implementation|[CN16-ISOLATION@1](receipts/corpus-native-advice.md#cn16--конкретный-план-изолированного-mac-запуска-2026-10-13): one Debug-only entry, memory repositories/ephemeral public transport, unavailable write effects, separate temp playback cache and no shared window persistence.7source owners/2tests+spec docs. No implementation authorized; CP15 continues independently |
+| CN16 |same Mac advisor|rejected by user; retired|No implementation. User answered «Не менять Mac-приложение»; no source-app Debug prerequisite. Historical proposal retained, responsibility moved to project-owned optional adoption |
 | CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local, archived|cycle accepted; both critics reject missing focus cue|1newcase/1firstimage, frozen CP14;6rows with keyboard vs9full+partial,20AXsizes/6labels pass. playphraseme-cn-b21-1v2u48gc manifest/HANDOFF; scoped restoration/shutdown. Caption-slot/resolution and arrow appearance residuals separate; no new compiler defect |
 | CW-B12 |01a132a6-3de5-7b72-820f-b5853a8cc992/local, archived|cycle accepted; both critics confirm2FAIL|2newstates/2firstimages,94frames/21dimensions, frozen CP13; uib-cw-b12-0RRqDd HANDOFF/neutral-manifest; tabs closed, source read-only; numeric success separate from visual acceptance, no literal compiler conflict established |
 | CW-B13 |01a132ba-030e-7a81-be76-f4b024ab1794/local, archived|cycle accepted; both critics confirm3FAIL|3newcases/3firstimages, frozen CP13;69layout+69visible frames/18CLI measures; uib-cw-b13-2Q5Tmo HANDOFF/neutral-manifest. Own selections removed/tabs closed. Confirmed desktop C2 plan gap and Voice principal tile omission feedCP15, separate from raster failures |
@@ -238,18 +245,12 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 ### Current contracts and protected boundaries
 
-Current next dependency after CP20: CE2 and both mathematical visual paths are
-complete; the resulting D02literal conflict is repaired and independently accepted.
-No implementation/review worker remains running. Existing two critics/advisors are
-retained, completed exporter and CE2worker archived. CN16's complete Mac source-
-isolation proposal awaits explicit human approval, re-presented2026-10-13. Automatic
-goal continuations are not that approval. No new generic wording or unchanged-test
-round is queued merely to occupy a slot. No OS-process contention prevents progress;
-CN8 archive's active-writer error is an unrelated host metadata limitation.
-Continue CN16 on approval or another actually qualified authorized source. Do not
-inflate cases with replays or silently modify source apps. Goal blocked/incomplete
-after the three-turn audit above:
-194proved primarycases,806remainder;74separate validationimages/594totalimages.
+Current next action: receive USE-MAC1/USE-WEB1 actual-user reports, distinguish bugs,
+onboarding friction and proposals, then assign coherent UI Blueprint fixes. CN16
+is retired, not awaiting authority. Do not require app modifications to continue.
+Existing two critics remain idle for relevant evidence; repeated generic image rounds
+are not the priority. User-approved project owners may integrate the utility themselves;
+root neither directs their app architecture nor modifies their files. Host goal active.
 
 
 CW-B18 path refinement: pinned CLI0.1.19 defaults daemon metadata/stderr beneath
