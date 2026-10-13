@@ -1263,11 +1263,18 @@ fn local_measures(
             });
             if let (Some((w, _, _)), Some((h, _, _))) = (width, height) {
                 if w.anchors[0].frame_kind != FrameKind::AccessibilityBounds {
-                    append(
-                        &mut out,
-                        &format!("FRAME OWNER (unprinted): #{}.\n", a + 1),
-                        limit,
-                    )?;
+                    let caption = human_component_name(v, a, limit)?;
+                    let names = (0..v.components.len())
+                        .map(|i| human_component_name(v, i, limit))
+                        .collect::<Result<Vec<_>>>()?;
+                    let owner = if control(&v.components[a])
+                        && names.iter().filter(|name| **name == caption).count() == 1
+                    {
+                        format!("FRAME OWNER: {}.\n", bounded_compact_json(&caption, limit)?)
+                    } else {
+                        format!("FRAME OWNER (unprinted): #{}.\n", a + 1)
+                    };
+                    append(&mut out, &owner, limit)?;
                 }
                 if w.anchors[0].frame_kind == FrameKind::LayoutBounds
                     && clipped.get(a).is_some_and(|edges| !edges.is_empty())
@@ -2371,23 +2378,40 @@ fn drawing_dimensions(
             ),
             limit,
         )?;
-        append(
-            &mut out,
-            &format!(
-                "Reuse {}.\n",
-                members[i]
+        let reused = members[i]
+            .iter()
+            .copied()
+            .filter(|index| {
+                assignment != Assignment::Measurements || measurement_targets.contains(index)
+            })
+            .collect::<Vec<_>>();
+        let names = (0..v.components.len())
+            .map(|i| human_component_name(v, i, limit))
+            .collect::<Result<Vec<_>>>()?;
+        let reuse = if assignment == Assignment::Measurements
+            && reused.iter().all(|&j| {
+                geometry(&v.components[j]).is_some_and(|g| g.frame_kind == FrameKind::LayoutBounds)
+                    && names.iter().filter(|name| **name == names[j]).count() == 1
+            }) {
+            format!(
+                "Measured owners: {}.\n",
+                reused
                     .iter()
-                    .copied()
-                    .filter(|index| assignment != Assignment::Measurements
-                        || measurement_targets.contains(index))
-                    .collect::<Vec<_>>()
+                    .map(|&j| bounded_compact_json(&names[j], limit))
+                    .collect::<Result<Vec<_>>>()?
+                    .join("; ")
+            )
+        } else {
+            format!(
+                "Reuse {}.\n",
+                reused
                     .iter()
                     .map(|i| format!("#{}", i + 1))
                     .collect::<Vec<_>>()
                     .join(", ")
-            ),
-            limit,
-        )?;
+            )
+        };
+        append(&mut out, &reuse, limit)?;
         append(&mut out, &local_measures(v, &owned, partial, limit)?, limit)?;
     }
     let scalar_fragments = lines
@@ -2656,6 +2680,17 @@ fn render_view(
     }
     vars.insert("artwork_guidance", artwork_guidance);
     vars.insert("state_guidance", format!("{}Reported Focused=true: outside ‘Focused’ tag in every view of that object, in the document language. Explicit caller-only input focus: ‘Focused (caller-reported)’. Keep source captions and EMPTY AX interiors. Focusable/selected alone is not focus. Unknown/withheld/false or conflicting focus never becomes an unconditional Focused tag; preserve conflicts. No inferred caret or focus shape.\n", if assignment == Assignment::Measurements { "Caption only recorded per-target flags or caller statements that explicitly identify that target, outside its empty frame. Whole-view context is not a state for every target; never spread group state to other frames. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }));
+    if assignment == Assignment::Measurements
+        && presentation
+            .lines()
+            .any(|line| line.starts_with("TARGET ") && !line.contains('"'))
+    {
+        vars.insert("state", format!("UNBOUND CALLER VIEW CONTEXT: {} Generic role/ordinal captions do not identify these named caller entities. No caller-to-frame mapping is supplied; do not infer it from order, proximity or the image", v.state));
+        vars.insert("printable_content", "only assigned dimensions/frame captions and Recorded per-target states outside EMPTY sketches; retain caller statements separately in a short ‘Caller context — not bound to frames’ note, never on a generic frame".into());
+        if let Some(guidance) = vars.get_mut("state_guidance") {
+            guidance.insert_str(0, "Generic frame owners: attach only their Recorded per-target states. Keep unbound caller names/state in the separate Caller context note, without assigning them to generic ordinals. Known per-target flags below are not removed.\n");
+        }
+    }
     vars.insert("design_analysis", design_analysis);
     vars.insert("sheets", sheet_plan);
     let mut rest = include_str!("prompt-template.txt");

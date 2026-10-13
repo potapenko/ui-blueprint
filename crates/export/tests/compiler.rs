@@ -542,6 +542,88 @@ fn current_observed_dimensions() -> (String, String) {
     (historical, current)
 }
 #[test]
+fn measured_human_owners_keep_literal_hashes_and_unbound_caller_state_separate() {
+    let mut b = fixture("observed");
+    b.views[0].state =
+        "Google is focused; Apple is disabled. Caller view observations only.".into();
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for (i, node) in snapshot.nodes.iter_mut().enumerate() {
+        let mut property = node.properties[0].clone();
+        let Property::Requested { field, state, .. } = &mut property else {
+            panic!()
+        };
+        *field = Field::Focused;
+        *state = Availability::Known {
+            value: Value::Flag(i == 0),
+        };
+        node.properties.push(property);
+    }
+    snapshot.context.fields.push(Field::Focused);
+    snapshot.coverage.fields.push(Field::Focused);
+    for o in &mut snapshot.observations {
+        o.coverage.fields.push(Field::Focused);
+    }
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+        panic!()
+    };
+    *state = Availability::Known {
+        value: Value::Text("Action #17 #20 #24".into()),
+    };
+    b.details = vec![DetailRequest {
+        view: b.views[0].id.clone(),
+        components: vec!["N000".into()],
+        title: "Owner detail".into(),
+    }];
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, l).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert!(text.contains("Action #17 #20 #24"));
+    assert!(text.contains("Measured owners:"));
+    assert!(text.contains("FRAME OWNER: "));
+    assert!(!text.contains("Reuse #1.") && !text.contains("FRAME OWNER (unprinted): #1."));
+    let named_machine = data(&p, "scene.json");
+    assert_eq!(
+        named_machine["views"][0]["components"][0]["properties"][1]["state"]["value"]["value"],
+        "Action #17 #20 #24"
+    );
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+        panic!()
+    };
+    *state = Availability::Unknown {
+        reason: Id("not-collected".into()),
+    };
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, l).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let text = std::str::from_utf8(&p.files()["prompt-D01.txt"]).unwrap();
+    assert_eq!(text.matches(&b.views[0].state).count(), 1);
+    assert!(text.contains("UNBOUND CALLER VIEW CONTEXT"));
+    assert!(text.contains("Caller context — not bound to frames"));
+    assert!(text.contains(
+        "Recorded Focused=true for button, item 1 in source scope; caption outside only."
+    ));
+    assert!(text.contains("Known per-target flags below are not removed"));
+    assert!(
+        !std::str::from_utf8(&p.files()["prompt-G01.txt"])
+            .unwrap()
+            .contains("UNBOUND CALLER VIEW CONTEXT")
+    );
+    let mut exact = l;
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+}
+
+#[test]
 fn colliding_public_named_captions_keep_text_and_distinct_source_ordinals() {
     for same_parent in [true, false] {
         for name in [
