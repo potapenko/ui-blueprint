@@ -85,7 +85,16 @@ Actual PNG sources2560×1440/780×1688 preserve nativeDPR2. Two successful initi
 GET200 responses each return20rows; no query/option/checkbox changes. Both own tabs
 closed and1280×720DPR2 restored. Author checked108frames/16required dimensions and
 both required firstG01 images at61bd8cb, no rerolls. Desktop measured-frame ownership
-and mobile lower clipping failures remain; independent reviews are pending.
+and mobile lower clipping failures remain. Both critics independently observed then
+reconciled author evidence: CV2 final01a132ab-05df-7383-9947-208a77cedb21,
+CT2 final01a132aa-8a66-7842-b26b-f9dc59046c06. Both images1536×1024 fail scoped
+acceptance: CW70≈98wrapper width spans240.9375popup, adds first-row border and
+repeats measurements; CW71 completes a21CSSpx text frame with only5.8046875visible.
+CT2 also retains focus/relationship-frame-meaning omissions; literal token spelling
+alone is not required. Adjacent sourced checkbox label is not independently treated
+as a mandatory fragment-membership defect. All108frames/16assigned amounts agree;
+no new contradictory compiler instruction was established. CP14 explores bounded
+human-presentation robustness without changing these facts or acceptance criteria.
 
 ## One first completion in the repair bucket
 
