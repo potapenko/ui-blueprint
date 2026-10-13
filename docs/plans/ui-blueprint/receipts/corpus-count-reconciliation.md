@@ -6,16 +6,16 @@ No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**201 proved eligible cases; range201–204 pending three named uncertainties.**
-The planning remainder is799 cases, potentially796 if all three are established.
-There are78 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;144 are non-fixture observations. Fixture UI is
+**202 proved eligible cases; range202–205 pending three named uncertainties.**
+The planning remainder is798 cases, potentially795 if all three are established.
+There are79 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;145 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:528 primary images =524 first outputs +4 rerolls;
-78 separate repair-validation images;4 unqualified reference attempts
+Completed-batch image buckets:529 primary images =525 first outputs +4 rerolls;
+79 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-610 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+612 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -140,7 +140,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B20 |1|1|New live Cast tooltip; canonical handoff works, first image fails; CW14 counted once under CW-B2 |
 | CN-B22 |1|3|New passive Release Guest Tour32AXnodes/24callouts; G01/D01/D02 evaluated, no rerolls |
 | CW-B21 |3|3|Distinct empty sign-in/register/recovery subforms; source-qualified first images, all fullrasterFAIL; providerchooser excluded |
-| **Primary subtotal** |**200**|**528**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:201 total cases |
+| CW-B22 |1|1|First collapsedFilters canonical→package→image after RECT2; previous refusals and PrivacyPolicy produce0cases/images |
+| **Primary subtotal** |**201**|**529**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:202 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1063,3 +1064,35 @@ Totals201cases(78Web+123Native;57fixture+144non-fixture),41primarybatches,
 528primaryimages(524first+4rerolls),78repairimages,4unqualifiedimages,610totalimages.
 Conservative remainder799; A02/B07/C04 uncertainties unchanged. Oldfailures and
 allimages/tooloriginals/containingdirectories retained.
+
+## Named captions and first collapsed Filters — combined final review
+
+Native source df43e883f4fdd09eaf1b005354380cbcbbb001fe, receipteec30ee;
+[receipt](consumer-named-captions1.md). Neutral
+`$T/uib-NAMED-CAPTIONS1-16wl9kqi/neutral-index.json`, SHA
+ff3525b3cfe2919e3ecb62dec4c8eb278cb461401e40e298b3366245fd553297.
+One A04D02repairPNG1672×941; exactCopypublicnames nowdistinctoccurrence1/2,
+sourceorder only, notsemanticidentity. MachineJSON/69assignments retained. All39
+amounts appear,38approximationlabels correct; Previous84.5→85drops≈, exactheight85
+is correct. Pinkbrain fails palette, extra View/Scope remains residual. Targeted
+sourcefix accepted, fullrasterFAIL; no newNativecase/reroll.
+
+Web neutral `/tmp/uib-rect2-accept-aeem4svv/neutral-index.json` completes original
+CW-B22 collapsedFilters for the first time. Producerabd8878 retains8nodes/requested
+fields/exactlayout/unknownIO/partialnonatomic. Four Rustmeasure outputs match source.
+Originalrefusals produce no canonicalresponse/image and are not earliercompletedcases.
+Firstimage preservescollapsedrail/chevron/verticallabel andassigned≈24×≈24, but
+prints prohibited#6. KnownASIDEframe39.140625×798.140625 is not assigned byexport;
+innerDIV30.109375×774.046875 distinct, no union/paint or firstnode-root inference.
+Confirmedgenericflat-frame selection gap assignedUSE-PRINCIPAL-FRAME1, notrasterbug.
+
+CV2initial01a1368f-1b5d-7fa0-96f3-f96c852a9de6/final
+01a13691-7fb0-73f0-8c83-cc8e678d88f1; CT2initial
+01a1368f-1c17-7441-8ae1-83e2297862c5/final
+01a13691-b9f6-7553-a02f-5fee239331ac. Bothqualify1Webnewcase+1Native repairimage,
+zero fullvisualacceptances. Sourceimplementation/privacy guards and geometryUnknown
+meanings preserved. Authorreceipt read onlyafterinitial; no repeatedchecks onfinal.
+
+Totals202cases(79Web+123Native;57fixture+145non-fixture),42primarybatches,
+529primaryimages(525first+4rerolls),79repairimages,4unqualifiedimages=612generated.
+Remainder798; oldA02/B07/C04 uncertaintyunchanged. Allimages/oldfailures retained.
