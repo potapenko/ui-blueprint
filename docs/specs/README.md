@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 59 (pinned-source skill installation before publication).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 60 (agent-composed blueprint skill).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -93,7 +93,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 | Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
 | Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
 | Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@2](development/rust.md) | Active / Evolving; C01 setup choices, product builds still unaccepted |
-| Agent skill and prompt installation | [AGENT-SKILL@3](development/agent-skill.md) | Pinned-source bootstrap and new-chat installation/use; public release separate |
+| Agent skill and prompt installation | [AGENT-SKILL@4](development/agent-skill.md) | Agent-composed drawing and cold-chat installation/use; literal CLI retained |
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 ## Routing invariants

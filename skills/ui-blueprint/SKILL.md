@@ -7,6 +7,10 @@ description: Use UI Blueprint to observe a selected Web or macOS interface, insp
 
 Use the local Rust engine for UI facts and calculations. Start from the user's
 selected component, observation or requirement; choose the smallest useful scope.
+For a blueprint, teach the geometry: use the engine for measurements and the agent
+for selecting and explaining useful relationships. Read the export reference for
+the agent-composed prompt scaffold; literal CLI output remains an explicit option.
+Respond and label drawings in the user's language unless requested otherwise.
 
 ## Establish the bundle and task
 

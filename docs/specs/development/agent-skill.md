@@ -1,6 +1,5 @@
 # Agent skill and prompt installation
-
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@3`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@4`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: the operator approved this chat's six-step plan on 2026-10-13;
   the later instruction “Теперь давай подключим skill к установщику” authorizes
@@ -10,24 +9,17 @@
 - Do not read when: using unchanged engine or collector internals.
 - Requires: [BOUNDARIES@1](../product/boundaries.md), [CLI@20](../product/cli.md).
 - Conditional requires: linked recipe contracts and [Mac distribution](macos-distribution.md).
-
 ## AGENT-SKILL.SCOPE — Approved plan and current stage
-
-The approved outcome is one `ui-blueprint` skill, installation of the matching CLI
-and skill through one prompt, and a README entry. Work stays single-agent on the
-current branch. The six steps are: register this contract; author the portable
-skill; integrate it into versioned distribution; document the installation prompt;
-check installation lifecycle and examples; checkpoint only task-owned changes.
-
+The approved outcome is one portable `ui-blueprint` skill and matching CLI,
+versioned installation, README instructions and verified installation/use.
+Current-branch work remains single-agent except the explicit cold-chat test below.
 Integration and isolated lifecycle checks are complete. The operator subsequently
 authorized isolated Codex/Claude discovery, then recording its results and readiness.
 On 2026-10-14 the user authorized push master, real installation under ~/.local
 and ~/.agents/skills/ui-blueprint, then testing installation and use in a new chat.
 Release publication/licensing and unrelated changes remain excluded. This does not
 resume the older goal; the new-chat test must use the pushed consumer instruction.
-
 ## AGENT-SKILL.WORKFLOW — Portable operating instructions
-
 The entrypoint is [skills/ui-blueprint/SKILL.md](../../../skills/ui-blueprint/SKILL.md).
 Keep it short and automatically discoverable for UI Blueprint observation,
 measurement, requirement checks, saved comparisons and drawing preparation.
@@ -89,12 +81,20 @@ require explicit authorization for their location and purpose.
 | Host discovery, verified | [Recorded versions/modes](../../development/macos-release.md#skill-discovery-verification--2026-10-13): Codex skills/list and Claude initialization list the installed skill; negative controls exclude cached presence |
 | Publication, excluded | Published URL/Gatekeeper and real user-session invocation remain separate from isolated discovery |
 
-No Rust changes, image generation or live collection are needed here. Earlier
-discovery used control requests; the newly authorized chat installs from the pushed
-guide and uses the skill on saved data. Public release acceptance remains separate.
+Earlier installation discovery used control requests, not product proof.
+The authorized cold test installs and uses saved data; public release is separate.
 
-## Change record
-AGENT-SKILL-003: explicit 2026-10-14 user correction opens push → new-chat install
-→ real skill use. The prior prompt refused because Releases was empty; pinned-source
-bootstrap and offline candidate input close that observed onboarding gap.
-CLI/wire/analysis/export semantics and release publication remain protected.
+## Agent-composed drawing — direct user direction2026-10-14
+
+Keep literal CLI export; the primary human-drawing workflow now teaches a fresh
+agent to compose a selective prompt from Rust-verified geometry. Bundle the English
+strategy, adaptable template and review criteria in the existing export reference;
+labels follow the user's language. Do not embed prior screenshots/prompts or A04
+answers. The user explicitly requests fresh-chat installation and forward testing:
+one saved-source case and one generation per initial iteration, with no inherited
+conversation or successful example. Isolated system-temp installation is authorized
+for this test; no application changes, new public release or old goal resume.
+
+AGENT-SKILL-003: authorized pinned-source bootstrap resolves the empty-Releases
+onboarding gap. AGENT-SKILL-004 adds the agent-composed drawing/cold-test workflow.
+CLI/wire/analysis/export semantics and public release boundaries remain protected.

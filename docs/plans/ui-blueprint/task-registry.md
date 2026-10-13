@@ -1,5 +1,26 @@
 # Единый реестр задач
 
+## Current finite task — skill-led blueprint, 2026-10-14
+
+The user explicitly selects a new primary strategy: retain literal CLI prompts,
+but teach a fresh agent how to compose a useful drawing assignment from library
+facts. User also explicitly requests a new chat per test iteration, installing
+and using the skill without this chat's history or successful example images.
+This is finite skill work with one cold-start test initially, not CORPUS-1000
+resumption. The old goal stays paused. No source application changes or new Rust
+features are selected. Root authors the portable English skill and receives one
+cold worker result; the worker does not spawn agents or read old prompts/images.
+
+Owned write set: skills/ui-blueprint/SKILL.md, its existing references/export.md,
+docs/specs/development/agent-skill.md and its registry row, this restart state.
+English instructions carry a reusable strategy/template, while image labels and
+responses follow the user's language. Rust remains the calculator; agent editorial
+choices remain explicit. Literal CLI is an alternative, not misattributed as the
+agent's composed prompt. One raw saved-source case, one generation, temp-prefix
+installation through the existing recipe, then review the actual result before
+considering another iteration. No global configuration or duplicate skill install.
+
+
 ## Current finite correction — CLI-generated geometry prompt, 2026-10-14
 
 Latest direct follow-up: remove zero arrows and technical captions in the library;
