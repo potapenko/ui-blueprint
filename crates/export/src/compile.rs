@@ -2043,8 +2043,12 @@ fn drawing_dimensions(
                 });
             }
             if d.label == "Measured left inset"
-                && input_containers.contains(&a)
-                && input_control(cb)
+                && ((input_containers.contains(&a) && input_control(cb))
+                    || (overview.contains(&a)
+                        && component_role(ca).eq_ignore_ascii_case("dialog")
+                        && !input_containers.contains(&a)
+                        && ca.children.contains(&cb.id)
+                        && same_frame(ca, cb)))
             {
                 if !insets.iter().any(|(_, parent, _)| *parent == a) {
                     insets.push((d, a, b));

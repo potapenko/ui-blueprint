@@ -1016,6 +1016,131 @@ fn popup_prompt_preserves_distinct_input_and_result_width_owners() {
 }
 
 #[test]
+fn no_input_dialog_selects_one_existing_direct_child_inset() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "DIV");
+        node.children.clear();
+    }
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("dialog".into()),
+    };
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[0] else {
+        panic!()
+    };
+    *state = Availability::Unknown {
+        reason: Id("native-role-only".into()),
+    };
+    for i in [6, 8] {
+        set_test_role(&mut snapshot.nodes[i], "BUTTON");
+    }
+    for (i, x, y, w, h) in [
+        (0, 0., 0., 200., 120.),
+        (2, 8., 8., 184., 16.),
+        (4, 8., 30., 184., 80.),
+        (6, 8., 30., 90., 30.),
+        (8, 102., 30., 90., 30.),
+    ] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x,
+            y,
+            width: w,
+            height: h,
+        });
+    }
+    snapshot.nodes[0].children = [2, 4].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+    snapshot.nodes[4].children = [6, 8].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+    let original = serde_json::to_vec(&b).unwrap();
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let p = compile(&b, l).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert_eq!(text.matches("LOCAL INSET DETAIL").count(), 1);
+    let tail = text.split("LOCAL INSET DETAIL").nth(1).unwrap();
+    assert!(
+        tail.contains("dialog Left boundary")
+            && tail.contains("container Left boundary")
+            && tail.contains("8 CSS px")
+    );
+    let dims = data(&p, "dimensions.json");
+    assert!(
+        dims[0]["dimensions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|d| d["label"] == "Measured left inset"
+                && d["value"] == 8.
+                && d["anchors"][0]["component"] == "N000"
+                && d["anchors"][1]["component"] == "N002")
+    );
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let mut exact = l;
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    for variant in ["unknown", "space", "not-dialog", "not-children"] {
+        let mut b = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+            panic!()
+        };
+        match variant {
+            "unknown" | "space" => {
+                for i in [2, 4] {
+                    let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[2]
+                    else {
+                        panic!()
+                    };
+                    if variant == "unknown" {
+                        *state = Availability::Unknown {
+                            reason: Id("not-collected".into()),
+                        };
+                    } else {
+                        let Availability::Known {
+                            value: Value::Geometry(g),
+                        } = state
+                        else {
+                            panic!()
+                        };
+                        g.coordinate_space.id = Id("unrelated".into());
+                    }
+                }
+            }
+            "not-dialog" => {
+                set_test_role(&mut snapshot.nodes[0], "DIV");
+                let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+                    panic!()
+                };
+                *state = Availability::Known {
+                    value: Value::Text("Popup capture region".into()),
+                };
+            }
+            "not-children" => snapshot.nodes[0].children.clear(),
+            _ => unreachable!(),
+        }
+        let p = compile(&b, l).unwrap();
+        assert!(
+            !std::str::from_utf8(&p.files()["prompt.txt"])
+                .unwrap()
+                .contains("LOCAL INSET DETAIL"),
+            "{variant}"
+        );
+    }
+}
+
+#[test]
 fn editable_combo_options_and_independent_same_size_controls_get_useful_geometry() {
     let mut b = fixture("observed");
     let SourceInput::Observed {
@@ -1128,6 +1253,13 @@ fn editable_combo_options_and_independent_same_size_controls_get_useful_geometry
             && !d["evidence"].as_array().unwrap().is_empty()));
     }
     let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert_eq!(text.matches("LOCAL INSET DETAIL").count(), 1);
+    assert!(
+        text.split("LOCAL INSET DETAIL")
+            .nth(1)
+            .unwrap()
+            .contains("select, item 1 in its group Left boundary")
+    );
     assert!(text.contains("WIDTH 140 CSS px BELOW this measured source frame; HEIGHT 120 CSS px"));
     assert!(text.contains("WIDTH 124 CSS px ABOVE; HEIGHT 20 CSS px"));
     assert!(
