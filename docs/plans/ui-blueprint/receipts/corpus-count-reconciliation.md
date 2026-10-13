@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after CW-B21 final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after recovered CN-B1 A04 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**200 proved eligible cases; range200–203 pending three named uncertainties.**
-The planning remainder is800 cases, potentially797 if all three are established.
-There are78 Web and122 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;143 are non-fixture observations. Fixture UI is
+**201 proved eligible cases; range201–204 pending three named uncertainties.**
+The planning remainder is799 cases, potentially796 if all three are established.
+There are78 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;144 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:524 primary images =520 first outputs +4 rerolls;
+Completed-batch image buckets:528 primary images =524 first outputs +4 rerolls;
 78 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-606 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+610 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -101,7 +101,7 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | --- | ---: | ---: | --- |
 | CW-B1 |11|12|CW02 is an unqualified occlusion negative |
 | CW-B2 |10|10|CW14 first image qualified through USE-PROMPT-LENGTH1; earlier no-image refusals preserved; unavailable/invalid candidates excluded |
-| CN-B1 |1|2|A12 counted; A02 qualification unresolved; other initial generation gaps |
+| CN-B1 |2|6|A12 and recovered A04 counted; A04 completed4firstsheets through CN-B23-A04; A02 qualification unresolved, other oldgaps retained |
 | CN-B2 |7|8|B07 partial sidebar qualification unresolved |
 | CN-B3 |8|16|12 configurations include3 documented duplicates;4 rerolls; C04 novelty unresolved |
 | CW-B3 |6|6|Qualified scrolled/lookup states; unrelated invalid CW-S1 excluded |
@@ -140,7 +140,7 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B20 |1|1|New live Cast tooltip; canonical handoff works, first image fails; CW14 counted once under CW-B2 |
 | CN-B22 |1|3|New passive Release Guest Tour32AXnodes/24callouts; G01/D01/D02 evaluated, no rerolls |
 | CW-B21 |3|3|Distinct empty sign-in/register/recovery subforms; source-qualified first images, all fullrasterFAIL; providerchooser excluded |
-| **Primary subtotal** |**199**|**524**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:200 total cases |
+| **Primary subtotal** |**200**|**528**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:201 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1028,3 +1028,38 @@ The assigned measurement frame is valid; its depicted relation is wrong. No new
 complete visual acceptance. Sourceowner archived after handoff; retained ready CLI
 and images remain available to consumers. Totals200cases/524primaryimages/
 78repairimages/4unqualifiedimages=606generatedimages;800cases remain.
+
+## CN-B23-A04 — previously ungenerated Vocabulary case completed
+
+Original CN-B1 A04 was excluded for no generated image. It now adds one case and
+four first sheets to that original batch, not a new live state or extra batch.
+Neutral `$T/uib-CN-B23-A04-dp_c01wb/neutral-index.json`; original80-node partial
+AX Snapshot/metadata/nativePNG unchanged, exporter04fa48e, originallimits retained.
+SourcePNG95d9c30306b420c717f2ce75ba78c1c8d1134a1aca1f7bb621cb45902f66ce86;
+Snapshot e7b996f6cedb662d026376460e916b858ad727460181d9e21c2bde7fcb237241.
+
+Originalowner recovered exact successful native screencapture command from
+turn01a12b45-a461-75d1-b731-46046a36cc7c/exec-d5d3e670-a1cb-4698-ae3c-70976738c0a2:
+window23492/PID39446, immediately after AXcollect. Not CUA-derived, no recorded
+resampling. No contemporaneousPNGhash/continuousbytes claim; AX/reference sequential,
+unknowntransform and partialscope remain. Both critics compare actualB902 reference:
+A04 longlist/translatedentries/partialfourthrow differs from threecomplete rows+Next.
+
+CV2initial01a1367c-b1f9-7d81-bb5e-6c1abf0cb21d/final
+01a1367f-a50d-7d30-bdda-9b0caf52b7f8; CT2initial
+01a1367c-b312-71b1-8392-41810b19eca0/final
+01a13680-7c56-7e50-b455-09a5f855c9b8 qualify the full4sheet protocol. AllPNG1672×941,
+69unique dimension assignments4/20/39/6. D01 passes both scopedreviews; G01/D02/D03
+fail. G01 omits reference-visible definitions/family/collocations, completes clipped
+Time content and conflates AX/artwork/windowextent. D02 pinkemoji fails palette;
+extra panels/headings remain residuals, not numericfailure. D03 71.5pt correctly
+rounds≈72 but raster drops≈. Exact prepared first_page AX-caption is not evidence
+of invented icon/function; no semanticrename authorized. Duplicate named Copy text
+to clipboard captions remain a human-disambiguation gap without fabricated binding.
+Author69Rustremeasurements are separately attributed; reviews did not rerun on final
+reconciliation. One scoped sheet acceptance does not accept the completecase.
+
+Totals201cases(78Web+123Native;57fixture+144non-fixture),41primarybatches,
+528primaryimages(524first+4rerolls),78repairimages,4unqualifiedimages,610totalimages.
+Conservative remainder799; A02/B07/C04 uncertainties unchanged. Oldfailures and
+allimages/tooloriginals/containingdirectories retained.
