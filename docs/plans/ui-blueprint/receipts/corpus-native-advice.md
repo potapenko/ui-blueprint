@@ -42,6 +42,24 @@ popup bounds or unrequested checkbox/focus/draft. BackgroundSearch is out of nee
 These exact selections/limits were passed to the implementation owner. No app launch
 or source changes occurred during this consumer clarification.
 
+### USE-MAC1 retry — consumer acceptance
+
+Turn01a13514-4e27-70e2-a8b4-05c0f451e9c6 independently ran the pinned Nativebundle
+14b01d8/CLI SHA6ee4f062b08012a859522bae4645773db4b996cb2c24238068c7174181ec407e
+with the original files and consumer-selected correspondence. Compare exit0 confirms
+unchanged Close/query/viewport bounds, viewport392×360pt, content392×576→392×36,
+reportedchildren16→1, TomHardythird→first and an unmapped scrollbar. Full original
+source/IDs preserved; caller_declared_unverified, partialscope and155unexamined nodes
+on each side explicit. The consumer says this answers its original QA question.
+Diagnose explains session/surfaces versus environment; strictold diff still refuses.
+No app launch/project changes. Sharedbundle/C retained for root; not removed.
+
+Nonblocking feedback: correspondenceJSON is bulky and compact text repeats too much
+Evidence/JSON. USE-MAC-COMPACT1 addresses only the latter as a bounded formatting
+change, preserving exact JSON/logic. Mapping-authoring ergonomics is recorded for a
+later concrete request, not silently added. This is a consumer workflow acceptance,
+not livecollection/wholeUI identity or a new primary imagecase.
+
 ## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
 
 **Отклонено пользователем2026-10-13. Не реализовывать как задачу UI Blueprint.**

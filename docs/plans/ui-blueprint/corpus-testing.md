@@ -331,3 +331,15 @@ on a completed pinned bundle/command. Help-only3e143199 is supporting progress.
 Both implementation packets are full-cycle finite tasks, no nested agents or per-step
 root approval. Real ownership/dependency handoffs are coordinated; unrelated checks
 are not repeated. Final acceptance includes the same consumers' actual tasks.
+
+## USE-MAC-COMPACT1 — direct consumer output feedback
+
+Native compare14b01d8 passes independent boundary review and the actual Macconsumer
+retry. The consumer's remaining nonblocking issue is verbose compact Evidence/JSON.
+Core now applies a small presentation-only fix: concise selected facts and metadata
+without loss of availability, caller-declared status, units/provenance, recorded
+children/positions, coverage or omissions. Exact machine JSON must remain byte-identical.
+No newflags/inputbuilder/algorithm/parser/sourceapp changes. Affected rendering,
+necessary focused checks/docs and consumer-native-compact1.md only. Actual samepair
+compact plus JSON preservation, pinned core bundle if sufficient, scopedcommit/push;
+no broad runtime/ImageGen cycle. Bulky correspondenceauthoring is recorded separately.
