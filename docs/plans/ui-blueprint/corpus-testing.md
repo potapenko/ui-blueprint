@@ -519,3 +519,51 @@ image criteria; a target improvement does not hide another failure or prove gene
 reliability. Keep all images/tool originals; no nested agents or new persistent dirs.
 Economy: one repeated human-owner/state ambiguity in actual measured outputs; reuse
 saved sources and accepted lower layers while the independent auth corpus continues.
+
+## USE-AUTO-DETAIL2 — omit an uninformative automatic tail
+
+Authority: the user's explicit useful, less-noisy blueprint/prompt improvement goal.
+Root adopts the conservative Evolve proposal in
+[USE-AUTO-DETAIL1](receipts/consumer-auto-detail1.md), after actual source/planner and
+contract reconciliation. The existing literal plan-preservation contract requires a
+semantic change; register SHEET-PROMPTS@2 and its direct routes before source edits.
+This is a presentation decision inside the goal, not a declaration that unknown DIVs
+are invisible or that the prior renderer scope failure was an arithmetic bug.
+
+Adopt all four eligibility/protection conditions in that receipt. Additionally keep
+any input carrying optional design_analysis unchanged: that domain was excluded from
+the diagnosis. Only a single observed Document with no explicit details, in its
+existing auto-density branch, may omit a final short automatic chunk when every member
+is the verified generic DIV/unknown-three-geometry-only pattern and no member has
+structural, relation, mapping, focus, declaration, extension or dimension context.
+Any uncertainty keeps the sheet. Known zero geometry, false states, public text/name,
+controls, unsupported/redacted facts and explicit requests remain protected.
+
+Keep those original records in the exact scene/dimensions and complete G01. Preserve
+caller context, source unknowns/partial coverage and reference-visible overview
+content. Do not merge into the preceding full chunk, raise density, prune before
+chunking, rebalance retained groups or change earlier IDs/owners. All downstream
+sheet/manifest/brief/prompt files derive from the one final plan; their intentional
+plan changes must not be mislabeled byte preservation. Six base files, grammar,
+JSON field shapes and narrow export0.4 compatibility remain. Explicit-detail-only,
+propose/detail/compare/flow, multi-view and analysis-bearing inputs stay unchanged.
+
+Original export owner completes one full shipping_product packet. Writable: existing
+export auto-planner and directly affected tests; SHEET-PROMPTS leaf and only direct
+PACKAGE/EXPORT/CLI-EXPORT/registry/routing references needed for its revision; receipt
+`receipts/consumer-auto-detail2.md`. Shared spec-route lease is exclusive here.
+No source app/collector/CLI grammar/core/schema/Cargo or new flag/framework/graph.
+Baseline accepted c0d6fd8; use its ready CLI and exact CW27 Email/Register inputs,
+original density12 and caps. Email keeps25nodes/36unknowns/G01 and all required
+measurements but no D03; useful Register D03/M0077/M0078 remain. Focused counterexamples
+and bound/refusal/no-split checks follow the accepted diagnostic plan. One needed
+core build and one first literal Email G01 image verify preserved overview scope;
+no generation for the omitted sheet, no reroll, and no new primary case. Controls
+need preparation proof, not repeated images. Same two critics review the changed
+planning rule and actual output; unrelated accepted behavior stays closed.
+
+Current master, exact-path checkpoint/push under the existing Git lock, system-temp
+candidate and images retained with tool originals. No nested agents, worktree or
+persistent output directory. Neutral index precedes author assessment. If actual
+implementation encounters a protected dependency, return it rather than broaden
+eligibility or silently weaken source fidelity.
