@@ -1,6 +1,6 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after CW-B26 final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after CW-B26 and overview-presentation final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
@@ -13,9 +13,9 @@ fixture/component-preview origin;155 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:547 primary images =543 first outputs +4 rerolls;
-81 separate repair-validation images;4 unqualified reference attempts
+83 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-632 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+634 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -1243,3 +1243,32 @@ final reconciliation did not repeat checks. Three qualified cases and3firstimage
 added:212cases(87Web+125Native;57fixture+155nonfixture),46primarybatches,
 547primaryimages(543first+4rerolls),81repairimages,4unqualifiedimages=632total.
 Remainder788; original3uncertainties unchanged. Zero fullimage approvals.
+
+
+## USE-MEASUREMENT-PANELS1 — two repair images, no new cases
+
+Source691ce41a6fb3943c508b17880f2d2c75e9289476, receipt7ba17bf;
+[author receipt](consumer-measurement-panels1.md). Neutral index under
+`$T/uib-MEASUREMENT-PANELS1-jqiysjjj/neutral-index.json`, SHA
+296cc83d82e57e45ebda721ba71f811841116a31e55105f27a8dfa831ad3fb06,
+pins two literal first outputs: A03G01 1672×941 and PrivacyG01 1774×887.
+Same original sources/metadata/caps; no rerolls or additional A11 control image.
+New CLI SHA2b217eb1e6245e46a3c638cf61d76e82326914e36da96e361f92aa9f06fd0edf.
+
+CV2 initial01a136d8-2b2d-7333-8f70-bde301126f05/final
+01a136db-4179-7623-9db1-29c1b85682d3 and CT2 initial
+01a136d8-2d6f-7340-9727-fc2fb87dfa27/final
+01a136db-ac54-7330-8f9f-1ea61a139c17 accept the targeted separation on both outputs.
+CT2 accepts scoped source/prompt change: only conditional overview instruction;
+all machine files/required assignments/standalone detail prompts remain byte-identical.
+The author's four focused checks/build are author evidence, not repeated critic tests.
+
+A03 keeps4assigned quantities and506pt equality but remains fullFAIL: changed overlay,
+completed clipped eighth row and altered playback shapes/content/white-filled Play.
+Privacy retains four sentences/bold prefixes and828×≈128CSSpx, in a separate empty
+layout sketch. Both critics accept scoped delivery. CV2 treats the left unmeasured
+ReferenceUI enclosure as editorial framing; CT2 withdraws categorical source-border
+failure because evidence cannot establish a new source-control contour. The author's
+stricter disagreement remains explicit, without inventing a ban on editorial panels.
+No universal reliability claim or retrospective primary-image pass. Two repairimages
+added:212cases,547primaryimages,83repairimages,4unqualifiedimages=634total.
