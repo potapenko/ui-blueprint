@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B14 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B15 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**187 proved eligible cases; range187–190 pending three named uncertainties.**
-The planning remainder is813 cases, potentially810 if all three are established.
-There are66 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;130 are non-fixture observations. Fixture UI is
+**189 proved eligible cases; range189–192 pending three named uncertainties.**
+The planning remainder is811 cases, potentially808 if all three are established.
+There are68 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;132 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:509 primary images =505 first outputs +4 rerolls;
+Completed-batch image buckets:511 primary images =507 first outputs +4 rerolls;
 56 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-569 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+571 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -107,7 +107,23 @@ eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 | CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
 | CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
 | CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
-| **Primary subtotal** |**186**|**509**| |
+| CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs authorFAIL; review pending |
+| **Primary subtotal** |**188**|**511**| |
+
+CW-B15 evidence: `uib-cw-b15-7A6OTi/HANDOFF.md`, neutral-manifest, novelty-proof,
+per-realm loaded-chain, numeric/literal and state/resource records. NeutralSHA256
+ea801f73c4d74a30f617b072021609ad2d8e28575478a7db72d3450a620433ec.
+FrozenCP15;125rawrecords/102canonicalnodes,102layout+visible frames,408size facts;
+38required engine reruns (22/16), not all1094unprinted derivatives independently checked.
+16loaded functions matched eachrealm. SourceEpisodes empty-query effects qualified;
+11desktop/22rawmobile controls change disabled→enabled; below-viewport mobile items
+not promoted into artwork. No label/digit-only multiplication.
+NativeDPR2 fullsources retained. Direct Dcapture12,105,205,387CSSpx→410×774 rounds
+outward with<1CSSpx margins; sourcegeometry unrounded. M780×1582 exactboundedref.
+Two first1536×1024outputs, no rerolls. Own filters/query/results restored/tabsclosed,
+mobileviewportreset; final mobile panel-dismissal afterBack not separately proven.
+Author: Dfocus/inset-anchor/gap repetition fail; Mrepeated-focus/detail membership/
+bottomhelper clipping fail. Independent image acceptance pending, source limits retained.
 
 CW-B14 evidence: `uib-cw-b14-XUdZ9Y/HANDOFF.md`, neutral-manifest, required-dimension
 proof, literal-invocation proof and state/resource records. NeutralSHA256
