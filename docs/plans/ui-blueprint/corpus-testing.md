@@ -361,3 +361,40 @@ packaging remain I02owned. Shared spec routing lease handed off explicitly.
 Focused actual refusal/privacy/bounds/cleanup proof, coherentcommit/push/interfacepin
 then I02 integrates the strict allowlist and diagnoses actual popup/list. Closed-shadow
 Restore continues independently. Same site consumer performs the real final retry.
+
+## USE-MEASUREMENT-PANELS1 — clearer overview composition
+
+Basis: the user's explicit actual-prompt improvement goal and HBP-HUMAN-001/R2/R3
+permit concise presentation work. Existing source/frame/unknown protections remain
+requirements. CN-B24 and ADDRESS3 independent first observations, plus CV2 final
+01a136cb-30fe-7bf2-bed4-173d94bd1852, show four overview drawings conflate explicitly
+separate empty measurement sketches with reference artwork. Numerical source and
+assignments pass. This is a repeated renderer failure, not a new arithmetic defect.
+
+Agent proposal inside that approved presentation scope: improve the existing
+compiler's overview composition instructions so the reference rendition and measured
+sketches have clearly distinct roles and positions. The worker chooses the smallest
+concrete text/order change supported by the actual prompt; no new flags, schemas,
+style subsystem or additional wall of prohibitions. Preserve full source content,
+all assigned scalar owners/anchors, explicit empty sketches where required, unknown
+AX-to-image transforms, units and exact machine data. Do not remove the criterion
+or claim arbitrary artwork bounds are measured just to obtain a pass.
+
+Reuse the original export owner for one finite shipping_product packet: inspect the
+current 9a3308 presentation, implement one coherent candidate, run focused checks and
+compare saved Native A03 G01 plus Web Privacy G01. One first literal ImageGen attempt
+per selected sheet, no rerolls. A11 D03 is the previously passing detail control and
+must retain its preparation/assignments; no additional control image is required.
+Scene/dimensions/sheets/source/metadata/required IDs remain exact. Existing overview
+prompt formatting and directly affected tests are writable; one compact receipt
+`receipts/consumer-measurement-panels1.md` is permitted. Product/collector/CLI contracts,
+source applications, dependencies and shared registry files remain read-only.
+
+Acceptance separates source/prompt integrity from image outcomes. Every assigned
+label, owner, content/state, palette and frame separation is checked at actual
+returned size by the same two critics. Failed first outputs remain visible; two
+images cannot establish general reliability. Neutral index precedes author findings.
+Source-current master, own-path checkpoint/push under existing Git lock; all images
+in system temp retained, no branches/worktrees/new persistent directories or nested
+agents. Economy: one shared recurring overview failure across Native and Web; existing
+saved inputs and accepted binary evidence avoid fresh runtime collection or broad QA.

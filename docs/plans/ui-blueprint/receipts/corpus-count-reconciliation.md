@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after recovered CN-B1 A04 final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after CN-B24 and ADDRESS3 final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**205 proved eligible cases; range205–208 pending three named uncertainties.**
-The planning remainder is795 cases, potentially792 if all three are established.
-There are82 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;148 are non-fixture observations. Fixture UI is
+**209 proved eligible cases; range209–212 pending three named uncertainties.**
+The planning remainder is791 cases, potentially788 if all three are established.
+There are84 Web and125 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;152 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:534 primary images =530 first outputs +4 rerolls;
+Completed-batch image buckets:544 primary images =540 first outputs +4 rerolls;
 81 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-619 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+629 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -101,7 +101,7 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | --- | ---: | ---: | --- |
 | CW-B1 |11|12|CW02 is an unqualified occlusion negative |
 | CW-B2 |10|10|CW14 first image qualified through USE-PROMPT-LENGTH1; earlier no-image refusals preserved; unavailable/invalid candidates excluded |
-| CN-B1 |2|6|A12 and recovered A04 counted; A04 completed4firstsheets through CN-B23-A04; A02 qualification unresolved, other oldgaps retained |
+| CN-B1 |4|14|A12, recovered A04 and CN-B24 A03/A11wide counted;8 additional firstsheets complete two previously ungenerated cases. A11narrowCUAreference excluded; A02 qualification and other oldgaps retained |
 | CN-B2 |7|8|B07 partial sidebar qualification unresolved |
 | CN-B3 |8|16|12 configurations include3 documented duplicates;4 rerolls; C04 novelty unresolved |
 | CW-B3 |6|6|Qualified scrolled/lookup states; unrelated invalid CW-S1 excluded |
@@ -143,7 +143,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B22 |1|1|First collapsedFilters canonical→package→image after RECT2; previous refusals and PrivacyPolicy produce0cases/images |
 | CW-B23 |2|4|Provider choices and mode-tabs distinct from earlier form bodies;4firstsheets evaluated,0fullpass |
 | CW-B24 |1|1|Five-item AcceptableUse component below earlierTermsviewport; firstimage evaluated, fullFAIL |
-| **Primary subtotal** |**204**|**534**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:205 total cases |
+| USE-WEB-ADDRESS3 |2|2|Distinct whole Privacy/FairUse lists, actual new ordinal helper source chain; metadata-only correction, both firstimages evaluated, fullFAIL |
+| **Primary subtotal** |**208**|**544**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:209 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1166,3 +1167,48 @@ artifacts remainavailable. One primarycase+one repairimage added:205cases
 (82Web+123Native;57fixture+148nonfixture),44primarybatches,534primaryimages
 (530first+4rerolls),81repairimages,4unqualifiedimages=619total;795casesremain.
 No newfullimageapproval; oldfailures/images/tooloriginals retained.
+
+
+## CN-B24 and USE-WEB-ADDRESS3 — final reconciliation
+
+Native neutral `$T/uib-CN-B24-8pc1i2jn/neutral-index.json`, SHA
+97632a68647c58e68bbeffc67f43ab7335df0c7ce127e9659ae1d61bb8c17351,
+qualifies two formerly ungenerated original CN-B1 cases: A03 Common Phrases
+(seven full rows plus a partial row, translations and filters) and A11 wide
+(seven-column grid with changed membership/coverage). Both actual B5/B9 reference
+comparisons establish meaningful differences, not new query strings. Exact historical
+selected-window native PNG commands support capture provenance; no contemporaneous
+PNG hash or continuous custody claim. Partial80-node AX, sequential collection,
+unknown image transform and incomplete long-list/card coverage remain. A11 narrow
+is excluded for CUA-reference provenance, with no new generation.
+
+Unchanged original inputs and exporter9a3308 yield four assigned first sheets per
+case, all1672×941:8 firstimages,0rerolls. Count them under original CN-B1, not an
+extra primary batch. All111 assigned Native labels and A03's506pt equality survive.
+A03 D01/D03 and A11 D01–D03 pass scoped criteria. A03 D02 has a colored brain;
+both G01 conflate measured AX frames and artwork. A03 G01 omits Grammar and bounds
+the window while excluding the lower search band. CT2 additionally finds A11 G01 changes Shakespeare
+in Love's1998 to1996; author omitted this finding, with no evidence refuting it.
+No full Native case approval or new arithmetic/compiler defect is established.
+
+Web neutral `/tmp/uib-address3-ip1vx6m6/neutral-index-r2.json` qualifies two distinct
+whole lists. Helperfad3dbe3/abd8878pair actually collected9/4nodes and validated
+partial responses; Rust measures828×127.96875 and768×102.375CSSpx. NativeDPR2 PNG
+references and unchanged canonical sources remain. The original metadata prose
+children/native caused two export refusals with0images; corrected copies change
+only that phrase to children and native. No guard, source, field allowlist or cap
+changed, and no browser was restarted for the continuation. Both9a3308 packages
+produced one firstG01 each,0rerolls. All7items and4labels survive; both fullrasters
+fail the assigned separation of empty LayoutBounds sketch and reference artwork.
+Word-wrap differences alone are not a new blocking requirement.
+
+CV2 initial01a136c7-3d7f-7221-9c07-fbb5ead7cd15/final
+01a136cb-30fe-7bf2-bed4-173d94bd1852 and CT2 initial
+01a136c7-3e5e-7e91-bb4d-d64a30dca3df/final
+01a136cc-3a00-7dc2-a0f1-ce36d934b1fb inspected neutral artifacts before separate
+author assessments; final reconciliation did not repeat checks. Four qualified
+completed cases and10firstimages added. Totals209cases(84Web+125Native;
+57fixture+152nonfixture),45primarybatches,544primaryimages(540first+4rerolls),
+81repairimages and4unqualifiedimages =629generated images;791cases remain.
+Five scoped sheet passes do not become four complete-case approvals. New corpus
+preparation and a bounded overview-prompt experiment are separate pending work.
