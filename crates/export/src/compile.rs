@@ -613,7 +613,8 @@ pub(crate) fn component_name(v: &SceneView, index: usize) -> String {
 // Keep machine analysis labels stable; only human presentation uses these captions.
 fn human_component_name(v: &SceneView, index: usize, limit: usize) -> Result<String> {
     let c = &v.components[index];
-    let mut name = component_name(v, index);
+    let base_name = component_name(v, index);
+    let mut name = base_name.clone();
     let mut labels = vec![public_label(c)];
     if let Some(Value::Text(text)) = c
         .properties
@@ -643,19 +644,24 @@ fn human_component_name(v: &SceneView, index: usize, limit: usize) -> Result<Str
         name = format!("{stem} in group {group}");
     }
     if control(c)
-        && !name.contains(['"', ',', ' '])
-        && !v.components.iter().any(|p| p.children.contains(&c.id))
+        && (name.contains('"')
+            || (!name.contains([',', ' '])
+                && !v.components.iter().any(|p| p.children.contains(&c.id))))
         && v.components
             .iter()
             .enumerate()
-            .any(|(i, other)| i != index && control(other) && component_name(v, i) == name)
+            .any(|(i, other)| i != index && control(other) && component_name(v, i) == base_name)
     {
         let ordinal = v.components[..=index]
             .iter()
             .enumerate()
-            .filter(|(i, other)| control(other) && component_name(v, *i) == name)
+            .filter(|(i, other)| control(other) && component_name(v, *i) == base_name)
             .count();
-        name = format!("{name}, item {ordinal} in source scope");
+        name = if name.contains('"') {
+            format!("{name}, occurrence {ordinal}")
+        } else {
+            format!("{name}, item {ordinal} in source scope")
+        };
     }
     require(name.len() <= limit, E::OutputLimit)?;
     Ok(name)

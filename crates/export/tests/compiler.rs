@@ -541,6 +541,71 @@ fn current_observed_dimensions() -> (String, String) {
     (historical, current)
 }
 #[test]
+fn colliding_public_named_captions_keep_text_and_distinct_source_ordinals() {
+    for same_parent in [true, false] {
+        for name in [
+            "Copy text to clipboard.",
+            "⏱️ Русский e\u{301} \"copy\"",
+            "Copy\nsecond\tline",
+        ] {
+            let mut b = fixture("observed");
+            let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+                panic!()
+            };
+            snapshot.relations.clear();
+            for n in &mut snapshot.nodes {
+                set_test_role(n, "DIV");
+                n.children.clear();
+            }
+            for i in [2, 6, 8] {
+                set_test_role(&mut snapshot.nodes[i], "BUTTON");
+                let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[1] else {
+                    panic!()
+                };
+                *state = Availability::Known {
+                    value: Value::Text(if i == 8 { "Unique action" } else { name }.into()),
+                };
+            }
+            snapshot.nodes[0].children = if same_parent {
+                vec![snapshot.nodes[2].key.clone(), snapshot.nodes[6].key.clone()]
+            } else {
+                vec![snapshot.nodes[2].key.clone()]
+            };
+            if !same_parent {
+                snapshot.nodes[4].children = vec![snapshot.nodes[6].key.clone()];
+            }
+            let original = serde_json::to_vec(&b).unwrap();
+            let p = compile(&b, limits()).unwrap();
+            assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+            let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+            let quoted = serde_json::to_string(name).unwrap();
+            for ordinal in [1, 2] {
+                assert!(
+                    text.contains(&format!("button {quoted}, occurrence {ordinal}")),
+                    "{same_parent}: {name}"
+                );
+            }
+            assert!(text.contains("button \"Unique action\""));
+            assert!(!text.contains("button \"Unique action\", occurrence"));
+            assert!(!text.lines().any(|l| l.starts_with("second")));
+            assert!(!text.contains("\\u{"));
+            for i in [2, 6] {
+                assert_eq!(
+                    data(&p, "scene.json")["views"][0]["components"][i]["properties"][1]["state"]["value"]
+                        ["value"],
+                    name
+                );
+            }
+            let mut exact = limits();
+            exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+            assert!(compile(&b, exact).is_ok());
+            exact.max_output_bytes -= 1;
+            assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+        }
+    }
+}
+
+#[test]
 fn human_captions_preserve_unicode_and_distinguish_source_groups() {
     for name in [
         "⏱️ Speed",
