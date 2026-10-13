@@ -44,8 +44,13 @@ and `uib-CP13-uh3v_5ch/neutral-index.json` preserve the first failure, no newcas
 CP14 adds3qualified first repair images at0e01662: CW70/CW71 1536×1024,
 CW60 1431×1099. No newcases or rerolls. Owner-local presentation experiment preserves
 machine files/required assignments; author still reports owner/clipping/focus failures
-and control width-placement deviation. Independent source/image acceptance pending;
-no overall quality improvement claimed. [Receipt](corpus-prompt-robustness14.md),
+and control width-placement deviation. CT2 final01a132c3-7467-7bd1-bd6a-81db5c22a617
+accepts bounded editorial source after initial observation and author reconciliation;
+CV2 final01a132c4-1887-7652-9470-cedb68372248 confirms both Actor images fail.
+CW60 content/numerics/anchors pass; CV2 accepts scoped visual utility, while CT2
+retains strict assignment failure because width is below instead of requested above.
+This is a literal placement residual, not wrong geometry or a universal layout rule.
+No cohort acceptance or general quality improvement claimed. [Receipt](corpus-prompt-robustness14.md),
 `uib-CP14-of0kqnwt/neutral-index.json`, binarySHA256
 dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 

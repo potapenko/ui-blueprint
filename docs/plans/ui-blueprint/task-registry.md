@@ -134,7 +134,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CP11 |same exporter owner|7f767d5 bounded accepted; archived|Both critics accept formatting/machine preservation; newCW62stillFAIL for unassigned≈791/coordinate inventory; [receipt](receipts/corpus-construction-presentation11.md) |
 | CP12 |same exporter owner|172a080 bounded+oneimage accepted; archived|Both critics accept literal button i caption and≈38×54pt; machine/owner/privacy/limits unchanged; [receipt](receipts/corpus-literal-captions12.md) |
 | CP13 |same exporter owner|61bd8cb bounded accepted; archived|Both critics confirm owner correction, image stillFAIL for placement/repeats/focus; [receipt](receipts/corpus-wrapper-frame13.md); no source app/prefs access |
-| CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662/receipt8c6276c pushed; review running|Owner-local clipping/focus/source-reference presentation;48author checks, machine files/assignments exact.3first repair images, no newcases; failures remain, no cohort improvement claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
+| CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662 bounded accepted; receipt8c6276c|CT2 accepts editorial source/unchanged facts and limits. CW70/CW71 remainFAIL; CW60 scoped visual pass with literal-placement residual, not strict assignment pass.3repair images, no newcases/cohort acceptance/causal reliability claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -172,6 +172,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B11 |same Web source owner, archived|cycle accepted; both critics confirm2FAIL|CW70desktop20row andCW71mobile full-screen source-qualified;2firstimages,108frames/16dimensions, CP13; uib-cw-b11-7ARu0i handoff/neutral-manifest; tabs closed/viewport restored. No demonstrated compiler contradiction; bounded robustness refinement feedsCP14 |
 | CW6 |Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|source-only receipt accepted; retained|Two Reels Search candidates: positive suggestions/custom card and successful zero count/empty suggestions. No other safe new family established; [handoff](receipts/corpus-web-advice.md#cw6--two-remaining-reels-search-states-2026-10-13); no counts |
 | CW7 |same Web advisor|source-only receipt accepted; retained|Empty-main-query Clip Search entity apply/remove is realm+tab-history only, no phrase search/shared filter persistence;3new composition candidates. Actor/Reels apply remain excluded. [Effects/recipe](receipts/corpus-web-advice.md#cw7--empty-query-clip-search-selection-boundary-2026-10-13); no counts |
+| CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only orientation candidates running|Deduplicate landscape/size-class/keyboard compositions on existing task-owned iPhone/iPad. Verify orientation support and whole-bootstrap Simulator isolation; no runtime/source changes, ordinary Mac Debug and protected Release remain excluded |
 | CW-B12 |01a132a6-3de5-7b72-820f-b5853a8cc992/local, archived|cycle accepted; both critics confirm2FAIL|2newstates/2firstimages,94frames/21dimensions, frozen CP13; uib-cw-b12-0RRqDd HANDOFF/neutral-manifest; tabs closed, source read-only; numeric success separate from visual acceptance, no literal compiler conflict established |
 | CW-B13 |01a132ba-030e-7a81-be76-f4b024ab1794/local|full-cycle selected-filter batch running|CW7 narrow empty-main-query/own guest boundary; desktop multi-Director, mobile multi-Director and single Voice; qualify actual handlers/effects first. Frozen CP13, no tracked writes, no counts before completed evidence |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
@@ -181,8 +182,8 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP14 initial observations running|Three candidate images against unchanged source/criteria, author verdicts withheld |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP14 initial observations running|Three candidate images/assignments then bounded source diff; correctness and image benefit separated, author verdicts withheld |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP14 reconciled; idle retained|CW70/CW71FAIL; CW60 bounded visual pass with correct geometry despite ABOVE/BELOW deviation; cohort rejected |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP14 reconciled; idle retained|Source/prompt bounded accepted; CW70/CW71FAIL and CW60 content/numerics pass with strict-assignment residual; no further compiler defect proved |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
@@ -192,7 +193,7 @@ DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance remains through CR3. CA8f26e121 adds explicit static text,
 now accepted through CR4; existing completed batches keep their original pins.
-Current accepted exporter presentation baseline is61bd8cb; source/prompt protection
+Current accepted exporter presentation baseline is0e01662; source/prompt protection
 is bounded accepted. Individual image verdicts remain pinned to their actual sources,
 not full corpus or universal raster quality.
 Root owns this registry,
