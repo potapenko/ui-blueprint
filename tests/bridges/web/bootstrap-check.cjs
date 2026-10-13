@@ -220,11 +220,39 @@ async function machineOffline(){
   console.log('PASS machine: exact bytes/partial, no human path, failed/empty/stale/cleanup suppress output, safe write failure');
 }
 
+async function scopeOffline(){
+  const vm=require('node:vm'),crypto=require('node:crypto');
+  const previous={exports:{}};
+  vm.runInNewContext(execFileSync('git',['show','fad3dbe3:tests/bridges/web/geometry.cjs'],{cwd:path.resolve(__dirname,'../../..'),encoding:'utf8',timeout:5000}),{require,module:previous,__dirname,process,Buffer,URL,URLSearchParams,setTimeout,clearTimeout,setImmediate,performance,console});
+  const old=previous.exports,temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-scope-profile-')),cli=path.join(temp,'cli.cjs'),capture=path.join(temp,'input.json');
+  const uuid=crypto.randomUUID,report=console.error;
+  const owned={cli,worker:'/unused',target:'target',endpoint:'ws://127.0.0.1:9222/devtools/page/target',root:42,json:true};
+  const binding={surface:{id:'frame',generation:'loader'},document:1};
+  const raw=JSON.stringify({artifact:{kind:'channel_response',data:{result:{status:'observed',data:{nodes:Array.from({length:16},(_,i)=>({key:{namespace:'web.dom',key:String(42+i)}}))}}}}})+'\n';
+  try{
+    crypto.randomUUID=()=> '11111111-1111-4111-8111-111111111111';console.error=()=>{};
+    assert.equal(JSON.stringify(helper.inputs(owned,binding)),JSON.stringify(old.inputs(owned,binding)),'legacy exact-ID fixed input bytes');
+    await fs.writeFile(cli,'#!'+process.execPath+'\nconst fs=require("node:fs"),a=process.argv.slice(2);if(a[0]!=="observe")process.exit(99);fs.writeFileSync('+JSON.stringify(capture)+',JSON.stringify([JSON.parse(fs.readFileSync(a[a.indexOf("--connection")+1])),JSON.parse(fs.readFileSync(a[a.indexOf("--request")+1]))]),{mode:384});process.stdout.write('+JSON.stringify(raw)+');process.stderr.write('+JSON.stringify(JSON.stringify(diagnostic({exit_code:4,incomplete_channels:1}))+'\n')+');process.exitCode=4;\n',{mode:0o700});
+    const b=()=>({binding,remaining:()=>1000,revalidate:async()=>{},close:async()=>{}});
+    const before=await old.example(owned,b());const original=JSON.parse(await fs.readFile(capture,'utf8'));
+    const after=await helper.example(owned,b());const updated=JSON.parse(await fs.readFile(capture,'utf8'));
+    assert.equal(original[0].provider.setup.collector.max_nodes,16);assert.equal(updated[0].provider.setup.collector.max_nodes,32);
+    assert.equal(original[0].provider.setup.collector.max_methods,100);assert.equal(updated[0].provider.setup.collector.max_methods,109);
+    updated[0].provider.setup.collector.max_nodes=16;updated[0].provider.setup.collector.max_methods=100;assert.deepEqual(updated,original,'only URL nodes/methods differ');
+    assert.equal(before.code,4);assert.equal(after.code,4);assert(before.bytes.equals(after.bytes));assert(after.bytes.equals(Buffer.from(raw)));
+  }finally{
+    crypto.randomUUID=uuid;console.error=report;
+    for(const f of [cli,capture]){try{await fs.unlink(f);}catch(e){if(e.code!=='ENOENT')throw e;}}
+    await fs.rmdir(temp);await assert.rejects(fs.stat(temp),e=>e.code==='ENOENT');
+  }
+  console.log('PASS scope profile: only URL nodes16→32/methods100→109; exact legacy inputs and fixed16-node response bytes preserved');
+}
+
 async function live(){
   assert(process.env.UIB_WEB_LIVE_ALLOW==='1','explicit own-fixture activation required');
   const bundle=process.env.UIB_WEB_FIRST_USE_BUNDLE;assert(bundle&&path.isAbsolute(bundle));
-  const addressing=process.argv.includes('--run-address-authorized');
-  const selected=addressing?'ul:nth-of-type(6)':'#f01',width=addressing?240:360,height=addressing?160:123;
+  const addressing=process.argv.includes('--run-address-authorized'),whole=process.argv.includes('--run-scope-authorized');
+  const selected=whole?'#scope-fixture':addressing?'ul:nth-of-type(6)':'#f01',width=whole?384:addressing?240:360,height=whole?420:addressing?160:123;
   const executable=path.join(bundle,'web-geometry.cjs');
   assert((await fs.readFile(executable)).equals(await fs.readFile(path.join(__dirname,'geometry.cjs'))),'installed helper drift');
   const manifest=JSON.parse(await fs.readFile(path.join(bundle,'distribution-manifest.json'),'utf8'));
@@ -260,6 +288,12 @@ async function live(){
     await context.route('**/*',r=>new URL(r.request().url()).origin===fixture.url?r.continue():r.abort());
     const page=await context.newPage();page.setDefaultTimeout(2000);page.setDefaultNavigationTimeout(3000);
     await page.goto(fixture.url+'/?generation=1#first');await page.waitForFunction(()=>!!window.f01);
+    if(whole)await page.evaluate(()=>{
+      const root=document.createElement('div');root.id='scope-fixture';
+      root.innerHTML='<style>#scope-fixture{position:fixed;left:20px;top:100px;width:384px;height:420px;box-sizing:border-box;background:white}#scope-close{position:absolute;right:8px;top:8px;width:24px;height:24px}#scope-copy{position:absolute;left:24px;top:48px;width:336px;height:80px}#scope-list{position:absolute;left:24px;top:144px;width:336px;height:208px}#scope-list>button{display:block;box-sizing:border-box;width:336px;height:52px}#scope-list img{width:16px;height:16px}#scope-guest{position:absolute;left:24px;top:376px;width:336px;height:24px}</style><button id="scope-close"><span>×</span></button><div id="scope-copy"><span>Account</span><h2>Fixture chooser</h2><p>Choose a fixture provider</p></div><div id="scope-list">'+[0,1,2,3].map(i=>'<button><span>Provider '+i+'</span><span>Detail</span>'+([1,2].includes(i)?'<img>':'')+'</button>').join('')+'</div><button id="scope-guest">Continue</button>';
+      document.body.append(root);
+      if(1+root.querySelectorAll('*').length!==24)throw new Error('fixture count');
+    });
     if(addressing)await page.evaluate(()=>{
       const style=document.createElement('style');style.textContent='#address-fixture{position:fixed;top:10px;left:10px}#address-fixture>ul{box-sizing:border-box;width:240px;height:160px;margin:0;padding:0;list-style:none;position:absolute;top:0;left:0}#address-fixture>ul>li{height:40px}';document.head.append(style);
       const parent=document.createElement('section');parent.id='address-fixture';
@@ -271,10 +305,10 @@ async function live(){
       }document.body.append(parent);
     });
     const state=()=>page.evaluate(()=>({focus:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()}));
-    const before=await state();const good=await invoke(ws,page.url(),selected,4);assert(good.stderr.startsWith('observe_diagnostic exit=4 '));assert(good.stderr.includes('terminal=completed'));
-    for(const [name,amount] of [['width',width],['height',height]]){const line=good.stdout.split('\n').find(x=>x.startsWith(name+': '));assert(line);const result=JSON.parse(line.slice(name.length+2));assert.equal(result.status,'known');assert.equal(result.measurement.value.value.amount,amount);assert.equal(result.measurement.space.units,'css_px');}
+    const before=await state();const good=await invoke(ws,page.url(),whole?'#f01':selected,4);assert(good.stderr.startsWith('observe_diagnostic exit=4 '));assert(good.stderr.includes('terminal=completed'));
+    for(const [name,amount] of [['width',whole?360:width],['height',whole?123:height]]){const line=good.stdout.split('\n').find(x=>x.startsWith(name+': '));assert(line);const result=JSON.parse(line.slice(name.length+2));assert.equal(result.status,'known');assert.equal(result.measurement.value.value.amount,amount);assert.equal(result.measurement.space.units,'css_px');}
     assert.deepEqual(await state(),before);
-    if(process.argv.includes('--run-export-authorized')||addressing){
+    if(process.argv.includes('--run-export-authorized')||addressing||whole){
       const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-json-f01-')),proxy=path.join(temp,'proxy.cjs'),original=path.join(temp,'original.json');
       const saved=path.join(temp,'observation.json'),metadata=path.join(temp,'metadata.json'),query=path.join(temp,'query.json'),destination=path.join(temp,'package');
       try{
@@ -293,7 +327,7 @@ async function live(){
         await fs.writeFile(metadata,JSON.stringify(annotations),{mode:0o600,flag:'wx'});
         const run=(exe,a)=>execFileSync(exe,a,{cwd:'/',timeout:10000,maxBuffer:4194304,stdio:['ignore','pipe','pipe']});
         run(path.join(bundle,'uiblueprint-validate'),['--max-bytes','131072',saved]);
-        if(addressing)for(const [operation,amount] of [['width',width],['height',height]]){
+        if(addressing||whole)for(const [operation,amount] of [['width',width],['height',height]]){
           const space=bounds.coordinate_space,key=root.key;
           await fs.writeFile(query,JSON.stringify({schema_version:'0.2.0',artifact:{kind:'geometry_query',data:{id:operation,scope_id:snapshot.context.scope_id,targets:[key],operation,anchors:[{element:key,frame_kind:'layout_bounds',coordinate_space:space,fraction:0,axis:'x'}],quantity_kind:'length',units:space.units,applies_when:{platform:null,input_mode:null,text_scale:null}}}}),{mode:0o600});
           const measured=JSON.parse(run(path.join(bundle,'uiblueprint'),['measure','--snapshot',saved,'--query',query,'--space',space.id,'--max-input-bytes','131072','--max-output-bytes','131072','--json']));
@@ -307,6 +341,27 @@ async function live(){
         const serialized=JSON.stringify(scene);assert(serialized.includes('css_px'));assert(!serialized.includes('PRIVATE_BOOTSTRAP_CANARY'));
         assert.deepEqual(await state(),before);
         const refused=await invoke(ws,page.url(),'#absent',4,['--json']);assert(!refused.stdout);assert.equal(refused.stderr.trim(),'component_unresolved');
+        if(whole){
+          assert.equal(snapshot.nodes.length,24);assert.equal(scene.views[0].components.length,24);
+          const roles=snapshot.nodes.map(n=>n.native_role.value?.value);
+          assert.deepEqual(roles.reduce((a,v)=>(a[v]=(a[v]??0)+1,a),{}),{DIV:3,STYLE:1,BUTTON:6,SPAN:10,H2:1,P:1,IMG:2});
+          for(const n of snapshot.nodes)assert.deepEqual(n.properties.map(p=>p.field),['layout_bounds','hit_region','visible_region']);
+          assert.equal(snapshot.nodes[1].properties[0].state.availability,'unknown','STYLE preserved with unknown layout');
+          assert.equal(snapshot.coverage.status,'partial');
+          for(const [left,right,expected] of [[4,8,16],[8,23,24]]){
+            const space=bounds.coordinate_space,keys=[snapshot.nodes[left].key,snapshot.nodes[right].key];
+            await fs.writeFile(query,JSON.stringify({schema_version:'0.2.0',artifact:{kind:'geometry_query',data:{id:'gap',scope_id:snapshot.context.scope_id,targets:keys,operation:'gap',anchors:keys.map((element,i)=>({element,frame_kind:'layout_bounds',coordinate_space:space,fraction:i===0?1:0,axis:'y'})),quantity_kind:'length',units:space.units,applies_when:{platform:null,input_mode:null,text_scale:null}}}}));
+            const gap=JSON.parse(run(path.join(bundle,'uiblueprint'),['measure','--snapshot',saved,'--query',query,'--space',space.id,'--max-input-bytes','131072','--max-output-bytes','131072','--json']));
+            assert.deepEqual(gap.artifact.data.snapshot,snapshot);assert.equal(gap.artifact.data.result.measurement.value.value.amount,expected);
+          }
+          // Selection-boundary fixture deliberately reports unavailable layout;
+          // this tests32 admitted Elements, not a promise32 visible boxes fit bytes/time.
+          await page.evaluate(()=>{const root=document.createElement('div');root.id='scope-boundary';root.style.display='none';for(let i=0;i<31;i++)root.append(document.createElement('span'));document.body.append(root);});
+          const edge=await invoke(ws,page.url(),'#scope-boundary',4,['--json']);const edgeSnapshot=JSON.parse(edge.stdout).artifact.data.result.data;assert.equal(edgeSnapshot.nodes.length,32);
+          await page.evaluate(()=>document.getElementById('scope-boundary').append(document.createElement('span')));
+          const beyond=await invoke(ws,page.url(),'#scope-boundary',2,['--json']);assert(!beyond.stdout);assert(beyond.stderr.includes('cause=selection_incomplete'));assert(beyond.stderr.includes('committed=0'));assert(beyond.stderr.includes('worker_cleanup=confirmed'));
+          console.log('PASS scope:24 nodes including STYLE, same-snapshot gaps16/24 CSSpx;32 admitted,33 selection refusal with no publication');
+        }
         if(addressing){
           assert.equal(snapshot.nodes.length,9);assert.equal(scene.views[0].components.length,9);
           assert(snapshot.nodes.every(n=>['UL','LI','STRONG'].includes(n.native_role.value?.value)));
@@ -390,7 +445,8 @@ async function live(){
   }
 }
 (async()=>{
-  if(process.argv.includes('--check'))await offline();
-  else if(process.argv.includes('--run-authorized')||process.argv.includes('--run-export-authorized')||process.argv.includes('--run-address-authorized'))await live();
+  if(process.argv.includes('--check-scope-only'))await scopeOffline();
+  else if(process.argv.includes('--check'))await offline();
+  else if(process.argv.includes('--run-authorized')||process.argv.includes('--run-export-authorized')||process.argv.includes('--run-address-authorized')||process.argv.includes('--run-scope-authorized'))await live();
   else throw new Error('choose --check or explicitly authorized --run-authorized');
 })().catch(error=>{console.error(error);process.exitCode=1;});

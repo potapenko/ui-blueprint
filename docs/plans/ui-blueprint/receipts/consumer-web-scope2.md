@@ -119,4 +119,83 @@ fields/caps/deadlines/identity/privacy/cleanup and Rust code remain unchanged.
 
 Reuse the saved patch and ready abd8878 pair; test exact two-value delta, old small
 source and full24/STYLE→originalbytes/validator/measure/export plus selection32/33.
-Any other encountered bound remains a dependency. Corrected proof/result pending.
+Any other encountered bound remains a dependency.
+
+### Corrected SCOPE3 outcome — author proof complete
+
+WEB-FIRST-USE7 registration `0c97ff5` was committed/pushed before behavior.
+The saved SCOPE2 patch was reused, then changed only to grant URL methods109 as
+explicitly approved. Runtime implementation is one URL-only assignment block for
+nodes32/methods109; original inputs() and legacy16/100 stay unchanged. Help/guide
+state both values. No Rust code, build, guard math/counter or other quota changed.
+This corrected outcome supersedes the historical restored16 working-code status
+above; the failed SCOPE2 candidate, handoff and code0 failure remain unchanged.
+
+Focused verification on matching abd8878 binaries:
+
+- Fixed old/new input comparison with deterministic nonce: exactly URL max_nodes
+  16→32 and max_methods100→109 differ. Legacy serialized inputs are identical.
+  The same synthetic16-node Observe response is forwarded byte-for-byte with exit4;
+  this checks the caller boundary, not fabricated runtime geometry.
+- ONE fresh owned F01 session on Chromium145.0.7632.6, viewport800×600 CSS px/DPR1.
+  Accepted small #f01 still measures360×123 CSS px under the new URL profile.
+- Whole fixture mirrors the declared element composition without copying app source:
+  root DIV + STYLE + Close BUTTON/SPAN + copy DIV/SPAN/H2/P + provider DIV with
+  4BUTTON/8SPAN/2IMG + guest BUTTON =24. All24 are present in canonical output;
+  STYLE remains with unknown layout. Every node retains layout/hit/visible fields.
+- Helper --json equals original real Rust Observe bytes from the existing transparent
+  test capture proxy:112838bytes, SHA256
+  `a823a86baf450549a3071a470de777bc5d3b59bbbb7586f8c640d5af95de64a4`.
+  Output fits unchanged128KiB; no retry or field/node pruning. Snapshot validates.
+- Actual measure on THAT unchanged Snapshot: chooser384×420 CSS px, copy bottom→
+  provider-list top16 CSS px and list bottom→guest top24 CSS px. Query results retain
+  the exact embedded Snapshot; no merging of separate acquisitions.
+- Direct observed export with explicit synthetic metadata:24components,partial,
+  unknown_count41, six files/372099package bytes; numeric validation checked,
+  image validation unverified, approval draft, generated_image=false. Source bytes
+  remain unchanged through validator/measure/export. No generated image/corpus count.
+- Same session selection boundary:32-element display:none fixture admitted with
+  truthful unavailable geometry; adding33rd Element refuses2/selection_incomplete,
+  committed0/empty stdout and confirmed cleanup. This tests selection capacity,
+  not a claim that32 visible boxes always fit remaining bytes/time/work bounds.
+- Own workers are absent after each command; remote groups/sockets, browser/context/
+  profile/server cleanup passed. Run-owned fake-CLI/capture/query/source/metadata/
+  export files and their temp directories were removed after assertions. No app
+  project/runtime operation or image capture. Accepted ordinal/RECT2 suites were
+  not repeated. Syntax, selected Markdown links/route sizes, diff and manifest
+  verification passed; fixed input proof establishes remaining budgets unchanged.
+
+### Ready corrected candidate and consumer command
+
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-scope3-owkxkbyw/candidate`
+is a fresh candidate, with immutable handoff.json beside it. Matching Rust pair
+reused from `abd88783221412f8e3f9d1da1f3c9a2b4733b665`; base assets/validator remain
+from the accepted address2 inventory with explicit reuse_provenance. No Rust build,
+shared overwrite, distribution format change or v1/v2 recooking.
+
+| Asset | SHA256 |
+| --- | --- |
+| uiblueprint | `3fbd674283e87a9e2ac2292d0c9f797b2e4dc89fa805f59bc6025cabab7e6226` |
+| session-worker | `a942ff2648a949214b13356a360224d3ffbc2b97b071f65cbeac4b0f869362bd` |
+| uiblueprint-validate | `35e945ca310b91fd11f26e0416cdf7d7a916e0b1c3748acc8f247666bdfd300e` |
+| web-geometry.cjs | `58ed08d92f9f6f12b09c02edb6fc5ebe77674e637f7c89389304b0479b5235b1` |
+| WEB-FIRST-USE.md | `57adbdf7372fea7156aae9a8753cbfa33aa58000c47958862ef5bfaaefa92099` |
+
+```sh
+BUNDLE=/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-web-scope3-owkxkbyw/candidate
+node "$BUNDLE/web-geometry.cjs" --connection "$CDP_BROWSER_WS" \
+  --url 'http://localhost:3000/#/clip-search?language=en' \
+  --component '.playphraseme-provider-chooser' --json
+```
+
+Only the original Web owner supplies a fresh authorized connection and opens the
+actual whole chooser. Static24 and this authored24 fixture are not live whole-root
+proof. Partial4 must carry nonempty validated canonical data; any later bound failure
+is reported without hidden retries or further budget growth. Same-owner real
+observe→validator/measure/export and later corpus/ImageGen acceptance remain separate.
+
+Retention: corrected candidate/handoff belong to root’s focused profile review and
+same Web consumer through that qualified attempt and immediate acceptance/repair
+handoff. Prior failed SCOPE2 proof remains for its named history consumer. All images,
+shared bundles/source evidence and after-title-spacing.png are untouched. No root
+registry/plan edits or source-owner messages were made by this task.

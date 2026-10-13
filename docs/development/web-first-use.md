@@ -163,12 +163,18 @@ Preparation:10s overall,2s per CDP call,32 calls,128 targets,64KiB per text repl
 256KiB total per connection and16 events. Both selection walks have at most2048
 visited nodes, depth64 and1s each. --max-visited-nodes may lower (not raise) the2048
 limit. Browser/WebSocket internals are opaque tooling costs, not an RSS guarantee.
-URL-mode collection uses32 output nodes/depth8/128KiB/1000ms, collector16 nodes/256
-visits and unchanged host/transport bounds. Layout, hit and visible fields are all
+URL-mode collection uses32 output nodes/depth8/128KiB/1000ms, collector32 nodes/109
+methods/256 visits and unchanged host/transport bounds. Layout, hit and visible fields are all
 retained. The component budget follows measured full replies above64KiB and serial
 per-node IntersectionObserver waits, not a retry or a relaxed D06 threshold. Legacy
-exact-ID mode keeps64KiB/250ms. These limits do not promise whole-form
+exact-ID mode keeps collector16/methods100/64KiB/250ms. These limits do not promise whole-form
 completeness; a large selected subtree can still return a truthful partial/refusal.
+The URL collector now admits up to32 Elements within the existing request32; this
+allows a24-element whole component including non-layout elements such as STYLE.
+The explicit109-method allowance matches the existing rooted preflight3×32+13;
+method counters and guards remain. All other byte/work/deadline limits are unchanged
+and can still refuse. No field/node is
+removed to fit, and separately observed subcomponents are not merged.
 
 - 0: complete result within requested scope.
 - 4: partial, unresolved/ambiguous/stale, unsupported source scope or deadline.

@@ -34,7 +34,7 @@ An already authorized connection is required; URL alone is not authority.
 Selection is bounded metadata, not JS geometry or a manual snapshot adapter.
 Real Rust Observe -> Inspect -> Measure(width,height) supplies facts and coverage.
 Preparation uses a 10s deadline; URL mode collects 32 nodes/depth8/128KiB/1000ms
-(collector cap16 nodes). Legacy mode keeps 64KiB/250ms. No automatic quota retry.
+(collector cap32 nodes/109 methods). Legacy mode keeps collector16/methods100/64KiB/250ms. No automatic quota retry.
 A matching diagnostics-capable CLI is required; safe enum/count reasons go to stderr.
 
 Legacy exact-ID mode is unchanged (cannot mix modes):
@@ -413,6 +413,7 @@ function inputs(args,binding,outputBytes=FRAME,requestMs=250){
 async function example(args,bootstrap=null){
   const outputBytes=bootstrap?131072:FRAME,requestMs=bootstrap?1000:250;
   const binding=bootstrap?bootstrap.binding:await metadata(args),input=inputs(args,binding,outputBytes,requestMs);
+  if(bootstrap){input.connection.provider.setup.collector.max_nodes=32;input.connection.provider.setup.collector.max_methods=109;}
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-web-geometry-')),owned=[];let child=null,closed=null;
   const started=performance.now();
   async function save(name,bytes){const file=path.join(temp,name),handle=await fs.open(file,'wx',0o600);owned.push(file);try{await handle.writeFile(bytes);}finally{await handle.close();}return file;}
