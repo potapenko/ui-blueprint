@@ -474,3 +474,48 @@ existing consumer-web-scope2.md receipt with separate failed and corrected revis
 never rewrite the original refusal or call the old candidate ready. Same real Web
 consumer independently verifies the whole chooser after delivery. No repeated
 review of unchanged collector code; one focused profile/caller-boundary acceptance.
+
+## USE-HUMAN-OWNERS1 — readable owners and truthful detail state
+
+Authority: the user's explicit request for useful, less noisy actual prompts and
+CORPUS-1000 improvements; existing HBP1.2 C1/C5/C6 and R3 preserve source labels,
+state attribution and prohibit printed internal IDs. SCOPE4's two independent final
+reviews establish correct quantities but printed internal references and Google focus
+attached to Apple/item2; Close is item1 and Google item3. They do not establish a
+new arithmetic, privacy or compiler defect. A prepared input's context remains
+separate from canonical component properties.
+
+Agent proposal: one bounded presentation candidate in the existing exporter to make
+measurement-owner instructions human-readable and reduce ambiguous state attachment.
+Inspect the actual generated internal-reference hints and detail state wording;
+replace only generated machine-reference presentation where an existing unique human
+caption identifies the same owner. Never blanket-strip text: a literal public label
+containing # or digits remains source content. Do not rename unknown controls by
+interpreting their position, invent labels, parse caller prose into canonical facts,
+or add source annotations/schema/flags/collector features in this packet.
+
+View-level caller state remains attributed view context. A detail must not attach
+that state to a generic measured owner without a supported owner correspondence;
+retain the statement separately and its binding limitation rather than silently
+losing it or asserting a wrong state. Known per-component states remain with their
+real owner. Preserve source/caller separation, focus versus applied meaning, exact
+public content, all measurement ownership/anchors and no source-data changes. This
+clarifies existing truth rules; it is not a new exemption from state fidelity.
+
+Original export owner completes one finite shipping_product task: smallest existing
+prompt-formatting changes plus directly affected existing tests and
+`receipts/consumer-human-owners1.md`. Machine scene/dimensions/sheets, required IDs,
+input metadata and source remain exact; no CLI/schema/core/Cargo/spec/app edits.
+Use saved SCOPE4 D01 (state ownership) and D02 (internal IDs), one first literal
+ImageGen per sheet with original qualified reference,0rerolls. Retain initial failures.
+Use passing Privacy G01 and Native A11 D03 as unaffected preparation controls; no
+extra control images. If no concrete correction is supported within this envelope,
+return that finding rather than fake a fix or expand into collection/input redesign.
+
+Ready CLI/source691ce41 is the baseline. Scoped tests/one needed build, exact current
+branch commit/push, fresh temp candidate, neutral index before author assessment,
+same two critics. Focused acceptance separates preparation integrity and all actual
+image criteria; a target improvement does not hide another failure or prove general
+reliability. Keep all images/tool originals; no nested agents or new persistent dirs.
+Economy: one repeated human-owner/state ambiguity in actual measured outputs; reuse
+saved sources and accepted lower layers while the independent auth corpus continues.
