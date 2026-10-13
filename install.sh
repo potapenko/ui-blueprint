@@ -78,6 +78,7 @@ download() {
 if [ "$UNINSTALL" = false ] && [ "$SELECTED" != "$VERSION" ]; then
   STAGE=$(mktemp -d "${TMPDIR:-/tmp}/uiblueprint-install.XXXXXX")
   download "$RELEASES/v$SELECTED/install.sh" "$STAGE/install.sh"
+  grep -Fxq "VERSION='$SELECTED'" "$STAGE/install.sh" || die 'downloaded installer version mismatch'
   sh "$STAGE/install.sh" --prefix "$PREFIX"
   exit $?
 fi

@@ -111,6 +111,11 @@ case "$1" in -s) printf '%s\\n' "${TEST_OS:-Darwin}";; -m) printf '%s\\n' "${TES
     run([*args, '--version', '../escape'], env=env, ok=False)
     run([*args, '--version', '9.9.9'], env=env, ok=False)
     assert os.readlink(current) == 'versions/0.1.0'
+    wrong = versions / '0.3.0'
+    wrong.mkdir()
+    (wrong / 'install.sh').write_bytes((versions / '0.2.0/install.sh').read_bytes())
+    run([*args, '--version', '0.3.0'], env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
     # Modified/unknown content refuses complete uninstall before unlinking commands.
     (first / 'foreign.txt').write_text('keep')
     run([*args, '--uninstall'], env=env, ok=False)
