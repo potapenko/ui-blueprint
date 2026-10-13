@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B10 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B11 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**176 proved eligible cases; range176–179 pending three named uncertainties.**
-The planning remainder is824 cases, potentially821 if all three are established.
-There are56 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;119 are non-fixture observations. Fixture UI is
+**178 proved eligible cases; range178–181 pending three named uncertainties.**
+The planning remainder is822 cases, potentially819 if all three are established.
+There are58 Web and120 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;121 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:498 primary images =494 first outputs +4 rerolls;
+Completed-batch image buckets:500 primary images =496 first outputs +4 rerolls;
 50 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-552 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+554 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -75,7 +75,17 @@ and `uib-CP13-uh3v_5ch/neutral-index.json` preserve the first failure, no newcas
 | CN-B19 |6|26|Ordinary Debug composition, not fixture launch; partial target geometry independently confirmed;1Director duplicate excluded |
 | CN-B20 |6|6|4Actor cases and2Director states; failed scroll candidate excluded, actual selection/recovery incident retained separately |
 | CW-B10 |2|2|Actual Actor one-row and successful empty; initial20row scope is not counted or oldCW02 relabelled |
-| **Primary subtotal** |**175**|**498**| |
+| CW-B11 |2|2|New qualified desktop20row ready state and mobile full-screen ready topology; no oldCW02 relabelling; both first outputs evaluated as failures by author |
+| **Primary subtotal** |**177**|**500**| |
+
+CW-B11 evidence: `uib-cw-b11-7ARu0i/handoff.json`, `neutral-manifest.json`,
+`png-qualification.json` and `novelty.json` under the system-temp prefix below.
+Neutral manifestSHA25622076774257fe4d873611e14b8c5d9fb4247c588de77e5454346a64872e2bd91.
+Actual PNG sources2560×1440/780×1688 preserve nativeDPR2. Two successful initial
+GET200 responses each return20rows; no query/option/checkbox changes. Both own tabs
+closed and1280×720DPR2 restored. Author checked108frames/16required dimensions and
+both required firstG01 images at61bd8cb, no rerolls. Desktop measured-frame ownership
+and mobile lower clipping failures remain; independent reviews are pending.
 
 ## One first completion in the repair bucket
 

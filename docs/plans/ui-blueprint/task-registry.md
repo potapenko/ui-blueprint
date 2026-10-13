@@ -36,17 +36,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:176; unresolved upper bound179; conservative remainder824.**
+**Proved eligible case count:178; unresolved upper bound181; conservative remainder822.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Twenty-nine completed primary batches produced498 qualified evaluated images;
+Thirty completed primary batches produced500 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their494 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not498 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their496 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not500 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -81,9 +81,10 @@ CW-B9 adds4lookup/overflow states, bringing it to162;
 CN-B19 adds6Mac lookup states, bringing it to168;
 CN-B20 adds6mobile lookup states, bringing it to174, with a runtime incident retained;
 CW-B10 adds2Web Actor states, bringing it to176.
+CW-B11 adds2qualified desktop/mobile ready Actor states, bringing it to178.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1 images (50 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:552counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:554counted generated images
 overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -166,7 +167,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CN-B20 |mobile source owner01a12b45-a69a-72b2-91f2-1f937304afae|evaluation complete with runtime incident; archived|6cases/6images; both critics2phonePASS/4iPadFAIL,42labels correct; incident/restorationgap remain, no cleanruntime pass |
 | CW-B9 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|cycle accepted; archived, reviews complete|4new states/4firstG01 retain mandatory issues; CW66 content/numbers pass but explicit annotation-plan residual; no compiler conflict;162cases total |
 | CW-B10 |same Web source owner|cycle accepted; archived, both reviews complete|2new states/2firstimages/2FAIL;37frames/18dimensions; wrapper owner correct, narrow wording risk feedsCP13;176cases total |
-| CW-B11 |same Web source owner, restored|full-cycle ready Actor batch dispatched|Desktop initial20row state not previously qualified; at most1meaningful mobile counterpart, no arbitrary viewport/name multiplication; CP13, no counts yet |
+| CW-B11 |same Web source owner|cycle accepted; CV2/CT2 first observations running|CW70desktop20row andCW71mobile full-screen source-qualified;2firstimages/2authorFAIL,108frames/16dimensions, CP13; uib-cw-b11-7ARu0i handoff/neutral-index; tabs closed/viewport restored |
 | CW6 |Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|source-only receipt accepted; retained|Two Reels Search candidates: positive suggestions/custom card and successful zero count/empty suggestions. No other safe new family established; [handoff](receipts/corpus-web-advice.md#cw6--two-remaining-reels-search-states-2026-10-13); no counts |
 | CW-B12 |01a132a6-3de5-7b72-820f-b5853a8cc992/local|full-cycle two-state Reels Search running|Own guest tabs after CW-B11 browser release; frozen CP13, real source/geometry→literal prompt→first image→evaluation. Read-only tracked source, temp deliverables only; no selection/apply/auth changes; no counts until qualified terminal evidence |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
