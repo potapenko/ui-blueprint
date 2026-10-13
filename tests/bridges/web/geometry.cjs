@@ -19,7 +19,8 @@ URL + selected component, no manual JSON or runtime IDs:
 --url         Exact existing http(s) URL; query and SPA fragment participate.
               Multiple matching pages refuse; this never navigates a page.
 --component   One compound selector: optional tag/*, #id, .class, [attr],
-              [attr="value"]. No combinators, lists, escapes or pseudo selectors.
+              [attr="value"], optionally terminal :nth-of-type(N), N=1..2048.
+              No leading zeros, An+B, other pseudos, combinators, lists or escapes.
               Unique root-document light-DOM match only; no frame/shadow descent.
 --max-visited-nodes  Optional lower selection bound, 1..2048 (default 2048).
 --cli / --worker     Optional matching absolute binaries (defaults: siblings).
@@ -142,12 +143,14 @@ function parseFirstUse(argv){
     ||!connection.port||connection.username||connection.password||connection.search||connection.hash
     ||!/^\/devtools\/browser\/[A-Za-z0-9_-]{1,256}$/.test(connection.pathname))throw failure('invalid_connection',2);
   const url=normalizePageUrl(args['--url']),selector=args['--component'];
-  // Deliberately narrow compound grammar: native matches never scans relatives/:has.
-  const compound=/^(?:[A-Za-z][A-Za-z0-9_-]*|\*)?(?:(?:[#.][A-Za-z_][A-Za-z0-9_-]*)|(?:\[[A-Za-z_][A-Za-z0-9_-]*(?:=(?:"[^"\\\]\r\n]*"|'[^'\\\]\r\n]*'|[A-Za-z0-9_-]+))?\]))*$/;
-  if(typeof selector!=='string'||!selector||Buffer.byteLength(selector)>512||/[\x00-\x1f\x7f]/.test(selector)||!compound.test(selector))throw failure('unsupported_selector',2);
+  // Native matches sees only the compound. Ordinal work belongs to the bounded walk.
+  const compound=/^((?:[A-Za-z][A-Za-z0-9_-]*|\*)?(?:(?:[#.][A-Za-z_][A-Za-z0-9_-]*)|(?:\[[A-Za-z_][A-Za-z0-9_-]*(?:=(?:"[^"\\\]\r\n]*"|'[^'\\\]\r\n]*'|[A-Za-z0-9_-]+))?\]))*)(?::nth-of-type\(([1-9][0-9]{0,3})\))?$/;
+  if(typeof selector!=='string'||!selector||Buffer.byteLength(selector)>512||/[\x00-\x1f\x7f]/.test(selector))throw failure('unsupported_selector',2);
+  const match=compound.exec(selector);
+  if(!match||!match[1]||(match[2]&&Number(match[2])>2048))throw failure('unsupported_selector',2);
   const cap=args['--max-visited-nodes']??'2048';
   if(!/^[1-9][0-9]*$/.test(cap)||Number(cap)>2048)throw failure('invalid_selection_limit',2);
-  return {connection:connection.href,url,selector,maxVisited:Number(cap),json:args['--json']===true,
+  return {connection:connection.href,url,selector,compoundSelector:match[1],nthOfType:match[2]?Number(match[2]):null,maxVisited:Number(cap),json:args['--json']===true,
     cli:args['--cli']??path.join(__dirname,'uiblueprint'),worker:args['--worker']??path.join(__dirname,'session-worker')};
 }
 
@@ -207,15 +210,26 @@ function selectComponent(options){
   const expected=this instanceof Document?this:this.document;
   if(expected!==document)return {status:'stale'};
   const end=performance.now()+options.remainingMs;
+  const counts=options.nthOfType?new WeakMap():null;
   let node=expected,depth=0,visited=0,found=null;
   while(node){
     if(performance.now()>=end)return {status:'timeout'};
     if(visited>=options.maxVisited)return {status:'incomplete'};
     visited++;
-    if(node instanceof Element&&Element.prototype.matches.call(node,options.selector)){
-      if(found)return {status:'ambiguous'};
-      if(node.shadowRoot||['iframe','frame','template','slot'].includes(node.localName))return {status:'unsupported'};
-      found=node;
+    if(node instanceof Element){
+      let ordinal=null;
+      if(counts){
+        let namespaces=counts.get(node.parentNode);
+        if(!namespaces){namespaces=new Map();counts.set(node.parentNode,namespaces);}
+        let types=namespaces.get(node.namespaceURI);
+        if(!types){types=new Map();namespaces.set(node.namespaceURI,types);}
+        ordinal=(types.get(node.localName)??0)+1;types.set(node.localName,ordinal);
+      }
+      if((!counts||ordinal===options.nthOfType)&&Element.prototype.matches.call(node,options.selector)){
+        if(found)return {status:'ambiguous'};
+        if(node.shadowRoot||['iframe','frame','template','slot'].includes(node.localName))return {status:'unsupported'};
+        found=node;
+      }
     }
     const child=node.firstChild;
     if(child){if(depth>=64)return {status:'incomplete'};node=child;depth++;continue;}
@@ -265,7 +279,7 @@ async function openBootstrap(options){
   }
   async function invoke(objectId,fn,byValue){
     const result=await page.send('Runtime.callFunctionOn',{objectId,functionDeclaration:fn.toString(),
-      arguments:[{value:{selector:options.selector,maxVisited:options.maxVisited,remainingMs:Math.min(1000,page.remaining())}}],
+      arguments:[{value:{selector:options.compoundSelector,nthOfType:options.nthOfType,maxVisited:options.maxVisited,remainingMs:Math.min(1000,page.remaining())}}],
       // Chromium145 rejects these fixed readers in debug side-effect mode (F01).
       // They only read native DOM metadata; input is arguments, never source code.
       returnByValue:byValue,silent:true,userGesture:false,awaitPromise:false,throwOnSideEffect:false,objectGroup:group});

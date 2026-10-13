@@ -11,7 +11,7 @@ Reproduce the tested Web binaries with the current recipe from the checkout:
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-web-first-use.XXXXXX")"
-python3 distribution.py build --modules web --revision ea06095bf311e7e33af90e8d72fe822690a3223e --destination "$BUNDLE"
+python3 distribution.py build --modules web --revision abd88783221412f8e3f9d1da1f3c9a2b4733b665 --destination "$BUNDLE"
 ```
 
 The helper/guide are versioned recipe assets; the manifest records their hashes
@@ -60,8 +60,14 @@ ambiguous_target. The helper never navigates to create a match.
 Component is one compound CSS selector: optional tag or *, plus #id, .class,
 [attribute] or [attribute="value"] terms. Examples: `#picker`, `input.search`,
 `[role="dialog"][aria-label="Director"]`. Simple ASCII identifiers and quoted
-Unicode attribute values are supported. Combinators/whitespace between terms,
-selector lists, escapes and pseudo selectors (including :has) are unsupported.
+Unicode attribute values are supported, including literal colons in quotes.
+One terminal `:nth-of-type(N)` is supported: canonical integer1..2048, no leading
+zeros, signs, whitespace, arithmetic or keywords. Examples: `ul:nth-of-type(6)`
+and `ul:nth-of-type(3)`. It counts same-type element siblings within their parent,
+including siblings that do not match the rest of the compound; text/comments do
+not count. It is not a global index. Matching ordinals in multiple parents refuse.
+Combinators/whitespace between terms, selector lists, escapes and all other pseudo
+selectors (including :has) remain unsupported; a suffix cannot precede more terms.
 Selector text is data passed separately from the fixed selection function.
 No IDs have to be added to the application; use its existing public selection.
 
@@ -79,7 +85,9 @@ backend ID, retaining the original document/root/parent objects. It builds priva
 temporary connection/request records and calls the installed Rust collector.
 After Observe it checks URL/page uniqueness, document identity and the SAME selected
 root again before printing results. Navigation, remount, reparent or changed selector
-binding refuses; it never substitutes a new same-label/selector element.
+binding refuses; it never substitutes a new same-label/selector element. This
+includes sibling insertion/removal/reorder that changes the held node’s ordinal.
+The ordinal is counted during the same bounded walk, with no extra sibling scans.
 
 All geometry comes from the canonical Rust observation/analysis. Output contains
 design inspection, sourced width/height and component layout bounds, units/evidence,

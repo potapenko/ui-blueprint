@@ -67,7 +67,7 @@ at most16 unsolicited events. Check byte bounds before JSON parse. Native WebSoc
 browser allocations are opaque tooling/SDK costs, not a Rust allocator or browser RSS cap.
 Selection and final uniqueness walk each allow at most2048 visited DOM nodes, depth64
 and1000ms, within the overall deadline; no automatic retries or quota increases.
-An explicit --max-visited-nodes may lower this bound only (positive, <=2048). Ordinal bookkeeping has at most one increment per visited Element and at most visited-count entries; all nodes, including text/comments, still consume traversal quota. Multiple parents can produce ambiguity; an early match never bypasses exhaustion.
+An explicit --max-visited-nodes may lower this bound only (positive, <=2048). Ordinal bookkeeping has at most one type-counter increment per visited Element; parent, namespace and type-counter entries are each bounded by visited count; all nodes, including text/comments, still consume traversal quota. Multiple parents can produce ambiguity; an early match never bypasses exhaustion.
 URL mode requests32 output nodes/depth8/128KiB/1000ms, collector16 nodes/256 visits; the three layout/hit/visible fields and all transport/host caps stay unchanged. Legacy exact-ID remains64KiB/250ms.
 Basis: unchanged14-node widget encodes69125bytes;16-node all-field observation spans258.74ms, typed250ms parent timeout, then complete78900bytes within the proposed bounds. Serialized per-node IntersectionObserver waits explain cost; this is a caller workload, not changed D06 gates.
 No fields/nodes are pruned, guards weakened or requests retried. The finite component allowance is not a latency/completeness promise; oversized/unstable sources still refuse.
