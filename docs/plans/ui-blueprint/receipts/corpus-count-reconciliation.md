@@ -13,9 +13,9 @@ fixture/component-preview origin;140 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:521 primary images =517 first outputs +4 rerolls;
-75 separate repair-validation images;4 unqualified reference attempts
+76 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-600 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+601 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -918,3 +918,24 @@ universal rendering claim or automatic wording/reroll loop. Earlier failedimage 
 
 Current counts:197eligiblecases,521primaryimages,75repair-validationimages,
 4unqualifiedimages,600counted generatedimages; conservative remainder803.
+
+## CAST-OUTLINE1 — direct-user contour follow-up
+
+User directly requested pointer correction and only the first new-raster check in
+CT2 turn01a1361a-abc0-7271-a126-8c4aacbcaf60, without repeating accepted code/data
+verification. Source dcd8de6a7eff354dd3c6764006fb094cdde9f12f clarifies original
+contours; authorreceipt23dcab04 records one literal9015character prompt and one
+1619×971 repairimage. Neutral `$T/uib-CAST-OUTLINE1-koh_iyws/neutral-index.json`,
+SHAd98660d90dae9bc1523bdbe4300155a1e7148830c881aa3f11b4db53538b0892;
+imageSHAd72696343b91be7e61d4f07a2fb6e6d9a0bdaa29308dc346d44083cff276c287.
+Same original qualified reference; oldfailedimages/tooloriginals preserved.
+
+CT2final01a13629-1024-7920-9a4d-6ce160aad219 accepts the requested correction:
+no invented pointer, text and≈175×≈42 retained, no invented measurements. Dimension
+px shorthand remains a minor residual with explicit CSSpx footer. Accepted source/
+data checks were not rerun, and CV2 was not dispatched to duplicate this specific
+human-requested follow-up; this is scoped CT2acceptance, not a new dualcritic
+wholecorpus quality claim. Its separate wait was disabled by its owner.
+
+One repairimage, zero newprimarycases. Totals197cases,521primaryimages,
+76repair-validation images,4unqualifiedimages,601counted generatedimages.

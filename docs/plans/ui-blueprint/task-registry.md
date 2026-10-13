@@ -27,7 +27,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-197proved eligible primarycases,803remaining,75validationimages/600totalimages.
+197proved eligible primarycases,803remaining,76validationimages/601totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -118,10 +118,10 @@ CW-B19 adds1qualified mixed Settings state, bringing it to194.
 CW-B20 Cast and CN-B22 Guest Tour add2qualified cases, bringing it to196.
 Previously excluded CW14 now has its first qualified image, bringing it to197;
 it is counted once under CW-B2, not a new live state or repair reroll.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1 images (75 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1, CAST-OUTLINE1=1 images (76 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:600counted generated images
-overall; unqualified attempts increase neither eligible cases nor the75repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:601counted generated images
+overall; unqualified attempts increase neither eligible cases nor the76repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -153,7 +153,7 @@ root does not redirect or archive its unrelated application work.
 | CN-B22 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|terminal1new Guest Tour case/3first images; two-critic review pending|Same uib-CN-B22-itxeawwb neutral-index now includes passive Release32AXnodes/24callouts,3840×2100 nativePNG and G01/D01/D02 at1672×941;36Rust-measured dimensions,0rerolls. No activation/state/source changes. Initial Simulator gap and duplicateB21 preserved. Snapshot/connection/request and describe-process handoff sent user-named Guest Tour owner; no stale binding reuse |
 | CORPUS-REVIEW-B20-B22 |same CV2 + CT2 critics|complete; five rasterFAIL, three chains qualified|CV2final01a135fb-dc33-79b3-b673-899a19246fdb +metadata01a13605-aa2a-7131-9d91-378dc0a22f5e; CT2final01a13607-47be-71d0-b905-ee5b3a32f09a. Cast rootSPAN omission confirmed; Native30/30+4/4 detail quantities pass but coloredemoji/overview fail; CW14 source-preserving compaction accepted, raster assignments fail. CT2 read compact registry before full authorreconciliation, not fullyblind. Count ledger197cases/599images; originalA02/B07/C04 uncertainties unchanged |
 | USE-NATIVE-CAPTIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|running; shared owner returned after Cast contour handoff|CT2final confirms ambiguous "button, item 1 in its group" for16×16/228×80 and literal Unicode escapes. Original finite caption repair and one D01 image continue; no app changes. No replacement writer/code overlap |
-| Cast contour user follow-up |same exporter + existing CT2 critic|sourcedcd8de6/receipt23dcab0 delivered; CT2 owns first-raster check|Verified human turn01a1361a-abc0-7271-a126-8c4aacbcaf60 explicitly requests pointer correction/first new image without repeated accepted code/data checks. Source clarifies original contour; literal9015chars, one1619×971 PNG. Neutral uib-CAST-OUTLINE1-koh_iyws/neutral-index.json SHAd98660d9; author says no pointer, footer-qualified px remains. Root does not duplicate CT2 dispatch/automation; no newprimarycase, image count awaits recorded result |
+| Cast contour user follow-up |same exporter + existing CT2 critic|sourcedcd8de6/receipt23dcab0; CT2 user-requested contour check passed|Verified human turn01a1361a-abc0-7271-a126-8c4aacbcaf60 requested one newraster, no repeated accepted code/data checks. CT2final01a13629-1024-7920-9a4d-6ce160aad219: pointer absent, originaltext/≈175×≈42 preserved, no inventedmeasurements; footer-qualified px minorresidual. Neutral uib-CAST-OUTLINE1-koh_iyws/neutral-index.json SHAd98660d9; one1619×971 repairimage counted, no newprimarycase. CT2 owns/disables its wait; no duplicate rootreview or claim of rerun dualfull-image acceptance |
 | USE-MAC2 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|completed saved-data consumer tasks|Turn01a135a1-ab36-77f0-a6ce-13519a13bcd9: Director AX386×24pt known, layout unknown/not_requested; Reels50-component/3-sheet package prepared. No app/repository changes or images. Repro uib-USE-MAC2-6xt2xa97; brief410855B and missing-reference guidance feedback goes to USE-EXPORT-DOC1; simple measure input usability retained separately |
 | USE-EXPORT-DOC1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source2ed8fee/receipt9fe9f34 accepted by Mac consumer; owner archived|[Receipt](receipts/consumer-export-document1.md). Retry01a135bb-9eb2-7f70-83d0-c175735704ac confirms Reels brief16065B answers original task, source/partial/status/pt/AX distinctions and G01/D01/D02 reference needs clear. Author machine/prompt byte equality and focused bounds/privacy proof retained. Generic D01 sheets.json caption nonblocking; no further cosmetic loop. Retry uib-USE-MAC2-DOC1-retry-s0n74tif, no app/ImageGen run |
 | USE-WEB-FIX1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|supporting layer delivered3e143199; reused for bootstrap|[Receipt](receipts/consumer-web-first-use1.md): safehelp/bundledhelper/guide andv1/v2verify/remove; installedF01 proof. URL+component not closed by this layer |
