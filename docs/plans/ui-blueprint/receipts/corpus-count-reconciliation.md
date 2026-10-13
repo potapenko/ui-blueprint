@@ -13,9 +13,9 @@ fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
-63 separate repair-validation images;4 unqualified reference attempts
+65 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-583 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+585 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -733,3 +733,35 @@ rightinset prints≈12 instead of≈22, competing leftinset guides; unchanged pr
 means noCP18causal claim. CT2initial01a13433-73c1-7322-a084-c5b30879c812 and final01a13438-6dc3-78d0-b612-d288a3dbce29 accept the bounded source repair after author reconciliation, retaining all image failures.
 Totals194eligible primarycases,63repairimages,583counted images. No general image
 reliability claim; all previous firstfailures and tool-managed originals retained.
+
+## CP19 — outline/assignment wording experiment, 2026-10-13
+
+Source da306a261d9f95447383ebc6cf727efc79cfbe62, receipt93ee41a;
+[author receipt](corpus-outline-presentation19.md). Two first repair images, zero
+newcases/rerolls. B191536×1024/E041672×941. Neutral index
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP19-eoxhzvmn/neutral-index.json`,
+SHA91f3c71001a5665ad8be1be637affc2624ee2df2040106024ddfed990009dca4.
+Onlyprompt.txt changes; five wording reversals recreate baseline prompts exactly,
+all machine files/selected dimensions/source text/state remain unchanged.
+Candidate binarySHA7dbb7abe98d4ff029cb25dc3b262682ac92603020374d6c0ab564c11383f1760.
+Two focused checks/build/fmt reported; no new modelsetting/sourceapp/contract change.
+Initial independent observations confirm hollowON/OFFknobs in both samples, with
+all B1929/E0431assigned amounts/marks. B19internalIDs, extra second-select dimensions
+and split detail context still fail. E04source-icon silhouette differs; final reconciliation below rejects the author's Top/Bottom claim. Image improvement
+is sample-level only, no causal/general claim. One frozen candidate/two calls ends
+this experiment; do not automatically start another wording round.
+Totals194eligible primarycases,65repairimages,585counted images. Prior first failures
+retained, including original CP18 cases and every tool-managed image original.
+
+CP19 final acceptance: CV2turn01a13447-2f76-7e41-96ee-623653d9cf81 and CT2turn
+01a13448-2aab-7aa0-ae5d-7df5e33f36e6 accept bounded source/prompt preservation,
+confirm hollowON/OFF indicators in these samples, and reject both fullimages.
+B19internal references/unassigned second-select dimensions/rearranged paired context
+remain. E04single downward chevrons replace the source paired up/down glyphs under
+an existing silhouette requirement. Both critics read the second select caption as
+Top boundary: the author's claimed Bottom-boundary error is NOT accepted. E04all31
+assigned amounts/marks and vertical anchors pass; B19all29assigned labels pass.
+Dense text alone is not established as unreadable; no new mandatory density gate.
+No demonstrated new compiler defect; no automatic CP20 or repeated unchanged tests.
+Owner archived after receipt transfer. Candidate2f90deb→da306a2 accepted in bounded
+presentation scope, not as fullimage/corpus acceptance or a reliability guarantee.

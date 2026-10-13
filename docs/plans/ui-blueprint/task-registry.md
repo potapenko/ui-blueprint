@@ -90,10 +90,10 @@ CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
 CW-B19 adds1qualified mixed Settings state, bringing it to194.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2 images (63 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2 images (65 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:583counted generated images
-overall; unqualified attempts increase neither eligible cases nor the63repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:585counted generated images
+overall; unqualified attempts increase neither eligible cases nor the65repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -189,7 +189,7 @@ overall; unqualified attempts increase neither eligible cases nor the63repair-va
 | CW12 |same Web advisor|done; zero candidates|Content-rating is backend config, no ordinary Settings setter. No runtime changes; source receipt in corpus-web-advice.md. Goal continues |
 | CW13 |same Web advisor, retained|done; no new candidates in selected subset|Isolated storage does not remove source/query playback/statistics effects; no runtime changes. [Receipt](receipts/corpus-web-advice.md#cw13--isolated-storage-does-not-isolate-backend-effects-2026-10-13). CP18 independently running |
 | CP18 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|source2f90deb accepted; both full images rejected|[Receipt](receipts/corpus-select-spacing18.md), ef73da6. Existing engine adds6gaps/retains536old B19facts; E04/B13packages exact.2repairimages,0newcases. Both show≈16; fullimagesFAIL, source repair accepted CT2final01a13438-6dc3-78d0-b612-d288a3dbce29; CV2targeted spacing confirmed |
-| CP19 |same exporter owner|bounded prompt experiment queued|Recurring B19 filledONknobs/extra border and dimensions despite current wording. One justified concise editorial candidate, two frozen source replays/first images, no rerolls or new semantics; exact machine output protected. No claim of guaranteed renderer correction |
+| CP19 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source da306a2 accepted; two images rejected|[Receipt](receipts/corpus-outline-presentation19.md),93ee41a; machinefiles/assignments exact. Both critics confirm hollowknobs, B19IDs/extra dims; E04source-chevron mismatch. Author Top/Bottom claim rejected by both; all assigned amounts pass. Experiment complete, no automatic next round |
 | CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only receipt accepted; retained|Phone portrait-only; one conditional iPad Actor keyboard candidate plus unqualified compact-width branch. [Receipt](receipts/corpus-native-advice.md#cn15--orientation-and-ipad-keyboard-candidate-2026-10-13); root rejects overbroad non-CUA requirement: Apple DeviceHub is not Codex |
 | CN16 |same Mac advisor|plan ready; awaiting_authority for source-app implementation|[CN16-ISOLATION@1](receipts/corpus-native-advice.md#cn16--конкретный-план-изолированного-mac-запуска-2026-10-13): one Debug-only entry, memory repositories/ephemeral public transport, unavailable write effects, separate temp playback cache and no shared window persistence.7source owners/2tests+spec docs. No implementation authorized; CP15 continues independently |
 | CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local, archived|cycle accepted; both critics reject missing focus cue|1newcase/1firstimage, frozen CP14;6rows with keyboard vs9full+partial,20AXsizes/6labels pass. playphraseme-cn-b21-1v2u48gc manifest/HANDOFF; scoped restoration/shutdown. Caption-slot/resolution and arrow appearance residuals separate; no new compiler defect |
@@ -208,11 +208,21 @@ overall; unqualified attempts increase neither eligible cases nor the63repair-va
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP17 reconciled; idle retained|New inset useful but endpoint clarity qualified; both fullimagesFAIL, unchangedcontrol not causalregression |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP17 reconciled; idle retained|Bounded selection accepted; exactdata/input priority/guards verified; both fullimagesFAIL including explicit active-and-applied distinction |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP19 reconciled; idle retained|Final01a13447-2f76-7e41-96ee-623653d9cf81: sample hollowknobs pass, both imagesFAIL, E04Topboundary caption confirmed |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP19 reconciled; idle retained|Final01a13448-2aab-7aa0-ae5d-7df5e33f36e6: bounded source wording accepted, all machine/selection facts exact; both imagesFAIL, author E04anchor complaint not confirmed |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
+
+Next dependency after CP19: no running implementation/review remains. CN16's complete
+Mac source-isolation proposal still awaits explicit human approval; re-presented
+2026-10-13 after confirmed source-storage risk. Automatic goal continuations are not
+that approval. No OS-process contention blocks the accepted CP18/19 outcomes; CN8
+archive still reports active writer and is an unrelated host metadata limitation.
+Continue from CN16 on approval or another qualified authorized source; do not fill
+case counts with repeated renders or silently modify the source app. Goal active,
+194proved cases,806remainder; this is not completion or a user pause.
+
 
 CW-B18 path refinement: pinned CLI0.1.19 defaults daemon metadata/stderr beneath
 Library/Caches/ms-playwright/daemon. Source exposes PWTEST_DAEMON_SESSION_DIR.
@@ -227,7 +237,7 @@ DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance remains through CR3. CA8f26e121 adds explicit static text,
 now accepted through CR4; existing completed batches keep their original pins.
-Current accepted exporter presentation baseline is8f18a1e; source/prompt protection
+Current accepted exporter presentation baseline isda306a2; source/prompt protection
 is bounded accepted. Individual image verdicts remain pinned to their actual sources,
 not full corpus or universal raster quality.
 Root owns this registry,
