@@ -1,10 +1,10 @@
 # Web URL and selected-component first use
-- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@1`.
+- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@2`.
 - Authority: Active; Stability: Evolving; accepted/released: none.
-- Authority source: explicit user URL+selected-component request, root-selected USE-WEB-BOOTSTRAP1 outcome after USE-WEB-FIX1/3e143199.
+- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 adds only registered Observe diagnostic consumption; existing profile retained.
 - Read when: shipped Web helper URL/component preparation and external Observe/geometry.
 - Do not read when: unchanged exact-ID mode, Native, actions, export or saved comparison.
-- Requires: [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@1](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
+- Requires: [Observe diagnostics@1](cli-observe-diagnostics.md), [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@1](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
 
 ## UIB.WEB-FIRST-USE.INPUT
 Shipped Node24+ web-geometry.cjs adds this mode; the existing full exact-ID invocation
@@ -35,7 +35,8 @@ terms. Simple ASCII CSS identifiers; quoted Unicode attribute values allowed. No
 combinators, selector lists, pseudo classes/elements, :has, script or guessed labels.
 Unsupported syntax refuses explicitly; never silently broaden or choose the first match.
 Scope is the selected page's ROOT DOCUMENT light DOM only. Do not enter frame/shadow/
-template content; a selected iframe/frame/template/slot or shadow host is unsupported.
+template content; a selected iframe/frame/template/slot or authored open/closed shadow host is unsupported.
+CDP shadowRoots boundary metadata is checked too; user-agent internals of ordinary controls are not traversed and do not exclude their public host.
 No app DOM IDs or other source-app changes are required.
 
 ## UIB.WEB-FIRST-USE.BINDING
@@ -80,9 +81,10 @@ cleanup exits1, never success. No idle polling or collection while awaiting comm
 Help0; invalid/missing/unsupported arguments or quota2; missing/ambiguous target/root,
 stale binding, unsupported source boundary or deadline4; IO/cleanup1. Existing Rust
 exits retain their meaning; partial Observe4 can contain useful sourced dimensions.
-Preparation/revalidation failures publish no helper result. Diagnostics are fixed codes/
-hints, never raw URL, selector, source text, endpoint or exception. Metadata and temporary
-connection/request/observation files remain private task-temporary, no persistent config.
+Preparation/revalidation failures publish no helper result. URL mode requests --diagnostics-json with4096bytes and strictly validates the linked version/field/enum/count schema plus exit agreement; legacy mode stays compatible.
+Render only validated enum/count facts on stderr, including partial observations; null Host detail stays unavailable. Invalid/missing reports fail safely without raw text or silent old-CLI fallback.
+A limit/timeout category does not identify a particular budget or deeper cause; configured limits are context, not failure proof. No raw URI/selector/source/exception is emitted.
+Metadata and temporary connection/request/observation files stay private task-temporary; no persistent config.
 New explicit requests require current authority; no automatic retry or source stabilization.
 
 ## UIB.WEB-FIRST-USE.PROOF
