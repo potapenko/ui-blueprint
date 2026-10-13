@@ -533,7 +533,10 @@ fn collector_diagnostic(error: collector::Failure) -> DiagnosticRecord {
         E::InvalidInput => Cause::CollectorInvalidInput,
         E::Limit => Cause::CollectorLimit,
         E::StaleTarget => Cause::CollectorStaleTarget,
-        E::ResyncRequired => Cause::CollectorResyncRequired,
+        E::ResyncRequired => {
+            record.code = error.resync_site.map_or(0, |site| i32::from(site as u8));
+            Cause::CollectorResyncRequired
+        }
         E::Malformed => {
             record.code = error.malformed_site.map_or(0, |site| i32::from(site as u8));
             Cause::CollectorMalformed

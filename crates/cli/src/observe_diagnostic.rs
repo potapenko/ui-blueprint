@@ -221,6 +221,7 @@ mod tests {
             C::Host,
             C::SelectionIncomplete,
             C::CollectorMalformed,
+            C::CollectorResyncRequired,
             C::CollectorProtocol,
             C::CdpUncorrelatedError,
             C::TransportLoggingBoundary,
@@ -229,6 +230,7 @@ mod tests {
             let code = match cause {
                 C::Host => 16,
                 C::CollectorMalformed => 255,
+                C::CollectorResyncRequired => 4,
                 C::CollectorProtocol | C::CdpUncorrelatedError => i32::MIN,
                 _ => 0,
             };

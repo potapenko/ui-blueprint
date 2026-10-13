@@ -278,6 +278,7 @@ impl Collector {
             return Err(Failure {
                 kind: ErrorKind::Protocol(code),
                 malformed_site: None,
+                resync_site: None,
                 send_progress: transport::SendProgress::Flushed,
                 remote_cleanup: RemoteCleanup::NotRequired,
             });
@@ -368,6 +369,7 @@ fn cdp_failure(f: cdp::Failure) -> Failure {
     Failure {
         kind: ErrorKind::Cdp(f.kind),
         malformed_site: None,
+        resync_site: None,
         send_progress: f.send_progress,
         remote_cleanup: RemoteCleanup::NotRequired,
     }

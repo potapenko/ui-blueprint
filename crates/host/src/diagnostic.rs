@@ -48,7 +48,8 @@ pub struct DiagnosticRecord {
     /// Existing SendProgress: NotQueued=0, Queued=1, PossiblyWritten=2, Flushed=3.
     pub send_progress: u8,
     /// Existing protocol error number, fixed HostError code from `host`, or a
-    /// trusted CollectorMalformed branch code 0..=255 (zero means unspecified).
+    /// trusted CollectorMalformed code 0..=255 or CollectorResyncRequired site 0..=4.
+    /// Zero means unspecified for these collector branch codes.
     pub code: i32,
     /// Existing Selection.visited_nodes; zero for non-selection causes.
     pub count: u32,
@@ -101,6 +102,7 @@ impl DiagnosticRecord {
             || match self.cause {
                 Host => !(1..=16).contains(&self.code),
                 CollectorMalformed => !(0..=255).contains(&self.code),
+                CollectorResyncRequired => !(0..=4).contains(&self.code),
                 CollectorProtocol | CdpUncorrelatedError => false,
                 _ => self.code != 0,
             }
@@ -210,6 +212,11 @@ mod tests {
             record(DiagnosticCause::SelectionIncomplete, 0, u32::MAX),
             record(DiagnosticCause::CollectorMalformed, 0, 0),
             record(DiagnosticCause::CollectorMalformed, 255, 0),
+            record(DiagnosticCause::CollectorResyncRequired, 0, 0),
+            record(DiagnosticCause::CollectorResyncRequired, 1, 0),
+            record(DiagnosticCause::CollectorResyncRequired, 2, 0),
+            record(DiagnosticCause::CollectorResyncRequired, 3, 0),
+            record(DiagnosticCause::CollectorResyncRequired, 4, 0),
             DiagnosticRecord::host(DiagnosticStage::Receive, HostError::InvalidInput),
         ];
         for expected in cases {
@@ -290,6 +297,14 @@ mod tests {
             let mut unchanged = terminal();
             assert_eq!(
                 record(DiagnosticCause::CollectorMalformed, code, 0).apply(&mut unchanged),
+                Err(HostError::InvalidControl)
+            );
+            assert_eq!(unchanged, terminal());
+        }
+        for code in [-1, 5] {
+            let mut unchanged = terminal();
+            assert_eq!(
+                record(DiagnosticCause::CollectorResyncRequired, code, 0).apply(&mut unchanged),
                 Err(HostError::InvalidControl)
             );
             assert_eq!(unchanged, terminal());

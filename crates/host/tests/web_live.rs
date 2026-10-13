@@ -1190,3 +1190,263 @@ fn guarded_live_f01() {
         std::panic::resume_unwind(panic);
     }
 }
+
+// Synthetic protocol facts through the real paired binaries; no browser/app.
+// Explicit binary paths keep this diagnostic proof separate from live fixtures.
+#[test]
+#[ignore = "requires UIB_RESYNC_CLI and UIB_RESYNC_WORKER matched diagnostic binaries"]
+fn resync_sites_cross_real_worker_host_cli_without_source_output() {
+    use std::{
+        fs,
+        net::TcpListener,
+        os::unix::fs::PermissionsExt,
+        process::{Command, Stdio},
+    };
+    use tungstenite::{Message, accept};
+    let cli = std::env::var("UIB_RESYNC_CLI").expect("explicit CLI");
+    let worker = std::env::var("UIB_RESYNC_WORKER").expect("explicit matching worker");
+    assert!(Path::new(&cli).is_absolute() && Path::new(&worker).is_absolute());
+    let stamp = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap()
+        .as_nanos();
+    let dir = std::env::temp_dir().join(format!("uib-resync-peer-{}-{stamp}", std::process::id()));
+    fs::create_dir(&dir).unwrap();
+    fs::set_permissions(&dir, fs::Permissions::from_mode(0o700)).unwrap();
+    let run = std::panic::catch_unwind(|| {
+        for mode in 0..=4 {
+            for structured in [true, false] {
+                let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+                listener.set_nonblocking(true).unwrap();
+                let endpoint = format!(
+                    "ws://{}/devtools/page/web-target",
+                    listener.local_addr().unwrap()
+                );
+                let peer = thread::spawn(move || {
+                    let end = Instant::now() + Duration::from_secs(5);
+                    let stream = loop {
+                        match listener.accept() {
+                            Ok((s, _)) => break s,
+                            Err(e)
+                                if e.kind() == io::ErrorKind::WouldBlock
+                                    && Instant::now() < end =>
+                            {
+                                thread::sleep(Duration::from_millis(1))
+                            }
+                            _ => panic!("bounded peer accept"),
+                        }
+                    };
+                    stream.set_nonblocking(false).unwrap();
+                    stream
+                        .set_read_timeout(Some(Duration::from_secs(3)))
+                        .unwrap();
+                    stream
+                        .set_write_timeout(Some(Duration::from_secs(3)))
+                        .unwrap();
+                    let mut ws = accept(stream).unwrap();
+                    let mut reads = 0;
+                    let mut released = false;
+                    while let Ok(Message::Text(text)) = ws.read() {
+                        let command: Value = serde_json::from_str(&text).unwrap();
+                        let params = &command["params"];
+                        let result = match command["method"].as_str().unwrap() {
+                            "Target.getTargetInfo" => {
+                                json!({"targetInfo":{"targetId":"web-target"}})
+                            }
+                            "Page.getFrameTree" => {
+                                json!({"frameTree":{"frame":{"id":"frame","loaderId":"loader"}}})
+                            }
+                            "DOM.getDocument" => json!({"root":{"backendNodeId":1,"nodeType":9}}),
+                            "Page.createIsolatedWorld" => json!({"executionContextId":3}),
+                            "Accessibility.enable" => json!({}),
+                            "Runtime.releaseObjectGroup" => {
+                                released = true;
+                                json!({})
+                            }
+                            "DOM.resolveNode" => {
+                                json!({"object":{"type":"object","subtype":"node","objectId":format!("node-{}",params["backendNodeId"])}})
+                            }
+                            "Runtime.callFunctionOn"
+                                if params["functionDeclaration"]
+                                    .as_str()
+                                    .unwrap()
+                                    .starts_with("function verifyNodes(") =>
+                            {
+                                json!({"result":{"type":"object","value":{"current":true}}})
+                            }
+                            "Runtime.callFunctionOn" => {
+                                assert!(
+                                    params["functionDeclaration"]
+                                        .as_str()
+                                        .unwrap()
+                                        .starts_with("function readNode(")
+                                );
+                                reads += 1;
+                                let mut facts = json!({"scrollX":0,"scrollY":0,"width":800,"height":600,"dpr":1,"scale":1,"offsetLeft":0,"offsetTop":0,"pageLeft":0,"pageTop":0,"visualWidth":800,"visualHeight":600});
+                                if (mode == 3 && reads == 2) || (mode == 4 && reads == 3) {
+                                    facts["scrollY"] = json!(1);
+                                    facts["pageTop"] = json!(1);
+                                }
+                                let mut after = facts.clone();
+                                if mode == 2 {
+                                    after["scrollY"] = json!(1);
+                                    after["pageTop"] = json!(1);
+                                }
+                                let bounds = json!({"x":40,"y":60,"width":120,"height":40});
+                                let mut current = bounds.clone();
+                                if mode == 1 {
+                                    current["x"] = json!(41);
+                                }
+                                let mut rect = bounds.clone();
+                                rect["viewport"] = json!({"before":facts,"after":after});
+                                json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"tag":"INPUT","sensitive":false,"rect":rect,"clip":{"rect":bounds,"bounds":bounds,"current":current,"intersects":true,"ratio":1},"value":"PRIVATE_RESYNC_CANARY"}}})
+                            }
+                            _ => panic!("unexpected method; no raw payload"),
+                        };
+                        if ws
+                            .send(Message::Text(
+                                json!({"id":command["id"],"result":result})
+                                    .to_string()
+                                    .into(),
+                            ))
+                            .is_err()
+                        {
+                            break;
+                        }
+                    }
+                    released
+                });
+                let mut request =
+                    baseline::request("rebound_after_attach", vec![Channel::ExternalSemantics]);
+                let Artifact::Request(r) = &mut request.artifact else {
+                    unreachable!()
+                };
+                r.context.fields =
+                    vec![Field::LayoutBounds, Field::HitRegion, Field::VisibleRegion];
+                r.limits.deadline_ms = 1000;
+                r.limits.max_output_bytes = 131072;
+                let Artifact::Session(session) = baseline::descriptor().artifact else {
+                    unreachable!()
+                };
+                let nodes: Vec<_> = [11, 12].map(|id| json!({"reference":{"session_id":"web-session","target":baseline::target(),"surface":baseline::surface(),"key":{"namespace":"web.dom","key":id.to_string()},"snapshot_id":"prior","observation_id":"prior"},"sensitivity":"public"})).into();
+                let m = 1048576;
+                let connection = json!({"connection_version":"1.0.0","target":baseline::target(),"session":session,"attach_deadline_ms":2000,
+                    "host_limits":{"workers":2,"worker_bytes":64*m,"publication_reserve":m,"bootstrap_bytes":m,"parent_bytes":32*m,"input_bytes":2*m,"ingress_bytes":512*1024,"output_bytes":512*1024,"request_output_bytes":2*m,"completion_groups":2,"control_bytes":4096,"cleanup_ms":1000,"retained_domain_bytes":64*m,"retained_per_worker":15*m,"main_stack_bytes":8*m,"watchdog_stack_bytes":m},
+                    "provider":{"backend":"web","setup":baseline::setup(endpoint),"selection":{"selection":"references","nodes":nodes}}});
+                let config = dir.join("connection.json");
+                let input = dir.join("request.json");
+                fs::write(&config, serde_json::to_vec(&connection).unwrap()).unwrap();
+                fs::write(&input, serde_json::to_vec(&request).unwrap()).unwrap();
+                let mut command = Command::new(&cli);
+                command
+                    .arg("observe")
+                    .arg("--connection")
+                    .arg(&config)
+                    .arg("--request")
+                    .arg(&input)
+                    .arg("--worker")
+                    .arg(&worker)
+                    .args([
+                        "--max-input-bytes",
+                        "131072",
+                        "--max-output-bytes",
+                        "131072",
+                    ])
+                    .stdin(Stdio::null())
+                    .stdout(Stdio::piped())
+                    .stderr(Stdio::piped());
+                if structured {
+                    command.args(["--diagnostics-json", "--max-diagnostic-bytes", "4096"]);
+                }
+                // Drain bounded stdout/stderr concurrently so a valid baseline cannot block on a pipe.
+                let mut child = command.spawn().unwrap();
+                let stdout = child.stdout.take().unwrap();
+                let stderr = child.stderr.take().unwrap();
+                let out = thread::spawn(move || {
+                    let mut b = Vec::new();
+                    stdout.take(131073).read_to_end(&mut b).unwrap();
+                    b
+                });
+                let err = thread::spawn(move || {
+                    let mut b = Vec::new();
+                    stderr.take(4097).read_to_end(&mut b).unwrap();
+                    b
+                });
+                let end = Instant::now() + Duration::from_secs(8);
+                let mut timed_out = false;
+                loop {
+                    if child.try_wait().unwrap().is_some() {
+                        break;
+                    }
+                    if Instant::now() >= end {
+                        timed_out = true;
+                        child.kill().unwrap();
+                        child.wait().unwrap();
+                        break;
+                    }
+                    thread::sleep(Duration::from_millis(1));
+                }
+                let status = child.wait().unwrap();
+                let stdout = out.join().unwrap();
+                let stderr = err.join().unwrap();
+                let released = peer.join().unwrap();
+                assert!(!timed_out);
+                assert!(
+                    released,
+                    "mode={mode} structured={structured} stderr={}",
+                    String::from_utf8_lossy(&stderr)
+                );
+                assert_eq!(
+                    status.code(),
+                    Some(4),
+                    "{}",
+                    String::from_utf8_lossy(&stderr)
+                );
+                assert!(stdout.len() <= 131072 && stderr.len() <= 4096);
+                assert!(!stdout.windows(21).any(|v| v == b"PRIVATE_RESYNC_CANARY"));
+                assert!(!String::from_utf8_lossy(&stderr).contains("PRIVATE_RESYNC_CANARY"));
+                if mode == 0 {
+                    let doc = Document::from_json(&stdout, 131072).unwrap();
+                    assert!(matches!(doc.artifact, Artifact::ChannelResponse(_)));
+                } else {
+                    assert!(stdout.is_empty(), "failed guard cannot publish");
+                }
+                if structured {
+                    let d: Value = serde_json::from_slice(&stderr).unwrap();
+                    assert_eq!(d["worker_cleanup"], "confirmed");
+                    assert_eq!(d["exit_code"], 4);
+                    if mode != 0 {
+                        assert_eq!(d["terminal_error"], "resync_required");
+                        assert_eq!(d["committed_channels"], 0);
+                        assert_eq!(d["missing_channels"], 1);
+                        assert_eq!(d["host_diagnostic"]["cause"], "collector_resync_required");
+                        assert_eq!(d["host_diagnostic"]["stage"], "collect");
+                        assert_eq!(d["host_diagnostic"]["code"], mode);
+                        assert_eq!(d["host_diagnostic"]["remote_cleanup"], "released");
+                        assert!(d["host_diagnostic"]["selection_visited_nodes"].is_null());
+                    }
+                } else {
+                    assert_eq!(
+                        stderr,
+                        if mode == 0 {
+                            b"observe_incomplete\n".as_slice()
+                        } else {
+                            b"observe_unavailable\n".as_slice()
+                        }
+                    );
+                }
+            }
+        }
+    });
+    for file in ["connection.json", "request.json"] {
+        let p = dir.join(file);
+        if p.exists() {
+            fs::remove_file(p).unwrap();
+        }
+    }
+    fs::remove_dir(&dir).unwrap();
+    assert!(!dir.exists());
+    if let Err(error) = run {
+        std::panic::resume_unwind(error);
+    }
+}

@@ -201,10 +201,20 @@ pub enum MalformedSite {
     ContinuityException = 15,
     ContinuityShape = 16,
 }
+/// Fixed failing consistency guard, not an inferred underlying source cause.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[repr(u8)]
+pub enum ResyncSite {
+    RectTriple = 1,
+    NodeViewport = 2,
+    CrossNodeViewport = 3,
+    FinalViewport = 4,
+}
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct Failure {
     pub kind: ErrorKind,
     pub malformed_site: Option<MalformedSite>,
+    pub resync_site: Option<ResyncSite>,
     pub send_progress: transport::SendProgress,
     pub remote_cleanup: RemoteCleanup,
 }
@@ -221,6 +231,12 @@ impl Failure {
         }
         self
     }
+    fn resync(site: ResyncSite) -> Self {
+        Self {
+            resync_site: Some(site),
+            ..Self::new(ErrorKind::ResyncRequired)
+        }
+    }
     fn with_cleanup(mut self, cleanup: RemoteCleanup) -> Self {
         self.remote_cleanup = cleanup;
         self
@@ -229,6 +245,7 @@ impl Failure {
         Self {
             kind,
             malformed_site: None,
+            resync_site: None,
             send_progress: transport::SendProgress::NotQueued,
             remote_cleanup: RemoteCleanup::NotRequired,
         }

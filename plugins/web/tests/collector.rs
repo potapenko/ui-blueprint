@@ -831,6 +831,15 @@ fn viewport_mapping_refuses_context_changes_or_invalid_facts_without_publication
             },
             "mode {mode}"
         );
+        assert_eq!(
+            error.resync_site,
+            match mode {
+                3 => Some(collector::ResyncSite::NodeViewport),
+                4 => Some(collector::ResyncSite::CrossNodeViewport),
+                5 => Some(collector::ResyncSite::FinalViewport),
+                _ => None,
+            }
+        );
         assert!(!published);
         drop(c);
         fixture.finish();
@@ -1295,6 +1304,10 @@ fn lost_events_or_document_event_stop_current_refs_without_recollection() {
             }
         );
         assert_eq!(fixture.methods().len(), before + 1);
+        assert_eq!(
+            e.resync_site, None,
+            "unclassified event loss keeps code zero"
+        );
         assert!(c.pending_invalidation());
         assert!(
             c.pending_invalidation(),
@@ -4132,6 +4145,14 @@ fn popup_geometry_malformed_or_changed_source_cannot_publish() {
                 ErrorKind::ResyncRequired
             } else {
                 ErrorKind::Malformed
+            }
+        );
+        assert_eq!(
+            error.resync_site,
+            if mode == 3 || mode == 6 {
+                Some(collector::ResyncSite::RectTriple)
+            } else {
+                None
             }
         );
         c.detach();

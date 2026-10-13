@@ -356,7 +356,7 @@ impl Collector {
         if let Some((index, first)) = layouts.next() {
             let observed = viewport_context(first);
             if layouts.any(|(_, rect)| viewport_context(rect) != observed) {
-                return Err(Failure::new(ErrorKind::ResyncRequired));
+                return Err(Failure::resync(ResyncSite::CrossNodeViewport));
             }
             if first
                 .viewport
@@ -405,7 +405,7 @@ impl Collector {
                     return Err(Failure::new(ErrorKind::StaleTarget));
                 }
                 if read.rect.as_ref().map(viewport_context) != Some(observed) {
-                    return Err(Failure::new(ErrorKind::ResyncRequired));
+                    return Err(Failure::resync(ResyncSite::FinalViewport));
                 }
                 records.dom_end = self.time();
             }
@@ -634,7 +634,7 @@ pub(super) fn validate_dom(
         if clip.bounds.values() != [rect.x, rect.y, rect.width, rect.height]
             || clip.current.values() != clip.bounds.values()
         {
-            return Err(Failure::new(ErrorKind::ResyncRequired));
+            return Err(Failure::resync(ResyncSite::RectTriple));
         }
     }
     if let Some(samples) = read.rect.as_ref().and_then(|r| r.viewport.as_ref()) {
@@ -657,7 +657,7 @@ pub(super) fn validate_dom(
         if samples.before.as_ref().map(wire::ViewportFacts::values)
             != samples.after.as_ref().map(wire::ViewportFacts::values)
         {
-            return Err(Failure::new(ErrorKind::ResyncRequired));
+            return Err(Failure::resync(ResyncSite::NodeViewport));
         }
     }
     Ok(())
