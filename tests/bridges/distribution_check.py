@@ -25,6 +25,70 @@ def call(command, expected=0, env=None):
     return result
 
 
+def web_help(helper):
+    node = shutil.which('node')
+    assert node, 'Node.js 24+ is required to check the optional Web helper'
+    stage = Path(tempfile.mkdtemp(prefix='uib-web-help-'))
+    try:
+        guard = stage / 'guard.cjs'
+        guard.write_text("""const forbid=()=>{throw new Error('unexpected_effect');};
+global.WebSocket=class {constructor(){forbid();}};
+require('node:child_process').spawn=forbid;
+for(const key of ['stat','access','mkdtemp','open','readFile','unlink','rmdir'])
+  require('node:fs/promises')[key]=forbid;
+""")
+        for option in ('--help', '-h'):
+            result = call([node, '--require', guard, helper, option])
+            assert not result.stderr
+            for text in (b'--endpoint', b'--root-backend-id', b'--loader-id',
+                         b'already authorized', b'does not discover', b'WEB-FIRST-USE.md'):
+                assert text in result.stdout
+        # Invalid input stays sanitized, even alongside --help; no connection/file effects.
+        result = call([node, '--require', guard, helper, '--help', '--endpoint',
+                       'PRIVATE_ENDPOINT_CANARY'], 2)
+        assert not result.stdout and result.stderr == b'invalid_arguments\n'
+        print('PASS Web help: --help/-h, no metadata/CLI/file effects, sanitized invalid input')
+    finally:
+        dist.clean_stage(stage)
+        assert not stage.exists()
+
+
+def inventory_compatibility():
+    stage = Path(tempfile.mkdtemp(prefix='uib-dist-inventory-'))
+    try:
+        for version in (1, 2):
+            for modules in ('core', 'web', 'native', 'combined'):
+                names = dist.files_for(modules)
+                if version == 1:
+                    names -= dist.WEB_FILES
+                folder = stage / f'{version}-{modules}'
+                folder.mkdir()
+                (folder / 'foreign.txt').write_text('keep')
+                products = {name: (name.encode(), 0o644) for name in names}
+                manifest = {'format': f'ui-blueprint-local-{version}', 'modules': modules,
+                            'files': {name: {'sha256': dist.digest(data), 'mode': mode}
+                                      for name, (data, mode) in products.items()}}
+                with dist.destination(folder) as fd:
+                    dist.publish(fd, products, manifest)
+                    dist.verify(fd)
+                    if version == 2 and modules in ('web', 'combined'):
+                        for missing in sorted(dist.WEB_FILES):
+                            (folder / missing).unlink()
+                            try:
+                                dist.remove(fd)
+                                raise AssertionError('incomplete helper inventory accepted')
+                            except FileNotFoundError:
+                                pass
+                            assert {p.name for p in folder.iterdir()} == names - {missing} | {dist.MANIFEST, 'foreign.txt'}
+                            (folder / missing).write_bytes(products[missing][0])
+                    dist.remove(fd)
+                    assert {p.name for p in folder.iterdir()} == {'foreign.txt'}
+        print('PASS inventory: legacy/current all selections; new Web files mandatory; foreign files preserved')
+    finally:
+        dist.clean_stage(stage)
+        assert not stage.exists()
+
+
 def documents_entry(cli, stage, context, env):
     # Deliberately invalid version stops immediately after strict deserialization,
     # before request IO, spawning or transport. These are not live setup defaults.
@@ -74,6 +138,8 @@ def smoke(bundle):
     assert 'UNICODE LICENSE V3' in licenses and 'copyright Alexander Huszagh' in licenses
     assert 'Copyright notices for The Rust Standard Library' in (bundle / 'RUST_LIBRARY_NOTICES.html').read_text()
     call([sys.executable, bundle / 'distribution.py', 'verify', '--destination', bundle], env=env)
+    if manifest['format'] == 'ui-blueprint-local-2' and manifest['modules'] in ('web', 'combined'):
+        web_help(bundle / 'web-geometry.cjs')
     cli, validator = bundle / 'uiblueprint', bundle / 'uiblueprint-validate'
     assert b'native-session --connection' in call([cli, '--help'], env=env).stdout
     native = manifest['modules'] in ('native', 'combined')
@@ -238,5 +304,6 @@ if __name__ == '__main__':
     parser.add_argument('--bundle', type=Path, action='append', default=[])
     args = parser.parse_args()
     safety()
+    inventory_compatibility()
     for bundle in args.bundle:
         smoke(bundle.resolve())

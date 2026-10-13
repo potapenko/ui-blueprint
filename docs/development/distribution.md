@@ -81,6 +81,7 @@ Everything is directly under the chosen directory; no package manager is needed:
 - `uiblueprint-0.1.0.schema.json`, `uiblueprint-analysis-0.2.0.schema.json`.
 - `example-snapshot.json`, `example-query.json`, `example-evaluation.json`,
   `example-expectation.json`, `example-observed-brief.json`, `example-proposed-brief.json`.
+- Web/combined only: `web-geometry.cjs`, `WEB-FIRST-USE.md`.
 - `RUN.md` (this guide), `distribution.py` (verify/remove), `THIRD_PARTY_NOTICES.md`,
   `DEPENDENCY_LICENSES.txt`, `RUST_LIBRARY_NOTICES.html`, `distribution-manifest.json`.
 
@@ -153,6 +154,25 @@ I02 does not generate images or require keys. Both resulting raster examples rem
 Settings omits inventories and most dimensions/IDs. They also have resolution/style
 limitations. Do not call them checked blueprints or infer image accuracy from a
 successful package build. Larger scopes have no universal model-input-size guarantee.
+
+## First external Web use
+
+New Web/combined bundles include `web-geometry.cjs` and `WEB-FIRST-USE.md`.
+Follow the [first-use guide](web-first-use.md), or open its bundled Markdown copy,
+then run `node "$BUNDLE/web-geometry.cjs" --help`. Node.js 24+ is optional helper
+tooling, not a new Rust runtime/build prerequisite. No browser/profile is launched
+or changed. The helper prepares connection/request inputs for an exact existing CDP
+binding; it does not discover/select targets or replace the Rust collector with
+manual extraction. Missing endpoint or selection is a named prerequisite, not a
+request to read Rust source or modify the application.
+
+Bundle format `ui-blueprint-local-2` adds those two owned files only for Web/combined.
+The current manager also verifies/removes complete legacy `ui-blueprint-local-1`
+inventories; it never requires the new helper to remove an old bundle. Missing or
+modified version-2 helper/guide refuses verification/removal. Script/guide hashes,
+like the copied manager and RUN.md, describe the invoked recipe revision separately
+from the committed product source. Build a fresh bundle instead of modifying an old
+manifest. Use an accepted explicit product pin for reproducibility.
 
 ## Live use and matching components
 

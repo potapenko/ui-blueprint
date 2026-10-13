@@ -8,6 +8,51 @@ const {spawn} = require('node:child_process');
 const assert = require('node:assert/strict');
 
 const FRAME=65536;
+const HELP=`UI Blueprint Web geometry helper (Node.js 24+)
+
+Usage: node web-geometry.cjs --cli ABSOLUTE_CLI --worker ABSOLUTE_WORKER
+  --endpoint ws://127.0.0.1:PORT/devtools/page/TARGET --target-id TARGET
+  --frame-id FRAME --loader-id LOADER --document-backend-id DOCUMENT
+  --root-backend-id ELEMENT
+
+Required inputs, from ONE currently authorized CDP page/document:
+  --cli                  Absolute Web-enabled uiblueprint executable.
+  --worker               Absolute matching session-worker from the same bundle.
+  --endpoint             Existing numeric-loopback ws page endpoint; no browser
+                         endpoint, remote host, credentials, query or fragment.
+  --target-id            Exact CDP page target ID, matching the endpoint.
+  --frame-id             Root frame ID from Page.getFrameTree.
+  --loader-id            Original loaderId from that same frame/document.
+  --document-backend-id  DOM.getDocument(depth:0,pierce:false) root.backendNodeId.
+  --root-backend-id      Selected Element backendNodeId in that document, verified
+                         with DOM.describeNode(depth:0,pierce:false).
+
+Example after an authorized CDP caller has supplied those identities:
+  node "$BUNDLE/web-geometry.cjs" --cli "$BUNDLE/uiblueprint" \\
+    --worker "$BUNDLE/session-worker" --endpoint "$CDP_PAGE_WS" \\
+    --target-id "$TARGET_ID" --frame-id "$FRAME_ID" --loader-id "$LOADER_ID" \\
+    --document-backend-id "$DOCUMENT_BACKEND_ID" --root-backend-id "$ROOT_BACKEND_ID"
+
+You do not hand-write connection/request JSON: this helper prepares temporary
+inputs after identity revalidation, runs Rust Observe -> Inspect -> Measure
+(width/height), then removes only its own non-image inputs. Geometry is computed
+by Rust, not extracted or calculated by this script. Output includes source
+coverage, units and evidence. Fixed small-component profile: 32 output nodes,
+depth 8, 64 KiB, 250 ms request deadline (collector cap 16 nodes).
+
+Prerequisite: an already authorized CDP page connection AND exact selected-root
+identity. This helper revalidates them; it does not discover/select tabs or roots,
+launch a browser, change a profile, navigate, focus or act on an application.
+Do not invent IDs, use IDs from another tool, or combine an old root with a new
+loader after navigation. If no supported caller provides this binding, stop:
+the missing first-connection bootstrap must be supplied by UI Blueprint's owner.
+No app changes, browser/profile setup recipe or manual snapshot adapter is implied.
+
+Exit: 0 complete; 4 partial/unknown/unresolved (inspect output); 2 invalid/bounded
+input; 1 IO/cleanup failure; other product exits are preserved. Never retry with
+weakened identity/limits. --help and -h alone exit 0 without connecting or file IO.
+See WEB-FIRST-USE.md in Web/combined bundles, or docs/development/web-first-use.md.
+`;
 function failure(code,exit=4){return Object.assign(new Error(code),{code,exit});}
 function bounded(promise,ms,code){
   let timer;return Promise.race([promise,new Promise((_,reject)=>{timer=setTimeout(()=>reject(failure(code,1)),ms);})]).finally(()=>clearTimeout(timer));
@@ -164,6 +209,9 @@ async function example(args){
 }
 
 async function main(){
+  if(process.argv.length===3&&['--help','-h'].includes(process.argv[2])){
+    process.stdout.write(HELP);return;
+  }
   try{process.exitCode=await example(await argumentsFor(process.argv.slice(2)));}
   catch(error){console.error(error.code&&Number.isInteger(error.exit)?error.code:'example_io_or_validation_failure');process.exitCode=error.exit??1;}
 }
