@@ -125,6 +125,7 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
+| USE-MAC2 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|consumer verification dispatched|Up to3 independently chosen useful tasks beyond accepted Actor; existing Native14b01d8/corecompacte3ab912 bundles, both repositories read-only for this packet. Owner chooses scenarios under own project contracts; no CN16/restoration write/app harness. Return commands/results/repro and truthful live/saved distinction; no primary image-count increase without full corpus evidence |
 | USE-WEB-FIX1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|supporting layer delivered3e143199; reused for bootstrap|[Receipt](receipts/consumer-web-first-use1.md): safehelp/bundledhelper/guide andv1/v2verify/remove; installedF01 proof. URL+component not closed by this layer |
 | USE-MAC-COMPARE1 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|plan delivered2dd3701; selected for implementation|[Plan](receipts/consumer-native-comparison1.md): no existing path satisfiespair; separate caller-declared compare/diagnose, strict olddiff preserved |
 | USE-MAC-COMPARE2 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|source14b01d8 + receipt e84c129 accepted; consumer retry passed|[Receipt](receipts/consumer-native-comparison2.md). CT2final01a13517-40b6-7333-85b0-fb7634e8ee4d +Macretry01a13514-4e27-70e2-a8b4-05c0f451e9c6. OriginalActor QA answered, olddiffstrict/source preserved. No app changes |
