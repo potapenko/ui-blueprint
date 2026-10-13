@@ -1,15 +1,14 @@
 # Web URL and selected-component first use
-- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@3`.
+- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@4`.
 - Authority: Active; Stability: Evolving; accepted/released: none.
-- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 added typed diagnostics; @3 selects the measured component profile under USE-WEB-DIRECTOR2, before code.
+- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 added typed diagnostics; @3 selects the measured component profile under USE-WEB-DIRECTOR2, before code. @4 adds root-selected exact canonical stdout under USE-WEB-EXPORT1.
 - Read when: shipped Web helper URL/component preparation and external Observe/geometry.
-- Do not read when: unchanged exact-ID mode, Native, actions, export or saved comparison.
+- Do not read when: unchanged exact-ID mode, Native, actions or saved comparison.
 - Requires: [Observe diagnostics@1](cli-observe-diagnostics.md), [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@1](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
-
 ## UIB.WEB-FIRST-USE.INPUT
 Shipped Node24+ web-geometry.cjs adds this mode; the existing full exact-ID invocation
 remains compatible. No Rust CLI command, wire/schema, dependency or collector change.
-`node web-geometry.cjs --connection WS --url URL --component SELECTOR`
+`node web-geometry.cjs --connection WS --url URL --component SELECTOR [--json]`
 Node24+ is required ONLY for this optional shipped caller; core and low-level guarded
 Web CLI/worker stay Node-free. No package/runtime installation or browser setup.
 CLI/worker default to sibling uiblueprint/session-worker in the verified bundle;
@@ -38,7 +37,6 @@ Scope is the selected page's ROOT DOCUMENT light DOM only. Do not enter frame/sh
 template content; a selected iframe/frame/template/slot or authored open/closed shadow host is unsupported.
 CDP shadowRoots boundary metadata is checked too; user-agent internals of ordinary controls are not traversed and do not exclude their public host.
 No app DOM IDs or other source-app changes are required.
-
 ## UIB.WEB-FIRST-USE.BINDING
 Enumerate bounded Target.getTargets metadata on the authorized browser connection.
 Read the uniquely selected target's actual ID/URL; form its page endpoint on that SAME
@@ -62,7 +60,6 @@ Release owned remote handles/connections; never close the page/browser/applicati
 Only canonical Rust output supplies source facts, geometry, units, evidence and coverage.
 No action rights, freshness beyond actual observations, full-page visibility or padding
 is inferred. Partial/unknown/refusal meanings remain unchanged.
-
 ## UIB.WEB-FIRST-USE.BOUNDS
 Bootstrap has a10s overall deadline including its Observe bracket,2s max per CDP call,
 32 calls,128 enumerated targets,64KiB per text reply/256KiB total per connection, and
@@ -76,7 +73,6 @@ Basis: unchanged14-node widget encodes69125bytes;16-node all-field observation s
 No fields/nodes are pruned, guards weakened or requests retried. The finite component allowance is not a latency/completeness promise; oversized/unstable sources still refuse.
 Every owned remote group/socket, child and temporary file has bounded cleanup; failed
 cleanup exits1, never success. No idle polling or collection while awaiting commands.
-
 ## UIB.WEB-FIRST-USE.FAILURE
 Help0; invalid/missing/unsupported arguments or quota2; missing/ambiguous target/root,
 stale binding, unsupported source boundary or deadline4; IO/cleanup1. Existing Rust
@@ -86,11 +82,16 @@ Render only validated enum/count facts on stderr, including partial observations
 A limit/timeout category does not identify a particular budget or deeper cause; configured limits are context, not failure proof. No raw URI/selector/source/exception is emitted.
 Metadata and temporary connection/request/observation files stay private task-temporary; no persistent config.
 New explicit requests require current authority; no automatic retry or source stabilization.
-
+## UIB.WEB-FIRST-USE.OUTPUT
+URL mode --json is a unique valueless opt-in flag; default human Inspect/Measure and legacy mode stay unchanged.
+Emit only the original canonical observed ChannelResponse bytes from Rust Observe, without reserialization, wrapping, added newline or human output. IDs/values/units/availability/privacy remain exact; no new schema, save-file API, cache or geometry adapter.
+Publish only after observed-response/root admission, confirmed worker cleanup, final identity revalidation, remote close, child reaping and private temporary-file cleanup. Failed Observe, stale identity or cleanup failure emits no JSON. Useful observed exit4 retains its original bytes and exit4; empty refusal4 is not saved-data success.
+Diagnostics stay validated safe stderr. Machine output skips Inspect/Measure. One stdout write has a5s bound; physical write failure/timeout is IO1 with a fixed diagnostic, may leave partial physical bytes and is never retried.
+Shell redirection chooses a private caller-owned destination; use the unchanged response directly with CLI-EXPORT.INPUT/BOUNDS and explicit reviewed metadata. No state/environment/approval/reference is inferred.
 ## UIB.WEB-FIRST-USE.PROOF
 Offline help/bad inputs cause no connection or temp IO; duplicate/missing pages and
 components, selector eligibility, bounds/deadlines, stale loader/document/remount/parent,
 credential/private diagnostics and release failure have focused proof. Owned F01 actual
 URL+component→installed helper→canonical Rust Observe/Inspect/Measure checks independently
 authored geometry, unchanged state, truthful coverage and owned cleanup. Consumer's real
-Director retry remains independent acceptance. No ImageGen, Native or source-app operation.
+Director retry remains independent acceptance. Machine proof adds exact-byte F01→validator/export and no-publication failure cases. No ImageGen, Native or source-app operation.
