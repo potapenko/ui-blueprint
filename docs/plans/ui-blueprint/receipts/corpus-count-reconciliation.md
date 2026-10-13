@@ -1,6 +1,6 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-14. CCOUNT1 reconciliation, updated after CW-B28 final reviews.
+2026-10-14. CCOUNT1 reconciliation, updated after CW-B28 and terminal AUTO-DETAIL2 reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
@@ -13,9 +13,9 @@ fixture/component-preview origin;161 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:568 primary images =564 first outputs +4 rerolls;
-85 separate repair-validation images;4 unqualified reference attempts
+86 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-657 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+658 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -1415,8 +1415,23 @@ Register produced no Snapshot/package/image and adds no case. Subsequent separat
 the frozen collector's canonical JSON cap131072bytes by guard elimination. Exact
 full size is unknown; no cap/code/runtime change or new observation was made.
 
-Current total:218cases (93Web+125Native;57fixture+161nonfixture),49primary batches,
+CW-B28 subtotal before final repair reconciliation:218cases (93Web+125Native;57fixture+161nonfixture),49primary batches,
 568primary images (564first+4rerolls),85repair images and4unqualified attempts =
 657images. Remainder782; the three historical uncertainties remain separate.
-AUTO-DETAIL2's one repair image awaits final independent qualification and is not
-yet added here. All first failures, source images and tool originals remain retained.
+The CW-B28 subtotal above precedes the final AUTO-DETAIL2 repair qualification below.
+All first failures, source images and tool originals remain retained.
+
+
+## Final reconciliation at user-directed closeout
+
+AUTO-DETAIL2 source11de0ce and its one first EmailG01 repair image completed CT2
+final01a1375c-ff11-7322-a58d-b254a8c278d2 and CV2 final
+01a1375d-0df8-7631-a9e6-bbf4f4a92b55. Source preservation accepted; raster FAIL
+retained (internal labels and literal focus-attribution residual). This adds one
+repair image, no primary case or reroll. Final recorded corpus:218cases,568primary
+images,86repair images,4unqualified attempts =658images. The three old count
+uncertainties are not resolved by closing development.
+
+The subsequent manual/CLI demonstrations and cold skill tests happened under
+separate finite user requests while the goal was paused; they do not silently
+resume or enlarge this corpus. CORPUS-1000 is not achieved. See [closeout](../closeout.md).
