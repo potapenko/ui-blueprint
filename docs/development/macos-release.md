@@ -222,3 +222,31 @@ their removal verified. Automatic discovery of the new copy in that already-runn
 chat was not separately confirmed; it used the exact installed path explicitly.
 Public binary downloads, Gatekeeper and a clean-machine bootstrap without existing
 build prerequisites remain separate from this successful local-source installation.
+
+## New-chat live observation and drawing — 2026-10-14
+
+A further user-requested chat used the installed skill on the existing F01 Web
+fixture served locally in an isolated Chromium145.0.7632.6 browser. This was live
+DOM acquisition, not the bundled saved-data smoke or a production-site acceptance.
+The original installed `ccc2eddd` helper produced 9 nodes, canonical valid JSON,
+partial coverage/11unknowns and exit4. Rust measured width360 CSSpx and the first
+two buttons' gap9.6328125 CSSpx; export returned0 with numeric validation checked.
+ImageGen received the literal CLI prompt and the same-state safe screenshot.
+All10 assigned dimension labels and the visible input/three-button inventory were
+checked against the resulting1672×941 PNG. It remains schematic/draft: requested
+3840×2160 resolution was not met, the background is slightly textured and the
+footer contains a minor typo. No form interaction or complete hit/visibility claim.
+
+The test found stale skill documentation; f757ca01 reconciled the existing32-node/
+109-method URL profile and terminal nth-of-type support. The chat then updated the
+whole installed set from GitHub to8f15987ffb28c57e30acf170802736feeeca6255, verified
+19manifest files and6skill files, and passed valid/gap8/check-pass smoke. Replaying
+measure/export on the saved live observation returned identical measurements and
+byte-identical package/prompt; live acquisition was not repeated on the new version.
+
+Preserved failures: Wikipedia selection_limit/exit2 before Observe; Chrome155.0.8059.40
+gave collector_malformed code3 (SelectionException) on two fixtures. Their cause
+and compatibility remain unresolved, not covered by Chromium145 success. An initial
+export_private_content refusal was resolved by removing a slash from caller-authored
+metadata; original observation bytes were unchanged. Retained system-temp images
+and the ImageGen original were delivered to the requesting chat; no images entered Git.
