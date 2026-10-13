@@ -74,6 +74,32 @@ and compact-presentation outcomes are accepted separately from future input-auth
 convenience. Approved bundles remain current goal tool deliverables for consumer
 workflow until a replacement is supplied; no permanent archive is created.
 
+## USE-MAC2 — additional saved-data consumer tasks, 2026-10-13
+
+Consumer turn01a135a1-ab36-77f0-a6ce-13519a13bcd9 completed two tasks on accepted
+corebundle e3ab912. Director query width386pt/height24pt returned known/exit0
+from accessibility bounds; layout width returned unknown/not_requested/exit4.
+No painted or hit-area claim follows. Reels Search export returned50 components,
+partial coverage and G01/D01/D02 with numeric checked, approval draft and image
+validation unverified. No image generation, live collection or repository changes.
+Unavailable old resize source JSON was not reconstructed from historical summaries.
+
+Retained consumer inputs/output for immediate utility-owner reproduction:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-MAC2-6xt2xa97`.
+Original Reels source/metadata remain under uib-CN-B19-bway_om4/B19-06-reels-populated.
+Export used1048576 input bytes,8388608 output bytes,160 components,16 views,
+30 components/detail, document/blue-engineering. Re-export requires a new temp output.
+
+Consumer feedback: simple width/height currently needs detailed GeometryQuery JSON
+(usability request, no new CLI syntax authorized here); drawing-brief.md is410855B,
+mostly JSON, unsuitable as a quick human document; references_count0 accompanies
+G01's original-reference instruction without a clear attachment next step. No
+arithmetic bug was found. USE-EXPORT-DOC1 owns reconciliation and bounded human-text
+repair under existing EXPORT/DRAWING requirements, preserving machine facts, optional
+references and independent statuses. This consumer result adds zero primary cases
+or generated images. Root retains selected repro for that owner and subsequent Mac
+retry; ordinary transient evidence is not a permanent archive.
+
 ## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
 
 **Отклонено пользователем2026-10-13. Не реализовывать как задачу UI Blueprint.**
