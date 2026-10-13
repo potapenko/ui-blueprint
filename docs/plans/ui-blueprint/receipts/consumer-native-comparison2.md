@@ -103,3 +103,44 @@ through the independent boundary review and same consumer retry, then releases
 non-image artifacts. Build/test intermediates are run-owned and removed after use;
 no images were created or deleted. Independent review and consumer retry remain
 required; worker checks alone do not establish acceptance.
+
+## Pinned consumer bundle — ready for review/retry
+
+Coherent source checkpoint `14b01d8d8e917a1fcfbfb78ab87b0df3162bc588` is saved/pushed,
+exact13 owned paths. Registration checkpoint is separate, `a93f41cc5f5c3cdc08b6891ab514c8faef8effe4`.
+Native bundle built with the established release recipe and verified exit0:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-MAC-COMPARE2-b0qg9i83/native-bundle`.
+Recipe last committed revision `3e143199c42a146fe38c264ae1af6b998ed7b43f`, copied
+script SHA256 `126fe895b5111459df5cde3aaa51cbdcb74c42d246c2b22fba76f03a2684c041`.
+Copied RUN.md hash `0b6711462ed07bc842ea13cdb5ba5d10f1370c8836efeef38a15aa56cfc884b0`
+records the actual separate companion document; it was read from the other owner's
+current guide, not claimed to be the product source pin. No recipe/guide mutation.
+CLI SHA256 `6ee4f062b08012a859522bae4645773db4b996cb2c24238068c7174181ec407e`.
+Manifest confirms source14b01d8/native/aarch64-apple-darwin/release, Rust1.96.0,
+Swift6.4 and the unchanged lock hash above. No signing/older-platform qualification.
+
+From working directory `/`, the bundled CLI passed actual compare JSON0/985180B,
+compact0/29326B, diagnose4/853B; original complete canonical sources/C equality,
+content height change−540 and Tom position2→0 asserted. Old raw/graph/geometry each
+returned4/empty stdout/exact context_mismatch newline. Original input hashes remain
+unchanged. Runnable consumer commands (omit `--json` for compact output):
+
+```sh
+TASK=/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-MAC-COMPARE2-b0qg9i83
+BEFORE=/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B19-bway_om4/B19-01-minimal/observed.json
+AFTER=/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B19-bway_om4/B19-02-minimal/observed.json
+"$TASK/native-bundle/uiblueprint" compare --before "$BEFORE" --after "$AFTER" --diagnose --max-input-bytes 2097152 --max-output-bytes 2097152 --json
+"$TASK/native-bundle/uiblueprint" compare --before "$BEFORE" --after "$AFTER" --correspondence "$TASK/actor-correspondence.json" --max-entries 100 --max-input-bytes 2097152 --max-output-bytes 2097152 --json
+```
+
+The documented preparation example was also executed through compare0; its own
+check-only non-image file was removed and absence verified. Task-temp Cargo target
+removed with an image-suffix guard and absence verified; only requested C/generator/
+bundle remain under root ownership for review/retry. Distribution removed its own
+build intermediates. No images were created/deleted; after-title-spacing.png and
+other owners' WIP remain untouched. A final receipt-only checkpoint records this
+handoff; it does not change the bundle's product source pin or establish acceptance.
+
+Source/test/contract/guide fingerprint for the12 implementation paths listed above
+(excluding this evolving receipt; path + NUL + bytes + NUL in that listed order):
+`b4a742d2ea14335882001778aac53f9bec22525a3107a6ee438a2c58bb9f4538`.
