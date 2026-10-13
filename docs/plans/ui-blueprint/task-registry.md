@@ -2,6 +2,20 @@
 
 ## Current finite correction — CLI-generated geometry prompt, 2026-10-14
 
+Latest direct follow-up: remove zero arrows and technical captions in the library;
+show exactly one literal CLI-driven image. The geometry prompt now emits coincident
+edge/center statements without numeric zero dimensions, and uses allowed public
+names, reported child names or neutral roles instead of native/debug captions.
+Sibling ordinals distinguish otherwise unnamed controls; no function is invented.
+Scene, dimensions and sheets are byte-identical to the earlier A04 package.
+Seven focused tests, affected Clippy and CLI build passed. The committed A04
+prompt is an exact CLI output, used without additions or a screenshot for one
+ImageGen call. Result: no zero arrows or native/debug caption block; some unrelated
+raster rounding/palette imperfections remain. No reroll or full-fidelity claim.
+Image: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a04-clean-labels-sc1_91l5/blueprint-first.png`;
+final-package alongside it is the retained user deliverable. Tool original retained.
+CORPUS-1000 remains paused; no additional workers or generation batches.
+
 Implementation checkpoint9ef130807e2637fc29ab17722022d870e7fc4733 is pushed.
 The actual CLI produced the selected a04-geometry-prompt.txt verbatim from the
 original80-node A04 observation and unchanged metadata, using the existing

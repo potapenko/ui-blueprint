@@ -151,3 +151,67 @@ fn public_text_policy_and_unstable_measurements_survive_geometry_composition() {
     assert!(!prompt(&p).contains("REPETITION:"));
     assert!(prompt(&p).contains("size unknown × unknown"));
 }
+
+#[test]
+fn zero_distances_are_alignments_while_exact_machine_zeros_remain() {
+    let mut b = example();
+    let nodes = b["views"][0]["source"]["snapshot"]["nodes"]
+        .as_array_mut()
+        .unwrap();
+    nodes[1]["properties"][2]["state"]["value"]["value"]["shape"]["value"]["x"] = json!(0);
+    nodes[2]["properties"][2]["state"]["value"]["value"]["shape"]["value"]["x"] = json!(30);
+    let p = package(&b);
+    let text = prompt(&p);
+    assert!(text.contains("draw the shared boundary"));
+    assert!(text.contains("draw a shared center axis"));
+    assert!(!text.contains(": 0 CSS px"));
+    assert!(!text.contains(": 0 CSS px; dimension these boundaries"));
+    assert!(
+        dimensions(&p)
+            .iter()
+            .any(|d| d["value"].as_f64() == Some(0.0)
+                && d["anchors"][0]["component"] == "N001"
+                && d["anchors"][1]["component"] == "N002"
+                && d["anchors"][0]["edge"] == "right")
+    );
+}
+
+#[test]
+fn unnamed_groups_use_public_children_without_native_debug_captions() {
+    let mut b = example();
+    b["views"][0]["source"]["snapshot"]["nodes"][0]["properties"][1]["state"] =
+        json!({"availability":"unknown","reason":"not_available"});
+    let p = package(&b);
+    let text = prompt(&p);
+    assert!(text.contains("DRAW \"Orion / Lyra\""));
+    for junk in [
+        "AXGroup",
+        "AccessibilityBounds",
+        "Some(Partial)",
+        "occurrence",
+        "CenterY",
+    ] {
+        // The no-occurrence instruction is allowed; generated labels never use it.
+        assert!(
+            text.lines()
+                .filter(|l| l.starts_with("DRAW ")
+                    || l.starts_with("ALIGNMENT:")
+                    || l.starts_with("DETAIL "))
+                .all(|l| !l.contains(junk)),
+            "{junk}"
+        );
+    }
+    b["views"][0]["source"]["snapshot"]["nodes"][1]["properties"][1]["state"]["value"]["value"] =
+        json!("AXUnknown");
+    assert!(prompt(&package(&b)).contains("DRAW \"AXUnknown\""));
+}
+
+#[test]
+fn human_captions_keep_unicode_without_rust_debug_escapes() {
+    let mut b = example();
+    b["views"][0]["source"]["snapshot"]["nodes"][1]["properties"][1]["state"]["value"]["value"] =
+        json!("✂️ Public caption");
+    let p = package(&b);
+    assert!(prompt(&p).contains("✂️ Public caption"));
+    assert!(!prompt(&p).contains("\\u{"));
+}

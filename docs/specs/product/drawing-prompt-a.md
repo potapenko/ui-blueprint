@@ -89,3 +89,9 @@ The existing density limit still selects separate sheets for larger scopes; expl
 details, proposals, comparisons, multi-view and source/permission contracts retain
 their scope. Mixed/layout-frame presentation stays on its existing renderer. One actual CLI-generated prompt and one image demonstrate the correction;
 no mass-generation goal resumes. Existing model-free commands/flags/package fields stay.
+
+User refinement2026-10-14: zero distances become shared-boundary/alignment
+statements, never numeric arrow labels; exact zeros remain in dimensions. Human
+captions use allowed public labels or reported child labels, with neutral role
+names when unavailable. No guessed control function, global occurrence index or
+native/debug type appears as a printable caption. Source data is unchanged.
