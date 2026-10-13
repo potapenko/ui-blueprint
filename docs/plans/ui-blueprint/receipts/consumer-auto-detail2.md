@@ -77,3 +77,40 @@ credentials. One literal candidate prompt-G01.txt plus this original reference
 will be passed to built-in ImageGen. No wrapper, reroll, omitted-D03 or control image.
 Neutral immutable handoff precedes a separate author assessment; image result and
 limits follow below. Compiler checks do not prove image acceptance.
+
+## First output and final bounded result — 2026-10-14
+
+Source/guard/qualification checkpoint `11de0ce350582cc161edb548996667795e1eed37`
+committed and pushed to origin/master, incorporating the earlier registered planner
+`de105e38e4efd880bfa3d463f780281c4b108919`. Current package source is11de0ce;
+registration provenance isde105e38; baseline remainsc0d6fd8. Clippy with warnings
+as errors, formatting, changed links and diff whitespace pass. The3tail tests pass,
+including24counterexamples in total. Ready CLI retains the SHA above.
+
+One built-in ImageGen call, on2026-10-14 local time: literal13068-character
+email-candidate/prompt-G01.txt plus the original800×842reference. Actual decoded
+PNG1536×1024, no reroll/retouch/wrapper/control image, zero new primary cases.
+[Retained first image](/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-AUTO-DETAIL2-kg8kyxzu/email-G01-first.png)
+SHA-256 `df62a74014d12302bc44036ca5e4a375203fe218f393a1bd150878b9623b978d`.
+[Immutable neutral index](/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-AUTO-DETAIL2-kg8kyxzu/neutral-index.json)
+SHA-256 `c84abac3216558aab139b18d5ddc7a44d28032e33ed0abafa92993d9225677eb`
+was published before the [separate author assessment](/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-AUTO-DETAIL2-kg8kyxzu/author-review.json).
+
+Author targeted preservation PASS in this sample: the complete Email navigation,
+Close, heading/description, tabs, labelled empty inputs, primary and recovery
+controls remain. All3assigned values ≈392/≈412/≈22CSSpx with their boundary captions
+are present. Left artwork stays separate from right empty measurement sketches;
+partial/stored/non-atomic/draft/unverified/rounded/schematic footer remains.
+Full-sheet author verdict FAIL: mandatory Focused (caller-reported) text is absent
+though Email has outline emphasis; the explicitly unprinted #1 leaks into the frame
+heading. Background nonuniformity is also referred to the visual critic. No false
+1:1 or CAD-scale inference is made. This unchanged G01 prompt's first render does
+not prove a planner regression, fix earlier image failures or general reliability.
+Same critics retain independent source/image acceptance; no further candidate here.
+
+All selected CLI, baseline/candidate/control packages, indices/proofs and author
+assessment remain for root and critics. Only own image-free target and duplicate
+exact-budget replay directories were removed and their absence verified. Every
+original/reference/generated image and ancestor is retained; the tool-managed
+original also remains at its returned Codex generated_images path. Existing source
+observations, metadata, images, other-owner files and HUMAN-OWNERS1 stay untouched.
