@@ -1,5 +1,26 @@
 # Web source advisor handoffs
 
+## CW9 — Shortcuts has no wired entry, 2026-10-13
+
+Advisor turn01a133d9-c3b0-7180-b7fc-a5d5fbd05913, source-only atc23ef963.
+Route: Classic Search progressive-input/history/gate → Search overlays behavior;
+mobile-shell only to distinguish desktop keyboard behavior. Existing contracts
+describe shortcuts but do not establish an entry to this help component.
+
+Shortcuts show! only sets modal-props; its local demonstration call is commented.
+No caller/directmount found in inspected src/env/templates/client tests. Search
+menu imports its namespace but exposes only Settings. Registered keyboard handlers
+cover autocomplete/focus/playback/navigation/random actions, none opens this view.
+Startup registry includes paywall/login only. Mobile random-shortcut dialog QA and
+premium Context QA do not prove a help-dialog route. No keypress/console/network/UI
+operation or file change occurred. Source-only negative, not runtime proof; no case.
+
+Owners: [component](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/search/components/shortcuts/view.cljs:132),
+[menu](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/search/components/menu/view.cljs:26),
+[key handlers](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/search/ctrl.cljs:972),
+[startup](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/startup_ui.cljs:158).
+Do not test guessed keys or call show! from console to manufacture corpus coverage.
+
 ## CW8 — numeric filter states, 2026-10-13
 
 Advisor turn01a132ff-1413-7490-94b3-840bc58e0fd5, c23ef963/new-banners-paywall,
