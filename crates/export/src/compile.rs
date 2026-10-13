@@ -2650,6 +2650,360 @@ fn drawing_brief(
     sheets: &[Sheet],
     limit: usize,
 ) -> Result<String> {
+    if matches!(
+        b.purpose,
+        Purpose::Document | Purpose::Propose | Purpose::Detail
+    ) {
+        let cell = |text: &str| {
+            text.replace('&', "&amp;")
+                .replace('<', "&lt;")
+                .replace('>', "&gt;")
+                .replace('|', "\\|")
+                .replace(['\r', '\n'], "<br>")
+        };
+        let mut out = String::new();
+        append(
+            &mut out,
+            &format!(
+                "# {}\n\nGuide: {GUIDE}. Purpose: {:?}.\n\nPrepared drawing data; no image generated. Numeric validation: checked. Image validation: unverified. Approval: {:?} (record: {}).\n\n## Document\n\n- Identity: {}; revision {}.\n- Audience: {}; language: {}.\n- Date: {}; owner: {}.\n- Retention: {}.\n- Format: {}; requested output: {}.\n- Specification basis: {}.\n\n",
+                cell(&b.metadata.title),
+                b.purpose,
+                b.metadata.approval.status,
+                cell(
+                    b.metadata
+                        .approval
+                        .named_record
+                        .as_deref()
+                        .unwrap_or("none supplied")
+                ),
+                cell(&b.metadata.document_id),
+                cell(&b.metadata.revision),
+                cell(&b.metadata.audience),
+                cell(&b.metadata.language),
+                cell(&b.metadata.date),
+                cell(&b.metadata.owner),
+                cell(&b.metadata.retention),
+                cell(&b.metadata.page_format),
+                cell(&b.metadata.output_size),
+                cell(&b.metadata.specification_refs.join(", "))
+            ),
+            limit,
+        )?;
+        append(
+            &mut out,
+            "## Package and generation handoff\n\nRead this brief for the human summary. [scene.json](scene.json) retains every permitted source record, property, state, relation, geometry and availability; [dimensions.json](dimensions.json) retains exact values, anchors, evidence and chains. [sheets.json](sheets.json) records sheet membership; [manifest.json](manifest.json) records status and file ownership. Safe record IDs below join those files and are not image captions.\n\n**Reference images: none included or verified by this export.** The compiler does not load, capture or copy images. For a sheet marked **Original UI image**, attach a separately reviewed original image matching the declared source scope/state when generating its artwork. Use it for appearance and visible coverage, never to invent measurements or an AX-to-pixel transform. This is a generation handoff, not a collector failure. Empty measurement sketches and explicit proposed geometry can be used without an original UI image; a proposed appearance reference is optional.\n\n`package_written` means the data package was prepared, not that an image is ready, checked or accepted. Generation and image review remain separate actions.\n\n",
+            limit,
+        )?;
+        let split = s.views.len() == 1 && sheets.iter().any(|sheet| sheet.kind == "detail");
+        append(
+            &mut out,
+            if split {
+                "Use each standalone prompt below once for its sheet. Do not concatenate them or substitute the combined [prompt.txt](prompt.txt).\n\n"
+            } else {
+                "Use the complete [prompt.txt](prompt.txt) for this drawing plan.\n\n"
+            },
+            limit,
+        )?;
+        append(
+            &mut out,
+            "| Sheet | View and content | Members | Selected dimensions | Artwork reference | Prompt |\n| --- | --- | ---: | ---: | --- | --- |\n",
+            limit,
+        )?;
+        for sheet in sheets {
+            let i = s
+                .views
+                .iter()
+                .position(|v| v.id == sheet.view)
+                .ok_or(E::InvalidReference)?;
+            let v = &s.views[i];
+            let dims = d
+                .iter()
+                .find(|d| d.view == v.id)
+                .ok_or(E::InvalidReference)?;
+            let plan = drawing_dimensions(
+                v,
+                dims,
+                &clipped_edges(&b.views[i].source),
+                Some(sheet),
+                sheets,
+                limit,
+            )?;
+            let reference = if plan.assignment == Assignment::Measurements {
+                "Not needed for empty frames"
+            } else if v.source_kind == SourceKind::Observed {
+                "Original UI image"
+            } else {
+                "Optional for proposed appearance"
+            };
+            let content = match plan.assignment {
+                Assignment::Overview => "complete declared overview",
+                Assignment::Measurements => "empty measurement sketches",
+                Assignment::SourceDetail => "source fragment; membership does not prove visibility",
+            };
+            let file = if split {
+                format!("prompt-{}.txt", sheet.id)
+            } else {
+                "prompt.txt".into()
+            };
+            append(
+                &mut out,
+                &format!(
+                    "| {} | {}: {} | {} | {} | {} | [{}]({}) |\n",
+                    cell(&sheet.id),
+                    cell(&v.title),
+                    content,
+                    sheet.components.len(),
+                    plan.dimension_ids.len(),
+                    reference,
+                    file,
+                    file
+                ),
+                limit,
+            )?;
+        }
+        for (i, v) in s.views.iter().enumerate() {
+            let dims = d
+                .iter()
+                .find(|d| d.view == v.id)
+                .ok_or(E::InvalidReference)?;
+            let partial = clipped_edges(&b.views[i].source);
+            let plan = drawing_dimensions(v, dims, &partial, None, sheets, limit)?;
+            let coverage =
+                v.coverage
+                    .as_ref()
+                    .map_or("Proposed; not a runtime observation".into(), |c| {
+                        format!(
+                            "{:?}; omitted: {}; unknown count: {}",
+                            c.status,
+                            c.omitted_count
+                                .map_or_else(|| "unknown".into(), |n| n.to_string()),
+                            c.unknown_count
+                                .map_or_else(|| "unknown".into(), |n| n.to_string())
+                        )
+                    });
+            append(
+                &mut out,
+                &format!(
+                    "\n## View: {}\n\n- Source kind: {:?}. Source: {}.\n- Scope: {}.\n- Coverage: {}.\n- Environment (caller annotation): {}.\n- State (caller annotation): {}.\n- {} source records; {} source relations; {} explicit component mappings.\n\n### Requirements and limits\n\n",
+                    cell(&v.title),
+                    v.source_kind,
+                    cell(&v.source),
+                    cell(&v.scope),
+                    cell(&coverage),
+                    cell(&v.environment),
+                    cell(&v.state),
+                    v.components.len(),
+                    v.relations.len(),
+                    v.mappings.len()
+                ),
+                limit,
+            )?;
+            for note in v
+                .requirements
+                .iter()
+                .chain(&v.not_depicted)
+                .chain(&v.unknowns)
+            {
+                append(&mut out, &format!("- {}\n", cell(note)), limit)?;
+            }
+            append(
+                &mut out,
+                "\nSource text, accessible names and caller annotations have different meanings. A name is not an input value or proof of painted visibility. Unlisted states remain unknown/unavailable as recorded in scene.json, not false or empty. Geometry rows below show the preferred reported frame, not a replacement for other frame kinds.\n\n### Geometry contexts\n\n",
+                limit,
+            )?;
+            let mut contexts = Vec::new();
+            for c in &v.components {
+                if let Some(g) = geometry(c) {
+                    let context = format!(
+                        "{:?}; {} {:?}; {}, {:?}; transform {}",
+                        g.frame_kind,
+                        g.coordinate_space.id.0,
+                        g.coordinate_space.kind,
+                        unit_name(g.coordinate_space.units),
+                        g.coordinate_space.origin,
+                        match &g.transform {
+                            TransformState::LocalOnly {} => "local only",
+                            TransformState::Unknown { .. } => "unknown",
+                            TransformState::Known { .. } => "known; exact mapping in scene.json",
+                        }
+                    );
+                    if !contexts.contains(&context) {
+                        append(&mut out, &format!("- {}\n", cell(&context)), limit)?;
+                        contexts.push(context);
+                    }
+                }
+            }
+            if contexts.is_empty() {
+                append(&mut out, "- No known frame geometry.\n", limit)?;
+            }
+            append(
+                &mut out,
+                "\nAX frames are accessibility measurements, not painted borders. Equal units do not establish a transform. Sizes below use rounded display labels; exact geometry, uncertainty and availability remain in scene.json.\n\n### Source objects\n\n| Record | Object | Public text / accessible name | Known state or caller-described actions | Reported frame size |\n| --- | --- | --- | --- | --- |\n",
+                limit,
+            )?;
+            for (j, c) in v.components.iter().enumerate() {
+                let mut labels = Vec::new();
+                if let Some(label) = &c.label {
+                    labels.push(format!("Proposed label: {label}"));
+                }
+                for field in [
+                    Field::VisibleText,
+                    Field::AccessibilityName,
+                    Field::Placeholder,
+                ] {
+                    if let Some(Value::Text(text)) = c
+                        .properties
+                        .iter()
+                        .find(|p| p.field() == field)
+                        .and_then(Property::known)
+                    {
+                        labels.push(format!("{field:?}: {text}"));
+                    }
+                }
+                let mut state = c
+                    .properties
+                    .iter()
+                    .filter_map(|p| match p.known() {
+                        Some(Value::Flag(value))
+                            if matches!(
+                                p.field(),
+                                Field::Checked
+                                    | Field::Selected
+                                    | Field::Expanded
+                                    | Field::Enabled
+                                    | Field::Focused
+                            ) =>
+                        {
+                            Some(format!("{:?}: {value}", p.field()))
+                        }
+                        _ => None,
+                    })
+                    .collect::<Vec<_>>();
+                if let Some(actions) = &c.state_and_actions {
+                    state.push(actions.clone());
+                }
+                let frame = match (geometry(c), rect(c)) {
+                    (Some(g), Some(r)) => format!(
+                        "{:?}: {} × {} {}",
+                        g.frame_kind,
+                        display_number(r.width),
+                        display_number(r.height),
+                        unit_name(g.coordinate_space.units)
+                    ),
+                    (Some(g), None) => {
+                        format!("{:?}: non-rectangular; see scene.json", g.frame_kind)
+                    }
+                    _ => "Unavailable; see recorded property status".into(),
+                };
+                append(
+                    &mut out,
+                    &format!(
+                        "| {} | {} | {} | {} | {} |\n",
+                        cell(&c.id),
+                        cell(&component_name(v, j)),
+                        cell(&labels.join("; ")),
+                        if state.is_empty() {
+                            "Not reported here".into()
+                        } else {
+                            cell(&state.join("; "))
+                        },
+                        cell(&frame)
+                    ),
+                    limit,
+                )?;
+            }
+            append(
+                &mut out,
+                &format!(
+                    "\n### Selected dimensions\n\n{} selected drawing dimensions from {} exact records ({} unavailable). No new sizes, padding or tolerances are inferred. Full evidence and all remaining dimensions: [dimensions.json](dimensions.json).\n\n| ID | Source anchors | Frame / Space | Display value | Basis |\n| --- | --- | --- | --- | --- |\n",
+                    plan.dimension_ids.len(),
+                    dims.dimensions.len(),
+                    dims.dimensions.iter().filter(|d| d.value.is_none()).count()
+                ),
+                limit,
+            )?;
+            for dim in dims
+                .dimensions
+                .iter()
+                .filter(|d| plan.dimension_ids.contains(&d.id))
+            {
+                let anchors = dim
+                    .anchors
+                    .iter()
+                    .map(|a| format!("{} {:?}", a.component, a.edge))
+                    .collect::<Vec<_>>()
+                    .join(" → ");
+                let frames = dim
+                    .anchors
+                    .iter()
+                    .map(|a| format!("{:?} / {}", a.frame_kind, a.space.id.0))
+                    .collect::<Vec<_>>()
+                    .join(" → ");
+                let value = dim.value.map_or_else(
+                    || {
+                        format!(
+                            "Unavailable: {}",
+                            dim.unknown_reason.as_deref().unwrap_or("unknown")
+                        )
+                    },
+                    |n| format!("{} {}", display_number(n), unit_name(dim.units)),
+                );
+                append(
+                    &mut out,
+                    &format!(
+                        "| {} | {} | {} | {} | {:?} |\n",
+                        cell(&dim.id),
+                        cell(&anchors),
+                        cell(&frames),
+                        cell(&value),
+                        dim.source_kind
+                    ),
+                    limit,
+                )?;
+            }
+            for chain in &dims.chains {
+                append(
+                    &mut out,
+                    &format!(
+                        "\nDeclared chain: {} = {}; arithmetic tolerance {}. Exact operands remain in dimensions.json; rounded labels are not an exact sum.\n",
+                        cell(&chain.terms.join(" + ")),
+                        cell(&chain.total),
+                        chain.arithmetic_tolerance
+                    ),
+                    limit,
+                )?;
+            }
+            for (j, edges) in partial
+                .iter()
+                .enumerate()
+                .filter(|(_, edges)| !edges.is_empty())
+            {
+                append(
+                    &mut out,
+                    &format!(
+                        "\nKnown component cut: {} {:?}. Preserve the visible portion separately from full-layout sizes.\n",
+                        cell(&v.components[j].id),
+                        edges
+                    ),
+                    limit,
+                )?;
+            }
+            if !v.design_analysis.is_empty() {
+                append(&mut out, "\n### Selected relationships\n\n", limit)?;
+                append(
+                    &mut out,
+                    &crate::design::text(&v.design_analysis, limit)?,
+                    limit,
+                )?;
+            }
+        }
+        append(
+            &mut out,
+            "\n## Drawing and review requirements\n\nUse flat blue ground and white outlines/text, the same blue inside controls, no grid or screenshot fills. Preserve exact public labels, declared states, source boundaries and declared fragment scope. Follow the selected dimension owners in the prompts; source membership does not authorize offscreen artwork. Do not infer padding, radius, hit regions, unknown cuts or an AX-to-pixel mapping.\n\nThe scale is schematic: use dimension labels, never measure the image. Before marking any image checked, review labels, numbers/anchors/units, source scope and clipping, state, readability and privacy against the package. Image validation and named approval remain separate from local numeric validation.\n",
+            limit,
+        )?;
+        return Ok(out);
+    }
     let mut out = String::new();
     append(
         &mut out,

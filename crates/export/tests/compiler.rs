@@ -578,6 +578,36 @@ fn human_presentation_preserves_exact_historical_machine_fields() {
             serde_json::to_string(old).unwrap()
         );
         assert_eq!(actual[0]["chains"], expected[0]["chains"]);
+        let human = std::str::from_utf8(&package.files()["drawing-brief.md"]).unwrap();
+        assert!(!human.contains("```json"));
+        for text in [
+            &brief.metadata.document_id,
+            &brief.metadata.revision,
+            &brief.metadata.audience,
+            &brief.metadata.owner,
+            &brief.metadata.retention,
+            &brief.views[0].scope,
+            &brief.views[0].state,
+        ] {
+            assert!(human.contains(text), "missing brief meaning: {text}");
+        }
+        for file in [
+            "scene.json",
+            "dimensions.json",
+            "sheets.json",
+            "manifest.json",
+        ] {
+            assert!(human.contains(&format!("]({file})")));
+        }
+        assert!(human.contains("Image validation: unverified"));
+        assert!(human.contains("Reference images: none included or verified"));
+        if name == "observed" {
+            assert!(human.contains("| Original UI image |"));
+        } else {
+            assert!(!human.contains("| Original UI image |"));
+            assert!(human.contains("| Optional for proposed appearance |"));
+            assert!(human.contains("Declared chain:"));
+        }
         let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
         assert!(!prompt.contains("COMMON "));
         assert!(!prompt.contains("observation_id"));

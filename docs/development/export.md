@@ -7,6 +7,30 @@ generate an image, execute actions, or require a model, network or API key.
 This is an Evolving candidate under [EXPORT@2](../specs/product/export.md) and
 its full [DrawingBrief closure](../specs/product/drawing-package.md).
 
+## Reading a document package
+
+For document, propose and detail exports, start with `drawing-brief.md`: document
+identity/status, source scope/state and limitations, geometry contexts, public
+objects, selected anchored dimensions and a linked sheet plan. It no longer repeats
+the scene/dimension JSON. Full precise facts, availability and evidence remain in
+`scene.json` and `dimensions.json`; sheet membership and ownership remain in
+`sheets.json` and `manifest.json`. Display labels are rounded, not new measurements.
+Compare/flow brief presentation remains unchanged.
+
+The brief's sheet table distinguishes observed artwork from empty measurement
+sketches and proposed geometry. An **Original UI image** entry tells the caller to
+attach a separately reviewed original matching the declared state/scope when
+running the generator. `references_count=0` means no image is bundled, loaded or
+verified by the compiler; it is not a collector error. Empty frame sketches and
+explicit proposed geometry do not require an original UI image. A proposed
+appearance reference remains optional. Never infer painted bounds or an AX-to-pixel
+transform from the presence of source records.
+
+For split packages, use the linked standalone `prompt-G01.txt` / `prompt-D*.txt`
+individually; do not concatenate them. `package_written` confirms data preparation,
+not image readiness, generation, checking or acceptance. Review the actual output
+against source scope, states, dimensions, anchors and privacy before image approval.
+
 ## Entry points and integration
 
 `DrawingBrief::from_json(bytes, ExportLimits)` bounds input before parsing and
@@ -213,11 +237,11 @@ and affirmative instability (`2491dec`); partial scope does not establish missin
 geometry for a named known anchor. Source coverage stays partial and consistency
 stays unknown. No new observation, complete scope or image validation is claimed.
 
-The current package regression retains byte comparison of the five unchanged files
-for both examples. Its independent literal extent inventory updates only expected
-numeric values and their unknown_reason fields in memory, including the exact
-embedded block in drawing-brief. The prompt tables are decoded independently and
-compared with the historical component inventories and those same literal dimensions.
+The current package regression compares source/sheet records and the original exact
+dimension prefix for both examples. Its independent literal extent inventory updates
+only expected numeric values and their unknown_reason fields in memory. Human-brief checks retain
+required meanings and reference handoff without duplicating the machine dump;
+actual CLI replays compare all unaffected machine files and model prompts.
 Evidence, anchors, privacy, source facts and statuses remain preserved. A separate synthetic unstable
 variant verifies all 32 dimensions remain unknown with reached evidence. Historical
 files are never overwritten, and expected values are not captured from candidate
@@ -432,7 +456,7 @@ of the machine source occurs to fit the image. New image labels are not checked 
 
 The prompt selects useful control sizes, gaps/insets and a full outline overview with
 related enlarged details. Machine aliases, timestamps, detailed evidence and unknown
-property lists stay in machine files/brief. Controls use the same solid blue ground
+property lists stay in machine files; the document brief links to those records. Controls use the same solid blue ground
 as the sheet, with white outlines/text, no screenshot fills or decorative grid.
 Image generation remains a separately authorized built-in ImageGen call, followed
 by independent content and visual review at the actual returned size. All task images
@@ -477,7 +501,7 @@ a directly connecting arrow. The full overview, necessary text, state, dimension
 and source limitations remain; the other five machine files are unchanged.
 
 C3 resolves object/anchor references to source-derived human names. Compiler keys
-and source/procedure inventories stay in the machine brief; they are not printable
+and detailed source/procedure inventories stay in the machine files; they are not printable
 captions. The printable sheet uses title, meaningful source content/state, dimensions
 and a compact source-kind/coverage/atomicity/status/units note. This is channel-based
 selection, not a word blacklist: genuine UI text and meaningful caller state remain
