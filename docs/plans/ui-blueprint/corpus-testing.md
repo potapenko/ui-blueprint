@@ -265,3 +265,29 @@ commit/push. Samecritics/no nested agents. Zero newprimarycases; repairimages se
 Root исправляет свой инструмент по подтверждённым запросам и возвращает его тому же
 потребителю. CN16 не реализуется и не блокирует этот цикл. Без вложенной делегации
 для этих первых конечных задач. Настройки модели наследуются.
+
+## Consumer feedback implementation wave — 2026-10-13
+
+USE-WEB-FIX1 /shipping_product: existing I02owner handles the Web consumer's first-use
+barrier in UI Blueprint. Reproduce helper --help; establish supported connection/
+identity preparation; repair actual help/docs/packaging within existing semantics,
+with complete commands and focused proof. Own README/distribution and Web helper
+help/docs/direct tests; shared CLI/engine/Native source excluded. If supported
+bootstrap truly absent, return concrete minimal contract-compatible design rather
+than fabricated IDs, app instrumentation or docs claiming unsupported behavior.
+Consumer will retry the real Director task after the coherent utility correction.
+
+USE-MAC-COMPARE1 /diagnostic: existing Coreowner reproduces exact two retained Actor
+observations and reconciles raw/graph/geometry/native paths with contracts. Rawdiff's
+context_mismatch matches CLI-DIFF2, not proof of arithmetic bug. No restamping IDs,
+loosening cache/action identities, silently guessed correspondence or fixture-mode
+integration. Return an existing supported workflow if evidenced, otherwise a concrete
+minimal implementation/contract/verification plan for explicit cross-observation
+comparison and bounded diagnostics. Only receipt consumer-native-comparison1.md may
+be written; no new feature before this source reconciliation. Web work independent.
+
+Both finite tasks run in the UI Blueprint project, inherit model/settings and have
+no nested delegation. No changes to PlayPhrase.me Mac/Web repositories or runtime.
+Root owns this plan/registry. Workers choose exact internal steps, verify once for
+actual changes, checkpoint+push their files and return results to root. Acceptance
+is the consumer completing its real task; builds/docs alone are not that result.
