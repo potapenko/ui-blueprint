@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 41 (explicit Native static-text content).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 42 (explicit saved correspondence).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes.
 - Do not read when: a fully read, current selected closure already governs the task.
@@ -29,8 +29,7 @@ mobile implementations or unrelated products. Plan status is not runtime evidenc
 Historical authority delta `UIB-AUTH-001`: Draft 1.3 / Draft 1.0 → Active 1.4 / 1.1
 on user confirmation; no wire schema or released behavior changed. Field-level
 `draft` and historical statements remain meaningful. C00 adds routing only.
-C01 engineering choices under ROADMAP D01–D07 are registered in
-[UIB.DECISIONS@1](development/decisions/README.md). `C01-DEC-001` selects development
+C01 engineering choices under ROADMAP D01–D07 are registered in [UIB.DECISIONS@1](development/decisions/README.md). `C01-DEC-001` selects development
 policy (`DEV.RUST@2`) and initial candidate interfaces/gates; it does not accept
 product runtime or alter existing CONTENT@1 requirements. The linked direct user
 clarification preserves explicit request-driven collection, without periodic polling.
@@ -73,6 +72,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 `HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
+`USE-MAC-COMPARE-001`: user-requested external comparison, root USE-MAC-COMPARE2 selects [CLI-COMPARE@1](product/cli-compare.md)/CLI@19: declared pairs, reported mapped-child order, independent scalar measurements and safe diagnostics; old diff/identity/cache/actions/wire preserved, consumer acceptance separate.
 `CA8-STATIC-TEXT-001`: root's explicit CA8 Evolve packet after CA6/CA7 registers [NATIVE@5](product/native.md)/[static-text@1](product/native-static-text.md): explicit visible_text from safely admitted AXStaticText string AXValue only; old fields, raw Value/Title privacy, quotas and wire unchanged; implementation/live/independent acceptance separate.
 `CA5-NATIVE-VISIBLE-001`: root selected and actual [source feasibility](../plans/ui-blueprint/receipts/corpus-native-visible-children.md) supports [NATIVE@4 AX-VISIBLE](product/native.md#uibnativeax-visible--explicit-source-visible-collection-children)/[CLI@18](product/cli.md): explicit reported-visible collection children, unchanged ordinary/popup modes and quotas; runtime product/independent acceptance separate.
 `CP4-SHEETS-001`: explicit CP4 packet registers [SHEET-PROMPTS@1](product/drawing-sheet-prompts.md), DRAWING-PACKAGE@3/CLI-EXPORT@3: single-view detail plans add independently usable prompts and export0.4 ownership manifest; old inputs/base files and exact machine truth preserved, visual acceptance separate.
