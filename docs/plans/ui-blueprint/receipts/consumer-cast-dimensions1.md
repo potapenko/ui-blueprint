@@ -82,3 +82,11 @@ Existing CV2/CT2 own final acceptance. One repair image, zero new primary cases.
 Original failed Cast image and all prior evidence preserved. Final CLI/packages/
 index/review retained for consumer/critics. Only own image-free build target removed;
 all images, containing directories and tool-managed originals retained.
+
+## User-requested contour follow-up — 2026-10-13
+
+User turn01a1361a-abc0-7271-a126-8c4aacbcaf60 in CT2 requested pointer correction and first new image only; accepted code/data review was not repeated.
+Source `dcd8de6a7eff354dd3c6764006fb094cdde9f12f` clarifies source contours without added tails/notches/pointers; measurement arrows remain separate. One necessary core build/export, no test rerun.
+[Neutral handoff](/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CAST-OUTLINE1-koh_iyws/neutral-index.json), SHA-256 `d98660d90dae9bc1523bdbe4300155a1e7148830c881aa3f11b4db53538b0892`, pins literal9015-character prompt, original reference and first PNG1619×971.
+Image SHA-256 `d72696343b91be7e61d4f07a2fb6e6d9a0bdaa29308dc346d44083cff276c287`. Pointer is absent; per-dimension px abbreviation remains, with CSS px in footer. CT2 owns image-only acceptance.
+[Author assessment](/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CAST-OUTLINE1-koh_iyws/author-review.json) was saved after neutral handoff. All old/new images and tool originals retained; no reroll.
