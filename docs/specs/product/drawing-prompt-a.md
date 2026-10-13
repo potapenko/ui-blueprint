@@ -1,7 +1,7 @@
 # Полный prompt: основание и лист
 
 - Node type: leaf; domain: `uib.drawing-prompt-a`.
-- Contract: `UIB.DRAWING-PROMPT-A@2`; stable clause: `UIB.DRAWING-PROMPT-A.CONTENT`.
+- Contract: `UIB.DRAWING-PROMPT-A@3`; stable clause: `UIB.DRAWING-PROMPT-A.CONTENT`.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.2, user confirmation 2026-10-06; C00 source plus HBP-HUMAN-001 user-authorized presentation evolution on 2026-10-10.
 - Read when: сборка self-contained prompt; первая последовательная часть.
@@ -65,3 +65,27 @@ approval={{approval_status}}.
 ```
 
 HBP-HUMAN-001: requires the [human presentation rules](../../engineering-blueprint-guide.md#hbp-human-001--клиентская-подача-2026-10-10), DRAWING@1.2. Full original machine records stay exact; visible inventories/long decimals are superseded.
+
+
+## GEOMETRY-SHEET — direct user correction, 2026-10-14
+
+The user rejected traced media and explicitly requires the library/CLI itself to
+produce the dimensional drawing prompt. A manually authored example is not shipping
+implementation. For an AX-only single observed Document fitting the caller's existing
+components_per_detail limit, with reported multi-element groups and no explicit detail requests, compile a geometric
+map plus useful enlarged groups on one sheet. Select groups deterministically from
+reported child relationships and measured frames; no product-name, fixture-ID or
+caption-specific branching. Source scene stays exact; omitted visual detail is
+identified as editorial scope, not absent source data. Media contents are never traced.
+
+Derive local gaps, edge/center alignments and insets through the existing Rust engine
+in the same Surface/frame/Space, preserving evidence and exact values in dimensions.
+Only exact equality establishes a repeated measured value; rounding never establishes
+a design token, intended rule or tolerance. AX geometry describes measurement envelopes,
+not paint, visibility, hit regions or layout padding. Unknowns remain unknown.
+The prompt itself contains the selected frames, named anchors, dimensions and
+relationships; it needs neither agent-written geometry nor an image reference.
+The existing density limit still selects separate sheets for larger scopes; explicit
+details, proposals, comparisons, multi-view and source/permission contracts retain
+their scope. Mixed/layout-frame presentation stays on its existing renderer. One actual CLI-generated prompt and one image demonstrate the correction;
+no mass-generation goal resumes. Existing model-free commands/flags/package fields stay.

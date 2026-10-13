@@ -7,7 +7,7 @@
 - Read when: E01/E02, imagegen-prompt, человеческий экспорт.
 - Conditional requires: [DESIGN-ANALYSIS@1](design-analysis.md) when design_analysis is selected; its additive0.3 representation and explicit printable explanations supersede older no-analysis presentation limits only for that input.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
-- Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md), [UIB.DRAWING-GEOMETRY@2](drawing-geometry.md), [UIB.DRAWING-PROMPT-A@2](drawing-prompt-a.md), [UIB.DRAWING-REVIEW@2](drawing-review.md), [UIB.DRAWING-EXAMPLE@1](../reference/drawing-example.md).
+- Requires: [UIB.DRAWING-PACKAGE@2](drawing-package.md), [UIB.DRAWING-STYLE@2](drawing-style.md), [UIB.DRAWING-GEOMETRY@2](drawing-geometry.md), [UIB.DRAWING-PROMPT-A@3](drawing-prompt-a.md), [UIB.DRAWING-REVIEW@2](drawing-review.md), [UIB.DRAWING-EXAMPLE@1](../reference/drawing-example.md).
 - Source mapping: TZ 399–416; DRAWING 1–30; DRAWING 301–315; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 

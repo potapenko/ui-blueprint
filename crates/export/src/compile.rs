@@ -99,7 +99,17 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
     }
     scene.flow = flow(brief, &mut alias_maps)?;
     let sheets = sheets(brief, &scene, limits)?;
-    let prompt = prompt(brief, &scene, &dims, &sheets, limits.max_output_bytes)?;
+    let prompt = if crate::geometry_prompt::applies(brief, &sheets) {
+        crate::geometry_prompt::render(
+            brief,
+            &scene.views[0],
+            &mut dims[0],
+            &mut alias_maps[0],
+            limits.max_output_bytes,
+        )?
+    } else {
+        prompt(brief, &scene, &dims, &sheets, limits.max_output_bytes)?
+    };
     let mut sheet_prompts = Vec::new();
     let mut sheet_files = Vec::new();
     let mut required_dimension_ids = Vec::new();
@@ -500,7 +510,7 @@ pub(crate) fn display_number(value: f64) -> String {
         format!("≈{:.0}", value.round())
     }
 }
-fn geometry(c: &SceneComponent) -> Option<&Geometry> {
+pub(crate) fn geometry(c: &SceneComponent) -> Option<&Geometry> {
     c.geometry.as_ref().or_else(|| {
         [
             FrameKind::LayoutBounds,
@@ -660,7 +670,7 @@ pub(crate) fn component_name(v: &SceneView, index: usize) -> String {
     human_role.into()
 }
 // Keep machine analysis labels stable; only human presentation uses these captions.
-fn human_component_name(v: &SceneView, index: usize, limit: usize) -> Result<String> {
+pub(crate) fn human_component_name(v: &SceneView, index: usize, limit: usize) -> Result<String> {
     let c = &v.components[index];
     let base_name = component_name(v, index);
     let mut name = base_name.clone();
@@ -2513,8 +2523,9 @@ Source icons retain their silhouette as WHITE outlines, including Play triangles
 never replace an icon with its semantic name or icon-font token. An active row/tab
 uses an extra WHITE outline with the same BLUE interior, never a white-filled tile.
 Do not embed or tint the reference screenshot, video frame, photo, or thumbnail.
-Depict media only as sparse WHITE contour lines on the same flat BLUE; no tonal
-shading, photographic texture, grayscale, dark/gray panels, gradients or transparency.
+Represent media as a plain labelled envelope; never trace the film, people,
+photographs or thumbnail contents. No tonal shading, photographic texture,
+grayscale, dark/gray panels, gradients or transparency.
 
 Draw only visible coverage, including its actual cut boundary. Plain text is not a box.
 Overview borders follow visible reference borders. Source groups and layout boxes
@@ -2832,6 +2843,23 @@ fn drawing_brief(
     sheets: &[Sheet],
     limit: usize,
 ) -> Result<String> {
+    if crate::geometry_prompt::applies(b, sheets) {
+        let mut out = String::new();
+        append(
+            &mut out,
+            &format!(
+                "# {}\n\nUse [prompt.txt](prompt.txt) verbatim for ONE geometric sheet. No reference image or agent-written drawing instructions are required. The CLI does not call ImageGen.\n\nThe map and enlarged groups are selected from reported source structure. [scene.json](scene.json) preserves all {} source records; [dimensions.json](dimensions.json) preserves exact sizes, engine-derived gaps/alignments and evidence. [sheets.json](sheets.json) and [manifest.json](manifest.json) identify this package. Unshown visual details are editorial omissions, not missing source records.\n\nScope: {}. Caller context: {}. Coverage: {:?}.\n\nAX frames are measurement envelopes, not painted bounds, padding or visibility. Equal observed values do not establish a design token. Display labels are rounded; the drawing is schematic, not CAD scale. Image validation remains unverified and approval remains {:?}.\n",
+                b.metadata.title,
+                s.views[0].components.len(),
+                s.views[0].scope,
+                s.views[0].state,
+                s.views[0].coverage.as_ref().map(|c| c.status),
+                b.metadata.approval.status
+            ),
+            limit,
+        )?;
+        return Ok(out);
+    }
     if matches!(
         b.purpose,
         Purpose::Document | Purpose::Propose | Purpose::Detail

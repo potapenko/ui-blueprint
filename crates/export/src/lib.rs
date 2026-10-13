@@ -3,6 +3,7 @@
 mod compare;
 mod compile;
 mod design;
+mod geometry_prompt;
 mod observed;
 mod package;
 mod proposal;

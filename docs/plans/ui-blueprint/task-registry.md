@@ -1,5 +1,29 @@
 # Единый реестр задач
 
+## Current finite correction — CLI-generated geometry prompt, 2026-10-14
+
+The user explicitly rejected a manual prompt and directed that the library/CLI
+itself produce the drawing instructions. Immediate execution is authorized by
+«Ну так исправляй промпт… Покажи один результат» and the subsequent explicit
+correction «Промпт должен выдаваться аутпутом библиотеки». CORPUS-1000 stays
+paused; no new goal or mass generation. This finite task is single-chat execution,
+not a resumed coordinator-only goal; no agents are dispatched.
+
+Write set: crates/export geometry prompt owner and compile integration, focused
+compiler/geometry tests, direct prompt contract/registry/export documentation,
+this restart state and the selected canonical A04 prompt deliverable. Preserve
+other people's after-title-spacing.png. One actual unedited CLI prompt is the
+image-generation input; no reference screenshot or geometry rewritten by an agent.
+The first manually authored reference image is explicitly not library output.
+New implementation uses observed AX groups, Rust measurements and source names,
+without A04/product-specific code. Initial scope is the existing single-sheet
+observed Document path; larger/mixed/Web/explicit-detail plans remain separate.
+
+Old AUTO-DETAIL2 acceptance is terminal: CT2 source accepted; CV2 final
+01a1375d-0df8-7631-a9e6-bbf4f4a92b55 retains image FAIL for internal labels.
+Focus appearance remained, missing literal focus attribution is separate. All
+three finished utility-worker/reviewer chats are archived; advisors retained.
+
 ## Finite closeout — user direction 2026-10-14
 
 The user explicitly directed finishing existing work, pushing ready changes and

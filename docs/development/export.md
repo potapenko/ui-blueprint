@@ -562,3 +562,38 @@ and size views. Singleton inputs get an explicit size view. Captions prefer repo
 accessibility names or supported single-line labels, otherwise plain role/topology
 context. Multiline source UI text stays verbatim render data; no ligature-token
 blacklist or invented icon classification is introduced.
+
+
+## One-sheet AX geometry drawing
+
+For an observed document with Accessibility frames only and reported groups,
+the existing single-sheet path now compiles a geometric map, selected enlarged
+control groups, sizes, engine-measured spacing and shared center axes. It does
+not require a screenshot or an agent-written drawing prompt. Source-specific
+names and values come from the input; no application case is hard-coded.
+
+Use the existing density parameter to admit the selected scope on one sheet:
+
+```sh
+uiblueprint imagegen-prompt --snapshot "$SNAPSHOT" --metadata "$METADATA" \
+  --purpose document --out "$OUT" --max-input-bytes 1048576 \
+  --max-output-bytes 2097152 --max-components 100 --max-views 1 \
+  --components-per-detail 100 --json
+```
+
+These are explicit example limits, not new defaults. Read `$OUT/prompt.txt`
+verbatim into ImageGen. The CLI itself does not invoke a model. All source
+records remain in scene.json and exact relations in dimensions.json. The
+compiler chooses up to four compact groups (two to eight measured children)
+for readable enlargement, rather than treating every text node as a control.
+Small parent offsets are editorial dimension candidates, not inferred padding.
+Unknown measurements, unmatched spaces and private text are not promoted to facts.
+This path currently applies to single-view AX-only documents within that density
+limit, with no explicit detail requests. Web/mixed frames, explicit details and
+larger multi-sheet plans retain their existing renderer. Shared media guidance
+prohibits tracing film/photo contents on every path.
+
+The [A04 example prompt](../plans/ui-blueprint/receipts/a04-geometry-prompt.txt)
+is an unedited CLI output from a saved80-node observation; it is not a runtime
+input or a template read by the library. Schematic image geometry and source
+Accessibility geometry remain distinct; generation is not verified CAD output.

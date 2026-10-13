@@ -2976,7 +2976,11 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     }
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object button: Button"));
+    assert!(
+        prompt
+            .lines()
+            .any(|line| line.starts_with("Object button") && line.contains(": Button [#"))
+    );
     assert!(prompt.contains("Placement context 1: LayoutBounds;"));
     assert!(prompt.contains("DIMENSIONED RECTANGLE button"));
     assert!(!prompt.contains("REQUIRED Width AccessibilityBounds"));
@@ -3005,7 +3009,8 @@ fn mixed_frames_choose_reported_layout_without_aliasing_other_known_frames() {
     assert!(
         std::str::from_utf8(&package.files()["prompt.txt"])
             .unwrap()
-            .contains("Object button: BUTTON [#")
+            .lines()
+            .any(|line| line.starts_with("Object button") && line.contains(": BUTTON [#"))
     );
 }
 
@@ -3275,7 +3280,7 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
         let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
         let object = prompt
             .lines()
-            .find(|s| s.starts_with("Object button:"))
+            .find(|s| s.starts_with("Object button") && s.contains(": Button [#"))
             .unwrap();
         assert_eq!(
             object.contains("CLIPPED LAYOUT"),
@@ -3287,9 +3292,9 @@ fn clipping_requires_proved_layout_subset_and_preserves_other_frame_sizes() {
             assert!(
                 prompt.lines().any(
                     |s| s.starts_with(if kind == FrameKind::AccessibilityBounds {
-                        "AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"button\":"
+                        "AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"button"
                     } else {
-                        "DIMENSIONED RECTANGLE button:"
+                        "DIMENSIONED RECTANGLE button"
                     }) && s.contains(if kind == FrameKind::PaintBounds {
                         "HEIGHT 20 CSS px"
                     } else {

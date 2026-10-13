@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 57 (bounded automatic detail tail).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 58 (geometry-first single-sheet prompt).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -69,6 +69,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 `HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
+`GEOMETRY-SHEET-001`: direct user correction2026-10-14 registers [PROMPT-A@3](product/drawing-prompt-a.md#geometry-sheet--direct-user-correction-2026-10-14): library-generated single-sheet AX geometry map and measured relationships, no media tracing or manual prompt substitution; existing density/explicit-detail boundaries remain.
 `USE-OBS-DIAGNOSTICS-001`: user-requested safe refusal reasons, root finite packet selects [OBSERVE-DIAGNOSTICS@3](product/cli-observe-diagnostics.md)/CLI@20: opt-in bounded fixed stderr report from validated Host facts; legacy NDJSON/default errors/limits/cleanup/wire preserved, real Director acceptance separate. USE-WEB-RECT2 registers [GEOMETRY@2](product/geometry.md) per-property unknown for equal CSSOM endpoints with incompatible IO bounds; diagnostic@3 code1 becomes A≠C, old pins retain old meaning.
 `USE-WEB-BOOTSTRAP-001`: explicit user URL+component outcome and root-selected connection policy register [WEB-FIRST-USE@7](product/web-first-use.md): optional Node24+ caller on an already-authorized loopback CDP browser connection, exact URL/unique bounded component, source-derived identity and existing Rust Observe/geometry; USE-WEB-EXPORT1 adds opt-in original canonical stdout after cleanup. Core/low-level Web remain Node-free; no launch/app integration or new wire; acceptance separate.
 `USE-MAC-COMPARE-001`: user-requested external comparison, root USE-MAC-COMPARE2 selects [CLI-COMPARE@2](product/cli-compare.md)/CLI@19: declared pairs, reported mapped-child order, independent scalar measurements and safe diagnostics; old diff/identity/cache/actions/wire preserved, consumer acceptance separate.
@@ -92,7 +93,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 | Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
 | Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
 | Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@2](development/rust.md) | Active / Evolving; C01 setup choices, product builds still unaccepted |
-| Agent skill and prompt installation | [AGENT-SKILL@2](development/agent-skill.md) | Local installation and bounded Codex/Claude discovery verified; public release pending |
+| Agent skill and prompt installation | [AGENT-SKILL@3](development/agent-skill.md) | Pinned-source bootstrap and new-chat installation/use; public release separate |
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 ## Routing invariants
