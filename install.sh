@@ -125,6 +125,11 @@ verify_bundle() {
   for file in $FILES; do
     [ -f "$folder/$file" ] && [ ! -L "$folder/$file" ] || die "missing regular file: $file"
     [ "$(awk -v name="$file" '$2 == name { count++ } END { print count+0 }' "$receipt")" -eq 1 ] || die 'invalid receipt inventory'
+    case "$file" in
+      uiblueprint|uiblueprint-validate|session-worker|native-host-helper) mode=755 ;;
+      *) mode=644 ;;
+    esac
+    [ "$(stat -f '%Lp' "$folder/$file")" = "$mode" ] || die "changed permissions: $file"
   done
   [ "$(find "$folder" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq "$((expected+1))" ] \
     || die 'unknown files in version directory; nothing removed'

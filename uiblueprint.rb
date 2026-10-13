@@ -11,7 +11,7 @@ class Uiblueprint < Formula
   depends_on arch: :arm64
 
   def install
-    odie "Requires macOS @MIN_MACOS@ or later" if MacOS.version < Version.new("@MIN_MACOS@")
+    odie "Requires macOS @MIN_MACOS@ or later" if MacOS.full_version < Version.new("@MIN_MACOS@")
     # Keep worker/helper, schemas and optional Web caller beside the real CLI.
     libexec.install Dir["*", ".??*"].reject { |name| name == "." || name == ".." }
     bin.install_symlink libexec/"uiblueprint", libexec/"uiblueprint-validate"

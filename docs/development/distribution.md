@@ -125,8 +125,11 @@ EXPORT_PARENT="$(mktemp -d "${TMPDIR:-/tmp}/uib-export.XXXXXX")"
 ```
 
 Expected: validator valid/0; measure **8 css_px** in local-form; check pass/0.
-Each export writes six text/JSON files and reports `generated_image=false` with
-unverified visual status. The local command never calls ImageGen or needs a key.
+Each export writes six base text/JSON files and reports `generated_image=false`
+with unverified visual status. Current single-view bundles with planned details
+also write per-sheet prompt files and use package/receipt version0.4.0 under
+[SHEET-PROMPTS@1](../specs/product/drawing-sheet-prompts.md). Historical builds
+retain their original versions. The local command never calls ImageGen or needs a key.
 Example byte/count limits are explicit example parameters, not production defaults.
 Keep exports separately; the distribution manager never deletes them. Remove only
 your own non-image example outputs after use; retain any images and their folders.

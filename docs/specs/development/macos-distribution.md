@@ -14,10 +14,12 @@
 
 Evolve the local-only distribution into a prepared Mac Apple Silicon release:
 one combined Mac/Web archive, shell installer and own-tap Homebrew formula.
-Preparation is single-agent on the current branch. Publication, uploading to
-Apple, license selection, remote tap edits, tags and pushes are not authorized
-by this preparation task. Local Developer ID signing is allowed without
-creating or exporting credentials; notarization submission is an explicit later step.
+Implementation stays in this chat on the current branch. Publication, license
+selection, remote tap edits, tags and pushes remain outside preparation.
+Developer ID signing uses existing credentials only. Notarization of the signed
+candidate is an explicit preparation step after locating an existing profile;
+it is never implicit in the local build command. The user's later request permits
+read-only consultation with other project chats about the profile name only.
 The original accepted plan and user approval remain in this chat, not inferred
 from this contract. No README, product algorithms, CLI grammar, wire schemas,
 runtime permissions, Linux/Windows/Intel support or automatic browser launch changes.

@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import re
 import stat
+import subprocess
 import tarfile
 import tempfile
 from types import SimpleNamespace
@@ -173,6 +174,11 @@ def read_candidate(folder):
             data, _ = dist.read_regular(fd, asset)
             if dist.digest(data) != expected:
                 raise ValueError(f'changed candidate: {asset}')
+        checksums, _ = dist.read_regular(fd, 'SHA256SUMS')
+        expected_checksums = ''.join(f'{record["assets"][asset]}  {asset}\n'
+                                    for asset in (name, 'install.sh', 'uiblueprint.rb')).encode()
+        if checksums != expected_checksums:
+            raise ValueError('changed candidate: SHA256SUMS')
     return record
 
 
@@ -209,23 +215,36 @@ def notarize(args):
         # Apple accepts zip, not tar.gz. These are the exact signed archive contents.
         archive = stage / 'notarization.zip'
         dist.run(['ditto', '-c', '-k', '--keepParent', str(bundle), str(archive)])
+        # A timed-out submission may already exist at Apple. Persist uncertainty
+        # BEFORE upload; a later invocation must not silently submit a duplicate.
+        record['notarization'] = 'submission_outcome_unknown'
+        store_record(args.destination, record)
         result = json.loads(dist.run(['xcrun', 'notarytool', 'submit', str(archive),
                                     '--keychain-profile', args.keychain_profile,
                                     '--output-format', 'json'], timeout=300))
         record['notarization'] = 'submitted'
         record['notarization_id'] = result['id']
-        # Persist the submission ID before a later bounded wait; do not auto-resubmit.
-        with dist.destination(args.destination) as fd:
-            temporary = '.release-notarization.json'
-            out = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=fd)
+        store_record(args.destination, record)
+        return record
+    finally:
+        dist.clean_stage(stage)
+
+
+def store_record(folder, record):
+    with dist.destination(folder) as fd:
+        temporary = '.release-notarization.json'
+        out = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o644, dir_fd=fd)
+        try:
             with os.fdopen(out, 'wb') as stream:
                 stream.write(dist.encoded(record))
                 stream.flush()
                 os.fsync(stream.fileno())
             os.rename(temporary, 'release.json', src_dir_fd=fd, dst_dir_fd=fd)
-        return record
-    finally:
-        dist.clean_stage(stage)
+        finally:
+            try:
+                os.unlink(temporary, dir_fd=fd)
+            except FileNotFoundError:
+                pass
 
 
 def main():
@@ -259,7 +278,7 @@ def main():
                 dist.clean_stage(stage)
         print(json.dumps(result))
         return 0
-    except (OSError, ValueError, KeyError, TypeError) as error:
+    except (OSError, ValueError, KeyError, TypeError, subprocess.TimeoutExpired, tarfile.TarError) as error:
         print(f'release: {error}', file=sys.stderr)
         return 1
 

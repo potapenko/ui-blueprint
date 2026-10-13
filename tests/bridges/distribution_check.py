@@ -187,10 +187,18 @@ def smoke(bundle):
                            '--components-per-detail', '10', '--json'], env=env)
             receipt = json.loads(result.stdout)
             assert receipt['generated_image'] is False and receipt['status'] == 'package_written'
-            assert set(p.name for p in (stage / purpose).iterdir()) == {
-                'manifest.json', 'drawing-brief.md', 'scene.json', 'dimensions.json', 'sheets.json', 'prompt.txt'}
-            assert receipt['result_version'] == '0.1.0'
-            assert json.loads((stage / purpose / 'manifest.json').read_text())['package_version'] == '0.1.0'
+            # CP4 SHEET-PROMPTS@1: bundled observed32/proposed10 examples have
+            # four density details / two explicitly requested details respectively.
+            details = 4 if purpose == 'document' else 2
+            prompts = {'prompt-G01.txt'} | {f'prompt-D{i:02}.txt' for i in range(1, details + 1)}
+            expected = {'manifest.json', 'drawing-brief.md', 'scene.json', 'dimensions.json',
+                        'sheets.json', 'prompt.txt'} | prompts
+            assert set(p.name for p in (stage / purpose).iterdir()) == expected
+            assert set(receipt['files']) == expected and receipt['result_version'] == '0.4.0'
+            export_manifest = json.loads((stage / purpose / 'manifest.json').read_text())
+            assert export_manifest['package_version'] == '0.4.0'
+            assert {item['file'] for item in export_manifest['sheet_prompts']} == prompts
+            assert all((stage / purpose / name).stat().st_size > 0 for name in prompts)
         # Two saved synthetic observations, with one literal width change. No UI or model.
         before = json.loads((bundle / 'example-snapshot.json').read_text())
         if manifest['modules'] in ('web', 'combined'):

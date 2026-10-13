@@ -3,7 +3,8 @@
 The approved 2026-10-13 scope prepares an Apple Silicon combined Mac/Web release.
 The [installation contract](../specs/development/macos-distribution.md) is routed
 through D01. Publication and project licensing remain separate owner decisions.
-No README, release/tag, remote tap or Apple upload changes during preparation.
+No README, release/tag or remote tap changes during preparation. The local
+`prepare` command never uploads to Apple; `notarize` is a separate explicit step.
 
 ## Prepare locally
 
@@ -41,7 +42,7 @@ non-image candidates after acceptance/discard. Never clean up retained images.
 
 ## Signing and later notarization
 
-Future approved notarization is an explicit upload, separate from preparation:
+Notarization is an explicit upload of the signed candidate, separate from building:
 
 ```sh
 python3 -B release.py notarize --destination "$RELEASE_OUT" --keychain-profile PROFILE
@@ -52,8 +53,10 @@ ZIP of the same signed files, submits once, and records Apple's submission ID.
 Use `xcrun notarytool info ID --keychain-profile PROFILE --output-format json`
 to inspect it, or `wait ID --keychain-profile PROFILE --timeout 5m` for a bounded
 wait. Require **Accepted** before public release; inspect rejected submissions
-with `notarytool log`. A transport timeout is an unknown submission outcome:
-inspect Apple history before retrying. Standalone executables/tar.gz do not get
+with `notarytool log`. Before upload the tool records `submission_outcome_unknown`;
+a transport timeout retains that state and a subsequent command refuses to submit
+again. Inspect Apple history and reconcile the record before any retry.
+Standalone executables/tar.gz do not get
 a stapled ticket; verify the downloaded/quarantined candidate under normal
 Gatekeeper policy. Do not remove quarantine or disable system checks to pass QA.
 
@@ -98,6 +101,11 @@ the project's license before publishing it. No build-tool dependency is added.
 Run `shellcheck install.sh`, `ruby -c uiblueprint.rb`,
 `python3 -B tests/bridges/release_check.py`, and the real candidate check above.
 Installer tests use fake HTTPS transport and isolated system-temp prefixes.
+The candidate check also runs the real installer/payload and Homebrew formula
+install/test methods using the installed Homebrew API with an isolated prefix;
+it does not register a tap or change the operator's Cellar.
+Current export smoke follows [SHEET-PROMPTS@1](../specs/product/drawing-sheet-prompts.md)
+for exact0.4 document/propose inventories; comparison remains0.2.
 They are not proof of a published URL or downloaded Gatekeeper acceptance.
 Public curl/Homebrew lifecycle, Apple Accepted status and a fresh downloaded
 signature/Gatekeeper check remain publication gates. Broader product acceptance

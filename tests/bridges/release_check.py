@@ -9,9 +9,11 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import tarfile
 import tempfile
+from types import SimpleNamespace
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -100,6 +102,8 @@ case "$1" in -s) printf '%s\\n' "${TEST_OS:-Darwin}";; -m) printf '%s\\n' "${TES
     run(args, env=env, ok=False)
     (install_root / '.lock').rmdir()
     # Cross-version dispatch pins the requested remote installer.
+    run([*args, '--version', '0.2.0'], env=dict(env, DOWNLOAD_FAILURE='yes'), ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
     run([*args, '--version', '0.2.0'], env=env)
     assert os.readlink(current) == 'versions/0.2.0' and first.exists()
     run(args, env=env)
@@ -117,6 +121,9 @@ case "$1" in -s) printf '%s\\n' "${TEST_OS:-Darwin}";; -m) printf '%s\\n' "${TES
     run([*args, '--uninstall'], env=env, ok=False)
     assert (first / 'uiblueprint').exists()
     (first / 'RUN.md').write_bytes(original)
+    (first / 'RUN.md').chmod(0o600)
+    run([*args, '--uninstall'], env=env, ok=False)
+    (first / 'RUN.md').chmod(0o644)
     (first / 'RUN.md').unlink()
     outside = stage / 'outside'
     outside.write_bytes(original)
@@ -220,6 +227,70 @@ def recipe_checks(stage, bundle, versions):
     print('PASS recipe: archive round trip, template syntax, source-pin guard, local publication rollback, post-signing manifest')
 
 
+def notarization_checks(folder):
+    original = (folder / 'release.json').read_bytes()
+    record = json.loads(original)
+    record['signing'] = 'developer_id'
+    args = SimpleNamespace(destination=folder, keychain_profile='test-profile')
+    try:
+        for timeout in (False, True):
+            (folder / 'release.json').write_bytes(dist.encoded(record))
+            def command(argv, **_):
+                if argv[:3] == ['xcrun', 'notarytool', 'submit']:
+                    assert json.loads((folder / 'release.json').read_bytes())['notarization'] == 'submission_outcome_unknown'
+                    if timeout:
+                        raise subprocess.TimeoutExpired(argv, 300)
+                    return b'{"id":"test-submission"}'
+                assert argv[0] in ('codesign', 'ditto')
+                return b''
+            with patch.object(release.dist, 'run', side_effect=command):
+                try:
+                    release.notarize(args)
+                    assert not timeout
+                except subprocess.TimeoutExpired:
+                    assert timeout
+            status = json.loads((folder / 'release.json').read_bytes())['notarization']
+            assert status == ('submission_outcome_unknown' if timeout else 'submitted')
+            with patch.object(release.dist, 'run') as external:
+                try:
+                    release.notarize(args)
+                    raise AssertionError('submission repeated')
+                except ValueError:
+                    pass
+                external.assert_not_called()
+    finally:
+        (folder / 'release.json').write_bytes(original)
+    print('PASS notarization control: mocked submission ID/timeout retained; no implicit repeat or real upload')
+
+
+def homebrew_formula(folder, bundle, stage):
+    brew = shutil.which('brew')
+    if not brew:
+        raise AssertionError('Homebrew is required for the candidate formula API check')
+    env = dict(os.environ, HOMEBREW_NO_AUTO_UPDATE='1', HOMEBREW_NO_ANALYTICS='1',
+               HOMEBREW_NO_INSTALL_FROM_API='1', HOMEBREW_NO_ENV_HINTS='1',
+               HOMEBREW_NO_INSTALL_CLEANUP='1', HOMEBREW_CACHE=str(stage / 'cache'),
+               HOMEBREW_LOGS=str(stage / 'logs'), HOMEBREW_TEMP=str(stage))
+    # Use the actual Homebrew DSL/install/test APIs, redirecting only the formula's
+    # prefix. No tap registration, global linking or change to the operator's Cellar.
+    code = '''require "formula"
+require "formula_assertions"
+load ARGV[0]
+formula = Uiblueprint.new("uiblueprint", Pathname(ARGV[0]), :stable)
+installed = Pathname(ARGV[1])
+formula.define_singleton_method(:prefix) { installed }
+formula.define_singleton_method(:opt_prefix) { installed }
+formula.extend(Homebrew::Assertions)
+Dir.chdir(ARGV[2]) { formula.install }
+formula.test
+raise "missing public link" unless (installed/"bin/uiblueprint").symlink?
+raise "missing worker" unless (installed/"libexec/session-worker").executable?
+puts "PASS Homebrew formula: real install/test APIs with temporary prefix"
+'''
+    print(dist.run([brew, 'ruby', '-e', code, '--', str(folder / 'uiblueprint.rb'),
+                    str(stage / 'cellar/uiblueprint/0.1.0'), str(bundle)], env=env, timeout=60).decode().strip())
+
+
 def real_candidate(folder):
     record = release.read_candidate(folder)
     stage = Path(tempfile.mkdtemp(prefix='uib-installed-check-'))
@@ -227,6 +298,13 @@ def real_candidate(folder):
         bundle = stage / 'bundle'
         bundle.mkdir()
         release.extract_candidate(folder, bundle, record)
+        # No checkout WIP can enter shipped support files.
+        for name, source in {'distribution.py': 'distribution.py',
+                             'RUN.md': 'docs/development/distribution.md',
+                             'THIRD_PARTY_NOTICES.md': 'THIRD_PARTY_NOTICES.md',
+                             'web-geometry.cjs': 'tests/bridges/web/geometry.cjs',
+                             'WEB-FIRST-USE.md': 'docs/development/web-first-use.md'}.items():
+            assert (bundle / name).read_bytes() == release.committed(record['source_revision'], source)
         spec = importlib.util.spec_from_file_location('distribution_check', ROOT / 'tests/bridges/distribution_check.py')
         checks = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(checks)
@@ -234,7 +312,36 @@ def real_candidate(folder):
         if record['signing'] == 'developer_id':
             for name in release.BINARIES:
                 run(['codesign', '--verify', '--strict', bundle / name])
-        print('PASS actual candidate: complete offline bundle smoke and recorded signature checks')
+        # Exercise the actual installer with actual signed payload; substitute only
+        # HTTPS transport because the user has explicitly deferred publication.
+        shims = stage / 'shims'
+        shims.mkdir()
+        (shims / 'curl').write_text('''#!/bin/sh
+set -eu
+out=''
+for arg do
+  if [ "$out" = next ]; then out=$arg; fi
+  if [ "$arg" = --output ]; then out=next; fi
+  url=$arg
+done
+[ "$url" = "$EXPECTED_URL" ]
+cp "$LOCAL_ARCHIVE" "$out"
+''')
+        (shims / 'curl').chmod(0o755)
+        archive = release.archive_name(record['version'])
+        env = dict(os.environ, PATH=f'{shims}:/usr/bin:/bin:/usr/sbin:/sbin', TMPDIR=str(stage),
+                   EXPECTED_URL=f'{release.REPOSITORY}/releases/download/v{record["version"]}/{archive}',
+                   LOCAL_ARCHIVE=str(folder / archive))
+        prefix = stage / 'real installed prefix'
+        command = ['sh', folder / 'install.sh', '--prefix', prefix]
+        run(command, env=env)
+        run([prefix / 'bin/uiblueprint', '--help'], env=env)
+        installed = prefix / 'share/uiblueprint/versions' / record['version']
+        checks.smoke(installed)
+        run([*command, '--uninstall'], env=env)
+        assert not (prefix / 'share/uiblueprint').exists()
+        homebrew_formula(folder, bundle, stage)
+        print('PASS actual candidate: provenance, signed bundle smoke, real install/run/remove; transport is local')
     finally:
         dist.clean_stage(stage)
         assert not stage.exists()
@@ -255,6 +362,7 @@ def main():
         install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)
         recipe_checks(stage, bundle, versions)
+        notarization_checks(versions / '0.1.0')
     finally:
         dist.clean_stage(stage)
         assert not stage.exists(), stage
