@@ -1,10 +1,22 @@
 # Единый реестр задач
 
-## CORPUS-1000 — user pause for Codex restart, 2026-10-13
+## CORPUS-1000 — resumed after Codex restart, 2026-10-13
+
+The user explicitly resumed: «Я перегрузил кодекс, поэтому можешь начинать
+продолжать работать… Те чаты, которые ты приостановил… проверь… продолжай».
+Host goal is verified active. Same exporter and two critics were verified
+terminal before redispatch; no duplicate workers were created. Nativecaption
+4ac37a7/32c971d ready artifacts still exist: continue the one pending D01 generation.
+Both CW21 critics resume only author reconciliation from their completed initial
+observations. Web source owner remains idle because its three-form batch is done.
+The prior pause below is historical, not a current execution gate. Scope and
+197case/601image counts remain unchanged until the pending results are recorded.
+
+### Preserved pre-restart handoff
 
 User explicitly requested a careful pause because the usage limit was exhausted
-and Codex needs restarting. Dispatch is disabled; do not start or resume work until
-the user explicitly resumes. The original1000-case goal remains incomplete and
+and Codex needed restarting. Dispatch was disabled until the explicit resume above.
+The original1000-case goal remains incomplete and
 unchanged. This is a user pause, not completion or a blocker.
 
 Restart handoff:
@@ -50,8 +62,8 @@ cases, risk-first planning and corpus-driven improvements. Root is coordination-
 workers finish finite tasks. [Accepted plan](corpus-testing.md) and
 [execution runbook](execution.md) govern. This goal is incomplete.
 
-Pre-pause host status was `active`; this handoff records the explicit user pause.
-The root invokes host `paused` after the final bounded save/drain below.
+Host status is now `active`, verified on explicit user resume. The pause was
+successfully saved at8c593ff; original pre-pause outcomes remain preserved.
 User rejected CN16 and explicitly answered «Не менять Mac-приложение». Root's earlier
 assumption that a new app-internal Debug mode was the prerequisite is withdrawn.
 User then authorized Mac/Web project agents to integrate UI Blueprint into their own
@@ -188,7 +200,7 @@ root does not redirect or archive its unrelated application work.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
-| CW-B21 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal3forms/3firstimages; both initial reviews done, user-paused before reconciliation|Immutable /tmp/uib-cw-b21-76jwxzy4/neutral-index-r2.json and author-evaluation-r2.json. Both critics idle; exact initial turns/findings and next steps recorded in restart section above. Originalsource/allowlist/limits/refusals retained. Chooser uncollected, count unchanged pending reconciliation/count checkpoint |
+| CW-B21 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal3forms/3firstimages; same critics resumed author reconciliation|Immutable /tmp/uib-cw-b21-76jwxzy4/neutral-index-r2.json and author-evaluation-r2.json. Initial turns/findings retained in restart section; no repeated source/visual/test wave. Originalsource/allowlist/limits/refusals retained. Chooser uncollected, count unchanged pending final reconciliation/count checkpoint |
 | USE-WEB-PRIVATE1 |CT2 utility investigator01a12c78-5e34-7870-8eec-9203a8076f05|completed; callerannotation syntax correction, no codefix|Turn01a1362e-4b31-76f3-b2af-1e65e296309b: public_text rejects '/' in state and4not_depicted strings; public_text_fields[] valid. Original3commands exit2/private_content/empty/absentdest; same600cCLI/snapshots/limits with5plain-language metadata substitutions all exit0,10/12/7nodes,partial. Snapshot sensitivity defect not established; guard/allowlist preserved. Trialcopies cleaned, actualconsumer resumes |
 | USE-CAST-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source600c6ab accepted; dimension presentation passes, fullrasterFAIL|[Receipt](receipts/consumer-cast-dimensions1.md). CT2completedreview01a13619-1715-7962-9aa2-e93f0a4ad1c7 reused; CV2initial01a13619-14d3-7a02-b47a-3365e100cb26/final01a1361b-8ed0-74b0-bd7b-8e50a1c2267d. Correct≈175×≈42/anchors, no invented304/R12. Unsupported pointer remains; footer-qualified px is formatting residual perCV2. One qualified repairimage, no newcase. Owner continues Nativecaptions, no Cast reroll loop |
 | USE-WEB-EXPORT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source863dcdb accepted; owner archived|[Receipt](receipts/consumer-web-export1.md). CT2 initial01a135e6-f917-7610-905d-a9770c6a19db/final01a135ee-0692-7ed2-92d6-a200fb95342e accepts publication boundary; actual Webconsumer01a135e6-f83d-7263-8635-d7928ac5120a confirms Cast→canonicalJSON→export without adapter. Candidate retained uib-web-export1-h1iqyuk2/candidate. Raster/assignment failures separate from accepted handoff |
@@ -196,7 +208,7 @@ root does not redirect or archive its unrelated application work.
 | USE-PROMPT-LENGTH1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source7b7d454 accepted; same owner continues Cast repair|[Receipt](receipts/consumer-prompt-length1.md). CT2final01a13607-47be-71d0-b905-ee5b3a32f09a independently confirms exact non-prompt bytes and equivalent notation/content/assignment; author tests reused. Literal40197→31611 accepted by ImageGen, first1536×1024 raster stillFAIL. Provenance supplement94b314e8 resolves mutable priorindex; verified reconstruction disclosed. No universal length/raster claim |
 | CN-B22 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|terminal1new Guest Tour case/3first images; two-critic review pending|Same uib-CN-B22-itxeawwb neutral-index now includes passive Release32AXnodes/24callouts,3840×2100 nativePNG and G01/D01/D02 at1672×941;36Rust-measured dimensions,0rerolls. No activation/state/source changes. Initial Simulator gap and duplicateB21 preserved. Snapshot/connection/request and describe-process handoff sent user-named Guest Tour owner; no stale binding reuse |
 | CORPUS-REVIEW-B20-B22 |same CV2 + CT2 critics|complete; five rasterFAIL, three chains qualified|CV2final01a135fb-dc33-79b3-b673-899a19246fdb +metadata01a13605-aa2a-7131-9d91-378dc0a22f5e; CT2final01a13607-47be-71d0-b905-ee5b3a32f09a. Cast rootSPAN omission confirmed; Native30/30+4/4 detail quantities pass but coloredemoji/overview fail; CW14 source-preserving compaction accepted, raster assignments fail. CT2 read compact registry before full authorreconciliation, not fullyblind. Count ledger197cases/599images; originalA02/B07/C04 uncertainties unchanged |
-| USE-NATIVE-CAPTIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|USER-PAUSED; saved4ac37a7/32c971d, owner idle|[Paused handoff](receipts/consumer-native-captions1.md). Unicode/unique group-caption source checks passed, exactmachine/assignments retained; image/independent acceptance not done. Ready CLI and literalD01 retained under uib-NATIVE-CAPTIONS1-f7r0vndc. No generation started/process/lock/automation or own dirtyfile; resume only on direct user instruction |
+| USE-NATIVE-CAPTIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|explicitly resumed from saved4ac37a7/32c971d|[Saved handoff](receipts/consumer-native-captions1.md). Unicode/unique group-caption checks passed, exactmachine/assignments retained; image/independent acceptance pending. Ready CLI/literalD01 under uib-NATIVE-CAPTIONS1-f7r0vndc. Next one generation on pinned artifacts, then neutral handoff/assessment; no repeated unchanged build/tests |
 | Cast contour user follow-up |same exporter + existing CT2 critic|sourcedcd8de6/receipt23dcab0; CT2 user-requested contour check passed|Verified human turn01a1361a-abc0-7271-a126-8c4aacbcaf60 requested one newraster, no repeated accepted code/data checks. CT2final01a13629-1024-7920-9a4d-6ce160aad219: pointer absent, originaltext/≈175×≈42 preserved, no inventedmeasurements; footer-qualified px minorresidual. Neutral uib-CAST-OUTLINE1-koh_iyws/neutral-index.json SHAd98660d9; one1619×971 repairimage counted, no newprimarycase. CT2 owns/disables its wait; no duplicate rootreview or claim of rerun dualfull-image acceptance |
 | USE-MAC2 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|completed saved-data consumer tasks|Turn01a135a1-ab36-77f0-a6ce-13519a13bcd9: Director AX386×24pt known, layout unknown/not_requested; Reels50-component/3-sheet package prepared. No app/repository changes or images. Repro uib-USE-MAC2-6xt2xa97; brief410855B and missing-reference guidance feedback goes to USE-EXPORT-DOC1; simple measure input usability retained separately |
 | USE-EXPORT-DOC1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source2ed8fee/receipt9fe9f34 accepted by Mac consumer; owner archived|[Receipt](receipts/consumer-export-document1.md). Retry01a135bb-9eb2-7f70-83d0-c175735704ac confirms Reels brief16065B answers original task, source/partial/status/pt/AX distinctions and G01/D01/D02 reference needs clear. Author machine/prompt byte equality and focused bounds/privacy proof retained. Generic D01 sheets.json caption nonblocking; no further cosmetic loop. Retry uib-USE-MAC2-DOC1-retry-s0n74tif, no app/ImageGen run |
@@ -337,8 +349,8 @@ now has197 proved/803remaining after the new qualified wave. Keep app projects u
 is retired, not awaiting authority. Do not require app modifications to continue.
 Existing two critics remain idle for relevant evidence; repeated generic image rounds
 are not the priority. User-approved project owners may integrate the utility themselves;
-root neither directs their app architecture nor modifies their files. User pause now
-overrides this execution sequence; no dispatch until explicit resume.
+root neither directs their app architecture nor modifies their files. Explicit
+post-restart resume restores the recorded finite execution sequence.
 
 
 CW-B18 path refinement: pinned CLI0.1.19 defaults daemon metadata/stderr beneath
