@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B19 completion.
+2026-10-13. CCOUNT1 reconciliation, updated after CW-B20/CN-B22 and CW14 first output.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**194 proved eligible cases; range194–197 pending three named uncertainties.**
-The planning remainder is806 cases, potentially803 if all three are established.
-There are73 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
+**197 proved eligible cases; range197–200 pending three named uncertainties.**
+The planning remainder is803 cases, potentially800 if all three are established.
+There are75 Web and122 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;140 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
+Completed-batch image buckets:521 primary images =517 first outputs +4 rerolls;
 74 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-594 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+599 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -100,7 +100,7 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | Batch | Proved eligible cases/states | Primary images | Limit or exclusion |
 | --- | ---: | ---: | --- |
 | CW-B1 |11|12|CW02 is an unqualified occlusion negative |
-| CW-B2 |9|9|CW14 generation refused; unavailable/invalid candidates excluded |
+| CW-B2 |10|10|CW14 first image qualified through USE-PROMPT-LENGTH1; earlier no-image refusals preserved; unavailable/invalid candidates excluded |
 | CN-B1 |1|2|A12 counted; A02 qualification unresolved; other initial generation gaps |
 | CN-B2 |7|8|B07 partial sidebar qualification unresolved |
 | CN-B3 |8|16|12 configurations include3 documented duplicates;4 rerolls; C04 novelty unresolved |
@@ -136,7 +136,10 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs fail independent reviews |
 | CW-B16 |2|2|Desktop applied Genre tags/Clear/popup and mobile applied chips/Clear;17amounts correct, both first1536×1024 outputs fail independent review; literal inset selection gap feedsCP17 |
 | CW-B17 |2|2|Fixed-width/data desktop height720→480 changes Actor/Genres visible coverage; baselines not cases;44assigned source measurements checked, both first images fail independent review |
-| **Primary subtotal** |**192**|**515**| |
+| CW-B19 |1|1|Qualified mixed Settings state; earlier receipt retained below |
+| CW-B20 |1|1|New live Cast tooltip; canonical handoff works, first image fails; CW14 counted once under CW-B2 |
+| CN-B22 |1|3|New passive Release Guest Tour32AXnodes/24callouts; G01/D01/D02 evaluated, no rerolls |
+| **Primary subtotal** |**196**|**521**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:197 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -838,3 +841,55 @@ after author reconciliation. Weblower rectanglecut is present; CT2withdraws its
 additional glyph-overexposure finding as unsubstantiated. Both fullimages remainFAIL;
 no renderer-success or causal Web improvement claim. Count194eligiblecases,
 74repairimages,594totalimages.
+
+## CW-B20 / CN-B22 / CW14 first-output reconciliation — 2026-10-13
+
+Three source-qualified cases completed generation and evaluation, adding five
+primary first images and zero rerolls. Cast and Guest Tour are new source cases;
+CW14 is the retained CW-B2 source whose earlier attempts produced no image and
+which was explicitly excluded from the previous194. Its first successful raster
+now completes that original case once; it is not a new live state or a repair
+image of an already-counted generated case. CW-B2 increases9→10; two new batches
+CW-B20/CN-B22 increase completed primary batches38→40. CP1/A06 remains the one
+cross-bucket case with its images in repair validation, without double counting.
+
+| Case | Source / exact neutral artifact | First images / result |
+| --- | --- | --- |
+| CW-B20 Cast | `/tmp/uib-cw-b20-qg6pyl7o/neutral-index.json`, live_cases; original7357B ChannelResponse SHA5783653b170dc0353a1e8f308d7b5ab48be97f084bbcdeaf8e48b424b7351b41, helper863dcdb/Rustea06095, exporter2ed8fee |1G01,1774×887; useful live canonical→export chain, rasterFAIL |
+| CN-B22 Guest Tour | `$T/uib-CN-B22-itxeawwb/neutral-index.json`; passive32AXnodes/24callouts, native3840×2100PNG, original inputs retained |3sheets1672×941;36unique dimensions2/30/4, all fullrastersFAIL |
+| CW14 | `$T/uib-PROMPT-LENGTH1-4_p2ad7r/neutral-index.json`, SHA1c4589d4c470bc8d543adebca277000c6da3c94bc6c6ab3d382c2370863fbe5f; original saved215-node source/reference, repaired exporter7b7d454 |1G01,1536×1024; literal31611chars accepted after40197char HTTP400/noimage, rasterFAIL |
+
+CV2 initial01a135f1-d7c5-7b71-acf7-bac63c8cb31b and final
+01a135fb-dc33-79b3-b673-899a19246fdb; CT2 initial
+01a135f1-d905-7540-b49e-1e4884b58ca5 and final
+01a13607-47be-71d0-b905-ee5b3a32f09a qualify all three source chains. CT2 explicitly
+discloses reading the compact task registry before full author reconciliation:
+the procedure is not fully blind; its non-author byte/source/numeric checks are
+listed independently. Native AX/paint/connector distinctions, partial coverage,
+non-atomic capture and unknown transforms remain. No source app was edited.
+
+CW14 original refusal-index path later became revision2 including Cast. Supplemental
+`$T/uib-PROMPT-LENGTH1-4_p2ad7r/provenance-supplement-2026-10-13.json`, SHA
+94b314e8c0e2bb39a9e724c5c472ac64e295e956a6a17ed51178b0b104b8a8b2, preserves exact
+current copy and a verified reconstruction of originalrevision1 whose historical
+SHA da5dcda88fd2468264c9c4bd5fc25fbf5ee1132e30f3fca5f0e16cb09be9ef60 matches.
+It is not a contemporaneously retained copy. Both critics close this linkage gap
+(CT2 metadata01a13605-ac2a-7c51-9134-c81e48c484a7; CV2 metadata
+01a13605-aa2a-7131-9d91-378dc0a22f5e); frozen repairindex and underlying9files/images
+remain unchanged. Historical zero-image refusals are preserved, never image counts.
+
+Source7b7d454 shortening is accepted: all non-prompt files across CW14/Director/Reels
+are byte-identical, notation expands to the same source/state/clip/context/dimension
+assignments; no universal service-size or raster promise. Cast's omitted selected
+root SPAN/known sizes is a separate confirmed preparation defect assigned to
+USE-CAST-DIMENSIONS1. Guest Tour's repeated human captions and literal Unicode
+escapes are queued presentation gaps, not a shortening regression. Raster failures
+remain missing/invented assignments, omitted connectors/focus, AX/artwork conflation
+and forbidden colored icons. Zero new fully accepted images; successful Native detail
+numeric checks do not erase visual failures.
+
+Current total:197qualified cases (75Web+122Native;57fixture+140non-fixture),
+521primary images (517first+4rerolls),74repair-validation and4unqualified images,
+599generated images overall. The original3case uncertainties are unchanged;
+range197–200, conservative remainder803. Retained images and containing directories
+are never agent-cleaned.

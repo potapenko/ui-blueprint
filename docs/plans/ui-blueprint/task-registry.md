@@ -27,7 +27,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-194proved eligible primarycases,806remaining,74validationimages/594totalimages.
+197proved eligible primarycases,803remaining,74validationimages/599totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -61,17 +61,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:194; unresolved upper bound197; conservative remainder806.**
+**Proved eligible case count:197; unresolved upper bound200; conservative remainder803.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Thirty-eight completed primary batches produced516 qualified evaluated images;
+Forty completed primary batches produced521 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their512 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not516 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their517 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not521 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -115,9 +115,12 @@ CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
 CW-B19 adds1qualified mixed Settings state, bringing it to194.
+CW-B20 Cast and CN-B22 Guest Tour add2qualified cases, bringing it to196.
+Previously excluded CW14 now has its first qualified image, bringing it to197;
+it is counted once under CW-B2, not a new live state or repair reroll.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2 images (74 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:594counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:599counted generated images
 overall; unqualified attempts increase neither eligible cases nor the74repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -139,9 +142,10 @@ to UI Blueprint. This communication adds no generated corpus cases.
 | USE-CAST-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|authorized after current provenance handoff|Actualconsumer +CV2final01a135fb-dc33-79b3-b673-899a19246fdb confirm known Cast M0001/M0002 layout174.671875×42.3125 omitted from printable assignments. Diagnose/fix existing useful-dimension selection generically, exactsource/measurements/privacy preserved; focused small-scope/generalization and one literal Cast repair image. No newcase/reroll camouflage, radius invention or newflags. Independent frozen7b7d454 review continues |
 | USE-WEB-EXPORT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source863dcdb accepted; owner archived|[Receipt](receipts/consumer-web-export1.md). CT2 initial01a135e6-f917-7610-905d-a9770c6a19db/final01a135ee-0692-7ed2-92d6-a200fb95342e accepts publication boundary; actual Webconsumer01a135e6-f83d-7263-8635-d7928ac5120a confirms Cast→canonicalJSON→export without adapter. Candidate retained uib-web-export1-h1iqyuk2/candidate. Raster/assignment failures separate from accepted handoff |
 | CW-B20 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal1live case/1first image; two-critic review pending|Cast tooltip original7357B SHA5783653b..., acquisition863dcdb/ea06095, exporter2ed8fee, source partial. Neutral /tmp/uib-cw-b20-qg6pyl7o/neutral-index.json live_cases. Author reports missing prompt assignments and raster invented dimensions/radius; verify independently before repair. Earlier CW14 HTTP400 produced0images and remains separate USE-PROMPT-LENGTH1. No reroll/source-app changes |
-| USE-PROMPT-LENGTH1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source7b7d454/receipt1df136c delivered; same2critics reviewing|[Receipt](receipts/consumer-prompt-length1.md). CW14 literal40197→31611chars accepted by built-in ImageGen; first1536×1024image,0rerolls. Author proves unchanged non-prompt files across CW14/Director/Reels and equivalent context/clip/state notation; source/raster acceptance pending. Neutral uib-PROMPT-LENGTH1-4_p2ad7r/neutral-index.json, CLI4729085d; no new flags/density/input changes |
+| USE-PROMPT-LENGTH1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source7b7d454 accepted; same owner continues Cast repair|[Receipt](receipts/consumer-prompt-length1.md). CT2final01a13607-47be-71d0-b905-ee5b3a32f09a independently confirms exact non-prompt bytes and equivalent notation/content/assignment; author tests reused. Literal40197→31611 accepted by ImageGen, first1536×1024 raster stillFAIL. Provenance supplement94b314e8 resolves mutable priorindex; verified reconstruction disclosed. No universal length/raster claim |
 | CN-B22 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|terminal1new Guest Tour case/3first images; two-critic review pending|Same uib-CN-B22-itxeawwb neutral-index now includes passive Release32AXnodes/24callouts,3840×2100 nativePNG and G01/D01/D02 at1672×941;36Rust-measured dimensions,0rerolls. No activation/state/source changes. Initial Simulator gap and duplicateB21 preserved. Snapshot/connection/request and describe-process handoff sent user-named Guest Tour owner; no stale binding reuse |
-| CORPUS-REVIEW-B20-B22 |same CV2 + CT2 critics|CV2final0/5visual passes; CT2initial still running|CV2initial01a135f1-d7c5-7b71-acf7-bac63c8cb31b/final01a135fb-dc33-79b3-b673-899a19246fdb confirms Cast plan gap/raster inventions, GuestTour missinglinks/AX overlay and coloredemoji, CW14 dropped/collapsed assignments. Cast/GuestTour sourcequalified; CW14 firstimage requires oldindex linkage supplement before ledger acceptance. Originalauthor recovered nested earlierindex with exact oldhash; immutable supplement pending. CT2 source/numeric review remains independent;194proved count unchanged |
+| CORPUS-REVIEW-B20-B22 |same CV2 + CT2 critics|complete; five rasterFAIL, three chains qualified|CV2final01a135fb-dc33-79b3-b673-899a19246fdb +metadata01a13605-aa2a-7131-9d91-378dc0a22f5e; CT2final01a13607-47be-71d0-b905-ee5b3a32f09a. Cast rootSPAN omission confirmed; Native30/30+4/4 detail quantities pass but coloredemoji/overview fail; CW14 source-preserving compaction accepted, raster assignments fail. CT2 read compact registry before full authorreconciliation, not fullyblind. Count ledger197cases/599images; originalA02/B07/C04 uncertainties unchanged |
+| USE-NATIVE-CAPTIONS1 |export owner after USE-CAST-DIMENSIONS1|queued confirmed presentation gap|CT2final identifies same human caption "button, item 1 in its group" for16×16 and228×80 frames in CN-B22 D01, plus literal Unicode escapes. Machine owners remain distinct; not a7b7d454 regression. Future finite caption repair must preserve publictext/source identity and useful human disambiguation; no new implementation dispatch yet |
 | USE-MAC2 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|completed saved-data consumer tasks|Turn01a135a1-ab36-77f0-a6ce-13519a13bcd9: Director AX386×24pt known, layout unknown/not_requested; Reels50-component/3-sheet package prepared. No app/repository changes or images. Repro uib-USE-MAC2-6xt2xa97; brief410855B and missing-reference guidance feedback goes to USE-EXPORT-DOC1; simple measure input usability retained separately |
 | USE-EXPORT-DOC1 |export owner01a12b6a-92a9-73c3-aec2-022e32651008|source2ed8fee/receipt9fe9f34 accepted by Mac consumer; owner archived|[Receipt](receipts/consumer-export-document1.md). Retry01a135bb-9eb2-7f70-83d0-c175735704ac confirms Reels brief16065B answers original task, source/partial/status/pt/AX distinctions and G01/D01/D02 reference needs clear. Author machine/prompt byte equality and focused bounds/privacy proof retained. Generic D01 sheets.json caption nonblocking; no further cosmetic loop. Retry uib-USE-MAC2-DOC1-retry-s0n74tif, no app/ImageGen run |
 | USE-WEB-FIX1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|supporting layer delivered3e143199; reused for bootstrap|[Receipt](receipts/consumer-web-first-use1.md): safehelp/bundledhelper/guide andv1/v2verify/remove; installedF01 proof. URL+component not closed by this layer |
@@ -277,7 +281,7 @@ review also passes; no pending repair/review for these deltas. Reuse these tools
 for broader owner-selected real tasks/source cases under CORPUS-1000, preserving
 scope and avoiding another repetition of the accepted Actor/Director examples.
 Saved-data checks and runtime retries added zero generated primary cases; corpus
-remains194 proved/806remaining. Keep app projects untouched from this project. CN16
+now has197 proved/803remaining after the new qualified wave. Keep app projects untouched from this project. CN16
 is retired, not awaiting authority. Do not require app modifications to continue.
 Existing two critics remain idle for relevant evidence; repeated generic image rounds
 are not the priority. User-approved project owners may integrate the utility themselves;
