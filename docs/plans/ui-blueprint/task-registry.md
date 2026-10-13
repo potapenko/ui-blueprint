@@ -2,6 +2,26 @@
 
 ## Current finite correction — CLI-generated geometry prompt, 2026-10-14
 
+Implementation checkpoint9ef130807e2637fc29ab17722022d870e7fc4733 is pushed.
+The actual CLI produced the selected a04-geometry-prompt.txt verbatim from the
+original80-node A04 observation and unchanged metadata, using the existing
+components_per_detail100 single-sheet limit. The committed example equals that
+output byte-for-byte; the library never reads the example. One ImageGen call used
+that exact prompt alone, without a screenshot or agent additions. First image:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-a04-drawing-mr6wmffq/a04-library-generated-first.png`.
+Its delivery-package remains alongside it for the user; all original images stay.
+The preceding manual reference image is a different artifact and is not attributed
+to the library. No further generation or mass test is dispatched.
+
+Verification:61compiler cases and4new source-mutation/space/privacy/unknown/bound
+cases passed; affected Clippy and CLI build passed. Two stale caption assertions
+were reconciled with the accepted baseline's existing human-ordinal captions;
+numerical and clipping checks remain. First image now shows geometric details and
+measured repetitions; it still includes zero-length arrows, technical captions and
+some missing rounding marks. It is not a perfect/verified engineering drawing.
+The current implementation is accepted as a concrete automatic output for user
+review, not universal fidelity across Web/mixed or multi-sheet inputs.
+
 The user explicitly rejected a manual prompt and directed that the library/CLI
 itself produce the drawing instructions. Immediate execution is authorized by
 «Ну так исправляй промпт… Покажи один результат» and the subsequent explicit
