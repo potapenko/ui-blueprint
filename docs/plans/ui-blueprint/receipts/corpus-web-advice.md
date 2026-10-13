@@ -1,5 +1,37 @@
 # Web source advisor handoffs
 
+## CW11 — one mixed Settings switch state, 2026-10-13
+
+Advisor turn01a1340a-2eb9-7de2-8ad9-ec5ccc7eb98c, c23ef963, source-only.
+Route: Settings → Content Safety behavior/invariants/state-QA. Local preferences
+are not security/age gates. No UI/storage/source changes or completed case.
+
+Candidate: fresh qualified isolated guest, corpusen, empty ClipSearch/query/results/
+viewer/playback → inputSettings. If BOTH17+content rows naturally exist and areOFF,
+enable ONLY Hide explicit nudity. It becomes aria-checkedtrue/is-on with shifted
+thumb while offensive remainsOFF. That meaningful checked-state difference is absent
+from prior defaultSettings; it is not CW60subscriptiondemo or locale text substitution.
+AI-note belongs only to nudity and is ALWAYS visible; don't claim toggle reveals it.
+No select-value change creates new dependent controls/help/disabled sections in the
+inspected Settings. No arbitrary switch combinations/mobile copies/scale variants.
+
+Boolean setter changes app-db and model-storage in that owned isolated context only;
+no direct account/server call. It affects filtering of existing cards and FUTURE
+query flags, not a new query itself. Empty ClipSearch has no content consumer. Normal
+Settings-open analytics/bootstrap remain. If rows absent, exclude without changing
+rating/corpus or hidden state. Target switch by its row title, settle CSS transition,
+capture one final state. Restore nudityOFF and verify botharia-checkedfalse before
+closing Settings and exactbrowser session; closing form alone does not undo preference.
+
+Owners: [switch](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/search/components/settings/view.cljs:320),
+[model](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/settings/model.cljs:34),
+[state CSS](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/search/components/settings/view.cljs:159),
+[consumer](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/content_safety.cljs:39),
+[future request flags](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/rest_api.cljs:1510),
+[entry](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/input/view.cljs:273).
+QA: [nudity note](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-settings-nudity-ai-note-visible-desktop-mobile.md),
+[English offensive row](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-settings-hard-offensive-toggle-visible-only-for-english.md).
+
 ## CW10 — documented isolated browser route, 2026-10-13
 
 Advisor turn01a133ed-34c3-7831-bbf0-32617dfae47a, sourcec23ef963. Read-only
