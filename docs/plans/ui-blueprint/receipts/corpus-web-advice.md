@@ -1,5 +1,32 @@
 # Web source advisor handoffs
 
+## USE-WEB-DIRECTOR2 — real consumer retry succeeds, 2026-10-13
+
+Consumer turn01a135c4-9fed-7fb0-8515-51d5dddfdc4b independently repeated the same
+Director task using helpercfe1111/Rustea06095 in a new owned session. Simple
+URL+component invocation required no manual request JSON or runtime target IDs.
+Rust output supplies popup194.25×144.21875, input177.21875×25.59375 and
+list177.21875×78.28125 CSSpx. From returned coordinates in one observation, the
+consumer established shared left/width for input and three rows,3px row gaps and
+6.015625px input-to-list gap. Those gaps are consumer arithmetic on Rust output,
+not a separately executed engine gap query or additional DOM measurement.
+
+All3 calls retain partial/exit4 from unavailable hit/visible data and non-atomic
+reading; diagnostics now distinguish completed delivery and confirmed worker
+cleanup. Consumer explicitly accepts the original popup/input/list/alignment task.
+Exact commands/output/limitations remain at `/tmp/uib-director3-4lyp_t21/handoff.json`;
+its directory also contains the retained director.png. Never delete that image or
+directory. Draft cleared, no filters applied, own browser closed; repositories
+unchanged. This is real runtime consumer evidence, not a new generated corpuscase.
+
+CT2 initial01a135c4-a0e9-7a61-acd8-63093356c761 finds no actionable changed-boundary
+defect and resolves the original closed-shadow finding through source inspection
+and independent offline candidate probes. Final01a135ca-a729-7a31-b97c-03481d3bcb62
+reconciles author and consumer receipts and accepts within scope without remaining
+actionable discrepancy. No general performance, full visibility or historical-
+failure-cause claim follows. Utility owner archived after completed handoff; current
+candidate remains a retained tool deliverable for project consumers until superseded.
+
 ## USE-WEB1 retry — real Director outcome remains incomplete
 
 Consumer forwarded a direct implementation follow-up after retrying ready

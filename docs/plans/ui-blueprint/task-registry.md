@@ -131,8 +131,8 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 | USE-MAC-COMPARE1 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|plan delivered2dd3701; selected for implementation|[Plan](receipts/consumer-native-comparison1.md): no existing path satisfiespair; separate caller-declared compare/diagnose, strict olddiff preserved |
 | USE-MAC-COMPARE2 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|source14b01d8 + receipt e84c129 accepted; consumer retry passed|[Receipt](receipts/consumer-native-comparison2.md). CT2final01a13517-40b6-7333-85b0-fb7634e8ee4d +Macretry01a13514-4e27-70e2-a8b4-05c0f451e9c6. OriginalActor QA answered, olddiffstrict/source preserved. No app changes |
 | USE-MAC-COMPACT1 |same Coreowner|sourcee3ab912 accepted by sameconsumer; owner archived|[Receipt](receipts/consumer-native-compact1.md); retry01a1353b-94b3-7321-8d6e-4cfb9404c803:11092B readable, allfacts/caveats preserved. JSON-preservation authorproof retained. Metadataheader/largeC remain nonblocking backlog; no further cosmetic round |
-| USE-WEB-BOOTSTRAP1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source0b89da2 delivered; realconsumer task incomplete, review running|[Receipt](receipts/consumer-web-bootstrap1.md). URL+component actualF01/guards/cleanup pass; readybundle uib-web-bootstrap-fnctj0t1/bundle, Rustpin3e995ec/helperhash8c36f936. RealDirector retry partial; CT2final01a1354b-f19b-73f1-9612-45e2cbca8ac3 rejects closed-shadow admission; packagingboundary accepted; repair pending; no app changes |
-| USE-WEB-DIRECTOR2 |same I02utility owner|sourcecfe1111 delivered; same Web consumer and CT2 review dispatched|[Receipt](receipts/consumer-web-director2.md). Candidate uib-director2-serg4v0r/candidate, Rustea06095/helper2508a519; typed diagnostics, measured URL1000ms/128KiB profile, closed-authored-shadow repair. Own widget/negative/cleanup proof only; original Director subcause unrecoverable. Real popup/input/list/alignment retry and changed-boundary review pending; no source-app edits |
+| USE-WEB-BOOTSTRAP1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|historical0b89da2 superseded by accepted DIRECTOR2|[Receipt](receipts/consumer-web-bootstrap1.md). Original first-use path introduced URL+component; its opaque refusals and closed-shadow defect resolved in cfe1111 below. Original evidence/bundle preserved, no retroactive acceptance claim |
+| USE-WEB-DIRECTOR2 |same I02utility owner|sourcecfe1111 accepted; owner archived after handoff|[Receipt](receipts/consumer-web-director2.md). Consumer01a135c4-9fed-7fb0-8515-51d5dddfdc4b solves real popup/input/list/alignment; CT2 initial01a135c4-a0e9-7a61-acd8-63093356c761 and final01a135ca-a729-7a31-b97c-03481d3bcb62 accept changed boundaries. Retain uib-director2-serg4v0r/candidate and /tmp/uib-director3-4lyp_t21 for consumers. All3 results partial/exit4; historical subcause and universal performance remain unknown |
 | USE-OBS-DIAGNOSTICS1 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|sourceea06095 accepted within Core scope; bundle deliveredI02|[Receipt](receipts/consumer-observe-diagnostics1.md). CT2 initial01a1358f-e4ed-7cb3-906e-5716c439b514, final01a1359d-b690-7fe1-976f-767165aa3a28: no defect/discrepancy; independent pinned preflight336B, author guarded-peer/privacy/compatibility proof reconciled. Bundle uib-USE-OBS-DIAGNOSTICS1-6p1rb0a2/web-bundle; CLI67915c39/worker4c633949. Combined helper/profile review and real Director acceptance remain pending |
 | USE-MAC1 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|first trial completed; comparison/onboarding feedback received|Nativebundle3e995ec pass; original Actor pair diff→exit4/context_mismatch from different sessions/Surfaces. Contract violation unproved; explicit comparison workflow and safe diagnostics requested. [Feedback](receipts/corpus-native-advice.md#use-mac1--actual-consumer-comparison-feedback-2026-10-13). No app/project changes |
 | USE-WEB1 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|first trial completed; onboarding feedback received|Build/verify3e995ec Web bundle pass; first observe blocked by manual target/connection setup, helper absent frombundle/--help invalid_arguments. [Feedback](receipts/corpus-web-advice.md#use-web1--actual-consumer-first-use-feedback-2026-10-13). No app changes/live-collector proof; utility first-use repair next |
@@ -254,13 +254,13 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 ### Current contracts and protected boundaries
 
-Current next action: Native compare and compact presentation e3ab912 are accepted
-by their actual consumer. Core Observe diagnostics ea06095 now has scoped CT2
-acceptance; reuse that evidence in the combined Web repair. Web URL+component
-code0b89da2 measured input but failed popup/list. USE-WEB-DIRECTOR2 sourcecfe1111
-now integrates diagnostics, measured WEB-FIRST-USE@3 profile and closed-shadow repair;
-same Web consumer real retry and CT2 changed-boundary review run in parallel. Native
-compact is accepted, no repeated image-generation or cosmetic loop. Keep app projects untouched and return actual utility results. CN16
+Current next action: Native compare/compact, readable export2ed8fee and Web
+URL+component cfe1111 are accepted by their actual consumers. Web's scoped CT2
+review also passes; no pending repair/review for these deltas. Reuse these tools
+for broader owner-selected real tasks/source cases under CORPUS-1000, preserving
+scope and avoiding another repetition of the accepted Actor/Director examples.
+Saved-data checks and runtime retries added zero generated primary cases; corpus
+remains194 proved/806remaining. Keep app projects untouched from this project. CN16
 is retired, not awaiting authority. Do not require app modifications to continue.
 Existing two critics remain idle for relevant evidence; repeated generic image rounds
 are not the priority. User-approved project owners may integrate the utility themselves;
