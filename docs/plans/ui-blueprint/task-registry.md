@@ -2,6 +2,17 @@
 
 ## Current finite task — skill-led blueprint, 2026-10-14
 
+Skill checkpoint8f15987ffb28c57e30acf170802736feeeca6255 is pushed and validated.
+Fresh project chat01a1378d-650c-74b1-aded-f140cbc43045 (local),
+«Проверить blueprint skill с чистого контекста», owns one complete installation
+and saved-source drawing task. The packet includes only raw observation/metadata
+in `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-skill-cold1-neddehtc/inputs`,
+the exact source pin, installation recipe and operational boundaries. It excludes
+other chats, docs/plans, prior prompts/images/assessments and expected dimensions.
+Installed skill/prefix and all deliverables are inside that system-temp root.
+No global skill/config replacement. Root waits for one terminal result, then
+checks the actual drawing; no interim micro-tasks or second generation authorized.
+
 The user explicitly selects a new primary strategy: retain literal CLI prompts,
 but teach a fresh agent how to compose a useful drawing assignment from library
 facts. User also explicitly requests a new chat per test iteration, installing
