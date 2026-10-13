@@ -90,10 +90,10 @@ CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
 CW-B19 adds1qualified mixed Settings state, bringing it to194.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3 images (72 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2 images (74 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:592counted generated images
-overall; unqualified attempts increase neither eligible cases nor the72repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:594counted generated images
+overall; unqualified attempts increase neither eligible cases nor the74repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -121,7 +121,7 @@ overall; unqualified attempts increase neither eligible cases nor the72repair-va
 | CE2 |CE1 owner01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|completed; no new defects|[Receipt](receipts/corpus-analysis-wave2.md),862b76d.11snapshots/7families/76measurements/47requests;3expected refusal cases. Original449nodes/geometry/state/no-request compatibility preserved; zero newcases/images. No extra tests or repair required |
 | CMATH1 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|complete; math/source accepted, all4imagesFAIL|[Receipt](receipts/corpus-math-visual1.md),810d65f.31operands/17requests independently checked; Web12/12core math, Native0/5. Focus/state/clip/assignment defects separate; no compilerbug.4validationimages/0newcases |
 | CMATH2 |same exporter owner|complete; source/math ownership pass,3fullimagesFAIL|[Receipt](receipts/corpus-math-visual2.md),adba063. G01math4/4/details0, dimensions4/16/0. Bothcritics confirm D02Draw/visible-only conflict→CP20. NativeAX/art/state/coverage raster failures retained;3validationimages/0newcases |
-| CP20 |same exporter owner|fragment-scope repair dispatched|Restore unambiguous D02artwork eligibility without guessing visibility or pruning machine records. Existing export prep/tests+corpus-fragment-scope20.md. NativeD02/WebB17-G first validations only; all source/math/sheet facts protected |
+| CP20 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source3e995ec accepted;2imagesFAIL|[Receipt](receipts/corpus-fragment-scope20.md),e9b1a20. Source-members/visibility conflict closed; onlyD02wording changed, all data/ownership/math preserved. Native stilldraws excluded content; Webselection/focus/gap fail; extra glyph complaint withdrawn |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
 | CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
@@ -212,22 +212,23 @@ overall; unqualified attempts increase neither eligible cases nor the72repair-va
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CMATH2 reconciled; idle retained|Final01a13484-ec4e-7773-85a3-32ca47f3d754:4mathG01/0details, all3fullFAIL; precise D02scope conflict retained |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CMATH2 reconciled; idle retained|Final01a13486-f05d-7060-8649-0662a67c7fba: source/math and unique20dimension ownership pass; D02literal-scope reconciliation required |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP20 reconciled; idle retained|Final01a13496-4535-7cc2-9c07-eab46bb48528: literal conflict closed, bothimagesFAIL; Weblowercut accepted |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP20 reconciled; idle retained|Final01a13498-1db5-7c03-8e09-fa40f94d8cdd: boundedsource accepted, all data preserved; unsubstantiated Webglyph finding withdrawn; bothimagesFAIL |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
 
-After CP19 no implementation/review remained; CE2 has completed mathematical analysis on the expanded saved corpus; CMATH1
-completed four single-sheet mathematical images; CMATH2 completed the split-sheet
-Native math path and exposed a concrete fragment-scope contradiction, now CP20. CN16's complete
-Mac source-isolation proposal still awaits explicit human approval; re-presented
-2026-10-13 after confirmed source-storage risk. Automatic goal continuations are not
-that approval. No OS-process contention blocks the accepted CP18/19 outcomes; CN8
-archive still reports active writer and is an unrelated host metadata limitation.
-Continue CP20 independently and CN16 on approval or another qualified authorized source; do not fill
-case counts with repeated renders or silently modify the source app. Goal active,
-194proved cases,806remainder; this is not completion or a user pause.
+Current next dependency after CP20: CE2 and both mathematical visual paths are
+complete; the resulting D02literal conflict is repaired and independently accepted.
+No implementation/review worker remains running. Existing two critics/advisors are
+retained, completed exporter and CE2worker archived. CN16's complete Mac source-
+isolation proposal awaits explicit human approval, re-presented2026-10-13. Automatic
+goal continuations are not that approval. No new generic wording or unchanged-test
+round is queued merely to occupy a slot. No OS-process contention prevents progress;
+CN8 archive's active-writer error is an unrelated host metadata limitation.
+Continue CN16 on approval or another actually qualified authorized source. Do not
+inflate cases with replays or silently modify source apps. Goal active/incomplete:
+194proved primarycases,806remainder;74separate validationimages/594totalimages.
 
 
 CW-B18 path refinement: pinned CLI0.1.19 defaults daemon metadata/stderr beneath
@@ -243,7 +244,7 @@ DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance remains through CR3. CA8f26e121 adds explicit static text,
 now accepted through CR4; existing completed batches keep their original pins.
-Current accepted exporter presentation baseline isda306a2; source/prompt protection
+Current accepted exporter presentation baseline is3e995ec; source/prompt protection
 is bounded accepted. Individual image verdicts remain pinned to their actual sources,
 not full corpus or universal raster quality.
 Root owns this registry,

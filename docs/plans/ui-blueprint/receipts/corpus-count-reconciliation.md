@@ -13,9 +13,9 @@ fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
-72 separate repair-validation images;4 unqualified reference attempts
+74 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-592 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+594 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -813,3 +813,28 @@ failure solely to renderer or assert a clipping algorithm bug. CT2final
 01a13486-f05d-7060-8649-0662a67c7fba confirms the source-fragment preparation conflict
 after author reconciliation. CP20 restores literal scope consistency; source/math
 preservation remains accepted. Totals194eligible primarycases,72validationimages,592counted images.
+
+## CP20 — source-fragment scope contradiction repaired, 2026-10-13
+
+Source3e995ec5ab4fbf9160c6fc45e12c72fb32e5c0ed, receipte9b1a20;
+[repair receipt](corpus-fragment-scope20.md). Two first repairimages, NativeD02
+1672×940 and WebCW-B17-G1536×1024; zero newprimarycases/rerolls. Neutralindex
+`$T/uib-CP20-nl4f8dwt/neutral-index.json`, SHA
+01f8f7ea7aabd3094ba7037518b2b9c441a20f112cca599dbcfba06cda724f76.
+Six direct wording changes remove Draw-all/source-scope-as-context contradictions;
+source members remain eligibility candidates subject to existing visibility/cuts.
+OnlyNativeprompt-D02changes; source50nodes/member20records/dimensions20/sheetownership
+4/16/0/G01math4notes and G01/D01/fullprompt/machinefiles exact. Webpackage unchanged;
+its qualified fullsourcePNG used, wrong-origin referencePNG remains excluded.
+Seven focused checks/build/fmt reported; no newalgorithm/visibilityparser/mapping.
+
+CV2final01a13496-4535-7cc2-9c07-eab46bb48528 and CT2initial01a13493-c319-7520-8b50-3cbfef654479
+accept specific prompt-scope consistency; both images stillFAIL. Native stilldraws
+hidden/completed rows and excluded toolbar/Search parents/siblings; white scrollbar
+thumb retained as visualfailure. Web loses Action/overviewfocus, repeats≈5 and
+flattens popup/trigger width; nineassigned amounts/≈8/emptyfull-layout frame survive.
+CT2final01a13498-1db5-7c03-8e09-fa40f94d8cdd accepts bounded source/prompt repair
+after author reconciliation. Weblower rectanglecut is present; CT2withdraws its
+additional glyph-overexposure finding as unsubstantiated. Both fullimages remainFAIL;
+no renderer-success or causal Web improvement claim. Count194eligiblecases,
+74repairimages,594totalimages.
