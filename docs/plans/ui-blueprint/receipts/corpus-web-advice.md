@@ -1,5 +1,51 @@
 # Web source advisor handoffs
 
+## CW6 — two remaining Reels Search states, 2026-10-13
+
+Advisor turn01a132a2-795b-7df2-8751-a58bb36e6537, source-only,
+c23ef963e5be87195f80cef7173d537a5a146c74/new-banners-paywall. Selected route:
+site specs root → Discovery/Playback → Reels Discovery → behavior,
+invariants-and-failure, route-state-data-qa-and-references. Contract supplies
+fresh search input/public suggestions; local draft/callback behavior is observed
+source evidence; the following two candidates are QA proposals, not new intent.
+
+Own guest `http://localhost:3000/#/reels/en?source=common-phrases`, pause public
+auto-started playback if needed, open `button[aria-label="Search phrase."]`,
+fill `.reels-search-input` with exact public draft `hello` or `zzqxzzqx` in a
+separate own tab for each state. R1 requires successful positive count and
+nonempty suggestions: custom-query card plus Common Phrase rows/subtitles/counts.
+R2 requires successful count0 and suggestions[]: disabled custom card/submit plus
+no-suggestions message. Both differ from the already captured initially empty
+panel. Runtime data, row count, overflow and uniqueness require fresh verification.
+Transport failures cannot qualify as empty; actual duplicates are excluded.
+
+Local atoms own input/options/count/loading. Each onChange, without debounce,
+starts count then suggestions; request-id guards late results. Wait both completed
+responses and stable output. No Enter/Submit/custom card/suggestion selection:
+those apply feed/query and analytics/source-query persistence. Check unchanged
+URL/source and no login/paywall; close whole exact own tab after capture.
+Count may create browser-search-session-id in sessionStorage if absent; this is
+ordinary service bootstrap, not evidence of zero writes or origin isolation.
+Do not manually create/read out the identifier. A strict no-new-storage route
+requires it to exist from ordinary bootstrap. login-md opens login on401/403;
+exclude that outcome without bypass. Closing a tab does not revoke requests or
+erase server logs/cache. No translate-to is supplied by this lookup.
+
+Owners: [search component](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/search/view.cljs:179),
+[REST](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/rest_api.cljs:1171),
+[suggestion response](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/clj/playphraseme/common/common_phrases.clj:295),
+[apply handler](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/view.cljs:1650).
+QA: [empty input](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-search-panel-empty-focused-input.md),
+[suggestion lookup](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/cases/regression/tc-reels-search-suggestion-opens-common-phrases.md)
+without its selection step.
+
+No additional safe family was established from the prior catalog. Actor ready is
+owned by CW-B11; previous Director/mobile/Terms/demo variants are covered. Existing
+gated/unavailable/non-novel CW candidates retain those dispositions. Shortcuts has
+code but no current visible menu entry; do not invoke it from console. Account,
+Favorites/export, filter application and preferences remain outside this packet.
+No runtime, changes, captures or new counted cases came from the consultation.
+
 ## CW5 — Actor in a disposable own tab, 2026-10-13
 
 Advisor turn01a13263-dd27-78f0-a156-3b5ecb6379ff, c23ef963/new-banners-paywall,
