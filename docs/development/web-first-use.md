@@ -136,6 +136,19 @@ package does not mean an image was generated, checked or accepted. The caller ow
 the saved non-image files through their declared review/retention period. Legacy
 exact-ID mode does not accept this flag; its existing behavior is unchanged.
 
+## CSSOM and IntersectionObserver disagreement
+
+If initial and callback CSSOM rectangles match exactly but IntersectionObserver
+reports different target bounds, layout remains the exact CSSOM measurement.
+Requested visible_region and the three existing IO facts are unknown with reason
+`intersection-bounds-disagree-with-layout`; nothing is rounded or snapped to IO.
+Hit samples retain their own attribution. The observation remains partial and
+sequential/non-atomic, and every identity/viewport/cleanup check still applies.
+If the two CSSOM rectangles differ, collection still refuses with resync/code1.
+These code1 semantics apply to diagnostics contract@3 and its producer revision;
+older@2 records meant any rect-triple disagreement. Keep the producer pin with
+saved diagnostics. A partial response is not full visibility or paint evidence.
+
 ## Limits and outcomes
 
 Preparation:10s overall,2s per CDP call,32 calls,128 targets,64KiB per text reply,

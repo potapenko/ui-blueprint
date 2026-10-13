@@ -4037,7 +4037,10 @@ fn popup_geometry_peer(mode: u8) -> Fixture {
             3 => read["result"]["value"]["clip"]["current"]["x"] = json!(41),
             4 => read["result"]["value"]["clip"]["rect"]["width"] = json!(-1),
             5 => read["result"]["value"]["hit"]["x"] = json!("private"),
-            6 => read["result"]["value"]["clip"]["bounds"]["width"] = json!(121),
+            6 => {
+                read["result"]["value"]["clip"]["bounds"]["width"] = json!(121);
+                read["result"]["value"]["clip"]["current"]["width"] = json!(121);
+            }
             _ => (),
         }
         Some(read)
@@ -4239,6 +4242,187 @@ fn component_declarations_preserve_distinct_sources_and_refuse_incomplete_or_pri
                 assert!(s.components.is_empty());
             }
         }
+        drop(c);
+        fixture.finish();
+    }
+}
+
+// Numeric values are the supplied private API sample, not a canonical app Snapshot.
+fn rect_disagreement_peer(mode: u8) -> Fixture {
+    let mut reads = 0;
+    let mut frames = 0;
+    Fixture::new(move |method, command, _| {
+        if method == "Runtime.releaseObjectGroup" && mode == 11 {
+            return Some(json!({"error":{"code":-32000,"message":CANARY}}));
+        }
+        if method == "Page.getFrameTree" {
+            frames += 1;
+            if mode == 10 && frames == 4 {
+                return Some(json!({"frameTree":{"frame":{"id":"frame","loaderId":"changed"}}}));
+            }
+        }
+        if method != "Runtime.callFunctionOn"
+            || !command["params"]["functionDeclaration"]
+                .as_str()
+                .is_some_and(|f| f.starts_with("function readNode("))
+        {
+            return None;
+        }
+        reads += 1;
+        let a = json!({"x":19.9375,"y":95.84375,"width":8.28125,"height":26.96875});
+        let mut b = json!({"x":20,"y":96,"width":8.28125,"height":26.96875});
+        let mut c = a.clone();
+        match mode {
+            1 => b = a.clone(),
+            2 => {
+                b = a.clone();
+                c["x"] = json!(21);
+            }
+            3 => c = b.clone(),
+            4 => c["x"] = json!(21),
+            6 => b["width"] = json!(-1),
+            _ => {}
+        }
+        let mut before = json!({"scrollX":0,"scrollY":0,"width":1280,"height":900,"dpr":2,"scale":1,"offsetLeft":0,"offsetTop":0,"pageLeft":0,"pageTop":0,"visualWidth":1280,"visualHeight":900});
+        if (mode == 8 && reads == 2) || (mode == 9 && reads == 3) {
+            before["scrollY"] = json!(1);
+            before["pageTop"] = json!(1);
+        }
+        let mut after = before.clone();
+        if mode == 7 {
+            after["scrollY"] = json!(1);
+            after["pageTop"] = json!(1);
+        }
+        let mut rect = a.clone();
+        rect["viewport"] = json!({"before":before,"after":after});
+        // The final viewport bracket requests layout only and has no IO observation.
+        let final_read = command["params"]["arguments"][0]["value"]["remainingMs"] == 0;
+        Some(
+            json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"tag":"SPAN","sensitive":false,"rect":rect,
+            "hit":{"x":24.078125,"y":109.328125,"matches":true},
+            "clip":if final_read { Json::Null } else { json!({"rect":b,"bounds":b,"current":c,"intersects":true,"ratio":if mode==5{2}else{1}}) },"value":CANARY}}}),
+        )
+    })
+}
+#[test]
+fn rect_disagreement_preserves_layout_fields_hit_evidence_and_unknown_io() {
+    for mode in [0, 1] {
+        let fixture = rect_disagreement_peer(mode);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::LayoutBounds, Field::HitRegion, Field::VisibleRegion];
+        let (_, docs) = collect(&mut c, &r, &scope(&[11, 12]));
+        let s = snapshot(&docs[0]);
+        validation::validate_snapshot(s).unwrap();
+        assert_eq!(s.nodes.len(), 2);
+        assert_eq!(s.context.fields, r.context.fields);
+        assert_eq!(s.coverage.status, CoverageStatus::Partial);
+        assert_eq!(s.coverage.unknown_count, Some(2));
+        assert!(
+            s.observations
+                .iter()
+                .all(|o| o.consistency == Consistency::Unknown
+                    && o.consistency_reason == Some(id("sequential-reads-not-atomic")))
+        );
+        for n in &s.nodes {
+            assert_eq!(
+                n.properties.iter().map(Property::field).collect::<Vec<_>>(),
+                r.context.fields
+            );
+            let Value::Geometry(layout) = known(n, Field::LayoutBounds) else {
+                panic!("layout")
+            };
+            assert_eq!(
+                layout.shape,
+                Shape::Rect(Rect {
+                    x: 19.9375,
+                    y: 95.84375,
+                    width: 8.28125,
+                    height: 26.96875
+                })
+            );
+            assert_eq!(layout.coordinate_space.units, Unit::CssPx);
+            assert!(matches!(layout.transform, TransformState::Known { .. }));
+            assert!(matches!(known(n, Field::HitRegion), Value::Geometry(_)));
+            let reason = if mode == 0 {
+                "intersection-bounds-disagree-with-layout"
+            } else {
+                "intersection-clipping-is-not-occlusion-or-paint"
+            };
+            assert!(
+                matches!(&n.properties[2],Property::Requested{state:Availability::Unknown{reason:r},..} if r==&id(reason))
+            );
+            assert_eq!(n.extensions.len(), 5);
+            for (extension, name) in n.extensions[2..].iter().zip([
+                "intersection_rect_not_occlusion",
+                "intersection_ratio_not_visibility",
+                "is_intersecting_not_visible",
+            ]) {
+                assert_eq!(extension.name, id(name));
+                let Property::Requested {
+                    state, evidence, ..
+                } = &extension.property
+                else {
+                    panic!("requested IO")
+                };
+                assert_eq!(evidence.provenance, Provenance::Reported);
+                assert_eq!(evidence.source_namespace, id("web.dom"));
+                assert_eq!(
+                    evidence.method,
+                    id("intersection-observer-single-target-zero-margin")
+                );
+                assert_eq!(evidence.observation_id, s.observations[0].id);
+                if mode == 0 {
+                    assert_eq!(*state, Availability::Unknown { reason: id(reason) });
+                } else {
+                    assert!(matches!(state, Availability::Known { .. }));
+                }
+            }
+        }
+        assert!(!serde_json::to_string(&docs[0]).unwrap().contains(CANARY));
+        c.detach();
+        drop(c);
+        fixture.finish();
+    }
+}
+#[test]
+fn rect_disagreement_does_not_bypass_temporal_malformed_viewport_identity_or_cleanup_guards() {
+    for mode in 2..=11 {
+        let fixture = rect_disagreement_peer(mode);
+        let mut c = fixture.attach(limits());
+        let mut r = request();
+        r.context.fields = vec![Field::LayoutBounds, Field::HitRegion, Field::VisibleRegion];
+        let error = c
+            .observe(&r, &scope(&[11, 12]), 41, op().deadline, |_| {
+                panic!("must not publish")
+            })
+            .unwrap_err();
+        let (kind, site) = match mode {
+            2..=4 => (
+                ErrorKind::ResyncRequired,
+                Some(collector::ResyncSite::RectTriple),
+            ),
+            5 | 6 => (ErrorKind::Malformed, None),
+            7 => (
+                ErrorKind::ResyncRequired,
+                Some(collector::ResyncSite::NodeViewport),
+            ),
+            8 => (
+                ErrorKind::ResyncRequired,
+                Some(collector::ResyncSite::CrossNodeViewport),
+            ),
+            9 => (
+                ErrorKind::ResyncRequired,
+                Some(collector::ResyncSite::FinalViewport),
+            ),
+            10 => (ErrorKind::StaleTarget, None),
+            11 => (ErrorKind::CleanupUnconfirmed, None),
+            _ => unreachable!(),
+        };
+        assert_eq!(error.kind, kind, "mode {mode}");
+        assert_eq!(error.resync_site, site, "mode {mode}");
+        assert!(!format!("{error:?}").contains(CANARY));
+        c.detach();
         drop(c);
         fixture.finish();
     }

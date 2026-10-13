@@ -127,6 +127,13 @@ pub(crate) fn dom(
     observation: &Observation,
     cap: usize,
 ) -> Node {
+    let io_disagrees = read
+        .clip
+        .as_ref()
+        .zip(read.rect.as_ref())
+        .is_some_and(|(clip, rect)| {
+            clip.bounds.values() != [rect.x, rect.y, rect.width, rect.height]
+        });
     let properties = context
         .fields
         .iter()
@@ -172,7 +179,11 @@ pub(crate) fn dom(
                             unknown("single-hit-sample-does-not-establish-hit-region")
                         }),
                     Field::VisibleRegion => {
-                        unknown("intersection-clipping-is-not-occlusion-or-paint")
+                        if io_disagrees {
+                            unknown("intersection-bounds-disagree-with-layout")
+                        } else {
+                            unknown("intersection-clipping-is-not-occlusion-or-paint")
+                        }
                     }
                     Field::Value
                         if read.tag.as_deref() == Some("OUTPUT") && read.value.is_none() =>
@@ -283,24 +294,43 @@ fn geometry_facts(
     if context.fields.contains(&Field::VisibleRegion)
         && let Some(clip) = &read.clip
     {
-        add(
-            "intersection_rect_not_occlusion",
-            Field::VisibleRegion,
-            web_geometry(FrameKind::VisibleRegion, clip.rect.values(), context),
-            "intersection-observer-single-target-zero-margin",
-        );
-        add(
-            "intersection_ratio_not_visibility",
-            Field::Value,
-            Value::Number(clip.ratio),
-            "intersection-observer-single-target-zero-margin",
-        );
-        add(
-            "is_intersecting_not_visible",
-            Field::Value,
-            Value::Flag(clip.intersects),
-            "intersection-observer-single-target-zero-margin",
-        );
+        let agrees = read
+            .rect
+            .as_ref()
+            .is_some_and(|rect| clip.bounds.values() == [rect.x, rect.y, rect.width, rect.height]);
+        for (name, field, value) in [
+            (
+                "intersection_rect_not_occlusion",
+                Field::VisibleRegion,
+                web_geometry(FrameKind::VisibleRegion, clip.rect.values(), context),
+            ),
+            (
+                "intersection_ratio_not_visibility",
+                Field::Value,
+                Value::Number(clip.ratio),
+            ),
+            (
+                "is_intersecting_not_visible",
+                Field::Value,
+                Value::Flag(clip.intersects),
+            ),
+        ] {
+            result.push(ExtensionProperty {
+                namespace: id("web.dom"),
+                name: id(name),
+                property: property(
+                    field,
+                    false,
+                    observation,
+                    "intersection-observer-single-target-zero-margin",
+                    if agrees {
+                        known(value)
+                    } else {
+                        unknown("intersection-bounds-disagree-with-layout")
+                    },
+                ),
+            });
+        }
     }
     result
 }

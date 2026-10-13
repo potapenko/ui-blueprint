@@ -1214,7 +1214,7 @@ fn resync_sites_cross_real_worker_host_cli_without_source_output() {
     fs::create_dir(&dir).unwrap();
     fs::set_permissions(&dir, fs::Permissions::from_mode(0o700)).unwrap();
     let run = std::panic::catch_unwind(|| {
-        for mode in 0..=4 {
+        for mode in 0..=5 {
             for structured in [true, false] {
                 let listener = TcpListener::bind("127.0.0.1:0").unwrap();
                 listener.set_nonblocking(true).unwrap();
@@ -1292,14 +1292,23 @@ fn resync_sites_cross_real_worker_host_cli_without_source_output() {
                                     after["scrollY"] = json!(1);
                                     after["pageTop"] = json!(1);
                                 }
-                                let bounds = json!({"x":40,"y":60,"width":120,"height":40});
+                                let bounds = if mode == 5 {
+                                    json!({"x":19.9375,"y":95.84375,"width":8.28125,"height":26.96875})
+                                } else {
+                                    json!({"x":40,"y":60,"width":120,"height":40})
+                                };
+                                let mut io_bounds = bounds.clone();
+                                if mode == 5 {
+                                    io_bounds["x"] = json!(20);
+                                    io_bounds["y"] = json!(96);
+                                }
                                 let mut current = bounds.clone();
                                 if mode == 1 {
                                     current["x"] = json!(41);
                                 }
                                 let mut rect = bounds.clone();
                                 rect["viewport"] = json!({"before":facts,"after":after});
-                                json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"tag":"INPUT","sensitive":false,"rect":rect,"clip":{"rect":bounds,"bounds":bounds,"current":current,"intersects":true,"ratio":1},"value":"PRIVATE_RESYNC_CANARY"}}})
+                                json!({"result":{"type":"object","value":{"connected":true,"sameDocument":true,"tag":"INPUT","sensitive":false,"rect":rect,"clip":{"rect":io_bounds,"bounds":io_bounds,"current":current,"intersects":true,"ratio":1},"value":"PRIVATE_RESYNC_CANARY"}}})
                             }
                             _ => panic!("unexpected method; no raw payload"),
                         };
@@ -1405,9 +1414,36 @@ fn resync_sites_cross_real_worker_host_cli_without_source_output() {
                 assert!(stdout.len() <= 131072 && stderr.len() <= 4096);
                 assert!(!stdout.windows(21).any(|v| v == b"PRIVATE_RESYNC_CANARY"));
                 assert!(!String::from_utf8_lossy(&stderr).contains("PRIVATE_RESYNC_CANARY"));
-                if mode == 0 {
+                if mode == 0 || mode == 5 {
                     let doc = Document::from_json(&stdout, 131072).unwrap();
-                    assert!(matches!(doc.artifact, Artifact::ChannelResponse(_)));
+                    let Artifact::ChannelResponse(response) = doc.artifact else {
+                        panic!("response")
+                    };
+                    let ChannelResult::Observed(snapshot) = response.result else {
+                        panic!("observed")
+                    };
+                    assert_eq!(snapshot.nodes.len(), 2);
+                    assert_eq!(snapshot.coverage.status, CoverageStatus::Partial);
+                    if mode == 5 {
+                        let node = &snapshot.nodes[0];
+                        let Value::Geometry(layout) = node.properties[0].known().unwrap() else {
+                            panic!("layout")
+                        };
+                        assert_eq!(
+                            layout.shape,
+                            Shape::Rect(Rect {
+                                x: 19.9375,
+                                y: 95.84375,
+                                width: 8.28125,
+                                height: 26.96875
+                            })
+                        );
+                        assert!(
+                            matches!(&node.properties[2],Property::Requested{state:Availability::Unknown{reason},..} if reason.0=="intersection-bounds-disagree-with-layout")
+                        );
+                        assert_eq!(node.extensions.len(), 3);
+                        assert!(node.extensions.iter().all(|e|matches!(&e.property,Property::Requested{state:Availability::Unknown{reason},..} if reason.0=="intersection-bounds-disagree-with-layout")));
+                    }
                 } else {
                     assert!(stdout.is_empty(), "failed guard cannot publish");
                 }
@@ -1415,7 +1451,7 @@ fn resync_sites_cross_real_worker_host_cli_without_source_output() {
                     let d: Value = serde_json::from_slice(&stderr).unwrap();
                     assert_eq!(d["worker_cleanup"], "confirmed");
                     assert_eq!(d["exit_code"], 4);
-                    if mode != 0 {
+                    if mode != 0 && mode != 5 {
                         assert_eq!(d["terminal_error"], "resync_required");
                         assert_eq!(d["committed_channels"], 0);
                         assert_eq!(d["missing_channels"], 1);
@@ -1428,7 +1464,7 @@ fn resync_sites_cross_real_worker_host_cli_without_source_output() {
                 } else {
                     assert_eq!(
                         stderr,
-                        if mode == 0 {
+                        if mode == 0 || mode == 5 {
                             b"observe_incomplete\n".as_slice()
                         } else {
                             b"observe_unavailable\n".as_slice()

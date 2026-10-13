@@ -631,9 +631,9 @@ pub(super) fn validate_dom(
             .rect
             .as_ref()
             .ok_or(Failure::new(ErrorKind::Malformed))?;
-        if clip.bounds.values() != [rect.x, rect.y, rect.width, rect.height]
-            || clip.current.values() != clip.bounds.values()
-        {
+        // CSSOM endpoints must agree exactly. An incompatible IO frame is
+        // qualified per property by normalization, never substituted for layout.
+        if clip.current.values() != [rect.x, rect.y, rect.width, rect.height] {
             return Err(Failure::resync(ResyncSite::RectTriple));
         }
     }
