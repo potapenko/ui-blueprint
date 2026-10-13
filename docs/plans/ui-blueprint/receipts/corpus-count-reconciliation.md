@@ -6,16 +6,16 @@ No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**204 proved eligible cases; range204–207 pending three named uncertainties.**
-The planning remainder is796 cases, potentially793 if all three are established.
-There are81 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;147 are non-fixture observations. Fixture UI is
+**205 proved eligible cases; range205–208 pending three named uncertainties.**
+The planning remainder is795 cases, potentially792 if all three are established.
+There are82 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;148 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:533 primary images =529 first outputs +4 rerolls;
-80 separate repair-validation images;4 unqualified reference attempts
+Completed-batch image buckets:534 primary images =530 first outputs +4 rerolls;
+81 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-617 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+619 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -142,7 +142,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CW-B21 |3|3|Distinct empty sign-in/register/recovery subforms; source-qualified first images, all fullrasterFAIL; providerchooser excluded |
 | CW-B22 |1|1|First collapsedFilters canonical→package→image after RECT2; previous refusals and PrivacyPolicy produce0cases/images |
 | CW-B23 |2|4|Provider choices and mode-tabs distinct from earlier form bodies;4firstsheets evaluated,0fullpass |
-| **Primary subtotal** |**203**|**533**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:204 total cases |
+| CW-B24 |1|1|Five-item AcceptableUse component below earlierTermsviewport; firstimage evaluated, fullFAIL |
+| **Primary subtotal** |**204**|**534**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:205 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1133,3 +1134,35 @@ measurements authorized. Twoqualifiedprimarycases+fourprimaryimages+one repairim
 204cases(81Web+123Native;57fixture+147nonfixture),43primarybatches,
 533primaryimages(529first+4rerolls),80repairimages,4unqualifiedimages=617total.
 Remainder796, original3uncertainties unchanged. No newfullimageapproval.
+
+## CW-B24 and repeated-control gap repair — final reconciliation
+
+Primary `/tmp/uib-b24-us0x8w8a/neutral-index.json`: actualfive-itemAcceptableUseUL,
+source768×153.5625CSSpx, firstPNG1774×887. ActualCW49/CW62reference comparisons
+establish this content outsideearlierTermsviews, not a secondwholepagecase. Source/
+ref/prompt/imagequalified, nativeDPR2crop retainsoutsidebulletcontext without new
+measuredinset. All5sentences/wrappedthirditem and768/≈154labels pass; fullrasterFAIL
+because textoccupiesrequired separateemptyLayoutBounds sketch. No compilerdefect
+established from this rendererfailure. No newapp/sourcechanges or rerolls.
+
+Repairsource9a3308be1864dd1de531c07cfdcb7be9fbd1e954, receipt5dd03b2;
+[receipt](consumer-repeated-gaps1.md), neutral
+`$T/uib-REPEATED-GAPS1-7_9gd6d_/neutral-index.json`, SHA
+28d3929a7438025e1efb41a7a46f5e13ee36c01741c84f40eedb82af62b72956.
+One1536×1024D01repairimage, zero newcases. Sourcefix accepted: existingpositive
+M0055gap6.015625 fromN001.bottom→N005.top gains exactlyoneD01owner. Sameknownrole/
+frame/Space/Surface/contextguard, no newgeometry/parent/semanticgroup/padding.
+Machinequantities preserved; manifest changes assignmentonly. No repeats of
+alreadyfixedprincipalframes. All7assignedlabels pass; fullrasterFAIL from extra
+unassigned secondbutton≈347×≈41pair. Correctsourcevalues don't authorize extra
+printeddimensions. Emptyframes/units/≈/callerfocus/disabled sourceattribution retained.
+
+CV2initialCW2401a136a8-e9ac-74d0-a5ca-cf20ced65842, gapinitial
+01a136aa-f3ac-74a1-8ea6-0cec8ada0ec4, final01a136ac-b3f2-7c40-93b0-c27d788c54f8;
+CT2gapinitial01a136aa-f482-7dd1-a817-11e52c4ff7d8, final
+01a136ad-3ab9-7b93-b881-534f6e8edb79. Finalauthorreconciliation reused initialchecks,
+no tests/build/image rerun. Sourceowner archived after acceptedhandoff; readyCLI/
+artifacts remainavailable. One primarycase+one repairimage added:205cases
+(82Web+123Native;57fixture+148nonfixture),44primarybatches,534primaryimages
+(530first+4rerolls),81repairimages,4unqualifiedimages=619total;795casesremain.
+No newfullimageapproval; oldfailures/images/tooloriginals retained.

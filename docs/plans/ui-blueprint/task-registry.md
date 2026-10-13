@@ -10,7 +10,7 @@ terminal before redispatch; no duplicate workers were created. Nativecaption
 Both CW21 critics resume only author reconciliation from their completed initial
 observations. Web source owner remains idle because its three-form batch is done.
 The prior pause below is historical, not a current execution gate. Scope and
-Current post-resume corpus:204cases/617images after CW23 qualification.
+Current post-resume corpus:205cases/619images after CW24 qualification.
 
 ### Preserved pre-restart handoff
 
@@ -82,7 +82,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-204proved eligible primarycases,796remaining,80validationimages/617totalimages.
+205proved eligible primarycases,795remaining,81validationimages/619totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -116,17 +116,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:204; unresolved upper bound207; conservative remainder796.**
+**Proved eligible case count:205; unresolved upper bound208; conservative remainder795.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Forty-three completed primary batches produced533 qualified evaluated images;
+Forty-four completed primary batches produced534 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their529 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not533 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their530 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not534 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -179,10 +179,11 @@ Recovered CN-B1 A04 completes its previously ungenerated four-sheet protocol,
 adding one case and four first images:201cases. This is saved historical input.
 CW-B22 collapsedFilters now completes its first source/package/image chain:202cases.
 CW-B23 provider choices andmode-tabs complete2distinct componentcases:204cases.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1, CAST-OUTLINE1=1, USE-NATIVE-CAPTIONS1=1, USE-FORM-DIMENSIONS1=1, USE-NAMED-CAPTIONS1=1, USE-PRINCIPAL-FRAME1=1 images (80 total).
+CW-B24 adds1qualifiedfive-itemAcceptableUsecomponent:205cases.
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1, CAST-OUTLINE1=1, USE-NATIVE-CAPTIONS1=1, USE-FORM-DIMENSIONS1=1, USE-NAMED-CAPTIONS1=1, USE-PRINCIPAL-FRAME1=1, USE-REPEATED-GAPS1=1 images (81 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:617counted generated images
-overall; unqualified attempts increase neither eligible cases nor the80repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:619counted generated images
+overall; unqualified attempts increase neither eligible cases nor the81repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -206,8 +207,8 @@ root does not redirect or archive its unrelated application work.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
-| CW-B24 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal1newcomponent/1firstimage; same2critics initialreview|Neutral /tmp/uib-b24-us0x8w8a/neutral-index.json. Whole5itemAcceptableUseUL belowoldTermsviewport, source768×153.5625CSSpx, acceptedabd8878/59b444d,0rerolls. Authorcontent/numberspass butlayoutsketch/artworkconflation fail. Noappsourcechanges/ownbrowserclosed, no inflatedextra blocks; count204 pendingqualification |
-| USE-REPEATED-GAPS1 |same exporter01a12b6a-92a9-73c3-aec2-022e32651008|source9a3308b/receipt5dd03b2 delivered; added to CW24criticwave|[Receipt](receipts/consumer-repeated-gaps1.md). Exactreplayconfirmedframefixalreadydone. Genericrole/frame/Space/Surface/context eligibility selectsM0055existinggap6.015625 toD01once, no newmeasurement/parent. Sixfamilymachineproof/negativetests reported. Neutral uib-REPEATED-GAPS1-7_9gd6d_/index SHA28d3929a, CLI2130fabe;1repairPNG1536×1024, gapreportedcorrect butduplicateunassignedsizepairFAIL author. No newcase/count pendingreview |
+| CW-B24 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|qualified1newcase/1firstimage counted; fullrasterFAIL|Neutral /tmp/uib-b24-us0x8w8a/neutral-index.json; finalsamewaveCV2/CT2 verifydistinctlistvsCW49/CW62,5sentences and2labels pass. Layoutsketch/artwork separation fails withoutnewcompilerdefect.205cases/619images,0rerolls/sourcechanges |
+| USE-REPEATED-GAPS1 |same exporter01a12b6a-92a9-73c3-aec2-022e32651008|source9a3308b accepted; owner archived, fullrasterFAIL retained|[Receipt](receipts/consumer-repeated-gaps1.md). CV2final01a136ac-b3f2-7c40-93b0-c27d788c54f8/CT2final01a136ad-3ab9-7b93-b881-534f6e8edb79 accept existinggap/contextguards/machinepreservation.7assignedlabels+≈6anchorspass, extra2unassignedsizeannotationsfail. One repairimagecounted, no newcase; readyCLI2130fabe retained |
 | CW-B23 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|qualified2cases/4firstimages counted;0fullrasterPASS|Neutral /tmp/uib-b23-mheswu5b/neutral-index.json. Samewavefinals01a1369f-e50d-7872-a1a4-f4be8424da5a and01a136a0-35b5-76e1-9024-1763bb1ed743; providerD01 8numbers/tabs4numbers pass, sourceIDs/scope/raster fail. Oldexportknownframes/gaps omissions require currentreplay; user/runtimecleanup intact. Counter204cases617images |
 | USE-PRINCIPAL-FRAME1 |same exporter01a12b6a-92a9-73c3-aec2-022e32651008|source59b444d accepted; fullrasterFAIL retained|[Receipt](receipts/consumer-principal-frame1.md). CT2final01a136a0-35b5-76e1-9024-1763bb1ed743/CV2final01a1369f-e50d-7872-a1a4-f4be8424da5a. Genericeditorial frame no root/paint/scopeauthority; exactmachine/controlproof accepted. Image4numberspass butartworkconflation/IDs fail. One repairimagecounted; readyCLI649d2fa0 retained |
 | USE-NAMED-CAPTIONS1 |same exporter01a12b6a-92a9-73c3-aec2-022e32651008|sourcedf43e88 accepted; fullrasterFAIL retained|[Receipt](receipts/consumer-named-captions1.md). CT2final01a13691-b9f6-7553-a02f-5fee239331ac/CV2final01a13691-7fb0-73f0-8c83-cc8e678d88f1 accept distinctquotedCopyowners and unchangedmachinefacts.39magnitudes/38approxlabels; palette/Previousmissing≈ fail. One repairimagecounted; no newNativecase |
@@ -366,7 +367,7 @@ review also passes; no pending repair/review for these deltas. Reuse these tools
 for broader owner-selected real tasks/source cases under CORPUS-1000, preserving
 scope and avoiding another repetition of the accepted Actor/Director examples.
 Saved-data checks and runtime retries added zero generated primary cases; corpus
-now has204 proved/796remaining after completedCW23. Keep app projects untouched from this project. CN16
+now has205 proved/795remaining after completedCW24. Keep app projects untouched from this project. CN16
 is retired, not awaiting authority. Do not require app modifications to continue.
 Existing two critics remain idle for relevant evidence; repeated generic image rounds
 are not the priority. User-approved project owners may integrate the utility themselves;
