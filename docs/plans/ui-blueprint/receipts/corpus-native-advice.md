@@ -1,5 +1,62 @@
 # Native source advisor handoffs
 
+## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
+
+Статус: предложение для отдельного одобрения, не разрешение на реализацию.
+Исходный план CN16-ISOLATION@1; advisor turn01a132e6-54a6-7770-8325-71947e7e8d8f.
+Root сохраняет исходную постановку ниже. Текущий CORPUS разрешает тесты и source
+консультации, но не это изменение исходного Mac-приложения. Обычный Debug и
+защищённый Release не запускаются/не изменяются в ожидании решения; CP15 независим.
+
+**CN16: предлагаю один Debug-only режим `--isolated-public-reads` внутри существующего Mac target.** Он использует настоящие UI и публичные lookup, но не создаёт production session, пользовательские repositories и общие caches. Это предложение требует одобрения; изменений сейчас нет.
+
+Основание: `beta-01`, `c7d8e3dc…`. Повторно подтверждены CN10–14 owners. Важное дополнение: `shortFormMediaCache: nil` **не обеспечивает изоляцию** — rolling player отдельно создаёт общий `PlayPhrase/ShortClipMedia` через `RollingCompositionMediaPreparation.shared`.
+
+### Предлагаемое поведение
+
+- Режим выбирается **до создания любой production-композиции**. Начальное состояние — guest, пустой paused Search, новые данные в памяти; существующие пользовательские значения не читаются.
+- Один process-owned memory `DataStore` обслуживает существующие `PreferencesRepository`, `RestorationRepository`, `LearnerContinuationRepository` и `PracticeHistoryRepository`. При выходе состояние исчезает.
+- Публичные typed clients остаются настоящими: Search/Actor, filter options, related phrases, Common Phrases/Vocabulary и разрешённые публичные translations. Сессия транспорта — ephemeral, без cookies, credential storage и дискового URL cache; без `SessionAuthorizedTransport` и production/debug credentials.
+- Auth/account/subscription, Favorites mutations/import/export, statistics/analytics, clipboard, внешнее открытие URL и Download/export получают существующие unavailable/no-op зависимости. Не выдавать no-op за успешную операцию. Guest/access ограничения сохраняются.
+- Playback остаётся существующим. Его cache resolver получает отдельный task-owned system-temp root; production cache factory не вызывается. Это временный media cache, не новый player.
+- Общая оконная persistence не подключается. Ordinary Debug и Release сохраняют нынешнее поведение.
+- Для app-target Preview ранний `XCODE_RUNNING_FOR_PREVIEWS` guard выбирает существующую fixture-композицию и отключает общую оконную persistence. Это защищает bootstrap, но **не объявляет безопасным произвольный Preview body**, который сам создаёт production owner.
+
+Один новый launch switch нужен: существующий `--playphrase-scenario` выбирает фиксированные fixtures; live public-read режим не должен маскироваться под такую fixture. Новых targets, bundle IDs, OS users, серверов или общего test framework не требуется.
+
+### Конкретный write set
+
+| Owner | Изменение |
+|---|---|
+| [PlayphrasemeMacApp.swift](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/PlayphrasemeMacApp.swift) | Передать единожды выбранный launch context; условно не подключать `.restoresLearnerWindowFrame()`; передать изолированные playback dependencies. |
+| [MacAppComposition.swift](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Application/Composition/MacAppComposition.swift) | Ранний Debug-only выбор режима/Preview до `makeProduction`. Конфликтующие режимы отклонять, без fallback в production. |
+| Новый `Application/Composition/MacIsolatedPublicReadComposition.swift` | Узкая сборка существующих моделей; private memory `DataStore` на существующем протоколе; владение временным cache root. Private test `MemoryDataStore` сейчас недоступен приложению — его нельзя назвать готовой production-абстракцией. |
+| [ReelsProductionComposition.swift](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayphrasemeApp/Application/Composition/ReelsProductionComposition.swift) | Вынести создание Download dependencies и clipboard effect к вызывающему composition owner, передавать их явно. Ordinary caller передаёт прежние реализации; isolated — memory options/unavailable service/no-op copy. Не дублировать ReelsModel/UI. |
+| [ShortClipPlayer.swift](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Infrastructure/Playback/ShortClipPlayer/ShortClipPlayer.swift), [RollingCompositionPlayerEngine.swift](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Infrastructure/Playback/RollingCompositionPlayer/RollingCompositionPlayerEngine.swift), [SingleVideoPlayerDependencies.swift](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-mac/PlayPhraseLearner/Infrastructure/Playback/SingleVideoPlayerDependencies.swift) | Провести из composition существующий `RollingCompositionMediaPreparation(resolver:)` к уже существующему параметру pool. Обычный default остаётся `.shared`. Узкая dependency injection необходима: сейчас engine создаёт pool без аргументов и обходит app-level cache injection. |
+| Новые `PlayphrasemeAppTests/Application/Composition/MacIsolatedPublicReadCompositionTests.swift` и `MacLaunchIsolationTests.swift` | Проверки выбора bootstrap, зависимостей, памяти, cache ownership и lifecycle. |
+
+`LearnerWindowFrameRestoration.swift`, production session/library/statistics owners, package targets и `project.pbxproj` менять не требуется. Существующий чужой diff проекта защищён.
+
+### Contract Delta до реализации
+
+Добавить один leaf `docs/specs/features/native-developer-agent-control-plane/isolated-public-read-bootstrap.md`, связать его из существующей ветки и описать запуск в `docs/agent-tooling.md`. В оконном контракте зафиксировать исключение **только** для нового Debug-режима и Preview bootstrap.
+
+Новая норма: явный изолированный режим не читает/пишет пользовательские stores и не подключает write-capable внешние эффекты. Release, ordinary Debug, public-link semantics и существующие продуктовые требования не меняются.
+
+### Минимальная проверка
+
+1. **Focused tests:** production factories не достигаются из isolated/Preview entry; repositories переживают переходы в одном memory store, но не второй запуск; auth/account/Favorites/analytics/export effects unavailable; public transport не получает credentials. Проверить cache resolver и отсутствие оконного persistence attachment.
+2. **Один bounded runtime цикл после одобрения:** запуск → Actor/Director lookup → Reels Search → resize → deactivate/exit. Проверить неизменность именованных shared restoration/preferences/window keys и app-owned library/statistics/cache locations. Значения не выводить; не читать credentials. Изолированные изменения должны остаться в памяти или named temp root.
+3. **Обычный путь:** focused regression на прежний composition selection и Release build без нового режима/Preview guard. Защищённый PID63105 не использовать для проверки и не перезапускать.
+4. Завершить собственные задачи/плееры до удаления только run-owned non-image cache. Изображения сохранять по действующему правилу.
+
+Runtime подтверждает ограниченный набор известных shared owners, а не универсальное отсутствие любых системных записей.
+
+Режим откроет дальнейшие реальные Mac проверки Actor/entity lookup, Search/Clip/Reels композиций, transient panels и изменения размеров. Он не открывает оплаченные состояния, настоящий Account/Favorites или новый набор «1000 случаев» автоматически.
+
+**Остаток перед реализацией:** одобрение этого source-app изменения. Точный способ передачи playback dependency нужно согласовать с обязательными Swift/SwiftUI contracts при реализации; обход через глобальную смену cache path или `nil` недопустим. Восстановление пользовательской Mac selection остаётся отдельным нерешённым выбором.
+
+
 ## CN15 — orientation and iPad keyboard candidate, 2026-10-13
 
 Advisor turn01a132c5-678b-7301-892c-3cdd495eafe9, beta-01/c7d8e3dc source-only.
