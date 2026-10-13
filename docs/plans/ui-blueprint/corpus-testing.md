@@ -180,3 +180,23 @@ Return actual results and minimal confirmed defect repros; focused checks only,
 scoped commit/push when files change. No new primary corpus cases or image counts.
 One complete verification task; inherit settings, no nested agents. Root owns plan
 and registry; CN16 human-authority dependency remains limited to source-app changes.
+
+## CMATH1 — actual image explanations on four real families, 2026-10-13
+
+Existing mathematical-prompt acceptance verification after CE2 passed11snapshots,
+76measurements/47analysis requests; no new product semantics or generic wording loop.
+Use CE2's recorded exact source operands for DirectorCW-B13-D, GenresCW-B16-D,
+EpisodesCW-B15-M and iPadActorCN-B21. Reconstruct explicit public metadata in system
+temp; original snapshots/images stay untouched. Verify frozen da306a2 CLI output and
+source/data preservation, then generate one literal first output per required sheet
+using each qualified original reference. No fresh runtime/captures/source-app changes,
+wrappers/retouch/rerolls or compiler edits. Existing DESIGN-ANALYSIS1 and full current
+export/analysis/common source/privacy closure apply. Unknown Native layout is not AX;
+rounded equal labels do not mean exact equality; 2:2 widths create no recommendation.
+
+One full task in existing exporter owner, no nested delegation. Only tracked write:
+receipts/corpus-math-visual1.md; all generated packages/images in systemtemp, image
+originals retained. Neutral index precedes author evaluation; existing critics verify
+prepared math, source-fidelity and readable explanations. Source snapshots are reused,
+so no new primarycase count; report actual validation-image count independently.
+Stop after finite four-case outcome, report honest failures and scoped commit/push.

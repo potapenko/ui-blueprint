@@ -118,7 +118,8 @@ overall; unqualified attempts increase neither eligible cases nor the65repair-va
 | CW4 |same Web advisor|accepted source-only consultation|5desktop/mobile lookup recipes with complete restore; Actor excluded; [handoff](receipts/corpus-web-advice.md#cw4--temporary-filter-lookup-states-2026-10-12) |
 | CW5 |same Web advisor|accepted source-only own-tab recipe|Actor draft/results page-local; exact own-tab close disposes callbacks, normal startup/log/cache effects retained; [handoff](receipts/corpus-web-advice.md#cw5--actor-in-a-disposable-own-tab-2026-10-13) |
 | CW-B7 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|investigation accepted; archived after review handoff|2demo states/2first images/0rerolls;both critics acceptCW58/rejectCW59 focus loss; [review](receipts/corpus-web-demo-review7.md) |
-| CE2 |CE1 owner01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|real-snapshot analysis verification dispatched|8–12saved snapshots/6families/both platforms, actual engine/CLI relations and recommendation guards. Existing test files + corpus-analysis-wave2.md only; no source-app/product-code edits, no new primary cases/images |
+| CE2 |CE1 owner01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|completed; no new defects|[Receipt](receipts/corpus-analysis-wave2.md),862b76d.11snapshots/7families/76measurements/47requests;3expected refusal cases. Original449nodes/geometry/state/no-request compatibility preserved; zero newcases/images. No extra tests or repair required |
+| CMATH1 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|four-case math visual verification dispatched|Director/Genres/Episodes/iPadActor, CE2exact operands+frozenCP19. Actual CLI math→literal firstimages, source apps untouched; no wording loop/newprimary cases. Receipt corpus-math-visual1.md only |
 | CE1 |01a12b3a-e8ce-7f50-8da7-08ceaf66fd6d|accepted; archived|ed6c60d, defects retained in tests |
 | CE1-FIX |01a12b47-adb6-78e1-9fee-8daf614091e6|accepted; archived|1661e88,36tests pass; duplicate identity and−0 repaired |
 | CW-B1 |01a12b42-f256-73b0-a694-014228af42b2|investigation accepted; archived|12images,0accepted; labels/formulas and model failures |
@@ -215,13 +216,13 @@ overall; unqualified attempts increase neither eligible cases nor the65repair-va
 
 ### Current contracts and protected boundaries
 
-After CP19 no implementation/review remained; CE2 now independently verifies
-existing mathematical analysis on the expanded saved corpus. CN16's complete
+After CP19 no implementation/review remained; CE2 has completed mathematical analysis on the expanded saved corpus; CMATH1
+now verifies four real-family mathematical image explanations independently. CN16's complete
 Mac source-isolation proposal still awaits explicit human approval; re-presented
 2026-10-13 after confirmed source-storage risk. Automatic goal continuations are not
 that approval. No OS-process contention blocks the accepted CP18/19 outcomes; CN8
 archive still reports active writer and is an unrelated host metadata limitation.
-Continue CE2 independently and CN16 on approval or another qualified authorized source; do not fill
+Continue CMATH1 independently and CN16 on approval or another qualified authorized source; do not fill
 case counts with repeated renders or silently modify the source app. Goal active,
 194proved cases,806remainder; this is not completion or a user pause.
 
