@@ -2,6 +2,32 @@
 
 ## Current finite task — skill-led blueprint, 2026-10-14
 
+Clip Search evaluator is terminal, turn01a13796-8041-7262-b6c4-2cdd82c183e3.
+It installed the same8f15987 skill and independently chose filters, first card and
+search-strip details;74Rust measurements are known. One agent-composed prompt,
+one ImageGen output, no prior image/reference or reroll. The retained user result
+is `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-skill-clipsearch-bhs4_2l1/blueprint.png`;
+prompt.txt, facts.md/json, CLI package and report.md remain alongside it.
+Root inspected the actual image. Transfer of the fact-selection/prompt strategy
+is demonstrated on this second interface, with disclosed metadata-format help.
+Geometric acceptance is FAIL: the62.5→≈63 right inset is detached from Download,
+filter alignment misses actual edges,204width is missing, and other anchors/text
+remain imperfect. No universal skill or raster-accuracy claim; no additional
+iteration is dispatched without further user direction. Cold worker archived
+after handoff; Mac/Web advisors retained. Metadata syntax lesson is in the skill
+reference for future agents, with source/privacy distinctions preserved.
+
+Clip Search cold test exposed a source-handoff metadata-format gap: empty
+specification_refs and public slash-separated prose trigger invalid_input and
+private_content respectively. Root provided this bounded API-format diagnosis
+after reading validate.rs, without layout/dimension/composition advice. Worker
+keeps raw Snapshot and metadata unchanged, validates its separate annotation copy
+before generation and does not bypass sensitivity rules. This is disclosed
+operational assistance, not a completely unaided installation-to-image claim.
+The reusable syntax explanation is now added to the skill export reference; the
+active evaluator remains on its original installed8f15987 pin. No renderer or
+source-case-specific instruction changed and no second generation is requested.
+
 User selected Clip Search on Mac as a new-interface holdout, explicitly questioning
 A04-specific tuning. Fresh evaluator01a13796-77f8-7e50-82b1-2b2b6a2b89db,
 «Проверить skill на Clip Search Mac», installs the unchanged8f15987 skill in

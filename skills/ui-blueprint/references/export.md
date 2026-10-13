@@ -40,6 +40,20 @@ do not create new runtime facts. Approval stays draft unless an actual named app
 exists. `public_text_fields: []` is conservative; explicitly allow reviewed safe text
 only when necessary. Raw value fields and pixels are not automatically exported.
 
+### Metadata format failures
+
+`specification_refs` must be nonempty; use the applicable guide reference from
+this skill or the bundle. The current CLI's public-metadata syntax guard also
+rejects `/`, backslashes, URLs and template delimiters, even in benign prose.
+Thus `export_private_content` can indicate metadata syntax, not a detected secret.
+Identify the actual field before proceeding. In a separate metadata copy, an
+explicitly reviewed public annotation such as “layout / accessibility” may be
+rephrased as “layout and accessibility”; preserve its meaning and original file.
+Never mass-strip unknown strings, erase privacy markers, change the Snapshot or
+reinterpret a refused private payload as public. If the cause remains unclear,
+report the gap before sending data to an image model. Raw source privacy and
+caller-annotation syntax are separate checks.
+
 ## Compile from the original observation
 
 Create a unique temporary parent; the package child must not already exist.
