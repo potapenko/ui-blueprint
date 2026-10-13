@@ -123,6 +123,17 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 ### Ownership and disposition
 
+Direct user handoff2026-10-13: «Исследовать перенос Guest Tour»
+(`01a11b4c-d590-78d2-a123-e863f8348fdb`, local) is an additional real utility
+consumer under the user's explicit request to explain UI Blueprint for its geometry
+task. Root sent ready Native bundle14b01d8, verified developer PID+exact-name command,
+public Observe/Inspect/Measure workflow, docs and AX/layout/line limitations. This
+chat owns its app task; no root app edits, integration mandate, interruption or
+archival. Mac advisor is asked for its existing passive Guest Tour input/command
+handoff; no extra capture requested. Current snapshots are historical observations,
+not proof of that consumer's subsequently changed UI. Feedback returns utility gaps
+to UI Blueprint. This communication adds no generated corpus cases.
+
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
 | USE-WEB-EXPORT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source863dcdb delivered; same Web consumer and CT2 review dispatched|[Receipt](receipts/consumer-web-export1.md). WEB-FIRST-USE4/registry48 registered69f5ce95. F01 original45290B exactly retained through --json→validator→export9components/partial. Candidate uib-web-export1-h1iqyuk2/candidate, helper26093cfe/CLI67915c39; no new binary/schema/storage API. Real CW-B20 Cast continuation and focused publication review pending |
