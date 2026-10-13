@@ -902,6 +902,53 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     assert!(!input.contains("visible text \"Accessible search name\""));
     let all = String::from_utf8(package.files().values().flatten().copied().collect()).unwrap();
     assert!(!all.contains("UNAPPROVED_RAW_VALUE_CANARY"));
+    let mut clipped = brief.clone();
+    let SourceInput::Observed { snapshot, .. } = &mut clipped.views[0].source else {
+        panic!()
+    };
+    for property in &mut snapshot.nodes[0].properties {
+        if let Property::Requested {
+            field: Field::VisibleText,
+            state,
+            ..
+        } = property
+        {
+            *state = Availability::Known {
+                value: Value::Text("Three partial words".into()),
+            };
+        }
+    }
+    let mut visible = snapshot.nodes[0].properties[2].clone();
+    let Property::Requested {
+        field,
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut visible
+    else {
+        panic!()
+    };
+    *field = Field::VisibleRegion;
+    g.frame_kind = FrameKind::VisibleRegion;
+    let Shape::Rect(rect) = &mut g.shape else {
+        panic!()
+    };
+    rect.height = 4.0;
+    snapshot.nodes[0].properties[4] = visible;
+    let original = serde_json::to_vec(&clipped).unwrap();
+    let p = compile(&clipped, limits()).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    let lines = text.lines().collect::<Vec<_>>();
+    let clip = lines
+        .iter()
+        .position(|l| l.starts_with("COMPONENT CLIP #1"))
+        .unwrap();
+    assert!(lines[clip + 1].starts_with("Object input"));
+    assert!(lines[clip + 1].contains(
+        "visible-text payload (draw only its proved clipped fragment) \"Three partial words\""
+    ));
+    assert_eq!(serde_json::to_vec(&clipped).unwrap(), original);
     let SourceInput::Observed {
         public_text_fields, ..
     } = &mut brief.views[0].source
@@ -2116,12 +2163,33 @@ fn object_states_and_context_links_survive_compact_presentation() {
                 reason: Id("not-collected".into()),
             },
         };
+        let mut focus = property.clone();
+        let Property::Requested { field, state, .. } = &mut focus else {
+            panic!()
+        };
+        *field = Field::Focused;
+        *state = if i <= 2 {
+            Availability::Known {
+                value: Value::Flag(i == 0),
+            }
+        } else {
+            Availability::Unknown {
+                reason: Id("not-collected".into()),
+            }
+        };
         node.properties.push(property);
+        node.properties.push(focus);
     }
-    snapshot.context.fields.push(Field::Enabled);
-    snapshot.coverage.fields.push(Field::Enabled);
+    snapshot
+        .context
+        .fields
+        .extend([Field::Enabled, Field::Focused]);
+    snapshot
+        .coverage
+        .fields
+        .extend([Field::Enabled, Field::Focused]);
     for o in &mut snapshot.observations {
-        o.coverage.fields.push(Field::Enabled);
+        o.coverage.fields.extend([Field::Enabled, Field::Focused]);
     }
     let original = serde_json::to_vec(&brief).unwrap();
     let p = compile(&brief, limits()).unwrap();
@@ -2140,6 +2208,15 @@ fn object_states_and_context_links_survive_compact_presentation() {
         assert!(object.contains(&format!("placement context {context}")));
     }
     assert!(prompt.contains("Placement context 3: LayoutBounds; REF"));
+    assert_eq!(
+        prompt
+            .matches("show the reference focus cue in every view containing this object")
+            .count(),
+        1
+    );
+    assert!(prompt.lines().any(|l| l.starts_with("Object")
+        && l.contains("First control")
+        && l.contains("Focused=true; show the reference focus cue")));
     for object in prompt.lines().filter(|s| {
         s.starts_with("Object") && !s.contains("First control") && !s.contains("Second control")
     }) {
@@ -2410,6 +2487,11 @@ fn container_frame_width_has_below_slot_without_claiming_enclosure() {
     assert!(prompt.contains(
         "WIDTH 1200 CSS px BELOW this measured source frame; HEIGHT 800 CSS px on the LEFT"
     ));
+    let owner = prompt
+        .find("FRAME OWNER (unprinted): source record #1.")
+        .unwrap();
+    let measure = prompt[owner..].find("DIMENSIONED RECTANGLE").unwrap();
+    assert!(!prompt[owner..owner + measure].contains("source record #2"));
     assert!(prompt.contains("PRINT BELOW-FRAME WIDTH LABEL exactly:"));
     assert!(prompt.contains("width 1200 CSS px"));
     assert!(prompt.contains("label-layout boundary belongs to the named text"));

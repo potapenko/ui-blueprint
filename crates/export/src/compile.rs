@@ -671,7 +671,12 @@ fn object_text(
     }
     if !aggregate && !visible_text(c).is_empty() {
         out.push_str(&format!(
-            "; visible-text payload {}",
+            "; visible-text payload{} {}",
+            if partial.get(index).is_some_and(|edges| !edges.is_empty()) {
+                " (draw only its proved clipped fragment)"
+            } else {
+                ""
+            },
             bounded_compact_json(&visible_text(c), limit)?
         ));
     }
@@ -705,6 +710,9 @@ fn object_text(
             ) || p.field() == Field::Focused && *value)
         {
             out.push_str(&format!("; {:?}={value}", p.field()));
+            if p.field() == Field::Focused {
+                out.push_str("; show the reference focus cue in every view containing this object");
+            }
             if p.field() == Field::Checked && !input_control(c) {
                 out.push_str("; indicator interior BLUE, WHITE OUTLINE only");
             }
@@ -919,18 +927,19 @@ fn drawing_inventory(
             contexts.push(context);
         }
     }
+    let mut previous_fragment_item = None;
+    let mut previous_fragment_parent = None;
+    let mut previous_fragment_path: Vec<(usize, String)> = Vec::new();
     for (i, c) in v.components.iter().enumerate() {
-        let Some(edges) = partial.get(i).filter(|edges| !edges.is_empty()) else {
-            continue;
-        };
         if selected.is_some_and(|s| !s.contains(&c.id)) {
             continue;
         }
-        if let Some(Value::Geometry(visible)) = c
-            .properties
-            .iter()
-            .find(|p| p.field() == Field::VisibleRegion)
-            .and_then(Property::known)
+        if let Some(edges) = partial.get(i).filter(|edges| !edges.is_empty())
+            && let Some(Value::Geometry(visible)) = c
+                .properties
+                .iter()
+                .find(|p| p.field() == Field::VisibleRegion)
+                .and_then(Property::known)
             && let Shape::Rect(r) = &visible.shape
         {
             append(
@@ -951,14 +960,6 @@ fn drawing_inventory(
                 ),
                 limit,
             )?;
-        }
-    }
-    let mut previous_fragment_item = None;
-    let mut previous_fragment_parent = None;
-    let mut previous_fragment_path: Vec<(usize, String)> = Vec::new();
-    for (i, c) in v.components.iter().enumerate() {
-        if selected.is_some_and(|s| !s.contains(&c.id)) {
-            continue;
         }
         if assignment == Assignment::SourceDetail
             && !control(c)
@@ -1199,6 +1200,13 @@ fn local_measures(
                     && m.anchors[1].edge == Edge::Bottom
             });
             if let (Some((w, _, _)), Some((h, _, _))) = (width, height) {
+                if w.anchors[0].frame_kind != FrameKind::AccessibilityBounds {
+                    append(
+                        &mut out,
+                        &format!("FRAME OWNER (unprinted): source record #{}.\n", a + 1),
+                        limit,
+                    )?;
+                }
                 if w.anchors[0].frame_kind == FrameKind::LayoutBounds
                     && clipped.get(a).is_some_and(|edges| !edges.is_empty())
                 {
