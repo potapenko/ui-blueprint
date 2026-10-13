@@ -1,5 +1,9 @@
 # Local UI Blueprint distribution
 
+For the approved Mac archive/curl/Homebrew preparation workflow, see
+[Mac release preparation](macos-release.md). It is not yet a published release;
+project licensing and publication remain separate owner decisions.
+
 Build a selected set from one **committed** source revision. This is a local
 P6 delivery procedure, not a signed release or P7 acceptance. Saved-data analysis
 and document/proposal/comparison export run without a model, API keys, browser, Node or Swift.
@@ -54,9 +58,11 @@ remove while a bundle is in use. Do not replace individual executables.
 
 The manifest records exact product source revision, feature sets, target, Rust/Swift
 versions, lock hash, selected dependency checksums and all installed file hashes.
-The invoked recipe and companion docs are copied with their own hashes; they may be
-newer than `--revision`. Reproduce both the source pin and the recipe revision from
-this repository. Reproducibility means pinned source, dependencies and procedure;
+New builds copy the recipe and companion docs from that same source revision.
+Earlier local managers copied them from the invoking checkout independently;
+those historical v1/v2 inventories remain verifiable/removable. Reproduce the
+source pin and recorded invoking recipe for those historical builds.
+Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
 Historical I02/E05 qualification pinned product source `a0265843634fce8bc6a942fc1f276391a51c54c6` with the
@@ -180,8 +186,9 @@ Bundle format `ui-blueprint-local-2` adds those two owned files only for Web/com
 The current manager also verifies/removes complete legacy `ui-blueprint-local-1`
 inventories; it never requires the new helper to remove an old bundle. Missing or
 modified version-2 helper/guide refuses verification/removal. Script/guide hashes,
-like the copied manager and RUN.md, describe the invoked recipe revision separately
-from the committed product source. Build a fresh bundle instead of modifying an old
+like the copied manager and RUN.md, now describe the same committed product source.
+Historical builds retain their separately recorded recipe provenance.
+Build a fresh bundle instead of modifying an old
 manifest. Use an accepted explicit product pin for reproducibility.
 
 ## Live use and matching components

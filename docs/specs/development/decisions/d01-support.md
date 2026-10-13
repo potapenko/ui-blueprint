@@ -11,6 +11,10 @@
   [evidence](evidence.md), [Rust engineering rules](../../../../RUST.md).
 - Owner/deadline: T01 pin before first Cargo build; W01/M01 matrix before P2 claims.
 
+For release packaging and user installation, follow the registered
+[Mac distribution contract](../macos-distribution.md), `UIB.MAC-DISTRIBUTION@1`.
+This additional route does not promote the platform qualification below.
+
 ## Requirement, observation, decision
 
 Reproducible stable setup and platform separation are required. Observed R03

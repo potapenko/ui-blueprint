@@ -235,7 +235,10 @@ def build(args, fd):
         source = stage / 'source'
         source.mkdir()
         paths = ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates', 'plugins/web',
-                 'schemas', 'fixtures/analysis', 'fixtures/export']
+                 'schemas', 'fixtures/analysis', 'fixtures/export', 'distribution.py',
+                 'docs/development/distribution.md', 'THIRD_PARTY_NOTICES.md']
+        if args.modules in ('web', 'combined'):
+            paths += ['tests/bridges/web/geometry.cjs', 'docs/development/web-first-use.md']
         if args.modules in ('native', 'combined'):
             paths += SWIFT
         archive = run(['git', 'archive', revision, *paths], cwd=ROOT)
@@ -296,13 +299,14 @@ def build(args, fd):
                 'example-observed-brief.json': 'fixtures/export/observed-brief.json',
                 'example-proposed-brief.json': 'fixtures/export/proposed-brief.json'}.items():
             products[output] = ((source / input_path).read_bytes(), 0o644)
-        # Recipe/docs provenance is explicit, independent of the chosen product revision.
-        for output, path in {'distribution.py': Path(__file__), 'RUN.md': ROOT / 'docs/development/distribution.md',
-                             'THIRD_PARTY_NOTICES.md': ROOT / 'THIRD_PARTY_NOTICES.md'}.items():
+        # Shipped support files belong to the same committed revision as the binaries.
+        for output, path in {'distribution.py': source / 'distribution.py',
+                             'RUN.md': source / 'docs/development/distribution.md',
+                             'THIRD_PARTY_NOTICES.md': source / 'THIRD_PARTY_NOTICES.md'}.items():
             products[output] = (path.read_bytes(), 0o644)
         if args.modules in ('web', 'combined'):
-            products['web-geometry.cjs'] = ((ROOT / 'tests/bridges/web/geometry.cjs').read_bytes(), 0o644)
-            products['WEB-FIRST-USE.md'] = ((ROOT / 'docs/development/web-first-use.md').read_bytes(), 0o644)
+            products['web-geometry.cjs'] = ((source / 'tests/bridges/web/geometry.cjs').read_bytes(), 0o644)
+            products['WEB-FIRST-USE.md'] = ((source / 'docs/development/web-first-use.md').read_bytes(), 0o644)
         products['DEPENDENCY_LICENSES.txt'] = (licenses, 0o644)
         sysroot = Path(run(['rustup', 'run', TOOLCHAIN, 'rustc', '--print', 'sysroot'],
                            cwd=source).decode().strip())
