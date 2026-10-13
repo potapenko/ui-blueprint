@@ -282,6 +282,45 @@ No signed/notarized/archive release, global installation or project license gran
 is implied. The source checkout remains necessary for rebuilding and full developer
 fixtures; the delivered saved-data commands need only the selected executable set.
 
+## Agent skill and prompt installation
+
+The portable [ui-blueprint skill](../../skills/ui-blueprint/SKILL.md) and its
+references are maintained in `skills/ui-blueprint/`. Its ordinary recipes require
+the selected executable bundle and operation-specific inputs, not this checkout.
+The [agent-skill contract](../specs/development/agent-skill.md) records the approved
+plan, actual current-stage authorization and acceptance boundaries.
+
+Current status: skill and documentation preparation only. The existing local v1/v2
+bundle inventory above does **not** include the skill. The README prompt is a
+documented target workflow, not a claim that combined installation or publication
+has happened. Do not run an unrendered release installer template, infer a release
+from source files, or report a skill-only copy as a complete installation.
+
+When installer integration resumes, supply the complete skill directory and binary
+set from one pinned release source. Verify their integrity and compatibility before
+activation. Preserve repeat-install behavior, ownership boundaries and user edits;
+do not mix a new skill from a moving branch with an arbitrary old CLI. Resolve source
+repository/release URLs against the actual publication destination before rendering
+the installer and README release links.
+
+The installation prompt must explicitly name the authorized binary prefix and skill
+destination. The README example chooses managed files under `~/.local` and the
+default Codex skill path `~/.codex/skills/ui-blueprint`; custom locations must be
+substituted explicitly. Reading this guide is not permission to install into those
+directories. No sudo, shell-profile edit, UI launch, permission grant or automatic
+source build belongs to that prompt's operation.
+
+Completion requires the installed skill's relative references to resolve outside
+the checkout and the [saved-data smoke example](../../skills/ui-blueprint/references/analysis.md#known-result-smoke-example)
+to produce validator valid, gap **8 css_px**, and check pass. Check each exit and
+payload. Local checks do not prove published downloads or Codex skill discovery;
+verify those separately when publication and a real installation are authorized.
+
+For live first use, Web still needs Node24+ and an already-authorized browser CDP
+connection. Ordinary macOS observation still needs prepared trusted connection and
+Request documents; the developer PID/name helper is not part of the installed skill.
+Neither prerequisite is silently created by installing instructions.
+
 ## Capability and acceptance handoff
 
 Scoped Native AX/Web geometry, saved-data analysis/export and bounded own-fixture

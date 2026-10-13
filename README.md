@@ -109,6 +109,36 @@ review at their original sizes. Their footers preserve the status recorded befor
 that review. This verification covers the pictured forms; generated drawings
 still need review and are not pixel-exact exports.
 
+## Install through your agent
+
+**Preparation stage:** the [Codex skill](skills/ui-blueprint/SKILL.md) is available
+in this repository. Combined CLI + skill installation is not integrated yet, and
+no public release is advertised here. The following is the intended installation
+prompt; it must stop if a matching published release is unavailable.
+
+```text
+Install UI Blueprint and its ui-blueprint skill for Codex from
+https://github.com/potapenko/ui-bluprint.
+Read the distribution instructions and use one matching published release for
+the CLI and skill. I authorize the managed UI Blueprint files under ~/.local
+and the skill directory ~/.codex/skills/ui-blueprint. Preserve unrelated or
+locally modified files. Verify the bundle and run its saved-data example.
+Do not build from source, change shell profiles or grant UI permissions.
+If combined installation is not ready or no matching release is published,
+stop and report that prerequisite without installing a partial set.
+```
+
+For a custom Codex home or installation location, replace the two destinations in
+the prompt explicitly. The skill contains conditional instructions for saved-data
+analysis, Web, macOS and drawing export. It needs a compatible executable bundle;
+copying the skill alone does not install the utility or grant access to an app.
+See [installation readiness and acceptance](docs/development/distribution.md#agent-skill-and-prompt-installation).
+
+Once the matching bundle and skill are installed and discovered by Codex, try:
+
+> Use $ui-blueprint to measure the gaps between these controls and explain any
+> missing data. Use the authorized browser connection and selected component.
+
 ## Try it locally
 
 The documented build requires Python 3.11+, Git, the pinned Rust toolchain and

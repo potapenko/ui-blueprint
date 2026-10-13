@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI Blueprint"
+  short_description: "Measure UI geometry and prepare reviewed blueprints"
+  default_prompt: "Use $ui-blueprint to measure the selected interface and explain its spacing with source evidence."
