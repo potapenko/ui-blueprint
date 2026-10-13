@@ -1,5 +1,47 @@
 # Web source advisor handoffs
 
+## CW10 — documented isolated browser route, 2026-10-13
+
+Advisor turn01a133ed-34c3-7831-bbf0-32617dfae47a, sourcec23ef963. Read-only
+tool/source feasibility; no contexts, tabs, storage or files created. IAB publishes
+visibility/viewport, not storage-context creation; sessionName is not isolation.
+Installed @playwright/cli0.1.19 documents independent per-session cookies/webstorage/
+IndexedDB/cache/history and in-memory profile lifetime, with browser.isolated:true,
+outputDir and outputMode:stdout. Site browser-routing permits generic Playwright
+Chromium fallback for this missing IAB capability; unsupported-browser UI is a stop,
+not permission to spoof UA. No attach/CDP endpoint/extension/persistent/operator
+profile/storageState import. This is a fresh owned browser, not access to Chrome403.
+
+Future entry: pinned CLI -s=<unique> --config=<system-temp-config> open own empty
+ClipSearch URL. Close the SAMEsession browser, not just its tab; no close-all/kill-all.
+Wrapper uses unpinned npx package, so exact inspected version must be preserved or
+requalified. npx was found. Browser launchability and ALL daemon/session/output
+locations were not established: qualify them against system-temp/no-persistent-dir
+policy before launch. This documentation is not completed runtime isolation proof.
+Images/tooloriginals/ancestors retained; only owned non-image transients cleaned.
+
+Interface locale setter changes app-db and localStorage/model-storage, with no
+separate account/server setter. Documentlang/scoped text direction change; shell
+layout remainsLTR. Learner translation is separate but follows locale while unset,
+so later translation consumers may change; use empty ClipSearch/no playback/content.
+Settings opening has ordinary analytics. No user UI-scale setting found; responsive
+scale is viewport-derived, not a reason to invent browser-zoom cases.
+
+After runner qualification, proposed candidates: Arabic desktopFilters (RTL text
+inside LTR grid), German mobileSettings (actual long-label wrapping/coverage only),
+Arabic mobile interface-language picker (localized groups with mixed native/English
+rows). Corpuslanguage remainsen; locale changes through normal UI in freshisolated
+guest state only. RUfixedlocale/CNrestrictions remain, no override. Duplicate text-only
+or linearly scaled states excluded. No operator cookies or profile state inspected.
+
+References: [session docs](/Users/eugenepotapenko/.npm/_npx/31e32ef8478fbf80/node_modules/@playwright/cli/skills/playwright-cli/references/session-management.md),
+[config schema](/Users/eugenepotapenko/.npm/_npx/31e32ef8478fbf80/node_modules/@playwright/cli/README.md:388),
+[site routing](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/qa/browser-routing.md),
+[locale setter](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/model.cljs:114),
+[Settings](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/settings/model.cljs),
+[direction](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/localization.cljs:580),
+[responsive scale](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/responsive.cljs:190).
+
 ## CW9 — Shortcuts has no wired entry, 2026-10-13
 
 Advisor turn01a133d9-c3b0-7180-b7fc-a5d5fbd05913, source-only atc23ef963.
