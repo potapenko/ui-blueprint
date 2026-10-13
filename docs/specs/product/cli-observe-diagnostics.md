@@ -1,6 +1,6 @@
 # Opt-in Observe diagnostics
 - Node type: leaf; domain: `uib.cli.observe-diagnostics`.
-- Contract: `UIB.CLI-OBSERVE-DIAGNOSTICS@2`; clauses: `.INPUT`, `.DATA`, `.SOURCE`, `.BOUNDS`, `.FAILURE`, `.ACCEPTANCE`.
+- Contract: `UIB.CLI-OBSERVE-DIAGNOSTICS@3`; clauses: `.INPUT`, `.DATA`, `.SOURCE`, `.BOUNDS`, `.FAILURE`, `.ACCEPTANCE`.
 - Authority: Active / Stability: Evolving; accepted/released baseline: none.
 - Authority source: user's usable-refusal-reasons request, root USE-OBS-DIAGNOSTICS1 shipping implementation packet for the real Web Director consumer; old default output remains protected. USE-WEB-RESYNC2 authorizes fixed branch codes after two CW-B22 refusals, including a transition-qualified attempt.
 - Read when: opt-in Observe diagnostics, caller/helper refusal interpretation.
@@ -79,17 +79,21 @@ untrusted canary exclusion and independent stdout/report budgets. No live Direct
 acceptance claim: Web owner repeats the real popup/list using the combined fix.
 ## UIB.CLI-OBSERVE-DIAGNOSTICS.RESYNC-SITE — USE-WEB-RESYNC2
 Restore useful refusal attribution through additive fixed classification, registered before code.
-For collector_resync_required only, code is 0 (unspecified), 1 (initial rect /
-IntersectionObserver bounds / current rect differ), 2 (one node’s viewport before/after
+For collector_resync_required only, code is 0 (unspecified), 1 (initial/current CSSOM rects A/C differ), 2 (one node’s viewport before/after
 differs), 3 (viewport contexts differ across nodes), or 4 (final viewport differs
 from initial context). Emit a nonzero code only from that actual failing guard.
 The code proves the branch, never animation, rounding or another underlying cause.
 Unknown sites retain0; negative codes or codes above4 refuse as invalid control.
 No source identifiers, coordinates, payloads, strings or parent graph parsing.
-Existing guard predicates, fields/caps/deadlines, cause/exit4, privacy and cleanup stay.
+GEOMETRY@2 Web source-agreement governs A=C≠B partial output; all other guard predicates, fields/caps/deadlines, cause/exit4, privacy and cleanup stay.
 JSON output_version1.0.0/fields, 12-byte record and 64-byte control layout stay.
 Paired Host/worker validation expands for this cause only; old Host rejects nonzero
 resync codes. Ship a matching CLI+worker pair; cross-version pairs are not compatible.
 Other cause/code and stage/operation validation is unchanged. Test all four actual
 guards with no publication, unknown0, rejection of−1/5, fixed transport/CLI rendering,
 legacy default output, cleanup and absence of private source content.
+
+USE-WEB-RECT2 advances this clause to@3 before code: code1 now denotes A≠C only.
+Prior@2/ad3e6b88 records retain their original rect-triple meaning; JSON fields/version
+are unchanged, so interpret records with the producer source pin, never reinterpret
+old evidence. Requires [GEOMETRY@2 WEB-SOURCE-AGREEMENT](geometry.md).
