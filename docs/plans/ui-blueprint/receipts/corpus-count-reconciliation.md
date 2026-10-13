@@ -89,7 +89,7 @@ dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 | CW-B10 |2|2|Actual Actor one-row and successful empty; initial20row scope is not counted or oldCW02 relabelled |
 | CW-B11 |2|2|New qualified desktop20row ready state and mobile full-screen ready topology; no oldCW02 relabelling; both first outputs evaluated as failures by author |
 | CW-B12 |2|2|Reels Search positive custom/suggestions and successful empty;94frames/21required labels, both first outputs authorFAIL; numeric success is not image acceptance |
-| CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images authorFAIL, independent review pending |
+| CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
 | **Primary subtotal** |**182**|**505**| |
 
 CW-B13 evidence: `uib-cw-b13-2Q5Tmo/HANDOFF.md`, `neutral-manifest.json`,
@@ -107,6 +107,19 @@ Wrong desktop center-trigger click removed own tag, then safely restored; retain
 Mobile guest:false reflects missing desktop LoginDOM, not proven auth state. Desktop
 caller clip wording was inaccurate; actual capture/bounds preserved. No frozen input
 rewrite or scope/acceptance upgrade follows from these attribution cautions.
+Both critics completed image-first then author reconciliation: CV2 final
+01a132d0-8ff9-7550-8bf3-cba04b4966c5 and CT2 final01a132d0-667b-7500-9a10-839dfcb85058.
+All three images fail. Desktop C2 plan is independently deficient before rendering:
+only trigger/input sizes selected, despite popup N016/M0065–66
+194.2578125×143.2734375 and result N023/M0093–94 178.2109375×24.09375.
+Known attachment/input-row gaps6.0234375, rowgap3.0078125 and inset8.0234375
+also lack useful selected explanation. CT2 additionally confirms Voice principal
+tile N006/M0025–26 366×42 lacks assigned size or explicit verified shared-size
+binding; equal-sized lookup row is a different owner. Repair domain is export
+presentation selection, not arithmetic/collection. No algorithmic cause inferred.
+CP15 owns the bounded fix; wrong raster scope/anchors/drafts/states remain separate.
+CV2 does not classify clear right-vs-left label placement alone as a mandatory
+visual failure; missing dimensions and wrong frame ownership are substantive.
 
 CW-B12 evidence: `uib-cw-b12-0RRqDd/HANDOFF.md`, `neutral-manifest.json`,
 `literal-invocation-proof.json`, per-case records and qualification under the
