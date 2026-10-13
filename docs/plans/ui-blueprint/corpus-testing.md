@@ -439,3 +439,38 @@ One focused changed-profile review, no repeat of accepted ordinal/RECT2 internal
 Current branch, scoped commit/push and existing Git lock; no nested agents, worktrees,
 new persistent directories or image deletion. Economy: one existing limit choice
 blocks a specific useful complete component; reuse all accepted lower-layer work.
+
+## USE-WEB-SCOPE3 — explicit method allowance for the selected profile
+
+SCOPE2 returned actual owned F01 failure and frozen abd8878 evidence: rooted
+preflight admits the configured maximum, `3 * cap + 13`; cap32 therefore needs109
+methods, but the caller profile grants100. Failure precedes selection even for a
+small source. Registration61e3a34 is not working-code acceptance; receipt12c7ff2
+and the unqualified temp candidate preserve the failure. Working helper16 was restored.
+
+The conservative preflight is observed implementation, not an established defect.
+Root does not adopt the worker's proposed Rust admission rewrite. The user-authorized
+outcome remains a whole selected component, and the existing chosen request32 remains.
+Agent-selected minimal Evolve delta: explicitly grant URL-mode collector32 and
+max_methods109 together, justified by the unchanged worst-case admission formula.
+This is a declared bounded caller-workload change, not a hidden retry or permission
+to relax a guard. First verify109 is admitted by the existing typed limits/global
+ceilings; if it is not, return that precise constraint rather than bypass it.
+
+Register WEB-FIRST-USE@7 BOUNDS before behavior. Only these two URL profile values
+change from accepted16/100. Legacy retains16/100; request32/depth8/128KiB/1000ms,
+collector256visits, transport/host/bootstrap/identity/cleanup limits and all fields
+remain unchanged. No Rust code/build, schema, dependencies, new options, truncation,
+retries, actual-source alteration or general adaptive budget mechanism. The method
+counter and every preflight predicate stay in place with an explicit finite grant.
+
+Same I02 owner completes the original full task and source/test/docs receipt scope,
+reusing retained patch and abd8878 pair where useful. Focused fixed-input comparison
+must show exactly the two authorized URL values and unchanged legacy. One owned
+browser session checks old small input, full24 including STYLE, selection32/refusal33,
+original canonical bytes→validator/measure/export, and cleanup under unchanged other
+bounds. A different encountered budget remains an explicit dependency. Update the
+existing consumer-web-scope2.md receipt with separate failed and corrected revisions;
+never rewrite the original refusal or call the old candidate ready. Same real Web
+consumer independently verifies the whole chooser after delivery. No repeated
+review of unchanged collector code; one focused profile/caller-boundary acceptance.
