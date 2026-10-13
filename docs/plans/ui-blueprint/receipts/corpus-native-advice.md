@@ -100,6 +100,23 @@ references and independent statuses. This consumer result adds zero primary case
 or generated images. Root retains selected repro for that owner and subsequent Mac
 retry; ordinary transient evidence is not a permanent archive.
 
+### USE-EXPORT-DOC1 consumer acceptance
+
+Mac retry01a135bb-9eb2-7f70-83d0-c175735704ac used hash-verified source2ed8fee CLI
+on original Reels input, exit0. The16065B brief answers the consumer's documentation
+task: source/state/partial coverage,50 objects,pt and AX-versus-painted distinction,
+numeric checked versus image unverified/approval draft remain clear. G01/D02 need a
+separate reviewed reference; D01 empty measurement sketches do not. No image is
+loaded by export. The consumer accepts both practical readability and reference
+handoff fixes. Existing generic D01 caption in sheets.json is nonblocking because
+the brief's table explains its role; no further cosmetic task is opened.
+
+Selected retry retained for root at system temp
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-USE-MAC2-DOC1-retry-s0n74tif/reels-document`.
+No app launch/source changes/ImageGen; no new corpus count. Author's unchanged
+machine/prompt byte proof was not redundantly rerun by the consumer. Export worker
+is archived after accepted handoff; supplied CLI/packages remain goal deliverables.
+
 ## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
 
 **Отклонено пользователем2026-10-13. Не реализовывать как задачу UI Blueprint.**
