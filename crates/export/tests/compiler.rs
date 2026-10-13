@@ -215,6 +215,7 @@ fn separate_prompts_cover_source_and_own_every_selected_dimension_once() {
     assert!(!d1.contains("VIEW PLAN: complete overview"));
     assert!(d1.contains("VIEW PLAN: ONLY this detail sheet's assigned measurement blocks"));
     assert!(d1.contains("MEASUREMENT ONLY"));
+    assert!(!d1.contains("OVERVIEW COMPOSITION"));
     assert!(!d1.contains("Use the original reference for artwork appearance"));
     assert!(!d1.contains("; text ") && !d1.contains("box[x"));
     assert!(d1.contains("excludes its reported parent"));
@@ -2368,11 +2369,14 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     let package = compile(&brief, limits()).unwrap();
     assert_eq!(serde_json::to_vec(&brief).unwrap(), original);
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert!(prompt.contains("Object button: Button"));
+    assert!(prompt.contains("Object button, item 1 in source scope: Button"));
     assert!(prompt.contains("window-sized semantic Play/Search region"));
     assert!(prompt.contains("Measurement context 1: AccessibilityBounds;"));
+    assert!(prompt.contains("LEFT, ‘Reference UI’"));
+    assert!(prompt.contains("RIGHT, ‘Measured frames’"));
+    assert!(prompt.contains("dimensions attached only to their own sketch edges"));
     assert!(
-        prompt.contains("AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"button\"")
+        prompt.contains("AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"button, item 1 in source scope\"")
     );
     assert_eq!(
         prompt
@@ -2454,7 +2458,7 @@ fn ax_only_known_frames_and_canonical_button_keep_true_attribution() {
     assert!(
         std::str::from_utf8(&p.files()["prompt.txt"])
             .unwrap()
-            .contains("EXACT OUTSIDE CAPTION \"button\": WIDTH")
+            .contains("EXACT OUTSIDE CAPTION \"button, item 1 in source scope\": WIDTH")
     );
 }
 
