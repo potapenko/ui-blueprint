@@ -942,6 +942,356 @@ fn factual_query_known_extents_keep_source_evidence_without_normative_fields() {
     );
 }
 
+// Synthetic source facts, independent of CW27 or the planner's output.
+fn unknown_geometry_tail() -> DrawingBrief {
+    let mut b = fixture("observed");
+    b.details.clear();
+    let SourceInput::Observed {
+        snapshot,
+        public_text_fields,
+    } = &mut b.views[0].source
+    else {
+        panic!("observed fixture")
+    };
+    public_text_fields.clear();
+    let mut node = snapshot.nodes[0].clone();
+    node.children.clear();
+    node.extensions.clear();
+    node.source_declarations.clear();
+    node.properties.retain(|p| {
+        matches!(
+            p.field(),
+            Field::LayoutBounds | Field::HitRegion | Field::VisibleRegion
+        )
+    });
+    snapshot.nodes = (0..25)
+        .map(|i| {
+            let mut n = node.clone();
+            n.key.key = Id(format!("auto-tail-{i}"));
+            if i == 24 {
+                n.native_role = Availability::Known {
+                    value: Value::Text("DIV".into()),
+                };
+                for p in &mut n.properties {
+                    if let Property::Requested { state, .. } = p {
+                        *state = Availability::Unknown {
+                            reason: Id("not-exposed".into()),
+                        };
+                    }
+                }
+            }
+            n
+        })
+        .collect();
+    snapshot.context.fields = vec![Field::LayoutBounds, Field::HitRegion, Field::VisibleRegion];
+    snapshot.coverage.fields = snapshot.context.fields.clone();
+    for observation in &mut snapshot.observations {
+        observation.coverage.fields = snapshot.context.fields.clone();
+    }
+    snapshot.relations.clear();
+    snapshot.components.clear();
+    for surface in &mut snapshot.surface_records {
+        surface.anchor = None;
+    }
+    uiblueprint_schema::validation::validate_snapshot(snapshot).expect("synthetic tail source");
+    b
+}
+
+#[test]
+fn automatic_unknown_tail_preserves_source_overview_and_limits() {
+    let b = unknown_geometry_tail();
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    let sheets = data(&p, "sheets.json");
+    assert_eq!(sheets.as_array().unwrap().len(), 3);
+    assert_eq!(sheets[0]["components"].as_array().unwrap().len(), 25);
+    assert_eq!(sheets[1]["components"].as_array().unwrap().len(), 12);
+    assert_eq!(sheets[2]["components"].as_array().unwrap().len(), 12);
+    assert!(!p.files().contains_key("prompt-D03.txt"));
+    assert_eq!(p.version(), "0.4.0");
+    let scene = data(&p, "scene.json");
+    let tail = &scene["views"][0]["components"][24];
+    assert_eq!(tail["id"], "N024");
+    assert_eq!(tail["properties"].as_array().unwrap().len(), 3);
+    for property in tail["properties"].as_array().unwrap() {
+        assert_eq!(property["state"]["availability"], "unknown");
+        assert!(property["evidence"].is_object());
+    }
+    let m = data(&p, "manifest.json");
+    assert_eq!(m["sheet_prompts"].as_array().unwrap().len(), 3);
+    assert_eq!(
+        m["sheet_prompts"][0]["component_ids"],
+        sheets[0]["components"]
+    );
+    let mut assigned: Vec<_> = m["sheet_prompts"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .flat_map(|s| s["dimension_ids"].as_array().unwrap().iter().cloned())
+        .collect();
+    assigned.sort_by_key(|id| id.as_str().unwrap().to_owned());
+    let mut required = m["required_dimension_ids"].as_array().unwrap().clone();
+    required.sort_by_key(|id| id.as_str().unwrap().to_owned());
+    assert_eq!(assigned, required);
+    assert!(assigned.windows(2).all(|w| w[0] != w[1]));
+    let mut unsplit = limits();
+    unsplit.components_per_detail = 25;
+    let overview = compile(&b, unsplit).unwrap();
+    assert_eq!(overview.version(), "0.1.0");
+    assert_eq!(overview.files().len(), 6);
+    for file in ["scene.json", "dimensions.json"] {
+        assert_eq!(p.files()[file], overview.files()[file]);
+    }
+    let mut exact = limits();
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+}
+
+#[test]
+fn automatic_unknown_tail_retains_explicit_requests_and_meaningful_context() {
+    for case in [
+        "explicit",
+        "detail-purpose",
+        "multi-view",
+        "full-chunk",
+        "button",
+        "text",
+        "name",
+        "disabled",
+        "unknown-state",
+        "known-zero",
+        "unsupported",
+        "redacted",
+        "child",
+        "parent",
+        "relation",
+        "mapping",
+        "focus",
+        "unknown-focus",
+        "selection",
+        "composition",
+        "surface-anchor",
+        "declaration",
+        "extension",
+    ] {
+        let mut b = unknown_geometry_tail();
+        let SourceInput::Observed {
+            snapshot,
+            public_text_fields,
+        } = &mut b.views[0].source
+        else {
+            panic!()
+        };
+        let first = snapshot.nodes[0].key.clone();
+        let key = snapshot.nodes[24].key.clone();
+        let known_geometry = snapshot.nodes[0].properties[0].clone();
+        let Property::Requested { evidence, .. } = &snapshot.nodes[24].properties[0] else {
+            panic!()
+        };
+        let evidence = evidence.clone();
+        match case {
+            "explicit" | "detail-purpose" => b.details.push(DetailRequest {
+                view: b.views[0].id.clone(),
+                components: vec!["N024".into()],
+                title: "Explicit unknown source".into(),
+            }),
+            "multi-view" => {}
+            "full-chunk" => {
+                let tail = snapshot.nodes[24].clone();
+                for node in &mut snapshot.nodes[20..24] {
+                    node.native_role = tail.native_role.clone();
+                    node.properties = tail.properties.clone();
+                }
+            }
+            "button" => {
+                snapshot.nodes[24].native_role = Availability::Known {
+                    value: Value::Text("BUTTON".into()),
+                }
+            }
+            "text" | "name" | "disabled" | "unknown-state" => {
+                let field = match case {
+                    "text" => Field::VisibleText,
+                    "name" => Field::AccessibilityName,
+                    _ => Field::Enabled,
+                };
+                if matches!(field, Field::VisibleText | Field::AccessibilityName) {
+                    public_text_fields.push(field);
+                }
+                snapshot.context.fields.push(field);
+                snapshot.coverage.fields.push(field);
+                for o in &mut snapshot.observations {
+                    o.coverage.fields.push(field);
+                }
+                for node in &mut snapshot.nodes[..24] {
+                    node.properties.push(Property::Requested {
+                        field,
+                        sensitivity: Sensitivity::Public,
+                        evidence: evidence.clone(),
+                        state: Availability::Unknown {
+                            reason: Id("not-exposed".into()),
+                        },
+                    });
+                }
+                snapshot.nodes[24].properties.push(Property::Requested {
+                    field,
+                    sensitivity: Sensitivity::Public,
+                    evidence: evidence.clone(),
+                    state: if case == "unknown-state" {
+                        Availability::Unknown {
+                            reason: Id("not-exposed".into()),
+                        }
+                    } else {
+                        Availability::Known {
+                            value: if case == "disabled" {
+                                Value::Flag(false)
+                            } else {
+                                Value::Text("Public fragment".into())
+                            },
+                        }
+                    },
+                });
+            }
+            "known-zero" => {
+                snapshot.nodes[24].properties[0] = known_geometry;
+                let Property::Requested {
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(g),
+                        },
+                    ..
+                } = &mut snapshot.nodes[24].properties[0]
+                else {
+                    panic!()
+                };
+                let Shape::Rect(r) = &mut g.shape else {
+                    panic!()
+                };
+                r.width = 0.0;
+                r.height = 0.0;
+            }
+            "unsupported" | "redacted" => {
+                let Property::Requested { state, .. } = &mut snapshot.nodes[24].properties[0]
+                else {
+                    panic!()
+                };
+                *state = if case == "unsupported" {
+                    Availability::Unsupported {
+                        reason: Id("not-supported".into()),
+                    }
+                } else {
+                    Availability::Redacted {}
+                };
+            }
+            "child" => snapshot.nodes[24].children.push(first.clone()),
+            "parent" => snapshot.nodes[0].children.push(key.clone()),
+            "relation" => snapshot.relations.push(Relation {
+                kind: RelationKind::DescribedBy,
+                from: first.clone(),
+                to: key.clone(),
+                evidence: evidence.clone(),
+            }),
+            "mapping" => snapshot.components.push(ComponentMapping {
+                logical_component_key: Id("mapped".into()),
+                members: vec![first.clone(), key.clone()],
+                declaration_source: Id("test-mapping".into()),
+                provenance: Provenance::Reported,
+            }),
+            "focus" => {
+                snapshot.focus.keyboard = FocusRef::Known {
+                    target: key.clone(),
+                    evidence: evidence.clone(),
+                }
+            }
+            "unknown-focus" => {
+                snapshot.focus.keyboard = FocusRef::Unknown {
+                    reason: Id("unbound".into()),
+                }
+            }
+            "selection" => {
+                snapshot.focus.text_selection = Some(TextSelection {
+                    anchor: 0,
+                    focus: 0,
+                    units: Id("utf16".into()),
+                    evidence: evidence.clone(),
+                })
+            }
+            "composition" => {
+                snapshot.focus.composition_state = Property::Requested {
+                    field: Field::Value,
+                    sensitivity: Sensitivity::Public,
+                    evidence: evidence.clone(),
+                    state: Availability::Unknown {
+                        reason: Id("unbound".into()),
+                    },
+                }
+            }
+            "surface-anchor" => snapshot.surface_records[0].anchor = Some(key.clone()),
+            "declaration" => snapshot.nodes[24]
+                .source_declarations
+                .push(SourceDeclaration {
+                    namespace: Id("test".into()),
+                    name: Id("state".into()),
+                    state: Availability::Unknown {
+                        reason: Id("unknown".into()),
+                    },
+                    sensitivity: Sensitivity::Public,
+                    source: Id("test-source".into()),
+                }),
+            "extension" => {
+                let property = snapshot.nodes[24].properties[0].clone();
+                snapshot.nodes[24].extensions.push(ExtensionProperty {
+                    namespace: Id("test".into()),
+                    name: Id("frame".into()),
+                    property,
+                });
+            }
+            _ => unreachable!(),
+        }
+        if case == "detail-purpose" {
+            b.purpose = Purpose::Detail;
+        }
+        if case == "multi-view" {
+            let mut second = b.views[0].clone();
+            second.id = "second".into();
+            b.views.push(second);
+        }
+        let mut l = limits();
+        if case == "full-chunk" {
+            l.components_per_detail = 5;
+        }
+        let original = serde_json::to_vec(&b).unwrap();
+        let p = compile(&b, l).unwrap_or_else(|e| panic!("{case}: {e:?}"));
+        let sheets = data(&p, "sheets.json");
+        assert!(
+            sheets
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|s| s["kind"] == "detail"
+                    && s["components"]
+                        .as_array()
+                        .unwrap()
+                        .contains(&serde_json::json!("N024"))),
+            "{case}"
+        );
+        if case == "explicit" || case == "detail-purpose" {
+            assert_eq!(sheets.as_array().unwrap().len(), 5);
+            assert_eq!(sheets[1]["title"], "Explicit unknown source");
+            assert_eq!(sheets[4]["components"], serde_json::json!(["N024"]));
+            assert!(
+                data(&p, "manifest.json")["sheet_prompts"][1]["dimension_ids"]
+                    .as_array()
+                    .unwrap()
+                    .is_empty()
+            );
+        }
+        assert_eq!(serde_json::to_vec(&b).unwrap(), original, "{case}");
+    }
+}
+
 // Independent reader for the human table notation. Reconstruct nested arrays/objects
 // from the documented paths, rather than using the exporter's field factoring code.
 #[test]

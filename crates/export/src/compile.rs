@@ -374,6 +374,55 @@ fn sheets(b: &DrawingBrief, s: &Scene, l: ExportLimits) -> Result<Vec<Sheet>> {
         }
         if v.components.len() > l.components_per_detail {
             for chunk in v.components.chunks(l.components_per_detail) {
+                // An unknown-only tail has no independently describable enlargement.
+                // Keep every record on G01/in scene; unknown never means invisible.
+                if b.purpose == Purpose::Document
+                    && s.views.len() == 1
+                    && b.details.is_empty()
+                    && v.source_kind == SourceKind::Observed
+                    && v.design_analysis.is_empty()
+                    && chunk.len() < l.components_per_detail
+                    && chunk.iter().all(|c| {
+                        matches!(&c.native_role, Some(Availability::Known { value: Value::Text(role) }) if role == "DIV")
+                            && c.role.is_none()
+                            && c.label.is_none()
+                            && c.geometry.is_none()
+                            && c.parent.is_none()
+                            && c.children.is_empty()
+                            && !v.components.iter().any(|p| p.children.contains(&c.id))
+                            && c.declarations.is_empty()
+                            && c.extensions.is_empty()
+                            && c.state_and_actions.is_none()
+                            && c.properties.len() == 3
+                            && [Field::LayoutBounds, Field::HitRegion, Field::VisibleRegion]
+                                .iter()
+                                .all(|field| c.properties.iter().any(|p| matches!(p,
+                                    Property::Requested {
+                                        field: actual,
+                                        sensitivity: Sensitivity::Public,
+                                        state: Availability::Unknown { .. },
+                                        ..
+                                    } if actual == field)))
+                            && c.source_key.as_ref().is_some_and(|key| {
+                                !v.relations.iter().any(|r| &r.from == key || &r.to == key)
+                                    && !v.mappings.iter().any(|m| m.members.contains(key))
+                                    && !v.surfaces.iter().any(|s| s.anchor.as_ref() == Some(key))
+                                    && v.focus.as_ref().is_some_and(|f| {
+                                        [&f.keyboard, &f.accessibility, &f.active_descendant]
+                                            .iter()
+                                            .all(|axis| match axis {
+                                                FocusRef::NotRequested {} | FocusRef::None { .. } => true,
+                                                FocusRef::Known { target, .. } => target != key,
+                                                FocusRef::Unknown { .. } => false,
+                                            })
+                                            && f.text_selection.is_none()
+                                            && matches!(f.composition_state, Property::NotRequested { .. })
+                                    })
+                            })
+                    })
+                {
+                    continue;
+                }
                 groups.push((
                     "Scope detail; preserve every listed object".into(),
                     chunk.iter().map(|c| c.id.clone()).collect(),

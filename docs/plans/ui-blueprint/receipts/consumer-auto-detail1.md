@@ -188,3 +188,71 @@ No tests, build, CLI replay, ImageGen, live UI or screenshot ran in this diagnos
 Receipt-only validation: changed local links and route consistency, diff whitespace;
 checkpoint/push on current master under the existing Git lock. Other-owner files,
 including `after-title-spacing.png`, remain untouched. HUMAN-OWNERS1 stays closed.
+
+## Implementation after direct user approval
+
+2026-10-13: direct user message in this chat approved the exact proposed plan at
+02219e9316bf5dd1e5689b06322a22477fd99fc3 and the SHEET-PROMPTS change, requested
+implementation, checks and checkpoint in master. This supersedes the earlier
+read-only boundary; the original diagnosis/proposal above remains historical.
+Single-chat execution; no delegation or new image generation. Existing registry56
+skill-discovery change is unrelated and preserved; this delta registers revision57.
+SHEET-PROMPTS1 → 2 AUTO-TAIL is an approved Evolve change, registered before source.
+Owned paths: compile.rs, tests/compiler.rs, SHEET-PROMPTS, registry, PACKAGE/CLI-EXPORT
+requires links and this receipt. Exact source/data, explicit plans, other modes,
+limits/owners/privacy and earlier accepted presentation remain protected.
+Actual approval: “Утверждаю предложенный план и изменение SHEET-PROMPTS. Реализуй исключение такого автоматического хвоста, сохрани все данные в G01 и machine package, explicit details и Register D03. Выполни проверки и сделай checkpoint в master.”
+
+Implemented only the existing auto-chunk branch: strict known-DIV/three-public-Unknown
+geometry predicate; no explicit requests, one observed Document, partial final chunk.
+Incoming child links are checked as well as local children because observed scene
+records do not synthesize a parent field. Relations, mappings, source surface anchors
+and focus targets protect their members. Unknown focus, unbound text selection or
+composition and optional design-analysis context conservatively retain the sheet.
+No per-sheet dimension pass, new flag, parameter, schema field or source projection.
+Unknown-only members cannot supply known measurement anchors under the existing
+engine; unchanged required IDs/owners were also verified on real inputs.
+
+Verification completed on the approved implementation:
+
+- Two new compiler tests pass: full overview/exact scene/dimensions, unique required
+  ownership, no-split version and exact aggregate bytes; 23 counterexamples for
+  explicit requests (including Detail purpose), multiple views, a full unknown-only
+  chunk, control/text/name/false or unknown state, known zero geometry,
+  unsupported/redacted facts, parent/child, relation/mapping, focus/unknown focus,
+  selection/composition, surface anchor, source declaration and extension.
+- Four existing focused tests named above pass. No full workspace suite was needed.
+  Initial synthetic-fixture failures exposed missing requested-field records; the
+  fixture was corrected to satisfy canonical validation, without weakening it.
+- Locked core CLI baseline and candidate builds pass. Original CW27 input and
+  metadata hashes still equal the pins above; commands kept their exact original
+  density and input/component/view/output limits, with task-temp destinations.
+- Email loses only prompt-D03.txt. sheets.json, manifest.json, drawing-brief.md and
+  combined prompt.txt consistently reflect the shorter plan. prompt-G01/D01/D02
+  are byte-identical to the current pre-change baseline. All25 G01 members,
+  required_dimension_ids and retained sheet entries/owners are unchanged.
+- Register's complete ten-file package is byte-identical to the current pre-change
+  baseline, including D03 membership N024–026 and dimensions M0077/M0078. Both
+  candidates' scene.json and dimensions.json also equal the original CW27 bytes.
+- Actual CLI aggregate budget boundaries pass for Email436234 and Register473211
+  bytes: exact budget succeeds; one byte less refuses2 with no destination/stdout.
+- `cargo clippy --locked -p uiblueprint-export --all-targets -- -D warnings`,
+  `cargo fmt --all -- --check`, changed local links/anchors and diff whitespace pass.
+
+Pre-change core CLI SHA-256:
+`2652ee516ee5d8b02db9dbaccb47c8c0287737f8ca0f9405c034ac329210f739`.
+Candidate core CLI SHA-256:
+`4a7222dc2dec0865d6c5b238a8993b67ebfff17051895402f9241547d8f21e20`.
+Email exact scene/dimensions SHA-256:
+`d449ffa949d8cc6cc2eecee469aa669ca02251caad909bb1f65d87a65bb46944` /
+`a661d30fdc07fcb301b85a76f03e82a2c03d83cb62aaf4fbc70270a43b9430a7`.
+Register exact scene/dimensions SHA-256:
+`d0f1a3f5d5560dc09e1e97631c610828cb9144bafca543cb67c1e67baa1d5ad7` /
+`2fad538de89a065c832ec8f8315d8aeafc9654084e5b474765d58063beb6e08d`.
+
+These are compiler/CLI results and author verification, not independent image
+acceptance. No image/model call or live UI operation occurred. Earlier image
+failures and HUMAN-OWNERS1 acceptance are unchanged. The task-owned image-free
+temporary build/binaries/replay packages were removed after verification; original
+CW27 evidence and every existing image remain. Checkpoint includes only the seven
+owned files on master; unrelated `after-title-spacing.png` remains untouched.

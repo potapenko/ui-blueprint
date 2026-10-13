@@ -7,7 +7,7 @@
 - Read when: export compiler, manifest, ProposedLayout и validation.
 - Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
 - Requires: [UIB.PRIVACY@1](privacy.md), [UIB.DRAWING-GEOMETRY@2](drawing-geometry.md).
-- Conditional requires: [SHEET-PROMPTS@1](drawing-sheet-prompts.md) for separately executable single-view detail sheets; CP4 additive export0.4, existing inputs/base files preserved.
+- Conditional requires: [SHEET-PROMPTS@2](drawing-sheet-prompts.md) for separately executable single-view detail sheets; CP4 additive export0.4, existing inputs/base files preserved.
 - Source mapping: DRAWING 131–157; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; HBP-HUMAN-001 presentation rules supersede the earlier exhaustive visible inventory rules; machine truth remains exact.
 
