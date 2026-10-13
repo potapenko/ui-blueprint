@@ -467,6 +467,18 @@ records actual prompt → image candidates and verification; it does not imply f
 image acceptance before both continuing critics approve.
 
 
+## Human captions and Unicode
+
+Human frame/anchor captions and detail headings use JSON string escaping: reviewed
+Unicode, combining marks and variation selectors remain their original characters,
+while quotes, admitted newlines and tabs stay escaped within one record. Existing
+public-text admission/redaction is unchanged; this is not Unicode normalization.
+Generic control captions retain their item ordinal and add the recorded parent-group
+ordinal within the view, distinguishing different source objects without guessing
+semantic names or printing raw source IDs. Group ordinals do not create painted groups.
+Machine source text, analysis labels, exact measurements and sheet ownership stay
+unchanged; the DOC1 brief uses the same human captions for its readable table.
+
 ## Concise literal prompt records
 
 Repeated rules for clipping and paired dimensions are stated once per applicable

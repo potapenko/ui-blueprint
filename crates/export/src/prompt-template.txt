@@ -26,6 +26,7 @@ numbers. No invented padding/radius/tolerance or exact-sum claim for rounded cha
 
 ОБЪЕКТЫ И ИЕРАРХИЯ
 Object names identify records and measurement sketches. They are NOT extra UI text.
+Group/item ordinals follow recorded parent/child-control order, not painted groups.
 Placement contexts/coordinates describe positions only. Distinct Spaces stay distinct.
 
 СОСТОЯНИЯ И ДЕЙСТВИЯ

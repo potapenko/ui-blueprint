@@ -541,6 +541,109 @@ fn current_observed_dimensions() -> (String, String) {
     (historical, current)
 }
 #[test]
+fn human_captions_preserve_unicode_and_distinguish_source_groups() {
+    for name in [
+        "⏱️ Speed",
+        "Русский 世界 e\u{301}",
+        "Quoted \"name\"",
+        "First line\nSecond\tline",
+    ] {
+        let mut b = fixture("observed");
+        let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+            panic!()
+        };
+        let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+            panic!()
+        };
+        *state = Availability::Known {
+            value: Value::Text(name.into()),
+        };
+        let original = serde_json::to_vec(&b).unwrap();
+        let p = compile(&b, limits()).unwrap();
+        assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+        assert_eq!(
+            data(&p, "scene.json")["views"][0]["components"][0]["properties"][1]["state"]["value"]
+                ["value"],
+            name
+        );
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert!(!prompt.contains("\\u{"));
+        let object = prompt
+            .lines()
+            .find(|line| line.starts_with("Object ") && line.contains(" [#1]"))
+            .unwrap();
+        assert!(object.contains(&serde_json::to_string(name).unwrap()));
+        assert!(!prompt.lines().any(|line| line.starts_with("Second")));
+        let mut exact = limits();
+        exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+        assert!(compile(&b, exact).is_ok());
+        exact.max_output_bytes -= 1;
+        assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    }
+    for name in [
+        "forbidden\u{1}caption",
+        "forbidden\rline",
+        "forbidden\u{7f}caption",
+    ] {
+        let mut b = fixture("observed");
+        let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+            panic!()
+        };
+        let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[1] else {
+            panic!()
+        };
+        *state = Availability::Known {
+            value: Value::Text(name.into()),
+        };
+        let p = compile(&b, limits()).unwrap();
+        assert_eq!(
+            data(&p, "scene.json")["views"][0]["components"][0]["properties"][1]["state"]["availability"],
+            "redacted"
+        );
+        assert!(
+            !std::str::from_utf8(&p.files()["prompt.txt"])
+                .unwrap()
+                .contains("forbidden")
+        );
+    }
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "DIV");
+        node.children.clear();
+    }
+    snapshot.relations.clear();
+    for i in [2, 6] {
+        set_test_role(&mut snapshot.nodes[i], "BUTTON");
+    }
+    snapshot.nodes[0].children = vec![snapshot.nodes[2].key.clone()];
+    snapshot.nodes[4].children = vec![snapshot.nodes[6].key.clone()];
+    for (i, width, height) in [(2, 16., 16.), (6, 228., 80.)] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x: 0.,
+            y: 0.,
+            width,
+            height,
+        });
+    }
+    let p = compile(&b, limits()).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(text.contains("DIMENSIONED RECTANGLE button, item 1 in group 1: WIDTH 16 CSS px ABOVE; HEIGHT 16 CSS px LEFT"));
+    assert!(text.contains("DIMENSIONED RECTANGLE button, item 1 in group 2: WIDTH 228 CSS px ABOVE; HEIGHT 80 CSS px LEFT"));
+}
+
+#[test]
 fn human_presentation_preserves_exact_historical_machine_fields() {
     for name in ["observed", "proposed"] {
         let brief = fixture(name);
@@ -1589,13 +1692,12 @@ fn editable_combo_options_and_independent_same_size_controls_get_useful_geometry
         text.split("LOCAL INSET DETAIL")
             .nth(1)
             .unwrap()
-            .contains("select, item 1 in its group Left boundary")
+            .contains("select, item 1 in group 3 Left boundary")
     );
     assert!(text.contains("WIDTH 140 CSS px BELOW this measured source frame; HEIGHT 120 CSS px"));
     assert!(text.contains("WIDTH 124 CSS px ABOVE; HEIGHT 20 CSS px"));
     assert!(
-        text.contains("Input to first")
-            || text.contains("option, item 1 in its group Top boundary")
+        text.contains("Input to first") || text.contains("option, item 1 in group 4 Top boundary")
     );
     assert_eq!(serde_json::to_vec(&b).unwrap(), source);
     let mut exact = l;

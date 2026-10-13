@@ -610,6 +610,41 @@ pub(crate) fn component_name(v: &SceneView, index: usize) -> String {
     }
     human_role.into()
 }
+// Keep machine analysis labels stable; only human presentation uses these captions.
+fn human_component_name(v: &SceneView, index: usize, limit: usize) -> Result<String> {
+    let c = &v.components[index];
+    let mut name = component_name(v, index);
+    let mut labels = vec![public_label(c)];
+    if let Some(Value::Text(text)) = c
+        .properties
+        .iter()
+        .find(|p| p.field() == Field::AccessibilityName)
+        .and_then(Property::known)
+    {
+        labels.push(text);
+    }
+    if let Some(parent) = v.components.iter().find(|p| p.children.contains(&c.id)) {
+        labels.push(public_label(parent));
+    }
+    for text in labels.into_iter().filter(|s| !s.is_empty()) {
+        let debug = format!("{:?}", text.replace('\n', " / "));
+        if name.contains(&debug) {
+            name = name.replace(&debug, &bounded_compact_json(&text, limit)?);
+        }
+    }
+    if control(c)
+        && let Some(stem) = name.strip_suffix(" in its group")
+        && let Some(parent) = v.components.iter().position(|p| p.children.contains(&c.id))
+    {
+        let group = v.components[..=parent]
+            .iter()
+            .filter(|p| !p.children.is_empty())
+            .count();
+        name = format!("{stem} in group {group}");
+    }
+    require(name.len() <= limit, E::OutputLimit)?;
+    Ok(name)
+}
 fn geometry_context(v: &SceneView, g: &Geometry) -> usize {
     v.components
         .iter()
@@ -658,11 +693,14 @@ fn object_text(
             } else {
                 String::new()
             };
-        format!("- Source member {}{position}", component_name(v, index))
+        format!(
+            "- Source member {}{position}",
+            human_component_name(v, index, limit)?
+        )
     } else {
         format!(
             "Object {}: {} [#{}]",
-            component_name(v, index),
+            human_component_name(v, index, limit)?,
             component_role(c),
             index + 1
         )
@@ -696,7 +734,7 @@ fn object_text(
             && !value.is_empty()
             // A short accessible name is already quoted in the object caption.
             && !(field == Field::AccessibilityName
-                && component_name(v, index).contains(&format!("{value:?}")))
+                && human_component_name(v, index, limit)?.contains(&bounded_compact_json(value, limit)?))
         {
             out.push_str(&format!(
                 "; {:?}={}",
@@ -946,7 +984,7 @@ fn drawing_inventory(
                 &format!(
                     "COMPONENT CLIP #{} (construction only), {}: known clipped edges {:?}; visible rect[x {}, y {}, w {}, h {}] {} in Space {} ({:?}, {:?}).\n",
                     i + 1,
-                    component_name(v, i),
+                    human_component_name(v, i, limit)?,
                     edges,
                     display_number(r.x),
                     display_number(r.y),
@@ -969,7 +1007,7 @@ fn drawing_inventory(
                 &mut out,
                 &format!(
                     "BOUNDARY CONTEXT: {}. Only listed descendant records belong to this sheet, subject to its artwork scope; its unlisted children and complete parent region are not artwork on this sheet. Full geometry stays in machine evidence.\n",
-                    component_name(v, i)
+                    human_component_name(v, i, limit)?
                 ),
                 limit,
             )?;
@@ -1001,7 +1039,7 @@ fn drawing_inventory(
                     let mut location = Vec::new();
                     let mut current = parent;
                     while let Some(index) = current {
-                        let name = component_name(v, index);
+                        let name = human_component_name(v, index, limit)?;
                         let ancestor = v
                             .components
                             .iter()
@@ -1113,7 +1151,7 @@ fn measurement_inventory(
                 &mut out,
                 &format!(
                     "TARGET {}: {:?}, context {context}; this frame only.\n",
-                    component_name(v, i),
+                    human_component_name(v, i, limit)?,
                     g.frame_kind
                 ),
                 limit,
@@ -1124,8 +1162,8 @@ fn measurement_inventory(
                 &mut out,
                 &format!(
                     "Boundary: {} excludes its reported parent {} and {} sibling source objects; they are context only, never contents of this sketch.\n",
-                    component_name(v, i),
-                    component_name(v, parent),
+                    human_component_name(v, i, limit)?,
+                    human_component_name(v, parent, limit)?,
                     child_indices(v, parent).len().saturating_sub(1)
                 ),
                 limit,
@@ -1147,7 +1185,7 @@ fn measurement_inventory(
                     &format!(
                         "Recorded {:?}={value} for {}; caption outside only.\n",
                         p.field(),
-                        component_name(v, i)
+                        human_component_name(v, i, limit)?
                     ),
                     limit,
                 )?;
@@ -1158,7 +1196,7 @@ fn measurement_inventory(
                 &mut out,
                 &format!(
                     "Reported state/actions for {}: {}; not executed.\n",
-                    component_name(v, i),
+                    human_component_name(v, i, limit)?,
                     bounded_compact_json(state, limit)?
                 ),
                 limit,
@@ -1217,7 +1255,7 @@ fn local_measures(
                         &mut out,
                         &format!(
                             "SEPARATE FULL-LAYOUT SKETCH — {} (LayoutBounds): EMPTY measurement rectangle, no UI contents. WIDTH {} {} ABOVE; HEIGHT {} {} LEFT. Both dimensions end on this full-layout frame's opposite edges, never on the visible overview. Caption outside: full layout frame.\n",
-                            component_name(v, a),
+                            human_component_name(v, a, limit)?,
                             display_number(w.value.ok_or(E::InvalidGeometry)?),
                             unit_name(w.units),
                             display_number(h.value.ok_or(E::InvalidGeometry)?),
@@ -1241,7 +1279,7 @@ fn local_measures(
                             &mut out,
                             &format!(
                                 "OVERVIEW ASSIGNMENT — same component {}, different frame: {:?} VisibleRegion in Space {} ({:?}, {}, {:?}). Render only that sourced visible intersection with its proved component cut. It is not a standalone viewport, paint bounds or occlusion proof. Do not stretch the visible fragment to the full-layout height, complete offscreen content or attach the full-layout labels to it. Visible-frame data stays distinct even when its width equals the full-layout width.\n",
-                                component_name(v, a),
+                                human_component_name(v, a, limit)?,
                                 evidence.provenance,
                                 visible.coordinate_space.id.0,
                                 visible.coordinate_space.kind,
@@ -1266,9 +1304,9 @@ fn local_measures(
                             "DIMENSIONED RECTANGLE"
                         },
                         if accessibility {
-                            bounded_compact_json(&component_name(v, a), limit)?
+                            bounded_compact_json(&human_component_name(v, a, limit)?, limit)?
                         } else {
-                            component_name(v, a)
+                            human_component_name(v, a, limit)?
                         },
                         display_number(w.value.ok_or(E::InvalidGeometry)?),
                         unit_name(w.units),
@@ -1286,13 +1324,16 @@ fn local_measures(
                     append(
                         &mut out,
                         &format!(
-                            "PRINT BELOW-FRAME WIDTH LABEL exactly: {:?}.\n",
-                            format!(
-                                "{} — measured frame width {} {}",
-                                component_name(v, a),
-                                display_number(w.value.ok_or(E::InvalidGeometry)?),
-                                unit_name(w.units)
-                            )
+                            "PRINT BELOW-FRAME WIDTH LABEL exactly: {}.\n",
+                            bounded_compact_json(
+                                &format!(
+                                    "{} — measured frame width {} {}",
+                                    human_component_name(v, a, limit)?,
+                                    display_number(w.value.ok_or(E::InvalidGeometry)?),
+                                    unit_name(w.units)
+                                ),
+                                limit
+                            )?
                         ),
                         limit,
                     )?;
@@ -1320,9 +1361,9 @@ fn local_measures(
                         "RECTANGLE EXTENT"
                     },
                     if d.anchors[0].frame_kind == FrameKind::AccessibilityBounds {
-                        bounded_compact_json(&component_name(v, a), limit)?
+                        bounded_compact_json(&human_component_name(v, a, limit)?, limit)?
                     } else {
-                        component_name(v, a)
+                        human_component_name(v, a, limit)?
                     },
                     d.anchors[0].edge,
                     d.anchors[1].edge,
@@ -1356,13 +1397,13 @@ fn local_measures(
             && d.anchors[0].space == d.anchors[1].space;
         let start = format!(
             "{} {:?} {}",
-            component_name(v, a),
+            human_component_name(v, a, limit)?,
             d.anchors[0].edge,
             if border_pair { "boundary" } else { "anchor" }
         );
         let end = format!(
             "{} {:?} {}",
-            component_name(v, b),
+            human_component_name(v, b, limit)?,
             d.anchors[1].edge,
             if border_pair { "boundary" } else { "anchor" }
         );
@@ -1412,9 +1453,11 @@ fn local_measures(
             append(
                 &mut out,
                 &format!(
-                    "EDGE FRAGMENT ({direction}; placement contexts {} / {}): print START {start:?}; print END {end:?}. START is left/upper; END is right/lower.\n{topology}\n",
+                    "EDGE FRAGMENT ({direction}; placement contexts {} / {}): print START {}; print END {}. START is left/upper; END is right/lower.\n{topology}\n",
                     geometry(&v.components[a]).map_or(0, |g| geometry_context(v, g)),
-                    geometry(&v.components[b]).map_or(0, |g| geometry_context(v, g))
+                    geometry(&v.components[b]).map_or(0, |g| geometry_context(v, g)),
+                    bounded_compact_json(&start, limit)?,
+                    bounded_compact_json(&end, limit)?
                 ),
                 limit,
             )?;
@@ -1753,7 +1796,7 @@ fn detail_caption(v: &SceneView, members: &[usize]) -> String {
             })
         });
         if let Some(name) = name.filter(|s| !s.is_empty()) {
-            return format!("{} — dimensions", name.replace('\n', " / "));
+            return format!("{} — dimensions", name);
         }
         let labels = v
             .relations
@@ -1770,7 +1813,7 @@ fn detail_caption(v: &SceneView, members: &[usize]) -> String {
             .filter(|s| !s.is_empty())
             .collect::<Vec<_>>();
         if !labels.is_empty() {
-            return format!("{} — dimensions", labels.join(" ").replace('\n', " / "));
+            return format!("{} — dimensions", labels.join(" "));
         }
     }
     let parent = members.first().and_then(|first| {
@@ -1788,7 +1831,7 @@ fn detail_caption(v: &SceneView, members: &[usize]) -> String {
                 .all(|&i| label.children.contains(&v.components[i].id))
             && !public_label(label).is_empty()
         {
-            return format!("{} — dimensions", public_label(label).replace('\n', " / "));
+            return format!("{} — dimensions", public_label(label));
         }
     }
     "Control dimensions and spacing".into()
@@ -2265,8 +2308,8 @@ fn drawing_dimensions(
         append(
             &mut out,
             &format!(
-                "LOCAL DETAIL {:?} — partial; source state retained:\n",
-                title
+                "LOCAL DETAIL {} — partial; source state retained:\n",
+                bounded_compact_json(title, limit)?
             ),
             limit,
         )?;
@@ -2896,7 +2939,7 @@ fn drawing_brief(
                     &format!(
                         "| {} | {} | {} | {} | {} |\n",
                         cell(&c.id),
-                        cell(&component_name(v, j)),
+                        cell(&human_component_name(v, j, limit)?),
                         cell(&labels.join("; ")),
                         if state.is_empty() {
                             "Not reported here".into()
