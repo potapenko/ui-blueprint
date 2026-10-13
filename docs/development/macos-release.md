@@ -186,3 +186,39 @@ No public download, downloaded Gatekeeper check, real user installation, desktop
 skill-picker interaction or model invocation was tested. Discovery is qualified only
 for the versions/modes above. Publication, licensing and remaining signing/notarization
 gates retain their separate authority; discovery success does not close them.
+
+## New-chat installation and skill use — 2026-10-14
+
+The operator explicitly required push first, then installation by a new chat using
+the README prompt, followed by actual skill use. The first attempt exposed a real
+onboarding failure: the old guide required a published release although none existed.
+`c873dd93` added pinned-source bootstrap and the installer's explicit `--local-release`.
+A second read through web search returned stale instructions; `ccc2eddd` changed
+the short prompt to fetch the current guide directly with curl. The test chat then
+continued from that pushed instruction, without parent-prepared local binaries.
+
+The chat cloned GitHub with no checkout into system temp, pinned
+`ccc2eddd5ca4423bb20a744e9eec12730badf4b4`, built and verified the combined candidate,
+and ran its rendered installer with the authorized real prefix `~/.local` and skill
+path `~/.agents/skills/ui-blueprint`. Installed version:
+`0.0.0-dev.ccc2eddd5ca4423bb20a744e9eec12730badf4b4`. CLI and skill resolve through
+the same `current` version; file receipts and relative skill references verified.
+
+After reading the installed SKILL.md and analysis reference, the chat executed:
+
+- Bundled validator: `valid`, exit0.
+- Bundled gap query: **8 css_px** in `local-form`, exit0.
+- Bundled expectation: **pass**, exit0.
+- A new width query for `fixture.authored_layout:A`: **30 css_px**, `layout_bounds`,
+  `local-form`, snapshot `S11`/revision11, observation `OG1`, exit0. This is the
+  synthetic saved example, not a live UI observation.
+
+Thus installation and use are demonstrated, beyond loader registration. It took
+the documented source path on a prepared Apple Silicon macOS27.0.1 host; no new
+toolchain, shell-profile change, signature or public release was introduced. The
+pre-existing legacy skill copy was preserved. The new installed files remain for
+the operator; all run-owned non-image build/download/query files were removed and
+their removal verified. Automatic discovery of the new copy in that already-running
+chat was not separately confirmed; it used the exact installed path explicitly.
+Public binary downloads, Gatekeeper and a clean-machine bootstrap without existing
+build prerequisites remain separate from this successful local-source installation.
