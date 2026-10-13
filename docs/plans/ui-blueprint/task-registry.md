@@ -136,6 +136,12 @@ archival. Mac advisor is asked for its existing passive Guest Tour input/command
 handoff; no extra capture requested. Current snapshots are historical observations,
 not proof of that consumer's subsequently changed UI. Feedback returns utility gaps
 to UI Blueprint. This communication adds no generated corpus cases.
+Follow-up01a1360e-9369-7a73-b057-7f03585c0ffa: owner did not invoke the utility;
+its current question is recalculation latency/animation smoothness during hover,
+which saved AX geometry cannot establish. Treat as task-fit feedback, not a
+geometry defect, a completed utility trial or permission to add monitoring/profiling.
+Ready geometric inputs remain available for that owner's later geometry questions;
+root does not redirect or archive its unrelated application work.
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
