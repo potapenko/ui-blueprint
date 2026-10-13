@@ -2331,6 +2331,8 @@ only for explicitly empty inputs, and caller draft only when explicitly reported
 The name is NOT field content. Never replace visible public draft with its accessible
 name. "#;
 const ARTWORK_GUIDANCE: &str = r#"Exact visible UI strings and source icons; readable typography.
+Copy the source UI contour: no added tail, notch or pointer where the reference
+edge is straight. Measurement arrows remain separate.
 P#/M# refer to the numbered placement/measurement contexts.
 Partial details retain recorded rows/columns, without new wrappers/headings/controls.
 Source icons retain their silhouette as WHITE outlines, including Play triangles;
