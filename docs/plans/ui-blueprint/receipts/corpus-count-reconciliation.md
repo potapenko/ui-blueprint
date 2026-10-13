@@ -121,7 +121,7 @@ binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 | CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
 | CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
 | CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs fail independent reviews |
-| CW-B16 |2|2|Desktop applied Genre tags/Clear/popup and mobile applied chips/Clear;17amounts correct, two first1536×1024 outputs authorFAIL, review pending |
+| CW-B16 |2|2|Desktop applied Genre tags/Clear/popup and mobile applied chips/Clear;17amounts correct, both first1536×1024 outputs fail independent review; literal inset selection gap feedsCP17 |
 | **Primary subtotal** |**190**|**513**| |
 
 CW-B16 evidence: `uib-cw-b16-Ganih2/HANDOFF.md`, neutral-manifest, novelty/state,
@@ -138,6 +138,13 @@ Author: DlosesAction applied cue and popup/trigger geometry; MlosesassignedAdven
 detail/reflows and boxes text-onlyClear. Full overview/17amounts preserved.
 OwnClear restores emptyfilters/URL, tabsclosed/mobileviewportreset. Finalmobile panel
 dismissal not separately proven; bounded actionnetwork Dnone/MpublicSVGonly.
+Independent-first/author reconciliation completed: CV2 final01a133b0-349e-7090-9adb-885ea8bb013a,
+CT2 final01a133bd-cca7-7d00-baa1-67615bdb858b. Both images fail as above; no extra
+focus-shape failure invented. Exact chip widths86.84375/86.8515625 both display≈87
+without being equal facts. DesktopC2 separately omits any measured inset despite
+M0249 popupN016.left→gridN020.left=8.0234375 and M0245→headerN017.left samevalue.
+One useful existing relation suffices; no new algorithm/padding/union/mapping claim.
+CP17 owns this bounded presentation-selection repair; source limitations unchanged.
 
 CW-B15 evidence: `uib-cw-b15-7A6OTi/HANDOFF.md`, neutral-manifest, novelty-proof,
 per-realm loaded-chain, numeric/literal and state/resource records. NeutralSHA256
