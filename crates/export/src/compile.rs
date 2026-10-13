@@ -1896,6 +1896,17 @@ fn drawing_dimensions(
         .iter()
         .filter(|d| d.value.is_some() && frame_matches(d))
         .collect();
+    // Flat observations have no root/parent proof. Source order selects one
+    // representative measured element only, never an inferred enclosing frame.
+    let flat_element_frame = v.source_kind == SourceKind::Observed
+        && v.components.len() > 1
+        && v.components
+            .iter()
+            .all(|c| c.children.is_empty() && c.parent.is_none())
+        && geometry(&v.components[0]).is_some_and(|g| g.frame_kind == FrameKind::LayoutBounds)
+        && v.components
+            .iter()
+            .all(|c| geometry(c).is_none() || same_frame(&v.components[0], c));
     // The engine's existing parent/child inset results identify an overflowing wrapper.
     // No union, new quantity, source identity or invented container is calculated here.
     let mut overview: Vec<usize> = v
@@ -1905,9 +1916,7 @@ fn drawing_dimensions(
         .filter(|(i, c)| {
             !control(c)
                 && (!c.children.is_empty()
-                    || (*i == 0
-                        && component_role(c).eq_ignore_ascii_case("form")
-                        && geometry(c).is_some_and(|g| g.frame_kind == FrameKind::LayoutBounds))
+                    || (*i == 0 && flat_element_frame)
                     || (v.components.len() == 1
                         && geometry(c).is_some_and(|g| {
                             matches!(
@@ -2323,6 +2332,16 @@ fn drawing_dimensions(
         .filter(|(owner, _, a, b)| owner.is_none() && a == b)
         .map(|(_, d, a, b)| (*d, *a, *b))
         .collect::<Vec<_>>();
+    if flat_element_frame && overview_measures.iter().any(|(_, a, _)| *a == 0) {
+        append(
+            &mut out,
+            &format!(
+                "MEASURED ELEMENT FRAME — {}: source order selects this element's recorded layout frame, not a root, full-scope extent or painted border. Show its assigned dimensions on a separate EMPTY LayoutBounds sketch; caption it as this measured element. Keep reference artwork separate. Do not enclose other records or form a union.\n",
+                human_component_name(v, 0, limit)?
+            ),
+            limit,
+        )?;
+    }
     append(
         &mut out,
         &local_measures(v, &overview_measures, partial, limit)?,

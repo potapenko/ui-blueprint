@@ -1345,6 +1345,207 @@ fn popup_prompt_preserves_distinct_input_and_result_width_owners() {
 }
 
 #[test]
+fn flat_observation_selects_a_recorded_element_frame_not_a_scope_union() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    snapshot.nodes.truncate(3);
+    snapshot.relations.clear();
+    snapshot.components.clear();
+    let known = snapshot.nodes[0].properties[2].clone();
+    for n in &mut snapshot.nodes {
+        set_test_role(n, "DIV");
+        n.children.clear();
+        n.properties[2] = known.clone();
+        let Property::Requested { state, .. } = &mut n.properties[1] else {
+            panic!()
+        };
+        *state = Availability::Unknown {
+            reason: Id("not-collected".into()),
+        };
+    }
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("ASIDE".into()),
+    };
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[0] else {
+        panic!()
+    };
+    *state = Availability::Unknown {
+        reason: Id("role-not-collected".into()),
+    };
+    set_test_role(&mut snapshot.nodes[2], "BUTTON");
+    for (i, x, y, w, h) in [
+        (0, 0., 42.15625, 39.140625, 798.140625),
+        (1, 9.03125, 54.203125, 30.109375, 774.046875),
+        (2, 12.03125, 62.71875, 24.09375, 24.09375),
+    ] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x,
+            y,
+            width: w,
+            height: h,
+        });
+    }
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(text.contains("MEASURED ELEMENT FRAME — aside:"));
+    assert!(text.contains("not a root, full-scope extent or painted border"));
+    assert!(text.contains("separate EMPTY LayoutBounds sketch"));
+    assert!(
+        text.contains(
+            "DIMENSIONED RECTANGLE aside: WIDTH ≈39 CSS px ABOVE; HEIGHT ≈798 CSS px LEFT"
+        )
+    );
+    assert!(!text.contains("DIMENSIONED RECTANGLE container:"));
+    assert!(text.contains("WIDTH ≈24 CSS px ABOVE; HEIGHT ≈24 CSS px LEFT"));
+    for variant in [
+        "different-role",
+        "nonroot-text-first",
+        "unknown-first",
+        "other-space",
+        "ax-only",
+        "mixed-frame",
+        "recorded-parent",
+        "overflowing-other",
+    ] {
+        let mut v = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut v.views[0].source else {
+            panic!()
+        };
+        match variant {
+            "different-role" => {
+                snapshot.nodes[0].native_role = Availability::Known {
+                    value: Value::Text("SECTION".into()),
+                }
+            }
+            "nonroot-text-first" => set_test_role(&mut snapshot.nodes[0], "LABEL"),
+            "recorded-parent" => snapshot.nodes[1].children = vec![snapshot.nodes[0].key.clone()],
+            "mixed-frame" => {
+                let mut hit = snapshot.nodes[1].properties[2].clone();
+                let Property::Requested {
+                    field,
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(g),
+                        },
+                    ..
+                } = &mut hit
+                else {
+                    panic!()
+                };
+                *field = Field::HitRegion;
+                g.frame_kind = FrameKind::HitRegion;
+                snapshot.nodes[1].properties[3] = hit;
+                let Property::Requested { state, .. } = &mut snapshot.nodes[1].properties[2] else {
+                    panic!()
+                };
+                *state = Availability::Unknown {
+                    reason: Id("not-collected".into()),
+                };
+            }
+            "unknown-first" => {
+                let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[2] else {
+                    panic!()
+                };
+                *state = Availability::Unknown {
+                    reason: Id("not-collected".into()),
+                };
+            }
+            _ => {
+                let i = if variant == "ax-only" { 0 } else { 1 };
+                let Property::Requested {
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(g),
+                        },
+                    ..
+                } = &mut snapshot.nodes[i].properties[2]
+                else {
+                    panic!()
+                };
+                if variant == "other-space" {
+                    g.coordinate_space.id = Id("other-space".into());
+                } else if variant == "ax-only" {
+                    for n in &mut snapshot.nodes {
+                        let Property::Requested {
+                            field,
+                            state:
+                                Availability::Known {
+                                    value: Value::Geometry(g),
+                                },
+                            ..
+                        } = &mut n.properties[2]
+                        else {
+                            panic!()
+                        };
+                        *field = Field::AccessibilityBounds;
+                        g.frame_kind = FrameKind::AccessibilityBounds;
+                    }
+                    for fields in std::iter::once(&mut snapshot.context.fields)
+                        .chain(std::iter::once(&mut snapshot.coverage.fields))
+                        .chain(
+                            snapshot
+                                .observations
+                                .iter_mut()
+                                .map(|o| &mut o.coverage.fields),
+                        )
+                    {
+                        for f in fields {
+                            if *f == Field::LayoutBounds {
+                                *f = Field::AccessibilityBounds;
+                            }
+                        }
+                    }
+                } else {
+                    g.shape = Shape::Rect(Rect {
+                        x: 1000.,
+                        y: 1000.,
+                        width: 900.,
+                        height: 900.,
+                    });
+                }
+            }
+        }
+        let p = compile(&v, limits()).unwrap_or_else(|e| panic!("{variant}: {e:?}"));
+        let t = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        if matches!(
+            variant,
+            "unknown-first" | "other-space" | "ax-only" | "mixed-frame" | "recorded-parent"
+        ) {
+            assert!(!t.contains("MEASURED ELEMENT FRAME"), "{variant}");
+        } else {
+            assert!(t.contains("MEASURED ELEMENT FRAME"), "{variant}");
+            assert!(t.contains("WIDTH ≈39 CSS px ABOVE; HEIGHT ≈798 CSS px LEFT"));
+            assert!(!t.contains("WIDTH 900 CSS px"));
+        }
+        assert!(
+            data(&p, "scene.json")["views"][0]["components"]
+                .as_array()
+                .unwrap()
+                .len()
+                == 3
+        );
+    }
+    let mut exact = limits();
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+}
+
+#[test]
 fn flat_selected_form_uses_existing_frame_and_input_gap_without_children() {
     let mut b = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
@@ -1641,6 +1842,12 @@ fn single_noninteractive_scope_gets_its_known_frame_without_role_inference() {
         if variant == "ax" {
             assert!(prompt.contains("AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"span\": WIDTH ≈175 CSS px ABOVE; HEIGHT ≈42 CSS px LEFT"));
             assert!(prompt.contains("EMPTY WHITE dashed rectangle"));
+        } else if variant == "two-leaves" {
+            // The generic flat-view policy selects a measured element, not a root.
+            assert!(prompt.contains("MEASURED ELEMENT FRAME — span:"));
+            assert!(prompt.contains("not a root, full-scope extent or painted border"));
+            assert!(prompt.contains("separate EMPTY LayoutBounds sketch"));
+            assert!(prompt.contains("WIDTH ≈175 CSS px ABOVE; HEIGHT ≈42 CSS px LEFT"));
         } else {
             assert!(!prompt.contains("DIMENSIONED RECTANGLE span:"), "{variant}");
             assert!(
