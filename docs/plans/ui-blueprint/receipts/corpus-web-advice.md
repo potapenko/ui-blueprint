@@ -1,5 +1,28 @@
 # Web source advisor handoffs
 
+## CW13 — isolated storage does not isolate backend effects, 2026-10-13
+
+Advisor terminal01a13423-0637-7740-8e90-acf2549e0697, sourcec23ef963; bounded
+source-only revisit of prior shared-localStorage exclusions after B18/B19. Zero
+newly ready candidates in this subset, not a claim the entire site is exhausted.
+Reels query/source selection and desktop Actor selection can persist local state
+safely in the owned context, but also start search/playback. Reels close-back-panel
+sets flipped=false and passes playback-enabled=true; player lifecycle restarts
+play-current on activation/item change. Pre-pausing is not a no-playback guarantee.
+Qualified views may increment onboarding counters/send analytics-video-view;
+closing a session cannot revoke prior requests. No source/UI/network changes made.
+Source owners under src/cljs/playphraseme: views/reels/view.cljs:2128,
+views/reels/views/video/view.cljs:1500, common/video_player.cljs:1524.
+Contracts: existing Reels Discovery/Experience/shell and CW7 Search/persistence.
+Remaining Settings selections only change labels/options in empty Clip Search,
+not new dependent composition. B12 already covers unapplied Reels Search; B13–17
+cover selected entity/Years/IMDb/Genres; B18 locale variants excluded; B19 complete.
+CW44/CW46 access gates remain. No interception, capability spoof, clipboard,
+account or source-app changes proposed. Exact new dependency for those specific
+source/query transitions: qualify their ordinary playback/statistics scope or an
+existing authorized runtime preventing those effects. CP18 proceeds independently.
+
+
 ## CW12 — backend rating is not a local Settings control, 2026-10-13
 
 Advisor terminal01a13416-7c7d-7252-84b4-4d00799f81bd, sourcec23ef963,

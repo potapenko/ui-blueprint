@@ -701,3 +701,15 @@ Both switches restoredOFF, Settings closed, exact owned isolated session and its
 resources verified gone by the worker. Ordinary bootstrap/analytics occurred;
 no search/filter-option/translation/media requests observed. No repository edits.
 All images/tool original retained; no broad zero-network or filesystem-isolation claim.
+
+CW-B19 final reconciliation: CV2turn01a13422-62d4-7c31-994f-dbf983867d22 and
+CT2turn01a13423-beed-7c72-a535-541ff741b97e agree on two raster failures:
+white-filled ON knob and missing≈ on623CSSpx. All31numeric amounts appear;
+30/31literal labels pass. Values, mixed state, focus and meaningful content remain.
+CT2 additionally finds the specific existing C2 select-spacing requirement absent
+from the literal plan: N007.bottom222.515625 → N011.top238.546875 is16.03125CSSpx,
+same source Space/Surface. CV2's broad geometry pass does not override this narrower
+omission. CP18 assigned to original exporter owner for engine-backed representative
+select spacing and bounded regression/generalization. No primary count change.
+Post-render Settings detachment was not separately proved; exact isolated-session
+termination and restoredOFF states remain reported evidence, not that missing UI proof.
