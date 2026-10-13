@@ -10,7 +10,7 @@ terminal before redispatch; no duplicate workers were created. Nativecaption
 Both CW21 critics resume only author reconciliation from their completed initial
 observations. Web source owner remains idle because its three-form batch is done.
 The prior pause below is historical, not a current execution gate. Scope and
-Post-resume CW21 final reconciliation and Native caption repair:200cases/605images.
+Post-resume CW21 final reconciliation and Native caption repair:200cases/606images.
 
 ### Preserved pre-restart handoff
 
@@ -82,7 +82,7 @@ See [current runbook](execution.md#проектные-агенты-как-пол
 
 The preceding blocked status and three-turn audit are history, not a current wait
 for CN16 approval. All accepted work, data and original objective remain preserved:
-200proved eligible primarycases,800remaining,77validationimages/605totalimages.
+200proved eligible primarycases,800remaining,78validationimages/606totalimages.
 Consumer attempts do not change image/source counts until actual evidence qualifies.
 The historical Release-state recovery issue remains a separate decision; no write
 or activation is authorized by this coordinator handoff. Restart from these consumer
@@ -175,10 +175,10 @@ Previously excluded CW14 now has its first qualified image, bringing it to197;
 it is counted once under CW-B2, not a new live state or repair reroll.
 CW-B21 adds3qualified auth-subform cases after final source/image reconciliation,
 bringing the total to200; providerchooser has no observation/image and is excluded.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1, CAST-OUTLINE1=1, USE-NATIVE-CAPTIONS1=1 images (77 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2, CP19=2, CMATH1=4, CMATH2=3, CP20=2, USE-CAST-DIMENSIONS1=1, CAST-OUTLINE1=1, USE-NATIVE-CAPTIONS1=1, USE-FORM-DIMENSIONS1=1 images (78 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:605counted generated images
-overall; unqualified attempts increase neither eligible cases nor the77repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:606counted generated images
+overall; unqualified attempts increase neither eligible cases nor the78repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -205,7 +205,7 @@ root does not redirect or archive its unrelated application work.
 | CW-B22 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|terminal0cases/0images,2actual acquisition refusals|Neutral /tmp/uib-cw-b22-469ouaqz/neutral-index.json. CollapsedFilters resync_required/collector_resync_required4; PrivacyPolicy selection_incomplete46visited/resource_limit2; neither publishesSnapshot. No capincrease/pruning/retry/sourcechanges, state restored and ownbrowserclosed. Specific failures, not projectexhaustion; resync exactcause assigned originalutilityowner |
 | USE-WEB-RESYNC1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|diagnosis complete; owner archived, one consumer retry dispatched|Turn01a1365b-042b-7450-8109-750821e901d3 narrows to rect/IOrect/repeatedrect or3viewport consistency checks in acquire.rs359/408/637/660. Typedreport cannot identifywhich; no utilitybug established. released cleanup excludes event-loss detachedpath; code0/send_progress notqueued not deeperproof. Sourceowner retries once only after observed transition completion, samefields/scope/caps; no arbitrarysleep/retryuntilpass/appchange. PrivacyPolicy quota separate |
 | CW-B21 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|3qualified cases/3firstimages counted;0fullrasterPASS|Immutable /tmp/uib-cw-b21-76jwxzy4/neutral-index-r2.json. CV2final01a1364a-ef96-7082-98cb-10803a399f59/CT2final01a1364a-f655-7f12-a3a4-7f802bc49c92 qualify chains;18/18assigned labels pass. TechnicalIDs, repeatedstate attribution and Registeralignment fail. FORMroot dimensions/Registerexistinggap omissions separately confirmed. Chooser excluded;200cases/604images |
-| USE-FORM-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source04fa48e/receipt4a8abd4 delivered; same2critics initial review|[Receipt](receipts/consumer-form-dimensions1.md). Known FORM scopeframe pairs and Registerexistinggap selected,7focusedchecks/unchangedmachine and controlfamilies reported. OneRegister1470×1070 repairimage, author7numberspass but focus/detailcontext fail; no newcase. Neutral uib-FORM-DIMENSIONS1-ene0o8o2/neutral-index.json SHA10b10a07, CLId9691b5b retained. Source/raster acceptance pending |
+| USE-FORM-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source04fa48e accepted; owner archived, rasterFAIL retained|[Receipt](receipts/consumer-form-dimensions1.md). CT2final01a1365c-e72f-76b3-8df1-83ab30e2e6b3/CV2final01a1365b-a893-7652-a7f3-d4b022686cfa accept measuredframe/gap assignments,7scalarpass; no universalfirstnode-root assertion. Rasterfocus/pairedfield/lateralinset fail. Onequalifiedrepairimage counted,200cases/606images. ReadyCLId9691b5b and neutral10b10a07 retained |
 | USE-WEB-PRIVATE1 |CT2 utility investigator01a12c78-5e34-7870-8eec-9203a8076f05|completed; callerannotation syntax correction, no codefix|Turn01a1362e-4b31-76f3-b2af-1e65e296309b: public_text rejects '/' in state and4not_depicted strings; public_text_fields[] valid. Original3commands exit2/private_content/empty/absentdest; same600cCLI/snapshots/limits with5plain-language metadata substitutions all exit0,10/12/7nodes,partial. Snapshot sensitivity defect not established; guard/allowlist preserved. Trialcopies cleaned, actualconsumer resumes |
 | USE-CAST-DIMENSIONS1 |same export owner01a12b6a-92a9-73c3-aec2-022e32651008|source600c6ab accepted; dimension presentation passes, fullrasterFAIL|[Receipt](receipts/consumer-cast-dimensions1.md). CT2completedreview01a13619-1715-7962-9aa2-e93f0a4ad1c7 reused; CV2initial01a13619-14d3-7a02-b47a-3365e100cb26/final01a1361b-8ed0-74b0-bd7b-8e50a1c2267d. Correct≈175×≈42/anchors, no invented304/R12. Unsupported pointer remains; footer-qualified px is formatting residual perCV2. One qualified repairimage, no newcase. Owner continues Nativecaptions, no Cast reroll loop |
 | USE-WEB-EXPORT1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source863dcdb accepted; owner archived|[Receipt](receipts/consumer-web-export1.md). CT2 initial01a135e6-f917-7610-905d-a9770c6a19db/final01a135ee-0692-7ed2-92d6-a200fb95342e accepts publication boundary; actual Webconsumer01a135e6-f83d-7263-8635-d7928ac5120a confirms Cast→canonicalJSON→export without adapter. Candidate retained uib-web-export1-h1iqyuk2/candidate. Raster/assignment failures separate from accepted handoff |

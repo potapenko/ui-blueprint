@@ -13,9 +13,9 @@ fixture/component-preview origin;143 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:524 primary images =520 first outputs +4 rerolls;
-77 separate repair-validation images;4 unqualified reference attempts
+78 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-605 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+606 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -1001,3 +1001,30 @@ failure. No rerun of accepted builds/tests on resume or final reconciliation.
 
 Totals200cases,524primaryimages,77repairimages,4unqualifiedimages,605generated;
 no newfullvisualacceptance. Oldfailedimages/tooloriginals remain retained.
+
+## USE-FORM-DIMENSIONS1 — accepted measured-frame assignment repair
+
+Source04fa48e1682d8d2e3cfdf455261a97033b07dbe6, receipt4a8abd4;
+[receipt](consumer-form-dimensions1.md). Neutral
+`$T/uib-FORM-DIMENSIONS1-ene0o8o2/neutral-index.json`, SHA
+10b10a075bb517e25a1a4a45868e4b96aa292cd1a825be8a3bcff4982994a4d0.
+One Register1470×1070 repairimage, zero newcases/rerolls. Original3FORM frames
+and RegisterM0045gap become assigned without new measurements, source/hierarchy
+changes or redaction/Space/Surface weakening. All machine files and complete
+Cast/GuestTour/CW14 controls remain unchanged; authorfocused tests reused.
+
+CV2initial01a13659-f5fc-7ed3-bdf0-1c0173ba7473/final
+01a1365b-a893-7652-a7f3-d4b022686cfa; CT2initial
+01a13659-f87d-7522-a2c3-44810fc21f1a/final
+01a1365c-e72f-76b3-8df1-83ab30e2e6b3 accept the bounded source/assignment repair.
+First-FORM is editorial selection of a measured frame, not proof of universal
+Snapshot scope-root identity. The actual3cases are separately bound by their
+rooted Web acquisition. No new parent relation or painted-border claim follows.
+
+All7raster scalars/units/approximation marks pass, including≈347×≈252 and≈36gap.
+FullrasterFAIL remains: omitted repeated focus attribution, missing second input
+in assigned paired detail and invented lateral inset despite equal source x/width.
+The assigned measurement frame is valid; its depicted relation is wrong. No new
+complete visual acceptance. Sourceowner archived after handoff; retained ready CLI
+and images remain available to consumers. Totals200cases/524primaryimages/
+78repairimages/4unqualifiedimages=606generatedimages;800cases remain.
