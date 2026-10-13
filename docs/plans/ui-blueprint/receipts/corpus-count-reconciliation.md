@@ -107,7 +107,7 @@ eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 | CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
 | CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
 | CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
-| CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs authorFAIL; review pending |
+| CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs fail independent reviews |
 | **Primary subtotal** |**188**|**511**| |
 
 CW-B15 evidence: `uib-cw-b15-7A6OTi/HANDOFF.md`, neutral-manifest, novelty-proof,
@@ -123,7 +123,16 @@ outward with<1CSSpx margins; sourcegeometry unrounded. M780×1582 exactboundedre
 Two first1536×1024outputs, no rerolls. Own filters/query/results restored/tabsclosed,
 mobileviewportreset; final mobile panel-dismissal afterBack not separately proven.
 Author: Dfocus/inset-anchor/gap repetition fail; Mrepeated-focus/detail membership/
-bottomhelper clipping fail. Independent image acceptance pending, source limits retained.
+bottomhelper clipping fail. Both critics observed independently and reconciled author
+evidence: CV2 final01a13351-94e6-7e42-bb7b-af71d8720901,
+CT2 final01a13351-73c2-7ad0-8528-eb1716215e5f. D≈147width ends inside input, duplicated
+≈6gap occupies remaining input width instead of input→Clear; ≈12inset anchors unclear.
+Moverview focus survives but repeated-input focus/detail neighbors do not; helper
+18layout/16visible cut is not preserved (no exact clipped-glyph pixel claim).
+All38amounts and meaningful enabled Episodes state/scope/draft pass. Clear-height
+right/left slot remains separate from substantive ownership; Dfooter final word
+clipped, principal provenance readable. No new compiler or source-app defect proven.
+Source/runtime and incomplete mobile-dismissal proof remain bounded, not upgraded.
 
 CW-B14 evidence: `uib-cw-b14-XUdZ9Y/HANDOFF.md`, neutral-manifest, required-dimension
 proof, literal-invocation proof and state/resource records. NeutralSHA256
