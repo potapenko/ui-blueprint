@@ -642,6 +642,21 @@ fn human_component_name(v: &SceneView, index: usize, limit: usize) -> Result<Str
             .count();
         name = format!("{stem} in group {group}");
     }
+    if control(c)
+        && !name.contains(['"', ',', ' '])
+        && !v.components.iter().any(|p| p.children.contains(&c.id))
+        && v.components
+            .iter()
+            .enumerate()
+            .any(|(i, other)| i != index && control(other) && component_name(v, i) == name)
+    {
+        let ordinal = v.components[..=index]
+            .iter()
+            .enumerate()
+            .filter(|(i, other)| control(other) && component_name(v, *i) == name)
+            .count();
+        name = format!("{name}, item {ordinal} in source scope");
+    }
     require(name.len() <= limit, E::OutputLimit)?;
     Ok(name)
 }
@@ -1884,6 +1899,9 @@ fn drawing_dimensions(
         .filter(|(i, c)| {
             !control(c)
                 && (!c.children.is_empty()
+                    || (*i == 0
+                        && component_role(c).eq_ignore_ascii_case("form")
+                        && geometry(c).is_some_and(|g| g.frame_kind == FrameKind::LayoutBounds))
                     || (v.components.len() == 1
                         && geometry(c).is_some_and(|g| {
                             matches!(
@@ -1985,7 +2003,15 @@ fn drawing_dimensions(
                 .to_ascii_lowercase()
                 .as_str(),
             "select" | "combobox"
-        ) || !large(a)
+        ) && !(input_control(&v.components[a])
+            && input_control(&v.components[b])
+            && overview.contains(&0)
+            && component_role(&v.components[0]).eq_ignore_ascii_case("form")
+            && v.components.iter().all(|c| c.children.is_empty())
+            && same_frame(&v.components[0], &v.components[a])
+            && same_frame(&v.components[a], &v.components[b])
+            && geometry(&v.components[a]).is_some_and(|g| g.frame_kind == FrameKind::LayoutBounds))
+            || !large(a)
             || !large(b)
             || groups.iter().flat_map(|(_, m)| m).any(|&i| {
                 component_role(&v.components[i]) == component_role(&v.components[a])

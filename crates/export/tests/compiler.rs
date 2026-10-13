@@ -1280,6 +1280,143 @@ fn popup_prompt_preserves_distinct_input_and_result_width_owners() {
 }
 
 #[test]
+fn flat_selected_form_uses_existing_frame_and_input_gap_without_children() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    snapshot.nodes.truncate(7);
+    snapshot.relations.clear();
+    snapshot.components.clear();
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "DIV");
+        node.children.clear();
+        let Property::Requested { state, .. } = &mut node.properties[1] else {
+            panic!()
+        };
+        *state = Availability::Unknown {
+            reason: Id("not-collected".into()),
+        };
+    }
+    for (i, role) in [(0, "FORM"), (3, "INPUT"), (6, "INPUT")] {
+        set_test_role(&mut snapshot.nodes[i], role);
+    }
+    for i in [3, 6] {
+        snapshot.nodes[i].properties[2] = snapshot.nodes[0].properties[2].clone();
+    }
+    for (i, x, y, w, h) in [
+        (0, 10., 20., 347.359375, 251.734375),
+        (3, 10., 50., 347.359375, 42.),
+        (6, 10., 127.734375, 347.359375, 42.),
+    ] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x,
+            y,
+            width: w,
+            height: h,
+        });
+    }
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains(
+        "DIMENSIONED RECTANGLE form outline: WIDTH ≈347 CSS px ABOVE; HEIGHT ≈252 CSS px LEFT"
+    ));
+    assert!(prompt.contains("input, item 1 in source scope Bottom boundary"));
+    assert!(prompt.contains("input, item 2 in source scope Top boundary"));
+    assert_eq!(prompt.matches("↕ ≈36 CSS px").count(), 1);
+    let dimensions = data(&p, "dimensions.json");
+    let gap = dimensions[0]["dimensions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .find(|d| d["label"] == "Repeated control clear gap")
+        .unwrap();
+    assert_eq!(gap["value"], 35.734375);
+    assert_eq!(gap["anchors"][0]["component"], "N003");
+    assert_eq!(gap["anchors"][1]["component"], "N006");
+    assert_eq!(gap["anchors"][0]["edge"], "bottom");
+    assert_eq!(gap["anchors"][1]["edge"], "top");
+    assert!(
+        data(&p, "scene.json")["views"][0]["components"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|n| n["children"].as_array().unwrap().is_empty())
+    );
+    let mut exact = limits();
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    for variant in [
+        "unknown-root",
+        "ordinary-root",
+        "form-not-first",
+        "reported-parent",
+        "different-space",
+        "unknown-field",
+        "button-field",
+    ] {
+        let mut v = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut v.views[0].source else {
+            panic!()
+        };
+        match variant {
+            "ordinary-root" => set_test_role(&mut snapshot.nodes[0], "DIV"),
+            "form-not-first" => {
+                set_test_role(&mut snapshot.nodes[0], "DIV");
+                set_test_role(&mut snapshot.nodes[1], "FORM");
+            }
+            "reported-parent" => snapshot.nodes[1].children = vec![snapshot.nodes[0].key.clone()],
+            "button-field" => set_test_role(&mut snapshot.nodes[6], "BUTTON"),
+            _ => {
+                let index = if variant == "unknown-root" { 0 } else { 6 };
+                let Property::Requested { state, .. } = &mut snapshot.nodes[index].properties[2]
+                else {
+                    panic!()
+                };
+                if variant == "different-space" {
+                    let Availability::Known {
+                        value: Value::Geometry(g),
+                    } = state
+                    else {
+                        panic!()
+                    };
+                    g.coordinate_space.id = Id("other-space".into());
+                } else {
+                    *state = Availability::Unknown {
+                        reason: Id("not-collected".into()),
+                    };
+                }
+            }
+        }
+        let p = compile(&v, limits()).unwrap();
+        let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert!(!text.contains("↕ ≈36 CSS px"), "{variant}");
+        if matches!(
+            variant,
+            "unknown-root" | "ordinary-root" | "form-not-first" | "reported-parent"
+        ) {
+            assert!(
+                !text.contains("DIMENSIONED RECTANGLE form outline:"),
+                "{variant}"
+            );
+        }
+    }
+}
+
+#[test]
 fn single_noninteractive_scope_gets_its_known_frame_without_role_inference() {
     let mut b = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
