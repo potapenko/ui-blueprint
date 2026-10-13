@@ -23,6 +23,9 @@ URL + selected component, no manual JSON or runtime IDs:
               Unique root-document light-DOM match only; no frame/shadow descent.
 --max-visited-nodes  Optional lower selection bound, 1..2048 (default 2048).
 --cli / --worker     Optional matching absolute binaries (defaults: siblings).
+--json        URL mode only: original observed ChannelResponse bytes on stdout,
+              after identity and cleanup checks; safe diagnostics on stderr.
+              Skips human Inspect/Measure. Exit 4 can carry useful partial data.
 
 Core and low-level guarded Web CLI remain Node-free. This caller does not discover
 browsers, scan profiles, launch/reconfigure, navigate/focus, or change applications.
@@ -125,10 +128,12 @@ function normalizePageUrl(value){
   return url.href;
 }
 function parseFirstUse(argv){
-  const allowed=new Set(['--connection','--url','--component','--max-visited-nodes','--cli','--worker']),args={};
-  for(let i=0;i<argv.length;i+=2){
-    if(!allowed.has(argv[i])||argv[i] in args||!argv[i+1])throw failure('invalid_arguments',2);
-    args[argv[i]]=argv[i+1];
+  const allowed=new Set(['--connection','--url','--component','--max-visited-nodes','--cli','--worker','--json']),args={};
+  for(let i=0;i<argv.length;i++){
+    const key=argv[i];
+    if(!allowed.has(key)||key in args)throw failure('invalid_arguments',2);
+    if(key==='--json')args[key]=true;
+    else{if(!argv[i+1]||argv[i+1].startsWith('--'))throw failure('invalid_arguments',2);args[key]=argv[++i];}
   }
   if(!args['--connection'])throw failure('connection_required',2);
   if(('--cli' in args)!==('--worker' in args))throw failure('matching_executables_required',2);
@@ -142,7 +147,7 @@ function parseFirstUse(argv){
   if(typeof selector!=='string'||!selector||Buffer.byteLength(selector)>512||/[\x00-\x1f\x7f]/.test(selector)||!compound.test(selector))throw failure('unsupported_selector',2);
   const cap=args['--max-visited-nodes']??'2048';
   if(!/^[1-9][0-9]*$/.test(cap)||Number(cap)>2048)throw failure('invalid_selection_limit',2);
-  return {connection:connection.href,url,selector,maxVisited:Number(cap),
+  return {connection:connection.href,url,selector,maxVisited:Number(cap),json:args['--json']===true,
     cli:args['--cli']??path.join(__dirname,'uiblueprint'),worker:args['--worker']??path.join(__dirname,'session-worker')};
 }
 
@@ -291,7 +296,7 @@ async function openBootstrap(options){
   try{
     browser=await BootstrapCdp.open(options.connection,deadline,budget);
     const id=await target(),endpoint=new URL(options.connection);endpoint.pathname=`/devtools/page/${id}`;
-    args={cli:options.cli,worker:options.worker,target:id,endpoint:endpoint.href};
+    args={cli:options.cli,worker:options.worker,target:id,endpoint:endpoint.href,json:options.json};
     page=await BootstrapCdp.open(args.endpoint,deadline,budget);binding=await metadata();
     const {executionContextId}=await page.send('Page.createIsolatedWorld',{frameId:binding.surface.id,worldName:'ui-blueprint-first-use',grantUniveralAccess:false});
     if(!Number.isInteger(executionContextId)||executionContextId<=0)throw failure('cdp_invalid_reply');
@@ -421,10 +426,16 @@ async function example(args,bootstrap=null){
     if(bootstrap){await bootstrap.revalidate();await bootstrap.close();}
     const source=JSON.parse(observed.bytes),snapshot=source.artifact?.data?.result?.data;
     if(source.artifact?.kind!=='channel_response'||source.artifact.data.result.status!=='observed'||!snapshot)throw failure('snapshot_unavailable');
-    const file=await save('observe.json',observed.bytes),key={namespace:'web.dom',key:String(args.root)};
+    const key={namespace:'web.dom',key:String(args.root)};
     const root=snapshot.nodes.find(node=>node.key.namespace===key.namespace&&node.key.key===key.key);
     if(!root)throw failure('root_not_observed');
+    if(args.json&&(!diagnostic||diagnostic.worker_cleanup!=='confirmed'||diagnostic.terminal!=='completed'
+      ||diagnostic.operation!=='observe'||diagnostic.committed_channels!==1||diagnostic.missing_channels!==0))throw failure('observe_not_completed',1);
     if(diagnostic&&observed.code!==0)console.error(formatObserveDiagnostic(diagnostic));
+    // Keep the original Buffer. The finally block must finish before the caller
+    // can publish it; no saved-data DTO or JSON re-encoding is involved.
+    if(args.json)return {code:observed.code,bytes:observed.bytes};
+    const file=await save('observe.json',observed.bytes);
     const inspected=await call(['inspect','--snapshot',file,'--ref',JSON.stringify(key),'--view','design','--max-input-bytes','131072','--max-output-bytes',String(outputBytes)]);
     if(inspected.code!==0)throw failure(`inspect_refused_exit_${inspected.code}`,inspected.code);
     process.stdout.write(inspected.bytes);
@@ -461,6 +472,23 @@ async function example(args,bootstrap=null){
   }
 }
 
+async function publishCanonical(bytes){
+  const output=process.stdout;
+  let onError;
+  try{
+    await bounded(new Promise((resolve,reject)=>{
+      onError=()=>reject(failure('stdout_write_failed',1));output.once('error',onError);
+      output.write(bytes,error=>error?onError():resolve());
+    }),5000,'stdout_write_failed',1);
+  }catch{
+    // Do not leave an indefinitely blocked pipe keeping the process alive.
+    output.destroy();throw failure('stdout_write_failed',1);
+  }finally{
+    // Node can emit the error event after invoking the write callback.
+    await new Promise(resolve=>setImmediate(resolve));output.removeListener('error',onError);
+  }
+}
+
 async function main(){
   if(process.argv.length===3&&['--help','-h'].includes(process.argv[2])){
     process.stdout.write(HELP);return;
@@ -475,11 +503,14 @@ async function main(){
         await fs.access(options[key],require('node:fs').constants.X_OK);
       }
       const bootstrap=await openBootstrap(options);
-      try{process.exitCode=await example(bootstrap.args,bootstrap);}
+      let result;
+      try{result=await example(bootstrap.args,bootstrap);}
       finally{await bootstrap.close();}
+      if(options.json){await publishCanonical(result.bytes);process.exitCode=result.code;}
+      else process.exitCode=result;
     }
   }
   catch(error){const code=error.code&&Number.isInteger(error.exit)?error.code:'example_io_or_validation_failure';console.error(error.observation?code+' '+formatObserveDiagnostic(error.observation):code==='connection_required'?'connection_required: provide an already authorized loopback CDP browser WebSocket via --connection; see --help':code);process.exitCode=error.exit??1;}
 }
 if(require.main===module)main();
-module.exports={parseFirstUse,normalizePageUrl,selectComponent,heldCurrent,openBootstrap,BootstrapCdp,inputs,example,parseObserveDiagnostic,formatObserveDiagnostic};
+module.exports={parseFirstUse,normalizePageUrl,selectComponent,heldCurrent,openBootstrap,BootstrapCdp,inputs,example,parseObserveDiagnostic,formatObserveDiagnostic,publishCanonical};

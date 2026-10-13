@@ -88,7 +88,53 @@ source-native roles and reported children are shown as attribution, not inferred
 logical membership. Layout bounds do not prove hit/visible bounds, padding or atomicity.
 Temporary files and remote handles/connections are owned and cleaned; source apps
 and their data are not cleanup targets. This caller creates no durable observation
-file; existing low-level Observe remains available for explicitly managed saved data.
+file itself; opt-in --json below lets the caller save the original response.
+
+## Save the original observation for export
+
+Add the valueless `--json` flag to the URL+component invocation. Stdout contains
+only the original canonical observed ChannelResponse from Rust Observe, including
+its original newline. It skips human Inspect/Measure and preserves IDs, precise
+values, units, availability and privacy. Safe diagnostics stay on stderr.
+
+Publication follows final identity revalidation, confirmed worker/remote cleanup,
+child reaping and private temporary-file removal. Failed observation, stale binding
+or cleanup failure publishes no JSON. Exit4 with a nonempty valid response is useful
+partial data; exit4 with no response is a refusal. Physical stdout failure can leave
+partial bytes and returns1; never export such a file or automatically retry.
+
+This shell example uses a private system-temp directory. Set PAGE_URL and
+COMPONENT_SELECTOR to the authorized existing selection, and METADATA_FILE to
+reviewed caller metadata in the [export guide](export.md#observed-file-to-package).
+Metadata adds document/state/scope/environment annotations, never geometry or a
+replacement Snapshot. Use unknown for unavailable state/environment and draft
+approval; `public_text_fields: []` exports no unreviewed public text.
+
+```sh
+(
+  umask 077
+  OUT="$(mktemp -d "${TMPDIR:-/tmp}/uib-web-export.XXXXXX")" || exit 1
+  observation_exit=0
+  node "$BUNDLE/web-geometry.cjs" --connection "$CDP_BROWSER_WS" \
+    --url "$PAGE_URL" --component "$COMPONENT_SELECTOR" --json \
+    > "$OUT/observation.json" || observation_exit=$?
+  case "$observation_exit" in 0|4) ;; *) exit "$observation_exit" ;; esac
+  test -s "$OUT/observation.json" || exit 4
+  "$BUNDLE/uiblueprint-validate" --max-bytes 131072 "$OUT/observation.json" || exit $?
+  "$BUNDLE/uiblueprint" imagegen-prompt \
+    --snapshot "$OUT/observation.json" --metadata "$METADATA_FILE" \
+    --out "$OUT/package" --max-input-bytes 2000000 --max-output-bytes 4000000 \
+    --max-components 32 --max-views 1 --components-per-detail 12 --json || exit $?
+  printf 'Observation and package: %s\n' "$OUT"
+)
+```
+
+The finite export limits are example caller choices, not new defaults. Export
+accepts the untouched response directly; no extraction, JSON adapter or manual
+geometry entry is needed. It preserves partial/unknown source status. A written
+package does not mean an image was generated, checked or accepted. The caller owns
+the saved non-image files through their declared review/retention period. Legacy
+exact-ID mode does not accept this flag; its existing behavior is unchanged.
 
 ## Limits and outcomes
 

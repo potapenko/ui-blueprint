@@ -29,7 +29,11 @@ async function offline(){
   }
   for(const bad of [Buffer.from('observe_incomplete\n'),Buffer.from('x'.repeat(4097)),Buffer.from(JSON.stringify(good).replace('"exit_code":0','"exit_code":0,"exit_code":0')+'\n')])assert.throws(()=>helper.parseObserveDiagnostic(bad,0),e=>e.code==='observe_diagnostic_invalid');
   assert.throws(()=>helper.parseObserveDiagnostic(encode(good),4),e=>e.code==='observe_diagnostic_invalid');
-  const parsed=helper.parseFirstUse(args());assert.equal(parsed.selector,'#f01');assert.equal(parsed.maxVisited,2048);
+  const parsed=helper.parseFirstUse(args());assert.equal(parsed.selector,'#f01');assert.equal(parsed.maxVisited,2048);assert.equal(parsed.json,false);
+  assert.equal(helper.parseFirstUse([...args(),'--json']).json,true);
+  assert.equal(helper.parseFirstUse(['--json',...args()]).json,true);
+  for(const extra of [['--json','--json'],['--json','true'],['--endpoint','ws://127.0.0.1:9222/devtools/page/x','--json']])
+    assert.throws(()=>helper.parseFirstUse([...args(),...extra]),e=>e.code==='invalid_arguments');
   for(const selector of ['div.card','[role="dialog"][aria-label="Режиссёр"]','*','#f01','.card[data-testid="x"]'])assert.equal(helper.parseFirstUse(args(selector)).selector,selector);
   for(const selector of ['div > input','div input','.a,.b',':has(input)',':first-child','[foo:bar]','#a\\:b','[data-x="oops]',''])assert.throws(()=>helper.parseFirstUse(args(selector)),e=>['unsupported_selector','invalid_arguments'].includes(e.code));
   for(const input of [[],['--url',url,'--component','#f01']])assert.throws(()=>helper.parseFirstUse(input),e=>e.code==='connection_required');
@@ -118,7 +122,62 @@ async function offline(){
     }finally{fs.mkdtemp=make;}
     assert.equal(ownedDirs.length,2);for(const dir of ownedDirs)await assert.rejects(fs.stat(dir),e=>e.code==='ENOENT');
   }finally{await fs.unlink(delayed);await fs.rmdir(temp);}
+  await machineOffline();
   console.log('PASS offline: input/URL/selector, unique bounded walk, remount, CDP bytes/calls/events/deadline/cleanup, source-derived binding');
+}
+
+async function machineOffline(){
+  // Synthetic child protocol only; live proof below checks actual canonical data.
+  const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-json-offline-')),cli=path.join(temp,'cli.cjs');
+  const dirs=[],make=fs.mkdtemp,unlink=fs.unlink,write=process.stdout.write,report=console.error;
+  const output=[],diagnostics=[];let revalidated=false,remoteClosed=false;
+  const bytes=Buffer.from('{ "artifact": {"kind":"channel_response","data":{"result":{"status":"observed","data":{"nodes":[{"key":{"namespace":"web.dom","key":"42"}}]}}}}}\n');
+  const owned={cli,worker:'/unused',target:'target',endpoint:'ws://127.0.0.1:9222/devtools/page/target',root:42,json:true};
+  const bootstrap=()=>({binding:{surface:{id:'frame',generation:'loader'},document:1},remaining:()=>1000,
+    revalidate:async()=>{revalidated=true;},close:async()=>{remoteClosed=true;}});
+  async function child(data,code=0,d=diagnostic({exit_code:code,incomplete_channels:code===4?1:0})){
+    await fs.writeFile(cli,'#!/usr/bin/env node\nif(process.argv[2]!=="observe")process.exit(99);\nprocess.stdout.write(Buffer.from('+JSON.stringify(data.toString('base64'))+',"base64"));\nprocess.stderr.write('+JSON.stringify(JSON.stringify(d)+'\n')+');process.exitCode='+code+';\n',{mode:0o700});
+  }
+  try{
+    fs.mkdtemp=async(...a)=>{const d=await make(...a);dirs.push(d);return d;};
+    process.stdout.write=function(data,callback){output.push(Buffer.from(data));callback?.();return true;};
+    console.error=(...a)=>diagnostics.push(a.join(' '));
+    for(const code of [0,4]){
+      await child(bytes,code);revalidated=false;remoteClosed=false;
+      const result=await helper.example(owned,bootstrap());assert.equal(result.code,code);assert(result.bytes.equals(bytes));
+      assert(revalidated&&remoteClosed);assert.equal(output.length,0);
+      for(const d of dirs)await assert.rejects(fs.stat(d),e=>e.code==='ENOENT');
+      await helper.publishCanonical(result.bytes);assert(Buffer.concat(output).equals(bytes));output.length=0;
+    }
+    assert(diagnostics.some(x=>x.startsWith('observe_diagnostic exit=4 ')));
+    await child(Buffer.alloc(0),4);await rejects(()=>helper.example(owned,bootstrap()),'observe_refused_exit_4');
+    await child(bytes,2,diagnostic({exit_code:2,terminal:'failed'}));await rejects(()=>helper.example(owned,bootstrap()),'observe_refused_exit_2');
+    await child(bytes,4,diagnostic({exit_code:4,terminal:'failed'}));await rejects(()=>helper.example(owned,bootstrap()),'observe_not_completed');
+    await child(bytes,0,diagnostic({worker_cleanup:'not_started'}));await rejects(()=>helper.example(owned,bootstrap()),'observe_not_completed');
+    await child(Buffer.from('{"artifact":{"kind":"channel_response","data":{"result":{"status":"failed"}}}}'));
+    await rejects(()=>helper.example(owned,bootstrap()),'snapshot_unavailable');
+    await child(bytes);
+    for(const [field,code] of [['revalidate','stale_target'],['close','bootstrap_cleanup_unconfirmed']]){
+      const b=bootstrap();b[field]=async()=>{throw Object.assign(new Error(code),{code});};
+      await rejects(()=>helper.example(owned,b),code);
+    }
+    fs.unlink=async file=>{if(file.endsWith('request.json'))throw new Error('PRIVATE_CLEANUP_CANARY');return unlink(file);};
+    await rejects(()=>helper.example(owned,bootstrap()),'example_cleanup_unconfirmed');fs.unlink=unlink;
+    assert.equal(output.length,0,'no publication before cleanup or after refusal');
+    const destroy=process.stdout.destroy;process.stdout.destroy=()=>{};
+    try{
+      process.stdout.write=function(data,callback){const e=new Error('PRIVATE_WRITE_CANARY');callback(e);setImmediate(()=>process.stdout.emit('error',e));return false;};
+      await rejects(()=>helper.publishCanonical(bytes),'stdout_write_failed');
+      let destroyed=false;process.stdout.destroy=()=>{destroyed=true;};
+      process.stdout.write=()=>false;
+      await rejects(()=>helper.publishCanonical(bytes),'stdout_write_failed');assert(destroyed,'timed-out pipe retired');
+    }finally{process.stdout.destroy=destroy;}
+  }finally{
+    fs.mkdtemp=make;fs.unlink=unlink;process.stdout.write=write;console.error=report;
+    for(const d of dirs){try{for(const f of await fs.readdir(d))await fs.unlink(path.join(d,f));await fs.rmdir(d);}catch(e){if(e.code!=='ENOENT')throw e;}}
+    await fs.unlink(cli);await fs.rmdir(temp);
+  }
+  console.log('PASS machine: exact bytes/partial, no human path, failed/empty/stale/cleanup suppress output, safe write failure');
 }
 
 async function live(){
@@ -146,7 +205,7 @@ async function live(){
     const code=await wait(new Promise((resolve,reject)=>{child.once('error',reject);child.once('close',(code,signal)=>signal?reject(new Error('child_signal')):resolve(code));}),15000);
     const stdout=Buffer.concat(out).toString(),stderr=Buffer.concat(err).toString();assert.equal(code,expected,stderr);assert(!stdout.includes('PRIVATE_BOOTSTRAP_CANARY')&&!stderr.includes('PRIVATE_BOOTSTRAP_CANARY'));
     noWorkers();
-    results.push({component,exit:code,stdout_bytes:Buffer.byteLength(stdout),stderr:stderr.trim()});return {stdout,stderr};
+    results.push({component,exit:code,stdout_bytes:Buffer.byteLength(stdout),stderr:stderr.trim()});return {stdout,stderr,bytes:Buffer.concat(out)};
   }
   try{
     fixture=await start();server=await setup.chromium.launchServer({headless:true,timeout:8000,args:['--remote-debugging-port=0','--remote-debugging-address=127.0.0.1']});
@@ -163,6 +222,41 @@ async function live(){
     const before=await state();const good=await invoke(ws,page.url(),'#f01',4);assert(good.stderr.startsWith('observe_diagnostic exit=4 '));assert(good.stderr.includes('terminal=completed'));
     for(const [name,amount] of [['width',360],['height',123]]){const line=good.stdout.split('\n').find(x=>x.startsWith(name+': '));assert(line);const result=JSON.parse(line.slice(name.length+2));assert.equal(result.status,'known');assert.equal(result.measurement.value.value.amount,amount);assert.equal(result.measurement.space.units,'css_px');}
     assert.deepEqual(await state(),before);
+    if(process.argv.includes('--run-export-authorized')){
+      const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-json-f01-')),proxy=path.join(temp,'proxy.cjs'),original=path.join(temp,'original.json');
+      const saved=path.join(temp,'observation.json'),metadata=path.join(temp,'metadata.json'),destination=path.join(temp,'package');
+      try{
+        // Capture and forward actual CLI bytes verbatim; never construct source facts.
+        await fs.writeFile(proxy,'#!'+process.execPath+'\nconst fs=require("node:fs"),{spawnSync}=require("node:child_process");\nconst r=spawnSync('+JSON.stringify(path.join(bundle,'uiblueprint'))+',process.argv.slice(2),{timeout:7000,maxBuffer:1048576});\nif(process.argv[2]==="observe"&&r.stdout)fs.writeFileSync('+JSON.stringify(original)+',r.stdout,{flag:"wx",mode:0o600});\nif(r.stdout)process.stdout.write(r.stdout);if(r.stderr)process.stderr.write(r.stderr);process.exitCode=r.status??1;\n',{mode:0o700});
+        const machine=await invoke(ws,page.url(),'#f01',4,['--json','--cli',proxy,'--worker',workers[0]]);
+        const raw=await fs.readFile(original);assert(machine.bytes.equals(raw));assert.equal(machine.stdout.trim().split('\n').length,1);
+        assert(machine.stderr.startsWith('observe_diagnostic exit=4 '));assert(machine.stderr.includes('terminal=completed'));
+        await fs.writeFile(saved,machine.bytes,{mode:0o600,flag:'wx'});
+        const response=JSON.parse(raw),snapshot=response.artifact.data.result.data;
+        assert.equal(response.artifact.kind,'channel_response');assert.equal(response.artifact.data.result.status,'observed');
+        assert.deepEqual(snapshot.context.fields,['layout_bounds','hit_region','visible_region']);
+        const root=snapshot.nodes[0],bounds=root.properties.find(p=>p.field==='layout_bounds').state.value.value;
+        assert.equal(bounds.coordinate_space.units,'css_px');
+        const annotations={metadata:{document_id:'F01-EXACT-HANDOFF',revision:'1',title:'Owned F01 fixture',audience:'Developer',language:'en',date:'2026-10-13',owner:'USE-WEB-EXPORT1',retention:'Transient verification; removed after assertions',specification_refs:['UIB.DRAWING@1.2'],approval:{status:'draft',named_record:null},page_format:'A3 proportions',output_size:'3840 x 2160 output pixels'},state:'Owned fixture initial state',scope:'Selected #f01 component',environment:'Headless Chromium 145; viewport 800 x 600 CSS px; DPR 1',safe_source_reference:'Owned F01 fixture',not_depicted:['Outside selected component; unrequested semantic fields'],public_text_fields:[]};
+        await fs.writeFile(metadata,JSON.stringify(annotations),{mode:0o600,flag:'wx'});
+        const run=(exe,a)=>execFileSync(exe,a,{cwd:'/',timeout:10000,maxBuffer:4194304,stdio:['ignore','pipe','pipe']});
+        run(path.join(bundle,'uiblueprint-validate'),['--max-bytes','131072',saved]);
+        const receipt=JSON.parse(run(path.join(bundle,'uiblueprint'),['imagegen-prompt','--snapshot',saved,'--metadata',metadata,'--out',destination,'--max-input-bytes','2000000','--max-output-bytes','4000000','--max-components','32','--max-views','1','--components-per-detail','32','--json']));
+        assert((await fs.readFile(saved)).equals(raw));
+        const files=(await fs.readdir(destination)).sort();assert.deepEqual(files,['dimensions.json','drawing-brief.md','manifest.json','prompt.txt','scene.json','sheets.json']);
+        const scene=JSON.parse(await fs.readFile(path.join(destination,'scene.json'),'utf8'));
+        assert.equal(scene.views[0].components.length,snapshot.nodes.length);
+        const serialized=JSON.stringify(scene);assert(serialized.includes('css_px'));assert(!serialized.includes('PRIVATE_BOOTSTRAP_CANARY'));
+        assert.deepEqual(await state(),before);
+        const refused=await invoke(ws,page.url(),'#absent',4,['--json']);assert(!refused.stdout);assert.equal(refused.stderr.trim(),'component_unresolved');
+        console.log(JSON.stringify({status:'passed',kind:'owned-F01-exact-observe-to-export',source_revision:manifest.source_revision,bytes:raw.length,sha256:crypto.createHash('sha256').update(raw).digest('hex'),nodes:snapshot.nodes.length,export_receipt:receipt,files,default_geometry:'360x123 css_px',partial_exit:4,original_bytes_equal:true,state_unchanged:true}));
+      }finally{
+        try{for(const f of await fs.readdir(destination))await fs.unlink(path.join(destination,f));await fs.rmdir(destination);}catch(e){if(e.code!=='ENOENT')throw e;}
+        for(const f of [proxy,original,saved,metadata]){try{await fs.unlink(f);}catch(e){if(e.code!=='ENOENT')throw e;}}
+        await fs.rmdir(temp);await assert.rejects(fs.stat(temp),e=>e.code==='ENOENT');
+      }
+      return;
+    }
     for(const [pageUrl,selector,code,extra] of [[page.url().replace('#first','#different'),'#f01','target_unresolved',[]],[page.url(),'#absent','component_unresolved',[]],[page.url(),'button','ambiguous_component',[]],[page.url(),'#child','unsupported_scope',[]],[page.url(),'#f01','selection_limit',['--max-visited-nodes','1']]]){
       const r=await invoke(ws,pageUrl,selector,code==='selection_limit'?2:4,extra);assert(!r.stdout);assert.equal(r.stderr.trim(),code);assert.deepEqual(await state(),before);
     }
@@ -204,6 +298,6 @@ async function live(){
 }
 (async()=>{
   if(process.argv.includes('--check'))await offline();
-  else if(process.argv.includes('--run-authorized'))await live();
+  else if(process.argv.includes('--run-authorized')||process.argv.includes('--run-export-authorized'))await live();
   else throw new Error('choose --check or explicitly authorized --run-authorized');
 })().catch(error=>{console.error(error);process.exitCode=1;});
