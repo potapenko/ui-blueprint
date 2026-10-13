@@ -2,6 +2,33 @@
 
 ## Current finite task — skill-led blueprint, 2026-10-14
 
+User selected Clip Search on Mac as a new-interface holdout, explicitly questioning
+A04-specific tuning. Fresh evaluator01a13796-77f8-7e50-82b1-2b2b6a2b89db,
+«Проверить skill на Clip Search Mac», installs the unchanged8f15987 skill in
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-skill-clipsearch-bhs4_2l1`.
+The source handoff is terminal: real historical A11-grid Clip Search,2026-10-11,
+80partialAXnodes; originalSHA bd2fea7d78ce1de798dea190c757eeb9b86bf997a1ce71f39bea7fd296427828.
+The raw copy and metadata are in that test root/inputs; no prior image/prompt was
+provided. Mac owner reported no prepared trusted connection/request for current
+process and did not attempt live collection. Root disclosed that limit and that
+Clip Search appeared in the older corpus; this is new to the skill test, not a
+claim of never-observed/live-new UI. Scope remains one image and no source changes.
+ Keep skill pin8f15987 unchanged for this second test. Mac
+source owner01a1102f-791c-7e91-bec3-1877ea004d51 has a finite raw Clip Search
+Snapshot+reviewed-metadata request, no source code, prompt, image generation or
+composition advice. A separate fresh evaluator will install the same skill and
+receive only those raw inputs. Source owner's application context stays separate.
+
+First cold chat completed and was archived after result handoff. Installation
+smoke passed; it independently selected useful geometry and measured39relations.
+Its agent-composed prompt and one image are retained at
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-skill-cold1-neddehtc/`
+(final-prompt.txt, measured-facts.json, blueprint.png). It did not see prior images,
+prompts or suggested dimensions. The image is informative but not fully accepted:
+overview stacks overlapping regions, some anchors/rounding marks are wrong and
+requested vertical insets are missing. Root inspected the returned image; no
+reroll, full-fidelity or generalization claim. Test scope is now Clip Search.
+
 Skill checkpoint8f15987ffb28c57e30acf170802736feeeca6255 is pushed and validated.
 Fresh project chat01a1378d-650c-74b1-aded-f140cbc43045 (local),
 «Проверить blueprint skill с чистого контекста», owns one complete installation
