@@ -2409,13 +2409,13 @@ fn object_states_and_context_links_survive_compact_presentation() {
     assert!(prompt.contains("Placement context 3: LayoutBounds; REF"));
     assert_eq!(
         prompt
-            .matches("show the reference focus cue in every view containing this object")
+            .matches("print a separate outside state tag meaning \"Focused\" in the document language in every view containing this object")
             .count(),
         1
     );
     assert!(prompt.lines().any(|l| l.starts_with("Object")
         && l.contains("First control")
-        && l.contains("Focused=true; show the reference focus cue")));
+        && l.contains("Focused=true; print a separate outside state tag")));
     for object in prompt.lines().filter(|s| {
         s.starts_with("Object") && !s.contains("First control") && !s.contains("Second control")
     }) {
@@ -2443,6 +2443,85 @@ fn object_states_and_context_links_survive_compact_presentation() {
         }
     }
 
+    // False/unknown/redacted source focus does not acquire a per-target positive
+    // instruction, even with explicit caller prose. That prose remains annotation.
+    for focus in [
+        Availability::Known {
+            value: Value::Flag(false),
+        },
+        Availability::Unknown {
+            reason: Id("not-collected".into()),
+        },
+        Availability::Redacted {},
+    ] {
+        let mut variant = brief.clone();
+        variant.views[0].state =
+            "First control is focused, caller-reported; no action performed".into();
+        let SourceInput::Observed { snapshot, .. } = &mut variant.views[0].source else {
+            panic!()
+        };
+        let property = snapshot.nodes[0]
+            .properties
+            .iter_mut()
+            .find(|p| p.field() == Field::Focused)
+            .unwrap();
+        let Property::Requested {
+            state, sensitivity, ..
+        } = property
+        else {
+            panic!()
+        };
+        *state = focus.clone();
+        if matches!(focus, Availability::Redacted {}) {
+            *sensitivity = Sensitivity::Sensitive;
+        }
+        let original = serde_json::to_vec(&variant).unwrap();
+        let p = compile(&variant, limits()).unwrap();
+        let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        assert_eq!(text.matches(&variant.views[0].state).count(), 1);
+        let object = text
+            .lines()
+            .find(|l| l.starts_with("Object") && l.contains("First control"))
+            .unwrap();
+        assert!(!object.contains("print a separate outside state tag"));
+        assert_eq!(
+            object.contains("Focused=false"),
+            matches!(
+                focus,
+                Availability::Known {
+                    value: Value::Flag(false)
+                }
+            )
+        );
+        let scene = data(&p, "scene.json");
+        let field = scene["views"][0]["components"][0]["properties"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|p| p["field"] == "focused")
+            .unwrap();
+        let expected = serde_json::to_value(&focus).unwrap();
+        assert_eq!(field["state"]["availability"], expected["availability"]);
+        if matches!(focus, Availability::Known { .. }) {
+            assert_eq!(field["state"]["value"], expected["value"]);
+        }
+        if matches!(focus, Availability::Unknown { .. }) {
+            assert!(
+                field["state"]["reason"]
+                    .as_str()
+                    .is_some_and(|r| !r.is_empty())
+            );
+        }
+        assert_eq!(serde_json::to_vec(&variant).unwrap(), original);
+        let mut exact = limits();
+        exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+        assert!(compile(&variant, exact).is_ok());
+        exact.max_output_bytes -= 1;
+        assert_eq!(
+            compile(&variant, exact).unwrap_err(),
+            ExportError::OutputLimit
+        );
+    }
     let mut brief = fixture("proposed");
     proposed(&mut brief).components[0].state_and_actions =
         "Disabled until record is ready; CDP unknown; Save not executed".into();

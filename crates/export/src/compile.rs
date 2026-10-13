@@ -707,14 +707,18 @@ fn object_text(
     }
     for p in &c.properties {
         if let Some(Value::Flag(value)) = p.known()
-            && (matches!(
+            && matches!(
                 p.field(),
-                Field::Checked | Field::Selected | Field::Expanded | Field::Enabled
-            ) || p.field() == Field::Focused && *value)
+                Field::Checked
+                    | Field::Selected
+                    | Field::Expanded
+                    | Field::Enabled
+                    | Field::Focused
+            )
         {
             out.push_str(&format!("; {:?}={value}", p.field()));
-            if p.field() == Field::Focused {
-                out.push_str("; show the reference focus cue in every view containing this object");
+            if p.field() == Field::Focused && *value {
+                out.push_str("; print a separate outside state tag meaning \"Focused\" in the document language in every view containing this object");
             }
             if p.field() == Field::Checked && !input_control(c) {
                 out.push_str("; indicator interior BLUE, WHITE OUTLINE only");
@@ -1137,10 +1141,14 @@ fn measurement_inventory(
         }
         for p in &c.properties {
             if let Some(Value::Flag(value)) = p.known()
-                && (matches!(
+                && matches!(
                     p.field(),
-                    Field::Checked | Field::Selected | Field::Expanded | Field::Enabled
-                ) || p.field() == Field::Focused && *value)
+                    Field::Checked
+                        | Field::Selected
+                        | Field::Expanded
+                        | Field::Enabled
+                        | Field::Focused
+                )
             {
                 append(
                     &mut out,
@@ -2497,7 +2505,7 @@ fn render_view(
             "Accessible names are not field contents. Caller-draft rendering does not apply to this fragment: input ownership is incomplete. Whole-view state is non-rendering provenance, not permission to add an input, its draft or associated content.\n");
     }
     vars.insert("artwork_guidance", artwork_guidance);
-    vars.insert("state_guidance", if assignment == Assignment::Measurements { "Caption only recorded per-target flags or caller statements that explicitly identify that target, outside its empty frame. Whole-view context is not a state for every target; never spread group state to other frames. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }.into());
+    vars.insert("state_guidance", format!("{}For an assigned object with reported Focused=true, print a separate outside state annotation meaning ‘Focused’ in the document language in each view containing it. For caller-only focus explicitly identifying an included input, annotate ‘Focused (caller-reported)’ in that language instead; it remains caller attribution, not a reported flag. Keep the source caption unchanged and AX interiors empty. Focusable or selected alone does not establish focus. Unknown/withheld focus is not reported true; reported Focused=false or conflicting statements must not become an unconditional Focused tag. Preserve the disagreement. No inferred caret position or focus shape.\n", if assignment == Assignment::Measurements { "Caption only recorded per-target flags or caller statements that explicitly identify that target, outside its empty frame. Whole-view context is not a state for every target; never spread group state to other frames. No inferred enabled/Normal state; no reconstruction of controls.\n" } else { STATE_GUIDANCE }));
     vars.insert("design_analysis", design_analysis);
     vars.insert("sheets", sheet_plan);
     let mut rest = include_str!("prompt-template.txt");
