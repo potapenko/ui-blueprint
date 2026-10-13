@@ -13,9 +13,9 @@ fixture/component-preview origin;123 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:502 primary images =498 first outputs +4 rerolls;
-50 separate repair-validation images;4 unqualified reference attempts
+53 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-556 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+559 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -41,6 +41,13 @@ CP13 adds1qualifiedCW69 repeat at61bd8cb. Both critics accept bounded wording an
 unchanged machine ownership; new1536×1024image fixes wrapper-vs-popup attachment but
 still fails placement/repetition/focus requirements. [Receipt](corpus-wrapper-frame13.md)
 and `uib-CP13-uh3v_5ch/neutral-index.json` preserve the first failure, no newcase/reroll.
+CP14 adds3qualified first repair images at0e01662: CW70/CW71 1536×1024,
+CW60 1431×1099. No newcases or rerolls. Owner-local presentation experiment preserves
+machine files/required assignments; author still reports owner/clipping/focus failures
+and control width-placement deviation. Independent source/image acceptance pending;
+no overall quality improvement claimed. [Receipt](corpus-prompt-robustness14.md),
+`uib-CP14-of0kqnwt/neutral-index.json`, binarySHA256
+dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 
 ## Completed primary batches
 
