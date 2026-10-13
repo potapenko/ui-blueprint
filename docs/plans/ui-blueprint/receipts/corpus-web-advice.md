@@ -1,5 +1,31 @@
 # Web source advisor handoffs
 
+## USE-WEB1 retry — real Director outcome remains incomplete
+
+Consumer forwarded a direct implementation follow-up after retrying ready
+0b89da2helper/Rust3e995ec on its own isolated Chromium, existinglocalhost ClipSearch,
+English/draftspiel/3options/no selection. New URL+component entry needs no manual
+JSON/runtimeIDs. Inputselector#clip-search-filter-director-input produced real Rust
+177.21875×25.59375CSSpx, partial/unknown_count1, non-atomic, exit4 with useful output.
+Popup[data-testid="clip-search-filter-director-popover"] and
+list#clip-search-filter-director-options both exit4/emptystdout/observe_refused_exit_4.
+No retries/quota increases/manualgeometry; rootcause unestablished. Whole original
+popup/listalignment task is NOT accepted from input-only success.
+
+Minimal source-owned evidence:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-director-consumer-v2flg3f0/handoff.json`,
+with three .out/.err pairs, requests.txt and director.png. OriginalWS closed; do not
+reuse it. Consumer restoreddraft/popup/URL/selection, closed ownedbrowser81766/profile;
+console0errors/10warnings, options200, dynamicrequestsnoFailures, ordinarybootstrap/
+Firebase/analytics remain explicit. No PlayPhrase.me orUIBlueprint source edits.
+
+USE-WEB-DIRECTOR2 assigned to the same utility owner: establish actual failure layer,
+expose safe useful reason and complete the real popup/list path; no blind cap increase,
+raw diagnostics, manual geometry adapter or app-internal infrastructure. Relevant
+source/Host dependency must be returned exactly before crossing write ownership.
+Actual site consumer will retry an updated pinned bundle; ownfixture proof is separate.
+No new image-generation corpuscase is counted by this diagnostic screenshot/run.
+
 ## USE-WEB1 — actual consumer first-use feedback, 2026-10-13
 
 Terminal01a134b3-edfa-7c92-8059-85dc74114a4c. Web owner attempted a real task:

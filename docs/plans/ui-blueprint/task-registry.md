@@ -129,7 +129,8 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 | USE-MAC-COMPARE1 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|plan delivered2dd3701; selected for implementation|[Plan](receipts/consumer-native-comparison1.md): no existing path satisfiespair; separate caller-declared compare/diagnose, strict olddiff preserved |
 | USE-MAC-COMPARE2 |Coreowner01a111a7-9887-7983-9aa0-c08dfa2d46bc|source14b01d8 + receipt e84c129 accepted; consumer retry passed|[Receipt](receipts/consumer-native-comparison2.md). CT2final01a13517-40b6-7333-85b0-fb7634e8ee4d +Macretry01a13514-4e27-70e2-a8b4-05c0f451e9c6. OriginalActor QA answered, olddiffstrict/source preserved. No app changes |
 | USE-MAC-COMPACT1 |same Coreowner|sourcee3ab912 accepted by sameconsumer; owner archived|[Receipt](receipts/consumer-native-compact1.md); retry01a1353b-94b3-7321-8d6e-4cfb9404c803:11092B readable, allfacts/caveats preserved. JSON-preservation authorproof retained. Metadataheader/largeC remain nonblocking backlog; no further cosmetic round |
-| USE-WEB-BOOTSTRAP1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source0b89da2 delivered; consumer +boundary review running|[Receipt](receipts/consumer-web-bootstrap1.md). URL+component actualF01/guards/cleanup pass; readybundle uib-web-bootstrap-fnctj0t1/bundle, Rustpin3e995ec/helperhash8c36f936. RealDirector retry inWebchat and independentCT2review pending; no app changes |
+| USE-WEB-BOOTSTRAP1 |I02owner01a11bdd-8f38-7943-a91f-3621a70a994c|source0b89da2 delivered; realconsumer task incomplete, review running|[Receipt](receipts/consumer-web-bootstrap1.md). URL+component actualF01/guards/cleanup pass; readybundle uib-web-bootstrap-fnctj0t1/bundle, Rustpin3e995ec/helperhash8c36f936. RealDirector retry inWebchat and independentCT2review pending; no app changes |
+| USE-WEB-DIRECTOR2 |same I02utility owner|realconsumer refusal repair running|Input177.21875×25.59375CSSpx acquired; popup/list refuseexit4withoutreason. Evidence uib-director-consumer-v2flg3f0/handoff.json. Diagnoseactualcause +safe reason +completepath, no app changes/blindquotaincrease; sameconsumer retry next |
 | USE-MAC1 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|first trial completed; comparison/onboarding feedback received|Nativebundle3e995ec pass; original Actor pair diff→exit4/context_mismatch from different sessions/Surfaces. Contract violation unproved; explicit comparison workflow and safe diagnostics requested. [Feedback](receipts/corpus-native-advice.md#use-mac1--actual-consumer-comparison-feedback-2026-10-13). No app/project changes |
 | USE-WEB1 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|first trial completed; onboarding feedback received|Build/verify3e995ec Web bundle pass; first observe blocked by manual target/connection setup, helper absent frombundle/--help invalid_arguments. [Feedback](receipts/corpus-web-advice.md#use-web1--actual-consumer-first-use-feedback-2026-10-13). No app changes/live-collector proof; utility first-use repair next |
 | CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
@@ -252,8 +253,9 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 Current next action: Native compare is accepted by its actual consumer; compact
 presentation e3ab912 is also accepted by that consumer; Coreowner archived. Web URL+component code0b89da2
-is delivered and independently reviewed by CT2 while the Webowner retries Director.
-Only those live acceptance handles are awaited; no repeated image-generation loop. Keep app projects untouched and return actual utility results. CN16
+is delivered and undergoing CT2 boundary review. Actual Webretry measuredinput but
+failedpopup/list with opaqueexit4; USE-WEB-DIRECTOR2 addresses that realgap. Native
+compact is accepted, no repeated image-generation or cosmetic loop. Keep app projects untouched and return actual utility results. CN16
 is retired, not awaiting authority. Do not require app modifications to continue.
 Existing two critics remain idle for relevant evidence; repeated generic image rounds
 are not the priority. User-approved project owners may integrate the utility themselves;
