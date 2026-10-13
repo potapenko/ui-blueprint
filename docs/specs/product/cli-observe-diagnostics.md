@@ -1,13 +1,12 @@
 # Opt-in Observe diagnostics
 - Node type: leaf; domain: `uib.cli.observe-diagnostics`.
-- Contract: `UIB.CLI-OBSERVE-DIAGNOSTICS@1`; clauses: `.INPUT`, `.DATA`, `.SOURCE`, `.BOUNDS`, `.FAILURE`, `.ACCEPTANCE`.
+- Contract: `UIB.CLI-OBSERVE-DIAGNOSTICS@2`; clauses: `.INPUT`, `.DATA`, `.SOURCE`, `.BOUNDS`, `.FAILURE`, `.ACCEPTANCE`.
 - Authority: Active / Stability: Evolving; accepted/released baseline: none.
-- Authority source: user's usable-refusal-reasons request, root USE-OBS-DIAGNOSTICS1 shipping implementation packet for the real Web Director consumer; old default output remains protected.
+- Authority source: user's usable-refusal-reasons request, root USE-OBS-DIAGNOSTICS1 shipping implementation packet for the real Web Director consumer; old default output remains protected. USE-WEB-RESYNC2 authorizes fixed branch codes after two CW-B22 refusals, including a transition-qualified attempt.
 - Read when: opt-in Observe diagnostics, caller/helper refusal interpretation.
 - Do not read when: ordinary Observe or other commands need no new report.
 - Requires: [CLI OBSERVE](cli.md), [EXCHANGE2](exchange.md), [IDENTITY1](identity.md), [PRIVACY1](privacy.md), [LIFECYCLE1](lifecycle.md), [BOUNDARIES1](boundaries.md), [D02](../development/decisions/d02-boundaries.md), [D05](../development/decisions/d05-limits.md); explicit closure applies.
 - Protected: canonical NDJSON/ACK/order/bytes, legacy stdout/exits/stderr, authority/quotas/deadlines/retry/cleanup, Host wire and graph opacity, compare/other commands.
-
 ## UIB.CLI-OBSERVE-DIAGNOSTICS.INPUT
 ```text
 observe --connection C --request R --worker ABSOLUTE_PATH --max-input-bytes N --max-output-bytes N --diagnostics-json --max-diagnostic-bytes D
@@ -18,7 +17,6 @@ integer1024..4096; bounds outside that interval reject before inputs/dispatch.
 The fixed report's worst encoding fits1024 bytes including newline; caller-owned
 bounded encoding runs after operation/cleanup, not in Host steady-state framing.
 No new file, trace, discovery, collection or request limit. No CLI timeout default.
-
 ## UIB.CLI-OBSERVE-DIAGNOSTICS.DATA
 After valid opt-in arguments, stderr is exactly one JSON object plus newline on
 success/partial/refusal, replacing only opt-in constant error text. Default remains
@@ -47,11 +45,10 @@ uncorrelated_error,cancelled}, transport_{invalid_limits,endpoint_rejected,
 logging_boundary,connect,handshake,extensions,timeout,cancelled,byte_limit,work_limit,
 io,protocol,capacity,binary,closed,pending_write,no_pending_write}.
 code is existing validated i32; interpretation depends on cause (Host fixed code,
-protocol number, or trusted malformed-site code). Zero may mean unspecified, not
+protocol number, trusted malformed-site code, or the fixed resync site below). Zero may mean unspecified, not
 success. selection_visited_nodes is u32 only for selection causes, otherwise null.
 remote_cleanup is not_required/released/unconfirmed; send_progress is
 not_queued/queued/possibly_written/flushed. No free text or untrusted identifier.
-
 ## UIB.CLI-OBSERVE-DIAGNOSTICS.SOURCE
 Copy fixed facts from existing HostCompletion::diagnostic(), terminal/class and
 publication getters while the completion remains held; Host already validates the
@@ -63,7 +60,6 @@ Missing record means cause/stage/code unavailable. Parent timeout, worker death 
 Native outcomes may have no record. A generic limit/timeout category is not proof
 of which configured budget or underlying source operation failed. Report actual
 observed phase/status separately; no explanation invented from exit4/configuration.
-
 ## UIB.CLI-OBSERVE-DIAGNOSTICS.BOUNDS / .FAILURE
 Always perform established shutdown/reap and preserve all earlier ACKed channels.
 Snapshot bytes/leases stay unchanged. Capture worker_cleanup from actual caller
@@ -75,10 +71,25 @@ structured report and no dispatch. Preflight errors after valid options get repo
 with unavailable Host fields. Unexpected encoding/internal or physical stderr write
 failure gives fixed bounded diagnostic_output_failed/1; no raw data/partial graph.
 Physical write may be partial; no automatic retry. Default paths remain identical.
-
 ## UIB.CLI-OBSERVE-DIAGNOSTICS.ACCEPTANCE
 Guarded own peer proves default byte/exit preservation, success/partial/refusal/
 timeout, earlier channels and cleanup. Validated-record cases prove fixed enums/
 counts and unavailable subcause, exact report bounds, malformed/duplicate options,
 untrusted canary exclusion and independent stdout/report budgets. No live Director
 acceptance claim: Web owner repeats the real popup/list using the combined fix.
+## UIB.CLI-OBSERVE-DIAGNOSTICS.RESYNC-SITE — USE-WEB-RESYNC2
+Restore useful refusal attribution through additive fixed classification, registered before code.
+For collector_resync_required only, code is 0 (unspecified), 1 (initial rect /
+IntersectionObserver bounds / current rect differ), 2 (one node’s viewport before/after
+differs), 3 (viewport contexts differ across nodes), or 4 (final viewport differs
+from initial context). Emit a nonzero code only from that actual failing guard.
+The code proves the branch, never animation, rounding or another underlying cause.
+Unknown sites retain0; negative codes or codes above4 refuse as invalid control.
+No source identifiers, coordinates, payloads, strings or parent graph parsing.
+Existing guard predicates, fields/caps/deadlines, cause/exit4, privacy and cleanup stay.
+JSON output_version1.0.0/fields, 12-byte record and 64-byte control layout stay.
+Paired Host/worker validation expands for this cause only; old Host rejects nonzero
+resync codes. Ship a matching CLI+worker pair; cross-version pairs are not compatible.
+Other cause/code and stage/operation validation is unchanged. Test all four actual
+guards with no publication, unknown0, rejection of−1/5, fixed transport/CLI rendering,
+legacy default output, cleanup and absence of private source content.

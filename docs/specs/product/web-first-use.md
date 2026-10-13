@@ -4,7 +4,7 @@
 - Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 added typed diagnostics; @3 selects the measured component profile under USE-WEB-DIRECTOR2, before code. @4 adds root-selected exact canonical stdout under USE-WEB-EXPORT1.
 - Read when: shipped Web helper URL/component preparation and external Observe/geometry.
 - Do not read when: unchanged exact-ID mode, Native, actions or saved comparison.
-- Requires: [Observe diagnostics@1](cli-observe-diagnostics.md), [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@1](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
+- Requires: [Observe diagnostics@2](cli-observe-diagnostics.md), [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@1](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
 - Conditional requires: [CLI-EXPORT@3 INPUT/BOUNDS](cli-export.md) and its drawing closure when consuming machine output for export.
 ## UIB.WEB-FIRST-USE.INPUT
 Shipped Node24+ web-geometry.cjs adds this mode; the existing full exact-ID invocation
