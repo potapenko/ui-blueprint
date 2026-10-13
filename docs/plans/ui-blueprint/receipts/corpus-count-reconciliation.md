@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B15 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B16 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**189 proved eligible cases; range189–192 pending three named uncertainties.**
-The planning remainder is811 cases, potentially808 if all three are established.
-There are68 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;132 are non-fixture observations. Fixture UI is
+**191 proved eligible cases; range191–194 pending three named uncertainties.**
+The planning remainder is809 cases, potentially806 if all three are established.
+There are70 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;134 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:511 primary images =507 first outputs +4 rerolls;
+Completed-batch image buckets:513 primary images =509 first outputs +4 rerolls;
 59 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-574 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+576 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -116,7 +116,23 @@ binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 | CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
 | CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
 | CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs fail independent reviews |
-| **Primary subtotal** |**188**|**511**| |
+| CW-B16 |2|2|Desktop applied Genre tags/Clear/popup and mobile applied chips/Clear;17amounts correct, two first1536×1024 outputs authorFAIL, review pending |
+| **Primary subtotal** |**190**|**513**| |
+
+CW-B16 evidence: `uib-cw-b16-Ganih2/HANDOFF.md`, neutral-manifest, novelty/state,
+numeric/literal and resource records. NeutralSHA256
+381809f952620fabdd06c3f18451c1f3fa74dcafa5b90ee4588ab5545c4773da.
+FrozenCP15;56rawrecords→55nodes(D35/M20),55layout+visible frames,220source sizes;
+17assigned labels(8/9) recomputed.14loaded functions matched eachfreshrealm.
+PriorCW19 popup and prior mobileGenre baselines unselected; Dadds2removabletags/Clear,
+MaddsClear; two applied chips vs12unselected. SourceAll/emptyquery effects localonly.
+NativeDPR2 fullsources retained, Dwrapper+overflowpopup capture390×538 and M780×770
+qualified. Dunion is capture-only, not UI geometry; recordedoutward margins leave
+exact source facts unchanged. Twofirst1536×1024 images, no rerolls.
+Author: DlosesAction applied cue and popup/trigger geometry; MlosesassignedAdventure
+detail/reflows and boxes text-onlyClear. Full overview/17amounts preserved.
+OwnClear restores emptyfilters/URL, tabsclosed/mobileviewportreset. Finalmobile panel
+dismissal not separately proven; bounded actionnetwork Dnone/MpublicSVGonly.
 
 CW-B15 evidence: `uib-cw-b15-7A6OTi/HANDOFF.md`, neutral-manifest, novelty-proof,
 per-realm loaded-chain, numeric/literal and state/resource records. NeutralSHA256
