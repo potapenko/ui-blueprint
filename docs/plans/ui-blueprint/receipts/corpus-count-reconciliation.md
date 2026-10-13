@@ -1,6 +1,6 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 reconciliation, updated after whole-auth-dialog CW-B27 final reviews.
+2026-10-13. CCOUNT1 reconciliation, updated after CW-B27 and human-owner prompt final reviews.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
@@ -13,9 +13,9 @@ fixture/component-preview origin;159 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:561 primary images =557 first outputs +4 rerolls;
-83 separate repair-validation images;4 unqualified reference attempts
+85 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-648 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+650 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -1358,3 +1358,34 @@ Threecases/11firstimages added:216cases(91Web+125Native;57fixture+159nonfixture)
 images=648total. Remainder784; original3uncertainties unchanged. All first failures,
 source images and tool originals retained. HUMAN-OWNERS1 repair images are separate
 pending work and are not included in these counters.
+
+
+## USE-HUMAN-OWNERS1 — readable detail owners
+
+Sourcec0d6fd86943297d6c5d3adcf6518a81c3b9db53c, receiptfedf78c;
+[author receipt](consumer-human-owners1.md). Neutral index
+`$T/uib-HUMAN-OWNERS1-xw0ivqxk/neutral-index.json`, SHA
+315177cd92bb3c507a4bf67f6f2d3eb8605f6df0cd01df23dc4c200ce9add584,
+pins SCOPE4D01/D02 firstrepair images, both1536×1024,0rerolls/0newcases.
+CLI SHAcec0befde805dc91e52364ac6eafcd4a134d65f0631735859ece02526e9986f5.
+
+CV2 initial01a1371d-3824-7c51-8726-012961a7fdcc/final
+01a13720-51e8-7ef0-b9c0-2d7ae4782ff9 and CT2 initial
+01a1371d-3900-7c42-b5d5-eafd797a08cf/final
+01a13724-12b7-7d63-a217-483583ffb0da confirm scoped caption improvement; CT2 accepts
+source/prompt change. Generated hints use existing unique captions, ambiguous/AX
+contexts preserve their prior handling; literal public # is not stripped. Caller
+prose remains unparsed, retained separately without guessed binding; known per-target
+flags stay with their owners. All machine files/manifest/brief/required IDs/source/
+metadata and Privacy/A11D03 controls are unchanged. Author checks/build remain author
+evidence; critics did not rerun them or prior code/runtime acceptance.
+
+All11 assigned numeric labels and anchors survive, internal IDs and false Apple
+focus attachment disappear. D01 stillFAIL: its separate context note loses necessary
+Apple-disabled/Google-focused statements despite their presence in the prompt.
+D02FAIL: unsupported Scale1:1; schematic wording does not validate that scale.
+Off-sheet Apple/Google states are not newly required on D02. Footer-qualified px
+remains a literal abbreviation residual, not a demonstrated conversion; rounded empty
+frames alone are not measured-radius claims. No fullsheet approval or general
+reliability claim. Two repairimages added:216cases,561primaryimages,85repairimages,
+4unqualifiedimages=650total. Source/firstfailures/tool originals remain unchanged.
