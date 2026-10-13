@@ -133,9 +133,10 @@ Use ~/.local for the utility and ~/.claude/skills/ui-blueprint for the skill.
 Verify the bundled example and load the skill.
 ```
 
-**Release status:** no public release is available yet. These prompts are prepared
-for the first matching CLI + skill release; the agent must stop before installing
-if that release is unavailable. Codex and Claude Code discovery passed isolated
+**Release status:** no public release is available yet. On a prepared Mac the same
+prompt builds one pinned GitHub revision and installs the matching CLI + skill;
+the guide lists the required build tools. Published binaries will remove that build
+prerequisite. Codex and Claude Code discovery passed isolated
 local checks; [tested versions and limits](docs/development/macos-release.md#skill-discovery-verification--2026-10-13)
 are recorded separately from public release readiness.
 

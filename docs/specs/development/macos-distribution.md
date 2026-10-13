@@ -1,7 +1,7 @@
 # Mac distribution
 
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@2`.
+- Contract: `UIB.MAC-DISTRIBUTION@3`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -33,7 +33,7 @@ Preserve complete dependency notices; a missing project license is explicit
 and prevents presenting preparation as a public release approval.
 Use a flat CLI tar.gz, a SHA256SUMS file and a version-pinned install.sh.
 Skill-capable candidates add a separate versioned skill tar.gz from the same commit;
-legacy candidates remain verifiable. [AGENT-SKILL@2](agent-skill.md) governs opt-in installation.
+legacy candidates remain verifiable. [AGENT-SKILL@3](agent-skill.md) governs opt-in installation.
 Record source revision, build host, conservative minimum OS and signature status.
 The initial OS floor is the actual build/test host version; older OS support
 requires its own qualification, never inference from Swift's deployment target.
@@ -93,3 +93,7 @@ precedes implementation through D01; it does not select a license or publish.
 MAC-DIST-002, 2026-10-13: explicit user continuation in the skill chat authorizes
 matching skill packaging/installation and temp-only tests. Existing CLI archive and
 Homebrew behavior stay unchanged; no publication, real installation or notarization.
+
+MAC-DIST-003: user-authorized 2026-10-14 push/new-chat installation adds explicit
+--local-release ABS for pinned locally built assets, with unchanged hash/inventory
+guards. No network/version dispatch in that mode; no implicit prerequisite install.

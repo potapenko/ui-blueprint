@@ -333,6 +333,41 @@ def hostile_skill_checks(stage, versions):
     print('PASS skill archive: traversal, symlink and duplicate members rejected before activation')
 
 
+def local_install_checks(stage, versions):
+    prefix, skill = stage / 'local candidate prefix', stage / 'local skills/ui-blueprint'
+    first, second = versions / '0.1.0', versions / '0.2.0'
+    env = dict(os.environ, PATH=f'{stage / "shims"}:/usr/bin:/bin:/usr/sbin:/sbin',
+               TMPDIR=str(stage), DOWNLOAD_FAILURE='yes')
+    command = ['sh', first / 'install.sh', '--prefix', prefix, '--skill-dir', skill]
+    run([*command, '--local-release', 'relative'], env=env, ok=False)
+    run([*command, '--local-release', first, '--version', '0.2.0'], env=env, ok=False)
+    assert not prefix.exists()
+    run([*command, '--local-release', first], env=env)
+    current = prefix / 'share/uiblueprint/current'
+    assert os.readlink(current) == 'versions/0.1.0' and (skill / 'SKILL.md').is_file()
+    run([*command, '--local-release', first], env=env)
+    archive = second / release.skill_archive_name('0.2.0')
+    original = archive.read_bytes()
+    update = ['sh', second / 'install.sh', '--prefix', prefix, '--local-release', second]
+    archive.write_bytes(original + b'corrupt')
+    run(update, env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
+    archive.unlink()
+    outside = stage / 'skill-archive-outside'
+    outside.write_bytes(original)
+    archive.symlink_to(outside)
+    run(update, env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
+    archive.unlink()
+    archive.write_bytes(original)
+    run(update, env=env)
+    assert os.readlink(current) == 'versions/0.2.0' and '0.2.0' in str(skill.resolve())
+    run([*command, '--local-release', first], env=env)
+    run([*command, '--uninstall'], env=env)
+    assert not current.exists() and not skill.is_symlink()
+    print('PASS local candidate: no network, repeat/update/rollback, invalid path/version, corrupt/symlink asset refusal, installed skill and removal')
+
+
 def recipe_checks(stage, bundle, versions):
     record = release.read_candidate(versions / '0.1.0')
     assert record['publication'] == 'not_published' and record['notarization'] == 'not_submitted'
@@ -560,6 +595,7 @@ def main():
         install_checks(stage, versions)
         skill_checks(stage, versions)
         hostile_skill_checks(stage, versions)
+        local_install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)
         recipe_checks(stage, bundle, versions)
         notarization_checks(versions / '0.1.0')

@@ -1,6 +1,6 @@
 # Agent skill and prompt installation
 
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@2`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@3`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: the operator approved this chat's six-step plan on 2026-10-13;
   the later instruction “Теперь давай подключим skill к установщику” authorizes
@@ -9,8 +9,7 @@
 - Read when: maintaining the distributed skill or its prompt installation path.
 - Do not read when: using unchanged engine or collector internals.
 - Requires: [BOUNDARIES@1](../product/boundaries.md), [CLI@20](../product/cli.md).
-- Conditional requires: the linked product contracts below for the selected recipe.
-  Reconcile the committed Mac distribution contract when integration resumes.
+- Conditional requires: linked recipe contracts and [Mac distribution](macos-distribution.md).
 
 ## AGENT-SKILL.SCOPE — Approved plan and current stage
 
@@ -22,9 +21,10 @@ check installation lifecycle and examples; checkpoint only task-owned changes.
 
 Integration and isolated lifecycle checks are complete. The operator subsequently
 authorized isolated Codex/Claude discovery, then recording its results and readiness.
-Unrelated changes, publication, licensing, pushes and real installation stay excluded.
-The original approvals remain in this chat; this does not resume the older goal.
-Documentation now records bounded discovery evidence, not a public release acceptance.
+On 2026-10-14 the user authorized push master, real installation under ~/.local
+and ~/.agents/skills/ui-blueprint, then testing installation and use in a new chat.
+Release publication/licensing and unrelated changes remain excluded. This does not
+resume the older goal; the new-chat test must use the pushed consumer instruction.
 
 ## AGENT-SKILL.WORKFLOW — Portable operating instructions
 
@@ -64,9 +64,12 @@ foreign destinations and unrelated files. Uninstall removes only the owned link,
 receipt and verified files, never the shared skill parent. Never recursively delete.
 An interrupted install may leave a verified inactive version, but no successful
 combined-install claim or active switch before both payloads are ready.
-The prompt names the trusted release and authorizes both locations. No source build,
-profile edit, privilege escalation, permission grant or UI access. First target is
-qualified Apple Silicon macOS. Public URL and real-session invocation remain unverified.
+The prompt authorizes both locations. Before a published release exists, use one
+pinned GitHub master commit and the existing local build recipe with already-installed
+prerequisites; --local-release ABS consumes its matching rendered candidate offline.
+No implicit toolchain install, profile edit, privilege escalation or UI access.
+Source builds are labelled local/unsigned, not public releases. Later release installs
+retain their existing path. New-chat invocation is required evidence for this stage.
 
 ## AGENT-SKILL.RETENTION
 
@@ -86,15 +89,12 @@ require explicit authorization for their location and purpose.
 | Host discovery, verified | [Recorded versions/modes](../../development/macos-release.md#skill-discovery-verification--2026-10-13): Codex skills/list and Claude initialization list the installed skill; negative controls exclude cached presence |
 | Publication, excluded | Published URL/Gatekeeper and real user-session invocation remain separate from isolated discovery |
 
-No Rust changes, image generation, live collection or independent-agent evaluation
-are authorized here. Discovery uses local control requests without model turns;
-synthetic lifecycle, real saved-data smoke and public release acceptance stay distinct.
+No Rust changes, image generation or live collection are needed here. Earlier
+discovery used control requests; the newly authorized chat installs from the pushed
+guide and uses the skill on saved data. Public release acceptance remains separate.
 
 ## Change record
-
-Traversal: registry → AGENT-SKILL@2 / MAC-DISTRIBUTION@2; reuse their unchanged
-BOUNDARIES/CLI/development dependency closure. Evidence: committed installer,
-release builder and isolated release tests; current unrelated Rust edits excluded.
-AGENT-SKILL-001 established the portable workflow. AGENT-SKILL-002 is the explicit
-user-approved additive installation integration above; CLI/wire/analysis/export
-semantics, ordinary no-skill installs and legacy candidate verification stay protected.
+AGENT-SKILL-003: explicit 2026-10-14 user correction opens push → new-chat install
+→ real skill use. The prior prompt refused because Releases was empty; pinned-source
+bootstrap and offline candidate input close that observed onboarding gap.
+CLI/wire/analysis/export semantics and release publication remain protected.

@@ -4,12 +4,10 @@ Install the local utility and the `ui-blueprint` skill together. The utility
 performs geometry calculations; the skill explains observation, analysis,
 comparison, and drawing workflows to the agent. One skill covers these tasks.
 
-**Current status:** local installation and isolated Codex/Claude Code skill discovery
-have been verified. Public release preparation remains incomplete; no public release
-has been published. See [tested versions and evidence](development/macos-release.md#skill-discovery-verification--2026-10-13).
-An agent following this guide must stop before installation when a matching
-published CLI + skill release is unavailable. Source files and local candidates
-are not published releases. Do not install only half of the requested set.
+**Current status:** install from a matching published release when available.
+Until the first release, use the pinned-source path below on a prepared Mac.
+It builds and installs the utility and skill together without publishing a release.
+See [tested discovery versions](development/macos-release.md#skill-discovery-verification--2026-10-13).
 
 ## Start with a prompt
 
@@ -39,7 +37,7 @@ installation; successful file installation is a separate result.
 
 ## Instructions for the installing agent
 
-### 1. Select a complete release before changing files
+### 1. Select a matching release or pinned source
 
 Use only [UI Blueprint releases](https://github.com/potapenko/ui-blueprint/releases)
 from `potapenko/ui-blueprint`. Resolve the latest stable release to one exact tag;
@@ -49,13 +47,58 @@ an arbitrary existing CLI, or a skill from a moving source branch.
 Confirm that the release provides the Mac CLI archive, matching skill archive,
 rendered `install.sh`, and checksums. The installer must support `--skill-dir` and
 pin both payloads from one source revision. A missing release/asset or unsupported
-installer is a prerequisite failure: report it without falling back to a source
-build, installing a skill alone, or running this repository's unrendered template.
+installer in a published release is a prerequisite failure; do not mix its files
+with source builds or install only half the set. If no release exists, follow the
+explicit source path below. Never run the repository's unrendered installer template.
 
 First support is Apple Silicon macOS. Check the release's OS floor; the initial
 qualified host is macOS 27.0.1. Intel Macs, older macOS, Linux and Windows are not
-qualified. End users do not need Rust, Xcode or Python. Node.js 24+ is needed only
+qualified. Published binaries do not need Rust, Xcode or Python. Node.js 24+ is needed only
 for the optional Web first-use caller, not for installation or saved-data analysis.
+
+### Before the first release: build one GitHub commit
+
+This path requires already-installed Git, Python 3.11+, Rust/rustup 1.96.0,
+Xcode/Swift 6 and the locked Cargo dependency cache. Check these prerequisites
+before writing to the installation destinations; report a concrete missing tool
+or cache entry rather than silently installing a toolchain. The existing recipe
+builds with `--locked --offline`. This is a local developer installation, unsigned
+unless separately signed; do not claim public-release or Gatekeeper acceptance.
+
+Fetch GitHub's `master` into a unique system-temp directory and pin its full SHA.
+Use a no-checkout clone so repository images and unrelated working files are not
+materialized. Materialize only the two build recipes from that commit:
+
+```sh
+UIB_SETUP=$(mktemp -d "${TMPDIR:-/tmp}/uib-setup.XXXXXX")
+git clone --depth 1 --single-branch --branch master --no-checkout \
+  https://github.com/potapenko/ui-blueprint.git "$UIB_SETUP/source"
+UIB_REVISION=$(git -C "$UIB_SETUP/source" rev-parse HEAD)
+for UIB_RECIPE in release.py distribution.py; do
+  git -C "$UIB_SETUP/source" show "$UIB_REVISION:$UIB_RECIPE" > "$UIB_SETUP/source/$UIB_RECIPE"
+done
+mkdir "$UIB_SETUP/candidate"
+python3 -B "$UIB_SETUP/source/release.py" prepare \
+  --version "0.0.0-dev.$UIB_REVISION" --revision "$UIB_REVISION" \
+  --destination "$UIB_SETUP/candidate"
+python3 -B "$UIB_SETUP/source/release.py" verify --destination "$UIB_SETUP/candidate"
+```
+
+Run commands sequentially and stop on failure; use bounded tool timeouts for Git
+and the build. `prepare` reads all product, skill, installer and guide files from
+that same commit. No checkout WIP or installed developer CLI enters the bundle.
+Then install the prepared set at the prompt's authorized destinations:
+
+```sh
+sh "$UIB_SETUP/candidate/install.sh" --local-release "$UIB_SETUP/candidate" \
+  --prefix "$HOME/.local" --skill-dir "$SKILL_DIR"
+```
+
+Set `SKILL_DIR` to the absolute authorized host skill path before running this
+command. `--local-release` copies only matching local archives; the same hashes,
+inventory, ownership and modified-file refusal checks apply. Skip the published
+download step below and continue with verification in step 3. Afterwards remove
+only this run's non-image temporary files and empty directories, preserving images.
 
 ### 2. Install the utility and this agent's skill
 
@@ -80,8 +123,9 @@ selects the active set. Public commands live in `~/.local/bin`. The installed sk
 points to that same active version's skill directory, keeping updates together.
 Use the real version directory when supplying explicit worker/helper paths.
 
-No sudo, shell-profile modification, UI permission grant, app/browser launch,
-source build or automatic dependency installation is part of this workflow.
+No sudo, shell-profile modification, UI permission grant, app/browser launch or
+automatic dependency installation is part of this workflow. Source compilation
+occurs only through the explicit pre-release path above.
 If the command directory is absent from PATH, use absolute paths for verification
 and subsequent skill work. Do not make the person repair PATH just to finish setup.
 

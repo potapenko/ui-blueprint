@@ -67,6 +67,13 @@ Gatekeeper policy. Do not remove quarantine or disable system checks to pass QA.
 
 ## User installation after publication
 
+Before publication, the [agent guide](../install.md#before-the-first-release-build-one-github-commit)
+can build a pinned GitHub source revision using existing prerequisites, then invoke
+its rendered installer with `--local-release ABSOLUTE_CANDIDATE_DIRECTORY`.
+This explicit mode performs no download or cross-version installer dispatch and
+retains the same payload hashes/ownership checks. It is a local unsigned developer
+installation, not a public release or proof of downloaded Gatekeeper acceptance.
+
 ```sh
 curl -fsSL https://github.com/potapenko/ui-blueprint/releases/latest/download/install.sh | sh
 ```

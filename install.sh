@@ -12,6 +12,7 @@ SKILL_FILES='@SKILL_FILES@'
 PREFIX=${HOME:?HOME must be set}/.local
 SKILL_DIR=''
 SELECTED=$VERSION
+LOCAL_RELEASE=''
 UNINSTALL=false
 STAGE=''
 LOCK=''
@@ -69,11 +70,13 @@ while [ "$#" -gt 0 ]; do
     --prefix) [ "$#" -ge 2 ] || die '--prefix needs a directory'; PREFIX=$2; shift 2 ;;
     --version) [ "$#" -ge 2 ] || die '--version needs a release version'; SELECTED=${2#v}; shift 2 ;;
     --skill-dir) [ "$#" -ge 2 ] && [ -n "$2" ] || die '--skill-dir needs an absolute skill directory'; SKILL_DIR=$2; shift 2 ;;
+    --local-release) [ "$#" -ge 2 ] && [ -n "$2" ] || die '--local-release needs an absolute candidate directory'; LOCAL_RELEASE=$2; shift 2 ;;
     --uninstall) UNINSTALL=true; shift ;;
     --help|-h)
-      printf '%s\n' 'Usage: sh install.sh [--prefix ABSOLUTE_DIRECTORY] [--version VERSION] [--skill-dir ABSOLUTE_DIRECTORY] [--uninstall]' \
+      printf '%s\n' 'Usage: sh install.sh [--prefix ABSOLUTE_DIRECTORY] [--version VERSION] [--skill-dir ABSOLUTE_DIRECTORY] [--local-release ABSOLUTE_DIRECTORY] [--uninstall]' \
         'Default prefix: ~/.local. No sudo or shell-profile changes.' \
         '--skill-dir opts into one exact host-selected skill path; registered skills follow updates.' \
+        '--local-release installs matching locally prepared archives without network access.' \
         'Stop active sessions before update, rollback or removal.'
       exit 0 ;;
     *) die "unknown argument: $1" ;;
@@ -118,6 +121,11 @@ if [ -n "$SKILL_DIR" ]; then
 fi
 version_ok "$VERSION" || die 'unrendered installer; use install.sh from a release'
 version_ok "$SELECTED" || die 'invalid release version'
+if [ -n "$LOCAL_RELEASE" ]; then
+  case "$LOCAL_RELEASE" in /*) ;; *) die '--local-release must be absolute' ;; esac
+  [ -d "$LOCAL_RELEASE" ] && [ ! -L "$LOCAL_RELEASE" ] || die 'invalid local release directory'
+  [ "$SELECTED" = "$VERSION" ] || die 'run the matching local installer for the selected version'
+fi
 [ "$(uname -s)" = Darwin ] && [ "$(uname -m)" = arm64 ] || die 'only Apple Silicon macOS is supported'
 ACTUAL=$(sw_vers -productVersion)
 awk -v actual="$ACTUAL" -v minimum="$MIN_MACOS" 'BEGIN {
@@ -126,6 +134,12 @@ awk -v actual="$ACTUAL" -v minimum="$MIN_MACOS" 'BEGIN {
 }' || die "requires macOS $MIN_MACOS or later (found $ACTUAL)"
 
 download() {
+  if [ -n "$LOCAL_RELEASE" ]; then
+    local_asset=$LOCAL_RELEASE/${1##*/}
+    [ -f "$local_asset" ] && [ ! -L "$local_asset" ] || die 'missing regular local release asset'
+    cp "$local_asset" "$2" || die 'local release copy failed; active version unchanged'
+    return
+  fi
   curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
     --connect-timeout 15 --max-time 300 --output "$2" "$1" || die 'download failed; active version unchanged'
 }
