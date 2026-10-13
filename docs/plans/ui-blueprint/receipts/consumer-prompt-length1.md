@@ -86,3 +86,12 @@ to consumer/root. Original consumer attempt remains1attempt/0images.
 Final CLI/packages/index/proof/assessment retained for consumer and critics. Only
 run-owned image-free build target and superseded draft packages/binary removed.
 Every image, its containing directory, shared input and tool-managed original retained.
+
+## Provenance reconciliation — 2026-10-13
+
+Consumer index path now contains revision2, SHA-256 `d5a99aaee551985af82f33a370b8e31931e86f2de3c7cdff2d3de090ad1f1d5b`.
+It wraps the entire original under earlier_saved_attempt and adds live Cast/counts/retention.
+Re-serialization recovered the exact pinned original bytes, SHA-256 `da5dcda88fd2468264c9c4bd5fc25fbf5ee1132e30f3fca5f0e16cb09be9ef60`; this is a verified reconstruction, not a contemporaneously saved copy.
+All9earlier CW14 input/reference/package files and the repaired image/tool original still match their pins. The frozen repair index/hash above is unchanged.
+[Neutral provenance supplement](/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-PROMPT-LENGTH1-4_p2ad7r/provenance-supplement-2026-10-13.json) pins read-only original/current copies and the exact linkage.
+Supplement SHA-256 `94b314e8c0e2bb39a9e724c5c472ac64e295e956a6a17ed51178b0b104b8a8b2`. No live Cast assessment, code/build/test/prompt/image changes or new generation.
