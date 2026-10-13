@@ -119,3 +119,114 @@ equality. No Delta/Removal, cache/replay mutation, CLI schema, live event listen
 or action ref is produced. Future removal generation needs explicit removal evidence.
 [Tests](../../crates/engine/tests/diff.rs) and [receipt](../plans/ui-blueprint/receipts/G02-recorded-diff.md)
 record current author proof; full diff/changes and live acceptance remain separate.
+
+## External observations with declared correspondence
+
+[CLI-COMPARE@2](../specs/product/cli-compare.md) adds a separate saved-data command:
+
+```text
+uiblueprint compare --before B --after A --diagnose --max-input-bytes 2097152 --max-output-bytes 2097152 [--json]
+uiblueprint compare --before B --after A --correspondence C --max-entries 100 --max-input-bytes 2097152 --max-output-bytes 2097152 [--json]
+```
+
+Diagnose returns actual differing Context axes, which axes block the old diff, exact
+key-match count and supported next steps. Its report contains no UI text or paths.
+Exit4 means strict incompatibility, with a useful report. `compare` uses explicitly
+selected caller pairs, not identifier/name/box/ordinal matching. Cross-observation
+identity remains unverified; the engine never rewrites either source. Canonical
+Snapshot or observed ChannelResponse files work directly. No application changes,
+fixture session, live capture, permissions or model are needed for these saved files.
+
+C is local correspondence1.0 JSON with exact fields below. Existing canonical types
+retain their strict shape; all declarations and IDs are nonempty/max256 characters.
+Unknown/duplicate members, nested array records, duplicate endpoints/pair IDs,
+dangling refs, wrong namespace/Surface and mismatched original bindings reject.
+
+```text
+{
+  correspondence_version: "1.0.0",
+  before_binding: {snapshot_id, revision, context},
+  after_binding: {snapshot_id, revision, context},
+  surface_pairs: [{before: Identity, after: Identity, declaration: Id}],
+  node_pairs: [{id: Id, before: SourceKey, after: SourceKey, declaration: Id}],
+  measurement_pairs: [{id: Id, before_query: GeometryQuery, after_query: GeometryQuery,
+                      before_evaluation: EvaluationInput, after_evaluation: EvaluationInput}]
+}
+```
+
+This is a field/type guide; supply actual JSON values. Each binding must copy that
+source's original ID/revision/full Context exactly. Surface pairs cover both full
+Surface sets. Equal schema/plugin/Target incarnation/scope/projection/field sets
+remain required. Declaration records your QA correspondence assumption; it does not
+become reported Evidence. An empty measurement_pairs array is valid. No missing node
+or field acquires an old value. Complete0 is a factual report, not normative QA pass.
+Unknown measurements or entry truncation give4; invalid/limits2, IO/internal1.
+
+Property entries separate content/Evidence changes and reference original node
+indices and fields in both complete unchanged sources. Every selected pair also
+exposes reported child counts, unmapped counts, mapped order and each mapped child's
+zero-based position in the original parent lists. A mapped subsequence can remain
+unchanged while an element moves from recorded position2 to0. Null position means
+absent from that recorded parent list. Null content_changed means the full reported
+lists were not compared because some children are unmapped. Neither means deletion.
+Even all_reported_children_mapped does not prove full UI coverage or visibility.
+Native bounds remain accessibility bounds; source partial coverage remains partial.
+
+Optional width/height/gap queries and evaluations use unchanged analysis0.2 types
+inside C (bare canonical records, not AnalysisDocument wrappers). They must bind to
+their own Snapshot and describe the same declared targets/anchors/operation and
+units. The engine recomputes both independently and subtracts known scalar lengths.
+It does not infer common screen origin, object motion, window-local transforms or
+chronology. Missing/redacted/unsupported data retains typed unknown and null change.
+
+### Actual Actor consumer example
+
+The consumer explicitly selected Close7→7, query9→9, viewport12→12, content27→27
+and Tom Hardy40→36 from the original CN-B19 pair. The index agreement for some pairs
+is not the matching basis. Close/query and Tom Hardy have caller-checked identifiers;
+viewport/content are explicitly declared semantic counterparts. The example's
+surface declaration also remains unverified. Review those choices for your own QA.
+A ready correspondence is handed off with the pinned build; no Window node pair is
+needed for this scenario. To prepare the same example from the untouched files:
+
+```python
+import json, tempfile
+from pathlib import Path
+before_file = Path("/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CN-B19-bway_om4/B19-01-minimal/observed.json")
+after_file = before_file.parent.parent / "B19-02-minimal/observed.json"
+a, b = [json.loads(p.read_bytes())["artifact"]["data"]["result"]["data"] for p in (before_file, after_file)]
+pairs = [("close",7,7), ("query",9,9), ("viewport",12,12), ("content",27,27), ("tom_hardy",40,36)]
+bind = lambda s: dict(snapshot_id=s["id"], revision=s["revision"], context=s["context"])
+assert len(a["context"]["surfaces"]) == len(b["context"]["surfaces"]) == 1
+c = dict(correspondence_version="1.0.0", before_binding=bind(a), after_binding=bind(b),
+         surface_pairs=[dict(before=a["context"]["surfaces"][0], after=b["context"]["surfaces"][0],
+                             declaration="Caller pairs Actor QA surfaces; window identity remains unverified")],
+         node_pairs=[dict(id=name, before=a["nodes"][i]["key"], after=b["nodes"][j]["key"],
+                          declaration="Explicit Actor consumer selection; not observed identity") for name,i,j in pairs],
+         measurement_pairs=[])
+for name,i,j in pairs:
+    if name not in ("viewport", "content"): continue
+    for operation in ("width", "height"):
+        queries, evaluations = [], []
+        for side,index in ((a,i),(b,j)):
+            geometry = next(p["state"]["value"]["value"] for p in side["nodes"][index]["properties"] if p["field"] == "accessibility_bounds")
+            space, key = geometry["coordinate_space"], side["nodes"][index]["key"]
+            queries.append(dict(id=f"{name}-{operation}", scope_id=side["context"]["scope_id"], targets=[key],
+                operation=operation, anchors=[dict(element=key, frame_kind="accessibility_bounds", coordinate_space=space,
+                fraction=0, axis="x" if operation=="width" else "y")], quantity_kind="length", units=space["units"],
+                applies_when=dict(platform=None,input_mode=None,text_scale=None)))
+            evaluations.append(dict(**bind(side),result_space=space,transforms=[],conditions=None))
+        c["measurement_pairs"].append(dict(id=f"{name}-{operation}",before_query=queries[0],after_query=queries[1],
+            before_evaluation=evaluations[0],after_evaluation=evaluations[1]))
+with tempfile.NamedTemporaryFile(mode="w",prefix="uib-actor-correspondence-",suffix=".json",delete=False) as file:
+    json.dump(c,file,indent=2); print(file.name)
+# This named consumer input is retained for the retry; its consumer owns removal afterwards.
+```
+
+Use the printed file as C. Expected saved facts: unchanged Close/query/viewport
+bounds, viewport392×360pt, content392×576→392×36pt, content reported children16→1,
+Tom Hardy's recorded child position2→0. Scrollarea reported children2→1 includes an
+unmapped scrollbar on the before side; after node28 is a different node and is not
+paired. The report does not claim15 actors deleted,16 rows visible, painted popup
+bounds, checkbox/focus/draft state, or fresh live UI. Both original source hashes
+remain unchanged. Strict old `diff` still refuses this pair with context_mismatch.

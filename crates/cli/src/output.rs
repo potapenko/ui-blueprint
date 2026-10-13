@@ -11,6 +11,244 @@ struct Bounded {
     limit: usize,
     failure: Option<Failure>,
 }
+const COMPARISON_LIMITATIONS: &str = "Declared correspondence is unverified. Selected properties and reported mapped-child order only; unmapped children, metadata, relations, components, focus and unselected nodes are unexamined. Partial source coverage stays partial. Independent length changes are not object motion, deletion, cause, chronology, complete UI equality or action authority.";
+const COMPARISON_GUIDANCE: &str = "Use compare --correspondence FILE with each original snapshot_id/revision/full context and explicitly declared Surface/node pairs, or measure each saved side with its own keys. Inspect selected pairs before using the result. Matching names, AXIdentifier values, boxes or ordinal indices never establish identity. Different Target/plugin/scope/projection/fields require a compatible recorded basis, not rewritten IDs.";
+
+fn comparison_json(buffer: &mut Bounded, value: &impl serde::Serialize) -> Result<(), Failure> {
+    serde_json::to_writer(&mut *buffer, value).map_err(|_| buffer.error())
+}
+fn comparison_text(buffer: &mut Bounded, text: &str) -> Result<(), Failure> {
+    buffer
+        .write_all(text.as_bytes())
+        .map_err(|_| buffer.error())
+}
+pub(crate) fn comparison_diagnostic(
+    args: &crate::arguments::CompareArguments,
+    result: &uiblueprint_engine::diff::ComparisonDiagnostic,
+) -> Result<Vec<u8>, Failure> {
+    let mut buffer = Bounded::new(args.max_output);
+    let fields = serde_json::json!({
+        "output_version":"1.0.0", "kind":"comparison_diagnostic", "source":"saved", "live_revalidated":false,
+        "differing_axes":result.differing_axes, "strict_diff_blocking_axes":result.strict_diff_blocking_axes,
+        "protected_basis_compatible":result.protected_basis_compatible, "strict_diff_compatible":result.strict_diff_compatible,
+        "before_nodes":result.before_nodes, "after_nodes":result.after_nodes, "exact_key_matches":result.exact_key_matches,
+        "next_steps":result.next_steps, "guidance":COMPARISON_GUIDANCE,
+    });
+    if args.json {
+        comparison_json(&mut buffer, &fields)?;
+    } else {
+        writeln!(&mut buffer, "Recorded comparison diagnostic: strict_diff_compatible={} protected_basis_compatible={} before_nodes={} after_nodes={} exact_key_matches={}",
+            result.strict_diff_compatible, result.protected_basis_compatible, result.before_nodes, result.after_nodes, result.exact_key_matches).map_err(|_| buffer.error())?;
+        comparison_text(&mut buffer, "differing_axes=")?;
+        comparison_json(&mut buffer, &result.differing_axes)?;
+        comparison_text(&mut buffer, "\nstrict_diff_blocking_axes=")?;
+        comparison_json(&mut buffer, &result.strict_diff_blocking_axes)?;
+        comparison_text(&mut buffer, "\nnext_steps=")?;
+        comparison_json(&mut buffer, &result.next_steps)?;
+        comparison_text(&mut buffer, "\n")?;
+        comparison_text(&mut buffer, COMPARISON_GUIDANCE)?;
+    }
+    comparison_text(&mut buffer, "\n")?;
+    Ok(buffer.bytes)
+}
+pub(crate) fn corresponded(
+    args: &crate::arguments::CompareArguments,
+    result: &uiblueprint_engine::diff::CorrespondedDifference<'_>,
+    correspondence_bytes: &[u8],
+) -> Result<Vec<u8>, Failure> {
+    let mut buffer = Bounded::new(args.max_output);
+    if args.json {
+        comparison_text(
+            &mut buffer,
+            "{\"output_version\":\"1.0.0\",\"kind\":\"corresponded_difference\",\"source\":\"saved\",\"live_revalidated\":false,\"correspondence_status\":\"caller_declared_unverified\",\"comparison_scope\":\"selected_properties_reported_children_and_independent_scalar_lengths\",\"limitations\":",
+        )?;
+        comparison_json(&mut buffer, &COMPARISON_LIMITATIONS)?;
+        comparison_text(&mut buffer, ",\"before\":")?;
+        comparison_json(&mut buffer, result.before)?;
+        comparison_text(&mut buffer, ",\"after\":")?;
+        comparison_json(&mut buffer, result.after)?;
+        comparison_text(&mut buffer, ",\"correspondence\":")?;
+        buffer
+            .write_all(correspondence_bytes)
+            .map_err(|_| buffer.error())?;
+        comparison_text(&mut buffer, ",\"entries\":[")?;
+        for (i, entry) in result.entries.iter().enumerate() {
+            if i != 0 {
+                comparison_text(&mut buffer, ",")?;
+            }
+            comparison_json(&mut buffer, &corresponded_entry(result, entry)?)?;
+        }
+        comparison_text(&mut buffer, "],\"measurements\":[")?;
+        for (i, measurement) in result.measurements.iter().enumerate() {
+            if i != 0 {
+                comparison_text(&mut buffer, ",")?;
+            }
+            write!(
+                &mut buffer,
+                "{{\"pair_index\":{},\"before\":",
+                measurement.pair_index
+            )
+            .map_err(|_| buffer.error())?;
+            comparison_json(&mut buffer, &measurement.before)?;
+            comparison_text(&mut buffer, ",\"after\":")?;
+            comparison_json(&mut buffer, &measurement.after)?;
+            comparison_text(&mut buffer, ",\"change\":")?;
+            comparison_json(&mut buffer, &measurement.change)?;
+            comparison_text(&mut buffer, "}")?;
+        }
+        writeln!(&mut buffer, "],\"unexamined_before_nodes\":{},\"unexamined_after_nodes\":{},\"omitted_entries\":{}}}", result.unexamined_before_nodes, result.unexamined_after_nodes, result.omitted_entries).map_err(|_| buffer.error())?;
+    } else {
+        corresponded_compact(&mut buffer, result)?;
+    }
+    Ok(buffer.bytes)
+}
+fn corresponded_entry(
+    report: &uiblueprint_engine::diff::CorrespondedDifference<'_>,
+    entry: &uiblueprint_engine::diff::CorrespondedEntry,
+) -> Result<serde_json::Value, Failure> {
+    use uiblueprint_engine::diff::CorrespondedEntry::*;
+    Ok(match *entry {
+        Property {
+            pair_index,
+            before_index,
+            after_index,
+            field,
+            before_present,
+            after_present,
+            content_changed,
+            evidence_changed,
+        } => {
+            serde_json::json!({"kind":"property","pair_index":pair_index,"before_index":before_index,"after_index":after_index,
+                "field":field,"before_present":before_present,"after_present":after_present,"content_changed":content_changed,"evidence_changed":evidence_changed})
+        }
+        Children {
+            pair_index,
+            before_index,
+            after_index,
+            mapped_order_changed,
+            unmapped_before_children,
+            unmapped_after_children,
+        } => {
+            let complete = unmapped_before_children == 0 && unmapped_after_children == 0;
+            let mapped =
+                uiblueprint_engine::diff::mapped_child_positions(report, before_index, after_index)
+                    .map_err(|_| Failure::io())?;
+            let mut positions = Vec::new();
+            positions
+                .try_reserve_exact(mapped.len())
+                .map_err(|_| Failure::io())?;
+            for p in mapped {
+                positions.push(serde_json::json!({"child_pair_index":p.child_pair_index,"before_position":p.before_position,"after_position":p.after_position}));
+            }
+            serde_json::json!({"kind":"children","pair_index":pair_index,"before_index":before_index,"after_index":after_index,
+                "mapped_order_changed":mapped_order_changed,"unmapped_before_children":unmapped_before_children,"unmapped_after_children":unmapped_after_children,
+                "status":if complete {"all_reported_children_mapped"} else {"reported_subset"},
+                "content_changed":if complete {Some(mapped_order_changed)} else {None},
+                "before_reported_children":report.before.nodes[before_index].children.len(),"after_reported_children":report.after.nodes[after_index].children.len(),"mapped_child_positions":positions})
+        }
+    })
+}
+fn corresponded_compact(
+    buffer: &mut Bounded,
+    result: &uiblueprint_engine::diff::CorrespondedDifference<'_>,
+) -> Result<(), Failure> {
+    use uiblueprint_engine::diff::CorrespondedEntry::*;
+    comparison_text(
+        buffer,
+        "Recorded comparison; correspondence_status=caller_declared_unverified\nbefore_coverage=",
+    )?;
+    comparison_json(buffer, &result.before.coverage)?;
+    comparison_text(buffer, "\nafter_coverage=")?;
+    comparison_json(buffer, &result.after.coverage)?;
+    comparison_text(buffer, "\n")?;
+    for entry in &result.entries {
+        comparison_json(buffer, &corresponded_entry(result, entry)?)?;
+        comparison_text(buffer, "\n")?;
+        let (pair, old, new) = match *entry {
+            Property {
+                pair_index,
+                before_index,
+                after_index,
+                ..
+            }
+            | Children {
+                pair_index,
+                before_index,
+                after_index,
+                ..
+            } => (pair_index, before_index, after_index),
+        };
+        comparison_text(buffer, "pair=")?;
+        comparison_json(buffer, &result.correspondence.node_pairs[pair].id)?;
+        comparison_text(buffer, " before_key=")?;
+        comparison_json(buffer, &result.before.nodes[old].key)?;
+        comparison_text(buffer, " after_key=")?;
+        comparison_json(buffer, &result.after.nodes[new].key)?;
+        comparison_text(buffer, "\n")?;
+        match entry {
+            Property { field, .. } => {
+                comparison_text(buffer, "before_property=")?;
+                comparison_json(
+                    buffer,
+                    &result.before.nodes[old]
+                        .properties
+                        .iter()
+                        .find(|p| p.field() == *field),
+                )?;
+                comparison_text(buffer, "\nafter_property=")?;
+                comparison_json(
+                    buffer,
+                    &result.after.nodes[new]
+                        .properties
+                        .iter()
+                        .find(|p| p.field() == *field),
+                )?;
+            }
+            Children { .. } => {
+                comparison_text(buffer, "before_reported_children=")?;
+                comparison_json(buffer, &result.before.nodes[old].children)?;
+                comparison_text(buffer, "\nafter_reported_children=")?;
+                comparison_json(buffer, &result.after.nodes[new].children)?;
+                for p in uiblueprint_engine::diff::mapped_child_positions(result, old, new)
+                    .map_err(|_| Failure::io())?
+                {
+                    comparison_text(buffer, "\nchild_pair=")?;
+                    comparison_json(
+                        buffer,
+                        &result.correspondence.node_pairs[p.child_pair_index].id,
+                    )?;
+                    comparison_text(buffer, " before_position=")?;
+                    comparison_json(buffer, &p.before_position)?;
+                    comparison_text(buffer, " after_position=")?;
+                    comparison_json(buffer, &p.after_position)?;
+                }
+            }
+        }
+        comparison_text(buffer, "\n")?;
+    }
+    for m in &result.measurements {
+        comparison_text(buffer, "measurement_pair=")?;
+        comparison_json(
+            buffer,
+            &result.correspondence.measurement_pairs[m.pair_index].id,
+        )?;
+        comparison_text(buffer, "\nbefore_measurement=")?;
+        comparison_json(buffer, &m.before)?;
+        comparison_text(buffer, "\nafter_measurement=")?;
+        comparison_json(buffer, &m.after)?;
+        comparison_text(buffer, "\nlength_change=")?;
+        comparison_json(buffer, &m.change)?;
+        comparison_text(buffer, "\n")?;
+    }
+    writeln!(
+        buffer,
+        "unexamined_before_nodes={} unexamined_after_nodes={} omitted_entries={}",
+        result.unexamined_before_nodes, result.unexamined_after_nodes, result.omitted_entries
+    )
+    .map_err(|_| buffer.error())?;
+    comparison_text(buffer, COMPARISON_LIMITATIONS)?;
+    comparison_text(buffer, "\n")
+}
 impl Bounded {
     fn new(limit: usize) -> Self {
         Self {

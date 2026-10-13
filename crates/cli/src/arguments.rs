@@ -2,6 +2,70 @@ use crate::Failure;
 use std::{ffi::OsString, path::PathBuf};
 use uiblueprint_schema::model::Projection;
 
+pub(crate) struct CompareArguments {
+    pub before: PathBuf,
+    pub after: PathBuf,
+    pub correspondence: Option<PathBuf>,
+    pub max_entries: Option<usize>,
+    pub max_input: usize,
+    pub max_output: usize,
+    pub json: bool,
+}
+impl CompareArguments {
+    pub fn parse(mut args: impl Iterator<Item = OsString>) -> Result<Self, Failure> {
+        let (mut before, mut after, mut correspondence, mut entries, mut input, mut output) =
+            (None, None, None, None, None, None);
+        let (mut json, mut diagnose) = (false, false);
+        let invalid = Failure::invalid("invalid_arguments");
+        while let Some(flag) = args.next() {
+            if flag == "--json" && !json {
+                json = true;
+                continue;
+            }
+            if flag == "--diagnose" && !diagnose {
+                diagnose = true;
+                continue;
+            }
+            let value = args.next().ok_or(invalid)?;
+            match flag.to_str() {
+                Some("--before") if before.is_none() => before = Some(PathBuf::from(value)),
+                Some("--after") if after.is_none() => after = Some(PathBuf::from(value)),
+                Some("--correspondence") if correspondence.is_none() => {
+                    correspondence = Some(PathBuf::from(value))
+                }
+                Some("--max-input-bytes") if input.is_none() => input = Some(limit(value)?),
+                Some("--max-output-bytes") if output.is_none() => output = Some(limit(value)?),
+                Some("--max-entries") if entries.is_none() => {
+                    entries = Some(
+                        value
+                            .to_str()
+                            .filter(|s| !s.is_empty() && s.bytes().all(|b| b.is_ascii_digit()))
+                            .and_then(|s| s.parse::<usize>().ok())
+                            .ok_or(invalid)?,
+                    )
+                }
+                _ => return Err(invalid),
+            }
+        }
+        if diagnose {
+            if correspondence.is_some() || entries.is_some() {
+                return Err(invalid);
+            }
+        } else if correspondence.is_none() || entries.is_none() {
+            return Err(invalid);
+        }
+        Ok(Self {
+            before: before.ok_or(invalid)?,
+            after: after.ok_or(invalid)?,
+            correspondence,
+            max_entries: entries,
+            max_input: input.ok_or(invalid)?,
+            max_output: output.ok_or(invalid)?,
+            json,
+        })
+    }
+}
+
 pub(crate) enum DiffMode {
     Graph {
         max_entries: usize,

@@ -3,6 +3,7 @@
 
 mod action;
 mod arguments;
+mod compare;
 #[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
 mod connection;
 mod export;
@@ -24,6 +25,9 @@ use uiblueprint_engine::{self as engine, MeasurementResult};
 use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
+Declared comparison: compare --before FILE --after FILE --correspondence FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
+Comparison diagnostic: compare --before FILE --after FILE --diagnose --max-input-bytes N --max-output-bytes N [--json]\n\
+Compare uses caller-declared unverified pairs, reported mapped-child order and independently measured lengths. It grants no stable identity, action or deletion authority.\n\
 Native session: native-session --connection FILE --worker ABSOLUTE_PATH --duration-ms N --max-input-bytes N --max-output-bytes N (macos feature; bounded NDJSON command paths on stdin)\n\
 Diff: uiblueprint diff --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Graph diff: diff --graph --before FILE --after FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
@@ -318,6 +322,8 @@ fn main() -> ExitCode {
         InspectArguments::parse(args.into_iter().skip(1)).and_then(execute_inspect)
     } else if args.first().is_some_and(|arg| arg == "diff") {
         DiffArguments::parse(args.into_iter().skip(1)).and_then(execute_diff)
+    } else if args.first().is_some_and(|arg| arg == "compare") {
+        arguments::CompareArguments::parse(args.into_iter().skip(1)).and_then(compare::execute)
     } else {
         Arguments::parse(args).and_then(execute)
     };

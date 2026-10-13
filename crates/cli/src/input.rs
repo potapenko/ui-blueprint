@@ -82,6 +82,29 @@ pub(crate) fn load_diff(args: &DiffArguments) -> Result<(Snapshot, Snapshot), Fa
     let after = read_snapshot(&args.after, &mut remaining, args.max_input)?;
     Ok((before, after))
 }
+pub(crate) struct LoadedComparison {
+    pub before: Snapshot,
+    pub after: Snapshot,
+    pub correspondence: Option<(uiblueprint_engine::diff::Correspondence, Vec<u8>)>,
+}
+pub(crate) fn load_comparison(
+    args: &crate::arguments::CompareArguments,
+) -> Result<LoadedComparison, Failure> {
+    let mut remaining = args.max_input;
+    let before = read_snapshot(&args.before, &mut remaining, args.max_input)?;
+    let after = read_snapshot(&args.after, &mut remaining, args.max_input)?;
+    let correspondence = if let Some(path) = &args.correspondence {
+        let bytes = read(path, &mut remaining)?;
+        Some((crate::compare::decode(&bytes)?, bytes))
+    } else {
+        None
+    };
+    Ok(LoadedComparison {
+        before,
+        after,
+        correspondence,
+    })
+}
 pub(crate) fn load(args: &Arguments) -> Result<Loaded, Failure> {
     let mut remaining = args.max_input;
     let snapshot = read_snapshot(&args.snapshot, &mut remaining, args.max_input)?;

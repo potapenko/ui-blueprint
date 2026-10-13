@@ -493,3 +493,341 @@ fn geometric_unknown_mapping_never_becomes_zero_and_wrong_bindings_refuse() {
     let input = evaluation(&other, own);
     assert!(compare_geometry(&a, &other, &key, FrameKind::LayoutBounds, &old, &input).is_err());
 }
+
+mod declared_correspondence {
+    use super::*;
+    use uiblueprint_engine::{MeasurementResult, diff::*};
+    use uiblueprint_schema::analysis::*;
+
+    fn binding(s: &Snapshot) -> SnapshotBinding {
+        SnapshotBinding {
+            snapshot_id: s.id.clone(),
+            revision: s.revision,
+            context: s.context.clone(),
+        }
+    }
+    fn pair() -> (Snapshot, Snapshot, Correspondence) {
+        let doc = Document::from_json(
+            include_bytes!("../../../fixtures/golden/GEO-GAP.json"),
+            65536,
+        )
+        .unwrap();
+        let Artifact::Finding(case) = doc.artifact else {
+            panic!("fixture")
+        };
+        let mut a = case.snapshot;
+        a.nodes.truncate(2);
+        for node in &mut a.nodes {
+            node.children.clear();
+        }
+        a.relations.clear();
+        a.components.clear();
+        let mut b = a.clone();
+        b.id = Id("after".into());
+        b.context.session_id = Id("other-session".into());
+        b.context.surfaces[0] = Identity {
+            id: Id("other-window".into()),
+            generation: Id("other-generation".into()),
+        };
+        for n in &mut b.nodes {
+            n.key.key.0.insert_str(0, "after-");
+            n.surface = b.context.surfaces[0].clone();
+        }
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut b.nodes[1].properties[0]
+        else {
+            panic!("geometry")
+        };
+        let Shape::Rect(rect) = &mut g.shape else {
+            panic!("rect")
+        };
+        rect.x = 60.0;
+        let node_pairs = a
+            .nodes
+            .iter()
+            .zip(&b.nodes)
+            .enumerate()
+            .map(|(i, (x, y))| NodePair {
+                id: Id(format!("pair-{i}")),
+                before: x.key.clone(),
+                after: y.key.clone(),
+                declaration: Id("authored QA correspondence, not identity".into()),
+            })
+            .collect();
+        let old = GeometryQuery::from_expectation(&case.expectation).unwrap();
+        let mut new = old.clone();
+        for (k, n) in new.targets.iter_mut().zip(&b.nodes) {
+            *k = n.key.clone();
+        }
+        for (anchor, n) in new.anchors.iter_mut().zip(&b.nodes) {
+            anchor.element = n.key.clone();
+        }
+        let evaluation = |s: &Snapshot| EvaluationInput {
+            snapshot_id: s.id.clone(),
+            revision: s.revision,
+            context: s.context.clone(),
+            result_space: old.anchors[0].coordinate_space.clone(),
+            transforms: vec![],
+            conditions: None,
+        };
+        let c = Correspondence {
+            before_binding: binding(&a),
+            after_binding: binding(&b),
+            surface_pairs: vec![SurfacePair {
+                before: a.context.surfaces[0].clone(),
+                after: b.context.surfaces[0].clone(),
+                declaration: Id("authored windows".into()),
+            }],
+            node_pairs,
+            measurement_pairs: vec![MeasurementPair {
+                id: Id("gap".into()),
+                before_evaluation: evaluation(&a),
+                after_evaluation: evaluation(&b),
+                before_query: old,
+                after_query: new,
+            }],
+        };
+        (a, b, c)
+    }
+    fn amount(v: &MeasurementResult) -> f64 {
+        let MeasurementResult::Known { measurement } = v else {
+            panic!("known")
+        };
+        let Value::Quantity { amount, .. } = measurement.value else {
+            panic!("quantity")
+        };
+        amount
+    }
+    #[test]
+    fn independent_lengths_and_original_sources_with_strict_legacy_refusal() {
+        let (a, b, c) = pair();
+        let before = a.clone();
+        let after = b.clone();
+        let r = compare_corresponded(&a, &b, &c, 100).unwrap();
+        assert_eq!(
+            (
+                amount(&r.measurements[0].before),
+                amount(&r.measurements[0].after),
+                r.measurements[0].change
+            ),
+            (8.0, 20.0, Some(12.0))
+        );
+        assert!(r.entries.iter().any(|v| matches!(
+            v,
+            CorrespondedEntry::Property {
+                content_changed: true,
+                field: Field::LayoutBounds,
+                ..
+            }
+        )));
+        assert_eq!(r.omitted_entries, 0);
+        assert_eq!(a, before);
+        assert_eq!(b, after);
+        assert!(matches!(
+            compare_recorded(&a, &b, DiffLimits { max_entries: 100 }),
+            Err(DiffError::IncompatibleContext)
+        ));
+        let d = diagnose_comparison(&a, &b).unwrap();
+        assert_eq!(d.strict_diff_blocking_axes, vec!["session_id", "surfaces"]);
+        assert_eq!(d.exact_key_matches, 0);
+        assert!(d.protected_basis_compatible);
+        assert!(!d.strict_diff_compatible);
+    }
+    #[test]
+    fn selected_children_order_preserves_unmapped_scope() {
+        let (mut a, mut b, mut c) = pair();
+        c.measurement_pairs.clear();
+        for s in [&mut a, &mut b] {
+            let mut n = s.nodes[1].clone();
+            n.key.key.0.push_str("-unmapped");
+            s.nodes.push(n);
+            s.nodes[0].children = vec![s.nodes[1].key.clone(), s.nodes[2].key.clone()];
+        }
+        b.nodes[0].children.reverse();
+        let r = compare_corresponded(&a, &b, &c, 100).unwrap();
+        assert_eq!(r.unexamined_before_nodes, 1);
+        assert_eq!(
+            mapped_child_positions(&r, 0, 0).unwrap(),
+            vec![MappedChildPosition {
+                child_pair_index: 1,
+                before_position: Some(0),
+                after_position: Some(1)
+            }]
+        );
+        assert!(r.entries.iter().any(|v| matches!(
+            v,
+            CorrespondedEntry::Children {
+                pair_index: 0,
+                mapped_order_changed: false,
+                unmapped_before_children: 1,
+                unmapped_after_children: 1,
+                ..
+            }
+        )));
+        c.node_pairs.push(NodePair {
+            id: Id("third".into()),
+            before: a.nodes[2].key.clone(),
+            after: b.nodes[2].key.clone(),
+            declaration: Id("explicit third".into()),
+        });
+        b.nodes[0].children = vec![b.nodes[2].key.clone(), b.nodes[1].key.clone()];
+        let r = compare_corresponded(&a, &b, &c, 100).unwrap();
+        assert!(r.entries.iter().any(|v| matches!(
+            v,
+            CorrespondedEntry::Children {
+                pair_index: 0,
+                mapped_order_changed: true,
+                unmapped_before_children: 0,
+                unmapped_after_children: 0,
+                ..
+            }
+        )));
+    }
+    #[test]
+    fn binding_one_to_one_dangling_surface_and_query_guards() {
+        let (a, b, c) = pair();
+        for variant in 0..8 {
+            let mut bad = c.clone();
+            let expected = match variant {
+                0 => {
+                    bad.before_binding.revision += 1;
+                    CorrespondenceError::BindingMismatch
+                }
+                1 => {
+                    bad.node_pairs[1].after = bad.node_pairs[0].after.clone();
+                    CorrespondenceError::InvalidPair
+                }
+                2 => {
+                    bad.node_pairs[0].after.key = Id("missing".into());
+                    CorrespondenceError::InvalidPair
+                }
+                3 => {
+                    bad.surface_pairs[0].after.generation = Id("missing".into());
+                    CorrespondenceError::InvalidPair
+                }
+                4 => {
+                    bad.node_pairs[0].id = bad.node_pairs[1].id.clone();
+                    CorrespondenceError::InvalidPair
+                }
+                5 => {
+                    bad.measurement_pairs[0]
+                        .after_evaluation
+                        .context
+                        .environment_revision = Id("fabricated".into());
+                    CorrespondenceError::InvalidMeasurement
+                }
+                6 => {
+                    bad.measurement_pairs[0].after_query.anchors.reverse();
+                    CorrespondenceError::InvalidMeasurement
+                }
+                _ => {
+                    bad.measurement_pairs[0].after_query.units = Unit::Pt;
+                    CorrespondenceError::InvalidMeasurement
+                }
+            };
+            assert!(
+                matches!(compare_corresponded(&a,&b,&bad,100),Err(e) if e==expected),
+                "variant {variant}"
+            );
+        }
+        let mut other = b.clone();
+        other.context.target.generation = Id("restarted".into());
+        let mut bad = c.clone();
+        bad.after_binding = binding(&other);
+        assert!(matches!(
+            compare_corresponded(&a, &other, &bad, 100),
+            Err(CorrespondenceError::ProtectedBasis)
+        ));
+    }
+    #[test]
+    fn unknown_redacted_and_zero_cap_are_not_known_zero_or_old_values() {
+        let (a, mut b, c) = pair();
+        for state in [
+            Availability::Unknown {
+                reason: Id("not_observed".into()),
+            },
+            Availability::Unsupported {
+                reason: Id("not_supported".into()),
+            },
+            Availability::Redacted {},
+        ] {
+            let Property::Requested { state: actual, .. } = &mut b.nodes[1].properties[0] else {
+                panic!("property")
+            };
+            *actual = state;
+            let r = compare_corresponded(&a, &b, &c, 100).unwrap();
+            assert_eq!(r.measurements[0].change, None);
+            assert_eq!(r.unknown_measurements, 1);
+            assert!(matches!(
+                r.measurements[0].after,
+                MeasurementResult::Unknown { .. }
+            ));
+            let zero = compare_corresponded(&a, &b, &c, 0).unwrap();
+            assert!(zero.entries.is_empty() && zero.measurements.is_empty());
+            assert_eq!(zero.omitted_entries, r.entries.len() + r.measurements.len());
+        }
+    }
+    #[test]
+    fn finite_input_with_overflowing_gap_refuses_internal_arithmetic() {
+        let (a, mut b, c) = pair();
+        for (node, x) in b.nodes.iter_mut().zip([-1.5e308, 1.5e308]) {
+            let Property::Requested {
+                state:
+                    Availability::Known {
+                        value: Value::Geometry(g),
+                    },
+                ..
+            } = &mut node.properties[0]
+            else {
+                panic!("geometry")
+            };
+            let Shape::Rect(rect) = &mut g.shape else {
+                panic!("rect")
+            };
+            rect.x = x;
+        }
+        assert!(matches!(
+            compare_corresponded(&a, &b, &c, 100),
+            Err(CorrespondenceError::NonFinite)
+        ));
+    }
+    #[test]
+    fn namespace_separation_and_missing_transform_remain_explicit() {
+        let (a, b, mut c) = pair();
+        let mut other = b.clone();
+        for node in &mut other.nodes {
+            node.key.namespace = Id("fixture.other".into());
+            for property in &mut node.properties {
+                if let Property::Requested { evidence, .. } = property {
+                    evidence.source_namespace = Id("fixture.other".into());
+                }
+            }
+        }
+        for observation in &mut other.observations {
+            observation.source_namespace = Id("fixture.other".into());
+        }
+        let mut bad = c.clone();
+        bad.measurement_pairs.clear();
+        for (p, n) in bad.node_pairs.iter_mut().zip(&other.nodes) {
+            p.after = n.key.clone();
+        }
+        assert!(matches!(
+            compare_corresponded(&a, &other, &bad, 100),
+            Err(CorrespondenceError::InvalidPair)
+        ));
+        c.measurement_pairs[0].after_evaluation.result_space.id = Id("other-local".into());
+        let r = compare_corresponded(&a, &b, &c, 100).unwrap();
+        assert_eq!(r.measurements[0].change, None);
+        assert!(matches!(
+            r.measurements[0].after,
+            MeasurementResult::Unknown {
+                reason: uiblueprint_engine::UnknownReason::MissingTransform,
+                ..
+            }
+        ));
+    }
+}

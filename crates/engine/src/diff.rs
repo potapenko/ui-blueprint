@@ -3,6 +3,9 @@ use uiblueprint_schema::{
     model::*,
     validation::{self, ValidationError},
 };
+#[path = "correspondence.rs"]
+mod correspondence;
+pub use correspondence::*;
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct DiffLimits {
