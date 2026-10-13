@@ -117,3 +117,38 @@ Worker reports objective/route/evidence,
 checks, limitations, changed paths/commit/push и конкретный next dependency.
 Waiting_resource освобождает lane и повторно проверяется до3мин; цель не закрывается
 из-за ожидания. Принятые ненужные worker chats архивируются, advisors сохраняются.
+
+## CP19 — bounded outline/assignment wording experiment, 2026-10-13
+
+Direct user authority: improve actual generated prompts through image/critic cycles;
+current CORPUS-1000 includes corpus-driven repairs. This is an agent-proposed bounded
+presentation experiment, not a newly discovered arithmetic bug or a new product rule.
+Existing HBP-HUMAN-001/R2/R3 requires blue interiors, white outlines and selected useful
+anchored dimensions. CP18source2f90deb is accepted; B19still white-fills ON knobs,
+adds an unsupported preference border and unassigned repeated dimensions. E04 shows
+an inset transcription/anchor failure despite unchanged input. Prior failures remain.
+
+Reuse original exporter owner. Objective: make these existing requirements clearer
+in the literal compiler prompt through one coherent concise editorial candidate,
+without changing source/measurements, assignments, CLI, flags, abstraction or source apps.
+First compare the actual current per-object/overview/detail wording and applicable
+ImageGen guidance; do not add another generic rule wall. If evidence supports no
+specific alternative, return that result without a cosmetic code change. No semantic
+contract evolution or generic renderer framework is authorized.
+
+Writable scope: existing export prompt preparation plus directly affected tests and
+one receipt corpus-outline-presentation19.md. Exact plan/files selected by worker.
+Reuse the current fully read EXPORT2 drawing/HBP closure and common numeric/privacy
+contracts from CP18; RUST/DEV.RUST checks apply only to actual changes. One independent
+writer; master only, protected unrelated files and source repositories unchanged.
+
+Use frozen CP18 B19 and E04 source inputs and qualified original PNGs. Freeze one
+candidate before two first image calls. No wrappers, retouch, rerolls, new captures,
+optional model calls or autonomous extra iterations. Machine files and selected
+measurements must remain exact; focused affected checks only. Record each full-image
+failure and any improvement separately; two samples cannot prove general reliability.
+Report baseline/candidate pins, actual CLI text, checks, neutral index, separate author
+assessment and scoped commit+push. Existing two critics assess the same frozen outputs.
+These are repair-validation images, not additional primary corpus cases. No nested
+agents. After that finite outcome return to root; future work requires a new decision
+based on the result, not an automatic wording loop.

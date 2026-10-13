@@ -90,10 +90,10 @@ CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
 CW-B19 adds1qualified mixed Settings state, bringing it to194.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2 images (61 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2, CP18=2 images (63 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:581counted generated images
-overall; unqualified attempts increase neither eligible cases nor the61repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:583counted generated images
+overall; unqualified attempts increase neither eligible cases nor the63repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -188,7 +188,8 @@ overall; unqualified attempts increase neither eligible cases nor the61repair-va
 | CW11 |same Web advisor|source-only receipt accepted; one candidate ready afterB18|[Recipe](receipts/corpus-web-advice.md#cw11--one-mixed-settings-switch-state-2026-10-13): isolated guest emptyClipSearch/corpusen, naturally visible17+rows, nudityON/offensiveOFF; local setter only, no query. RestorebothOFF. AI-note alreadyvisible, no invented dependent sections/rating changes; no counts |
 | CW12 |same Web advisor|done; zero candidates|Content-rating is backend config, no ordinary Settings setter. No runtime changes; source receipt in corpus-web-advice.md. Goal continues |
 | CW13 |same Web advisor, retained|done; no new candidates in selected subset|Isolated storage does not remove source/query playback/statistics effects; no runtime changes. [Receipt](receipts/corpus-web-advice.md#cw13--isolated-storage-does-not-isolate-backend-effects-2026-10-13). CP18 independently running |
-| CP18 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|repair running|Restore C2/R2 repeated-select spacing after CW-B19 finalCT2; crates/export+direct tests+corpus-select-spacing18.md only. Existing engine, exact machine facts, B19+one distinct witness, literal first generations; source apps protected |
+| CP18 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|source2f90deb accepted; both full images rejected|[Receipt](receipts/corpus-select-spacing18.md), ef73da6. Existing engine adds6gaps/retains536old B19facts; E04/B13packages exact.2repairimages,0newcases. Both show≈16; fullimagesFAIL, source repair accepted CT2final01a13438-6dc3-78d0-b612-d288a3dbce29; CV2targeted spacing confirmed |
+| CP19 |same exporter owner|bounded prompt experiment queued|Recurring B19 filledONknobs/extra border and dimensions despite current wording. One justified concise editorial candidate, two frozen source replays/first images, no rerolls or new semantics; exact machine output protected. No claim of guaranteed renderer correction |
 | CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only receipt accepted; retained|Phone portrait-only; one conditional iPad Actor keyboard candidate plus unqualified compact-width branch. [Receipt](receipts/corpus-native-advice.md#cn15--orientation-and-ipad-keyboard-candidate-2026-10-13); root rejects overbroad non-CUA requirement: Apple DeviceHub is not Codex |
 | CN16 |same Mac advisor|plan ready; awaiting_authority for source-app implementation|[CN16-ISOLATION@1](receipts/corpus-native-advice.md#cn16--конкретный-план-изолированного-mac-запуска-2026-10-13): one Debug-only entry, memory repositories/ephemeral public transport, unavailable write effects, separate temp playback cache and no shared window persistence.7source owners/2tests+spec docs. No implementation authorized; CP15 continues independently |
 | CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local, archived|cycle accepted; both critics reject missing focus cue|1newcase/1firstimage, frozen CP14;6rows with keyboard vs9full+partial,20AXsizes/6labels pass. playphraseme-cn-b21-1v2u48gc manifest/HANDOFF; scoped restoration/shutdown. Caption-slot/resolution and arrow appearance residuals separate; no new compiler defect |

@@ -13,9 +13,9 @@ fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
-61 separate repair-validation images;4 unqualified reference attempts
+63 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-581 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+583 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -713,3 +713,23 @@ omission. CP18 assigned to original exporter owner for engine-backed representat
 select spacing and bounded regression/generalization. No primary count change.
 Post-render Settings detachment was not separately proved; exact isolated-session
 termination and restoredOFF states remain reported evidence, not that missing UI proof.
+
+## CP18 — repeated-select spacing repair validation, 2026-10-13
+
+Source2f90deb3ff2f65bf39b984c2f37c535f3e23a86d, author receiptef73da6;
+[repair receipt](corpus-select-spacing18.md). Two first repair images, zero newcases
+or rerolls. B19 remains1536×1024; E04Settings1672×941. Neutral index
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-CP18-wrqha_vd/neutral-index.json`,
+SHA25696b7bac5ef64c3ecd0a465e37ca5b89bb537a907f7221080ddc0d124012514ac.
+B19old536measurements exact; six appended existing-engine intervals, selected
+M0537 N007.bottom→N011.top16.03125CSSpx. Scene/sheets/manifest unchanged;
+E04Settings and CW-B13-D complete packages byte-identical to CP17. Five focused
+checks/scoped lint/build/fmt reported; independent CT2 inspection confirms guarded
+source derivation and exact preservation, no duplicated run claimed.
+CV2final01a13435-abdf-7ab0-8e3d-5c9aaf712e99 confirms specific spacing shown; both
+fullimagesFAIL. B19required29labels pass, but filledONknobs, unsupported enclosing
+border and extra unassigned second-select dimensions remain. E0430/31labels pass:
+rightinset prints≈12 instead of≈22, competing leftinset guides; unchanged prompt
+means noCP18causal claim. CT2initial01a13433-73c1-7322-a084-c5b30879c812 and final01a13438-6dc3-78d0-b612-d288a3dbce29 accept the bounded source repair after author reconciliation, retaining all image failures.
+Totals194eligible primarycases,63repairimages,583counted images. No general image
+reliability claim; all previous firstfailures and tool-managed originals retained.
