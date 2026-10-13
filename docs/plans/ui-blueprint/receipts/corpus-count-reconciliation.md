@@ -106,7 +106,7 @@ eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 | CW-B12 |2|2|Reels Search positive custom/suggestions and successful empty;94frames/21required labels, both first outputs authorFAIL; numeric success is not image acceptance |
 | CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
 | CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
-| CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts checked, full authorFAIL, independent review pending |
+| CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
 | **Primary subtotal** |**186**|**509**| |
 
 CW-B14 evidence: `uib-cw-b14-XUdZ9Y/HANDOFF.md`, neutral-manifest, required-dimension
@@ -124,6 +124,15 @@ Back; no stronger restoration assertion. Ordinary bootstrap/history effects rema
 Author failures: D imports out-of-scope header/Suggestions and misattaches root frame;
 M loses selectedAll and repeats size labels; Y adds unassigned sizes/white spinner
 interiors. Sources and numbers remain distinct from image acceptance.
+Both critics observed independently then reconciled author findings: CV2 final
+01a1332a-dd9e-7ef2-901a-8711676ee690, CT2 final01a1332a-f8f5-7213-a957-249500b6717c.
+All3images fail; D scope expansion misbinds measured N000203.796875×385.8828125;
+M disabled-but-selected All loses its distinction; Y white-filled spinner panels
+violate blue-interior rules despite preserved drafts/focus/Clear/8anchors. Extra
+Year-to179×44 is source-correct but unassigned, not arithmetic error. CSS-unit context
+survives footer even where labels saypx; no unit-conversion failure claimed.
+No new compiler defect established. Missing separate mobile-handler proof and Y
+panel-absence evidence remain explicit, not full runtime/source acceptance claims.
 
 CN-B21 evidence: `playphraseme-cn-b21-1v2u48gc/HANDOFF.md`, neutral `manifest.json`,
 runtime/source-qualification/numeric-check/cleanup records under system-temp prefix.
