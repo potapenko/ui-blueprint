@@ -1,21 +1,21 @@
 # CORPUS-1000 — case count reconciliation
 
-2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B17 completion.
+2026-10-13. CCOUNT1 terminal reconciliation, updated by root after CW-B19 completion.
 This counts source-qualified generated/evaluated cases, not visual acceptance.
 No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**193 proved eligible cases; range193–196 pending three named uncertainties.**
-The planning remainder is807 cases, potentially804 if all three are established.
-There are72 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;136 are non-fixture observations. Fixture UI is
+**194 proved eligible cases; range194–197 pending three named uncertainties.**
+The planning remainder is806 cases, potentially803 if all three are established.
+There are73 Web and121 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:515 primary images =511 first outputs +4 rerolls;
+Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
 61 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-580 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+581 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -682,3 +682,22 @@ established. CT2 identifies a bounded wording risk: BELOW the enclosing shape is
 selected for non-control withchildren without geometric enclosure proof. CP13
 clarifies wording only; it may not substitute popup/union geometry. All artifacts
 retained, source repos unchanged. Actual1536×1024, no resolution-only gate.
+
+## CW-B19 — isolated mixed Settings switches, 2026-10-13
+
+Terminal turn01a13411-91cc-7980-b573-91a3cc0a5c46; neutral manifest
+`/tmp/uib19-2n6wzorx/neutral-manifest.json`. One qualified Web non-fixture state,
+one literal CP17 first output1536×1024, no reroll. Total194 proved cases;
+38completed primary batches. Explicit nudityON/offensiveOFF differs from all-off;
+no extra switch combinations or mobile copies counted. Fifty canonical nodes,
+100layout/visible frames,200size facts,31required engine quantities checked.
+NativeDPR2 reference844×1248 from1280×900CSS viewport; capture union is not an owner.
+ImageSHA b8ae59a57fabab4029016a9ad91f8d114de4f8926a7dee9cbda2310f506c91e4,
+promptSHA8607849cb28e2cd06eb86e65fd9589bada46d1c608857c669bf4030422362e6f.
+Author reports white-filled switch knob and missing approximation marker; zero
+image acceptance. Existing CV2/CT2 received actual artifacts without author verdict
+for initial independent observation; final reconciliation remains pending.
+Both switches restoredOFF, Settings closed, exact owned isolated session and its
+resources verified gone by the worker. Ordinary bootstrap/analytics occurred;
+no search/filter-option/translation/media requests observed. No repository edits.
+All images/tool original retained; no broad zero-network or filesystem-isolation claim.

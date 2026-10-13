@@ -36,17 +36,17 @@ does not authorize bypassing a tool/OS gate. No replacement task or nested agent
 
 ### Current counts and acceptance
 
-**Proved eligible case count:193; unresolved upper bound196; conservative remainder807.**
+**Proved eligible case count:194; unresolved upper bound197; conservative remainder806.**
 [CCOUNT1 ledger](receipts/corpus-count-reconciliation.md) records case/state eligibility,
 explicit fixture origin, image buckets, duplicates and original execution protocols.
 This is completed evaluation count, not image-quality approval.
 
-Thirty-seven completed primary batches produced515 qualified evaluated images;
+Thirty-eight completed primary batches produced516 qualified evaluated images;
 CW58,CW60,CW61 and CN-B20 phone Actor narrowed/empty are the five primary-case
 images independently accepted by both critics within their declared drawing scope.
 Image acceptance does not turn CN-B20's recorded runtime incident into a clean run.
-Their511 first outputs by configuration/sheet include3 duplicate fixture renderings;
-this is not515 distinct successful cases. CW-B4 adds9cases/13sheets and one full
+Their512 first outputs by configuration/sheet include3 duplicate fixture renderings;
+this is not516 distinct successful cases. CW-B4 adds9cases/13sheets and one full
 author-pass case, not independent acceptance. CN-B6 adds7families/9states/23sheets.
 CN-B5 adds8cases/52sheets; CN-B7 adds1case/7sheets; CW-B5 adds5cases/5sheets.
 CN-B8 adds5families/7states/11sheets. Further batches count only after their final
@@ -89,10 +89,11 @@ CW-B14 adds3qualified Years/MovieIMDb compositions, bringing it to187.
 CW-B15 adds2qualified Episodes state/composition cases, bringing it to189.
 CW-B16 adds2qualified applied-Genres state/composition cases, bringing it to191.
 CW-B17 adds2qualified compact-height coverage cases, bringing it to193.
+CW-B19 adds1qualified mixed Settings state, bringing it to194.
 Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3, CP16=3, CP17=2 images (61 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:580counted generated images
-overall, with no increase to eligible cases or the50repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:581counted generated images
+overall; unqualified attempts increase neither eligible cases nor the61repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -185,7 +186,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW9 |same Web advisor|source-only negative accepted; candidate excluded|No menu/keyboard/startup/caller wires Shortcuts; local show! demonstration commented. [Receipt](receipts/corpus-web-advice.md#cw9--shortcuts-has-no-wired-entry-2026-10-13); no runtime or count, no console/guessed-key workaround |
 | CW10 |same Web advisor|documented route accepted; runtime/path proof pending|[Receipt](receipts/corpus-web-advice.md#cw10--documented-isolated-browser-route-2026-10-13): CLI0.1.19 browser.isolated true supported, site fallback permitted; daemon/output paths and launchability unproved. Locale local-only, translation follows whileunset; no UI-scale setting.3conditional locale candidates, no runtime/count |
 | CW11 |same Web advisor|source-only receipt accepted; one candidate ready afterB18|[Recipe](receipts/corpus-web-advice.md#cw11--one-mixed-settings-switch-state-2026-10-13): isolated guest emptyClipSearch/corpusen, naturally visible17+rows, nudityON/offensiveOFF; local setter only, no query. RestorebothOFF. AI-note alreadyvisible, no invented dependent sections/rating changes; no counts |
-| CW12 |same Web advisor|source-only lower-rating dependency qualification running|Check exact local-setting versus age/security boundary, conditional Settings rows and any search/playback/network consumer before proposing one lower-rating state. No runtime/rating changes or source edits; B19 scope unchanged |
+| CW12 |same Web advisor|done; zero candidates|Content-rating is backend config, no ordinary Settings setter. No runtime changes; source receipt in corpus-web-advice.md. Goal continues |
 | CN15 |Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51|source-only receipt accepted; retained|Phone portrait-only; one conditional iPad Actor keyboard candidate plus unqualified compact-width branch. [Receipt](receipts/corpus-native-advice.md#cn15--orientation-and-ipad-keyboard-candidate-2026-10-13); root rejects overbroad non-CUA requirement: Apple DeviceHub is not Codex |
 | CN16 |same Mac advisor|plan ready; awaiting_authority for source-app implementation|[CN16-ISOLATION@1](receipts/corpus-native-advice.md#cn16--конкретный-план-изолированного-mac-запуска-2026-10-13): one Debug-only entry, memory repositories/ephemeral public transport, unavailable write effects, separate temp playback cache and no shared window persistence.7source owners/2tests+spec docs. No implementation authorized; CP15 continues independently |
 | CN-B21 |01a132cb-d0d2-7010-a20a-968333901c78/local, archived|cycle accepted; both critics reject missing focus cue|1newcase/1firstimage, frozen CP14;6rows with keyboard vs9full+partial,20AXsizes/6labels pass. playphraseme-cn-b21-1v2u48gc manifest/HANDOFF; scoped restoration/shutdown. Caption-slot/resolution and arrow appearance residuals separate; no new compiler defect |
@@ -196,7 +197,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B16 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, reused forB17|cycle accepted; both critics reject2images|17amounts correct; DlosesAction cue/popup alignment-width; MomitsAdventure/reflowsdetail/boxesClear. CT2 separately confirms known useful inset omitted fromliteral plan, feedingCP17. uib-cw-b16-Ganih2 HANDOFF/neutral-manifest; capture union notUIframe |
 | CW-B17 |same Web owner01a1330a-4a7f-7461-9e24-cd45919c234a, archived|cycle accepted; both critics confirm2FAIL|78nodes/source measurements preserved; no36/36Actor rendered-owner pass. Hidden text exposed, rows boxed/owners collapsed; Genres state/clip/selector/assignment failures. Compact existing-inset M0233/M0229 witness feedssameCP17, no extra generation. uib-cw-b17-sSkxRL HANDOFF/neutral-manifest; state restored/tabsclosed |
 | CW-B18 |01a133fc-3106-75d2-8510-442d523b3260/local, reused forB19|isolation/exclusions accepted;0cases/0modelcalls|[Runtime receipt](receipts/corpus-web-advice.md#cw-b18--runtime-isolation-qualified-candidates-excluded-2026-10-13); all3locale candidates lack proposedstate or duplicate geometry. Pinned CLI hooks/actual paths under /tmp/uib18-b8w_lnv0, sessionclosed/7imagesretained. Bootstrap/Firebase/analytics explicit |
-| CW-B19 |same isolated-browser owner|full-cycle mixed Settings switches running|Fresh qualified isolatedguest/en/emptyClipSearch; only naturally present nudityON/offensiveOFF, preserve AI-note association, restorebothOFF/sessionclose. FrozenCP17, source read-only; no newcase yet |
+| CW-B19 |01a133fc-3106-75d2-8510-442d523b3260, archived|done; 1 evaluated case, critics running|Terminal01a13411-91cc-7980-b573-91a3cc0a5c46. CP17,31engine quantities checked, first image retained, zero acceptance. Both switches restoredOFF; exact browser resources gone. CV2/CT2 initial observation dispatched; /tmp/uib19-2n6wzorx/neutral-manifest.json |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |

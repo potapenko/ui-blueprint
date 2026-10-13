@@ -1,5 +1,21 @@
 # Web source advisor handoffs
 
+## CW12 — backend rating is not a local Settings control, 2026-10-13
+
+Advisor terminal01a13416-7c7d-7252-84b4-4d00799f81bd, sourcec23ef963,
+read-only Settings/ContentSafety → Foundation/RuntimeConfig traversal. Zero candidates.
+Content-rating arrives through bootstrap `GET /api/v1/configs?id=content-rating`;
+there is no ordinary desktop/mobile Settings setter to lower it. The local nudity
+and offensive flags do not change rating. Non-adult backend config hides the entire
+17+ section, but that is not an available local UI transition. No backend changes,
+response interception or hidden dispatch authorized by this finding.
+Owners in the site repository: `common/rest_api.cljs:1480`, `core.cljs:523`,
+`model.cljs:18` under `src/cljs/playphraseme/`; desktop Settings `view.cljs:446`,
+mobile Settings `view.cljs:241`. Contract: `docs/specs/foundation/runtime-config/behavior.md:47`.
+A separately authorized existing runtime with another backend rating would be a new
+source prerequisite. This does not stop the independent corpus goal or reopen B19.
+
+
 ## CW-B18 — runtime isolation qualified, candidates excluded, 2026-10-13
 
 Worker01a133fc-3106-75d2-8510-442d523b3260, terminal turn
