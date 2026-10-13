@@ -16,7 +16,7 @@ R01/R02/R03 source ledgers identify transferable mechanisms and incompatible
 assumptions. Decision: **no code copied from those upstreams** in the initial
 engine. Reimplement selected identity/update/geometry rules against our contracts.
 Use public Apple frameworks only within native helper. Playwright/Node are fixture
-tools, not a mandatory product runtime. No model, daemon framework, persistence
+tools, not a mandatory product runtime; already-installed Node24+ also runs the optional [first-use caller](../../product/web-first-use.md), without changing the Node-free core/low-level Web path. No model, daemon framework, persistence
 engine, async runtime or native SDK dependency in core by default.
 Exact initial root workspace dependencies when T01/S01 need serialization:
 | Package / version / features | Purpose / evidence |

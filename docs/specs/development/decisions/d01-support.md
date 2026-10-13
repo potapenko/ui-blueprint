@@ -37,7 +37,8 @@ or browser SDK dependencies. No blanket `--all-features` or all-target-OS build.
 | Other OS/arch/browser | No qualification yet | Intel Mac, macOS14–26 runtime, Linux/Windows, Safari/Firefox/WebKit/OOPIF and mobile not claimed |
 
 Node24.15.0/Playwright Core1.58.2 and Chromium bundle1208 are **fixture tooling**,
-not mandatory shipping runtime dependencies. A Web-only build must not invoke
+not mandatory shipping runtime dependencies. The optional [first-use caller](../../product/web-first-use.md) also uses already-installed Node24+; core and low-level Web CLI/worker remain Node-free.
+A Web-only build must not invoke
 Swift/Xcode, and a core-only build must not attach any runtime. Target-scoped
 capabilities can still be partial/permission_required independently by channel.
 

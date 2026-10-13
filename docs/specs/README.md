@@ -1,8 +1,7 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 42 (explicit saved correspondence).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 43 (explicit Web first-use caller).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
-- Read when: selecting product/development contracts or recovering uncertain routes.
-- Do not read when: a fully read, current selected closure already governs the task.
+- Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
 ## Authority and precedence
 `UIB.ROUTING.AUTHORITY`: user confirmation on 2026-10-06 made
@@ -72,6 +71,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 `HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
+`USE-WEB-BOOTSTRAP-001`: explicit user URL+component outcome and root-selected connection policy register [WEB-FIRST-USE@1](product/web-first-use.md): optional Node24+ caller on an already-authorized loopback CDP browser connection, exact URL/unique bounded component, source-derived identity and existing Rust Observe/geometry. Core/low-level Web remain Node-free; no launch/app integration or new wire; acceptance separate.
 `USE-MAC-COMPARE-001`: user-requested external comparison, root USE-MAC-COMPARE2 selects [CLI-COMPARE@1](product/cli-compare.md)/CLI@19: declared pairs, reported mapped-child order, independent scalar measurements and safe diagnostics; old diff/identity/cache/actions/wire preserved, consumer acceptance separate.
 `CA8-STATIC-TEXT-001`: root's explicit CA8 Evolve packet after CA6/CA7 registers [NATIVE@5](product/native.md)/[static-text@1](product/native-static-text.md): explicit visible_text from safely admitted AXStaticText string AXValue only; old fields, raw Value/Title privacy, quotas and wire unchanged; implementation/live/independent acceptance separate.
 `CA5-NATIVE-VISIBLE-001`: root selected and actual [source feasibility](../plans/ui-blueprint/receipts/corpus-native-visible-children.md) supports [NATIVE@4 AX-VISIBLE](product/native.md#uibnativeax-visible--explicit-source-visible-collection-children)/[CLI@18](product/cli.md): explicit reported-visible collection children, unchanged ordinary/popup modes and quotas; runtime product/independent acceptance separate.

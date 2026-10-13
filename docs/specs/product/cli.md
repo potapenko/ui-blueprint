@@ -3,9 +3,9 @@
 - Contract: `UIB.CLI@19`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @18 with explicit saved correspondence; existing raw JSON/commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
-- Read when: CLI commands, compact/JSON и публикация.
-- Do not read when: задача не затрагивает этот домен; reference/future узлы не являются общим preload.
+- Read when: CLI commands, compact/JSON и публикация; skip unrelated domains/reference/future nodes.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
+- Optional shipped Node caller: [WEB-FIRST-USE@1](web-first-use.md); explicit URL/component preparation, no change to Rust CLI grammar or OBSERVE below.
 - Conditional requires, declared comparison: [CLI-COMPARE@1](cli-compare.md) for compare/diagnose; old commands preserved.
 - Conditional requires, recorded diff: [CLI-DIFF@2](cli-diff.md), with [CLI-GEOMETRY-DIFF@1](cli-geometry-diff.md) only for --geometry; raw mode unchanged.
 - Conditional requires, graph diff: [CLI-GRAPH-DIFF@1](cli-graph-diff.md) only for --graph; existing raw/geometry preserved.
