@@ -291,3 +291,43 @@ no nested delegation. No changes to PlayPhrase.me Mac/Web repositories or runtim
 Root owns this plan/registry. Workers choose exact internal steps, verify once for
 actual changes, checkpoint+push their files and return results to root. Acceptance
 is the consumer completing its real task; builds/docs alone are not that result.
+
+## Selected consumer implementations — 2026-10-13
+
+The consumers forwarded direct user requests: Web URL+selectedcomponent with no
+manual JSON/runtime IDs; Native external-snapshot comparison with useful diagnostics
+and a retry on the exact unchanged pair. Root selects the concrete source-backed
+plans from consumer-web-first-use1.md and consumer-native-comparison1.md, not an
+application-infrastructure prerequisite. The original source projects remain untouched.
+
+USE-MAC-COMPARE2 /shipping_product: Core implements separate compare/diagnose from
+2dd3701plan, with original records, explicit unverified caller correspondence,
+independent scalar measurements, selected reported-child facts and bounded diagnostics.
+Old diff/cache/action/source identities and public formats stay strict. Register
+contract before code; a93f41c now registers CLI-COMPARE1/CLI19/registry42. Actual
+consumer selected Close7→7, query9→9, viewport12→12, content27→27, TomHardy40→36.
+Acceptance: unchanged Close/query/viewport recordedbounds; viewport392×360pt;
+content392×576→392×36; reportedActor children16→1, TomHardy recordedposition3→1.
+Before scrollbar node28 is not after node28; no ordinal matching/deletion/visibility
+claim. Root relayed this selection to Core. The source collector/app is unchanged.
+Core owns engine/CLI/compare docs/tests. Narrow approved Cargo extension makes the
+existing pinned serde nonoptional in CLI for typed map-only input; no new package,
+version, lockfile/rootmanifest or features. Default/feature compile proof required.
+
+USE-WEB-BOOTSTRAP1 /shipping_product: I02owner completes the supported URL+component
+frontend in the shipped optional Node helper, reusing real Rust Observe/Inspect/
+Measure and exact target revalidation. Explicit authorized loopback CDP connection
+is the selected provider; URL cannot create authority. No hidden port/profile scan,
+browser launch/reconfiguration, app integration, manual JSON/IDs or second JS engine.
+Unique exact URL (SPAfragment preserved) and bounded unique light-DOM component;
+stale/ambiguous/incomplete selection refuses. Register new helper contract before
+behavior code; current Node fixture-only wording must be reconciled for the optional
+caller while core/low-levelWeb stay Node-free. No new package/runtime installation.
+Core released shared spec routing after a93f41c; Web now owns its narrow registration,
+with Nativecompare clauses protected. Source writes stay in Webhelper/packaging/docs,
+not concurrent Core CLI/engine/host files. First-use consumer retries Director only
+on a completed pinned bundle/command. Help-only3e143199 is supporting progress.
+
+Both implementation packets are full-cycle finite tasks, no nested agents or per-step
+root approval. Real ownership/dependency handoffs are coordinated; unrelated checks
+are not repeated. Final acceptance includes the same consumers' actual tasks.

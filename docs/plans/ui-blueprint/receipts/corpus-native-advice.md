@@ -24,6 +24,24 @@ Temporary bundle removed through distribution.py remove; original observations a
 recovery backup retained. Both projects unchanged, zero captures/images/newcases.
 Root owns utility diagnosis/fixes; Mac owner owns any optional integration locally.
 
+### USE-MAC1 consumer-selected acceptance pairs
+
+Follow-up turn01a134dd-dccd-7921-af55-0c3596b3989e identifies five explicit pairs:
+Close7→7 (searchLearn.actor.close), query9→9 (searchLearn.actor.query),
+AXScrollArea12→12 (consumer role/subtree selection), content27→27 (selected list
+child), TomHardy40→36 (searchLearn.actor.tom_hardy, unique; explicitly confirmed).
+Indices zero-based, namespace macos.ax; original before/after key prefixes remain
+16ddacd65f5641afb255f9a7a8de85cc /8c88b84352074b20bc73fe1c17d6195e followed by
+-external_semantics-handle-N. No source rewrite or identity proof follows.
+
+Useful QA result: unchanged recorded Close/query/viewport bounds; viewport392×360pt;
+content392×576→392×36; recordedActor children16→1; TomHardy original-list position
+third→first. Before scrollbar child28 must remain unmatched, not paired with the
+different after node28. Don't infer deletion fromapp, allrowsvisible, node1painted
+popup bounds or unrequested checkbox/focus/draft. BackgroundSearch is out of need.
+These exact selections/limits were passed to the implementation owner. No app launch
+or source changes occurred during this consumer clarification.
+
 ## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
 
 **Отклонено пользователем2026-10-13. Не реализовывать как задачу UI Blueprint.**
