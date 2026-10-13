@@ -100,3 +100,23 @@ binary would fail preflight. This finite packet returns the exact new dependency
 Root plan/task registry, other work and after-title-spacing.png were not edited.
 No Rust build, image, external provider/login action, app source change or new corpus
 case occurred. Source resources are released; no borrowed bundle/proof was removed.
+
+
+## USE-WEB-SCOPE3 — separately authorized corrected profile
+
+Root explicitly approved the [SCOPE3 plan](../corpus-testing.md#use-web-scope3--explicit-method-allowance-for-the-selected-profile)
+in this chat. It rejects the prior proposed Rust admission rewrite: the conservative
+preflight is not a demonstrated defect. New Evolve allowance is URL nodes32 AND
+methods109, exactly3×32+13; legacy remains16/100. This is a new declared profile,
+not an automatic retry or reinterpretation of the failed SCOPE2 experiment above.
+
+Frozen abd8878 typed evidence: Host CollectorCaps.max_methods is u32 and maps directly
+to collector Limits; validation requires nonzero/isize bounds and checked multiplication
+by io_read_bytes.109×16384=1785856 is representable. Existing dispatch enforces that
+same granted method cap. No global/spec100 ceiling found in the selected closure;
+100 was caller configuration. Registration WEB-FIRST-USE7 precedes behavior. Other
+fields/caps/deadlines/identity/privacy/cleanup and Rust code remain unchanged.
+
+Reuse the saved patch and ready abd8878 pair; test exact two-value delta, old small
+source and full24/STYLE→originalbytes/validator/measure/export plus selection32/33.
+Any other encountered bound remains a dependency. Corrected proof/result pending.
