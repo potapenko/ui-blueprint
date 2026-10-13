@@ -29,8 +29,9 @@ browsers, scan profiles, launch/reconfigure, navigate/focus, or change applicati
 An already authorized connection is required; URL alone is not authority.
 Selection is bounded metadata, not JS geometry or a manual snapshot adapter.
 Real Rust Observe -> Inspect -> Measure(width,height) supplies facts and coverage.
-Preparation uses a 10s deadline; collection keeps 32 nodes/depth8/64KiB/250ms
-(collector cap16 nodes). Large/unsupported scopes refuse rather than broaden.
+Preparation uses a 10s deadline; URL mode collects 32 nodes/depth8/128KiB/1000ms
+(collector cap16 nodes). Legacy mode keeps 64KiB/250ms. No automatic quota retry.
+A matching diagnostics-capable CLI is required; safe enum/count reasons go to stderr.
 
 Legacy exact-ID mode is unchanged (cannot mix modes):
   --cli ABSOLUTE_CLI --worker ABSOLUTE_WORKER
@@ -266,6 +267,20 @@ async function openBootstrap(options){
     if(result?.exceptionDetails||!result?.result)throw failure('selection_unavailable');
     return result.result;
   }
+  async function describeRoot(objectId){
+    const {node}=await page.send('DOM.describeNode',{objectId,depth:0,pierce:false});
+    if(node?.nodeType!==1||!Number.isInteger(node.backendNodeId)||node.backendNodeId<=0||node.backendNodeId>2147483647)throw failure('cdp_invalid_reply');
+    // Closed roots are absent from Element.shadowRoot but reported by CDP here.
+    // Inspect only boundary presence; never resolve/traverse a shadow root.
+    if(node.shadowRoots!==undefined){
+      if(!Array.isArray(node.shadowRoots))throw failure('cdp_invalid_reply');
+      for(const boundary of node.shadowRoots){
+        if(boundary?.shadowRootType==='open'||boundary?.shadowRootType==='closed')throw failure('unsupported_scope');
+        if(boundary?.shadowRootType!=='user-agent')throw failure('cdp_invalid_reply');
+      }
+    }
+    return node.backendNodeId;
+  }
   async function close(){
     if(closed)return;closed=true;let bad=false;
     if(page&&groupOwned){try{await page.send('Runtime.releaseObjectGroup',{objectGroup:group});}catch{bad=true;}}
@@ -290,9 +305,7 @@ async function openBootstrap(options){
     const status=properties.result.find(p=>p.name==='status')?.value?.value;selected(status);
     const root=properties.result.find(p=>p.name==='root')?.value?.objectId;
     if(typeof root!=='string')throw failure('cdp_invalid_reply');
-    const described=await page.send('DOM.describeNode',{objectId:root,depth:0,pierce:false});
-    const backend=described?.node?.backendNodeId;
-    if(described?.node?.nodeType!==1||!Number.isInteger(backend)||backend<=0||backend>2147483647)throw failure('cdp_invalid_reply');
+    const backend=await describeRoot(root);
     args={...args,surface:binding.surface,document:binding.document,root:backend};
     const current=await metadata();
     if(JSON.stringify(current)!==JSON.stringify(binding)||(await invoke(container,heldCurrent,true)).value?.current!==true)throw failure('stale_target');
@@ -301,12 +314,61 @@ async function openBootstrap(options){
     },revalidate:async()=>{
       if(await target()!==args.target)throw failure('stale_target');
       if(JSON.stringify(await metadata())!==JSON.stringify(binding))throw failure('stale_target');
+      if(await describeRoot(root)!==args.root)throw failure('stale_target');
       selected((await invoke(container,selectComponent,true)).value?.status);
     }};
   }catch(error){await close();throw error;}
 }
 
-function inputs(args,binding){
+function parseObserveDiagnostic(bytes,exit){
+  const invalid=()=>failure('observe_diagnostic_invalid',1);
+  if(!Buffer.isBuffer(bytes)||bytes.length>4096||!bytes.length)throw invalid();
+  const text=bytes.toString('utf8');
+  if(!text.endsWith('\n'))throw invalid();
+  let d;try{d=JSON.parse(text);}catch{throw invalid();}
+  const keys=(value,names)=>value!==null&&typeof value==='object'&&!Array.isArray(value)
+    &&Object.keys(value).length===names.length&&names.every(k=>Object.hasOwn(value,k));
+  const member=(value,names,nullable=false)=>(nullable&&value===null)||names.includes(value);
+  const integer=(value,min,max)=>Number.isInteger(value)&&value>=min&&value<=max;
+  const outer='output_version kind exit_code caller_phase caller_error operation terminal terminal_error requested_channels committed_channels missing_channels incomplete_channels worker_cleanup host_diagnostic'.split(' ');
+  const callers='io_error invalid_arguments invalid_input_file invalid_connection invalid_connection_version invalid_request connection_request_mismatch input_limit output_limit invalid_deadline observe_invalid_or_limit observe_unavailable observe_incomplete observe_worker_or_cleanup_failure unsupported_observe_backend unsupported_observe_platform_or_feature'.split(' ');
+  const hostErrors='invalid_limits resource_limit allocation_failure overflow busy invalid_input invalid_state invalid_control stale_operation deadline_expired permission_denied io worker_failed system_allocation_failure cleanup_pending resync_required action_refused'.split(' ');
+  if(!keys(d,outer)||JSON.stringify(d)+'\n'!==text||d.output_version!=='1.0.0'||d.kind!=='observe_diagnostic'
+    ||!integer(d.exit_code,0,5)||d.exit_code!==exit
+    ||!member(d.caller_phase,'preflight read_inputs validate prepare attach configure_helpers submit wait_terminal shutdown publish_stdout complete'.split(' '))
+    ||!member(d.caller_error,callers,true)||!member(d.operation,['attach','observe'],true)
+    ||!member(d.terminal,['completed','failed','cancelled','timed_out'],true)
+    ||!member(d.terminal_error,hostErrors,true)||!member(d.worker_cleanup,['not_started','confirmed','unconfirmed']))throw invalid();
+  for(const field of ['requested_channels','committed_channels','missing_channels','incomplete_channels'])
+    if(d[field]!==null&&!integer(d[field],0,7))throw invalid();
+  if(d.worker_cleanup==='unconfirmed'&&d.exit_code!==1)throw invalid();
+  const h=d.host_diagnostic;
+  if(h!==null){
+    const causes=['host',...'invalid_input limit stale_target resync_required malformed protocol timeout publication_stopped cleanup_unconfirmed'.split(' ').map(x=>'collector_'+x),
+      ...'missing ambiguous incomplete unsupported timed_out'.split(' ').map(x=>'selection_'+x),
+      ...'invalid_limits invalid_binding encoding envelope budget detached busy counter_exhausted wrong_session unexpected_reply uncorrelated_error cancelled'.split(' ').map(x=>'cdp_'+x),
+      ...'invalid_limits endpoint_rejected logging_boundary connect handshake extensions timeout cancelled byte_limit work_limit io protocol capacity binary closed pending_write no_pending_write'.split(' ').map(x=>'transport_'+x)];
+    if(!keys(h,'stage cause code selection_visited_nodes remote_cleanup send_progress'.split(' '))
+      ||!member(h.stage,'decode begin permit capacity collect encode receive publish finish'.split(' '))
+      ||!member(h.cause,causes)||!integer(h.code,-2147483648,2147483647)
+      ||(h.cause.startsWith('selection_')?!integer(h.selection_visited_nodes,0,4294967295):h.selection_visited_nodes!==null)
+      ||!member(h.remote_cleanup,['not_required','released','unconfirmed'])
+      ||!member(h.send_progress,['not_queued','queued','possibly_written','flushed']))throw invalid();
+  }
+  return d;
+}
+function formatObserveDiagnostic(d){
+  const value=x=>x===null?'unavailable':String(x),h=d.host_diagnostic;
+  return 'observe_diagnostic exit='+d.exit_code+' phase='+d.caller_phase+' caller_error='+value(d.caller_error)
+    +' operation='+value(d.operation)+' terminal='+value(d.terminal)+' terminal_error='+value(d.terminal_error)
+    +' requested='+value(d.requested_channels)+' committed='+value(d.committed_channels)
+    +' missing='+value(d.missing_channels)+' incomplete='+value(d.incomplete_channels)
+    +' worker_cleanup='+d.worker_cleanup+(h?' stage='+h.stage+' cause='+h.cause+' code='+h.code
+      +' selection_visited='+value(h.selection_visited_nodes)+' remote_cleanup='+h.remote_cleanup
+      +' send_progress='+h.send_progress:' host_detail=unavailable');
+}
+
+function inputs(args,binding,outputBytes=FRAME,requestMs=250){
   const nonce=crypto.randomUUID(),mib=1048576;
   const target={id:args.target,generation:nonce},sessionId=`web-geometry-${nonce}`,scope='selected-component';
   const plugin={id:'web',version:'0.1.0'};
@@ -325,12 +387,13 @@ function inputs(args,binding){
         cdp:{max_request_bytes:16384,max_message_bytes:8192,max_metadata_bytes:256,max_results:1,result_bytes:8192,max_events:4,event_bytes:34000},
         collector:{max_nodes:16,max_methods:100,max_reply_bytes:8192,max_total_reply_bytes:65536,max_text_bytes:600,max_handle_bytes:256,max_ax_properties:32,io_read_bytes:16384,io_write_bytes:32768,io_work:2048}}}};
   const request={schema_version:'0.1.0',artifact:{kind:'request',data:{request_id:nonce,clock_domain:'rebound_after_attach',context,
-    limits:{max_elements:32,max_depth:8,max_output_bytes:FRAME,deadline_ms:250},freshness_policy:'current_required',operation:{operation:'observe',channels:['external_semantics']}}}};
+    limits:{max_elements:32,max_depth:8,max_output_bytes:outputBytes,deadline_ms:requestMs},freshness_policy:'current_required',operation:{operation:'observe',channels:['external_semantics']}}}};
   return {connection,request};
 }
 
 async function example(args,bootstrap=null){
-  const binding=bootstrap?bootstrap.binding:await metadata(args),input=inputs(args,binding);
+  const outputBytes=bootstrap?131072:FRAME,requestMs=bootstrap?1000:250;
+  const binding=bootstrap?bootstrap.binding:await metadata(args),input=inputs(args,binding,outputBytes,requestMs);
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-web-geometry-')),owned=[];let child=null,closed=null;
   const started=performance.now();
   async function save(name,bytes){const file=path.join(temp,name),handle=await fs.open(file,'wx',0o600);owned.push(file);try{await handle.writeFile(bytes);}finally{await handle.close();}return file;}
@@ -339,33 +402,38 @@ async function example(args,bootstrap=null){
     if(performance.now()-started>=120000)throw failure('example_deadline',1);
     const bracket=bootstrap&&argv[0]==='observe';
     const timeout=bracket?Math.min(5000,bootstrap.remaining()):5000;
-    child=spawn(args.cli,argv,{stdio:['ignore','pipe','pipe']});const chunks=[];let total=0,diagnostics=0,over=false;
-    child.stdout.on('data',chunk=>{total+=chunk.length;if(total>FRAME){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
-    child.stderr.on('data',chunk=>{diagnostics+=chunk.length;if(diagnostics>FRAME){over=true;child.kill('SIGKILL');}});
+    child=spawn(args.cli,argv,{stdio:['ignore','pipe','pipe']});const chunks=[],errorChunks=[];let total=0,diagnostics=0,over=false;
+    child.stdout.on('data',chunk=>{total+=chunk.length;if(total>outputBytes){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
+    child.stderr.on('data',chunk=>{diagnostics+=chunk.length;if(diagnostics<=4096)errorChunks.push(chunk);if(diagnostics>FRAME){over=true;child.kill('SIGKILL');}});
     closed=new Promise((resolve,reject)=>{child.once('error',()=>reject(failure('cli_spawn_failed',1)));child.once('close',(code,signal)=>resolve({code,signal}));});
     const result=await bounded(closed,timeout,bracket?'bootstrap_deadline':'cli_timeout',bracket?4:1);
     if(over||result.signal)throw failure('cli_output_or_cleanup_failure',1);
-    return {code:result.code,bytes:Buffer.concat(chunks)};
+    return {code:result.code,bytes:Buffer.concat(chunks),stderr:diagnostics<=4096?Buffer.concat(errorChunks):Buffer.alloc(0)};
   }
   try{
     const connection=await json('connection.json',input.connection),request=await json('request.json',input.request);
-    const observed=await call(['observe','--connection',connection,'--request',request,'--worker',args.worker,'--max-input-bytes','131072','--max-output-bytes',String(FRAME)]);
-    if(![0,4].includes(observed.code)||!observed.bytes.length)throw failure(`observe_refused_exit_${observed.code}`,[1,2,3,4,5].includes(observed.code)?observed.code:1);
+    const observed=await call(['observe','--connection',connection,'--request',request,'--worker',args.worker,'--max-input-bytes','131072','--max-output-bytes',String(outputBytes),
+      ...(bootstrap?['--diagnostics-json','--max-diagnostic-bytes','4096']:[])]);
+    const diagnostic=bootstrap?parseObserveDiagnostic(observed.stderr,observed.code):null;
+    if(![0,4].includes(observed.code)||!observed.bytes.length){
+      const error=failure(`observe_refused_exit_${observed.code}`,[1,2,3,4,5].includes(observed.code)?observed.code:1);error.observation=diagnostic;throw error;
+    }
     if(bootstrap){await bootstrap.revalidate();await bootstrap.close();}
     const source=JSON.parse(observed.bytes),snapshot=source.artifact?.data?.result?.data;
     if(source.artifact?.kind!=='channel_response'||source.artifact.data.result.status!=='observed'||!snapshot)throw failure('snapshot_unavailable');
     const file=await save('observe.json',observed.bytes),key={namespace:'web.dom',key:String(args.root)};
     const root=snapshot.nodes.find(node=>node.key.namespace===key.namespace&&node.key.key===key.key);
     if(!root)throw failure('root_not_observed');
-    const inspected=await call(['inspect','--snapshot',file,'--ref',JSON.stringify(key),'--view','design','--max-input-bytes','131072','--max-output-bytes',String(FRAME)]);
+    if(diagnostic&&observed.code!==0)console.error(formatObserveDiagnostic(diagnostic));
+    const inspected=await call(['inspect','--snapshot',file,'--ref',JSON.stringify(key),'--view','design','--max-input-bytes','131072','--max-output-bytes',String(outputBytes)]);
     if(inspected.code!==0)throw failure(`inspect_refused_exit_${inspected.code}`,inspected.code);
     process.stdout.write(inspected.bytes);
-    console.log('Component parts: reported layout_bounds; names/roles not requested.');
+    console.log('Component parts: reported layout_bounds, source-native roles and reported children; normalized names/roles not requested.');
     for(const node of snapshot.nodes){
       const prop=node.properties.find(p=>p.field==='layout_bounds'),state=prop?.state;
       if(state?.availability!=='known'){console.log(`${node.key.namespace}:${node.key.key} ${state?.availability??'not_requested'} ${state?.reason??''} evidence=${JSON.stringify(prop?.evidence??null)}`);continue;}
       const geometry=state.value.value,space=geometry.coordinate_space;
-      console.log(`${node.key.namespace}:${node.key.key} ${geometry.frame_kind} ${JSON.stringify(geometry.shape)} ${space.units} ${space.kind}/${space.origin} space=${space.id} transform=${JSON.stringify(geometry.transform)} evidence=${JSON.stringify(prop.evidence)}`);
+      console.log(`${node.key.namespace}:${node.key.key} ${geometry.frame_kind} ${JSON.stringify(geometry.shape)} ${space.units} ${space.kind}/${space.origin} space=${space.id} transform=${JSON.stringify(geometry.transform)} evidence=${JSON.stringify(prop.evidence)} native_role=${JSON.stringify(node.native_role)} reported_children=${JSON.stringify(node.children)}`);
     }
     const geometry=root.properties.find(p=>p.field==='layout_bounds')?.state;
     if(geometry?.availability!=='known'){console.log('Root dimensions unknown: layout_bounds unavailable.');return 4;}
@@ -375,7 +443,7 @@ async function example(args,bootstrap=null){
         anchors:[{element:key,frame_kind:'layout_bounds',coordinate_space:space,fraction:0,axis:'x'}],quantity_kind:'length',units:space.units,
         applies_when:{platform:null,input_mode:null,text_scale:null}}}};
       const q=await json(`${operation}.json`,query);
-      const measured=await call(['measure','--snapshot',file,'--query',q,'--space',space.id,'--max-input-bytes','131072','--max-output-bytes',String(FRAME),'--json']);
+      const measured=await call(['measure','--snapshot',file,'--query',q,'--space',space.id,'--max-input-bytes','131072','--max-output-bytes',String(outputBytes),'--json']);
       if(![0,4].includes(measured.code))throw failure(`measure_refused_exit_${measured.code}`,measured.code);
       const result=JSON.parse(measured.bytes);assert.equal(result.artifact.kind,'measurement');assert.deepStrictEqual(result.artifact.data.snapshot,snapshot);
       console.log(`${operation}: ${JSON.stringify(result.artifact.data.result)}`);if(measured.code===4)exit=4;
@@ -411,7 +479,7 @@ async function main(){
       finally{await bootstrap.close();}
     }
   }
-  catch(error){const code=error.code&&Number.isInteger(error.exit)?error.code:'example_io_or_validation_failure';console.error(code==='connection_required'?'connection_required: provide an already authorized loopback CDP browser WebSocket via --connection; see --help':code);process.exitCode=error.exit??1;}
+  catch(error){const code=error.code&&Number.isInteger(error.exit)?error.code:'example_io_or_validation_failure';console.error(error.observation?code+' '+formatObserveDiagnostic(error.observation):code==='connection_required'?'connection_required: provide an already authorized loopback CDP browser WebSocket via --connection; see --help':code);process.exitCode=error.exit??1;}
 }
 if(require.main===module)main();
-module.exports={parseFirstUse,normalizePageUrl,selectComponent,heldCurrent,openBootstrap,BootstrapCdp,example};
+module.exports={parseFirstUse,normalizePageUrl,selectComponent,heldCurrent,openBootstrap,BootstrapCdp,inputs,example,parseObserveDiagnostic,formatObserveDiagnostic};

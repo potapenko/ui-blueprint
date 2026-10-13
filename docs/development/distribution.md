@@ -36,11 +36,11 @@ no destination directory and never changes PATH, home settings or permissions.
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision a0265843634fce8bc6a942fc1f276391a51c54c6 --destination "$BUNDLE"
+python3 distribution.py build --modules web --revision ea06095bf311e7e33af90e8d72fe822690a3223e --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 ```
 
-The example pins the qualified current source; use another full saved commit
+The example pins the current diagnostic-capable Web source; use another full saved commit
 only when intentionally selecting another candidate. All product
 binaries, schemas and example inputs come from that revision, ignoring checkout
 WIP. Builds use a private system-temp source archive, Cargo target and Swift module
@@ -59,7 +59,7 @@ newer than `--revision`. Reproduce both the source pin and the recipe revision f
 this repository. Reproducibility means pinned source, dependencies and procedure;
 byte-identical compiler output across paths/SDKs/hosts is not promised.
 
-I02 qualifies product source `a0265843634fce8bc6a942fc1f276391a51c54c6` with the
+Historical I02/E05 qualification pinned product source `a0265843634fce8bc6a942fc1f276391a51c54c6` with the
 unchanged recipe last changed at `6a5bec2`. E05 repairs the shared prompt compiler
 for complete literal Director/Settings prompts; no public schema, CLI flag or
 package version changes. It affects the CLI in every selection, so all four
@@ -167,6 +167,14 @@ connection/request inputs internally. Supply only an already-authorized loopback
 browser WebSocket, URL and selector; sibling CLI/worker paths default automatically.
 No app change, launch/profile setup, guessed port or manual geometry extraction.
 Core/low-level Web remain Node-free. Legacy exact-ID mode stays available.
+Director2 candidates require the diagnostic-capable Rust pin `ea06095` or its
+accepted successor together with the current helper. URL-mode component profile is
+128KiB/1000ms, with unchanged16-node collector cap and all layout/hit/visible fields.
+Strict enum/count stderr explains actual refusal/partial state without raw source
+text; unavailable subcause stays unknown. Fresh Web/combined builds check the compiled
+CLI safe help for the required diagnostic options and refuse an incompatible old
+source before publication. Old v1/v2 bundles still verify/remove with their own
+complete inventory; this is not an in-place upgrade or automatic fallback. See the guide for exact source and limits.
 
 Bundle format `ui-blueprint-local-2` adds those two owned files only for Web/combined.
 The current manager also verifies/removes complete legacy `ui-blueprint-local-1`

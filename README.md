@@ -4,11 +4,11 @@ Local Rust tools for inspecting saved UI observations, measuring geometry,
 checking explicit expectations and preparing model-free engineering documents.
 Selected Web and macOS modules use matching owned worker/helper executables.
 
-To build a local bundle into an existing directory:
+To build the current Web first-use bundle into an existing directory:
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-local.XXXXXX")"
-python3 distribution.py build --modules combined --revision a0265843634fce8bc6a942fc1f276391a51c54c6 --destination "$BUNDLE"
+python3 distribution.py build --modules web --revision ea06095bf311e7e33af90e8d72fe822690a3223e --destination "$BUNDLE"
 python3 "$BUNDLE/distribution.py" verify --destination "$BUNDLE"
 "$BUNDLE/uiblueprint" --help
 ```

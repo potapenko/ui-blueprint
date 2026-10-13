@@ -11,7 +11,7 @@ Reproduce the tested Web binaries with the current recipe from the checkout:
 
 ```sh
 BUNDLE="$(mktemp -d "${TMPDIR:-/tmp}/uib-web-first-use.XXXXXX")"
-python3 distribution.py build --modules web --revision 3e995ec5ab4fbf9160c6fc45e12c72fb32e5c0ed --destination "$BUNDLE"
+python3 distribution.py build --modules web --revision ea06095bf311e7e33af90e8d72fe822690a3223e --destination "$BUNDLE"
 ```
 
 The helper/guide are versioned recipe assets; the manifest records their hashes
@@ -66,8 +66,10 @@ Selector text is data passed separately from the fixed selection function.
 No IDs have to be added to the application; use its existing public selection.
 
 Search covers the root document's light DOM only, under a bounded complete walk.
-It does not enter frame/shadow/template contents. A selected boundary element or
-shadow host refuses. Multiple matches, missing roots or exhausted traversal refuse;
+It does not enter frame/shadow/template contents. Selected authored open/closed
+shadow hosts refuse via both DOM and CDP boundary metadata; user-agent internals
+of ordinary input controls are not traversed and do not exclude their public host.
+A selected frame/template/slot boundary also refuses. Multiple matches, missing roots or exhausted traversal refuse;
 finding one element before reaching a limit does not prove uniqueness.
 
 ## What the operation does
@@ -81,8 +83,9 @@ binding refuses; it never substitutes a new same-label/selector element.
 
 All geometry comes from the canonical Rust observation/analysis. Output contains
 design inspection, sourced width/height and component layout bounds, units/evidence,
-coverage and unavailable fields. Names/roles are not requested by this geometry
-profile. Layout bounds do not prove hit/visible bounds, padding or atomicity.
+coverage and unavailable fields. Normalized names/roles are not requested by this geometry profile. Existing
+source-native roles and reported children are shown as attribution, not inferred
+logical membership. Layout bounds do not prove hit/visible bounds, padding or atomicity.
 Temporary files and remote handles/connections are owned and cleaned; source apps
 and their data are not cleanup targets. This caller creates no durable observation
 file; existing low-level Observe remains available for explicitly managed saved data.
@@ -93,8 +96,11 @@ Preparation:10s overall,2s per CDP call,32 calls,128 targets,64KiB per text repl
 256KiB total per connection and16 events. Both selection walks have at most2048
 visited nodes, depth64 and1s each. --max-visited-nodes may lower (not raise) the2048
 limit. Browser/WebSocket internals are opaque tooling costs, not an RSS guarantee.
-Rust collection retains32 output nodes/depth8/64KiB/250ms, collector16 nodes/256
-visits and existing host/transport bounds. These limits do not promise whole-form
+URL-mode collection uses32 output nodes/depth8/128KiB/1000ms, collector16 nodes/256
+visits and unchanged host/transport bounds. Layout, hit and visible fields are all
+retained. The component budget follows measured full replies above64KiB and serial
+per-node IntersectionObserver waits, not a retry or a relaxed D06 threshold. Legacy
+exact-ID mode keeps64KiB/250ms. These limits do not promise whole-form
 completeness; a large selected subtree can still return a truthful partial/refusal.
 
 - 0: complete result within requested scope.
@@ -103,8 +109,15 @@ completeness; a large selected subtree can still return a truthful partial/refus
 - 2: invalid/missing arguments, unsupported selector syntax or a quota refusal.
 - 1: IO or unconfirmed cleanup. Other Rust exits retain their meanings.
 
-Preparation/revalidation failures print no result. Diagnostics use fixed codes,
-never raw URLs/selectors/UI text. Make a new explicit request only under current
+Preparation/revalidation failures print no result. URL mode uses the matching CLI's
+bounded opt-in diagnostic report and prints only validated enums/counts, never raw
+stderr, URLs, selectors or UI text. A partial observation can print useful geometry
+AND a diagnostic with terminal=completed, committed=1, incomplete=1. A refusal names
+the actual terminal and available Host stage/cause; host_detail=unavailable stays
+unknown. A generic collector_limit or timeout does not identify a particular budget;
+code=0 can mean unspecified, not success. Worker cleanup and remote cleanup differ.
+Missing/malformed reports fail as observe_diagnostic_invalid: verify a matching new
+bundle, not an old CLI with unsupported flags. There is no silent fallback. Make a new explicit request only under current
 authority; there is no automatic retry, relaxed guard or source stabilization.
 
 ## Legacy exact-ID mode

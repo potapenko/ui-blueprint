@@ -55,6 +55,11 @@ def encoded(value):
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
+def require_web_caller_cli(executable):
+    usage = run([str(executable), '--help'], timeout=5)
+    if not all(option in usage for option in (b'--diagnostics-json', b'--max-diagnostic-bytes')):
+        raise ValueError('selected source lacks Observe diagnostics required by the shipped Web caller; use ea06095 or a qualified compatible successor')
+
 
 def run(command, *, cwd=None, env=None, timeout=300):
     """A fresh process group owns compilers too; output stays in memory, never logs."""
@@ -262,6 +267,8 @@ def build(args, fd):
         print(f'Building {args.modules} from {revision}', file=sys.stderr, flush=True)
         run([*cargo, 'build', '--release', '--locked', '--offline', '--target', TARGET,
              '--bins', *selection], cwd=source, env=env)
+        if 'web' in cli_features:
+            require_web_caller_cli(stage / 'target' / TARGET / 'release' / 'uiblueprint')
         records, licenses = dependency_notices(source, env, cargo, selection)
         binaries = ['uiblueprint', 'uiblueprint-validate']
         if args.modules != 'core':

@@ -95,6 +95,17 @@ def inventory_compatibility():
         dist.clean_stage(stage)
         assert not stage.exists()
 
+def caller_compatibility():
+    with patch.object(dist, 'run', return_value=b'Observe: --connection FILE'):
+        try:
+            dist.require_web_caller_cli(Path('/unused-cli'))
+            raise AssertionError('incompatible Web caller accepted')
+        except ValueError:
+            pass
+    with patch.object(dist, 'run', return_value=b'--diagnostics-json --max-diagnostic-bytes') as invoked:
+        dist.require_web_caller_cli(Path('/unused-cli'))
+        invoked.assert_called_once_with(['/unused-cli', '--help'], timeout=5)
+    print('PASS Web caller/CLI prerequisite without observation; old inventory support unchanged')
 
 def documents_entry(cli, stage, context, env):
     # Deliberately invalid version stops immediately after strict deserialization,
@@ -312,5 +323,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     safety()
     inventory_compatibility()
+    caller_compatibility()
     for bundle in args.bundle:
         smoke(bundle.resolve())

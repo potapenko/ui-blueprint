@@ -10,8 +10,25 @@ const connection='ws://127.0.0.1:9222/devtools/browser/owned';
 const url='http://127.0.0.1:3000/#first';
 const args=(selector='#f01')=>['--connection',connection,'--url',url,'--component',selector];
 async function rejects(work,code){await assert.rejects(work,e=>e.code===code);}
+function diagnostic(overrides={}){
+  return {output_version:'1.0.0',kind:'observe_diagnostic',exit_code:0,caller_phase:'complete',caller_error:null,
+    operation:'observe',terminal:'completed',terminal_error:null,requested_channels:1,committed_channels:1,
+    missing_channels:0,incomplete_channels:0,worker_cleanup:'confirmed',host_diagnostic:null,...overrides};
+}
 
 async function offline(){
+  const encode=d=>Buffer.from(JSON.stringify(d)+'\n');
+  const good=diagnostic(),timeout=diagnostic({exit_code:4,caller_phase:'wait_terminal',caller_error:'observe_incomplete',terminal:'timed_out',committed_channels:0,missing_channels:1});
+  assert.equal(helper.parseObserveDiagnostic(encode(good),0).host_diagnostic,null);
+  assert(helper.formatObserveDiagnostic(helper.parseObserveDiagnostic(encode(timeout),4)).includes('terminal=timed_out'));
+  const limit=diagnostic({exit_code:2,caller_error:'observe_invalid_or_limit',terminal:'failed',terminal_error:'resource_limit',host_diagnostic:{stage:'collect',cause:'collector_limit',code:0,selection_visited_nodes:null,remote_cleanup:'released',send_progress:'flushed'}});
+  const message=helper.formatObserveDiagnostic(helper.parseObserveDiagnostic(encode(limit),2));
+  assert(message.includes('cause=collector_limit code=0'));assert(!message.includes('output_bytes')&&!message.includes('deadline_ms'));
+  for(const bad of [diagnostic({caller_error:'PRIVATE_CANARY'}),diagnostic({selector:'PRIVATE_CANARY'}),diagnostic({worker_cleanup:'unconfirmed'}),diagnostic({requested_channels:8}),diagnostic({host_diagnostic:{...limit.host_diagnostic,cause:'PRIVATE_CANARY'}})]){
+    assert.throws(()=>helper.parseObserveDiagnostic(encode(bad),bad.exit_code),e=>e.code==='observe_diagnostic_invalid'&&!e.message.includes('PRIVATE_CANARY'));
+  }
+  for(const bad of [Buffer.from('observe_incomplete\n'),Buffer.from('x'.repeat(4097)),Buffer.from(JSON.stringify(good).replace('"exit_code":0','"exit_code":0,"exit_code":0')+'\n')])assert.throws(()=>helper.parseObserveDiagnostic(bad,0),e=>e.code==='observe_diagnostic_invalid');
+  assert.throws(()=>helper.parseObserveDiagnostic(encode(good),4),e=>e.code==='observe_diagnostic_invalid');
   const parsed=helper.parseFirstUse(args());assert.equal(parsed.selector,'#f01');assert.equal(parsed.maxVisited,2048);
   for(const selector of ['div.card','[role="dialog"][aria-label="Режиссёр"]','*','#f01','.card[data-testid="x"]'])assert.equal(helper.parseFirstUse(args(selector)).selector,selector);
   for(const selector of ['div > input','div input','.a,.b',':has(input)',':first-child','[foo:bar]','#a\\:b','[data-x="oops]',''])assert.throws(()=>helper.parseFirstUse(args(selector)),e=>['unsupported_selector','invalid_arguments'].includes(e.code));
@@ -73,16 +90,19 @@ async function offline(){
       else if(q.method==='Runtime.evaluate')result={result:{objectId:'document'}};
       else if(q.method==='Runtime.callFunctionOn')result={result:q.params.returnByValue?{value:q.params.functionDeclaration.includes('heldCurrent')?{current:true}:{status:mode==='remount'?'stale':'selected'}}:{objectId:'container'}};
       else if(q.method==='Runtime.getProperties')result={result:[{name:'status',value:{value:mode==='malformed-status'?'constructor':'selected'}},{name:'root',value:{objectId:'element'}}]};
-      else if(q.method==='DOM.describeNode')result={node:{nodeType:1,backendNodeId:42}};
+      else if(q.method==='DOM.describeNode')result={node:{nodeType:1,backendNodeId:42,...(['closed-shadow','ua-shadow'].includes(mode)?{shadowRoots:[{shadowRootType:mode==='closed-shadow'?'closed':'user-agent'}]}:{})}};
       else if(q.method==='Runtime.releaseObjectGroup')result={};
       else throw new Error('unexpected_method');
       return {id:q.id,result};
     };
-    for(const [which,expected] of [['missing','target_unresolved'],['ambiguous','ambiguous_target'],['stale-loader','stale_target'],['malformed-status','cdp_invalid_reply']]){
+    for(const [which,expected] of [['missing','target_unresolved'],['ambiguous','ambiguous_target'],['stale-loader','stale_target'],['malformed-status','cdp_invalid_reply'],['closed-shadow','unsupported_scope']]){
       mode=which;frames=0;await rejects(()=>helper.openBootstrap(parsed),expected);assert(FakeSocket.sockets.every(s=>s.didClose));
     }
     mode='ok';const prepared=await helper.openBootstrap(parsed);assert.equal(prepared.args.root,42);assert.equal(prepared.binding.document,1);
     mode='remount';await rejects(()=>prepared.revalidate(),'stale_target');await prepared.close();assert(FakeSocket.sockets.every(s=>s.didClose));
+    mode='ok';const boundary=await helper.openBootstrap(parsed);
+    mode='closed-shadow';await rejects(()=>boundary.revalidate(),'unsupported_scope');await boundary.close();assert(FakeSocket.sockets.every(s=>s.didClose));
+    mode='ua-shadow';const control=await helper.openBootstrap(parsed);await control.revalidate();await control.close();
   }finally{global.WebSocket=old.WebSocket;}
   // The overall preparation deadline also bounds a stalled Observe child.
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-bootstrap-deadline-'));
@@ -93,7 +113,7 @@ async function offline(){
     try{
       const owned={cli:delayed,worker:'/unused',target:'target',endpoint:'ws://127.0.0.1:9222/devtools/page/target',root:42};
       await rejects(()=>helper.example(owned,{binding:{surface:{id:'frame',generation:'loader'},document:1},remaining:()=>20,revalidate:()=>{throw new Error('must not publish');}}),'bootstrap_deadline');
-      await fs.writeFile(delayed,'#!/usr/bin/env node\nprocess.exit(0);\n');
+      await fs.writeFile(delayed,'#!/usr/bin/env node\nprocess.stderr.write('+JSON.stringify(JSON.stringify(diagnostic())+'\n')+');\nprocess.exit(0);\n');
       await assert.rejects(()=>helper.example(owned,{binding:{surface:{id:'frame',generation:'loader'},document:1},remaining:()=>1000}),e=>e.code==='observe_refused_exit_0'&&e.exit===1);
     }finally{fs.mkdtemp=make;}
     assert.equal(ownedDirs.length,2);for(const dir of ownedDirs)await assert.rejects(fs.stat(dir),e=>e.code==='ENOENT');
@@ -140,7 +160,7 @@ async function live(){
     const page=await context.newPage();page.setDefaultTimeout(2000);page.setDefaultNavigationTimeout(3000);
     await page.goto(fixture.url+'/?generation=1#first');await page.waitForFunction(()=>!!window.f01);
     const state=()=>page.evaluate(()=>({focus:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()}));
-    const before=await state();const good=await invoke(ws,page.url(),'#f01',4);assert.equal(good.stderr,'');
+    const before=await state();const good=await invoke(ws,page.url(),'#f01',4);assert(good.stderr.startsWith('observe_diagnostic exit=4 '));assert(good.stderr.includes('terminal=completed'));
     for(const [name,amount] of [['width',360],['height',123]]){const line=good.stdout.split('\n').find(x=>x.startsWith(name+': '));assert(line);const result=JSON.parse(line.slice(name.length+2));assert.equal(result.status,'known');assert.equal(result.measurement.value.value.amount,amount);assert.equal(result.measurement.space.units,'css_px');}
     assert.deepEqual(await state(),before);
     for(const [pageUrl,selector,code,extra] of [[page.url().replace('#first','#different'),'#f01','target_unresolved',[]],[page.url(),'#absent','component_unresolved',[]],[page.url(),'button','ambiguous_component',[]],[page.url(),'#child','unsupported_scope',[]],[page.url(),'#f01','selection_limit',['--max-visited-nodes','1']]]){
@@ -149,8 +169,18 @@ async function live(){
     const duplicate=await context.newPage();await duplicate.goto(page.url());const ambiguous=await invoke(ws,page.url(),'#f01',4);assert(!ambiguous.stdout);assert.equal(ambiguous.stderr.trim(),'ambiguous_target');await duplicate.close();
     await page.evaluate(()=>{const input=document.getElementById('draft');input.type='password';input.value='PRIVATE_BOOTSTRAP_CANARY';});
     const privateBefore=await page.inputValue('#draft'),privateState=await state();
-    const privateRead=await invoke(ws,page.url(),'#draft',4);assert.equal(privateRead.stderr,'');
+    const privateRead=await invoke(ws,page.url(),'#draft',4);assert(privateRead.stderr.startsWith('observe_diagnostic exit=4 '));assert(privateRead.stderr.includes('terminal=completed'));
     assert.equal(await page.inputValue('#draft'),privateBefore);assert.deepEqual(await state(),privateState);
+    await page.evaluate(()=>{const host=document.createElement('div');host.id='closed-host';document.body.append(host);host.attachShadow({mode:'closed'});});
+    const closed=await invoke(ws,page.url(),'#closed-host',4);assert(!closed.stdout);assert.equal(closed.stderr.trim(),'unsupported_scope');
+    await page.evaluate(()=>{const host=document.createElement('div');host.id='new-boundary';document.body.append(host);});
+    const boundary=await helper.openBootstrap(helper.parseFirstUse(['--connection',ws,'--url',page.url(),'--component','#new-boundary']));
+    await page.evaluate(()=>document.getElementById('new-boundary').attachShadow({mode:'closed'}));
+    await rejects(()=>boundary.revalidate(),'unsupported_scope');await boundary.close();
+    await page.evaluate(()=>{const host=document.createElement('div');host.id='remount-boundary';document.body.append(host);});
+    const retired=await helper.openBootstrap(helper.parseFirstUse(['--connection',ws,'--url',page.url(),'--component','#remount-boundary']));
+    await page.evaluate(()=>{const old=document.getElementById('remount-boundary'),host=document.createElement('div');host.id=old.id;old.replaceWith(host);host.attachShadow({mode:'closed'});});
+    await rejects(()=>retired.revalidate(),'stale_target');await retired.close();
     const reparent=await helper.openBootstrap(helper.parseFirstUse(['--connection',ws,'--url',page.url(),'--component','#f01']));
     await page.evaluate(()=>{const root=document.getElementById('f01'),wrapper=document.createElement('section');root.parentNode.insertBefore(wrapper,root);wrapper.append(root);});
     await rejects(()=>reparent.revalidate(),'stale_target');await reparent.close();
