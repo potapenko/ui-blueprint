@@ -37,15 +37,15 @@ pub(crate) fn comparison_diagnostic(
     if args.json {
         comparison_json(&mut buffer, &fields)?;
     } else {
-        writeln!(&mut buffer, "Recorded comparison diagnostic: strict_diff_compatible={} protected_basis_compatible={} before_nodes={} after_nodes={} exact_key_matches={}",
-            result.strict_diff_compatible, result.protected_basis_compatible, result.before_nodes, result.after_nodes, result.exact_key_matches).map_err(|_| buffer.error())?;
-        comparison_text(&mut buffer, "differing_axes=")?;
-        comparison_json(&mut buffer, &result.differing_axes)?;
-        comparison_text(&mut buffer, "\nstrict_diff_blocking_axes=")?;
-        comparison_json(&mut buffer, &result.strict_diff_blocking_axes)?;
-        comparison_text(&mut buffer, "\nnext_steps=")?;
-        comparison_json(&mut buffer, &result.next_steps)?;
-        comparison_text(&mut buffer, "\n")?;
+        writeln!(&mut buffer, "Recorded comparison diagnostic (source=saved, live_revalidated=false):\nStrict diff compatible: {}; protected basis compatible: {}\nRecorded nodes: before {}, after {}; exact keys matched: {}", result.strict_diff_compatible, result.protected_basis_compatible, result.before_nodes, result.after_nodes, result.exact_key_matches).map_err(|_| buffer.error())?;
+        writeln!(
+            &mut buffer,
+            "Differing axes: {}\nStrict diff blockers: {}\nSupported next steps: {}",
+            result.differing_axes.join(", "),
+            result.strict_diff_blocking_axes.join(", "),
+            result.next_steps.join(", ")
+        )
+        .map_err(|_| buffer.error())?;
         comparison_text(&mut buffer, COMPARISON_GUIDANCE)?;
     }
     comparison_text(&mut buffer, "\n")?;
@@ -153,17 +153,203 @@ fn corresponded_compact(
     result: &uiblueprint_engine::diff::CorrespondedDifference<'_>,
 ) -> Result<(), Failure> {
     use uiblueprint_engine::diff::CorrespondedEntry::*;
+    use uiblueprint_schema::model::Property as SourceProperty;
+    let same_evidence = |a: &Evidence, b: &Evidence| {
+        a == b
+            && a.uncertainty.as_ref().map(|u| u.absolute.to_bits())
+                == b.uncertainty.as_ref().map(|u| u.absolute.to_bits())
+    };
+    let same_transform = |a: &TransformState, b: &TransformState| {
+        a == b
+            && match (a, b) {
+                (
+                    TransformState::Known { transform: a },
+                    TransformState::Known { transform: b },
+                ) => {
+                    a.affine
+                        .iter()
+                        .zip(&b.affine)
+                        .all(|(x, y)| x.to_bits() == y.to_bits())
+                        && same_evidence(&a.evidence, &b.evidence)
+                }
+                _ => true,
+            }
+    };
+    // Exact presentation references only; source records and JSON stay unchanged.
+    let mut evidence = Vec::<&Evidence>::new();
+    let mut spaces = Vec::<&Space>::new();
+    let mut transforms = Vec::<&TransformState>::new();
+    for entry in &result.entries {
+        let Property {
+            before_index,
+            after_index,
+            field,
+            ..
+        } = entry
+        else {
+            continue;
+        };
+        for node in [
+            &result.before.nodes[*before_index],
+            &result.after.nodes[*after_index],
+        ] {
+            if let Some(SourceProperty::Requested {
+                evidence: source,
+                state,
+                ..
+            }) = node.properties.iter().find(|p| p.field() == *field)
+            {
+                if !evidence.iter().any(|e| same_evidence(e, source)) {
+                    evidence.try_reserve(1).map_err(|_| Failure::io())?;
+                    evidence.push(source);
+                }
+                if let Availability::Known {
+                    value: Value::Geometry(g),
+                } = state
+                {
+                    if !spaces.contains(&&g.coordinate_space) {
+                        spaces.try_reserve(1).map_err(|_| Failure::io())?;
+                        spaces.push(&g.coordinate_space);
+                    }
+                    if !transforms.iter().any(|t| same_transform(t, &g.transform)) {
+                        transforms.try_reserve(1).map_err(|_| Failure::io())?;
+                        transforms.push(&g.transform);
+                    }
+                }
+            }
+        }
+    }
+    for m in &result.measurements {
+        let pair = &result.correspondence.measurement_pairs[m.pair_index];
+        for space in [
+            &pair.before_evaluation.result_space,
+            &pair.after_evaluation.result_space,
+        ] {
+            if !spaces.contains(&space) {
+                spaces.try_reserve(1).map_err(|_| Failure::io())?;
+                spaces.push(space);
+            }
+        }
+        for side in [&m.before, &m.after] {
+            let sources = match side {
+                MeasurementResult::Known { measurement } => {
+                    if !spaces.contains(&&measurement.space) {
+                        spaces.try_reserve(1).map_err(|_| Failure::io())?;
+                        spaces.push(&measurement.space);
+                    }
+                    &measurement.evidence
+                }
+                MeasurementResult::Unknown { evidence, .. } => evidence,
+            };
+            for source in sources {
+                if !evidence.iter().any(|e| same_evidence(e, source)) {
+                    evidence.try_reserve(1).map_err(|_| Failure::io())?;
+                    evidence.push(source);
+                }
+            }
+        }
+    }
     comparison_text(
         buffer,
-        "Recorded comparison; correspondence_status=caller_declared_unverified\nbefore_coverage=",
+        "Recorded comparison: source=saved live_revalidated=false correspondence_status=caller_declared_unverified\n",
     )?;
-    comparison_json(buffer, &result.before.coverage)?;
-    comparison_text(buffer, "\nafter_coverage=")?;
-    comparison_json(buffer, &result.after.coverage)?;
-    comparison_text(buffer, "\n")?;
-    for entry in &result.entries {
-        comparison_json(buffer, &corresponded_entry(result, entry)?)?;
+    comparison_text(
+        buffer,
+        "E/S/T labels abbreviate exact metadata only; no identity or common-coordinate proof. Node indices address each original Snapshot separately.\n",
+    )?;
+    for (side, snapshot) in [("before", result.before), ("after", result.after)] {
+        write!(buffer, "{side}: snapshot=").map_err(|_| buffer.error())?;
+        comparison_json(buffer, &snapshot.id)?;
+        writeln!(buffer, " revision={}", snapshot.revision).map_err(|_| buffer.error())?;
+        comparison_text(buffer, "  context=")?;
+        comparison_json(buffer, &snapshot.context)?;
+        comparison_text(buffer, "\n  coverage=")?;
+        comparison_json(buffer, &snapshot.coverage)?;
+        comparison_text(buffer, "\n  observations=")?;
+        comparison_json(buffer, &snapshot.observations)?;
         comparison_text(buffer, "\n")?;
+    }
+    for (i, source) in evidence.iter().enumerate() {
+        write!(buffer, "E{}=", i + 1).map_err(|_| buffer.error())?;
+        comparison_json(buffer, source)?;
+        comparison_text(buffer, "\n")?;
+    }
+    for (i, space) in spaces.iter().enumerate() {
+        write!(buffer, "S{}=", i + 1).map_err(|_| buffer.error())?;
+        comparison_json(buffer, space)?;
+        comparison_text(buffer, "\n")?;
+    }
+    for (i, transform) in transforms.iter().enumerate() {
+        write!(buffer, "T{}=", i + 1).map_err(|_| buffer.error())?;
+        comparison_json(buffer, transform)?;
+        comparison_text(buffer, "\n")?;
+    }
+    let fact = |buffer: &mut Bounded, property: Option<&SourceProperty>| -> Result<(), Failure> {
+        match property {
+            None => comparison_text(buffer, "absent_in_record"),
+            Some(SourceProperty::NotRequested { .. }) => comparison_text(buffer, "not_requested"),
+            Some(SourceProperty::Requested {
+                state,
+                sensitivity,
+                evidence: source,
+                ..
+            }) => {
+                comparison_json(buffer, sensitivity)?;
+                comparison_text(buffer, " ")?;
+                match state {
+                    Availability::Known {
+                        value: Value::Geometry(g),
+                    } => {
+                        comparison_text(buffer, "known ")?;
+                        if let Shape::Rect(r) = &g.shape {
+                            write!(
+                                buffer,
+                                "rect(x={} y={} width={} height={})",
+                                r.x, r.y, r.width, r.height
+                            )
+                            .map_err(|_| buffer.error())?;
+                        } else {
+                            comparison_json(buffer, &g.shape)?;
+                        }
+                        comparison_text(buffer, " frame=")?;
+                        comparison_json(buffer, &g.frame_kind)?;
+                        let space = spaces
+                            .iter()
+                            .position(|s| **s == g.coordinate_space)
+                            .ok_or(Failure::io())?
+                            + 1;
+                        let transform = transforms
+                            .iter()
+                            .position(|t| same_transform(t, &g.transform))
+                            .ok_or(Failure::io())?
+                            + 1;
+                        write!(buffer, " S{space} T{transform}").map_err(|_| buffer.error())?;
+                    }
+                    Availability::Known { value } => {
+                        comparison_text(buffer, "known ")?;
+                        comparison_json(buffer, value)?;
+                    }
+                    Availability::Unknown { reason } => {
+                        comparison_text(buffer, "unknown reason=")?;
+                        comparison_json(buffer, reason)?;
+                    }
+                    Availability::Unsupported { reason } => {
+                        comparison_text(buffer, "unsupported reason=")?;
+                        comparison_json(buffer, reason)?;
+                    }
+                    Availability::Redacted {} => comparison_text(buffer, "redacted")?,
+                }
+                let source = evidence
+                    .iter()
+                    .position(|e| same_evidence(e, source))
+                    .ok_or(Failure::io())?
+                    + 1;
+                write!(buffer, " E{source}").map_err(|_| buffer.error())
+            }
+        }
+    };
+    let mut current_pair = None;
+    for entry in &result.entries {
         let (pair, old, new) = match *entry {
             Property {
                 pair_index,
@@ -178,41 +364,96 @@ fn corresponded_compact(
                 ..
             } => (pair_index, before_index, after_index),
         };
-        comparison_text(buffer, "pair=")?;
-        comparison_json(buffer, &result.correspondence.node_pairs[pair].id)?;
-        comparison_text(buffer, " before_key=")?;
-        comparison_json(buffer, &result.before.nodes[old].key)?;
-        comparison_text(buffer, " after_key=")?;
-        comparison_json(buffer, &result.after.nodes[new].key)?;
-        comparison_text(buffer, "\n")?;
+        if current_pair != Some(pair) {
+            comparison_text(buffer, "\nPair ")?;
+            comparison_json(buffer, &result.correspondence.node_pairs[pair].id)?;
+            writeln!(buffer, " (before node{old} -> after node{new})")
+                .map_err(|_| buffer.error())?;
+            comparison_text(buffer, "  before_key=")?;
+            comparison_json(buffer, &result.before.nodes[old].key)?;
+            comparison_text(buffer, " after_key=")?;
+            comparison_json(buffer, &result.after.nodes[new].key)?;
+            comparison_text(buffer, "\n")?;
+            current_pair = Some(pair);
+        }
         match entry {
-            Property { field, .. } => {
-                comparison_text(buffer, "before_property=")?;
-                comparison_json(
+            Property {
+                field,
+                content_changed,
+                evidence_changed,
+                ..
+            } => {
+                comparison_text(buffer, "  ")?;
+                comparison_json(buffer, field)?;
+                write!(buffer, ": content_changed={content_changed} evidence_changed={evidence_changed}\n    before: ").map_err(|_| buffer.error())?;
+                fact(
                     buffer,
-                    &result.before.nodes[old]
+                    result.before.nodes[old]
                         .properties
                         .iter()
                         .find(|p| p.field() == *field),
                 )?;
-                comparison_text(buffer, "\nafter_property=")?;
-                comparison_json(
+                comparison_text(buffer, "\n    after:  ")?;
+                fact(
                     buffer,
-                    &result.after.nodes[new]
+                    result.after.nodes[new]
                         .properties
                         .iter()
                         .find(|p| p.field() == *field),
                 )?;
+                comparison_text(buffer, "\n")?;
             }
-            Children { .. } => {
-                comparison_text(buffer, "before_reported_children=")?;
-                comparison_json(buffer, &result.before.nodes[old].children)?;
-                comparison_text(buffer, "\nafter_reported_children=")?;
-                comparison_json(buffer, &result.after.nodes[new].children)?;
+            Children {
+                mapped_order_changed,
+                unmapped_before_children,
+                unmapped_after_children,
+                ..
+            } => {
+                let complete = *unmapped_before_children == 0 && *unmapped_after_children == 0;
+                let status = if complete {
+                    "all_reported_children_mapped"
+                } else {
+                    "reported_subset"
+                };
+                write!(buffer, "  reported children: {} -> {}; unmapped: {} -> {}; mapped_order_changed={mapped_order_changed}; {status}; content_changed=", result.before.nodes[old].children.len(), result.after.nodes[new].children.len(), unmapped_before_children, unmapped_after_children).map_err(|_| buffer.error())?;
+                comparison_json(
+                    buffer,
+                    &if complete {
+                        Some(mapped_order_changed)
+                    } else {
+                        None
+                    },
+                )?;
+                comparison_text(buffer, "\n  before_reported_children=")?;
+                comparison_text(buffer, "[")?;
+                for (i, key) in result.before.nodes[old].children.iter().enumerate() {
+                    if i > 0 {
+                        comparison_text(buffer, ", ")?;
+                    }
+                    if let Some(index) = result.before.nodes.iter().position(|n| n.key == *key) {
+                        write!(buffer, "node{index}").map_err(|_| buffer.error())?;
+                    } else {
+                        comparison_json(buffer, key)?;
+                    }
+                }
+                comparison_text(buffer, "]")?;
+                comparison_text(buffer, "\n  after_reported_children=")?;
+                comparison_text(buffer, "[")?;
+                for (i, key) in result.after.nodes[new].children.iter().enumerate() {
+                    if i > 0 {
+                        comparison_text(buffer, ", ")?;
+                    }
+                    if let Some(index) = result.after.nodes.iter().position(|n| n.key == *key) {
+                        write!(buffer, "node{index}").map_err(|_| buffer.error())?;
+                    } else {
+                        comparison_json(buffer, key)?;
+                    }
+                }
+                comparison_text(buffer, "]")?;
                 for p in uiblueprint_engine::diff::mapped_child_positions(result, old, new)
                     .map_err(|_| Failure::io())?
                 {
-                    comparison_text(buffer, "\nchild_pair=")?;
+                    comparison_text(buffer, "\n  child_pair=")?;
                     comparison_json(
                         buffer,
                         &result.correspondence.node_pairs[p.child_pair_index].id,
@@ -222,27 +463,70 @@ fn corresponded_compact(
                     comparison_text(buffer, " after_position=")?;
                     comparison_json(buffer, &p.after_position)?;
                 }
+                comparison_text(buffer, "\n")?;
             }
         }
-        comparison_text(buffer, "\n")?;
     }
     for m in &result.measurements {
-        comparison_text(buffer, "measurement_pair=")?;
-        comparison_json(
-            buffer,
-            &result.correspondence.measurement_pairs[m.pair_index].id,
-        )?;
-        comparison_text(buffer, "\nbefore_measurement=")?;
-        comparison_json(buffer, &m.before)?;
-        comparison_text(buffer, "\nafter_measurement=")?;
-        comparison_json(buffer, &m.after)?;
-        comparison_text(buffer, "\nlength_change=")?;
+        let pair = &result.correspondence.measurement_pairs[m.pair_index];
+        comparison_text(buffer, "\nMeasurement ")?;
+        comparison_json(buffer, &pair.id)?;
+        comparison_text(buffer, " frames=")?;
+        for a in &pair.before_query.anchors {
+            comparison_json(buffer, &a.frame_kind)?;
+            comparison_text(buffer, " ")?;
+        }
+        comparison_text(buffer, "\n")?;
+        for (label, side) in [("before", &m.before), ("after", &m.after)] {
+            write!(buffer, "  {label}: ").map_err(|_| buffer.error())?;
+            let sources = match side {
+                MeasurementResult::Known { measurement } => {
+                    comparison_text(buffer, "known ")?;
+                    comparison_json(buffer, &measurement.value)?;
+                    let space = spaces
+                        .iter()
+                        .position(|s| **s == measurement.space)
+                        .ok_or(Failure::io())?
+                        + 1;
+                    write!(buffer, " S{space} details=").map_err(|_| buffer.error())?;
+                    comparison_json(buffer, &measurement.details)?;
+                    &measurement.evidence
+                }
+                MeasurementResult::Unknown { reason, evidence } => {
+                    comparison_text(buffer, "unknown reason=")?;
+                    comparison_json(buffer, reason)?;
+                    let space = if label == "before" {
+                        &pair.before_evaluation.result_space
+                    } else {
+                        &pair.after_evaluation.result_space
+                    };
+                    let index = spaces
+                        .iter()
+                        .position(|s| **s == *space)
+                        .ok_or(Failure::io())?
+                        + 1;
+                    write!(buffer, " S{index}").map_err(|_| buffer.error())?;
+                    evidence
+                }
+            };
+            comparison_text(buffer, " evidence=")?;
+            for source in sources {
+                let i = evidence
+                    .iter()
+                    .position(|e| same_evidence(e, source))
+                    .ok_or(Failure::io())?
+                    + 1;
+                write!(buffer, "E{i} ").map_err(|_| buffer.error())?;
+            }
+            comparison_text(buffer, "\n")?;
+        }
+        comparison_text(buffer, "  length_change=")?;
         comparison_json(buffer, &m.change)?;
         comparison_text(buffer, "\n")?;
     }
     writeln!(
         buffer,
-        "unexamined_before_nodes={} unexamined_after_nodes={} omitted_entries={}",
+        "\nunexamined_before_nodes={} unexamined_after_nodes={} omitted_entries={}",
         result.unexamined_before_nodes, result.unexamined_after_nodes, result.omitted_entries
     )
     .map_err(|_| buffer.error())?;

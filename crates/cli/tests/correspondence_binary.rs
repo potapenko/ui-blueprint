@@ -199,6 +199,58 @@ fn comparison_preserves_originals_and_exposes_selected_facts_and_unexamined_chil
     let compact = String::from_utf8(compact.stdout).unwrap();
     assert!(compact.contains("before_reported_children="));
     assert!(compact.contains("length_change=12.0"));
+    assert!(compact.contains(
+        "source=saved live_revalidated=false correspondence_status=caller_declared_unverified"
+    ));
+    assert_eq!(compact.matches("Pair ").count(), 2);
+    assert_eq!(compact.matches("before_key=").count(), 2);
+    assert_eq!(compact.matches("E1=").count(), 1);
+    assert_eq!(compact.matches("S1=").count(), 1);
+    assert_eq!(compact.matches("T1=").count(), 1);
+    assert!(compact.contains("known rect(x=48 y=20 width=20 height=10)"));
+    assert!(compact.contains("before_reported_children=[node1, node2]"));
+    assert!(compact.contains("after_reported_children=[node2, node1]"));
+    assert!(compact.contains(r#"child_pair="control" before_position=0 after_position=1"#));
+    assert!(
+        compact.contains("unexamined_before_nodes=1 unexamined_after_nodes=1 omitted_entries=0")
+    );
+    let cap = compact.len().to_string();
+    let path = c.dir.join("c");
+    let path = path.to_str().unwrap();
+    let exact = c.run(
+        "compare",
+        &[
+            "--correspondence",
+            path,
+            "--max-entries",
+            "100",
+            "--max-input-bytes",
+            "1000000",
+            "--max-output-bytes",
+            &cap,
+        ],
+    );
+    assert_eq!(exact.status.code(), Some(0));
+    assert_eq!(exact.stdout, compact.as_bytes());
+    let cap = (compact.len() - 1).to_string();
+    error(
+        c.run(
+            "compare",
+            &[
+                "--correspondence",
+                path,
+                "--max-entries",
+                "100",
+                "--max-input-bytes",
+                "1000000",
+                "--max-output-bytes",
+                &cap,
+            ],
+        ),
+        2,
+        "output_limit\n",
+    );
+
     error(
         c.run(
             "diff",
@@ -241,6 +293,40 @@ fn diagnostic_gives_actual_axes_and_supported_next_steps_without_ui_or_paths() {
         String::from_utf8(compact.stdout)
             .unwrap()
             .contains("compare --correspondence FILE")
+    );
+    let compact = c.diagnose(false);
+    let compact = String::from_utf8(compact.stdout).unwrap();
+    assert!(compact.contains("Strict diff blockers: session_id, surfaces"));
+    assert!(compact.contains("source=saved, live_revalidated=false"));
+    assert!(!compact.contains("private-canary"));
+    assert!(!compact.contains(c.dir.to_str().unwrap()));
+    let cap = compact.len().to_string();
+    let exact = c.run(
+        "compare",
+        &[
+            "--diagnose",
+            "--max-input-bytes",
+            "1000000",
+            "--max-output-bytes",
+            &cap,
+        ],
+    );
+    assert_eq!(exact.status.code(), Some(4));
+    assert_eq!(exact.stdout, compact.as_bytes());
+    let cap = (compact.len() - 1).to_string();
+    error(
+        c.run(
+            "compare",
+            &[
+                "--diagnose",
+                "--max-input-bytes",
+                "1000000",
+                "--max-output-bytes",
+                &cap,
+            ],
+        ),
+        2,
+        "output_limit\n",
     );
     c.after["context"]["target"]["generation"] = json!("other");
     c.save();
@@ -322,6 +408,10 @@ fn pair_bindings_unknowns_redaction_and_escaping_are_explicit() {
     let compact = c.compare(100, false);
     assert_eq!(compact.status.code(), Some(4));
     assert!(!compact.stdout.contains(&27));
+    assert!(String::from_utf8_lossy(&compact.stdout).contains("redacted E"));
+    assert!(
+        String::from_utf8_lossy(&compact.stdout).contains("unknown reason=\"redacted_property\"")
+    );
     assert!(
         String::from_utf8(compact.stdout)
             .unwrap()

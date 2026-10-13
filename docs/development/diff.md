@@ -172,6 +172,16 @@ lists were not compared because some children are unmapped. Neither means deleti
 Even all_reported_children_mapped does not prove full UI coverage or visibility.
 Native bounds remain accessibility bounds; source partial coverage remains partial.
 
+Compact groups fields under each declared pair, with original keys printed once.
+Before/after facts keep exact numbers, availability/reasons, content/Evidence flags
+and per-side source references. Repeated Evidence/Space/transform metadata uses local
+E/S/T display labels defined once; these labels prove neither identity nor a common
+coordinate system. Source Context/coverage/Observations remain attributed on each side.
+Reported child lists use indices in that side's unchanged original Snapshot; unresolved
+refs retain their original keys. Equal indices across sides are not matching evidence.
+Counts, unmapped children, original positions, unknown measurements and omitted/
+unexamined coverage remain explicit. Full `--json` output remains byte-identical.
+
 Optional width/height/gap queries and evaluations use unchanged analysis0.2 types
 inside C (bare canonical records, not AnalysisDocument wrappers). They must bind to
 their own Snapshot and describe the same declared targets/anchors/operation and
