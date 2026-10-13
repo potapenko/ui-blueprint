@@ -90,7 +90,7 @@ dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
 | CW-B11 |2|2|New qualified desktop20row ready state and mobile full-screen ready topology; no oldCW02 relabelling; both first outputs evaluated as failures by author |
 | CW-B12 |2|2|Reels Search positive custom/suggestions and successful empty;94frames/21required labels, both first outputs authorFAIL; numeric success is not image acceptance |
 | CW-B13 |3|3|Selected desktop Director tags, mobile Director pills and single Voice tile; no name multiplication; all three first images fail both independent reviews |
-| CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; first image authorFAIL, independent review pending |
+| CN-B21 |1|1|Real keyboard-shortened iPad Actor ready list;6visible rows vs9full+partial; optional compact-width unavailable; both critics reject focus loss, numbers/membership pass |
 | **Primary subtotal** |**183**|**506**| |
 
 CN-B21 evidence: `playphraseme-cn-b21-1v2u48gc/HANDOFF.md`, neutral `manifest.json`,
@@ -99,6 +99,15 @@ ManifestSHA25661336dd0486f87db9ef997dce4fd677911b7f106d33ecb32238c5b6401ed2434.
 Native simctl source2752×2064/1376×1032pt/native2x;10selected AX nodes,
 20source sizes and6assignedlabels checked. First output1672×941 atCP14, no reroll.
 Author missing popup arrow/focus and caption-placement deviations remain unaccepted.
+Both critics observed independently then reconciled author evidence: CV2 final
+01a132dd-0f42-7872-b796-c6a997500b61, CT2 final01a132dc-9354-72d3-b3dd-c015816d8ea0.
+The missing focus cue rejects the image; correct20source sizes/6labels, separate AX
+sketch owners, six names/counts/order, placeholder and unchecked state are preserved.
+Popup arrow absence concerns source appearance, never permission for inferred outer
+geometry. Above/below caption-slot and requested3840×2160 vs actual1672×941 remain
+separate residuals; readability passes, no universal slot or resolution-only gate.
+No concrete compiler defect demonstrated by this image; supplied focus is caller
+evidence/reference, not a newly inferred AX property.
 Original and returned image bytes hash-identical; blank preview was inconsistent
 display, not a second generation or differing image file. All originals/copies retained.
 Installedbinary matchesB20, sourceGitunknown. AX per-node owner/acquisitiontime/
