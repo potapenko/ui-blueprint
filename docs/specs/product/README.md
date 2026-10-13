@@ -33,7 +33,7 @@
 | [UIB.ANALYSIS@2](analysis.md) | local measurement/check0.2, direct observed input, result-space/evaluation, validation layers and protected0.1 compatibility; types/validation closure unchanged |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |
-| [UIB.CLI-COMPARE@1](cli-compare.md) | Explicit declared saved pairs, selected reported children, independent scalar lengths and safe diagnostics |
+| [UIB.CLI-COMPARE@2](cli-compare.md) | Explicit declared saved pairs, selected reported children, independent scalar lengths and safe diagnostics |
 | [UIB.CLI-NEIGHBORS@1](cli-neighbors.md) | bounded explicit recorded relation context; contract |
 | [UIB.CLI-EXPORT@2](cli-export.md) | saved Snapshot/ChannelResponse → document or engine-attributed compare with explicit metadata; contract |
 | [UIB.EXPORT@2](export.md) | E01/E02, imagegen-prompt, человеческий экспорт; contract |

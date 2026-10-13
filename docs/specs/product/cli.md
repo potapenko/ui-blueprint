@@ -6,7 +6,7 @@
 - Read when: CLI commands, compact/JSON и публикация; skip unrelated domains/reference/future nodes.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
 - Optional shipped Node caller: [WEB-FIRST-USE@1](web-first-use.md); explicit URL/component preparation, no change to Rust CLI grammar or OBSERVE below.
-- Conditional requires, declared comparison: [CLI-COMPARE@1](cli-compare.md) for compare/diagnose; old commands preserved.
+- Conditional requires, declared comparison: [CLI-COMPARE@2](cli-compare.md) for compare/diagnose; old commands preserved.
 - Conditional requires, recorded diff: [CLI-DIFF@2](cli-diff.md), with [CLI-GEOMETRY-DIFF@1](cli-geometry-diff.md) only for --geometry; raw mode unchanged.
 - Conditional requires, graph diff: [CLI-GRAPH-DIFF@1](cli-graph-diff.md) only for --graph; existing raw/geometry preserved.
 - Conditional requires, action caller only: [UIB.CLI-ACTIONS@3](cli-actions.md); selected first single-step syntax/output/authority/exits, no full scenario claim.
