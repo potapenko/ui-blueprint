@@ -141,7 +141,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CP13 |same exporter owner|61bd8cb bounded accepted; archived|Both critics confirm owner correction, image stillFAIL for placement/repeats/focus; [receipt](receipts/corpus-wrapper-frame13.md); no source app/prefs access |
 | CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662 bounded accepted; receipt8c6276c|CT2 accepts editorial source/unchanged facts and limits. CW70/CW71 remainFAIL; CW60 scoped visual pass with literal-placement residual, not strict assignment pass.3repair images, no newcases/cohort acceptance/causal reliability claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
 | CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcedd160c0 bounded accepted; receiptd63a089|Both critics confirm C2 omissions closed; CT2 accepts role/group/owner selection and guarded engine additions.49author checks, old facts preserved, human selection12/16/4. All3images remainFAIL; no general reliability claim. [Receipt](receipts/corpus-useful-selection15.md); uib-CP15-a9tb_k2m neutral-index |
-| CP16 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcefdaca3e/receipt6480165 pushed; review running|Outside focus/caller-only tags, knownfalse retained in source facts;3focused checks and byte boundary pass, machine files/assignments unchanged.3first repair outputs; author reports partial DOM tag, Native focus still absent, CW60 no inventedfocus/scopedpass. No consistent focus improvement claimed. [Receipt](receipts/corpus-focus-presentation16.md); uib-CP16-fbrtvb6c neutral-index |
+| CP16 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcefdaca3e bounded accepted; experiment closed without focus-success claim|CT2 accepts attribution/knownfalse/unknown/privacy/byte guards and unchanged machine data. D/Native focus and fullimageFAIL; CW60 negativecontrol/scopedPASS both critics. Dcaller metadata has no focus assertion: its tag invents caller attribution despite reportedN013true. [Receipt](receipts/corpus-focus-presentation16.md); no further focus round authorized by this packet |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -206,7 +206,7 @@ DRAWING-PACKAGE3/CLI-EXPORT3/SHEET-PROMPTS1 and their selected closures.
 CA5 registered its Native/CLI/routing delta before saved source1af633c; bounded
 collector acceptance remains through CR3. CA8f26e121 adds explicit static text,
 now accepted through CR4; existing completed batches keep their original pins.
-Current accepted exporter presentation baseline isdd160c0; source/prompt protection
+Current accepted exporter presentation baseline isfdaca3e; source/prompt protection
 is bounded accepted. Individual image verdicts remain pinned to their actual sources,
 not full corpus or universal raster quality.
 Root owns this registry,

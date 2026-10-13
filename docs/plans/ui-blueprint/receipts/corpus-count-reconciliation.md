@@ -71,9 +71,14 @@ eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 CP16 adds3first repair images atfdaca3e, no cases/rerolls: CW-B14-D/CW601536×1024,
 CN-B211672×941. Exact machine files/assignments unchanged fromdd160c0; older source
 baseline changes separately attributed.3focused author checks plus byte boundary,
-build/lint/fmt pass. Author: DOMdetail focus tag only (caller label despite reported
-true), Native focus absent, negative control no inventedfocus/scopedpass. Independent
-review pending; no consistent per-view focus benefit or new round claimed.
+build/lint/fmt pass. CT2 final01a13388-a756-74b2-a315-58102c255a1d accepts bounded
+source/prompt safeguards; CV2 final01a13388-0cdb-73c3-bcf7-032b543caa27 confirms
+D/Native focus/full-imageFAIL and CW60 negative-control/scopedPASS after independent
+first observation and author reconciliation. CV2 corrects author attribution:
+Dcaller metadata/whole-view context contains no focus assertion; the positive fact
+is canonicalN013true. The rendered caller-reported tag is unsupported attribution,
+not successful preservation. Native focus remains omitted. No consistent per-view
+focus benefit, causal/reliability claim or further experiment round follows.
 [Receipt](corpus-focus-presentation16.md), `uib-CP16-fbrtvb6c/neutral-index.json`,
 binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 
