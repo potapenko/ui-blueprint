@@ -29,10 +29,11 @@
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
 | [UIB.WEB-FIRST-USE@1](web-first-use.md) | Optional shipped URL+component caller with explicit existing connection and exact bounded selection |
-| [UIB.CLI@19](cli.md) | CLI commands/output; compact component parts, [raw diff@2](cli-diff.md)/[selected-space diff@1](cli-geometry-diff.md)/[graph diff@1](cli-graph-diff.md), preserved JSON/OBSERVE and [CLI-ACTIONS@3](cli-actions.md) |
+| [UIB.CLI@20](cli.md) | CLI commands/output; compact component parts, [raw diff@2](cli-diff.md)/[selected-space diff@1](cli-geometry-diff.md)/[graph diff@1](cli-graph-diff.md), preserved JSON/OBSERVE and [CLI-ACTIONS@3](cli-actions.md) |
 | [UIB.ANALYSIS@2](analysis.md) | local measurement/check0.2, direct observed input, result-space/evaluation, validation layers and protected0.1 compatibility; types/validation closure unchanged |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |
+| [UIB.CLI-OBSERVE-DIAGNOSTICS@1](cli-observe-diagnostics.md) | Opt-in bounded fixed Observe terminal/cause/count facts, unavailable subcause explicit |
 | [UIB.CLI-COMPARE@2](cli-compare.md) | Explicit declared saved pairs, selected reported children, independent scalar lengths and safe diagnostics |
 | [UIB.CLI-NEIGHBORS@1](cli-neighbors.md) | bounded explicit recorded relation context; contract |
 | [UIB.CLI-EXPORT@2](cli-export.md) | saved Snapshot/ChannelResponse → document or engine-attributed compare with explicit metadata; contract |

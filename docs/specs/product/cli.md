@@ -1,10 +1,11 @@
 # CLI и bounded output
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@19`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @18 with explicit saved correspondence; existing raw JSON/commands preserved.
+- Contract: `UIB.CLI@20`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @19 with opt-in Observe diagnostics; existing raw JSON/commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
 - Read when: CLI commands, compact/JSON и публикация; skip unrelated domains/reference/future nodes.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
+- Conditional requires, Observe diagnostic option: [OBSERVE-DIAGNOSTICS@1](cli-observe-diagnostics.md); default output preserved.
 - Optional shipped Node caller: [WEB-FIRST-USE@1](web-first-use.md); explicit URL/component preparation, no change to Rust CLI grammar or OBSERVE below.
 - Conditional requires, declared comparison: [CLI-COMPARE@2](cli-compare.md) for compare/diagnose; old commands preserved.
 - Conditional requires, recorded diff: [CLI-DIFF@2](cli-diff.md), with [CLI-GEOMETRY-DIFF@1](cli-geometry-diff.md) only for --geometry; raw mode unchanged.
@@ -76,8 +77,7 @@ Serialize borrowed canonical data through bounded output; no unbounded Value or
 second Snapshot owner. Prepublication errors emit no partial stdout; diagnostics
 stay on stderr. OS write failure remains IO and may leave a partial physical write.
 
-output_version versions this CLI envelope only; embedded Context.schema_version
-stays0.1.0. Core Document negotiation/variants and analysis0.2 remain unchanged.
+output_version versions this CLI envelope only; embedded Context.schema_version stays0.1.0. Core Document negotiation/variants and analysis0.2 remain unchanged.
 Future envelope changes require versioned compatibility. The product does not
 import this envelope, so this choice adds no parser/schema-validation framework.
 Registration is not runtime acceptance or completion of full projections/actions.
