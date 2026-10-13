@@ -13,9 +13,9 @@ fixture/component-preview origin;127 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:506 primary images =502 first outputs +4 rerolls;
-53 separate repair-validation images;4 unqualified reference attempts
+56 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-563 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+566 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -53,6 +53,13 @@ This is a literal placement residual, not wrong geometry or a universal layout r
 No cohort acceptance or general quality improvement claimed. [Receipt](corpus-prompt-robustness14.md),
 `uib-CP14-of0kqnwt/neutral-index.json`, binarySHA256
 dcf8d0cc594c5554bd4aece230104907725c3b15e9e3e849e91e5fea9f83283f.
+CP15 adds3first repair images atdd160c0, no newcases/rerolls: desktop/Voice1536×1024,
+CW601448×1086.49author checks pass, desktop338old facts and allVoice/CW60 facts
+preserved;2same-space engine additions independently recomputed. Human plans12/16/4
+quantities. Author reports repaired C2 selection with allnewamounts visible, separate
+raster failures remain; independent acceptance pending. [Receipt](corpus-useful-selection15.md),
+`uib-CP15-a9tb_k2m/neutral-index.json`, frozen binarySHA256
+eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
 
 ## Completed primary batches
 

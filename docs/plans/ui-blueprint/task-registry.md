@@ -85,9 +85,9 @@ CW-B11 adds2qualified desktop/mobile ready Actor states, bringing it to178.
 CW-B12 adds2qualified Reels Search states, bringing it to180.
 CW-B13 adds3qualified selected-filter compositions, bringing it to183.
 CN-B21 adds1qualified iPad Actor keyboard composition, bringing it to184.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3 images (53 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1, CP14=3, CP15=3 images (56 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:563counted generated images
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:566counted generated images
 overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
@@ -137,7 +137,7 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CP12 |same exporter owner|172a080 bounded+oneimage accepted; archived|Both critics accept literal button i caption and≈38×54pt; machine/owner/privacy/limits unchanged; [receipt](receipts/corpus-literal-captions12.md) |
 | CP13 |same exporter owner|61bd8cb bounded accepted; archived|Both critics confirm owner correction, image stillFAIL for placement/repeats/focus; [receipt](receipts/corpus-wrapper-frame13.md); no source app/prefs access |
 | CP14 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|source0e01662 bounded accepted; receipt8c6276c|CT2 accepts editorial source/unchanged facts and limits. CW70/CW71 remainFAIL; CW60 scoped visual pass with literal-placement residual, not strict assignment pass.3repair images, no newcases/cohort acceptance/causal reliability claim. [Receipt](receipts/corpus-prompt-robustness14.md); uib-CP14-of0kqnwt neutral-index |
-| CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, restored|full-cycle useful-geometry selection repair running|Confirmed C2 omissions: desktop popup/result sizes and meaningful gaps/inset; Voice principal tile366×42 unassigned. Fix existing export selection, preserve raw facts/no inferred union or mapping. D/MV plus CW60 control; focused tests/CLI/first images, repair validation only, no newcases |
+| CP15 |same exporter owner01a12b6a-92a9-73c3-aec2-022e32651008, archived|sourcedd160c0/receiptd63a089 pushed; review running|Option/approved text-combobox classification, explicit dialog and parent/frame/role representation repair.49author tests, old facts preserved,2engine additions independently recomputed; human selection12/16/4.3first repair images, C2 quantities appear but full authorFAIL. [Receipt](receipts/corpus-useful-selection15.md); uib-CP15-a9tb_k2m neutral-index |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -189,8 +189,8 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B5 |same Web source owner|investigation accepted|5cases/5first sheets/0rerolls; CW50 author pass,4FAIL;140frames/45dimensions checked |
 | CW-B6 |same Web source owner|investigation accepted; archived|5states/5first sheets/0rerolls; author0PASS/5FAIL; CT3 confirms two narrow caption-meaning omissions |
 | CW-DOC1 |same Web source owner|diagnosis accepted; archived|Correct layout/visible operands, but full-layout≈2307 is assigned to overview without a separate frame; CP6 replay unchanged |
-| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CN-B21 reconciled; idle retained for CP15|iPad image rejected for focus loss; six dimensions/membership pass, caption-position and size residuals not universal failure rules |
-| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CN-B21 reconciled; idle retained for CP15|20AXsizes/6labels and provenance pass; focus/arrow loss in image, no new compiler defect; CW-B13 C2 repair scope stays open |
+| CV2 |01a12c78-5b4f-7153-90f2-c9078bd61a9c|CP15 initial observations running|Three first candidate images and C2 usefulness, author narrative withheld |
+| CT2 |01a12c78-5e34-7870-8eec-9203a8076f05|CP15 initial observations running|Image/assignments then bounded selection diff/new-engine facts/privacy/limits; author narrative withheld |
 | CT3 |same content critic|accepted criterion clarification|CW54/CW56 omit prepared frame meaning; values/participants/CSS units retained; no exact-token or placement rule |
 
 ### Current contracts and protected boundaries
