@@ -312,8 +312,10 @@ successful combined installation. Never run the unrendered installer template.
 
 The [agent-skill contract](../specs/development/agent-skill.md) separates integration
 checks from public installation and host discovery. Temp-prefix tests substitute
-local transport; they do not prove a published URL, Gatekeeper or automatic skill
-loading. The [saved-data smoke example](../../skills/ui-blueprint/references/analysis.md#known-result-smoke-example)
+local transport; they do not prove a published URL or Gatekeeper. Separate
+[host discovery checks passed](macos-release.md#skill-discovery-verification--2026-10-13)
+for the recorded Codex/Claude versions and isolated settings, without model invocation.
+The [saved-data smoke example](../../skills/ui-blueprint/references/analysis.md#known-result-smoke-example)
 expects validator valid, gap **8 css_px**, and check pass. Check each exit/payload.
 
 For live first use, Web still needs Node24+ and an already-authorized browser CDP

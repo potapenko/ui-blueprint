@@ -135,8 +135,9 @@ Verify the bundled example and load the skill.
 
 **Release status:** no public release is available yet. These prompts are prepared
 for the first matching CLI + skill release; the agent must stop before installing
-if that release is unavailable. Claude Code's discovery path is documented, but
-actual host discovery is not yet verified.
+if that release is unavailable. Codex and Claude Code discovery passed isolated
+local checks; [tested versions and limits](docs/development/macos-release.md#skill-discovery-verification--2026-10-13)
+are recorded separately from public release readiness.
 
 [Installation guide, manual commands, and update prompt →](docs/install.md)
 

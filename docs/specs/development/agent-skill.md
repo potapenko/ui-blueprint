@@ -20,11 +20,11 @@ current branch. The six steps are: register this contract; author the portable
 skill; integrate it into versioned distribution; document the installation prompt;
 check installation lifecycle and examples; checkpoint only task-owned changes.
 
-Current execution adds installer/release integration and isolated lifecycle checks.
-Unrelated changes remain untouched; publication, licensing, pushes, real installation
-and host UI discovery remain excluded. The original approval stays in this chat;
-this does not resume the older coordinated goal. README and the canonical agent
-installation guide are concurrently owned by the installation-documentation chat.
+Integration and isolated lifecycle checks are complete. The operator subsequently
+authorized isolated Codex/Claude discovery, then recording its results and readiness.
+Unrelated changes, publication, licensing, pushes and real installation stay excluded.
+The original approvals remain in this chat; this does not resume the older goal.
+Documentation now records bounded discovery evidence, not a public release acceptance.
 
 ## AGENT-SKILL.WORKFLOW — Portable operating instructions
 
@@ -66,7 +66,7 @@ An interrupted install may leave a verified inactive version, but no successful
 combined-install claim or active switch before both payloads are ready.
 The prompt names the trusted release and authorizes both locations. No source build,
 profile edit, privilege escalation, permission grant or UI access. First target is
-qualified Apple Silicon macOS. Public URL/discovery acceptance stays unclaimed.
+qualified Apple Silicon macOS. Public URL and real-session invocation remain unverified.
 
 ## AGENT-SKILL.RETENTION
 
@@ -83,11 +83,12 @@ require explicit authorization for their location and purpose.
 | --- | --- |
 | Skill/documentation | Frontmatter/UI metadata valid; internal links portable; examples match current command inputs; changed links/routes and diff whitespace checked |
 | Installation | Temp-prefix fresh/repeat/update/conflict checks, damaged archive/platform/path failures, matching installed CLI known-result example and skill resources outside checkout |
-| Publication, excluded | Real published URL installation and actual Codex discovery in a new chat; never inferred from local file checks |
+| Host discovery, verified | [Recorded versions/modes](../../development/macos-release.md#skill-discovery-verification--2026-10-13): Codex skills/list and Claude initialization list the installed skill; negative controls exclude cached presence |
+| Publication, excluded | Published URL/Gatekeeper and real user-session invocation remain separate from isolated discovery |
 
 No Rust changes, image generation, live collection or independent-agent evaluation
-are authorized here. Synthetic lifecycle and real saved-data checks stay separate
-from installed-host discovery, downloaded Gatekeeper and public release acceptance.
+are authorized here. Discovery uses local control requests without model turns;
+synthetic lifecycle, real saved-data smoke and public release acceptance stay distinct.
 
 ## Change record
 

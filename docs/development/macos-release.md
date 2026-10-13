@@ -127,3 +127,55 @@ is not replaced by successful packaging tests.
 Prepare reviewed release notes with the exact source commit, architecture,
 minimum OS, Node optionality and support limits before publishing. Do not create
 tags, push, create a GitHub draft/release, or change the remote tap in preparation.
+
+## Skill discovery verification — 2026-10-13
+
+Local readiness: installer integration, installed saved-data smoke and isolated
+host discovery are verified. Public release readiness remains pending. The operator
+explicitly requested discovery checks in temporary directories without publication
+or changes to real settings, then requested this documentation record and checkpoint.
+
+The skill and installer tested here are unchanged from integration checkpoint
+`fa7afc027358ab1d8d2168c531275c79dde33e95`; lifecycle test checkpoint is `5eb95d0d`.
+The rendered production installer installed exact skill bytes into two temporary
+prefixes, with host links under the isolated home's `.agents/skills/ui-blueprint`
+and `.claude/skills/ui-blueprint`. Each link resolved through `current/skill` to
+`versions/0.1.0/skill`. Local transport supplied the archives. This discovery fixture
+used synthetic CLI payloads, which were not executed: real CLI installation and
+the gap **8 css_px** / check **pass** smoke were established separately on the
+unsigned `0.1.0-skill` candidate built from `fa7afc02` in the preceding check.
+
+| Host and mode | Observed result |
+| --- | --- |
+| Codex bundled CLI `0.162.0-alpha.17.2`, isolated `app-server --stdio` | `skills/list` with the temporary project cwd and `forceReload: true` returned `ui-blueprint`, `scope: user`, `enabled: true`, resolved installed SKILL.md path, UI metadata and no skill-loading errors |
+| Claude Code `2.1.296`, local stream-JSON initialization with `--setting-sources user,project,local` | The successful initialization response listed `ui-blueprint` with its description marked `(user)`, exposing `/ui-blueprint` |
+| Same Claude version with `--bare` | Initialization succeeded, but its command list did not include this personal skill; do not generalize this observation to other versions or modes |
+| Both hosts with the temporary discovery links removed, in fresh processes | `ui-blueprint` was absent; after installer-created links were present, fresh processes returned it again |
+
+Codex used only `initialize`, `initialized` and `skills/list`, not `turn/start`.
+Claude used `--print --input-format stream-json --output-format stream-json
+--verbose --no-session-persistence`, an empty strict MCP configuration and disabled
+hooks. Its only input was a control request with subtype `initialize`; no user
+prompt or skill execution was submitted. This proves loader/command registration,
+not model selection of the skill, instruction adherence or task completion.
+
+Both probes ran under a macOS sandbox denying network access and writes outside
+the task's system-temp tree. Child-process home/config/cache/temp paths were isolated;
+real host settings and repository files were not changed. Claude Code was absent
+from the checked local command locations, so its official npm package was downloaded
+into temp for this test. No account login, credentials or model call was needed.
+The initial Claude probe hit a denied `/tmp/claude-501` write; setting its
+`CLAUDE_CODE_TMPDIR` inside the test tree allowed initialization without widening
+write access. Codex's temporary-helper and blocked featured-plugin-cache warnings
+did not produce skill-loading errors.
+
+The production uninstaller removed both temporary managed installations and links.
+Temporary Claude runtime, configuration, payloads, probe scripts and raw logs were
+removed. Eight Codex-created system-skill PNG/SVG icons remain in the system-temp
+test tree under the no-image-deletion rule; they are not discovery evidence. This
+record summarizes the tool results retained in the requesting chat, not archived logs.
+
+No public download, downloaded Gatekeeper check, real user installation, desktop
+skill-picker interaction or model invocation was tested. Discovery is qualified only
+for the versions/modes above. Publication, licensing and remaining signing/notarization
+gates retain their separate authority; discovery success does not close them.

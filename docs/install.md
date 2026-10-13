@@ -4,7 +4,9 @@ Install the local utility and the `ui-blueprint` skill together. The utility
 performs geometry calculations; the skill explains observation, analysis,
 comparison, and drawing workflows to the agent. One skill covers these tasks.
 
-**Current status:** release preparation. No public release has been published.
+**Current status:** local installation and isolated Codex/Claude Code skill discovery
+have been verified. Public release preparation remains incomplete; no public release
+has been published. See [tested versions and evidence](development/macos-release.md#skill-discovery-verification--2026-10-13).
 An agent following this guide must stop before installation when a matching
 published CLI + skill release is unavailable. Source files and local candidates
 are not published releases. Do not install only half of the requested set.
@@ -29,8 +31,11 @@ These paths follow [OpenAI's local skill documentation](https://developers.opena
 and [Claude Code's skill documentation](https://code.claude.com/docs/en/skills).
 Existing custom/legacy locations must be identified from the host rather than
 guessed. Do not install duplicate copies, change host configuration or migrate an
-existing skill without the user's authorization. Claude Code host discovery remains
-unqualified until verified there; successful file installation is a separate result.
+existing skill without the user's authorization. Discovery was verified with Codex's
+bundled CLI 0.162.0-alpha.17.2 and Claude Code 2.1.296 in isolated local processes.
+Claude used `--setting-sources user,project,local`; `--bare` did not list the skill in
+this check. Discovery in the person's actual session must still be checked after
+installation; successful file installation is a separate result.
 
 ## Instructions for the installing agent
 
