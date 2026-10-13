@@ -71,7 +71,9 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
                 sv.focus = Some(aliases.focus(&s.focus));
                 sv.not_depicted.push("Pixels and unreviewed text are excluded; stored observation, not a new measurement".into());
                 sv.unknowns.push("Unavailable properties retain unknown, unsupported, redacted or not_requested. Padding, radius and baseline are unknown unless explicitly reported.".into());
-                (observed::dimensions(s, &mut aliases)?, vec![])
+                let mut dimensions = observed::dimensions(s, &mut aliases)?;
+                popup_dimensions(s, &sv, &mut aliases, &mut dimensions)?;
+                (dimensions, vec![])
             }
         };
         sv.design_analysis = crate::design::compile(v, &sv, &mut aliases, limits)?;
@@ -512,6 +514,7 @@ fn control(c: &SceneComponent) -> bool {
             | "radio"
             | "switch"
             | "slider"
+            | "option"
     )
 }
 pub(crate) fn unit_name(unit: Unit) -> &'static str {
@@ -1431,7 +1434,9 @@ fn input_control(c: &SceneComponent) -> bool {
     matches!(
         component_role(c).to_ascii_lowercase().as_str(),
         "input" | "textbox" | "searchbox"
-    )
+    ) || component_role(c).eq_ignore_ascii_case("combobox")
+        && c.properties.iter().any(|p| p.field() == Field::InputKind
+            && matches!(p.known(), Some(Value::Text(kind)) if matches!(kind.as_str(), "text" | "search")))
 }
 fn rect(c: &SceneComponent) -> Option<&Rect> {
     geometry(c).and_then(|g| match &g.shape {
@@ -1547,6 +1552,149 @@ fn clipped_edges(source: &SourceInput) -> Vec<Vec<Edge>> {
         })
         .collect()
 }
+fn popup_dimensions(
+    source: &Snapshot,
+    view: &SceneView,
+    aliases: &mut Aliases,
+    out: &mut Vec<Dimension>,
+) -> Result<()> {
+    for dialog in 0..view.components.len() {
+        if !component_role(&view.components[dialog]).eq_ignore_ascii_case("dialog") {
+            continue;
+        }
+        for body in std::iter::once(dialog).chain(child_indices(view, dialog)) {
+            let children = child_indices(view, body);
+            let Some(input) = children
+                .iter()
+                .copied()
+                .find(|&i| input_control(&view.components[i]))
+            else {
+                continue;
+            };
+            let Some(row) = children.iter().find_map(|&list| {
+                let rows = child_indices(view, list);
+                (component_role(&view.components[list]).eq_ignore_ascii_case("listbox")
+                    && rows.len() >= 2
+                    && rows.iter().all(|&i| {
+                        component_role(&view.components[i]).eq_ignore_ascii_case("option")
+                    }))
+                .then(|| rows[0])
+            }) else {
+                continue;
+            };
+            for (a, b, first, last, label) in [
+                (dialog, input, Edge::Left, Edge::Left, "Measured left inset"),
+                (
+                    input,
+                    row,
+                    Edge::Bottom,
+                    Edge::Top,
+                    "Input to first control gap",
+                ),
+            ] {
+                if out.iter().any(|d| {
+                    d.anchors[0].component == view.components[a].id
+                        && d.anchors[1].component == view.components[b].id
+                        && d.anchors[0].edge == first
+                        && d.anchors[1].edge == last
+                        && d.anchors
+                            .iter()
+                            .all(|x| x.frame_kind == FrameKind::LayoutBounds)
+                }) {
+                    continue;
+                }
+                let layout = |i: usize| {
+                    source.nodes[i]
+                        .properties
+                        .iter()
+                        .find_map(|p| match p.known() {
+                            Some(Value::Geometry(g))
+                                if p.field() == Field::LayoutBounds
+                                    && g.frame_kind == FrameKind::LayoutBounds =>
+                            {
+                                Some(g.as_ref())
+                            }
+                            _ => None,
+                        })
+                };
+                let (Some(g), Some(h)) = (layout(a), layout(b)) else {
+                    continue;
+                };
+                if g.coordinate_space != h.coordinate_space
+                    || g.coordinate_space.origin != Origin::TopLeft
+                    || source.nodes[a].surface != source.nodes[b].surface
+                {
+                    continue;
+                }
+                let horizontal = matches!(first, Edge::Left | Edge::Right);
+                let query = GeometryQuery {
+                    id: Id("export-popup-spacing".into()),
+                    scope_id: source.context.scope_id.clone(),
+                    targets: vec![source.nodes[a].key.clone(), source.nodes[b].key.clone()],
+                    operation: GeometryRelation::Gap,
+                    anchors: [(a, first), (b, last)]
+                        .map(|(i, edge)| Anchor {
+                            element: source.nodes[i].key.clone(),
+                            frame_kind: FrameKind::LayoutBounds,
+                            coordinate_space: g.coordinate_space.clone(),
+                            fraction: if matches!(edge, Edge::Right | Edge::Bottom) {
+                                1.0
+                            } else {
+                                0.0
+                            },
+                            axis: Id(if horizontal { "x" } else { "y" }.into()),
+                        })
+                        .to_vec(),
+                    quantity_kind: QuantityKind::Length,
+                    units: g.coordinate_space.units,
+                    applies_when: ContextConditions {
+                        platform: None,
+                        input_mode: None,
+                        text_scale: None,
+                    },
+                };
+                let context = EvaluationContext {
+                    space: &g.coordinate_space,
+                    transforms: &[],
+                    conditions: None,
+                };
+                let (value, unknown_reason, evidence) =
+                    match engine::measure_query(source, &query, &context)
+                        .map_err(|_| E::InvalidGeometry)?
+                    {
+                        MeasurementResult::Known { measurement } => {
+                            let Value::Quantity { amount, .. } = measurement.value else {
+                                return Err(E::InvalidGeometry);
+                            };
+                            (Some(amount), None, measurement.evidence)
+                        }
+                        MeasurementResult::Unknown { reason, evidence } => {
+                            (None, Some(reason.as_str().into()), evidence)
+                        }
+                    };
+                out.push(Dimension {
+                    id: format!("M{:04}", out.len() + 1),
+                    label: label.into(),
+                    anchors: [(a, first), (b, last)].map(|(i, edge)| DimensionAnchor {
+                        component: view.components[i].id.clone(),
+                        frame_kind: FrameKind::LayoutBounds,
+                        space: aliases.space(&g.coordinate_space),
+                        edge,
+                    }),
+                    value,
+                    units: g.coordinate_space.units,
+                    source_kind: SourceKind::Observed,
+                    evidence: evidence.iter().map(|e| aliases.evidence(e)).collect(),
+                    requirement_ref: None,
+                    unknown_reason,
+                    check_tolerance: None,
+                });
+            }
+        }
+    }
+    Ok(())
+}
+
 fn detail_caption(v: &SceneView, members: &[usize]) -> String {
     if let [index] = members {
         let c = &v.components[*index];
@@ -1649,7 +1797,8 @@ fn drawing_dimensions(
         .filter(|(i, c)| {
             !control(c)
                 && !c.children.is_empty()
-                && !v.components.iter().any(|p| p.children.contains(&c.id))
+                && (component_role(c).eq_ignore_ascii_case("dialog")
+                    || !v.components.iter().any(|p| p.children.contains(&c.id)))
                 && !available.iter().any(|d| {
                     d.label.starts_with("Measured")
                         && d.value.is_some_and(|n| n < 0.0)
@@ -1687,8 +1836,17 @@ fn drawing_dimensions(
             {
                 continue;
             }
-            overview.push(i);
-            input_containers.push(i);
+            let container = v
+                .components
+                .iter()
+                .position(|c| {
+                    component_role(c).eq_ignore_ascii_case("dialog")
+                        && c.children.contains(&v.components[i].id)
+                        && same_frame(c, &v.components[input])
+                })
+                .unwrap_or(i);
+            overview.push(container);
+            input_containers.push(container);
             groups.push((
                 "Input and adjacent controls — partial spacing".into(),
                 vec![input, rows[0], rows[1]],
@@ -1763,6 +1921,10 @@ fn drawing_dimensions(
             .any(|&j| {
                 let other = &v.components[j];
                 component_role(other) == component_role(c)
+                    && same_frame(other, c)
+                    && v.components.iter().any(|parent| {
+                        parent.children.contains(&c.id) && parent.children.contains(&other.id)
+                    })
                     && match (geometry(other), geometry(c), rect(other), rect(c)) {
                         (Some(g), Some(h), Some(a), Some(b)) => {
                             g.coordinate_space == h.coordinate_space
@@ -1864,7 +2026,13 @@ fn drawing_dimensions(
                 && owner(a).is_some()
                 && child_indices(v, b).iter().any(|i| owner(*i) == owner(a))
             {
-                admitted = true;
+                admitted = !dimensions.dimensions.iter().any(|direct| {
+                    direct.label == "Input to first control gap"
+                        && direct.value == d.value
+                        && frame_matches(direct)
+                        && direct.anchors[0].component == ca.id
+                        && cb.children.contains(&direct.anchors[1].component)
+                });
             }
             if d.label == "Measured left inset"
                 && input_containers.contains(&a)
@@ -1911,13 +2079,15 @@ fn drawing_dimensions(
             continue;
         }
         let signature = format!(
-            "{:?}|{}|{:?}|{:?}|{:?}|{}",
+            "{:?}|{}|{:?}|{:?}|{:?}|{}|{}→{}",
             destination,
             d.label,
             d.anchors[0].edge,
             d.anchors[1].edge,
             d.units,
-            value.to_bits()
+            value.to_bits(),
+            component_role(ca),
+            component_role(cb)
         );
         if seen.contains(&signature) {
             continue;

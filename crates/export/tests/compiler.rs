@@ -963,7 +963,7 @@ fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
 }
 
 #[test]
-fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss() {
+fn popup_prompt_preserves_distinct_input_and_result_width_owners() {
     let mut brief = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut brief.views[0].source else {
         panic!()
@@ -997,7 +997,7 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
     snapshot.nodes[0].children = [2, 4, 6].map(|i| snapshot.nodes[i].key.clone()).to_vec();
     let package = compile(&brief, limits()).unwrap();
     let prompt = std::str::from_utf8(&package.files()["prompt.txt"]).unwrap();
-    assert_eq!(prompt.matches("WIDTH ≈198 CSS px").count(), 1);
+    assert_eq!(prompt.matches("WIDTH ≈198 CSS px").count(), 2);
     assert_eq!(prompt.matches("LOCAL INSET DETAIL").count(), 1);
     let inset = prompt.split("LOCAL INSET DETAIL").nth(1).unwrap();
     assert!(inset.contains("print END \"input") && inset.contains("20 CSS px"));
@@ -1013,6 +1013,205 @@ fn popup_prompt_has_one_left_inset_and_one_shared_field_width_without_data_loss(
         && d["anchors"][1]["component"] == "N000"
         && d["label"] == "Measured right inset"
         && d["value"] == 20.0));
+}
+
+#[test]
+fn editable_combo_options_and_independent_same_size_controls_get_useful_geometry() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed {
+        snapshot,
+        public_text_fields,
+    } = &mut b.views[0].source
+    else {
+        panic!()
+    };
+    public_text_fields.push(Field::InputKind);
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "DIV");
+        node.children.clear();
+    }
+    for (i, native) in [
+        (4, "dialog"),
+        (8, "combobox"),
+        (10, "listbox"),
+        (12, "option"),
+        (14, "option"),
+    ] {
+        snapshot.nodes[i].native_role = Availability::Known {
+            value: Value::Text(native.into()),
+        };
+        let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[0] else {
+            panic!()
+        };
+        *state = Availability::Unknown {
+            reason: Id("native-role-only".into()),
+        };
+    }
+    set_test_role(&mut snapshot.nodes[2], "BUTTON");
+    set_test_role(&mut snapshot.nodes[18], "BUTTON");
+    for (i, x, y, w, h) in [
+        (0, 0., 0., 100., 20.),
+        (2, 0., 0., 100., 20.),
+        (4, 0., 26., 140., 120.),
+        (6, 8., 46., 124., 80.),
+        (8, 8., 46., 124., 24.),
+        (10, 8., 76., 124., 44.),
+        (12, 8., 76., 124., 20.),
+        (14, 8., 100., 124., 20.),
+        (16, 200., 0., 124., 20.),
+        (18, 200., 0., 124., 20.),
+    ] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x,
+            y,
+            width: w,
+            height: h,
+        });
+    }
+    for (parent, children) in [
+        (0, vec![2, 4]),
+        (4, vec![6]),
+        (6, vec![8, 10]),
+        (10, vec![12, 14]),
+        (16, vec![18]),
+    ] {
+        snapshot.nodes[parent].children = children
+            .iter()
+            .map(|&i| snapshot.nodes[i].key.clone())
+            .collect();
+    }
+    for (i, node) in snapshot.nodes.iter_mut().enumerate() {
+        let mut p = node.properties[0].clone();
+        let Property::Requested { field, state, .. } = &mut p else {
+            panic!()
+        };
+        *field = Field::InputKind;
+        *state = if i == 8 {
+            Availability::Known {
+                value: Value::Text("text".into()),
+            }
+        } else {
+            Availability::Unknown {
+                reason: Id("not-collected".into()),
+            }
+        };
+        node.properties.push(p);
+    }
+    snapshot.context.fields.push(Field::InputKind);
+    snapshot.coverage.fields.push(Field::InputKind);
+    for o in &mut snapshot.observations {
+        o.coverage.fields.push(Field::InputKind);
+    }
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let source = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, l).unwrap();
+    let dims = data(&p, "dimensions.json");
+    let all = dims[0]["dimensions"].as_array().unwrap();
+    for (a, b, label, value) in [
+        ("N004", "N008", "Measured left inset", 8.),
+        ("N008", "N012", "Input to first control gap", 6.),
+    ] {
+        assert!(all.iter().any(|d| d["anchors"][0]["component"] == a
+            && d["anchors"][1]["component"] == b
+            && d["label"] == label
+            && d["value"] == value
+            && !d["evidence"].as_array().unwrap().is_empty()));
+    }
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(text.contains("WIDTH 140 CSS px BELOW this measured source frame; HEIGHT 120 CSS px"));
+    assert!(text.contains("WIDTH 124 CSS px ABOVE; HEIGHT 20 CSS px"));
+    assert!(
+        text.contains("Input to first")
+            || text.contains("option, item 1 in its group Top boundary")
+    );
+    assert_eq!(serde_json::to_vec(&b).unwrap(), source);
+    let mut exact = l;
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    let mut withheld = b.clone();
+    let SourceInput::Observed {
+        public_text_fields, ..
+    } = &mut withheld.views[0].source
+    else {
+        panic!()
+    };
+    public_text_fields.retain(|f| *f != Field::InputKind);
+    let withheld = compile(&withheld, l).unwrap();
+    assert!(
+        !data(&withheld, "dimensions.json")[0]["dimensions"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .any(|d| d["label"] == "Input to first control gap")
+    );
+    // Independent same-size buttons in separate parents need their own pair.
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for i in [12, 14] {
+        set_test_role(&mut snapshot.nodes[i], "BUTTON");
+    }
+    let p = compile(&b, l).unwrap();
+    let text = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert_eq!(
+        text.matches("WIDTH 124 CSS px ABOVE; HEIGHT 20 CSS px")
+            .count(),
+        2
+    );
+    // Incompatible and unavailable input geometry creates no derived popup facts.
+    for unknown in [false, true] {
+        let mut invalid = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut invalid.views[0].source else {
+            panic!()
+        };
+        for i in [12, 14] {
+            snapshot.nodes[i].native_role = Availability::Known {
+                value: Value::Text("option".into()),
+            };
+            let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[0] else {
+                panic!()
+            };
+            *state = Availability::Unknown {
+                reason: Id("native-role-only".into()),
+            };
+        }
+        let Property::Requested { state, .. } = &mut snapshot.nodes[8].properties[2] else {
+            panic!()
+        };
+        if unknown {
+            *state = Availability::Unknown {
+                reason: Id("missing".into()),
+            };
+        } else {
+            let Availability::Known {
+                value: Value::Geometry(g),
+            } = state
+            else {
+                panic!()
+            };
+            g.coordinate_space.id = Id("different".into());
+        }
+        let p = compile(&invalid, l).unwrap();
+        assert!(
+            !data(&p, "dimensions.json")[0]["dimensions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|d| d["label"] == "Input to first control gap")
+        );
+    }
 }
 
 #[test]
