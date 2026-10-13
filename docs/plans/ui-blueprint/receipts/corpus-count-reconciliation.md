@@ -122,7 +122,7 @@ binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 | CW-B14 |3|3|Desktop/mobile Movie IMDb disabled states and mobile Years new52px Clear row;3first1536×1024 outputs,36prepared amounts correct, both critics reject all3images |
 | CW-B15 |2|2|Desktop/mobile Episodes exact-source states keep controls enabled; mobile editableID differs from Movie selectedrow.38required amounts correct, both first outputs fail independent reviews |
 | CW-B16 |2|2|Desktop applied Genre tags/Clear/popup and mobile applied chips/Clear;17amounts correct, both first1536×1024 outputs fail independent review; literal inset selection gap feedsCP17 |
-| CW-B17 |2|2|Fixed-width/data desktop height720→480 changes Actor/Genres visible coverage; baselines not cases;44assigned source measurements checked, both first images authorFAIL |
+| CW-B17 |2|2|Fixed-width/data desktop height720→480 changes Actor/Genres visible coverage; baselines not cases;44assigned source measurements checked, both first images fail independent review |
 | **Primary subtotal** |**192**|**515**| |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
@@ -137,8 +137,19 @@ Four bounded attempts had wrong origins and were excluded before generation, not
 extra modelcalls. Two first1536×1024 images used qualified fullcompactrefs.
 Author: source-hidden actor name exposed/rows boxed; Genres losesAction cue,
 over-completes clipped text, prints selector/adds dimensions. Amounts don't prove
-all paired owners. Independent review pending. State/viewport restored/tabsclosed;
+all paired owners. State/viewport restored/tabsclosed;
 Actor stayed paused at recordedchecks; bounded interactionnetwork no requests/errors.
+Both critics independently observed then reconciled author evidence: CV2 final
+01a133c2-de1b-7470-987c-ef29d273ad25, CT2 final01a133d0-b31a-72d1-ba43-1ab9e8b87116.
+Actor reveals source-hidden Milla text, boxes unboxed rows and collapses coincident
+but separately assigned root/trigger bundles; no36/36 rendered-owner pass claimed.
+Genres full-layout≈194×219 sketch remains correctly separate from clipped artwork,
+but Action cue/text cut/selector and repeated-expanded annotations fail. Internal
+selector is presentation noise, not secret leakage. Focus works in these samples,
+not a general success claim. No exact glyph count inferred from rectangle math.
+Compact inset M0233 popupN016.left→gridN020.left=8.0234375 and header alternative
+M0229 remain unselected: existing CP17 scope, supplied as a model-free replay witness
+without another ImageGen call. No new measurement algorithm or source-app defect.
 
 CW-B16 evidence: `uib-cw-b16-Ganih2/HANDOFF.md`, neutral-manifest, novelty/state,
 numeric/literal and resource records. NeutralSHA256
