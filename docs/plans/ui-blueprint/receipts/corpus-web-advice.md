@@ -19,6 +19,16 @@ reuse it. Consumer restoreddraft/popup/URL/selection, closed ownedbrowser81766/p
 console0errors/10warnings, options200, dynamicrequestsnoFailures, ordinarybootstrap/
 Firebase/analytics remain explicit. No PlayPhrase.me orUIBlueprint source edits.
 
+Independent source review of0b89da2: CT2initial01a1353a-2822-7d41-afca-a5620c56aa12
+and final01a1354b-f19b-73f1-9612-45e2cbca8ac3 identify one separate P2 boundary defect.
+Selected closed-shadow hosts bypass JS node.shadowRoot (null for closed) while
+available DOM.describeNode.shadowRoots metadata is ignored. Offline valid-response
+probe acceptedbackend42; no private-content extraction/runtime access claimed.
+Restore exclusion at preparation and final revalidation; no shadow traversal or
+source-app change. Same helper owner received the exactfinding for this repair.
+V1/v2 packaging boundary passes scopedreview; broader source acceptance awaits fix.
+Do not infer that shadowDOM caused Director's distinct opaque failures.
+
 USE-WEB-DIRECTOR2 assigned to the same utility owner: establish actual failure layer,
 expose safe useful reason and complete the real popup/list path; no blind cap increase,
 raw diagnostics, manual geometry adapter or app-internal infrastructure. Relevant
