@@ -1,5 +1,29 @@
 # Native source advisor handoffs
 
+## USE-MAC1 — actual consumer comparison feedback, 2026-10-13
+
+Terminal01a134b3-eca4-7ba2-b982-2e72d8e5c61e. Native bundle3e995ec built and
+verified; CLI SHAeaa10d2d7bd53c8c64a80b075f5ca7acb5f8887479649997c38268919e4ba883.
+App was not running, so consumer used original real CN-B19 Actor observations
+B19-01-minimal/observed.json and B19-02-minimal/observed.json. No app launch or data
+rewrite. Actual `diff --before ... --after ... --max-input-bytes 2097152
+--max-output-bytes 2097152 --max-entries 30` returned exit4/context_mismatch,
+emptystdout. Both inputs individually validate. Target/scope/fields/plugin/projection
+match while session/Surface identities differ. This is not proved to violate current
+CLI-DIFF2; strict matching is explicitly required. Do not fix by restamping identities
+or silently weakening compatibility. Consumer's real QA task remained unsatisfied.
+
+Requests: a supported documented comparison workflow for successive external Native
+observations with explicit matching; useful safe context_mismatch explanation and
+supported next step; a discoverable first-use Mac entrypoint. Assess existing
+native-session/graph/geometry paths before designing a new matching feature. README's
+historical a026584 pin must not be confused with current trialsource. The difference
+between contract-correct refusal and missing user capability stays explicit.
+
+Temporary bundle removed through distribution.py remove; original observations and
+recovery backup retained. Both projects unchanged, zero captures/images/newcases.
+Root owns utility diagnosis/fixes; Mac owner owns any optional integration locally.
+
 ## CN16 — конкретный план изолированного Mac-запуска, 2026-10-13
 
 **Отклонено пользователем2026-10-13. Не реализовывать как задачу UI Blueprint.**

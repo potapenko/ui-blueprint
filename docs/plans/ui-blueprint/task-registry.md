@@ -125,7 +125,7 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 | Packet | Owner / local thread | State | Evidence / next consumer |
 | --- | --- | --- | --- |
-| USE-MAC1 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|consumer trial dispatched|Use actual UI Blueprint in own real tasks; project integration decisions owned locally. Version/commands/results/repro/requests to utility owner; no root source-app edits/CN16 |
+| USE-MAC1 |Mac owner01a1102f-791c-7e91-bec3-1877ea004d51|first trial completed; comparison/onboarding feedback received|Nativebundle3e995ec pass; original Actor pair diff→exit4/context_mismatch from different sessions/Surfaces. Contract violation unproved; explicit comparison workflow and safe diagnostics requested. [Feedback](receipts/corpus-native-advice.md#use-mac1--actual-consumer-comparison-feedback-2026-10-13). No app/project changes |
 | USE-WEB1 |Web owner01a1102f-e21d-7251-9597-c29a1c66d088|first trial completed; onboarding feedback received|Build/verify3e995ec Web bundle pass; first observe blocked by manual target/connection setup, helper absent frombundle/--help invalid_arguments. [Feedback](receipts/corpus-web-advice.md#use-web1--actual-consumer-first-use-feedback-2026-10-13). No app changes/live-collector proof; utility first-use repair next |
 | CW1 | Web advisor01a1102f-e21d-7251-9597-c29a1c66d088 | accepted discovery |24recipes; [handoff](receipts/corpus-web-advice.md) |
 | CN1/CN2/CN3 | Mac advisor01a1102f-791c-7e91-bec3-1877ea004d51 | accepted discovery |25seeds+12Debug configurations, fractional-grid limits; [handoff](receipts/corpus-native-advice.md) + wave summary |
@@ -245,8 +245,10 @@ overall; unqualified attempts increase neither eligible cases nor the74repair-va
 
 ### Current contracts and protected boundaries
 
-Current next action: receive USE-MAC1/USE-WEB1 actual-user reports, distinguish bugs,
-onboarding friction and proposals, then assign coherent UI Blueprint fixes. CN16
+Current next action: both consumer reports received. Reproduce and reconcile the
+Web first-connection/helper-help gap and Native comparison/onboarding gap inside
+UI Blueprint. Choose existing supported paths before new behavior; preserve strict
+identity/privacy/limits. Return a usable correction to the same consumers for retry. CN16
 is retired, not awaiting authority. Do not require app modifications to continue.
 Existing two critics remain idle for relevant evidence; repeated generic image rounds
 are not the priority. User-approved project owners may integrate the utility themselves;
