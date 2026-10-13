@@ -1,7 +1,7 @@
 # Web URL and selected-component first use
-- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@2`.
+- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@3`.
 - Authority: Active; Stability: Evolving; accepted/released: none.
-- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 adds only registered Observe diagnostic consumption; existing profile retained.
+- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 added typed diagnostics; @3 selects the measured component profile under USE-WEB-DIRECTOR2, before code.
 - Read when: shipped Web helper URL/component preparation and external Observe/geometry.
 - Do not read when: unchanged exact-ID mode, Native, actions, export or saved comparison.
 - Requires: [Observe diagnostics@1](cli-observe-diagnostics.md), [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@1](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
@@ -71,9 +71,9 @@ browser allocations are opaque tooling/SDK costs, not a Rust allocator or browse
 Selection and final uniqueness walk each allow at most2048 visited DOM nodes, depth64
 and1000ms, within the overall deadline; no automatic retries or quota increases.
 An explicit --max-visited-nodes may lower this bound only (positive, <=2048).
-Collection preserves existing helper profile:32 output nodes/depth8/64KiB/250ms,
-collector16 nodes/256 visits and existing host/transport caps. Preparation limits do
-not enlarge collection. Unsupported/oversized real components remain explicit refusals.
+URL mode requests32 output nodes/depth8/128KiB/1000ms, collector16 nodes/256 visits; the three layout/hit/visible fields and all transport/host caps stay unchanged. Legacy exact-ID remains64KiB/250ms.
+Basis: unchanged14-node widget encodes69125bytes;16-node all-field observation spans258.74ms, typed250ms parent timeout, then complete78900bytes within the proposed bounds. Serialized per-node IntersectionObserver waits explain cost; this is a caller workload, not changed D06 gates.
+No fields/nodes are pruned, guards weakened or requests retried. The finite component allowance is not a latency/completeness promise; oversized/unstable sources still refuse.
 Every owned remote group/socket, child and temporary file has bounded cleanup; failed
 cleanup exits1, never success. No idle polling or collection while awaiting commands.
 
