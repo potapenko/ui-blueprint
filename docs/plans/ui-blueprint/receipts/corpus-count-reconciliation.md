@@ -13,9 +13,9 @@ fixture/component-preview origin;132 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:511 primary images =507 first outputs +4 rerolls;
-56 separate repair-validation images;4 unqualified reference attempts
+59 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-571 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+574 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -68,6 +68,14 @@ emphasis does not distinguish the two states. No cohort/general reliability clai
 [Receipt](corpus-useful-selection15.md),
 `uib-CP15-a9tb_k2m/neutral-index.json`, frozen binarySHA256
 eb48151c13401d00c3139df56b23aa7b4ed057cf8019a2cb0f82b49bb1dfe2b1.
+CP16 adds3first repair images atfdaca3e, no cases/rerolls: CW-B14-D/CW601536×1024,
+CN-B211672×941. Exact machine files/assignments unchanged fromdd160c0; older source
+baseline changes separately attributed.3focused author checks plus byte boundary,
+build/lint/fmt pass. Author: DOMdetail focus tag only (caller label despite reported
+true), Native focus absent, negative control no inventedfocus/scopedpass. Independent
+review pending; no consistent per-view focus benefit or new round claimed.
+[Receipt](corpus-focus-presentation16.md), `uib-CP16-fbrtvb6c/neutral-index.json`,
+binarySHA256adf52388cdcb1a634e2f5a25f68742d65e7a995798faa53c8398c4db5c8eec89.
 
 ## Completed primary batches
 
