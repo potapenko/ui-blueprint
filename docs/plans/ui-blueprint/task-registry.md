@@ -81,10 +81,10 @@ CW-B9 adds4lookup/overflow states, bringing it to162;
 CN-B19 adds6Mac lookup states, bringing it to168;
 CN-B20 adds6mobile lookup states, bringing it to174, with a runtime incident retained;
 CW-B10 adds2Web Actor states, bringing it to176.
-Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1 images (49 total).
+Separate repair validation: CP1=4, CP2=2, CP3=12, CP4=13, CP6=8, CP7=1, CP8=1, CP9=3, CTEXT2=1, CP10=2, CP11=1, CP12=1, CP13=1 images (50 total).
 These repeats do not enlarge the primary scenario corpus. CP5 generated no images.
-CTEXT1 and original1xCW-B8 add4unqualified reference attempts:551counted generated images
-overall, with no increase to eligible cases or the49repair-validation images.
+CTEXT1 and original1xCW-B8 add4unqualified reference attempts:552counted generated images
+overall, with no increase to eligible cases or the50repair-validation images.
 [First-wave evidence](receipts/corpus-wave1-summary.md) retains original counts.
 
 ### Ownership and disposition
@@ -131,7 +131,7 @@ overall, with no increase to eligible cases or the49repair-validation images.
 | CP10 |exporter owner01a12b6a-92a9-73c3-aec2-022e32651008|5e071f5 bounded accepted; archived|Both critics accept source hints/AM image, reject CTEXT2 wrong-column layout; [receipt](receipts/corpus-arrangement-repair10.md) |
 | CP11 |same exporter owner|7f767d5 bounded accepted; archived|Both critics accept formatting/machine preservation; newCW62stillFAIL for unassigned≈791/coordinate inventory; [receipt](receipts/corpus-construction-presentation11.md) |
 | CP12 |same exporter owner|172a080 bounded+oneimage accepted; archived|Both critics accept literal button i caption and≈38×54pt; machine/owner/privacy/limits unchanged; [receipt](receipts/corpus-literal-captions12.md) |
-| CP13 |same exporter owner, restored|full-cycle wrapper-frame wording task running|CW69 wrapper98×24 is not popup241; remove unsupported enclosing-shape implication, preserve exact owner/values; one new image, no live apps |
+| CP13 |same exporter owner|61bd8cb bounded accepted; archived|Both critics confirm owner correction, image stillFAIL for placement/repeats/focus; [receipt](receipts/corpus-wrapper-frame13.md); no source app/prefs access |
 | CR2 |01a12c29-4fa9-7051-b737-0e35a0e4c79a|accept; archived after handoff|203c48a compatibility/privacy/bounds accepted; F1/F2 closed, aef13c6 receipt reconciled; no raster acceptance |
 | CR3 |01a12c83-017a-7b42-b657-3464f9a773dc|accept_with_residual; archived|1af633c permissions/compatibility/bounds and retained live geometry accepted; no image/calibration/full-view claim |
 | CA1/CA2 |01a12b6a-9746-7600-830d-b973f7b8e30b|diagnostic accepted|f084486, same-window focused-popover ancestry proved for Genre/Director |
@@ -785,6 +785,22 @@ authorizes switching the whole batch to verifiedCP12 only if no modelcall has
 started. Preserve any priorCP11packages, compare exactmachine facts and record
 the effectivepin before generation. If any call alreadybegan, finishCP11 with
 no mixedversions/rerolls. Same inputs/source/criteria; no history relabelled.
+
+CP13 current accepted exporter:61bd8cb6876373422fc37d71a9ecf68d765952b1,
+author receiptbe3c77f, committed/pushed. Text-only measured-frame wording replaces
+unsupported enclosure implication; predicate/selection/geometry unchanged. Same
+CV2turn01a13294-d34f-72e1-92ce-eb1c077521b7 and CT2
+turn01a13294-d440-7f50-a030-91316deb12e7 independently accept source/prompt change.
+Five replay machine packages unchanged; Native control wholly unchanged, four Web
+prompts+146characters. CT2 checked hashes/diff/invariants and test definitions;
+three passing focused checks remain author evidence, not independently rerun.
+New1536×1024CW69 fixes≈98/≈24attachment to wrapper and checkbox silhouette. Both
+critics retain overallFAIL: repeated assigned input/checkbox dimensions and missing
+focus in repeated input. CT2 also confirms wrong width-line slot/frame qualifier;
+author records shifted composition. No full raster or causal/general guarantee.
+One repair image/no new case/reroll. Frozen temp binary
+`uib-CP13-uh3v_5ch/uiblueprint-cp13`, SHA256
+`51c6cc360e877ee6067e3beffecd997d2a28a1ed8189c1cf08cc28eaf2dc2c97`.
 
 All batches through CN-B9 have terminal handoffs. CN-B10 now tests the remaining
 safe wired catalog; the previous8-case limit was not proof of catalog exhaustion.
