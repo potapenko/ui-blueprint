@@ -343,3 +343,18 @@ No newflags/inputbuilder/algorithm/parser/sourceapp changes. Affected rendering,
 necessary focused checks/docs and consumer-native-compact1.md only. Actual samepair
 compact plus JSON preservation, pinned core bundle if sufficient, scopedcommit/push;
 no broad runtime/ImageGen cycle. Bulky correspondenceauthoring is recorded separately.
+
+## USE-OBS-DIAGNOSTICS1 — exact Web consumer dependency
+
+Web helper currently discards childCLI reason; original Director popup/list failure
+cause cannot be recovered from exit4 alone. Source owner traced existing bounded
+HostCompletion terminal/diagnostic records not exposed through Observe. Core now
+implements the smallest opt-in enum/count diagnostic report with a registered additive
+contract, unchanged default NDJSON/exits/constantstderr and no raw UI/path/URL/exception
+text. Existing validated Host owner reused, no logger/framework, graph reparse inparent,
+collector quotas/grants/timeouts/retry changes or application work. Missing subcause
+stays unknown. CLI/needed existing Host accessor/tests/docs only; Webhelper and
+packaging remain I02owned. Shared spec routing lease handed off explicitly.
+Focused actual refusal/privacy/bounds/cleanup proof, coherentcommit/push/interfacepin
+then I02 integrates the strict allowlist and diagnoses actual popup/list. Closed-shadow
+Restore continues independently. Same site consumer performs the real final retry.
