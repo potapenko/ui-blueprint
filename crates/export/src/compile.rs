@@ -1840,7 +1840,14 @@ fn drawing_dimensions(
         .enumerate()
         .filter(|(i, c)| {
             !control(c)
-                && !c.children.is_empty()
+                && (!c.children.is_empty()
+                    || (v.components.len() == 1
+                        && geometry(c).is_some_and(|g| {
+                            matches!(
+                                g.frame_kind,
+                                FrameKind::LayoutBounds | FrameKind::AccessibilityBounds
+                            )
+                        })))
                 && (component_role(c).eq_ignore_ascii_case("dialog")
                     || !v.components.iter().any(|p| p.children.contains(&c.id)))
                 && !available.iter().any(|d| {

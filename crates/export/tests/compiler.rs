@@ -1177,6 +1177,176 @@ fn popup_prompt_preserves_distinct_input_and_result_width_owners() {
 }
 
 #[test]
+fn single_noninteractive_scope_gets_its_known_frame_without_role_inference() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    snapshot.nodes.truncate(1);
+    snapshot.nodes[0].children.clear();
+    snapshot.relations.clear();
+    snapshot.components.clear();
+    snapshot.nodes[0].native_role = Availability::Known {
+        value: Value::Text("SPAN".into()),
+    };
+    let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[0] else {
+        panic!()
+    };
+    *state = Availability::Unknown {
+        reason: Id("not-collected".into()),
+    };
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut snapshot.nodes[0].properties[2]
+    else {
+        panic!()
+    };
+    g.shape = Shape::Rect(Rect {
+        x: 25.09375,
+        y: 343.59375,
+        width: 174.671875,
+        height: 42.3125,
+    });
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert!(prompt.contains("Object span: SPAN [#1]"));
+    assert!(
+        prompt.contains(
+            "DIMENSIONED RECTANGLE span: WIDTH ≈175 CSS px ABOVE; HEIGHT ≈42 CSS px LEFT"
+        )
+    );
+    let dims = data(&p, "dimensions.json");
+    for (i, value, start, end) in [
+        (0, 174.671875, "left", "right"),
+        (1, 42.3125, "top", "bottom"),
+    ] {
+        assert_eq!(dims[0]["dimensions"][i]["value"], value);
+        for j in [0, 1] {
+            assert_eq!(dims[0]["dimensions"][i]["anchors"][j]["component"], "N000");
+        }
+        assert_eq!(dims[0]["dimensions"][i]["anchors"][0]["edge"], start);
+        assert_eq!(dims[0]["dimensions"][i]["anchors"][1]["edge"], end);
+        assert_eq!(
+            dims[0]["dimensions"][i]["anchors"][0]["frame_kind"],
+            "layout_bounds"
+        );
+    }
+    let mut exact = limits();
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    // A small text-only scope is principal even below the repeated-control size threshold.
+    let mut text = b.clone();
+    let SourceInput::Observed { snapshot, .. } = &mut text.views[0].source else {
+        panic!()
+    };
+    set_test_role(&mut snapshot.nodes[0], "LABEL");
+    let Property::Requested {
+        state: Availability::Known {
+            value: Value::Geometry(g),
+        },
+        ..
+    } = &mut snapshot.nodes[0].properties[2]
+    else {
+        panic!()
+    };
+    g.shape = Shape::Rect(Rect {
+        x: 0.,
+        y: 0.,
+        width: 9.,
+        height: 6.,
+    });
+    let p = compile(&text, limits()).unwrap();
+    assert!(
+        std::str::from_utf8(&p.files()["prompt.txt"])
+            .unwrap()
+            .contains(
+                "DIMENSIONED RECTANGLE label layout: WIDTH 9 CSS px ABOVE; HEIGHT 6 CSS px LEFT"
+            )
+    );
+    for variant in ["unknown", "hit-only", "visible-only", "two-leaves", "ax"] {
+        let mut v = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut v.views[0].source else {
+            panic!()
+        };
+        if variant == "two-leaves" {
+            let mut other = snapshot.nodes[0].clone();
+            other.key.key = Id("second-leaf".into());
+            snapshot.nodes.push(other);
+        } else {
+            let mut geometry = snapshot.nodes[0].properties[2].clone();
+            let Property::Requested { state, .. } = &mut snapshot.nodes[0].properties[2] else {
+                panic!()
+            };
+            *state = Availability::Unknown {
+                reason: Id("not-collected".into()),
+            };
+            if variant != "unknown" {
+                let Property::Requested {
+                    field,
+                    state:
+                        Availability::Known {
+                            value: Value::Geometry(g),
+                        },
+                    ..
+                } = &mut geometry
+                else {
+                    panic!()
+                };
+                let (target, f, kind) = match variant {
+                    "hit-only" => (3, Field::HitRegion, FrameKind::HitRegion),
+                    "visible-only" => (4, Field::VisibleRegion, FrameKind::VisibleRegion),
+                    "ax" => (
+                        2,
+                        Field::AccessibilityBounds,
+                        FrameKind::AccessibilityBounds,
+                    ),
+                    _ => unreachable!(),
+                };
+                *field = f;
+                g.frame_kind = kind;
+                snapshot.nodes[0].properties[target] = geometry;
+                if variant == "ax" {
+                    for fields in std::iter::once(&mut snapshot.context.fields)
+                        .chain(std::iter::once(&mut snapshot.coverage.fields))
+                        .chain(
+                            snapshot
+                                .observations
+                                .iter_mut()
+                                .map(|o| &mut o.coverage.fields),
+                        )
+                    {
+                        for field in fields {
+                            if *field == Field::LayoutBounds {
+                                *field = Field::AccessibilityBounds;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        let p = compile(&v, limits()).unwrap_or_else(|e| panic!("{variant}: {e:?}"));
+        let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+        if variant == "ax" {
+            assert!(prompt.contains("AX FRAME MEASUREMENT (not painted UI), EXACT OUTSIDE CAPTION \"span\": WIDTH ≈175 CSS px ABOVE; HEIGHT ≈42 CSS px LEFT"));
+            assert!(prompt.contains("EMPTY WHITE dashed rectangle"));
+        } else {
+            assert!(!prompt.contains("DIMENSIONED RECTANGLE span:"), "{variant}");
+            assert!(
+                !prompt.contains("AX FRAME MEASUREMENT (not painted UI), EXACT"),
+                "{variant}"
+            );
+        }
+    }
+}
+
+#[test]
 fn no_input_dialog_selects_one_existing_direct_child_inset() {
     let mut b = fixture("observed");
     let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
