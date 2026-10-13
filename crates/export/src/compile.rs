@@ -721,7 +721,9 @@ fn object_text(
                 out.push_str("; print a separate outside state tag meaning \"Focused\" in the document language in every view containing this object");
             }
             if p.field() == Field::Checked && !input_control(c) {
-                out.push_str("; indicator interior BLUE, WHITE OUTLINE only");
+                out.push_str(
+                    "; indicator is a hollow WHITE outline with a BLUE center in this state",
+                );
             }
             if p.field() == Field::Selected && *value {
                 out.push_str("; double WHITE outline, BLUE interior; preserve caller distinction between active and applied");
@@ -2240,7 +2242,7 @@ fn drawing_dimensions(
         } else if sheet.is_some_and(|s| s.kind == "detail") {
             "VIEW PLAN: selected source-detail artwork only. This detail has no assigned measurements; do not invent measurement blocks or dimensions. Preserve this source selection and its proved component clipping.\n"
         } else {
-            "VIEW PLAN: complete overview plus ONLY the following supported local details. Each label has one owner; never repeat measurements on another view.\nOVERVIEW MEASURES:\n"
+            "VIEW PLAN: complete overview plus ONLY the following supported local details. In each detail, Reuse lists visual context; print only the dimensions explicitly assigned below it. Each label has one owner.\nOVERVIEW MEASURES:\n"
         },
         limit,
     )?;
@@ -2347,8 +2349,10 @@ Depict media only as sparse WHITE contour lines on the same flat BLUE; no tonal
 shading, photographic texture, grayscale, dark/gray panels, gradients or transparency.
 
 Draw only visible coverage, including its actual cut boundary. Plain text is not a box.
-Source wrappers appear only as necessary measurement boundaries.
-Use the original reference for artwork appearance. AX coordinates describe only
+Overview borders follow visible reference borders. Source groups and layout boxes
+are placement context; an extra frame appears only as an assigned measurement sketch.
+The reference supplies composition and glyph shapes; the blueprint palette supplies
+WHITE outlines and BLUE interiors. AX coordinates describe only
 accessibility measurements; they do not reposition painted text or glyphs. Never
 expose occluded controls in artwork just because their AX records are listed.
 The source text payload can contain clipped content. CLIPPING TAKES PRIORITY:
@@ -2383,9 +2387,9 @@ blocked background without changing its layout or inventing missing controls.
 Print no “State: Normal” or other invented state. Whole-view caller context is
 separate from per-object source flags; proximity to a measurement is not a state
 binding. Preserve explicitly attributed active-versus-applied meaning. Active
-means an extra WHITE outline with BLUE interior. Off-switch: hollow WHITE circular outline
-with BLUE interior at the left; a solid-white knob is forbidden even if the
-reference uses one. Do not add controls/actions absent from the object plan.
+means an extra WHITE outline with BLUE interior. Every switch knob is a hollow
+WHITE circle with a BLUE center, in BOTH ON and OFF states. Preserve its source
+position; off remains at the left. Do not add controls/actions absent from the object plan.
 
 "#;
 const FRAME_GUIDANCE: &str = r#"DIMENSIONED RECTANGLE: BOTH dimensions on the SAME measured source frame.

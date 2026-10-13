@@ -11,8 +11,9 @@ If a control binding is ambiguous, leave that control’s state unknown.
 {{assignment}}
 
 ГРАФИЧЕСКИЙ ЯЗЫК
-Solid BLUE #087AB5 ground; WHITE outlines/text. Every control and indicator interior
-is the same BLUE, including off-switch knobs and active rows. No fills, grid or shadow.
+WHITE linework and text on one solid BLUE #087AB5 ground. Every control, active row
+and indicator is hollow with the same BLUE interior, including BOTH ON and OFF
+switch knobs. No fills, grid or shadow.
 
 ПРОЕКЦИЯ И ЛИСТ
 {{artwork_guidance}}
