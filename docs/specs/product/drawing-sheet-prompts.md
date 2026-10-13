@@ -61,7 +61,10 @@ reference-visible content. Scene/dimensions remain exact; no filtering before
 chunking, merging into a full detail, density change or rebalancing. Full source
 union includes G01; detail-only union need not include this tail. Required dimension
 IDs/owners and earlier details remain unchanged. Any explicit request preserves
-the prior plan. Proposed/detail/compare/flow, multi-view and no-split cases stay.
+the prior plan. Inputs with optional design_analysis requests retain the prior
+plan, including unknown analysis results. Proposed/detail/compare/flow, multi-view
+and no-split cases stay. This is the USE-AUTO-DETAIL2 protected-domain clarification
+of the approved exception, not eligibility expansion or an analysis semantic change.
 Sheets, manifest, brief and prompts derive consistently from the final plan;
 there is no orphan prompt entry. At least one detail remains, so export0.4 stays.
 

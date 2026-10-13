@@ -1051,6 +1051,54 @@ fn automatic_unknown_tail_preserves_source_overview_and_limits() {
 }
 
 #[test]
+fn automatic_unknown_tail_retains_analysis_requests_with_unknown_results() {
+    let mut b = unknown_geometry_tail();
+    let SourceInput::Observed { snapshot, .. } = &b.views[0].source else {
+        panic!()
+    };
+    let Some(Value::Geometry(g)) = snapshot.nodes[0].properties[0].known() else {
+        panic!()
+    };
+    let queries: Vec<_> = [0, 24]
+        .into_iter()
+        .map(|i| {
+            serde_json::json!({
+                "id": format!("tail-width-{i}"), "scope_id": snapshot.context.scope_id,
+                "targets": [snapshot.nodes[i].key], "operation": "width",
+                "anchors": [{"element": snapshot.nodes[i].key, "frame_kind": "layout_bounds",
+                    "coordinate_space": g.coordinate_space, "fraction": 0.0, "axis": "x"}],
+                "quantity_kind": "length", "units": "css_px",
+                "applies_when": {"platform": null, "input_mode": null, "text_scale": null}
+            })
+        })
+        .collect();
+    b.views[0].design_analysis = serde_json::from_value(serde_json::json!([{
+        "kind": "relation", "caption": "Caller-selected widths", "operation": "equal",
+        "operands": queries, "evaluation": {"snapshot_id": snapshot.id,
+            "revision": snapshot.revision, "context": snapshot.context,
+            "result_space": g.coordinate_space, "transforms": [], "conditions": null}
+    }]))
+    .unwrap();
+    let original = serde_json::to_vec(&b).unwrap();
+    let p = compile(&b, limits()).unwrap();
+    let sheets = data(&p, "sheets.json");
+    assert_eq!(sheets.as_array().unwrap().len(), 4);
+    assert_eq!(sheets[3]["components"], serde_json::json!(["N024"]));
+    assert!(p.files().contains_key("prompt-D03.txt"));
+    assert!(
+        data(&p, "manifest.json")["sheet_prompts"][3]["dimension_ids"]
+            .as_array()
+            .unwrap()
+            .is_empty()
+    );
+    assert_eq!(
+        data(&p, "scene.json")["views"][0]["design_analysis"][0]["status"],
+        "unknown"
+    );
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+}
+
+#[test]
 fn automatic_unknown_tail_retains_explicit_requests_and_meaningful_context() {
     for case in [
         "explicit",

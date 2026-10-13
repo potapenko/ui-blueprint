@@ -380,7 +380,7 @@ fn sheets(b: &DrawingBrief, s: &Scene, l: ExportLimits) -> Result<Vec<Sheet>> {
                     && s.views.len() == 1
                     && b.details.is_empty()
                     && v.source_kind == SourceKind::Observed
-                    && v.design_analysis.is_empty()
+                    && b.views[i].design_analysis.is_empty()
                     && chunk.len() < l.components_per_detail
                     && chunk.iter().all(|c| {
                         matches!(&c.native_role, Some(Availability::Known { value: Value::Text(role) }) if role == "DIV")
