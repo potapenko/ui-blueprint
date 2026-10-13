@@ -6,16 +6,16 @@ No source, image, runtime or product code changed during the reconciliation.
 
 ## Conservative result
 
-**202 proved eligible cases; range202–205 pending three named uncertainties.**
-The planning remainder is798 cases, potentially795 if all three are established.
-There are79 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
-fixture/component-preview origin;145 are non-fixture observations. Fixture UI is
+**204 proved eligible cases; range204–207 pending three named uncertainties.**
+The planning remainder is796 cases, potentially793 if all three are established.
+There are81 Web and123 Native cases in the proved minimum. Fifty-seven are explicitly
+fixture/component-preview origin;147 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
-Completed-batch image buckets:529 primary images =525 first outputs +4 rerolls;
-79 separate repair-validation images;4 unqualified reference attempts
+Completed-batch image buckets:533 primary images =529 first outputs +4 rerolls;
+80 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-612 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+617 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -141,7 +141,8 @@ binarySHA256896e15a8ffadd6d95830518bb748491e98d264596ac64b1eeb88dfc2a257e5e3.
 | CN-B22 |1|3|New passive Release Guest Tour32AXnodes/24callouts; G01/D01/D02 evaluated, no rerolls |
 | CW-B21 |3|3|Distinct empty sign-in/register/recovery subforms; source-qualified first images, all fullrasterFAIL; providerchooser excluded |
 | CW-B22 |1|1|First collapsedFilters canonical→package→image after RECT2; previous refusals and PrivacyPolicy produce0cases/images |
-| **Primary subtotal** |**201**|**529**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:202 total cases |
+| CW-B23 |2|4|Provider choices and mode-tabs distinct from earlier form bodies;4firstsheets evaluated,0fullpass |
+| **Primary subtotal** |**203**|**533**|Plus one already-qualified CP1/A06 case whose images remain in the repair bucket:204 total cases |
 
 CW-B17 evidence: `uib-cw-b17-sSkxRL/HANDOFF.md`, neutral-manifest, novelty/numeric/
 literal/state/resource records. NeutralSHA256
@@ -1096,3 +1097,39 @@ meanings preserved. Authorreceipt read onlyafterinitial; no repeatedchecks onfin
 Totals202cases(79Web+123Native;57fixture+145non-fixture),42primarybatches,
 529primaryimages(525first+4rerolls),79repairimages,4unqualifiedimages=612generated.
 Remainder798; oldA02/B07/C04 uncertaintyunchanged. Allimages/oldfailures retained.
+
+## CW-B23 plus principal-frame repair — five-image final wave
+
+Primaryneutral `/tmp/uib-b23-mheswu5b/neutral-index.json`: two distinct actual
+components, providers3sheets andmode-tabs1sheet, acquisitionabd8878/exportdf43e883.
+EarlierCW21form bodies explicitly excluded both; wholechooser refusal never
+produced a case. Fourfirstimages,0rerolls, no account/provider/submit action.
+Caller/reference names/disabled/focused/pressed states remain separate from
+geometry-only canonicalfields. Exactsource/reference/prompt/image chains qualified.
+
+CV2initialCW2301a1369c-35cb-7231-aca2-fc090e7fa8fa, repairinitial
+01a1369e-32d1-7742-8816-053336f3eb36, final01a1369f-e50d-7872-a1a4-f4be8424da5a;
+CT2initial01a1369c-3680-7b93-adef-f2c3df3163c9/final
+01a136a0-35b5-76e1-9024-1763bb1ed743. No repeatedchecks onauthorreconciliation.
+All5fullrasters fail: providerG01 unassigneddimensions/coordinates/IDs and filled
+Googlelogo; D01 eightcorrectscalars butselectorprinted; D02 restoresfullproviderlist
+instead ofassignedthreeEmailspans; tabsfourcorrectscalars butselectorprinted.
+Slotplacement/qualifiedpx shorthand residuals not treated as unitconversion.
+
+Repairsource59b444de37d0366f9073aef5d7a3626a5cd0e03b accepted separately;
+[receipt](consumer-principal-frame1.md), neutral
+`$T/uib-PRINCIPAL-FRAME1-k6knif_6/neutral-index.json`, SHA
+7690e7679f94408a8aa00a16196b556bf33e81fcf2ea2f6a0119f6cf37b748ac.
+One1024×1536repairimage, no newcase. Genericflatobserved selection chooses a
+measured element, notroot/fullscope/paintauthority; unknownfirst/mixedgeometry/
+topology/control guards remain. Eightreplaymachinepackages retained; A04/GuestTour/
+Cast/CW14 fullyunchanged. LiteralemptyLayoutBounds instruction explicit, raster
+stillappliesASIDEdimensions toartwork andprintselector/#6. All4scalaramounts correct.
+
+CW23was producedbeforegenericframefix: currentframeassignment mustbe replayed
+before claimingfixed. Existingprovider6.015625CSSpx gaps remain confirmed selection
+gap, assignedsameowner USE-REPEATED-GAPS1. No invented hierarchy/union/padding/new
+measurements authorized. Twoqualifiedprimarycases+fourprimaryimages+one repairimage:
+204cases(81Web+123Native;57fixture+147nonfixture),43primarybatches,
+533primaryimages(529first+4rerolls),80repairimages,4unqualifiedimages=617total.
+Remainder796, original3uncertainties unchanged. No newfullimageapproval.
