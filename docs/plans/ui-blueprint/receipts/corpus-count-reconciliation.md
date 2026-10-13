@@ -13,9 +13,9 @@ fixture/component-preview origin;137 are non-fixture observations. Fixture UI is
 not relabelled as production data. Families and meaningful states remain distinct.
 
 Completed-batch image buckets:516 primary images =512 first outputs +4 rerolls;
-69 separate repair-validation images;4 unqualified reference attempts
+72 separate repair-validation images;4 unqualified reference attempts
 (CTEXT1 and the first3CW-B8 images before native-density correction);
-589 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
+592 counted generated images in total. CTEXT1 used a CUA JPEG misnamed as PNG and is
 excluded from qualified validation and case counts. CTEXT2 adds one source-qualified
 repeat image, no new case: both independent critics confirm all4texts/9items
 preserved but layout fails; no concrete literal compiler defect demonstrated.
@@ -788,3 +788,28 @@ establish unit conversion or numerical source defects. CT2independently checked 
 operands/requests/package hashes and preservation; final01a13474-b824-7821-87a5-a6e899083971 accepts bounded source/math after author reconciliation, retaining all four fullimage failures.
 No new compiler contradiction found. These reused-source validations increase only
 image bucket:194primarycases,69validationimages,589counted generated images.
+
+## CMATH2 — Native split-sheet mathematics, 2026-10-13
+
+[Author receipt](corpus-math-visual2.md),adba063, frozenCLI da306a2. One reused
+NativeReels source, originaldensity30, three first standalone G01/D01/D02images,
+all1672×941; zero newprimarycases/rerolls. Neutral index
+`$T/uib-CMATH2-cyglq8rv/neutral-index.json`,SHA
+fb3a8b30678f4a92fffa1f5e1c0301df05b86d062d1377d3742d7ed11557e827.
+50source nodes retained; exact seven operands/fourrequests; 20required dimensions
+have unique ownership4/16/0. G01has4math notes, detailsnone; detailprompts/source
+scene/dimensions/sheets preserve baseline bytes except explicit analysis block.
+
+CV2final01a13484-ec4e-7773-85a3-32ca47f3d754 and CT2initial01a13480-fbdd-7d10-8789-446b10c0cdbe
+confirm4/4math onG01 and no duplication, but all3fullsheetsFAIL. G01duplicatesAXsizes
+on artwork and empty sketches, omits clipped fragment and prints requested resolution
+as unqualified fact. D01has15/16exact preparedlabels (Search≈74 loses≈) and invents
+inputfocus. D02completes clipped/offscreen rows and filledscrollbar triangles.
+Both critics retain a concrete prompt-scope conflict: 'Each Draw item is included
+artwork' and explicit N038–N044/children14–20 versus offscreen exclusion/visible-only
+coverage. AXmembership cannot resolvepaint. Source/math preservation passes, but
+these drawing assignments need owner reconciliation; do not attribute allcoverage
+failure solely to renderer or assert a clipping algorithm bug. CT2final
+01a13486-f05d-7060-8649-0662a67c7fba confirms the source-fragment preparation conflict
+after author reconciliation. CP20 restores literal scope consistency; source/math
+preservation remains accepted. Totals194eligible primarycases,72validationimages,592counted images.

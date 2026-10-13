@@ -224,3 +224,27 @@ Only tracked write receipts/corpus-math-visual2.md; images/selected packages/ind
 systemtemp, originals retained. Neutral artifacts before author assessment, same
 critics finish scoped acceptance. Report actual calls/sheets separately; zero new
 primarycases. Scoped currentbranch commit/push, no nested delegation, terminal fulltask.
+
+## CP20 — source-fragment artwork eligibility, 2026-10-13
+
+Shipping Restore after both CMATH2 critics confirm conflicting D02 preparation:
+'Each Draw item is included artwork' lists clipped/offscreen N038–N044 while the
+same prompt excludes offscreen content. Existing SHEET-PROMPTS1 scope/ownership and
+HBP1.2 prohibit membership from upgrading partial/unknown visibility. Numeric/source
+preservation is accepted; the preparation conflict is not attributed solely to raster.
+
+Original exporter owner completes one bounded fix in existing prompt/source-fragment
+preparation, directly affected checks and receipts/corpus-fragment-scope20.md.
+Separate record membership from artwork eligibility under existing visible/reference/
+known-cut restrictions. Do not guess visibility, parse freeform scope into an oracle,
+prune sources/sheet members, infer AXpaint/mapping or alter engine/schema/flags.
+Keep required emptyAX measurement sketches, exact dimensions/states and G01math.
+
+Use exact CMATH2 Nativepackage plus CW-B17-G clippedWeb as affected/generalization
+inputs. Validate complete packages/assignment preservation and literal consistency;
+focused affected checks only. One first NativeD02 and one WebG01 image from literal
+candidateprompts/originalqualifiedPNGs; no unnecessary otherNative sheet generations,
+wrappers/rerolls/runtime/source-app changes or autonomous further round. Full original
+Nativepackage is recompiled, but image acceptance scope is those two chosen sheets.
+Systemtemp/imagesretained, neutral index before authorassessment, scoped master
+commit/push. Samecritics/no nested agents. Zero newprimarycases; repairimages separate.
