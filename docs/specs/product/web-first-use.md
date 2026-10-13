@@ -1,7 +1,7 @@
 # Web URL and selected-component first use
-- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@4`.
+- Node type: leaf; domain: `uib.web.first-use`; contract: `UIB.WEB-FIRST-USE@5`.
 - Authority: Active; Stability: Evolving; accepted/released: none.
-- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 added typed diagnostics; @3 selects the measured component profile under USE-WEB-DIRECTOR2, before code. @4 adds root-selected exact canonical stdout under USE-WEB-EXPORT1.
+- Authority source: explicit URL+component request and USE-WEB-BOOTSTRAP1; USE-WEB-DIRECTOR2 authorizes safe diagnostics. @2 added typed diagnostics; @3 selects the measured component profile under USE-WEB-DIRECTOR2, before code. @4 adds root-selected exact canonical stdout under USE-WEB-EXPORT1. @5 adds only terminal integer nth-of-type under root-approved USE-WEB-ADDRESS2 and supplied whole-list source examples.
 - Read when: shipped Web helper URL/component preparation and external Observe/geometry.
 - Do not read when: unchanged exact-ID mode, Native, actions or saved comparison.
 - Requires: [Observe diagnostics@3](cli-observe-diagnostics.md), [CLI OBSERVE](cli.md), [BOUNDARIES@1](boundaries.md), [IDENTITY@1](identity.md), [MODEL@1](model.md), [EXCHANGE@2](exchange.md), [PRIVACY@1](privacy.md), [LIFECYCLE@1](lifecycle.md), [PROJECTIONS@1](projections.md), [GEOMETRY@2](geometry.md), [D02@2](../development/decisions/d02-boundaries.md), [D05@4](../development/decisions/d05-limits.md), [D07@5](../development/decisions/d07-reuse.md).
@@ -31,8 +31,8 @@ Only page targets qualify; zero exact matches→target_unresolved, multiple→am
 
 SELECTOR is explicit data, at most512 UTF-8 bytes: one compound CSS selector consisting
 of optional type or *, followed by #id, .class and/or [attribute] / [attribute="value"]
-terms. Simple ASCII CSS identifiers; quoted Unicode attribute values allowed. No escapes,
-combinators, selector lists, pseudo classes/elements, :has, script or guessed labels.
+terms, optionally ONE terminal :nth-of-type(N), canonical decimal integer1..2048. No leading zero/sign/space, An+B, keywords, repeated/nonterminal suffix, other pseudo classes/elements, escapes, combinators, selector lists, :has, script or guessed labels.
+Simple ASCII CSS identifiers; quoted Unicode attribute values and literal colons remain data. Base compound must be nonempty. N counts same expanded element name (namespace URI/local name) siblings within its own parent, never globally or only among compound matches; text/comments do not count.
 Unsupported syntax refuses explicitly; never silently broaden or choose the first match.
 Scope is the selected page's ROOT DOCUMENT light DOM only. Do not enter frame/shadow/
 template content; a selected iframe/frame/template/slot or authored open/closed shadow host is unsupported.
@@ -46,8 +46,7 @@ Obtain actual root frame/loader and document backend IDs via Page.getFrameTree a
 DOM.getDocument(depth0,piercefalse). No source key is manufactured from URL/selector.
 Caller session/generation nonces remain observation-scoped bookkeeping only.
 Use a named isolated read-only world and an owned object group. Traverse light DOM under
-explicit node/depth/time bounds; native Element.matches receives SELECTOR as a JSON
-argument, never executable interpolation. Exactly one match must be proved after the
+explicit node/depth/time bounds; native Element.matches receives only the compound part as JSON data. The parsed ordinal is checked with per-parent namespace/local-name counts during that SAME walk, with no previousSibling/whole-parent scan, fullgraph query or native nth matching. Exactly one match must be proved after the
 complete bounded traversal; one found before exhaustion is NOT unique. No full DOM dump,
 querySelectorAll-then-truncate or browser-side geometry calculation.
 Retain original document/root/parent objects and obtain its real backend ID. Recheck
@@ -56,7 +55,7 @@ existing RootSeed/WebSelection, canonical connection/request and actual Rust Obs
 After Observe, before helper stdout/Inspect/Measure, revalidate exact URL/page uniqueness,
 frame/loader/document, original connected root/parent and unique selector matching that
 SAME root. Navigation/remount/reparent/changed selection refuses, never reacquires a node
-or repairs an old ref. Identity checks do not assert atomicity or unchanged UI values.
+or repairs an old ref. Sibling insert/remove/reorder that changes the original node’s ordinal must refuse, including when another node now matches. Identity checks do not assert atomicity or unchanged UI values.
 Release owned remote handles/connections; never close the page/browser/application.
 Only canonical Rust output supplies source facts, geometry, units, evidence and coverage.
 No action rights, freshness beyond actual observations, full-page visibility or padding
@@ -68,7 +67,7 @@ at most16 unsolicited events. Check byte bounds before JSON parse. Native WebSoc
 browser allocations are opaque tooling/SDK costs, not a Rust allocator or browser RSS cap.
 Selection and final uniqueness walk each allow at most2048 visited DOM nodes, depth64
 and1000ms, within the overall deadline; no automatic retries or quota increases.
-An explicit --max-visited-nodes may lower this bound only (positive, <=2048).
+An explicit --max-visited-nodes may lower this bound only (positive, <=2048). Ordinal bookkeeping has at most one increment per visited Element and at most visited-count entries; all nodes, including text/comments, still consume traversal quota. Multiple parents can produce ambiguity; an early match never bypasses exhaustion.
 URL mode requests32 output nodes/depth8/128KiB/1000ms, collector16 nodes/256 visits; the three layout/hit/visible fields and all transport/host caps stay unchanged. Legacy exact-ID remains64KiB/250ms.
 Basis: unchanged14-node widget encodes69125bytes;16-node all-field observation spans258.74ms, typed250ms parent timeout, then complete78900bytes within the proposed bounds. Serialized per-node IntersectionObserver waits explain cost; this is a caller workload, not changed D06 gates.
 No fields/nodes are pruned, guards weakened or requests retried. The finite component allowance is not a latency/completeness promise; oversized/unstable sources still refuse.
@@ -95,4 +94,4 @@ components, selector eligibility, bounds/deadlines, stale loader/document/remoun
 credential/private diagnostics and release failure have focused proof. Owned F01 actual
 URL+component→installed helper→canonical Rust Observe/Inspect/Measure checks independently
 authored geometry, unchanged state, truthful coverage and owned cleanup. Consumer's real
-Director retry remains independent acceptance. Machine proof adds exact-byte F01→validator/export and no-publication failure cases. No ImageGen, Native or source-app operation.
+Director retry remains independent acceptance. Machine proof adds exact-byte F01→validator/export and no-publication failure cases. @5 proof covers integer/quote/byte boundaries, namespaces and sibling types, multiple-parent ambiguity, exhaustion after a match, and ordinal mutation/remount/reparent refusal; one own F01 list→Observe/validator/measure/export, source-owner live acceptance separate. No ImageGen, Native or source-app operation.
