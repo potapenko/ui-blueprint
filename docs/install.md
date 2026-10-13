@@ -12,7 +12,9 @@ See [tested discovery versions](development/macos-release.md#skill-discovery-ver
 ## Start with a prompt
 
 Copy the appropriate [README prompt](../README.md#install-through-your-agent)
-into local Codex or Claude Code. No manual download or terminal command is needed
+into local Codex or Claude Code. Fetch this mutable instruction URL directly with
+`curl --fail --location --connect-timeout 10 --max-time 30`; cached search/browser
+text can predate a source-installation fix. No manual download or terminal command is needed
 from the person once the release is available. Normal host tool permissions still
 apply; a web-only chat without access to the Mac cannot install local software.
 
@@ -150,7 +152,7 @@ temporary directories. Preserve user data and all images.
 ## Update with a prompt
 
 ```text
-Update my existing UI Blueprint utility and skill together following https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
+Update my existing UI Blueprint utility and skill using current instructions fetched with curl from https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
 Reuse their current locations, preserve my changes, and verify the bundled example.
 ```
 

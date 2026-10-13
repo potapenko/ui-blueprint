@@ -120,7 +120,7 @@ the skill teaches the agent how to use the utility afterward.
 **Codex**
 
 ```text
-Install UI Blueprint and its Codex skill following https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
+Install UI Blueprint and its Codex skill using current instructions fetched with curl from https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
 Use ~/.local for the utility and ~/.agents/skills/ui-blueprint for the skill.
 Verify the bundled example and load the skill.
 ```
@@ -128,7 +128,7 @@ Verify the bundled example and load the skill.
 **Claude Code**
 
 ```text
-Install UI Blueprint and its Claude Code skill following https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
+Install UI Blueprint and its Claude Code skill using current instructions fetched with curl from https://raw.githubusercontent.com/potapenko/ui-blueprint/master/docs/install.md
 Use ~/.local for the utility and ~/.claude/skills/ui-blueprint for the skill.
 Verify the bundled example and load the skill.
 ```
