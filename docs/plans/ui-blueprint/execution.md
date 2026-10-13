@@ -485,6 +485,18 @@ scroll ради косметического восстановления или
 
 ## Изоляция Mac restoration storage — CN10, 2026-10-13
 
+Для Web действует отдельное уточнение CW7: общий ранний агентский запрет на выбор
+любых фильтров не доказывает запрет пользователя на безопасное временное UI-состояние.
+[CW7 source receipt](receipts/corpus-web-advice.md#cw7--empty-query-clip-search-selection-boundary-2026-10-13)
+квалифицирует только собственную гостевую Clip Search вкладку с пустым главным
+query и исходно пустыми filters. Выбор/снятие entity меняет app-db и историю URL
+этой вкладки, не запускает phrase search и не сохраняет filters в общие настройки.
+Это применение уже разрешённого safe-state scope, а не новые полномочия на данные.
+Исполнитель перед выбором подтверждает актуальный loaded handler и предусловия;
+после снимает только свои значения и закрывает вкладку. История вкладки/bootstrap
+могут сохраняться. Nonempty query, Actor/Reels apply, account/preferences/server
+writes этим уточнением не разрешены. Нативная общая persistence из CN10 независима.
+
 Обычная Debug-композиция PlayPhrase.me не считается изолированной только потому,
 что запущена своим PID или собрана в temp. По CN10 Debug/Release имеют одинаковый
 bundle namespace и ключ PlayPhrase.native-restoration-v1; навигация сохраняет полный

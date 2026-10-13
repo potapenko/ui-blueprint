@@ -171,8 +171,9 @@ overall, with no increase to eligible cases or the50repair-validation images.
 | CW-B10 |same Web source owner|cycle accepted; archived, both reviews complete|2new states/2firstimages/2FAIL;37frames/18dimensions; wrapper owner correct, narrow wording risk feedsCP13;176cases total |
 | CW-B11 |same Web source owner, archived|cycle accepted; both critics confirm2FAIL|CW70desktop20row andCW71mobile full-screen source-qualified;2firstimages,108frames/16dimensions, CP13; uib-cw-b11-7ARu0i handoff/neutral-manifest; tabs closed/viewport restored. No demonstrated compiler contradiction; bounded robustness refinement feedsCP14 |
 | CW6 |Web advisor01a1102f-e21d-7251-9597-c29a1c66d088|source-only receipt accepted; retained|Two Reels Search candidates: positive suggestions/custom card and successful zero count/empty suggestions. No other safe new family established; [handoff](receipts/corpus-web-advice.md#cw6--two-remaining-reels-search-states-2026-10-13); no counts |
-| CW7 |same Web advisor|source-only effects qualification running|Trace Actor selection, Clip Search entity apply/remove, Reels suggestion application: realm/URL vs shared persistence/server writes. Determine whether useful new compositions fit user's existing safe reversible-state scope. No runtime authority or mutation granted; do not infer danger/permission from prior blanket agent exclusions |
+| CW7 |same Web advisor|source-only receipt accepted; retained|Empty-main-query Clip Search entity apply/remove is realm+tab-history only, no phrase search/shared filter persistence;3new composition candidates. Actor/Reels apply remain excluded. [Effects/recipe](receipts/corpus-web-advice.md#cw7--empty-query-clip-search-selection-boundary-2026-10-13); no counts |
 | CW-B12 |01a132a6-3de5-7b72-820f-b5853a8cc992/local, archived|cycle accepted; both critics confirm2FAIL|2newstates/2firstimages,94frames/21dimensions, frozen CP13; uib-cw-b12-0RRqDd HANDOFF/neutral-manifest; tabs closed, source read-only; numeric success separate from visual acceptance, no literal compiler conflict established |
+| CW-B13 |01a132ba-030e-7a81-be76-f4b024ab1794/local|full-cycle selected-filter batch running|CW7 narrow empty-main-query/own guest boundary; desktop multi-Director, mobile multi-Director and single Voice; qualify actual handlers/effects first. Frozen CP13, no tracked writes, no counts before completed evidence |
 | CW-B8 |Web source owner01a12b62-dbd8-7a42-8ddc-099c155d1291|accepted investigation; archived|3new states, both critics2PASS/1FAIL; initial3density failures retained separately; [review](receipts/corpus-web-responsive-review8.md);150cases total |
 | CN-B16 |01a12e0c-343c-7103-bff8-02b6d5dde8b5|source-only assessment accepted; archived|13candidates excluded as existing/unwired/internal model variants;0runtime/qualified/images; CA7 dependency released |
 | CN-B6 |01a12b45-a69a-72b2-91f2-1f937304afae|investigation accepted; archived|7families/9states/23first sheets;6content-pass/14FAIL/3scope unknown;65of68labels correct |
@@ -203,8 +204,13 @@ output directories. All images and tool originals remain in system temp, never
 agent-cleaned. Preserve unrelated after-title-spacing.png, user processes and other
 workers' runtime. Serialize actual shared input via existing source-project lanes.
 Current checkpoint/push uses exact owned paths and /tmp/ui-blueprint-master-git.lock.
-Ordinary primary navigation and pausing public auto-started content are authorized;
-selector values, collection/preferences, auth/access and production mutations are not.
+Ordinary primary navigation and pausing public auto-started content are authorized.
+CW7 qualifies one selector exception inside the user's safe reversible-state scope:
+own guest Clip Search with empty main query/initial filters; entity selection/removal
+affects only app-db/tab-history, no phrase search or shared filter persistence.
+Fresh loaded-handler/runtime qualification remains required; nonempty main query,
+Actor/Reels application, collection/preferences, auth/access and production writes
+remain excluded. Tab-history/bootstrap effects are explicit, not zero-effect claims.
 
 ### Frozen artifacts and evidence
 

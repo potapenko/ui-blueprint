@@ -1,5 +1,57 @@
 # Web source advisor handoffs
 
+## CW7 — empty-query Clip Search selection boundary, 2026-10-13
+
+Advisor turn01a132b5-475f-7281-a320-d6c61799c4c9, source-only,
+c23ef963e5be87195f80cef7173d537a5a146c74/new-banners-paywall. Route: Header/Actor;
+Phrase Filters controls/state/lookup; Clip Search input/grid/route-data; Classic
+Search discovery/history; Reels Discovery; daily-practice10 for persistence.
+Contract requires route/filter continuity. Effects below are source findings;
+three proposed compositions are QA scenarios, not new product behavior.
+
+Clip Search entity selection/removal updates ordinary app-db filters and uses
+history.pushState. With an EMPTY main query the execution branch resets results,
+viewer and playback and does not request phrase search. Filters/selected IDs have
+no persistence interceptor. This fits the user's authorized safe reversible UI
+scope in a fresh own guest tab; it is not permission for nonempty-query searches,
+account/preferences writes or a claim of zero side effects. Browser tab navigation
+history may persist in browser/session restore after Close. Public option lookup,
+normal bootstrap service storage/locale/analytics/server logs remain as before.
+
+Three candidates, runtime qualification still required:
+- Desktop Director: own empty-query/filter Clip Search tab; lookup tarantino,
+  select returned Quentin Tarantino; lookup spiel, select returned Steven Spielberg.
+  Capture multi-tag trigger/remove controls and open selected/applied picker as one
+  composed state, not separate cases per name.
+- Mobile Director: same two actual returned options through existing Filters UI;
+  selected pills before input/Clear, count wrapping/growth only when really observed.
+- Mobile Voice: own empty-filter tab, lookup arnold and select actual option;
+  single selected pill/is-single differs from multi Director. Cast is not a
+  separate case merely because names differ.
+
+No main query input, source/preferences changes or persistent suggestions-collapse
+toggle. Before and after each selection verify main query remains empty, no gate,
+results/viewer absent and only own selected IDs. Exit: remove own values via existing
+remove/pill controls, verify empty filters/results/viewer, then close exact own tab.
+Desktop draft follows CW4 input-clear/settle/close-reopen check; mobile waits pending
+lookup before Back/Close. Removal adds tab-history entries, does not erase them.
+
+Actor desktop remains excluded: selection starts search after100ms, refresh after2s,
+enables playback; qualified watch can write shared onboarding count/server statistics.
+v1/v2 capability, gates and mobile paused semantics need separate qualification.
+Reels selection remains excluded: load-feed/set-source-query writes shared model
+storage via Common Phrases offset/filter events; custom search also persists source
+query. Closing its tab cannot undo those writes; this needs additional authority.
+
+Owners: [Clip Search execution](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/ctrl.cljs:330),
+[selection](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/suggestions/view.cljs:867),
+[mobile composition](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/components/mobile_filters/view.cljs:795),
+[model](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/clip_search/model.cljs:7),
+[URL helpers](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/common/util.cljs:184),
+[Actor](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/actor_select/view.cljs:274),
+[Reels](/Users/eugenepotapenko/Projects/playphrase.me/playphraseme-site/src/cljs/playphraseme/views/reels/view.cljs:984).
+No runtime, changes or new completed cases from consultation. Source owners unchanged.
+
 ## CW6 — two remaining Reels Search states, 2026-10-13
 
 Advisor turn01a132a2-795b-7df2-8751-a58bb36e6537, source-only,
