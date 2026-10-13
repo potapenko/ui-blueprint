@@ -834,6 +834,136 @@ fn prompt_requires_anchored_control_rhythm_and_retains_coordinate_context() {
 }
 
 #[test]
+fn native_select_rows_get_anchored_spacing_without_crossing_owners() {
+    let mut b = fixture("observed");
+    let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+        panic!()
+    };
+    for node in &mut snapshot.nodes {
+        set_test_role(node, "DIV");
+        node.children.clear();
+    }
+    for (i, x, y, width, height) in [
+        (0, 0., 0., 900., 500.),
+        (2, 430., 180., 400., 50.),
+        (4, 630.828125, 189.390625, 197.921875, 33.125),
+        (6, 430., 230., 400., 50.),
+        (8, 630.828125, 238.546875, 197.921875, 33.125),
+    ] {
+        let Property::Requested {
+            state: Availability::Known {
+                value: Value::Geometry(g),
+            },
+            ..
+        } = &mut snapshot.nodes[i].properties[2]
+        else {
+            panic!()
+        };
+        g.shape = Shape::Rect(Rect {
+            x,
+            y,
+            width,
+            height,
+        });
+    }
+    for i in [4, 8] {
+        snapshot.nodes[i].native_role = Availability::Known {
+            value: Value::Text("select".into()),
+        };
+        let Property::Requested { state, .. } = &mut snapshot.nodes[i].properties[0] else {
+            panic!()
+        };
+        *state = Availability::Unknown {
+            reason: Id("not-collected".into()),
+        };
+    }
+    snapshot.nodes[0].children = [2, 6].map(|i| snapshot.nodes[i].key.clone()).to_vec();
+    snapshot.nodes[2].children = vec![snapshot.nodes[4].key.clone()];
+    snapshot.nodes[6].children = vec![snapshot.nodes[8].key.clone()];
+    let original = serde_json::to_vec(&b).unwrap();
+    let mut l = limits();
+    l.components_per_detail = 256;
+    let p = compile(&b, l).unwrap();
+    assert_eq!(serde_json::to_vec(&b).unwrap(), original);
+    let dims = data(&p, "dimensions.json");
+    let gaps = dims[0]["dimensions"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|d| d["label"] == "Repeated control clear gap")
+        .collect::<Vec<_>>();
+    assert_eq!(gaps.len(), 1);
+    assert_eq!(gaps[0]["value"], 16.03125);
+    assert_eq!(gaps[0]["anchors"][0]["component"], "N004");
+    assert_eq!(gaps[0]["anchors"][0]["edge"], "bottom");
+    assert_eq!(gaps[0]["anchors"][1]["component"], "N008");
+    assert_eq!(gaps[0]["anchors"][1]["edge"], "top");
+    assert!(!gaps[0]["evidence"].as_array().unwrap().is_empty());
+    let prompt = std::str::from_utf8(&p.files()["prompt.txt"]).unwrap();
+    assert_eq!(prompt.matches("↕ ≈16 CSS px").count(), 1);
+    assert!(prompt.contains("WIDTH ≈198 CSS px") && prompt.contains("HEIGHT ≈33 CSS px"));
+    let mut exact = l;
+    exact.max_output_bytes = p.files().values().map(Vec::len).sum();
+    assert!(compile(&b, exact).is_ok());
+    exact.max_output_bytes -= 1;
+    assert_eq!(compile(&b, exact).unwrap_err(), ExportError::OutputLimit);
+    for variant in [
+        "unknown",
+        "space",
+        "button",
+        "different-owner",
+        "intervening-row",
+    ] {
+        let mut b = b.clone();
+        let SourceInput::Observed { snapshot, .. } = &mut b.views[0].source else {
+            panic!()
+        };
+        match variant {
+            "unknown" | "space" => {
+                let Property::Requested { state, .. } = &mut snapshot.nodes[8].properties[2] else {
+                    panic!()
+                };
+                if variant == "unknown" {
+                    *state = Availability::Unknown {
+                        reason: Id("not-collected".into()),
+                    };
+                } else {
+                    let Availability::Known {
+                        value: Value::Geometry(g),
+                    } = state
+                    else {
+                        panic!()
+                    };
+                    g.coordinate_space.id = Id("unrelated".into());
+                }
+            }
+            "button" => set_test_role(&mut snapshot.nodes[8], "BUTTON"),
+            "different-owner" => snapshot.nodes[0].children.pop().map(|_| ()).unwrap(),
+            "intervening-row" => {
+                let key = snapshot.nodes[10].key.clone();
+                snapshot.nodes[0].children.insert(1, key);
+            }
+            _ => unreachable!(),
+        }
+        let p = compile(&b, l).unwrap();
+        assert!(
+            !data(&p, "dimensions.json")[0]["dimensions"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|d| d["label"] == "Repeated control clear gap"),
+            "{variant}"
+        );
+        assert!(
+            !std::str::from_utf8(&p.files()["prompt.txt"])
+                .unwrap()
+                .contains("↕ ≈16 CSS px"),
+            "{variant}"
+        );
+    }
+}
+
+#[test]
 fn visible_text_accessible_name_and_reviewed_draft_never_publish_raw_values() {
     let mut brief = fixture("observed");
     brief.views[0].state =

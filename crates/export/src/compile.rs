@@ -72,7 +72,7 @@ pub fn compile(brief: &DrawingBrief, limits: ExportLimits) -> Result<Package> {
                 sv.not_depicted.push("Pixels and unreviewed text are excluded; stored observation, not a new measurement".into());
                 sv.unknowns.push("Unavailable properties retain unknown, unsupported, redacted or not_requested. Padding, radius and baseline are unknown unless explicitly reported.".into());
                 let mut dimensions = observed::dimensions(s, &mut aliases)?;
-                popup_dimensions(s, &sv, &mut aliases, &mut dimensions)?;
+                control_dimensions(s, &sv, &mut aliases, &mut dimensions)?;
                 (dimensions, vec![])
             }
         };
@@ -1560,12 +1560,13 @@ fn clipped_edges(source: &SourceInput) -> Vec<Vec<Edge>> {
         })
         .collect()
 }
-fn popup_dimensions(
+fn control_dimensions(
     source: &Snapshot,
     view: &SceneView,
     aliases: &mut Aliases,
     out: &mut Vec<Dimension>,
 ) -> Result<()> {
+    let mut pairs = Vec::new();
     for dialog in 0..view.components.len() {
         if !component_role(&view.components[dialog]).eq_ignore_ascii_case("dialog") {
             continue;
@@ -1590,7 +1591,7 @@ fn popup_dimensions(
             }) else {
                 continue;
             };
-            for (a, b, first, last, label) in [
+            pairs.extend([
                 (dialog, input, Edge::Left, Edge::Left, "Measured left inset"),
                 (
                     input,
@@ -1599,106 +1600,149 @@ fn popup_dimensions(
                     Edge::Top,
                     "Input to first control gap",
                 ),
-            ] {
-                if out.iter().any(|d| {
-                    d.anchors[0].component == view.components[a].id
-                        && d.anchors[1].component == view.components[b].id
-                        && d.anchors[0].edge == first
-                        && d.anchors[1].edge == last
-                        && d.anchors
-                            .iter()
-                            .all(|x| x.frame_kind == FrameKind::LayoutBounds)
-                }) {
-                    continue;
+            ]);
+        }
+    }
+
+    // Append only missing relations, preserving all earlier measurement IDs.
+    let select = |i: usize| {
+        matches!(
+            component_role(&view.components[i])
+                .to_ascii_lowercase()
+                .as_str(),
+            "select" | "combobox"
+        ) && !input_control(&view.components[i])
+    };
+    for parent in 0..view.components.len() {
+        let rows = child_indices(view, parent)
+            .into_iter()
+            .map(|i| {
+                if select(i) {
+                    return Some(i);
                 }
-                let layout = |i: usize| {
-                    source.nodes[i]
-                        .properties
-                        .iter()
-                        .find_map(|p| match p.known() {
-                            Some(Value::Geometry(g))
-                                if p.field() == Field::LayoutBounds
-                                    && g.frame_kind == FrameKind::LayoutBounds =>
-                            {
-                                Some(g.as_ref())
-                            }
-                            _ => None,
-                        })
-                };
-                let (Some(g), Some(h)) = (layout(a), layout(b)) else {
-                    continue;
-                };
-                if g.coordinate_space != h.coordinate_space
-                    || g.coordinate_space.origin != Origin::TopLeft
-                    || source.nodes[a].surface != source.nodes[b].surface
-                {
-                    continue;
-                }
-                let horizontal = matches!(first, Edge::Left | Edge::Right);
-                let query = GeometryQuery {
-                    id: Id("export-popup-spacing".into()),
-                    scope_id: source.context.scope_id.clone(),
-                    targets: vec![source.nodes[a].key.clone(), source.nodes[b].key.clone()],
-                    operation: GeometryRelation::Gap,
-                    anchors: [(a, first), (b, last)]
-                        .map(|(i, edge)| Anchor {
-                            element: source.nodes[i].key.clone(),
-                            frame_kind: FrameKind::LayoutBounds,
-                            coordinate_space: g.coordinate_space.clone(),
-                            fraction: if matches!(edge, Edge::Right | Edge::Bottom) {
-                                1.0
-                            } else {
-                                0.0
-                            },
-                            axis: Id(if horizontal { "x" } else { "y" }.into()),
-                        })
-                        .to_vec(),
-                    quantity_kind: QuantityKind::Length,
-                    units: g.coordinate_space.units,
-                    applies_when: ContextConditions {
-                        platform: None,
-                        input_mode: None,
-                        text_scale: None,
-                    },
-                };
-                let context = EvaluationContext {
-                    space: &g.coordinate_space,
-                    transforms: &[],
-                    conditions: None,
-                };
-                let (value, unknown_reason, evidence) =
-                    match engine::measure_query(source, &query, &context)
-                        .map_err(|_| E::InvalidGeometry)?
-                    {
-                        MeasurementResult::Known { measurement } => {
-                            let Value::Quantity { amount, .. } = measurement.value else {
-                                return Err(E::InvalidGeometry);
-                            };
-                            (Some(amount), None, measurement.evidence)
-                        }
-                        MeasurementResult::Unknown { reason, evidence } => {
-                            (None, Some(reason.as_str().into()), evidence)
-                        }
-                    };
-                out.push(Dimension {
-                    id: format!("M{:04}", out.len() + 1),
-                    label: label.into(),
-                    anchors: [(a, first), (b, last)].map(|(i, edge)| DimensionAnchor {
-                        component: view.components[i].id.clone(),
-                        frame_kind: FrameKind::LayoutBounds,
-                        space: aliases.space(&g.coordinate_space),
-                        edge,
-                    }),
-                    value,
-                    units: g.coordinate_space.units,
-                    source_kind: SourceKind::Observed,
-                    evidence: evidence.iter().map(|e| aliases.evidence(e)).collect(),
-                    requirement_ref: None,
-                    unknown_reason,
-                    check_tolerance: None,
-                });
+                let children = child_indices(view, i);
+                let mut controls = children.into_iter().filter(|&j| select(j));
+                let first = controls.next();
+                first.filter(|_| controls.next().is_none())
+            })
+            .collect::<Vec<_>>();
+        for pair in rows.windows(2) {
+            let [Some(a), Some(b)] = pair else {
+                continue;
+            };
+            if same_frame(&view.components[*a], &view.components[*b])
+                && matches!((rect(&view.components[*a]), rect(&view.components[*b])),
+                    (Some(r), Some(q)) if r.x == q.x && r.width == q.width && q.y > r.y)
+            {
+                pairs.push((
+                    *a,
+                    *b,
+                    Edge::Bottom,
+                    Edge::Top,
+                    "Repeated control clear gap",
+                ));
             }
         }
+    }
+    for (a, b, first, last, label) in pairs {
+        if out.iter().any(|d| {
+            d.anchors[0].component == view.components[a].id
+                && d.anchors[1].component == view.components[b].id
+                && d.anchors[0].edge == first
+                && d.anchors[1].edge == last
+                && d.anchors
+                    .iter()
+                    .all(|x| x.frame_kind == FrameKind::LayoutBounds)
+        }) {
+            continue;
+        }
+        let layout = |i: usize| {
+            source.nodes[i]
+                .properties
+                .iter()
+                .find_map(|p| match p.known() {
+                    Some(Value::Geometry(g))
+                        if p.field() == Field::LayoutBounds
+                            && g.frame_kind == FrameKind::LayoutBounds =>
+                    {
+                        Some(g.as_ref())
+                    }
+                    _ => None,
+                })
+        };
+        let (Some(g), Some(h)) = (layout(a), layout(b)) else {
+            continue;
+        };
+        if g.coordinate_space != h.coordinate_space
+            || g.coordinate_space.origin != Origin::TopLeft
+            || source.nodes[a].surface != source.nodes[b].surface
+        {
+            continue;
+        }
+        let horizontal = matches!(first, Edge::Left | Edge::Right);
+        let query = GeometryQuery {
+            id: Id("export-popup-spacing".into()),
+            scope_id: source.context.scope_id.clone(),
+            targets: vec![source.nodes[a].key.clone(), source.nodes[b].key.clone()],
+            operation: GeometryRelation::Gap,
+            anchors: [(a, first), (b, last)]
+                .map(|(i, edge)| Anchor {
+                    element: source.nodes[i].key.clone(),
+                    frame_kind: FrameKind::LayoutBounds,
+                    coordinate_space: g.coordinate_space.clone(),
+                    fraction: if matches!(edge, Edge::Right | Edge::Bottom) {
+                        1.0
+                    } else {
+                        0.0
+                    },
+                    axis: Id(if horizontal { "x" } else { "y" }.into()),
+                })
+                .to_vec(),
+            quantity_kind: QuantityKind::Length,
+            units: g.coordinate_space.units,
+            applies_when: ContextConditions {
+                platform: None,
+                input_mode: None,
+                text_scale: None,
+            },
+        };
+        let context = EvaluationContext {
+            space: &g.coordinate_space,
+            transforms: &[],
+            conditions: None,
+        };
+        let (value, unknown_reason, evidence) = match engine::measure_query(
+            source, &query, &context,
+        )
+        .map_err(|_| E::InvalidGeometry)?
+        {
+            MeasurementResult::Known { measurement } => {
+                let Value::Quantity { amount, .. } = measurement.value else {
+                    return Err(E::InvalidGeometry);
+                };
+                (Some(amount), None, measurement.evidence)
+            }
+            MeasurementResult::Unknown { reason, evidence } => {
+                (None, Some(reason.as_str().into()), evidence)
+            }
+        };
+        out.push(Dimension {
+            id: format!("M{:04}", out.len() + 1),
+            label: label.into(),
+            anchors: [(a, first), (b, last)].map(|(i, edge)| DimensionAnchor {
+                component: view.components[i].id.clone(),
+                frame_kind: FrameKind::LayoutBounds,
+                space: aliases.space(&g.coordinate_space),
+                edge,
+            }),
+            value,
+            units: g.coordinate_space.units,
+            source_kind: SourceKind::Observed,
+            evidence: evidence.iter().map(|e| aliases.evidence(e)).collect(),
+            requirement_ref: None,
+            unknown_reason,
+            check_tolerance: None,
+        });
     }
     Ok(())
 }
