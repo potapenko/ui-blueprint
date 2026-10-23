@@ -67,9 +67,9 @@ transient nonimage artifacts stay there until immediate consumers finish.
 
 | Packet | Class / consumer | Owner | Status / dependency |
 | --- | --- | --- | --- |
-| KC-LIB | shipping_product: Compose collector → Rust → skill | finite library worker, pending dispatch | ready; must first publish integration API to root |
-| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | prepare ownership/runtime; depends on KC-LIB API and candidate |
-| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | unassigned | depends on saved candidate and runtime evidence |
+| KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | repair pending: independent F1/F2; candidate delivered |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | waiting_evidence: KC-LIB API; Desktop also waiting_resource (active app chat) |
+| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | running fresh read-only review of907b9b2; integrated live evidence pending |
 
 Economy basis: one utility owner and existing consumer owner retain their own
 project context; first deliver one shared probe path, expand only for a concrete
@@ -77,7 +77,54 @@ consumer failure. Root owns this registry only. Utility worker is sole source an
 Git writer in this repo after root's initial coordination checkpoint; subsequent
 root commits wait for explicit lease release. App owner serializes its own index.
 Runtime physical-input lane belongs to KC-APP; utility tests remain headless.
-Next: dispatch KC-LIB and KC-APP, relay minimal shared API, accept finite receipts.
+KC-APP preparation checkpoint `64535c4` in its master: only
+app-mobile/build.gradle.kts and app-mobile/BLUEPRINT.md changed; explicit
+-PplayphrasemeBlueprintSources adds external collector sources to debug only.
+Diff whitespace checked; compile/runtime not yet verified (collector not ready).
+F12 is the proposed explicit Android dev trigger, no server/broadcast/new UI.
+KC-LIB early API handed off: dev.uiblueprint.compose ProbeSession / ProbeRequest,
+Modifier.uiBlueprintMarker, UI-thread one-shot capture → bounded UTF-8 raw file →
+uiblueprint import-compose → existing Rust commands. Source implementation pending.
+KC-APP preparation receipt: branch master. app-desktop is untracked
+and owned by active chat `01a1691a-c072-7500-b304-a53377be2769` (Plan Kotlin port of
+Swift app); root Gradle/spec/docs are also modified. Android app-mobile is clean.
+No app/emulator/adb process observed, but existing owner's runtime lease is not
+confirmed released. Do not touch its saved app. Recheck this temporary ownership
+after next library milestone or within three minutes. Named Kotlin chat may proceed
+with Android after API handoff if no shared configuration writes are necessary.
+Live Android repro delivered by KC-APP: UI1.9.4/density2.625, F12 on UI thread,
+Scaffold screen root and child Column content both marked; selecting only screen
+and content refuses outside_root. Library owner identified parentLayoutCoordinates
+skipping modifier coordinators; repair will use public parentCoordinates exact
+identity chain with bounded traversal. No app workaround or weakened root scope.
+Ordinary Android debug APK and release compilation without collector passed;
+opt-in build runs on own headless emulator-5580. Live acceptance remains open.
+Library candidate saved `907b9b2c87fcb0475a64da939b4eaf8ec9358beb`; author reports
+38 focused Rust tests, clippy, Kotlin -Werror/lifecycle harness and actual Kotlin
+encoder→Rust numerical path passed. Source ancestry repair relayed to consumer.
+Current contracts: COMPOSE@1, CLI@21, AGENT-SKILL@5, MAC-DISTRIBUTION@4, registry61;
+root read Compose full closure plus ANALYSIS/TYPES/VALIDATION, saved diff/geometry
+and CACHE. New flat manifest3 includes Kotlin source assets; legacy1/2 protected.
+Matching unsigned combined candidate `23db1093cd328e5ffda9192f1a6cf839b0c89124`
+delivered at `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-compose-bundle-nz_0_b4q`;
+release candidate `.../T/uib-compose-release.8yew9c`, build `.../T/uib-compose-build.kOP4A8`.
+Root owns these nonimage transients until consumer/reviewer finish; images excluded.
+Actual package temporary-install/run/remove and packaged Kotlin→Rust100dp passed
+per author. No global install/publication. Author tests are not review.
+Fresh reviewer owns read-only identity/privacy/compatibility assessment of saved
+candidate; initial observations precede author receipt, then reconciliation.
+Independent initial observations recorded before author receipt. Reviewer reproduced:
+F1/P2 root density2.625/fontScale1.375 omitted from canonical metadata when root
+bounds=null despite source metadata availability; F2/P1 valid old manifest2/6-file
+skill installation cannot update to manifest3/7-file candidate (invalid receipt
+length in install.sh). No corruption; old/new-inventory test absent. KC-LIB owns
+both fixes; current candidate is not accepted. Same reviewer rechecks deltas.
+Android Phone scroll and Tablet reflow raw pairs obtained with stable sessions;
+consumer has matching23db109 CLI/skill for real Rust workflow. Desktop still waits
+for active application development owner, last observed migrating project rules.
+Root takes short coordination Git lane after library release; then returns it to
+KC-LIB repair. Next: repair F1/F2, continue live Android Rust proof, recheck Desktop,
+then same-reviewer reconciliation and integrated acceptance.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
