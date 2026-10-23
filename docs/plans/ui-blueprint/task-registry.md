@@ -68,8 +68,8 @@ transient nonimage artifacts stay there until immediate consumers finish.
 | Packet | Class / consumer | Owner | Status / dependency |
 | --- | --- | --- | --- |
 | KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | acceptedbeeab15: source/package/repaired boundaries independently verified |
-| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android710aed5 F12 repair review; Desktop source conflict resolved, implementing |
-| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | running fresh read-only review of907b9b2; integrated live evidence pending |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android710aed5 accepted; Desktop implementation/live verification running |
+| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | librarybeeab15 and Android710aed5 accepted; Desktop review awaits saved handoff |
 
 Economy basis: one utility owner and existing consumer owner retain their own
 project context; first deliver one shared probe path, expand only for a concrete
@@ -160,8 +160,17 @@ only clean app-desktop integration files and its diagnostic doc, rechecking for
 actual overlapping edits/leases. Preserve other docs/root config/scripts and
 foreignPID7030; own dev process/temp runtime only, physical-input lane only when
 actually free. No need to await entire donor port or disturb existing app.
-Next: finish Android scoped review, Desktop integration/live evidence, same-reviewer
-Desktop acceptance and final scoped checkpoints. No user decision or goal pause.
+KC-REVIEW final Android verdict: accept710aed5 withbeeab15. Independent bytecode
+inspection confirms release no142/no collector/write refs; debug alone recognizes
+F12. New9node raw reimport equals saved canonical; earlier evidence applies.
+Desktop own source sets compile; established runtime guard acquired by KC-APP.
+Plain JVM app could not be selected by Computer Use (Invalid app); owner is
+packaging an explicit separate dev .app target for reliable own-PID addressing.
+Normal main/JAR/distribution remain no-op. Clean COMPOSE.md gained permanent routes
+to both app-local BLUEPRINT recipes and honest matching-bundle/global-install
+boundary. No global skill update/publication is authorized or claimed.
+Next: Desktop live evidence, same-reviewer Desktop acceptance, transient nonimage
+cleanup after consumers and final scoped checkpoint. No user decision or goal pause.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
