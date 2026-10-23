@@ -1,5 +1,27 @@
 # Единый реестр задач
 
+## Global Compose installation — completed, 2026-10-23
+
+Direct user authorization: «Да, обнови теперь глобально установленный skill и CLI,
+чтобы Kotlin-чат сразу использовал новую поддержку. Проверь, что он подхватывает
+именно обновлённую версию.» This bounded follow-up does not resume the closed goal.
+Existing installer installed the verified local candidate `0.1.0-compose.repair1`,
+source `beeab158c66a864d0951902c992c949436030dc1`, under the existing
+`/Users/eugenepotapenko/.local/share/uiblueprint/versions/` owner; previous versions
+remain. CLI links in `.local/bin` and managed `.agents/skills/ui-blueprint` resolve
+through the same `current` version. Shell profiles were not modified.
+The stale `.codex/skills/ui-blueprint` directory exactly matched committed source
+`fa7afc027358ab1d8d2168c531275c79dde33e95`; it is now an alias to the managed
+`.agents` skill, preventing divergent instructions. Its six-file temporary backup
+was verified and removed after consumer confirmation; no images were present.
+Kotlin consumer `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` independently confirmed
+fresh-turn discovery metadata names Kotlin Compose Desktop/Android, both skill
+paths resolve to the new installed version,24bundle receipt hashes match,
+Compose reference/three sources exist, `import-compose` is in CLI help and the
+installed validator/measurement smoke returns valid/0 and8css_px/0. It will resolve
+the installed symlink for subsequent work instead of using old temporary bundles.
+No app launch, product code change, additional agents, publication or new goal.
+
 ## Kotlin Compose — active goal, 2026-10-23
 
 **Status: COMPLETE — accepted Desktop/macOS and Android Phone/Tablet scope.**
