@@ -68,8 +68,8 @@ transient nonimage artifacts stay there until immediate consumers finish.
 | Packet | Class / consumer | Owner | Status / dependency |
 | --- | --- | --- | --- |
 | KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | acceptedbeeab15: source/package/repaired boundaries independently verified |
-| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android710aed5 accepted; Desktop implementation/live verification running |
-| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | librarybeeab15 and Android710aed5 accepted; Desktop review awaits saved handoff |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android710aed5 accepted; Desktopcb873c4 ready for final review |
+| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | librarybeeab15/Android710aed5 accepted; Desktopcb873c4 evidence reconciliation running |
 
 Economy basis: one utility owner and existing consumer owner retain their own
 project context; first deliver one shared probe path, expand only for a concrete
@@ -182,8 +182,24 @@ exclusion and smallest fresh launch/Play/Pause check under current app routes.
 Root read updated app AGENTS→spec-root→Spec First/index→bootstrap2/transfer3,
 KOTLIN/COMPOSE and build/tooling/runtime/lane/release closure. Broad donor port,
 source feature siblings and its independent goal remain excluded.
-Next: saved Desktop source/runtime handoff, same-reviewer final check, consumed
-nonimage cleanup and checkpoint. No user decision or goal pause.
+KC-APP terminal handoff: Desktop sourcecb873c4. Evidence root
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphraseme-blueprint-desktop-j16qrq3n`.
+On/off declared dev app/JAR+classes in on-menu/off-final; canonical normal
+createDistributable app/JAR+classes in normal. Exact opt-in JAR SHA256
+ba81a44bfb8a6ec9200cdfae2768116f439ebb45c5ec4ea41f98b2b5efce52ef; actual CodeSource
+recorded.10live marker source files and before/after/queries/diffs retained.
+Normal package built with opt-in property still excludes collector/activation/menu;
+author's fresh launch/Next/Play/Pause passed, held700ms. Own processes stopped,
+shared desktop guard released, foreign7030 preserved. All images retained.
+Same reviewer inspected Desktop source before receiving author/evidence receipt,
+found no source blocker and now reconciles exact artifacts/runtime and geometry.
+Library owner cleans only consumed old bundles/releases/build scratch; final
+repair-bundle-pu4t2tvp and repair-release.K5vrBl retained as deliberate matching
+user/development deliverables, not auxiliary logs. Reviewer cleans its own
+nonimage fixtures after verdict. KC-APP must retain both evidence roots until
+review acceptance, then remove only own nonimages; image/icon dirs remain.
+Next: final Desktop verdict, KC-APP evidence cleanup release, root terminal
+checkpoint and goal completion only if mandatory criteria pass.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
