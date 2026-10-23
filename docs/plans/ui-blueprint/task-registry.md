@@ -67,8 +67,8 @@ transient nonimage artifacts stay there until immediate consumers finish.
 
 | Packet | Class / consumer | Owner | Status / dependency |
 | --- | --- | --- | --- |
-| KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | candidatebeeab15 delivered; F1/F2 independently rechecked; package review pending |
-| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android83e3b22 live proof; F12 release-seam repair; Desktop waiting_resource |
+| KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | acceptedbeeab15: source/package/repaired boundaries independently verified |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android710aed5 F12 repair review; Desktop source conflict resolved, implementing |
 | KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | running fresh read-only review of907b9b2; integrated live evidence pending |
 
 Economy basis: one utility owner and existing consumer owner retain their own
@@ -147,8 +147,21 @@ root read full current KOTLIN/COMPOSE/development and assigned narrow repair.
 Reviewer received app author evidence only after initial source observations.
 Desktop still has untracked build.gradle.kts/Main.kt/DesktopPlaybackScreen.kt owned
 by active app chat, no checkpoint/handoff; its packaged runtime PID7030 stays owned.
-Next: app F12 repair and same-reviewer acceptance; recheck Desktop exact ownership,
-continue its live integration when released. No user decision or goal pause.
+KC-REVIEW accepts library/packagebeeab15 after final actual bundle/archive checks;
+reimported all7Android records byte-identical, recomputed24dp/16dp and−213.7142857dp,
+confirmed58AXnodes exact attributes, Tablet focus, representative retained visuals.
+KC-APP F12 repair710aed5: recognition only in opt-in debug; author compiled variants,
+checked bytecode142 debug-only and0releasecollectorclasses; one new9markerPhone
+capture imported/validatedbeeab15. Same reviewer handles final source/artifact check.
+Desktop former overlap resolved: all3integrationfiles saved/clean at11d839a.
+Other chat current work is workflow/scripts/Codex actions. Root reconciled an
+absence-of-blanket-handoff wait with global actual-resource rule: KC-APP may edit
+only clean app-desktop integration files and its diagnostic doc, rechecking for
+actual overlapping edits/leases. Preserve other docs/root config/scripts and
+foreignPID7030; own dev process/temp runtime only, physical-input lane only when
+actually free. No need to await entire donor port or disturb existing app.
+Next: finish Android scoped review, Desktop integration/live evidence, same-reviewer
+Desktop acceptance and final scoped checkpoints. No user decision or goal pause.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
