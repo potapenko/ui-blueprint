@@ -67,8 +67,8 @@ transient nonimage artifacts stay there until immediate consumers finish.
 
 | Packet | Class / consumer | Owner | Status / dependency |
 | --- | --- | --- | --- |
-| KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | repair pending: independent F1/F2; candidate delivered |
-| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | waiting_evidence: KC-LIB API; Desktop also waiting_resource (active app chat) |
+| KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | candidatebeeab15 delivered; F1/F2 independently rechecked; package review pending |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android83e3b22 live proof; F12 release-seam repair; Desktop waiting_resource |
 | KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | running fresh read-only review of907b9b2; integrated live evidence pending |
 
 Economy basis: one utility owner and existing consumer owner retain their own
@@ -122,9 +122,33 @@ both fixes; current candidate is not accepted. Same reviewer rechecks deltas.
 Android Phone scroll and Tablet reflow raw pairs obtained with stable sessions;
 consumer has matching23db109 CLI/skill for real Rust workflow. Desktop still waits
 for active application development owner, last observed migrating project rules.
-Root takes short coordination Git lane after library release; then returns it to
-KC-LIB repair. Next: repair F1/F2, continue live Android Rust proof, recheck Desktop,
-then same-reviewer reconciliation and integrated acceptance.
+Repairs saved `beeab158c66a864d0951902c992c949436030dc1`; MAC-DISTRIBUTION@5,
+registry62. Same reviewer independently reproduced F1 fixed and exact original
+legacy→new→tamper-refusal→rollback→re-update→foreign-file-refusal→uninstall success.
+Final matching bundle `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-compose-repair-bundle-pu4t2tvp`;
+release `.../T/uib-compose-repair-release.K5vrBl`. Kotlin, COMPOSE.md and skill bytes
+unchanged from23db; ordinary canonical import bytes unchanged. Library released
+Git lane. Root owns old/new package/build nonimage cleanup after consumers finish.
+
+KC-APP Android checkpoint83e3b22 (plus64535c4) reports seven actual Phone/Tablet
+captures through packaged skill/CLI, Tablet gap24dp→16dp after compact reflow,
+Phone video scroll dy−213.714dp, old remounted video key unknown/target_unresolved.
+Same session/surface generations retained where applicable. Probe-off/on58AXnodes
+identical on both; Tablet Tab focus same; app-area PNG RGB identical (differences
+only system rows). Playback pause423ms preserved across Tablet resize. Release
+with opt-in property has0collectorclasses. Runtime artifacts retained at
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphraseme-blueprint-android-uvonzzxh`;
+cleanup owner KC-APP after review, all images retained. Own emulators/adb stopped,
+original dimensions restored, transferred app-private capture files removed.
+App source review after fresh app contract traversal found no layout/playback or
+privacy defect, but current KOTLIN.md forbids diagnostic activation literals in
+release. Main-source F12 recognition requires moving into existing debug seam;
+root read full current KOTLIN/COMPOSE/development and assigned narrow repair.
+Reviewer received app author evidence only after initial source observations.
+Desktop still has untracked build.gradle.kts/Main.kt/DesktopPlaybackScreen.kt owned
+by active app chat, no checkpoint/handoff; its packaged runtime PID7030 stays owned.
+Next: app F12 repair and same-reviewer acceptance; recheck Desktop exact ownership,
+continue its live integration when released. No user decision or goal pause.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
