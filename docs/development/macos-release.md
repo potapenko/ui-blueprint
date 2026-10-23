@@ -42,6 +42,13 @@ accepts legacy candidate-1 archives. `SHA256SUMS` covers both archives, the rend
 installer and formula. The CLI archive and Homebrew installation remain unchanged.
 
 Existing files cannot be overwritten. `release.json` is the last completion marker.
+For an inventory-changing update, run the new candidate's installer. To roll back
+to an already installed version, use that new installer with `--version OLD_VERSION`
+and the same prefix (omit `--local-release` for this selection). It verifies the
+recorded CLI/skill inventory and hashes before switching. The old shipped installer
+cannot be retroactively made aware of newer inventories. Missing/incomplete selected
+versions retain the matching-installer download path.
+
 Keep a selected candidate only for its pending owner review; remove run-owned
 non-image candidates after acceptance/discard. Never clean up retained images.
 

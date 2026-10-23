@@ -250,9 +250,15 @@ fn node(
         declaration("environment", Value::Text("instrumented_debug".into())),
         declaration("request_id", Value::Text(p.request_id.0.clone())),
     ];
-    let state = if let Some(b) = &n.bounds {
+    // Root Density was collected independently, even when its rectangle is unknown.
+    if n.marker_id == p.root_marker_id {
+        declarations.push(declaration("density", Value::Number(p.density)));
+        declarations.push(declaration("font_scale", Value::Number(p.font_scale)));
+    } else if let Some(b) = &n.bounds {
         declarations.push(declaration("density", Value::Number(b.density)));
         declarations.push(declaration("font_scale", Value::Number(b.font_scale)));
+    }
+    let state = if let Some(b) = &n.bounds {
         let mut transform_evidence = evidence.clone();
         transform_evidence.method = id("Compose-root-Density-px-to-dp");
         transform_evidence.provenance = Provenance::Derived;

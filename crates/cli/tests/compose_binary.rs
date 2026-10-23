@@ -294,3 +294,48 @@ fn compose_bounds_and_import_are_prepublication() {
         assert!(failed.stdout.is_empty());
     }
 }
+
+#[test]
+fn compose_unknown_root_retains_independent_density_and_font_scale() {
+    let c = Case::new();
+    let mut p = probe();
+    p["density"] = json!(2.625);
+    p["font_scale"] = json!(1.375);
+    p["nodes"][0]["bounds"] = Value::Null;
+    p["nodes"][1]["bounds"]["font_scale"] = json!(1.0);
+    c.save("raw", &p);
+    let s = snapshot(&c.import());
+    let number = |node: &Node, name: &str| {
+        let declaration = node
+            .source_declarations
+            .iter()
+            .find(|d| d.name.0 == name)
+            .unwrap();
+        let Availability::Known {
+            value: uiblueprint_schema::model::Value::Number(n),
+        } = declaration.state
+        else {
+            panic!("known independent source fact")
+        };
+        n
+    };
+    assert_eq!(number(&s.nodes[0], "density"), 2.625);
+    assert_eq!(number(&s.nodes[0], "font_scale"), 1.375);
+    assert_eq!(number(&s.nodes[1], "density"), 2.0);
+    assert_eq!(number(&s.nodes[1], "font_scale"), 1.0);
+    assert!(matches!(
+        s.nodes[0].properties[0],
+        Property::Requested {
+            state: Availability::Unknown { .. },
+            ..
+        }
+    ));
+    let Some(uiblueprint_schema::model::Value::Geometry(g)) = s.nodes[1].properties[0].known()
+    else {
+        panic!("child geometry")
+    };
+    let TransformState::Known { transform } = &g.transform else {
+        panic!("density transform")
+    };
+    assert_eq!(transform.affine[0], 1.0 / 2.625);
+}

@@ -19,6 +19,7 @@ LOCK=''
 NEW_LINKS=''
 NEW_SKILL_LINK=false
 NEW_SKILL_RECORD=false
+REUSE_INSTALLED=false
 
 die() { printf 'uiblueprint: %s\n' "$*" >&2; exit 1; }
 exists() { [ -e "$1" ] || [ -L "$1" ]; }
@@ -144,7 +145,14 @@ download() {
     --connect-timeout 15 --max-time 300 --output "$2" "$1" || die 'download failed; active version unchanged'
 }
 
-if [ "$UNINSTALL" = false ] && [ "$SELECTED" != "$VERSION" ]; then
+# A current installer can safely roll back across inventory revisions without
+# executing old installer code that cannot recognize the newer active version.
+if [ "$UNINSTALL" = false ] && [ "$SELECTED" != "$VERSION" ] && exists "$ROOT/versions/$SELECTED"; then
+  if [ -z "$SKILL_DIR" ] || exists "$ROOT/versions/$SELECTED/skill"; then
+    REUSE_INSTALLED=true
+  fi
+fi
+if [ "$UNINSTALL" = false ] && [ "$SELECTED" != "$VERSION" ] && [ "$REUSE_INSTALLED" = false ]; then
   STAGE=$(mktemp -d "${TMPDIR:-/tmp}/uiblueprint-install.XXXXXX")
   download "$RELEASES/v$SELECTED/install.sh" "$STAGE/install.sh"
   grep -Fxq "VERSION='$SELECTED'" "$STAGE/install.sh" || die 'downloaded installer version mismatch'
@@ -189,18 +197,39 @@ if exists "$ROOT/current"; then
   [ -d "$ROOT/$ACTIVE" ] && [ ! -L "$ROOT/$ACTIVE" ] || die 'current version is missing or a symlink'
 fi
 
+# Only formats emitted by our distribution recipe are admitted. The manifest is
+# itself in the hashed receipt; its format selects a closed inventory, never paths.
+bundle_format() {
+  [ -f "$1/distribution-manifest.json" ] && [ ! -L "$1/distribution-manifest.json" ] || die 'missing regular distribution manifest'
+  recorded_format=$(sed -n 's/^  "format": "\(ui-blueprint-local-[123]\)",$/\1/p' "$1/distribution-manifest.json")
+  case "$recorded_format" in ui-blueprint-local-1|ui-blueprint-local-2|ui-blueprint-local-3) ;; *) die 'invalid distribution format';; esac
+  printf '%s\n' "$recorded_format"
+}
+bundle_inventory() {
+  case "$1" in
+    ui-blueprint-local-1) printf '%s\n' "$FILES" | grep -Ev '^(ComposeMarker.kt|ProbeSession.kt|ProbeJson.kt|COMPOSE.md|web-geometry.cjs|WEB-FIRST-USE.md)$' ;;
+    ui-blueprint-local-2) printf '%s\n' "$FILES" | grep -Ev '^(ComposeMarker.kt|ProbeSession.kt|ProbeJson.kt|COMPOSE.md)$' ;;
+    ui-blueprint-local-3) printf '%s\n' "$FILES" ;;
+    *) die 'invalid distribution format' ;;
+  esac
+}
 verify_skill() {
   skill_folder=$1
+  case "$2" in
+    ui-blueprint-local-1|ui-blueprint-local-2) VERIFIED_SKILL_FILES=$(printf '%s\n' "$SKILL_FILES" | grep -Fxv 'references/compose.md') ;;
+    ui-blueprint-local-3) VERIFIED_SKILL_FILES=$SKILL_FILES ;;
+    *) die 'invalid skill distribution format' ;;
+  esac
   skill_receipt=$skill_folder/.skill-sha256
   [ -d "$skill_folder" ] && [ ! -L "$skill_folder" ] || die 'invalid skill directory'
   for skill_subdir in agents references; do
     [ -d "$skill_folder/$skill_subdir" ] && [ ! -L "$skill_folder/$skill_subdir" ] || die 'invalid skill subdirectory'
   done
   [ -f "$skill_receipt" ] && [ ! -L "$skill_receipt" ] || die 'missing skill receipt'
-  skill_count=$(printf '%s\n' "$SKILL_FILES" | wc -l | tr -d ' ')
+  skill_count=$(printf '%s\n' "$VERIFIED_SKILL_FILES" | wc -l | tr -d ' ')
   [ "$(wc -l < "$skill_receipt" | tr -d ' ')" -eq "$skill_count" ] || die 'invalid skill receipt length'
   grep -Eqv '^[0-9a-f]{64}  [A-Za-z0-9._/-]+$' "$skill_receipt" && die 'invalid skill receipt entry'
-  for skill_file in $SKILL_FILES; do
+  for skill_file in $VERIFIED_SKILL_FILES; do
     [ -f "$skill_folder/$skill_file" ] && [ ! -L "$skill_folder/$skill_file" ] || die 'missing regular skill file'
     [ "$(stat -f '%Lp' "$skill_folder/$skill_file")" = 644 ] || die 'changed skill file permissions'
     [ "$(awk -v name="$skill_file" '$2 == name { count++ } END { print count+0 }' "$skill_receipt")" -eq 1 ] || die 'invalid skill receipt inventory'
@@ -214,10 +243,12 @@ verify_bundle() {
   receipt=$folder/.install-sha256
   [ -d "$folder" ] && [ ! -L "$folder" ] || die 'invalid version directory'
   [ -f "$receipt" ] && [ ! -L "$receipt" ] || die 'missing regular install receipt'
-  expected=$(printf '%s\n' "$FILES" | wc -l | tr -d ' ')
+  recorded_bundle_format=$(bundle_format "$folder")
+  VERIFIED_FILES=$(bundle_inventory "$recorded_bundle_format")
+  expected=$(printf '%s\n' "$VERIFIED_FILES" | wc -l | tr -d ' ')
   [ "$(wc -l < "$receipt" | tr -d ' ')" -eq "$expected" ] || die 'invalid receipt length'
   grep -Eqv '^[0-9a-f]{64}  [A-Za-z0-9._-]+$' "$receipt" && die 'invalid receipt entry'
-  for file in $FILES; do
+  for file in $VERIFIED_FILES; do
     [ -f "$folder/$file" ] && [ ! -L "$folder/$file" ] || die "missing regular file: $file"
     [ "$(awk -v name="$file" '$2 == name { count++ } END { print count+0 }' "$receipt")" -eq 1 ] || die 'invalid receipt inventory'
     case "$file" in
@@ -228,7 +259,7 @@ verify_bundle() {
   done
   skill_entries=0
   if exists "$folder/skill"; then
-    verify_skill "$folder/skill"
+    verify_skill "$folder/skill" "$recorded_bundle_format"
     skill_entries=1
   fi
   [ "$(find "$folder" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq "$((expected+1+skill_entries))" ] \
@@ -260,12 +291,13 @@ if [ "$UNINSTALL" = true ]; then
   [ ! -L "$ROOT/current" ] || rm "$ROOT/current"
   for folder in "$ROOT/versions/"*; do
     exists "$folder" || continue
+    verify_bundle "$folder"
     if [ -d "$folder/skill" ]; then
-      for skill_file in $SKILL_FILES; do rm "$folder/skill/$skill_file"; done
+      for skill_file in $VERIFIED_SKILL_FILES; do rm "$folder/skill/$skill_file"; done
       rm "$folder/skill/.skill-sha256"
       rmdir "$folder/skill/agents" "$folder/skill/references" "$folder/skill"
     fi
-    for file in $FILES; do rm "$folder/$file"; done
+    for file in $VERIFIED_FILES; do rm "$folder/$file"; done
     rm "$folder/.install-sha256"
     rmdir "$folder"
   done
@@ -277,8 +309,10 @@ if [ "$UNINSTALL" = true ]; then
   exit 0
 fi
 
-DESTINATION=$ROOT/versions/$VERSION
-if exists "$DESTINATION"; then
+DESTINATION=$ROOT/versions/$SELECTED
+if [ "$REUSE_INSTALLED" = true ]; then
+  verify_bundle "$DESTINATION"
+elif exists "$DESTINATION"; then
   verify_bundle "$DESTINATION"
   # Same tag with different bytes is a conflict, never an in-place overwrite.
   EXPECTED='@FILE_HASHES@'
@@ -303,6 +337,7 @@ else
 fi
 if [ -n "$SKILL_DIR" ]; then
   if ! exists "$DESTINATION/skill"; then
+    [ "$REUSE_INSTALLED" = false ] || die 'selected installed version has no skill payload'
     [ -n "$STAGE" ] || STAGE=$(mktemp -d "${TMPDIR:-/tmp}/uiblueprint-install.XXXXXX")
     download "$RELEASES/v$VERSION/ui-blueprint-skill-v$VERSION.tar.gz" "$STAGE/skill.tar.gz"
     printf '%s  %s\n' "$SKILL_ARCHIVE_SHA256" "$STAGE/skill.tar.gz" | shasum -a 256 -c - >/dev/null || die 'skill archive checksum mismatch; active version unchanged'
@@ -315,12 +350,12 @@ if [ -n "$SKILL_DIR" ]; then
     mkdir "$STAGE/skill"
     tar -xzf "$STAGE/skill.tar.gz" -C "$STAGE/skill"
     printf '%s\n' '@SKILL_HASHES@' > "$STAGE/skill/.skill-sha256"
-    verify_skill "$STAGE/skill"
+    verify_skill "$STAGE/skill" "$(bundle_format "$DESTINATION")"
     mv "$STAGE/skill" "$DESTINATION/skill"
   fi
-  verify_skill "$DESTINATION/skill"
+  verify_skill "$DESTINATION/skill" "$(bundle_format "$DESTINATION")"
   EXPECTED_SKILL='@SKILL_HASHES@'
-  [ "$(cat "$DESTINATION/skill/.skill-sha256")" = "$EXPECTED_SKILL" ] || die 'this skill version already exists with different bytes'
+  [ "$REUSE_INSTALLED" = true ] || [ "$(cat "$DESTINATION/skill/.skill-sha256")" = "$EXPECTED_SKILL" ] || die 'this skill version already exists with different bytes'
   if [ ! -f "$ROOT/.skill-link" ]; then
     mkdir -p "$SKILL_PARENT"
     ln -s "$ROOT/current/skill" "$SKILL_DIR"
@@ -336,12 +371,12 @@ for command in uiblueprint uiblueprint-validate; do
     NEW_LINKS="$NEW_LINKS $command"
   fi
 done
-ln -s "versions/$VERSION" "$LOCK/next"
+ln -s "versions/$SELECTED" "$LOCK/next"
 mv -fh "$LOCK/next" "$ROOT/current"
 NEW_LINKS=''
 NEW_SKILL_LINK=false
 NEW_SKILL_RECORD=false
-printf 'Installed UI Blueprint %s\nBundle: %s\n' "$VERSION" "$DESTINATION"
+printf 'Installed UI Blueprint %s\nBundle: %s\n' "$SELECTED" "$DESTINATION"
 [ -z "$SKILL_DIR" ] || printf 'Skill: %s\n' "$SKILL_DIR"
 case ":${PATH:-}:" in
   *":$BIN:"*) ;;

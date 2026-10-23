@@ -580,6 +580,91 @@ esac
         assert not stage.exists()
 
 
+def cross_inventory_checks(stage, versions):
+    """Actual historical installer and receipt formats; synthetic executables, no network."""
+    old_version = '0.0.8'
+    old_folder = stage / 'legacy inventory release'
+    old_bundle = stage / 'legacy inventory bundle'
+    old_folder.mkdir()
+    old_bundle.mkdir()
+    names = dist.files_for('combined') - dist.COMPOSE_FILES
+    products = {name: ((name + '\n').encode(), 0o644) for name in names}
+    for name in release.BINARIES:
+        products[name] = (b'#!/bin/sh\nprintf "legacy synthetic executable\\n"\n', 0o755)
+    manifest = {'format': 'ui-blueprint-local-2', 'source_revision': 'a' * 40,
+                'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
+                                                for name, (data, mode) in products.items()}}
+    with dist.destination(old_bundle) as fd:
+        dist.publish(fd, products, manifest)
+    # Pinned historical template: do not regenerate the old installer from current code.
+    historical = '907b9b2c87fcb0475a64da939b4eaf8ec9358beb^'
+    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/compose.md')
+    with patch.object(release, 'SKILL_FILES', old_skill_files):
+        release.write_candidates(old_bundle, old_folder, version=old_version, revision='a' * 40,
+            minimum='27.0.1', signing='unsigned',
+            installer_template=release.committed(historical, 'install.sh').decode(),
+            formula_template=(ROOT / 'uiblueprint.rb').read_text(),
+            skill_files={name: release.committed(historical, f'skills/ui-blueprint/{name}') for name in old_skill_files})
+    prefix = stage / 'cross inventory prefix'
+    skill = stage / 'cross inventory host/ui-blueprint'
+    env = dict(os.environ, PATH=f'{stage / "shims"}:/usr/bin:/bin:/usr/sbin:/sbin',
+               DOWNLOAD_FAILURE='yes', TMPDIR=str(stage))
+    old = ['sh', old_folder / 'install.sh', '--prefix', prefix, '--skill-dir', skill,
+           '--local-release', old_folder]
+    new = ['sh', versions / '0.1.0/install.sh', '--prefix', prefix]
+    install = [*new, '--local-release', versions / '0.1.0']
+    run(old, env=env)
+    root = prefix / 'share/uiblueprint'
+    current = root / 'current'
+    legacy = root / 'versions' / old_version
+    assert len((legacy / '.install-sha256').read_text().splitlines()) == len(names) + 1
+    assert len((legacy / 'skill/.skill-sha256').read_text().splitlines()) == 6
+    receipt = legacy / '.install-sha256'
+    original = receipt.read_bytes()
+    lines = original.splitlines(keepends=True)
+    for mutation in (b''.join(lines[:-1]), lines[0] + b''.join(lines[:-1])):
+        receipt.write_bytes(mutation)
+        run(install, env=env, ok=False)
+        assert os.readlink(current) == f'versions/{old_version}'
+    receipt.write_bytes(original)
+    # Even a correct hash cannot make a foreign receipt path part of the closed inventory.
+    foreign = legacy / 'foreign.txt'
+    foreign.write_text('keep')
+    receipt.write_bytes(original + f'{dist.digest(foreign.read_bytes())}  foreign.txt\n'.encode())
+    run(install, env=env, ok=False)
+    assert foreign.read_text() == 'keep'
+    receipt.write_bytes(original)
+    foreign.unlink()
+    skill_receipt = legacy / 'skill/.skill-sha256'
+    skill_original = skill_receipt.read_bytes()
+    extra = legacy / 'skill/references/compose.md'
+    extra.write_text('foreign')
+    skill_receipt.write_bytes(skill_original + f'{dist.digest(extra.read_bytes())}  references/compose.md\n'.encode())
+    run(install, env=env, ok=False)
+    assert extra.read_text() == 'foreign'
+    skill_receipt.write_bytes(skill_original)
+    extra.unlink()
+    run(install, env=env)
+    assert os.readlink(current) == 'versions/0.1.0'
+    assert len((current / 'skill/.skill-sha256').read_text().splitlines()) == 7
+    # New code verifies both inventories; the old shipped script cannot be upgraded in place.
+    rollback = [*new, '--version', old_version]
+    inactive_source = legacy / 'RUN.md'
+    inactive_bytes = inactive_source.read_bytes()
+    inactive_source.write_bytes(inactive_bytes + b'local edit')
+    run(rollback, env=env, ok=False)
+    assert os.readlink(current) == 'versions/0.1.0'
+    inactive_source.write_bytes(inactive_bytes)
+    run(rollback, env=env)
+    assert os.readlink(current) == f'versions/{old_version}'
+    assert not (skill / 'references/compose.md').exists()
+    run(install, env=env)
+    assert os.readlink(current) == 'versions/0.1.0'
+    run([*new, '--uninstall'], env=env)
+    assert not root.exists() and not skill.is_symlink()
+    print('PASS cross-inventory: historical manifest2/six-file skill install → manifest3/seven-file update, verified offline rollback/re-update/removal; tampered and foreign inventories refused')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate', type=Path)
@@ -594,6 +679,7 @@ def main():
             candidate_at(versions / version, bundle, version)
         install_checks(stage, versions)
         skill_checks(stage, versions)
+        cross_inventory_checks(stage, versions)
         hostile_skill_checks(stage, versions)
         local_install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)

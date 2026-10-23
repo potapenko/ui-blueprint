@@ -1,7 +1,7 @@
 # Mac distribution
 
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@4`.
+- Contract: `UIB.MAC-DISTRIBUTION@5`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -25,7 +25,6 @@ from this contract. No README, product algorithms, CLI grammar, wire schemas,
 runtime permissions, Linux/Windows/Intel support or automatic browser launch changes.
 
 ## DISTRIBUTION.ARCHIVE — One immutable set
-
 Every distributed product, helper, recipe, guide and installer comes from one
 committed revision. Release version is separate from schema/package versions.
 Build the existing combined selection. Final file hashes follow code signing.
@@ -39,9 +38,7 @@ The initial OS floor is the actual build/test host version; older OS support
 requires its own qualification, never inference from Swift's deployment target.
 No publish command or network upload runs implicitly. A prepared candidate is
 not a notarized/public release. Existing local v1/v2 verification/removal stays valid.
-
 ## DISTRIBUTION.INSTALL — Ownership and lifecycle
-
 Default prefix is ~/.local; --prefix selects an absolute alternative.
 Own share/uiblueprint/versions/<version>, the current symlink and two bin links.
 Optional --skill-dir ABS selects one externally discoverable skill symlink through
@@ -56,23 +53,21 @@ bytes; they do not independently authenticate a compromised installer source.
 Do not overwrite foreign paths, symlinks or another installation channel.
 Serialize own mutations. Verify before switching current; retain previous versions.
 Repeat installation of the same unchanged version is idempotent; --version selects
-another published installer for upgrade/rollback. Stop sessions before switching;
+a fully verified already-installed version, or dispatches its published installer
+when absent. Each version uses its recorded manifest1/2/3 inventory, with exact
+receipt names, hashes and modes; skill inventory follows that same version. Stop sessions before switching;
 long-lived trusted connections should use explicit immutable version paths.
 --uninstall validates all managed versions before removing only owned files/links;
 unknown/modified content is retained with an error. Never recursively delete.
 Temporary extraction files are run-owned; retain images and image-containing
 directories if encountered. Display a PATH instruction when the bin path is absent.
-
 ## DISTRIBUTION.BREW — Same release bytes
-
 Prepare a formula for the proposed potapenko/homebrew-tap destination; editing
 that remote repository is a separate publication step. Install the identical
 versioned archive under libexec and expose only CLI/validator through bin links.
 Homebrew owns upgrade/removal. Do not add build/runtime tool dependencies solely
 for packaging. An unrendered template or unnotarized candidate is not publish-ready.
-
 ## DISTRIBUTION.ACCEPT — Preparation checks
-
 Verify archive inventory/hashes, committed provenance, installed saved-data
 commands and helper availability, paths with spaces, repeat install, update,
 rollback, removal, collisions, symlinks, changed files, interrupted downloads,
@@ -83,24 +78,23 @@ actual published URL acceptance. Check real signatures for signed candidates.
 Notarization, downloaded Gatekeeper acceptance, public curl and remote Homebrew
 installation remain named publication gates; no bypass or false pass.
 Broader native/Web product acceptance remains separate from packaging checks.
-
 ## Change record
-
 MAC-DIST-001, 2026-10-13: user-authorized additive release preparation, from local
 bundles to the archive and installation contract above. This contract's registration
 precedes implementation through D01; it does not select a license or publish.
-
 MAC-DIST-002, 2026-10-13: explicit user continuation in the skill chat authorizes
 matching skill packaging/installation and temp-only tests. Existing CLI archive and
 Homebrew behavior stay unchanged; no publication, real installation or notarization.
-
 MAC-DIST-003: user-authorized 2026-10-14 push/new-chat installation adds explicit
 --local-release ABS for pinned locally built assets, with unchanged hash/inventory
 guards. No network/version dispatch in that mode; no implicit prerequisite install.
-
 KC-COMPOSE-001: user-approved Compose integration requires the matching candidate
 bundle to carry ComposeMarker.kt, ProbeSession.kt, ProbeJson.kt and COMPOSE.md as
 flat optional source assets, and the skill archive to carry references/compose.md.
 Local manifest3 adds those exact files; manifest1/2 remain verifiable/removable.
 Core/Web/native binaries gain no Compose dependency. Source inclusion is explicit
 in consumer debug builds only; no global install or public release is authorized.
+KC-REVIEW-002: review exposed manifest2→3 installation failure caused by checking
+old receipts against the invoking installer's inventory. @5 registers verified
+installed-version selection for rollback; closed per-format inventories and existing
+ownership/tamper refusal remain. No global install, new option or public release.
