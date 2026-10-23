@@ -169,8 +169,21 @@ packaging an explicit separate dev .app target for reliable own-PID addressing.
 Normal main/JAR/distribution remain no-op. Clean COMPOSE.md gained permanent routes
 to both app-local BLUEPRINT recipes and honest matching-bundle/global-install
 boundary. No global skill update/publication is authorized or claimed.
-Next: Desktop live evidence, same-reviewer Desktop acceptance, transient nonimage
-cleanup after consumers and final scoped checkpoint. No user decision or goal pause.
+Desktop owner reports live capture through an explicit dev-only Capture geometry
+menu after key callbacks did not produce a record. Runtime class origin confirmed
+BlueprintCapture/ProbeSession from the exact own opt-in app JAR. Dev menu difference
+is explicit; playback-content off/on images/AX and post-Tab screenshot matched.
+Actual Rust comparison: video width1032→1872dp, cue gap8dp unchanged, cue0 dx420dp;
+resize preserved pause733ms. Cmd+P and capture action work; Tab/Space outcome
+unverified (not relabelled success or a new unrelated repair task).
+Off evidence was a declared dev-package, so it is NOT canonical normal-product
+acceptance. KC-APP is building current normal createDistributable for diagnostic
+exclusion and smallest fresh launch/Play/Pause check under current app routes.
+Root read updated app AGENTS→spec-root→Spec First/index→bootstrap2/transfer3,
+KOTLIN/COMPOSE and build/tooling/runtime/lane/release closure. Broad donor port,
+source feature siblings and its independent goal remain excluded.
+Next: saved Desktop source/runtime handoff, same-reviewer final check, consumed
+nonimage cleanup and checkpoint. No user decision or goal pause.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
