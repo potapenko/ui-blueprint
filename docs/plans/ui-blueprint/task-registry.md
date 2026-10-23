@@ -2,6 +2,9 @@
 
 ## Kotlin Compose — active goal, 2026-10-23
 
+**Status: COMPLETE — accepted Desktop/macOS and Android Phone/Tablet scope.**
+The heading is retained as the contract authority permalink, not an active-work flag.
+
 This is a new user-approved goal; the historical 2026-10-14 closeout and paused
 CORPUS-1000 remain unchanged. Initial branch `master`, baseline
 `e212a4c3682ba5db0f934f1c8e956973fca61542`. Preserve unrelated
@@ -68,8 +71,8 @@ transient nonimage artifacts stay there until immediate consumers finish.
 | Packet | Class / consumer | Owner | Status / dependency |
 | --- | --- | --- | --- |
 | KC-LIB | shipping_product: Compose collector → Rust → skill | `/root/compose_library` | acceptedbeeab15: source/package/repaired boundaries independently verified |
-| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | Android710aed5 accepted; Desktopcb873c4 ready for final review |
-| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | librarybeeab15/Android710aed5 accepted; Desktopcb873c4 evidence reconciliation running |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | accepted Android710aed5/Desktopcb873c4; cleanup complete |
+| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | `/root/compose_review` | accept_with_residual: librarybeeab15, Android710aed5, Desktopcb873c4; own scratch cleaned |
 
 Economy basis: one utility owner and existing consumer owner retain their own
 project context; first deliver one shared probe path, expand only for a concrete
@@ -198,8 +201,47 @@ repair-bundle-pu4t2tvp and repair-release.K5vrBl retained as deliberate matching
 user/development deliverables, not auxiliary logs. Reviewer cleans its own
 nonimage fixtures after verdict. KC-APP must retain both evidence roots until
 review acceptance, then remove only own nonimages; image/icon dirs remain.
-Next: final Desktop verdict, KC-APP evidence cleanup release, root terminal
-checkpoint and goal completion only if mandatory criteria pass.
+Final independent KC-REVIEW verdict: accept_with_residual, no mandatory gap for
+read-only Desktop/Android geometry. Verified on JAR hash/CodeSource and33dev,
+22off/22normal task classes;63unique dependencies resolve. Canonical normal/off
+have0collectorclasses or activation/file-writer literals; on has selected collector.
+Final CLI reimported Desktop2/3sequence10marker/density2 pair exactly; all saved
+Rust width/gap/diff results reproduced. Playback-content off/on AX/image evidence
+consistent; before/after pause733ms and canonical normal Play/Pause held700ms
+verified. Residual: Tab/Space unconfirmed in both source configurations, not a
+new regression or claimed full keyboard/application/physical-device qualification.
+Reviewer removed its owned nonimage scratch and verified absence. Library owner
+removed old23db bundle/release and build scratch (3151nonimage files; no images
+encountered), preserving final matching deliverables and app/reviewer evidence.
+Root released KC-APP evidence retention after acceptance; app owner removes only
+owned nonimages from the two named roots, preserving every screenshot/build icon
+and image-containing directory, foreign processes/caches/SDKs/devices untouched.
+KC-APP cleanup complete:4703owned nonimage files removed from the two approved
+roots, absence verified;31images/build icons and every containing directory
+retained unchanged. Final bundle/release, foreignPID7030, SDK/AVD/caches/unrelated
+files untouched. No source changes after appcb873c4; Android710aed5 remains.
+
+### Terminal outcome and limits
+
+All mandatory first-slice criteria are accepted: actual Desktop/macOS and Android
+Phone/Tablet marked Compose components use shipped Kotlin collector→Rust import,
+measure and compatible diff through matching skill. Permanent app COMPOSE routes
+lead to app-mobile/BLUEPRINT.md and app-desktop/BLUEPRINT.md. Selected markers and
+layout rectangles are supported, not arbitrary-app scanning, pixel visibility,
+action execution, Windows/TV/physical-device or full learner-product qualification.
+Tab/Space remains an unconfirmed pre-existing app baseline in both configurations.
+No task-owned source or acceptance work remains; old goals stay closed/paused.
+
+Current final source checkpoints: UI Blueprintbeeab158c66a864d0951902c992c949436030dc1;
+applicationcb873c4 (Android710aed5). Subsequent utility commits are coordination
+only. Current branches preserved; no push, public release or global installation.
+Final matching bundle and release under the named repair temp paths are deliberate
+user/development deliverables retained for ongoing Kotlin work/optional later
+managed installation. Operator owns their subsequent retention; no lifetime is
+promised. All auxiliary run nonimages are cleaned; all images remain retained.
+The existing Kotlin consumer chat remains available for future concrete requests;
+no automatic monitoring or unbounded feature work is scheduled.
+Final action: save this terminal coordination checkpoint, then mark goal complete.
 
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
