@@ -1,5 +1,84 @@
 # Единый реестр задач
 
+## Kotlin Compose — active goal, 2026-10-23
+
+This is a new user-approved goal; the historical 2026-10-14 closeout and paused
+CORPUS-1000 remain unchanged. Initial branch `master`, baseline
+`e212a4c3682ba5db0f934f1c8e956973fca61542`. Preserve unrelated
+`after-title-spacing.png`; no branch/worktree creation or publication is authorized.
+
+### Actual authority and accepted plan
+
+Human approval in chat `01a169e9-b345-7242-8969-7794cd963e4e`:
+«Да, утверждаю план. Начинай реализацию, работай вместе с Kotlin-чатом и доведи
+до рабочего использования скилла на Desktop и Android.»
+The preceding implementation plan is the fixed accepted basis: (1) Desktop/macOS
+external-tree feasibility and opt-in measured Compose probe for video/container
+and cue controls; (2) existing Rust analysis and resize comparison with preserved
+formats/Web/macOS behavior; (3) Android Phone/Tablet reflow/scroll observations;
+(4) portable Kotlin skill recipe and application-owner integration; (5) bounded
+improvements from concrete consumer repros. Windows and TV qualification/actions
+are excluded from this first outcome. No public release is authorized.
+
+Mode: Evolve. Execution: user-authorized coordinated work with the existing Kotlin
+chat; root coordinates, finite UI Blueprint worker owns utility implementation,
+Kotlin chat owns application integration and consumer evidence. No nested delegation.
+No reuse of old goal's broad worker, push, publication or runtime authorizations.
+The approved new `plugins/compose/` hierarchy is for the thin Kotlin collector;
+existing CLI, skill, specs and test owners may receive directly necessary edits.
+Application changes are made only by its owner, preserving playback policy.
+
+### Spec Basis and traversal receipt
+
+Read global implementation/product-truth routing/core/change/evidence/delivery,
+QA and coordination contracts, then `docs/specs/README.md` registry60 →
+product/README → BOUNDARIES@1, NATIVE@5, CLI@20, AGENT-SKILL@4 and their full
+closure EXCHANGE@2, GEOMETRY@2, PROJECTIONS@1, LIFECYCLE@1, MODEL@1,
+IDENTITY@1, PRIVACY@1. Engineering: RUST.md → DEV.RUST@2 → D01@1/D07@5 →
+ROADMAP@1, RUST-BOUNDARIES@1, C01-EVIDENCE@1, DECISIONS@1, REUSE@1;
+PROBE-SOURCES@1 is the selected upstream route. New Compose contract is absent
+and must be registered before implementation under this direct Evolve authority.
+Referenced older epochs in native headers do not replace current read leaves.
+Excluded: action execution, cache redesign, pixels/export redesign, old acceptance
+waves, iOS/TV/Windows implementation and unrelated application functionality.
+
+Specified invariants: explicit bounded request, source-attributed runtime facts,
+Rust-only analytics, no polling; separate layout/AX/hit/visible bounds; explicit
+units/coordinate spaces/transforms; unknown/partial/redacted retained; exact target,
+surface and generation; opt-in probe must not alter layout/focus/playback.
+Observed evidence: fixtures/native/Fixture.swift uses explicit SwiftUI anchors;
+tests/bridges/native/Collector.swift normalizes fixture probe; ordinary native_ax
+is AX-only. Existing model represents dp/px and opt_in_layout_probe. No current
+Compose provider. Kotlin chat's read-only receipt reports Kotlin2.3.20,
+Compose Desktop1.12.0, Android UI1.9.4 (BOM2025.10.01), Java21; separate JVM and
+Android modules, no commonMain. App has no probe/testTags; desktop files were
+actively changing. These are evidence, not new application behavior requirements.
+
+### Definition of done and ownership
+
+Usable matching collector/CLI/skill with actual PlayPhrase.me Desktop and Android
+observations; measured geometry and before/after comparison through documented
+Rust commands; scoped live evidence, probe-on/off invariance, stale/duplicate IDs,
+units/density and incomplete-source handling; relevant compatibility/privacy
+review; checkpoint commits; honest unsupported platform boundaries.
+Skill content alone, synthetic fixtures or a successful build do not satisfy this.
+All generated images stay in system temp forever from the agent's perspective;
+transient nonimage artifacts stay there until immediate consumers finish.
+
+| Packet | Class / consumer | Owner | Status / dependency |
+| --- | --- | --- | --- |
+| KC-LIB | shipping_product: Compose collector → Rust → skill | finite library worker, pending dispatch | ready; must first publish integration API to root |
+| KC-APP | shipping_product: real Desktop/Android integration and skill use | Kotlin chat `01a169e8-fb7b-73d0-9ec9-86b3c5e21036` | prepare ownership/runtime; depends on KC-LIB API and candidate |
+| KC-REVIEW | verification: identity/privacy/compatibility and integrated outcome | unassigned | depends on saved candidate and runtime evidence |
+
+Economy basis: one utility owner and existing consumer owner retain their own
+project context; first deliver one shared probe path, expand only for a concrete
+consumer failure. Root owns this registry only. Utility worker is sole source and
+Git writer in this repo after root's initial coordination checkpoint; subsequent
+root commits wait for explicit lease release. App owner serializes its own index.
+Runtime physical-input lane belongs to KC-APP; utility tests remain headless.
+Next: dispatch KC-LIB and KC-APP, relay minimal shared API, accept finite receipts.
+
 ## Текущее состояние: этап закрыт по решению пользователя, 2026-10-14
 
 [Итог, установленная версия и ограничения](closeout.md) — точка продолжения.
