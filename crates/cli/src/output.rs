@@ -1432,3 +1432,20 @@ pub(crate) fn observe_diagnostic(
     output.write_all(b"\n").map_err(|_| output.error())?;
     Ok(output.bytes)
 }
+
+/// Encode and validate a canonical imported source before publishing any bytes.
+pub(crate) fn snapshot_json(snapshot: Snapshot, limit: usize) -> Result<Vec<u8>, Failure> {
+    let document = Document {
+        schema_version: SchemaVersion::CURRENT,
+        artifact: Artifact::Snapshot(Box::new(snapshot)),
+    };
+    let mut output = Bounded::new(limit);
+    serde_json::to_writer(&mut output, &document).map_err(|_| output.error())?;
+    output.write_all(b"\n").map_err(|_| output.error())?;
+    let decoded = Document::from_json(&output.bytes, limit)
+        .map_err(|_| Failure::invalid("invalid_compose"))?;
+    if decoded != document {
+        return Err(Failure::invalid("compose_roundtrip_mismatch"));
+    }
+    Ok(output.bytes)
+}

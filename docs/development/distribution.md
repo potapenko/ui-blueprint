@@ -29,7 +29,9 @@ Defaults in Cargo manifests are unchanged. Core/Web compilation on a Mac still
 uses its normal native linker/SDK; “no collector SDK” does not mean a Mac binary
 can be linked without a system toolchain. Linux/Windows/Intel and older macOS
 runtimes are unqualified. Native's macOS 14 deployment target is a compile
-setting, not an older-runtime support promise. No iOS/Android/TV adapter is shipped.
+setting, not an older-runtime support promise. No iOS/TV adapter is shipped. Optional Compose Kotlin source assets support explicit
+debug integration in Desktop/macOS and Android apps; these do not add platform SDK
+dependencies to Rust or qualify arbitrary applications.
 
 ## Build into an existing directory
 
@@ -87,6 +89,8 @@ Everything is directly under the chosen directory; no package manager is needed:
 - `uiblueprint-0.1.0.schema.json`, `uiblueprint-analysis-0.2.0.schema.json`.
 - `example-snapshot.json`, `example-query.json`, `example-evaluation.json`,
   `example-expectation.json`, `example-observed-brief.json`, `example-proposed-brief.json`.
+- `ComposeMarker.kt`, `ProbeSession.kt`, `ProbeJson.kt`, `COMPOSE.md`: optional
+  debug source inclusion; use the matching skill Compose recipe.
 - Web/combined only: `web-geometry.cjs`, `WEB-FIRST-USE.md`.
 - `RUN.md` (this guide), `distribution.py` (verify/remove), `THIRD_PARTY_NOTICES.md`,
   `DEPENDENCY_LICENSES.txt`, `RUST_LIBRARY_NOTICES.html`, `distribution-manifest.json`.

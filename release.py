@@ -22,7 +22,7 @@ ROOT = Path(__file__).resolve().parent
 REPOSITORY = 'https://github.com/potapenko/ui-blueprint'
 BINARIES = ('uiblueprint', 'uiblueprint-validate', 'session-worker', 'native-host-helper')
 SKILL_FILES = ('SKILL.md', 'agents/openai.yaml', 'references/analysis.md',
-               'references/export.md', 'references/macos.md', 'references/web.md')
+               'references/export.md', 'references/macos.md', 'references/web.md', 'references/compose.md')
 VERSION = re.compile(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?\Z')
 
 
@@ -221,7 +221,9 @@ def extract_candidate(folder, bundle, record):
     expected = dist.files_for('combined') | {dist.MANIFEST}
     with tarfile.open(folder / archive_name(record['version']), 'r:gz') as archive:
         members = archive.getmembers()
-        if len(members) != len(expected) or {m.name for m in members} != expected or any(not m.isfile() for m in members):
+        names = {m.name for m in members}
+        inventories = (expected, expected - dist.COMPOSE_FILES, expected - dist.COMPOSE_FILES - dist.WEB_FILES)
+        if len(members) != len(names) or names not in inventories or any(not m.isfile() for m in members):
             raise ValueError('invalid release archive inventory')
         for member in members:
             with (bundle / member.name).open('xb') as stream:
@@ -235,7 +237,10 @@ def extract_candidate(folder, bundle, record):
         skill = bundle / 'skill'
         with tarfile.open(folder / skill_archive_name(record['version']), 'r:gz') as archive:
             members = archive.getmembers()
-            if (len(members) != len(SKILL_FILES) or {m.name for m in members} != set(SKILL_FILES)
+            expected_skill = set(SKILL_FILES)
+            if manifest['format'] != 'ui-blueprint-local-3':
+                expected_skill.remove('references/compose.md')
+            if (len(members) != len(expected_skill) or {m.name for m in members} != expected_skill
                     or any(not m.isfile() or m.mode != 0o644 for m in members)):
                 raise ValueError('invalid skill archive inventory')
             skill.mkdir()

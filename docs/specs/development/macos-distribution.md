@@ -1,7 +1,7 @@
 # Mac distribution
 
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@3`.
+- Contract: `UIB.MAC-DISTRIBUTION@4`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -97,3 +97,10 @@ Homebrew behavior stay unchanged; no publication, real installation or notarizat
 MAC-DIST-003: user-authorized 2026-10-14 push/new-chat installation adds explicit
 --local-release ABS for pinned locally built assets, with unchanged hash/inventory
 guards. No network/version dispatch in that mode; no implicit prerequisite install.
+
+KC-COMPOSE-001: user-approved Compose integration requires the matching candidate
+bundle to carry ComposeMarker.kt, ProbeSession.kt, ProbeJson.kt and COMPOSE.md as
+flat optional source assets, and the skill archive to carry references/compose.md.
+Local manifest3 adds those exact files; manifest1/2 remain verifiable/removable.
+Core/Web/native binaries gain no Compose dependency. Source inclusion is explicit
+in consumer debug builds only; no global install or public release is authorized.

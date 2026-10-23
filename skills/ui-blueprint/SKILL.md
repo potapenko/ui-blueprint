@@ -1,6 +1,6 @@
 ---
 name: ui-blueprint
-description: Use UI Blueprint to observe a selected Web or macOS interface, inspect saved UI data, measure spacing and alignment, check explicit requirements, compare compatible observations, or prepare an ImageGen blueprint. Use for UI Blueprint requests and UI geometry work with an available bundle; screenshot-only guesses and general UI redesign are outside this workflow.
+description: Use UI Blueprint to observe a selected Web, macOS or opt-in Kotlin Compose Desktop/Android interface, inspect saved UI data, measure spacing and alignment, check explicit requirements, compare compatible observations, or prepare an ImageGen blueprint. Use for UI Blueprint requests and UI geometry work with an available bundle; screenshot-only guesses and general UI redesign are outside this workflow.
 ---
 
 # UI Blueprint
@@ -27,7 +27,9 @@ options are missing, report that prerequisite; do not install or rebuild implici
 In the commands below, `UIB_BUNDLE` is a shell variable containing that absolute
 bundle directory, not a setting to add to the user's shell profile. Quote paths.
 Initial qualification is Apple Silicon macOS; use the selected bundle's documented
-OS floor. Do not infer support for older macOS, Intel, Linux, Windows or mobile.
+OS floor. Do not infer support for older macOS, Intel, Linux or Windows. The opt-in Compose
+recipe adds source collection in explicitly integrated Desktop/macOS and Android debug apps;
+it does not claim generic mobile observation.
 
 Read only the reference needed for the task:
 
@@ -35,6 +37,7 @@ Read only the reference needed for the task:
 | --- | --- |
 | Inspect, measure, check or compare saved data; installation smoke example | [Analysis](references/analysis.md) |
 | Existing browser connection + exact page URL + one component | [Web](references/web.md) |
+| Explicit opt-in Kotlin Compose Desktop/macOS or Android geometry | [Compose](references/compose.md) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
 | Compile a drawing package; generate/review an image when requested | [Export](references/export.md) |
 
@@ -51,7 +54,7 @@ This skill supplies read-only and drawing recipes, not a generic action executor
   from multi-channel NDJSON; never merge channels or substitute a failed response.
 - Choose exact reported `{namespace,key}` identifiers and recorded coordinate
   spaces. Layout, Accessibility, hit and visible bounds are different facts.
-  Preserve `css_px`, `pt`, `px` and origins; absent transforms stay unknown.
+  Preserve `css_px`, `pt`, `px`, `dp` and origins; absent transforms stay unknown.
 - Use `measure` for facts. Use `check` only with an actual sourced requirement and
   explicit tolerance. A measured gap is not a CSS padding declaration or design rule.
 - Keep partial, unknown, unsupported, redacted, false and empty distinct. Missing

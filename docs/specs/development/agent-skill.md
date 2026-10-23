@@ -1,5 +1,5 @@
 # Agent skill and prompt installation
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@4`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@5`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: the operator approved this chat's six-step plan on 2026-10-13;
   the later instruction “Теперь давай подключим skill к установщику” authorizes
@@ -98,3 +98,5 @@ for this test; no application changes, new public release or old goal resume.
 AGENT-SKILL-003: authorized pinned-source bootstrap resolves the empty-Releases
 onboarding gap. AGENT-SKILL-004 adds the agent-composed drawing/cold-test workflow.
 CLI/wire/analysis/export semantics and public release boundaries remain protected.
+
+KC-COMPOSE-001: human-approved2026-10-23 plan adds the portable [Compose@1](../product/compose.md) recipe and source-included collector. Existing installation and drawing behavior stay unchanged; Desktop/Android runtime acceptance is separate.

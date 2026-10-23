@@ -19,6 +19,7 @@
 | [UIB.EXCHANGE@2](exchange.md) | request/session/property/time/error/JSON envelopes and narrow explicit probe-wrapper composition; contract |
 | [UIB.WEB-DOCUMENTS@1](web-documents.md) | explicit bounded full-document Web selection and raw AX focusability; W06 technical representation |
 | [UIB.NATIVE-SESSION@3](native-session.md) | attached Native form observation/actions and CLI; contract |
+| [UIB.COMPOSE@1](compose.md) | Explicit opt-in Kotlin Desktop/macOS and Android layout probe/import |
 | [UIB.NATIVE@5](native.md) | Mac AX, capture, оконное matching, probe; contract |
 | [UIB.GEOMETRY@2](geometry.md) | пространства, transforms, измерения, Expectation/check; contract |
 | [UIB.PROJECTIONS@1](projections.md) | выбор области, coverage, проекции, many-to-many mapping; contract |
@@ -29,7 +30,7 @@
 | [UIB.CACHE@1](cache.md) | cache keys, invalidation, replay, upsert/removal; contract |
 | [UIB.PRIVACY@1](privacy.md) | сбор, хранение, ввод секретов, logs/errors/pixels/export; contract |
 | [UIB.WEB-FIRST-USE@7](web-first-use.md) | Optional shipped URL+component caller with explicit existing connection and exact bounded selection |
-| [UIB.CLI@20](cli.md) | CLI commands/output; compact component parts, [raw diff@2](cli-diff.md)/[selected-space diff@1](cli-geometry-diff.md)/[graph diff@1](cli-graph-diff.md), preserved JSON/OBSERVE and [CLI-ACTIONS@3](cli-actions.md) |
+| [UIB.CLI@21](cli.md) | CLI commands/output; compact component parts, [raw diff@2](cli-diff.md)/[selected-space diff@1](cli-geometry-diff.md)/[graph diff@1](cli-graph-diff.md), preserved JSON/OBSERVE and [CLI-ACTIONS@3](cli-actions.md) |
 | [UIB.ANALYSIS@2](analysis.md) | local measurement/check0.2, direct observed input, result-space/evaluation, validation layers and protected0.1 compatibility; types/validation closure unchanged |
 | [UIB.ROADMAP@1](roadmap.md) | пакеты реализации, сроки решений, compatibility freeze; contract |
 | [UIB.RUST-BOUNDARIES@1](rust-boundaries.md) | engineering/toolchain proposals, Rust owners; contract |

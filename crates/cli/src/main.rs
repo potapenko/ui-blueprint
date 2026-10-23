@@ -4,6 +4,7 @@
 mod action;
 mod arguments;
 mod compare;
+mod compose;
 #[cfg(all(target_os = "macos", any(feature = "macos", feature = "web")))]
 mod connection;
 mod export;
@@ -26,6 +27,7 @@ use uiblueprint_engine::{self as engine, MeasurementResult};
 use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
+Compose import: import-compose --input FILE --max-input-bytes N --max-output-bytes N (saved explicit debug probe; no live revalidation)\n\
 Declared comparison: compare --before FILE --after FILE --correspondence FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Comparison diagnostic: compare --before FILE --after FILE --diagnose --max-input-bytes N --max-output-bytes N [--json]\n\
 Compare uses caller-declared unverified pairs, reported mapped-child order and independently measured lengths. It grants no stable identity, action or deletion authority.\n\
@@ -342,6 +344,8 @@ fn main() -> ExitCode {
     }
     let result = if args.len() == 1 && args[0] == "--help" {
         Ok((HELP.as_bytes().to_vec(), 0))
+    } else if args.first().is_some_and(|arg| arg == "import-compose") {
+        compose::execute(args.into_iter().skip(1))
     } else if args.first().is_some_and(|arg| arg == "imagegen-prompt") {
         export::execute(args.into_iter().skip(1).collect())
     } else if args.first().is_some_and(|arg| arg == "neighbors") {

@@ -27,6 +27,7 @@ COMMON = {'uiblueprint', 'uiblueprint-validate', 'distribution.py', 'RUN.md',
           'uiblueprint-0.1.0.schema.json', 'uiblueprint-analysis-0.2.0.schema.json',
           'example-snapshot.json', 'example-query.json', 'example-evaluation.json',
           'example-expectation.json', 'example-observed-brief.json', 'example-proposed-brief.json'}
+COMPOSE_FILES = {'ComposeMarker.kt', 'ProbeSession.kt', 'ProbeJson.kt', 'COMPOSE.md'}
 WEB_FILES = {'web-geometry.cjs', 'WEB-FIRST-USE.md'}
 IMAGE_SUFFIXES = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico', '.icns',
                   '.bmp', '.tif', '.tiff', '.heic', '.heif', '.avif', '.pdf', '.partial'}
@@ -38,7 +39,7 @@ SWIFT = ['plugins/macos/NativeAcquisition.swift', 'plugins/macos/NativeJSON.swif
 
 
 def files_for(modules):
-    names = COMMON.copy()
+    names = COMMON | COMPOSE_FILES
     if modules != 'core':
         names.add('session-worker')
     if modules in ('native', 'combined'):
@@ -157,9 +158,11 @@ def verify(fd):
     manifest = json.loads(raw)
     modules = manifest.get('modules')
     expected_names = files_for(modules)
+    if manifest.get('format') in ('ui-blueprint-local-1', 'ui-blueprint-local-2'):
+        expected_names -= COMPOSE_FILES
     if manifest.get('format') == 'ui-blueprint-local-1':
         expected_names -= WEB_FILES  # old complete inventory remains removable
-    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2') or
+    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3') or
             modules not in ('core', 'web', 'native', 'combined') or
             set(manifest.get('files', {})) != expected_names):
         raise ValueError('invalid distribution manifest; no files removed')
@@ -307,6 +310,9 @@ def build(args, fd):
         if args.modules in ('web', 'combined'):
             products['web-geometry.cjs'] = ((source / 'tests/bridges/web/geometry.cjs').read_bytes(), 0o644)
             products['WEB-FIRST-USE.md'] = ((source / 'docs/development/web-first-use.md').read_bytes(), 0o644)
+        for name in ('ComposeMarker.kt', 'ProbeSession.kt', 'ProbeJson.kt'):
+            products[name] = ((source / 'plugins/compose/src' / name).read_bytes(), 0o644)
+        products['COMPOSE.md'] = ((source / 'plugins/compose/README.md').read_bytes(), 0o644)
         products['DEPENDENCY_LICENSES.txt'] = (licenses, 0o644)
         sysroot = Path(run(['rustup', 'run', TOOLCHAIN, 'rustc', '--print', 'sysroot'],
                            cwd=source).decode().strip())
@@ -315,7 +321,7 @@ def build(args, fd):
             (sysroot / 'share/doc/rust/COPYRIGHT-library.html').read_bytes(), 0o644)
         if set(products) != files_for(args.modules):
             raise ValueError('unexpected bundle inventory')
-        manifest = {'format': 'ui-blueprint-local-2', 'source_revision': revision,
+        manifest = {'format': 'ui-blueprint-local-3', 'source_revision': revision,
             'modules': args.modules, 'target': TARGET, 'profile': 'release',
             'cli_features': cli_features, 'worker_features': ['web'] if 'web' in cli_features else [],
             'rustc': tool_version, 'swift': swift_version, 'host_os': platform.mac_ver()[0],
