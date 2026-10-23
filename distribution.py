@@ -238,6 +238,7 @@ def build(args, fd):
         source = stage / 'source'
         source.mkdir()
         paths = ['Cargo.toml', 'Cargo.lock', 'rust-toolchain.toml', 'crates', 'plugins/web',
+                 'plugins/compose/src', 'plugins/compose/README.md',
                  'schemas', 'fixtures/analysis', 'fixtures/export', 'distribution.py',
                  'docs/development/distribution.md', 'THIRD_PARTY_NOTICES.md']
         if args.modules in ('web', 'combined'):
