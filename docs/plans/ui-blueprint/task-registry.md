@@ -2,6 +2,8 @@
 
 ## Native caller follow-up — 2026-10-27
 
+**Status: complete for bounded input preparation and separate measurement recipe.**
+
 Human authority directly verified via read_thread: Kotlin chat
 01a1691a-c072-7500-b304-a53377be2769, message01a17cdd-a517-7221-99fd-a8cc05c830f1:
 «У нас есть скилл blueprint, можешь брать, например, смотреть, как это у нас по
@@ -53,8 +55,35 @@ LaunchServices launches; source helper requires that exact field. Recipe now sta
 owner-controlled same-app LaunchServices setup/newPID, no ps/Info.plist substitution,
 no tool-driven relaunch/permission fallback. Consumer owns changed setup and retry.
 Packaged missingPID control2147483647→4/no stdout/files also passed.
-Next: actual consumer prepare→Observe→measure after correct launch precondition,
-final matching package and managed local update; no remote deployment.
+Final source6d8a7831b19dda24b8842768957d058df980af97 installed as
+`0.1.0-native.prepare3` under existing ~/.local/share/uiblueprint/versions.
+Both global skill aliases and CLI resolve to this matching bundle;24manifest
+file hashes pass. Older managed versions retained. Existing8css_px smoke passes.
+No shell/profile change, public release, remote preparation or deployment.
+
+Actual Kotlin consumer independently confirmed installed bundle hashes/recipe and
+completed the finite use case. Owner quit only its old direct-executable preview
+and launched the same declared .app through LaunchServices. Actual PID37106,
+bundle me.playphraseme.swift.component.preview, launch1793099460.3815598, target
+generation37106:1793099460.3815598. Wrong expected bundle→4/bundle_mismatch/0files;
+correct preparation→0/two private files; unchanged160/depth9/1000ms/512KiB verified.
+Observe→4/observe_incomplete with observed Snapshot and partial coverage, not Failed.
+Real error-state content AXButton Rust width67pt/height35.5pt, text gap13.341176pt:
+all known/0 from original observed records/actual keys. Some accessibility names
+unknown/unsupported; AX→pixel transform unknown. No layout/paint/hit/full-field claim.
+Compose separately imported/validated/measured loading card488×110.5dp, density2,
+fontScale1; no cross-identity compare/diff or source metadata rewrite.
+One earlier error-named capture actually showed Loading; consumer rejected that
+state proof and explicitly restored Error before a fresh correctly attributed
+capture. Cause unknown, no tool mutation/regression asserted. Source process lived
+after Observe. This is consumer/runtime evidence, not independent source review.
+
+Consumer released temporary prepare1 installation. All run-owned intermediate
+candidate/archive/install files removed and absence verified, no images encountered;
+final managed installation/older versions and consumer images/evidence untouched.
+Consumer owns its preview/runtime and screenshot lifecycle. Source app unchanged
+by this chat. Task complete; current branch checkpoint records outcome. Future
+full coverage or cross-platform comparison requires its own concrete requirement.
 
 ## Global Compose installation — completed, 2026-10-23
 
