@@ -115,6 +115,13 @@ class Preparation(unittest.TestCase):
             with self.assertRaises(OSError): self.prepare()
         self.assertEqual(list(self.stage.iterdir()), [])
 
+    def test_argument_diagnostics_do_not_echo_input(self):
+        result = subprocess.run([sys.executable, '-B', str(ROOT/'plugins/macos/native_prepare.py'),
+                                 '--pid', 'PRIVATE_CANARY'], capture_output=True, timeout=5)
+        self.assertEqual(result.returncode, 2)
+        self.assertEqual(result.stdout, b'')
+        self.assertEqual(result.stderr, b'invalid_arguments\n')
+
     def test_matching_bundle_and_tamper(self):
         names = ['native-prepare.py', 'native-host-helper', 'session-worker', 'uiblueprint']
         files = {}

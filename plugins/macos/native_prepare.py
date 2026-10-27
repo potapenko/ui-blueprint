@@ -32,6 +32,11 @@ class Refusal(Exception):
         self.code, self.status = code, status
 
 
+class ArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        raise Refusal('invalid_arguments')
+
+
 def strict_object(pairs):
     result = {}
     for key, value in pairs:
@@ -177,12 +182,12 @@ def prepare(bundle, pid, expected_bundle, output):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument('--pid', type=int, required=True)
     parser.add_argument('--bundle-id', required=True, help='expected exact app bundle ID')
     parser.add_argument('--out', type=Path, required=True, help='existing private system-temp directory')
-    args = parser.parse_args()
     try:
+        args = parser.parse_args()
         result = prepare(Path(__file__).resolve().parent, args.pid, args.bundle_id, args.out)
         print(json.dumps(result))
         return 0
