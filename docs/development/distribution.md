@@ -207,7 +207,10 @@ The CLI keeps its explicit paths and trusted connection/request grammar:
   --worker "$BUNDLE/session-worker" --max-input-bytes 2097152 --max-output-bytes 524288
 ```
 
-Use a trusted operator-authored connection for the **current** authorized target.
+For native AX, optional Python3.11+ `native-prepare.py --pid PID --bundle-id EXPECTED
+--out EXISTING_PRIVATE_DIRECTORY` prepares trusted connection.json/request.json from
+actual process metadata. It does not observe, activate or grant permissions. Use a
+trusted connection for the **current** authorized target.
 For Native set its `provider.helper_executable` to the absolute
 `$BUNDLE/native-host-helper` path (expand the variable when authoring JSON).
 For Web, establish an authorized numeric-loopback CDP target/document separately.
@@ -323,8 +326,9 @@ The [saved-data smoke example](../../skills/ui-blueprint/references/analysis.md#
 expects validator valid, gap **8 css_px**, and check pass. Check each exit/payload.
 
 For live first use, Web still needs Node24+ and an already-authorized browser CDP
-connection. Ordinary macOS observation still needs prepared trusted connection and
-Request documents; the developer PID/name helper is not part of the installed skill.
+connection. Ordinary macOS observation uses prepared trusted connection and Request documents;
+the installed native-prepare.py prepares them for an explicit PID/expected bundle.
+The repository developer PID/name example remains separate tooling.
 Neither prerequisite is silently created by installing instructions.
 
 ## Capability and acceptance handoff

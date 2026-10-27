@@ -1,5 +1,48 @@
 # Единый реестр задач
 
+## Native caller follow-up — 2026-10-27
+
+Human authority directly verified via read_thread: Kotlin chat
+01a1691a-c072-7500-b304-a53377be2769, message01a17cdd-a517-7221-99fd-a8cc05c830f1:
+«У нас есть скилл blueprint, можешь брать, например, смотреть, как это у нас по
+геометрии в SwiftUI и сравнивать свою геометрию с Kotlin. Если у тебя чего-то в
+Kotlin не хватает, говори чатам Blueprint, пусть доделывает.» Root's prior request
+for duplicate approval is withdrawn. This finite follow-up is direct single-agent
+implementation with existing consumer consultation; no old goal or agents resumed.
+
+Outcome: shipped optional native-prepare.py takes actual PID + expected bundle ID,
+checks matching bundle and repeated actual describe-process identity, writes
+exclusive bounded native_ax connection/request to a private caller-owned temp dir.
+No app launch/focus/AX observation/actions/permission change/pixel capture or retry.
+Caller runs Observe separately; its selected AXFocusedWindow must be authorized.
+Native AX and Compose measurements remain separate; protected compare identity
+requirements remain unchanged. No generic component selection or cross-platform
+compare capability is advertised. App/code/QA remain in the Kotlin consumer chat.
+
+Write set: plugins/macos/native_prepare.py; its focused bridge check; distribution.py,
+release.py/install.sh and affected packaging checks; native-first-use contract,
+registry/product/skill/distribution routes, macOS skill recipe and this restart state.
+Current master only; preserve unrelated after-title-spacing.png; no remote action.
+Spec traversal: registry62/product→NATIVE5/CLI21/AGENT-SKILL5/MAC-DISTRIBUTION5
+and existing complete EXCHANGE2/MODEL/IDENTITY/GEOMETRY2/PROJECTIONS/LIFECYCLE/
+PRIVACY closure, D05limits/native-acquisition/memory/work/D02/D03/D04/D06 and
+PILOTS/native-pilots/performance/GOLDEN/ACTIONS/forms dependencies. Existing clauses
+read fully/reused unchanged; new NATIVE-FIRST-USE1, AGENT-SKILL6, distribution6,
+registry63 registered before source. Exclude visual design, source app edits,
+cross-identity comparison, old benchmark/pilot waves and production deployment.
+Implementation reuses existing developer geometry request/profile and public helper;
+no new dependencies in Rust/core. Python3.11+ only for optional input preparation.
+
+Checks:6focused preparer tests pass (identity/limits/canonical request, expected
+bundle/restart/missing process, metadata limits/timeout, private dir/symlink/conflict,
+partial-write cleanup, bundle tampering). Distribution safety/inventory and installer
+suite pass including old manifest2+skill6 and manifest3+skill7→manifest4 update,
+verified rollback/removal and hostile inventory protection. First packaging test
+caught omitted format4 skill-admission branch; repaired and full affected suite rerun.
+Changed links/Python syntax/shell syntax/diff whitespace pass. These are synthetic/
+source checks, not native live acceptance. Next: build saved candidate; consumer
+source review and real prepare→Observe→measure on its own preview, then handoff.
+
 ## Global Compose installation — completed, 2026-10-23
 
 Direct user authorization: «Да, обнови теперь глобально установленный skill и CLI,

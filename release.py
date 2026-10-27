@@ -222,7 +222,8 @@ def extract_candidate(folder, bundle, record):
     with tarfile.open(folder / archive_name(record['version']), 'r:gz') as archive:
         members = archive.getmembers()
         names = {m.name for m in members}
-        inventories = (expected, expected - dist.COMPOSE_FILES, expected - dist.COMPOSE_FILES - dist.WEB_FILES)
+        legacy = expected - dist.NATIVE_CALLER_FILES
+        inventories = (expected, legacy, legacy - dist.COMPOSE_FILES, legacy - dist.COMPOSE_FILES - dist.WEB_FILES)
         if len(members) != len(names) or names not in inventories or any(not m.isfile() for m in members):
             raise ValueError('invalid release archive inventory')
         for member in members:
@@ -238,7 +239,7 @@ def extract_candidate(folder, bundle, record):
         with tarfile.open(folder / skill_archive_name(record['version']), 'r:gz') as archive:
             members = archive.getmembers()
             expected_skill = set(SKILL_FILES)
-            if manifest['format'] != 'ui-blueprint-local-3':
+            if manifest['format'] in ('ui-blueprint-local-1', 'ui-blueprint-local-2'):
                 expected_skill.remove('references/compose.md')
             if (len(members) != len(expected_skill) or {m.name for m in members} != expected_skill
                     or any(not m.isfile() or m.mode != 0o644 for m in members)):

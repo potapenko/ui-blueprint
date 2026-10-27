@@ -1,5 +1,5 @@
 # Agent skill and prompt installation
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@5`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@6`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: the operator approved this chat's six-step plan on 2026-10-13;
   the later instruction “Теперь давай подключим skill к установщику” authorizes
@@ -34,8 +34,8 @@ Use [ANALYSIS@2](../product/analysis.md) for factual query/check recipes,
 [WEB-FIRST-USE@4](../product/web-first-use.md) for Web URL/component acquisition,
 [NATIVE@5](../product/native.md) for the prepared ordinary AX caller and
 [CLI-EXPORT@3](../product/cli-export.md) plus its drawing closure for export.
-Native connection preparation is explicitly caller-owned in this first skill;
-do not advertise a shipped PID-to-connection bootstrap or developer test helper.
+Native input preparation uses the optional installed [NATIVE-FIRST-USE@1](../product/native-first-use.md)
+caller; its explicit PID/expected-bundle authority does not imply observation.
 Observation, coverage, units, frame kinds, identity and unavailable results retain
 their product meanings. Examples do not create UI requirements or action authority.
 
@@ -94,9 +94,7 @@ answers. The user explicitly requests fresh-chat installation and forward testin
 one saved-source case and one generation per initial iteration, with no inherited
 conversation or successful example. Isolated system-temp installation is authorized
 for this test; no application changes, new public release or old goal resume.
-
 AGENT-SKILL-003: authorized pinned-source bootstrap resolves the empty-Releases
 onboarding gap. AGENT-SKILL-004 adds the agent-composed drawing/cold-test workflow.
 CLI/wire/analysis/export semantics and public release boundaries remain protected.
-
 KC-COMPOSE-001: human-approved2026-10-23 plan adds the portable [Compose@1](../product/compose.md) recipe and source-included collector. Existing installation and drawing behavior stay unchanged; Desktop/Android runtime acceptance is separate.

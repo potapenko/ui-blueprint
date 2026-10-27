@@ -20,6 +20,7 @@
 | [UIB.WEB-DOCUMENTS@1](web-documents.md) | explicit bounded full-document Web selection and raw AX focusability; W06 technical representation |
 | [UIB.NATIVE-SESSION@3](native-session.md) | attached Native form observation/actions and CLI; contract |
 | [UIB.COMPOSE@1](compose.md) | Explicit opt-in Kotlin Desktop/macOS and Android layout probe/import |
+| [UIB.NATIVE-FIRST-USE@1](native-first-use.md) | Installed PID/expected-bundle native input preparation |
 | [UIB.NATIVE@5](native.md) | Mac AX, capture, оконное matching, probe; contract |
 | [UIB.GEOMETRY@2](geometry.md) | пространства, transforms, измерения, Expectation/check; contract |
 | [UIB.PROJECTIONS@1](projections.md) | выбор области, coverage, проекции, many-to-many mapping; contract |

@@ -7,11 +7,26 @@ not grant Accessibility or screen-recording permissions.
 
 ## First-use boundary
 
-This installed path requires **prepared trusted connection and Request JSON** from
-the authorized caller. The skill does not ship a PID-to-connection generator.
-If those inputs are absent, report exactly that prerequisite and continue any
-independent saved-data work. Do not invoke repository fixture/build scripts as if
-they were installed commands, invent process identity, or collect other applications.
+The native/combined bundle includes `native-prepare.py` (optional Python3.11+).
+Use the exact PID of the caller-authorized already-running app and its expected
+bundle ID. The caller authorizes that process's current AXFocusedWindow; this
+route does not select arbitrary windows/components or change focus. The preparer
+reads public process metadata only, checks identity twice, then writes inputs.
+It never collects UI, launches an app, requests permission or invokes Observe.
+
+```sh
+UIB_RUN=$(mktemp -d "${TMPDIR:-/tmp}/uib-native-inputs.XXXXXX")
+python3 "$UIB_BUNDLE/native-prepare.py" --pid "$TARGET_PID" \
+  --bundle-id "$EXPECTED_BUNDLE_ID" --out "$UIB_RUN"
+```
+
+Check exit0 before using `$UIB_RUN/connection.json` and `$UIB_RUN/request.json`.
+The directory must already exist, be private and caller-owned. Existing files
+are never overwritten. Exit4 means wrong/missing/changed process;2 invalid input,
+bundle or destination;1 IO/helper/timeout. No automatic retry/fallback.
+If the supplied bundle lacks this file, use a matching updated bundle; do not
+invoke repository fixture scripts or fabricate identities. `describe-process`
+is the identity source, not proof that an authorized window can be observed.
 
 Check these input facts before calling Observe:
 
@@ -74,3 +89,15 @@ Observe 4 can carry partial source data; 1 includes IO/unconfirmed cleanup;
 unresolved target remain distinct source outcomes. Report the actual result without
 opening permission dialogs, changing focus, broadening to another window or retrying
 automatically. Cleanup may reap owned helpers, never the user's application.
+
+## SwiftUI versus Compose
+
+Use native `accessibility_bounds` in their reported pt space and Compose
+`layout_bounds` in their sourced px/dp space as separate measurements. AX may
+merge/omit internal pieces; its rectangle is not a SwiftUI layout probe. Invoke
+Rust measure separately on each original record, with independent source keys
+and spaces; report both values and qualifications. Numerical equality does not
+establish equivalent layout/paint/hit areas or pt=dp mapping.
+Existing `compare` requires compatible plugin/Target/namespace; `diff` also needs
+its strict identity basis. Do not rewrite snapshots or force cross-platform pairs.
+Screenshots/interaction remain separate caller-owned visual evidence.

@@ -1,7 +1,7 @@
 # Mac distribution
 
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@5`.
+- Contract: `UIB.MAC-DISTRIBUTION@6`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -9,9 +9,7 @@
 - Read when: preparing release archives or installing/updating/removing them.
 - Requires: [BOUNDARIES@1](../product/boundaries.md), [DEV.RUST@2](rust.md).
 - Entry: [D01 support](decisions/d01-support.md); README files remain unchanged.
-
 ## DISTRIBUTION.SCOPE — Approved change
-
 Evolve the local-only distribution into a prepared Mac Apple Silicon release:
 one combined Mac/Web archive, shell installer and own-tap Homebrew formula.
 Implementation stays in this chat on the current branch. Publication, license
@@ -23,7 +21,6 @@ read-only consultation with other project chats about the profile name only.
 The original accepted plan and user approval remain in this chat, not inferred
 from this contract. No README, product algorithms, CLI grammar, wire schemas,
 runtime permissions, Linux/Windows/Intel support or automatic browser launch changes.
-
 ## DISTRIBUTION.ARCHIVE — One immutable set
 Every distributed product, helper, recipe, guide and installer comes from one
 committed revision. Release version is separate from schema/package versions.
@@ -54,7 +51,7 @@ Do not overwrite foreign paths, symlinks or another installation channel.
 Serialize own mutations. Verify before switching current; retain previous versions.
 Repeat installation of the same unchanged version is idempotent; --version selects
 a fully verified already-installed version, or dispatches its published installer
-when absent. Each version uses its recorded manifest1/2/3 inventory, with exact
+when absent. Each version uses its recorded manifest1/2/3/4 inventory, with exact
 receipt names, hashes and modes; skill inventory follows that same version. Stop sessions before switching;
 long-lived trusted connections should use explicit immutable version paths.
 --uninstall validates all managed versions before removing only owned files/links;
@@ -98,3 +95,6 @@ KC-REVIEW-002: review exposed manifest2→3 installation failure caused by check
 old receipts against the invoking installer's inventory. @5 registers verified
 installed-version selection for rollback; closed per-format inventories and existing
 ownership/tamper refusal remain. No global install, new option or public release.
+NATIVE-FIRST-USE-001: direct human consumer directive adds native-prepare.py to
+native/combined manifest4. Old1–3 inventories and skill contents remain verifiable;
+Python3.11+ is optional caller tooling. No permission change or publication.

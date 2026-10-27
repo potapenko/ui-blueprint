@@ -63,9 +63,11 @@ for(const key of ['stat','access','mkdtemp','open','readFile','unlink','rmdir'])
 def inventory_compatibility():
     stage = Path(tempfile.mkdtemp(prefix='uib-dist-inventory-'))
     try:
-        for version in (1, 2, 3):
+        for version in (1, 2, 3, 4):
             for modules in ('core', 'web', 'native', 'combined'):
                 names = dist.files_for(modules)
+                if version < 4:
+                    names -= dist.NATIVE_CALLER_FILES
                 if version < 3:
                     names -= dist.COMPOSE_FILES
                 if version == 1:
@@ -158,7 +160,7 @@ def smoke(bundle):
     assert 'UNICODE LICENSE V3' in licenses and 'copyright Alexander Huszagh' in licenses
     assert 'Copyright notices for The Rust Standard Library' in (bundle / 'RUST_LIBRARY_NOTICES.html').read_text()
     call([sys.executable, bundle / 'distribution.py', 'verify', '--destination', bundle], env=env)
-    if manifest['format'] in ('ui-blueprint-local-2', 'ui-blueprint-local-3') and manifest['modules'] in ('web', 'combined'):
+    if manifest['format'] in ('ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4') and manifest['modules'] in ('web', 'combined'):
         web_help(bundle / 'web-geometry.cjs')
     cli, validator = bundle / 'uiblueprint', bundle / 'uiblueprint-validate'
     assert b'native-session --connection' in call([cli, '--help'], env=env).stdout
@@ -249,7 +251,7 @@ def safety():
         folder = stage / 'bundle'; folder.mkdir()
         (folder / 'unrelated.txt').write_text('leave me')
         products = {name: (name.encode(), 0o644) for name in dist.files_for('core')}
-        manifest = {'format': 'ui-blueprint-local-3', 'modules': 'core', 'source_revision': 'synthetic',
+        manifest = {'format': 'ui-blueprint-local-4', 'modules': 'core', 'source_revision': 'synthetic',
                     'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                               for name, (data, mode) in products.items()}}
         with dist.destination(folder) as fd:

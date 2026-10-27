@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 62 (agent-composed blueprint skill).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 63 (agent-composed blueprint skill).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -69,6 +69,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 `HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
+`NATIVE-FIRST-USE-001`: verified human Kotlin comparison directive registers [NATIVE-FIRST-USE@1](product/native-first-use.md), optional bounded PID/expected-bundle preparer; unchanged AX/permissions/core, manifest4 adds its file.
 `KC-REVIEW-002`: approved Compose outcome repair registers [MAC-DISTRIBUTION@5](development/macos-distribution.md), per-recorded-format validation and verified installed-version rollback; source facts, ownership and existing archive guards preserved.
 `KC-COMPOSE-001`: human-approved2026-10-23 Kotlin plan registers [COMPOSE@1](product/compose.md), CLI@21 and AGENT-SKILL@5 for explicit bounded opt-in Desktop/macOS and Android probe → canonical Rust analysis; existing core/Web/native meanings and public release boundary remain.
 `GEOMETRY-SHEET-001`: direct user correction2026-10-14 registers [PROMPT-A@3](product/drawing-prompt-a.md#geometry-sheet--direct-user-correction-2026-10-14): library-generated single-sheet AX geometry map and measured relationships, no media tracing or manual prompt substitution; existing density/explicit-detail boundaries remain.

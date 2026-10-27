@@ -35,7 +35,7 @@ def bundle_at(folder, revision='a' * 40):
     products = {name: ((name + '\n').encode(), 0o644) for name in dist.files_for('combined')}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "Usage: synthetic candidate\\n"\n', 0o755)
-    manifest = {'format': 'ui-blueprint-local-3', 'source_revision': revision,
+    manifest = {'format': 'ui-blueprint-local-4', 'source_revision': revision,
                 'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                                                 for name, (data, mode) in products.items()}}
     with dist.destination(folder) as fd:
@@ -587,7 +587,7 @@ def cross_inventory_checks(stage, versions):
     old_bundle = stage / 'legacy inventory bundle'
     old_folder.mkdir()
     old_bundle.mkdir()
-    names = dist.files_for('combined') - dist.COMPOSE_FILES
+    names = dist.files_for('combined') - dist.COMPOSE_FILES - dist.NATIVE_CALLER_FILES
     products = {name: ((name + '\n').encode(), 0o644) for name in names}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "legacy synthetic executable\\n"\n', 0o755)
@@ -662,8 +662,41 @@ def cross_inventory_checks(stage, versions):
     assert os.readlink(current) == 'versions/0.1.0'
     run([*new, '--uninstall'], env=env)
     assert not root.exists() and not skill.is_symlink()
-    print('PASS cross-inventory: historical manifest2/six-file skill install → manifest3/seven-file update, verified offline rollback/re-update/removal; tampered and foreign inventories refused')
+    print('PASS cross-inventory: historical manifest2/six-file skill install → manifest4/seven-file update, verified offline rollback/re-update/removal; tampered and foreign inventories refused')
 
+
+
+def compose_inventory_upgrade(stage, versions):
+    """The installed Compose manifest3 upgrades without losing the matching skill."""
+    bundle = stage / 'compose3-bundle'
+    bundle.mkdir()
+    names = dist.files_for('combined') - dist.NATIVE_CALLER_FILES
+    products = {name: ((name + '\n').encode(), 0o644) for name in names}
+    for name in release.BINARIES:
+        products[name] = (b'#!/bin/sh\nexit 0\n', 0o755)
+    manifest = {'format': 'ui-blueprint-local-3', 'source_revision': 'a'*40,
+        'modules': 'combined', 'files': {n: {'sha256': dist.digest(d), 'mode': m}
+                                         for n, (d, m) in products.items()}}
+    with dist.destination(bundle) as fd:
+        dist.publish(fd, products, manifest)
+    candidate = stage / 'compose3-candidate'; candidate.mkdir()
+    release.write_candidates(bundle, candidate, version='0.0.9', revision='a'*40,
+        minimum='27.0.1', signing='unsigned',
+        installer_template=release.committed('beeab158', 'install.sh').decode(),
+        formula_template=(ROOT/'uiblueprint.rb').read_text(),
+        skill_files={n: release.committed('beeab158', 'skills/ui-blueprint/'+n) for n in release.SKILL_FILES})
+    prefix = stage / 'compose3-prefix'; skill = stage / 'compose3-skill'
+    run(['sh',candidate/'install.sh','--prefix',prefix,'--skill-dir',skill,'--local-release',candidate])
+    new = ['sh',versions/'0.1.0/install.sh','--prefix',prefix]
+    run([*new,'--local-release',versions/'0.1.0'])
+    current = prefix/'share/uiblueprint/current'
+    assert (current/'native-prepare.py').is_file()
+    run([*new,'--version','0.0.9'])
+    assert not (current/'native-prepare.py').exists()
+    assert (skill/'references/compose.md').is_file()
+    run([*new,'--uninstall'])
+    assert not current.exists() and not skill.exists()
+    print('PASS manifest3 Compose installation → manifest4 native caller update/rollback/removal')
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -680,6 +713,7 @@ def main():
         install_checks(stage, versions)
         skill_checks(stage, versions)
         cross_inventory_checks(stage, versions)
+        compose_inventory_upgrade(stage, versions)
         hostile_skill_checks(stage, versions)
         local_install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)
