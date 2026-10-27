@@ -14,6 +14,15 @@ route does not select arbitrary windows/components or change focus. The preparer
 reads public process metadata only, checks identity twice, then writes inputs.
 It never collects UI, launches an app, requests permission or invokes Observe.
 
+The app must expose public NSRunningApplication bundleIdentifier and launchDate.
+Apple's NSRunningApplication.h documents that launchDate is unavailable when an
+app was launched without LaunchServices. Running Contents/MacOS/executable directly
+can therefore give target_unresolved despite a visible window. Do not substitute
+ps timestamps or Info.plist values. The application owner may, within its authorized
+runtime workflow, close its own preview and launch the same declared .app through
+LaunchServices, then obtain a fresh PID. Preparation does not perform that setup,
+retry automatically, or grant permission to close/relaunch someone else's process.
+
 ```sh
 UIB_RUN=$(mktemp -d "${TMPDIR:-/tmp}/uib-native-inputs.XXXXXX")
 python3 "$UIB_BUNDLE/native-prepare.py" --pid "$TARGET_PID" \

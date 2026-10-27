@@ -15,6 +15,10 @@ PID/bundle/full launch time/target generation. Exact expected bundle must match;
 repeat the bounded identity read before publishing and refuse incarnation changes.
 The caller owns an already-running process and authorizes its focused window;
 PID/bundle identity does not select an arbitrary window title or component.
+Public NSRunningApplication identity is a prerequisite; Apple SDK documents missing
+launchDate for launches bypassing LaunchServices. Direct-executable previews may
+thus refuse; owner-controlled LaunchServices setup is separate, never fabricated
+ps/Info.plist launch identity or an implicit relaunch by this tool.
 No AX/content collection, activation, permission prompt, launch, retry, input,
 network, pixel capture or fixture files. It prepares inputs only; Observe must
 still establish and revalidate the actual AXFocusedWindow at acquisition time.

@@ -33,15 +33,28 @@ cross-identity comparison, old benchmark/pilot waves and production deployment.
 Implementation reuses existing developer geometry request/profile and public helper;
 no new dependencies in Rust/core. Python3.11+ only for optional input preparation.
 
-Checks:6focused preparer tests pass (identity/limits/canonical request, expected
+Checks:7focused preparer tests pass (identity/limits/canonical request, expected
 bundle/restart/missing process, metadata limits/timeout, private dir/symlink/conflict,
 partial-write cleanup, bundle tampering). Distribution safety/inventory and installer
 suite pass including old manifest2+skill6 and manifest3+skill7→manifest4 update,
 verified rollback/removal and hostile inventory protection. First packaging test
 caught omitted format4 skill-admission branch; repaired and full affected suite rerun.
 Changed links/Python syntax/shell syntax/diff whitespace pass. These are synthetic/
-source checks, not native live acceptance. Next: build saved candidate; consumer
-source review and real prepare→Observe→measure on its own preview, then handoff.
+source checks, not native live acceptance. Saved callera730d7c then9d773c6 (sanitized malformed-argument errors only);
+matching prepare1/prepare2 bundles built. Consumer declined unrelated source review;
+its check is actual tooling use, never independent source acceptance. Source
+self-check and existing independent literals/installer ownership regressions are
+reported separately. No new reviewer agent is authorized by this follow-up.
+Actual first consumer prepare1 on source PID95924 refused target_unresolved4 for
+both correct/wrong expected bundle, with0files; Observe not run. This is not
+bundle-mismatch proof. Consumer launched .app executable directly via Popen.
+Apple SDK NSRunningApplication.h109–112 states launchDate unavailable for non-
+LaunchServices launches; source helper requires that exact field. Recipe now states
+owner-controlled same-app LaunchServices setup/newPID, no ps/Info.plist substitution,
+no tool-driven relaunch/permission fallback. Consumer owns changed setup and retry.
+Packaged missingPID control2147483647→4/no stdout/files also passed.
+Next: actual consumer prepare→Observe→measure after correct launch precondition,
+final matching package and managed local update; no remote deployment.
 
 ## Global Compose installation — completed, 2026-10-23
 
