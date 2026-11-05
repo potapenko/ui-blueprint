@@ -33,7 +33,10 @@ browsers, scan profiles, launch/reconfigure, navigate/focus, or change applicati
 An already authorized connection is required; URL alone is not authority.
 Selection is bounded metadata, not JS geometry or a manual snapshot adapter.
 Real Rust Observe -> Inspect -> Measure(width,height) supplies facts and coverage.
-Preparation uses a 10s deadline; URL mode collects 32 nodes/depth8/128KiB/1000ms
+Browser connection waits at most 60s for Chrome permission. The worker opens its
+own browser connection and may require a second Allow. Preparation then has a 75s
+bracket including worker attach (60s); each metadata call still has a 2s limit.
+URL mode collects 32 nodes/depth8/128KiB/1000ms
 (collector cap32 nodes/109 methods). Legacy mode keeps collector16/methods100/64KiB/250ms. No automatic quota retry.
 A matching diagnostics-capable CLI is required; safe enum/count reasons go to stderr.
 
@@ -177,25 +180,26 @@ class BootstrapCdp{
       if(!reply||typeof reply!=='object'||Array.isArray(reply))return fail(failure('cdp_invalid_reply'));
       if(!('id' in reply)){if(++this.budget.events>16)fail(failure('bootstrap_limit',2));return;}
       if(!this.pending||reply.id!==this.pending.id)return fail(failure('cdp_uncorrelated_reply'));
+      if(reply.sessionId!==this.pending.sessionId)return fail(failure('cdp_wrong_session'));
       if(reply.error)this.pending.reject(failure('target_unresolved'));
       else this.pending.resolve(reply.result);
     });
   }
   remaining(){const left=this.deadline-performance.now();if(left<=0)throw failure('bootstrap_deadline');return Math.min(2000,left);}
-  static async open(endpoint,deadline,budget){
+  static async open(endpoint,deadline,budget,connectionWaitMs=null){
     const owner=new BootstrapCdp(endpoint,deadline,budget);
-    try{await bounded(owner.ready,owner.remaining(),'bootstrap_deadline',4);return owner;}
+    try{await bounded(owner.ready,connectionWaitMs??owner.remaining(),connectionWaitMs===null?'bootstrap_deadline':'browser_connection_timeout',4);return owner;}
     catch(error){await owner.close();throw error;}
   }
-  async send(method,params={}){
+  async send(method,params={},sessionId=undefined){
     if(this.fatal)throw this.fatal;
     if(++this.budget.calls>32)throw failure('bootstrap_limit',2);
-    const id=++this.sequence,wire=JSON.stringify({id,method,params});
+    const id=++this.sequence,wire=JSON.stringify({id,method,params,...(sessionId===undefined?{}:{sessionId})});
     if(Buffer.byteLength(wire)>16384)throw failure('bootstrap_limit',2);
     // Teardown gets its own bounded allowance; it performs no collection.
-    const timeout=method==='Runtime.releaseObjectGroup'?1000:this.remaining();
+    const timeout=['Runtime.releaseObjectGroup','Target.detachFromTarget'].includes(method)?1000:this.remaining();
     try{return await bounded(new Promise((resolve,reject)=>{
-      this.pending={id,resolve,reject};this.socket.send(wire);
+      this.pending={id,sessionId,resolve,reject};this.socket.send(wire);
     }),timeout,'bootstrap_deadline',4);}finally{this.pending=null;}
   }
   async close(){
@@ -251,8 +255,9 @@ function heldCurrent(){
 }
 
 async function openBootstrap(options){
-  const deadline=performance.now()+10000,group=`uib-first-use-${crypto.randomUUID()}`,budget={calls:0,events:0};
-  let browser=null,page=null,groupOwned=false,closed=false;
+  let deadline=performance.now()+60000;
+  const group=`uib-first-use-${crypto.randomUUID()}`,budget={calls:0,events:0};
+  let browser=null,page=null,sessionId=null,groupOwned=false,closed=false;
   const code={ambiguous:'ambiguous_component',missing:'component_unresolved',incomplete:'selection_limit',timeout:'selection_deadline',unsupported:'unsupported_scope',stale:'stale_target'};
   function selected(status){if(status!=='selected')throw failure(typeof status==='string'&&Object.hasOwn(code,status)?code[status]:'cdp_invalid_reply',status==='incomplete'?2:4);}
   function identity(value){if(typeof value!=='string'||!(/^[A-Za-z0-9_-]{1,256}$/).test(value))throw failure('cdp_invalid_reply');return value;}
@@ -303,15 +308,19 @@ async function openBootstrap(options){
   async function close(){
     if(closed)return;closed=true;let bad=false;
     if(page&&groupOwned){try{await page.send('Runtime.releaseObjectGroup',{objectGroup:group});}catch{bad=true;}}
-    for(const owner of [page,browser])if(owner){try{await owner.close();}catch{bad=true;}}
+    if(browser&&sessionId){try{await browser.send('Target.detachFromTarget',{sessionId});}catch{bad=true;}}
+    if(browser){try{await browser.close();}catch{bad=true;}}
     if(bad)throw failure('bootstrap_cleanup_unconfirmed',1);
   }
   let args,binding,container;
   try{
-    browser=await BootstrapCdp.open(options.connection,deadline,budget);
-    const id=await target(),endpoint=new URL(options.connection);endpoint.pathname=`/devtools/page/${id}`;
-    args={cli:options.cli,worker:options.worker,target:id,endpoint:endpoint.href,json:options.json};
-    page=await BootstrapCdp.open(args.endpoint,deadline,budget);binding=await metadata();
+    browser=await BootstrapCdp.open(options.connection,deadline,budget,60000);
+    deadline=performance.now()+75000;browser.deadline=deadline;
+    const id=await target();
+    sessionId=identity((await browser.send('Target.attachToTarget',{targetId:id,flatten:true}))?.sessionId);
+    page={send:(method,params)=>browser.send(method,params,sessionId),remaining:()=>browser.remaining()};
+    args={cli:options.cli,worker:options.worker,target:id,endpoint:options.connection,browserSession:true,json:options.json};
+    binding=await metadata();
     const {executionContextId}=await page.send('Page.createIsolatedWorld',{frameId:binding.surface.id,worldName:'ui-blueprint-first-use',grantUniveralAccess:false});
     if(!Number.isInteger(executionContextId)||executionContextId<=0)throw failure('cdp_invalid_reply');
     groupOwned=true;
@@ -414,6 +423,7 @@ async function example(args,bootstrap=null){
   const outputBytes=bootstrap?131072:FRAME,requestMs=bootstrap?1000:250;
   const binding=bootstrap?bootstrap.binding:await metadata(args),input=inputs(args,binding,outputBytes,requestMs);
   if(bootstrap){input.connection.provider.setup.collector.max_nodes=32;input.connection.provider.setup.collector.max_methods=109;}
+  if(args.browserSession)input.connection.attach_deadline_ms=60000;
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),'uib-web-geometry-')),owned=[];let child=null,closed=null;
   const started=performance.now();
   async function save(name,bytes){const file=path.join(temp,name),handle=await fs.open(file,'wx',0o600);owned.push(file);try{await handle.writeFile(bytes);}finally{await handle.close();}return file;}
@@ -421,7 +431,8 @@ async function example(args,bootstrap=null){
   async function call(argv){
     if(performance.now()-started>=120000)throw failure('example_deadline',1);
     const bracket=bootstrap&&argv[0]==='observe';
-    const timeout=bracket?Math.min(5000,bootstrap.remaining()):5000;
+    const timeout=bracket?Math.min(args.browserSession?65000:5000,bootstrap.remaining()):5000;
+    if(bracket&&args.browserSession)console.error('observer_connection_pending: Chrome may request Allow for the Rust worker; collection limits are unchanged');
     child=spawn(args.cli,argv,{stdio:['ignore','pipe','pipe']});const chunks=[],errorChunks=[];let total=0,diagnostics=0,over=false;
     child.stdout.on('data',chunk=>{total+=chunk.length;if(total>outputBytes){over=true;child.kill('SIGKILL');}else chunks.push(chunk);});
     child.stderr.on('data',chunk=>{diagnostics+=chunk.length;if(diagnostics<=4096)errorChunks.push(chunk);if(diagnostics>FRAME){over=true;child.kill('SIGKILL');}});
@@ -517,6 +528,7 @@ async function main(){
         if(!path.isAbsolute(options[key])||!(await fs.stat(options[key])).isFile())throw failure('invalid_executable',2);
         await fs.access(options[key],require('node:fs').constants.X_OK);
       }
+      console.error('browser_connection_pending: allow the authorized connection in Chrome if prompted; waiting up to 60s');
       const bootstrap=await openBootstrap(options);
       let result;
       try{result=await example(bootstrap.args,bootstrap);}

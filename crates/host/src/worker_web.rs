@@ -202,13 +202,37 @@ impl WebSession {
             setup.cdp.limits(),
         )
         .map_err(cdp_error)?;
+        // Browser-scoped CDP sessions belong to their own socket, so the worker
+        // must attach itself rather than inherit the caller's session ID.
+        let (client, cdp_session_id) = if setup.cdp_session_id.is_none()
+            && setup
+                .endpoint
+                .split_once("/devtools/browser/")
+                .is_some_and(|(_, id)| {
+                    !id.is_empty()
+                        && id
+                            .bytes()
+                            .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_')
+                }) {
+            let (client, session) = client
+                .attach_target(transport::OperationLimits {
+                    deadline,
+                    max_read_bytes: setup.collector.io_read_bytes,
+                    max_write_bytes: setup.collector.io_write_bytes,
+                    max_work: setup.collector.io_work,
+                })
+                .map_err(cdp_error)?;
+            (client, Some(session))
+        } else {
+            (client, setup.cdp_session_id)
+        };
         let collector = collector::Collector::attach_with_surfaces(
             client,
             collector::Binding {
                 session_id: descriptor.session_id,
                 target: descriptor.target,
                 surface: setup.surface,
-                cdp_session_id: setup.cdp_session_id,
+                cdp_session_id,
                 clock: collector::Clock {
                     domain: clock,
                     origin,

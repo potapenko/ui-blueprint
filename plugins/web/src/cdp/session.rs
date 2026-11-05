@@ -147,6 +147,64 @@ impl Client {
             .filter(|transport| !transport.cancellation().is_cancelled())
             .map(Transport::limits)
     }
+    /// Attach the trusted target on this browser socket and create a new binding.
+    /// A session from another socket is never accepted. Failure drops this owner.
+    pub fn attach_target(
+        mut self,
+        budget: OperationLimits,
+    ) -> Result<(Self, uiblueprint_schema::model::Id), Failure> {
+        use uiblueprint_schema::model::Id;
+        #[derive(serde::Deserialize)]
+        #[serde(deny_unknown_fields)]
+        struct Attached {
+            #[serde(rename = "sessionId")]
+            session_id: String,
+        }
+        #[derive(serde::Deserialize)]
+        struct Envelope {
+            result: Attached,
+        }
+        if self.state.binding.cdp_session_id.is_some() || self.state.active.is_some() {
+            return Err(Failure::plain(ErrorKind::InvalidBinding));
+        }
+        let target = self.state.binding.target.clone();
+        let reply = self
+            .prepare(
+                "Target.attachToTarget",
+                &serde_json::json!({"targetId": target.id.0, "flatten": true}),
+                budget,
+            )?
+            .run()?;
+        if !matches!(reply.kind(), ReplyKind::Result) {
+            return Err(Failure::plain(ErrorKind::InvalidBinding));
+        }
+        let attached: Envelope = serde_json::from_str(reply.wire())
+            .map_err(|_| Failure::plain(ErrorKind::InvalidBinding))?;
+        let session = attached.result.session_id;
+        if session.is_empty()
+            || session.len() > self.limits.max_metadata_bytes.min(256)
+            || !session
+                .bytes()
+                .all(|b| b.is_ascii_alphanumeric() || b == b'-' || b == b'_')
+        {
+            return Err(Failure::plain(ErrorKind::InvalidBinding));
+        }
+        drop(reply);
+        let session = Id(session);
+        let transport = self
+            .transport
+            .take()
+            .ok_or(Failure::plain(ErrorKind::Detached))?;
+        let client = Self::new(
+            transport,
+            Binding {
+                target,
+                cdp_session_id: Some(session.clone()),
+            },
+            self.limits,
+        )?;
+        Ok((client, session))
+    }
     pub fn cancellation(&self) -> Option<Cancellation> {
         self.transport.as_ref().map(Transport::cancellation)
     }

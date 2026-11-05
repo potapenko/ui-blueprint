@@ -28,6 +28,28 @@ Do not add IDs to the app to make a selector work. Missing connection/selection 
 a prerequisite to resolve through the authorized caller, not a reason to scan
 profiles, guess ports, launch/navigate a browser or change application configuration.
 
+## Chrome permission and browser sessions
+
+Use the existing caller-supplied browser endpoint. Chrome's built-in remote debugging
+may return HTTP404 for `/json/version` and HTTP403 for direct page sockets; that does
+not mean the skill is missing. The matching helper and Rust worker use browser CDP
+sessions instead of constructing page endpoints. Keep their versions together.
+
+`browser_connection_pending` precedes the initial handshake (up to60s).
+`observer_connection_pending` precedes the Rust worker's own handshake (up to60s).
+Chrome may show **Allow remote debugging?** for each connection. Check its visible UI
+while the command runs. Follow the host's permission rules; when the user has already
+explicitly authorized this diagnostic access, handle Allow yourself within that scope
+instead of asking the user to operate the computer again. Never bypass a denial,
+change debugging settings, or assume another tool's connection grants this one.
+A timeout alone does not prove a permission denial or an absent browser/skill.
+
+The helper retains exact URL/component binding throughout; permission waits do not
+increase the1000ms geometry-collection deadline or any collection quota. The agent
+must allow enough shell-command time (at least180s for both possible permission waits)
+and keep the command observable while handling prompts. A caller timeout must not be
+shorter than this documented workflow. It closes only its own sessions/sockets.
+
 ## Read measurements or save a source
 
 For a concise inspection and sourced width/height:

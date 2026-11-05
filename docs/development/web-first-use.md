@@ -45,6 +45,15 @@ No browser registry, profile/process scanning, app integration, launch, navigati
 focus, input or model key is involved. In particular, do not modify PlayPhrase.me
 or expose a debug port merely to follow this guide.
 
+Chrome approval-only debugging deliberately disables HTTP discovery and direct page
+WebSockets. URL mode attaches to the selected target through the supplied browser
+WebSocket using a flattened CDP session. The Rust worker opens its own browser
+connection and obtains its own session ID; IDs are never shared across sockets.
+Chrome may request Allow for both connections. Fixed browser_connection_pending /
+observer_connection_pending diagnostics identify the wait; use the authorized caller
+UI workflow to handle the prompt while the command is running. Neither a404 nor a
+timeout proves the skill is unavailable. No debugging setting is changed.
+
 Once that connection is supplied, per-observation runtime identities are obtained
 and checked by the helper, not by the user. The browser/page stays open after use.
 
@@ -159,7 +168,9 @@ saved diagnostics. A partial response is not full visibility or paint evidence.
 
 ## Limits and outcomes
 
-Preparation:10s overall,2s per CDP call,32 calls,128 targets,64KiB per text reply,
+Initial browser handshake:60s; preparation/revalidation:75s overall after handshake,
+including worker attach up to60s. Allow at least180s for the full caller command.
+Per CDP call:2s,32 calls,128 targets,64KiB per text reply,
 256KiB total per connection and16 events. Both selection walks have at most2048
 visited nodes, depth64 and1s each. --max-visited-nodes may lower (not raise) the2048
 limit. Browser/WebSocket internals are opaque tooling costs, not an RSS guarantee.

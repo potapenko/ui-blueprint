@@ -202,6 +202,82 @@ fn refused(c: &mut Client) -> ErrorKind {
 }
 
 #[test]
+fn browser_attach_binds_the_same_socket_and_rejects_other_sessions() {
+    let peer = Peer::new(|s| {
+        let mut ws = accept(s).expect("handshake");
+        let attach = command(&mut ws);
+        assert_eq!(attach["method"], "Target.attachToTarget");
+        assert_eq!(
+            attach["params"],
+            json!({"targetId":"owned-target","flatten":true})
+        );
+        assert!(attach.get("sessionId").is_none());
+        send(
+            &mut ws,
+            json!({"method":"Target.attachedToTarget","params":{"sessionId":"new-session"}}),
+        );
+        send(
+            &mut ws,
+            json!({"id":attach["id"],"result":{"sessionId":"new-session"}}),
+        );
+        let page = command(&mut ws);
+        assert_eq!(page["sessionId"], "new-session");
+        send(
+            &mut ws,
+            json!({"id":page["id"],"sessionId":"other-socket-session","result":{}}),
+        );
+    });
+    let (mut c, session) = client(&peer, None, "generation-a", limits())
+        .attach_target(op(700))
+        .expect("actual browser attachment");
+    assert_eq!(session.0, "new-session");
+    assert!(
+        c.pop_event().is_none(),
+        "root attachment events stay outside page binding"
+    );
+    let error = c
+        .prepare("Page.getFrameTree", &json!({}), op(700))
+        .expect("page command")
+        .run()
+        .expect_err("foreign session refused");
+    assert_eq!(error.kind, ErrorKind::WrongSession);
+}
+
+#[test]
+fn browser_attach_refuses_errors_and_invalid_session_ids() {
+    for result in [
+        json!({"sessionId":""}),
+        json!({"sessionId":"x".repeat(129)}),
+        json!({"sessionId":"bad\nvalue"}),
+        json!({}),
+        json!({"sessionId":42}),
+    ] {
+        let peer = Peer::new(move |s| {
+            let mut ws = accept(s).expect("handshake");
+            let attach = command(&mut ws);
+            send(&mut ws, json!({"id":attach["id"],"result":result}));
+        });
+        let error = client(&peer, None, "generation-a", limits())
+            .attach_target(op(700))
+            .expect_err("invalid session refused");
+        assert_eq!(error.kind, ErrorKind::InvalidBinding);
+    }
+    let peer = Peer::new(|s| {
+        let mut ws = accept(s).expect("handshake");
+        let attach = command(&mut ws);
+        send(
+            &mut ws,
+            json!({"id":attach["id"],"error":{"code":-32000,"message":CANARY}}),
+        );
+    });
+    let error = client(&peer, None, "generation-a", limits())
+        .attach_target(op(700))
+        .expect_err("denied attachment");
+    assert_eq!(error.kind, ErrorKind::InvalidBinding);
+    assert!(!format!("{error:?}").contains(CANARY));
+}
+
+#[test]
 fn reply_interleaved_event_exact_wire_and_private_diagnostics() {
     let peer = Peer::new(|s| {
         let mut ws = accept(s).expect("handshake");

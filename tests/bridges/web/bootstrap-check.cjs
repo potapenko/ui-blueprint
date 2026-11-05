@@ -114,12 +114,19 @@ async function offline(){
     for(let i=0;i<32;i++)await c.send('test');await rejects(()=>c.send('test'),'bootstrap_limit');await c.close();
     c=await helper.BootstrapCdp.open(connection,performance.now()+5000);for(let i=0;i<17;i++)c.socket.dispatchEvent(new MessageEvent('message',{data:'{"method":"event"}'}));await rejects(()=>c.send('test'),'bootstrap_limit');await c.close();
     FakeSocket.autoOpen=false;await rejects(()=>helper.BootstrapCdp.open(connection,performance.now()+20),'bootstrap_deadline');FakeSocket.autoOpen=true;
+    FakeSocket.autoOpen=false;await rejects(()=>helper.BootstrapCdp.open(connection,performance.now()+1000,undefined,20),'browser_connection_timeout');FakeSocket.autoOpen=true;
+    FakeSocket.reply=q=>({id:q.id,sessionId:'foreign',result:{}});
+    c=await helper.BootstrapCdp.open(connection,performance.now()+5000);
+    await rejects(()=>c.send('Page.getFrameTree',{},'owned'),'cdp_wrong_session');await c.close();
+    FakeSocket.reply=q=>({id:q.id,...(q.sessionId?{sessionId:q.sessionId}:{}),result:{}});
     c=await helper.BootstrapCdp.open(connection,performance.now()+5000);FakeSocket.autoClose=false;await rejects(()=>c.close(),'cdp_cleanup_unconfirmed');FakeSocket.autoClose=true;
 
     let mode='ok',frames=0;
     FakeSocket.reply=q=>{
       let result;
       if(q.method==='Target.getTargets')result={targetInfos:mode==='missing'?[]:Array.from({length:mode==='ambiguous'?2:1},(_,i)=>({targetId:'target'+i,type:'page',url}))};
+      else if(q.method==='Target.attachToTarget'){assert.equal(q.params.targetId,'target0');assert.equal(q.params.flatten,true);result={sessionId:'owned-session'};}
+      else if(q.method==='Target.detachFromTarget'){assert.equal(q.params.sessionId,'owned-session');result={};}
       else if(q.method==='Target.getTargetInfo')result={targetInfo:{targetId:'target0',type:'page',url}};
       else if(q.method==='Page.getFrameTree')result={frameTree:{frame:{id:'frame',loaderId:mode==='stale-loader'&&++frames>1?'new':'loader'}}};
       else if(q.method==='DOM.getDocument')result={root:{nodeType:9,backendNodeId:1}};
@@ -130,12 +137,13 @@ async function offline(){
       else if(q.method==='DOM.describeNode')result={node:{nodeType:1,backendNodeId:42,...(['closed-shadow','ua-shadow'].includes(mode)?{shadowRoots:[{shadowRootType:mode==='closed-shadow'?'closed':'user-agent'}]}:{})}};
       else if(q.method==='Runtime.releaseObjectGroup')result={};
       else throw new Error('unexpected_method');
-      return {id:q.id,result};
+      if(!q.method.startsWith('Target.')||q.method==='Target.getTargetInfo')assert.equal(q.sessionId,'owned-session');
+      return {id:q.id,...(q.sessionId?{sessionId:q.sessionId}:{}),result};
     };
     for(const [which,expected] of [['missing','target_unresolved'],['ambiguous','ambiguous_target'],['stale-loader','stale_target'],['malformed-status','cdp_invalid_reply'],['closed-shadow','unsupported_scope']]){
       mode=which;frames=0;await rejects(()=>helper.openBootstrap(parsed),expected);assert(FakeSocket.sockets.every(s=>s.didClose));
     }
-    mode='ok';const prepared=await helper.openBootstrap(parsed);assert.equal(prepared.args.root,42);assert.equal(prepared.binding.document,1);
+    mode='ok';const prepared=await helper.openBootstrap(parsed);assert.equal(prepared.args.root,42);assert.equal(prepared.binding.document,1);assert.equal(prepared.args.endpoint,connection);assert.equal(prepared.args.browserSession,true);assert(FakeSocket.sockets.every(s=>!s.endpoint.includes('/devtools/page/')));
     mode='remount';await rejects(()=>prepared.revalidate(),'stale_target');await prepared.close();assert(FakeSocket.sockets.every(s=>s.didClose));
     mode='ok';const boundary=await helper.openBootstrap(parsed);
     mode='closed-shadow';await rejects(()=>boundary.revalidate(),'unsupported_scope');await boundary.close();assert(FakeSocket.sockets.every(s=>s.didClose));
@@ -305,7 +313,7 @@ async function live(){
       }document.body.append(parent);
     });
     const state=()=>page.evaluate(()=>({focus:document.activeElement?.id,scroll:[scrollX,scrollY],state:window.f01.checkpoint()}));
-    const before=await state();const good=await invoke(ws,page.url(),whole?'#f01':selected,4);assert(good.stderr.startsWith('observe_diagnostic exit=4 '));assert(good.stderr.includes('terminal=completed'));
+    const before=await state();const good=await invoke(ws,page.url(),whole?'#f01':selected,4);assert(good.stderr.includes('observe_diagnostic exit=4 '));assert(good.stderr.includes('terminal=completed'));
     for(const [name,amount] of [['width',whole?360:width],['height',whole?123:height]]){const line=good.stdout.split('\n').find(x=>x.startsWith(name+': '));assert(line);const result=JSON.parse(line.slice(name.length+2));assert.equal(result.status,'known');assert.equal(result.measurement.value.value.amount,amount);assert.equal(result.measurement.space.units,'css_px');}
     assert.deepEqual(await state(),before);
     if(process.argv.includes('--run-export-authorized')||addressing||whole){
@@ -316,7 +324,7 @@ async function live(){
         await fs.writeFile(proxy,'#!'+process.execPath+'\nconst fs=require("node:fs"),{spawnSync}=require("node:child_process");\nconst r=spawnSync('+JSON.stringify(path.join(bundle,'uiblueprint'))+',process.argv.slice(2),{timeout:7000,maxBuffer:1048576});\nif(process.argv[2]==="observe"&&r.stdout)fs.writeFileSync('+JSON.stringify(original)+',r.stdout,{flag:"wx",mode:0o600});\nif(r.stdout)process.stdout.write(r.stdout);if(r.stderr)process.stderr.write(r.stderr);process.exitCode=r.status??1;\n',{mode:0o700});
         const machine=await invoke(ws,page.url(),selected,4,['--json','--cli',proxy,'--worker',workers[0]]);
         const raw=await fs.readFile(original);assert(machine.bytes.equals(raw));assert.equal(machine.stdout.trim().split('\n').length,1);
-        assert(machine.stderr.startsWith('observe_diagnostic exit=4 '));assert(machine.stderr.includes('terminal=completed'));
+        assert(machine.stderr.includes('observe_diagnostic exit=4 '));assert(machine.stderr.includes('terminal=completed'));
         await fs.writeFile(saved,machine.bytes,{mode:0o600,flag:'wx'});
         const response=JSON.parse(raw),snapshot=response.artifact.data.result.data;
         assert.equal(response.artifact.kind,'channel_response');assert.equal(response.artifact.data.result.status,'observed');
@@ -340,7 +348,7 @@ async function live(){
         assert.equal(scene.views[0].components.length,snapshot.nodes.length);
         const serialized=JSON.stringify(scene);assert(serialized.includes('css_px'));assert(!serialized.includes('PRIVATE_BOOTSTRAP_CANARY'));
         assert.deepEqual(await state(),before);
-        const refused=await invoke(ws,page.url(),'#absent',4,['--json']);assert(!refused.stdout);assert.equal(refused.stderr.trim(),'component_unresolved');
+        const refused=await invoke(ws,page.url(),'#absent',4,['--json']);assert(!refused.stdout);assert(refused.stderr.endsWith('component_unresolved\n'));
         if(whole){
           assert.equal(snapshot.nodes.length,24);assert.equal(scene.views[0].components.length,24);
           const roles=snapshot.nodes.map(n=>n.native_role.value?.value);
@@ -414,7 +422,7 @@ async function live(){
     const privateRead=await invoke(ws,page.url(),'#draft',4);assert(privateRead.stderr.startsWith('observe_diagnostic exit=4 '));assert(privateRead.stderr.includes('terminal=completed'));
     assert.equal(await page.inputValue('#draft'),privateBefore);assert.deepEqual(await state(),privateState);
     await page.evaluate(()=>{const host=document.createElement('div');host.id='closed-host';document.body.append(host);host.attachShadow({mode:'closed'});});
-    const closed=await invoke(ws,page.url(),'#closed-host',4);assert(!closed.stdout);assert.equal(closed.stderr.trim(),'unsupported_scope');
+    const closed=await invoke(ws,page.url(),'#closed-host',4);assert(!closed.stdout);assert(closed.stderr.endsWith('unsupported_scope\n'));
     await page.evaluate(()=>{const host=document.createElement('div');host.id='new-boundary';document.body.append(host);});
     const boundary=await helper.openBootstrap(helper.parseFirstUse(['--connection',ws,'--url',page.url(),'--component','#new-boundary']));
     await page.evaluate(()=>document.getElementById('new-boundary').attachShadow({mode:'closed'}));
