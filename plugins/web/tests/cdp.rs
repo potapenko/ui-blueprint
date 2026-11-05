@@ -253,6 +253,11 @@ fn browser_attach_refuses_errors_and_invalid_session_ids() {
         json!({"sessionId":42}),
         json!(["looks-like-a-session"]),
     ] {
+        let expected = if result.is_array() {
+            ErrorKind::Envelope
+        } else {
+            ErrorKind::InvalidBinding
+        };
         let peer = Peer::new(move |s| {
             let mut ws = accept(s).expect("handshake");
             let attach = command(&mut ws);
@@ -261,7 +266,7 @@ fn browser_attach_refuses_errors_and_invalid_session_ids() {
         let error = client(&peer, None, "generation-a", limits())
             .attach_target(op(700))
             .expect_err("invalid session refused");
-        assert_eq!(error.kind, ErrorKind::InvalidBinding);
+        assert_eq!(error.kind, expected);
     }
     let peer = Peer::new(|s| {
         let mut ws = accept(s).expect("handshake");
