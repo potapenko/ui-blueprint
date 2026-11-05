@@ -251,6 +251,7 @@ fn browser_attach_refuses_errors_and_invalid_session_ids() {
         json!({"sessionId":"bad\nvalue"}),
         json!({}),
         json!({"sessionId":42}),
+        json!(["looks-like-a-session"]),
     ] {
         let peer = Peer::new(move |s| {
             let mut ws = accept(s).expect("handshake");

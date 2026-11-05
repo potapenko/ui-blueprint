@@ -162,7 +162,24 @@ impl Client {
         }
         #[derive(serde::Deserialize)]
         struct Envelope {
+            #[serde(deserialize_with = "attached_object")]
             result: Attached,
+        }
+        fn attached_object<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Attached, D::Error> {
+            struct Object;
+            impl<'de> serde::de::Visitor<'de> for Object {
+                type Value = Attached;
+                fn expecting(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                    f.write_str("CDP attachment object")
+                }
+                fn visit_map<A: serde::de::MapAccess<'de>>(
+                    self,
+                    a: A,
+                ) -> Result<Attached, A::Error> {
+                    serde::Deserialize::deserialize(serde::de::value::MapAccessDeserializer::new(a))
+                }
+            }
+            d.deserialize_map(Object)
         }
         if self.state.binding.cdp_session_id.is_some() || self.state.active.is_some() {
             return Err(Failure::plain(ErrorKind::InvalidBinding));
