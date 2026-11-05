@@ -1,0 +1,7 @@
+# GitHub-hosted preview label verified in actions/runner-images:
+# images/macos/xcode-27-arm64-Readme.md (macOS27, Apple Silicon).
+# actionlint names its additional-label allowlist "self-hosted-runner"; this
+# does not change the workflow to a self-hosted runner.
+self-hosted-runner:
+  labels:
+    - xcode-27

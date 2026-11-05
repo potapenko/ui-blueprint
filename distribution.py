@@ -245,6 +245,11 @@ def build(args, fd):
                  'plugins/compose/src', 'plugins/compose/README.md',
                  'schemas', 'fixtures/analysis', 'fixtures/export', 'distribution.py',
                  'docs/development/distribution.md', 'THIRD_PARTY_NOTICES.md']
+        # New sources embed the product version. Historical pinned builds remain
+        # valid without this file; their recipes and binaries keep their old meaning.
+        if subprocess.run(['git', 'cat-file', '-e', f'{revision}:VERSION'], cwd=ROOT,
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+            paths.append('VERSION')
         if args.modules in ('web', 'combined'):
             paths += ['tests/bridges/web/geometry.cjs', 'docs/development/web-first-use.md']
         if args.modules in ('native', 'combined'):

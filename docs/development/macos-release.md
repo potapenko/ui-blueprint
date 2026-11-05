@@ -1,9 +1,11 @@
 # Mac release preparation (not published)
 
-The approved 2026-10-13 scope prepares an Apple Silicon combined Mac/Web release.
+The approved scope prepares an Apple Silicon combined Mac/Web release.
 The [installation contract](../specs/development/macos-distribution.md) is routed
 through D01. Publication and project licensing remain separate owner decisions.
-No README, release/tag or remote tap changes during preparation. The local
+The2026-11-06 [numeric release workflow](releases.md) adds VERSION, changelog,
+CLI version output and manual GitHub Actions. No release/tag or remote tap changes
+occur during local preparation. The local
 `prepare` command never uploads to Apple; `notarize` is a separate explicit step.
 
 ## Prepare locally
@@ -12,14 +14,17 @@ No README, release/tag or remote tap changes during preparation. The local
 including recipes, guides, Web caller, schemas and examples. It refuses an
 invoked release/build recipe that differs from that revision. Checkpoint changes
 first; unrelated working-tree changes are not included in the archive.
-The release version is independent of schema/export package versions.
+The release version comes from VERSION in that commit, independently of
+schema/export package versions. --version is an optional equality assertion;
+it cannot rename the product or add a Web/native suffix. A matching nonempty
+CHANGELOG section and the compiled CLI version are checked before completion.
 The conservative minimum macOS is the actual build host version (currently
 27.0.1); this does not qualify older releases or Intel. The public URLs below
 will not work until an authorized release has actually been published.
 
 ```sh
 RELEASE_OUT="$(mktemp -d "${TMPDIR:-/tmp}/uib-release-candidate.XXXXXX")"
-python3 -B release.py prepare --version 0.1.0 --revision HEAD --destination "$RELEASE_OUT"
+python3 -B release.py prepare --revision HEAD --destination "$RELEASE_OUT"
 python3 -B release.py verify --destination "$RELEASE_OUT"
 python3 -B tests/bridges/release_check.py --candidate "$RELEASE_OUT"
 ```

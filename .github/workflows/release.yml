@@ -1,0 +1,134 @@
+name: Prepare UI Blueprint release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Numeric version from VERSION (for example 0.1.0)
+        required: true
+        type: string
+      revision:
+        description: Reviewed source commit (full 40-character SHA)
+        required: true
+        type: string
+      create_draft:
+        description: Create a GitHub draft after verification (requires explicit authorization)
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: xcode-27
+    timeout-minutes: 30
+    env:
+      UIB_VERSION: ${{ inputs.version }}
+      UIB_REVISION: ${{ inputs.revision }}
+    steps:
+      - name: Validate explicit release inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$UIB_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]
+          [[ "$UIB_REVISION" =~ ^[0-9a-f]{40}$ ]]
+          echo "CARGO_TARGET_DIR=$RUNNER_TEMP/cargo-target" >> "$GITHUB_ENV"
+      - name: Check out the reviewed source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.revision }}
+          persist-credentials: false
+      - name: Check source version and release notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$UIB_REVISION"
+          python3 -B - <<'PY'
+          import os, release
+          version = release.source_version('HEAD')
+          if version != os.environ['UIB_VERSION']:
+              raise SystemExit('Requested version differs from committed VERSION')
+          release.release_notes('HEAD', version)
+          PY
+      - name: Prepare the pinned build toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.96.0 --profile minimal --component rustfmt --component clippy
+          cargo fetch --locked
+          command -v shellcheck >/dev/null || brew install shellcheck
+      - name: Check CLI and release caller
+        shell: bash
+        run: |
+          set -euo pipefail
+          cargo fmt --all -- --check
+          cargo test --locked -p uiblueprint-cli --test binary
+          node tests/bridges/web/bootstrap-check.cjs --check
+          shellcheck install.sh
+      - name: Build and verify the complete release
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate="$RUNNER_TEMP/uiblueprint-candidate"
+          mkdir "$candidate"
+          python3 -B release.py prepare --revision "$UIB_REVISION" --version "$UIB_VERSION" --destination "$candidate"
+          python3 -B release.py verify --destination "$candidate"
+          python3 -B tests/bridges/release_check.py --candidate "$candidate"
+          python3 -B release.py notes --revision "$UIB_REVISION" > "$candidate/RELEASE_NOTES.md"
+      - name: Keep verified candidate artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: uiblueprint-${{ inputs.version }}-${{ inputs.revision }}
+          path: ${{ runner.temp }}/uiblueprint-candidate/*
+          if-no-files-found: error
+          retention-days: 7
+
+  draft:
+    if: ${{ inputs.create_draft }}
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    env:
+      UIB_VERSION: ${{ inputs.version }}
+      UIB_REVISION: ${{ inputs.revision }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download this run's verified candidate
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: uiblueprint-${{ inputs.version }}-${{ inputs.revision }}
+          path: ${{ runner.temp }}/uiblueprint-candidate
+      - name: Check downloaded bytes and refuse an existing tag
+        shell: bash
+        working-directory: ${{ runner.temp }}/uiblueprint-candidate
+        run: |
+          set -euo pipefail
+          sha256sum --check SHA256SUMS
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          record = json.loads(Path('release.json').read_text())
+          if (record['version'] != os.environ['UIB_VERSION'] or
+              record['source_revision'] != os.environ['UIB_REVISION'] or
+              record.get('version_source') != 'VERSION'):
+              raise SystemExit('Artifact source/version mismatch')
+          PY
+          existing=$(git ls-remote "https://github.com/$GITHUB_REPOSITORY.git" "refs/tags/v$UIB_VERSION")
+          test -z "$existing" || { echo 'Version tag already exists; choose a new version'; exit 1; }
+      - name: Create draft with the exact source and assets
+        shell: bash
+        working-directory: ${{ runner.temp }}/uiblueprint-candidate
+        run: |
+          set -euo pipefail
+          gh release create "v$UIB_VERSION" --repo "$GITHUB_REPOSITORY" \
+            --target "$UIB_REVISION" --draft --title "UI Blueprint $UIB_VERSION" \
+            --notes-file RELEASE_NOTES.md \
+            ./*.tar.gz install.sh SHA256SUMS release.json uiblueprint.rb

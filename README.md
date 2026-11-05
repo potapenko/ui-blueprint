@@ -133,7 +133,8 @@ Use ~/.local for the utility and ~/.claude/skills/ui-blueprint for the skill.
 Verify the bundled example and load the skill.
 ```
 
-**Release status:** no public release is available yet. On a prepared Mac the same
+**Release status:** numeric version **0.1.0** is being prepared; no public release
+is available yet. On a prepared Mac the same
 prompt builds one pinned GitHub revision and installs the matching CLI + skill;
 the guide lists the required build tools. Published binaries will remove that build
 prerequisite. Codex and Claude Code discovery passed isolated
@@ -141,6 +142,10 @@ local checks; [tested versions and limits](docs/development/macos-release.md#ski
 are recorded separately from public release readiness.
 
 [Installation guide, manual commands, and update prompt →](docs/install.md)
+
+The installed command is `uiblueprint`; `uiblueprint --version` reports the product
+version. One version covers the CLI, collectors, helpers and agent skill.
+See [changes](CHANGELOG.md) and the [release workflow](docs/development/releases.md).
 
 After setup, ask: “Use UI Blueprint to measure the gaps between these controls.”
 The agent selects the relevant skill instructions. Live observation still needs

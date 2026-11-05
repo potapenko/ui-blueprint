@@ -4,7 +4,8 @@ Install the local utility and the `ui-blueprint` skill together. The utility
 performs geometry calculations; the skill explains observation, analysis,
 comparison, and drawing workflows to the agent. One skill covers these tasks.
 
-**Current status:** install from a matching published release when available.
+**Current status:** numeric release0.1.0 is being prepared; no public release yet.
+Install from a matching published release when available.
 Until the first release, use the pinned-source path below on a prepared Mac.
 It builds and installs the utility and skill together without publishing a release.
 See [tested discovery versions](development/macos-release.md#skill-discovery-verification--2026-10-13).
@@ -81,7 +82,7 @@ for UIB_RECIPE in release.py distribution.py; do
 done
 mkdir "$UIB_SETUP/candidate"
 python3 -B "$UIB_SETUP/source/release.py" prepare \
-  --version "0.0.0-dev.$UIB_REVISION" --revision "$UIB_REVISION" \
+  --revision "$UIB_REVISION" \
   --destination "$UIB_SETUP/candidate"
 python3 -B "$UIB_SETUP/source/release.py" verify --destination "$UIB_SETUP/candidate"
 ```
@@ -89,6 +90,11 @@ python3 -B "$UIB_SETUP/source/release.py" verify --destination "$UIB_SETUP/candi
 Run commands sequentially and stop on failure; use bounded tool timeouts for Git
 and the build. `prepare` reads all product, skill, installer and guide files from
 that same commit. No checkout WIP or installed developer CLI enters the bundle.
+The release number comes from that commit's VERSION file. Do not invent a suffix
+or relabel a previously installed version. New source distributions need a new
+numeric VERSION if their bytes have changed; an existing different candidate
+under the same version is deliberately refused. Historical source recipes retain
+their own syntax; do not mix an old source commit with the new recipe.
 Then install the prepared set at the prompt's authorized destinations:
 
 ```sh
@@ -132,6 +138,9 @@ If the command directory is absent from PATH, use absolute paths for verificatio
 and subsequent skill work. Do not make the person repair PATH just to finish setup.
 
 ### 3. Verify a useful result and load the skill
+
+Run the installed `uiblueprint --version` and compare it with the selected release.
+The CLI, helpers and skill must come from that same version and source revision.
 
 Read the installed `SKILL.md` and follow its relative
 `references/analysis.md` → **Known-result smoke example**. Confirm each exit and

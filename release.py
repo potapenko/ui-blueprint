@@ -24,6 +24,7 @@ BINARIES = ('uiblueprint', 'uiblueprint-validate', 'session-worker', 'native-hos
 SKILL_FILES = ('SKILL.md', 'agents/openai.yaml', 'references/analysis.md',
                'references/export.md', 'references/macos.md', 'references/web.md', 'references/compose.md')
 VERSION = re.compile(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?\Z')
+NUMERIC_VERSION = re.compile(r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\Z')
 
 
 def committed(revision, path):
@@ -37,6 +38,27 @@ def resolve_revision(revision):
         if committed(resolved, name) != (ROOT / name).read_bytes():
             raise ValueError(f'{name} differs from selected commit; checkpoint it before preparation')
     return resolved
+
+
+def source_version(revision):
+    raw = committed(revision, 'VERSION').decode('utf-8')
+    version = raw.rstrip('\n')
+    if raw != version + '\n' or not NUMERIC_VERSION.fullmatch(version):
+        raise ValueError('VERSION must contain one canonical numeric MAJOR.MINOR.PATCH line')
+    return version
+
+
+def release_notes(revision, version):
+    changelog = committed(revision, 'CHANGELOG.md').decode('utf-8')
+    heading = re.compile(r'^## ' + re.escape(version) + r'\s*$', re.MULTILINE)
+    matches = list(heading.finditer(changelog))
+    if len(matches) != 1:
+        raise ValueError('CHANGELOG.md must contain exactly one section for VERSION')
+    body = re.split(r'^## ', changelog[matches[0].end():], maxsplit=1,
+                    flags=re.MULTILINE)[0].strip()
+    if not body:
+        raise ValueError('release changelog section is empty')
+    return f'# UI Blueprint {version}\n\n{body}\n'
 
 
 def archive_name(version):
@@ -141,13 +163,17 @@ def sign_bundle(bundle, identity):
 
 
 def prepare(args):
-    name = archive_name(args.version)
     revision = resolve_revision(args.revision)
+    version = source_version(revision)
+    if args.version is not None and args.version != version:
+        raise ValueError('--version must match VERSION in the selected commit')
+    release_notes(revision, version)  # Refuse incomplete metadata before building.
+    name = archive_name(version)
     minimum = dist.run(['sw_vers', '-productVersion']).decode().strip()
     if not re.fullmatch(r'[0-9]+\.[0-9]+(?:\.[0-9]+)?', minimum):
         raise ValueError('unrecognized macOS version')
     with dist.destination(args.destination) as destination:
-        dist.absent(destination, {name, skill_archive_name(args.version), 'install.sh',
+        dist.absent(destination, {name, skill_archive_name(version), 'install.sh',
                                   'uiblueprint.rb', 'SHA256SUMS', 'release.json'})
         stage = Path(tempfile.mkdtemp(prefix='uib-release-'))
         try:
@@ -156,15 +182,18 @@ def prepare(args):
             output.mkdir()
             with dist.destination(bundle) as fd:
                 dist.build(SimpleNamespace(modules='combined', revision=revision), fd)
+            if dist.run([str(bundle / 'uiblueprint'), '--version']) != f'uiblueprint {version}\n'.encode():
+                raise ValueError('built CLI version differs from release VERSION')
             signing = 'unsigned'
             if args.sign_identity:
                 sign_bundle(bundle, args.sign_identity)
                 signing = 'developer_id'
-            record = write_candidates(bundle, output, version=args.version, revision=revision,
+            record = write_candidates(bundle, output, version=version, revision=revision,
                                       minimum=minimum, signing=signing,
                                       installer_template=committed(revision, 'install.sh').decode(),
                                       formula_template=committed(revision, 'uiblueprint.rb').decode(),
                                       skill_files=committed_skill(revision))
+            record['version_source'] = 'VERSION'
             # Reuse exclusive publication/rollback, with release.json as completion marker.
             products = {p.name: (p.read_bytes(), 0o644) for p in output.iterdir() if p.name != 'release.json'}
             publish_candidates(destination, products, record)
@@ -197,6 +226,10 @@ def read_candidate(folder):
     with dist.destination(folder) as fd:
         raw, _ = dist.read_regular(fd, 'release.json')
         record = json.loads(raw)
+        if record.get('version_source') not in (None, 'VERSION'):
+            raise ValueError('unknown release version source')
+        if record.get('version_source') == 'VERSION' and not NUMERIC_VERSION.fullmatch(record['version']):
+            raise ValueError('non-numeric product release version')
         name = archive_name(record['version'])
         names = [name, 'install.sh', 'uiblueprint.rb']
         if record.get('format') == 'ui-blueprint-release-candidate-2':
@@ -234,6 +267,9 @@ def extract_candidate(folder, bundle, record):
         manifest, _ = dist.verify(fd)
     if manifest['source_revision'] != record['source_revision'] or manifest['modules'] != 'combined':
         raise ValueError('release source/module mismatch')
+    if record.get('version_source') == 'VERSION':
+        if dist.run([str(bundle / 'uiblueprint'), '--version']) != f'uiblueprint {record["version"]}\n'.encode():
+            raise ValueError('release CLI/version mismatch')
     if record['format'] == 'ui-blueprint-release-candidate-2':
         skill = bundle / 'skill'
         with tarfile.open(folder / skill_archive_name(record['version']), 'r:gz') as archive:
@@ -306,17 +342,23 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest='command', required=True)
     build = commands.add_parser('prepare', help='build locally; no upload/publication')
-    build.add_argument('--version', required=True)
+    build.add_argument('--version', help='optional assertion; must match committed VERSION')
     build.add_argument('--revision', default='HEAD')
     build.add_argument('--destination', type=Path, required=True, help='existing absolute output directory')
     build.add_argument('--sign-identity', help='existing Developer ID Application certificate SHA-1')
     verify = commands.add_parser('verify', help='verify prepared archive and metadata offline')
     verify.add_argument('--destination', type=Path, required=True)
+    notes = commands.add_parser('notes', help='print committed release notes; no build or upload')
+    notes.add_argument('--revision', default='HEAD')
     submit = commands.add_parser('notarize', help='EXPLICIT upload to Apple; requires separate operator authorization')
     submit.add_argument('--destination', type=Path, required=True)
     submit.add_argument('--keychain-profile', required=True)
     args = parser.parse_args()
     try:
+        if args.command == 'notes':
+            revision = resolve_revision(args.revision)
+            print(release_notes(revision, source_version(revision)), end='')
+            return 0
         if args.command == 'prepare':
             result = prepare(args)
         elif args.command == 'notarize':

@@ -7,6 +7,27 @@ use std::{
 use uiblueprint_schema::{SchemaVersion, model::*};
 
 static NEXT: AtomicU64 = AtomicU64::new(0);
+#[test]
+fn product_version_needs_no_snapshot_and_rejects_extra_arguments() {
+    let output = Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+        .arg("--version")
+        .current_dir(std::env::temp_dir())
+        .output()
+        .expect("version command");
+    assert!(output.status.success());
+    assert!(output.stderr.is_empty());
+    assert_eq!(
+        String::from_utf8(output.stdout).expect("UTF-8 version"),
+        format!("uiblueprint {}\n", include_str!("../../../VERSION").trim())
+    );
+    let invalid = Command::new(env!("CARGO_BIN_EXE_uiblueprint"))
+        .args(["--version", "unexpected"])
+        .output()
+        .expect("invalid version command");
+    assert_eq!(invalid.status.code(), Some(5));
+    assert!(invalid.stdout.is_empty());
+}
+
 struct Case {
     directory: PathBuf,
     snapshot: Snapshot,

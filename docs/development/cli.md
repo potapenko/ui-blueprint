@@ -62,6 +62,7 @@ uiblueprint measure --snapshot S --query Q --space ID --max-input-bytes N --max-
 uiblueprint measure --snapshot S --expectation X --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json]
 uiblueprint check --snapshot S --expectation X --space ID --max-input-bytes N --max-output-bytes N [--evaluation E] [--json --result-version 0.2.0]
 uiblueprint --help
+uiblueprint --version
 ```
 
 S accepts strict core0.1 Snapshot OR observed ChannelResponse containing it; X is core0.1 Expectation, Q/E are analysis0.2 GeometryQuery/EvaluationInput. A single Observe line can go directly to measure/check as to inspect/diff; preserve the embedded Snapshot/evidence. Failed/no-Snapshot responses reject2. Measure accepts exactly one query/expectation; check requires expectation and rejects query. Duplicate/unknown/incompatible flags reject. Compatibility measure extracts factual fields from the actual expectation, never a normative placeholder or pass/fail.
@@ -69,6 +70,11 @@ All named regular files share ONE aggregate input byte budget before parsing. No
 SPACE_ID resolves unambiguously among query anchors, existing geometry/baselines/capture transforms and supplied transform endpoints. Same ID with different Space definitions rejects. E must select that complete Space and bind Snapshot ID/revision/full Context and existing evidence. Without E: source binding, selected Space, no extra transforms/conditions. Missing facts stay unknown, not guessed.
 
 ## Output and versions
+
+`--version` alone prints the product version from the committed root VERSION file
+(for example `uiblueprint 0.1.0`), with exit0 and no input or live source access.
+Product versions cover the matching distribution; the data-format versions below
+remain independent.
 
 Compact output reports saved-data attribution, snapshot/target/generation/scope, coverage/fields, byte budgets, original Observations, factual query/anchors, selected Space/conditions, quantity/details/evidence or unavailable reason. Actual Expectation/source/tolerance appear only when supplied. Query mode invents no normative fields. Strings are escaped.
 Measure JSON emits canonical analysis0.2 MeasurementCase. Check JSON defaults to core0.1 FindingCase; explicit result-version0.2.0 emits GeometryCheckCase with full evaluation, measurement and expectation. Explicit0.1.0 keeps legacy check. Result-version requires JSON; measure accepts only0.2.0. Unknown has no fake value; known zero/empty intersection stays known.

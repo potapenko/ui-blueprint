@@ -6,6 +6,7 @@
 - Read when: CLI commands, compact/JSON и публикация; skip unrelated domains/reference/future nodes.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
 - Conditional requires, Compose saved probe import: [COMPOSE@1](compose.md); existing Observe providers unchanged.
+- Conditional requires, product version: [RELEASES@1](../development/releases.md) defines --version; existing commands and data versions stay unchanged.
 - Conditional requires, Observe diagnostic option: [OBSERVE-DIAGNOSTICS@3](cli-observe-diagnostics.md); default output preserved.
 - Optional shipped Node caller: [WEB-FIRST-USE@7](web-first-use.md); explicit URL/component preparation, no change to Rust CLI grammar or OBSERVE below.
 - Conditional requires, declared comparison: [CLI-COMPARE@2](cli-compare.md) for compare/diagnose; old commands preserved.

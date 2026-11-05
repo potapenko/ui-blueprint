@@ -371,6 +371,13 @@ def local_install_checks(stage, versions):
 def recipe_checks(stage, bundle, versions):
     record = release.read_candidate(versions / '0.1.0')
     assert record['publication'] == 'not_published' and record['notarization'] == 'not_submitted'
+    mismatch = stage / 'wrong-cli-version'
+    mismatch.mkdir()
+    try:
+        release.extract_candidate(versions / '0.1.0', mismatch, dict(record, version_source='VERSION'))
+        raise AssertionError('CLI/release version mismatch accepted')
+    except ValueError as error:
+        assert str(error) == 'release CLI/version mismatch'
     unpacked = stage / 'unpacked'
     unpacked.mkdir()
     release.extract_candidate(versions / '0.1.0', unpacked, record)
@@ -552,6 +559,8 @@ esac
             command += ['--skill-dir', skill]
         run(command, env=env)
         run([prefix / 'bin/uiblueprint', '--help'], env=env)
+        if record.get('version_source') == 'VERSION':
+            assert run([prefix / 'bin/uiblueprint', '--version'], env=env).stdout == f'uiblueprint {record["version"]}\n'.encode()
         installed = prefix / 'share/uiblueprint/versions' / record['version']
         if with_skill:
             assert skill.resolve().parent == installed.resolve()
@@ -698,10 +707,47 @@ def compose_inventory_upgrade(stage, versions):
     assert not current.exists() and not skill.exists()
     print('PASS manifest3 Compose installation → manifest4 native caller update/rollback/removal')
 
+def numeric_version_checks():
+    revision = 'a' * 40
+    notes = b'# Changes\n\n## 0.1.0\n\nFirst release.\n\n## 0.0.9\nOld release.\n'
+    def source(version=b'0.1.0\n', changelog=notes):
+        return lambda rev, name: {'VERSION': version, 'CHANGELOG.md': changelog}[name]
+    with patch.object(release, 'committed', side_effect=source()):
+        assert release.source_version(revision) == '0.1.0'
+        assert release.release_notes(revision, '0.1.0') == '# UI Blueprint 0.1.0\n\nFirst release.\n'
+    for bad in (b'v0.1.0\n', b'0.1\n', b'01.1.0\n', b'0.1.0-web.browser2\n',
+                b'0.1.0', b'0.1.0\n\n', b' 0.1.0\n'):
+        with patch.object(release, 'committed', side_effect=source(bad)):
+            try:
+                release.source_version(revision)
+                raise AssertionError('noncanonical version accepted')
+            except ValueError:
+                pass
+    for bad in (b'## 0.2.0\nOther\n', b'## 0.1.0\n', b'## 0.1.0\nA\n## 0.1.0\nB\n'):
+        with patch.object(release, 'committed', side_effect=source(changelog=bad)):
+            try:
+                release.release_notes(revision, '0.1.0')
+                raise AssertionError('missing/empty/duplicate notes accepted')
+            except ValueError:
+                pass
+    with patch.object(release, 'resolve_revision', return_value=revision), \
+         patch.object(release, 'committed', side_effect=source()), \
+         patch.object(release.dist, 'build') as build:
+        try:
+            release.prepare(SimpleNamespace(revision=revision, version='0.2.0'))
+            raise AssertionError('mismatched version accepted')
+        except ValueError:
+            pass
+        build.assert_not_called()
+    assert release.archive_name('0.1.0-web.browser2').endswith('.tar.gz')
+    print('PASS numeric release version, committed notes, pre-build mismatch refusal and legacy candidate naming')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate', type=Path)
     args = parser.parse_args()
+    numeric_version_checks()
     stage = Path(tempfile.mkdtemp(prefix='uib-release-check-'))
     try:
         bundle = stage / 'bundle'

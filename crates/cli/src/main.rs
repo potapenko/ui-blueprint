@@ -27,6 +27,7 @@ use uiblueprint_engine::{self as engine, MeasurementResult};
 use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
+Version: uiblueprint --version\n\
 Compose import: import-compose --input FILE --max-input-bytes N --max-output-bytes N (saved explicit debug probe; no live revalidation)\n\
 Declared comparison: compare --before FILE --after FILE --correspondence FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Comparison diagnostic: compare --before FILE --after FILE --diagnose --max-input-bytes N --max-output-bytes N [--json]\n\
@@ -344,6 +345,11 @@ fn main() -> ExitCode {
     }
     let result = if args.len() == 1 && args[0] == "--help" {
         Ok((HELP.as_bytes().to_vec(), 0))
+    } else if args.len() == 1 && args[0] == "--version" {
+        Ok((
+            format!("uiblueprint {}\n", include_str!("../../../VERSION").trim()).into_bytes(),
+            0,
+        ))
     } else if args.first().is_some_and(|arg| arg == "import-compose") {
         compose::execute(args.into_iter().skip(1))
     } else if args.first().is_some_and(|arg| arg == "imagegen-prompt") {
