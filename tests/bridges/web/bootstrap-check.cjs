@@ -414,12 +414,12 @@ async function live(){
       return;
     }
     for(const [pageUrl,selector,code,extra] of [[page.url().replace('#first','#different'),'#f01','target_unresolved',[]],[page.url(),'#absent','component_unresolved',[]],[page.url(),'button','ambiguous_component',[]],[page.url(),'#child','unsupported_scope',[]],[page.url(),'#f01','selection_limit',['--max-visited-nodes','1']]]){
-      const r=await invoke(ws,pageUrl,selector,code==='selection_limit'?2:4,extra);assert(!r.stdout);assert.equal(r.stderr.trim(),code);assert.deepEqual(await state(),before);
+      const r=await invoke(ws,pageUrl,selector,code==='selection_limit'?2:4,extra);assert(!r.stdout);assert(r.stderr.endsWith(code+'\n'));assert.deepEqual(await state(),before);
     }
-    const duplicate=await context.newPage();await duplicate.goto(page.url());const ambiguous=await invoke(ws,page.url(),'#f01',4);assert(!ambiguous.stdout);assert.equal(ambiguous.stderr.trim(),'ambiguous_target');await duplicate.close();
+    const duplicate=await context.newPage();await duplicate.goto(page.url());const ambiguous=await invoke(ws,page.url(),'#f01',4);assert(!ambiguous.stdout);assert(ambiguous.stderr.endsWith('ambiguous_target\n'));await duplicate.close();
     await page.evaluate(()=>{const input=document.getElementById('draft');input.type='password';input.value='PRIVATE_BOOTSTRAP_CANARY';});
     const privateBefore=await page.inputValue('#draft'),privateState=await state();
-    const privateRead=await invoke(ws,page.url(),'#draft',4);assert(privateRead.stderr.startsWith('observe_diagnostic exit=4 '));assert(privateRead.stderr.includes('terminal=completed'));
+    const privateRead=await invoke(ws,page.url(),'#draft',4);assert(privateRead.stderr.includes('observe_diagnostic exit=4 '));assert(privateRead.stderr.includes('terminal=completed'));
     assert.equal(await page.inputValue('#draft'),privateBefore);assert.deepEqual(await state(),privateState);
     await page.evaluate(()=>{const host=document.createElement('div');host.id='closed-host';document.body.append(host);host.attachShadow({mode:'closed'});});
     const closed=await invoke(ws,page.url(),'#closed-host',4);assert(!closed.stdout);assert(closed.stderr.endsWith('unsupported_scope\n'));

@@ -370,13 +370,14 @@ impl Fixture {
                         assert_eq!(command["params"]["userGesture"], false);
                         assert_eq!(
                             command["params"]["throwOnSideEffect"],
-                            is_selection
+                            (is_selection
+                                && command["params"]["arguments"][0]["value"]["rooted"] != true)
                                 || (is_verification
                                     && command["params"]["functionDeclaration"]
                                         .as_str()
                                         .unwrap_or("")
                                         .starts_with("function verifyNodes(")),
-                            "only fixed native read/rooted verification use ordinary evaluation"
+                            "only fixed native read/rooted selection/verification use ordinary evaluation"
                         );
                         if is_selection {
                             rooted = command["params"]["arguments"][0]["value"]["rooted"] == true;

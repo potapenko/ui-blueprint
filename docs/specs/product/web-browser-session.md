@@ -58,3 +58,11 @@ old direct-page behavior; permission timeout with no geometry; helper cleanup an
 stale-target negatives; actual local component through matching installed CLI/worker.
 Facts must distinguish successful measurements from partial coverage or a refusal.
 No public release, remote deployment or changes to the admin application are included.
+
+Chrome154 real-consumer proof exposed SelectionException/code3 after attachment:
+the exact fixed selectIds reader throws “Possible side-effect in debug-evaluate”.
+Ordinary evaluation of the same isolated rooted reader selected20 visited nodes with
+unchanged header DOM/focus/scroll. Restore this reader using ordinary evaluation,
+as already used by held-root verification; no authored script, app mutation,
+fallback, requested fields, scope or collection limits change. The initial-ID
+selection path keeps its previous debug-evaluation mode.

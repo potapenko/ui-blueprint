@@ -166,6 +166,11 @@ These code1 semantics apply to diagnostics contract@3 and its producer revision;
 older@2 records meant any rect-triple disagreement. Keep the producer pin with
 saved diagnostics. A partial response is not full visibility or paint evidence.
 
+Chrome154 can reject the fixed rooted-selection reader with “Possible side-effect
+in debug-evaluate”. The collector uses ordinary evaluation for this isolated,
+read-only native-DOM walk, as for held-root verification. It does not run authored
+page code or change DOM, focus or scroll. Initial-ID selection is unchanged.
+
 ## Limits and outcomes
 
 Initial browser handshake:60s; preparation/revalidation:75s overall after handshake,

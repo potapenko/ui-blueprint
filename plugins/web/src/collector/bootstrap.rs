@@ -139,7 +139,10 @@ impl Collector {
                     silent: true,
                     user_gesture: false,
                     await_promise: false,
-                    throw_on_side_effect: true,
+                    // Chrome154 rejects this fixed rooted DOM reader in debugger
+                    // side-effect mode. It only fills its own bounded container;
+                    // the source document, focus and scroll remain unchanged.
+                    throw_on_side_effect: !rooted,
                     arguments: [OptionsArgument { value: options }],
                 },
                 budget,
