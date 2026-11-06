@@ -24,5 +24,6 @@ build the utility locally and install its matching skill. No binary attachments.
 - Prompt-based installation builds the utility locally from the release tag and
   installs its matching skill. GitHub releases contain no binary attachments.
 
-Initial binary target: Apple Silicon macOS. See the candidate's minimum OS and
-signing status. Intel, Linux, Windows and older macOS support are not qualified.
+Local source builds are initially qualified on Apple Silicon macOS27.0.1, with
+Git, Python3.11+, Rust1.96.0 and Xcode/Swift6. Node24+ is optional for Web observation.
+Intel, Linux, Windows and older macOS support are not qualified.
