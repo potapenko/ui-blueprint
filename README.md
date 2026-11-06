@@ -133,13 +133,12 @@ Use ~/.local for the utility and ~/.claude/skills/ui-blueprint for the skill.
 Verify the bundled example and load the skill.
 ```
 
-**Release status:** numeric version **0.1.0** is being prepared; no public release
-is available yet. On a prepared Mac the same
-prompt builds one pinned GitHub revision and installs the matching CLI + skill;
-the guide lists the required build tools. Published binaries will remove that build
-prerequisite. Codex and Claude Code discovery passed isolated
-local checks; [tested versions and limits](docs/development/macos-release.md#skill-discovery-verification--2026-10-13)
-are recorded separately from public release readiness.
+**Source releases:** each release fixes a verified numeric version and commit.
+Installation happens through the prompt above: the agent builds the utility on your
+Mac and installs its matching skill. There are no binary release attachments and
+no Apple certificate requirement. See the [source releases](https://github.com/potapenko/ui-blueprint/releases)
+for numbered versions.
+The [installation guide](docs/install.md) lists the local build prerequisites.
 
 [Installation guide, manual commands, and update prompt →](docs/install.md)
 
@@ -189,7 +188,7 @@ the [distribution guide](docs/development/distribution.md) and
 ## Current scope
 
 UI Blueprint is under active development. Local builds are available through the
-documented bundle recipe; a release has not been published yet.
+documented bundle recipe. Installations build the selected source version locally.
 
 | Area | Available path |
 | --- | --- |
@@ -213,3 +212,8 @@ Further reading: [geometry](docs/development/geometry.md),
 [comparisons](docs/development/diff.md),
 [product specifications](docs/specs/README.md), and
 [dependency notices](THIRD_PARTY_NOTICES.md).
+
+## License
+
+UI Blueprint is licensed under [MIT](LICENSE). Third-party dependencies retain
+their own [licenses and notices](THIRD_PARTY_NOTICES.md).

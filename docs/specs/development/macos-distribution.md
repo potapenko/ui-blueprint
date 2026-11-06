@@ -9,6 +9,7 @@
 - Read when: preparing release archives or installing/updating/removing them.
 - Requires: [BOUNDARIES@1](../product/boundaries.md), [DEV.RUST@2](rust.md).
 - Entry: [D01 support](decisions/d01-support.md); README files remain unchanged.
+- Source-only releases: [RELEASES@2](releases.md) supersedes binary publication/signing gates for the user-selected source channel; binary packaging remains local installation machinery.
 - Numeric versions/workflow: [RELEASES@1](releases.md) overrides the earlier README/CLI exclusions within its approved scope.
 ## DISTRIBUTION.SCOPE — Approved change
 Evolve the local-only distribution into a prepared Mac Apple Silicon release:

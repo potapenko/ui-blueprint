@@ -1,4 +1,4 @@
-name: Prepare UI Blueprint release
+name: Verify UI Blueprint source release
 
 on:
   workflow_dispatch:
@@ -71,7 +71,7 @@ jobs:
           cargo test --locked -p uiblueprint-cli --test binary
           node tests/bridges/web/bootstrap-check.cjs --check
           shellcheck install.sh
-      - name: Build and verify the complete release
+      - name: Verify local source installation
         shell: bash
         run: |
           set -euo pipefail
@@ -81,13 +81,6 @@ jobs:
           python3 -B release.py verify --destination "$candidate"
           python3 -B tests/bridges/release_check.py --candidate "$candidate"
           python3 -B release.py notes --revision "$UIB_REVISION" > "$candidate/RELEASE_NOTES.md"
-      - name: Keep verified candidate artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: uiblueprint-${{ inputs.version }}-${{ inputs.revision }}
-          path: ${{ runner.temp }}/uiblueprint-candidate/*
-          if-no-files-found: error
-          retention-days: 7
 
   draft:
     if: ${{ inputs.create_draft }}
@@ -101,34 +94,25 @@ jobs:
       UIB_REVISION: ${{ inputs.revision }}
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Download this run's verified candidate
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - name: Check out the verified source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          name: uiblueprint-${{ inputs.version }}-${{ inputs.revision }}
-          path: ${{ runner.temp }}/uiblueprint-candidate
-      - name: Check downloaded bytes and refuse an existing tag
+          ref: ${{ inputs.revision }}
+          persist-credentials: false
+      - name: Verify source metadata and refuse an existing tag
         shell: bash
-        working-directory: ${{ runner.temp }}/uiblueprint-candidate
         run: |
           set -euo pipefail
-          sha256sum --check SHA256SUMS
-          python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          record = json.loads(Path('release.json').read_text())
-          if (record['version'] != os.environ['UIB_VERSION'] or
-              record['source_revision'] != os.environ['UIB_REVISION'] or
-              record.get('version_source') != 'VERSION'):
-              raise SystemExit('Artifact source/version mismatch')
-          PY
+          test "$(git rev-parse HEAD)" = "$UIB_REVISION"
+          test "$(cat VERSION)" = "$UIB_VERSION"
+          test -s LICENSE
+          python3 -B release.py notes --revision "$UIB_REVISION" > "$RUNNER_TEMP/RELEASE_NOTES.md"
           existing=$(git ls-remote "https://github.com/$GITHUB_REPOSITORY.git" "refs/tags/v$UIB_VERSION")
           test -z "$existing" || { echo 'Version tag already exists; choose a new version'; exit 1; }
-      - name: Create draft with the exact source and assets
+      - name: Create source-only draft (no uploaded assets)
         shell: bash
-        working-directory: ${{ runner.temp }}/uiblueprint-candidate
         run: |
           set -euo pipefail
           gh release create "v$UIB_VERSION" --repo "$GITHUB_REPOSITORY" \
             --target "$UIB_REVISION" --draft --title "UI Blueprint $UIB_VERSION" \
-            --notes-file RELEASE_NOTES.md \
-            ./*.tar.gz install.sh SHA256SUMS release.json uiblueprint.rb
+            --notes-file "$RUNNER_TEMP/RELEASE_NOTES.md"

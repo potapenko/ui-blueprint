@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 65 (numeric release preparation).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 66 (MIT source-only releases).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -69,6 +69,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 `HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
+`SOURCE-RELEASE-001`: direct2026-11-06 user correction selects [RELEASES@2](development/releases.md): MIT, verified source tags, prompt-driven local installation, no binary attachments or Apple release gate. Exact publication confirmation remains.
 `RELEASES-001`: explicit2026-11-06 plan approval registers [RELEASES@1](development/releases.md): one numeric product version, CLI version output, changelog and manual GitHub workflow; local preparation only, remote publication separately authorized.
 `WEB-BROWSER-SESSION-001`: explicit2026-11-05 repair/execution approval registers [WEB-BROWSER-SESSION@1](product/web-browser-session.md): browser-scoped flat CDP sessions and separate permission wait, preserving Rust collection and old direct-page inputs; installation/live proof required.
 `NATIVE-FIRST-USE-001`: verified human Kotlin comparison directive registers [NATIVE-FIRST-USE@1](product/native-first-use.md), optional bounded PID/expected-bundle preparer; unchanged AX/permissions/core, manifest4 adds its file.

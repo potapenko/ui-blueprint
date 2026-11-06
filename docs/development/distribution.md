@@ -2,7 +2,8 @@
 
 For the approved Mac archive/curl/Homebrew preparation workflow, see
 [Mac release preparation](macos-release.md). It is not yet a published release;
-project licensing and publication remain separate owner decisions.
+MIT is selected; publication still requires exact user confirmation. Current
+public releases are source-only; these bundles are local installation inputs.
 
 Build a selected set from one **committed** source revision. This is a local
 P6 delivery procedure, not a signed release or P7 acceptance. Saved-data analysis

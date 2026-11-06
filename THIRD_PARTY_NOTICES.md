@@ -1,8 +1,33 @@
 # UI Blueprint third-party notices
 
-This document describes the local bundle's notice policy. It does not grant a
-license to UI Blueprint itself. Project crates remain `publish = false`; no project
-license has been invented and this task does not publish a release.
+UI Blueprint is licensed under MIT. Its full project notice is included below;
+dependency licenses and attributions remain separate and unchanged.
+
+## UI Blueprint license
+
+MIT License
+
+Copyright (c) 2026 Eugene Potapenko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+## Dependency notices
 
 Every local build writes **DEPENDENCY_LICENSES.txt** with the full original
 LICENSE/NOTICE/COPYING files found in the actual selected locked normal/build graph.

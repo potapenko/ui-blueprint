@@ -1,9 +1,10 @@
 # Release template: release.py renders version, digest and supported macOS floor.
-# License intentionally pending the owner's decision; do not publish this template.
+# Local installation formula; source-only GitHub releases do not distribute it.
 class Uiblueprint < Formula
   desc "Local UI geometry analysis and bounded Mac and Web observation"
   homepage "https://github.com/potapenko/ui-blueprint"
   url "https://github.com/potapenko/ui-blueprint/releases/download/v@VERSION@/uiblueprint-v@VERSION@-aarch64-apple-darwin.tar.gz"
+  license "MIT"
   version "@VERSION@"
   sha256 "@ARCHIVE_SHA256@"
 

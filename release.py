@@ -135,7 +135,7 @@ def write_candidates(bundle, output, *, version, revision, minimum, signing,
     record = {'format': 'ui-blueprint-release-candidate-2', 'version': version,
               'source_revision': revision, 'target': dist.TARGET, 'minimum_macos': minimum,
               'modules': 'combined', 'signing': signing, 'notarization': 'not_submitted',
-              'publication': 'not_published', 'project_license': 'pending_owner_decision',
+              'publication': 'not_published', 'project_license': 'MIT',
               'assets': assets}
     with (output / 'release.json').open('xb') as stream:
         stream.write(dist.encoded(record))
@@ -168,6 +168,12 @@ def prepare(args):
     if args.version is not None and args.version != version:
         raise ValueError('--version must match VERSION in the selected commit')
     release_notes(revision, version)  # Refuse incomplete metadata before building.
+    license_text = committed(revision, 'LICENSE').decode('utf-8')
+    if not license_text.startswith('MIT License\n'):
+        raise ValueError('source release requires the selected MIT license')
+    for name in ('THIRD_PARTY_NOTICES.md', 'skills/ui-blueprint/SKILL.md'):
+        if license_text not in committed(revision, name).decode('utf-8'):
+            raise ValueError(f'project license missing from local package: {name}')
     name = archive_name(version)
     minimum = dist.run(['sw_vers', '-productVersion']).decode().strip()
     if not re.fullmatch(r'[0-9]+\.[0-9]+(?:\.[0-9]+)?', minimum):

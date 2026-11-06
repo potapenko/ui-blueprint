@@ -707,6 +707,32 @@ def compose_inventory_upgrade(stage, versions):
     assert not current.exists() and not skill.exists()
     print('PASS manifest3 Compose installation → manifest4 native caller update/rollback/removal')
 
+def source_release_checks():
+    license_text = (ROOT / 'LICENSE').read_text()
+    assert license_text.startswith('MIT License\n')
+    assert license_text in (ROOT / 'THIRD_PARTY_NOTICES.md').read_text()
+    assert license_text in (ROOT / 'skills/ui-blueprint/SKILL.md').read_text()
+    workflow = json.loads(run(['ruby', '-rjson', '-ryaml', '-e',
+        'puts JSON.generate(YAML.load_file(ARGV[0]))', ROOT / '.github/workflows/release.yml']).stdout)
+    trigger = workflow.get('on', workflow.get('true'))
+    assert set(trigger) == {'workflow_dispatch'}
+    assert trigger['workflow_dispatch']['inputs']['create_draft']['default'] is False
+    assert workflow['permissions'] == {'contents': 'read'}
+    assert workflow['jobs']['draft']['needs'] == 'build'
+    assert workflow['jobs']['draft']['permissions'] == {'contents': 'write'}
+    for job in workflow['jobs'].values():
+        for step in job['steps']:
+            assert not step.get('uses', '').startswith(('actions/upload-artifact@', 'actions/download-artifact@'))
+            assert 'gh release upload' not in step.get('run', '')
+    command = workflow['jobs']['draft']['steps'][-1]['run']
+    assert 'gh release create' in command and '--draft' in command
+    assert not any(name in command for name in ('*.tar.gz', 'install.sh', 'SHA256SUMS', 'release.json', 'uiblueprint.rb'))
+    guide = (ROOT / 'docs/install.md').read_text()
+    assert '--branch "$UIB_TAG" --no-checkout' in guide and '--local-release' in guide
+    assert '/releases/latest/download/install.sh' not in guide
+    print('PASS MIT in both local packages; source-only draft has no uploaded assets; prompt installation pins release source')
+
+
 def numeric_version_checks():
     revision = 'a' * 40
     notes = b'# Changes\n\n## 0.1.0\n\nFirst release.\n\n## 0.0.9\nOld release.\n'
@@ -747,6 +773,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--candidate', type=Path)
     args = parser.parse_args()
+    source_release_checks()
     numeric_version_checks()
     stage = Path(tempfile.mkdtemp(prefix='uib-release-check-'))
     try:

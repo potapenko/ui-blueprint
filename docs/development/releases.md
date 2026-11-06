@@ -1,76 +1,71 @@
-# Release UI Blueprint
+# Release UI Blueprint source
 
-Current preparation: **0.1.0**, Apple Silicon macOS. No public release exists yet.
-The executable remains `uiblueprint`. One release version covers its matching
-worker, native helper, optional callers and agent skill. Recorded-data schema
-versions and internal Cargo package versions are separate.
+A release is a verified source commit, numeric tag `vX.Y.Z` and changelog notes.
+It has **no binary attachments**. Users install through the README prompt: the
+agent resolves the release, obtains its instructions with curl, builds locally
+and installs the utility and matching skill. GitHub automatically provides source
+archives for tags; these are not uploaded executable packages.
 
-## Bump and prepare locally
+## Prepare and verify
 
-1. Update the root [VERSION](../../VERSION):0.1.0 →0.1.1 for fixes,0.2.0 for new
-   capabilities. Use three numeric components; no feature/browser suffixes.
-2. Add that version's section to [CHANGELOG.md](../../CHANGELOG.md). Describe the
-   user-visible result and relevant support limits. Never replace an existing
-   release with different bytes under the same number.
-3. Complete focused checks and checkpoint on the current branch. Inspect the
-   complete source delta before including previously unpushed work in a release.
-4. Build one exact committed source, verify it and test its temporary installation:
+1. Set the root [VERSION](../../VERSION):0.1.0 →0.1.1 for fixes,0.2.0 for new
+   capabilities. One number covers the complete utility and skill.
+2. Update [CHANGELOG.md](../../CHANGELOG.md), including installation/support limits.
+3. Keep the project [MIT license](../../LICENSE) and dependency notices with source
+   and local packages. Do not change an existing release tag or version's bytes.
+4. Run focused checks and checkpoint on the current branch. Review the complete
+   delta, including previously unpushed commits, before proposing publication.
+5. Verify that the selected source can actually build and install locally:
 
 ```sh
 UIB_REVISION=$(git rev-parse HEAD)
-UIB_RELEASE_OUT=$(mktemp -d "${TMPDIR:-/tmp}/uib-release.XXXXXX")
-python3 -B release.py prepare --revision "$UIB_REVISION" --destination "$UIB_RELEASE_OUT"
-python3 -B release.py verify --destination "$UIB_RELEASE_OUT"
-python3 -B tests/bridges/release_check.py --candidate "$UIB_RELEASE_OUT"
-python3 -B release.py notes --revision "$UIB_REVISION" > "$UIB_RELEASE_OUT/RELEASE_NOTES.md"
+UIB_CHECK=$(mktemp -d "${TMPDIR:-/tmp}/uib-source-release.XXXXXX")
+python3 -B release.py prepare --revision "$UIB_REVISION" --destination "$UIB_CHECK"
+python3 -B release.py verify --destination "$UIB_CHECK"
+python3 -B tests/bridges/release_check.py --candidate "$UIB_CHECK"
+python3 -B release.py notes --revision "$UIB_REVISION" > "$UIB_CHECK/RELEASE_NOTES.md"
 ```
 
-Stop on any failure. The CLI's `--version`, archive name, installer version and
-skill archive must agree. Preparation is local and unsigned by default. The
-existing [Mac release guide](macos-release.md) covers signing, notarization and
-installation ownership. Keep review artifacts in system temp; remove run-owned
-non-image outputs after review, retaining all images.
+The generated archives/install.sh are temporary local-installation inputs.
+Do not attach them to GitHub Releases or upload them as CI artifacts. Remove
+run-owned non-image files after verification; retain all images. No Apple signing,
+notarization, credential lookup or Gatekeeper qualification is required for this
+source-only release. Separately requested binary distribution is a different task.
 
-## GitHub Actions and draft
+## Verify on GitHub and prepare a source draft
 
-The [release workflow](../../.github/workflows/release.yml) has only a manual
-`workflow_dispatch` trigger. It never starts on a push or tag. Before any remote
-release build, upload or publication, obtain the operator's explicit confirmation
-for the exact version, source SHA and GitHub repository. Approval of implementation
-or a Git push alone is insufficient. Present this exact question with real values:
+The [workflow](../../.github/workflows/release.yml) has only a manual trigger.
+It checks the numeric version and exact full40-character SHA, installs the pinned
+build toolchain in the ephemeral runner, builds and tests local installation.
+It uploads no binary artifacts. The build job has contents:read; the optional
+source-draft job has contents:write. Action revisions are pinned. The xcode-27
+runner checks Apple Silicon macOS source compilation, not Apple notarization.
+
+Before a push, remote release workflow or publication by an agent, present the
+reviewed version, source SHA and intended GitHub actions. Obtain the mandatory
+explicit confirmation, with actual values:
 
 «Разрешаешь выкладку UI Blueprint vVERSION из COMMIT на GitHub
-potapenko/ui-blueprint (сборка и загрузка артефактов / создание draft / публикация)?»
+potapenko/ui-blueprint: push текущего master, проверка и публикация исходников
+с тегом vVERSION, без бинарных вложений?»
 
-Name only the actions actually requested. Wait for an unambiguous affirmative
-answer. This runbook does not itself authorize a remote action.
+Wait for an unambiguous affirmative reply. This runbook and approval of a code
+change are not publication authority. Changes to source, contents or targets need
+a revised confirmation. No remote action runs implicitly during local preparation.
 
-After that authorization and after the workflow/source are present on GitHub,
-open **Actions → Prepare UI Blueprint release → Run workflow**. Supply the numeric
-VERSION and reviewed full40-character SHA. The default `create_draft=false` builds
-and verifies the combined bundle and keeps the artifacts for7days. The runner is
-the GitHub `xcode-27` Apple Silicon image; toolchain1.96.0 is explicitly installed
-and locked dependencies fetched before the offline packaging recipe runs.
+After authorization, push the reviewed current branch. In **Actions → Verify UI
+Blueprint source release**, run the workflow with its numeric version and exact
+commit SHA. `create_draft=false` only verifies. `create_draft=true` creates a source
+release draft after successful checks; there are no asset uploads. Existing tags
+or releases are refused instead of overwritten.
 
-With separately authorized `create_draft=true`, a second job downloads only this
-run's artifacts, verifies checksums/source/version, refuses an existing tag and
-creates a **draft** titled `UI Blueprint X.Y.Z` for tag `vX.Y.Z`. It attaches the
-CLI archive, matching skill archive, install.sh, SHA256SUMS, release.json and
-Homebrew formula. Release notes come from the selected commit's changelog.
-GitHub also refuses a duplicate release; the workflow never overwrites assets.
-The build job has read-only repository access. Only the optional draft job gets
-contents:write. Action implementations are pinned to verified commit hashes.
+## Publish and check installation
 
-## Public release
-
-Draft creation does not publish. Before public release, resolve the project
-license and existing Mac signing/notarization/Gatekeeper requirements, review the
-exact final assets, and obtain the required explicit publication confirmation.
-Do not publish the default unsigned candidate as a qualified Mac binary release.
-Any changed source, contents or targets require a revised review/confirmation.
-
-Publish the reviewed draft only after those gates. Then verify the public download
-and installation from that exact tag, and update the README's release-status text.
-The [installation guide](../install.md) resolves the latest stable release once
-and uses its exact tag for all downloads. Until the first publication, it retains
-the explicit pinned-source fallback and does not claim public binaries exist.
+Publish the exact reviewed draft after verification and within the user's explicit
+publication approval. Check the tag points to the reviewed SHA, VERSION matches,
+MIT is visible, and release assets are empty. The public notes must explain prompt
+installation and link to the tag-pinned installation guide. Then verify that guide
+resolves and installs the exact release source through the ordinary local flow.
+Update current release status only from actual GitHub evidence. No binary download,
+Apple signature, Homebrew tap publication or source-only tag alone is claimed as
+proof of successful local installation.

@@ -5,7 +5,10 @@ helpers and agent skill. Versions of recorded data formats are independent.
 
 ## 0.1.0
 
-First numbered release candidate; not published yet.
+UI Blueprint source release under MIT. Install through the agent prompt in the
+[README](https://github.com/potapenko/ui-blueprint/tree/v0.1.0#install-through-your-agent).
+The [tag-pinned instructions](https://github.com/potapenko/ui-blueprint/blob/v0.1.0/docs/install.md)
+build the utility locally and install its matching skill. No binary attachments.
 
 - Local Rust inspection, geometry measurements, requirement checks and comparison
   of saved UI observations.
@@ -17,7 +20,9 @@ First numbered release candidate; not published yet.
 - Browser-session CDP support for Chrome's permission-based debugging, including
   the rooted-selection compatibility fix verified on Chrome154.
 - One numeric product version, `uiblueprint --version`, and manual GitHub release
-  preparation from a pinned commit.
+  verification from a pinned commit.
+- Prompt-based installation builds the utility locally from the release tag and
+  installs its matching skill. GitHub releases contain no binary attachments.
 
 Initial binary target: Apple Silicon macOS. See the candidate's minimum OS and
 signing status. Intel, Linux, Windows and older macOS support are not qualified.
