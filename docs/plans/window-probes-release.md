@@ -1,7 +1,7 @@
 # Window geometry and the matching installed release
 
-Status: both probes verified; source/review complete; final local install pending.
-No remote release is authorized before the exact confirmation below.
+Status: both probes verified; UI Blueprint0.2.0 and matching skill installed and
+checked by root. Only source publication awaits the exact confirmation below.
 Authority: direct user instruction on 2026-11-14, message
 `01a1dbc5-5599-7481-aed8-7eda49313fb1`: finish the new features, skills and installation,
 coordinate with “Проверить поддержку Rust и GPUI”, collect useful geometry from the
@@ -68,8 +68,8 @@ temp; images remain, owned non-image intermediates retire after their consumer.
    remount evidence; canonical CLI consumers and source-grounded numeric checks.
    Independent review covers lifecycle, expanded collection and installer ownership.
 6. Prepare numeric0.2.0 from the final checkpoint, verify the local candidate,
-   legacy update/rollback and matching installed skill. A fresh worker uses only
-   the installed recipe and selected actual records; no memorized task instructions.
+   legacy update/rollback and matching installed skill. The user's final correction
+   requires root to run the final checks directly; the fresh-worker test was stopped.
 7. Present exact version, SHA, complete unpublished delta, checks and residuals.
    Ask the mandatory GitHub release question; push/build/tag/publish only after
    its separate affirmative answer. The release is source-only, no binary uploads.
@@ -104,4 +104,19 @@ logical-pixel source gaps. Selected originals:
 Review's cross-AppContext numeric-window-ID finding is fixed in41bf52df with a
 private per-window weak allocation witness. Eight tests, Clippy and Release pass;
 root and the original reviewer independently closed the narrow fix. No code finding
-or required runtime repetition remains. The selected source is ready to package.
+or required runtime repetition remains.
+
+## Installed handoff
+
+Release source pin:0959042aa0b210c3c53fb205bdd4f70735bc2d25, version0.2.0.
+Candidate build/verify, full packaging lifecycle and real temp installation passed.
+Actual ~/.local installation resolves to versions/0.2.0;24 bundle and8 skill hashes
+and modes/aliases were checked. Both ~/.agents and legacy ~/.codex skill links use it.
+Root directly reran the installed example (valid,8css_px,check-pass), actual SwiftUI
+field widths1449.5→490.5pt,10pt gap and Rust resize delta−959pt, and GPUI8→18 logicalpx.
+All passed; originals were unchanged and temporary queries removed. Twelve toolbar
+outcomes were accounted for; cross-surface distance remains unknown, not invented.
+The user said “Не надо дергать никакого агента, прогоните тесты сами”; delegation
+was stopped and no independent cold-worker pass is claimed. GitHub publication,
+remote builds, push and tag have not run. The post-install record is documentation;
+the reviewed source release remains the exact installed pin above.
