@@ -26,6 +26,11 @@ fn text(name: &str, value: &str) -> SourceDeclaration {
 }
 
 pub(crate) fn encode(c: &Capture) -> Result<Vec<u8>, Error> {
+    let scope = c
+        .request
+        .component
+        .as_ref()
+        .map_or_else(|| c.config.scope.clone(), |id| format!("component-{id}"));
     let fields = vec![
         Field::LayoutBounds,
         Field::AccessibilityBounds,
@@ -40,7 +45,7 @@ pub(crate) fn encode(c: &Capture) -> Result<Vec<u8>, Error> {
     let observation_id = id(format!("gpui-{}", c.sequence));
     let coverage = Coverage {
         status: CoverageStatus::Partial,
-        scope_id: id(c.config.scope.clone()),
+        scope_id: id(scope.clone()),
         fields: fields.clone(),
         omitted_count: None,
         unknown_count: Some((c.samples.len() * 4) as u64),
@@ -98,12 +103,48 @@ pub(crate) fn encode(c: &Capture) -> Result<Vec<u8>, Error> {
                 text("request_id", &c.request.id),
                 text("state_id", &c.request.state),
                 text("environment", "instrumented_debug"),
-                text("parent_mapping", "declared-and-checked-marked-ancestry"),
+                text(
+                    "parent_mapping",
+                    if c.config.window_root {
+                        "native-id-ancestry-or-window-host"
+                    } else {
+                        "declared-and-checked-marked-ancestry"
+                    },
+                ),
                 text("source_units", "GPUI.Pixels-logical-not-DevicePixels"),
             ];
             if let Some(parent) = &sample.parent {
-                declarations.push(text("parent_marker_id", parent));
-            } else {
+                declarations.push(text("parent_marker_id", &parent.id));
+            }
+            if c.samples
+                .first()
+                .is_some_and(|first| first.mount == sample.mount)
+            {
+                declarations.push(text(
+                    "selection",
+                    if c.request.component.is_some() {
+                        "component-subtree"
+                    } else if c.config.window_root {
+                        "window-root-all-marked"
+                    } else {
+                        "explicit-subset"
+                    },
+                ));
+                declarations.push(text("unmarked_coverage", "unknown"));
+                declarations.push(declaration(
+                    "returned_marker_occurrences",
+                    Value::Number(c.samples.len() as f64),
+                ));
+                if c.config.window_root {
+                    declarations.push(text(
+                        "root_binding",
+                        "actual-gpui-base-Root-and-WindowHandle",
+                    ));
+                    declarations.push(text(
+                        "excluded_sources",
+                        "native-chrome;unmarked-internals;other-windows",
+                    ));
+                }
                 declarations.extend([
                     text("application_id", &c.config.app),
                     text("build_id", &c.config.build),
@@ -126,7 +167,7 @@ pub(crate) fn encode(c: &Capture) -> Result<Vec<u8>, Error> {
                 children: c
                     .samples
                     .iter()
-                    .filter(|s| s.parent.as_deref() == Some(&sample.id))
+                    .filter(|s| s.parent.as_ref().is_some_and(|p| p.mount == sample.mount))
                     .map(key)
                     .collect(),
                 extensions: Vec::new(),
@@ -152,7 +193,7 @@ pub(crate) fn encode(c: &Capture) -> Result<Vec<u8>, Error> {
                     generation: id(c.config.run.clone()),
                 },
                 surfaces: vec![surface],
-                scope_id: id(c.config.scope.clone()),
+                scope_id: id(scope.clone()),
                 projection: Projection::Design,
                 fields: fields.clone(),
                 plugin: PluginIdentity {
@@ -180,7 +221,7 @@ pub(crate) fn encode(c: &Capture) -> Result<Vec<u8>, Error> {
             nodes,
             relations: Vec::new(),
             components: vec![ComponentMapping {
-                logical_component_key: id(c.config.scope.clone()),
+                logical_component_key: id(scope.clone()),
                 members: c.samples.iter().map(key).collect(),
                 declaration_source: id("explicit-gpui-markers"),
                 provenance: Provenance::Reported,

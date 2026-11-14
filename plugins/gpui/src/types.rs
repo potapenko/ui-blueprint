@@ -24,6 +24,8 @@ pub struct Configuration {
     pub(crate) run: String,
     pub(crate) scope: String,
     pub(crate) markers: Vec<Marker>,
+    pub(crate) window_root: bool,
+    pub(crate) required: Vec<String>,
 }
 
 impl Configuration {
@@ -34,7 +36,27 @@ impl Configuration {
             run: run.into(),
             scope: scope.into(),
             markers,
+            window_root: false,
+            required: Vec::new(),
         }
+    }
+
+    /// Attribution for the app's registered window roots; no descendant whitelist.
+    pub fn application(app: &str, build: &str, run: &str) -> Self {
+        Self {
+            app: app.into(),
+            build: build.into(),
+            run: run.into(),
+            scope: "window-root".into(),
+            markers: vec![Marker::new("window_root", None)],
+            window_root: true,
+            required: Vec::new(),
+        }
+    }
+    /// Minimum public anchors, independent of optional mounted descendants.
+    pub fn required_anchors(mut self, ids: &[&str]) -> Self {
+        self.required = ids.iter().map(|id| (*id).into()).collect();
+        self
     }
 
     pub(crate) fn validate(&self) -> Result<(), Error> {
@@ -43,6 +65,15 @@ impl Configuration {
         }
         if self.markers.is_empty() || self.markers.len() > 256 {
             return Err(Error::Limit);
+        }
+        if self.required.len() > 255 || (!self.window_root && !self.required.is_empty()) {
+            return Err(Error::Limit);
+        }
+        for (ix, id) in self.required.iter().enumerate() {
+            validate_id(id)?;
+            if self.required[..ix].contains(id) {
+                return Err(Error::Duplicate);
+            }
         }
         for (ix, marker) in self.markers.iter().enumerate() {
             validate_id(&marker.id)?;
@@ -66,6 +97,8 @@ pub struct Request {
     pub(crate) id: String,
     pub(crate) state: String,
     pub(crate) selected: Vec<String>,
+    pub(crate) root_request: bool,
+    pub(crate) component: Option<String>,
     pub(crate) expected_mounts: Vec<(String, u64)>,
     pub(crate) expected_surface: Option<u64>,
     pub(crate) deadline: Duration,
@@ -84,12 +117,26 @@ impl Request {
             id: id.into(),
             state: state.into(),
             selected: selected.iter().map(|s| (*s).into()).collect(),
+            root_request: false,
+            component: None,
             expected_mounts: Vec::new(),
             expected_surface: None,
             deadline,
             max_bytes,
         }
     }
+    /// Ordinary window request: no selector means its registered root/subtree.
+    pub fn capture(id: &str, state: &str, deadline: Duration, max_bytes: usize) -> Self {
+        let mut request = Self::new(id, state, &[], deadline, max_bytes);
+        request.root_request = true;
+        request
+    }
+    /// Narrow to one unambiguous current public marker, preserving its descendants.
+    pub fn component(mut self, id: &str) -> Self {
+        self.component = Some(id.into());
+        self
+    }
+
     pub fn with_expected_mount(mut self, marker: &str, generation: u64) -> Self {
         self.expected_mounts.push((marker.into(), generation));
         self
@@ -101,7 +148,12 @@ impl Request {
     pub(crate) fn validate(&self, config: &Configuration) -> Result<(), Error> {
         validate_id(&self.id)?;
         validate_id(&self.state)?;
-        if self.selected.is_empty()
+        if self.root_request != config.window_root
+            || (!self.root_request && self.component.is_some())
+        {
+            return Err(Error::InvalidScope);
+        }
+        if (!self.root_request && self.selected.is_empty())
             || self.selected.len() > 256
             || self.max_bytes == 0
             || self.max_bytes > 1_048_576
@@ -110,6 +162,9 @@ impl Request {
             || self.expected_mounts.len() > 256
         {
             return Err(Error::Limit);
+        }
+        if let Some(component) = &self.component {
+            validate_id(component)?;
         }
         for (ix, id) in self.selected.iter().enumerate() {
             if self.selected[..ix].contains(id) {
@@ -128,12 +183,13 @@ impl Request {
                 return Err(Error::InvalidScope);
             }
         }
-        if !self.selected.contains(&config.markers[0].id) {
+        if !self.root_request && !self.selected.contains(&config.markers[0].id) {
             return Err(Error::InvalidScope);
         }
         for (ix, (id, generation)) in self.expected_mounts.iter().enumerate() {
+            validate_id(id)?;
             if *generation == 0
-                || !self.selected.contains(id)
+                || (!self.root_request && !self.selected.contains(id))
                 || self.expected_mounts[..ix]
                     .iter()
                     .any(|(previous, _)| previous == id)
@@ -161,6 +217,8 @@ pub(crate) fn validate_id(value: &str) -> Result<(), Error> {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Error {
     Disabled,
+    RootUnavailable,
+    AmbiguousTarget,
     InvalidIdentity,
     InvalidScope,
     Duplicate,

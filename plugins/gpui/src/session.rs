@@ -1,7 +1,10 @@
-use crate::{Configuration, Error, Request};
-use gpui_kit::{AnyWindowHandle, Bounds, Pixels, Window};
+pub(crate) use crate::frame::Sample;
+use crate::{
+    Configuration, Error, Request,
+    frame::{FrameMetadata, Lease, Mounted, Pending, State},
+};
+use gpui_kit::{Bounds, Pixels, Window, base::Root};
 use std::{
-    any::TypeId,
     cell::RefCell,
     rc::{Rc, Weak},
     sync::atomic::{AtomicU64, Ordering},
@@ -15,47 +18,10 @@ pub(crate) fn next_generation() -> Result<u64, Error> {
         .map(|n| n + 1)
         .map_err(|_| Error::Limit)
 }
-
-#[derive(Clone, Debug)]
-pub(crate) struct Sample {
-    pub id: String,
-    pub parent: Option<String>,
-    pub mount: u64,
-    pub bounds: Bounds<Pixels>,
-}
-#[derive(Default)]
-pub(crate) struct Mounted {
-    pub native_path: Option<gpui_kit::GlobalElementId>,
-    pub native_type: Option<TypeId>,
-    pub generation: u64,
-    pub last_frame: u64,
-}
-pub(crate) struct Pending {
-    pub request: Request,
-    pub started: Instant,
-    pub samples: Vec<Sample>,
-}
-pub(crate) struct State {
-    pub config: Configuration,
-    pub window: AnyWindowHandle,
-    pub started: Instant,
-    pub closed: bool,
-    pub frame: u64,
-    pub sequence: u64,
-    pub instance: u64,
-    pub root_generation: u64,
-    pub mounts: Vec<Mounted>,
-    pub stack: Vec<usize>,
-    pub frame_error: Option<Error>,
-    pub pending: Option<Pending>,
-    pub result: Option<Result<Capture, Error>>,
-}
-
-/// Main-thread session for exactly one app window/root. Clone handles, not state.
+/// Main-thread producer owned by exactly one app window/root.
 #[derive(Clone)]
 pub struct Session(pub(crate) Rc<RefCell<State>>);
-
-/// One immutable layout observation. Publication validates against its owning session.
+/// Immutable observed layout; publication checks the full emitted occurrence set.
 #[derive(Clone)]
 pub struct Capture {
     pub(crate) owner: Weak<RefCell<State>>,
@@ -72,59 +38,106 @@ pub struct Capture {
     pub(crate) viewport: [f64; 2],
     pub(crate) window_id: String,
     pub(crate) samples: Vec<Sample>,
+    pub(crate) bindings: Vec<Weak<Lease>>,
 }
-
 impl Session {
     pub fn new(config: Configuration, window: &Window) -> Result<Self, Error> {
+        if config.window_root {
+            return Err(Error::RootUnavailable);
+        }
+        Self::create(config, window)
+    }
+    pub(crate) fn create(config: Configuration, window: &Window) -> Result<Self, Error> {
         if !cfg!(debug_assertions) {
             return Err(Error::Disabled);
         }
         config.validate()?;
-        let mounts = (0..config.markers.len())
-            .map(|_| Mounted::default())
-            .collect();
-        Ok(Self(Rc::new(RefCell::new(State {
+        Ok(Self(Rc::new(RefCell::new(State::new(
             config,
-            window: window.window_handle(),
-            started: Instant::now(),
-            closed: false,
-            frame: 0,
-            sequence: 0,
-            instance: next_generation()?,
-            root_generation: 0,
-            mounts,
-            stack: Vec::new(),
-            frame_error: None,
-            pending: None,
-            result: None,
-        }))))
+            window.window_handle(),
+        )?))))
     }
-
-    /// Arm one request and schedule a normal redraw. Does not focus or change app state.
-    pub fn request(&self, request: Request, window: &mut Window) -> Result<(), Error> {
+    pub(crate) fn bind_root(&self, window: &Window) -> Result<(), Error> {
         let mut state = self.0.borrow_mut();
         if state.closed || state.window != window.window_handle() {
             return Err(Error::StaleTarget);
         }
+        if state.config.window_root {
+            let actual = window
+                .root::<Root>()
+                .flatten()
+                .ok_or(Error::RootUnavailable)?
+                .entity_id();
+            if state.root_entity.is_some_and(|root| root != actual) {
+                return Err(Error::StaleTarget);
+            }
+            state.root_entity = Some(actual);
+        }
+        Ok(())
+    }
+    fn seal(&self) {
+        let mut state = self.0.borrow_mut();
+        if state.config.window_root && !state.retired {
+            return;
+        }
+        state.seal(Rc::downgrade(&self.0));
+    }
+    pub(crate) fn retire_window_frame(&self, frame: u64, window: &Window) {
+        if self.bind_root(window).is_err() {
+            self.close();
+            return;
+        }
+        {
+            let mut state = self.0.borrow_mut();
+            if state.frame != frame || state.in_frame {
+                return;
+            }
+            state.retired = true;
+        }
+        self.seal();
+    }
+    /// Arm one bounded request. Root requests have no selector by default.
+    pub fn request(&self, request: Request, window: &mut Window) -> Result<(), Error> {
+        self.bind_root(window)?;
+        if self.0.borrow().in_frame {
+            return Err(Error::Busy);
+        }
+        self.seal();
+        let mut state = self.0.borrow_mut();
         if state.pending.is_some() || state.result.is_some() {
             return Err(Error::Busy);
         }
         request.validate(&state.config)?;
+        let component = if let Some(id) = &request.component {
+            let mut matches = state.current.iter().filter(|r| &r.id == id && r.alive());
+            let first = matches.next().cloned().ok_or(Error::IncompleteScope)?;
+            if matches.next().is_some() {
+                return Err(Error::AmbiguousTarget);
+            }
+            Some(first)
+        } else {
+            None
+        };
         state.pending = Some(Pending {
             request,
             started: Instant::now(),
             samples: Vec::new(),
+            component,
+            metadata: None,
         });
         window.refresh();
         Ok(())
     }
-
-    /// Read after the requested frame. No previous capture is returned as a fallback.
+    /// Call after Window::draw has completed. Native callback recipe is in the example.
     pub fn take(&self, window: &Window) -> Option<Result<Capture, Error>> {
-        let mut state = self.0.borrow_mut();
-        if state.window != window.window_handle() {
-            return Some(Err(Error::StaleTarget));
+        if let Err(error) = self.bind_root(window) {
+            return Some(Err(error));
         }
+        if self.0.borrow().in_frame {
+            return None;
+        }
+        self.seal();
+        let mut state = self.0.borrow_mut();
         if state
             .pending
             .as_ref()
@@ -135,92 +148,87 @@ impl Session {
         }
         state.result.take()
     }
-
     pub fn cancel(&self) {
         let mut state = self.0.borrow_mut();
         if state.pending.take().is_some() || state.result.is_some() {
             state.result = Some(Err(Error::Cancelled));
         }
     }
-
     pub fn close(&self) {
         let mut state = self.0.borrow_mut();
         state.closed = true;
         state.pending = None;
         state.result = Some(Err(Error::StaleTarget));
+        state.current.clear();
+        state.previous.clear();
+        state.stack.clear();
+        state.in_frame = false;
+        state.ready = false;
     }
-
+    pub(crate) fn begin(&self, window: &Window) -> bool {
+        if let Err(error) = self.bind_root(window) {
+            self.0.borrow_mut().frame_error = Some(error);
+            return false;
+        }
+        self.seal();
+        let mut state = self.0.borrow_mut();
+        if state.pending.as_ref().is_some_and(|p| p.metadata.is_some()) {
+            state.pending = None;
+            state.result = Some(Err(Error::StaleTarget));
+        }
+        state.start_frame();
+        true
+    }
+    pub(crate) fn begin_window(&self, bounds: Bounds<Pixels>, window: &Window) {
+        if !self.begin(window) {
+            return;
+        }
+        let mut state = self.0.borrow_mut();
+        let record = Mounted {
+            id: "window_root".into(),
+            path: None,
+            generation: state.root_generation,
+            lease: None,
+        };
+        state.add(record, bounds);
+    }
     pub(crate) fn finish(&self, window: &Window) {
         let mut state = self.0.borrow_mut();
-        let Some(pending) = state.pending.take() else {
+        if !state.in_frame {
             return;
-        };
-        let error = state.frame_error.or_else(|| {
-            if state.closed || state.window != window.window_handle() {
-                Some(Error::StaleTarget)
-            } else if pending.started.elapsed() > pending.request.deadline {
-                Some(Error::Deadline)
-            } else if pending
-                .request
-                .expected_surface
-                .is_some_and(|x| x != state.root_generation)
-            {
-                Some(Error::StaleTarget)
-            } else if pending.samples.len() != pending.request.selected.len() {
-                Some(Error::IncompleteScope)
-            } else if pending
-                .request
-                .expected_mounts
-                .iter()
-                .any(|(id, generation)| {
-                    !pending
-                        .samples
-                        .iter()
-                        .any(|s| &s.id == id && s.mount == *generation)
-                })
-            {
-                Some(Error::StaleTarget)
-            } else {
-                None
-            }
-        });
-        if let Some(error) = error {
-            state.result = Some(Err(error));
+        }
+        state.in_frame = false;
+        state.ready = true;
+        if state.pending.is_none() {
             return;
         }
         let scale = f64::from(window.scale_factor());
         let rem_size = f64::from(f32::from(window.rem_size()));
         let viewport = window.viewport_size();
-        if !scale.is_finite() || scale <= 0.0 || !rem_size.is_finite() || rem_size <= 0.0 {
-            state.result = Some(Err(Error::InvalidGeometry));
-            return;
+        if !scale.is_finite() || scale <= 0. || !rem_size.is_finite() || rem_size <= 0. {
+            state.frame_error = Some(Error::InvalidGeometry);
         }
-        state.sequence += 1;
-        state.result = Some(Ok(Capture {
-            owner: Rc::downgrade(&self.0),
-            config: state.config.clone(),
-            request: pending.request,
-            instance: state.instance,
-            sequence: state.sequence,
-            frame: state.frame,
-            surface: state.root_generation,
-            start: pending.started.duration_since(state.started).as_secs_f64(),
+        let metadata = FrameMetadata {
             end: state.started.elapsed().as_secs_f64(),
             scale,
             rem_size,
             viewport: [
-                f64::from(f32::from(viewport.width)),
-                f64::from(f32::from(viewport.height)),
+                f32::from(viewport.width).into(),
+                f32::from(viewport.height).into(),
             ],
             window_id: format!("{:?}", window.window_handle().window_id()),
-            samples: pending.samples,
-        }));
+        };
+        if let Some(pending) = &mut state.pending {
+            pending.metadata = Some(metadata);
+        }
     }
 }
-
 impl Capture {
+    /// A repeated structural label has no single mount; inspect its returned SourceKeys.
     pub fn mount(&self, id: &str) -> Option<u64> {
-        self.samples.iter().find(|s| s.id == id).map(|s| s.mount)
+        let mut matches = self.samples.iter().filter(|s| s.id == id);
+        let first = matches.next()?.mount;
+        matches.next().is_none().then_some(first)
     }
     pub fn surface_generation(&self) -> u64 {
         self.surface
@@ -228,24 +236,26 @@ impl Capture {
     pub fn sequence(&self) -> u64 {
         self.sequence
     }
-
-    /// Validate current publication authority, then encode one bounded canonical document.
     pub fn to_json(&self, session: &Session, window: &Window) -> Result<Vec<u8>, Error> {
         if !Weak::ptr_eq(&self.owner, &Rc::downgrade(&session.0)) {
             return Err(Error::StaleTarget);
         }
+        session.bind_root(window)?;
         let state = session.0.borrow();
         if state.closed
-            || state.window != window.window_handle()
+            || state.in_frame
             || state.frame != self.frame
             || state.root_generation != self.surface
             || state.pending.is_some()
+            || self
+                .bindings
+                .iter()
+                .any(|binding| binding.upgrade().is_none())
             || self.samples.iter().any(|s| {
-                let ix = state.config.markers.iter().position(|m| m.id == s.id);
-                ix.is_none_or(|ix| {
-                    state.mounts[ix].generation != s.mount
-                        || state.mounts[ix].last_frame != self.frame
-                })
+                !state
+                    .current
+                    .iter()
+                    .any(|r| r.id == s.id && r.generation == s.mount && r.alive())
             })
         {
             return Err(Error::StaleTarget);

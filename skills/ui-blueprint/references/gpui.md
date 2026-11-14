@@ -1,43 +1,56 @@
-# Opt-in GPUI layout observations
+# GPUI window-root geometry
 
-Use a supplied original canonical Snapshot through [saved analysis](analysis.md).
-An app owner may explicitly integrate the separate `uiblueprint-gpui` Debug source
-package. Require its compatible revision, pinned gpui-kit/GPUI version and authorized
-capture path. The installed CLI archive does not implicitly contain or inject it.
-Source integration/builds require their own authorized scope and supplied SDK
-instructions; this recipe alone does not authorize changing an app or installing it.
+Use original canonical Snapshots through [saved analysis](analysis.md). Require the
+app owner's authorized Debug capture route and matching source SDK. An installed
+CLI does not inject instrumentation into another application. This recipe does not
+authorize app changes, installation, permissions or input actions by itself.
 
-The qualified source path is gpui-kit0.9.1/gpui-pre0.3.12 on macOS ARM64, Rust1.100.0.
-Only explicitly registered, native-ID-bearing elements are measured after layout.
-Semantic marker IDs, current native mount generation, session/window incarnation,
-capture sequence and layout pass are distinct. Parents/component membership are
-declared and checked against marked runtime ancestry, not a recovered full tree.
-Anonymous, unmounted or virtualized elements do not become known geometry.
+## Ordinary selection
 
-Keep namespace `gpui.layout`, recorded SourceKeys and space `gpui-window-logical-px`.
-Here `px` means GPUI logical Pixels, not DevicePixels. Source scale is separate.
-Never substitute AX, hit, visible or painted bounds for layout; their unknown
-status is intentional. Layout text frames are not glyph contours.
+For an explicitly chosen window, omit the component selector to capture its
+registered window root and available mounted marked subtree. Do not ask the user
+for a root ID or a repeated marker list. An optional component selector narrows to
+one unambiguous current subtree. Missing/ambiguous window, root or selector refuses;
+never substitute an old small sample, another window or only a convenient region.
 
-Capture is explicit and bounded. The app requests a redraw, waits for actual
-measurement completion, obtains `Session::take` and calls `Capture::to_json` on
-the same owning window/session. Publication rechecks frame and mounts; old IDs,
-duplicates, missing selected ancestors, cancellation and limits refuse. Native
-GPUI0.3.12 next-frame callbacks execute before drawing; use the SDK's qualified
-host example rather than assuming a single callback means capture completed.
+The source SDK registers a Debug Base Root plugin once before creating windows:
+`register(Configuration::application(app, build, run).required_anchors(...), cx)`.
+`Session::for_window(window, cx)` binds its real Root/WindowHandle. The normal request
+is `Request::capture(id, state, deadline, bytes)`, with optional `.component(id)`.
+The old `Request::new(...selected...)` is an explicit compatibility mode, not the
+default route. Require the SDK's supplied revision and integration instructions;
+source builds are qualified separately from the installed saved-data CLI.
 
-Saved output remains cache/unverified, even when just written. A layout pass is
-not a GPU/presented-frame ID. Source window scale alone is not a screenshot map;
-matching native window/state and separately verified transforms are required.
-The SDK emits no screenshots or actions. Read-only acquisition never changes
-focus, values, scroll or window size to improve coverage.
+## What is measured
 
-Inspect declared marker IDs to choose the actual returned keys, then use existing
-`inspect --view design`, `measure` and `check`. There is no `import-gpui` command
-and no need to rewrite geometry into a second JSON schema. Queries reference the
-original geometry and coordinate spaces. Requirements need an independent source;
-the example's8→18 gap is a diagnostic stimulus, not a client design rule.
+Dynamic `Session::mark` registrations use public structural labels and real native
+identities. Repeated rows have distinct opaque occurrences; never export content,
+account or item values as their IDs. Required anchors are a minimum, not a complete
+list of descendants. Native-key replacement, removal and root/window recreation
+invalidate old bindings. The producer validates the entire emitted set.
 
-Record real runtime checks and source-test evidence separately. Native input,
-probe-on/off, resize, scrolling, remount and pixel pairing require their own
-qualification; a synthetic snapshot or a green build does not supply it.
+A root request collects admissible normal and deferred prepaint samples. Publication
+waits for post-draw retirement; GPUI0.3.12 on_next_frame callbacks alone run before
+drawing. Cached geometry cannot be re-labelled as a fresh sample. Requests and
+live registrations are bounded; overflow must not look like complete collection.
+
+Keep namespace `gpui.layout`, original SourceKeys and `gpui-window-logical-px`.
+These are GPUI logical Pixels, not DevicePixels. Source scale is separate. Layout
+is not AX/hit/paint/visibility, and text layout is not glyph contours. All marked
+nodes does not mean every renderer element: account for meaningful regions and
+controls, unmarked internals, unmaterialized rows, native chrome and other surfaces.
+A marker count alone cannot satisfy useful window coverage.
+
+Saved data remains cache/unverified. A layout pass is not a presented GPU frame;
+source scale alone does not establish screenshot mapping. Do not merge separately
+hosted roots with unrelated origins. Independent image/input evidence remains
+separate from canonical geometry and source-test results.
+
+## Existing analysis path
+
+Inspect returned structural marker IDs and select their actual recorded keys.
+Use `inspect --view design`, `measure` and `check`; there is no `import-gpui` command
+or need to rewrite coordinates into another format. Requirements need their own
+source. The native example's8→18 gap is a diagnostic stimulus, not client design.
+Run root capture after meaningful state changes, then verify geometry, appearance,
+remount and limits as applicable; do not poll to manufacture freshness.

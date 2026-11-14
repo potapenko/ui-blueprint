@@ -1,4 +1,4 @@
-#[path = "support/view.rs"]
+#[path = "support/window_view.rs"]
 mod support;
 use gpui_kit::{prelude::*, *};
 
@@ -34,6 +34,24 @@ fn main() {
         .with_assets(gpui_kit::assets::Assets)
         .run(move |cx| {
             gpui_kit::init(cx);
+            if enabled {
+                uiblueprint_gpui::register(
+                    uiblueprint_gpui::Configuration::application(
+                        "org.uiblueprint.gpui-example",
+                        &build,
+                        &run,
+                    )
+                    .required_anchors(&[
+                        "content",
+                        "toolbar",
+                        "workspace",
+                        "rows",
+                        "input_frame",
+                    ]),
+                    cx,
+                )
+                .expect("valid Debug app attribution before window creation");
+            }
             let (handle, view) = gpui_kit::open_window(
                 WindowOptions {
                     window_bounds: Some(WindowBounds::Windowed(Bounds::new(
@@ -48,18 +66,7 @@ fn main() {
                     ..Default::default()
                 },
                 cx,
-                |window, cx| {
-                    cx.new(|cx| {
-                        support::ExampleView::new(
-                            window,
-                            cx,
-                            enabled,
-                            &run,
-                            &build,
-                            Some(directory),
-                        )
-                    })
-                },
+                |window, cx| cx.new(|cx| support::WindowView::new(window, cx, enabled, directory)),
             )
             .expect("open diagnostic window");
             println!(

@@ -1,66 +1,69 @@
-# GPUI layout probe
+# GPUI window geometry
 
-Optional Debug source package for selected GPUI runtime layout.
-[Contract](../../docs/specs/product/gpui-probe.md): UIB.GPUI-PROBE@1.
-Rust1.100.0, gpui-kit0.9.1/gpui-pre0.3.12; separate Cargo.lock keeps GPUI outside
-core builds. No new importer, installed provider, global installation or client UI.
+Opt-in Debug source package for gpui-kit0.9.1/gpui-pre0.3.12 and Rust1.100.0.
+[GPUI-PROBE@2](../../docs/specs/product/gpui-probe.md) extends the existing producer;
+core0.1 Snapshot and the existing Rust inspect/measure/check path are unchanged.
+The separate Cargo.lock keeps GPUI out of normal CLI builds. No client app is added.
 
-## Source and dependency decision
+## Register the actual window root once
 
-| Read source | Adopted / rejected |
-| --- | --- |
-| gpui-kit0.9.1, upstream longbridge/gpui-kit commit39ab849a93b5f15507b969164d49891db8d5b470 | Published GPUI re-export; no copied code |
-| gpui-pre0.3.12 element.rs/window.rs/geometry.rs/elements/div.rs | Public Element delegation, prepaint bounds, exact window handle, logical Pixels and scale |
-| gpui-base0.9.1 observe.rs/test_support.rs | Layout-transparent wrapping is applicable; its all-property observer is rejected because it reads text/values and retains last-paint data |
-| gpui-kit0.9.1 test.rs/test/query.rs | Focused framework tests, not proof of native presentation |
-
-GPUI-pre's LICENSE-APACHE (Zed Industries2022–2025) was read. kit/base manifests
-are Apache-2.0; their cached packages contain no LICENSE/NOTICE. No upstream
-implementation is copied. Local dependency use does not qualify redistribution
-of assets/transitive dependencies. Exact resolved versions/checksums are in Cargo.lock.
-Rust1.96 failed in gpui-pre-macos on Option::map_or_default; the subsequent direct
-user request selected current stable1.100.0 for Blueprint and both GPUI projects.
-
-## Integrate in an explicitly authorized app
-
-Add this source package as an optional dependency, behind an application Debug
-feature. Compile instrumentation with `cfg(all(debug_assertions, feature = "ui-blueprint"))`.
-Do not inject it into another application or enable it in production by default.
-`Session::new` also refuses Release collection with `Error::Disabled`.
+After `gpui_kit::init` and other Root plugins, before opening windows:
 
 ```rust,ignore
-let session = Session::new(Configuration::new(
-    "public.app.id", "exact-build-id", "unique-app-run", "selected-component",
-    vec![Marker::new("root", None), Marker::new("title", Some("root"))],
-), window)?;
-// Retain the session; use a Result-returning render helper for this snippet:
-let title = session.mark("title", div().id("title").child("Example"))?;
-let root = session.mark("root", div().id("root").child(title))?;
-// App-owned explicit trigger; no periodic collection:
-session.request(Request::new("request-1", "public-state-id", &["root", "title"],
-    Duration::from_secs(2), 262_144), window)?;
-// After the requested layout/paint completes, still on its owning window:
-if let Some(result) = session.take(window) {
-    let bytes = result?.to_json(&session, window)?;
-    // The app owns any private system-temp write; SDK has no IO.
-}
+uiblueprint_gpui::register(
+    Configuration::application("public.app.id", "exact-build-id", "unique-app-run")
+        .required_anchors(&["toolbar", "content"]),
+    cx,
+)?;
 ```
 
-Every marker needs an existing native ElementId. A RenderOnce wrapper may erase
-that ID; mark its actual ID-bearing element or an existing semantic parent frame.
-Do not add a layout container merely to measure. Parents must match the nearest
-marked runtime ancestor; unmarked/virtualized content is outside coverage.
-Capture.mount(), surface_generation() and Request's expected-generation builders
-support fresh binding. New sessions have distinct canonical IDs within one run.
-On root removal create a new session; close/cancel retire pending work.
+Gate registration/instrumentation behind the consuming application's explicit Debug
+feature. `Session::new`/registration also refuse Release collection. Required
+anchors are a minimum, not a list of every optional descendant. Register before
+creating windows: an already-created unregistered root is unavailable, not patched.
 
-Native GPUI0.3.12 executes on_next_frame callbacks **before** drawing (window.rs:2008),
-despite its doc wording. The example uses the following event for publication after
-one requested redraw. It does not recollect or poll. See examples/support/view.rs.
+In the existing view's render/event callback, after Base Root creation:
 
-## Run the native diagnostic example
+```rust,ignore
+let session = Session::for_window(window, cx)?;
+let title = session.mark("title", div().id("title").child("Example"))?;
+// A Result-returning render helper can compose marked existing elements.
+session.request(Request::capture("request-1", "public-state-id",
+    Duration::from_secs(2), 1_048_576), window)?;
+```
 
-From the UI Blueprint checkout, with installed prerequisites and cached dependencies:
+An omitted component selector captures the actual window root and all admissible
+mounted marked descendants. No repeated root ID, `selected()` list or special
+window flag. Optional `.component("toolbar")` narrows the request; a missing or
+ambiguous component refuses. All windows retain their own actual Root identity.
+
+Markers need existing native ElementIds; apply builders before marking. Repeated
+structural labels (such as `row`) are separate opaque occurrences. Use domain-stable
+native keys, not row indexes; their raw values are never exported. A RenderOnce
+wrapper may erase its ID: mark its actual native element or an existing parent
+frame, without adding a layout node merely for instrumentation.
+
+## Frame completion and saved data
+
+The transparent Base Root decorator preserves original layout, focus and AX.
+It collects normal and deferred prepaint, then a `window.defer` effect seals data
+AFTER old-frame retirement. Requests force fresh callbacks through `window.refresh`;
+last-paint cache data cannot silently become current geometry. Live missing
+callbacks fail rather than publish a falsely complete marked set.
+Read `Session::take` after completion, then `Capture::to_json` on that same session
+and window. The latter validates every emitted occurrence. The app owns private
+transport/output. The native example demonstrates the callback order: GPUI0.3.12
+on_next_frame callbacks run BEFORE drawing, so one callback is not completion.
+
+Only public IDs, geometry and fixed metadata are serialized. The namespace is
+`gpui.layout`, space `gpui-window-logical-px`, with source scale separate. Saved
+output is cache/unverified; layout pass is not a presented GPU frame. Native chrome,
+unmarked internals, unmaterialized rows and other OS windows are not invented.
+AX/hit/paint/visibility and general screen/image transforms remain unknown.
+
+## Run the native example
+
+From the checkout, with the pinned toolchain/dependencies already available:
 
 ```sh
 UIB_GPUI_RUN=$(mktemp -d "${TMPDIR:-/tmp}/uib-gpui.XXXXXX")
@@ -69,30 +72,28 @@ cargo +1.100.0 build --manifest-path plugins/gpui/Cargo.toml --example native --
 python3 -B plugins/gpui/package-example.py --binary "$CARGO_TARGET_DIR/debug/examples/native" --destination "$UIB_GPUI_RUN/on"
 ```
 
-Open the returned .app with authorized native tooling. Click **Capture**: its
-captures/capture-1.json is actual canonical data. The package records the exact
-binary SHA-256 in each Snapshot's public build identity. stderr/stdout are native.log.
-Change gap, text and disclosure; scroll the list and use the window's Zoom action;
-capture after each settled state. Type into the input, capture, then keep typing.
-For on/off use the same binary and identical actions, package a NEW temp destination
-with `--off`, and serialize the two app instances/input. Off emits no Snapshot.
-The stdin commands are an optional app-owned diagnostic interface, not a live service.
-Stop only the owned process. Keep all images; clean only owned non-image output.
+Open the returned app with authorized native tooling. **Capture window** writes
+captures/capture-N.json with its exact binary hash. **Add row**, **Remove row**,
+**Show details** and **Show overlay** change the mounted tree without changing the
+capture call. All materialized row/control frames are marked. **Capture toolbar**
+exercises explicit narrowing. Change gap8→18, text, scroll and window size.
+For on/off package the same binary in a NEW temp destination with `--off`; use
+identical actions and serialize native input/instances. Off emits no Snapshot.
+Stop only the owned PID; all images remain, and only owned non-image output retires.
 
-## Qualification and limits
+## Compatibility, source basis and qualification
 
-The local macOS ARM64 native run exercised11/12 markers, real8→18 logical-px gap,
-long-text height22.5→67.5, scroll delta−256, child disappearance/new mount, and
-viewport720×640→1920×1018→720×640. Existing CLI inspect/measure/check accepted the
-original files; both gaps passed sourced zero-tolerance fixture requirements.
-Input/focus survived capture and values were absent from Snapshots. Card and scroll
-pixels matched on/off exactly in normal/expanded/scrolled states. The zoom pair's
-cursor-overlay history differed; full zoom pixel equality is not claimed.
-The ordinary titled-window pilot mapped logical content to PNG by source scale2
-and verified content inset32; this is separate caller evidence, not an SDK transform.
-Saved data remains cache/unverified; layout pass is not a presented GPU frame.
-AX/hit/paint/visibility and arbitrary app-tree coverage remain unavailable.
-Framework regressions cover adjacent-frame keyed replacement, same-run sessions,
-stale publication, duplicate/missing IDs, limits, cancellation and deadlines.
-Native qualification is scoped; no Linux/mobile, animation synchronization or
-PlayPhrase.me product parity is claimed. B0 acceptance belongs to the consumer.
+`Configuration::new` / `Session::new` / `Request::new(...selected...)` retain the
+exact-subset API. Do not double-instrument one native occurrence with two sessions.
+The new source uses public RootPlugin::decorate, Window.defer/refresh and Element
+hooks. gpui-kit0.9.1 source commit39ab849a93b5f15507b969164d49891db8d5b470 and
+pinned gpui-pre/base sources were inspected; no upstream implementation was copied.
+GPUI-pre LICENSE-APACHE was read; kit/base declare Apache-2.0. Local use is not a
+redistribution audit of every asset/transitive dependency.
+
+Seven integration tests cover legacy selection plus default root, dynamic/deferred
+children, distinct repeated-row parents, component ambiguity, root replacement,
+window isolation, 140-generation churn, limits and fresh cached-subtree callbacks.
+Root-mode native qualification is in progress; the earlier @1 native11/12-node
+proof is not whole-window acceptance. No universal renderer-tree, Linux/mobile,
+client product parity, installation or release claim follows from this source SDK.
