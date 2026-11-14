@@ -28,9 +28,9 @@ struct ProbeMarker: Equatable, Sendable {
 }
 
 /// Retained SwiftUI state can survive disappearance; mount identity must not.
-struct ProbeMount: Sendable {
+@MainActor final class ProbeMount {
     private(set) var id = UUID().uuidString
-    mutating func renew() { id = UUID().uuidString }
+    func renew() { id = UUID().uuidString }
 }
 
 struct ProbeConfiguration: Sendable {
@@ -43,6 +43,7 @@ struct ProbeConfiguration: Sendable {
 
     init(targetID: String, targetGeneration: String, surfaceID: String,
          scopeID: String, rootMarkerID: String, requiredMarkerIDs: [String]) throws {
+        guard requiredMarkerIDs.count < 256 else { throw BlueprintProbeError.invalidConfiguration }
         let ids = requiredMarkerIDs + [rootMarkerID]
         let selected = Set(ids)
         guard !requiredMarkerIDs.contains(rootMarkerID),

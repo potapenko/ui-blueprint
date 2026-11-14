@@ -39,6 +39,7 @@ Read only the reference needed for the task:
 | Existing browser connection + exact page URL + one component | [Web](references/web.md) |
 | Explicit opt-in Kotlin Compose Desktop/macOS or Android geometry | [Compose](references/compose.md) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
+| Analyze a supplied opt-in SwiftUI SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
 | Compile a drawing package; generate/review an image when requested | [Export](references/export.md) |
 
 Use supplied saved data directly when it answers the question. Otherwise observe

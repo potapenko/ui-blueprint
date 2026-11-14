@@ -1,5 +1,6 @@
 #if DEBUG
 import Foundation
+import Combine
 import Testing
 @testable import UIBlueprintSwiftUI
 
@@ -61,8 +62,8 @@ private func markers(gap: Double = 8, textMount: String = "text-mount") -> [Prob
     }
 }
 
-@Test func retainedChildStateGetsANewMountAfterDisappear() throws {
-    var retained = ProbeMount()
+@Test @MainActor func retainedChildStateGetsANewMountAfterDisappear() throws {
+    let retained = ProbeMount()
     let firstAppearance = retained.id
     let initial = markers(textMount: retained.id)
     #expect(try validateProbeMarkers(initial, configuration: configuration(),
@@ -177,5 +178,23 @@ private func markers(gap: Double = 8, textMount: String = "text-mount") -> [Prob
     let other = try session()
     other.attach(rootMountID: "root-mount")
     #expect(!other.isCurrentMounts(fresh))
+}
+
+@Test @MainActor func captureDeliversOneExplicitEventToTheExistingReader() async throws {
+    let s = try session()
+    s.attach(rootMountID: "root-mount")
+    var delivered = [UInt64]()
+    let subscription = s.captureRequests.sink { token in
+        delivered.append(token)
+        s.resolve(token: token, rootMountID: "root-mount", markers: markers(),
+            globalFrame: CGRect(x: 0, y: 28, width: 240, height: 80), displayScale: 2)
+    }
+    let first = try await s.capture(requestID: "event-1", stateID: "ordinary")
+    #expect(first.revision == 1 && delivered == [1])
+    let second = try await s.capture(requestID: "event-2", stateID: "ordinary")
+    #expect(second.revision == 2 && delivered == [1, 2])
+    await Task.yield()
+    #expect(delivered == [1, 2])
+    withExtendedLifetime(subscription) {}
 }
 #endif

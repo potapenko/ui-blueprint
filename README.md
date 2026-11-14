@@ -218,6 +218,11 @@ For Rust development, follow the [engineering rules](RUST.md) and
 formatting, Clippy and tests for the default, Web, macOS and combined Rust features;
 live UI and performance qualification remain separate.
 
+For selected internal SwiftUI layout, the optional [Debug probe SDK](plugins/swiftui/README.md)
+is integrated explicitly by the application owner. It produces canonical snapshots
+for the existing Rust geometry commands; ordinary Accessibility observation remains
+a separate source. The SDK is supplied as source, not injected into arbitrary apps.
+
 ## License
 
 UI Blueprint is licensed under [MIT](LICENSE). Third-party dependencies retain

@@ -1,6 +1,7 @@
 # SwiftUI real-app geometry package
 
-Status: implementation in progress. Approved by the user on 2026-11-14 in
+Status: real-app geometry works; repairing capture neutrality before acceptance.
+Approved by the user on 2026-11-14 in
 UI Blueprint chat `01a1dab2-2e7d-7f13-9400-8e42b0859137`; subsequent correction
 selects joint work with `[pl-gpui] [mac] Подготовить онбординг Rust-проекта`
 and excludes the new Rust/GPUI application entirely.
@@ -46,7 +47,7 @@ Native write set/approval is recorded by its owner in
 5. Review coherent changes, show retained actual screenshots, clean only owned
    non-image outputs/processes and checkpoint both current branches.
 
-SDK handoff: package compiles in Debug and Release;9 focused Swift tests pass.
+SDK handoff: package compiles in Debug and Release;10 focused Swift tests pass.
 Actual SDK-produced synthetic records validate against core0.1, and the unchanged
 Rust engine returns independent8/18pt gaps. Release object has no BlueprintProbe
 symbols. These checks establish SDK/codec behavior, not real-app acceptance.
@@ -57,5 +58,16 @@ Root's native-host review also identified the completed-capture/publication gap:
 host now must recheck `isCurrentMounts(snapshot)` after await. The SDK's bounded
 lifecycle revision rejects intervening child/root invalidation, separately from
 the app's state check; completed-snapshot regression passes. No frame-freshness claim.
-Current dependency: native integration and actual-app snapshots/on-off/pairing.
+Real app produced7-node canonical Snapshots. Rust measured card336×184pt,
+icon34pt, group gaps18/7/18pt and top/bottom24pt. Resize changed root1920→961pt;
+Retry remounted the scope and an old root mount request produced no file.
+Stationary SDK before/after data agreed around a qualified SC capture with sourced
+window/scale mapping. These are real-app positives, not full acceptance.
+On/off comparison uncovered history/capture differences; valid SDK request changed
+paint after query while a wrong-token request did not. No tolerance relaxation or
+visual workaround was accepted. Repair: non-observable session request events and
+mount identities; nil markers are bare content. Old anchors retain their original
+mount token and refuse after renewal, rather than receiving a new identity.
+Current dependency: native owner's review and matched on/off/capture rerun on the
+event-driven SDK; reflow raw data remains separately available for Rust checks.
 Packaging/global installation and GPUI remain outside this package.

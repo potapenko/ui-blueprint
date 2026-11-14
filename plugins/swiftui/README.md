@@ -45,8 +45,10 @@ let snapshot = try await session.capture(
 )
 ```
 
-The next request-driven SwiftUI update resolves selected bounds anchors. The
-app must check `session.isCurrentMounts(snapshot)` and its own selected state
+An explicit main-actor event reaches the existing SwiftUI geometry callback and
+resolves selected bounds anchors without changing observable UI state. Mount
+identity renewal also does not request rendering; old anchor generations refuse.
+The app must check `session.isCurrentMounts(snapshot)` and its own selected state
 again after awaiting capture and immediately before publication. This rejects
 root/child invalidation that occurred after the SDK resumed the continuation;
 it does not turn saved geometry into a current or atomic frame observation.

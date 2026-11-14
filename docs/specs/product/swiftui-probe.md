@@ -13,7 +13,7 @@
 ## SWIFTUI.COLLECT — Request-owned source measurement
 
 The concrete Swift package `plugins/swiftui`, module `UIBlueprintSwiftUI`, uses
-SwiftUI/Foundation/Observation on macOS14+. Its implementation is DEBUG-only.
+SwiftUI/Foundation/Combine on macOS14+. Its implementation is DEBUG-only.
 The consuming app owns one session per explicitly selected root/window, provides
 its real target/run identity and admits requests. No AppKit, reflection, networking,
 file IO, model/text collection or input actions belong to the SDK.
@@ -22,6 +22,9 @@ They attach bounds anchors without adding a layout container, hit area, focus or
 accessibility element. Resolve selected anchors only for an explicit capture,
 on the main actor, in the measured root's local pt/top-left space. Source display
 scale comes from that SwiftUI environment, not a process-global screen query.
+An explicit event reaches the existing SwiftUI geometry reader; capture must not
+mutate observable UI state to request redraw. Mount identity is non-observable;
+an old anchor with a renewed mount token refuses instead of acquiring the new ID.
 Root-local frames are not AX, hit, paint or visibility bounds. A root frame in
 SwiftUI global coordinates may be reported separately; it is not a screen or
 capture transform. Missing mapping remains unknown.

@@ -15,6 +15,7 @@ extension EnvironmentValues {
 private struct ProbeAnchor {
     let id: String
     let mountID: String
+    let mount: ProbeMount
     let parent: String?
     let anchor: Anchor<CGRect>
 }
@@ -38,22 +39,26 @@ private struct ProbeMarkerModifier: ViewModifier {
     @State private var mount = ProbeMount()
     @Environment(\.blueprintProbeSession) private var session
 
-    func body(content: Content) -> some View {
-        content
-            .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
-                if session != nil, records.count < 257 {
-                    records.append(ProbeAnchor(id: identity.id, mountID: mount.id,
-                        parent: identity.parent, anchor: anchor))
+    @ViewBuilder func body(content: Content) -> some View {
+        if let session {
+            content
+                .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
+                    if records.count < 257 {
+                        records.append(ProbeAnchor(id: identity.id, mountID: mount.id, mount: mount,
+                            parent: identity.parent, anchor: anchor))
+                    }
                 }
-            }
-            .onChange(of: identity) { old, _ in
-                session?.markerDetached(id: old.id, mountID: mount.id)
-                mount.renew()
-            }
-            .onDisappear {
-                session?.markerDetached(id: identity.id, mountID: mount.id)
-                mount.renew()
-            }
+                .onChange(of: identity) { old, _ in
+                    session.markerDetached(id: old.id, mountID: mount.id)
+                    mount.renew()
+                }
+                .onDisappear {
+                    session.markerDetached(id: identity.id, mountID: mount.id)
+                    mount.renew()
+                }
+        } else {
+            content
+        }
     }
 }
 
@@ -63,22 +68,28 @@ private struct ProbeRootModifier: ViewModifier {
     @Environment(\.displayScale) private var displayScale
 
     func body(content: Content) -> some View {
-        let token = session.requestRevision
         content
             .environment(\.blueprintProbeSession, session)
             .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
                 if records.count < 257 {
                     records.append(ProbeAnchor(id: session.configuration.rootMarkerID,
-                        mountID: mount.id, parent: nil, anchor: anchor))
+                        mountID: mount.id, mount: mount, parent: nil, anchor: anchor))
                 }
             }
             .backgroundPreferenceValue(ProbeAnchors.self) { anchors in
                 GeometryReader { proxy in
                     Color.clear
-                        .onChange(of: token, initial: true) { _, value in
+                        .onReceive(session.captureRequests) { value in
                             guard session.wantsCapture(token: value) else { return }
                             let selected = anchors.filter {
                                 session.configuration.requiredMarkerIDs.contains($0.id)
+                            }
+                            // A retained mount reference may already have renewed
+                            // while SwiftUI still holds an older preference value.
+                            // Refuse that old anchor; never label it with the new ID.
+                            guard selected.allSatisfy({ $0.mount.id == $0.mountID }) else {
+                                session.fail(.staleMount, token: value)
+                                return
                             }
                             // Resolve values only during this explicit request. Do not
                             // retain the GeometryProxy or anchors in the session.

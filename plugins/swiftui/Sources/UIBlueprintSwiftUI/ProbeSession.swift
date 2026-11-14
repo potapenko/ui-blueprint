@@ -1,23 +1,24 @@
 #if DEBUG
 import Foundation
-import Observation
+import Combine
 
 /// The app owns one session for one selected root. No IO or app state is owned here.
-@MainActor @Observable
+@MainActor
 public final class BlueprintProbeSession {
     public private(set) var requestRevision: UInt64 = 0
     public var isReady: Bool { rootMountID != nil }
     let configuration: ProbeConfiguration
     let sessionID = UUID().uuidString
-    @ObservationIgnored private var rootMountID: String?
-    @ObservationIgnored private var rootCollision = false
-    @ObservationIgnored private var surfaceGeneration = UUID().uuidString
-    @ObservationIgnored private var pending: Pending?
-    @ObservationIgnored private var timer: Task<Void, Never>?
-    @ObservationIgnored private var sequence: UInt64 = 0
-    @ObservationIgnored private var layoutRevision: UInt64 = 0
-    @ObservationIgnored private var lifecycleRevision: UInt64 = 0
-    @ObservationIgnored private var lastLayout: LayoutSample?
+    let captureRequests = PassthroughSubject<UInt64, Never>()
+    private var rootMountID: String?
+    private var rootCollision = false
+    private var surfaceGeneration = UUID().uuidString
+    private var pending: Pending?
+    private var timer: Task<Void, Never>?
+    private var sequence: UInt64 = 0
+    private var layoutRevision: UInt64 = 0
+    private var lifecycleRevision: UInt64 = 0
+    private var lastLayout: LayoutSample?
 
     private struct LayoutSample: Equatable {
         let markers: [ProbeMarker]
@@ -56,7 +57,9 @@ public final class BlueprintProbeSession {
                         maxOutputBytes: Int = 1_048_576) async throws -> BlueprintProbeSnapshot {
         guard publicProbeID(requestID), publicProbeID(stateID),
               (1...10_000).contains(timeoutMilliseconds), (1...1_048_576).contains(maxOutputBytes),
-              expectedMounts.allSatisfy({ configuration.requiredMarkerIDs.contains($0.key) && publicProbeID($0.value) })
+              expectedMounts.count <= 256,
+              expectedMounts.allSatisfy({ publicProbeID($0.key) && publicProbeID($0.value)
+                  && configuration.requiredMarkerIDs.contains($0.key) })
         else { throw BlueprintProbeError.invalidRequest }
         guard rootMountID != nil else { throw BlueprintProbeError.unavailable }
         guard pending == nil else { throw BlueprintProbeError.busy }
@@ -79,6 +82,9 @@ public final class BlueprintProbeSession {
                     catch { return }
                     self?.fail(.timeout, token: token)
                 }
+                // Deliver into the existing view callback without changing any
+                // Observable/SwiftUI state or asking the view to redraw.
+                captureRequests.send(token)
             }
         } onCancel: {
             Task { @MainActor [weak self] in self?.cancel(captureID: captureID) }
@@ -174,7 +180,7 @@ public final class BlueprintProbeSession {
         lifecycleRevision += 1
     }
 
-    private func fail(_ error: BlueprintProbeError, token: UInt64? = nil) {
+    func fail(_ error: BlueprintProbeError, token: UInt64? = nil) {
         if let token, token != requestRevision { return }
         let request = pending
         pending = nil

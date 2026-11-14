@@ -1,4 +1,4 @@
-# Ordinary macOS Accessibility observation
+# macOS geometry observations
 
 Use the matching Native or combined bundle selected in [the skill](../SKILL.md).
 Its `session-worker` and `native-host-helper` must be the siblings of the selected
@@ -110,3 +110,32 @@ establish equivalent layout/paint/hit areas or pt=dp mapping.
 Existing `compare` requires compatible plugin/Target/namespace; `diff` also needs
 its strict identity basis. Do not rewrite snapshots or force cross-platform pairs.
 Screenshots/interaction remain separate caller-owned visual evidence.
+
+## Opt-in SwiftUI layout observations
+
+An application owner can explicitly integrate the separately supplied
+`UIBlueprintSwiftUI` Debug SDK and provide a canonical core0.1 Snapshot from its
+real SwiftUI component. This is a different source from `native_ax`; the ordinary
+preparer does not install, inject or activate it. Require the SDK's supplied
+revision/integration instructions and the app owner's authorized capture path.
+Do not assume the installed CLI archive contains this source package or modify
+an application merely because the user requested a read-only observation.
+
+The producer measures selected bounds anchors inside the real app, with semantic
+marker IDs, separate mount UUIDs and declared parent/component membership.
+Use its original `swiftui.layout` SourceKeys and `swiftui-root-pt` local point
+space through the existing [saved analysis](analysis.md) recipe. No new importer
+or handwritten geometry is needed. Inspect the record before choosing anchors.
+Do not substitute the old F02 fixture manifest or its hard-coded component names.
+
+Capture sequence, measured-layout revision and displayed frame are distinct.
+The owner checks selected state and `isCurrentMounts(snapshot)` before publishing
+the SDK bytes. Saved output remains cache/unverified; equal observations do not
+prove an unchanged animation interval. Source display scale and SwiftUI-global
+root coordinates alone do not establish a screen/pixel transform.
+
+Layout, hit, visible and paint coverage stay separate. In particular, a native
+button's Accessibility rectangle may be smaller than its SwiftUI layout frame.
+Never coerce those rectangles to equality. A screenshot pairing needs its own
+source-bound window/capture metadata and a qualified transform. Actual app
+interaction and probe-on/off invariance remain separate evidence.
