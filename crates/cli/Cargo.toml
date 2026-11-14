@@ -10,6 +10,9 @@ description = "Bounded local UI Blueprint geometry CLI"
 name = "uiblueprint"
 path = "src/main.rs"
 
+[lints]
+workspace = true
+
 [dependencies]
 uiblueprint-schema = { path = "../schema" }
 uiblueprint-engine = { path = "../engine" }

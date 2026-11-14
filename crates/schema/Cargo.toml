@@ -6,6 +6,9 @@ rust-version.workspace = true
 publish = false
 description = "Candidate UI Blueprint schema identity and version validation"
 
+[lints]
+workspace = true
+
 [dependencies]
 serde.workspace = true
 serde_json.workspace = true

@@ -213,6 +213,11 @@ Further reading: [geometry](docs/development/geometry.md),
 [product specifications](docs/specs/README.md), and
 [dependency notices](THIRD_PARTY_NOTICES.md).
 
+For Rust development, follow the [engineering rules](RUST.md) and
+[workspace checks and PR CI](docs/specs/development/rust.md). Pull requests run
+formatting, Clippy and tests for the default, Web, macOS and combined Rust features;
+live UI and performance qualification remain separate.
+
 ## License
 
 UI Blueprint is licensed under [MIT](LICENSE). Third-party dependencies retain

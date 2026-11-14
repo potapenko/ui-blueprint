@@ -6,6 +6,9 @@ rust-version.workspace = true
 publish = false
 description = "Request-owned observation sessions for UI Blueprint adapters"
 
+[lints]
+workspace = true
+
 [dependencies]
 uiblueprint-schema = { path = "../schema" }
 serde_json.workspace = true

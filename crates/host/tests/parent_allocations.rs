@@ -35,17 +35,21 @@ fn observe(bytes: usize) {
 unsafe impl GlobalAlloc for ObservedSystem {
     unsafe fn alloc(&self, l: Layout) -> *mut u8 {
         observe(l.size());
+        // SAFETY: The GlobalAlloc caller supplies a valid nonzero layout, forwarded unchanged to System.
         unsafe { System.alloc(l) }
     }
     unsafe fn alloc_zeroed(&self, l: Layout) -> *mut u8 {
         observe(l.size());
+        // SAFETY: The caller supplies a valid nonzero layout; System performs the requested zeroing.
         unsafe { System.alloc_zeroed(l) }
     }
     unsafe fn realloc(&self, p: *mut u8, l: Layout, n: usize) -> *mut u8 {
         observe(n);
+        // SAFETY: The caller owns this System allocation with layout l and supplies a valid new size n.
         unsafe { System.realloc(p, l, n) }
     }
     unsafe fn dealloc(&self, p: *mut u8, l: Layout) {
+        // SAFETY: The caller transfers a live System allocation with its exact layout for one deallocation.
         unsafe { System.dealloc(p, l) }
     }
 }

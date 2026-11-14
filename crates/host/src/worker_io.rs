@@ -27,7 +27,9 @@ impl WorkerIo {
         // proving they exist. The registered spawn contract transfers their sole
         // child-process ownership; watchdog only borrows input until joined.
         Ok(Self {
+            // SAFETY: the spawn contract transfers sole ownership of verified fd3 here.
             input: unsafe { File::from_raw_fd(CHILD_INPUT_FD) },
+            // SAFETY: verified fd4 is distinct from fd3 and is adopted exactly once here.
             output: unsafe { File::from_raw_fd(CHILD_OUTPUT_FD) },
             diagnostic: None,
         })

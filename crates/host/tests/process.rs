@@ -64,25 +64,31 @@ fn u64_at(data: &[u8], at: usize) -> u64 {
 }
 fn descriptors() -> usize {
     (0..512)
+        // SAFETY: F_GETFD only queries each integer descriptor; closed descriptors return an error.
         .filter(|fd| unsafe { libc::fcntl(*fd, libc::F_GETFD) } >= 0)
         .count()
 }
 
 #[test]
 fn mapped_lanes_empty_environment_actual_stack_and_no_inheritance() {
+    // SAFETY: The fixed path is NUL-terminated; a successful open returns a new descriptor.
     let raw = unsafe { libc::open(c"/dev/null".as_ptr(), libc::O_RDONLY) };
     assert!(raw >= 0);
+    // SAFETY: The checked successful open returned a descriptor with no other Rust owner.
     let extra = unsafe { OwnedFd::from_raw_fd(raw) };
+    // SAFETY: extra remains live; F_SETFD takes an integer flag and only changes this owned descriptor.
     unsafe {
         libc::fcntl(extra.as_raw_fd(), libc::F_SETFD, 0);
     }
     let mut c = child(b"I");
     for fd in [c.input_fd().expect("input"), c.output_fd(), c.fatal_fd()] {
         assert_ne!(
+            // SAFETY: The child owns each borrowed descriptor; F_GETFD takes no additional argument.
             unsafe { libc::fcntl(fd.as_raw_fd(), libc::F_GETFD) } & libc::FD_CLOEXEC,
             0
         );
         assert_ne!(
+            // SAFETY: The child owns each borrowed descriptor; F_GETFL takes no additional argument.
             unsafe { libc::fcntl(fd.as_raw_fd(), libc::F_GETFL) } & libc::O_NONBLOCK,
             0
         );
@@ -244,6 +250,7 @@ fn externally_reaped_child_is_lost_not_a_signal_target() {
     let mut status = 0;
     let mut result = 0;
     while Instant::now() < end {
+        // SAFETY: pid is our own child reported by its handshake; status is writable and WNOHANG does not block.
         result = unsafe { libc::waitpid(pid, &mut status, libc::WNOHANG) };
         if result == pid {
             break;
@@ -267,6 +274,7 @@ fn partial_fd_setup_and_default_sigpipe_are_confined_to_owned_peers() {
 
 #[test]
 fn watchdog_request_rejects_invalid_ceilings_without_changing_process_limits() {
+    // SAFETY: This public page-size query has no pointers or ownership effects.
     let page = unsafe { libc::sysconf(libc::_SC_PAGESIZE) } as usize;
     for ceiling in [0, 1, page, 1024 * 1024 + 1, usize::MAX] {
         assert_eq!(

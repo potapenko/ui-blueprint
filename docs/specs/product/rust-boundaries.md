@@ -10,7 +10,7 @@
 - Source mapping: TZ 784–811; [inverse map](../reference/source-map.md); source links are provenance, not requires.
 - Precedence: [registry](../README.md); исходные Active нормы при расхождении сохраняют силу; здесь нет новых решений.
 
-Rust source дополнительно следует [RUST.md](../../../RUST.md); toolchain/Cargo — [DEV.RUST@1](../development/rust.md). Эти маршруты активируются по задаче, а не для переноса данного текста.
+Rust source дополнительно следует [RUST.md](../../../RUST.md); toolchain/Cargo — [DEV.RUST@3](../development/rust.md). Эти маршруты активируются по задаче, а не для переноса данного текста.
 
 <a id="uib-rust-boundaries-content"></a>
 

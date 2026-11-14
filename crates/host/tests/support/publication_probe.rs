@@ -58,34 +58,42 @@ unsafe impl GlobalAlloc for Window {
     unsafe fn alloc(&self, l: Layout) -> *mut u8 {
         if ACTIVE.load(Ordering::Relaxed) {
             charged(l.size());
+            // SAFETY: The global caller supplies a valid nonzero layout; this terminal window owns Guard scratch.
             unsafe { GUARD.alloc(l) }
         } else {
+            // SAFETY: Outside the window, the valid caller layout is forwarded unchanged to System.
             unsafe { System.alloc(l) }
         }
     }
     unsafe fn alloc_zeroed(&self, l: Layout) -> *mut u8 {
         if ACTIVE.load(Ordering::Relaxed) {
             charged(l.size());
+            // SAFETY: The valid nonzero caller layout is forwarded to Guard with zeroing semantics.
             unsafe { GUARD.alloc_zeroed(l) }
         } else {
+            // SAFETY: Outside the window, System receives the same valid layout and supplies zeroing.
             unsafe { System.alloc_zeroed(l) }
         }
     }
     unsafe fn realloc(&self, p: *mut u8, l: Layout, n: usize) -> *mut u8 {
         if ACTIVE.load(Ordering::Relaxed) {
             charged(n);
+            // SAFETY: The window only resizes its own Guard scratch, with the original layout and valid new size.
             let value = unsafe { GUARD.realloc(p, l, n) };
             released(l.size());
             value
         } else {
+            // SAFETY: Outside the window, this is the caller-owned System pointer and its exact layout.
             unsafe { System.realloc(p, l, n) }
         }
     }
     unsafe fn dealloc(&self, p: *mut u8, l: Layout) {
         if ACTIVE.load(Ordering::Relaxed) {
+            // SAFETY: The window frees its own Guard scratch exactly once with the original allocation layout.
             unsafe { GUARD.dealloc(p, l) };
             released(l.size());
         } else {
+            // SAFETY: Outside the window, the caller transfers a live System allocation with its exact layout.
             unsafe { System.dealloc(p, l) }
         }
     }
@@ -182,14 +190,17 @@ fn main() {
     // SAFETY: valid nonzero layouts, exclusively owned until the final explicit
     // deallocation. The output is initialized; no borrowed slice survives use.
     let output = unsafe { GUARD.alloc_zeroed(output_layout) };
+    // SAFETY: The layout is valid and nonzero; Guard returns owned storage or terminates on failure.
     let ballast = unsafe { GUARD.alloc(ballast_layout) };
     for i in 0..BALLAST {
+        // SAFETY: i is within the live ballast allocation; each byte is written before being read.
         unsafe {
             ballast.add(i).write_volatile(0xa5);
             assert_eq!(ballast.add(i).read_volatile(), 0xa5);
         }
     }
     let limit = if mode == 5 { 16 } else { BUFFER };
+    // SAFETY: output is uniquely owned, zero-initialized BUFFER-byte storage and limit never exceeds BUFFER.
     let bytes = unsafe { std::slice::from_raw_parts_mut(output, limit) };
     let mut fixed = worker_main::FixedOutput { bytes, used: 0 };
     ACTIVE.store(true, Ordering::Release);

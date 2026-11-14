@@ -6,6 +6,14 @@ resolver = "3"
 edition = "2024"
 rust-version = "1.96"
 
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+unused_must_use = "deny"
+
+[workspace.lints.clippy]
+dbg_macro = "warn"
+undocumented_unsafe_blocks = "warn"
+
 [workspace.dependencies]
 serde = { version = "=1.0.229", features = ["derive"] }
 serde_json = { version = "=1.0.151", features = ["float_roundtrip"] }

@@ -41,6 +41,7 @@ fn pair(child_nonblocking: bool) -> Result<(OwnedFd, OwnedFd), HostError> {
     if unsafe { libc::socketpair(libc::AF_UNIX, libc::SOCK_STREAM, 0, fds.as_mut_ptr()) } != 0 {
         return Err(os_error(errno()));
     }
+    // SAFETY: successful socketpair returned two distinct, newly owned sockets.
     // Wrap both immediately so a later setup failure closes only these sockets.
     let [parent, child] = unsafe { [OwnedFd::from_raw_fd(fds[0]), OwnedFd::from_raw_fd(fds[1])] };
     let parent = high(parent)?;
@@ -57,6 +58,7 @@ impl Actions {
         let mut raw = MaybeUninit::uninit();
         // SAFETY: initializer writes the opaque handle; assume_init only on success.
         check(unsafe { libc::posix_spawn_file_actions_init(raw.as_mut_ptr()) })?;
+        // SAFETY: successful initialization above wrote the complete actions handle.
         Ok(Self(unsafe { raw.assume_init() }))
     }
     fn dup(&mut self, fd: &OwnedFd, target: i32) -> Result<(), HostError> {
@@ -84,6 +86,7 @@ impl Attributes {
         let mut raw = MaybeUninit::uninit();
         // SAFETY: writable storage for initializer; read only after success.
         check(unsafe { libc::posix_spawnattr_init(raw.as_mut_ptr()) })?;
+        // SAFETY: successful initialization above wrote the complete attributes handle.
         let mut value = Self(unsafe { raw.assume_init() });
         // SAFETY: initialized handle; public Darwin flag closes unrelated FDs,
         // even descriptors another parent thread has not yet marked CLOEXEC.

@@ -10,6 +10,9 @@ description = "Bounded parent leases and supervised canonical worker processing"
 default = []
 web = ["dep:uiblueprint-web", "dep:log"]
 
+[lints]
+workspace = true
+
 [dependencies]
 uiblueprint-schema = { path = "../schema" }
 uiblueprint-engine = { path = "../engine" }

@@ -6,6 +6,9 @@ rust-version.workspace = true
 publish = false
 description = "Pure UI Blueprint geometry measurements and checks"
 
+[lints]
+workspace = true
+
 [dependencies]
 uiblueprint-schema = { path = "../schema" }
 

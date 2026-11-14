@@ -8,6 +8,7 @@ fn limits(resource: i32) -> Result<libc::rlimit, HostError> {
     if unsafe { libc::getrlimit(resource, value.as_mut_ptr()) } != 0 {
         return Err(os_error(errno()));
     }
+    // SAFETY: the successful getrlimit call initialized the entire limit record.
     Ok(unsafe { value.assume_init() })
 }
 fn set(resource: i32, value: &libc::rlimit) -> Result<(), HostError> {

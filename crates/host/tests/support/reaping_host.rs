@@ -31,6 +31,7 @@ impl ProcessPlatform for Audit {
             // Actual Native owner latches Lost before any PID wait under this
             // unsupported policy. Restore policy, but not the lost owner.
             assert_eq!(child.try_reap(), Err(HostError::CleanupPending));
+            // SAFETY: original is the initialized prior disposition of this disposable peer; only it is restored.
             unsafe {
                 assert_eq!(
                     libc::sigaction(libc::SIGCHLD, &original, std::ptr::null_mut()),
@@ -231,6 +232,7 @@ fn disposable_parent() {
     // Host deliberately retains poisoned roots. This disposable test now restores
     // policy and independently reaps its sole child after protocol EOF. No PID
     // signalling, shared runner children, or unregistered grandchildren exist.
+    // SAFETY: original is the saved valid SIGCHLD disposition; restoration is confined to this peer.
     unsafe {
         assert_eq!(
             libc::sigaction(libc::SIGCHLD, &original, std::ptr::null_mut()),

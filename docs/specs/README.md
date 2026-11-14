@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 66 (MIT source-only releases).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 67 (shared Rust lints and PR CI).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -98,7 +98,7 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 | Fixtures, GOLDEN01, pilots, integration or performance | [Acceptance tree](acceptance/README.md) | Positive/negative evidence requirements, not claimed results |
 | Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
 | Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
-| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@2](development/rust.md) | Active / Evolving; C01 setup choices, product builds still unaccepted |
+| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@3](development/rust.md) | Active / Evolving; current workspace, shared lints and PR feature matrix; runtime/release acceptance separate |
 | Agent skill and prompt installation | [AGENT-SKILL@4](development/agent-skill.md) | Agent-composed drawing and cold-chat installation/use; literal CLI retained |
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |

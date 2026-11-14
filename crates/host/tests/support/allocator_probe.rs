@@ -114,6 +114,7 @@ fn injected_null(size: usize) -> bool {
     // SAFETY: fd4 is the disposable probe's inherited owned output lane; one
     // fixed stack byte is written without formatting, allocation or recursion.
     let marker = [0xa1_u8];
+    // SAFETY: The inherited output lane borrows the initialized one-byte marker for this call.
     if unsafe { libc::write(4, marker.as_ptr().cast(), marker.len()) } != 1 {
         DarwinPlatform::fatal_exit(-1, &[0; 64], 82);
     }
@@ -139,6 +140,7 @@ unsafe fn fail_one_realloc(pointer: *mut u8, layout: Layout, new_size: usize) ->
     // SAFETY: the caller owns this exact initialized old layout. Inspecting it
     // before returning null does not free, resize or transfer the old allocation.
     for offset in 0..layout.size() {
+        // SAFETY: offset is within the live, initialized old allocation supplied by the caller.
         if unsafe { pointer.add(offset).read_volatile() } != 0xa5 {
             DarwinPlatform::fatal_exit(-1, &[0; 64], 83);
         }
@@ -183,6 +185,7 @@ fn observe(pointer: *mut u8, size: usize, initial_zero: bool) {
     // SAFETY: all offsets are in the caller-owned initialized allocation. Volatile
     // access makes this actual storage proof observable, not an elided allocation.
     for index in 0..size {
+        // SAFETY: index is within the caller-owned allocation; any initial read is only of zeroed storage.
         unsafe {
             if initial_zero {
                 assert_eq!(pointer.add(index).read_volatile(), 0);

@@ -54,7 +54,7 @@ Acceptance выбирается по [карте проверок](../acceptance
 
 | Consumer | Выбор перед explicit dependency closure |
 | --- | --- |
-| C01/T01 | ROADMAP; RUST-BOUNDARIES; DEV.RUST@1 по trigger; REUSE и принятые source records |
+| C01/T01 | ROADMAP; RUST-BOUNDARIES; DEV.RUST@3 по trigger; REUSE и принятые source records |
 | S01/L01 | MODEL, EXCHANGE, CLI, GOLDEN; schema решения D03; ANALYSIS для local analysis JSON/evaluation |
 | G01/G02 | GEOMETRY, PROJECTIONS; NATIVE для probe mapping; platform PILOTS по проверке |
 | W01/M01/P01 | соответствующий PILOTS; для Native NATIVE; его requires включает privacy/lifecycle |

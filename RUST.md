@@ -126,6 +126,9 @@ These references explain language practice; they do not define product intent.
   types, feature configuration, or generated code involved.
 - Do not mix compiler repair with unrelated dependency or behavior changes.
 - Do not add broad lint suppressions. A narrow exception needs a local reason.
+- Every workspace package inherits the root `[workspace.lints]` through
+  `[lints] workspace = true`. Keep the shared policy and existing crate unsafe
+  restrictions; see [Rust development](docs/specs/development/rust.md#devrustci--shared-lints-and-pull-requests).
 - Leave no new unexplained compiler/Clippy warnings or known test regressions.
   Report any unresolved check accurately.
 - Use the command scopes and acceptance mapping in

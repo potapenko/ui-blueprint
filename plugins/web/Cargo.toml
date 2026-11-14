@@ -6,6 +6,9 @@ rust-version.workspace = true
 publish = false
 description = "Owned bounded WebSocket transport for the UI Blueprint Web adapter"
 
+[lints]
+workspace = true
+
 [dependencies]
 tungstenite.workspace = true
 log.workspace = true

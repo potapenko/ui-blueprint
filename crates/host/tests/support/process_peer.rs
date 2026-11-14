@@ -9,13 +9,16 @@ use uiblueprint_host::{process::DarwinPlatform, process_api::*};
 static WATCHDOG_STACK: AtomicUsize = AtomicUsize::new(0);
 extern "C" fn interrupted(_: i32) {}
 fn send(fd: i32, bytes: &[u8]) {
+    // SAFETY: bytes remains readable for its full length; send borrows the inherited lane and suppresses SIGPIPE.
     unsafe {
         libc::send(fd, bytes.as_ptr().cast(), bytes.len(), libc::MSG_NOSIGNAL);
     }
 }
 fn byte() -> u8 {
     let mut value = 0;
+    // SAFETY: The owned inherited input lane writes at most one byte into live value storage.
     if unsafe { libc::read(3, (&mut value as *mut u8).cast(), 1) } != 1 {
+        // SAFETY: Terminate only this disposable peer after failed input; no Rust cleanup is required.
         unsafe { libc::_exit(80) }
     }
     value
@@ -26,17 +29,24 @@ fn info(main_stack: usize) -> [u8; 64] {
     value[1] = std::env::vars_os().count() as u8;
     value[2] = std::env::args_os().count() as u8;
     value[3] = (6..256)
+        // SAFETY: F_GETFD only queries an integer descriptor and accepts closed descriptors with an error.
         .filter(|fd| unsafe { libc::fcntl(*fd, libc::F_GETFD) } >= 0)
         .count() as u8;
+    // SAFETY: F_GETFL queries the inherited fatal lane without a pointer argument or ownership transfer.
     value[4] = u8::from(unsafe { libc::fcntl(5, libc::F_GETFL) } & libc::O_NONBLOCK != 0);
     let mut null_stat = std::mem::MaybeUninit::<libc::stat>::uninit();
+    // SAFETY: The path is NUL-terminated and null_stat provides writable storage for one stat record.
     if unsafe { libc::stat(c"/dev/null".as_ptr(), null_stat.as_mut_ptr()) } != 0 {
+        // SAFETY: Terminate this disposable peer rather than reading an uninitialized stat record.
         unsafe { libc::_exit(86) }
     }
+    // SAFETY: The successful stat call above initialized the complete record.
     let null_device = unsafe { null_stat.assume_init() }.st_rdev;
     for fd in 0..3 {
         let mut stat = std::mem::MaybeUninit::<libc::stat>::uninit();
+        // SAFETY: stat has writable storage for one record; invalid descriptors return an error.
         if unsafe { libc::fstat(fd, stat.as_mut_ptr()) } == 0 {
+            // SAFETY: The preceding successful fstat initialized the complete record.
             let actual = unsafe { stat.assume_init() };
             if actual.st_mode & libc::S_IFMT == libc::S_IFCHR && actual.st_rdev == null_device {
                 value[5 + fd as usize] = 1;
@@ -45,11 +55,13 @@ fn info(main_stack: usize) -> [u8; 64] {
     }
     value[8..16].copy_from_slice(&(main_stack as u64).to_le_bytes());
     value[16..24].copy_from_slice(&(WATCHDOG_STACK.load(Ordering::Acquire) as u64).to_le_bytes());
+    // SAFETY: getpid has no pointer inputs or ownership transfer.
     value[24..28].copy_from_slice(&unsafe { libc::getpid() }.to_le_bytes());
     let mut limit = libc::rlimit {
         rlim_cur: 1,
         rlim_max: 1,
     };
+    // SAFETY: limit is a live writable record and RLIMIT_CORE is a valid resource selector.
     if unsafe { libc::getrlimit(libc::RLIMIT_CORE, &mut limit) } == 0
         && limit.rlim_cur == 0
         && limit.rlim_max == 0
@@ -61,13 +73,17 @@ fn info(main_stack: usize) -> [u8; 64] {
 fn collision() {
     let path = std::env::current_exe().expect("test executable path");
     let spec = SpawnSpec::new(&path).expect("bounded own peer path");
+    // SAFETY: Duplicate the inherited output lane into a new independently owned descriptor above the lanes.
     let output = unsafe { libc::fcntl(4, libc::F_DUPFD_CLOEXEC, 100) };
     if output < 0 {
+        // SAFETY: Only this disposable peer exits when descriptor duplication fails.
         unsafe { libc::_exit(81) }
     }
+    // SAFETY: Successful fcntl returned a new descriptor that has no other Rust owner.
     let output = unsafe { OwnedFd::from_raw_fd(output) };
     // Only this disposable peer's six inherited owned lanes are touched.
     for fd in 0..6 {
+        // SAFETY: Only this disposable peer owns these inherited raw lanes; none has a Rust FD owner.
         unsafe {
             libc::close(fd);
         }
@@ -101,6 +117,7 @@ fn partial_setup() {
     let spec = SpawnSpec::new(&std::env::current_exe().expect("own peer")).expect("spec");
     let count = || {
         (0..32)
+            // SAFETY: F_GETFD queries integer descriptors without dereferencing pointers or taking ownership.
             .filter(|fd| unsafe { libc::fcntl(*fd, libc::F_GETFD) } >= 0)
             .count()
     };
@@ -109,11 +126,14 @@ fn partial_setup() {
         rlim_cur: 0,
         rlim_max: 0,
     };
+    // SAFETY: limit is writable initialized storage for the valid RLIMIT_NOFILE query.
     unsafe {
         libc::getrlimit(libc::RLIMIT_NOFILE, &mut limit);
     }
     limit.rlim_cur = 10;
+    // SAFETY: limit is a live record; changing the limit affects only this disposable peer.
     if unsafe { libc::setrlimit(libc::RLIMIT_NOFILE, &limit) } != 0 {
+        // SAFETY: Only this disposable peer exits on setup failure.
         unsafe { libc::_exit(85) }
     }
     let failed = DarwinPlatform.spawn(&spec).is_err();
@@ -134,6 +154,7 @@ fn closed_sigpipe() {
         }
     }
     // Only this owned test process: prove per-send suppression even with default SIGPIPE.
+    // SAFETY: SIG_DFL is the valid sentinel for SIGPIPE; the change is confined to this owned test process.
     unsafe {
         libc::signal(libc::SIGPIPE, libc::SIG_DFL);
     }
@@ -150,15 +171,19 @@ fn closed_sigpipe() {
     send(4, &[u8::from(used == 65 && closed && reaped)]);
 }
 fn interrupt_poll() {
+    // SAFETY: Darwin sigaction contains integer fields; the handler and empty signal mask are set below.
     let mut action: libc::sigaction = unsafe { std::mem::zeroed() };
     action.sa_sigaction = interrupted as *const () as usize;
+    // SAFETY: The mask is writable and the installed extern C handler is non-unwinding and does no work.
     unsafe {
         libc::sigemptyset(&mut action.sa_mask);
         libc::sigaction(libc::SIGUSR1, &action, std::ptr::null_mut());
     }
+    // SAFETY: pthread_self returns the identity of the live calling thread without transferring ownership.
     let main = unsafe { libc::pthread_self() } as usize;
     let signaler = std::thread::spawn(move || {
         std::thread::sleep(Duration::from_millis(20));
+        // SAFETY: The main thread remains alive until join; SIGUSR1 uses the no-op handler installed above.
         unsafe {
             libc::pthread_kill(main as libc::pthread_t, libc::SIGUSR1);
         }
@@ -173,9 +198,11 @@ fn interrupt_poll() {
     send(4, &report);
 }
 fn signal_action(handler: usize, flags: i32) -> libc::sigaction {
+    // SAFETY: Darwin sigaction contains integer fields, initialized here before setting handler and mask.
     let mut action: libc::sigaction = unsafe { std::mem::zeroed() };
     action.sa_sigaction = handler;
     action.sa_flags = flags;
+    // SAFETY: action.sa_mask is writable storage for a complete Darwin signal set.
     unsafe {
         libc::sigemptyset(&mut action.sa_mask);
     }
@@ -183,13 +210,18 @@ fn signal_action(handler: usize, flags: i32) -> libc::sigaction {
 }
 fn query_chld() -> libc::sigaction {
     let mut action = std::mem::MaybeUninit::uninit();
+    // SAFETY: A null new-action pointer performs a query into writable sigaction storage.
     if unsafe { libc::sigaction(libc::SIGCHLD, std::ptr::null(), action.as_mut_ptr()) } != 0 {
+        // SAFETY: Terminate this peer rather than expose an uninitialized action record.
         unsafe { libc::_exit(88) }
     }
+    // SAFETY: The successful sigaction query initialized the complete action record.
     unsafe { action.assume_init() }
 }
 fn apply_chld(action: &libc::sigaction) {
+    // SAFETY: action is a live record built from valid signal constants or the no-op extern C handler.
     if unsafe { libc::sigaction(libc::SIGCHLD, action, std::ptr::null_mut()) } != 0 {
+        // SAFETY: Only this disposable peer exits on a failed policy change.
         unsafe { libc::_exit(89) }
     }
 }
@@ -207,6 +239,7 @@ fn policy_refusal(mode: u8) {
         DarwinPlatform::validate_parent_reaping() == Err(uiblueprint_host::HostError::InvalidState);
     let fd_count = || {
         (0..256)
+            // SAFETY: F_GETFD queries each integer descriptor without changing its ownership.
             .filter(|fd| unsafe { libc::fcntl(*fd, libc::F_GETFD) } >= 0)
             .count()
     };
@@ -230,7 +263,9 @@ fn policy_refusal(mode: u8) {
     let balanced = fd_count() == count;
     let mut status = 0;
     let no_child = refused
+        // SAFETY: This isolated peer has no unmanaged children; status is writable and WNOHANG is nonblocking.
         && unsafe { libc::waitpid(-1, &mut status, libc::WNOHANG) } == -1
+        // SAFETY: __error returns this thread's errno storage; it is read immediately after waitpid failed.
         && unsafe { *libc::__error() } == libc::ECHILD;
     apply_chld(&original);
     send(
@@ -259,6 +294,7 @@ fn policy_drift() {
         }
     }
     if at != 65 {
+        // SAFETY: Only this disposable peer exits when its bounded child handshake fails.
         unsafe { libc::_exit(90) }
     }
     let pid = i32::from_le_bytes(header[24..28].try_into().expect("owned pid"));
@@ -285,7 +321,9 @@ fn policy_drift() {
     let mut auto_reaped = false;
     // EOF may precede final kernel exit cleanup. It is not reap evidence.
     while eof && Instant::now() < end {
+        // SAFETY: pid was read from our own child handshake; status is writable and this call only waits.
         let waited = unsafe { libc::waitpid(pid, &mut status, libc::WNOHANG) };
+        // SAFETY: __error returns current-thread errno storage, read only after waitpid reports an error.
         if waited == -1 && unsafe { *libc::__error() } == libc::ECHILD {
             auto_reaped = true;
             break;
@@ -312,6 +350,7 @@ fn policy_drift() {
 fn main() {
     let stack = match DarwinPlatform::setup_main(8 * 1024 * 1024) {
         Ok(n) => n,
+        // SAFETY: Only this disposable peer exits on its own stack setup failure.
         Err(_) => unsafe { libc::_exit(82) },
     };
     // Production caller must use the same provider and verify actual extent.
@@ -342,9 +381,11 @@ fn main() {
     match mode {
         b'I' => {}
         b'E' => send(4, &[byte()]),
+        // SAFETY: This fixed test mode exits only the disposable peer with the expected status.
         b'X' => unsafe { libc::_exit(17) },
         b'H' => std::thread::sleep(Duration::from_millis(1000)),
         b'D' => {
+            // SAFETY: This peer solely owns raw input lane 3; it has no File or OwnedFd wrapper.
             unsafe {
                 libc::close(3);
             }
@@ -355,6 +396,7 @@ fn main() {
         b'M' => DarwinPlatform::fatal_exit(-1, &[0xa5; 64], 78),
         b'B' => {
             for _ in 0..8192 {
+                // SAFETY: The 64-byte temporary stays live through send; fd5 is inherited and send is nonblocking.
                 if unsafe {
                     libc::send(
                         5,
@@ -375,6 +417,7 @@ fn main() {
         b'S' => closed_sigpipe(),
         b'N' | b'G' | b'T' => policy_refusal(mode),
         b'L' => policy_drift(),
+        // SAFETY: An unknown fixed command terminates only this disposable peer.
         _ => unsafe { libc::_exit(83) },
     }
 }
