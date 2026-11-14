@@ -13,6 +13,7 @@
 
 | Контракт | Read when / роль |
 | --- | --- |
+| [UIB.SWIFTUI-PROBE@1](swiftui-probe.md) | Explicit real-app SwiftUI Debug layout measurement and canonical export |
 | [UIB.DESIGN-ANALYSIS@1](design-analysis.md) | Explicit mathematical relationships and consistency recommendations in export |
 | [UIB.BOUNDARIES@1](boundaries.md) | выбор архитектуры, platform/plugin/profile/extension boundaries; contract |
 | [UIB.MODEL@1](model.md) | schema, нормализация, свойства, роли, provenance; contract |
