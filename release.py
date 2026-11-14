@@ -9,6 +9,7 @@ import io
 import json
 import os
 from pathlib import Path
+import posixpath
 import re
 import stat
 import subprocess
@@ -22,7 +23,8 @@ ROOT = Path(__file__).resolve().parent
 REPOSITORY = 'https://github.com/potapenko/ui-blueprint'
 BINARIES = ('uiblueprint', 'uiblueprint-validate', 'session-worker', 'native-host-helper')
 SKILL_FILES = ('SKILL.md', 'agents/openai.yaml', 'references/analysis.md',
-               'references/export.md', 'references/macos.md', 'references/web.md', 'references/compose.md')
+               'references/export.md', 'references/macos.md', 'references/web.md',
+               'references/compose.md', 'references/gpui.md')
 VERSION = re.compile(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?\Z')
 NUMERIC_VERSION = re.compile(r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\Z')
 
@@ -76,9 +78,29 @@ def committed_skill(revision):
     return {name: committed(revision, f'skills/ui-blueprint/{name}') for name in SKILL_FILES}
 
 
+def skill_inventory(bundle_format):
+    names = set(SKILL_FILES)
+    if bundle_format in ('ui-blueprint-local-1', 'ui-blueprint-local-2'):
+        return names - {'references/compose.md', 'references/gpui.md'}
+    if bundle_format in ('ui-blueprint-local-3', 'ui-blueprint-local-4'):
+        return names - {'references/gpui.md'}
+    if bundle_format == 'ui-blueprint-local-5':
+        return names
+    raise ValueError('invalid skill distribution format')
+
+
 def make_skill_archive(output, files):
     if set(files) != set(SKILL_FILES):
         raise ValueError('invalid skill inventory')
+    for name, data in files.items():
+        if not name.endswith('.md'):
+            continue
+        for link in re.findall(r'\]\(([^)]+)\)', data.decode('utf-8')):
+            if re.match(r'[A-Za-z][A-Za-z0-9+.-]*:', link) or link.startswith('#'):
+                continue
+            target = posixpath.normpath(posixpath.join(posixpath.dirname(name), link.split('#', 1)[0]))
+            if target not in files:
+                raise ValueError(f'skill link is not packaged: {name}: {link}')
     with output.open('xb') as stream, gzip.GzipFile(fileobj=stream, mode='wb', mtime=0) as compressed:
         with tarfile.open(fileobj=compressed, mode='w', format=tarfile.USTAR_FORMAT) as archive:
             for name in sorted(files):
@@ -114,6 +136,10 @@ def render(template, replacements):
 
 def write_candidates(bundle, output, *, version, revision, minimum, signing,
                      installer_template, formula_template, skill_files):
+    with dist.destination(bundle) as fd:
+        manifest, _ = dist.verify(fd)
+    if set(skill_files) != skill_inventory(manifest['format']):
+        raise ValueError('skill inventory does not match distribution format')
     archive = output / archive_name(version)
     hashes = make_archive(bundle, archive)
     archive_hash = dist.digest(archive.read_bytes())
@@ -280,9 +306,7 @@ def extract_candidate(folder, bundle, record):
         skill = bundle / 'skill'
         with tarfile.open(folder / skill_archive_name(record['version']), 'r:gz') as archive:
             members = archive.getmembers()
-            expected_skill = set(SKILL_FILES)
-            if manifest['format'] in ('ui-blueprint-local-1', 'ui-blueprint-local-2'):
-                expected_skill.remove('references/compose.md')
+            expected_skill = skill_inventory(manifest['format'])
             if (len(members) != len(expected_skill) or {m.name for m in members} != expected_skill
                     or any(not m.isfile() or m.mode != 0o644 for m in members)):
                 raise ValueError('invalid skill archive inventory')

@@ -35,7 +35,7 @@ def bundle_at(folder, revision='a' * 40):
     products = {name: ((name + '\n').encode(), 0o644) for name in dist.files_for('combined')}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "Usage: synthetic candidate\\n"\n', 0o755)
-    manifest = {'format': 'ui-blueprint-local-4', 'source_revision': revision,
+    manifest = {'format': 'ui-blueprint-local-5', 'source_revision': revision,
                 'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                                                 for name, (data, mode) in products.items()}}
     with dist.destination(folder) as fd:
@@ -385,6 +385,16 @@ def recipe_checks(stage, bundle, versions):
         assert (unpacked / name).read_bytes() == (bundle / name).read_bytes()
     for name in release.SKILL_FILES:
         assert (unpacked / 'skill' / name).read_bytes() == (ROOT / 'skills/ui-blueprint' / name).read_bytes()
+    broken_skill = {name: (ROOT / 'skills/ui-blueprint' / name).read_bytes()
+                    for name in release.SKILL_FILES}
+    broken_skill['SKILL.md'] += b'\n[Missing recipe](references/not-packaged.md#use)\n'
+    broken_archive = stage / 'broken-skill.tar.gz'
+    try:
+        release.make_skill_archive(broken_archive, broken_skill)
+        raise AssertionError('unpackaged skill reference accepted')
+    except ValueError as error:
+        assert str(error).startswith('skill link is not packaged:')
+    assert not broken_archive.exists()
     with patch.object(release, 'committed', return_value=b'pinned bytes') as source:
         assert set(release.committed_skill('c' * 40).values()) == {b'pinned bytes'}
         assert [call.args for call in source.call_args_list] == [
@@ -518,8 +528,11 @@ def real_candidate(folder):
             assert (bundle / name).read_bytes() == release.committed(record['source_revision'], source)
         with_skill = record['format'] == 'ui-blueprint-release-candidate-2'
         if with_skill:
-            for name, data in release.committed_skill(record['source_revision']).items():
-                assert (bundle / 'skill' / name).read_bytes() == data
+            manifest = json.loads((bundle / dist.MANIFEST).read_bytes())
+            skill_names = release.skill_inventory(manifest['format'])
+            for name in skill_names:
+                assert (bundle / 'skill' / name).read_bytes() == release.committed(
+                    record['source_revision'], f'skills/ui-blueprint/{name}')
         spec = importlib.util.spec_from_file_location('distribution_check', ROOT / 'tests/bridges/distribution_check.py')
         checks = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(checks)
@@ -564,13 +577,15 @@ esac
         installed = prefix / 'share/uiblueprint/versions' / record['version']
         if with_skill:
             assert skill.resolve().parent == installed.resolve()
-            for name in release.SKILL_FILES:
+            for name in skill_names:
                 assert (skill / name).read_bytes() == (bundle / 'skill' / name).read_bytes()
             # All Markdown references stay inside the installed skill, outside checkout.
             import re
             for path in skill.resolve().rglob('*.md'):
                 for link in re.findall(r'\]\(([^)]+)\)', path.read_text()):
-                    resolved = (path.parent / link).resolve()
+                    if re.match(r'[A-Za-z][A-Za-z0-9+.-]*:', link) or link.startswith('#'):
+                        continue
+                    resolved = (path.parent / link.split('#', 1)[0]).resolve()
                     assert resolved.is_relative_to(skill.resolve()) and resolved.is_file(), link
         checks.smoke(installed)
         run([*command, '--uninstall'], env=env)
@@ -578,7 +593,7 @@ esac
         assert not skill.is_symlink()
         if with_skill:
             # Homebrew receives the unchanged CLI archive, not the separate skill asset.
-            for name in release.SKILL_FILES:
+            for name in skill_names:
                 (bundle / 'skill' / name).unlink()
             for name in ('agents', 'references', ''):
                 (bundle / 'skill' / name).rmdir()
@@ -589,33 +604,36 @@ esac
         assert not stage.exists()
 
 
-def cross_inventory_checks(stage, versions):
+def cross_inventory_checks(stage, versions, manifest_version):
     """Actual historical installer and receipt formats; synthetic executables, no network."""
-    old_version = '0.0.8'
-    old_folder = stage / 'legacy inventory release'
-    old_bundle = stage / 'legacy inventory bundle'
+    old_version = f'0.0.{manifest_version}'
+    old_folder = stage / f'legacy{manifest_version} inventory release'
+    old_bundle = stage / f'legacy{manifest_version} inventory bundle'
     old_folder.mkdir()
     old_bundle.mkdir()
     names = dist.files_for('combined') - dist.COMPOSE_FILES - dist.NATIVE_CALLER_FILES
+    if manifest_version == 1:
+        names -= dist.WEB_FILES
     products = {name: ((name + '\n').encode(), 0o644) for name in names}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "legacy synthetic executable\\n"\n', 0o755)
-    manifest = {'format': 'ui-blueprint-local-2', 'source_revision': 'a' * 40,
+    manifest = {'format': f'ui-blueprint-local-{manifest_version}', 'source_revision': 'a' * 40,
                 'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                                                 for name, (data, mode) in products.items()}}
     with dist.destination(old_bundle) as fd:
         dist.publish(fd, products, manifest)
     # Pinned historical template: do not regenerate the old installer from current code.
     historical = '907b9b2c87fcb0475a64da939b4eaf8ec9358beb^'
-    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/compose.md')
+    old_skill_files = tuple(name for name in release.SKILL_FILES
+                            if name not in ('references/compose.md', 'references/gpui.md'))
     with patch.object(release, 'SKILL_FILES', old_skill_files):
         release.write_candidates(old_bundle, old_folder, version=old_version, revision='a' * 40,
             minimum='27.0.1', signing='unsigned',
             installer_template=release.committed(historical, 'install.sh').decode(),
             formula_template=(ROOT / 'uiblueprint.rb').read_text(),
             skill_files={name: release.committed(historical, f'skills/ui-blueprint/{name}') for name in old_skill_files})
-    prefix = stage / 'cross inventory prefix'
-    skill = stage / 'cross inventory host/ui-blueprint'
+    prefix = stage / f'cross inventory{manifest_version} prefix'
+    skill = stage / f'cross inventory{manifest_version} host/ui-blueprint'
     env = dict(os.environ, PATH=f'{stage / "shims"}:/usr/bin:/bin:/usr/sbin:/sbin',
                DOWNLOAD_FAILURE='yes', TMPDIR=str(stage))
     old = ['sh', old_folder / 'install.sh', '--prefix', prefix, '--skill-dir', skill,
@@ -655,7 +673,7 @@ def cross_inventory_checks(stage, versions):
     extra.unlink()
     run(install, env=env)
     assert os.readlink(current) == 'versions/0.1.0'
-    assert len((current / 'skill/.skill-sha256').read_text().splitlines()) == 7
+    assert len((current / 'skill/.skill-sha256').read_text().splitlines()) == 8
     # New code verifies both inventories; the old shipped script cannot be upgraded in place.
     rollback = [*new, '--version', old_version]
     inactive_source = legacy / 'RUN.md'
@@ -671,7 +689,7 @@ def cross_inventory_checks(stage, versions):
     assert os.readlink(current) == 'versions/0.1.0'
     run([*new, '--uninstall'], env=env)
     assert not root.exists() and not skill.is_symlink()
-    print('PASS cross-inventory: historical manifest2/six-file skill install → manifest4/seven-file update, verified offline rollback/re-update/removal; tampered and foreign inventories refused')
+    print(f'PASS cross-inventory: manifest{manifest_version}/six-file skill install → manifest5/eight-file update, verified offline rollback/re-update/removal; tampered and foreign inventories refused')
 
 
 
@@ -689,23 +707,80 @@ def compose_inventory_upgrade(stage, versions):
     with dist.destination(bundle) as fd:
         dist.publish(fd, products, manifest)
     candidate = stage / 'compose3-candidate'; candidate.mkdir()
-    release.write_candidates(bundle, candidate, version='0.0.9', revision='a'*40,
-        minimum='27.0.1', signing='unsigned',
-        installer_template=release.committed('beeab158', 'install.sh').decode(),
-        formula_template=(ROOT/'uiblueprint.rb').read_text(),
-        skill_files={n: release.committed('beeab158', 'skills/ui-blueprint/'+n) for n in release.SKILL_FILES})
+    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/gpui.md')
+    with patch.object(release, 'SKILL_FILES', old_skill_files):
+        release.write_candidates(bundle, candidate, version='0.0.9', revision='a'*40,
+            minimum='27.0.1', signing='unsigned',
+            installer_template=release.committed('beeab158', 'install.sh').decode(),
+            formula_template=(ROOT/'uiblueprint.rb').read_text(),
+            skill_files={n: release.committed('beeab158', 'skills/ui-blueprint/'+n) for n in old_skill_files})
     prefix = stage / 'compose3-prefix'; skill = stage / 'compose3-skill'
     run(['sh',candidate/'install.sh','--prefix',prefix,'--skill-dir',skill,'--local-release',candidate])
     new = ['sh',versions/'0.1.0/install.sh','--prefix',prefix]
     run([*new,'--local-release',versions/'0.1.0'])
     current = prefix/'share/uiblueprint/current'
     assert (current/'native-prepare.py').is_file()
+    assert (skill/'references/gpui.md').is_file()
     run([*new,'--version','0.0.9'])
     assert not (current/'native-prepare.py').exists()
     assert (skill/'references/compose.md').is_file()
+    assert not (skill/'references/gpui.md').exists()
     run([*new,'--uninstall'])
     assert not current.exists() and not skill.exists()
-    print('PASS manifest3 Compose installation → manifest4 native caller update/rollback/removal')
+    print('PASS manifest3 Compose installation → manifest5 eight-file skill update/rollback/removal')
+
+
+def native_inventory_upgrade(stage, versions):
+    """The actual installed manifest4/skill7 format updates without replacing old bytes."""
+    bundle = stage / 'native4-bundle'
+    bundle_at(bundle)
+    manifest = json.loads((bundle / dist.MANIFEST).read_bytes())
+    manifest['format'] = 'ui-blueprint-local-4'
+    (bundle / dist.MANIFEST).write_bytes(dist.encoded(manifest))
+    candidate = stage / 'native4-candidate'
+    candidate.mkdir()
+    historical = '2e30f7fbc7d136f48a45bc194c4ae2fea6eb086a'
+    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/gpui.md')
+    with patch.object(release, 'SKILL_FILES', old_skill_files):
+        release.write_candidates(bundle, candidate, version='0.0.10', revision='a'*40,
+            minimum='27.0.1', signing='unsigned',
+            installer_template=release.committed(historical, 'install.sh').decode(),
+            formula_template=(ROOT/'uiblueprint.rb').read_text(),
+            skill_files={n: release.committed(historical, 'skills/ui-blueprint/'+n) for n in old_skill_files})
+    extracted = stage / 'native4-extracted'
+    extracted.mkdir()
+    release.extract_candidate(candidate, extracted, release.read_candidate(candidate))
+    assert {str(p.relative_to(extracted / 'skill')) for p in (extracted / 'skill').rglob('*')
+            if p.is_file()} == set(old_skill_files)
+    prefix, skill = stage / 'native4-prefix', stage / 'native4-skill'
+    run(['sh', candidate/'install.sh', '--prefix', prefix, '--skill-dir', skill,
+         '--local-release', candidate])
+    current = prefix/'share/uiblueprint/current'
+    original = (current/'skill/.skill-sha256').read_bytes()
+    assert len(original.splitlines()) == 7
+    new = ['sh', versions/'0.1.0/install.sh', '--prefix', prefix]
+    update = [*new, '--local-release', versions/'0.1.0']
+    missing = current/'skill/references/macos.md'
+    saved = missing.read_bytes()
+    missing.unlink()
+    run(update, ok=False)
+    assert os.readlink(current) == 'versions/0.0.10'
+    missing.write_bytes(saved)
+    foreign = current/'skill/references/gpui.md'
+    foreign.write_text('keep this foreign file')
+    run(update, ok=False)
+    assert foreign.read_text() == 'keep this foreign file'
+    foreign.unlink()
+    run(update)
+    assert len((current/'skill/.skill-sha256').read_text().splitlines()) == 8
+    assert (skill/'references/gpui.md').is_file()
+    run([*new, '--version', '0.0.10'])
+    assert (current/'skill/.skill-sha256').read_bytes() == original
+    assert not (skill/'references/gpui.md').exists()
+    run(update)
+    run([*new, '--uninstall'])
+    assert not current.exists() and not skill.exists()
+    print('PASS historical manifest4/skill7 → manifest5/skill8 update, offline rollback, re-update/removal; missing/foreign skill files preserved')
 
 def source_release_checks():
     license_text = (ROOT / 'LICENSE').read_text()
@@ -785,8 +860,10 @@ def main():
             candidate_at(versions / version, bundle, version)
         install_checks(stage, versions)
         skill_checks(stage, versions)
-        cross_inventory_checks(stage, versions)
+        for manifest_version in (1, 2):
+            cross_inventory_checks(stage, versions, manifest_version)
         compose_inventory_upgrade(stage, versions)
+        native_inventory_upgrade(stage, versions)
         hostile_skill_checks(stage, versions)
         local_install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)

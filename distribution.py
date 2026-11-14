@@ -166,7 +166,7 @@ def verify(fd):
         expected_names -= COMPOSE_FILES
     if manifest.get('format') == 'ui-blueprint-local-1':
         expected_names -= WEB_FILES  # old complete inventory remains removable
-    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4') or
+    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4', 'ui-blueprint-local-5') or
             modules not in ('core', 'web', 'native', 'combined') or
             set(manifest.get('files', {})) != expected_names):
         raise ValueError('invalid distribution manifest; no files removed')
@@ -332,7 +332,7 @@ def build(args, fd):
             (sysroot / 'share/doc/rust/COPYRIGHT-library.html').read_bytes(), 0o644)
         if set(products) != files_for(args.modules):
             raise ValueError('unexpected bundle inventory')
-        manifest = {'format': 'ui-blueprint-local-4', 'source_revision': revision,
+        manifest = {'format': 'ui-blueprint-local-5', 'source_revision': revision,
             'modules': args.modules, 'target': TARGET, 'profile': 'release',
             'cli_features': cli_features, 'worker_features': ['web'] if 'web' in cli_features else [],
             'rustc': tool_version, 'swift': swift_version, 'host_os': platform.mac_ver()[0],

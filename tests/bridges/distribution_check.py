@@ -63,7 +63,7 @@ for(const key of ['stat','access','mkdtemp','open','readFile','unlink','rmdir'])
 def inventory_compatibility():
     stage = Path(tempfile.mkdtemp(prefix='uib-dist-inventory-'))
     try:
-        for version in (1, 2, 3, 4):
+        for version in (1, 2, 3, 4, 5):
             for modules in ('core', 'web', 'native', 'combined'):
                 names = dist.files_for(modules)
                 if version < 4:
@@ -251,7 +251,7 @@ def safety():
         folder = stage / 'bundle'; folder.mkdir()
         (folder / 'unrelated.txt').write_text('leave me')
         products = {name: (name.encode(), 0o644) for name in dist.files_for('core')}
-        manifest = {'format': 'ui-blueprint-local-4', 'modules': 'core', 'source_revision': 'synthetic',
+        manifest = {'format': 'ui-blueprint-local-5', 'modules': 'core', 'source_revision': 'synthetic',
                     'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                               for name, (data, mode) in products.items()}}
         with dist.destination(folder) as fd:

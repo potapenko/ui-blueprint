@@ -1,7 +1,6 @@
 # Mac distribution
-
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@6`.
+- Contract: `UIB.MAC-DISTRIBUTION@7`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -53,7 +52,7 @@ Do not overwrite foreign paths, symlinks or another installation channel.
 Serialize own mutations. Verify before switching current; retain previous versions.
 Repeat installation of the same unchanged version is idempotent; --version selects
 a fully verified already-installed version, or dispatches its published installer
-when absent. Each version uses its recorded manifest1/2/3/4 inventory, with exact
+when absent. Each version uses its recorded manifest1/2/3/4/5 inventory, with exact
 receipt names, hashes and modes; skill inventory follows that same version. Stop sessions before switching;
 long-lived trusted connections should use explicit immutable version paths.
 --uninstall validates all managed versions before removing only owned files/links;
@@ -87,16 +86,15 @@ Homebrew behavior stay unchanged; no publication, real installation or notarizat
 MAC-DIST-003: user-authorized 2026-10-14 push/new-chat installation adds explicit
 --local-release ABS for pinned locally built assets, with unchanged hash/inventory
 guards. No network/version dispatch in that mode; no implicit prerequisite install.
-KC-COMPOSE-001: user-approved Compose integration requires the matching candidate
-bundle to carry ComposeMarker.kt, ProbeSession.kt, ProbeJson.kt and COMPOSE.md as
-flat optional source assets, and the skill archive to carry references/compose.md.
-Local manifest3 adds those exact files; manifest1/2 remain verifiable/removable.
-Core/Web/native binaries gain no Compose dependency. Source inclusion is explicit
-in consumer debug builds only; no global install or public release is authorized.
-KC-REVIEW-002: review exposed manifest2→3 installation failure caused by checking
-old receipts against the invoking installer's inventory. @5 registers verified
-installed-version selection for rollback; closed per-format inventories and existing
-ownership/tamper refusal remain. No global install, new option or public release.
-NATIVE-FIRST-USE-001: direct human consumer directive adds native-prepare.py to
-native/combined manifest4. Old1–3 inventories and skill contents remain verifiable;
-Python3.11+ is optional caller tooling. No permission change or publication.
+KC-COMPOSE-001: user-approved manifest3 adds the four flat optional Compose source
+files and references/compose.md; consumer Debug inclusion remains explicit.
+KC-REVIEW-002: @5 selects verified installed-version rollback after the manifest2→3
+receipt mismatch; older inventories, ownership and tamper refusal stay protected.
+NATIVE-FIRST-USE-001: direct human directive adds native-prepare.py to manifest4;
+Python3.11+ is optional. No runtime permission change or publication follows.
+WINDOW-RELEASE-001: direct2026-11-14 instruction to finish the new capabilities,
+skills and release preparation adds manifest5 with the same CLI inventory and
+references/gpui.md in the eight-file skill. Formats1/2 retain six skill files;
+3/4 retain seven. Verify those exact historical inventories for update, rollback
+and removal. Candidate skill links must resolve within its packaged files.
+SDK integration remains separate; source-only publication keeps its explicit gate.
