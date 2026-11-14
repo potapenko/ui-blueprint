@@ -74,4 +74,15 @@ and all12 named toolbar surfaces captured; narrow-window8/12 and return-wide12/1
 were recorded truthfully. Common/Vocabulary, Settings, playback, scroll and resize
 passed. Independent consumer repeated the default request and panel switch in the
 real app;26 original canonical records validated/inspected. Known app gaps remain
-in the coverage manifest. Installed-skill and GPUI qualification remain separate.
+in the coverage manifest. Installed-skill delivery remains separate.
+
+## GPUI qualification
+
+Native source6159969 produced35 default-root nodes, then37/38/41 after dynamic
+row/details/deferred-overlay changes; explicit toolbar scope returns8. Remount,
+scroll, resize, sourced8→18 logical-pixel gaps and matched on/off/input checks passed.
+Identity fix41bf52df adds a private per-window witness after a cross-AppContext
+regression; eight tests, Clippy/Release and independent fix review passed.
+The positive native paths are unchanged. Full-toolbar bitmap equality is not claimed
+because the CUA cursor raster differed. This remains a native technical example,
+not PlayPhrase.me client implementation or unmarked-renderer-tree qualification.

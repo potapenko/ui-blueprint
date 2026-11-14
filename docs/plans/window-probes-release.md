@@ -1,6 +1,6 @@
 # Window geometry and the matching installed release
 
-Status: SwiftUI verified; GPUI identity fix in review; final local install pending.
+Status: both probes verified; source/review complete; final local install pending.
 No remote release is authorized before the exact confirmation below.
 Authority: direct user instruction on 2026-11-14, message
 `01a1dbc5-5599-7481-aed8-7eda49313fb1`: finish the new features, skills and installation,
@@ -101,5 +101,7 @@ deferred overlay/remount/scroll/resize/input and scoped on/off checks. Seven tes
 Clippy and Release passed. Root independently validated12 records and checked8/18
 logical-pixel source gaps. Selected originals:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-gpui-window-deliverable-v78vpjnq/`.
-Review found cross-AppContext numeric-window-ID aliasing. The owner adds a private
-per-window weak object-identity guard; only its focused regression/review remains.
+Review's cross-AppContext numeric-window-ID finding is fixed in41bf52df with a
+private per-window weak allocation witness. Eight tests, Clippy and Release pass;
+root and the original reviewer independently closed the narrow fix. No code finding
+or required runtime repetition remains. The selected source is ready to package.
