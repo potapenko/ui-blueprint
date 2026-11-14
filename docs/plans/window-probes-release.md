@@ -1,6 +1,7 @@
 # Window geometry and the matching installed release
 
-Status: implementation in progress on current master; no remote release authorized.
+Status: SwiftUI verified; GPUI identity fix in review; final local install pending.
+No remote release is authorized before the exact confirmation below.
 Authority: direct user instruction on 2026-11-14, message
 `01a1dbc5-5599-7481-aed8-7eda49313fb1`: finish the new features, skills and installation,
 coordinate with “Проверить поддержку Rust и GPUI”, collect useful geometry from the
@@ -10,17 +11,16 @@ The exact source-release confirmation remains required after local verification.
 ## Basis and boundaries
 
 Mode: Evolve for root collection and portable skill routing; repair packaging.
-Registry71 → SWIFTUI-PROBE3 / GPUI-PROBE1 and their model, identity, geometry,
+Registry72 → SWIFTUI-PROBE3 / GPUI-PROBE2 and their model, identity, geometry,
 privacy, exchange, boundary and CLI closure; AGENT-SKILL7, MAC-DISTRIBUTION7,
 RELEASES2 and DEV.RUST5 govern delivery. The new window profile is
 [WINDOW-PROBE1](../specs/product/window-probe.md). Runtime evidence remains scoped.
 The user requires useful descendant geometry, not just choosing a larger rectangle.
 Follow-up clarification: no component selector means the selected window's root;
 the consumer supplies neither a repeated root ID nor a fixed marker list.
-Current SwiftUI exports an exact marker allowlist; normal Search has ten markers.
-The installed bundle is intact but old: 0.1.0-web.browser2, source2e30f7f.
-The source skill already has SwiftUI/GPUI routes; the installed skill does not.
-The GPUI reference is omitted from the current release archive inventory.
+Starting gaps were exact marker allowlists, a stale installed skill, and an omitted
+GPUI recipe in packaging. Source fixes are saved; the installed bundle remains
+0.1.0-web.browser2 until the final coherent candidate is installed.
 
 Retain canonical core0.1/analysis0.2, source IDs/units, private output, explicit
 Debug opt-in, Release exclusion, app behavior and existing exact-subset callers.
@@ -81,5 +81,25 @@ ownership regression suites passed; independent review found no mandatory issue.
 SDK checkpoint4e8a9968: mountedSubtree with own-session preference isolation,
 required minimum and complete emitted-set lifecycle. Fifteen focused tests,
 three canonical/Rust measurements and Release exclusion passed; non-author source
-review found no mandatory issue. Native window/toolbar runtime remains in progress.
+review found no mandatory issue.
 Skill validation passed using temporary PyYAML; that temporary dependency was removed.
+Native e19b20c47: default wide Search gives135 content nodes plus all12 named toolbar
+surfaces (14 toolbar nodes); narrow gives129 content plus8 surfaces, with4 explicit
+unavailable outcomes. Return-wide restores all12. Root validated35 canonical records
+and2MiB window caps, after reviewing the3s total deadline and publication fences.
+Earlier same-source content checks cover active panel, Settings, playback/paused,
+scroll (Rust dy−767pt), resize (Rust dwidth−959pt) and sourced10/10/8pt gap checks.
+Private input is not exported. Known uninstrumented app regions remain explicit.
+Selected original records are retained for installed-skill and consumer verification:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphraseme-blueprint-window-deliverable-4ux0vf2c/`.
+Native closing docs506527116: Debug/Release exclusion and12 tests/33 executions pass;
+coordinator repeated default capture/panel switch (26 valid/inspected records).
+Native processes stopped, owned non-image builds/logs/original captures removed.
+Coordinator owns the exact Debug app pinned in the native recipe until replacement;
+images stay. GPUI6159969 compiled and passed native default35→41 nodes, subtree8,
+deferred overlay/remount/scroll/resize/input and scoped on/off checks. Seven tests,
+Clippy and Release passed. Root independently validated12 records and checked8/18
+logical-pixel source gaps. Selected originals:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-gpui-window-deliverable-v78vpjnq/`.
+Review found cross-AppContext numeric-window-ID aliasing. The owner adds a private
+per-window weak object-identity guard; only its focused regression/review remains.

@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 71 (window-root acquisition and matching release).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 72 (SwiftUI/GPUI window roots and matching release).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -97,7 +97,7 @@ remain separate. Existing SwiftUI, Web, Compose, core and release scope are prot
 `L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
-| Explicit GPUI runtime geometry | [GPUI-PROBE@1](product/gpui-probe.md) | Approved scoped producer and native technical example; no client application implementation |
+| Explicit GPUI runtime geometry | [GPUI-PROBE@2](product/gpui-probe.md) | Registered window root, dynamic marked occurrences and explicit subtree; no client implementation |
 | Explicit real-app SwiftUI geometry | [SWIFTUI-PROBE@3](product/swiftui-probe.md) | Debug producer, mounted subtree and explicit subset, real app proof required |
 | Ordinary SwiftUI Search with localhost | [NORMAL-SEARCH@1](product/swiftui-normal-search.md) | Real API/media, normal workspace geometry and same-session resize; no artificial error scenario |
 | Useful window-root geometry and coverage | [WINDOW-PROBE@1](product/window-probe.md) | Direct 2026-11-14 completion command; mounted marked descendants and explicit surface gaps |

@@ -135,6 +135,9 @@ app's coverage result and each original canonical record independently, preservi
 surface IDs and local spaces. Equal space names in different records do not prove
 a common origin. Account for unavailable toolbar/overlays and unmaterialized rows;
 do not merge their coordinates or call mounted layout pixel visibility.
+When the app publishes a coverage manifest last, require that completion record
+before treating the multi-file window request as finished. Earlier individual
+Snapshot files alone do not prove that every requested surface was accounted for.
 
 The producer measures selected bounds anchors inside the real app, with semantic
 marker IDs, separate mount UUIDs and declared parent/component membership.

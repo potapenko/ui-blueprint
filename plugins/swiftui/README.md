@@ -1,6 +1,6 @@
 # UI Blueprint SwiftUI probe
 
-`UIBlueprintSwiftUI` is an opt-in macOS14+ Swift package for selected internal
+`UIBlueprintSwiftUI` is an opt-in Swift package targeting macOS14+ for internal
 layout boundaries in an application's real SwiftUI view. All implementation is
 `#if DEBUG`; Release builds expose no probe API. It has no external dependencies.
 The app admits requests and owns any private output file. The SDK has no file,
@@ -106,16 +106,20 @@ paths from untrusted URLs. Use `expectedMounts` to refuse a remounted target.
 
 The governing contract is [SWIFTUI-PROBE@3](../../docs/specs/product/swiftui-probe.md).
 Root collection follows [WINDOW-PROBE@1](../../docs/specs/product/window-probe.md);
-its actual whole-window runtime qualification is separate from SDK tests.
-The current qualified consumer is the real PlayPhrase.me normal Search workspace:
-localhost API, ordinary returned media and no fixture/scenario selector. See
-[normal Search qualification](../../docs/specs/product/swiftui-normal-search.md).
+its real runtime qualification is separate from SDK tests. On macOS27.0.1, the
+real PlayPhrase.me learner window returns135 content nodes and12 named toolbar
+surfaces from a request without a component selector. Actual panel changes,
+scroll, Settings, playback and resize were checked with localhost API and ordinary
+returned media. Narrow-window unavailable toolbar hosts and uninstrumented app
+regions are explicit in coverage; cross-host coordinate transforms remain unknown.
+The earlier [normal Search qualification](../../docs/specs/product/swiftui-normal-search.md)
+records the smaller initial scope.
 Its source owner retains exact app/build/run identity and the closed capture route.
 The earlier C02 recovery example deliberately avoided the real server; it is
 historical codec/geometry evidence, not normal service-operation proof.
 The verified installed `0.1.0-web.browser2` CLI already consumes this canonical
-output; the SDK itself is supplied separately as this source package. No global
-CLI/skill installation or public SDK release is implied by the local integration.
+output; the SDK itself is supplied separately as this source package. Matching
+CLI/skill installation and public source publication have their own verification.
 
 ## Focused verification
 

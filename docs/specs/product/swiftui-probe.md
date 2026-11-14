@@ -1,8 +1,8 @@
 # Explicit SwiftUI layout probe
 
 - Node type: leaf; domain: `uib.swiftui-probe`; contract: `UIB.SWIFTUI-PROBE@3`.
-- Authority: Active; stability: Evolving; prior bounded macOS acceptance below
-  does not accept the new window mode, public release or whole-application visuals.
+- Authority: Active; stability: Accepted for the bounded macOS window profile below;
+  public release, installed-skill delivery and whole-application visuals are separate.
 - Authority source: direct 2026-11-14 user approval in chat
   `01a1dab2-2e7d-7f13-9400-8e42b0859137`: implement the first SwiftUI package
   against the real PlayPhrase.me app; subsequent native-chat human correction
@@ -92,9 +92,9 @@ instruction above; canonical formats and exact-subset defaults remain unchanged.
 Native owner `01a1daaf-dafe-7e63-b309-3afd2ddec599` owns app integration/runtime;
 Blueprint owns SDK and numeric checks. Prior screenshots remain unaccepted.
 Separate hosting roots retain separate sessions/records and unknown transforms.
-## Prior bounded profile
+## Verified window profile
 
-SDK30523aba / nativea5228dd01 produced7 recovery nodes accepted by canonical
-validation/inspect/measure/check; source gaps18/7/18pt pass,19pt fails, hit unknown.
-SDK10 tests and native27 checks passed. This does not qualify @3 window collection,
-external closed-app introspection, unmarked descendants, screenshots or other platforms.
+SDK4e8a9968 / nativee19b20c47: normal localhost Search,135 content nodes and12
+named toolbar surfaces. Resize, panel/scroll/Settings, playback and stale refusal
+passed; SDK15 tests, native33 executions, Debug/Release exclusion and independent
+source/live/Rust checks passed. Unknown transforms and unmarked regions remain explicit.

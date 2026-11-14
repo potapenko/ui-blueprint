@@ -13,7 +13,7 @@
 
 | Контракт | Read when / роль |
 | --- | --- |
-| [UIB.GPUI-PROBE@1](gpui-probe.md) | Explicit GPUI Debug layout measurement and canonical export |
+| [UIB.GPUI-PROBE@2](gpui-probe.md) | GPUI window-root and explicit-subtree layout measurement and canonical export |
 | [UIB.SWIFTUI-PROBE@3](swiftui-probe.md) | Explicit SwiftUI root/subset layout measurement and canonical export |
 | [UIB.SWIFTUI-NORMAL-SEARCH@1](swiftui-normal-search.md) | Ordinary localhost Search qualification without fixture/error injection |
 | [UIB.WINDOW-PROBE@1](window-probe.md) | Useful root/window collection, dynamic marked descendants and explicit coverage |

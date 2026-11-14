@@ -66,3 +66,12 @@ WINDOW-ROOT-001 evolves selected-subset proof into useful root acquisition under
 the direct user command. Existing wire formats, app behavior, permissions and
 geometry meanings stay unchanged. Runtime acceptance and public release require
 their separate evidence; this contract does not assert them.
+
+## SwiftUI qualification
+
+SDK4e8a9968 with nativee19b20c47 on macOS27.0.1: default Search content135nodes
+and all12 named toolbar surfaces captured; narrow-window8/12 and return-wide12/12
+were recorded truthfully. Common/Vocabulary, Settings, playback, scroll and resize
+passed. Independent consumer repeated the default request and panel switch in the
+real app;26 original canonical records validated/inspected. Known app gaps remain
+in the coverage manifest. Installed-skill and GPUI qualification remain separate.

@@ -72,6 +72,11 @@ transforms or observed conditions. Conditional queries may therefore remain unkn
 An explicit evaluation must match the source ID/revision/context and carry sourced
 conditions/transforms; never copy the synthetic evaluation into a live-data request.
 
+JSON analysis results can include the original Snapshot and evaluation. For a large
+window, parse the response in the calling tool and display the result, measurement
+or finding instead of repeatedly printing the whole source graph. Keep the original
+source unchanged and budget the complete response, not only its numeric value.
+
 ## Check a real requirement
 
 `EXPECTATION` is a core 0.1.0 expectation document with the user's or product's actual
