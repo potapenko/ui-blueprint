@@ -46,7 +46,11 @@ let snapshot = try await session.capture(
 ```
 
 The next request-driven SwiftUI update resolves selected bounds anchors. The
-returned `snapshot.data` is ready for the existing canonical core0.1 consumers:
+app must check `session.isCurrentMounts(snapshot)` and its own selected state
+again after awaiting capture and immediately before publication. This rejects
+root/child invalidation that occurred after the SDK resumed the continuation;
+it does not turn saved geometry into a current or atomic frame observation.
+The returned `snapshot.data` is ready for the existing canonical core0.1 consumers:
 
 ```sh
 uiblueprint inspect --snapshot captured.json --ref SOURCE_KEY_JSON --view design --max-input-bytes 1048576 --max-output-bytes 1048576

@@ -9,6 +9,8 @@ public enum BlueprintProbeError: String, Error, Sendable {
 
 /// Immutable source output. `revision` is a capture sequence, not a displayed frame ID.
 public struct BlueprintProbeSnapshot: Sendable {
+    let sessionID: String
+    let lifecycleRevision: UInt64
     public let data: Data
     public let revision: UInt64
     public let layoutRevision: UInt64

@@ -16,6 +16,7 @@ public final class BlueprintProbeSession {
     @ObservationIgnored private var timer: Task<Void, Never>?
     @ObservationIgnored private var sequence: UInt64 = 0
     @ObservationIgnored private var layoutRevision: UInt64 = 0
+    @ObservationIgnored private var lifecycleRevision: UInt64 = 0
     @ObservationIgnored private var lastLayout: LayoutSample?
 
     private struct LayoutSample: Equatable {
@@ -40,6 +41,14 @@ public final class BlueprintProbeSession {
         configuration = try ProbeConfiguration(targetID: targetID, targetGeneration: targetGeneration,
             surfaceID: surfaceID, scopeID: scopeID, rootMarkerID: rootMarkerID,
             requiredMarkerIDs: requiredMarkerIDs)
+    }
+
+    /// Check mount continuity again after an awaited capture. This does not
+    /// remeasure geometry or establish current/presented-frame freshness.
+    public func isCurrentMounts(_ snapshot: BlueprintProbeSnapshot) -> Bool {
+        rootMountID != nil && snapshot.sessionID == sessionID
+            && snapshot.surfaceGeneration == surfaceGeneration
+            && snapshot.lifecycleRevision == lifecycleRevision
     }
 
     public func capture(requestID: String, stateID: String, expectedMounts: [String: String] = [:],
@@ -87,6 +96,7 @@ public final class BlueprintProbeSession {
         }
         fail(.staleMount)
         self.rootMountID = rootMountID
+        invalidateLifecycle()
         surfaceGeneration = UUID().uuidString
         lastLayout = nil
     }
@@ -95,11 +105,13 @@ public final class BlueprintProbeSession {
         guard self.rootMountID == rootMountID else { return }
         fail(.staleMount)
         self.rootMountID = nil
+        invalidateLifecycle()
         lastLayout = nil
     }
 
     func markerDetached(id: String, mountID: String) {
         guard configuration.requiredMarkerIDs.contains(id) else { return }
+        invalidateLifecycle()
         if pending != nil { fail(.staleMount) }
     }
 
@@ -136,7 +148,8 @@ public final class BlueprintProbeSession {
             pending = nil
             timer?.cancel()
             timer = nil
-            request.continuation.resume(returning: BlueprintProbeSnapshot(data: data, revision: sequence,
+            request.continuation.resume(returning: BlueprintProbeSnapshot(sessionID: sessionID,
+                lifecycleRevision: lifecycleRevision, data: data, revision: sequence,
                 layoutRevision: nextLayout, mountIDs: Dictionary(uniqueKeysWithValues: selected.map { ($0.id, $0.mountID) }),
                 surfaceGeneration: surfaceGeneration, rootFrameInGlobalSpace: globalFrame, displayScale: displayScale))
         } catch {
@@ -149,6 +162,16 @@ public final class BlueprintProbeSession {
 
     private func cancel(captureID: UUID) {
         if pending?.captureID == captureID { fail(.cancelled) }
+    }
+
+    private func invalidateLifecycle() {
+        guard lifecycleRevision < UInt64.max else {
+            rootMountID = nil
+            rootCollision = true
+            fail(.resourceLimit)
+            return
+        }
+        lifecycleRevision += 1
     }
 
     private func fail(_ error: BlueprintProbeError, token: UInt64? = nil) {

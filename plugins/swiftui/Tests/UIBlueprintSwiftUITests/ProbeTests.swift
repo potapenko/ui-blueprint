@@ -158,4 +158,24 @@ private func markers(gap: Double = 8, textMount: String = "text-mount") -> [Prob
     await #expect(throws: BlueprintProbeError.staleMount) { try await first.value }
     #expect(try await capture(s, id: "fresh").revision == 1)
 }
+
+@Test @MainActor func completedSnapshotCannotCrossLaterMountInvalidation() async throws {
+    let s = try session()
+    s.attach(rootMountID: "root-mount")
+    let captured = try await capture(s, id: "before-detach")
+    #expect(s.isCurrentMounts(captured))
+    // The capture already completed, so invalidating only a pending continuation
+    // would miss this race at the app's subsequent file-publication boundary.
+    s.markerDetached(id: "text", mountID: "text-mount")
+    #expect(s.isReady)
+    #expect(!s.isCurrentMounts(captured))
+    let fresh = try await capture(s, id: "after-detach", markers: markers(textMount: "new-text"))
+    #expect(s.isCurrentMounts(fresh))
+    s.detach(rootMountID: "root-mount")
+    s.attach(rootMountID: "root-mount")
+    #expect(!s.isCurrentMounts(fresh))
+    let other = try session()
+    other.attach(rootMountID: "root-mount")
+    #expect(!other.isCurrentMounts(fresh))
+}
 #endif

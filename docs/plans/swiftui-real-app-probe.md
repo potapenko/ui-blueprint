@@ -46,12 +46,16 @@ Native write set/approval is recorded by its owner in
 5. Review coherent changes, show retained actual screenshots, clean only owned
    non-image outputs/processes and checkpoint both current branches.
 
-SDK handoff: package compiles in Debug and Release;8 focused Swift tests pass.
+SDK handoff: package compiles in Debug and Release;9 focused Swift tests pass.
 Actual SDK-produced synthetic records validate against core0.1, and the unchanged
 Rust engine returns independent8/18pt gaps. Release object has no BlueprintProbe
 symbols. These checks establish SDK/codec behavior, not real-app acceptance.
 Native owner's independent SDK review found retained-child disappearance could
 reuse a mount ID. Root repaired both marker lifetimes through ProbeMount; the
 focused retained-state renewal/rejection test passes. API/codec unchanged.
+Root's native-host review also identified the completed-capture/publication gap:
+host now must recheck `isCurrentMounts(snapshot)` after await. The SDK's bounded
+lifecycle revision rejects intervening child/root invalidation, separately from
+the app's state check; completed-snapshot regression passes. No frame-freshness claim.
 Current dependency: native integration and actual-app snapshots/on-off/pairing.
 Packaging/global installation and GPUI remain outside this package.
