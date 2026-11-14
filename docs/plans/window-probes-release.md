@@ -1,7 +1,7 @@
 # Window geometry and the matching installed release
 
-Status: both probes verified; UI Blueprint0.2.0 and matching skill installed and
-checked by root. Only source publication awaits the exact confirmation below.
+Status: UI Blueprint0.2.0 published from the approved source; matching local
+utility/skill remain installed and verified. CI environment residual is recorded below.
 Authority: direct user instruction on 2026-11-14, message
 `01a1dbc5-5599-7481-aed8-7eda49313fb1`: finish the new features, skills and installation,
 coordinate with “Проверить поддержку Rust и GPUI”, collect useful geometry from the
@@ -120,3 +120,20 @@ The user said “Не надо дергать никакого агента, п�
 was stopped and no independent cold-worker pass is claimed. GitHub publication,
 remote builds, push and tag have not run. The post-install record is documentation;
 the reviewed source release remains the exact installed pin above.
+
+## Published source — 2026-11-15
+
+The user explicitly approved publication from0959042, without binary attachments
+and without agents. [v0.2.0](https://github.com/potapenko/ui-blueprint/releases/tag/v0.2.0)
+is published, not draft/prerelease; its tag resolves to the full installed pin above
+and its assets list is empty. Public VERSION, MIT license and tagged installation
+guide were fetched and matched byte-for-byte to that commit. Master930718a was
+already on the remote; the approved release source was not changed.
+
+[GitHub run43651358761](https://github.com/potapenko/ui-blueprint/actions/runs/43651358761)
+passed CLI/SwiftUI/GPUI checks, candidate build/verify and ordinary install/run/remove.
+Its final separate Homebrew formula check failed because the runner's Ruby4.0.9
+lacked minitest. The same exact-source full candidate check passed locally. The
+source-only release was published using that verified candidate; no Homebrew binary
+was published, no source/test requirement was changed, and the CI run remains failed.
+This post-publication record does not alter the immutable release or installed source.
