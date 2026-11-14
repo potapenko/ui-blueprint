@@ -41,7 +41,7 @@ impl QuotaCounter {
     }
     pub fn release(&self, bytes: usize) -> Result<(), ChargeError> {
         self.live
-            .fetch_update(Ordering::AcqRel, Ordering::Acquire, |current| {
+            .try_update(Ordering::AcqRel, Ordering::Acquire, |current| {
                 current.checked_sub(bytes)
             })
             .map(|_| ())

@@ -205,7 +205,7 @@ fn validate(d: &raw::Document, cap: usize) -> Result<(), Failure> {
     Ok(())
 }
 fn private_node(attrs: &[i32], strings: &[String]) -> Result<bool, Failure> {
-    for pair in attrs.chunks_exact(2) {
+    for pair in attrs.as_chunks::<2>().0 {
         let name = native_string(strings, pair[0])?.to_ascii_lowercase();
         let value = native_string(strings, pair[1])?.to_ascii_lowercase();
         if (name == "type" && value == "password")
@@ -522,7 +522,7 @@ fn normalize_document(
                     observation,
                 );
             } else {
-                for (j, pair) in n.attributes[i].chunks_exact(2).enumerate() {
+                for (j, pair) in n.attributes[i].as_chunks::<2>().0.iter().enumerate() {
                     ext(
                         &mut node,
                         format!("attribute.{j}.name"),

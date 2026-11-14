@@ -40,11 +40,10 @@ fn executable() -> PathBuf {
         .unwrap_or_else(|| {
             std::env::current_exe()
                 .expect("test executable")
-                .parent()
-                .unwrap()
-                .parent()
-                .unwrap()
-                .join("examples/allocator_probe")
+                .ancestors()
+                .map(|directory| directory.join("examples/allocator_probe"))
+                .find(|candidate| candidate.is_file())
+                .expect("build the source example before running this test")
         })
 }
 fn run(mode: u8) -> (ProcessState, Option<Control>, usize) {
@@ -153,7 +152,7 @@ fn fatal(mode: u8, reason: u64, requested: u64, live: u64, phase: u8) {
 #[test]
 fn actual_system_backed_allocations_zeroing_and_realloc_balance() {
     // ParentGone is the probe's explicit reporting sentinel, not simulated EOF.
-    for mode in [b'0', b'A', b'Q'] {
+    for mode in *b"0AQ" {
         fatal(mode, 5, mode as u64, 0, 1);
     }
 }
@@ -185,7 +184,7 @@ fn fatal_encoding_and_absence_have_distinct_attribution() {
 
 #[test]
 fn injected_small_null_releases_its_precharge_without_erasing_live_ownership() {
-    for mode in [b'F', b'Z', b'G'] {
+    for mode in *b"FZG" {
         let (state, record, calls) = run(mode);
         assert_eq!(state, ProcessState::Exited { code: 102 });
         let record = record.expect("actual shared System-null fatal path");

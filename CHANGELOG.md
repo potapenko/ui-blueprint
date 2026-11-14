@@ -3,6 +3,13 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## Unreleased
+
+- Add the optional GPUI Debug source collector and native qualification example,
+  using existing canonical Snapshot inspection and Rust geometry analysis.
+- Pin source builds and the optional GPUI probe to stable Rust1.100.0, released
+  2026-11-12. Existing dependency versions and data formats are unchanged.
+
 ## 0.1.0
 
 UI Blueprint source release under MIT. Install through the agent prompt in the

@@ -61,8 +61,8 @@ impl<'a> Publication<'a> {
         if requested == 0 || requested & !7 != 0 || limit == 0 {
             return Err(HostError::InvalidInput);
         }
-        for slot in 0..3 {
-            if (requested & (1 << slot) != 0) != group.frames[slot].is_some() {
+        for (slot, frame) in group.frames.iter().enumerate() {
+            if (requested & (1 << slot) != 0) != frame.is_some() {
                 return Err(HostError::InvalidInput);
             }
         }

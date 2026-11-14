@@ -58,10 +58,7 @@ fn worker_running(pid: u32) -> bool {
         assert!(fields.next().is_none());
         // Z means the process has exited but init has not reaped its record.
         // Parent-death liveness requires exit; this is not our waitpid/reap claim.
-        if state.starts_with('Z') {
-            return false;
-        }
-        true
+        !state.starts_with('Z')
     } else {
         assert_eq!(result.status.code(), Some(1));
         assert!(result.stdout.is_empty() && result.stderr.is_empty());

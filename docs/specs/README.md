@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 68 (real-app SwiftUI probe).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 69 (GPUI probe and Rust1.100).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -69,6 +69,10 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `N03-POPUP-001`: [NATIVE-SESSION@3](product/native-session.md)/[NATIVE-POPUP@1](product/native-session-popup.md) registers explicit held popup/parent composition under [N03](../plans/ui-blueprint/packets/N03-native-popup-e2e.md), before source edits. Ordinary forms, PROTECTED same-Surface policy, canonical wire, nonce and consumers stay unchanged; independent acceptance remains separate.
 `HBP-HUMAN-001`: user-launched [human blueprint goal](../plans/ui-blueprint/human-blueprints.md) evolves DRAWING@1.2 and EXPORT/DRAWING leaves@2: concise selected prompt, rounded display labels, blue/white outline-only drawings and engine-derived anchored gap/inset dimensions. Exact source facts, identity, privacy, model-free CLI and limits remain protected. Image acceptance requires both continuing critics; registration is not acceptance.
 ## Select a route
+`GPUI-PROBE-001`: direct2026-11-14 approval of the finite GPUI package and
+explicit parallel-execution correction register [GPUI-PROBE@1](product/gpui-probe.md).
+One opt-in native producer reuses canonical core0.1; consumer B0/runtime proof
+remain separate. Existing SwiftUI, Web, Compose, core and release scope are protected.
 `SOURCE-RELEASE-001`: direct2026-11-06 user correction selects [RELEASES@2](development/releases.md): MIT, verified source tags, prompt-driven local installation, no binary attachments or Apple release gate. Exact publication confirmation remains.
 `RELEASES-001`: explicit2026-11-06 plan approval registers [RELEASES@1](development/releases.md): one numeric product version, CLI version output, changelog and manual GitHub workflow; local preparation only, remote publication separately authorized.
 `WEB-BROWSER-SESSION-001`: explicit2026-11-05 repair/execution approval registers [WEB-BROWSER-SESSION@1](product/web-browser-session.md): browser-scoped flat CDP sessions and separate permission wait, preserving Rust collection and old direct-page inputs; installation/live proof required.
@@ -93,13 +97,14 @@ Native-only metrics/ceilings/admissions add no pure Rust Swift dependency; commo
 `L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
-| Explicit real-app SwiftUI geometry | [SWIFTUI-PROBE@1](product/swiftui-probe.md) | Direct 2026-11-14 approval; reusable Debug producer, real app proof required; no GPUI work |
+| Explicit GPUI runtime geometry | [GPUI-PROBE@1](product/gpui-probe.md) | Approved scoped producer and native technical example; no client application implementation |
+| Explicit real-app SwiftUI geometry | [SWIFTUI-PROBE@2](product/swiftui-probe.md) | Direct 2026-11-14 approval; reusable Debug producer, real app proof required; no GPUI work |
 | Product behavior/schema/engine/plugin/CLI/export | [Product tree](product/README.md) | Current norms; select the smallest applicable leaf closure |
 | R01 browser / R02 native / R03 core research | [Exact research routes](reference/research-routes.md) | Pinned source-reading scopes; no design decision D01–D07 by C00 |
 | Fixtures, GOLDEN01, pilots, integration or performance | [Acceptance tree](acceptance/README.md) | Positive/negative evidence requirements, not claimed results |
 | Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
 | Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
-| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@3](development/rust.md) | Active / Evolving; current workspace, shared lints and PR feature matrix; runtime/release acceptance separate |
+| Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@4](development/rust.md) | Active / Evolving; current workspace, shared lints and PR feature matrix; runtime/release acceptance separate |
 | Agent skill and prompt installation | [AGENT-SKILL@4](development/agent-skill.md) | Agent-composed drawing and cold-chat installation/use; literal CLI retained |
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |

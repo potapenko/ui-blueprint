@@ -1,0 +1,33 @@
+[package]
+name = "uiblueprint-gpui"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.100"
+publish = false
+description = "Explicit, scoped GPUI layout snapshots for UI Blueprint"
+
+[workspace]
+resolver = "3"
+
+[dependencies]
+gpui-kit = { version = "=0.9.1", default-features = false }
+serde_json = { version = "=1.0.151", features = ["float_roundtrip"] }
+uiblueprint-schema = { path = "../../crates/schema" }
+
+[dev-dependencies]
+gpui-kit = { version = "=0.9.1", features = ["component", "assets", "test-support"] }
+
+[lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+unused_must_use = "deny"
+
+[lints.clippy]
+dbg_macro = "warn"
+undocumented_unsafe_blocks = "warn"
+
+[profile.dev]
+debug = 0
+
+[[example]]
+name = "native"
+path = "examples/native.rs"

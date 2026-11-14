@@ -223,6 +223,12 @@ is integrated explicitly by the application owner. It produces canonical snapsho
 for the existing Rust geometry commands; ordinary Accessibility observation remains
 a separate source. The SDK is supplied as source, not injected into arbitrary apps.
 
+For Rust/GPUI layout, the optional [GPUI Debug source package](plugins/gpui/README.md)
+collects explicitly marked native elements into the same canonical Snapshot.
+It includes a native qualification example and preserves logical-pixel units,
+session/mount identity and unknown non-layout channels. Both workspaces pin Rust1.100.0;
+GPUI dependencies remain outside the normal CLI build.
+
 ## License
 
 UI Blueprint is licensed under [MIT](LICENSE). Third-party dependencies retain

@@ -31,7 +31,7 @@ that exact release instead. Before the first publication, only a user-selected
 explicit developer commit may use the same build path; report it as unpublished.
 
 Check prerequisites first: Apple Silicon macOS (initial qualified host27.0.1), Git,
-Python3.11+, Rust/rustup1.96.0 with the locked Cargo dependency cache, and Xcode/Swift6.
+Python3.11+, Rust1.100.0 through rustup with the locked Cargo dependency cache, and Xcode/Swift6.
 Node24+ is optional for Web observation, not for saved-data geometry. Report a
 concrete missing prerequisite; install additional development tools only within
 separate user authority. The packaging recipe stays `--locked --offline`.

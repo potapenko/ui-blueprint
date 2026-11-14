@@ -128,8 +128,8 @@ pub(super) fn spawn_registered<'a, P: ProcessPlatform>(
     // other free slot. Busy admission returns no child to discard/retry.
     let mut admitted = None;
     let mut busy = false;
-    for index in 0..worker.helpers.len() {
-        if worker.helpers[index].is_some() {
+    for (index, helper) in worker.helpers.iter().enumerate() {
+        if helper.is_some() {
             continue;
         }
         match Helper::spawn(domain, session, index, kind, spec, deadline, platform) {

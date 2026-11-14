@@ -22,7 +22,7 @@ use uiblueprint_schema::model::*;
 static OWNERS: AtomicU64 = AtomicU64::new(0);
 fn next_owner() -> Result<u64, Failure> {
     OWNERS
-        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |v| v.checked_add(1))
+        .try_update(Ordering::Relaxed, Ordering::Relaxed, |v| v.checked_add(1))
         .map(|v| v + 1)
         .map_err(|_| Failure::new(ErrorKind::Limit))
 }

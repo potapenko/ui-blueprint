@@ -20,7 +20,7 @@ static IDS: AtomicU32 = AtomicU32::new(0);
 static EPOCHS: AtomicU64 = AtomicU64::new(0);
 fn next_id(counter: &AtomicU32) -> Result<u32, Failure> {
     counter
-        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| {
+        .try_update(Ordering::Relaxed, Ordering::Relaxed, |n| {
             (n < MAX_WIRE_ID).then(|| n + 1)
         })
         .map(|n| n + 1)
@@ -31,7 +31,7 @@ fn next_epoch() -> Result<u64, Failure> {
 }
 fn increment_epoch(counter: &AtomicU64) -> Result<u64, Failure> {
     counter
-        .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+        .try_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
         .map(|n| n + 1)
         .map_err(|_| Failure::plain(ErrorKind::CounterExhausted))
 }

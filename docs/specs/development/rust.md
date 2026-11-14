@@ -3,7 +3,7 @@
 - Node type: leaf
 - Authority: Active
 - Stability: Evolving
-- Contract: `DEV.RUST@3`; supersedes `DEV.RUST@2` development-check policy.
+- Contract: `DEV.RUST@4`; supersedes `DEV.RUST@3` toolchain policy.
 - Authority source: direct user instruction on 2026-11-14 to add shared lints,
   pull-request CI and current documentation; original setup follows
   [C01-DEC-001](decisions/README.md#meaning-and-precedence).
@@ -15,10 +15,13 @@
 ## DEV.RUST.SCOPE — Current workspace
 
 The workspace contains schema, plugin-api, engine, export, CLI, host and Web
-packages. It pins Rust `1.96.0` with rustfmt/Clippy, edition `2024`, resolver `3`,
-rust-version `1.96` and `aarch64-apple-darwin`. D01 remains the initial setup
+packages. It pins Rust `1.100.0` with rustfmt/Clippy, edition `2024`, resolver `3`,
+rust-version `1.100` and `aarch64-apple-darwin`. D01 remains the initial setup
 decision; its T01/S01 pending statements are historical, not current build status.
-This change preserves toolchain, dependencies, product behavior and release scope.
+The direct2026-11-14 user request selects the latest stable toolchain across the
+three active Rust projects; the official stable manifest and Rust announcement
+confirm1.100.0 (2026-11-12). Dependencies, product behavior and release scope stay
+unchanged. The separate GPUI package uses the same pin without joining core builds.
 
 ## DEV.RUST.TOOLCHAIN — Reproducible setup
 
@@ -83,9 +86,7 @@ then runs tests serially for each explicit CLI feature selection: none, `web`,
 for the combined selection; select either one alone for its single-feature job.
 Live browser/native and performance tests remain explicitly ignored; CI does not
 grant runtime permissions, qualify other platforms or publish a release.
-
 ## DEV.RUST.ACCEPTANCE — Evidence and limits
-
 - Map behavior checks to the selected feature's clauses and plausible failures.
   Test observable results rather than mirroring implementation details.
 - Use deterministic, bounded fixtures for pure logic. Adapter and integration

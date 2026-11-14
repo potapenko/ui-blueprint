@@ -373,7 +373,7 @@ fn output() -> OutputRequest {
 #[test]
 fn native_requests_are_collected_after_real_begin_and_ax_ack_precedes_capture() {
     let _serial = RUNTIME_TEST.lock().unwrap();
-    for mode in [b'F', b'X', b'W', b'B'] {
+    for mode in *b"FXWB" {
         AX_ACK.store(false, Ordering::SeqCst);
         HELPERS.store(0, Ordering::SeqCst);
         EXPECT_ACK.store(mode != b'B', Ordering::SeqCst);

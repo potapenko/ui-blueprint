@@ -78,7 +78,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     let mut rows = Vec::new();
     let mut rejected = 0;
-    for pair in args[2..].chunks_exact(2) {
+    for pair in args[2..].as_chunks::<2>().0 {
         let path = PathBuf::from(&pair[1]);
         match pair[0].to_str().ok_or("invalid option")? {
             "--p1" => {

@@ -18,7 +18,7 @@ This additional route does not promote the platform qualification below.
 ## Requirement, observation, decision
 
 The T01/S01 pending work and diagnostic qualification below describe the initial
-decision. The workspace now exists; use [DEV.RUST@3](../rust.md) for current
+decision. The workspace now exists; use [DEV.RUST@4](../rust.md) for current
 package, feature and CI checks. This does not extend platform runtime qualification.
 
 Reproducible stable setup and platform separation are required. Observed R03

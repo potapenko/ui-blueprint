@@ -319,7 +319,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             return Err("expected --document FILE pairs".into());
         }
         let mut rows = Vec::new();
-        for pair in args.chunks_exact(2) {
+        for pair in args.as_chunks::<2>().0 {
             if pair[0] != "--document" {
                 return Err("unsupported option".into());
             }

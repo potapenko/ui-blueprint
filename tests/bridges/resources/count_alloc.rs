@@ -11,7 +11,7 @@ static INVALID: AtomicBool = AtomicBool::new(false);
 pub struct CountingSystem;
 
 fn add(bytes: usize) {
-    match LIVE.fetch_update(Ordering::SeqCst, Ordering::SeqCst, |n| n.checked_add(bytes)) {
+    match LIVE.try_update(Ordering::SeqCst, Ordering::SeqCst, |n| n.checked_add(bytes)) {
         Ok(before) => {
             PEAK.fetch_max(before + bytes, Ordering::SeqCst);
         }
@@ -20,7 +20,7 @@ fn add(bytes: usize) {
 }
 fn sub(bytes: usize) {
     if LIVE
-        .fetch_update(Ordering::SeqCst, Ordering::SeqCst, |n| n.checked_sub(bytes))
+        .try_update(Ordering::SeqCst, Ordering::SeqCst, |n| n.checked_sub(bytes))
         .is_err()
     {
         INVALID.store(true, Ordering::SeqCst);

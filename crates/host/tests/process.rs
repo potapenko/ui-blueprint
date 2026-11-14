@@ -15,12 +15,11 @@ fn executable() -> PathBuf {
         .map(PathBuf::from)
         .unwrap_or_else(|| {
             std::env::current_exe()
-                .expect("test path")
-                .parent()
-                .expect("deps")
-                .parent()
-                .expect("debug")
-                .join("examples/process_peer")
+                .expect("test executable")
+                .ancestors()
+                .map(|directory| directory.join("examples/process_peer"))
+                .find(|candidate| candidate.is_file())
+                .expect("build the source example before running this test")
         })
 }
 fn child(mode: &[u8]) -> DarwinChild {
@@ -264,7 +263,7 @@ fn externally_reaped_child_is_lost_not_a_signal_target() {
 
 #[test]
 fn partial_fd_setup_and_default_sigpipe_are_confined_to_owned_peers() {
-    for mode in [b'R', b'S'] {
+    for mode in *b"RS" {
         let mut c = child(&[mode]);
         let _ = output(&mut c, 64);
         assert_eq!(output(&mut c, 1), [1]);
@@ -292,7 +291,7 @@ fn watchdog_request_rejects_invalid_ceilings_without_changing_process_limits() {
 
 #[test]
 fn incompatible_reaping_is_refused_before_spawn_without_mutating_parent_policy() {
-    for mode in [b'N', b'G', b'T'] {
+    for mode in *b"NGT" {
         let mut c = child(&[mode]);
         let _ = output(&mut c, 64);
         assert_eq!(

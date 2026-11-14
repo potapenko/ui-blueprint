@@ -1,6 +1,6 @@
 ---
 name: ui-blueprint
-description: Use UI Blueprint to observe a selected Web, macOS or opt-in Kotlin Compose Desktop/Android interface, inspect saved UI data, measure spacing and alignment, check explicit requirements, compare compatible observations, or prepare an ImageGen blueprint. Use for UI Blueprint requests and UI geometry work with an available bundle; screenshot-only guesses and general UI redesign are outside this workflow.
+description: Use UI Blueprint to observe a selected Web, macOS or opt-in Kotlin Compose Desktop/Android interface, analyze supplied SwiftUI/GPUI Debug snapshots, inspect saved UI data, measure spacing and alignment, check explicit requirements, compare compatible observations, or prepare an ImageGen blueprint. Use for UI Blueprint requests and UI geometry work with an available bundle; screenshot-only guesses and general UI redesign are outside this workflow.
 ---
 
 # UI Blueprint
@@ -40,6 +40,7 @@ Read only the reference needed for the task:
 | Explicit opt-in Kotlin Compose Desktop/macOS or Android geometry | [Compose](references/compose.md) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
 | Analyze a supplied opt-in SwiftUI SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
+| Analyze a supplied opt-in GPUI Debug snapshot | [GPUI](references/gpui.md) and [Analysis](references/analysis.md) |
 | Compile a drawing package; generate/review an image when requested | [Export](references/export.md) |
 
 Use supplied saved data directly when it answers the question. Otherwise observe

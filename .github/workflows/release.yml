@@ -61,7 +61,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rustup toolchain install 1.96.0 --profile minimal --component rustfmt --component clippy
+          rustup toolchain install 1.100.0 --profile minimal --component rustfmt --component clippy
           cargo fetch --locked
           command -v shellcheck >/dev/null || brew install shellcheck
       - name: Check CLI and release caller

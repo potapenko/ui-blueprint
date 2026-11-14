@@ -20,7 +20,7 @@ import tomllib
 
 ROOT = Path(__file__).resolve().parent
 TARGET = 'aarch64-apple-darwin'
-TOOLCHAIN = '1.96.0'
+TOOLCHAIN = '1.100.0'
 MANIFEST = 'distribution-manifest.json'
 COMMON = {'uiblueprint', 'uiblueprint-validate', 'distribution.py', 'RUN.md',
           'THIRD_PARTY_NOTICES.md', 'DEPENDENCY_LICENSES.txt', 'RUST_LIBRARY_NOTICES.html',

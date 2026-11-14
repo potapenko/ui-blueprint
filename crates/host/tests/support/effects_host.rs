@@ -311,7 +311,7 @@ fn fake_delivery_confirms_one_nonce_per_operation_and_reuses_worker() {
 #[test]
 fn marked_pre_dispatch_refusal_cannot_gain_effect_authority_or_false_success() {
     let _serial = RUNTIME_TEST.lock().unwrap();
-    for mode in [b'R', b'S', b'N', b'G', b'M', b'U', b'O'] {
+    for mode in *b"RSNGMUO" {
         let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
         let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
         let session = attach(&mut host, true);
@@ -360,7 +360,7 @@ fn marked_pre_dispatch_refusal_cannot_gain_effect_authority_or_false_success() {
 #[test]
 fn fake_loss_or_duplicate_permit_request_is_unknown_and_never_retried() {
     let _serial = RUNTIME_TEST.lock().unwrap();
-    for mode in [b'L', b'D', b'Q'] {
+    for mode in *b"LDQ" {
         let domain = HostDomain::new::<DarwinPlatform>(limits()).unwrap();
         let mut host = RuntimeHost::new(&domain, fake_spec(), DarwinPlatform).unwrap();
         let session = attach(&mut host, true);
