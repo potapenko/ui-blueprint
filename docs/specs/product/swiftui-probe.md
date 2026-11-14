@@ -1,13 +1,14 @@
 # Explicit SwiftUI layout probe
 
-- Node type: leaf; domain: `uib.swiftui-probe`; contract: `UIB.SWIFTUI-PROBE@2`.
-- Authority: Active; stability: Accepted for the bounded macOS internal-data
-  profile below; no public release or whole-application visual acceptance.
+- Node type: leaf; domain: `uib.swiftui-probe`; contract: `UIB.SWIFTUI-PROBE@3`.
+- Authority: Active; stability: Evolving; prior bounded macOS acceptance below
+  does not accept the new window mode, public release or whole-application visuals.
 - Authority source: direct 2026-11-14 user approval in chat
   `01a1dab2-2e7d-7f13-9400-8e42b0859137`: implement the first SwiftUI package
   against the real PlayPhrase.me app; subsequent native-chat human correction
   `01a1db4f-dad2-7133-b3d7-da15922655b3` makes internal geometry the acceptance
-  outcome, not screenshot/display investigation. @2 supersedes @1 acceptance only.
+  outcome, not screenshot/display investigation. Direct user message
+  `01a1dbc5-5599-7481-aed8-7eda49313fb1` authorizes @3 root collection.
 - Read when: integrating or verifying the opt-in SwiftUI SDK.
 - Requires: [NATIVE@5](native.md), [MODEL@1](model.md),
   [GEOMETRY@2](geometry.md), [IDENTITY@1](identity.md), [PRIVACY@1](privacy.md),
@@ -35,7 +36,13 @@ capture transform. Missing mapping remains unknown.
 ## SWIFTUI.SNAPSHOT — Bounded and attributable
 
 Configuration selects root plus required markers, at most256 total, with public
-ASCII IDs of1–96 bytes. Capture has a unique request ID, public application state
+ASCII IDs of1–96 bytes. Default `requiredMarkers` preserves exact-subset callers;
+`mountedSubtree` emits all mounted markers for that session, with required IDs as
+a minimum. Optional nodes obey the same parent/identity/lifecycle validation;
+appear, disappear and identity change invalidate publication across that change.
+Missing expected optional mounts refuse as stale. Preferences are session-scoped;
+each session's overflow refuses before selection, never silently truncates.
+Capture has a unique request ID, public application state
 ID, optional expected mount IDs, deadline1–10000ms and output cap1–1048576 bytes.
 The ordinary default deadline is1000ms; caps are SDK limits, not enlarged host quotas.
 One request per session is active. Duplicate/missing markers, invalid parents or
@@ -64,11 +71,10 @@ Old F02 probe, native_ax, Compose, CLI, wire versions and release behavior stay 
 
 ## SWIFTUI.ACCEPT — Real application, not fixture-only completion
 
-Ordinary localhost Search follows [NORMAL-SEARCH@1](swiftui-normal-search.md).
-The initial profile below qualifies only the real PlayPhrase.me recovery component
-under `c02.search.request-failed`, not normal service operation.
-Root/card/icon/text/title/detail/Retry measurements must validate in Rust and
-produce useful numeric results, followed by real resize/content observations.
+Ordinary localhost Search follows [NORMAL-SEARCH@1](swiftui-normal-search.md);
+useful window-root qualification follows [WINDOW-PROBE@1](window-probe.md).
+The initial profile below covers the real PlayPhrase.me recovery component under
+`c02.search.request-failed`; its numeric/resize proof is not normal service proof.
 SDK tests cover identities, duplicate/missing/stale data, limits and cancellation.
 The SDK must not mutate app state, focus, input or layout to measure it. Verify
 actual bounds, identities, parent links, state/reflow/resize and stale refusals
@@ -80,21 +86,15 @@ neutrality and universal screen transforms are not accepted by this package.
 
 ## Change record
 
-SWIFTUI-REAL-APP-001 adds a reusable producer under direct user approval. Existing
-core0.1/analysis0.2 data consumers are unchanged. Native integration is owned by
-chat `01a1daaf-dafe-7e63-b309-3afd2ddec599`; Blueprint owns SDK and numeric checks.
-The failed/incomparable screenshot branch is retained as unaccepted diagnostic
-history, not relabelled pass. SWIFTUI-REAL-APP-002 records the direct human scope
-correction above; data/identity/privacy/no-mutation requirements are unchanged.
-No deployment, global installation or production access is added. Independently
-authorized GPUI work may proceed in parallel under its own owner and contract.
+SWIFTUI-REAL-APP-001/002 qualify the earlier SDK and internal-data acceptance.
+WINDOW-ROOT-001 adds explicit mounted-subtree collection under the direct user
+instruction above; canonical formats and exact-subset defaults remain unchanged.
+Native owner `01a1daaf-dafe-7e63-b309-3afd2ddec599` owns app integration/runtime;
+Blueprint owns SDK and numeric checks. Prior screenshots remain unaccepted.
+Separate hosting roots retain separate sessions/records and unknown transforms.
+## Prior bounded profile
 
-## Verified profile
-
-SDK30523aba with native implementationa5228dd01 produced the real app's7 selected
-layout nodes. Original final bytes pass the installed combined CLI's validator,
-inspect, measure and check, plus the task-built Rust consumer. Independent source
-spacing checks return18/7/18pt; a19pt mismatch fails and unknown hit stays unknown.
-SDK10 focused tests and native27 parameterized admission checks passed. This
-qualifies explicit macOS Debug integration, not external closed-app introspection,
-unmarked descendants, screenshots, normal server connectivity or other platforms.
+SDK30523aba / nativea5228dd01 produced7 recovery nodes accepted by canonical
+validation/inspect/measure/check; source gaps18/7/18pt pass,19pt fails, hit unknown.
+SDK10 tests and native27 checks passed. This does not qualify @3 window collection,
+external closed-app introspection, unmarked descendants, screenshots or other platforms.

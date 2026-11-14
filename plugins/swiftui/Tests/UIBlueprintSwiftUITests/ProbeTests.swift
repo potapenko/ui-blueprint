@@ -4,9 +4,9 @@ import Combine
 import Testing
 @testable import UIBlueprintSwiftUI
 
-private func configuration() throws -> ProbeConfiguration {
+private func configuration(selection: BlueprintProbeSelection = .requiredMarkers) throws -> ProbeConfiguration {
     try ProbeConfiguration(targetID: "example.app", targetGeneration: "run-1", surfaceID: "main",
-        scopeID: "sample", rootMarkerID: "root", requiredMarkerIDs: ["icon", "text"])
+        scopeID: "sample", rootMarkerID: "root", requiredMarkerIDs: ["icon", "text"], selection: selection)
 }
 
 private func markers(gap: Double = 8, textMount: String = "text-mount") -> [ProbeMarker] {
@@ -81,14 +81,16 @@ private func markers(gap: Double = 8, textMount: String = "text-mount") -> [Prob
         expectedMounts: ["text": retained.id]).count == 3)
 }
 
-@MainActor private func session() throws -> BlueprintProbeSession {
+@MainActor private func session(selection: BlueprintProbeSelection = .requiredMarkers) throws -> BlueprintProbeSession {
     try BlueprintProbeSession(targetID: "example.app", targetGeneration: "run-1", surfaceID: "main",
-        scopeID: "sample", rootMarkerID: "root", requiredMarkerIDs: ["icon", "text"])
+        scopeID: "sample", rootMarkerID: "root", requiredMarkerIDs: ["icon", "text"], selection: selection)
 }
 
 @MainActor private func capture(_ session: BlueprintProbeSession, id: String,
-                                markers: [ProbeMarker] = markers(), cap: Int = 1_048_576) async throws -> BlueprintProbeSnapshot {
-    let task = Task { try await session.capture(requestID: id, stateID: "ordinary", maxOutputBytes: cap) }
+                                markers: [ProbeMarker] = markers(), cap: Int = 1_048_576,
+                                expectedMounts: [String: String] = [:]) async throws -> BlueprintProbeSnapshot {
+    let task = Task { try await session.capture(requestID: id, stateID: "ordinary",
+        expectedMounts: expectedMounts, maxOutputBytes: cap) }
     await Task.yield()
     // Synthetic source callback exercises lifecycle/encoding. Real SwiftUI layout
     // and actual-app invariance are a separate required native integration proof.
@@ -196,5 +198,122 @@ private func markers(gap: Double = 8, textMount: String = "text-mount") -> [Prob
     await Task.yield()
     #expect(delivered == [1, 2])
     withExtendedLifetime(subscription) {}
+}
+
+private func optionalBranch(mountID: String = "panel-mount") -> [ProbeMarker] {
+    [ProbeMarker(id: "panel", mountID: mountID, parent: "root",
+        bounds: CGRect(x: 12, y: 42, width: 216, height: 32)),
+     ProbeMarker(id: "panel-row-0", mountID: "row-mount", parent: "panel",
+        bounds: CGRect(x: 16, y: 46, width: 208, height: 24))]
+}
+
+@Test func nestedRootPreferenceBucketsAreIndependentAndBounded() throws {
+    let c = try configuration(selection: .mountedSubtree)
+    let foreign = (0..<300).map {
+        ProbeMarker(id: "foreign-\($0)", mountID: "foreign-mount-\($0)", parent: "foreign-root", bounds: .zero)
+    }
+    var groups = [String: [ProbeMarker]]()
+    mergeProbeMarkerGroups(&groups, next: ["nested-session": foreign, "selected-session": markers()])
+    mergeProbeMarkerGroups(&groups, next: ["selected-session": optionalBranch(), "nested-session": foreign])
+    let selected = try #require(groups["selected-session"])
+    #expect(groups["nested-session"]?.count == 257)
+    #expect(try validateProbeMarkers(selected, configuration: c, expectedMounts: [:]).count == 5)
+    mergeProbeMarkerGroups(&groups, next: ["selected-session": foreign])
+    #expect(groups["selected-session"]?.count == 257)
+    #expect(throws: BlueprintProbeError.resourceLimit) {
+        try validateProbeMarkers(groups["selected-session"]!, configuration: c, expectedMounts: [:])
+    }
+}
+
+@Test func mountedSubtreeKeepsRequiredMinimumAndOptionalHierarchy() throws {
+    let c = try configuration(selection: .mountedSubtree)
+    let all = markers() + optionalBranch()
+    #expect(try validateProbeMarkers(all, configuration: c, expectedMounts: [:]).count == 5)
+    #expect(try validateProbeMarkers(markers(), configuration: c, expectedMounts: [:]).count == 3)
+    #expect(throws: BlueprintProbeError.incompleteScope) {
+        try validateProbeMarkers(all.filter { $0.id != "icon" }, configuration: c, expectedMounts: [:])
+    }
+    #expect(throws: BlueprintProbeError.invalidRequest) {
+        try validateProbeMarkers(all, configuration: configuration(), expectedMounts: [:])
+    }
+    #expect(throws: BlueprintProbeError.staleMount) {
+        try validateProbeMarkers(markers(), configuration: c, expectedMounts: ["panel": "panel-mount"])
+    }
+}
+
+@Test func optionalNodesMustHaveValidUniqueRootedIdentityWithinTheLimit() throws {
+    let c = try configuration(selection: .mountedSubtree)
+    let all = markers() + optionalBranch()
+    #expect(throws: BlueprintProbeError.duplicateMarker) {
+        try validateProbeMarkers(all + optionalBranch(), configuration: c, expectedMounts: [:])
+    }
+    #expect(throws: BlueprintProbeError.invalidParent) {
+        try validateProbeMarkers(markers() + optionalBranch().suffix(1), configuration: c, expectedMounts: [:])
+    }
+    let privateID = ProbeMarker(id: "private/value", mountID: "new-mount", parent: "root", bounds: .zero)
+    #expect(throws: BlueprintProbeError.invalidRequest) {
+        try validateProbeMarkers(all + [privateID], configuration: c, expectedMounts: [:])
+    }
+    let overflow = markers() + (0..<254).map {
+        ProbeMarker(id: "optional-\($0)", mountID: "optional-mount-\($0)", parent: "root", bounds: .zero)
+    }
+    #expect(throws: BlueprintProbeError.resourceLimit) {
+        try validateProbeMarkers(overflow, configuration: c, expectedMounts: [:])
+    }
+}
+
+@Test @MainActor func optionalOccurrencesAreEncodedAndMountFenced() async throws {
+    let s = try session(selection: .mountedSubtree)
+    s.attach(rootMountID: "root-mount")
+    let mount = ProbeMount()
+    let all = markers() + optionalBranch(mountID: mount.id)
+    let first = try await capture(s, id: "whole-root", markers: all)
+    #expect(first.mountIDs.count == 5 && first.mountIDs["panel"] == mount.id)
+    let document = try #require(JSONSerialization.jsonObject(with: first.data) as? [String: Any])
+    let artifact = try #require(document["artifact"] as? [String: Any])
+    let snapshot = try #require(artifact["data"] as? [String: Any])
+    let nodes = try #require(snapshot["nodes"] as? [[String: Any]])
+    #expect(nodes.count == 5)
+    let panel = try #require(nodes.first { node in
+        (node["key"] as? [String: String])?["key"] == "panel-\(mount.id)"
+    })
+    #expect((panel["children"] as? [[String: String]]) == [["namespace": "swiftui.layout", "key": "panel-row-0-row-mount"]])
+    s.markerDetached(id: "panel", mountID: mount.id)
+    #expect(!s.isCurrentMounts(first))
+    mount.renew()
+    let reappeared = markers() + optionalBranch(mountID: mount.id)
+    await #expect(throws: BlueprintProbeError.staleMount) {
+        try await capture(s, id: "old-optional", markers: reappeared, expectedMounts: first.mountIDs)
+    }
+    await #expect(throws: BlueprintProbeError.staleMount) {
+        try await capture(s, id: "absent-optional", expectedMounts: first.mountIDs)
+    }
+    let current = try await capture(s, id: "current-optional", markers: reappeared,
+        expectedMounts: ["panel": mount.id])
+    #expect(s.isCurrentMounts(current))
+    s.markerAttached(id: "new-control", mountID: "new-control-mount")
+    #expect(!s.isCurrentMounts(current))
+    if let directory = ProcessInfo.processInfo.environment["UIB_SWIFTUI_TEST_OUTPUT"] {
+        try first.data.write(to: URL(fileURLWithPath: directory).appendingPathComponent("mounted-subtree.json"))
+    }
+}
+
+@Test @MainActor func optionalLifecycleChangesRefusePendingSubtreeCaptureOnly() async throws {
+    let s = try session(selection: .mountedSubtree)
+    s.attach(rootMountID: "root-mount")
+    let pending = Task { try await s.capture(requestID: "optional-arrives", stateID: "ordinary") }
+    await Task.yield()
+    s.markerAttached(id: "optional", mountID: "new-optional")
+    await #expect(throws: BlueprintProbeError.staleMount) { try await pending.value }
+    let exact = try session()
+    exact.attach(rootMountID: "root-mount")
+    let snapshot = try await capture(exact, id: "exact-subset")
+    exact.markerAttached(id: "optional", mountID: "new-optional")
+    exact.markerDetached(id: "optional", mountID: "new-optional")
+    #expect(exact.isCurrentMounts(snapshot))
+    await #expect(throws: BlueprintProbeError.invalidRequest) {
+        try await exact.capture(requestID: "outside-subset", stateID: "ordinary",
+            expectedMounts: ["optional": "new-optional"])
+    }
 }
 #endif

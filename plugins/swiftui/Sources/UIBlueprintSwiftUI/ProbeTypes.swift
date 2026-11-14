@@ -7,6 +7,12 @@ public enum BlueprintProbeError: String, Error, Sendable {
     case timeout, cancelled, encodingFailed
 }
 
+/// Select a fixed declared subset, or all marked occurrences under this root.
+public enum BlueprintProbeSelection: Sendable {
+    case requiredMarkers
+    case mountedSubtree
+}
+
 /// Immutable source output. `revision` is a capture sequence, not a displayed frame ID.
 public struct BlueprintProbeSnapshot: Sendable {
     let sessionID: String
@@ -27,6 +33,18 @@ struct ProbeMarker: Equatable, Sendable {
     let bounds: CGRect
 }
 
+/// Bound each root's preference bucket independently. The extra occurrence is an
+/// overflow sentinel, not a successful truncated observation.
+func mergeProbeMarkerGroups<Marker>(_ value: inout [String: [Marker]],
+                                    next: [String: [Marker]]) {
+    for (sessionID, markers) in next {
+        let remaining = max(0, 257 - (value[sessionID]?.count ?? 0))
+        if remaining > 0 {
+            value[sessionID, default: []].append(contentsOf: markers.prefix(remaining))
+        }
+    }
+}
+
 /// Retained SwiftUI state can survive disappearance; mount identity must not.
 @MainActor final class ProbeMount {
     private(set) var id = UUID().uuidString
@@ -40,9 +58,11 @@ struct ProbeConfiguration: Sendable {
     let scopeID: String
     let rootMarkerID: String
     let requiredMarkerIDs: Set<String>
+    let selection: BlueprintProbeSelection
 
     init(targetID: String, targetGeneration: String, surfaceID: String,
-         scopeID: String, rootMarkerID: String, requiredMarkerIDs: [String]) throws {
+         scopeID: String, rootMarkerID: String, requiredMarkerIDs: [String],
+         selection: BlueprintProbeSelection = .requiredMarkers) throws {
         guard requiredMarkerIDs.count < 256 else { throw BlueprintProbeError.invalidConfiguration }
         let ids = requiredMarkerIDs + [rootMarkerID]
         let selected = Set(ids)
@@ -56,6 +76,11 @@ struct ProbeConfiguration: Sendable {
         self.scopeID = scopeID
         self.rootMarkerID = rootMarkerID
         self.requiredMarkerIDs = selected
+        self.selection = selection
+    }
+
+    func selects(_ markerID: String) -> Bool {
+        selection == .mountedSubtree || requiredMarkerIDs.contains(markerID)
     }
 }
 
@@ -77,7 +102,7 @@ func validateProbeMarkers(_ markers: [ProbeMarker], configuration: ProbeConfigur
     var byID: [String: ProbeMarker] = [:]
     var mounts = Set<String>()
     for marker in markers {
-        guard configuration.requiredMarkerIDs.contains(marker.id),
+        guard configuration.selects(marker.id), publicProbeID(marker.id),
               publicProbeID(marker.mountID) else { throw BlueprintProbeError.invalidRequest }
         guard byID.updateValue(marker, forKey: marker.id) == nil,
               mounts.insert(marker.mountID).inserted else { throw BlueprintProbeError.duplicateMarker }
@@ -86,8 +111,9 @@ func validateProbeMarkers(_ markers: [ProbeMarker], configuration: ProbeConfigur
             throw BlueprintProbeError.staleMount
         }
     }
-    guard Set(byID.keys) == configuration.requiredMarkerIDs,
+    guard configuration.requiredMarkerIDs.isSubset(of: Set(byID.keys)),
           let root = byID[configuration.rootMarkerID] else { throw BlueprintProbeError.incompleteScope }
+    guard Set(expectedMounts.keys).isSubset(of: Set(byID.keys)) else { throw BlueprintProbeError.staleMount }
     guard root.parent == nil, root.bounds.origin == .zero else { throw BlueprintProbeError.invalidParent }
     for marker in markers where marker.id != root.id {
         var visited = Set<String>()

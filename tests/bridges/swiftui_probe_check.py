@@ -27,7 +27,11 @@ def main():
     space = dict(id="swiftui-root-pt", kind="local", units="pt", origin="top_left")
     with tempfile.TemporaryDirectory(prefix="uib-swiftui-query-") as directory:
         query_path = pathlib.Path(directory) / "query.json"
-        for filename, expected in [("before.json", 8), ("after.json", 18)]:
+        for filename, expected, selected in [
+            ("before.json", 8, [("icon", 1.0), ("text", 0.0)]),
+            ("after.json", 18, [("icon", 1.0), ("text", 0.0)]),
+            ("mounted-subtree.json", 4, [("panel", 0.0), ("panel-row-0", 0.0)]),
+        ]:
             path = args.records / filename
             result = run([str(args.validator), "--max-bytes", "1048576", str(path)])
             assert result["valid"] is True
@@ -38,7 +42,7 @@ def main():
             }
             anchors = [dict(element=nodes[name]["key"], frame_kind="layout_bounds",
                             coordinate_space=space, fraction=fraction, axis="x")
-                       for name, fraction in [("icon", 1.0), ("text", 0.0)]]
+                       for name, fraction in selected]
             query_path.write_text(json.dumps(dict(schema_version="0.2.0", artifact=dict(
                 kind="geometry_query", data=dict(id="gap", scope_id=snapshot["context"]["scope_id"],
                 targets=[a["element"] for a in anchors], operation="gap", anchors=anchors,
@@ -50,7 +54,7 @@ def main():
             assert measured["status"] == "known"
             assert measured["measurement"]["value"]["value"]["amount"] == expected
     assert not pathlib.Path(directory).exists()
-    print("SwiftUI SDK synthetic records: canonical validation and Rust gaps 8/18 pt passed")
+    print("SwiftUI SDK synthetic records: canonical validation, gaps 8/18 pt and optional-row inset 4 pt passed")
 
 
 if __name__ == "__main__":

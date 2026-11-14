@@ -21,11 +21,9 @@ private struct ProbeAnchor {
 }
 
 private struct ProbeAnchors: PreferenceKey {
-    static var defaultValue: [ProbeAnchor] { [] }
-    static func reduce(value: inout [ProbeAnchor], nextValue: () -> [ProbeAnchor]) {
-        // Retain one sentinel beyond the limit so overflow cannot look complete.
-        let remaining = max(0, 257 - value.count)
-        if remaining > 0 { value.append(contentsOf: nextValue().prefix(remaining)) }
+    static var defaultValue: [String: [ProbeAnchor]] { [:] }
+    static func reduce(value: inout [String: [ProbeAnchor]], nextValue: () -> [String: [ProbeAnchor]]) {
+        mergeProbeMarkerGroups(&value, next: nextValue())
     }
 }
 
@@ -42,12 +40,12 @@ private struct ProbeMarkerModifier: ViewModifier {
     @ViewBuilder func body(content: Content) -> some View {
         if let session {
             content
-                .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
-                    if records.count < 257 {
-                        records.append(ProbeAnchor(id: identity.id, mountID: mount.id, mount: mount,
-                            parent: identity.parent, anchor: anchor))
-                    }
+                .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { groups, anchor in
+                    mergeProbeMarkerGroups(&groups, next: [session.sessionID: [
+                        ProbeAnchor(id: identity.id, mountID: mount.id, mount: mount,
+                            parent: identity.parent, anchor: anchor)]])
                 }
+                .onAppear { session.markerAttached(id: identity.id, mountID: mount.id) }
                 .onChange(of: identity) { old, _ in
                     session.markerDetached(id: old.id, mountID: mount.id)
                     mount.renew()
@@ -70,19 +68,23 @@ private struct ProbeRootModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .environment(\.blueprintProbeSession, session)
-            .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
-                if records.count < 257 {
-                    records.append(ProbeAnchor(id: session.configuration.rootMarkerID,
-                        mountID: mount.id, mount: mount, parent: nil, anchor: anchor))
-                }
+            .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { groups, anchor in
+                mergeProbeMarkerGroups(&groups, next: [session.sessionID: [
+                    ProbeAnchor(id: session.configuration.rootMarkerID,
+                        mountID: mount.id, mount: mount, parent: nil, anchor: anchor)]])
             }
-            .backgroundPreferenceValue(ProbeAnchors.self) { anchors in
+            .backgroundPreferenceValue(ProbeAnchors.self) { groups in
                 GeometryReader { proxy in
                     Color.clear
                         .onReceive(session.captureRequests) { value in
                             guard session.wantsCapture(token: value) else { return }
+                            let anchors = groups[session.sessionID, default: []]
+                            guard anchors.count <= 256 else {
+                                session.fail(.resourceLimit, token: value)
+                                return
+                            }
                             let selected = anchors.filter {
-                                session.configuration.requiredMarkerIDs.contains($0.id)
+                                session.configuration.selects($0.id)
                             }
                             // A retained mount reference may already have renewed
                             // while SwiftUI still holds an older preference value.

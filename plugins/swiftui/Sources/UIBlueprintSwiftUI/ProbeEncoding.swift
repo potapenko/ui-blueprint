@@ -27,7 +27,10 @@ enum ProbeEncoding {
             ]
             if let parent = marker.parent { declarations.append(declaration("parent_marker_id", text(parent))) }
             if marker.id == c.rootMarkerID {
-                declarations += [declaration("display_scale", number(scale)),
+                declarations += [declaration("marker_selection", text(c.selection == .mountedSubtree
+                        ? "mounted-subtree" : "required-markers")),
+                    declaration("required_marker_count", number(Double(c.requiredMarkerIDs.count))),
+                    declaration("display_scale", number(scale)),
                     declaration("layout_revision", text(String(layoutRevision))),
                     declaration("process_id", number(Double(ProcessInfo.processInfo.processIdentifier))),
                     declaration("root_swiftui_global_x", number(globalFrame.origin.x)),

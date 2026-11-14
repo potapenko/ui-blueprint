@@ -38,10 +38,11 @@ public final class BlueprintProbeSession {
     }
 
     public init(targetID: String, targetGeneration: String, surfaceID: String,
-                scopeID: String, rootMarkerID: String, requiredMarkerIDs: [String]) throws {
+                scopeID: String, rootMarkerID: String, requiredMarkerIDs: [String],
+                selection: BlueprintProbeSelection = .requiredMarkers) throws {
         configuration = try ProbeConfiguration(targetID: targetID, targetGeneration: targetGeneration,
             surfaceID: surfaceID, scopeID: scopeID, rootMarkerID: rootMarkerID,
-            requiredMarkerIDs: requiredMarkerIDs)
+            requiredMarkerIDs: requiredMarkerIDs, selection: selection)
     }
 
     /// Check mount continuity again after an awaited capture. This does not
@@ -59,7 +60,7 @@ public final class BlueprintProbeSession {
               (1...10_000).contains(timeoutMilliseconds), (1...1_048_576).contains(maxOutputBytes),
               expectedMounts.count <= 256,
               expectedMounts.allSatisfy({ publicProbeID($0.key) && publicProbeID($0.value)
-                  && configuration.requiredMarkerIDs.contains($0.key) })
+                  && configuration.selects($0.key) })
         else { throw BlueprintProbeError.invalidRequest }
         guard rootMountID != nil else { throw BlueprintProbeError.unavailable }
         guard pending == nil else { throw BlueprintProbeError.busy }
@@ -115,8 +116,16 @@ public final class BlueprintProbeSession {
         lastLayout = nil
     }
 
+    func markerAttached(id: String, mountID: String) {
+        markerLifecycleChanged(id: id)
+    }
+
     func markerDetached(id: String, mountID: String) {
-        guard configuration.requiredMarkerIDs.contains(id) else { return }
+        markerLifecycleChanged(id: id)
+    }
+
+    private func markerLifecycleChanged(id: String) {
+        guard configuration.selects(id) else { return }
         invalidateLifecycle()
         if pending != nil { fail(.staleMount) }
     }

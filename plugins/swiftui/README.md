@@ -16,25 +16,40 @@ Initialize one session in the window's retained Debug owner, never inside `body`
 ```swift
 let session = try BlueprintProbeSession(
     targetID: "me.example.app", targetGeneration: runGeneration,
-    surfaceID: "learner-window-search", scopeID: "search",
-    rootMarkerID: "search",
-    requiredMarkerIDs: ["video", "query", "query-content", "search-icon", "query-field",
-                        "query-actions", "clear", "favorite", "counter"]
+    surfaceID: "learner-window-content", scopeID: "learner-window",
+    rootMarkerID: "window-content",
+    requiredMarkerIDs: ["search"],
+    selection: .mountedSubtree
 )
 ```
 
 `runGeneration` is a separate UUID bound by the app to its current run. Never
 export an ingress credential/launch token as an identity. All supplied IDs are
 public ASCII `A-Z a-z 0-9 . _ -`, 1–96 bytes. The root ID is automatic; exclude it
-from `requiredMarkerIDs`. The root plus children cannot exceed256 markers.
+from `requiredMarkerIDs`. The root plus collected children cannot exceed256 markers.
+With `.mountedSubtree`, required IDs are a minimum: every current marker in this
+session is collected, including conditional controls and materialized rows.
+Missing optional branches are normal; missing required IDs refuse the capture.
+Omitting `selection` preserves the original `.requiredMarkers` exact-subset mode.
 
 Apply `.blueprintProbeRoot(session: session)` to the existing full selected root.
-Apply `.blueprintMarker("video", parent: "search")` to the existing video container
+Apply `.blueprintMarker("search", parent: "window-content")` to the existing Search
+workspace, `.blueprintMarker("video", parent: "search")` to its video container
 and equivalent markers to its real sibling/query parts. For example, query-content
 belongs to query, query-actions to query-content, and clear/favorite/counter to
 query-actions. Parents must form one tree reaching the root.
 These are explicit marker relationships, not discovery of every SwiftUI view.
 The marker adds no sizing, padding, hit area, focus or Accessibility element.
+Keep IDs unique in the selected root. Repeated rows may use public structural slot
+names with their existing SwiftUI `ForEach` identity and SDK mount lifetime; a slot
+name does not establish logical content identity. Never export private item IDs.
+The app's public state and post-capture checks must account for content replacement.
+
+Separate hosting roots, such as a toolbar, get distinct sessions and surface IDs.
+Nested roots do not share marker buckets or charge each other's node limit. Capture
+them through the app's window request and keep their canonical records separate;
+the SDK does not invent a transform between their local origins. Declare any
+unmeasured surfaces or uninstrumented regions as coverage gaps.
 
 ## Request and consume
 
@@ -80,11 +95,18 @@ paths from untrusted URLs. Use `expectedMounts` to refuse a remounted target.
   cancellation and output overflow throw fixed errors without successful partial data.
 - A session accepts one root and one pending request. Attach two simultaneous roots
   to one session and it becomes unavailable; create correctly scoped sessions.
+- Any selected optional marker's appearance, disappearance or changed identity
+  invalidates publication across that lifecycle change. `expectedMounts` can bind
+  optional occurrences too; a missing or remounted expected occurrence refuses.
+- A session exceeding256 collected anchors refuses before selection. Overflow is
+  never reported as a successful complete subset. Unmarked descendants are unknown.
 - Real-app geometry, lifecycle and no-app-state-mutation require their own proof.
   Synthetic SDK tests alone do not accept an application integration. Pixel capture
   and screenshot association are separate capabilities, not this SDK's data source.
 
-The governing contract is [SWIFTUI-PROBE@2](../../docs/specs/product/swiftui-probe.md).
+The governing contract is [SWIFTUI-PROBE@3](../../docs/specs/product/swiftui-probe.md).
+Root collection follows [WINDOW-PROBE@1](../../docs/specs/product/window-probe.md);
+its actual whole-window runtime qualification is separate from SDK tests.
 The current qualified consumer is the real PlayPhrase.me normal Search workspace:
 localhost API, ordinary returned media and no fixture/scenario selector. See
 [normal Search qualification](../../docs/specs/product/swiftui-normal-search.md).
@@ -99,8 +121,9 @@ CLI/skill installation or public SDK release is implied by the local integration
 
 Run `swift test --package-path plugins/swiftui --scratch-path "$TASK_TEMP/swift"`
 from the repository root with `UIB_SWIFTUI_TEST_OUTPUT="$TASK_TEMP"` to export
-the two synthetic test records. Build the existing CLI and schema validator into
+the three synthetic test records. Build the existing CLI and schema validator into
 the same task-owned temporary root, then run
 `python3 -B tests/bridges/swiftui_probe_check.py --cli "$CLI" --validator "$VALIDATOR" --records "$TASK_TEMP"`.
-The bridge check validates exact SDK bytes and independent8/18pt gap expectations.
+The bridge check validates exact SDK bytes, independent8/18pt gaps and the optional
+row's4pt inset in a mounted-subtree record.
 Retain actual-app screenshots separately; remove only run-owned non-image outputs.
