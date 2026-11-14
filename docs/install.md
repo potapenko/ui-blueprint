@@ -96,6 +96,14 @@ skill discovery are separate results. Report any remaining host refresh requirem
 without restarting the application automatically. Live UI access is a separate
 prerequisite; installation does not grant browser or macOS permissions.
 
+The matching skill includes SwiftUI and GPUI root-geometry recipes. Those use an
+app's explicitly integrated Debug producer and its documented capture route; the
+CLI installation does not inject a producer into a running Release application.
+Select the window root by default, preserve original per-surface records and
+report unmeasured regions. SDK source packages are included in the release source
+under `plugins/swiftui` and `plugins/gpui`; integrate them only within the target
+project's authorized development scope.
+
 Remove only this run's non-image source/build/download files and empty temporary
 directories after verification. Preserve all images and unrelated existing files.
 Finish with the installed numeric version, utility/skill paths, example results

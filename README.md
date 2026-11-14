@@ -216,10 +216,13 @@ Further reading: [geometry](docs/development/geometry.md),
 For Rust development, follow the [engineering rules](RUST.md) and
 [workspace checks and PR CI](docs/specs/development/rust.md). Pull requests run
 formatting, Clippy and tests for the default, Web, macOS and combined Rust features;
-live UI and performance qualification remain separate.
+the separate SwiftUI and GPUI source packages also run their focused checks.
+Live UI and performance qualification remain separate.
 
-For selected internal SwiftUI layout, the optional [Debug probe SDK](plugins/swiftui/README.md)
-is integrated explicitly by the application owner. It produces canonical snapshots
+For internal SwiftUI layout, the optional [Debug probe SDK](plugins/swiftui/README.md)
+is integrated explicitly by the application owner. Window requests start at the
+app-owned root and collect its mounted marked descendants, with required-anchor
+checks and explicit coverage. It produces canonical snapshots
 for the existing Rust geometry commands; ordinary Accessibility observation remains
 a separate source. The SDK is supplied as source, not injected into arbitrary apps.
 
@@ -228,6 +231,12 @@ collects explicitly marked native elements into the same canonical Snapshot.
 It includes a native qualification example and preserves logical-pixel units,
 session/mount identity and unknown non-layout channels. Both workspaces pin Rust1.100.0;
 GPUI dependencies remain outside the normal CLI build.
+
+Choosing a window does not by itself prove complete descendant coverage. The app's
+capture route reports meaningful content, toolbar and overlay regions, including
+any unavailable or unmaterialized parts. Separate hosting surfaces keep separate
+local coordinates until a mapping is verified. The installed skill follows these
+routes; the source SDKs remain explicit application dependencies.
 
 ## License
 

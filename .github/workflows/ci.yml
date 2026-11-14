@@ -1,4 +1,4 @@
-name: Rust CI
+name: UI Blueprint CI
 
 on:
   pull_request:
@@ -52,3 +52,27 @@ jobs:
         run: cargo build --locked --workspace --bins --examples --features "$UIB_FEATURES"
       - name: Test workspace
         run: cargo test --locked --workspace --features "$UIB_FEATURES" -- --test-threads=1
+
+  probes:
+    name: Optional SwiftUI and GPUI probes
+    runs-on: xcode-27
+    timeout-minutes: 30
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Prepare pinned toolchain
+        shell: bash
+        run: |
+          echo "CARGO_TARGET_DIR=$RUNNER_TEMP/probe-target" >> "$GITHUB_ENV"
+          rustup show active-toolchain
+          cargo fetch --locked --manifest-path plugins/gpui/Cargo.toml
+      - name: Test SwiftUI probe
+        run: swift test --package-path plugins/swiftui --scratch-path "$RUNNER_TEMP/swiftui-probe"
+      - name: Check GPUI formatting and lints
+        run: |
+          cargo fmt --manifest-path plugins/gpui/Cargo.toml --all -- --check
+          cargo clippy --locked --manifest-path plugins/gpui/Cargo.toml --all-targets -- -D warnings
+      - name: Test GPUI probe
+        run: cargo test --locked --manifest-path plugins/gpui/Cargo.toml -- --test-threads=1

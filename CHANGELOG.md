@@ -3,12 +3,28 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
-## Unreleased
+## 0.2.0
 
-- Add the optional GPUI Debug source collector and native qualification example,
-  using existing canonical Snapshot inspection and Rust geometry analysis.
+Window-root geometry and matching agent installation. Install the source release
+through the [tag-pinned guide](https://github.com/potapenko/ui-blueprint/blob/v0.2.0/docs/install.md).
+No binary attachments; local preparation does not imply publication.
+
+- Add opt-in SwiftUI and GPUI Debug producers for real runtime layout, using the
+  existing canonical Snapshot inspection and Rust geometry analysis.
+- Add root collection of mounted marked descendants with required-anchor checks,
+  preserving explicit component selection and source identity/coverage limits.
+- Route the agent skill from the selected window/root by default and include the
+  complete SwiftUI/GPUI operating references in the installed matching package.
+- Preserve update and rollback for historical installations while verifying the
+  complete new skill inventory and its portable links.
+- Add shared Rust lint policy and pull-request checks for supported CLI features.
 - Pin source builds and the optional GPUI probe to stable Rust1.100.0, released
   2026-11-12. Existing dependency versions and data formats are unchanged.
+
+Internal geometry requires explicit integration in the target application's Debug
+build. It covers measured marked boundaries, not every private framework view;
+layout, Accessibility, hit, paint and screen/image coordinates remain distinct.
+Initial local build/runtime qualification remains Apple Silicon macOS27.0.1.
 
 ## 0.1.0
 

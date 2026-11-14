@@ -1,9 +1,8 @@
 # Rust development
 
-- Node type: leaf
-- Authority: Active
+- Node type: leaf; Authority: Active
 - Stability: Evolving
-- Contract: `DEV.RUST@4`; supersedes `DEV.RUST@3` toolchain policy.
+- Contract: `DEV.RUST@5`; retains @4 toolchain policy and adds optional probe checks.
 - Authority source: direct user instruction on 2026-11-14 to add shared lints,
   pull-request CI and current documentation; original setup follows
   [C01-DEC-001](decisions/README.md#meaning-and-precedence).
@@ -16,12 +15,10 @@
 
 The workspace contains schema, plugin-api, engine, export, CLI, host and Web
 packages. It pins Rust `1.100.0` with rustfmt/Clippy, edition `2024`, resolver `3`,
-rust-version `1.100` and `aarch64-apple-darwin`. D01 remains the initial setup
-decision; its T01/S01 pending statements are historical, not current build status.
-The direct2026-11-14 user request selects the latest stable toolchain across the
-three active Rust projects; the official stable manifest and Rust announcement
-confirm1.100.0 (2026-11-12). Dependencies, product behavior and release scope stay
-unchanged. The separate GPUI package uses the same pin without joining core builds.
+rust-version `1.100` and `aarch64-apple-darwin`. The direct2026-11-14 user request
+selects1.100.0 (released2026-11-12); D01's earlier setup status is historical.
+Dependencies and product behavior stay unchanged. The separate GPUI package uses
+the same pin without joining core builds.
 
 ## DEV.RUST.TOOLCHAIN — Reproducible setup
 
@@ -86,13 +83,16 @@ then runs tests serially for each explicit CLI feature selection: none, `web`,
 for the combined selection; select either one alone for its single-feature job.
 Live browser/native and performance tests remain explicitly ignored; CI does not
 grant runtime permissions, qualify other platforms or publish a release.
+The 2026-11-14 completion command adds a separate SwiftUI/GPUI probe job: Swift
+package tests and the separate GPUI package's fmt, Clippy and tests. Source-release
+verification also runs these tests before drafting. They are source/framework
+checks; real PlayPhrase.me window and GPUI native-example qualification remain separate.
 ## DEV.RUST.ACCEPTANCE — Evidence and limits
 - Map behavior checks to the selected feature's clauses and plausible failures.
   Test observable results rather than mirroring implementation details.
 - Use deterministic, bounded fixtures for pure logic. Adapter and integration
   evidence follows the feature contract; compiler success does not replace it.
-- Optional watcher, dependency-audit, and benchmark tools are not prerequisites
-  until a concrete need and policy establish them.
+- Optional development tools require a concrete need; they are not prerequisites.
 - Report actual commands/scopes and unresolved results; never imply checks ran
   before their build environment exists.
 - Shared policy changes require the affected feature matrix, workflow validation,

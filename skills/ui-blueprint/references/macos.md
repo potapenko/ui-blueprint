@@ -121,6 +121,21 @@ revision/integration instructions and the app owner's authorized capture path.
 Do not assume the installed CLI archive contains this source package or modify
 an application merely because the user requested a read-only observation.
 
+For an integrated app, follow its documented capture ingress for the exact selected
+window. If no smaller component is requested, use its window-content root with
+`selection: .mountedSubtree`: required markers are a minimum, and all current
+marked descendants are exported. Do not supply a fixed sample list as the entire
+window. The legacy `.requiredMarkers` mode retains explicit subset capture.
+Unmarked SwiftUI internals are not automatically discovered. Source integration
+is separate from using an already integrated app; a missing capture route is an
+explicit prerequisite, not a reason to substitute Accessibility bounds.
+
+One window may have separate content, toolbar and presentation roots. Use the
+app's coverage result and each original canonical record independently, preserving
+surface IDs and local spaces. Equal space names in different records do not prove
+a common origin. Account for unavailable toolbar/overlays and unmaterialized rows;
+do not merge their coordinates or call mounted layout pixel visibility.
+
 The producer measures selected bounds anchors inside the real app, with semantic
 marker IDs, separate mount UUIDs and declared parent/component membership.
 Use its original `swiftui.layout` SourceKeys and `swiftui-root-pt` local point

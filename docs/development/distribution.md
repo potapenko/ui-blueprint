@@ -302,9 +302,10 @@ or that guide is not permission to install. The installer takes an explicit
 `--skill-dir ABSOLUTE_PATH`; it has no Codex/Claude default and does not scan or
 migrate legacy configurations.
 
-The [portable skill](../../skills/ui-blueprint/SKILL.md) is a separate release asset
-from the same committed source as the CLI archive. The local v1/v2 bundle inventory
-above stays unchanged. [Release preparation](macos-release.md) produces a matching
+The [portable skill](../../skills/ui-blueprint/SKILL.md) is a separate local-install
+archive from the same committed source as the CLI archive. Manifest5 retains the
+binary inventory and supplies eight skill files, including the GPUI reference;
+historical formats1/2 retain six, and formats3/4 seven. [Release preparation](macos-release.md) produces a matching
 skill archive and rendered installer with both hashes; candidate-2 verification
 checks both, while legacy candidate-1 verification remains supported.
 

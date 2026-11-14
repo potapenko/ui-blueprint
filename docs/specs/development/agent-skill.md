@@ -1,10 +1,8 @@
 # Agent skill and prompt installation
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@6`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@7`.
 - Authority: Active; stability: Evolving; released baseline: none.
-- Authority source: the operator approved this chat's six-step plan on 2026-10-13;
-  the later instruction “Теперь давай подключим skill к установщику” authorizes
-  integration after inspecting existing work, with temp-only checks and no publication
-  or real installation. The earlier documentation-only stage is checkpoint2afd3a01.
+- Authority source: approved six-step plan (2026-10-13), real installation approval
+  (2026-10-14), and completion instruction (2026-11-14) recorded below.
 - Read when: maintaining the distributed skill or its prompt installation path.
 - Do not read when: using unchanged engine or collector internals.
 - Requires: [BOUNDARIES@1](../product/boundaries.md), [CLI@20](../product/cli.md).
@@ -12,13 +10,12 @@
 ## AGENT-SKILL.SCOPE — Approved plan and current stage
 The approved outcome is one portable `ui-blueprint` skill and matching CLI,
 versioned installation, README instructions and verified installation/use.
-Current-branch work remains single-agent except the explicit cold-chat test below.
-Integration and isolated lifecycle checks are complete. The operator subsequently
-authorized isolated Codex/Claude discovery, then recording its results and readiness.
+Current user direction permits coordinated work with the existing platform owners.
+The earlier installation, isolated lifecycle and Codex/Claude discovery checks passed.
 On 2026-10-14 the user authorized push master, real installation under ~/.local
 and ~/.agents/skills/ui-blueprint, then testing installation and use in a new chat.
-Release publication/licensing and unrelated changes remain excluded. This does not
-resume the older goal; the new-chat test must use the pushed consumer instruction.
+The 2026-11-14 completion command authorizes the matching local installation;
+publication still requires the exact reviewed-release confirmation.
 ## AGENT-SKILL.WORKFLOW — Portable operating instructions
 The entrypoint is [skills/ui-blueprint/SKILL.md](../../../skills/ui-blueprint/SKILL.md).
 Keep it short and automatically discoverable for UI Blueprint observation,
@@ -38,6 +35,10 @@ Native input preparation uses the optional installed [NATIVE-FIRST-USE@1](../pro
 caller; its explicit PID/expected-bundle authority does not imply observation.
 Observation, coverage, units, frame kinds, identity and unavailable results retain
 their product meanings. Examples do not create UI requirements or action authority.
+When no smaller component is requested, use the selected window/root and its useful
+marked descendants under [WINDOW-PROBE@1](../product/window-probe.md). Select SwiftUI
+or GPUI source recipes explicitly, distinguish separate surfaces and coverage gaps,
+and preserve the app-owned capture path. An AX rectangle is not internal layout.
 
 ## AGENT-SKILL.INSTALL — Opt-in matching release
 
@@ -81,20 +82,19 @@ require explicit authorization for their location and purpose.
 | Host discovery, verified | [Recorded versions/modes](../../development/macos-release.md#skill-discovery-verification--2026-10-13): Codex skills/list and Claude initialization list the installed skill; negative controls exclude cached presence |
 | Publication, excluded | Published URL/Gatekeeper and real user-session invocation remain separate from isolated discovery |
 
-Earlier installation discovery used control requests, not product proof.
-The authorized cold test installs and uses saved data; public release is separate.
+Installed-source discovery and a fresh worker's actual geometry use are separate checks.
 
 ## Agent-composed drawing — direct user direction2026-10-14
 
 Keep literal CLI export; the primary human-drawing workflow now teaches a fresh
 agent to compose a selective prompt from Rust-verified geometry. Bundle the English
 strategy, adaptable template and review criteria in the existing export reference;
-labels follow the user's language. Do not embed prior screenshots/prompts or A04
-answers. The user explicitly requests fresh-chat installation and forward testing:
-one saved-source case and one generation per initial iteration, with no inherited
-conversation or successful example. Isolated system-temp installation is authorized
-for this test; no application changes, new public release or old goal resume.
+labels follow the user's language. Do not embed prior screenshots/prompts or answers.
+The historical drawing test used one saved-source case and one generation without
+inherited answers. Current root/installation verification does not require new images.
 AGENT-SKILL-003: authorized pinned-source bootstrap resolves the empty-Releases
 onboarding gap. AGENT-SKILL-004 adds the agent-composed drawing/cold-test workflow.
 CLI/wire/analysis/export semantics and public release boundaries remain protected.
 KC-COMPOSE-001: human-approved2026-10-23 plan adds the portable [Compose@1](../product/compose.md) recipe and source-included collector. Existing installation and drawing behavior stay unchanged; Desktop/Android runtime acceptance is separate.
+WINDOW-ROOT-001: direct user message01a1dbc5-5599-7481-aed8-7eda49313fb1 authorizes
+root-first skill routing, complete SwiftUI/GPUI references and matching local install.

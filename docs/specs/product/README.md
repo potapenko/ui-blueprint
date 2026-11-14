@@ -14,8 +14,9 @@
 | Контракт | Read when / роль |
 | --- | --- |
 | [UIB.GPUI-PROBE@1](gpui-probe.md) | Explicit GPUI Debug layout measurement and canonical export |
-| [UIB.SWIFTUI-PROBE@2](swiftui-probe.md) | Explicit real-app SwiftUI Debug layout measurement and canonical export |
+| [UIB.SWIFTUI-PROBE@3](swiftui-probe.md) | Explicit SwiftUI root/subset layout measurement and canonical export |
 | [UIB.SWIFTUI-NORMAL-SEARCH@1](swiftui-normal-search.md) | Ordinary localhost Search qualification without fixture/error injection |
+| [UIB.WINDOW-PROBE@1](window-probe.md) | Useful root/window collection, dynamic marked descendants and explicit coverage |
 | [UIB.DESIGN-ANALYSIS@1](design-analysis.md) | Explicit mathematical relationships and consistency recommendations in export |
 | [UIB.BOUNDARIES@1](boundaries.md) | выбор архитектуры, platform/plugin/profile/extension boundaries; contract |
 | [UIB.MODEL@1](model.md) | schema, нормализация, свойства, роли, provenance; contract |

@@ -1,12 +1,15 @@
 ---
 name: ui-blueprint
-description: Use UI Blueprint to observe a selected Web, macOS or opt-in Kotlin Compose Desktop/Android interface, analyze supplied SwiftUI/GPUI Debug snapshots, inspect saved UI data, measure spacing and alignment, check explicit requirements, compare compatible observations, or prepare an ImageGen blueprint. Use for UI Blueprint requests and UI geometry work with an available bundle; screenshot-only guesses and general UI redesign are outside this workflow.
+description: Use UI Blueprint for window or component geometry, including opt-in SwiftUI/GPUI layout, Web, macOS Accessibility and Kotlin Compose. Inspect source observations, measure spacing and alignment, check requirements, compare compatible states, or prepare an ImageGen blueprint. Use for UI Blueprint requests and UI geometry with an available bundle; screenshot-only guesses and general redesign are outside this workflow.
 ---
 
 # UI Blueprint
 
-Use the local Rust engine for UI facts and calculations. Start from the user's
-selected component, observation or requirement; choose the smallest useful scope.
+Use the local Rust engine for UI facts and calculations. When the user selects a
+window without a smaller scope, start at its authorized root and useful descendants.
+Use a smaller component when requested; do not silently substitute a demo subset.
+An omitted component selector means that window's registered root; do not require
+the user to name it again. Resolve an ambiguous window instead of choosing another.
 For a blueprint, teach the geometry: use the engine for measurements and the agent
 for selecting and explaining useful relationships. Read the export reference for
 the agent-composed prompt scaffold; literal CLI output remains an explicit option.
@@ -39,14 +42,17 @@ Read only the reference needed for the task:
 | Existing browser connection + exact page URL + one component | [Web](references/web.md) |
 | Explicit opt-in Kotlin Compose Desktop/macOS or Android geometry | [Compose](references/compose.md) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
-| Analyze a supplied opt-in SwiftUI SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
-| Analyze a supplied opt-in GPUI Debug snapshot | [GPUI](references/gpui.md) and [Analysis](references/analysis.md) |
+| Opt-in SwiftUI window/root geometry or supplied SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
+| Opt-in GPUI window/root geometry or supplied Debug snapshot | [GPUI](references/gpui.md) and [Analysis](references/analysis.md) |
 | Compile a drawing package; generate/review an image when requested | [Export](references/export.md) |
 
 Use supplied saved data directly when it answers the question. Otherwise observe
 the authorized target once, then analyze the returned source. After an authorized
 app change, obtain a new observation when needed. Never poll to manufacture freshness.
 This skill supplies read-only and drawing recipes, not a generic action executor.
+Before calling a window result complete, account for its meaningful regions and
+controls, including toolbar/overlays. Distinguish measured, absent, unmaterialized
+and unsupported parts. A root rectangle or marker count alone does not prove coverage.
 
 ## Preserve meaning
 
