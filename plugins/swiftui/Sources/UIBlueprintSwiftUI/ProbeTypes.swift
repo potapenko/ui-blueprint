@@ -25,6 +25,12 @@ struct ProbeMarker: Equatable, Sendable {
     let bounds: CGRect
 }
 
+/// Retained SwiftUI state can survive disappearance; mount identity must not.
+struct ProbeMount: Sendable {
+    private(set) var id = UUID().uuidString
+    mutating func renew() { id = UUID().uuidString }
+}
+
 struct ProbeConfiguration: Sendable {
     let targetID: String
     let targetGeneration: String

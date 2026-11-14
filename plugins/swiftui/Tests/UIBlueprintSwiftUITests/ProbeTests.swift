@@ -61,6 +61,25 @@ private func markers(gap: Double = 8, textMount: String = "text-mount") -> [Prob
     }
 }
 
+@Test func retainedChildStateGetsANewMountAfterDisappear() throws {
+    var retained = ProbeMount()
+    let firstAppearance = retained.id
+    let initial = markers(textMount: retained.id)
+    #expect(try validateProbeMarkers(initial, configuration: configuration(),
+        expectedMounts: ["text": firstAppearance]).count == 3)
+    // This is the same retained mount-state operation invoked by onDisappear,
+    // not a hand-authored replacement ID. SwiftUI may keep the state instance.
+    retained.renew()
+    let reappeared = markers(textMount: retained.id)
+    #expect(retained.id != firstAppearance)
+    #expect(throws: BlueprintProbeError.staleMount) {
+        try validateProbeMarkers(reappeared, configuration: configuration(),
+            expectedMounts: ["text": firstAppearance])
+    }
+    #expect(try validateProbeMarkers(reappeared, configuration: configuration(),
+        expectedMounts: ["text": retained.id]).count == 3)
+}
+
 @MainActor private func session() throws -> BlueprintProbeSession {
     try BlueprintProbeSession(targetID: "example.app", targetGeneration: "run-1", surfaceID: "main",
         scopeID: "sample", rootMarkerID: "root", requiredMarkerIDs: ["icon", "text"])

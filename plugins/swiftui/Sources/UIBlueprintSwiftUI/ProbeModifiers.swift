@@ -35,28 +35,31 @@ private struct MarkerIdentity: Equatable {
 
 private struct ProbeMarkerModifier: ViewModifier {
     let identity: MarkerIdentity
-    @State private var mountID = UUID().uuidString
+    @State private var mount = ProbeMount()
     @Environment(\.blueprintProbeSession) private var session
 
     func body(content: Content) -> some View {
         content
             .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
                 if session != nil, records.count < 257 {
-                    records.append(ProbeAnchor(id: identity.id, mountID: mountID,
+                    records.append(ProbeAnchor(id: identity.id, mountID: mount.id,
                         parent: identity.parent, anchor: anchor))
                 }
             }
             .onChange(of: identity) { old, _ in
-                session?.markerDetached(id: old.id, mountID: mountID)
-                mountID = UUID().uuidString
+                session?.markerDetached(id: old.id, mountID: mount.id)
+                mount.renew()
             }
-            .onDisappear { session?.markerDetached(id: identity.id, mountID: mountID) }
+            .onDisappear {
+                session?.markerDetached(id: identity.id, mountID: mount.id)
+                mount.renew()
+            }
     }
 }
 
 private struct ProbeRootModifier: ViewModifier {
     let session: BlueprintProbeSession
-    @State private var mountID = UUID().uuidString
+    @State private var mount = ProbeMount()
     @Environment(\.displayScale) private var displayScale
 
     func body(content: Content) -> some View {
@@ -66,7 +69,7 @@ private struct ProbeRootModifier: ViewModifier {
             .transformAnchorPreference(key: ProbeAnchors.self, value: .bounds) { records, anchor in
                 if records.count < 257 {
                     records.append(ProbeAnchor(id: session.configuration.rootMarkerID,
-                        mountID: mountID, parent: nil, anchor: anchor))
+                        mountID: mount.id, parent: nil, anchor: anchor))
                 }
             }
             .backgroundPreferenceValue(ProbeAnchors.self) { anchors in
@@ -83,17 +86,17 @@ private struct ProbeRootModifier: ViewModifier {
                                 ProbeMarker(id: $0.id, mountID: $0.mountID,
                                     parent: $0.parent, bounds: proxy[$0.anchor])
                             }
-                            session.resolve(token: value, rootMountID: mountID, markers: markers,
+                            session.resolve(token: value, rootMountID: mount.id, markers: markers,
                                 globalFrame: proxy.frame(in: .global), displayScale: displayScale)
                         }
                 }
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
             }
-            .onAppear { session.attach(rootMountID: mountID) }
+            .onAppear { session.attach(rootMountID: mount.id) }
             .onDisappear {
-                session.detach(rootMountID: mountID)
-                mountID = UUID().uuidString
+                session.detach(rootMountID: mount.id)
+                mount.renew()
             }
     }
 }
