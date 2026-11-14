@@ -1,7 +1,7 @@
 # Explicit GPUI layout probe
 
 - Node type: leaf; domain: `uib.gpui-probe`; contract: `UIB.GPUI-PROBE@2`.
-- Authority: Active; stability: Evolving; root-mode qualification pending.
+- Authority: Active; stability: Evolving; bounded native root-mode qualification recorded in the package recipe.
 - Authority source: original approval message01a1db4b-9e3c-72e3-9f40-7babe4604262
   and parallel execution01a1db4c-a361-7683-9804-0461d38e25fb; direct root/default
   implementation message01a1dbc5-5599-7481-aed8-7eda49313fb1, 2026-11-14.
@@ -17,7 +17,8 @@
 The existing `plugins/gpui` producer adds app-local Debug registration through
 public gpui-kit0.9.1 Base Root hooks, before windows are created. No file IO,
 network, actions or installation belongs to that registration. Each actual
-Root/plugin instance owns one session bound to its exact WindowHandle/Root entity.
+Root/plugin instance owns one session bound to its exact WindowHandle/Root entity
+and a private per-window runtime ownership witness (numeric IDs alone can repeat).
 `Session::for_window(window, cx)` resolves only that registered root; unavailable,
 changed or ambiguous binding refuses without choosing a small sample.
 `Request::capture(id, state, deadline, bytes)` has no component selector by default:

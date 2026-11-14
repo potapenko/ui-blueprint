@@ -3,7 +3,7 @@
 Opt-in Debug source package for gpui-kit0.9.1/gpui-pre0.3.12 and Rust1.100.0.
 [GPUI-PROBE@2](../../docs/specs/product/gpui-probe.md) extends the existing producer;
 core0.1 Snapshot and the existing Rust inspect/measure/check path are unchanged.
-The separate Cargo.lock keeps GPUI out of normal CLI builds. No client app is added.
+The separate Cargo.lock keeps GPUI out of normal CLI builds.
 
 ## Register the actual window root once
 
@@ -82,7 +82,6 @@ identical actions and serialize native input/instances. Off emits no Snapshot.
 Stop only the owned PID; all images remain, and only owned non-image output retires.
 
 ## Compatibility, source basis and qualification
-
 `Configuration::new` / `Session::new` / `Request::new(...selected...)` retain the
 exact-subset API. Do not double-instrument one native occurrence with two sessions.
 The new source uses public RootPlugin::decorate, Window.defer/refresh and Element
@@ -90,10 +89,12 @@ hooks. gpui-kit0.9.1 source commit39ab849a93b5f15507b969164d49891db8d5b470 and
 pinned gpui-pre/base sources were inspected; no upstream implementation was copied.
 GPUI-pre LICENSE-APACHE was read; kit/base declare Apache-2.0. Local use is not a
 redistribution audit of every asset/transitive dependency.
-
-Seven integration tests cover legacy selection plus default root, dynamic/deferred
+Eight integration tests cover legacy selection plus default root, dynamic/deferred
 children, distinct repeated-row parents, component ambiguity, root replacement,
-window isolation, 140-generation churn, limits and fresh cached-subtree callbacks.
-Root-mode native qualification is in progress; the earlier @1 native11/12-node
-proof is not whole-window acceptance. No universal renderer-tree, Linux/mobile,
-client product parity, installation or release claim follows from this source SDK.
+window/cross-App isolation, 140-generation churn, limits and fresh cached callbacks.
+Native default capture returned35→41 nodes after new rows/branch/deferred overlay;
+explicit toolbar narrowing returned8. Original JSON passed existing Rust analysis,
+gap8→18, scroll/remount/resize and private-ID exclusion. Matched paste/capture/input
+continuation passed on/off. Workspace/rows/footer/overlay pixels matched; CUA cursor
+pixels prevent a full-toolbar bitmap equality claim. No universal renderer-tree,
+Linux/mobile, client parity, installation or release claim follows from this SDK.

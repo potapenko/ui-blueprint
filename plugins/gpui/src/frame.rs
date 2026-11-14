@@ -2,7 +2,7 @@ use crate::{
     Configuration, Error, Request,
     session::{Capture, next_generation},
 };
-use gpui_kit::{AnyWindowHandle, Bounds, EntityId, GlobalElementId, Pixels};
+use gpui_kit::{AnyWindowHandle, Bounds, EntityId, GlobalElementId, Pixels, WindowTextSystem};
 use std::{any::TypeId, cell::RefCell, rc::Weak, time::Instant};
 
 pub(crate) struct Lease {
@@ -69,6 +69,8 @@ impl Pending {
 pub(crate) struct State {
     pub config: Configuration,
     pub window: AnyWindowHandle,
+    // Opaque per-window allocation identity; no text-system content is read.
+    pub window_instance: Weak<WindowTextSystem>,
     pub root_entity: Option<EntityId>,
     pub started: Instant,
     pub closed: bool,
@@ -87,7 +89,11 @@ pub(crate) struct State {
     pub result: Option<Result<Capture, Error>>,
 }
 impl State {
-    pub fn new(config: Configuration, window: AnyWindowHandle) -> Result<Self, Error> {
+    pub fn new(
+        config: Configuration,
+        window: AnyWindowHandle,
+        window_instance: Weak<WindowTextSystem>,
+    ) -> Result<Self, Error> {
         let root_generation = if config.window_root {
             next_generation()?
         } else {
@@ -96,6 +102,7 @@ impl State {
         Ok(Self {
             config,
             window,
+            window_instance,
             root_entity: None,
             started: Instant::now(),
             closed: false,

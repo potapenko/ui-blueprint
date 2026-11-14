@@ -55,11 +55,15 @@ impl Session {
         Ok(Self(Rc::new(RefCell::new(State::new(
             config,
             window.window_handle(),
+            Rc::downgrade(window.text_system()),
         )?))))
     }
     pub(crate) fn bind_root(&self, window: &Window) -> Result<(), Error> {
         let mut state = self.0.borrow_mut();
-        if state.closed || state.window != window.window_handle() {
+        if state.closed
+            || state.window != window.window_handle()
+            || !Weak::ptr_eq(&state.window_instance, &Rc::downgrade(window.text_system()))
+        {
             return Err(Error::StaleTarget);
         }
         if state.config.window_root {

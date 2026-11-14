@@ -369,3 +369,81 @@ fn no_registered_root_is_not_a_component_fallback(cx: &mut TestAppContext) {
     })
     .unwrap();
 }
+
+#[gpui_kit::test]
+fn foreign_app_with_equal_local_window_ids_is_rejected(cx: &mut TestAppContext) {
+    let mut other = cx.new_app();
+    let (first, _view) = setup(cx);
+    other.update(|cx| {
+        gpui_kit::init(cx);
+        register(
+            Configuration::application("test.app", "fixture", "other-app-run")
+                .required_anchors(&["content"]),
+            cx,
+        )
+        .unwrap();
+    });
+    let second = other.update(|cx| {
+        gpui_kit::open_window(WindowOptions::default(), cx, |_, cx| {
+            cx.new(|_| View {
+                rows: vec![10, 20],
+                extra: false,
+                overlay: false,
+            })
+        })
+        .unwrap()
+        .0
+    });
+    assert_eq!(first, second, "exercise the equal per-App handle case");
+    let session = cx
+        .update_window(first, |_, window, cx| {
+            let session = Session::for_window(window, cx).unwrap();
+            session
+                .request(
+                    Request::capture("source", "fixture", Duration::from_secs(2), 1_048_576),
+                    window,
+                )
+                .unwrap();
+            window.render_frame(cx);
+            session
+        })
+        .unwrap();
+    cx.run_until_parked();
+    let (capture, root_id) = cx
+        .update_window(first, |_, window, _| {
+            let capture = session.take(window).unwrap().unwrap();
+            assert!(capture.to_json(&session, window).is_ok());
+            (
+                capture,
+                window
+                    .root::<gpui_kit::base::Root>()
+                    .flatten()
+                    .unwrap()
+                    .entity_id(),
+            )
+        })
+        .unwrap();
+    other
+        .update_window(second, |_, window, _| {
+            assert_eq!(
+                root_id,
+                window
+                    .root::<gpui_kit::base::Root>()
+                    .flatten()
+                    .unwrap()
+                    .entity_id()
+            );
+            assert!(
+                matches!(capture.to_json(&session, window), Err(Error::StaleTarget)),
+                "foreign App window must not validate an original App capture"
+            );
+            assert!(matches!(
+                session.request(
+                    Request::capture("foreign", "fixture", Duration::from_secs(2), 1_048_576),
+                    window
+                ),
+                Err(Error::StaleTarget)
+            ));
+        })
+        .unwrap();
+}
