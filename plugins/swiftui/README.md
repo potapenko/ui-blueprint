@@ -16,9 +16,10 @@ Initialize one session in the window's retained Debug owner, never inside `body`
 ```swift
 let session = try BlueprintProbeSession(
     targetID: "me.example.app", targetGeneration: runGeneration,
-    surfaceID: "learner-window-recovery", scopeID: "recovery",
-    rootMarkerID: "recovery",
-    requiredMarkerIDs: ["card", "icon", "text-group", "title", "detail", "retry"]
+    surfaceID: "learner-window-search", scopeID: "search",
+    rootMarkerID: "search",
+    requiredMarkerIDs: ["video", "query", "query-content", "search-icon", "query-field",
+                        "query-actions", "clear", "favorite", "counter"]
 )
 ```
 
@@ -28,9 +29,10 @@ public ASCII `A-Z a-z 0-9 . _ -`, 1–96 bytes. The root ID is automatic; exclud
 from `requiredMarkerIDs`. The root plus children cannot exceed256 markers.
 
 Apply `.blueprintProbeRoot(session: session)` to the existing full selected root.
-Apply `.blueprintMarker("card", parent: "recovery")` to the actual card boundary,
-and equivalent markers to its real inner parts. Declare title/detail's parent
-as `text-group`, for example. Parents must form one tree reaching the root.
+Apply `.blueprintMarker("video", parent: "search")` to the existing video container
+and equivalent markers to its real sibling/query parts. For example, query-content
+belongs to query, query-actions to query-content, and clear/favorite/counter to
+query-actions. Parents must form one tree reaching the root.
 These are explicit marker relationships, not discovery of every SwiftUI view.
 The marker adds no sizing, padding, hit area, focus or Accessibility element.
 
@@ -83,10 +85,12 @@ paths from untrusted URLs. Use `expectedMounts` to refuse a remounted target.
   and screenshot association are separate capabilities, not this SDK's data source.
 
 The governing contract is [SWIFTUI-PROBE@2](../../docs/specs/product/swiftui-probe.md).
-The first native consumer is the real PlayPhrase.me Search recovery component;
-its source owner retains the exact app/build/run identity and local fixture setup.
-The controlled C02 failure scenario used to verify that component deliberately
-avoids the real server. It is not an SDK requirement or a server-health test.
+The current qualified consumer is the real PlayPhrase.me normal Search workspace:
+localhost API, ordinary returned media and no fixture/scenario selector. See
+[normal Search qualification](../../docs/specs/product/swiftui-normal-search.md).
+Its source owner retains exact app/build/run identity and the closed capture route.
+The earlier C02 recovery example deliberately avoided the real server; it is
+historical codec/geometry evidence, not normal service-operation proof.
 The verified installed `0.1.0-web.browser2` CLI already consumes this canonical
 output; the SDK itself is supplied separately as this source package. No global
 CLI/skill installation or public SDK release is implied by the local integration.

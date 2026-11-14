@@ -64,8 +64,9 @@ Old F02 probe, native_ax, Compose, CLI, wire versions and release behavior stay 
 
 ## SWIFTUI.ACCEPT — Real application, not fixture-only completion
 
-The native owner integrates the SDK in the real PlayPhrase.me recovery component
-under the existing local `c02.search.request-failed` Debug app composition.
+Ordinary localhost Search follows [NORMAL-SEARCH@1](swiftui-normal-search.md).
+The initial profile below qualifies only the real PlayPhrase.me recovery component
+under `c02.search.request-failed`, not normal service operation.
 Root/card/icon/text/title/detail/Retry measurements must validate in Rust and
 produce useful numeric results, followed by real resize/content observations.
 SDK tests cover identities, duplicate/missing/stale data, limits and cancellation.
