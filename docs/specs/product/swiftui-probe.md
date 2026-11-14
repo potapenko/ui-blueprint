@@ -1,10 +1,13 @@
 # Explicit SwiftUI layout probe
 
-- Node type: leaf; domain: `uib.swiftui-probe`; contract: `UIB.SWIFTUI-PROBE@1`.
-- Authority: Active; stability: Evolving; runtime acceptance pending.
+- Node type: leaf; domain: `uib.swiftui-probe`; contract: `UIB.SWIFTUI-PROBE@2`.
+- Authority: Active; stability: Accepted for the bounded macOS internal-data
+  profile below; no public release or whole-application visual acceptance.
 - Authority source: direct 2026-11-14 user approval in chat
   `01a1dab2-2e7d-7f13-9400-8e42b0859137`: implement the first SwiftUI package
-  against the real PlayPhrase.me app; work with its native owner, no GPUI work.
+  against the real PlayPhrase.me app; subsequent native-chat human correction
+  `01a1db4f-dad2-7133-b3d7-da15922655b3` makes internal geometry the acceptance
+  outcome, not screenshot/display investigation. @2 supersedes @1 acceptance only.
 - Read when: integrating or verifying the opt-in SwiftUI SDK.
 - Requires: [NATIVE@5](native.md), [MODEL@1](model.md),
   [GEOMETRY@2](geometry.md), [IDENTITY@1](identity.md), [PRIVACY@1](privacy.md),
@@ -66,16 +69,31 @@ under the existing local `c02.search.request-failed` Debug app composition.
 Root/card/icon/text/title/detail/Retry measurements must validate in Rust and
 produce useful numeric results, followed by real resize/content observations.
 SDK tests cover identities, duplicate/missing/stale data, limits and cancellation.
-Probe on/off must preserve the selected app's layout, focus, input and Retry.
-Pair actual stationary-window screenshots with source geometry through a proved
-transform and unchanged scene state. Unknown or changed pairing is not a pass;
-exact animated-frame/pixel correspondence is not inferred from equal endpoints.
-Headless tests support, but never replace, this actual app proof. Release exclusion
-and owned-resource cleanup are required; screenshots remain in system temp.
+The SDK must not mutate app state, focus, input or layout to measure it. Verify
+actual bounds, identities, parent links, state/reflow/resize and stale refusals
+through the real app's internal producer and Rust consumers. Headless tests alone
+do not replace this proof. Release exclusion and owned-resource cleanup remain.
+Screenshots are optional separate visual evidence, never a geometry source or a
+blocking gate for this internal-data package. Exact presented frames, pixel
+neutrality and universal screen transforms are not accepted by this package.
 
 ## Change record
 
 SWIFTUI-REAL-APP-001 adds a reusable producer under direct user approval. Existing
 core0.1/analysis0.2 data consumers are unchanged. Native integration is owned by
 chat `01a1daaf-dafe-7e63-b309-3afd2ddec599`; Blueprint owns SDK and numeric checks.
-No GPUI source, deployment, global installation or production access is authorized.
+The failed/incomparable screenshot branch is retained as unaccepted diagnostic
+history, not relabelled pass. SWIFTUI-REAL-APP-002 records the direct human scope
+correction above; data/identity/privacy/no-mutation requirements are unchanged.
+No deployment, global installation or production access is added. Independently
+authorized GPUI work may proceed in parallel under its own owner and contract.
+
+## Verified profile
+
+SDK30523aba with native implementationa5228dd01 produced the real app's7 selected
+layout nodes. Original final bytes pass the installed combined CLI's validator,
+inspect, measure and check, plus the task-built Rust consumer. Independent source
+spacing checks return18/7/18pt; a19pt mismatch fails and unknown hit stays unknown.
+SDK10 focused tests and native27 parameterized admission checks passed. This
+qualifies explicit macOS Debug integration, not external closed-app introspection,
+unmarked descendants, screenshots, normal server connectivity or other platforms.

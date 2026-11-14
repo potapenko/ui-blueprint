@@ -78,12 +78,18 @@ paths from untrusted URLs. Use `expectedMounts` to refuse a remounted target.
   cancellation and output overflow throw fixed errors without successful partial data.
 - A session accepts one root and one pending request. Attach two simultaneous roots
   to one session and it becomes unavailable; create correctly scoped sessions.
-- Real-app geometry, screenshot association and on/off invariance require their
-  own proof. Synthetic SDK tests alone do not accept an application integration.
+- Real-app geometry, lifecycle and no-app-state-mutation require their own proof.
+  Synthetic SDK tests alone do not accept an application integration. Pixel capture
+  and screenshot association are separate capabilities, not this SDK's data source.
 
-The governing contract is [SWIFTUI-PROBE@1](../../docs/specs/product/swiftui-probe.md).
+The governing contract is [SWIFTUI-PROBE@2](../../docs/specs/product/swiftui-probe.md).
 The first native consumer is the real PlayPhrase.me Search recovery component;
 its source owner retains the exact app/build/run identity and local fixture setup.
+The controlled C02 failure scenario used to verify that component deliberately
+avoids the real server. It is not an SDK requirement or a server-health test.
+The verified installed `0.1.0-web.browser2` CLI already consumes this canonical
+output; the SDK itself is supplied separately as this source package. No global
+CLI/skill installation or public SDK release is implied by the local integration.
 
 ## Focused verification
 
