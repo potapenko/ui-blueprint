@@ -130,8 +130,15 @@ class Preparation(unittest.TestCase):
             path.chmod(0o644)
             files[name] = dict(sha256=caller.hashlib.sha256(data).hexdigest(), mode=0o644)
         manifest = self.stage/'distribution-manifest.json'
-        manifest.write_bytes(caller.encode(dict(format='ui-blueprint-local-4', modules='combined', files=files)))
-        self.assertEqual(caller.verify_bundle(self.stage), self.helper)
+        for version in ('ui-blueprint-local-4', 'ui-blueprint-local-5'):
+            for module in ('native', 'combined'):
+                manifest.write_bytes(caller.encode(dict(format=version, modules=module, files=files)))
+                self.assertEqual(caller.verify_bundle(self.stage), self.helper)
+        for version in ('ui-blueprint-local-3', 'ui-blueprint-local-6', 'unknown'):
+            manifest.write_bytes(caller.encode(dict(format=version, modules='combined', files=files)))
+            with self.assertRaises(caller.Refusal) as failure: caller.verify_bundle(self.stage)
+            self.assertEqual(failure.exception.code, 'invalid_bundle')
+        manifest.write_bytes(caller.encode(dict(format='ui-blueprint-local-5', modules='combined', files=files)))
         self.helper.write_bytes(b'changed')
         with self.assertRaises(caller.Refusal) as failure: caller.verify_bundle(self.stage)
         self.assertEqual(failure.exception.code, 'changed_bundle')

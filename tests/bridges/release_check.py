@@ -512,6 +512,21 @@ puts "PASS Homebrew formula: real install/test APIs with temporary prefix"
                     str(stage / 'cellar/uiblueprint/0.1.0'), str(bundle)], env=env, timeout=60).decode().strip())
 
 
+def native_preparer_smoke(bundle, stage):
+    """The real shipped preparer must accept its own manifest before target refusal."""
+    if not (bundle / 'native-prepare.py').is_file():
+        return
+    output = Path(tempfile.mkdtemp(prefix='prepare-', dir=stage))
+    result = subprocess.run([sys.executable, '-B', str(bundle / 'native-prepare.py'),
+        '--pid', '2147483647', '--bundle-id', 'example.nonexistent.app', '--out', str(output)],
+        stdin=subprocess.DEVNULL, capture_output=True, timeout=5)
+    assert result.returncode == 4 and result.stderr == b'target_unresolved\n' and not result.stdout, (
+        'shipped native preparer must accept its distribution manifest', result.returncode, result.stderr)
+    assert not list(output.iterdir())
+    output.rmdir()
+    print('PASS native preparer: actual bundled manifest accepted; missing process refused before output')
+
+
 def real_candidate(folder):
     record = release.read_candidate(folder)
     stage = Path(tempfile.mkdtemp(prefix='uib-installed-check-'))
@@ -588,6 +603,7 @@ esac
                     resolved = (path.parent / link.split('#', 1)[0]).resolve()
                     assert resolved.is_relative_to(skill.resolve()) and resolved.is_file(), link
         checks.smoke(installed)
+        native_preparer_smoke(installed, stage)
         run([*command, '--uninstall'], env=env)
         assert not (prefix / 'share/uiblueprint').exists()
         assert not skill.is_symlink()

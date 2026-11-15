@@ -3,6 +3,13 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.3.2
+
+- Accept the current manifest5 native/combined distribution in `native-prepare.py`,
+  retaining manifest4 compatibility and all file hash/mode and process guards.
+- Exercise the shipped preparer during actual candidate verification so a bundle
+  inventory update cannot silently break prepare before observing a real window.
+
 ## 0.3.1
 
 - Resolve the installed CLI symlink before locating the matching native helper,
