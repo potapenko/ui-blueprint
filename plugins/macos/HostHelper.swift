@@ -7,6 +7,10 @@ import Darwin
 @main struct NativeHostHelper {
     @MainActor static func main() async {
         do {
+            if CommandLine.arguments.dropFirst().first == "capture-window" {
+                let status = await NativeWindowCapture.run(Array(CommandLine.arguments.dropFirst(2)))
+                _exit(status)
+            }
             if CommandLine.arguments.count > 1 {
                 guard CommandLine.arguments.count == 3, CommandLine.arguments[1] == "describe-process",
                       let pid = Int32(CommandLine.arguments[2]), pid > 0 else { _exit(2) }

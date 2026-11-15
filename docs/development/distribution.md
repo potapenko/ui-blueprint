@@ -12,9 +12,9 @@ and document/proposal/comparison export run without a model, API keys, browser, 
 ## Prerequisites and selection
 
 The tested host is arm64 macOS 27.0.1. Install prerequisites yourself before
-building: Python 3.11+, Git, rustup with Rust **1.96.0** already installed, a native
+building: Python 3.11+, Git, rustup with Rust **1.100.0** already installed, a native
 C linker, and cached packages from the committed Cargo.lock. The recipe uses
-`rustup run 1.96.0` and Cargo `--locked --offline`; it never installs/downloads a
+`rustup run 1.100.0` and Cargo `--locked --offline`; it never installs/downloads a
 toolchain or dependencies. Missing tools/cache fail explicitly. An already prepared
 Rust toolchain includes the standard library. Native additionally needs the selected
 Xcode/Swift 6 toolchain and SDK; the helper uses public Apple frameworks.

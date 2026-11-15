@@ -9,6 +9,7 @@ mod compose;
 mod connection;
 mod export;
 mod input;
+mod native_capture;
 #[cfg(all(target_os = "macos", feature = "macos"))]
 mod native_session;
 mod observe;
@@ -28,6 +29,7 @@ use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
 Version: uiblueprint --version\n\
+Native PNG: capture-window --pid PID --window-id CG_WINDOW_ID --expected-bundle BUNDLE --out NEW_SYSTEM_TEMP_DIRECTORY --request-id ID [--deadline-ms N] [--expected-launch-time SECONDS]\n\
 Compose import: import-compose --input FILE --max-input-bytes N --max-output-bytes N (saved explicit debug probe; no live revalidation)\n\
 Declared comparison: compare --before FILE --after FILE --correspondence FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Comparison diagnostic: compare --before FILE --after FILE --diagnose --max-input-bytes N --max-output-bytes N [--json]\n\
@@ -284,6 +286,11 @@ fn diff_failure(error: engine::diff::DiffError) -> Failure {
 
 fn main() -> ExitCode {
     let args: Vec<_> = std::env::args_os().skip(1).collect();
+    if args.first().is_some_and(|arg| arg == "capture-window") {
+        let failure = native_capture::execute(args.into_iter().skip(1));
+        let _ = writeln!(io::stderr().lock(), "{}", failure.code);
+        return ExitCode::from(failure.exit);
+    }
     #[cfg(all(target_os = "macos", feature = "macos"))]
     if args.first().is_some_and(|arg| arg == "native-session") {
         let result = native_session::execute(args.into_iter().skip(1), &mut io::stdout().lock());

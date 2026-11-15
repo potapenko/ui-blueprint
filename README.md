@@ -242,3 +242,7 @@ routes; the source SDKs remain explicit application dependencies.
 
 UI Blueprint is licensed under [MIT](LICENSE). Third-party dependencies retain
 their own [licenses and notices](THIRD_PARTY_NOTICES.md).
+
+For independent native window images, `uiblueprint capture-window --help` describes
+the exact-PID/window PNG command and coordinate metadata. It requires existing
+capture permission and does not modify the observed application.

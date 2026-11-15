@@ -33,7 +33,7 @@ WEB_FILES = {'web-geometry.cjs', 'WEB-FIRST-USE.md'}
 IMAGE_SUFFIXES = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico', '.icns',
                   '.bmp', '.tif', '.tiff', '.heic', '.heif', '.avif', '.pdf', '.partial'}
 SWIFT = ['plugins/macos/NativeAcquisition.swift', 'plugins/macos/NativeJSON.swift',
-         'plugins/macos/NativeArtifacts.swift', 'fixtures/native/Observe.swift',
+         'plugins/macos/NativeArtifacts.swift', 'plugins/macos/NativeWindowCapture.swift', 'fixtures/native/Observe.swift',
          'tests/bridges/native/Collector.swift', 'tests/bridges/native/WindowAX.swift',
          'plugins/macos/HostProtocol.swift', 'plugins/macos/NativeFocusedAX.swift',
          'plugins/macos/NativeFormSession.swift', 'plugins/macos/HostHelper.swift']

@@ -157,3 +157,58 @@ button's Accessibility rectangle may be smaller than its SwiftUI layout frame.
 Never coerce those rectangles to equality. A screenshot pairing needs its own
 source-bound window/capture metadata and a qualified transform. Actual app
 interaction and probe-on/off invariance remain separate evidence.
+
+## Independent native PNG from the selected window
+
+Use the matching installed CLI/helper in `UIB_BUNDLE` (0.3.0 or a qualified later
+version). This path requires existing Screen Recording permission; it never opens
+a permission prompt. It performs no app launch, focus, input or resize. The app
+owner supplies an authorized live PID and expected bundle ID.
+
+First obtain actual CGWindowIDs for that PID, without capturing anything:
+
+```sh
+"$UIB_BUNDLE/uiblueprint" capture-window --list-windows \
+  --pid "$APP_PID" --expected-bundle "$APP_BUNDLE_ID"
+```
+
+Use the returned process launch_time and the explicitly selected window_id. CUA,
+AX, SDK and CGWindow IDs are not interchangeable. Multiple candidates require a
+real window choice; do not guess by title or capture another window as fallback.
+Only numeric metadata from the selected PID is returned, never foreign titles.
+
+```sh
+"$UIB_BUNDLE/uiblueprint" capture-window \
+  --pid "$APP_PID" --window-id "$CG_WINDOW_ID" \
+  --expected-bundle "$APP_BUNDLE_ID" --expected-launch-time "$LAUNCH_TIME" \
+  --out "$UIB_RUN/native-window" --request-id "window-reference"
+```
+
+`UIB_RUN` is an existing caller-owned system-temp directory; `native-window` must
+not yet exist. The command returns bounded JSON and writes `window.png` plus
+`capture.json`. PNG is native lossless full-window SDR, at source scale, without
+shadow/cursor/audio/child windows and without resizing/upscaling. Preserve all
+images including staging files; failures never authorize image deletion.
+The default deadline is5seconds; `--deadline-ms` accepts100–10000. Pixel ceilings
+4096 per side and8,388,608 total refuse larger output rather than downscale it.
+
+Metadata binds PID/bundle/launch and CGID, records actual window/filter rectangles,
+point_pixel_scale and PNG dimensions/hash, and provides verified screen-to-image
+and window-local-to-image affines when the source APIs establish them. A changed
+process/window/frame/display configuration refuses. This is an independent external
+observation, not an atomic GPU frame or a proof of visibility/occlusion.
+
+Associate with existing SDK geometry without modifying its JSON. Confirm the same
+process/window and settled state. A source-proven root offset `(rx, ry)` in the
+window maps local `(x,y)` through the window-local affine after adding that offset;
+for natural scale `s`, this is `(s*(x+rx), s*(y+ry))`. Use exact per-state metadata,
+not a prior window height. GPUI coordinates already in window-content space still
+need the actual content-to-full-window inset. SwiftUI-global is not screen space.
+When an offset/space is uncertain, verify it against native bounds and selected
+image edges; do not invent it. A Snapshot's `captures: []` does not prohibit this
+external association. Never require new donor-side bridges or GPU-frame tokens
+merely to use independently observed screenshot/geometry evidence.
+
+Show the retained native PNG inline. Distinguish derived association from reported
+source facts and preserve unknown layout/hit/paint properties. No PNG payload or
+private UI content is sent to another service merely by successful capture.

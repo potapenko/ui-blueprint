@@ -41,6 +41,7 @@ Read only the reference needed for the task:
 | Inspect, measure, check or compare saved data; installation smoke example | [Analysis](references/analysis.md) |
 | Existing browser connection + exact page URL + one component | [Web](references/web.md) |
 | Explicit opt-in Kotlin Compose Desktop/macOS or Android geometry | [Compose](references/compose.md) |
+| Capture an independent lossless PNG of an exact native window | [macOS](references/macos.md#independent-native-png-from-the-selected-window) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
 | Opt-in SwiftUI window/root geometry or supplied SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
 | Opt-in GPUI window/root geometry or supplied Debug snapshot | [GPUI](references/gpui.md) and [Analysis](references/analysis.md) |

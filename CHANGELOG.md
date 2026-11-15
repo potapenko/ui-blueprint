@@ -3,6 +3,16 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.3.0
+
+- Add `capture-window` for an exact already-running macOS process/window: independent
+  lossless PNG, source dimensions/scale, no-shadow convention and attributable
+  mapping metadata without application instrumentation changes.
+- Add scoped `--list-windows` numeric metadata for the selected PID and a matching
+  installed skill recipe. Existing SDK Snapshots and geometry commands are unchanged.
+- Local candidate only until separately authorized publication; older installed
+  versions remain available for verified rollback.
+
 ## 0.2.0
 
 Window-root geometry and matching agent installation. Install the source release

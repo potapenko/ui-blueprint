@@ -13,6 +13,7 @@
 
 | Контракт | Read when / роль |
 | --- | --- |
+| [UIB.NATIVE-CAPTURE@1](native-capture.md) | Exact native window PNG and attributable coordinate metadata |
 | [UIB.GPUI-PROBE@2](gpui-probe.md) | GPUI window-root and explicit-subtree layout measurement and canonical export |
 | [UIB.SWIFTUI-PROBE@3](swiftui-probe.md) | Explicit SwiftUI root/subset layout measurement and canonical export |
 | [UIB.SWIFTUI-NORMAL-SEARCH@1](swiftui-normal-search.md) | Ordinary localhost Search qualification without fixture/error injection |
