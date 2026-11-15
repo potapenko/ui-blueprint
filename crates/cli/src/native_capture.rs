@@ -6,7 +6,7 @@ pub(crate) fn execute(args: impl Iterator<Item = OsString>) -> Failure {
     #[cfg(all(target_os = "macos", feature = "macos"))]
     {
         use std::{os::unix::process::CommandExt, process::Command};
-        let Ok(executable) = std::env::current_exe() else {
+        let Ok(executable) = std::env::current_exe().and_then(|path| path.canonicalize()) else {
             return Failure::io();
         };
         let Some(parent) = executable.parent() else {

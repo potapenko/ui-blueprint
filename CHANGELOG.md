@@ -3,6 +3,11 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.3.1
+
+- Resolve the installed CLI symlink before locating the matching native helper,
+  so `capture-window` works through the normal `~/.local/bin/uiblueprint` entry.
+
 ## 0.3.0
 
 - Add `capture-window` for an exact already-running macOS process/window: independent
