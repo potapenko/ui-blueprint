@@ -29,7 +29,7 @@ caller-owned nonsymlink directory. Conflicts refuse without overwriting; failure
 remove only files created by this attempt with unchanged inode identity. Success
 prints their paths as JSON after both files close. Input metadata is strict bounded
 JSON; helper calls each have3s timeout,4096-byte output admission and sanitized errors.
-Matching bundle manifest hashes are checked before executable use. Python belongs
+Compatible native/combined manifest4 and5 hashes are checked before executable use. Python belongs
 only to this optional preparation tool, never the core/native Observe dependency.
 Connection1.0.0 and core0.1 Request remain unchanged. New UUID request/session IDs;
 Surface ax-focused-REQUEST with generation REQUEST. Source process generation is

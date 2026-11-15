@@ -61,6 +61,15 @@ output is cache/unverified; layout pass is not a presented GPU frame. Native chr
 unmarked internals, unmaterialized rows and other OS windows are not invented.
 AX/hit/paint/visibility and general screen/image transforms remain unknown.
 
+## Portable source dependency
+
+`python3 plugins/gpui/package-source.py --revision FULL_COMMIT --out NEW_TEMP_DIR`
+exports the unchanged SDK and required canonical schema library with standalone
+manifests, exact locked runtime dependencies, MIT license and sdk-source.json hashes.
+The consumer may vendor that directory in its authorized project; no dependency
+on a sibling UI Blueprint checkout remains. This is an explicit source export,
+not a registry publication or an automatic app integration.
+
 ## Run the native example
 
 From the checkout, with the pinned toolchain/dependencies already available:
