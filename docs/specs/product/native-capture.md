@@ -1,7 +1,7 @@
 # Exact native window PNG
 
 - Node type: leaf; domain: `uib.native-capture`; contract: `UIB.NATIVE-CAPTURE@1`.
-- Authority: Active / Evolving; runtime acceptance pending.
+- Authority: Active / Evolving; bounded local qualification: [delivery](../../plans/native-window-capture.md).
 - Authority source: direct user messages01a1ddf8-8471-7e91-88d4-dc38e80cf501 and
   01a1ddfa-0e60-74d2-b771-de13f9467652, chat01a1dcba-7955-7591-9bfb-4d0078eea8cf,
   2026-11-15: Blueprint itself captures the native window; donors remain read-only.
