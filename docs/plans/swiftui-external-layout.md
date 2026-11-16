@@ -79,8 +79,8 @@ before command execution;513-byte inline startup input reproduces the LLDB pipe
 failure without a target. Both owners closed those failures; no product PID is
 leased to this chat now. Existing installed0.3.2 remains unchanged.
 
-Current package restores DEBUG-CAPTURE.DATA/PRIVACY/LIFECYCLE under contract@5,
-registry78. Task-owned writes: capture/field-reader/snapshot/recovery Python
+Current package restores DEBUG-CAPTURE.DATA/PRIVACY/LIFECYCLE under contract@6,
+registry79. Task-owned writes: capture/field-reader/snapshot/recovery Python
 modules, their three focused checks, this state, candidate contract, registry and
 candidate recipe. Existing SDK/AX/GPUI paths and unrelated work remain protected.
 The exact-image/target-ABI checks are implementation of existing privacy/lifecycle
@@ -138,11 +138,19 @@ menus closed,1/39/Common17/Ready-paused. Public native helper independently agre
 Old72842 is absent and is not reused. Owner's unchanged-copy/env29/signature receipt:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphraseme-services-debug-source-11-kp12lrk3/run-identity.json`.
 Request ID is services-settings-qualification-1. Other consumer identities remain
-closed. Product hold cannot parse termination commands or call Kill; receipt command
-is null and a separate owner recovery decision is required. Capture is owner-run,
+closed. 9407's product command=null was rejected by review: it could hold but not execute
+a later owner decision. @6 now supplies a distinct terminate-admitted-source
+command, bound to the retained PID/generation/owner. Observe never writes it.
+The owner must obtain separate human confirmation at an actual unsafe outcome
+before writing this command; no advance hypothetical kill grant or general GO.
+The concrete command uses attached SBProcess.Kill, not external SIGKILL/teardown.
+`lifetime-owner-recovery-v2-summary.json` and its source harness in the retained
+root qualify the exact route on a synthetic process: wrong fixture action and
+foreign/partial commands hold; matching explicit action yields observed source
+termination, debugger exit0 and target absence. No product process was involved. Capture is owner-run,
 one attempt, initial refusal→stop, no retry/quota increase/blind SIGCONT.
 
-Next: affected check of this narrow admission/no-product-kill delta, frozen5-module
+Next: affected check of the executable separate owner-recovery route, frozen5-module
 candidate handoff to Services root, actual Settings outcome, then compatible local
 delivery only if qualification succeeds. Reels/Clip/Library await that outcome.
 No new agents, donor modifications, product termination or production release.

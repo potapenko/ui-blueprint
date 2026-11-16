@@ -57,7 +57,7 @@ class RecoveryInput(unittest.TestCase):
                 Kill=lambda: (kills.append(1) or SimpleNamespace(Success=lambda: success)))
             with patch('swiftui_recovery_control.termination_requested', return_value=command), \
                     patch('time.sleep', return_value=None):
-                value = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None, allow_fixture_termination=True)
+                value = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None, termination_action='terminate-owned-fixture')
             self.assertEqual(value, expected)
             self.assertEqual(len(kills), int(command))
 
@@ -70,7 +70,7 @@ class RecoveryInput(unittest.TestCase):
         def unavailable(_): raise OSError()
         with patch('swiftui_recovery_control.termination_requested', return_value=True), \
                 patch('time.sleep', return_value=None):
-            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', unavailable, allow_fixture_termination=True)
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', unavailable, termination_action='terminate-owned-fixture')
         self.assertEqual(result, 'exit_after_failed_owner_command')
         self.assertEqual(kills, [1])
 
@@ -88,12 +88,12 @@ class RecoveryInput(unittest.TestCase):
             if effect is not None: raise effect
         with patch('swiftui_recovery_control.termination_requested', return_value=False), \
                 patch('time.sleep', side_effect=delay):
-            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None, allow_fixture_termination=True)
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None, termination_action='terminate-owned-fixture')
         self.assertEqual(result, 'external_target_exit')
         process.Kill.assert_not_called(); process.Detach.assert_not_called()
         self.assertEqual(debugger.SetAsync.call_count, 2)
 
-    def test_product_hold_cannot_consume_even_a_matching_termination_command(self):
+    def test_hold_without_action_cannot_consume_a_termination_command(self):
         from unittest.mock import Mock
         lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
         debugger = SimpleNamespace(SetAsync=lambda _: None)
@@ -106,6 +106,40 @@ class RecoveryInput(unittest.TestCase):
         self.assertEqual(result, 'external_target_exit')
         self.assertIsNone(receipts[0]['command'])
         reader.assert_not_called(); process.Kill.assert_not_called(); process.Detach.assert_not_called()
+
+    def test_product_action_requires_exact_separate_command(self):
+        with tempfile.TemporaryDirectory(prefix='uib-product-recovery-command-') as directory:
+            root = Path(directory); path = root/'command.json'
+            fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY)
+            valid = dict(pid=123, generation='123:17.5', owner='held-owner',
+                         action='terminate-admitted-source')
+            def allowed():
+                return termination_requested(fd, path.name, 123, '123:17.5', 'held-owner',
+                                             'terminate-admitted-source')
+            try:
+                self.assertFalse(allowed())
+                for field, replacement in [('action', 'terminate-owned-fixture'), ('pid', 124),
+                        ('generation', '123:18.5'), ('owner', 'another-owner')]:
+                    path.write_text(json.dumps({**valid, field: replacement})); path.chmod(0o600)
+                    self.assertFalse(allowed())
+                path.write_text(json.dumps(valid))
+                self.assertTrue(allowed())
+                self.assertFalse(termination_requested(fd, path.name, 123, '123:17.5', 'held-owner'))
+            finally:
+                os.close(fd)
+
+    def test_admitted_source_exit_is_not_labelled_as_fixture(self):
+        from unittest.mock import Mock
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        debugger = SimpleNamespace(SetAsync=lambda _: None)
+        process = Mock(); process.GetState.side_effect = [5, 10]
+        process.IsValid.return_value = True; process.Kill.return_value.Success.return_value = True
+        with patch('swiftui_recovery_control.termination_requested', return_value=True), \
+                patch('time.sleep', return_value=None):
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None,
+                                     termination_action='terminate-admitted-source')
+        self.assertEqual(result, 'owner_terminated_source')
+        process.Kill.assert_called_once()
 
 
 if __name__ == '__main__':

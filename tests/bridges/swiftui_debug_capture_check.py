@@ -178,7 +178,7 @@ class CanonicalPrivacy(unittest.TestCase):
             result = json.loads((out/'manifest-own-fixture.json').read_bytes())
             self.assertEqual(result['cleanup'], 'external_target_exit')
             hold.assert_called_once()
-            self.assertTrue(hold.call_args.kwargs['allow_fixture_termination'])
+            self.assertEqual(hold.call_args.kwargs['termination_action'], 'terminate-owned-fixture')
             self.assertEqual(result['status'], 'failed')
             self.assertEqual(detached, [])
             self.assertFalse((out/'snapshot-own-fixture.json').exists())
@@ -186,7 +186,7 @@ class CanonicalPrivacy(unittest.TestCase):
         bare = object.__new__(capture.Calls); bare.inflight = True
         self.assertFalse(bare.close())
 
-    def test_admitted_product_interruption_disables_fixture_termination(self):
+    def test_admitted_product_interruption_selects_distinct_owner_action(self):
         req_value = copy.deepcopy(REQ)
         req_value['expected_bundle'] = 'me.playphraseme.reference.services.test'
         binding = tuple(req_value[k] for k in ('request_id', 'pid', 'expected_bundle',
@@ -210,7 +210,7 @@ class CanonicalPrivacy(unittest.TestCase):
                     patch.object(capture, 'Calls', return_value=calls), \
                     patch.object(capture, 'retain_debugger', return_value='external_target_exit') as hold:
                 capture.capture(debugger, str(req), '', str(out))
-            self.assertFalse(hold.call_args.kwargs['allow_fixture_termination'])
+            self.assertEqual(hold.call_args.kwargs['termination_action'], 'terminate-admitted-source')
             self.assertFalse((out/'snapshot-own-fixture.json').exists())
 
     def test_acquisition_budget_reserves_pool_cleanup_inside_total_cap(self):

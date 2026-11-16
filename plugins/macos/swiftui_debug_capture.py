@@ -2,8 +2,8 @@
 """Qualified-profile candidate: existing SwiftUI getter to canonical layout.
 
 No app launch or environment changes. This candidate is not installed/released.
-In-flight failure retains debugger ownership. Only an explicit matching fixture
-owner command can terminate that synthetic process; no automatic kill/restart.
+In-flight failure retains debugger ownership. Only a separately authorized,
+matching owner command can terminate the held process; Observe never writes that command and never automatically kills/restarts.
 """
 import sys
 sys.dont_write_bytecode = True
@@ -520,7 +520,7 @@ def capture(debugger, request_path, bundle_path, output_path):
                     write_new(fd, 'recovery-'+req['request_id']+'.json', encode(checkpoint))
                 outcome['cleanup'] = retain_debugger(debugger, process, lldb, fd,
                     req['request_id'], req['pid'], generation, owner, publish,
-                    allow_fixture_termination=fixture)
+                    termination_action='terminate-owned-fixture' if fixture else 'terminate-admitted-source')
         if not safe:
             if process is None or not process.IsValid():
                 outcome['cleanup'] = 'debugger_ownership_lost'

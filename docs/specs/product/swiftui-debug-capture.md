@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@5`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@6`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -108,17 +108,29 @@ The withdrawn implementation did not meet the required stopped-state preservatio
 this host rejects keep-stopped detach and debugger teardown can resume the target.
 The replacement must retain debugger ownership until an explicit owner decision;
 it may not silently resume, retry, terminate the target or claim safe teardown.
-For owned synthetic fixtures only, the retained owner accepts an explicit private
-termination command bound to the captured PID, generation and random owner token.
-Missing, partial, malformed or foreign commands keep the debugger held. A command
-is attempted once; failure never triggers retries. Confirmed owner termination,
-external exit and externally lost debugger ownership have distinct outcomes.
-For admitted product targets, owner-command parsing and Kill are disabled:
-retain LLDB/launcher, publish the recovery receipt and return control to the source
-owner for a separate recovery decision. Capture permission is not termination or
-resume permission; there is no automatic restoration claim for an interrupted call.
-No product termination path is enabled. If recovery receipt IO fails, retain
-ownership rather than exit; forced debugger/host loss is not a safe recovery.
+The retained debugger exposes a separate private command channel bound to the
+captured PID, generation and random owner token. Fixture action is
+`terminate-owned-fixture`; the single admitted product action is distinct:
+`terminate-admitted-source`. A command with the wrong action/identity/owner or
+partial/malformed input keeps holding. The selected action is fixed by the capture
+owner, not supplied as new authority by the command. One matching command is
+attempted once through the already attached SBProcess.Kill; failures never retry.
+
+Observe never writes a recovery command. For product recovery, before writing the
+command the source owner must obtain a separate explicit human decision to forcibly
+terminate the exact held diagnostic copy. Diagnostic/reopen permission is not that
+decision. Ask only if the unsafe outcome actually occurs; channel availability is
+not permission to execute it. Report possible loss of unsaved state in that copy.
+Normal capture does not require advance permission for hypothetical termination.
+The owner then copies trusted checkpoint PID/generation/owner plus the fixed action
+into the indicated0600 command file. The held debugger consumes it and reports
+confirmed termination only on an observed exit; external exit and failed-command
+exit remain distinct. External SIGKILL/debugger teardown are not this route.
+
+@6 repairs the9407 handoff's non-executable product recovery boundary without
+adding automatic recovery authority. Fixture qualification of this command route
+and affected non-author review precede the product attempt. Receipt IO failure
+keeps ownership; forced debugger/host loss remains outside safe-recovery guarantees.
 
 ## Acceptance
 

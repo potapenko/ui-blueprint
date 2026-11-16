@@ -80,7 +80,8 @@ an OS foreground guarantee or evidence that outside events were processed while
 stopped. The application is never activated to obtain the values.
 
 Recoverable refusal after a completed call yields no Snapshot and
-`detached_restored`; the same process can be captured again with a new request.
+`detached_restored`; this qualification nevertheless stops on its first refusal.
+A further attempt requires its own explicit finite handoff.
 The withdrawn implementation used `owner_recovery_required` after an interrupted
 getter. It did not prove that the target stayed stopped after debugger teardown.
 Do not use it for product recovery or treat a blind SIGCONT as safe restoration.
@@ -93,11 +94,21 @@ is claimed.
 This LLDB target rejects `Detach(True)`. An interrupted call now keeps its owning
 LLDB process alive. `recovery-REQUEST.json` contains the exact PID, generation,
 random owner token and command filename. Invalid/partial/foreign commands keep
-holding. For a product target `command` is null: command parsing and Kill are disabled;
-keep both processes alive and obtain a separate owner recovery decision.
-Only the synthetic fixture owner may write a0600 command in the same
-private directory, with exactly those PID/generation/owner fields and
-`action: "terminate-owned-fixture"`. That explicit action is attempted once.
+holding. The checkpoint also fixes `termination_action`: fixtures use
+`terminate-owned-fixture`, the admitted source uses `terminate-admitted-source`.
+Observe never creates this command. For an unsafe product outcome, first present
+the exact held PID/bundle/generation and possible loss of unsaved changes in this
+copy, and obtain a separate explicit human confirmation to forcibly terminate it.
+Diagnostic launch or reopening approval is not that confirmation. No advance
+permission for hypothetical termination is required for ordinary capture.
+
+Only AFTER that confirmation, the source owner writes exactly the trusted
+checkpoint's PID/generation/owner plus `action: "terminate-admitted-source"` to
+its indicated command filename, exclusive0600 in the same private directory.
+The attached debugger executes SBProcess.Kill once and waits for an observed exit;
+no external signal/reattach or debugger teardown substitutes for this operation.
+The frozen handoff includes the exact conditional command for this target. If the
+command fails or outcome is unknown, keep holding and report; never retry blindly.
 The launcher uses an isolated child session and does not kill LLDB on ordinary
 SIGINT/SIGTERM/SIGHUP cancellation; it waits for the owned debugger to finish.
 Repeated wait, async-setup or backoff interrupts keep ownership. This means

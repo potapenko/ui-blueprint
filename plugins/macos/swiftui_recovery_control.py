@@ -8,7 +8,10 @@ import os
 import stat
 
 
-def termination_requested(directory_fd, filename, expected_pid, expected_generation, expected_owner):
+def termination_requested(directory_fd, filename, expected_pid, expected_generation, expected_owner,
+                          expected_action='terminate-owned-fixture'):
+    if expected_action not in ('terminate-owned-fixture', 'terminate-admitted-source'):
+        return False
     # Expected values belong to the retained checkpoint, never to this command.
     if (type(expected_pid) is not int or expected_pid <= 0
             or not isinstance(expected_generation, str) or not expected_generation
@@ -39,14 +42,14 @@ def termination_requested(directory_fd, filename, expected_pid, expected_generat
                 and type(value['pid']) is int and value['pid'] == expected_pid
                 and value['generation'] == expected_generation
                 and value['owner'] == expected_owner
-                and value['action'] == 'terminate-owned-fixture')
+                and value['action'] == expected_action)
     except (OSError, ValueError, UnicodeError, RecursionError):
         return False
 
 
 def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, generation, owner, publish,
-                    allow_fixture_termination=False):
-    """Retain target ownership; only admitted fixtures accept termination commands.
+                    termination_action=None):
+    """Retain ownership; an explicit bound owner command is separate from Observe.
 
     The SBProcess stays attached to the original process; no PID-based reattach
     or signal is used. publish accepts fixed-code records, not debugger text.
@@ -56,7 +59,8 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
     attempted = accepted = False
     async_ready = False
     checkpoint = dict(status='waiting_owner', pid=pid, generation=generation,
-                      owner=owner, command=command if allow_fixture_termination else None,
+                      owner=owner, command=command if termination_action else None,
+                      termination_action=termination_action,
                       detach_attempted=False)
     published = False
     while True:
@@ -73,12 +77,16 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
                     pass  # Receipt IO must not abandon a live interrupted call.
             state = process.GetState()
             if state == lldb.eStateExited:
-                return ('owner_terminated_fixture' if accepted else
-                        'exit_after_failed_owner_command' if attempted else 'external_target_exit')
+                if accepted:
+                    return ('owner_terminated_source' if termination_action == 'terminate-admitted-source'
+                            else 'owner_terminated_fixture')
+                return 'exit_after_failed_owner_command' if attempted else 'external_target_exit'
             if state == lldb.eStateDetached or not process.IsValid():
                 return 'debugger_ownership_lost'
-            if allow_fixture_termination and not attempted and termination_requested(directory_fd, command, pid, generation, owner):
-                # Only the admitted synthetic-fixture branch can reach this action.
+            if termination_action and not attempted and termination_requested(
+                    directory_fd, command, pid, generation, owner, termination_action):
+                # Observe never writes this command. For a product the owner must
+                # first obtain separate human authorization for this exact target.
                 # Mark before dispatch: even an exception must not retry termination.
                 attempted = True
                 accepted = process.Kill().Success()
