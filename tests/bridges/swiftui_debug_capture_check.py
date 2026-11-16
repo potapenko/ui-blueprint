@@ -6,6 +6,7 @@ import copy
 import json
 from pathlib import Path
 import subprocess
+import shutil
 import tempfile
 import unittest
 from types import SimpleNamespace
@@ -131,7 +132,7 @@ class CanonicalPrivacy(unittest.TestCase):
         with self.assertRaises(codec.Refusal) as error:
             codec.request(json.dumps(req).encode())
         self.assertEqual(str(error.exception), 'invalid_identity')
-        result = subprocess.run([sys.executable, '-B', str(ROOT/'plugins/macos/swiftui_debug_capture.py'),
+        result = subprocess.run([shutil.which('python3'), '-B', str(ROOT/'plugins/macos/swiftui_debug_capture.py'),
                                   '--private-'+CANARY], capture_output=True, timeout=5)
         self.assertNotIn(CANARY.encode(), result.stdout+result.stderr)
         self.assertNotEqual(result.returncode, 0)
