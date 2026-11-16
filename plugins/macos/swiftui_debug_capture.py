@@ -2,7 +2,8 @@
 """Qualified-profile candidate: existing SwiftUI getter to canonical layout.
 
 No app launch or environment changes. This candidate is not installed/released.
-In-flight failure requires owner recovery; it never kills or restarts a target.
+In-flight failure retains debugger ownership. Only an explicit matching fixture
+owner command can terminate that synthetic process; no automatic kill/restart.
 """
 import sys
 sys.dont_write_bytecode = True
@@ -16,8 +17,11 @@ import stat
 import subprocess
 import tempfile
 import time
+import uuid
 
 import native_prepare
+from swiftui_debug_fields import GETTER, SWIFT_SYMBOLS, collect_fields
+from swiftui_recovery_control import retain_debugger
 from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, snapshot
 
 
@@ -54,7 +58,7 @@ def output_directory(path, req):
         info = os.fstat(fd)
         if info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) & 0o077:
             raise Refusal('private_destination_required', 2)
-        for prefix in ('snapshot-', 'manifest-'):
+        for prefix in ('snapshot-', 'manifest-', 'recovery-', 'owner-command-'):
             try:
                 os.stat(prefix+req['request_id']+'.json', dir_fd=fd, follow_symlinks=False)
             except FileNotFoundError:
@@ -178,6 +182,7 @@ class Calls:
         self.bp = self.memory = None
         self.suspended = []
         self.pool = None
+        self.owned_array = None
         self.code = self.read(self.pc, 16)
         self.return_code = self.read(self.return_pc, 16)
         self.redzone = self.read(self.sp-128, 128)
@@ -224,7 +229,8 @@ class Calls:
             return self.symbols[name]
         self.admit()
         owners = {'objc_msgSend': 'libobjcMsgSend.dylib', 'NSApp': 'AppKit'}
-        owner = owners.get(name, 'libobjc.A.dylib')
+        owner = ('SwiftUI' if name == GETTER else 'libswiftCore.dylib'
+                 if name in SWIFT_SYMBOLS else owners.get(name, 'libobjc.A.dylib'))
         addresses = set()
         for context in self.t.FindSymbols(name):
             if context.GetModule().GetFileSpec().GetFilename() == owner:
@@ -256,8 +262,8 @@ class Calls:
 
     def call(self, name, *args):
         self.admit()
-        # The final pool-pop owns one reserved call inside the same total256 cap.
-        limit = 256 if name == 'objc_autoreleasePoolPop' else 255
+        # Reserve array release plus pool-pop inside the same total256 cap.
+        limit = 256 if name == 'objc_autoreleasePoolPop' else 255 if name == 'swift_release' else 254
         if self.count >= limit or len(args) > 8:
             raise Refusal('call_limit', 2)
         address = self.symbol(name)
@@ -304,6 +310,10 @@ class Calls:
             raise Refusal('unexpected_breakpoint_owner_recovery')
         self.inflight = False
         value = tuple(frame.FindRegister('x'+str(i)).GetValueAsUnsigned() for i in range(4))
+        if name == GETTER:
+            self.owned_array = value[0]
+        elif name == 'swift_release':
+            self.owned_array = None
         self.restore()
         return value
 
@@ -332,9 +342,11 @@ class Calls:
         try:
             if self.altered:
                 self.restore()
+            # All completed-call cleanup shares one bounded two-second interval.
+            self.deadline = time.monotonic()+2
+            if self.owned_array:
+                self.call('swift_release', self.owned_array)
             if self.pool:
-                # A completed capture may use a separately bounded cleanup call.
-                self.deadline = time.monotonic()+2
                 self.call('objc_autoreleasePoolPop', self.pool)
                 self.pool = None
             if self.memory is not None and self.p.DeallocateMemory(self.memory).Fail():
@@ -384,11 +396,7 @@ def collect(calls, req):
     # Multiple hosted surfaces must never be merged into one invented origin.
     if len(hosts) != 1:
         raise Refusal('hosting_surface_unresolved')
-    data = c.objc(hosts[0], 'makeViewDebugData')
-    length = c.objc(data, 'length')
-    if length > MAX_BYTES:
-        raise Refusal('source_byte_limit', 2)
-    raw = c.read(c.objc(data, 'bytes'), length)
+    raw = collect_fields(c, hosts[0], req)
     if c.objc(window, 'windowNumber') != req['window_id'] or c.objc(window, 'contentView') != root:
         raise Refusal('stale_window')
     flags = dict(is_key_window=bool(c.objc(window, 'isKeyWindow')),
@@ -404,6 +412,8 @@ def capture(debugger, request_path, bundle_path, output_path):
     req = read_request(request_path)
     fd = output_directory(output_path, req)
     process = calls = None
+    owner = uuid.uuid4().hex
+    before = None
     safe = True
     payload = None
     outcome = dict(manifest_version='1.0.0', request_id=req['request_id'], status='failed', code='capture_failed', exit_status=1,
@@ -414,6 +424,7 @@ def capture(debugger, request_path, bundle_path, output_path):
         before = metadata(helper, req)
         debugger.SetAsync(False)
         debugger.HandleCommand('settings set target.require-hardware-breakpoint true')
+        debugger.HandleCommand('settings set target.load-script-from-symbol-file false')
         target = debugger.CreateTarget('')
         error = lldb.SBError()
         process = target.AttachToProcessWithID(debugger.GetListener(), req['pid'], error)
@@ -431,7 +442,7 @@ def capture(debugger, request_path, bundle_path, output_path):
         calls.initialize()
         raw, window_state = collect(calls, req)
         calls.admit()
-        # The raw model-reflecting response remains transient and is never published.
+        # Only already allowlisted fields reach the canonical encoder.
         payload = snapshot(raw, req, before, start, time.monotonic())
         del raw
         if metadata(helper, req, deadline) != before:
@@ -451,12 +462,25 @@ def capture(debugger, request_path, bundle_path, output_path):
             safe = calls.close()
             outcome['calls'] = calls.count
         if process is not None and process.IsValid() and process.GetState() != lldb.eStateDetached:
-            if process.GetState() != lldb.eStateStopped:
-                process.Stop()
-            if process.Detach(not safe).Fail():
-                safe = False
-            outcome['cleanup'] = 'detached_restored' if safe else 'owner_recovery_required'
+            if safe:
+                if process.GetState() != lldb.eStateStopped:
+                    process.Stop()
+                safe = process.Detach(False).Success()
+                outcome['cleanup'] = 'detached_restored' if safe else 'owner_recovery_required'
+            if not safe:
+                payload = None
+                outcome.update(status='failed', code='owner_recovery_required', exit_status=4,
+                               snapshot=None, native_window_state=None)
+                # Never call unsupported Detach(True). Keep the owning debugger
+                # alive until the exact fixture owner decides or an exit is observed.
+                generation = before['target']['generation'] if before else str(req['pid'])+':unverified'
+                def publish(checkpoint):
+                    write_new(fd, 'recovery-'+req['request_id']+'.json', encode(checkpoint))
+                outcome['cleanup'] = retain_debugger(debugger, process, lldb, fd,
+                    req['request_id'], req['pid'], generation, owner, publish)
         if not safe:
+            if process is None or not process.IsValid():
+                outcome['cleanup'] = 'debugger_ownership_lost'
             payload = None
             outcome.update(status='failed', code='owner_recovery_required', exit_status=4,
                            snapshot=None, native_window_state=None)

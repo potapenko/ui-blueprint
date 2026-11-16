@@ -101,7 +101,7 @@ def snapshot(raw, req, metadata, start, end):
     nonce = uuid.uuid4().hex
     surface = dict(id='native-window-'+str(req['window_id']), generation=nonce)
     evidence = dict(observation_id='debug-'+nonce, source_namespace=NAMESPACE,
-                    provenance='reported', method='NSHostingView.makeViewDebugData.position-size', uncertainty=None)
+                    provenance='reported', method='NSHostingView._viewDebugData.validated-fields.position-size', uncertainty=None)
     nodes = []
 
     def prop(field, state):

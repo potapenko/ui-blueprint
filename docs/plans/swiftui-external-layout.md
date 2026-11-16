@@ -64,49 +64,60 @@ This initial fixture experiment did not operate a consumer. A later explicitly
 leased read-only Reels diagnostic occurred after its failed consumer capture;
 it did not establish safe detach or post-debugger-exit lifetime.
 
-## Current candidate and next finite package
+## Current coherent fixture-only candidate
 
-1. Direct user reply in this support chat on2026-11-16 authorizes the separate
-   byte-identical product copy with `SWIFTUI_VIEW_DEBUG=29` and brief addressed
-   LLDB layout capture. This does not authorize donor file/code changes.
-2. Geometry-only extraction is implemented in `plugins/macos/swiftui_debug_snapshot.py`
-   and the addressed `swiftui_debug_capture.py` candidate. The system serializer
-   includes reflected property1/model values even with mask29. Never save/log its
-   raw response from a product app. Scope, allocation/byte/node/depth budgets,
-   cleanup and timeout effects have an explicit candidate contract; review is pending.
-3. Resolve source identity and coordinate semantics. The returned tree has no
-   stable semantic IDs; keys must be observation-scoped unless stronger evidence
-   exists. Serialized transform items are incomplete. Do not infer arbitrary
-   transforms or publish all positions in a universal window/image space.
-4. [DEBUG-CAPTURE@3](../specs/product/swiftui-debug-capture.md) is registered.
-   Twelve focused checks and actual canary/output-refusal→recapture passed. Reels'
-   non-author reviewer found call-budget, nonfinite and deadline defects in e6ecb1b;
-   affected re-review of a4a79d2 closed all3 findings and the UUID identity delta.
-   Both Python runtimes passed10/10; final-pin canary/refusal artifacts were checked.
-5. Both real a4a79d2 captures refused call_limit with restored detach. Reviewed
-   c89 outer-host pruning reduced fixture calls but Reels then failed inside the
-   getter. Its subsequent read-only diagnostic did not prove safe detach/lifetime;
-   the source owner recovered the isolated app. Clip independently hung before
-   command execution at LLDB SetInputString;513-byte no-target reproduction confirms
-   this separate startup transport defect. Product retries are withdrawn.
-6. Fixture-only corrections now use command-file startup and a distinct existing
-   entry return breakpoint with exact SP guard. The old original-PC return could
-   falsely accept a nested call. Darwin reports keep-stopped detach unsupported;
-   debugger exit can resume a stopped target. A retained-debugger fixture proved
-   explicit owner-command termination followed by known target/debugger exit.
-7. Field-only prototype reads existing `_viewDebugData` structures, without full
-   serialization: same167nodes/geometry,13calls,~81KiB,167model slots never read.
-   Host ABI oracle pins Data16B/Any32B/key1B and storage offsets. This is not yet a
-   product adapter: integrate bounded extraction and explicit recovery ownership,
-   then review and requalify one real scope before local delivery.
-   Actual reviewer status checked after the new packet: idle, last verdict c89;
-   Reels root was asked to dispatch the new finite review to that existing reviewer.
+Human reply in this support chat on2026-11-16 authorizes a separate unchanged
+product copy with process-local `SWIFTUI_VIEW_DEBUG=29` and brief addressed LLDB.
+Product retries nevertheless remain withdrawn until corrected-method review and
+new exact consumer ownership handoff. No donor code/assets/config files, JIT,
+injected libraries or executable writes are authorized.
 
-The earlier temporary driver has destructive fixture cleanup and must never be
-used on a consumer. The new candidate has no kill/restart path; uncertain in-flight
-failure reports stopped/owner_recovery_required. Its [recipe](../development/swiftui-debug-capture.md)
-states the historical interface and withdrawal. Source review was closed, but actual
-product qualification failed; installation, transforms and glyph/paint remain open.
+The original serializer path failed on real consumers: both a4 captures exhausted
+256calls; c89 outer-host pruning then failed inside the Reels getter. The read-only
+Reels diagnostic did not establish safe detach/lifetime. Clip independently hung
+before command execution;513-byte inline startup input reproduces the LLDB pipe
+failure without a target. Both owners closed those failures; no product PID is
+leased to this chat now. Existing installed0.3.2 remains unchanged.
+
+Current package restores DEBUG-CAPTURE.DATA/PRIVACY/LIFECYCLE under contract@4,
+registry77. Task-owned writes: capture/field-reader/snapshot/recovery Python
+modules, their three focused checks, this state, candidate contract, registry and
+candidate recipe. Existing SDK/AX/GPUI paths and unrelated work remain protected.
+The exact-image/target-ABI checks are implementation of existing privacy/lifecycle
+requirements; source feasibility does not create broader product authority.
+
+- Command-file LLDB startup avoids the observed inline-input deadlock.
+- Calls require the distinct executable entry return site, exact SP and BP/thread.
+- Field-only collection pins SwiftUI/SwiftUICore/libswiftCore UUIDs, target type
+  metadata, value witnesses and field offsets; native storage identity precedes
+  headers, exact tail ranges precede payloads, Any metadata precedes geometry.
+  Model/value slots and full serialization are excluded. Types are nominal short
+  names; generic arguments remain unreported. Canonical coordinates stay separate
+  source-local spaces with unknown transforms, no B0/window/PNG claim.
+- Getter return ownership is recorded before register restoration. Every completed
+  decoder refusal releases the array; release/pool share2s and2reserved calls.
+- Interrupted calls retain LLDB. Malformed/partial/foreign commands keep holding;
+  one explicit command binds PID/generation/random owner and can terminate only
+  the owned fixture. External exit and failed-command exit have distinct outcomes.
+  Forced debugger/host loss is not safe recovery; no product termination enabled.
+
+Runtime evidence in the retained system-temp root below:
+`integrated-run-path.txt`, `integrated-refusal-recapture.json`,
+`integrated-final-path.txt`, `lifetime-integrated-summary.json`.
+Final allowlist instrumentation:167model slots,0slot reads,77068read bytes,
+canary absent from reads/output. Actual167-node capture uses45calls; max_nodes1 refuses with37calls and restored
+detach, then same-generation recapture succeeds. Canonical validator/inspect pass;
+Rust measure returns exact Color width1888pt. Public metadata after debugger exit
+confirms the original fixture generation33990:1794853157.923368 remains alive.
+Controlled infinite-call fixture stays stopped with LLDB alive through partial,
+null, foreign-generation and foreign-owner commands. Explicit matching termination
+then produces target exit-9/debugger exit0 and target absence after debugger exit.
+This is fixture evidence, not product qualification.
+
+Next: one affected non-author review through Reels' existing authorized reviewer,
+then resolve findings, qualify one newly leased consumer case and prepare compatible
+local delivery. Do not wait for another user GO for authorized fixture corrections.
+No additional agents are authorized by this support assignment.
 
 Fixture, driver and original observations are in system temp:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`.

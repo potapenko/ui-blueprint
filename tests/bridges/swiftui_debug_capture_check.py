@@ -168,12 +168,14 @@ class CanonicalPrivacy(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix='uib-debug-recovery-') as directory:
             out = Path(directory); req = out/'request.json'; req.write_text(json.dumps(REQ))
             with patch.dict(sys.modules, lldb=lldb), patch.object(capture, 'verified_helper', return_value=None), \
-                    patch.object(capture, 'metadata', return_value=META), patch.object(capture, 'Calls', return_value=calls):
+                    patch.object(capture, 'metadata', return_value=META), patch.object(capture, 'Calls', return_value=calls), \
+                    patch.object(capture, 'retain_debugger', return_value='external_target_exit') as hold:
                 capture.capture(debugger, str(req), '', str(out))
             result = json.loads((out/'manifest-own-fixture.json').read_bytes())
-            self.assertEqual(result['cleanup'], 'owner_recovery_required')
+            self.assertEqual(result['cleanup'], 'external_target_exit')
+            hold.assert_called_once()
             self.assertEqual(result['status'], 'failed')
-            self.assertEqual(detached, [True])
+            self.assertEqual(detached, [])
             self.assertFalse((out/'snapshot-own-fixture.json').exists())
         # The in-flight cleanup branch performs no register writes, retry or kill.
         bare = object.__new__(capture.Calls); bare.inflight = True
@@ -181,8 +183,8 @@ class CanonicalPrivacy(unittest.TestCase):
 
     def test_acquisition_budget_reserves_pool_cleanup_inside_total_cap(self):
         calls = object.__new__(capture.Calls)
-        calls.deadline = float('inf'); calls.count = 255
-        calls.pool = 1; calls.memory = None; calls.inflight = calls.altered = False
+        calls.deadline = float('inf'); calls.count = 254
+        calls.owned_array = 9; calls.pool = 1; calls.memory = None; calls.inflight = calls.altered = False
         calls.pc = 100; calls.sp = 4096; calls.return_pc = 150; calls.return_sp = 3968; calls.suspended = []
         error = SimpleNamespace(Fail=lambda: False)
         frame = SimpleNamespace(GetPC=lambda: 150, GetSP=lambda: 3968,
@@ -206,7 +208,8 @@ class CanonicalPrivacy(unittest.TestCase):
         self.assertEqual(refused.exception.code, 'call_limit')
         self.assertEqual(invoked, [])
         self.assertTrue(calls.close())
-        self.assertEqual(invoked, ['objc_autoreleasePoolPop'])
+        self.assertEqual(invoked, ['swift_release', 'objc_autoreleasePoolPop'])
+        self.assertIsNone(calls.owned_array)
         self.assertEqual(calls.count, 256)
         self.assertIsNone(calls.pool)
 
@@ -224,6 +227,20 @@ class CanonicalPrivacy(unittest.TestCase):
         with patch.object(capture.time, 'monotonic', return_value=10), self.assertRaises(codec.Refusal):
             calls.call('objc_msgSend', 1, 2)
         self.assertTrue(calls.inflight)
+
+        # Returned ownership is registered before a possible restore failure.
+        frame.GetSP = lambda: 3968
+        frame.FindRegister = lambda _: SimpleNamespace(GetValueAsUnsigned=lambda: 0x9000)
+        calls.deadline = float('inf'); calls.inflight = False
+        calls.listener = SimpleNamespace(GetNextEvent=lambda _: False, WaitForEvent=lambda *_: True)
+        def restore_failure(): raise codec.Refusal('register_restore_failed')
+        calls.restore = restore_failure
+        with self.assertRaises(codec.Refusal): calls.call(capture.GETTER)
+        self.assertEqual(calls.owned_array, 0x9000)
+        self.assertFalse(calls.inflight)
+        # A returned release consumes ownership even if restoration then fails.
+        with self.assertRaises(codec.Refusal): calls.call('swift_release', 0x9000)
+        self.assertIsNone(calls.owned_array)
 
     def test_post_attach_identity_uses_remaining_acquisition_budget(self):
         actual = dict(metadata_version='1.0.0', status='known', target=META['target'],
@@ -254,7 +271,9 @@ class CanonicalPrivacy(unittest.TestCase):
             return values[obj, name]
         calls = SimpleNamespace(symbol=lambda _: 10, selector=lambda x: x, objc=objc,
             read=lambda address, _: (1).to_bytes(8, 'little') if address==10 else b'[]')
-        raw, flags = capture.collect(calls, REQ)
+        with patch.object(capture, 'collect_fields', return_value=b'[]') as fields:
+            raw, flags = capture.collect(calls, REQ)
+        fields.assert_called_once_with(calls, 4, REQ)
         self.assertEqual(raw, b'[]')
         self.assertNotIn((4, 'subviews'), messages)
         self.assertEqual(flags['values'], dict(is_key_window=False, is_main_window=True, app_is_active=True))

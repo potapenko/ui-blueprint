@@ -1,7 +1,8 @@
 # External SwiftUI capture candidate
 
 **WITHDRAWN from product captures.** The c89b277 consumer getter failed with
-owner recovery required. Post-debugger-exit lifetime and safe detach are not proved.
+owner recovery required. The replacement is qualified only on owned fixtures;
+independent review and a newly leased product case remain required.
 Do not run this recipe on product apps; retained code is for controlled fixtures
 and failure diagnosis only. A separate513-byte inline LLDB startup hang was also
 reproduced without a target. No new version has been installed or released.
@@ -48,11 +49,12 @@ python3 -B plugins/macos/swiftui_debug_capture.py \
 
 Successful output is `snapshot-REQUEST.json` (canonical core0.1) and
 `manifest-REQUEST.json` (manifest_version1.0.0), both exclusive0600. The manifest
-names the output and cleanup outcome. Raw reflected values never become files or
-debug output. Exit0 means a partial Snapshot was published;2 is invalid input or
+names the output and cleanup outcome. The replacement reads only qualified type/geometry fields; it never calls the
+full serializer or reads model/value Any payloads. Exit0 means a partial Snapshot was published;2 is invalid input or
 budget refusal;4 is unavailable/stale/interrupted;1 is setup/IO failure.
 
-`swiftui.debug.layout` nodes have observation-scoped keys and reported type names,
+`swiftui.debug.layout` nodes have observation-scoped keys and reported nominal short type names
+(without generic arguments),
 not persistent component IDs. The getter's fractional position/size is preserved;
 it is not silently rounded to the SDK's resolved bounds-anchor channel.
 Each node has a separate source-local space. `measure` can compute its width or
@@ -72,18 +74,32 @@ The withdrawn implementation used `owner_recovery_required` after an interrupted
 getter. It did not prove that the target stayed stopped after debugger teardown.
 Do not use it for product recovery or treat a blind SIGCONT as safe restoration.
 The acquisition budget starts immediately after successful attach and includes
-post-attach identity checks. Cleanup has a separate2s allowance and one reserved
-call within the total256. The framework getter's allocations and synchronous
+post-attach identity checks. Cleanup has a combined2s allowance and two reserved
+calls within the total256 for owned-array release and pool-pop. The framework getter's allocations and synchronous
 debugger/OS latency are opaque; no global memory or whole-attempt wall-clock limit
 is claimed.
 
-This LLDB target rejects `Detach(True)`; closing the
-debugger may resume or lose the target. The current method must not be used for
-product recovery. Owned-fixture work is replacing that teardown path with explicit
-retained debugger ownership, and replacing full serialization with field-only reads.
+This LLDB target rejects `Detach(True)`. An interrupted call now keeps its owning
+LLDB process alive. `recovery-REQUEST.json` contains the exact PID, generation,
+random owner token and command filename. Invalid/partial/foreign commands keep
+holding. Only the synthetic fixture owner may write a0600 command in the same
+private directory, with exactly those PID/generation/owner fields and
+`action: "terminate-owned-fixture"`. That explicit action is attempted once.
+The final manifest distinguishes confirmed owner termination, external exit,
+exit after a failed command and lost debugger ownership. Never kill the debugger
+to simulate recovery; forced debugger/host loss has no safe-resume guarantee.
 
-Checks: `python3 -B tests/bridges/swiftui_debug_capture_check.py`; the synthetic
-SwiftUI source is `tests/bridges/native/SwiftUIDebugFixture.swift`. The LLDB-only
-`swiftui_debug_canary.py` harness proves a model canary is present in transient
-getter input and absent from the canonical Snapshot/manifest. It is not a product
-capture recipe and accepts only the named synthetic fixture namespace.
+The field reader pins system-image UUIDs and checks target-resolved type metadata,
+value witnesses, field offsets, native storage and exact dictionary tail ranges.
+Unexpected profiles refuse. A completed getter return is owned before register
+restoration; decoder/refusal cleanup releases that array before popping the pool.
+This does not qualify arbitrary newer systems or prove a global allocation bound.
+
+Focused checks:
+`python3 -B tests/bridges/swiftui_debug_capture_check.py`,
+`python3 -B tests/bridges/swiftui_debug_fields_check.py`, and
+`python3 -B tests/bridges/swiftui_recovery_control_check.py`.
+The synthetic SwiftUI source is `tests/bridges/native/SwiftUIDebugFixture.swift`.
+The older serializer-based canary harness is historical; it does not exercise
+or qualify the new field-only path. Current runtime evidence and pending review
+are linked from [the active state](../plans/swiftui-external-layout.md).

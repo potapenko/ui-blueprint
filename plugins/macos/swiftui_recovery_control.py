@@ -42,3 +42,43 @@ def termination_requested(directory_fd, filename, expected_pid, expected_generat
                 and value['action'] == 'terminate-owned-fixture')
     except (OSError, ValueError, UnicodeError, RecursionError):
         return False
+
+
+def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, generation, owner, publish):
+    """Hold an owned fixture until an authenticated decision or observed exit.
+
+    The SBProcess stays attached to the original process; no PID-based reattach
+    or signal is used. publish accepts fixed-code records, not debugger text.
+    """
+    import time
+    command = 'owner-command-'+request_id+'.json'
+    attempted = accepted = False
+    debugger.SetAsync(True)
+    checkpoint = dict(status='waiting_owner', pid=pid, generation=generation,
+                      owner=owner, command=command, detach_attempted=False)
+    published = False
+    while True:
+        try:
+            if not published:
+                try:
+                    publish(checkpoint)
+                    published = True
+                except BaseException:
+                    pass  # Receipt IO must not abandon a live interrupted call.
+            state = process.GetState()
+            if state == lldb.eStateExited:
+                return ('owner_terminated_fixture' if accepted else
+                        'exit_after_failed_owner_command' if attempted else 'external_target_exit')
+            if state == lldb.eStateDetached or not process.IsValid():
+                return 'debugger_ownership_lost'
+            if not attempted and termination_requested(directory_fd, command, pid, generation, owner):
+                # This function is reached only through the synthetic-fixture gate.
+                # Mark before dispatch: even an exception must not retry termination.
+                attempted = True
+                accepted = process.Kill().Success()
+            time.sleep(.1)
+        except BaseException:
+            # Partial commands, interrupts, and debugger errors never detach/resume
+            # the uncertain frame or authorize a retry. Forced host/debugger death
+            # remains outside this process's recovery guarantees.
+            time.sleep(.1)
