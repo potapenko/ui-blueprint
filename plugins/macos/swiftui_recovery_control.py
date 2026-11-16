@@ -8,7 +8,12 @@ import os
 import stat
 
 
-def termination_requested(directory_fd, filename, expected_pid):
+def termination_requested(directory_fd, filename, expected_pid, expected_generation, expected_owner):
+    # Expected values belong to the retained checkpoint, never to this command.
+    if (type(expected_pid) is not int or expected_pid <= 0
+            or not isinstance(expected_generation, str) or not expected_generation
+            or not isinstance(expected_owner, str) or not expected_owner):
+        return False
     if '/' in filename or filename in ('', '.', '..'):
         return False
     try:
@@ -30,8 +35,10 @@ def termination_requested(directory_fd, filename, expected_pid):
                 result[key] = value
             return result
         value = json.loads(raw, object_pairs_hook=unique)
-        return (isinstance(value, dict) and set(value) == {'pid', 'action'}
+        return (isinstance(value, dict) and set(value) == {'pid', 'generation', 'owner', 'action'}
                 and type(value['pid']) is int and value['pid'] == expected_pid
+                and value['generation'] == expected_generation
+                and value['owner'] == expected_owner
                 and value['action'] == 'terminate-owned-fixture')
     except (OSError, ValueError, UnicodeError, RecursionError):
         return False
