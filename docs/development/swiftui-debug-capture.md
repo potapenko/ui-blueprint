@@ -68,18 +68,16 @@ stopped. The application is never activated to obtain the values.
 
 Recoverable refusal after a completed call yields no Snapshot and
 `detached_restored`; the same process can be captured again with a new request.
-If a getter is interrupted or restoration cannot be confirmed, no Snapshot is
-published and `owner_recovery_required` leaves the process stopped. The tool
-never kills/restarts it or silently resumes/retries uncertain execution. Its owner
-must resolve that state; do not treat a blind SIGCONT as proven recovery.
+The withdrawn implementation used `owner_recovery_required` after an interrupted
+getter. It did not prove that the target stayed stopped after debugger teardown.
+Do not use it for product recovery or treat a blind SIGCONT as safe restoration.
 The acquisition budget starts immediately after successful attach and includes
 post-attach identity checks. Cleanup has a separate2s allowance and one reserved
 call within the total256. The framework getter's allocations and synchronous
 debugger/OS latency are opaque; no global memory or whole-attempt wall-clock limit
 is claimed.
 
-Withdrawal correction: the earlier keep-stopped claim above is historical and
-failed runtime qualification. This LLDB target rejects `Detach(True)`; closing the
+This LLDB target rejects `Detach(True)`; closing the
 debugger may resume or lose the target. The current method must not be used for
 product recovery. Owned-fixture work is replacing that teardown path with explicit
 retained debugger ownership, and replacing full serialization with field-only reads.
