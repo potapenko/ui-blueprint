@@ -13,6 +13,7 @@ from pathlib import Path
 import platform
 import plistlib
 import shlex
+import signal
 import stat
 import subprocess
 import tempfile
@@ -39,8 +40,36 @@ def run_lldb(lldb_path, commands):
         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
         with os.fdopen(fd, 'w') as stream:
             stream.write(commands)
-        return subprocess.run([lldb_path, '--no-lldbinit', '--batch', '--source', str(path)],
-            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+        args = [lldb_path, '--no-lldbinit', '--batch', '--source', str(path)]
+        signals = (signal.SIGINT, signal.SIGTERM, signal.SIGHUP)
+        previous = {signum: signal.getsignal(signum) for signum in signals}
+        # Embedded hosts can own native handlers that Python represents as None;
+        # refuse before spawn rather than replace a handler we cannot restore.
+        if any(handler is None for handler in previous.values()):
+            raise Refusal('unsupported_launcher_signal_owner')
+        handlers = {}
+        try:
+            # Cancellation cannot tear down a debugger that may own an uncertain
+            # native call. Install before spawn; isolate terminal group signals.
+            for signum in signals:
+                signal.signal(signum, lambda *_: None)
+                handlers[signum] = previous[signum]
+            child = subprocess.Popen(args, stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+            # No subprocess.run or Popen context manager: their exception cleanup
+            # can kill/wait for the child outside the fixture owner's decision.
+            while True:
+                try:
+                    time.sleep(.1)
+                    returncode = child.wait()
+                    break
+                except BaseException:
+                    # The delay is inside the protected body on the next iteration.
+                    continue
+            return subprocess.CompletedProcess(args, returncode)
+        finally:
+            for signum, handler in handlers.items():
+                signal.signal(signum, handler)
 
 
 def read_request(path):

@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 import subprocess
 import shutil
+import os
+import signal
+import time
 import tempfile
 import unittest
 from types import SimpleNamespace
@@ -302,23 +305,74 @@ class CanonicalPrivacy(unittest.TestCase):
 
     def test_long_no_target_command_uses_private_source_file_then_removes_it(self):
         lldb = '/Applications/Xcode.app/Contents/Developer/usr/bin/lldb'
-        original = subprocess.run
+        original = subprocess.Popen
         command_files = []
-        def bounded_run(args, **kwargs):
+        def bounded_spawn(args, **kwargs):
             path = Path(args[-1]); command_files.append(path)
             self.assertEqual(args[-2], '--source')
             self.assertEqual(path.stat().st_mode & 0o777, 0o600)
             self.assertGreater(len(path.read_bytes()), 513)
-            return original(args, **kwargs, timeout=3)
+            self.assertTrue(kwargs["start_new_session"])
+            return original(args, **kwargs)
         with tempfile.TemporaryDirectory(prefix='uib-no-target-input-') as directory:
             marker = Path(directory)/'executed.txt'
             commands = 'script open('+repr(str(marker))+', "w").write("executed") # '+'x'*4096+'\n'
-            with patch.object(capture.subprocess, 'run', side_effect=bounded_run):
+            with patch.object(capture.subprocess, 'Popen', side_effect=bounded_spawn), \
+                    patch.object(capture.signal, 'getsignal', return_value=signal.SIG_DFL), \
+                    patch.object(capture.signal, 'signal', return_value=signal.SIG_DFL):
                 result = capture.run_lldb(lldb, commands)
             self.assertEqual(result.returncode, 0)
             self.assertEqual(marker.read_text(), 'executed')
         self.assertTrue(command_files)
         self.assertTrue(all(not path.exists() and not path.parent.exists() for path in command_files))
+
+    def test_launcher_repeated_wait_interrupts_do_not_kill_debugger(self):
+        from unittest.mock import Mock
+        before = {s: signal.getsignal(s) for s in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP)}
+        child = Mock()
+        child.wait.side_effect = [KeyboardInterrupt(), KeyboardInterrupt(), OSError(), 0]
+        with patch.object(capture.subprocess, 'Popen', return_value=child) as spawn, \
+                patch.object(capture.time, 'sleep', side_effect=[KeyboardInterrupt(), None, None, None, None]), \
+                patch.object(capture.signal, 'getsignal', return_value=signal.SIG_DFL), \
+                patch.object(capture.signal, 'signal', return_value=signal.SIG_DFL) as handler:
+            result = capture.run_lldb('/mock/lldb', 'no target')
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(child.wait.call_count, 4)
+        child.kill.assert_not_called(); child.terminate.assert_not_called()
+        child.communicate.assert_not_called()
+        self.assertTrue(spawn.call_args.kwargs['start_new_session'])
+        self.assertEqual(handler.call_count, 6)
+        self.assertEqual(before, {s: signal.getsignal(s) for s in before})
+
+    def test_unrestorable_native_signal_handler_refuses_before_spawn(self):
+        with patch.object(capture.signal, 'getsignal', return_value=None), \
+                patch.object(capture.signal, 'signal') as change, \
+                patch.object(capture.subprocess, 'Popen') as spawn, self.assertRaises(codec.Refusal):
+            capture.run_lldb('/mock/lldb', 'no target')
+        change.assert_not_called(); spawn.assert_not_called()
+
+    def test_live_no_target_launcher_cancellation_preserves_debugger(self):
+        with tempfile.TemporaryDirectory(prefix='uib-launcher-cancel-') as directory:
+            root = Path(directory); ready = root/'ready'; done = root/'done'
+            commands = ('script import os,time; open('+repr(str(ready))+', "w").write(str(os.getpid())); '
+                        'time.sleep(1.5); open('+repr(str(done))+', "w").write("completed")\n')
+            program = ('import sys; sys.path.insert(0,'+repr(str(ROOT/'plugins/macos'))+'); '
+                'import swiftui_debug_capture as c; sys.exit(c.run_lldb('
+                +repr('/Applications/Xcode.app/Contents/Developer/usr/bin/lldb')+','+repr(commands)+').returncode)')
+            launcher = subprocess.Popen([shutil.which('python3'), '-B', '-c', program],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            deadline = time.monotonic()+5
+            while not ready.exists() and time.monotonic()<deadline:
+                time.sleep(.02)
+            self.assertTrue(ready.exists())
+            debugger_pid = int(ready.read_text())
+            for signum in (signal.SIGINT, signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
+                os.kill(launcher.pid, signum)
+                time.sleep(.03)
+                self.assertIsNone(launcher.poll())
+                os.kill(debugger_pid, 0)
+            self.assertEqual(launcher.wait(timeout=5), 0)
+            self.assertEqual(done.read_text(), 'completed')
 
 
 if __name__ == '__main__':

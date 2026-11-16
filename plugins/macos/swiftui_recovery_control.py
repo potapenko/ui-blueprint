@@ -53,12 +53,16 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
     import time
     command = 'owner-command-'+request_id+'.json'
     attempted = accepted = False
-    debugger.SetAsync(True)
+    async_ready = False
     checkpoint = dict(status='waiting_owner', pid=pid, generation=generation,
                       owner=owner, command=command, detach_attempted=False)
     published = False
     while True:
         try:
+            time.sleep(.1)
+            if not async_ready:
+                debugger.SetAsync(True)
+                async_ready = True
             if not published:
                 try:
                     publish(checkpoint)
@@ -76,9 +80,8 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
                 # Mark before dispatch: even an exception must not retry termination.
                 attempted = True
                 accepted = process.Kill().Success()
-            time.sleep(.1)
         except BaseException:
             # Partial commands, interrupts, and debugger errors never detach/resume
             # the uncertain frame or authorize a retry. Forced host/debugger death
             # remains outside this process's recovery guarantees.
-            time.sleep(.1)
+            continue

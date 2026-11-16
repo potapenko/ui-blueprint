@@ -74,6 +74,25 @@ class RecoveryInput(unittest.TestCase):
         self.assertEqual(result, 'exit_after_failed_owner_command')
         self.assertEqual(kills, [1])
 
+    def test_repeated_interrupts_in_delay_and_backend_keep_hold(self):
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        from unittest.mock import Mock
+        debugger = Mock()
+        debugger.SetAsync.side_effect = [KeyboardInterrupt(), None]
+        process = Mock()
+        process.GetState.side_effect = [KeyboardInterrupt(), 5, 10]
+        process.IsValid.return_value = True
+        delays = iter([KeyboardInterrupt(), KeyboardInterrupt(), None, OSError()])
+        def delay(_):
+            effect = next(delays, None)
+            if effect is not None: raise effect
+        with patch('swiftui_recovery_control.termination_requested', return_value=False), \
+                patch('time.sleep', side_effect=delay):
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None)
+        self.assertEqual(result, 'external_target_exit')
+        process.Kill.assert_not_called(); process.Detach.assert_not_called()
+        self.assertEqual(debugger.SetAsync.call_count, 2)
+
 
 if __name__ == '__main__':
     unittest.main()

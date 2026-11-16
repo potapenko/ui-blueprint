@@ -114,7 +114,22 @@ null, foreign-generation and foreign-owner commands. Explicit matching terminati
 then produces target exit-9/debugger exit0 and target absence after debugger exit.
 This is fixture evidence, not product qualification.
 
-Next: one affected non-author review through Reels' existing authorized reviewer,
+Affected review of d65fe4f found two remaining cancellation escapes: Python
+subprocess.run kills its child on KeyboardInterrupt, and recovery setup/backoff
+could throw outside the protected loop. Corrections use explicit isolated Popen
+ownership, parent cancellation handlers and a protected wait/setup/backoff loop.
+`lifetime-cancellation-summary.json` records a real held fixture surviving double
+SIGINT/SIGTERM/SIGHUP to its launcher, then the existing invalid-command sequence
+and exact owner termination. No product process participated.
+
+Final review confirmed only those2P1 findings; ABI/storage/Any and owned-array
+cleanup were closed for the exact image profile. The correction passes28focused
+checks in embedded Python3.9, including repeated wait/SetAsync/backoff interrupts,
+unrestorable native-handler preflight and real no-target launcher cancellation.
+The new held-fixture harness traverses run_lldb; the older lifetime harness did not.
+
+Next: one affected review of the coherent correction through Reels' existing
+reviewer,
 then resolve findings, qualify one newly leased consumer case and prepare compatible
 local delivery. Do not wait for another user GO for authorized fixture corrections.
 No additional agents are authorized by this support assignment.

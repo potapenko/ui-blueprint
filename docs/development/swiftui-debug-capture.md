@@ -85,6 +85,10 @@ random owner token and command filename. Invalid/partial/foreign commands keep
 holding. Only the synthetic fixture owner may write a0600 command in the same
 private directory, with exactly those PID/generation/owner fields and
 `action: "terminate-owned-fixture"`. That explicit action is attempted once.
+The launcher uses an isolated child session and does not kill LLDB on ordinary
+SIGINT/SIGTERM/SIGHUP cancellation; it waits for the owned debugger to finish.
+Repeated wait, async-setup or backoff interrupts keep ownership. This means
+cancellation is not an instruction to terminate a potentially attached debugger.
 The final manifest distinguishes confirmed owner termination, external exit,
 exit after a failed command and lost debugger ownership. Never kill the debugger
 to simulate recovery; forced debugger/host loss has no safe-resume guarantee.
