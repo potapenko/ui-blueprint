@@ -79,12 +79,18 @@ reviewed deadline wording and rejects exponent overflow during JSON decoding.
 
 Require a quiescent main thread and hardware-only return breakpoints. Save and
 restore supported register state and preserve the native stack red zone.
+Fixture correction: use the selected executable's existing entry point as the
+return site and require the exact call-stack pointer. The interrupted original
+PC can recur inside a nested call and is not a valid return witness by itself.
 Only the capture's own temporary data/breakpoints/thread suspension is retired.
 Normal completion or refusal after a completed call restores and detaches; it
 never kills/restarts the target. Pre-dispatch deadline/identity failure has no
 call effect. An interrupted in-flight call is not declared safely reversible:
-publish no Snapshot, keep the process stopped, report owner recovery required
-with fixed diagnostics, and never silently resume, retry or kill it.
+publish no Snapshot and report owner recovery required with fixed diagnostics.
+The withdrawn implementation did not meet the required stopped-state preservation:
+this host rejects keep-stopped detach and debugger teardown can resume the target.
+The replacement must retain debugger ownership until an explicit owner decision;
+it may not silently resume, retry, terminate the target or claim safe teardown.
 
 ## Acceptance
 

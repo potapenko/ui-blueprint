@@ -60,7 +60,9 @@ The first enabled-getter attempt failed with EXC_BAD_ACCESS during a stack write
 using a separate256KiB stack. The driver adopted [LLDB's native-stack-minus-red-zone
 method](https://github.com/swiftlang/llvm-project/blob/fb5f84d903a3b4e7aea15cd5666598a46f56c833/lldb/source/Target/ThreadPlanCallFunction.cpp#L54);
 the successful getter/state/resize runs followed. Earlier failures are not passes.
-No consumer application was attached, modified, restarted or captured here.
+This initial fixture experiment did not operate a consumer. A later explicitly
+leased read-only Reels diagnostic occurred after its failed consumer capture;
+it did not establish safe detach or post-debugger-exit lifetime.
 
 ## Current candidate and next finite package
 
@@ -97,6 +99,8 @@ No consumer application was attached, modified, restarted or captured here.
    Host ABI oracle pins Data16B/Any32B/key1B and storage offsets. This is not yet a
    product adapter: integrate bounded extraction and explicit recovery ownership,
    then review and requalify one real scope before local delivery.
+   Actual reviewer status checked after the new packet: idle, last verdict c89;
+   Reels root was asked to dispatch the new finite review to that existing reviewer.
 
 The earlier temporary driver has destructive fixture cleanup and must never be
 used on a consumer. The new candidate has no kill/restart path; uncertain in-flight
