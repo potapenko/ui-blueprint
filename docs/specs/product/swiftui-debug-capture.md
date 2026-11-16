@@ -11,6 +11,10 @@
   [IDENTITY@1](identity.md), [GEOMETRY@2](geometry.md), [PRIVACY@1](privacy.md),
   [EXCHANGE@2](exchange.md), [LIFECYCLE@1](lifecycle.md), [CLI@21](cli.md).
 - Accepted/released baseline: none. Existing SDK/AX/GPUI paths are unchanged.
+- Implementation status: c89b277 is withdrawn from product use after actual getter
+  interruption and an unproved detach/post-debugger-exit lifetime. Source review
+  and fixture tests did not qualify this path for the product. Further qualification
+  is limited to owned fixtures until a corrected method has new evidence.
 
 ## DEBUG-CAPTURE.SCOPE
 

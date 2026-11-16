@@ -1,7 +1,10 @@
 # External SwiftUI capture candidate
 
-This checkout candidate is not installed or released. It has synthetic fixture
-qualification; PlayPhrase.me semantic/coordinate qualification remains open.
+**WITHDRAWN from product captures.** The c89b277 consumer getter failed with
+owner recovery required. Post-debugger-exit lifetime and safe detach are not proved.
+Do not run this recipe on product apps; retained code is for controlled fixtures
+and failure diagnosis only. A separate513-byte inline LLDB startup hang was also
+reproduced without a target. No new version has been installed or released.
 Its [contract](../specs/product/swiftui-debug-capture.md) preserves the distinction
 between this raw debug getter and the existing bounds-anchor SDK.
 

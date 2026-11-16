@@ -1,6 +1,7 @@
 # External SwiftUI layout qualification
 
-Status: active finite qualification; no shipped capability or version change.
+Status: c89b277 WITHDRAWN from product use; active fixture-only method correction.
+No shipped capability or version change. Existing installed0.3.2 is unchanged.
 Owner: support chat `01a1e565-14f6-7be0-aa02-cd648a1b0423`, current `master`.
 
 ## Authority and scope
@@ -80,19 +81,21 @@ No consumer application was attached, modified, restarted or captured here.
    non-author reviewer found call-budget, nonfinite and deadline defects in e6ecb1b;
    affected re-review of a4a79d2 closed all3 findings and the UUID identity delta.
    Both Python runtimes passed10/10; final-pin canary/refusal artifacts were checked.
-5. Both real a4a79d2 Clip/Reels captures refused call_limit,256calls, with restored
-   detach and no Snapshot. Outermost-host pruning now avoids the unnecessary native
-   descendant scan (same fixture geometry,39→28calls); affected review precedes retry.
-   Qualify the real Clip slice, with
-   state/resize and original PNG pairing. Then expand to the other named cases.
-   Add the proven capability to a coherent local minor release/skill/install;
-   only after this can consumers receive a supported command and exact pins.
+5. Both real a4a79d2 captures refused call_limit with restored detach. Reviewed
+   c89 outer-host pruning reduced fixture calls but Reels then failed inside the
+   getter. Its subsequent read-only diagnostic did not prove safe detach/lifetime;
+   the source owner recovered the isolated app. Clip independently hung before
+   command execution at LLDB SetInputString;513-byte no-target reproduction confirms
+   this separate startup transport defect. Product retries are withdrawn.
+6. Next: command-file startup, owned-fixture interrupted-call/post-debugger-exit
+   proof, and a bounded field-only extraction hypothesis avoiding whole-model
+   serialization. Only then requalify one real scope and prepare local delivery.
 
 The earlier temporary driver has destructive fixture cleanup and must never be
 used on a consumer. The new candidate has no kill/restart path; uncertain in-flight
 failure reports stopped/owner_recovery_required. Its [recipe](../development/swiftui-debug-capture.md)
-states the exact interface and residuals. Independent source review is closed;
-product qualification, new installation, complete transforms and glyph/paint remain open.
+states the historical interface and withdrawal. Source review was closed, but actual
+product qualification failed; installation, transforms and glyph/paint remain open.
 
 Fixture, driver and original observations are in system temp:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`.
