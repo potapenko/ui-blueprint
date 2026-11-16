@@ -14,10 +14,29 @@ import plistlib
 import shlex
 import stat
 import subprocess
+import tempfile
 import time
 
 import native_prepare
 from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, snapshot
+
+
+def require_fixture(req):
+    # Product use was withdrawn after the real getter/lifetime failure.
+    if not req['expected_bundle'].startswith('me.uiblueprint.external-layout.canary.'):
+        raise Refusal('product_capture_withdrawn')
+
+
+def run_lldb(lldb_path, commands):
+    # LLDB2103 blocks before its interpreter when inline startup input fills
+    # the Darwin pipe. A short source command keeps the payload out of that pipe.
+    with tempfile.TemporaryDirectory(prefix='uib-lldb-commands-') as directory:
+        path = Path(directory)/'capture.lldb'
+        fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, 'w') as stream:
+            stream.write(commands)
+        return subprocess.run([lldb_path, '--no-lldbinit', '--batch', '--source', str(path)],
+            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
 
 
 def read_request(path):
@@ -148,6 +167,11 @@ class Calls:
                 raise Refusal('unsupported_register_state')
             self.saved[name] = reg.GetData()
         self.pc, self.sp = frame.GetPC(), frame.GetSP()
+        entry = target.GetModuleAtIndex(0).GetObjectFileEntryPointAddress()
+        self.return_pc = entry.GetLoadAddress(target)
+        if self.return_pc in (lldb.LLDB_INVALID_ADDRESS, self.pc):
+            raise Refusal('return_site_unavailable')
+        self.return_sp = (self.sp-128) & ~15
         self.count = self.read_bytes = 0
         self.symbols, self.selectors = {}, {}
         self.inflight = self.altered = False
@@ -155,6 +179,7 @@ class Calls:
         self.suspended = []
         self.pool = None
         self.code = self.read(self.pc, 16)
+        self.return_code = self.read(self.return_pc, 16)
         self.redzone = self.read(self.sp-128, 128)
         self.listener = lldb.SBListener('uib-layout-calls')
         self.listener.StartListeningForEvents(process.GetBroadcaster(), lldb.SBProcess.eBroadcastBitStateChanged)
@@ -165,7 +190,7 @@ class Calls:
 
     def initialize(self):
         self.admit()
-        self.bp = self.t.BreakpointCreateByAddress(self.pc)
+        self.bp = self.t.BreakpointCreateByAddress(self.return_pc)
         if not self.bp.IsValid() or not self.bp.IsHardware():
             raise Refusal('hardware_breakpoint_unavailable')
         self.bp.SetThreadID(self.thread.GetThreadID())
@@ -222,7 +247,8 @@ class Calls:
             if not self.thread.GetFrameAtIndex(0).FindRegister(name).SetData(self.saved[name], error):
                 raise Refusal('register_restore_failed')
         # Cleanup checks must run even after the acquisition deadline.
-        for pointer, expected in ((self.pc, self.code), (self.sp-128, self.redzone)):
+        for pointer, expected in ((self.pc, self.code), (self.return_pc, self.return_code),
+                                  (self.sp-128, self.redzone)):
             error = self.lldb.SBError()
             if self.p.ReadMemory(pointer, len(expected), error) != expected or error.Fail():
                 raise Refusal('return_state_changed')
@@ -240,8 +266,8 @@ class Calls:
         self.altered = True
         for i, value in enumerate(args):
             self.setreg('x'+str(i), value)
-        self.setreg('sp', (self.sp-128) & ~15)
-        self.setreg('lr', self.pc)
+        self.setreg('sp', self.return_sp)
+        self.setreg('lr', self.return_pc)
         self.setreg('pc', address)
         while self.listener.GetNextEvent(self.lldb.SBEvent()):
             pass
@@ -269,7 +295,8 @@ class Calls:
             self.p.Stop()
         self.d.SetAsync(False)
         frame = self.thread.GetFrameAtIndex(0)
-        if self.p.GetState() != self.lldb.eStateStopped or frame.GetPC() != self.pc:
+        if (self.p.GetState() != self.lldb.eStateStopped or frame.GetPC() != self.return_pc
+                or frame.GetSP() != self.return_sp):
             raise Refusal('call_interrupted_owner_recovery')
         if self.thread.GetStopReason() != self.lldb.eStopReasonBreakpoint:
             raise Refusal('unexpected_stop_owner_recovery')
@@ -382,6 +409,7 @@ def capture(debugger, request_path, bundle_path, output_path):
     outcome = dict(manifest_version='1.0.0', request_id=req['request_id'], status='failed', code='capture_failed', exit_status=1,
                    cleanup='not_attached', snapshot=None, calls=0, native_window_state=None)
     try:
+        require_fixture(req)
         helper = verified_helper(bundle_path)
         before = metadata(helper, req)
         debugger.SetAsync(False)
@@ -455,6 +483,7 @@ def main():
     try:
         args = parser.parse_args()
         req = read_request(args.request)
+        require_fixture(req)
         native_prepare.verify_bundle(args.bundle)
         fd = output_directory(args.out, req)
         os.close(fd)
@@ -468,9 +497,8 @@ def main():
             raise Refusal('unsupported_debugger')
         script = 'swiftui_debug_capture.capture(lldb.debugger, '+', '.join(repr(str(p.resolve()))
             for p in (args.request, args.bundle, args.out))+')'
-        subprocess.run([lldb_path, '--no-lldbinit', '--batch', '-o',
-            'command script import '+shlex.quote(str(Path(__file__).resolve())), '-o', 'script '+script],
-            stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+        run_lldb(lldb_path, 'command script import '+shlex.quote(str(Path(__file__).resolve()))
+                 +'\nscript '+script+'\n')
         result = decode((args.out/('manifest-'+req['request_id']+'.json')).read_bytes())
         print(encode(result).decode(), end='')
         return result['exit_status']

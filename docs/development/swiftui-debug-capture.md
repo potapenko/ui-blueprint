@@ -5,6 +5,8 @@ owner recovery required. Post-debugger-exit lifetime and safe detach are not pro
 Do not run this recipe on product apps; retained code is for controlled fixtures
 and failure diagnosis only. A separate513-byte inline LLDB startup hang was also
 reproduced without a target. No new version has been installed or released.
+The current CLI also rejects product bundle namespaces before debugger startup.
+Controlled experiments remain possible only in the dedicated synthetic namespace.
 Its [contract](../specs/product/swiftui-debug-capture.md) preserves the distinction
 between this raw debug getter and the existing bounds-anchor SDK.
 
@@ -75,6 +77,12 @@ post-attach identity checks. Cleanup has a separate2s allowance and one reserved
 call within the total256. The framework getter's allocations and synchronous
 debugger/OS latency are opaque; no global memory or whole-attempt wall-clock limit
 is claimed.
+
+Withdrawal correction: the earlier keep-stopped claim above is historical and
+failed runtime qualification. This LLDB target rejects `Detach(True)`; closing the
+debugger may resume or lose the target. The current method must not be used for
+product recovery. Owned-fixture work is replacing that teardown path with explicit
+retained debugger ownership, and replacing full serialization with field-only reads.
 
 Checks: `python3 -B tests/bridges/swiftui_debug_capture_check.py`; the synthetic
 SwiftUI source is `tests/bridges/native/SwiftUIDebugFixture.swift`. The LLDB-only

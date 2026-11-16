@@ -87,9 +87,16 @@ No consumer application was attached, modified, restarted or captured here.
    the source owner recovered the isolated app. Clip independently hung before
    command execution at LLDB SetInputString;513-byte no-target reproduction confirms
    this separate startup transport defect. Product retries are withdrawn.
-6. Next: command-file startup, owned-fixture interrupted-call/post-debugger-exit
-   proof, and a bounded field-only extraction hypothesis avoiding whole-model
-   serialization. Only then requalify one real scope and prepare local delivery.
+6. Fixture-only corrections now use command-file startup and a distinct existing
+   entry return breakpoint with exact SP guard. The old original-PC return could
+   falsely accept a nested call. Darwin reports keep-stopped detach unsupported;
+   debugger exit can resume a stopped target. A retained-debugger fixture proved
+   explicit owner-command termination followed by known target/debugger exit.
+7. Field-only prototype reads existing `_viewDebugData` structures, without full
+   serialization: same167nodes/geometry,13calls,~81KiB,167model slots never read.
+   Host ABI oracle pins Data16B/Any32B/key1B and storage offsets. This is not yet a
+   product adapter: integrate bounded extraction and explicit recovery ownership,
+   then review and requalify one real scope before local delivery.
 
 The earlier temporary driver has destructive fixture cleanup and must never be
 used on a consumer. The new candidate has no kill/restart path; uncertain in-flight

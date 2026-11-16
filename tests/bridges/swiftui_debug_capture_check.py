@@ -19,7 +19,7 @@ import swiftui_debug_capture as capture
 CANARY = 'PRIVATE_MODEL_VALUE_71cfe9'
 META = dict(target=dict(id='macos-pid-123', generation='123:1794836979.5'))
 REQ = dict(request_version='1.0.0', request_id='own-fixture', pid=123,
-           expected_bundle='me.uiblueprint.fixture', expected_launch_time=1794836979.5,
+           expected_bundle='me.uiblueprint.external-layout.canary.unit', expected_launch_time=1794836979.5,
            window_id=456, limits=dict(max_nodes=256, max_depth=256,
                                      max_output_bytes=1048576, deadline_ms=10000))
 
@@ -183,9 +183,9 @@ class CanonicalPrivacy(unittest.TestCase):
         calls = object.__new__(capture.Calls)
         calls.deadline = float('inf'); calls.count = 255
         calls.pool = 1; calls.memory = None; calls.inflight = calls.altered = False
-        calls.pc = 100; calls.sp = 4096; calls.suspended = []
+        calls.pc = 100; calls.sp = 4096; calls.return_pc = 150; calls.return_sp = 3968; calls.suspended = []
         error = SimpleNamespace(Fail=lambda: False)
-        frame = SimpleNamespace(GetPC=lambda: 100,
+        frame = SimpleNamespace(GetPC=lambda: 150, GetSP=lambda: 3968,
             FindRegister=lambda _: SimpleNamespace(GetValueAsUnsigned=lambda: 0))
         calls.thread = SimpleNamespace(GetFrameAtIndex=lambda _: frame, GetStopReason=lambda: 3,
                                         GetStopReasonDataAtIndex=lambda _: 7)
@@ -218,6 +218,12 @@ class CanonicalPrivacy(unittest.TestCase):
         with patch.object(capture.time, 'monotonic', return_value=10):
             calls.call('objc_msgSend', 1, 2)
         self.assertEqual(calls.count, 1)
+        # The same breakpoint reached from a nested call is not a return.
+        frame.GetSP = lambda: 3904
+        next_events = iter([False, True])
+        with patch.object(capture.time, 'monotonic', return_value=10), self.assertRaises(codec.Refusal):
+            calls.call('objc_msgSend', 1, 2)
+        self.assertTrue(calls.inflight)
 
     def test_post_attach_identity_uses_remaining_acquisition_budget(self):
         actual = dict(metadata_version='1.0.0', status='known', target=META['target'],
@@ -267,6 +273,32 @@ class CanonicalPrivacy(unittest.TestCase):
         with self.assertRaises(codec.Refusal) as error:
             capture.collect(calls,REQ)
         self.assertEqual(error.exception.code,'hosting_surface_unresolved')
+
+    def test_product_capture_is_withdrawn_before_debugger_start(self):
+        req = copy.deepcopy(REQ); req['expected_bundle'] = 'me.playphraseme.reference.example'
+        with self.assertRaises(codec.Refusal) as error:
+            capture.require_fixture(req)
+        self.assertEqual(error.exception.code, 'product_capture_withdrawn')
+
+    def test_long_no_target_command_uses_private_source_file_then_removes_it(self):
+        lldb = '/Applications/Xcode.app/Contents/Developer/usr/bin/lldb'
+        original = subprocess.run
+        command_files = []
+        def bounded_run(args, **kwargs):
+            path = Path(args[-1]); command_files.append(path)
+            self.assertEqual(args[-2], '--source')
+            self.assertEqual(path.stat().st_mode & 0o777, 0o600)
+            self.assertGreater(len(path.read_bytes()), 513)
+            return original(args, **kwargs, timeout=3)
+        with tempfile.TemporaryDirectory(prefix='uib-no-target-input-') as directory:
+            marker = Path(directory)/'executed.txt'
+            commands = 'script open('+repr(str(marker))+', "w").write("executed") # '+'x'*4096+'\n'
+            with patch.object(capture.subprocess, 'run', side_effect=bounded_run):
+                result = capture.run_lldb(lldb, commands)
+            self.assertEqual(result.returncode, 0)
+            self.assertEqual(marker.read_text(), 'executed')
+        self.assertTrue(command_files)
+        self.assertTrue(all(not path.exists() and not path.parent.exists() for path in command_files))
 
 
 if __name__ == '__main__':
