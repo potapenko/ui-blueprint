@@ -14,7 +14,7 @@ communication. All seven coordinators supplied concrete cases.
 The requested result is actual runtime layout, hierarchy and source attribution,
 then a compatible locally installed tool and consumer verification. AX bounds,
 pixels, static declarations and renamed source records cannot substitute for it.
-Product donor code/assets/configuration, SDK markers, injected libraries/JIT and
+Product donor code/assets/configuration files, SDK markers, injected libraries/JIT and
 runtime code patches remain prohibited. Consumer processes stay with their owners.
 Production/public release needs the existing separate exact confirmation.
 
@@ -61,31 +61,33 @@ method](https://github.com/swiftlang/llvm-project/blob/fb5f84d903a3b4e7aea15cd56
 the successful getter/state/resize runs followed. Earlier failures are not passes.
 No consumer application was attached, modified, restarted or captured here.
 
-## Remaining gates and next finite package
+## Current candidate and next finite package
 
-1. Resolve whether a per-launch `SWIFTUI_VIEW_DEBUG=29` environment is permitted
-   for a separate byte-identical product copy. A direct question is pending;
-   do not infer that the existing configuration prohibition was lifted.
-2. Qualify geometry-only extraction **before** product use. The system serializer
+1. Direct user reply in this support chat on2026-11-16 authorizes the separate
+   byte-identical product copy with `SWIFTUI_VIEW_DEBUG=29` and brief addressed
+   LLDB layout capture. This does not authorize donor file/code changes.
+2. Geometry-only extraction is implemented in `plugins/macos/swiftui_debug_snapshot.py`
+   and the addressed `swiftui_debug_capture.py` candidate. The system serializer
    includes reflected property1/model values even with mask29. Never save/log its
    raw response from a product app. Scope, allocation/byte/node/depth budgets,
-   cleanup and timeout effects need a concrete supported design and review.
+   cleanup and timeout effects have an explicit candidate contract; review is pending.
 3. Resolve source identity and coordinate semantics. The returned tree has no
    stable semantic IDs; keys must be observation-scoped unless stronger evidence
    exists. Serialized transform items are incomplete. Do not infer arbitrary
    transforms or publish all positions in a universal window/image space.
-4. Register the bounded new contract, implement its helper and canonical adapter,
-   test privacy/refusal/restoration, and independently review debugger lifecycle
-   and compatibility. Complete applicable D02/D04/D05 closure before integration.
+4. [DEBUG-CAPTURE@1](../specs/product/swiftui-debug-capture.md) is registered.
+   Seven focused checks and actual canary/output-refusal→recapture passed.
+   Reels supplies an already-authorized non-author privacy/lifecycle reviewer.
 5. Qualify one real Clip root/rail/grid/query slice through its native owner, with
    state/resize and original PNG pairing. Then expand to the other named cases.
    Add the proven capability to a coherent local minor release/skill/install;
    only after this can consumers receive a supported command and exact pins.
 
-The current temporary driver is fixture-only and intentionally not distributed:
-its failure cleanup may kill its own synthetic process. It must never be applied
-to a consumer app. No ready local version, canonical Snapshot adapter, independent
-safety review, complete transforms or glyph/paint support is claimed.
+The earlier temporary driver has destructive fixture cleanup and must never be
+used on a consumer. The new candidate has no kill/restart path; uncertain in-flight
+failure reports stopped/owner_recovery_required. Its [recipe](../development/swiftui-debug-capture.md)
+states the exact interface and residuals. No new installed version, independent
+review completion, complete transforms or glyph/paint support is claimed.
 
 Fixture, driver and original observations are in system temp:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`.

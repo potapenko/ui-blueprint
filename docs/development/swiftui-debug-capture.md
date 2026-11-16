@@ -1,0 +1,74 @@
+# External SwiftUI capture candidate
+
+This checkout candidate is not installed or released. It has synthetic fixture
+qualification; PlayPhrase.me semantic/coordinate qualification remains open.
+Its [contract](../specs/product/swiftui-debug-capture.md) preserves the distinction
+between this raw debug getter and the existing bounds-anchor SDK.
+
+The caller owns an already-running app and exact window. This command does not
+launch it, set its environment, activate it or request OS permissions. Current
+profile: macOS27.0.1 arm64, Xcode LLDB2103.0.34.407. A compatible installed native
+bundle supplies the independently verified public process metadata helper.
+
+An example request (replace the illustrative identity with independently verified
+values; a PID or window title alone is insufficient):
+
+```json
+{
+  "request_version": "1.0.0",
+  "request_id": "owned-request-1",
+  "pid": 123,
+  "expected_bundle": "me.uiblueprint.fixture",
+  "expected_launch_time": 1794836979.5,
+  "window_id": 456,
+  "limits": {
+    "max_nodes": 256,
+    "max_depth": 256,
+    "max_output_bytes": 1048576,
+    "deadline_ms": 10000
+  }
+}
+```
+
+Use an existing private system-temp output directory and a new request ID:
+
+```sh
+python3 -B plugins/macos/swiftui_debug_capture.py \
+  --request "$UIB_REQUEST" --out "$UIB_OUTPUT" \
+  --bundle /Users/eugenepotapenko/.local/share/uiblueprint/versions/0.3.2
+```
+
+Successful output is `snapshot-REQUEST.json` (canonical core0.1) and
+`manifest-REQUEST.json` (manifest_version1.0.0), both exclusive0600. The manifest
+names the output and cleanup outcome. Raw reflected values never become files or
+debug output. Exit0 means a partial Snapshot was published;2 is invalid input or
+budget refusal;4 is unavailable/stale/interrupted;1 is setup/IO failure.
+
+`swiftui.debug.layout` nodes have observation-scoped keys and reported type names,
+not persistent component IDs. The getter's fractional position/size is preserved;
+it is not silently rounded to the SDK's resolved bounds-anchor channel.
+Each node has a separate source-local space. `measure` can compute its width or
+height; an inter-node gap returns `missing_transform` until a real mapping exists.
+Semantic part correspondence, root/window/PNG transforms, hit/paint/visibility and
+glyph/caret/selection are not supplied by this candidate.
+
+`native_window_state` reports independent `is_key_window`, `is_main_window` and
+`app_is_active` getters in the selected stopped-process interval. These are
+AppKit-reported flags with unknown consistency, not Input focus, AXFocusedWindow,
+an OS foreground guarantee or evidence that outside events were processed while
+stopped. The application is never activated to obtain the values.
+
+Recoverable refusal after a completed call yields no Snapshot and
+`detached_restored`; the same process can be captured again with a new request.
+If a getter is interrupted or restoration cannot be confirmed, no Snapshot is
+published and `owner_recovery_required` leaves the process stopped. The tool
+never kills/restarts it or silently resumes/retries uncertain execution. Its owner
+must resolve that state; do not treat a blind SIGCONT as proven recovery.
+The framework getter's internal allocations and attach latency are opaque.
+Output caps do not claim a global memory or whole-attempt wall-clock limit.
+
+Checks: `python3 -B tests/bridges/swiftui_debug_capture_check.py`; the synthetic
+SwiftUI source is `tests/bridges/native/SwiftUIDebugFixture.swift`. The LLDB-only
+`swiftui_debug_canary.py` harness proves a model canary is present in transient
+getter input and absent from the canonical Snapshot/manifest. It is not a product
+capture recipe and accepts only the named synthetic fixture namespace.

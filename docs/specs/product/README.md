@@ -13,6 +13,7 @@
 
 | Контракт | Read when / роль |
 | --- | --- |
+| [UIB.SWIFTUI-DEBUG-CAPTURE@1](swiftui-debug-capture.md) | External getter candidate, geometry allowlist and consumer-safe lifecycle; fixture-only qualification |
 | [UIB.NATIVE-CAPTURE@1](native-capture.md) | Exact native window PNG and attributable coordinate metadata |
 | [UIB.GPUI-PROBE@2](gpui-probe.md) | GPUI window-root and explicit-subtree layout measurement and canonical export |
 | [UIB.SWIFTUI-PROBE@3](swiftui-probe.md) | Explicit SwiftUI root/subset layout measurement and canonical export |
