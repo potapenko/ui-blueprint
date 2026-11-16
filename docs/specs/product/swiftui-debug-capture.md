@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@1`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@2`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -33,6 +33,8 @@ Canonical core0.1 Snapshot uses a distinct `swiftui.debug.layout` namespace.
 Type is structural metadata, not accessibility name or user-visible text.
 Children preserve the reported hierarchy; keys are observation-scoped and confer
 no cross-capture identity, action authority or declared component association.
+An internal capture nonce is independent of the caller's correlation ID, so reusing
+that ID cannot create continuity between two external observations.
 Missing position/size yields unknown layout, not a zero rectangle.
 Known position/size retain original numeric values in separate source-local pt,
 top-left spaces per node. Inter-node/window/image transforms remain unknown;
@@ -53,9 +55,15 @@ No raw exception text, backtrace, model values, selectors supplied by UI, argume
 or process command line is published. Output files are exclusive0600 in an existing
 private nonsymlink directory. Output and source inputs each cap at1MiB; max256
 nodes/depth,32window candidates,256NSViews/calls and bounded cumulative reads.
-Requests declare tighter positive limits and total attached deadline≤10000ms.
+Requests declare tighter positive limits and an acquisition budget≤10000ms from
+successful attach, including post-attach identity checks and event waits. Cleanup
+has a separate≤2000ms call allowance. One of the total256 calls is reserved for
+pool cleanup; no ordinary budget refusal may consume that reserve.
 The system getter's internal allocations are opaque; a post-return length check
 does not claim a global target-process memory bound. This is an explicit residual.
+Attach and synchronous debugger/OS stop-detach latency remain opaque; these budgets
+are not an unqualified whole-attempt wall-clock guarantee. @2 reconciles the
+reviewed deadline wording and rejects exponent overflow during JSON decoding.
 
 ## DEBUG-CAPTURE.LIFECYCLE
 

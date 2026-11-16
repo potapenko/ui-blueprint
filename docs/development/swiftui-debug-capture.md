@@ -64,8 +64,11 @@ If a getter is interrupted or restoration cannot be confirmed, no Snapshot is
 published and `owner_recovery_required` leaves the process stopped. The tool
 never kills/restarts it or silently resumes/retries uncertain execution. Its owner
 must resolve that state; do not treat a blind SIGCONT as proven recovery.
-The framework getter's internal allocations and attach latency are opaque.
-Output caps do not claim a global memory or whole-attempt wall-clock limit.
+The acquisition budget starts immediately after successful attach and includes
+post-attach identity checks. Cleanup has a separate2s allowance and one reserved
+call within the total256. The framework getter's allocations and synchronous
+debugger/OS latency are opaque; no global memory or whole-attempt wall-clock limit
+is claimed.
 
 Checks: `python3 -B tests/bridges/swiftui_debug_capture_check.py`; the synthetic
 SwiftUI source is `tests/bridges/native/SwiftUIDebugFixture.swift`. The LLDB-only

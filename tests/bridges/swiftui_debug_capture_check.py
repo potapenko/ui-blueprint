@@ -64,8 +64,9 @@ class CanonicalPrivacy(unittest.TestCase):
                                     capture_output=True, timeout=5)
             self.assertEqual(result.returncode, 0, result.stdout)
             cli = Path('/Users/eugenepotapenko/.local/bin/uiblueprint')
+            document = json.loads(path.read_bytes())['artifact']['data']
             result = subprocess.run([str(cli), 'inspect', '--snapshot', str(path), '--ref',
-                json.dumps(dict(namespace=codec.NAMESPACE, key='own-fixture-n0')),
+                json.dumps(document['nodes'][0]['key']),
                 '--view', 'design', '--max-input-bytes', '1048576', '--max-output-bytes', '1048576'],
                 capture_output=True, timeout=5)
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -86,6 +87,14 @@ class CanonicalPrivacy(unittest.TestCase):
             result = json.loads(measured.stdout)['artifact']['data']['result']
             self.assertEqual(result['status'], 'known')
             self.assertEqual(result['measurement']['value']['value']['amount'], 80)
+
+    def test_reused_caller_id_cannot_reuse_observation_or_node_identity(self):
+        first = json.loads(self.encode([node()]))['artifact']['data']
+        second = json.loads(self.encode([node()]))['artifact']['data']
+        self.assertNotEqual(first['id'], second['id'])
+        self.assertNotEqual(first['nodes'][0]['key'], second['nodes'][0]['key'])
+        self.assertNotEqual(first['context']['surfaces'], second['context']['surfaces'])
+        self.assertEqual(first['context']['target'], second['context']['target'])
 
     def test_missing_layout_is_unknown_and_never_zero(self):
         item = node(); item['properties'] = item['properties'][:3]
@@ -108,10 +117,14 @@ class CanonicalPrivacy(unittest.TestCase):
             req = copy.deepcopy(REQ); req['limits'][name] = cap
             with self.assertRaises(codec.Refusal):
                 self.encode([node(children=[node()])], req)
-        for raw in (b'{"x":1,"x":2}', b'[NaN]', b'x'*(1048576+1)):
+        for raw in (b'{"x":1,"x":2}', b'[NaN]', b'[1e999]', b'[-1e999]', b'x'*(1048576+1)):
             with self.assertRaises(codec.Refusal) as error:
                 codec.decode(raw)
             self.assertNotIn(CANARY, str(error.exception))
+        ignored_overflow = json.dumps([node()]).encode().replace(json.dumps(CANARY).encode(), b'1e999')
+        with self.assertRaises(codec.Refusal) as error:
+            codec.snapshot(ignored_overflow, REQ, META, 1, 2)
+        self.assertEqual(error.exception.code, 'nonfinite_json')
 
     def test_request_and_argument_errors_do_not_echo_private_input(self):
         req = copy.deepcopy(REQ); req['pid'] = CANARY
@@ -165,6 +178,61 @@ class CanonicalPrivacy(unittest.TestCase):
         # The in-flight cleanup branch performs no register writes, retry or kill.
         bare = object.__new__(capture.Calls); bare.inflight = True
         self.assertFalse(bare.close())
+
+    def test_acquisition_budget_reserves_pool_cleanup_inside_total_cap(self):
+        calls = object.__new__(capture.Calls)
+        calls.deadline = float('inf'); calls.count = 255
+        calls.pool = 1; calls.memory = None; calls.inflight = calls.altered = False
+        calls.pc = 100; calls.sp = 4096; calls.suspended = []
+        error = SimpleNamespace(Fail=lambda: False)
+        frame = SimpleNamespace(GetPC=lambda: 100,
+            FindRegister=lambda _: SimpleNamespace(GetValueAsUnsigned=lambda: 0))
+        calls.thread = SimpleNamespace(GetFrameAtIndex=lambda _: frame, GetStopReason=lambda: 3,
+                                        GetStopReasonDataAtIndex=lambda _: 7)
+        calls.bp = SimpleNamespace(GetID=lambda: 7)
+        calls.t = SimpleNamespace(BreakpointDelete=lambda _: True)
+        calls.p = SimpleNamespace(Continue=lambda: error, GetState=lambda: 1)
+        calls.d = SimpleNamespace(SetAsync=lambda _: None)
+        calls.listener = SimpleNamespace(GetNextEvent=lambda _: False, WaitForEvent=lambda *_: True)
+        calls.lldb = SimpleNamespace(SBEvent=lambda: None, eStateStopped=1, eStateExited=2,
+            eStateCrashed=4, eStopReasonBreakpoint=3,
+            SBProcess=SimpleNamespace(EventIsProcessEvent=lambda _: True, GetStateFromEvent=lambda _: 1))
+        invoked = []
+        calls.symbol = lambda name: (invoked.append(name) or 200)
+        calls.setreg = lambda *_: None
+        calls.restore = lambda: setattr(calls, 'altered', False)
+        with self.assertRaises(codec.Refusal) as refused:
+            calls.call('objc_msgSend', 1, 2)
+        self.assertEqual(refused.exception.code, 'call_limit')
+        self.assertEqual(invoked, [])
+        self.assertTrue(calls.close())
+        self.assertEqual(invoked, ['objc_autoreleasePoolPop'])
+        self.assertEqual(calls.count, 256)
+        self.assertIsNone(calls.pool)
+
+        # A fractional remaining budget must never enter WaitForEvent(1).
+        calls.count = 0; calls.deadline = 10.25
+        next_events = iter([False, True])
+        calls.listener = SimpleNamespace(GetNextEvent=lambda _: next(next_events),
+            WaitForEvent=lambda *_: self.fail('rounded fractional wait up to a second'))
+        with patch.object(capture.time, 'monotonic', return_value=10):
+            calls.call('objc_msgSend', 1, 2)
+        self.assertEqual(calls.count, 1)
+
+    def test_post_attach_identity_uses_remaining_acquisition_budget(self):
+        actual = dict(metadata_version='1.0.0', status='known', target=META['target'],
+            process=dict(pid=123, bundle_id=REQ['expected_bundle'], launch_time=REQ['expected_launch_time']))
+        result = subprocess.CompletedProcess([], 0, json.dumps(actual).encode())
+        with patch.object(capture.time, 'monotonic', return_value=10), \
+                patch.object(capture.subprocess, 'run', return_value=result) as call:
+            value = capture.metadata(Path('/verified/helper'), REQ, deadline=10.125)
+            self.assertEqual(value, actual)
+            self.assertEqual(call.call_args.kwargs['timeout'], .125)
+        with patch.object(capture.time, 'monotonic', return_value=10), \
+                patch.object(capture.subprocess, 'run') as call, self.assertRaises(codec.Refusal) as error:
+            capture.metadata(Path('/verified/helper'), REQ, deadline=10)
+        self.assertEqual(error.exception.code, 'deadline')
+        call.assert_not_called()
 
 
 if __name__ == '__main__':

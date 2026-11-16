@@ -6,6 +6,7 @@ includes source-controlled values in exceptions. Analytics remain in Rust.
 import json
 import math
 import re
+import uuid
 
 NAMESPACE = 'swiftui.debug.layout'
 FIELDS = ['layout_bounds', 'hit_region', 'visible_region', 'paint_bounds']
@@ -32,6 +33,8 @@ def decode(raw):
         raise Refusal('source_byte_limit', 2)
     try:
         return json.loads(raw, object_pairs_hook=_object,
+                          parse_float=lambda text: float(text) if math.isfinite(float(text)) else
+                          (_ for _ in ()).throw(Refusal('nonfinite_json', 2)),
                           parse_constant=lambda _: (_ for _ in ()).throw(Refusal('nonfinite_json', 2)))
     except (ValueError, UnicodeError, RecursionError):
         raise Refusal('invalid_json', 2) from None
@@ -93,7 +96,9 @@ def snapshot(raw, req, metadata, start, end):
         raise Refusal('layout_not_available')
     if not all(type(x) in (int, float) and math.isfinite(x) for x in (start, end)) or end < start:
         raise Refusal('invalid_interval', 2)
-    nonce = req['request_id']
+    # Correlation IDs supplied by callers may repeat in different destinations.
+    # They cannot create identity continuity between two external observations.
+    nonce = uuid.uuid4().hex
     surface = dict(id='native-window-'+str(req['window_id']), generation=nonce)
     evidence = dict(observation_id='debug-'+nonce, source_namespace=NAMESPACE,
                     provenance='reported', method='NSHostingView.makeViewDebugData.position-size', uncertainty=None)

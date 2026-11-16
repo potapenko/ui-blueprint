@@ -63,12 +63,45 @@ def write_new(fd, name, data):
         raise
 
 
-def metadata(helper, req):
+def metadata(helper, req, deadline=None):
+    timeout = 3 if deadline is None else min(3, deadline-time.monotonic())
+    if timeout <= 0:
+        raise Refusal('deadline')
     try:
-        value = native_prepare.describe(helper, req['pid'], req['expected_bundle'])
-    except native_prepare.Refusal as error:
-        raise Refusal(error.code, error.status) from None
-    if value['process']['launch_time'] != req['expected_launch_time']:
+        result = subprocess.run([str(helper), 'describe-process', str(req['pid'])],
+            stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            timeout=timeout, check=False)
+    except subprocess.TimeoutExpired:
+        raise Refusal('deadline' if deadline is not None else 'metadata_timeout',
+                      4 if deadline is not None else 1) from None
+    if deadline is not None and time.monotonic() >= deadline:
+        raise Refusal('deadline')
+    if result.returncode != 0:
+        raise Refusal('target_unresolved' if result.returncode == 4 else 'metadata_failed',
+                      4 if result.returncode == 4 else 1)
+    if len(result.stdout) > 4096:
+        raise Refusal('invalid_metadata', 2)
+    value = decode(result.stdout)
+    if not isinstance(value, dict) or set(value) != {'metadata_version', 'status', 'process', 'target'}:
+        raise Refusal('invalid_metadata', 2)
+    process, target = value['process'], value['target']
+    if (value['metadata_version'] != '1.0.0' or value['status'] != 'known'
+            or not isinstance(process, dict) or set(process) != {'pid', 'bundle_id', 'launch_time'}
+            or type(process['pid']) is not int or process['pid'] != req['pid']
+            or type(process['launch_time']) not in (int, float)
+            or not isinstance(target, dict) or set(target) != {'id', 'generation'}
+            or target['id'] != 'macos-pid-'+str(req['pid'])
+            or not isinstance(target['generation'], str) or len(target['generation']) > 256
+            or not target['generation'].startswith(str(req['pid'])+':')):
+        raise Refusal('invalid_metadata', 2)
+    try:
+        if float(target['generation'].split(':', 1)[1]) != process['launch_time']:
+            raise Refusal('invalid_metadata', 2)
+    except ValueError:
+        raise Refusal('invalid_metadata', 2) from None
+    if process['bundle_id'] != req['expected_bundle']:
+        raise Refusal('bundle_mismatch')
+    if process['launch_time'] != req['expected_launch_time']:
         raise Refusal('stale_target')
     return value
 
@@ -147,6 +180,7 @@ class Calls:
                 if not th.Suspend():
                     raise Refusal('thread_suspend_failed')
                 self.suspended.append(th)
+        self.symbol('objc_autoreleasePoolPop')
         self.pool = self.call('objc_autoreleasePoolPush')[0]
 
     def read(self, pointer, size):
@@ -196,9 +230,12 @@ class Calls:
 
     def call(self, name, *args):
         self.admit()
-        if self.count >= 256 or len(args) > 8:
+        # The final pool-pop owns one reserved call inside the same total256 cap.
+        limit = 256 if name == 'objc_autoreleasePoolPop' else 255
+        if self.count >= limit or len(args) > 8:
             raise Refusal('call_limit', 2)
         address = self.symbol(name)
+        self.admit()
         self.count += 1
         self.altered = True
         for i, value in enumerate(args):
@@ -208,16 +245,26 @@ class Calls:
         self.setreg('pc', address)
         while self.listener.GetNextEvent(self.lldb.SBEvent()):
             pass
+        self.admit()
         self.d.SetAsync(True)
         self.inflight = True
         if self.p.Continue().Fail():
             raise Refusal('call_dispatch_unknown')
-        while time.monotonic() < self.deadline:
+        while True:
+            remaining = self.deadline-time.monotonic()
+            if remaining <= 0:
+                break
             event = self.lldb.SBEvent()
-            if self.listener.WaitForEvent(1, event) and self.lldb.SBProcess.EventIsProcessEvent(event):
+            # This LLDB API only accepts whole seconds. Do not round a final
+            # fractional budget up; GetNextEvent is its nonblocking counterpart.
+            received = (self.listener.WaitForEvent(1, event) if remaining >= 1
+                        else self.listener.GetNextEvent(event))
+            if received and self.lldb.SBProcess.EventIsProcessEvent(event):
                 if self.lldb.SBProcess.GetStateFromEvent(event) in (
                         self.lldb.eStateStopped, self.lldb.eStateExited, self.lldb.eStateCrashed):
                     break
+            if not received and remaining < 1:
+                time.sleep(min(.005, max(0, self.deadline-time.monotonic())))
         if self.p.GetState() != self.lldb.eStateStopped:
             self.p.Stop()
         self.d.SetAsync(False)
@@ -261,8 +308,8 @@ class Calls:
             if self.pool:
                 # A completed capture may use a separately bounded cleanup call.
                 self.deadline = time.monotonic()+2
-                pool, self.pool = self.pool, None
-                self.call('objc_autoreleasePoolPop', pool)
+                self.call('objc_autoreleasePoolPop', self.pool)
+                self.pool = None
             if self.memory is not None and self.p.DeallocateMemory(self.memory).Fail():
                 return False
             if self.bp and not self.t.BreakpointDelete(self.bp.GetID()):
@@ -339,23 +386,24 @@ def capture(debugger, request_path, bundle_path, output_path):
         target = debugger.CreateTarget('')
         error = lldb.SBError()
         process = target.AttachToProcessWithID(debugger.GetListener(), req['pid'], error)
+        start = time.monotonic()
+        deadline = start+req['limits']['deadline_ms']/1000
         if error.Fail() or not process.IsValid():
             raise Refusal('attach_unavailable')
-        if process.GetProcessID() != req['pid'] or metadata(helper, req) != before:
+        if process.GetProcessID() != req['pid'] or metadata(helper, req, deadline) != before:
             raise Refusal('stale_target')
         thread = process.GetThreadAtIndex(0)
         frame = thread.GetFrameAtIndex(0)
         if thread.GetQueueName() != 'com.apple.main-thread' or frame.GetFunctionName() != 'mach_msg2_trap':
             raise Refusal('main_thread_not_quiescent')
-        start = time.monotonic()
-        calls = Calls(debugger, target, process, thread, start+req['limits']['deadline_ms']/1000)
+        calls = Calls(debugger, target, process, thread, deadline)
         calls.initialize()
         raw, window_state = collect(calls, req)
         calls.admit()
         # The raw model-reflecting response remains transient and is never published.
         payload = snapshot(raw, req, before, start, time.monotonic())
         del raw
-        if metadata(helper, req) != before:
+        if metadata(helper, req, deadline) != before:
             raise Refusal('stale_target')
         calls.admit()
         outcome.update(status='ready', code='partial_layout', exit_status=0,
