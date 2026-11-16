@@ -1,6 +1,6 @@
 # External SwiftUI layout qualification
 
-Status: c89b277 WITHDRAWN from product use; active fixture-only method correction.
+Status: c89b277 WITHDRAWN; reviewed method, one exact Settings qualification pending.
 No shipped capability or version change. Existing installed0.3.2 is unchanged.
 Owner: support chat `01a1e565-14f6-7be0-aa02-cd648a1b0423`, current `master`.
 
@@ -68,8 +68,8 @@ it did not establish safe detach or post-debugger-exit lifetime.
 
 Human reply in this support chat on2026-11-16 authorizes a separate unchanged
 product copy with process-local `SWIFTUI_VIEW_DEBUG=29` and brief addressed LLDB.
-Product retries nevertheless remain withdrawn until corrected-method review and
-new exact consumer ownership handoff. No donor code/assets/config files, JIT,
+General product retries remain withdrawn; the single Settings admission below
+uses closed method review and a fresh exact consumer ownership handoff. No donor code/assets/config files, JIT,
 injected libraries or executable writes are authorized.
 
 The original serializer path failed on real consumers: both a4 captures exhausted
@@ -79,8 +79,8 @@ before command execution;513-byte inline startup input reproduces the LLDB pipe
 failure without a target. Both owners closed those failures; no product PID is
 leased to this chat now. Existing installed0.3.2 remains unchanged.
 
-Current package restores DEBUG-CAPTURE.DATA/PRIVACY/LIFECYCLE under contract@4,
-registry77. Task-owned writes: capture/field-reader/snapshot/recovery Python
+Current package restores DEBUG-CAPTURE.DATA/PRIVACY/LIFECYCLE under contract@5,
+registry78. Task-owned writes: capture/field-reader/snapshot/recovery Python
 modules, their three focused checks, this state, candidate contract, registry and
 candidate recipe. Existing SDK/AX/GPUI paths and unrelated work remain protected.
 The exact-image/target-ABI checks are implementation of existing privacy/lifecycle
@@ -128,11 +128,24 @@ checks in embedded Python3.9, including repeated wait/SetAsync/backoff interrupt
 unrestorable native-handler preflight and real no-target launcher cancellation.
 The new held-fixture harness traverses run_lldb; the older lifetime harness did not.
 
-Next: one affected review of the coherent correction through Reels' existing
-reviewer,
-then resolve findings, qualify one newly leased consumer case and prepare compatible
-local delivery. Do not wait for another user GO for authorized fixture corrections.
-No additional agents are authorized by this support assignment.
+SWIFTUI-METHODOLOGY@3 final turn01a1e699-d456-7f80-8637-6cd8ebcfacf7 closes
+both cancellation P1 on efd27a9, no new findings; author personally read verdict.
+One bounded consumer qualification is now allowed by the existing human diagnostic
+authority, with explicit code admission rather than a consumer bypass.
+Services owner@11 handed off fresh45908 / me.playphraseme.reference.services.fgb7o3fd /
+exact native birth1794870752.9841919 / window22500, English Settings open,
+menus closed,1/39/Common17/Ready-paused. Public native helper independently agrees.
+Old72842 is absent and is not reused. Owner's unchanged-copy/env29/signature receipt:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/playphraseme-services-debug-source-11-kp12lrk3/run-identity.json`.
+Request ID is services-settings-qualification-1. Other consumer identities remain
+closed. Product hold cannot parse termination commands or call Kill; receipt command
+is null and a separate owner recovery decision is required. Capture is owner-run,
+one attempt, initial refusal→stop, no retry/quota increase/blind SIGCONT.
+
+Next: affected check of this narrow admission/no-product-kill delta, frozen5-module
+candidate handoff to Services root, actual Settings outcome, then compatible local
+delivery only if qualification succeeds. Reels/Clip/Library await that outcome.
+No new agents, donor modifications, product termination or production release.
 
 Fixture, driver and original observations are in system temp:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`.

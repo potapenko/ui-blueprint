@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@4`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@5`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -14,9 +14,19 @@
 - Implementation status: c89b277 is withdrawn from product use after actual getter
   interruption and an unproved detach/post-debugger-exit lifetime. Source review
   and fixture tests did not qualify this path for the product. Further qualification
-  is limited to owned fixtures until a corrected method has new evidence.
+  now has independent efd27a9 review closure. @5 admits one exact owner-run
+  Services Settings qualification under the human diagnostic authorization
+  01a1e59e and fresh owner handoff; no general product capability or release.
 
 ## DEBUG-CAPTURE.SCOPE
+
+The source-pinned admission identifies one Services Settings request ID and exact
+PID/bundle/birth/window. Other product identities refuse before debugger startup
+and again at capture entry. Fixture admission remains separate. A consumer must
+revalidate the pinned identity immediately before one attempt; first refusal stops
+qualification with no retry/quota increase. Restart/new identity needs new handoff.
+The source owner executes the capture; tool preparation grants no ownership of its
+process, input or stores. No production installation is implied.
 
 An explicit request identifies one already-running, operator-owned process by
 PID, expected bundle and exact launch time, and one native window number.
@@ -35,7 +45,7 @@ The initial qualified profile is macOS27.0.1 arm64 / LLDB2103.0.34.407 only.
 
 ## DEBUG-CAPTURE.DATA
 
-The fixture-only correction reads the existing `_viewDebugData` return through
+The guarded correction reads the existing `_viewDebugData` return through
 an exact system-image profile plus target-resolved metadata, value witnesses,
 field offsets and native storage checks before payload access. It never invokes
 the full model-reflecting serializer. Only type metadata, children, position and
@@ -45,7 +55,7 @@ The returned owned array is released on every completed-call exit, including
 all decoder refusals. Two calls within the total256 are reserved for its release
 and pool cleanup; the combined cleanup deadline remains2s.
 @4 restores the privacy/lifecycle requirements after the methodology review;
-this is a fixture-only candidate, not product permission or acceptance.
+that fixture review is reused by @5; product acceptance remains separate.
 Canonical core0.1 Snapshot uses a distinct `swiftui.debug.layout` namespace.
 Type is structural metadata, not accessibility name or user-visible text.
 Children preserve the reported hierarchy; keys are observation-scoped and confer
@@ -103,6 +113,10 @@ termination command bound to the captured PID, generation and random owner token
 Missing, partial, malformed or foreign commands keep the debugger held. A command
 is attempted once; failure never triggers retries. Confirmed owner termination,
 external exit and externally lost debugger ownership have distinct outcomes.
+For admitted product targets, owner-command parsing and Kill are disabled:
+retain LLDB/launcher, publish the recovery receipt and return control to the source
+owner for a separate recovery decision. Capture permission is not termination or
+resume permission; there is no automatic restoration claim for an interrupted call.
 No product termination path is enabled. If recovery receipt IO fails, retain
 ownership rather than exit; forced debugger/host loss is not a safe recovery.
 

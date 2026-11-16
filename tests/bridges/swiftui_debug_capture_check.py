@@ -178,12 +178,40 @@ class CanonicalPrivacy(unittest.TestCase):
             result = json.loads((out/'manifest-own-fixture.json').read_bytes())
             self.assertEqual(result['cleanup'], 'external_target_exit')
             hold.assert_called_once()
+            self.assertTrue(hold.call_args.kwargs['allow_fixture_termination'])
             self.assertEqual(result['status'], 'failed')
             self.assertEqual(detached, [])
             self.assertFalse((out/'snapshot-own-fixture.json').exists())
         # The in-flight cleanup branch performs no register writes, retry or kill.
         bare = object.__new__(capture.Calls); bare.inflight = True
         self.assertFalse(bare.close())
+
+    def test_admitted_product_interruption_disables_fixture_termination(self):
+        req_value = copy.deepcopy(REQ)
+        req_value['expected_bundle'] = 'me.playphraseme.reference.services.test'
+        binding = tuple(req_value[k] for k in ('request_id', 'pid', 'expected_bundle',
+                                              'expected_launch_time', 'window_id'))
+        error = SimpleNamespace(Fail=lambda: False)
+        frame = SimpleNamespace(GetFunctionName=lambda: 'mach_msg2_trap')
+        thread = SimpleNamespace(GetQueueName=lambda: 'com.apple.main-thread', GetFrameAtIndex=lambda _: frame)
+        process = SimpleNamespace(IsValid=lambda: True, GetProcessID=lambda: 123,
+            GetThreadAtIndex=lambda _: thread, GetState=lambda: 1)
+        target = SimpleNamespace(AttachToProcessWithID=lambda *args: process)
+        debugger = SimpleNamespace(SetAsync=lambda _: None, HandleCommand=lambda _: None,
+            CreateTarget=lambda _: target, GetListener=lambda: None)
+        lldb = SimpleNamespace(SBError=lambda: error, eStateStopped=1, eStateDetached=2)
+        def interrupted(): raise codec.Refusal('call_interrupted_owner_recovery')
+        calls = SimpleNamespace(initialize=interrupted, close=lambda: False, count=1)
+        with tempfile.TemporaryDirectory(prefix='uib-product-hold-') as directory:
+            out = Path(directory); req = out/'request.json'; req.write_text(json.dumps(req_value))
+            with patch.dict(sys.modules, lldb=lldb), patch.object(capture, 'CONSUMER_ADMISSION', binding), \
+                    patch.object(capture, 'verified_helper', return_value=None), \
+                    patch.object(capture, 'metadata', return_value=META), \
+                    patch.object(capture, 'Calls', return_value=calls), \
+                    patch.object(capture, 'retain_debugger', return_value='external_target_exit') as hold:
+                capture.capture(debugger, str(req), '', str(out))
+            self.assertFalse(hold.call_args.kwargs['allow_fixture_termination'])
+            self.assertFalse((out/'snapshot-own-fixture.json').exists())
 
     def test_acquisition_budget_reserves_pool_cleanup_inside_total_cap(self):
         calls = object.__new__(capture.Calls)
@@ -300,8 +328,20 @@ class CanonicalPrivacy(unittest.TestCase):
     def test_product_capture_is_withdrawn_before_debugger_start(self):
         req = copy.deepcopy(REQ); req['expected_bundle'] = 'me.playphraseme.reference.example'
         with self.assertRaises(codec.Refusal) as error:
-            capture.require_fixture(req)
+            capture.require_admitted_target(req)
         self.assertEqual(error.exception.code, 'product_capture_withdrawn')
+
+    def test_consumer_admission_binds_every_identity_field_and_request(self):
+        req = copy.deepcopy(REQ); req['expected_bundle'] = 'me.playphraseme.reference.services.test'
+        binding = {k: req[k] for k in ('request_id', 'pid', 'expected_bundle',
+                                     'expected_launch_time', 'window_id')}
+        with patch.object(capture, 'CONSUMER_ADMISSION', tuple(binding.values())):
+            self.assertFalse(capture.require_admitted_target(req))
+            for field in binding:
+                wrong = dict(req)
+                wrong[field] = req[field]+1 if isinstance(req[field], (int, float)) else req[field]+'x'
+                with self.assertRaises(codec.Refusal): capture.require_admitted_target(wrong)
+            self.assertTrue(capture.require_admitted_target(REQ))
 
     def test_long_no_target_command_uses_private_source_file_then_removes_it(self):
         lldb = '/Applications/Xcode.app/Contents/Developer/usr/bin/lldb'

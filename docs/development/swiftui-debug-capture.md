@@ -1,15 +1,19 @@
 # External SwiftUI capture candidate
 
-**WITHDRAWN from product captures.** The c89b277 consumer getter failed with
-owner recovery required. The replacement is qualified only on owned fixtures;
-independent review and a newly leased product case remain required.
-Do not run this recipe on product apps; retained code is for controlled fixtures
-and failure diagnosis only. A separate513-byte inline LLDB startup hang was also
-reproduced without a target. No new version has been installed or released.
-The current CLI also rejects product bundle namespaces before debugger startup.
-Controlled experiments remain possible only in the dedicated synthetic namespace.
-Its [contract](../specs/product/swiftui-debug-capture.md) preserves the distinction
-between this raw debug getter and the existing bounds-anchor SDK.
+**One source-pinned Services Settings qualification only.** The c89b277 path
+remains withdrawn. The efd27a9 method has independent review closure for the
+qualified image profile, not general product/B0 acceptance. The current candidate
+admits only its source-pinned request ID/PID/bundle/birth/window plus owned fixtures;
+other products refuse before debugger startup and at capture entry. A new identity
+requires a fresh owner handoff; callers must not edit the gate or reuse old recipes.
+No new installed version or production release is implied.
+The [contract](../specs/product/swiftui-debug-capture.md) distinguishes this raw
+field channel from the existing bounds-anchor SDK.
+
+Current admitted request: `services-settings-qualification-1`, PID45908,
+`me.playphraseme.reference.services.fgb7o3fd`, native birth1794870752.9841919,
+window22500. The source owner revalidates this tuple before dispatch. This recipe
+must not be reused after a restart or for another window/state without handoff.
 
 The caller owns an already-running app and exact window. This command does not
 launch it, set its environment, activate it or request OS permissions. Current
@@ -27,7 +31,7 @@ values; a PID or window title alone is insufficient):
   "request_version": "1.0.0",
   "request_id": "owned-request-1",
   "pid": 123,
-  "expected_bundle": "me.uiblueprint.fixture",
+  "expected_bundle": "me.uiblueprint.external-layout.canary.example",
   "expected_launch_time": 1794836979.5,
   "window_id": 456,
   "limits": {
@@ -39,7 +43,14 @@ values; a PID or window title alone is insufficient):
 }
 ```
 
-Use an existing private system-temp output directory and a new request ID:
+The product case uses the exact frozen request supplied with its handoff, not
+these illustrative fixture values. Run once using standalone Python in a retained
+terminal/session; do not wrap it in a timeout that kills the process tree. Revalidate
+identity immediately before dispatch. First refusal ends the case: no retry,
+quota increase or blind SIGCONT. Preserve any running launcher/debugger on an
+unsafe result and report the recovery receipt to the source owner.
+
+Use an existing private system-temp output directory:
 
 ```sh
 python3 -B plugins/macos/swiftui_debug_capture.py \
@@ -82,7 +93,9 @@ is claimed.
 This LLDB target rejects `Detach(True)`. An interrupted call now keeps its owning
 LLDB process alive. `recovery-REQUEST.json` contains the exact PID, generation,
 random owner token and command filename. Invalid/partial/foreign commands keep
-holding. Only the synthetic fixture owner may write a0600 command in the same
+holding. For a product target `command` is null: command parsing and Kill are disabled;
+keep both processes alive and obtain a separate owner recovery decision.
+Only the synthetic fixture owner may write a0600 command in the same
 private directory, with exactly those PID/generation/owner fields and
 `action: "terminate-owned-fixture"`. That explicit action is attempted once.
 The launcher uses an isolated child session and does not kill LLDB on ordinary

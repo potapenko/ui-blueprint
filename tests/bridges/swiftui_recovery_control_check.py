@@ -57,7 +57,7 @@ class RecoveryInput(unittest.TestCase):
                 Kill=lambda: (kills.append(1) or SimpleNamespace(Success=lambda: success)))
             with patch('swiftui_recovery_control.termination_requested', return_value=command), \
                     patch('time.sleep', return_value=None):
-                value = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None)
+                value = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None, allow_fixture_termination=True)
             self.assertEqual(value, expected)
             self.assertEqual(len(kills), int(command))
 
@@ -70,7 +70,7 @@ class RecoveryInput(unittest.TestCase):
         def unavailable(_): raise OSError()
         with patch('swiftui_recovery_control.termination_requested', return_value=True), \
                 patch('time.sleep', return_value=None):
-            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', unavailable)
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', unavailable, allow_fixture_termination=True)
         self.assertEqual(result, 'exit_after_failed_owner_command')
         self.assertEqual(kills, [1])
 
@@ -88,10 +88,24 @@ class RecoveryInput(unittest.TestCase):
             if effect is not None: raise effect
         with patch('swiftui_recovery_control.termination_requested', return_value=False), \
                 patch('time.sleep', side_effect=delay):
-            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None)
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', lambda _: None, allow_fixture_termination=True)
         self.assertEqual(result, 'external_target_exit')
         process.Kill.assert_not_called(); process.Detach.assert_not_called()
         self.assertEqual(debugger.SetAsync.call_count, 2)
+
+    def test_product_hold_cannot_consume_even_a_matching_termination_command(self):
+        from unittest.mock import Mock
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        debugger = SimpleNamespace(SetAsync=lambda _: None)
+        process = Mock(); process.GetState.side_effect = [5, 5, 10]
+        process.IsValid.return_value = True
+        receipts = []
+        with patch('swiftui_recovery_control.termination_requested', return_value=True) as reader, \
+                patch('time.sleep', return_value=None):
+            result = retain_debugger(debugger, process, lldb, 0, 'r', 123, 'g', 'o', receipts.append)
+        self.assertEqual(result, 'external_target_exit')
+        self.assertIsNone(receipts[0]['command'])
+        reader.assert_not_called(); process.Kill.assert_not_called(); process.Detach.assert_not_called()
 
 
 if __name__ == '__main__':

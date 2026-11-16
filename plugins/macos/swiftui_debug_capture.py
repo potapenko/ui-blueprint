@@ -26,10 +26,22 @@ from swiftui_recovery_control import retain_debugger
 from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, snapshot
 
 
-def require_fixture(req):
-    # Product use was withdrawn after the real getter/lifetime failure.
-    if not req['expected_bundle'].startswith('me.uiblueprint.external-layout.canary.'):
-        raise Refusal('product_capture_withdrawn')
+# Filled only from the selected consumer owner's fresh identity handoff. A caller
+# cannot expand this gate with a request flag, filename or bundle prefix.
+CONSUMER_ADMISSION = (
+    'services-settings-qualification-1', 45908,
+    'me.playphraseme.reference.services.fgb7o3fd', 1794870752.9841919, 22500,
+)
+
+
+def require_admitted_target(req):
+    if req['expected_bundle'].startswith('me.uiblueprint.external-layout.canary.'):
+        return True
+    identity = (req['request_id'], req['pid'], req['expected_bundle'],
+                req['expected_launch_time'], req['window_id'])
+    if identity == CONSUMER_ADMISSION:
+        return False
+    raise Refusal('product_capture_withdrawn')
 
 
 def run_lldb(lldb_path, commands):
@@ -444,11 +456,12 @@ def capture(debugger, request_path, bundle_path, output_path):
     owner = uuid.uuid4().hex
     before = None
     safe = True
+    fixture = False
     payload = None
     outcome = dict(manifest_version='1.0.0', request_id=req['request_id'], status='failed', code='capture_failed', exit_status=1,
                    cleanup='not_attached', snapshot=None, calls=0, native_window_state=None)
     try:
-        require_fixture(req)
+        fixture = require_admitted_target(req)
         helper = verified_helper(bundle_path)
         before = metadata(helper, req)
         debugger.SetAsync(False)
@@ -506,7 +519,8 @@ def capture(debugger, request_path, bundle_path, output_path):
                 def publish(checkpoint):
                     write_new(fd, 'recovery-'+req['request_id']+'.json', encode(checkpoint))
                 outcome['cleanup'] = retain_debugger(debugger, process, lldb, fd,
-                    req['request_id'], req['pid'], generation, owner, publish)
+                    req['request_id'], req['pid'], generation, owner, publish,
+                    allow_fixture_termination=fixture)
         if not safe:
             if process is None or not process.IsValid():
                 outcome['cleanup'] = 'debugger_ownership_lost'
@@ -536,7 +550,7 @@ def main():
     try:
         args = parser.parse_args()
         req = read_request(args.request)
-        require_fixture(req)
+        require_admitted_target(req)
         native_prepare.verify_bundle(args.bundle)
         fd = output_directory(args.out, req)
         os.close(fd)

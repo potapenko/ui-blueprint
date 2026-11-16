@@ -44,8 +44,9 @@ def termination_requested(directory_fd, filename, expected_pid, expected_generat
         return False
 
 
-def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, generation, owner, publish):
-    """Hold an owned fixture until an authenticated decision or observed exit.
+def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, generation, owner, publish,
+                    allow_fixture_termination=False):
+    """Retain target ownership; only admitted fixtures accept termination commands.
 
     The SBProcess stays attached to the original process; no PID-based reattach
     or signal is used. publish accepts fixed-code records, not debugger text.
@@ -55,7 +56,8 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
     attempted = accepted = False
     async_ready = False
     checkpoint = dict(status='waiting_owner', pid=pid, generation=generation,
-                      owner=owner, command=command, detach_attempted=False)
+                      owner=owner, command=command if allow_fixture_termination else None,
+                      detach_attempted=False)
     published = False
     while True:
         try:
@@ -75,8 +77,8 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
                         'exit_after_failed_owner_command' if attempted else 'external_target_exit')
             if state == lldb.eStateDetached or not process.IsValid():
                 return 'debugger_ownership_lost'
-            if not attempted and termination_requested(directory_fd, command, pid, generation, owner):
-                # This function is reached only through the synthetic-fixture gate.
+            if allow_fixture_termination and not attempted and termination_requested(directory_fd, command, pid, generation, owner):
+                # Only the admitted synthetic-fixture branch can reach this action.
                 # Mark before dispatch: even an exception must not retry termination.
                 attempted = True
                 accepted = process.Kill().Success()

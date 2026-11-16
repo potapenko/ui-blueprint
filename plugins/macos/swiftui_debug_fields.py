@@ -1,4 +1,4 @@
-"""Fixture-only, target-qualified SwiftUI field reader; no value reflection."""
+"""Exact-profile, target-qualified SwiftUI field reader; no value reflection."""
 import math
 import struct
 from swiftui_debug_snapshot import Refusal, encode
