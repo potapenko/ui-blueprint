@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@2`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@3`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -21,6 +21,12 @@ No launch, focus, resize, permission prompt, app configuration change, JIT,
 expression evaluation, loaded helper library or executable-memory write occurs.
 Root selection is exactly the selected window's existing NSView content tree;
 other-window metadata may establish uniqueness but its content is not read.
+Search this tree only until its outermost getter-capable hosting roots. Once one
+is found, its native descendants are not independently scanned: that root's
+getter is the selected SwiftUI graph. Multiple outer roots still refuse as
+ambiguous. Native/independently hosted internals remain explicit coverage gaps.
+@3 reconciles root selection after both real Clip/Reels attempts exhausted the
+call budget while the old scan unnecessarily descended through hosting roots.
 The initial qualified profile is macOS27.0.1 arm64 / LLDB2103.0.34.407 only.
 
 ## DEBUG-CAPTURE.DATA

@@ -20,7 +20,7 @@ Production/public release needs the existing separate exact confirmation.
 
 ## Basis and distinct gaps
 
-Registry75 → [SwiftUI probe@3](../specs/product/swiftui-probe.md),
+Registry76 → [SwiftUI probe@3](../specs/product/swiftui-probe.md),
 [Native@5](../specs/product/native.md), [Boundaries@1](../specs/product/boundaries.md),
 Model1 / Geometry2 / Identity1 / Privacy1 / Exchange2 / Projections1 / Lifecycle1 /
 CLI21 establish existing behavior. Consumer `visual-transfer@4`, especially
@@ -75,13 +75,15 @@ No consumer application was attached, modified, restarted or captured here.
    stable semantic IDs; keys must be observation-scoped unless stronger evidence
    exists. Serialized transform items are incomplete. Do not infer arbitrary
    transforms or publish all positions in a universal window/image space.
-4. [DEBUG-CAPTURE@2](../specs/product/swiftui-debug-capture.md) is registered.
-   Ten focused checks and actual canary/output-refusal→recapture passed. Reels'
+4. [DEBUG-CAPTURE@3](../specs/product/swiftui-debug-capture.md) is registered.
+   Twelve focused checks and actual canary/output-refusal→recapture passed. Reels'
    non-author reviewer found call-budget, nonfinite and deadline defects in e6ecb1b;
    affected re-review of a4a79d2 closed all3 findings and the UUID identity delta.
    Both Python runtimes passed10/10; final-pin canary/refusal artifacts were checked.
-5. Clip and Reels owners received the frozen a4a79d2 command for first captures
-   on their own env29 copies before packaging. Qualify the real Clip slice, with
+5. Both real a4a79d2 Clip/Reels captures refused call_limit,256calls, with restored
+   detach and no Snapshot. Outermost-host pruning now avoids the unnecessary native
+   descendant scan (same fixture geometry,39→28calls); affected review precedes retry.
+   Qualify the real Clip slice, with
    state/resize and original PNG pairing. Then expand to the other named cases.
    Add the proven capability to a coherent local minor release/skill/install;
    only after this can consumers receive a supported command and exact pins.

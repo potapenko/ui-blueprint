@@ -346,6 +346,9 @@ def collect(calls, req):
         seen.add(view)
         if c.objc(view, 'respondsToSelector:', c.selector('makeViewDebugData')):
             hosts.append(view)
+            # This getter owns its SwiftUI graph. Its native descendants may be
+            # numerous controls or nested hosts, not additional outer roots.
+            continue
         children = c.objc(view, 'subviews')
         length = c.objc(children, 'count')
         if len(seen)+len(pending)+length > 256:

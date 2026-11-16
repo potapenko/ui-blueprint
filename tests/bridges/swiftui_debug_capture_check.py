@@ -234,6 +234,40 @@ class CanonicalPrivacy(unittest.TestCase):
         self.assertEqual(error.exception.code, 'deadline')
         call.assert_not_called()
 
+    def test_outer_host_root_excludes_unneeded_native_descendant_walk(self):
+        messages = []
+        def objc(obj, name, *args):
+            messages.append((obj, name))
+            values = {(1, 'windows'): 2, (2, 'count'): 1, (2, 'objectAtIndex:'): 3,
+                (3, 'windowNumber'): 456, (3, 'contentView'): 4,
+                (4, 'respondsToSelector:'): 1, (4, 'makeViewDebugData'): 5,
+                (5, 'length'): 2, (5, 'bytes'): 100,
+                (3, 'isKeyWindow'): 0, (3, 'isMainWindow'): 1, (1, 'isActive'): 1}
+            if (obj, name) not in values:
+                self.fail('visited native descendants below selected hosting root')
+            return values[obj, name]
+        calls = SimpleNamespace(symbol=lambda _: 10, selector=lambda x: x, objc=objc,
+            read=lambda address, _: (1).to_bytes(8, 'little') if address==10 else b'[]')
+        raw, flags = capture.collect(calls, REQ)
+        self.assertEqual(raw, b'[]')
+        self.assertNotIn((4, 'subviews'), messages)
+        self.assertEqual(flags['values'], dict(is_key_window=False, is_main_window=True, app_is_active=True))
+
+    def test_distinct_outer_roots_refuse_without_calling_either_getter(self):
+        def objc(obj, name, *args):
+            if name == 'makeViewDebugData': self.fail('ambiguous root getter dispatched')
+            if name == 'objectAtIndex:': return 3 if obj==2 else 7+args[0]
+            values = {(1,'windows'):2, (2,'count'):1, (3,'windowNumber'):456,
+                (3,'contentView'):4, (4,'respondsToSelector:'):0, (4,'subviews'):6,
+                (6,'count'):2, (7,'respondsToSelector:'):1, (8,'respondsToSelector:'):1}
+            if (obj,name) not in values: self.fail('descended below a hosting root')
+            return values[obj,name]
+        calls = SimpleNamespace(symbol=lambda _:10, selector=lambda x:x, objc=objc,
+            read=lambda *_:(1).to_bytes(8,'little'))
+        with self.assertRaises(codec.Refusal) as error:
+            capture.collect(calls,REQ)
+        self.assertEqual(error.exception.code,'hosting_surface_unresolved')
+
 
 if __name__ == '__main__':
     unittest.main()

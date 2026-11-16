@@ -9,6 +9,9 @@ The caller owns an already-running app and exact window. This command does not
 launch it, set its environment, activate it or request OS permissions. Current
 profile: macOS27.0.1 arm64, Xcode LLDB2103.0.34.407. A compatible installed native
 bundle supplies the independently verified public process metadata helper.
+The native search stops at outermost getter-capable hosting roots; it does not
+scan all native controls below a selected host. Multiple outer roots still refuse.
+Nested native/independently hosted content is not thereby declared measured.
 
 An example request (replace the illustrative identity with independently verified
 values; a PID or window title alone is insufficient):
