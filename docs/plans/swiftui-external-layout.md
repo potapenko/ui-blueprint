@@ -1,6 +1,7 @@
 # External SwiftUI layout qualification
 
-Status: c89b277 WITHDRAWN; reviewed method, one exact Settings qualification pending.
+Status: product attempts WITHDRAWN after the first8588025 Settings run entered
+retained owner recovery; root cause and real capture acceptance remain open.
 No shipped capability or version change. Existing installed0.3.2 is unchanged.
 Owner: support chat `01a1e565-14f6-7be0-aa02-cd648a1b0423`, current `master`.
 
@@ -150,10 +151,26 @@ foreign/partial commands hold; matching explicit action yields observed source
 termination, debugger exit0 and target absence. No product process was involved. Capture is owner-run,
 one attempt, initial refusal→stop, no retry/quota increase/blind SIGCONT.
 
-Next: affected check of the executable separate owner-recovery route, frozen5-module
-candidate handoff to Services root, actual Settings outcome, then compatible local
-delivery only if qualification succeeds. Reels/Clip/Library await that outcome.
-No new agents, donor modifications, product termination or production release.
+Review01a1e6b6 closed the final recovery P1 on8588025, with no new findings.
+The author personally verified that verdict and handed one exact owner-run to
+Services. The frozen candidate remains at
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-services-recovery-qualified-6yvsvxqz/`.
+Actual first attempt matched tuple/state/hashes but entered waiting_owner. No
+Snapshot or terminal manifest exists yet. Source45908 and launcher/LLDB are held
+by Services source_settings_evidence, terminal/session94262. No second attempt,
+recovery command, signal, detach or relaunch was reported at this handoff.
+This is a real qualification failure; fixture/review closure is not product success.
+Current master consumer admission is disabled. Do not edit the already-running
+frozen package or use it for another capture. Other consumers remain unadmitted.
+
+Next: Services root obtains the separate human recovery decision for this actual
+held copy; its owner alone follows the reviewed recovery recipe. Await known
+terminal outcome, manifest/call count and post-debugger-exit process verification.
+Do not share the owner token. If command outcome remains unknown, keep ownership;
+no retry or teardown. Then diagnose the exact tool failure. The current waiting
+receipt lacks the original failure code/stage, so no root cause is inferred.
+Grammar61053 remains prepared but unadmitted; no root-only recapture or new collector.
+No new agents, donor modifications or production release. Installed0.3.2 unchanged.
 
 Fixture, driver and original observations are in system temp:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`.

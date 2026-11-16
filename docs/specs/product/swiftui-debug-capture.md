@@ -14,9 +14,10 @@
 - Implementation status: c89b277 is withdrawn from product use after actual getter
   interruption and an unproved detach/post-debugger-exit lifetime. Source review
   and fixture tests did not qualify this path for the product. Further qualification
-  now has independent efd27a9 review closure. @5 admits one exact owner-run
-  Services Settings qualification under the human diagnostic authorization
-  01a1e59e and fresh owner handoff; no general product capability or release.
+  received independent method/recovery review closure through8588025. The one
+  admitted Settings attempt then entered retained owner recovery without Snapshot.
+  Current product admission is disabled; no retry or other consumer is qualified.
+  Existing frozen LLDB ownership remains with Services until separate recovery.
 
 ## DEBUG-CAPTURE.SCOPE
 

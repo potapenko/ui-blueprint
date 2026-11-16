@@ -28,10 +28,9 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 
 # Filled only from the selected consumer owner's fresh identity handoff. A caller
 # cannot expand this gate with a request flag, filename or bundle prefix.
-CONSUMER_ADMISSION = (
-    'services-settings-qualification-1', 45908,
-    'me.playphraseme.reference.services.fgb7o3fd', 1794870752.9841919, 22500,
-)
+# The single Services attempt entered owner recovery; no further product run.
+# Its already-running frozen debugger remains owned by the Services operator.
+CONSUMER_ADMISSION = None
 
 
 def require_admitted_target(req):

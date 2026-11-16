@@ -1,6 +1,12 @@
 # External SwiftUI capture candidate
 
-**One source-pinned Services Settings qualification only.** The c89b277 path
+**WITHDRAWN from further product attempts.** The single reviewed8588025 Settings
+attempt entered retained owner recovery with no Snapshot. Current master admission
+is disabled. The existing frozen launcher/LLDB belongs to Services; do not mutate
+its package, repeat capture, or terminate/detach it as cleanup. Its owner must use
+the separate reviewed recovery protocol after the actual human decision.
+
+Historical single-case recipe below, retained for that owner recovery only. The c89b277 path
 remains withdrawn. The efd27a9 method has independent review closure for the
 qualified image profile, not general product/B0 acceptance. The current candidate
 admits only its source-pinned request ID/PID/bundle/birth/window plus owned fixtures;
