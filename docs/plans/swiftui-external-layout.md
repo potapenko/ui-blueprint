@@ -78,8 +78,10 @@ No consumer application was attached, modified, restarted or captured here.
 4. [DEBUG-CAPTURE@2](../specs/product/swiftui-debug-capture.md) is registered.
    Ten focused checks and actual canary/output-refusal→recapture passed. Reels'
    non-author reviewer found call-budget, nonfinite and deadline defects in e6ecb1b;
-   corrections and fresh final-shape canary/refusal evidence await affected re-review.
-5. Qualify one real Clip root/rail/grid/query slice through its native owner, with
+   affected re-review of a4a79d2 closed all3 findings and the UUID identity delta.
+   Both Python runtimes passed10/10; final-pin canary/refusal artifacts were checked.
+5. Clip and Reels owners received the frozen a4a79d2 command for first captures
+   on their own env29 copies before packaging. Qualify the real Clip slice, with
    state/resize and original PNG pairing. Then expand to the other named cases.
    Add the proven capability to a coherent local minor release/skill/install;
    only after this can consumers receive a supported command and exact pins.
@@ -87,8 +89,8 @@ No consumer application was attached, modified, restarted or captured here.
 The earlier temporary driver has destructive fixture cleanup and must never be
 used on a consumer. The new candidate has no kill/restart path; uncertain in-flight
 failure reports stopped/owner_recovery_required. Its [recipe](../development/swiftui-debug-capture.md)
-states the exact interface and residuals. No new installed version, independent
-review completion, complete transforms or glyph/paint support is claimed.
+states the exact interface and residuals. Independent source review is closed;
+product qualification, new installation, complete transforms and glyph/paint remain open.
 
 Fixture, driver and original observations are in system temp:
 `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`.
