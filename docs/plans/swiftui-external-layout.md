@@ -135,3 +135,26 @@ Freshness criterion for this fixture PASSED. Next event is affected independent
 review of integrated b5108fa and this fixture evidence, followed by one fresh exact
 consumer owner handoff. Product admission and installation remain disabled; no
 product PID was used. Review/consumer acceptance cannot be inferred from this pass.
+
+## Privacy review correction —2026-11-18
+
+Consumer review of a88380b confirmed hashes/eight pure checks, but found that an
+unresolved model reference silently omitted protection and cached storage used only
+table bounds. Both are implementation defects against the existing @7 ownership/
+privacy contract; the earlier freshness evidence does not close privacy acceptance.
+
+Current correction refuses unresolved/stale model references before geometry, checks
+every spanned table page against the selected graph, and refuses boxed model/value
+storage before dereferencing its pointer: the profile lacks a proven graph-allocation
+binding for arbitrary heap pointees. No zero-overlap audit is emitted on failure.
+Four additional negatives pass (12cache checks total): missing model protection,
+foreign storage, cross-page foreign ownership and unqualified boxes.
+
+Actual owned fixture40792 was freshly identity-checked, then refused with
+cache_box_ownership_unqualified,14calls,detached_restored,exit4,no Snapshot/audit.
+Public identity after LLDB exit remained identical. Evidence:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-cache-privacy-refusal-rhmspayl/`.
+This is safe refusal, not a successful usable geometry capture. Earlier a88380b
+snapshots remain test evidence only and must not be reused for product admission.
+Next missing fact is a verified allocation/ownership boundary for boxed storage,
+without reading model payload. No new product run or quota change can substitute.

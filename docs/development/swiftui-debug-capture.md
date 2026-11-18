@@ -8,7 +8,10 @@ The current cache-only candidate is an integration under development, governed b
 AttributeGraph geometry instead of invoking either withdrawn SwiftUI getter.
 It has cold-fixture collection evidence, focused negatives and canonical output;
 same-process controlled state/resize freshness now passed on the owned fixture;
-integrated independent review and actual consumer qualification remain pending.
+consumer privacy review then found incomplete protection/ownership checks.
+They now refuse unknown model/box ownership; the own fixture currently returns
+cache_box_ownership_unqualified with restored detach. No usable product recipe
+or new installed version is available.
 See [current evidence and exact limits](../plans/swiftui-external-layout.md).
 
 Do not use earlier frozen Services packages on a new process or bypass

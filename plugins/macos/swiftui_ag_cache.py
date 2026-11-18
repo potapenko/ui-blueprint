@@ -166,11 +166,14 @@ class CacheReader:
         return owner
 
     def owned_record(self, offset, size):
-        # This guard precedes type, properties and child pointers, including
-        # foreign children whose empty properties would bypass a value-only guard.
-        owner = self.page_owner(offset)
-        if self.ptr(owner+0x28) != self.graph:
-            raise Refusal('cache_foreign_graph')
+        # Validate every page spanned by the range, not merely the starting
+        # record's page. Table bounds alone do not establish graph ownership.
+        if size < 0 or size > 1048576:
+            raise Refusal('cache_offset_limit')
+        for page in range(offset & ~511, ((offset+max(size, 1)-1) & ~511)+512, 512):
+            owner = self.page_owner(page)
+            if self.ptr(owner+0x28) != self.graph:
+                raise Refusal('cache_foreign_graph')
         return self.address(offset, size)
 
     def resolve(self, attribute, links_only=False):
@@ -212,13 +215,17 @@ class CacheReader:
             return None
         offset = self.u32(p+8)
         if self.u8(p+3) & 2:
-            return self.ptr(self.address(offset, 8))
-        return self.address(offset, size)
+            # Box metadata is owned, but arbitrary heap pointees have no proven
+            # graph allocation binding in this profile. Refuse before reading
+            # the pointer or its payload rather than claim a complete audit.
+            self.owned_record(offset, 8)
+            raise Refusal('cache_box_ownership_unqualified')
+        return self.owned_record(offset, size)
 
     def protect_model(self, model_id):
         resolved, _ = self.resolve(model_id, links_only=True)
         if resolved is None:
-            return
+            raise Refusal('cache_model_protection_incomplete')
         attribute, _, _ = resolved
         p, descriptor, flags = self.attribute_info(attribute)
         # Cached View values and rule bodies are both excluded. Only their
@@ -232,9 +239,10 @@ class CacheReader:
                     raise Refusal('cache_model_layout')
                 body = p+offset
                 if self.u8(p+3) & 1:
-                    body = self.ptr(body)
+                    self.owned_record(attribute+offset, 8)
+                    raise Refusal('cache_box_ownership_unqualified')
                 else:
-                    self.address(attribute+offset, size)
+                    self.owned_record(attribute+offset, size)
                 self.private_ranges.append((body, body+size))
         if flags & 0x10:
             metadata = self.ptr(descriptor+8)

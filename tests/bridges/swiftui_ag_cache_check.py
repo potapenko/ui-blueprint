@@ -95,4 +95,37 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual(r.ptr(100,4),0x1004)
         with self.assertRaises(Refusal):r.ptr(100)
 
+    def test_unresolved_model_protection_refuses_instead_of_skipping(self):
+        for reason in ('cache_reference_stale','cache_value_unavailable'):
+            r=reader();r.resolve=lambda *a,**kw:(None,reason)
+            r.attribute_info=Mock(side_effect=AssertionError('unresolved payload'))
+            with self.assertRaises(Refusal) as error:r.protect_model(513)
+            self.assertEqual(error.exception.code,'cache_model_protection_incomplete')
+            r.attribute_info.assert_not_called()
+
+    def test_cached_storage_rejects_foreign_page_before_payload(self):
+        r=reader();r.base=0x10000;r.limit=4096
+        r.u32=lambda _:1024;r.u8=lambda _:0
+        r.page_owner=lambda _:0x2000;r.ptr=lambda _:0x3000
+        r.read=Mock(side_effect=AssertionError('payload read'))
+        with self.assertRaises(Refusal) as error:r.cached_storage(512,0x10,16)
+        self.assertEqual(error.exception.code,'cache_foreign_graph')
+        r.read.assert_not_called()
+
+    def test_range_crossing_into_foreign_page_refuses(self):
+        r=reader();r.base=0x10000;r.limit=4096
+        r.page_owner=lambda page:page
+        r.ptr=lambda a:r.graph if a==512+0x28 else 0x9999
+        with self.assertRaises(Refusal) as error:r.owned_record(1000,32)
+        self.assertEqual(error.exception.code,'cache_foreign_graph')
+        self.assertEqual(r.owned_record(1000,24),r.base+1000)
+
+    def test_box_ownership_unknown_refuses_before_pointer_read(self):
+        r=reader();r.u32=lambda _:1024;r.u8=lambda _:2
+        r.owned_record=Mock(return_value=0x10400)
+        r.ptr=Mock(side_effect=AssertionError('box pointer read'))
+        with self.assertRaises(Refusal) as error:r.cached_storage(512,0x10,16)
+        self.assertEqual(error.exception.code,'cache_box_ownership_unqualified')
+        r.owned_record.assert_called_once_with(1024,8);r.ptr.assert_not_called()
+
 if __name__ == '__main__': unittest.main()
