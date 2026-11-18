@@ -98,10 +98,40 @@ no toggle/resize freshness pass or failure is claimed from mismatched surfaces.
 `capture-collapsed` and `capture-zoom` filenames reflect intended actions only and
 must not be treated as state labels. They contain the same actual initial state.
 
-Next acceptance event: an addressable same-process fixture action/state/resize
-chain verified by exact native window evidence, then affected integrated privacy/
-lifecycle review. Product collection and local delivery stay disabled until those
-checks and a finite actual consumer qualification. Existing source-local coordinates
-still have unknown inter-node/window transforms; no R01/Settings B0 mapping exists.
-No same-getter retry, quota increase, donor edits or installation is authorized by
-these fixture counts. Installed0.3.2 remains unchanged.
+## Addressed controlled transition — completed2026-11-18
+
+A fresh tool-owned SwiftUI fixture now provides an explicit private control file
+for ordinary @State transitions and content-size window resizing. Source:
+`tests/bridges/native/SwiftUICacheTransitionFixture.swift`. It has no debug getter,
+SDK marker, injected bridge or product-donor code. Visible phase text and independent
+native capture make state attribution reviewable; this does not rely on CUA.
+
+Same PID40792 / launch1795039819.6985741 / CG25798 across all three phases:
+
+| Phase | Ordinary change | Native window pt | Orange cached layout pt |
+| --- | --- | --- | --- |
+| 0 | rail present | 640×432 | x104,y186,w520,h90 |
+| 1 | @State removes rail | 640×432 | x16,y186,w608,h90 |
+| 2 | SwiftUI content width640→800 | 800×432 | x16,y186,w768,h90 |
+
+Each phase acknowledged its PID/phase, independently checked exact public process/
+window metadata before and after cache capture, then captured native PNG from that
+same PID/window. All identities/incarnations matched; every capture detached
+normally,22calls each, no SwiftUI/AG evaluation calls,0protected model-range reads.
+All3canonical snapshots validated; post-debugger-exit process identity remained.
+Native phase0/phase2 PNGs were personally viewed and show the corresponding rail,
+phase label and size. Source-local coordinates still do not establish general
+inter-node/window/PNG transforms or semantic part mapping.
+
+Evidence and retained fixture app:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-cache-transition-ttnsixvw/`:
+`transition-results.json`, `launch.json`, each `phase-N/request.json`, canonical
+Snapshot/manifest and `phase-N/native/window.png`/capture.json. No prior debug getter
+was invoked in this generation. Existing b5108fa producer was unchanged during
+these runs. Initial private control file0, then1, then2 drives the three states;
+ack is PID:phase, no other process's files or controls participate.
+
+Freshness criterion for this fixture PASSED. Next event is affected independent
+review of integrated b5108fa and this fixture evidence, followed by one fresh exact
+consumer owner handoff. Product admission and installation remain disabled; no
+product PID was used. Review/consumer acceptance cannot be inferred from this pass.

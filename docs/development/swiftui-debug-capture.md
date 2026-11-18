@@ -7,7 +7,8 @@ The current cache-only candidate is an integration under development, governed b
 [debug capture@7](../specs/product/swiftui-debug-capture.md). It reads already-recorded
 AttributeGraph geometry instead of invoking either withdrawn SwiftUI getter.
 It has cold-fixture collection evidence, focused negatives and canonical output;
-same-process state/resize freshness and integrated independent review are pending.
+same-process controlled state/resize freshness now passed on the owned fixture;
+integrated independent review and actual consumer qualification remain pending.
 See [current evidence and exact limits](../plans/swiftui-external-layout.md).
 
 Do not use earlier frozen Services packages on a new process or bypass
