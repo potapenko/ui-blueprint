@@ -313,3 +313,31 @@ still covered 3/6. This excludes treating that index alone as a complete card lo
 The next finite check is whether the mounted native host's validated weak layout
 attribute uniquely matches a recorded layout attribute under env29, and whether
 all card-owner branches can be recovered from that binding within unchanged bounds.
+
+## Native-anchor reverse association experiment and Shell outcome
+
+W02 target measurement is complete. Shell's actual outcome for window27003
+(1440×984pt) reports NSButton layout in full-window top-left points. Back is
+(96,8,36,36), Forward (132.5,8,35,36), Refresh (168,8,37,36). Edge gaps compute
+to 0.5pt each. Shell verified item/view/window identity and both native conversion
+paths. Source hosting frames and target NSButtons are distinct objects. Visual
+correction remains with Shell. Original JSON is under system temp
+`playphraseme-shell62-toolbar.ewkg4a/launch-d9ba1e2f-6038-42b0-9346-d752ab02d319/blueprint/request-a116c718-8c4b-40d0-b9ea-3087a19ad036-outcome.json`.
+
+On our own env29 NSViewRepresentable fixture the platform host's weak layout
+attribute matched exactly one recorded layoutComputer attribute. In the larger
+fixture (140 eager unrelated siblings plus three repeated cards), starting at
+the weak attribute's owning subgraph visited eight raw records and identified
+one match among two layoutComputer properties. Using reverse subgraph/model
+associations gave three unique ancestor hops before the graph root. The first
+parent subgraph contained 42 raw records / 26 emitted views, including native
+video120×60 and middle-card title/action frames42/92. Neighbor widths41/91 and
+43/93 were absent. Both captures restored/detached and reported zero protected
+range intersections. Evidence in system temp: `uib-large-video-anchor-zt7miqjx`
+and `uib-anchor-parents-2tbhc0xp`.
+
+This is a feasibility test. A fixture-only in-process witness supplied the weak
+attribute ID. The parent depth was chosen explicitly for this experiment. A
+consumer collector must resolve and validate the native host/weak generation
+externally, prove the source owner boundary from metadata, and reject ambiguity
+instead of assuming one parent hop. The product gate remains closed.
