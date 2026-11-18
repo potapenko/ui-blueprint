@@ -451,6 +451,7 @@ class CacheReader:
 
         owner_names = {}
         active_owners = set()
+        owner_roots = {}
 
         def rule_owner(model):
             resolved, _ = self.resolve(model, links_only=True)
@@ -484,6 +485,7 @@ class CacheReader:
             owner_root = owner_name is not None and attribute not in active_owners
             if owner_root:
                 active_owners.add(attribute)
+                owner_roots[attribute] = owner_roots.get(attribute, 0) + 1
             names = {name, owner_name if owner_root else None}
             descendant_found = False
             child = self.u32(p+20)
@@ -496,7 +498,7 @@ class CacheReader:
             if owner_root:
                 active_owners.remove(attribute)
             if scope['type'] in names and (wanted_descendant is None or descendant_found):
-                matches.append(element)
+                matches.append((element, attribute if owner_name == scope['type'] else None))
             return descendant_found or (wanted_descendant is not None and wanted_descendant in names)
 
         scan(root, 1)
@@ -505,7 +507,10 @@ class CacheReader:
             raise Refusal('cache_scope_unresolved' if not matches else 'cache_scope_ambiguous')
         # Order uncertainty outside the selected subtree is not its property.
         self.unknown_order = 0
-        return matches[0]
+        element, owner = matches[0]
+        if owner is not None and owner_roots.get(owner) != 1:
+            raise Refusal('cache_scope_split_owner')
+        return element
 
     def collect(self, host):
         graph_view = self.host_graph(host)

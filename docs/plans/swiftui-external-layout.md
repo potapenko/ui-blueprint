@@ -246,3 +246,24 @@ VStack nor traversal index may substitute. Current selector is experimental and
 cannot be handed to Clip/Reels/Settings/Grammar as a supported procedure. Product
 admission/install remain disabled; do not repeat whole-window captures or expand
 limits to hide this gap. No assertion of universal impossibility is made.
+
+## Body-owner selection qualification
+
+The exact-profile StaticBody/DynamicBody descriptor and ViewBodyAccessor generic
+argument identify elided source types in a fresh fixture. Commit 40aa074 selected
+a single card with video among 968 raw records and emitted 30 views. The validator
+accepted the canonical snapshot. Its root measured 640×400pt and the nested video
+region measured 520×90pt. This result alone did not prove card completeness.
+
+Consumer review requested three sibling cards with independent title/action widths,
+one mounted video in the middle, plus a two-video ambiguity control. Source-owned
+body attributes really can reappear in disjoint sibling branches: the one-video
+case found two distinct outer records for each card attribute. Their shared
+ancestor includes the other cards. Selecting just the branch with video cannot
+prove the whole source card. The reader now refuses that case before geometry
+publication (cache_scope_split_owner); two matching cards refuse cache_scope_ambiguous.
+Both actual runs restored and detached with 14 calls and no snapshot.
+Fixture evidence is in the system-temp uib-three-scope-n1f69e9d directory.
+Next investigate a source-attributed forest retaining all disjoint owner branches
+and their original ancestry, with explicit coverage and without including another
+card. Source-global transforms and installation remain pending.
