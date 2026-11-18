@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@9`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@10`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -68,6 +68,15 @@ window ownership checks stay mandatory. Inter-node/PNG transforms remain unknown
 No limit is increased and no raw scan limit is silently bypassed. Optional scope
 is additive to request1.0; old unscoped inputs retain whole-host behavior. Product
 admission remains closed until the selected mechanism is qualified and reviewed.
+
+@10 covers the paused-card case requested by the Reels owner. On the qualified
+profile a source view body can appear in several disjoint branches. Match the
+unique body attribute whose outer occurrence contains the requested descendant,
+then include every outer occurrence of that same attribute. Preserve parent links
+within each branch and emit separate roots where the omitted ancestors differ.
+The owner attribute is local to this observation. Two matching owner attributes
+refuse as ambiguous. All selected branches share the original limits and must
+pass the same graph, type and privacy checks.
 
 ## DEBUG-CAPTURE.DATA
 

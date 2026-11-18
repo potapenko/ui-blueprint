@@ -184,7 +184,7 @@ class CacheChecks(unittest.TestCase):
         names={1024:'App.Root',2048:'App.Card',3072:'App.Video',4096:'App.Card'}
         r=self.scoped_reader(names,{1024:[2048,4096],2048:[3072]},
                              dict(type='App.Card',containing_type='App.Video'))
-        self.assertEqual(r.select_scope(1024),2048)
+        self.assertEqual(r.select_scope(1024),[2048])
         self.assertEqual(r.scanned_records,4);r.properties.assert_not_called()
 
     def test_absent_ambiguous_and_self_only_scope_refuse(self):
@@ -201,7 +201,7 @@ class CacheChecks(unittest.TestCase):
         names={1024+i*1024:'App.Other' for i in range(300)};names[2048]='App.Card'
         r=self.scoped_reader(names,{1024:list(names)[1:]},dict(type='App.Card'))
         r.req['limits']['max_nodes']=1
-        self.assertEqual(r.select_scope(1024),2048)
+        self.assertEqual(r.select_scope(1024),[2048])
         self.assertEqual(r.scanned_records,300)
         names={1024+i*1024:'App.Other' for i in range(1025)};names[2048]='App.Card'
         r=self.scoped_reader(names,{1024:list(names)[1:]},dict(type='App.Card'))

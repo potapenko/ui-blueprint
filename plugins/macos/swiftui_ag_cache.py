@@ -445,8 +445,8 @@ class CacheReader:
         scope = self.req.get('scope')
         if scope is None:
             self.scanned_records = 0
-            return root
-        seen, matches = set(), []
+            return [root]
+        seen, matches = set(), set()
         wanted_descendant = scope.get('containing_type')
 
         owner_names = {}
@@ -485,7 +485,7 @@ class CacheReader:
             owner_root = owner_name is not None and attribute not in active_owners
             if owner_root:
                 active_owners.add(attribute)
-                owner_roots[attribute] = owner_roots.get(attribute, 0) + 1
+                owner_roots.setdefault(attribute, []).append(element)
             names = {name, owner_name if owner_root else None}
             descendant_found = False
             child = self.u32(p+20)
@@ -498,7 +498,7 @@ class CacheReader:
             if owner_root:
                 active_owners.remove(attribute)
             if scope['type'] in names and (wanted_descendant is None or descendant_found):
-                matches.append((element, attribute if owner_name == scope['type'] else None))
+                matches.add(('owner', attribute) if owner_name == scope['type'] else ('element', element))
             return descendant_found or (wanted_descendant is not None and wanted_descendant in names)
 
         scan(root, 1)
@@ -507,10 +507,8 @@ class CacheReader:
             raise Refusal('cache_scope_unresolved' if not matches else 'cache_scope_ambiguous')
         # Order uncertainty outside the selected subtree is not its property.
         self.unknown_order = 0
-        element, owner = matches[0]
-        if owner is not None and owner_roots.get(owner) != 1:
-            raise Refusal('cache_scope_split_owner')
-        return element
+        kind, identity = matches.pop()
+        return owner_roots[identity] if kind == 'owner' else [identity]
 
     def collect(self, host):
         graph_view = self.host_graph(host)
@@ -527,7 +525,9 @@ class CacheReader:
             raise Refusal('cache_subgraph_root')
         self.nil_attribute = self.u32(self.symbol('AGAttributeNil', 'AttributeGraph'))
         self.associations()
-        self.walk(self.select_scope(root))
+        selected_roots = self.select_scope(root)
+        for selected_root in selected_roots:
+            self.walk(selected_root)
         # Establish all known selected model-value ranges before geometry reads.
         for node in self.nodes:
             self.protect_model(node['model'])
@@ -560,7 +560,7 @@ class CacheReader:
                           for start, end in self.private_ranges)
         if model_reads:
             raise Refusal('cache_private_range')
-        self.c.cache_audit = dict(scope_scan_records=self.scanned_records, raw_records=len(self.raw_seen), views=len(self.nodes),
+        self.c.cache_audit = dict(selected_roots=len(selected_roots), scope_scan_records=self.scanned_records, raw_records=len(self.raw_seen), views=len(self.nodes),
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)

@@ -267,3 +267,16 @@ Fixture evidence is in the system-temp uib-three-scope-n1f69e9d directory.
 Next investigate a source-attributed forest retaining all disjoint owner branches
 and their original ancestry, with explicit coverage and without including another
 card. Source-global transforms and installation remain pending.
+
+## Three-card ownership check
+
+On the owned three-card fixture the middle card mounted ScopeVideo. Selecting
+ScopeCard containing ScopeVideo returned both disjoint roots of that body
+attribute. The 35 emitted nodes contain the middle title frame (42pt), action
+frame (92pt), and orange video (520×90pt). The neighboring cards' title/action
+widths 41/91 and 43/93 are absent. Discovery visited 802 raw records. Geometry
+reads overlapped zero of 70 protected ranges. The canonical validator passed.
+With two mounted videos, two distinct owner attributes qualified and capture
+refused cache_scope_ambiguous. Both runs detached normally. Native and product
+qualification remain separate. Evidence is in system temp
+`uib-three-scope-d6u4hgdl/{one,two}`. The current consumer admission is disabled.
