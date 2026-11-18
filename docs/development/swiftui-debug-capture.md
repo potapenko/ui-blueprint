@@ -1,10 +1,10 @@
 # External SwiftUI capture — not a product recipe
 
-Product admission remains disabled. c89 and8588025 failed real consumer
+Only the exact Reels owner handoff registered in the current contract is admitted. c89 and8588025 failed real consumer
 qualification and must not be retried. No new version has been installed.
 
 The current cache-only candidate is an integration under development, governed by
-[debug capture@7](../specs/product/swiftui-debug-capture.md). It reads already-recorded
+[debug capture@8](../specs/product/swiftui-debug-capture.md). It reads already-recorded
 AttributeGraph geometry instead of invoking either withdrawn SwiftUI getter.
 It has cold-fixture collection evidence, focused negatives and canonical output;
 same-process controlled state/resize freshness now passed on the owned fixture;
@@ -12,7 +12,7 @@ consumer privacy review then found incomplete protection/ownership checks.
 Unknown model references and boxed geometry still refuse. The current narrower
 candidate reads graph-owned model pointer slots only to exclude their heap ranges;
 it never reads those pointees. All three fixture transitions pass with that
-protection. Affected review and actual consumer qualification remain pending;
+protection. Affected review is closed for7d18685; actual Reels consumer qualification is pending;
 no product recipe or new installed version is available.
 See [current evidence and exact limits](../plans/swiftui-external-layout.md).
 

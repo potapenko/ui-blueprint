@@ -29,9 +29,12 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 
 # Filled only from the selected consumer owner's fresh identity handoff. A caller
 # cannot expand this gate with a request flag, filename or bundle prefix.
-# The single Services attempt entered owner recovery; no further product run.
-# Its already-running frozen debugger remains owned by the Services operator.
-CONSUMER_ADMISSION = None
+# Reviewed cache-only path, one fresh owner-bound Reels case. Withdrawn getter
+# packages are not admitted. No source app launch or operation belongs here.
+CONSUMER_ADMISSION = (
+    'reels-cache-qualification-1', 19791,
+    'me.playphraseme.reference.reels.fgb7o3fd', 1795038583.1458468, 25250,
+)
 
 
 def require_admitted_target(req):

@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@7`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@8`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -16,12 +16,13 @@
   and fixture tests did not qualify this path for the product. Further qualification
   received independent method/recovery review closure through8588025. The one
   admitted Settings attempt then entered retained owner recovery without Snapshot.
-  Current product admission is disabled; no retry or other consumer is qualified.
+  The withdrawn getter admission remains disabled. After affected cache review,
+  @8 admits one exact owner-run Reels cache case; no other consumer is qualified.
   Services completed owner recovery; target and debugger processes are absent.
 
 ## DEBUG-CAPTURE.SCOPE
 
-The source-pinned admission identifies one Services Settings request ID and exact
+The source-pinned admission identifies one Reels cache qualification request ID and exact
 PID/bundle/birth/window. Other product identities refuse before debugger startup
 and again at capture entry. Fixture admission remains separate. A consumer must
 revalidate the pinned identity immediately before one attempt; first refusal stops
@@ -65,8 +66,13 @@ Raw control records are distinct from emitted view nodes: normalize transparent
 records according to the qualified source profile. Keep parent associations;
 sibling order with equal source-order keys is unknown unless a complete valid
 cached chain establishes it. Do not silently turn traversal order into semantics.
-The candidate remains fixture-only until the affected review and fresh-generation
-qualification; the consumed8588025 product admission is not reused.
+Affected consumer review of7d18685 closed the model-protection findings; cold
+collection and same-window transitions passed. @8 admits only request
+reels-cache-qualification-1 / PID19791 / me.playphraseme.reference.reels.fgb7o3fd /
+birth1795038583.1458468 / CG25250, handed off by the Reels owner on2026-11-18.
+The owner executes one attempt after fresh identity/state/hash verification;
+first refusal ends qualification. This is no release/B0/transform acceptance.
+The consumed8588025 getter admission is never reused.
 Canonical core0.1 Snapshot uses a distinct `swiftui.ag_cache.layout` namespace.
 Type is structural metadata, not accessibility name or user-visible text.
 Children preserve the reported hierarchy; keys are observation-scoped and confer

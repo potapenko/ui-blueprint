@@ -181,3 +181,18 @@ appeared; the completed run selects the original exact CGID, never substitutes o
 This candidate restores fixture usefulness while keeping the geometry ownership
 boundary. Product admission remains closed pending affected consumer review and a
 new exact owner-run; this is not a product measurement/install claim.
+
+## Reels single-case handoff —2026-11-18
+
+Reels consumer root01a1f09e-6b6f-73a0-9ddb-87bf77c4b2a3 independently reviewed
+7d18685: no blockers in affected delta,14pure checks and native PNG SHA/identity
+verified. Owner supplied fresh19791 / me.playphraseme.reference.reels.fgb7o3fd /
+birth1795038583.1458468 / CG25250,1920×1050pt,Common Phrases Reels paused,
+Play Reel/Sublet(2020)1/17,menus closed,launch env29/localhost/READ_ONLY.
+Executable56267d91d49eb9e6030e8ae5bddc34342b2d2b3450eba88264c15b022f70c215;
+debug dylib55e0190407da25c70db47475668f7df7203986f038429a34dd1f6668dfd8a6aa.
+@8/source literal admission binds only this tuple and reels-cache-qualification-1.
+The source owner runs once after rechecking state/identity/frozen hashes. This
+support chat does not attach or operate that app. No quota change or automatic
+retry; unknowns/unsupported boxed geometry remain explicit. Actual capture,
+canonical/native mapping and installation remain unaccepted until owner result.
