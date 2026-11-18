@@ -289,3 +289,27 @@ both raw discovery count and depth. The manifest does not distinguish them.
 This admission is consumed. Another full-graph uniqueness scan cannot qualify
 the case. A replacement needs an independently bound, bounded starting point
 or index from the exact window to its source owner before traversing the card.
+
+## Addressable native video surface
+
+The immutable Reels owner identifies RollingCompositionPlayerSurfaceView as the
+NSView created by RollingCompositionPlayerSurface inside ReelsVideoView.
+The surface class is shared across playback uses and has no dedicated identifier.
+Window membership plus this class alone cannot identify the active card.
+
+On a synthetic NSViewRepresentable with env29, a mounted child has an immediate
+SwiftUI.AppKitPlatformViewHost parent. Metadata resolves coreRepresentedViewProvider
+to the concrete NSView type. The parent has a populated optional coreLayoutInvalidator,
+whose sole field is an AttributeGraph.WeakAttribute<SwiftUI.LayoutComputer> at offset0.
+Only the optional-presence bit was tested on the instance. No weak handle was used
+to access geometry, and no reverse link to a tree owner is qualified. The helpers
+are in system temp `uib-platform-host-metadata-ze30cj6e`. An exploratory generic
+reflection helper failed in swift-frontend. The finite metadata and presence probes
+ran successfully. These observations use only a synthetic window.
+
+On the existing three-card fixture, the association index directly covered 3/6
+outer body-owner branches. Following ancestry from all 538 reachable indexed parents
+still covered 3/6. This excludes treating that index alone as a complete card locator.
+The next finite check is whether the mounted native host's validated weak layout
+attribute uniquely matches a recorded layout attribute under env29, and whether
+all card-owner branches can be recovered from that binding within unchanged bounds.
