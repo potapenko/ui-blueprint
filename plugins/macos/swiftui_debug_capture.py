@@ -21,7 +21,8 @@ import time
 import uuid
 
 import native_prepare
-from swiftui_debug_fields import GETTER, SWIFT_SYMBOLS, collect_fields
+from swiftui_debug_fields import GETTER, SWIFT_SYMBOLS
+from swiftui_ag_cache import collect_fields, is_host
 from swiftui_recovery_control import retain_debugger
 from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, snapshot
 
@@ -222,7 +223,6 @@ class Calls:
         self.bp = self.memory = None
         self.suspended = []
         self.pool = None
-        self.owned_array = None
         self.code = self.read(self.pc, 16)
         self.return_code = self.read(self.return_pc, 16)
         self.redzone = self.read(self.sp-128, 128)
@@ -301,9 +301,12 @@ class Calls:
         self.altered = False
 
     def call(self, name, *args):
+        if name not in ('objc_autoreleasePoolPush', 'objc_autoreleasePoolPop',
+                        'objc_msgSend', 'sel_registerName', 'class_getInstanceSize'):
+            raise Refusal('forbidden_target_call')
         self.admit()
-        # Reserve array release plus pool-pop inside the same total256 cap.
-        limit = 256 if name == 'objc_autoreleasePoolPop' else 255 if name == 'swift_release' else 254
+        # Preserve the existing acquisition ceiling; cache reads own no Swift array.
+        limit = 256 if name == 'objc_autoreleasePoolPop' else 254
         if self.count >= limit or len(args) > 8:
             raise Refusal('call_limit', 2)
         address = self.symbol(name)
@@ -350,10 +353,6 @@ class Calls:
             raise Refusal('unexpected_breakpoint_owner_recovery')
         self.inflight = False
         value = tuple(frame.FindRegister('x'+str(i)).GetValueAsUnsigned() for i in range(4))
-        if name == GETTER:
-            self.owned_array = value[0]
-        elif name == 'swift_release':
-            self.owned_array = None
         self.restore()
         return value
 
@@ -384,8 +383,6 @@ class Calls:
                 self.restore()
             # All completed-call cleanup shares one bounded two-second interval.
             self.deadline = time.monotonic()+2
-            if self.owned_array:
-                self.call('swift_release', self.owned_array)
             if self.pool:
                 self.call('objc_autoreleasePoolPop', self.pool)
                 self.pool = None
@@ -423,7 +420,7 @@ def collect(calls, req):
         if not view or view in seen or len(seen) >= 256:
             raise Refusal('view_tree_limit', 2)
         seen.add(view)
-        if c.objc(view, 'respondsToSelector:', c.selector('makeViewDebugData')):
+        if is_host(c, view, req):
             hosts.append(view)
             # This getter owns its SwiftUI graph. Its native descendants may be
             # numerous controls or nested hosts, not additional outer roots.
@@ -458,7 +455,7 @@ def capture(debugger, request_path, bundle_path, output_path):
     fixture = False
     payload = None
     outcome = dict(manifest_version='1.0.0', request_id=req['request_id'], status='failed', code='capture_failed', exit_status=1,
-                   cleanup='not_attached', snapshot=None, calls=0, native_window_state=None)
+                   cleanup='not_attached', snapshot=None, calls=0, native_window_state=None, cache_audit=None)
     try:
         fixture = require_admitted_target(req)
         helper = verified_helper(bundle_path)
@@ -466,6 +463,7 @@ def capture(debugger, request_path, bundle_path, output_path):
         debugger.SetAsync(False)
         debugger.HandleCommand('settings set target.require-hardware-breakpoint true')
         debugger.HandleCommand('settings set target.load-script-from-symbol-file false')
+        debugger.HandleCommand('settings set target.process.disable-memory-cache true')
         target = debugger.CreateTarget('')
         error = lldb.SBError()
         process = target.AttachToProcessWithID(debugger.GetListener(), req['pid'], error)
@@ -502,6 +500,7 @@ def capture(debugger, request_path, bundle_path, output_path):
         if calls is not None:
             safe = calls.close()
             outcome['calls'] = calls.count
+            outcome['cache_audit'] = getattr(calls, 'cache_audit', None)
         if process is not None and process.IsValid() and process.GetState() != lldb.eStateDetached:
             if safe:
                 if process.GetState() != lldb.eStateStopped:

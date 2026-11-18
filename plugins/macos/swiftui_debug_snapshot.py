@@ -8,7 +8,7 @@ import math
 import re
 import uuid
 
-NAMESPACE = 'swiftui.debug.layout'
+NAMESPACE = 'swiftui.ag_cache.layout'
 FIELDS = ['layout_bounds', 'hit_region', 'visible_region', 'paint_bounds']
 MAX_BYTES = 1048576
 
@@ -101,17 +101,20 @@ def snapshot(raw, req, metadata, start, end):
     nonce = uuid.uuid4().hex
     surface = dict(id='native-window-'+str(req['window_id']), generation=nonce)
     evidence = dict(observation_id='debug-'+nonce, source_namespace=NAMESPACE,
-                    provenance='reported', method='NSHostingView._viewDebugData.validated-fields.position-size', uncertainty=None)
+                    provenance='reported', method='AttributeGraph.validated-cache.position-size', uncertainty=None)
     nodes = []
+    child_order_unknown = False
 
     def prop(field, state):
         return dict(selection='requested', field=field, sensitivity='public', evidence=evidence, state=state)
 
     def visit(node, depth):
+        nonlocal child_order_unknown
         if len(nodes) >= req['limits']['max_nodes'] or depth > req['limits']['max_depth']:
             raise Refusal('tree_limit', 2)
         if not isinstance(node, dict) or not isinstance(node.get('properties'), list):
             raise Refusal('invalid_tree', 2)
+        child_order_unknown |= node.get('child_order_unknown') is True
         children = node.get('children', [])
         if not isinstance(children, list) or len(children) > req['limits']['max_nodes']:
             raise Refusal('invalid_tree', 2)
@@ -131,7 +134,11 @@ def snapshot(raw, req, metadata, start, end):
             if not name or len(name.encode()) > 4096 or any(ord(c) < 32 or ord(c) == 127 for c in name):
                 raise Refusal('type_limit', 2)
             native_role = dict(availability='known', value=dict(type='text', value=name))
-        layout = dict(availability='unknown', reason='position-or-size-not-exposed')
+        reason = node.get('layout_unknown_reason', 'position-or-size-not-exposed')
+        if reason not in ('position-or-size-not-exposed', 'cache_value_unavailable',
+                          'cache_reference_stale', 'cache_value_dirty'):
+            raise Refusal('invalid_cache_reason', 2)
+        layout = dict(availability='unknown', reason=reason)
         if 3 in props and 4 in props:
             x, y = _pair(props[3], '__C.CGPoint')
             width, height = _pair(props[4], '__C.CGSize', True)
@@ -155,11 +162,12 @@ def snapshot(raw, req, metadata, start, end):
                     omitted_count=None, unknown_count=unknown)
     context = dict(schema_version='0.1.0', session_id='debug-'+nonce, target=metadata['target'],
         surfaces=[surface], scope_id=coverage['scope_id'], projection='design', fields=FIELDS,
-        plugin=dict(id='swiftui-debug-capture', version='1.0.0'), environment_revision=nonce)
+        plugin=dict(id='swiftui-cache-layout', version='1.0.0'), environment_revision=nonce)
     observation = dict(id=evidence['observation_id'], source_namespace=NAMESPACE,
         channel='opt_in_layout_probe', start=start, end=end, clock_domain='capture-'+nonce,
         time_unit='seconds', freshness_basis='live_read', answer_source='cache', freshness='unverified',
-        last_verified=None, consistency='unknown', consistency_reason='debug-tree-not-presented-frame', coverage=coverage)
+        last_verified=None, consistency='unknown', consistency_reason=('cached-sibling-order-unqualified' if child_order_unknown
+                            else 'cached-tree-not-presented-frame'), coverage=coverage)
     value = dict(id='debug-'+nonce, revision=1, source_state=None, context=context,
         surface_records=[], observations=[observation], nodes=nodes, relations=[], components=[],
         focus=dict(keyboard=dict(status='not_requested'), accessibility=dict(status='not_requested'),

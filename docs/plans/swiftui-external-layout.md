@@ -58,38 +58,50 @@ Do not dump owner-token/command files. Do not rerun this package. dad8494 disabl
 current product admission. The original stop/call stage was lost;35calls alone
 cannot distinguish getter, restoration or cleanup. Its exact cause is unknown.
 
-## Materially different bounded mechanism
+## Cached-tree integration — current reproducible result
 
-Read-only disassembly on an owned helper establishes that _viewDebugData builds
-its result via _ViewDebug.appendDebugData, including unconditional generic model
-projection/copy. AGGraphGetValue can call update_attribute. Thus8588025's host
-allowlist avoided model-slot reads but did not remove target-side evaluation/copy.
-This is an observed risk, not an invented postmortem cause for45908.
+Current candidate follows registry81/debug-capture@7. The withdrawn getters are
+blocked by a dispatch allowlist. New swiftui_ag_cache.py reads recorded AG tree,
+subgraph associations and cached geometry, with graph-owner checks before every
+record, exact image/host/type provenance, page/weak-reference checks, protected
+model ranges, nonnegative size checks and explicit unknown sibling ordering.
+No product target has been contacted by this candidate.
 
-The proposed alternative reads the already-recorded AttributeGraph debug tree and
-only existing cached geometry through bounded memory reads, without invoking those
-SwiftUI/AG evaluators. No product target was used. The first owned-canary probe
-read250 raw direct-link records, including9 geometry records, in86426bytes;
-11ordinary AppKit/runtime calls preceded pool cleanup, no SwiftUI getter call.
-Root1920×1050 and VStack1888×152 at16,465 match the known fixture. Source33990:
-1794853157.923368 remained alive after debugger exit. This is incomplete: nested
-subgraph associations, Color/Text and full privacy/range guards remain unqualified.
-Host metadata establishes ViewSize.value:CGSize at0, proposal at16, size/stride32,
-alignment8; substituting raw CGSize metadata would be wrong.
+The v5 prototype on the earlier fixture matched all167 parent/type/position/size
+records, including Color/Text. Independent prototype review required owner-graph,
+host provenance, privacy read-range and size negatives; integration addresses them,
+but integrated independent review remains pending.
 
-One next acceptance scenario: reproduce the existing canary hierarchy including
-Color(16,491,1888,90) and Text(918.5,465,83,16), through cached subgraph links with
-no model/evaluation calls, validated type/range/dirty-cache handling and known
-post-exit lifetime. It has NOT passed. Complete this finite slice before any new
-product attempt; then affected review, one original-case qualification and local
-compatible delivery. No same-getter retry merely for extra logs or quota increase.
+Fresh-generation qualification on2026-11-18 used only a new owned fixture:
+PID19845 / bundle me.uiblueprint.external-layout.canary.cold.8d80a715c2fb43879bd1a841cec56c45 /
+birth1795038586.3340869 / window25252. Ordinary env29 launch, no prior debug getter.
+Initial descriptor admission refused safely; correction distinguishes four-byte
+aligned Swift descriptors and descriptor-less dynamic subclasses from heap pointers.
+The integrated capture then returned173views/390raw records,22calls,
+342protected model ranges/0overlapping reads,46geometry reads and2unknown sibling
+order groups. Canonical validator passed. Normal detach and public post-exit
+identity were confirmed. Native exact-window PNG independently shows the same
+640×400 expanded-rail state: Color80×300 at16,48, orange520×90 at104,166,
+Text83×16 at322.5,140. This establishes cold collection, not all acceptance.
 
-Research artifacts are in
-`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-external-layout-d6jl1rro/`:
-`getter-wrapper-observation.json`, `ag-code-observation.json`,
-`ag-storage-v2-observation.json`, `cached-geometry-metadata-oracle.txt`,
-`ag_cache_probe_v3.py`, `ag-cache-probe-v3-result.json`.
-They serve the named next fixture qualification/review; they are not a release.
-This chat retains non-image evidence through that handoff; images and retained
-fixture apps are never agent-cleaned. Grammar61053 and other consumer copies remain
-unadmitted; no relaunch/root-only pair/probe is needed from those owners now.
+Runtime evidence/app retained in system temp:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-cold-cache-dwjzt6so/`.
+`capture-5/snapshot-cold-cache-1.json` and manifest are the successful initial run;
+`native-check/window.png` and capture.json are independent addressed evidence.
+Earlier failed attempts remain evidence of refused admission, not passes.
+
+Important unresolved QA: CUA returned collapsed/zoomed fixture images, but exact
+PID/window native inventory and PNG remained expanded640×400. CUA inventory did
+not include the new fixture even after session reset. Therefore those CUA actions
+are not attributed to19845. The initial suspicion of stale cache is NOT established;
+no toggle/resize freshness pass or failure is claimed from mismatched surfaces.
+`capture-collapsed` and `capture-zoom` filenames reflect intended actions only and
+must not be treated as state labels. They contain the same actual initial state.
+
+Next acceptance event: an addressable same-process fixture action/state/resize
+chain verified by exact native window evidence, then affected integrated privacy/
+lifecycle review. Product collection and local delivery stay disabled until those
+checks and a finite actual consumer qualification. Existing source-local coordinates
+still have unknown inter-node/window transforms; no R01/Settings B0 mapping exists.
+No same-getter retry, quota increase, donor edits or installation is authorized by
+these fixture counts. Installed0.3.2 remains unchanged.

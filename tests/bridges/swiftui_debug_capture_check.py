@@ -216,7 +216,7 @@ class CanonicalPrivacy(unittest.TestCase):
     def test_acquisition_budget_reserves_pool_cleanup_inside_total_cap(self):
         calls = object.__new__(capture.Calls)
         calls.deadline = float('inf'); calls.count = 254
-        calls.owned_array = 9; calls.pool = 1; calls.memory = None; calls.inflight = calls.altered = False
+        calls.pool = 1; calls.memory = None; calls.inflight = calls.altered = False
         calls.pc = 100; calls.sp = 4096; calls.return_pc = 150; calls.return_sp = 3968; calls.suspended = []
         error = SimpleNamespace(Fail=lambda: False)
         frame = SimpleNamespace(GetPC=lambda: 150, GetSP=lambda: 3968,
@@ -240,9 +240,8 @@ class CanonicalPrivacy(unittest.TestCase):
         self.assertEqual(refused.exception.code, 'call_limit')
         self.assertEqual(invoked, [])
         self.assertTrue(calls.close())
-        self.assertEqual(invoked, ['swift_release', 'objc_autoreleasePoolPop'])
-        self.assertIsNone(calls.owned_array)
-        self.assertEqual(calls.count, 256)
+        self.assertEqual(invoked, ['objc_autoreleasePoolPop'])
+        self.assertEqual(calls.count, 255)
         self.assertIsNone(calls.pool)
 
         # A fractional remaining budget must never enter WaitForEvent(1).
@@ -260,19 +259,10 @@ class CanonicalPrivacy(unittest.TestCase):
             calls.call('objc_msgSend', 1, 2)
         self.assertTrue(calls.inflight)
 
-        # Returned ownership is registered before a possible restore failure.
-        frame.GetSP = lambda: 3968
-        frame.FindRegister = lambda _: SimpleNamespace(GetValueAsUnsigned=lambda: 0x9000)
-        calls.deadline = float('inf'); calls.inflight = False
-        calls.listener = SimpleNamespace(GetNextEvent=lambda _: False, WaitForEvent=lambda *_: True)
-        def restore_failure(): raise codec.Refusal('register_restore_failed')
-        calls.restore = restore_failure
-        with self.assertRaises(codec.Refusal): calls.call(capture.GETTER)
-        self.assertEqual(calls.owned_array, 0x9000)
-        self.assertFalse(calls.inflight)
-        # A returned release consumes ownership even if restoration then fails.
-        with self.assertRaises(codec.Refusal): calls.call('swift_release', 0x9000)
-        self.assertIsNone(calls.owned_array)
+        for forbidden in (capture.GETTER, 'swift_release', 'AGGraphGetValue', 'update_attribute'):
+            with self.assertRaises(codec.Refusal) as error:
+                calls.call(forbidden)
+            self.assertEqual(error.exception.code, 'forbidden_target_call')
 
     def test_post_attach_identity_uses_remaining_acquisition_budget(self):
         actual = dict(metadata_version='1.0.0', status='known', target=META['target'],
@@ -303,7 +293,8 @@ class CanonicalPrivacy(unittest.TestCase):
             return values[obj, name]
         calls = SimpleNamespace(symbol=lambda _: 10, selector=lambda x: x, objc=objc,
             read=lambda address, _: (1).to_bytes(8, 'little') if address==10 else b'[]')
-        with patch.object(capture, 'collect_fields', return_value=b'[]') as fields:
+        with patch.object(capture, 'collect_fields', return_value=b'[]') as fields, \
+                patch.object(capture, 'is_host', return_value=True):
             raw, flags = capture.collect(calls, REQ)
         fields.assert_called_once_with(calls, 4, REQ)
         self.assertEqual(raw, b'[]')
@@ -321,7 +312,8 @@ class CanonicalPrivacy(unittest.TestCase):
             return values[obj,name]
         calls = SimpleNamespace(symbol=lambda _:10, selector=lambda x:x, objc=objc,
             read=lambda *_:(1).to_bytes(8,'little'))
-        with self.assertRaises(codec.Refusal) as error:
+        with patch.object(capture, 'is_host', side_effect=lambda c,v,r: v in (7,8)), \
+                self.assertRaises(codec.Refusal) as error:
             capture.collect(calls,REQ)
         self.assertEqual(error.exception.code,'hosting_surface_unresolved')
 

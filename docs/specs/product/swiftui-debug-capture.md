@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@6`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@7`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -17,7 +17,7 @@
   received independent method/recovery review closure through8588025. The one
   admitted Settings attempt then entered retained owner recovery without Snapshot.
   Current product admission is disabled; no retry or other consumer is qualified.
-  Existing frozen LLDB ownership remains with Services until separate recovery.
+  Services completed owner recovery; target and debugger processes are absent.
 
 ## DEBUG-CAPTURE.SCOPE
 
@@ -46,18 +46,28 @@ The initial qualified profile is macOS27.0.1 arm64 / LLDB2103.0.34.407 only.
 
 ## DEBUG-CAPTURE.DATA
 
-The guarded correction reads the existing `_viewDebugData` return through
-an exact system-image profile plus target-resolved metadata, value witnesses,
-field offsets and native storage checks before payload access. It never invokes
-the full model-reflecting serializer. Only type metadata, children, position and
-size are admitted; model/value/environment/text Any payloads are not read.
-Unsupported ABI/storage/representation refuses without a fallback serializer.
-The returned owned array is released on every completed-call exit, including
-all decoder refusals. Two calls within the total256 are reserved for its release
-and pool cleanup; the combined cleanup deadline remains2s.
-@4 restores the privacy/lifecycle requirements after the methodology review;
-that fixture review is reused by @5; product acceptance remains separate.
-Canonical core0.1 Snapshot uses a distinct `swiftui.debug.layout` namespace.
+The @7 candidate replaces both debug getters with a bounded read of the existing
+AttributeGraph tree and already-computed geometry cache. It must not invoke
+_viewDebugData, makeViewDebugData, AGGraphGetValue, update_attribute, reflection
+of model values or their copy witnesses. Ordinary admitted AppKit/runtime metadata
+calls remain separate; no blanket claim of zero target instructions is made.
+Exact image UUIDs, NSHostingView class/field binding, ViewGraph identity and root
+Subgraph ownership must be established before tree payloads. Every tree/value/node
+record must belong to the selected graph. Geometry requires target descriptor,
+value-witness, field-offset, range and cache-validity checks before reading payload.
+Read only position/size; ViewSize.value is CGSize at0, not its proposal at16.
+Dirty, stale, absent or unsupported cached values remain unknown; never evaluate
+or numerically repair them. Sizes must be finite/nonnegative, positions finite.
+Model value/body ranges are protected and audited on the canary; a constant boolean
+or absence of evaluation calls alone is not privacy proof. Strings are read only
+to their terminator, never as a wide neighboring payload dump.
+Raw control records are distinct from emitted view nodes: normalize transparent
+records according to the qualified source profile. Keep parent associations;
+sibling order with equal source-order keys is unknown unless a complete valid
+cached chain establishes it. Do not silently turn traversal order into semantics.
+The candidate remains fixture-only until the affected review and fresh-generation
+qualification; the consumed8588025 product admission is not reused.
+Canonical core0.1 Snapshot uses a distinct `swiftui.ag_cache.layout` namespace.
 Type is structural metadata, not accessibility name or user-visible text.
 Children preserve the reported hierarchy; keys are observation-scoped and confer
 no cross-capture identity, action authority or declared component association.
@@ -82,13 +92,16 @@ Only sanitized canonical data and fixed-code metadata may reach disk/stdout/stde
 No raw exception text, backtrace, model values, selectors supplied by UI, arguments
 or process command line is published. Output files are exclusive0600 in an existing
 private nonsymlink directory. Output and source inputs each cap at1MiB; max256
-nodes/depth,32window candidates,256NSViews/calls and bounded cumulative reads.
+emitted views/depth,1024raw tree/control records and bounded metadata tables,
+32window candidates,256NSViews/calls,2MiB cumulative reads. Metadata/control-record
+units are not emitted view nodes; these bounds do not permit opaque getter allocation.
 Requests declare tighter positive limits and an acquisition budget≤10000ms from
 successful attach, including post-attach identity checks and event waits. Cleanup
 has a separate≤2000ms call allowance. Two of the total256 calls are reserved for
-array/pool cleanup; ordinary acquisition may not consume those reserves.
-The system getter's internal allocations are opaque; a post-return length check
-does not claim a global target-process memory bound. This is an explicit residual.
+cleanup; ordinary acquisition may not consume those reserves. Cache reading
+allocates no returned Swift array; only the existing native pool needs a cleanup call.
+Ordinary native getter/OS internals remain opaque; these limits do not claim a
+global target-process memory bound. The withdrawn SwiftUI getter is not a fallback.
 Attach and synchronous debugger/OS stop-detach latency remain opaque; these budgets
 are not an unqualified whole-attempt wall-clock guarantee. @2 reconciles the
 reviewed deadline wording and rejects exponent overflow during JSON decoding.
@@ -117,12 +130,12 @@ partial/malformed input keeps holding. The selected action is fixed by the captu
 owner, not supplied as new authority by the command. One matching command is
 attempted once through the already attached SBProcess.Kill; failures never retry.
 
-Observe never writes a recovery command. For product recovery, before writing the
-command the source owner must obtain a separate explicit human decision to forcibly
-terminate the exact held diagnostic copy. Diagnostic/reopen permission is not that
-decision. Ask only if the unsafe outcome actually occurs; channel availability is
-not permission to execute it. Report possible loss of unsaved state in that copy.
-Normal capture does not require advance permission for hypothetical termination.
+Observe never writes a recovery command. Product recovery requires authority distinct from Observe. The direct Services
+human reply01a1e6c3 on2026-11-17 now grants standing lifecycle authority for our
+isolated task-owned diagnostic copies; reuse it without repeated questions. Exact
+owner/PID/generation binding and the explicit command still apply. This does not
+cover unrelated processes, whole hosts, production or protected storage. Outside
+that standing scope, obtain the missing actual authority before recovery.
 The owner then copies trusted checkpoint PID/generation/owner plus the fixed action
 into the indicated0600 command file. The held debugger consumes it and reports
 confirmed termination only on an observed exit; external exit and failed-command
