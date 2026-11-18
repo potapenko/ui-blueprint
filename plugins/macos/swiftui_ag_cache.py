@@ -414,6 +414,72 @@ class CacheReader:
         for child in children:
             self.walk(child, parent, depth+1)
 
+    def qualified_nominal(self, metadata):
+        metadata = self.pointer(metadata)
+        if not metadata or self.u64(metadata) not in (0x200, 0x201, 0x202):
+            return None
+        descriptor = self.ptr(metadata+8, 4)
+        names, seen = [], set()
+        while descriptor:
+            if descriptor in seen or len(seen) >= 16:
+                raise Refusal('cache_type_context')
+            seen.add(descriptor)
+            kind = self.u32(descriptor) & 31
+            if kind not in (0, 16, 17, 18):
+                return None  # anonymous/extension contexts are not source selectors
+            offset = struct.unpack('<i', self.read(descriptor+8, 4))[0]
+            name = self.cstring(descriptor+8+offset)
+            if not name or any(not (c.isascii() and (c.isalnum() or c == '_')) for c in name):
+                return None
+            names.append(name)
+            if kind == 0:
+                return '.'.join(reversed(names))
+            relative = struct.unpack('<i', self.read(descriptor+4, 4))[0]
+            if not relative:
+                return None
+            address = descriptor+4+(relative & ~1)
+            descriptor = self.ptr(address, 4) if relative & 1 else address
+        return None
+
+    def select_scope(self, root):
+        scope = self.req.get('scope')
+        if scope is None:
+            self.scanned_records = 0
+            return root
+        seen, matches = set(), []
+        wanted_descendant = scope.get('containing_type')
+
+        def scan(element, depth):
+            p = self.owned_record(element, 32)
+            if element in seen or len(seen) >= 1024 or depth > self.req['limits']['max_depth']:
+                raise Refusal('cache_scope_scan_limit', 2)
+            seen.add(element)
+            metadata = self.pointer(self.u64(p))
+            name = None
+            if metadata:
+                # Structural wrappers can own a source component even when the
+                # debug serializer omits that wrapper from emitted view records.
+                name = self.qualified_nominal(metadata)
+            descendant_found = False
+            child = self.u32(p+20)
+            while child:
+                descendant_found |= scan(child, depth+1)
+                child = self.u32(self.owned_record(child, 32)+24)
+            children, _ = self.child_subgraphs(element)
+            for child in children:
+                descendant_found |= scan(child, depth+1)
+            if name == scope['type'] and (wanted_descendant is None or descendant_found):
+                matches.append(element)
+            return descendant_found or (wanted_descendant is not None and name == wanted_descendant)
+
+        scan(root, 1)
+        self.scanned_records = len(seen)
+        if len(matches) != 1:
+            raise Refusal('cache_scope_unresolved' if not matches else 'cache_scope_ambiguous')
+        # Order uncertainty outside the selected subtree is not its property.
+        self.unknown_order = 0
+        return matches[0]
+
     def collect(self, host):
         graph_view = self.host_graph(host)
         if graph_view is None:
@@ -429,7 +495,7 @@ class CacheReader:
             raise Refusal('cache_subgraph_root')
         self.nil_attribute = self.u32(self.symbol('AGAttributeNil', 'AttributeGraph'))
         self.associations()
-        self.walk(root)
+        self.walk(self.select_scope(root))
         # Establish all known selected model-value ranges before geometry reads.
         for node in self.nodes:
             self.protect_model(node['model'])
@@ -462,7 +528,7 @@ class CacheReader:
                           for start, end in self.private_ranges)
         if model_reads:
             raise Refusal('cache_private_range')
-        self.c.cache_audit = dict(raw_records=len(self.raw_seen), views=len(self.nodes),
+        self.c.cache_audit = dict(scope_scan_records=self.scanned_records, raw_records=len(self.raw_seen), views=len(self.nodes),
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)

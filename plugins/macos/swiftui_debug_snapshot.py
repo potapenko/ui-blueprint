@@ -55,7 +55,7 @@ def request(raw):
     data = decode(raw)
     required = {'request_version', 'request_id', 'pid', 'expected_bundle',
                 'expected_launch_time', 'window_id', 'limits'}
-    if not isinstance(data, dict) or set(data) != required or data['request_version'] != '1.0.0':
+    if not isinstance(data, dict) or set(data) not in (required, required | {'scope'}) or data['request_version'] != '1.0.0':
         raise Refusal('invalid_request', 2)
     for name in ('pid', 'window_id'):
         if type(data[name]) is not int or not 0 < data[name] <= 2147483647:
@@ -67,6 +67,15 @@ def request(raw):
                           ('request_id', r'[A-Za-z0-9][A-Za-z0-9._-]{0,63}')]:
         if not isinstance(data[name], str) or not re.fullmatch(pattern, data[name]):
             raise Refusal('invalid_identity', 2)
+    if 'scope' in data:
+        scope = data['scope']
+        if (not isinstance(scope, dict) or set(scope) not in
+                ({'type'}, {'type', 'containing_type'})):
+            raise Refusal('invalid_scope', 2)
+        for value in scope.values():
+            if (not isinstance(value, str) or len(value) > 256 or
+                    not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+', value)):
+                raise Refusal('invalid_scope', 2)
     limits = data['limits']
     ceilings = dict(max_nodes=256, max_depth=256, max_output_bytes=MAX_BYTES, deadline_ms=10000)
     if not isinstance(limits, dict) or set(limits) != set(ceilings):
@@ -158,7 +167,8 @@ def snapshot(raw, req, metadata, start, end):
     for root in source:
         visit(root, 1)
     unknown = sum(p['state']['availability'] != 'known' for n in nodes for p in n['properties'])
-    coverage = dict(status='partial', scope_id='selected-window-debug-layout', fields=FIELDS,
+    coverage = dict(status='partial', scope_id=('selected-type:'+req['scope']['type'] if 'scope' in req
+                                      else 'selected-window-debug-layout'), fields=FIELDS,
                     omitted_count=None, unknown_count=unknown)
     context = dict(schema_version='0.1.0', session_id='debug-'+nonce, target=metadata['target'],
         surfaces=[surface], scope_id=coverage['scope_id'], projection='design', fields=FIELDS,

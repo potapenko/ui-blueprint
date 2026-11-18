@@ -4,7 +4,7 @@ Product admission is disabled: the single Reels owner-run refused tree_limit. c8
 qualification and must not be retried. No new version has been installed.
 
 The current cache-only candidate is an integration under development, governed by
-[debug capture@8](../specs/product/swiftui-debug-capture.md). It reads already-recorded
+[debug capture@9](../specs/product/swiftui-debug-capture.md). It reads already-recorded
 AttributeGraph geometry instead of invoking either withdrawn SwiftUI getter.
 It has cold-fixture collection evidence, focused negatives and canonical output;
 same-process controlled state/resize freshness now passed on the owned fixture;
@@ -36,3 +36,9 @@ automatically terminate a target. Standing human authority covers lifecycle of
 our isolated task-owned diagnostic copies; owner/PID/generation binding and the
 explicit recovery command remain mandatory. Other processes/hosts/storage are
 outside that authority.
+
+Optional structural subtree selection is experimental: pure uniqueness/limit checks
+pass, but the own oversized-tree fixture does not expose its custom nominal scope
+nodes and safely returns cache_scope_unresolved. Source/binary type names alone do
+not qualify a consumer recipe. There is no public supported arbitrary-subtree
+procedure yet; no product admission or donor action is enabled by this candidate.

@@ -162,4 +162,49 @@ class CacheChecks(unittest.TestCase):
         with self.assertRaises(Refusal):r.protect_model(512)
         r.ptr.assert_not_called()
 
+    def scoped_reader(self, names, children, scope):
+        r=reader();r.req['scope']=scope;r.nil_attribute=0
+        r.pointer=lambda x:x;r.owned_record=lambda off,size:off
+        r.u64=lambda p:p
+        r.qualified_nominal=lambda metadata:names.get(metadata)
+        following={}
+        for siblings in children.values():
+            for i,node in enumerate(siblings):following[node]=siblings[i+1] if i+1<len(siblings) else 0
+        def u32(address):
+            for node in names:
+                if address==node+20:return next(iter(children.get(node,[])),0)
+                if address==node+24:return following.get(node,0)
+            return 0
+        r.u32=u32;r.child_subgraphs=lambda _:([],True)
+        r.properties=Mock(side_effect=AssertionError('outside geometry collected'))
+        return r
+
+    def test_unique_scope_with_proper_descendant_and_no_payload_reads(self):
+        names={1024:'App.Root',2048:'App.Card',3072:'App.Video',4096:'App.Card'}
+        r=self.scoped_reader(names,{1024:[2048,4096],2048:[3072]},
+                             dict(type='App.Card',containing_type='App.Video'))
+        self.assertEqual(r.select_scope(1024),2048)
+        self.assertEqual(r.scanned_records,4);r.properties.assert_not_called()
+
+    def test_absent_ambiguous_and_self_only_scope_refuse(self):
+        names={1024:'App.Root',2048:'App.Card',3072:'App.Card'}
+        children={1024:[2048,3072]}
+        for scope,code in [(dict(type='App.Missing'),'cache_scope_unresolved'),
+                           (dict(type='App.Card'),'cache_scope_ambiguous'),
+                           (dict(type='App.Card',containing_type='App.Card'),'cache_scope_unresolved')]:
+            r=self.scoped_reader(names,children,scope)
+            with self.assertRaises(Refusal) as error:r.select_scope(1024)
+            self.assertEqual(error.exception.code,code)
+
+    def test_scope_scan_does_not_use_emitted_node_quota_or_increase_raw_cap(self):
+        names={1024+i*1024:'App.Other' for i in range(300)};names[2048]='App.Card'
+        r=self.scoped_reader(names,{1024:list(names)[1:]},dict(type='App.Card'))
+        r.req['limits']['max_nodes']=1
+        self.assertEqual(r.select_scope(1024),2048)
+        self.assertEqual(r.scanned_records,300)
+        names={1024+i*1024:'App.Other' for i in range(1025)};names[2048]='App.Card'
+        r=self.scoped_reader(names,{1024:list(names)[1:]},dict(type='App.Card'))
+        with self.assertRaises(Refusal) as error:r.select_scope(1024)
+        self.assertEqual(error.exception.code,'cache_scope_scan_limit')
+
 if __name__ == '__main__': unittest.main()

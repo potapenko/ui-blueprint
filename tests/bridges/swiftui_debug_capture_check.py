@@ -406,6 +406,15 @@ class CanonicalPrivacy(unittest.TestCase):
             self.assertEqual(launcher.wait(timeout=5), 0)
             self.assertEqual(done.read_text(), 'completed')
 
+    def test_optional_scope_has_exact_bounded_nominal_names(self):
+        req=copy.deepcopy(REQ)
+        req['scope']=dict(type='PlayphrasemeApp.ClipSearchView')
+        self.assertEqual(codec.request(codec.encode(req))['scope'],req['scope'])
+        for value in ({}, {'type':'NoModule'}, {'type':'App.View<T>'},
+                      {'type':'App.View','index':0}, {'type':'App.View','containing_type':'x'*257}):
+            req['scope']=value
+            with self.assertRaises(codec.Refusal):codec.request(codec.encode(req))
+
 
 if __name__ == '__main__':
     unittest.main()

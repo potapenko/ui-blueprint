@@ -210,3 +210,39 @@ whole-window traversal cannot be repackaged as a qualified populated Clip case.
 No generic public recipe/install exists for that case. Existing source-local/
 unknown-transform boundaries remain. Next consumer facts: exact immutable source
 component boundary/type for Reels and Clip; no product process inspection by support.
+
+## Structural subtree discovery — pending runtime identity capability
+
+Owners supplied immutable source facts: Clip `PlayphrasemeApp.ClipSearchView`
+(searchSurface contains suggestions/grid/query); Reels `ReelsSlideView` containing
+proper descendant `ReelsVideoView` for the single paused front card. Source names
+are not proof of runtime presence. @9 adds an optional structural scope request
+and bounded metadata-only unique selection, with unchanged1024raw/256emitted limits.
+No product admission is enabled and no donor process was inspected.
+
+Synthetic negatives verify exact optional request shape, proper-descendant matching,
+absent/ambiguous/self-only refusal, separation of scan/emitted quotas and1024raw
+ceiling. Scope discovery never reads geometry outside the chosen subtree. Type
+matching follows qualified descriptor context names; generic arguments are omitted.
+
+Actual tool-owned `SwiftUICacheScopeFixture.swift` embeds a small ScopeCard with
+ScopeVideo beside80eager Color siblings. Whole capture refuses tree_limit with
+14calls/restored detach. The bounded selector scans the graph but refuses
+cache_scope_unresolved; its nominal metadata observation did not expose the named
+custom ScopeCard/ScopeVideo records. Including transparent raw records did not
+resolve them. A prior140-sibling control refused cache_scope_scan_limit; the cap
+was not increased. No useful scoped Snapshot is claimed from these runs.
+
+Evidence/app:
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-cache-scope-bt9v0zn3/`
+contains whole/selected/selected-raw-scope manifests, requests and own names2.json.
+The latter contains only observed type names, not UI/model contents. App binary
+symbols independently confirm CacheScopeFixture.ScopeCard/ScopeVideo exist, so
+source/binary existence alone is insufficient for this cached-tree selector.
+
+Next missing fact is a qualified link from the source component identity to an
+actual cached-tree boundary when its nominal record is absent. Neither a nearby
+VStack nor traversal index may substitute. Current selector is experimental and
+cannot be handed to Clip/Reels/Settings/Grammar as a supported procedure. Product
+admission/install remain disabled; do not repeat whole-window captures or expand
+limits to hide this gap. No assertion of universal impossibility is made.
