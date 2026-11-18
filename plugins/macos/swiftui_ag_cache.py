@@ -239,18 +239,29 @@ class CacheReader:
                     raise Refusal('cache_model_layout')
                 body = p+offset
                 if self.u8(p+3) & 1:
-                    self.owned_record(attribute+offset, 8)
-                    raise Refusal('cache_box_ownership_unqualified')
+                    slot = self.owned_record(attribute+offset, 8)
+                    body = self.ptr(slot)
+                    # This address is only DENIED, never admitted for a read.
+                    # Graph ownership is required for the pointer slot; no heap
+                    # ownership claim is made about its forbidden pointee.
                 else:
                     self.owned_record(attribute+offset, size)
+                if body+size > 1 << 64:
+                    raise Refusal('cache_model_layout')
                 self.private_ranges.append((body, body+size))
         if flags & 0x10:
             metadata = self.ptr(descriptor+8)
             size, _, _ = self.value_size(metadata)
             # A dirty model value is still private; do not use the geometry
             # clean-cache predicate to omit its protected storage.
-            value = self.cached_storage(p, flags & ~1, size)
-            if value is not None and size:
+            if size:
+                offset = self.u32(p+8)
+                if self.u8(p+3) & 2:
+                    value = self.ptr(self.owned_record(offset, 8))
+                else:
+                    value = self.owned_record(offset, size)
+                if value+size > 1 << 64:
+                    raise Refusal('cache_model_layout')
                 self.private_ranges.append((value, value+size))
 
     def geometry_type(self, metadata, key):

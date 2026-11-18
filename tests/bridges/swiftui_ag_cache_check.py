@@ -128,4 +128,38 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual(error.exception.code,'cache_box_ownership_unqualified')
         r.owned_record.assert_called_once_with(1024,8);r.ptr.assert_not_called()
 
+    def test_boxed_models_are_denied_without_reading_heap_payload(self):
+        r=reader();r.pointer=lambda x:x
+        r.resolve=lambda *a,**kw:((512,0,512),None)
+        r.attribute_info=lambda _: (0x10200,0x20000,0x110)
+        r.u64=lambda a: 0x30000 if a==0x20000 else self.fail('unexpected model read')
+        r.value_size=lambda _: (32,32,8)
+        r.u32=lambda a:{0x2002c:32,0x10208:1024}[a]
+        r.u8=lambda _:3
+        r.owned_record=Mock(side_effect=lambda off,size:0x10000+off)
+        slots=[]
+        def pointer_slot(a):
+            slots.append(a)
+            return {0x10220:0x50000,0x20008:0x40000,0x10400:0x60000}[a]
+        r.ptr=pointer_slot
+        r.protect_model(512)
+        self.assertEqual(r.private_ranges,[(0x50000,0x50020),(0x60000,0x60020)])
+        self.assertEqual(slots,[0x10220,0x20008,0x10400])
+        self.assertEqual(r.reads,[])
+        r.c=SimpleNamespace(read=Mock(side_effect=AssertionError('private payload')))
+        for address in (0x50000,0x60000):
+            with self.assertRaises(Refusal):r.read(address,16)
+        r.c.read.assert_not_called()
+
+    def test_foreign_model_pointer_slot_refuses_before_pointee_resolution(self):
+        r=reader();r.pointer=lambda x:x
+        r.resolve=lambda *a,**kw:((512,0,512),None)
+        r.attribute_info=lambda _: (0x10200,0x20000,0x110)
+        r.u64=lambda _:0x30000;r.value_size=lambda _:(32,32,8)
+        r.u32=lambda _:32;r.u8=lambda _:1
+        def foreign(*_):raise Refusal('cache_foreign_graph')
+        r.owned_record=foreign;r.ptr=Mock(side_effect=AssertionError('foreign slot read'))
+        with self.assertRaises(Refusal):r.protect_model(512)
+        r.ptr.assert_not_called()
+
 if __name__ == '__main__': unittest.main()

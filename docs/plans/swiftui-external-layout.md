@@ -158,3 +158,26 @@ This is safe refusal, not a successful usable geometry capture. Earlier a88380b
 snapshots remain test evidence only and must not be reused for product admission.
 Next missing fact is a verified allocation/ownership boundary for boxed storage,
 without reading model payload. No new product run or quota change can substitute.
+
+## Boxed model exclusion — narrower qualified candidate
+
+The next correction distinguishes excluding a model's heap range from admitting
+geometry there. Model body/value references are read only from graph-owned pointer
+slots, their type-metadata size defines a forbidden interval, and the heap pointee
+is never dereferenced. This makes no claim that the heap belongs to the graph.
+Geometry still cannot read boxed storage; unqualified geometry boxes, unresolved
+model references and foreign table pages retain af06c39 refusals. Retrospective
+and pre-read range intersection checks remain mandatory.
+
+Two additional pure negatives verify that boxed model payloads are never read,
+are denied afterwards, and a foreign pointer slot refuses before resolution.
+14cache negatives pass. Fresh runtime repeats phases0/1/2 on independently checked
+same40792/25798: orange widths520/608/768, nativewindow640/640/800, all restored
+detach/validcanonical, protected model intervals112/100/100 with0overlap reads.
+Evidence: `/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-cache-protected-transition-7wejp76s/`
+contains results.json and per-phase original native/geometry/manifest artifacts.
+One earlier preflight refused before attach because auxiliary off-screen windows
+appeared; the completed run selects the original exact CGID, never substitutes one.
+This candidate restores fixture usefulness while keeping the geometry ownership
+boundary. Product admission remains closed pending affected consumer review and a
+new exact owner-run; this is not a product measurement/install claim.

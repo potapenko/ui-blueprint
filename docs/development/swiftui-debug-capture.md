@@ -9,9 +9,11 @@ AttributeGraph geometry instead of invoking either withdrawn SwiftUI getter.
 It has cold-fixture collection evidence, focused negatives and canonical output;
 same-process controlled state/resize freshness now passed on the owned fixture;
 consumer privacy review then found incomplete protection/ownership checks.
-They now refuse unknown model/box ownership; the own fixture currently returns
-cache_box_ownership_unqualified with restored detach. No usable product recipe
-or new installed version is available.
+Unknown model references and boxed geometry still refuse. The current narrower
+candidate reads graph-owned model pointer slots only to exclude their heap ranges;
+it never reads those pointees. All three fixture transitions pass with that
+protection. Affected review and actual consumer qualification remain pending;
+no product recipe or new installed version is available.
 See [current evidence and exact limits](../plans/swiftui-external-layout.md).
 
 Do not use earlier frozen Services packages on a new process or bypass
