@@ -341,3 +341,20 @@ attribute ID. The parent depth was chosen explicitly for this experiment. A
 consumer collector must resolve and validate the native host/weak generation
 externally, prove the source owner boundary from metadata, and reject ambiguity
 instead of assuming one parent hop. The product gate remains closed.
+
+The 112c537 Reels anchor attempt refused cache_scope_scan_limit (215 calls,
+detached_restored, no Snapshot). Owner confirmed the same process/window after
+exit. The manifest does not determine which candidate ancestor exceeded the cap.
+The consumed admission was disabled in 87052bb.
+
+The revised algorithm follows recorded parent links from the native anchor's
+subgraph. At a root it follows only a unique attachment parent. It stops at an
+exact nominal source card and walks only its subtree. The one native layout
+attribute must belong to a node under the requested video type; merely finding
+a video sibling in the same scope is insufficient. The large fixture visited
+11 upward records and 44 selected records, with 26 emitted views, 52 protected
+ranges/zero overlaps and normal restored detach (38 calls). Exact middle title
+42pt, actions92pt and video120×60pt are present. Neighbor widths are absent.
+Evidence is in system temp `uib-parent-video-proof-y1ssET0Q`. A missing nominal
+ancestor refuses without scanning a larger ancestor subtree. No product admission
+or installation is implied by the fixture result.

@@ -327,6 +327,7 @@ class CacheReader:
             key = self.cstring(self.ptr(self.ptr(table)+index*8), 64)
             if key == 'layoutComputer' and hasattr(self, 'anchor_id') and self.anchor_id == self.u32(v+8):
                 self.anchor_matches += 1
+                self.matched_anchor_node = len(self.nodes)
             if key in ('position', 'size'):
                 # No read of any unrequested TreeValue's type/value payload.
                 result.append((key, self.ptr(v), self.u32(v+8)))
@@ -577,19 +578,37 @@ class CacheReader:
 
     def anchored_scope(self, host):
         self.anchor_id, sg = self.native_layout_anchor(host, self.req['scope']['native_view_type'])
+        # Start in the weak attribute's subgraph. Follow recorded parents and
+        # cross a subgraph root only via its unique graph-owned attachment site.
+        # Jumping to the entire parent subgraph can scan unrelated siblings.
+        element = self.u32(sg+0x60)
+        if not element or self.page_owner(element) != sg:
+            raise Refusal('anchor_subgraph_root')
         seen = set()
         self.scan_work = self.anchor_matches = 0
-        for _ in range(12):
-            root = self.u32(sg+0x60)
-            if not root or root in seen or self.page_owner(root) != sg:
+        scope = self.req['scope']
+        while element:
+            if element in seen or len(seen) >= self.req['limits']['max_depth']:
+                raise Refusal('anchor_parent_limit', 2)
+            seen.add(element)
+            self.scan_work += 1
+            p = self.owned_record(element, 32)
+            metadata = self.pointer(self.u64(p))
+            if metadata and self.qualified_nominal(metadata) == scope['type']:
+                # An actual nominal ancestor is a source component boundary.
+                # Verify the requested video descendant inside that boundary.
+                self.scanned_records = len(seen)
+                return [element]
+            parent = self.u32(p+16)
+            if parent:
+                if self.page_owner(parent) != self.page_owner(element):
+                    raise Refusal('anchor_parent_ownership')
+                element = parent
+                continue
+            sg = self.page_owner(element)
+            if self.u32(sg+0x60) != element:
                 raise Refusal('anchor_subgraph_root')
-            seen.add(root)
-            try:
-                return self.select_scope(root)
-            except Refusal as error:
-                if error.code != 'cache_scope_unresolved':
-                    raise
-            model = self.u32(self.owned_record(root, 12)+8)
+            model = self.u32(p+8)
             resolved, _ = self.resolve(model, links_only=True)
             if not resolved:
                 break
@@ -597,10 +616,9 @@ class CacheReader:
                        for parent, attr in pairs if attr == resolved[0]}
             if len(parents) != 1:
                 break
-            sg, parent = parents.pop()
-            self.owned_record(parent, 32)
-            if self.page_owner(parent) != sg:
-                raise Refusal('cache_subgraph_root')
+            owner, element = parents.pop()
+            if self.page_owner(element) != owner:
+                raise Refusal('anchor_parent_ownership')
         raise Refusal('anchor_card_owner_unresolved')
 
     def collect(self, host):
@@ -622,8 +640,17 @@ class CacheReader:
         selected_roots = self.anchored_scope(host) if anchored else self.select_scope(root)
         for selected_root in selected_roots:
             self.walk(selected_root)
-        if anchored and self.anchor_matches != 1:
-            raise Refusal('anchor_scope_binding_unresolved')
+        if anchored:
+            if self.anchor_matches != 1:
+                raise Refusal('anchor_scope_binding_unresolved')
+            index = self.matched_anchor_node
+            while index is not None:
+                node = self.nodes[index]
+                if self.qualified_nominal(node['metadata']) == self.req['scope']['containing_type']:
+                    break
+                index = node['parent']
+            if index is None:
+                raise Refusal('anchor_descendant_unresolved')
         # Establish all known selected model-value ranges before geometry reads.
         for node in self.nodes:
             self.protect_model(node['model'])

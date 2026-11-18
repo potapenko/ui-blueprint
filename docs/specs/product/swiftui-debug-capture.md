@@ -80,9 +80,11 @@ pass the same graph, type and privacy checks.
 
 Experimental anchor mode requires the exact mounted NSView type in the selected
 window, a unique represented view, matching provider pointer, runtime ivar
-offsets and a current weak layout attribute in the selected graph. At each
-unique reverse subgraph association the selector may test the requested Swift
-body owner and descendant. All ancestor searches share the raw discovery budget.
+offsets and a current weak layout attribute in the selected graph. The selector follows the recorded direct-parent link within the same subgraph and
+crosses a subgraph root only to its exact uniquely associated parent element. The
+first exact nominal card ancestor defines the bounded subtree. Parent traversal
+shares the request depth limit. The recorded native layout attribute must occur
+under the requested video type inside that card.
 A selected card must contain exactly one recorded layoutComputer association
 matching that native reference. Unknown, missing, expired or ambiguous bindings
 refuse. The mode is fixture-only until independent qualification.

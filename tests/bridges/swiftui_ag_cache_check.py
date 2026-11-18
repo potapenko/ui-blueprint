@@ -212,7 +212,8 @@ class CacheChecks(unittest.TestCase):
         r = reader()
         r.req['scope'] = {'native_view_type':'App.Surface'}
         r.native_layout_anchor = lambda *_: (512, 1500)
-        r.u32 = lambda address: 2048 if address == 1500+0x60 else 4096
+        r.u32 = lambda address: {1500+0x60:2048,2048+16:0,2048+8:4096}[address]
+        r.u64 = lambda _: 0; r.pointer = lambda x:x
         r.page_owner = lambda _: 1500
         r.owned_record = lambda offset, size: offset
         r.resolve = lambda *a, **kw: ((8192,0,8192),None)
@@ -221,6 +222,6 @@ class CacheChecks(unittest.TestCase):
         with self.assertRaises(Refusal) as error:
             r.anchored_scope(700)
         self.assertEqual(error.exception.code,'anchor_card_owner_unresolved')
-        r.select_scope.assert_called_once_with(2048)
+        r.select_scope.assert_not_called()
 
 if __name__ == '__main__': unittest.main()
