@@ -281,3 +281,11 @@ With two mounted videos, two distinct owner attributes qualified and capture
 refused cache_scope_ambiguous. Both runs detached normally. Native and product
 qualification remain separate. Evidence is in system temp
 `uib-three-scope-d6u4hgdl/{one,two}`. The current consumer admission is disabled.
+
+The scoped Reels owner-run on 107f67b returned cache_scope_scan_limit, exit2,
+16 calls, detached_restored and no snapshot. Public identity/window matched
+after exit. The refusal precedes card publication, and its fixed code covers
+both raw discovery count and depth. The manifest does not distinguish them.
+This admission is consumed. Another full-graph uniqueness scan cannot qualify
+the case. A replacement needs an independently bound, bounded starting point
+or index from the exact window to its source owner before traversing the card.
