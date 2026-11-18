@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@10`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@11`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -88,6 +88,17 @@ under the requested video type inside that card.
 A selected card must contain exactly one recorded layoutComputer association
 matching that native reference. Unknown, missing, expired or ambiguous bindings
 refuse. The mode is fixture-only until independent qualification.
+
+@11 adds an explicit geometry-bearing view selection for native-anchored
+requests after the Reels owner reported tree_limit inside the selected card.
+The root, native anchor, containing video type and records with position or
+size fields are retained. Edges connect each included record to its nearest
+included ancestor. Count omitted wrappers explicitly. Preserve model exclusion
+for every encountered view including omitted wrappers before any geometry
+payload read. All raw-record, emitted-record, depth, byte and call bounds apply.
+A recorded geometry field whose payload is dirty remains unknown as before.
+This mode does not establish semantic identities or guarantee that a large
+control has only one geometry-bearing record.
 
 ## DEBUG-CAPTURE.DATA
 

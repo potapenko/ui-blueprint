@@ -399,14 +399,24 @@ class CacheReader:
         self.raw_seen.add(element)
         metadata, flags, model = self.pointer(self.u64(p)), self.u32(p+12), self.u32(p+8)
         if not flags & 1 and metadata and model != self.nil_attribute:
-            if len(self.nodes) >= self.req['limits']['max_nodes']:
-                raise Refusal('tree_limit', 2)
-            node = dict(parent=parent, metadata=metadata, model=model, fields=self.properties(element), children=[])
-            index = len(self.nodes)
-            self.nodes.append(node)
-            if parent is not None:
-                self.nodes[parent]['children'].append(index)
-            parent = index
+            anchor_before = getattr(self, 'anchor_matches', 0)
+            fields = self.properties(element)
+            selection = self.req.get('scope', {}).get('selection')
+            omit = (selection == 'geometry_records' and parent is not None and not fields
+                    and anchor_before == self.anchor_matches and
+                    self.qualified_nominal(metadata) != self.req['scope']['containing_type'])
+            self.selected_models.add(model)
+            if omit:
+                self.omitted_views += 1
+            else:
+                if len(self.nodes) >= self.req['limits']['max_nodes']:
+                    raise Refusal('tree_limit', 2)
+                node = dict(parent=parent, metadata=metadata, model=model, fields=fields, children=[])
+                index = len(self.nodes)
+                self.nodes.append(node)
+                if parent is not None:
+                    self.nodes[parent]['children'].append(index)
+                parent = index
         child = self.u32(p+20)
         while child:
             self.walk(child, parent, depth+1)
@@ -638,6 +648,8 @@ class CacheReader:
         self.associations()
         anchored = 'native_view_type' in self.req.get('scope', {})
         selected_roots = self.anchored_scope(host) if anchored else self.select_scope(root)
+        self.selected_models = set()
+        self.omitted_views = 0
         for selected_root in selected_roots:
             self.walk(selected_root)
         if anchored:
@@ -652,8 +664,8 @@ class CacheReader:
             if index is None:
                 raise Refusal('anchor_descendant_unresolved')
         # Establish all known selected model-value ranges before geometry reads.
-        for node in self.nodes:
-            self.protect_model(node['model'])
+        for model in self.selected_models:
+            self.protect_model(model)
         if any(a < end and b > start for a, b in self.reads for start, end in self.private_ranges):
             raise Refusal('cache_private_range')
         normalized = []
@@ -683,7 +695,7 @@ class CacheReader:
                           for start, end in self.private_ranges)
         if model_reads:
             raise Refusal('cache_private_range')
-        self.c.cache_audit = dict(selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
+        self.c.cache_audit = dict(omitted_views=self.omitted_views, selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)

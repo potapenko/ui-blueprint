@@ -224,4 +224,27 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual(error.exception.code,'anchor_card_owner_unresolved')
         r.select_scope.assert_not_called()
 
+    def test_geometry_selection_preserves_skipped_model_and_ancestor(self):
+        r = reader()
+        r.req['scope'] = {'selection':'geometry_records','containing_type':'App.Video'}
+        r.anchor_matches = 0
+        r.nil_attribute = 0
+        r.selected_models = set()
+        r.omitted_views = 0
+        r.owned_record = lambda off, size: off
+        r.pointer = lambda x: x
+        r.u64 = lambda off: off
+        words = {}
+        for off, child in ((1024,2048),(2048,3072),(3072,0)):
+            words.update({off+12:0,off+8:off+100,off+20:child,off+24:0})
+        r.u32 = words.__getitem__
+        r.properties = lambda off: [('size',1,2)] if off==3072 else []
+        r.qualified_nominal = lambda _: 'App.Wrapper'
+        r.child_subgraphs = lambda _: ([],True)
+        r.walk(1024)
+        self.assertEqual(r.selected_models,{1124,2148,3172})
+        self.assertEqual(r.omitted_views,1)
+        self.assertEqual([n['parent'] for n in r.nodes],[None,0])
+        self.assertEqual(r.nodes[0]['children'],[1])
+
 if __name__ == '__main__': unittest.main()

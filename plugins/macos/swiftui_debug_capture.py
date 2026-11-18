@@ -31,13 +31,7 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 # cannot expand this gate with a request flag, filename or bundle prefix.
 # The single Reels window-root attempt refused tree_limit. No further product
 # capture is admitted until a bounded, source-qualified subtree path is verified.
-CONSUMER_ADMISSION = (
-    'reels-parent-path-1', 19791, 'me.playphraseme.reference.reels.fgb7o3fd',
-    1795038583.1458468, 25250,
-    {'type': 'PlayphrasemeApp.ReelsSlideView',
-     'containing_type': 'PlayphrasemeApp.ReelsVideoView',
-     'native_view_type': 'PlayphrasemeApp.RollingCompositionPlayerSurfaceView'},
-)
+CONSUMER_ADMISSION = None
 
 
 def require_admitted_target(req):

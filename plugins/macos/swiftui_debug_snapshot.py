@@ -70,9 +70,14 @@ def request(raw):
     if 'scope' in data:
         scope = data['scope']
         if (not isinstance(scope, dict) or set(scope) not in
-                ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'})):
+                ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'},
+                 {'type', 'containing_type', 'native_view_type', 'selection'})):
             raise Refusal('invalid_scope', 2)
-        for value in scope.values():
+        for key, value in scope.items():
+            if key == 'selection':
+                if value != 'geometry_records':
+                    raise Refusal('invalid_scope', 2)
+                continue
             if (not isinstance(value, str) or len(value) > 256 or
                     not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+', value)):
                 raise Refusal('invalid_scope', 2)
@@ -170,6 +175,8 @@ def snapshot(raw, req, metadata, start, end):
     coverage = dict(status='partial', scope_id=('selected-type:'+req['scope']['type'] if 'scope' in req
                                       else 'selected-window-debug-layout'), fields=FIELDS,
                     omitted_count=None, unknown_count=unknown)
+    if req.get('scope', {}).get('selection') == 'geometry_records':
+        coverage['scope_id'] += ':geometry-records-nearest-included-ancestor'
     context = dict(schema_version='0.1.0', session_id='debug-'+nonce, target=metadata['target'],
         surfaces=[surface], scope_id=coverage['scope_id'], projection='design', fields=FIELDS,
         plugin=dict(id='swiftui-cache-layout', version='1.0.0'), environment_revision=nonce)
