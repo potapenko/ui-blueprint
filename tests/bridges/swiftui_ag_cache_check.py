@@ -255,4 +255,21 @@ class CacheChecks(unittest.TestCase):
         self.assertFalse(CacheReader.native_descriptor_matches('App.Probe',sym))
         self.assertFalse(CacheReader.native_descriptor_matches('App.(Probe in _'+'A'*32+')',sym))
 
+    def test_declared_leaf_stops_before_child_links(self):
+        r=reader()
+        r.req['scope']={'selection':'geometry_records','containing_type':'App.Video',
+                        'leaf_types':['App.Actions']}
+        r.nil_attribute=0; r.anchor_matches=0; r.anchor_next={}
+        r.boundary_hits={};r.boundary_records=[];r.selected_models=set()
+        r.owned_record=lambda element,size:element
+        r.pointer=lambda x:x; r.u64=lambda _:123
+        r.u32=lambda addr:{1024+12:0,1024+8:42}[addr]
+        r.properties=lambda _:[]; r.qualified_nominal=lambda _:'App.Actions'
+        r.child_subgraphs=Mock(side_effect=AssertionError('descendants accessed'))
+        r.walk(1024)
+        self.assertEqual(r.nodes[0]['children'],[])
+        self.assertEqual(r.selected_models,{42})
+        self.assertEqual(r.boundary_records,[{'type':'App.Actions','node_index':0}])
+        r.child_subgraphs.assert_not_called()
+
 if __name__ == '__main__': unittest.main()

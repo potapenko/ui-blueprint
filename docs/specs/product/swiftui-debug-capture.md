@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@11`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@12`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -99,6 +99,17 @@ payload read. All raw-record, emitted-record, depth, byte and call bounds apply.
 A recorded geometry field whose payload is dirty remains unknown as before.
 This mode does not establish semantic identities or guarantee that a large
 control has only one geometry-bearing record.
+
+@12 supports owner-declared leaf_types for a geometry_records request. Keep the
+boundary record and stop before its children. Report the nominal body owner's
+name and output node index for each cut; frame availability still comes from
+that record. Require at least one boundary for each requested type. To prove
+native membership, inspect at most64 records local to the weak attribute's
+subgraph for a unique matching layoutComputer, then follow the graph-owned
+parent path. Inside a cut video continue only along that verified witness path.
+Other branches of a cut control do not consume the card traversal budget.
+Only declared source boundaries may be requested. All previous ownership,
+privacy and limit refusals remain. A request does not grant product admission.
 
 ## DEBUG-CAPTURE.DATA
 

@@ -393,7 +393,7 @@ class CacheReader:
             known = False
         return [root for _, root in sorted(selected, key=lambda item: item[0])], known
 
-    def walk(self, element, parent=None, depth=1):
+    def walk(self, element, parent=None, depth=1, witness_only=False):
         p = self.owned_record(element, 32)
         if element in self.raw_seen or len(self.raw_seen) >= 1024 or depth > self.req['limits']['max_depth']:
             raise Refusal('cache_tree_limit', 2)
@@ -403,7 +403,12 @@ class CacheReader:
             anchor_before = getattr(self, 'anchor_matches', 0)
             fields = self.properties(element)
             selection = self.req.get('scope', {}).get('selection')
-            omit = (selection == 'geometry_records' and parent is not None and not fields
+            leaves = self.req.get('scope', {}).get('leaf_types', ())
+            leaf = self.qualified_nominal(metadata) if leaves else None
+            if leaves and leaf not in leaves:
+                _, leaf = self.rule_owner(model, self.leaf_owner_names)
+            stop = leaf in leaves
+            omit = (not stop and selection == 'geometry_records' and parent is not None and not fields
                     and anchor_before == self.anchor_matches and
                     self.qualified_nominal(metadata) != self.req['scope']['containing_type'])
             self.selected_models.add(model)
@@ -418,6 +423,18 @@ class CacheReader:
                 if parent is not None:
                     self.nodes[parent]['children'].append(index)
                 parent = index
+            if stop:
+                self.boundary_records.append(dict(type=leaf, node_index=parent))
+                self.boundary_hits[leaf] = self.boundary_hits.get(leaf, 0)+1
+                next_element = self.anchor_next.get(element)
+                if next_element is not None:
+                    self.walk(next_element, parent, depth+1, witness_only=True)
+                return
+        if witness_only:
+            next_element = self.anchor_next.get(element)
+            if next_element is not None:
+                self.walk(next_element, parent, depth+1, witness_only=True)
+            return
         child = self.u32(p+20)
         while child:
             self.walk(child, parent, depth+1)
@@ -455,6 +472,27 @@ class CacheReader:
             descriptor = self.ptr(address, 4) if relative & 1 else address
         return None
 
+    def rule_owner(self, model, owner_names):
+        resolved, _ = self.resolve(model, links_only=True)
+        if resolved is None:
+            return None, None
+        attribute = resolved[0]
+        if attribute not in owner_names:
+            _, descriptor, _ = self.attribute_info(attribute)
+            rule = self.pointer(self.u64(descriptor))
+            name = None
+            descriptor_addr = self.ptr(rule+8, 4) if rule and self.u64(rule)==0x200 else None
+            symbol = self.c.t.ResolveLoadAddress(descriptor_addr).GetSymbol() if descriptor_addr else None
+            if (symbol and symbol.GetStartAddress().GetLoadAddress(self.c.t) == descriptor_addr
+                    and symbol.GetMangledName() in (
+                        '$s7SwiftUI10StaticBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn',
+                        '$s7SwiftUI11DynamicBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn')):
+                accessor = self.ptr(rule+16)
+                if self.qualified_nominal(accessor) == 'SwiftUI.ViewBodyAccessor':
+                    name = self.qualified_nominal(self.ptr(accessor+16))
+            owner_names[attribute] = name
+        return attribute, owner_names[attribute]
+
     def select_scope(self, root):
         scope = self.req.get('scope')
         if scope is None:
@@ -467,27 +505,6 @@ class CacheReader:
         active_owners = set()
         owner_roots = {}
 
-        def rule_owner(model):
-            resolved, _ = self.resolve(model, links_only=True)
-            if resolved is None:
-                return None, None
-            attribute = resolved[0]
-            if attribute not in owner_names:
-                _, descriptor, _ = self.attribute_info(attribute)
-                rule = self.pointer(self.u64(descriptor))
-                name = None
-                descriptor_addr = self.ptr(rule+8, 4) if rule and self.u64(rule)==0x200 else None
-                symbol = self.c.t.ResolveLoadAddress(descriptor_addr).GetSymbol() if descriptor_addr else None
-                if (symbol and symbol.GetStartAddress().GetLoadAddress(self.c.t) == descriptor_addr
-                        and symbol.GetMangledName() in (
-                            '$s7SwiftUI10StaticBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn',
-                            '$s7SwiftUI11DynamicBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn')):
-                    accessor = self.ptr(rule+16)
-                    if self.qualified_nominal(accessor) == 'SwiftUI.ViewBodyAccessor':
-                        name = self.qualified_nominal(self.ptr(accessor+16))
-                owner_names[attribute] = name
-            return attribute, owner_names[attribute]
-
         def scan(element, depth):
             p = self.owned_record(element, 32)
             if element in seen or len(seen) >= 1024 or depth > self.req['limits']['max_depth']:
@@ -499,7 +516,7 @@ class CacheReader:
             seen.add(element)
             metadata = self.pointer(self.u64(p))
             name = self.qualified_nominal(metadata) if metadata else None
-            attribute, owner_name = rule_owner(self.u32(p+8))
+            attribute, owner_name = self.rule_owner(self.u32(p+8), owner_names)
             owner_root = owner_name is not None and attribute not in active_owners
             if owner_root:
                 active_owners.add(attribute)
@@ -613,10 +630,44 @@ class CacheReader:
         seen = set()
         self.scan_work = self.anchor_matches = 0
         scope = self.req['scope']
+        if scope.get('leaf_types'):
+            # Resolve the native witness inside its own subgraph, with no
+            # evaluation or cross-subgraph search. Its exact path remains
+            # traversable even if the owner requests the video as a leaf.
+            matches, local_seen = [], set()
+            pending = [element]
+            while pending:
+                candidate = pending.pop()
+                if candidate in local_seen or len(local_seen) >= 64:
+                    raise Refusal('anchor_witness_limit')
+                local_seen.add(candidate)
+                if self.page_owner(candidate) != sg:
+                    raise Refusal('anchor_parent_ownership')
+                record = self.owned_record(candidate, 32)
+                before = self.anchor_matches
+                self.properties(candidate)
+                if self.anchor_matches > before:
+                    matches.append(candidate)
+                child = self.u32(record+20)
+                while child:
+                    if len(pending)+len(local_seen) >= 64:
+                        raise Refusal('anchor_witness_limit')
+                    pending.append(child)
+                    child = self.u32(self.owned_record(child, 32)+24)
+            if self.anchor_matches != 1:
+                raise Refusal('anchor_scope_binding_unresolved')
+            self.scan_work = len(local_seen)
+            self.anchor_matches = 0
+            element = matches[0]
+            self.anchor_next = {}
+        lower = None
         while element:
             if element in seen or len(seen) >= self.req['limits']['max_depth']:
                 raise Refusal('anchor_parent_limit', 2)
             seen.add(element)
+            if scope.get('leaf_types'):
+                self.anchor_next[element] = lower
+                lower = element
             self.scan_work += 1
             p = self.owned_record(element, 32)
             metadata = self.pointer(self.u64(p))
@@ -664,10 +715,15 @@ class CacheReader:
         self.associations()
         anchored = 'native_view_type' in self.req.get('scope', {})
         selected_roots = self.anchored_scope(host) if anchored else self.select_scope(root)
+        self.boundary_hits = {}
+        self.boundary_records = []
+        self.leaf_owner_names = {}
         self.selected_models = set()
         self.omitted_views = 0
         for selected_root in selected_roots:
             self.walk(selected_root)
+        if set(self.boundary_hits) != set(self.req.get('scope', {}).get('leaf_types', ())):
+            raise Refusal('scope_leaf_unresolved')
         if anchored:
             if self.anchor_matches != 1:
                 raise Refusal('anchor_scope_binding_unresolved')
@@ -711,7 +767,7 @@ class CacheReader:
                           for start, end in self.private_ranges)
         if model_reads:
             raise Refusal('cache_private_range')
-        self.c.cache_audit = dict(omitted_views=self.omitted_views, selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
+        self.c.cache_audit = dict(boundary_records=self.boundary_records, stopped_branches=self.boundary_hits, omitted_views=self.omitted_views, selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)

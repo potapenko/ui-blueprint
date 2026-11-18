@@ -71,9 +71,17 @@ def request(raw):
         scope = data['scope']
         if (not isinstance(scope, dict) or set(scope) not in
                 ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'},
-                 {'type', 'containing_type', 'native_view_type', 'selection'})):
+                 {'type', 'containing_type', 'native_view_type', 'selection'},
+                 {'type', 'containing_type', 'native_view_type', 'selection', 'leaf_types'})):
             raise Refusal('invalid_scope', 2)
         for key, value in scope.items():
+            if key == 'leaf_types':
+                pattern = r'[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+'
+                if (not isinstance(value, list) or not 1 <= len(value) <= 4
+                        or any(not isinstance(v, str) or len(v)>256 or not re.fullmatch(pattern,v) for v in value)
+                        or len(set(value)) != len(value) or scope['type'] in value):
+                    raise Refusal('invalid_scope', 2)
+                continue
             if key == 'selection':
                 if value != 'geometry_records':
                     raise Refusal('invalid_scope', 2)
