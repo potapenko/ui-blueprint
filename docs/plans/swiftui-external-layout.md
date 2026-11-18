@@ -272,7 +272,8 @@ card. Source-global transforms and installation remain pending.
 
 On the owned three-card fixture the middle card mounted ScopeVideo. Selecting
 ScopeCard containing ScopeVideo returned both disjoint roots of that body
-attribute. The 35 emitted nodes contain the middle title frame (42pt), action
+attribute. Both raw roots were walked; normalization produced one emitted root with 35
+nodes. Its contents include the middle title frame (42pt), action
 frame (92pt), and orange video (520×90pt). The neighboring cards' title/action
 widths 41/91 and 43/93 are absent. Discovery visited 802 raw records. Geometry
 reads overlapped zero of 70 protected ranges. The canonical validator passed.
