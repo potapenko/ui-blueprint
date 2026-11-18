@@ -17,7 +17,8 @@
   received independent method/recovery review closure through8588025. The one
   admitted Settings attempt then entered retained owner recovery without Snapshot.
   The withdrawn getter admission remains disabled. After affected cache review,
-  @8 admits one exact owner-run Reels cache case; no other consumer is qualified.
+  the one @8 Reels cache attempt refused tree_limit. Its admission is consumed;
+  no further consumer is qualified without bounded subtree selection.
   Services completed owner recovery; target and debugger processes are absent.
 
 ## DEBUG-CAPTURE.SCOPE

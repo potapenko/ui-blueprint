@@ -196,3 +196,17 @@ The source owner runs once after rechecking state/identity/frozen hashes. This
 support chat does not attach or operate that app. No quota change or automatic
 retry; unknowns/unsupported boxed geometry remain explicit. Actual capture,
 canonical/native mapping and installation remain unaccepted until owner result.
+
+## Reels actual result — c08afb0
+
+One owner-run reels-cache-qualification-1 returned exit2/tree_limit,16calls,
+detached_restored,no Snapshot/cache audit/native flags. Owner confirmed the same
+19791/birth1795038583.1458468 and onscreenCG25250/1920×1050 after LLDB exit.
+No retry or increased quota occurred. Fixed manifest is retained at
+`/var/folders/px/srfnff157mg33175_4y8yrnr0000gn/T/uib-reels-cache-qualified-419tbvf5/output/manifest-reels-cache-qualification-1.json`.
+The consumed literal admission is disabled. This is safe refusal, not successful
+product geometry. A bounded source-qualified subtree selection is now required;
+whole-window traversal cannot be repackaged as a qualified populated Clip case.
+No generic public recipe/install exists for that case. Existing source-local/
+unknown-transform boundaries remain. Next consumer facts: exact immutable source
+component boundary/type for Reels and Clip; no product process inspection by support.

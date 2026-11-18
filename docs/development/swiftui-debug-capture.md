@@ -1,6 +1,6 @@
 # External SwiftUI capture — not a product recipe
 
-Only the exact Reels owner handoff registered in the current contract is admitted. c89 and8588025 failed real consumer
+Product admission is disabled: the single Reels owner-run refused tree_limit. c89 and8588025 failed real consumer
 qualification and must not be retried. No new version has been installed.
 
 The current cache-only candidate is an integration under development, governed by
