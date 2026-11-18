@@ -424,6 +424,7 @@ class CacheReader:
                     self.nodes[parent]['children'].append(index)
                 parent = index
             if stop:
+                self.nodes[parent]['leaf_type'] = leaf
                 self.boundary_records.append(dict(type=leaf, node_index=parent))
                 self.boundary_hits[leaf] = self.boundary_hits.get(leaf, 0)+1
                 next_element = self.anchor_next.get(element)
@@ -698,6 +699,17 @@ class CacheReader:
                 raise Refusal('anchor_parent_ownership')
         raise Refusal('anchor_card_owner_unresolved')
 
+    def verify_anchor_ancestry(self):
+        required = self.req['scope']['containing_type']
+        index = self.matched_anchor_node
+        while index is not None:
+            node = self.nodes[index]
+            if (self.qualified_nominal(node['metadata']) == required
+                    or node.get('leaf_type') == required):
+                return
+            index = node['parent']
+        raise Refusal('anchor_descendant_unresolved')
+
     def collect(self, host):
         graph_view = self.host_graph(host)
         if graph_view is None:
@@ -727,14 +739,7 @@ class CacheReader:
         if anchored:
             if self.anchor_matches != 1:
                 raise Refusal('anchor_scope_binding_unresolved')
-            index = self.matched_anchor_node
-            while index is not None:
-                node = self.nodes[index]
-                if self.qualified_nominal(node['metadata']) == self.req['scope']['containing_type']:
-                    break
-                index = node['parent']
-            if index is None:
-                raise Refusal('anchor_descendant_unresolved')
+            self.verify_anchor_ancestry()
         # Establish all known selected model-value ranges before geometry reads.
         for model in self.selected_models:
             self.protect_model(model)

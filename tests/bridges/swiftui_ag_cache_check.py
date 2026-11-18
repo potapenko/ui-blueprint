@@ -272,4 +272,16 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual(r.boundary_records,[{'type':'App.Actions','node_index':0}])
         r.child_subgraphs.assert_not_called()
 
+    def test_owner_video_witness_must_be_on_anchor_ancestry(self):
+        r=reader();r.req['scope']={'containing_type':'App.Video'}
+        r.qualified_nominal=lambda _: 'SwiftUI.ModifiedContent'
+        r.nodes=[dict(metadata=10,parent=None),
+                 dict(metadata=11,parent=0,leaf_type='App.Video'),
+                 dict(metadata=12,parent=0)]
+        r.matched_anchor_node=2
+        with self.assertRaises(Refusal) as error:r.verify_anchor_ancestry()
+        self.assertEqual(error.exception.code,'anchor_descendant_unresolved')
+        r.nodes[2]['parent']=1
+        r.verify_anchor_ancestry()
+
 if __name__ == '__main__': unittest.main()
