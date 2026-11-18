@@ -78,8 +78,13 @@ def request(raw):
                 if value != 'geometry_records':
                     raise Refusal('invalid_scope', 2)
                 continue
-            if (not isinstance(value, str) or len(value) > 256 or
-                    not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+', value)):
+            simple = r'[A-Za-z_][A-Za-z0-9_]*'
+            qualified = rf'{simple}(?:\.{simple})+'
+            if key == 'native_view_type':
+                # Swift demangles private nominal descriptors with the complete
+                # file discriminator. Compare this string literally at lookup.
+                qualified = rf'(?:{qualified}|{simple}\.\({simple} in _[A-F0-9]{{32}}\))'
+            if not isinstance(value, str) or len(value) > 256 or not re.fullmatch(qualified, value):
                 raise Refusal('invalid_scope', 2)
     limits = data['limits']
     ceilings = dict(max_nodes=256, max_depth=256, max_output_bytes=MAX_BYTES, deadline_ms=10000)

@@ -417,6 +417,16 @@ class CanonicalPrivacy(unittest.TestCase):
             self.assertEqual(launcher.wait(timeout=5), 0)
             self.assertEqual(done.read_text(), 'completed')
 
+    def test_private_native_type_requires_full_discriminator(self):
+        req = copy.deepcopy(REQ)
+        scope = dict(type='App.Clip', containing_type='App.Query',
+                     native_view_type='App.(View in _00DEFCC61D65EEABD9495FC981F4871C)')
+        req['scope'] = scope
+        self.assertEqual(codec.request(codec.encode(req))['scope'],scope)
+        for name in ('App.(View in _00D)', 'App.(View in _*)', scope['native_view_type']+' '):
+            with self.assertRaises(codec.Refusal):
+                codec.request(codec.encode({**req,'scope':{**scope,'native_view_type':name}}))
+
     def test_optional_scope_has_exact_bounded_nominal_names(self):
         req=copy.deepcopy(REQ)
         req['scope']=dict(type='PlayphrasemeApp.ClipSearchView')

@@ -247,4 +247,12 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual([n['parent'] for n in r.nodes],[None,0])
         self.assertEqual(r.nodes[0]['children'],[1])
 
+    def test_lldb_short_name_cannot_alias_private_descriptor(self):
+        suffix = '_00DEFCC61D65EEABD9495FC981F4871C'
+        sym = SimpleNamespace(GetName=lambda:'nominal type descriptor for App.Probe',
+            GetMangledName=lambda:'$s3App5Probe33'+suffix+'LLCMn')
+        self.assertTrue(CacheReader.native_descriptor_matches('App.(Probe in '+suffix+')',sym))
+        self.assertFalse(CacheReader.native_descriptor_matches('App.Probe',sym))
+        self.assertFalse(CacheReader.native_descriptor_matches('App.(Probe in _'+'A'*32+')',sym))
+
 if __name__ == '__main__': unittest.main()

@@ -1,5 +1,6 @@
 """Exact-profile cached geometry; never evaluate AttributeGraph or copy models."""
 import math
+import re
 import struct
 from swiftui_debug_fields import IMAGES
 from swiftui_debug_snapshot import Refusal, encode
@@ -527,6 +528,21 @@ class CacheReader:
         kind, identity = matches.pop()
         return owner_roots[identity] if kind == 'owner' else [identity]
 
+    @staticmethod
+    def native_descriptor_matches(expected, symbol):
+        name = symbol.GetName()
+        prefix = 'nominal type descriptor for '
+        private = re.fullmatch(r'(\w+)\.\((\w+) in (_[A-F0-9]{32})\)', expected)
+        if private:
+            module, cls, discriminator = private.groups()
+            # LLDB can omit the discriminator in its display name. The raw
+            # descriptor symbol carries the exact private declaration identity.
+            return (name in (prefix+expected, prefix+module+'.'+cls)
+                    and (symbol.GetMangledName() or '').endswith('33'+discriminator+'LLCMn'))
+        # A private class with an identical short name must not satisfy a public selector.
+        return (name == prefix+expected
+                and not re.search(r'33_[A-F0-9]{32}LLCMn$', symbol.GetMangledName() or ''))
+
     def native_layout_anchor(self, host, expected):
         pending, visited, matches = [host], set(), []
         while pending:
@@ -540,7 +556,7 @@ class CacheReader:
                 if descriptor:
                     symbol = self.c.t.ResolveLoadAddress(descriptor).GetSymbol()
                     if (symbol.GetStartAddress().GetLoadAddress(self.c.t) == descriptor
-                            and symbol.GetName() == 'nominal type descriptor for '+expected):
+                            and self.native_descriptor_matches(expected, symbol)):
                         matches.append(view)
             children = self.c.objc(view, 'subviews')
             count = self.c.objc(children, 'count')
