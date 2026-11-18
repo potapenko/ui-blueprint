@@ -190,7 +190,7 @@ class CanonicalPrivacy(unittest.TestCase):
         req_value = copy.deepcopy(REQ)
         req_value['expected_bundle'] = 'me.playphraseme.reference.services.test'
         binding = tuple(req_value[k] for k in ('request_id', 'pid', 'expected_bundle',
-                                              'expected_launch_time', 'window_id'))
+                                              'expected_launch_time', 'window_id')) + (None,)
         error = SimpleNamespace(Fail=lambda: False)
         frame = SimpleNamespace(GetFunctionName=lambda: 'mach_msg2_trap')
         thread = SimpleNamespace(GetQueueName=lambda: 'com.apple.main-thread', GetFrameAtIndex=lambda _: frame)
@@ -327,13 +327,21 @@ class CanonicalPrivacy(unittest.TestCase):
         req = copy.deepcopy(REQ); req['expected_bundle'] = 'me.playphraseme.reference.services.test'
         binding = {k: req[k] for k in ('request_id', 'pid', 'expected_bundle',
                                      'expected_launch_time', 'window_id')}
-        with patch.object(capture, 'CONSUMER_ADMISSION', tuple(binding.values())):
+        with patch.object(capture, 'CONSUMER_ADMISSION', tuple(binding.values()) + (None,)):
             self.assertFalse(capture.require_admitted_target(req))
             for field in binding:
                 wrong = dict(req)
                 wrong[field] = req[field]+1 if isinstance(req[field], (int, float)) else req[field]+'x'
                 with self.assertRaises(codec.Refusal): capture.require_admitted_target(wrong)
             self.assertTrue(capture.require_admitted_target(REQ))
+
+    def test_scoped_reels_grant_refuses_lost_or_weakened_scope(self):
+        req = dict(zip(('request_id','pid','expected_bundle','expected_launch_time',
+                        'window_id','scope'), capture.CONSUMER_ADMISSION))
+        self.assertFalse(capture.require_admitted_target(req))
+        for altered in (None, {'type':req['scope']['type']}, {'type':'SwiftUI.Text'}):
+            with self.assertRaises(codec.Refusal):
+                capture.require_admitted_target({**req,'scope':altered})
 
     def test_long_no_target_command_uses_private_source_file_then_removes_it(self):
         lldb = '/Applications/Xcode.app/Contents/Developer/usr/bin/lldb'

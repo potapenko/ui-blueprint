@@ -31,14 +31,19 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 # cannot expand this gate with a request flag, filename or bundle prefix.
 # The single Reels window-root attempt refused tree_limit. No further product
 # capture is admitted until a bounded, source-qualified subtree path is verified.
-CONSUMER_ADMISSION = None
+CONSUMER_ADMISSION = (
+    'reels-scoped-card-1', 19791, 'me.playphraseme.reference.reels.fgb7o3fd',
+    1795038583.1458468, 25250,
+    {'type': 'PlayphrasemeApp.ReelsSlideView',
+     'containing_type': 'PlayphrasemeApp.ReelsVideoView'},
+)
 
 
 def require_admitted_target(req):
     if req['expected_bundle'].startswith('me.uiblueprint.external-layout.canary.'):
         return True
     identity = (req['request_id'], req['pid'], req['expected_bundle'],
-                req['expected_launch_time'], req['window_id'])
+                req['expected_launch_time'], req['window_id'], req.get('scope'))
     if identity == CONSUMER_ADMISSION:
         return False
     raise Refusal('product_capture_withdrawn')
