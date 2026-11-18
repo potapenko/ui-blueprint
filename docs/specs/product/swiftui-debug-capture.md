@@ -78,6 +78,15 @@ The owner attribute is local to this observation. Two matching owner attributes
 refuse as ambiguous. All selected branches share the original limits and must
 pass the same graph, type and privacy checks.
 
+Experimental anchor mode requires the exact mounted NSView type in the selected
+window, a unique represented view, matching provider pointer, runtime ivar
+offsets and a current weak layout attribute in the selected graph. At each
+unique reverse subgraph association the selector may test the requested Swift
+body owner and descendant. All ancestor searches share the raw discovery budget.
+A selected card must contain exactly one recorded layoutComputer association
+matching that native reference. Unknown, missing, expired or ambiguous bindings
+refuse. The mode is fixture-only until independent qualification.
+
 ## DEBUG-CAPTURE.DATA
 
 The @7 candidate replaces both debug getters with a bounded read of the existing

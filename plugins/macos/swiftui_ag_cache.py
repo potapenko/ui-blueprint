@@ -325,6 +325,8 @@ class CacheReader:
             if index >= count or count > 4096:
                 raise Refusal('cache_key_limit')
             key = self.cstring(self.ptr(self.ptr(table)+index*8), 64)
+            if key == 'layoutComputer' and hasattr(self, 'anchor_id') and self.anchor_id == self.u32(v+8):
+                self.anchor_matches += 1
             if key in ('position', 'size'):
                 # No read of any unrequested TreeValue's type/value payload.
                 result.append((key, self.ptr(v), self.u32(v+8)))
@@ -478,6 +480,10 @@ class CacheReader:
             p = self.owned_record(element, 32)
             if element in seen or len(seen) >= 1024 or depth > self.req['limits']['max_depth']:
                 raise Refusal('cache_scope_scan_limit', 2)
+            if hasattr(self, 'scan_work'):
+                self.scan_work += 1
+                if self.scan_work > 1024:
+                    raise Refusal('cache_scope_scan_limit', 2)
             seen.add(element)
             metadata = self.pointer(self.u64(p))
             name = self.qualified_nominal(metadata) if metadata else None
@@ -510,6 +516,93 @@ class CacheReader:
         kind, identity = matches.pop()
         return owner_roots[identity] if kind == 'owner' else [identity]
 
+    def native_layout_anchor(self, host, expected):
+        pending, visited, matches = [host], set(), []
+        while pending:
+            view = pending.pop()
+            if view in visited or len(visited) >= 128:
+                raise Refusal('anchor_view_limit')
+            visited.add(view)
+            cls = self.pointer(self.u64(view) & self.isa_mask)
+            if self.u64(cls+32) & 2:
+                descriptor = self.pointer(self.u64(cls+64))
+                if descriptor:
+                    symbol = self.c.t.ResolveLoadAddress(descriptor).GetSymbol()
+                    if (symbol.GetStartAddress().GetLoadAddress(self.c.t) == descriptor
+                            and symbol.GetName() == 'nominal type descriptor for '+expected):
+                        matches.append(view)
+            children = self.c.objc(view, 'subviews')
+            count = self.c.objc(children, 'count')
+            if len(visited)+len(pending)+count > 128:
+                raise Refusal('anchor_view_limit')
+            pending.extend(self.c.objc(children, 'objectAtIndex:', i) for i in range(count))
+        if len(matches) != 1:
+            raise Refusal('native_anchor_unresolved')
+        view = matches[0]
+        platform = self.c.objc(view, 'superview')
+        cls = self.pointer(self.u64(platform) & self.isa_mask)
+        descriptor = self.ptr(cls+64, 4)
+        addr = self.c.t.ResolveLoadAddress(descriptor)
+        symbol = addr.GetSymbol()
+        if (addr.GetModule().GetFileSpec().GetFilename() != 'SwiftUI'
+                or symbol.GetStartAddress().GetLoadAddress(self.c.t) != descriptor
+                or symbol.GetName() != 'nominal type descriptor for SwiftUI.AppKitPlatformViewHost'):
+            raise Refusal('anchor_parent_unqualified')
+        extent = self.c.call('class_getInstanceSize', cls)[0]
+
+        def offset(key, size):
+            data = key.encode('ascii')+bytes([0])
+            error = self.c.lldb.SBError()
+            if self.c.p.WriteMemory(self.c.memory, data, error) != len(data) or error.Fail():
+                raise Refusal('ivar_lookup_input')
+            ivar = self.c.call('class_getInstanceVariable', cls, self.c.memory)[0]
+            if not ivar:
+                raise Refusal('ivar_unavailable')
+            value = self.c.call('ivar_getOffset', ivar)[0]
+            if value < 8 or value+size > extent:
+                raise Refusal('ivar_extent')
+            return value
+
+        if self.ptr(platform+offset('coreRepresentedViewProvider', 8)) != view:
+            raise Refusal('anchor_provider_mismatch')
+        slot = platform+offset('coreLayoutInvalidator', 9)
+        if self.u8(slot+8) != 0:
+            raise Refusal('anchor_invalidator_absent')
+        attribute = self.u32(slot)
+        subgraph = self.page_owner(attribute)
+        if (self.ptr(subgraph+0x28) != self.graph or
+                self.u32(slot+4) != self.u32(subgraph+0x18) & 0x7fffffff):
+            raise Refusal('expired_layout_reference')
+        return attribute, subgraph
+
+    def anchored_scope(self, host):
+        self.anchor_id, sg = self.native_layout_anchor(host, self.req['scope']['native_view_type'])
+        seen = set()
+        self.scan_work = self.anchor_matches = 0
+        for _ in range(12):
+            root = self.u32(sg+0x60)
+            if not root or root in seen or self.page_owner(root) != sg:
+                raise Refusal('anchor_subgraph_root')
+            seen.add(root)
+            try:
+                return self.select_scope(root)
+            except Refusal as error:
+                if error.code != 'cache_scope_unresolved':
+                    raise
+            model = self.u32(self.owned_record(root, 12)+8)
+            resolved, _ = self.resolve(model, links_only=True)
+            if not resolved:
+                break
+            parents = {(owner, parent) for owner, pairs in self.links.items()
+                       for parent, attr in pairs if attr == resolved[0]}
+            if len(parents) != 1:
+                break
+            sg, parent = parents.pop()
+            self.owned_record(parent, 32)
+            if self.page_owner(parent) != sg:
+                raise Refusal('cache_subgraph_root')
+        raise Refusal('anchor_card_owner_unresolved')
+
     def collect(self, host):
         graph_view = self.host_graph(host)
         if graph_view is None:
@@ -525,9 +618,12 @@ class CacheReader:
             raise Refusal('cache_subgraph_root')
         self.nil_attribute = self.u32(self.symbol('AGAttributeNil', 'AttributeGraph'))
         self.associations()
-        selected_roots = self.select_scope(root)
+        anchored = 'native_view_type' in self.req.get('scope', {})
+        selected_roots = self.anchored_scope(host) if anchored else self.select_scope(root)
         for selected_root in selected_roots:
             self.walk(selected_root)
+        if anchored and self.anchor_matches != 1:
+            raise Refusal('anchor_scope_binding_unresolved')
         # Establish all known selected model-value ranges before geometry reads.
         for node in self.nodes:
             self.protect_model(node['model'])
@@ -560,7 +656,7 @@ class CacheReader:
                           for start, end in self.private_ranges)
         if model_reads:
             raise Refusal('cache_private_range')
-        self.c.cache_audit = dict(selected_roots=len(selected_roots), scope_scan_records=self.scanned_records, raw_records=len(self.raw_seen), views=len(self.nodes),
+        self.c.cache_audit = dict(selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)

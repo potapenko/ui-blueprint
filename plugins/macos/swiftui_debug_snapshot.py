@@ -70,7 +70,7 @@ def request(raw):
     if 'scope' in data:
         scope = data['scope']
         if (not isinstance(scope, dict) or set(scope) not in
-                ({'type'}, {'type', 'containing_type'})):
+                ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'})):
             raise Refusal('invalid_scope', 2)
         for value in scope.values():
             if (not isinstance(value, str) or len(value) > 256 or

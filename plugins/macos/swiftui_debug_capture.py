@@ -302,7 +302,8 @@ class Calls:
 
     def call(self, name, *args):
         if name not in ('objc_autoreleasePoolPush', 'objc_autoreleasePoolPop',
-                        'objc_msgSend', 'sel_registerName', 'class_getInstanceSize'):
+                        'objc_msgSend', 'sel_registerName', 'class_getInstanceSize',
+                        'class_getInstanceVariable', 'ivar_getOffset'):
             raise Refusal('forbidden_target_call')
         self.admit()
         # Preserve the existing acquisition ceiling; cache reads own no Swift array.

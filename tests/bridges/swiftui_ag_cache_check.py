@@ -208,4 +208,19 @@ class CacheChecks(unittest.TestCase):
         with self.assertRaises(Refusal) as error:r.select_scope(1024)
         self.assertEqual(error.exception.code,'cache_scope_scan_limit')
 
+    def test_anchor_can_only_ascend_a_unique_owned_parent(self):
+        r = reader()
+        r.req['scope'] = {'native_view_type':'App.Surface'}
+        r.native_layout_anchor = lambda *_: (512, 1500)
+        r.u32 = lambda address: 2048 if address == 1500+0x60 else 4096
+        r.page_owner = lambda _: 1500
+        r.owned_record = lambda offset, size: offset
+        r.resolve = lambda *a, **kw: ((8192,0,8192),None)
+        r.links = {3000:[(4000,8192)],5000:[(6000,8192)]}
+        r.select_scope = Mock(side_effect=Refusal('cache_scope_unresolved'))
+        with self.assertRaises(Refusal) as error:
+            r.anchored_scope(700)
+        self.assertEqual(error.exception.code,'anchor_card_owner_unresolved')
+        r.select_scope.assert_called_once_with(2048)
+
 if __name__ == '__main__': unittest.main()
