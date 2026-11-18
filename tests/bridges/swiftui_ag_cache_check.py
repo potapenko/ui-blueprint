@@ -164,6 +164,7 @@ class CacheChecks(unittest.TestCase):
 
     def scoped_reader(self, names, children, scope):
         r=reader();r.req['scope']=scope;r.nil_attribute=0
+        r.resolve=lambda *args,**kwargs:(None,'cache_value_unavailable')
         r.pointer=lambda x:x;r.owned_record=lambda off,size:off
         r.u64=lambda p:p
         r.qualified_nominal=lambda metadata:names.get(metadata)

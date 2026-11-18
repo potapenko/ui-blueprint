@@ -21,20 +21,7 @@ struct ScopeCard: View {
         }
         .padding(16)
         .frame(width: phase == 2 ? 800 : 640, height: 400)
-        .task {
-            guard let directory = ProcessInfo.processInfo.environment["UIB_FIXTURE_CONTROL"] else { return }
-            let root = URL(fileURLWithPath: directory)
-            while !Task.isCancelled {
-                if let text = try? String(contentsOf: root.appendingPathComponent("phase"), encoding: .utf8),
-                   let requested = Int(text.trimmingCharacters(in: .whitespacesAndNewlines)),
-                   (0...2).contains(requested) {
-                    phase = requested
-                    let acknowledgement = "\(ProcessInfo.processInfo.processIdentifier):\(phase)"
-                    try? acknowledgement.write(to: root.appendingPathComponent("ack"), atomically: true, encoding: .utf8)
-                }
-                try? await Task.sleep(for: .milliseconds(200))
-            }
-        }
+
     }
 }
 

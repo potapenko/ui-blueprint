@@ -449,17 +449,42 @@ class CacheReader:
         seen, matches = set(), []
         wanted_descendant = scope.get('containing_type')
 
+        owner_names = {}
+        active_owners = set()
+
+        def rule_owner(model):
+            resolved, _ = self.resolve(model, links_only=True)
+            if resolved is None:
+                return None, None
+            attribute = resolved[0]
+            if attribute not in owner_names:
+                _, descriptor, _ = self.attribute_info(attribute)
+                rule = self.pointer(self.u64(descriptor))
+                name = None
+                descriptor_addr = self.ptr(rule+8, 4) if rule and self.u64(rule)==0x200 else None
+                symbol = self.c.t.ResolveLoadAddress(descriptor_addr).GetSymbol() if descriptor_addr else None
+                if (symbol and symbol.GetStartAddress().GetLoadAddress(self.c.t) == descriptor_addr
+                        and symbol.GetMangledName() in (
+                            '$s7SwiftUI10StaticBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn',
+                            '$s7SwiftUI11DynamicBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn')):
+                    accessor = self.ptr(rule+16)
+                    if self.qualified_nominal(accessor) == 'SwiftUI.ViewBodyAccessor':
+                        name = self.qualified_nominal(self.ptr(accessor+16))
+                owner_names[attribute] = name
+            return attribute, owner_names[attribute]
+
         def scan(element, depth):
             p = self.owned_record(element, 32)
             if element in seen or len(seen) >= 1024 or depth > self.req['limits']['max_depth']:
                 raise Refusal('cache_scope_scan_limit', 2)
             seen.add(element)
             metadata = self.pointer(self.u64(p))
-            name = None
-            if metadata:
-                # Structural wrappers can own a source component even when the
-                # debug serializer omits that wrapper from emitted view records.
-                name = self.qualified_nominal(metadata)
+            name = self.qualified_nominal(metadata) if metadata else None
+            attribute, owner_name = rule_owner(self.u32(p+8))
+            owner_root = owner_name is not None and attribute not in active_owners
+            if owner_root:
+                active_owners.add(attribute)
+            names = {name, owner_name if owner_root else None}
             descendant_found = False
             child = self.u32(p+20)
             while child:
@@ -468,9 +493,11 @@ class CacheReader:
             children, _ = self.child_subgraphs(element)
             for child in children:
                 descendant_found |= scan(child, depth+1)
-            if name == scope['type'] and (wanted_descendant is None or descendant_found):
+            if owner_root:
+                active_owners.remove(attribute)
+            if scope['type'] in names and (wanted_descendant is None or descendant_found):
                 matches.append(element)
-            return descendant_found or (wanted_descendant is not None and name == wanted_descendant)
+            return descendant_found or (wanted_descendant is not None and wanted_descendant in names)
 
         scan(root, 1)
         self.scanned_records = len(seen)
