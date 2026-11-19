@@ -200,7 +200,7 @@ enum NativeWindowCapture {
         do {
             if arguments.contains("--list-windows") {
                 let options = try discoveryOptions(arguments)
-                let watchdog = DispatchWorkItem { FileHandle.standardError.write(Data("capture_deadline\n".utf8)); _exit(4) }
+                let watchdog = DispatchWorkItem { @Sendable in FileHandle.standardError.write(Data("capture_deadline\n".utf8)); _exit(4) }
                 DispatchQueue.global().asyncAfter(deadline: .now() + 5, execute: watchdog)
                 defer { watchdog.cancel() }
                 let result = try listWindows(options)
@@ -211,7 +211,7 @@ enum NativeWindowCapture {
             }
             let options = try Options.parse(arguments)
             let deadline = ProcessInfo.processInfo.systemUptime + Double(options.deadlineMS) / 1000
-            let watchdog = DispatchWorkItem {
+            let watchdog = DispatchWorkItem { @Sendable in
                 FileHandle.standardError.write(Data("capture_deadline\n".utf8)); _exit(4)
             }
             DispatchQueue.global().asyncAfter(deadline: .now() + Double(options.deadlineMS) / 1000, execute: watchdog)
