@@ -17,9 +17,21 @@ contract revisions are recorded in [migration support](../swiftui-external-layou
 | Settings V01 | `/root/settings_geometry` | Recover measured parts from the accepted pair and qualify a route for the remaining internal geometry |
 | Clip C01.a | `/root/clip_qualification` | Verify private anchor and source ownership, then hand off one bounded consumer case |
 
-The installed 0.4.0 release candidate at 9512ff3 provides saved-data analysis and
-the cache reader. Reels partial capture and Shell toolbar measurement have real
-consumer evidence. Open domain outcomes and public publication remain separate.
+Local installation and qualification, November 19:
+
+| Outcome | Evidence or remaining dependency |
+| --- | --- |
+| 0.5.0 installed | Managed CLI and skill from ff1a2d961dc0e27536a706e1d9ef004c22bd0413. Version 0.4.0 retained for rollback. Release archive verified; exact GitHub publication confirmation requested. |
+| Reels | Real paused card at 1920×1050pt: title 698.5×76pt and video 1008.276×567.155pt. ActionBar bounds unknown. At 1440×900 the paired PNG establishes an outer visible video edge of 854×480.5pt. Layout at that size remains unverified. |
+| Shell and S10 | Three target NSButton frames measured; gaps both 0.5pt. Separate Learner target resize completed at 961×1050pt with AX, CG and native PNG agreement. |
+| Settings | 12 registered source markers, 43 measurements and an established mapping within one saved source pair. Unmarked labels/dividers lack own reliable layout; test scrolling exposed a 60pt discrepancy. Auth overlays are explicitly excluded. |
+| Clip C01.a | Private background-anchor geometry matched a three-region synthetic oracle. Actual unchanged owner SDK export has zero of three required inner bounds. Installed collector lacks a live Clip admission. |
+| Favorites and Statistics | Unique owner/cursor check passed on fixture, duplicate bindings refused. Existing SDK ingress publishes mounted markers, with no scope for empty slots, Import or PDF bounds. Existing AX frames describe accessibility only. |
+| Grammar | Panel 520×766.5pt verified. Hint body fixture returns an inner VStack but no confirmed outer frame. Repeated action occurrences lack a shared public layout identity. Real inner measurements remain open. |
+
+The consumer contacts have the installed version and measured limits. No released
+capture permission transfers between process generations. Qualification evidence
+and outstanding cases remain linked in the migration support record above.
 This assignment does not reopen the historical P0–P7 packages below.
 
 
