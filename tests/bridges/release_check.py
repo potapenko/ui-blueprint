@@ -834,7 +834,13 @@ def numeric_version_checks():
         return lambda rev, name: {'VERSION': version, 'CHANGELOG.md': changelog}[name]
     with patch.object(release, 'committed', side_effect=source()):
         assert release.source_version(revision) == '0.1.0'
-        assert release.release_notes(revision, '0.1.0') == '# UI Blueprint 0.1.0\n\nFirst release.\n'
+        for version, body, excluded in [('0.1.0', 'First release.', 'Old release.'),
+                                        ('0.0.9', 'Old release.', 'First release.')]:
+            generated = release.release_notes(revision, version)
+            assert generated.startswith(f'# UI Blueprint {version}\n\n{body}\n')
+            assert excluded not in generated
+            assert f'Install UI Blueprint v{version} and its matching skill' in generated
+            assert f'https://github.com/potapenko/ui-blueprint/blob/v{version}/docs/install.md' in generated
     for bad in (b'v0.1.0\n', b'0.1\n', b'01.1.0\n', b'0.1.0-web.browser2\n',
                 b'0.1.0', b'0.1.0\n\n', b' 0.1.0\n'):
         with patch.object(release, 'committed', side_effect=source(bad)):

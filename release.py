@@ -60,7 +60,13 @@ def release_notes(revision, version):
                     flags=re.MULTILINE)[0].strip()
     if not body:
         raise ValueError('release changelog section is empty')
-    return f'# UI Blueprint {version}\n\n{body}\n'
+    guide = f'{REPOSITORY}/blob/v{version}/docs/install.md'
+    return (f'# UI Blueprint {version}\n\n{body}\n\n'
+            '## Install through your agent\n\n'
+            'Copy this prompt into Codex or Claude Code on your Mac.\n\n'
+            f'```text\nInstall UI Blueprint v{version} and its matching skill for this agent.\n'
+            f'Build from tag v{version} using the instructions at {guide}\n'
+            'Use the managed utility and skill locations in the guide, then verify the bundled example.\n```\n')
 
 
 def archive_name(version):
