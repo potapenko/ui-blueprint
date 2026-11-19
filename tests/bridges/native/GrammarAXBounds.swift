@@ -18,9 +18,13 @@ private enum GrammarAXBounds {
         let selectedName = names[a.first ?? ""]
         let roleOnly = a.first == "library-slot-overlay-role"
         let library = roleOnly || selectedName != nil
-        if library { a.removeFirst() }
-        let areaID = library ? "searchLearn.learner.overlay" : "searchLearn.learner.grammar"
+        let pdfWitness = a.first == "library-statistics-witness"
+        if library || pdfWitness { a.removeFirst() }
+        let areaID: String
+        if pdfWitness { areaID = "searchLearn.learner.statistics" }
+        else { areaID = library ? "searchLearn.learner.overlay" : "searchLearn.learner.grammar" }
         let buttonName = selectedName ?? "Present Simple"
+        if pdfWitness && a.count != 7 { throw Refusal("statistics_visual_witness_required") }
         if library && a.count != 7 { throw Refusal("library_overlay_witness_required") }
         guard (a.count == 5 || a.count == 7), let pid = Int32(a[0]), pid > 0,
               let birth = Double(a[2]), birth.isFinite, birth > 0,
@@ -177,9 +181,9 @@ private enum GrammarAXBounds {
                   let hit else { throw Refusal("ax_hit_unavailable") }
             return hit
         }
-        func areaAtWitness(_ point: CGPoint, root: AXUIElement) throws -> (area: AXUIElement, cost: Int) {
+        func areaAtWitness(_ point: CGPoint, root: AXUIElement, startingAt original: AXUIElement? = nil) throws -> (area: AXUIElement, cost: Int) {
             guard try rect(root).contains(point) else { throw Refusal("witness_outside_window") }
-            var element = try hitAt(point)
+            var element = try original ?? hitAt(point)
             var chain = [AXUIElement](), area: AXUIElement?
             while !CFEqual(element, root) {
                 try limit.reserveSelectionEntry()
@@ -245,6 +249,36 @@ private enum GrammarAXBounds {
             return (selectedArea, button)
         }
         let (firstWindow, firstWindowFrame) = try window()
+        if pdfWitness, let witness {
+            func witnessedButton() throws -> (button: AXUIElement, area: AXUIElement, bounds: CGRect) {
+                let hit = try hitAt(witness)
+                guard try text(hit, kAXRoleAttribute) == kAXButtonRole else { throw Refusal("ax_hit_not_button") }
+                let area = try areaAtWitness(witness, root: firstWindow, startingAt: hit).area
+                guard let enabled = try attribute(hit, kAXEnabledAttribute),
+                      CFGetTypeID(enabled) == CFBooleanGetTypeID() else { throw Refusal("ax_enabled_unavailable") }
+                guard CFEqual(enabled, kCFBooleanTrue) else { throw Refusal("ax_button_disabled") }
+                let bounds = try rect(hit)
+                guard bounds.contains(witness) else { throw Refusal("witness_outside_button_bounds") }
+                return (hit, area, bounds)
+            }
+            let first = try witnessedButton()
+            let second = try witnessedButton()
+            let (lastWindow, lastFrame) = try window()
+            guard CFEqual(first.button, second.button), CFEqual(first.area, second.area),
+                  first.bounds == second.bounds, CFEqual(firstWindow, lastWindow),
+                  firstWindowFrame == lastFrame else { throw Refusal("ax_target_changed") }
+            try limit.check()
+            let bounds = first.bounds
+            let result: [String:Any] = ["source":"native_ax", "field":"accessibility_bounds",
+                "attribution":"owner_visual_witness", "role":kAXButtonRole, "enabled":true,
+                "scope_ax_identifier":areaID, "pid":pid, "bundle_id":a[1], "launch_time":birth,
+                "window_id":cg, "coordinate_space":"ax-screen", "units":"pt", "origin":"top_left",
+                "rect":[bounds.origin.x, bounds.origin.y, bounds.width, bounds.height],
+                "witness_ax_screen_pt":[witness.x, witness.y], "consistency":"revalidated_nonatomic",
+                "uptime_start":start, "uptime_end":ProcessInfo.processInfo.systemUptime]
+            print(String(decoding: try JSONSerialization.data(withJSONObject:result,options:.sortedKeys), as: UTF8.self))
+            return
+        }
         if roleOnly, let witness {
             let firstArea = try areaAtWitness(witness, root: firstWindow).area
             let firstRole = try publicContainerRole(firstArea)

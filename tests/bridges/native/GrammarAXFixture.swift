@@ -5,7 +5,7 @@ import AppKit
 enum GrammarAXFixture {
     @MainActor static func main() throws {
         let args = CommandLine.arguments
-        guard args.count == 3, ["different-areas", "same-area", "large-window", "large-area", "large-duplicate"].contains(args[1]) else {
+        guard args.count == 3, ["different-areas", "same-area", "large-window", "large-area", "large-duplicate", "statistics", "statistics-disabled"].contains(args[1]) else {
             throw CocoaError(.fileReadInvalidFileName)
         }
         let app = NSApplication.shared
@@ -14,10 +14,12 @@ enum GrammarAXFixture {
                               styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
         let root = NSView(frame: .init(x: 0, y: 0, width: 520, height: 200))
         window.contentView = root
+        let statistics = args[1].hasPrefix("statistics")
+        let scopeID = statistics ? "searchLearn.learner.statistics" : "searchLearn.learner.grammar"
         var selected: NSButton?
         for index in 0...1 {
             let scroll = NSScrollView(frame: .init(x: 20 + 250 * index, y: 40, width: 210, height: 120))
-            scroll.setAccessibilityIdentifier(index == 0 ? "searchLearn.learner.grammar" : "fixture.other")
+            scroll.setAccessibilityIdentifier(index == 0 ? scopeID : "fixture.other")
             let content = NSView(frame: .init(x: 0, y: 0, width: 210, height: 120))
             scroll.documentView = content
             root.addSubview(scroll)
@@ -26,8 +28,12 @@ enum GrammarAXFixture {
             let duplicate = index == 0 && ["same-area", "large-duplicate"].contains(args[1])
             let count = crowded ? 170 : (duplicate ? 2 : 1)
             for row in 0..<count {
-                let button = NSButton(title: "Fixture", target: nil, action: nil)
-                button.setAccessibilityLabel(row == 0 || duplicate ? "Present Simple" : "Other")
+                let button = NSButton(title: statistics ? "" : "Fixture", target: nil, action: nil)
+                if statistics {
+                    button.isEnabled = index != 0 || args[1] != "statistics-disabled"
+                } else {
+                    button.setAccessibilityLabel(row == 0 || duplicate ? "Present Simple" : "Other")
+                }
                 button.frame = .init(x: 12, y: 8 + row * 36, width: 100 + 50 * index, height: 30)
                 content.addSubview(button)
                 if selected == nil { selected = button }
