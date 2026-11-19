@@ -1,5 +1,6 @@
 // Owner-run read-only qualification of one public AX button in Grammar Home.
-// Build with plugins/macos/NativeAcquisition.swift. No bundle installation.
+// Build with plugins/macos/NativeAcquisition.swift. Append a witnessed AX-screen x y
+// to select one concrete scroll area by its public hit-test parent chain.
 import AppKit
 import ApplicationServices
 
@@ -15,10 +16,17 @@ private enum GrammarAXBounds {
 
     @MainActor static func run() throws {
         let a = Array(CommandLine.arguments.dropFirst())
-        guard a.count == 5, let pid = Int32(a[0]), pid > 0,
+        guard (a.count == 5 || a.count == 7), let pid = Int32(a[0]), pid > 0,
               let birth = Double(a[2]), birth.isFinite, birth > 0,
               let cg = UInt32(a[3]), cg > 0, a[4].hasPrefix("/") else {
-            throw Refusal("expected_PID_BUNDLE_BIRTH_CGWINDOW_ABSOLUTE_APP_PATH")
+            throw Refusal("expected_PID_BUNDLE_BIRTH_CGWINDOW_ABSOLUTE_APP_PATH_optional_AX_SCREEN_X_Y")
+        }
+        var witness: CGPoint?
+        if a.count == 7 {
+            guard let x = Float(a[5]), let y = Float(a[6]), x.isFinite, y.isFinite else {
+                throw Refusal("invalid_ax_screen_witness")
+            }
+            witness = CGPoint(x: CGFloat(x), y: CGFloat(y))
         }
         guard AXIsProcessTrusted() else { throw Refusal("accessibility_permission_required") }
         let appPath = URL(fileURLWithPath: a[4]).resolvingSymlinksInPath().standardizedFileURL
@@ -53,15 +61,16 @@ private enum GrammarAXBounds {
             var count = 0
             let status = AXUIElementGetAttributeValueCount(e, key, &count)
             if !windows && (status == .attributeUnsupported || status == .noValue) { return [] }
-            guard status == .success, count <= capacity else { throw Refusal("ax_scope_incomplete") }
+            guard status == .success else { throw Refusal("ax_array_count_unavailable") }
+            guard count <= capacity else { throw Refusal("ax_children_over_capacity") }
             var found = [AXUIElement]()
             let missing = try limit.array(count: count, windows: windows, capacity: capacity, read: { index, length in
                 var page: CFArray?
                 guard AXUIElementCopyAttributeValues(e, key, index, length, &page) == .success,
-                      let page else { throw Refusal("ax_scope_incomplete") }
+                      let page else { throw Refusal("ax_array_page_unavailable") }
                 return page
             }, visit: { raw in
-                guard CFGetTypeID(raw) == AXUIElementGetTypeID() else { throw Refusal("ax_scope_incomplete") }
+                guard CFGetTypeID(raw) == AXUIElementGetTypeID() else { throw Refusal("ax_child_type_unavailable") }
                 found.append(unsafeDowncast(raw, to: AXUIElement.self))
             })
             var after = 0
@@ -107,17 +116,45 @@ private enum GrammarAXBounds {
             }
             return (w, frame)
         }
+        func areaAtWitness(_ point: CGPoint, root: AXUIElement) throws -> (area: AXUIElement, cost: Int) {
+            try prepare(app)
+            guard try rect(root).contains(point) else { throw Refusal("witness_outside_window") }
+            var hit: AXUIElement?
+            guard AXUIElementCopyElementAtPosition(app, Float(point.x), Float(point.y), &hit) == .success,
+                  var element = hit else { throw Refusal("ax_hit_unavailable") }
+            var chain = [AXUIElement](), area: AXUIElement?
+            while !CFEqual(element, root) {
+                try limit.reserveSelectionEntry()
+                guard chain.count < 32, !chain.contains(where: { CFEqual(element, $0) }),
+                      let role = try text(element, kAXRoleAttribute), role != kAXWindowRole,
+                      role != kAXPopoverRole else { throw Refusal("ax_hit_window_unresolved") }
+                chain.append(element)
+                if role == kAXScrollAreaRole && area == nil {
+                    guard try text(element, kAXIdentifierAttribute) == areaID else {
+                        throw Refusal("ax_hit_scroll_area_mismatch")
+                    }
+                    area = element
+                }
+                guard let parent = try attribute(element, kAXParentAttribute),
+                      CFGetTypeID(parent) == AXUIElementGetTypeID() else { throw Refusal("ax_hit_parent_unavailable") }
+                element = unsafeDowncast(parent, to: AXUIElement.self)
+            }
+            guard let area else { throw Refusal("ax_hit_scroll_area_unavailable") }
+            return (area, chain.count)
+        }
         func resolve(_ root: AXUIElement) throws -> (AXUIElement, AXUIElement) {
-            var pending: [(AXUIElement, Bool, Int)] = [(root, false, 0)]
-            var seen = [AXUIElement](), selectedArea: AXUIElement?, button: AXUIElement?
+            let hitArea = try witness.map { try areaAtWitness($0, root: root) }
+            let nodeBudget = 160 - (hitArea?.cost ?? 0)
+            var pending: [(AXUIElement, Bool, Int)] = [(hitArea?.area ?? root, hitArea != nil, 0)]
+            var seen = [AXUIElement](), selectedArea = hitArea?.area, button: AXUIElement?
             while let (element, inherited, depth) = pending.popLast() {
-                guard depth <= 32, seen.count < 160 else { throw Refusal("ax_scope_incomplete") }
+                guard depth <= 32, seen.count < nodeBudget else { throw Refusal("ax_traversal_limit") }
                 guard !seen.contains(where: { CFEqual($0, element) }) else { throw Refusal("ax_scope_not_a_tree") }
                 seen.append(element)
                 guard let role = try text(element, kAXRoleAttribute) else { throw Refusal("ax_role_unavailable") }
                 if depth > 0 && (role == kAXWindowRole || role == kAXPopoverRole) { continue }
                 var inside = inherited
-                if role == kAXScrollAreaRole {
+                if hitArea == nil && role == kAXScrollAreaRole {
                     inside = try text(element, kAXIdentifierAttribute) == areaID
                     if inside {
                         guard selectedArea == nil else { throw Refusal("ambiguous_scroll_area") }
@@ -128,7 +165,7 @@ private enum GrammarAXBounds {
                     guard button == nil else { throw Refusal("ambiguous_button") }
                     button = element
                 }
-                let children = try list(element, windows: false, capacity: 160 - seen.count - pending.count)
+                let children = try list(element, windows: false, capacity: nodeBudget - seen.count - pending.count)
                 for child in children { pending.append((child, inside, depth + 1)) }
             }
             guard let selectedArea else { throw Refusal("scroll_area_unavailable") }
@@ -146,13 +183,18 @@ private enum GrammarAXBounds {
             throw Refusal("ax_target_changed")
         }
         try limit.check()
-        let result: [String:Any] = ["source":"native_ax", "field":"accessibility_bounds",
+        var result: [String:Any] = ["source":"native_ax", "field":"accessibility_bounds",
             "role":kAXButtonRole, "scope_ax_identifier":areaID, "accessibility_name":buttonName,
             "name_source":kAXDescriptionAttribute, "pid":pid, "bundle_id":a[1],
             "launch_time":birth, "window_id":cg, "coordinate_space":"ax-screen", "units":"pt",
             "origin":"top_left", "rect":[bounds.origin.x, bounds.origin.y, bounds.width, bounds.height],
             "consistency":"revalidated_nonatomic", "uptime_start":start,
             "uptime_end":ProcessInfo.processInfo.systemUptime]
+        if let witness {
+            result["scope_selection"] = "nearest_scroll_area_on_ax_hit_parent_path_to_exact_window"
+            result["uniqueness"] = "all_ax_children_of_this_scroll_area_excluding_separate_surfaces"
+            result["scope_witness_ax_screen_pt"] = [witness.x, witness.y]
+        }
         print(String(decoding: try JSONSerialization.data(withJSONObject:result,options:.sortedKeys), as: UTF8.self))
     }
     @MainActor static func main() {

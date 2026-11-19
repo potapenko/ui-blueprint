@@ -5,7 +5,7 @@ import AppKit
 enum GrammarAXFixture {
     @MainActor static func main() throws {
         let args = CommandLine.arguments
-        guard args.count == 3, ["different-areas", "same-area"].contains(args[1]) else {
+        guard args.count == 3, ["different-areas", "same-area", "large-window", "large-area", "large-duplicate"].contains(args[1]) else {
             throw CocoaError(.fileReadInvalidFileName)
         }
         let app = NSApplication.shared
@@ -21,10 +21,13 @@ enum GrammarAXFixture {
             let content = NSView(frame: .init(x: 0, y: 0, width: 210, height: 120))
             scroll.documentView = content
             root.addSubview(scroll)
-            let count = index == 0 && args[1] == "same-area" ? 2 : 1
+            let crowded = (index == 1 && ["large-window", "large-duplicate"].contains(args[1])) ||
+                          (index == 0 && args[1] == "large-area")
+            let duplicate = index == 0 && ["same-area", "large-duplicate"].contains(args[1])
+            let count = crowded ? 170 : (duplicate ? 2 : 1)
             for row in 0..<count {
                 let button = NSButton(title: "Fixture", target: nil, action: nil)
-                button.setAccessibilityLabel("Present Simple")
+                button.setAccessibilityLabel(row == 0 || duplicate ? "Present Simple" : "Other")
                 button.frame = .init(x: 12, y: 8 + row * 36, width: 100 + 50 * index, height: 30)
                 content.addSubview(button)
                 if selected == nil { selected = button }
