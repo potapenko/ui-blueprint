@@ -326,7 +326,7 @@ class CacheReader:
             if index >= count or count > 4096:
                 raise Refusal('cache_key_limit')
             key = self.cstring(self.ptr(self.ptr(table)+index*8), 64)
-            if key == 'layoutComputer' and hasattr(self, 'anchor_id') and self.anchor_id == self.u32(v+8):
+            if key == 'layoutComputer' and hasattr(self, 'anchor_ids') and self.u32(v+8) in self.anchor_ids:
                 self.anchor_matches += 1
                 self.matched_anchor_node = len(self.nodes)
             if key in ('position', 'size'):
@@ -394,10 +394,11 @@ class CacheReader:
         return [root for _, root in sorted(selected, key=lambda item: item[0])], known
 
     def walk(self, element, parent=None, depth=1, witness_only=False):
-        p = self.owned_record(element, 32)
-        if element in self.raw_seen or len(self.raw_seen) >= 1024 or depth > self.req['limits']['max_depth']:
+        if (element in self.raw_seen or len(self.raw_seen) + getattr(self, 'owner_scan_cost', 0) >= 1024
+                or depth > self.req['limits']['max_depth']):
             raise Refusal('cache_tree_limit', 2)
         self.raw_seen.add(element)
+        p = self.owned_record(element, 32)
         metadata, flags, model = self.pointer(self.u64(p)), self.u32(p+12), self.u32(p+8)
         if not flags & 1 and metadata and model != self.nil_attribute:
             anchor_before = getattr(self, 'anchor_matches', 0)
@@ -409,8 +410,9 @@ class CacheReader:
                 _, leaf = self.rule_owner(model, self.leaf_owner_names)
             stop = leaf in leaves
             omit = (not stop and selection == 'geometry_records' and parent is not None and not fields
-                    and anchor_before == self.anchor_matches and
-                    self.qualified_nominal(metadata) != self.req['scope']['containing_type'])
+                    and anchor_before == self.anchor_matches
+                    and (not self.req['scope'].get('containing_type')
+                         or self.qualified_nominal(metadata) != self.req['scope']['containing_type']))
             self.selected_models.add(model)
             if omit:
                 self.omitted_views += 1
@@ -431,6 +433,12 @@ class CacheReader:
                 if next_element is not None:
                     self.walk(next_element, parent, depth+1, witness_only=True)
                 return
+        elif self.req.get('scope', {}).get('native_match') == 'within_owner':
+            # A reference on a transparent record cannot identify an emitted view.
+            before = self.anchor_matches
+            self.properties(element)
+            if self.anchor_matches != before:
+                raise Refusal('anchor_scope_binding_unresolved')
         if witness_only:
             next_element = self.anchor_next.get(element)
             if next_element is not None:
@@ -533,7 +541,10 @@ class CacheReader:
                 descendant_found |= scan(child, depth+1)
             if owner_root:
                 active_owners.remove(attribute)
-            if scope['type'] in names and (wanted_descendant is None or descendant_found):
+            match = scope['type'] in names
+            if scope.get('native_match') == 'within_owner':
+                match = owner_root and owner_name == scope['type']
+            if match and (wanted_descendant is None or descendant_found):
                 matches.add(('owner', attribute) if owner_name == scope['type'] else ('element', element))
             return descendant_found or (wanted_descendant is not None and wanted_descendant in names)
 
@@ -561,7 +572,7 @@ class CacheReader:
         return (name == prefix+expected
                 and not re.search(r'33_[A-F0-9]{32}LLCMn$', symbol.GetMangledName() or ''))
 
-    def native_layout_anchor(self, host, expected):
+    def native_views(self, host, expected):
         pending, visited, matches = [host], set(), []
         while pending:
             view = pending.pop()
@@ -581,9 +592,15 @@ class CacheReader:
             if len(visited)+len(pending)+count > 128:
                 raise Refusal('anchor_view_limit')
             pending.extend(self.c.objc(children, 'objectAtIndex:', i) for i in range(count))
+        return matches
+
+    def native_layout_anchor(self, host, expected):
+        matches = self.native_views(host, expected)
         if len(matches) != 1:
             raise Refusal('native_anchor_unresolved')
-        view = matches[0]
+        return self.represented_layout(matches[0])
+
+    def represented_layout(self, view):
         platform = self.c.objc(view, 'superview')
         cls = self.pointer(self.u64(platform) & self.isa_mask)
         descriptor = self.ptr(cls+64, 4)
@@ -621,7 +638,8 @@ class CacheReader:
         return attribute, subgraph
 
     def anchored_scope(self, host):
-        self.anchor_id, sg = self.native_layout_anchor(host, self.req['scope']['native_view_type'])
+        anchor_id, sg = self.native_layout_anchor(host, self.req['scope']['native_view_type'])
+        self.anchor_ids = {anchor_id}
         # Start in the weak attribute's subgraph. Follow recorded parents and
         # cross a subgraph root only via its unique graph-owned attachment site.
         # Jumping to the entire parent subgraph can scan unrelated siblings.
@@ -726,7 +744,17 @@ class CacheReader:
         self.nil_attribute = self.u32(self.symbol('AGAttributeNil', 'AttributeGraph'))
         self.associations()
         anchored = 'native_view_type' in self.req.get('scope', {})
-        selected_roots = self.anchored_scope(host) if anchored else self.select_scope(root)
+        within_owner = self.req.get('scope', {}).get('native_match') == 'within_owner'
+        if within_owner:
+            selected_roots = self.select_scope(root)
+            self.owner_scan_cost = self.scanned_records
+            matches = self.native_views(host, self.req['scope']['native_view_type'])
+            self.anchor_ids = {self.represented_layout(view)[0] for view in matches}
+            if not matches or len(self.anchor_ids) != len(matches):
+                raise Refusal('native_anchor_unresolved')
+            self.anchor_matches = 0
+        else:
+            selected_roots = self.anchored_scope(host) if anchored else self.select_scope(root)
         self.boundary_hits = {}
         self.boundary_records = []
         self.leaf_owner_names = {}
@@ -739,7 +767,8 @@ class CacheReader:
         if anchored:
             if self.anchor_matches != 1:
                 raise Refusal('anchor_scope_binding_unresolved')
-            self.verify_anchor_ancestry()
+            if not within_owner:
+                self.verify_anchor_ancestry()
         # Establish all known selected model-value ranges before geometry reads.
         for model in self.selected_models:
             self.protect_model(model)
@@ -776,6 +805,8 @@ class CacheReader:
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)
+        if within_owner:
+            self.c.cache_audit['native_match_node_index'] = self.matched_anchor_node
         return encode(roots)
 
 

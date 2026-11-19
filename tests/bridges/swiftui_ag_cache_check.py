@@ -247,6 +247,46 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual([n['parent'] for n in r.nodes],[None,0])
         self.assertEqual(r.nodes[0]['children'],[1])
 
+    def test_owner_scan_and_selected_walk_share_the_record_limit(self):
+        r = reader()
+        r.owner_scan_cost = 1023
+        r.raw_seen.add(1024)
+        r.owned_record = Mock(side_effect=AssertionError('excess read'))
+        with self.assertRaises(Refusal) as error:
+            r.walk(2048)
+        self.assertEqual(error.exception.code, 'cache_tree_limit')
+        r.owned_record.assert_not_called()
+
+    def test_incomplete_native_enumeration_cannot_yield_candidates(self):
+        r = reader()
+        r.pointer = r.u64 = lambda address: 0
+        r.isa_mask = 0
+        r.c = SimpleNamespace(objc=Mock(side_effect=[123, 128]))
+        with self.assertRaises(Refusal) as error:
+            r.native_views(700, 'App.Cursor')
+        self.assertEqual(error.exception.code, 'anchor_view_limit')
+        self.assertEqual(r.c.objc.call_count, 2)
+
+    def test_stale_or_duplicate_candidate_refuses_before_reading_selected_layout(self):
+        for results, expected in (([(100, 20), Refusal('expired_layout_reference')], 'expired_layout_reference'),
+                                  ([(100, 20), (100, 20)], 'native_anchor_unresolved')):
+            r = reader()
+            r.req['scope'] = dict(type='App.Slot', native_view_type='App.Cursor', native_match='within_owner')
+            r.host_graph = r.ptr = r.u32 = r.page_owner = lambda *args: 100
+            r.u8 = lambda address: 0
+            r.symbol = lambda *args: 200
+            r.associations = Mock()
+            r.scanned_records = 8
+            r.select_scope = Mock(return_value=[256])
+            r.native_views = Mock(return_value=[300, 400])
+            r.represented_layout = Mock(side_effect=results)
+            r.walk = Mock(side_effect=AssertionError('premature acquisition'))
+            with self.assertRaises(Refusal) as error:
+                r.collect(700)
+            self.assertEqual(error.exception.code, expected)
+            self.assertEqual(r.represented_layout.call_count, 2)
+            r.walk.assert_not_called()
+
     def test_lldb_short_name_cannot_alias_private_descriptor(self):
         suffix = '_00DEFCC61D65EEABD9495FC981F4871C'
         sym = SimpleNamespace(GetName=lambda:'nominal type descriptor for App.Probe',

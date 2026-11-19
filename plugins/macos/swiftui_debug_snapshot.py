@@ -69,12 +69,20 @@ def request(raw):
             raise Refusal('invalid_identity', 2)
     if 'scope' in data:
         scope = data['scope']
-        if (not isinstance(scope, dict) or set(scope) not in
+        scoped_native = isinstance(scope, dict) and 'native_match' in scope
+        if scoped_native:
+            required_keys = {'type', 'native_view_type', 'native_match'}
+            if (scope['native_match'] != 'within_owner' or not required_keys <= set(scope)
+                    or set(scope) - required_keys - {'containing_type', 'selection'}):
+                raise Refusal('invalid_scope', 2)
+        elif (not isinstance(scope, dict) or set(scope) not in
                 ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'},
                  {'type', 'containing_type', 'native_view_type', 'selection'},
                  {'type', 'containing_type', 'native_view_type', 'selection', 'leaf_types'})):
             raise Refusal('invalid_scope', 2)
         for key, value in scope.items():
+            if key == 'native_match':
+                continue
             if key == 'leaf_types':
                 pattern = r'[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+'
                 if (not isinstance(value, list) or not 1 <= len(value) <= 4

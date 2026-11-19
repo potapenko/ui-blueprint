@@ -427,6 +427,16 @@ class CanonicalPrivacy(unittest.TestCase):
             with self.assertRaises(codec.Refusal):
                 codec.request(codec.encode({**req,'scope':{**scope,'native_view_type':name}}))
 
+    def test_within_owner_requires_an_exact_native_type_and_excludes_leaf_cuts(self):
+        scope = dict(type='App.Slot', native_view_type='App.Anchor', native_match='within_owner')
+        for fields in ({}, {'selection':'geometry_records'}, {'containing_type':'App.Overlay'}):
+            requested = dict(scope, **fields)
+            self.assertEqual(codec.request(codec.encode({**REQ, 'scope':requested}))['scope'], requested)
+        for invalid in ({**scope, 'native_match':'first'}, {**scope, 'leaf_types':['App.Stop']},
+                        {key:value for key,value in scope.items() if key != 'native_view_type'}):
+            with self.assertRaises(codec.Refusal):
+                codec.request(codec.encode({**REQ, 'scope':invalid}))
+
     def test_optional_scope_has_exact_bounded_nominal_names(self):
         req=copy.deepcopy(REQ)
         req['scope']=dict(type='PlayphrasemeApp.ClipSearchView')
