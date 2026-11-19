@@ -1,8 +1,7 @@
 # External SwiftUI layout qualification
 
-Status: product admission WITHDRAWN. The real8588025 Settings capture failed;
-owner recovery completed. Active work is a bounded cached-tree alternative on
-owned fixtures. No new installed version;0.3.2 remains unchanged.
+Status: 0.4.0 installed locally from9512ff3 after a real partial Reels acquisition.
+The one-shot Reels grant is consumed. Further source cases remain in progress.
 Owner: support chat01a1e565-14f6-7be0-aa02-cd648a1b0423, current master only.
 
 ## Authority and protected boundaries
@@ -24,7 +23,7 @@ No new agents are authorized here; Reels supplies its existing reviewer.
 
 ## Contract basis and distinct gaps
 
-Registry80 → [debug capture@6](../specs/product/swiftui-debug-capture.md),
+Registry86 → [debug capture@12](../specs/product/swiftui-debug-capture.md),
 [SwiftUI probe@3](../specs/product/swiftui-probe.md),
 [Native@5](../specs/product/native.md), [Boundaries@1](../specs/product/boundaries.md),
 Model1 / Geometry2 / Identity1 / Privacy1 / Exchange2 / Projections1 / Lifecycle1 /
@@ -379,3 +378,12 @@ Evidence: system-temp `uib-reels-body-owner-u37eidz8/output/` and
 `playphraseme-reels-owner-check-Xu5f4n/`. The exact one-shot admission is consumed.
 This partial acquisition supports local packaging while action-bar geometry,
 consumer resize/pairing, Library, Learner, Clip and Settings remain open.
+
+
+Local combined version 0.4.0 was built from9512ff3b7f081ee55cac36a3c1e63658513aee45,
+tested in an isolated prefix and installed at ~/.local/share/uiblueprint/versions/0.4.0.
+The managed CLI and skill point to the new version. The saved real Reels snapshot
+passed validation using the installed command. The package smoke measured title
+698.5×76pt and video1008.276×567.155pt from the original unrounded source data.
+Six-module import/help and version gates passed. Candidate release assets remain in
+system temp uib-local-0.4.0-LZX8ARcZ. Source publication remains unapproved.
