@@ -215,8 +215,10 @@ private UI content is sent to another service merely by successful capture.
 
 ## External SwiftUI cached layout
 
-A native or combined 0.4.0 bundle includes `swiftui_debug_capture.py` and the
-matching read-only cache decoder. Source-owner qualification supplies the exact
+A native or combined bundle from 0.4.0 onward includes `swiftui_debug_capture.py`
+and the matching read-only cache decoder. The 0.5.0 option for matching repeated
+native classes within a SwiftUI owner is fixture-only. The earlier Reels
+one-shot admission has been consumed. Source-owner qualification supplies the exact
 pinned request and acquisition procedure. Keep the immutable request, consumer
 identity, chosen window and approved source-type scope together. Use the
 consumer's qualified procedure for live collection. Installation alone does

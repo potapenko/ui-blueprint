@@ -3,6 +3,18 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.5.0
+
+- Add fixture-only selection of a native view by its SwiftUI owner when several
+  controls have the same native class. Ambiguous owners or bindings refuse.
+  A cursor region describes that native view alone.
+- Teams can validate, inspect and measure saved SwiftUI snapshots with the
+  installed CLI. The previous Reels qualification covered one paused card and
+  its one-shot admission has been consumed. Live product acquisition requires
+  a separately qualified request and an exact handoff from the process owner.
+- Include a copyable installation prompt pinned to the release tag in generated
+  release notes.
+
 ## 0.4.0
 
 - Include the macOS SwiftUI cached-layout reader and its dependencies in native
