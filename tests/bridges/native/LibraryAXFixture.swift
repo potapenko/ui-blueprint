@@ -5,7 +5,7 @@ import AppKit
 enum LibraryAXFixture {
     @MainActor static func main() throws {
         let args = CommandLine.arguments
-        guard args.count == 3, ["unique", "duplicate", "missing", "distinct-window", "same-frame-window"].contains(args[1]) else {
+        guard args.count == 3, ["unique", "duplicate", "missing", "distinct-window", "same-frame-window", "no-import", "duplicate-import"].contains(args[1]) else {
             throw CocoaError(.fileReadInvalidFileName)
         }
         let app = NSApplication.shared
@@ -14,7 +14,7 @@ enum LibraryAXFixture {
                               styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
         let root = NSView(frame: .init(x: 0, y: 0, width: 520, height: 200))
         window.contentView = root
-        var selected: NSButton?
+        var selected: NSButton?, importButton: NSButton?
         for index in 0...1 {
             let overlay = NSView(frame: .init(x: 20 + index * 250, y: 20, width: 220, height: 160))
             overlay.setAccessibilityElement(true)
@@ -31,10 +31,15 @@ enum LibraryAXFixture {
                 overlay.addSubview(button)
                 if selected == nil { selected = button }
             }
-            let other = NSButton(title: "Other", target: nil, action: nil)
-            other.setAccessibilityIdentifier("searchLearn.learner.favorites")
-            other.frame = .init(x: 15, y: 100, width: 80, height: 25)
-            overlay.addSubview(other)
+            let imports = index == 0 && args[1] == "duplicate-import" ? 2 : 1
+            for row in 0..<imports {
+                let other = NSButton(title: "Fixture", target: nil, action: nil)
+                other.setAccessibilityLabel(index == 0 && args[1] == "no-import" ? "Other" : "Import")
+                other.setAccessibilityIdentifier("searchLearn.learner.favorites")
+                other.frame = .init(x: 15 + row * 90, y: 100, width: 80, height: 25)
+                overlay.addSubview(other)
+                if importButton == nil { importButton = other }
+            }
         }
         var sibling: NSWindow?
         if ["distinct-window", "same-frame-window"].contains(args[1]) {
@@ -47,13 +52,15 @@ enum LibraryAXFixture {
         window.orderFront(nil)
         RunLoop.current.run(until: Date().addingTimeInterval(0.6))
         let identity = NSRunningApplication.current
-        guard let bundle = identity.bundleIdentifier, let date = identity.launchDate, let selected,
+        guard let bundle = identity.bundleIdentifier, let date = identity.launchDate, let selected, let importButton,
               let path = identity.bundleURL?.path, let screen = NSScreen.screens.first else {
             throw CocoaError(.fileReadUnknown)
         }
         let frame = selected.accessibilityFrame()
+        let importFrame = importButton.accessibilityFrame()
         var data: [String:Any] = ["pid":identity.processIdentifier, "bundle":bundle, "birth":date.timeIntervalSince1970,
             "cg":window.windowNumber, "path":path,
+            "expected_import":[importFrame.minX, screen.frame.maxY - importFrame.maxY, importFrame.width, importFrame.height],
             "expected":[frame.minX, screen.frame.maxY - frame.maxY, frame.width, frame.height]]
         if let sibling { data["sibling_window"] = sibling.windowNumber }
         try JSONSerialization.data(withJSONObject:data).write(to:URL(fileURLWithPath:args[2]), options:.withoutOverwriting)

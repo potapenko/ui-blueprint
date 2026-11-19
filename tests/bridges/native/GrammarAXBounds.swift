@@ -1,4 +1,4 @@
-// Owner-run public AX measurements for Grammar Home and the empty Favorites slot.
+// Owner-run public AX measurements for Grammar Home and Favorites controls.
 // Build with plugins/macos/NativeAcquisition.swift. Append a witnessed AX-screen x y
 // to select one concrete scroll area by its public hit-test parent chain.
 import AppKit
@@ -14,11 +14,13 @@ private enum GrammarAXBounds {
 
     @MainActor static func run() throws {
         var a = Array(CommandLine.arguments.dropFirst())
-        let library = a.first == "library-empty-slot" || a.first == "library-slot-overlay-role"
+        let names = ["library-empty-slot": "Favorites collection 1, empty", "library-import": "Import"]
+        let selectedName = names[a.first ?? ""]
         let roleOnly = a.first == "library-slot-overlay-role"
+        let library = roleOnly || selectedName != nil
         if library { a.removeFirst() }
         let areaID = library ? "searchLearn.learner.overlay" : "searchLearn.learner.grammar"
-        let buttonName = library ? "Favorites collection 1, empty" : "Present Simple"
+        let buttonName = selectedName ?? "Present Simple"
         if library && a.count != 7 { throw Refusal("library_overlay_witness_required") }
         guard (a.count == 5 || a.count == 7), let pid = Int32(a[0]), pid > 0,
               let birth = Double(a[2]), birth.isFinite, birth > 0,
