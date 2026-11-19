@@ -26,15 +26,29 @@ func run() throws {
           let birth = Double(args[3]), birth.isFinite, let id = UInt32(args[4]), id > 0,
           let w = Int(args[5]), let h = Int(args[6]), (1...4096).contains(w),
           (1...4096).contains(h) else { throw Refusal("usage: PID BUNDLE NATIVE_BIRTH CGID WIDTH_PT HEIGHT_PT") }
+    #if PINNED_OWNER_RESIZE
+    // The owner builds a one-window executable with its own case-specific constants.
+    guard Array(args.dropFirst()) == ownerArguments else { throw Refusal("owner_arguments_mismatch") }
+    #else
     guard args[2] == "me.playphraseme.reference.reels.fgb7o3fd" ||
           args[2].hasPrefix("me.uiblueprint.external-layout.canary.") else {
         throw Refusal("unsupported_owner_copy")
     }
+    #endif
     func frame() throws -> CGRect {
         guard let app = NSRunningApplication(processIdentifier: pid), !app.isTerminated,
               app.bundleIdentifier == args[2], app.launchDate?.timeIntervalSince1970 == birth else {
             throw Refusal("stale_process")
         }
+        #if PINNED_OWNER_RESIZE
+        guard let livePath = app.bundleURL?.path, let canonicalPath = realpath(livePath, nil) else {
+            throw Refusal("owner_bundle_path_mismatch")
+        }
+        defer { free(canonicalPath) }
+        guard String(cString: canonicalPath) == ownerBundlePath else {
+            throw Refusal("owner_bundle_path_mismatch")
+        }
+        #endif
         guard let list = CGWindowListCopyWindowInfo([.optionOnScreenOnly,.excludeDesktopElements],
                                                      kCGNullWindowID) as? [[String:Any]] else {
             throw Refusal("window_inventory_unavailable")
@@ -50,6 +64,9 @@ func run() throws {
         return rect
     }
     let before = try frame()
+    #if PINNED_OWNER_RESIZE
+    guard before == ownerStartingFrame else { throw Refusal("owner_starting_frame_mismatch") }
+    #endif
     guard AXIsProcessTrusted() else { throw Refusal("accessibility_permission_required") }
     let app = AXUIElementCreateApplication(pid)
     AXUIElementSetMessagingTimeout(app, 2)
