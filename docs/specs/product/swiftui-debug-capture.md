@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@13`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@14`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -132,6 +132,31 @@ repeated matching owners, multiple matches within one owner, incomplete search
 and stale bindings. Any reported native cursor rectangle describes only that
 NSView in its stated native space. SwiftUI control layout requires independently
 qualified SwiftUI geometry. Product admission and release require separate review.
+
+## DEBUG-CAPTURE.SELECTION-PROVENANCE
+
+For offline verification of normalized branches, @14 adds an optional top-level
+manifest field `selection_provenance`. Emit it with a successful nonempty Snapshot
+from direct unique structural selection, including `within_owner`. It contains:
+
+- `observation_id` copied from the canonical observation, an opaque nonce-scoped
+  `occurrence_id` for the one selected occurrence, and its `selection_source`
+  (`body_owner` or `nominal_element`).
+- `source_type`, the exact module-qualified nominal type matched in that source.
+- `branches`, one entry per selected outer raw branch. Each has an opaque local
+  `branch_id` and a `root_keys` array of canonical node keys. Use an empty array
+  when normalization emitted no nodes for that branch.
+
+Each emitted root belongs to exactly one entry. Its canonical child links identify
+the other emitted nodes of that branch. The receipt must account for all selected
+branches and emitted roots. Array position carries no semantic meaning. Keep raw
+pointers and graph identifiers private. Tokens identify only this observation.
+
+Omit the receipt for unscoped captures and native-ancestor selection without
+direct structural selection. Ambiguous selection, an entirely empty result or a
+failed capture supplies no mapping. Older manifests remain consumable with
+unknown branch provenance. Construct the receipt only from existing selection
+and normalization evidence within the same limits and acquisition permissions.
 
 ## DEBUG-CAPTURE.DATA
 
