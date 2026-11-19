@@ -29,6 +29,8 @@ COMMON = {'uiblueprint', 'uiblueprint-validate', 'distribution.py', 'RUN.md',
           'example-expectation.json', 'example-observed-brief.json', 'example-proposed-brief.json'}
 COMPOSE_FILES = {'ComposeMarker.kt', 'ProbeSession.kt', 'ProbeJson.kt', 'COMPOSE.md'}
 NATIVE_CALLER_FILES = {'native-prepare.py'}
+CACHE_FILES = {'swiftui_debug_capture.py', 'swiftui_ag_cache.py', 'swiftui_debug_fields.py',
+               'swiftui_debug_snapshot.py', 'swiftui_recovery_control.py', 'native_prepare.py'}
 WEB_FILES = {'web-geometry.cjs', 'WEB-FIRST-USE.md'}
 IMAGE_SUFFIXES = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico', '.icns',
                   '.bmp', '.tif', '.tiff', '.heic', '.heif', '.avif', '.pdf', '.partial'}
@@ -45,7 +47,7 @@ def files_for(modules):
         names.add('session-worker')
     if modules in ('native', 'combined'):
         names.add('native-host-helper')
-        names.update(NATIVE_CALLER_FILES)
+        names.update(NATIVE_CALLER_FILES | CACHE_FILES)
     if modules in ('web', 'combined'):
         names.update(WEB_FILES)
     return names
@@ -160,13 +162,15 @@ def verify(fd):
     manifest = json.loads(raw)
     modules = manifest.get('modules')
     expected_names = files_for(modules)
+    if manifest.get('format') != 'ui-blueprint-local-6':
+        expected_names -= CACHE_FILES
     if manifest.get('format') in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3'):
         expected_names -= NATIVE_CALLER_FILES
     if manifest.get('format') in ('ui-blueprint-local-1', 'ui-blueprint-local-2'):
         expected_names -= COMPOSE_FILES
     if manifest.get('format') == 'ui-blueprint-local-1':
         expected_names -= WEB_FILES  # old complete inventory remains removable
-    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4', 'ui-blueprint-local-5') or
+    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6') or
             modules not in ('core', 'web', 'native', 'combined') or
             set(manifest.get('files', {})) != expected_names):
         raise ValueError('invalid distribution manifest; no files removed')
@@ -253,7 +257,7 @@ def build(args, fd):
         if args.modules in ('web', 'combined'):
             paths += ['tests/bridges/web/geometry.cjs', 'docs/development/web-first-use.md']
         if args.modules in ('native', 'combined'):
-            paths += SWIFT + ['plugins/macos/native_prepare.py']
+            paths += SWIFT + ['plugins/macos/'+name for name in sorted(CACHE_FILES)]
         archive = run(['git', 'archive', revision, *paths], cwd=ROOT)
         with tarfile.open(fileobj=io.BytesIO(archive)) as saved:
             for member in saved:
@@ -299,6 +303,8 @@ def build(args, fd):
                  '-module-cache-path', str(stage / 'module-cache'),
                  *[str(source / p) for p in SWIFT], '-o', str(stage / 'native-host-helper')])
             products['native-host-helper'] = ((stage / 'native-host-helper').read_bytes(), 0o755)
+            for name in CACHE_FILES:
+                products[name] = ((source / 'plugins/macos' / name).read_bytes(), 0o644)
             products['native-prepare.py'] = ((source / 'plugins/macos/native_prepare.py').read_bytes(), 0o644)
         for path in (source / 'schemas').glob('*.json'):
             products[path.name] = (path.read_bytes(), 0o644)
@@ -332,7 +338,7 @@ def build(args, fd):
             (sysroot / 'share/doc/rust/COPYRIGHT-library.html').read_bytes(), 0o644)
         if set(products) != files_for(args.modules):
             raise ValueError('unexpected bundle inventory')
-        manifest = {'format': 'ui-blueprint-local-5', 'source_revision': revision,
+        manifest = {'format': 'ui-blueprint-local-6', 'source_revision': revision,
             'modules': args.modules, 'target': TARGET, 'profile': 'release',
             'cli_features': cli_features, 'worker_features': ['web'] if 'web' in cli_features else [],
             'rustc': tool_version, 'swift': swift_version, 'host_os': platform.mac_ver()[0],

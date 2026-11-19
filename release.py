@@ -84,7 +84,7 @@ def skill_inventory(bundle_format):
         return names - {'references/compose.md', 'references/gpui.md'}
     if bundle_format in ('ui-blueprint-local-3', 'ui-blueprint-local-4'):
         return names - {'references/gpui.md'}
-    if bundle_format == 'ui-blueprint-local-5':
+    if bundle_format in ('ui-blueprint-local-5', 'ui-blueprint-local-6'):
         return names
     raise ValueError('invalid skill distribution format')
 
@@ -287,8 +287,9 @@ def extract_candidate(folder, bundle, record):
     with tarfile.open(folder / archive_name(record['version']), 'r:gz') as archive:
         members = archive.getmembers()
         names = {m.name for m in members}
-        legacy = expected - dist.NATIVE_CALLER_FILES
-        inventories = (expected, legacy, legacy - dist.COMPOSE_FILES, legacy - dist.COMPOSE_FILES - dist.WEB_FILES)
+        previous = expected - dist.CACHE_FILES
+        legacy = previous - dist.NATIVE_CALLER_FILES
+        inventories = (expected, previous, legacy, legacy - dist.COMPOSE_FILES, legacy - dist.COMPOSE_FILES - dist.WEB_FILES)
         if len(members) != len(names) or names not in inventories or any(not m.isfile() for m in members):
             raise ValueError('invalid release archive inventory')
         for member in members:

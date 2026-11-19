@@ -1,6 +1,6 @@
 # Mac distribution
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@7`.
+- Contract: `UIB.MAC-DISTRIBUTION@8`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -98,3 +98,9 @@ references/gpui.md in the eight-file skill. Formats1/2 retain six skill files;
 3/4 retain seven. Verify those exact historical inventories for update, rollback
 and removal. Candidate skill links must resolve within its packaged files.
 SDK integration remains separate; source-only publication keeps its explicit gate.
+
+Manifest6 adds the six committed cache-capture Python modules to native and
+combined local packages after the first verified partial Reels capture. The
+package carries no consumed process grant. Operator-bound qualification remains
+a separate step. Existing CLI/wire and skill inventories retain their meaning.
+Manifest1–5 verification selects the recorded historical inventory for rollback.

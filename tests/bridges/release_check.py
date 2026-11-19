@@ -35,7 +35,7 @@ def bundle_at(folder, revision='a' * 40):
     products = {name: ((name + '\n').encode(), 0o644) for name in dist.files_for('combined')}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "Usage: synthetic candidate\\n"\n', 0o755)
-    manifest = {'format': 'ui-blueprint-local-5', 'source_revision': revision,
+    manifest = {'format': 'ui-blueprint-local-6', 'source_revision': revision,
                 'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                                                 for name, (data, mode) in products.items()}}
     with dist.destination(folder) as fd:
@@ -627,7 +627,7 @@ def cross_inventory_checks(stage, versions, manifest_version):
     old_bundle = stage / f'legacy{manifest_version} inventory bundle'
     old_folder.mkdir()
     old_bundle.mkdir()
-    names = dist.files_for('combined') - dist.COMPOSE_FILES - dist.NATIVE_CALLER_FILES
+    names = dist.files_for('combined') - dist.CACHE_FILES - dist.COMPOSE_FILES - dist.NATIVE_CALLER_FILES
     if manifest_version == 1:
         names -= dist.WEB_FILES
     products = {name: ((name + '\n').encode(), 0o644) for name in names}
@@ -713,7 +713,7 @@ def compose_inventory_upgrade(stage, versions):
     """The installed Compose manifest3 upgrades without losing the matching skill."""
     bundle = stage / 'compose3-bundle'
     bundle.mkdir()
-    names = dist.files_for('combined') - dist.NATIVE_CALLER_FILES
+    names = dist.files_for('combined') - dist.CACHE_FILES - dist.NATIVE_CALLER_FILES
     products = {name: ((name + '\n').encode(), 0o644) for name in names}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nexit 0\n', 0o755)
@@ -751,6 +751,9 @@ def native_inventory_upgrade(stage, versions):
     bundle = stage / 'native4-bundle'
     bundle_at(bundle)
     manifest = json.loads((bundle / dist.MANIFEST).read_bytes())
+    for name in dist.CACHE_FILES:
+        del manifest['files'][name]
+        (bundle/name).unlink()
     manifest['format'] = 'ui-blueprint-local-4'
     (bundle / dist.MANIFEST).write_bytes(dist.encoded(manifest))
     candidate = stage / 'native4-candidate'

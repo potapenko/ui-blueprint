@@ -358,3 +358,24 @@ ranges/zero overlaps and normal restored detach (38 calls). Exact middle title
 Evidence is in system temp `uib-parent-video-proof-y1ssET0Q`. A missing nominal
 ancestor refuses without scanning a larger ancestor subtree. No product admission
 or installation is implied by the fixture result.
+
+
+## First qualified Reels snapshot, November 19
+
+The Reels owner ran 2a3487f once on the paused Sublet 1/17 card. The helper
+returned exit0, detached_restored and a valid canonical snapshot with 38 nodes.
+It inspected 201 raw records and excluded 202 protected ranges with zero recorded
+overlaps. PID, generation and CGWindowID matched after LLDB exited. The owner
+confirmed identical hashes for the native images before and after capture.
+
+Title n13 measures 698.5×76pt. Video n16 and n19 share the exact frame
+(455.86206896551727,182.00862068965526,1008.2758620689655,567.155172413793)pt.
+The owner confirmed its native edges agree with a 52pt vertical content offset
+at 2× scale for that state. No universal transform is established. Action bar
+n33 has unknown bounds. Its ancestor n32 has a reported frame; it must not be
+reported as n33's own frame. Translation was absent in this state.
+
+Evidence: system-temp `uib-reels-body-owner-u37eidz8/output/` and
+`playphraseme-reels-owner-check-Xu5f4n/`. The exact one-shot admission is consumed.
+This partial acquisition supports local packaging while action-bar geometry,
+consumer resize/pairing, Library, Learner, Clip and Settings remain open.

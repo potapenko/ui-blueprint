@@ -31,11 +31,7 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 # cannot expand this gate with a request flag, filename or bundle prefix.
 # The single Reels window-root attempt refused tree_limit. No further product
 # capture is admitted until a bounded, source-qualified subtree path is verified.
-CONSUMER_ADMISSION = (
-    'reels-owner-boundaries-1', 19791, 'me.playphraseme.reference.reels.fgb7o3fd',
-    1795038583.1458468, 25250,
-    {'type': 'PlayphrasemeApp.ReelsSlideView', 'containing_type': 'PlayphrasemeApp.ReelsVideoView', 'native_view_type': 'PlayphrasemeApp.RollingCompositionPlayerSurfaceView', 'selection': 'geometry_records', 'leaf_types': ['PlayphrasemeApp.ReelsVideoView', 'PlayphrasemeApp.ReelsActionBarView']},
-)
+CONSUMER_ADMISSION = None
 
 
 def require_admitted_target(req):
@@ -182,7 +178,7 @@ def verified_helper(bundle_path):
     if manifest_path.is_symlink() or manifest_path.stat().st_size > MAX_BYTES:
         raise Refusal('invalid_bundle', 2)
     manifest = decode(manifest_path.read_bytes())
-    if manifest['format'] not in ('ui-blueprint-local-4', 'ui-blueprint-local-5') or manifest['modules'] not in ('native', 'combined'):
+    if manifest['format'] not in ('ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6') or manifest['modules'] not in ('native', 'combined'):
         raise Refusal('invalid_bundle', 2)
     helper = bundle/'native-host-helper'
     expected = manifest['files']['native-host-helper']

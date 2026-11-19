@@ -212,3 +212,21 @@ merely to use independently observed screenshot/geometry evidence.
 Show the retained native PNG inline. Distinguish derived association from reported
 source facts and preserve unknown layout/hit/paint properties. No PNG payload or
 private UI content is sent to another service merely by successful capture.
+
+## External SwiftUI cached layout
+
+A native or combined 0.4.0 bundle includes `swiftui_debug_capture.py` and the
+matching read-only cache decoder. Source-owner qualification supplies the exact
+pinned request and acquisition procedure. Keep the immutable request, consumer
+identity, chosen window and approved source-type scope together. Use the
+consumer's qualified procedure for live collection. Installation alone does
+not authorize attaching to a running app.
+
+For a successful saved acquisition, require the terminal manifest to identify
+the expected request, a complete snapshot filename and restored detach. Validate
+the snapshot with the matching uiblueprint-validate. Inspect boundary_records
+in cache_audit to find the canonical node index for each source-qualified
+component. A type may produce several nested records. Read field availability
+before measuring a particular node. Layout of a covering ancestor is a separate
+observation. Each local pt space has its own identity and an unknown transform
+until independent source evidence establishes a mapping.

@@ -201,16 +201,18 @@ fi
 # itself in the hashed receipt; its format selects a closed inventory, never paths.
 bundle_format() {
   [ -f "$1/distribution-manifest.json" ] && [ ! -L "$1/distribution-manifest.json" ] || die 'missing regular distribution manifest'
-  recorded_format=$(sed -n 's/^  "format": "\(ui-blueprint-local-[12345]\)",$/\1/p' "$1/distribution-manifest.json")
-  case "$recorded_format" in ui-blueprint-local-1|ui-blueprint-local-2|ui-blueprint-local-3|ui-blueprint-local-4|ui-blueprint-local-5) ;; *) die 'invalid distribution format';; esac
+  recorded_format=$(sed -n 's/^  "format": "\(ui-blueprint-local-[123456]\)",$/\1/p' "$1/distribution-manifest.json")
+  case "$recorded_format" in ui-blueprint-local-1|ui-blueprint-local-2|ui-blueprint-local-3|ui-blueprint-local-4|ui-blueprint-local-5|ui-blueprint-local-6) ;; *) die 'invalid distribution format';; esac
   printf '%s\n' "$recorded_format"
 }
 bundle_inventory() {
+  if [ "$1" = ui-blueprint-local-6 ]; then printf '%s\n' "$FILES"; return; fi
+  historical_files=$(printf '%s\n' "$FILES" | grep -Ev '^(swiftui_(debug_capture|ag_cache|debug_fields|debug_snapshot|recovery_control)|native_prepare)\.py$')
   case "$1" in
-    ui-blueprint-local-1) printf '%s\n' "$FILES" | grep -Ev '^(ComposeMarker.kt|ProbeSession.kt|ProbeJson.kt|COMPOSE.md|native-prepare.py|web-geometry.cjs|WEB-FIRST-USE.md)$' ;;
-    ui-blueprint-local-2) printf '%s\n' "$FILES" | grep -Ev '^(ComposeMarker.kt|ProbeSession.kt|ProbeJson.kt|COMPOSE.md|native-prepare.py)$' ;;
-    ui-blueprint-local-3) printf '%s\n' "$FILES" | grep -Fxv 'native-prepare.py' ;;
-    ui-blueprint-local-4|ui-blueprint-local-5) printf '%s\n' "$FILES" ;;
+    ui-blueprint-local-1) printf '%s\n' "$historical_files" | grep -Ev '^(ComposeMarker.kt|ProbeSession.kt|ProbeJson.kt|COMPOSE.md|native-prepare.py|web-geometry.cjs|WEB-FIRST-USE.md)$' ;;
+    ui-blueprint-local-2) printf '%s\n' "$historical_files" | grep -Ev '^(ComposeMarker.kt|ProbeSession.kt|ProbeJson.kt|COMPOSE.md|native-prepare.py)$' ;;
+    ui-blueprint-local-3) printf '%s\n' "$historical_files" | grep -Fxv 'native-prepare.py' ;;
+    ui-blueprint-local-4|ui-blueprint-local-5) printf '%s\n' "$historical_files" ;;
     *) die 'invalid distribution format' ;;
   esac
 }
@@ -219,7 +221,7 @@ verify_skill() {
   case "$2" in
     ui-blueprint-local-1|ui-blueprint-local-2) VERIFIED_SKILL_FILES=$(printf '%s\n' "$SKILL_FILES" | grep -Ev '^references/(compose|gpui)\.md$') ;;
     ui-blueprint-local-3|ui-blueprint-local-4) VERIFIED_SKILL_FILES=$(printf '%s\n' "$SKILL_FILES" | grep -Fxv 'references/gpui.md') ;;
-    ui-blueprint-local-5) VERIFIED_SKILL_FILES=$SKILL_FILES ;;
+    ui-blueprint-local-5|ui-blueprint-local-6) VERIFIED_SKILL_FILES=$SKILL_FILES ;;
     *) die 'invalid skill distribution format' ;;
   esac
   skill_receipt=$skill_folder/.skill-sha256

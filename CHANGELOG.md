@@ -3,6 +3,17 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.4.0
+
+- Include the macOS SwiftUI cached-layout reader and its dependencies in native
+  packages. A qualified owner-run on the paused Reels card returned 38 nodes,
+  including a title and the measured video frame. The action-bar boundary was
+  identified but its own bounds were unavailable.
+- Keep scoped acquisition tied to the approved consumer, process generation,
+  window and source types. Ordinary installation grants no debugging session.
+- Read and measure the resulting canonical snapshots with the existing CLI.
+  Local node coordinates require separate evidence before mapping to an image.
+
 ## 0.3.2
 
 - Accept the current manifest5 native/combined distribution in `native-prepare.py`,

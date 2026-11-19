@@ -60,7 +60,7 @@ def verify_bundle(bundle):
     if manifest_path.is_symlink() or manifest_path.stat().st_size > 1048576:
         raise Refusal('invalid_bundle')
     manifest = decode(manifest_path.read_bytes())
-    if manifest['format'] not in ('ui-blueprint-local-4', 'ui-blueprint-local-5') or manifest['modules'] not in ('native', 'combined'):
+    if manifest['format'] not in ('ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6') or manifest['modules'] not in ('native', 'combined'):
         raise Refusal('invalid_bundle')
     for name in ('native-prepare.py', 'native-host-helper', 'session-worker', 'uiblueprint'):
         path = bundle / name
