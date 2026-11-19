@@ -3,6 +3,12 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.5.1
+
+- Fix the native window helper's deadline handlers for window listing and PNG
+  capture. When a watchdog expires, the helper reports `capture_deadline` and
+  exits with code 4. Existing saved snapshots use the same formats and commands.
+
 ## 0.5.0
 
 - Add fixture-only selection of a native view by its SwiftUI owner when several
