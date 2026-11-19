@@ -483,7 +483,8 @@ def capture(debugger, request_path, bundle_path, output_path):
         raw, window_state = collect(calls, req)
         calls.admit()
         # Only already allowlisted fields reach the canonical encoder.
-        payload = snapshot(raw, req, before, start, time.monotonic())
+        provenance = {}
+        payload = snapshot(raw, req, before, start, time.monotonic(), provenance)
         del raw
         if metadata(helper, req, deadline) != before:
             raise Refusal('stale_target')
@@ -530,6 +531,8 @@ def capture(debugger, request_path, bundle_path, output_path):
     try:
         if payload is not None:
             created = write_new(fd, outcome['snapshot'], payload)
+            if provenance:
+                outcome['selection_provenance'] = provenance
         write_new(fd, 'manifest-'+req['request_id']+'.json', encode(outcome))
     except BaseException:
         if created is not None:

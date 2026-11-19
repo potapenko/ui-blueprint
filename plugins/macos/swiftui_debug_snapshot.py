@@ -124,10 +124,26 @@ def _pair(attribute, type_name, nonnegative=False):
     return value
 
 
-def snapshot(raw, req, metadata, start, end):
+def snapshot(raw, req, metadata, start, end, selection_provenance=None):
     """Return canonical bytes; unqualified transforms never join node spaces."""
     source = decode(raw)
-    if not isinstance(source, list) or not source:
+    selected = isinstance(source, dict)
+    if selected:
+        if (set(source) != {'selection_source', 'source_type', 'branches'}
+                or source['selection_source'] not in ('body_owner', 'nominal_element')
+                or not isinstance(source['source_type'], str)
+                or source['source_type'] != req.get('scope', {}).get('type')):
+            raise Refusal('invalid_selection_provenance', 2)
+        branches = source['branches']
+        if (not isinstance(branches, list) or not 1 <= len(branches) <= 1024
+                or any(not isinstance(branch, list) for branch in branches)
+                or (source['selection_source'] == 'nominal_element' and len(branches) != 1)):
+            raise Refusal('invalid_selection_provenance', 2)
+    else:
+        if not isinstance(source, list):
+            raise Refusal('layout_not_available')
+        branches = [source]
+    if not any(branches):
         raise Refusal('layout_not_available')
     if not all(type(x) in (int, float) and math.isfinite(x) for x in (start, end)) or end < start:
         raise Refusal('invalid_interval', 2)
@@ -190,8 +206,11 @@ def snapshot(raw, req, metadata, start, end):
         result['children'] = [visit(child, depth+1) for child in children]
         return key
 
-    for root in source:
-        visit(root, 1)
+    published_branches = []
+    for index, branch in enumerate(branches):
+        keys = [visit(root, 1) for root in branch]
+        if selected:
+            published_branches.append(dict(branch_id=f'{nonce}-branch-{index}', root_keys=keys))
     unknown = sum(p['state']['availability'] != 'known' for n in nodes for p in n['properties'])
     coverage = dict(status='partial', scope_id=('selected-type:'+req['scope']['type'] if 'scope' in req
                                       else 'selected-window-debug-layout'), fields=FIELDS,
@@ -212,5 +231,10 @@ def snapshot(raw, req, metadata, start, end):
                    active_descendant=dict(status='not_requested'), text_selection=None,
                    composition_state=dict(selection='not_requested', field='value')),
         captures=[], coverage=coverage)
-    return encode(dict(schema_version='0.1.0', artifact=dict(kind='snapshot', data=value)),
-                  req['limits']['max_output_bytes'])
+    payload = encode(dict(schema_version='0.1.0', artifact=dict(kind='snapshot', data=value)),
+                     req['limits']['max_output_bytes'])
+    if selected and selection_provenance is not None:
+        selection_provenance.update(observation_id=observation['id'], occurrence_id=nonce+'-occurrence',
+                                    selection_source=source['selection_source'], source_type=source['source_type'],
+                                    branches=published_branches)
+    return payload

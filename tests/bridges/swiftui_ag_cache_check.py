@@ -8,7 +8,7 @@ import struct
 import unittest
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'plugins/macos'))
 from swiftui_ag_cache import CacheReader
-from swiftui_debug_snapshot import Refusal
+from swiftui_debug_snapshot import Refusal, decode, snapshot
 
 
 def reader():
@@ -196,6 +196,62 @@ class CacheChecks(unittest.TestCase):
             r=self.scoped_reader(names,children,scope)
             with self.assertRaises(Refusal) as error:r.select_scope(1024)
             self.assertEqual(error.exception.code,code)
+
+    def structural_capture(self, scope):
+        # Recorded structural inputs, with two outer branches of owner 101 and
+        # one of owner 202, both of the same nominal body type. No live backend.
+        names = {1024: 'App.Window', 2048: 'App.Empty', 3072: 'App.Transparent', 4096: 'SwiftUI.VStack',
+                 5120: 'SwiftUI.Text', 6144: 'App.SelectedPart', 7168: 'App.Similar'}
+        children = {1024: [2048, 3072, 7168], 3072: [4096, 6144], 4096: [5120]}
+        r = self.scoped_reader(names, children, scope)
+        r.req['limits']['max_output_bytes'] = 1048576
+        r.req['window_id'] = 1
+        r.c = SimpleNamespace()
+        r.host_graph = lambda _: 10
+        r.ptr = lambda _: 20
+        r.u8 = lambda _: 0
+        r.symbol = lambda *args: 30
+        r.page_owner = lambda _: 20
+        r.associations = lambda: None
+        links = r.u32
+        words = {20+0x60: 1024, **{n+8: n for n in names}, 2048+12: 1, 3072+12: 1}
+        r.u32 = lambda address: words.get(address, links(address))
+        r.rule_owner = lambda model, _: ((101, 'App.Hint') if model in (2048, 3072) else
+                                         (202, 'App.Hint') if model == 7168 else (None, None))
+        r.properties = lambda _: []
+        r.protect_model = lambda _: None
+        r.nominal = names.__getitem__
+        raw = r.collect(None)
+        receipt = {}
+        document = decode(snapshot(raw, r.req, dict(target=dict(id='fixture', generation='one')),
+                                   1, 2, receipt))['artifact']['data']
+        return document, receipt
+
+    def test_structural_selection_to_published_roots(self):
+        scope = dict(type='App.Hint', containing_type='App.SelectedPart')
+        doc, receipt = self.structural_capture(scope)
+        nodes = doc['nodes']
+        self.assertEqual([n['native_role']['value']['value'] for n in nodes],
+                         ['SwiftUI.VStack', 'SwiftUI.Text', 'App.SelectedPart'])
+        self.assertEqual(nodes[0]['children'], [nodes[1]['key']])
+        self.assertEqual(receipt['observation_id'], doc['observations'][0]['id'])
+        self.assertEqual(receipt['selection_source'], 'body_owner')
+        self.assertEqual(receipt['source_type'], 'App.Hint')
+        self.assertEqual([b['root_keys'] for b in receipt['branches']], [[], [nodes[0]['key'], nodes[2]['key']]])
+        self.assertEqual(len({b['branch_id'] for b in receipt['branches']}), 2)
+        self.assertEqual(set(receipt), {'selection_source', 'source_type', 'branches', 'occurrence_id', 'observation_id'})
+        self.assertTrue(all(set(b) == {'branch_id', 'root_keys'} for b in receipt['branches']))
+        doc2, other = self.structural_capture(scope)
+        self.assertNotEqual(receipt['observation_id'], doc2['observations'][0]['id'])
+        self.assertNotEqual(receipt['occurrence_id'], other['occurrence_id'])
+        self.assertTrue({n['key']['key'] for n in nodes}.isdisjoint(n['key']['key'] for n in doc2['nodes']))
+        with self.assertRaisesRegex(Refusal, 'cache_scope_ambiguous'):
+            self.structural_capture(dict(type='App.Hint'))
+        with self.assertRaisesRegex(Refusal, 'layout_not_available'):
+            self.structural_capture(dict(type='App.Empty'))
+        _, nominal = self.structural_capture(dict(type='SwiftUI.VStack'))
+        self.assertEqual(nominal['selection_source'], 'nominal_element')
+        self.assertEqual(len(nominal['branches']), 1)
 
     def test_scope_scan_does_not_use_emitted_node_quota_or_increase_raw_cap(self):
         names={1024+i*1024:'App.Other' for i in range(300)};names[2048]='App.Card'

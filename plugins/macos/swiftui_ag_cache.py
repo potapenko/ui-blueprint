@@ -504,6 +504,7 @@ class CacheReader:
 
     def select_scope(self, root):
         scope = self.req.get('scope')
+        self.selected_source = None
         if scope is None:
             self.scanned_records = 0
             return [root]
@@ -548,7 +549,10 @@ class CacheReader:
             if within_owner:
                 match = owner_root and owner_name == scope['type']
             if match and (wanted_descendant is None or descendant_found):
-                matches.add(('owner', attribute) if owner_name == scope['type'] else ('element', element))
+                if owner_name == scope['type']:
+                    matches.add(('body_owner', attribute, owner_name))
+                else:
+                    matches.add(('nominal_element', element, name))
             return descendant_found or (wanted_descendant is not None and wanted_descendant in names)
 
         scan(root, 1)
@@ -557,8 +561,9 @@ class CacheReader:
             raise Refusal('cache_scope_unresolved' if not matches else 'cache_scope_ambiguous')
         # Order uncertainty outside the selected subtree is not its property.
         self.unknown_order = 0
-        kind, identity = matches.pop()
-        return owner_roots[identity] if kind == 'owner' else [identity]
+        kind, identity, matched_type = matches.pop()
+        self.selected_source = dict(selection_source=kind, source_type=matched_type)
+        return owner_roots[identity] if kind == 'body_owner' else [identity]
 
     @staticmethod
     def native_descriptor_matches(expected, symbol):
@@ -734,7 +739,16 @@ class CacheReader:
             index = node['parent']
         raise Refusal('anchor_descendant_unresolved')
 
+    def walk_branches(self, selected_roots):
+        branches = []
+        for root in selected_roots:
+            first = len(self.nodes)
+            self.walk(root)
+            branches.append([i for i in range(first, len(self.nodes)) if self.nodes[i]['parent'] is None])
+        return branches
+
     def collect(self, host):
+        self.selected_source = None
         graph_view = self.host_graph(host)
         if graph_view is None:
             raise Refusal('cache_host_unavailable')
@@ -766,8 +780,7 @@ class CacheReader:
         self.leaf_owner_names = {}
         self.selected_models = set()
         self.omitted_views = 0
-        for selected_root in selected_roots:
-            self.walk(selected_root)
+        branches = self.walk_branches(selected_roots)
         if set(self.boundary_hits) != set(self.req.get('scope', {}).get('leaf_types', ())):
             raise Refusal('scope_leaf_unresolved')
         if anchored:
@@ -813,6 +826,9 @@ class CacheReader:
             evaluated_swiftui_or_graph=False)
         if within_owner:
             self.c.cache_audit['native_match_node_index'] = self.matched_anchor_node
+        if self.selected_source is not None:
+            return encode(dict(**self.selected_source,
+                               branches=[[normalized[i] for i in branch] for branch in branches]))
         return encode(roots)
 
 
