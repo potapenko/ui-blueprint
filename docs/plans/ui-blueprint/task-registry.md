@@ -45,6 +45,16 @@ questions were closed by Learner in 5db64f6 and ddef469 within the stated row,
 Grade and inline-text scope. Compact Common fixes are tracked by their owner.
 The pending publication decision now concerns v0.5.1 at the exact release SHA.
 
+Library owner also verified secondary public accessibility measurements on window
+27479. In empty Favorites, the slot measured (1478,182,15.5,15) and Import measured
+(1816.5,176.5,75,26.5) in top-left AX screen points. Each was the unique named
+button in the verified overlay. At Statistics scroll-end the enabled unnamed
+button under the owner's visual PDF witness measured (1586,848.5,131,30.5).
+The PDF attribution comes from the owner and native image. Original AX records
+and paired native evidence are retained in system temp
+`playphraseme-library-slot-snc6acgp`. Primary SwiftUI frames remain unverified.
+The installed in-app SDK enumerates only mounted markers in its registered scopes.
+
 The consumer contacts have the installed version and measured limits. No released
 capture permission transfers between process generations. Qualification evidence
 and outstanding cases remain linked in the migration support record above.
