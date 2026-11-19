@@ -55,6 +55,14 @@ and paired native evidence are retained in system temp
 `playphraseme-library-slot-snc6acgp`. Primary SwiftUI frames remain unverified.
 The installed in-app SDK enumerates only mounted markers in its registered scopes.
 
+On the corrected Learner compact build, the owner independently confirmed the
+same 961×1050pt viewport and 116 stable markers. The Common panel moved to
+x554.5, width464 (reference x555, width463). The remaining half-point edge
+difference belongs to the consumer layout work. On the Statistics top state,
+the owner matched three public AX buttons to native visual witnesses. Their
+widths are 66.5, 50 and 76.5pt, height30.5pt, with two 5pt gaps. These are
+accessibility bounds for one observation of the Watch time state.
+
 The consumer contacts have the installed version and measured limits. No released
 capture permission transfers between process generations. Qualification evidence
 and outstanding cases remain linked in the migration support record above.
