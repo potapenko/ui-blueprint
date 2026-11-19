@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@12`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@13`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -110,6 +110,28 @@ parent path. Inside a cut video continue only along that verified witness path.
 Other branches of a cut control do not consume the card traversal budget.
 Only declared source boundaries may be requested. All previous ownership,
 privacy and limit refusals remain. A request does not grant product admission.
+
+## DEBUG-CAPTURE.NATIVE-WITHIN-OWNER
+
+Library S12 and Grammar S12 request geometry where different controls mount the
+same cursor NSView class. @13 registers a fixture-only experiment. An explicit
+`scope.native_match = "within_owner"` first selects one structural SwiftUI body
+owner by the SUBTREE rules for `type` and optional `containing_type`. Across all
+branches of that owner require exactly one layoutComputer association to exactly
+one live represented NSView of the declared exact class in the selected window.
+Qualify every same-class candidate using the existing provider, graph and current
+weak-attribute checks. An incomplete candidate search, ambiguous owner or binding,
+stale reference, unsupported provider or exhausted budget refuses without output.
+Selection by traversal index, coordinates, text or model values is forbidden.
+Discovery and validation share the original cumulative budgets across candidates
+and branches. Model payloads remain protected. This mode excludes `leaf_types`.
+Omitting the option preserves the existing unique-native-anchor behavior.
+
+Qualification requires same-class controls in distinct owners and refusals for
+repeated matching owners, multiple matches within one owner, incomplete search
+and stale bindings. Any reported native cursor rectangle describes only that
+NSView in its stated native space. SwiftUI control layout requires independently
+qualified SwiftUI geometry. Product admission and release require separate review.
 
 ## DEBUG-CAPTURE.DATA
 
