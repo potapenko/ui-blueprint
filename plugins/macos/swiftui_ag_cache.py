@@ -563,6 +563,9 @@ class CacheReader:
     @staticmethod
     def native_descriptor_matches(expected, symbol):
         name = symbol.GetName()
+        mangled = symbol.GetMangledName()
+        if not mangled:
+            return False
         prefix = 'nominal type descriptor for '
         private = re.fullmatch(r'(\w+)\.\((\w+) in (_[A-F0-9]{32})\)', expected)
         if private:
@@ -570,10 +573,10 @@ class CacheReader:
             # LLDB can omit the discriminator in its display name. The raw
             # descriptor symbol carries the exact private declaration identity.
             return (name in (prefix+expected, prefix+module+'.'+cls)
-                    and (symbol.GetMangledName() or '').endswith('33'+discriminator+'LLCMn'))
+                    and mangled.endswith('33'+discriminator+'LLCMn'))
         # A private class with an identical short name must not satisfy a public selector.
         return (name == prefix+expected
-                and not re.search(r'33_[A-F0-9]{32}LLCMn$', symbol.GetMangledName() or ''))
+                and not re.search(r'33_[A-F0-9]{32}LLCMn$', mangled))
 
     def native_views(self, host, expected):
         pending, visited, matches = [host], set(), []

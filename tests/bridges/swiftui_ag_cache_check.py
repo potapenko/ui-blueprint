@@ -305,6 +305,15 @@ class CacheChecks(unittest.TestCase):
         self.assertFalse(CacheReader.native_descriptor_matches('App.Probe',sym))
         self.assertFalse(CacheReader.native_descriptor_matches('App.(Probe in _'+'A'*32+')',sym))
 
+    def test_public_native_descriptor_requires_a_mangled_symbol(self):
+        for missing in (None, ''):
+            symbol = SimpleNamespace(GetName=lambda: 'nominal type descriptor for App.Probe',
+                                     GetMangledName=lambda: missing)
+            self.assertFalse(CacheReader.native_descriptor_matches('App.Probe', symbol))
+        symbol = SimpleNamespace(GetName=lambda: 'nominal type descriptor for App.Probe',
+                                 GetMangledName=lambda: '$s3App5ProbeCMn')
+        self.assertTrue(CacheReader.native_descriptor_matches('App.Probe', symbol))
+
     def test_declared_leaf_stops_before_child_links(self):
         r=reader()
         r.req['scope']={'selection':'geometry_records','containing_type':'App.Video',
