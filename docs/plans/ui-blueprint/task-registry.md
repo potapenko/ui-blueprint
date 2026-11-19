@@ -29,6 +29,22 @@ Local installation and qualification, November 19:
 | Favorites and Statistics | Unique owner/cursor check passed on fixture, duplicate bindings refused. Existing SDK ingress publishes mounted markers, with no scope for empty slots, Import or PDF bounds. Existing AX frames describe accessibility only. |
 | Grammar | Panel 520×766.5pt verified. Hint body fixture returns an inner VStack but no confirmed outer frame. Repeated action occurrences lack a shared public layout identity. Real inner measurements remain open. |
 
+On 2026-11-19 the installed version advanced to **0.5.1** (1fabf7bc).
+Services closed V09 on the original guest Settings state. Owner-reported pre/post
+SDK records agree for the row (512×48), selector (109×28) and help (512×14),
+in GPUI logical pixels. Native capture exited 0. Support verified the original
+PNG length and SHA against the sidecar for CG28295, 3840×2100 px at 2×.
+Evidence: system temp `playphraseme-v09-scoped-native.seq8GQrAIH/closed`.
+
+Learner independently closed the secondary public AX case for the Present Simple
+button: (1570.5,310,48,32) pt in top-left ax-screen coordinates, scoped to
+searchLearn.learner.grammar and revalidated in window25264. Exact result:
+`playphraseme-learner62-grammar-ax-cg-04w1kve1/result.json` in system temp.
+Its SwiftUI layout remains unknown. The separate Common wide and LEFT intrinsic
+questions were closed by Learner in 5db64f6 and ddef469 within the stated row,
+Grade and inline-text scope. Compact Common fixes are tracked by their owner.
+The pending publication decision now concerns v0.5.1 at the exact release SHA.
+
 The consumer contacts have the installed version and measured limits. No released
 capture permission transfers between process generations. Qualification evidence
 and outstanding cases remain linked in the migration support record above.
