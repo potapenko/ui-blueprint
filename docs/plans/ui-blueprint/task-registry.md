@@ -1,5 +1,28 @@
 # Единый реестр задач
 
+## Current migration support coordination — 2026-11-19
+
+The user explicitly directed this chat to act as coordinator and assign implementation
+to workers. The active goal covers the UI Blueprint work requested by the
+PlayPhrase.me SwiftUI→GPUI coordinators. Each consumer owns its app, UI actions and
+final use-case verification. Root owns assignments, cross-project communication,
+review, release decisions and acceptance tracking. Current evidence and applicable
+contract revisions are recorded in [migration support](../swiftui-external-layout.md).
+
+| Assignment | Implementation owner | Outcome to return to root |
+| --- | --- | --- |
+| Library/Grammar cursor measurement | `/root/native_component_measurement` | Disambiguate repeated native cursor views by proven source ownership on a fixture, then supply a reviewed qualification path |
+| Narrow contract for repeated native anchors | `/root/native_scope_contract` | Register ownership, privacy and ambiguity rules for the selected case with the implementation owner |
+| Learner and Reels window resize | `/root/owner_window_resize` | Provide addressed owner-only resize, independent CG/AX readback and consumer handoff |
+| Settings V01 | `/root/settings_geometry` | Recover measured parts from the accepted pair and qualify a route for the remaining internal geometry |
+| Clip C01.a | `/root/clip_qualification` | Verify private anchor and source ownership, then hand off one bounded consumer case |
+
+The installed 0.4.0 release candidate at 9512ff3 provides saved-data analysis and
+the cache reader. Reels partial capture and Shell toolbar measurement have real
+consumer evidence. Open domain outcomes and public publication remain separate.
+This assignment does not reopen the historical P0–P7 packages below.
+
+
 ## Native caller follow-up — 2026-10-27
 
 **Status: complete for bounded input preparation and separate measurement recipe.**
