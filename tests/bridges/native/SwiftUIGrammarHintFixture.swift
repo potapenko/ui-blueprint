@@ -1,5 +1,6 @@
 // Synthetic SDK qualification. Pass an existing empty output directory, optionally followed by --panel-only.
 import AppKit
+import CryptoKit
 import SwiftUI
 import UIBlueprintSwiftUI
 
@@ -25,9 +26,27 @@ private extension View {
     }
 }
 
+private struct SelectedHints: PreferenceKey {
+    static let defaultValue: [String] = []
+    static func reduce(value: inout [String], nextValue: () -> [String]) {
+        value += nextValue()
+    }
+}
+
+private struct OwnerObservation: Encodable {
+    struct Occurrence: Encodable {
+        let marker: String
+        let mount: String?
+    }
+    let snapshotSHA256: String
+    let ownerType: String
+    let occurrences: [Occurrence]
+}
+
 private struct GrammarSearchHint: View {
     let id: String
     let width: CGFloat
+    let selected: Bool
     let markers: Bool
 
     var body: some View {
@@ -42,12 +61,15 @@ private struct GrammarSearchHint: View {
         .padding(8)
         .frame(width: width)
         .measured(id, parent: "grammar-panel", markers: markers)
+        .preference(key: SelectedHints.self, value: selected ? [id] : [])
     }
 }
 
 @MainActor
 private final class Driver: ObservableObject {
     @Published var width: CGFloat = 110
+    @Published var selection: Set<String> = ["hint"]
+    var mountedSelection: [String] = []
     var reference: [String: CGRect] = [:]
 }
 
@@ -57,9 +79,10 @@ private struct Form: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 19) {
-            GrammarSearchHint(id: "hint", width: driver.width, markers: markers)
-            GrammarSearchHint(id: "neighbor", width: 145, markers: markers)
+            GrammarSearchHint(id: "hint", width: driver.width, selected: driver.selection.contains("hint"), markers: markers)
+            GrammarSearchHint(id: "neighbor", width: 145, selected: driver.selection.contains("neighbor"), markers: markers)
         }
+        .onPreferenceChange(SelectedHints.self) { driver.mountedSelection = $0 }
         .padding(13)
         .measured("grammar-panel", parent: "root", markers: true)
         .frame(width: 424, height: 220, alignment: .topLeading)
@@ -96,18 +119,30 @@ private struct Runner {
         window.orderFront(nil)
         Task { @MainActor in
             do {
-                for (phase, width) in [("narrow", CGFloat(110)), ("wide", CGFloat(192))] {
+                let phases: [(String, CGFloat, Set<String>)] = [
+                    ("narrow", 110, ["hint"]), ("wide", 192, ["neighbor"]), ("ambiguous", 192, ["hint", "neighbor"])
+                ]
+                for (phase, width, selection) in phases {
+                    driver.selection = selection
                     driver.width = width
                     let deadline = ContinuousClock.now.advanced(by: .seconds(5))
-                    while !session.isReady || driver.reference.count != 9 || driver.reference["hint"]?.width != width {
+                    while !session.isReady || driver.reference.count != 9 || driver.reference["hint"]?.width != width
+                            || Set(driver.mountedSelection) != selection {
                         guard ContinuousClock.now < deadline else { throw FixtureError.referenceNotReady }
                         try await Task.sleep(for: .milliseconds(25))
                     }
+                    let mounted = driver.mountedSelection.sorted()
                     let oracle = driver.reference
                     let snapshot = try await session.capture(requestID: phase, stateID: phase)
-                    guard driver.reference == oracle, session.isCurrentMounts(snapshot) else {
+                    guard driver.reference == oracle, driver.mountedSelection.sorted() == mounted, session.isCurrentMounts(snapshot) else {
                         throw FixtureError.layoutChangedDuringCapture
                     }
+                    let observation = OwnerObservation(
+                        snapshotSHA256: SHA256.hash(data: snapshot.data).map { String(format: "%02x", $0) }.joined(),
+                        ownerType: String(describing: GrammarSearchHint.self),
+                        occurrences: mounted.map { .init(marker: $0, mount: snapshot.mountIDs[$0]) }
+                    )
+                    try JSONEncoder().encode(observation).write(to: output.appendingPathComponent(phase + "-owner.json"), options: .withoutOverwriting)
                     let rects = oracle.mapValues { [$0.minX, $0.minY, $0.width, $0.height] }
                     try JSONEncoder().encode(rects).write(to: output.appendingPathComponent(phase + "-oracle.json"), options: .withoutOverwriting)
                     try snapshot.data.write(to: output.appendingPathComponent(phase + "-snapshot.json"), options: .withoutOverwriting)
