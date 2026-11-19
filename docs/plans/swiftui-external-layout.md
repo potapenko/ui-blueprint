@@ -1,8 +1,18 @@
 # External SwiftUI layout qualification
 
-Status: 0.4.0 installed locally from9512ff3 after a real partial Reels acquisition.
-The one-shot Reels grant is consumed. Further source cases remain in progress.
-Owner: support chat01a1e565-14f6-7be0-aa02-cd648a1b0423, current master only.
+The locally installed release is **0.5.1**, source
+`1fabf7bc6da2af6236ca0ba9049ecaea604a697e`. Services confirmed the V09
+timeout fix on its 1920×1050 window. The prepared GitHub source release awaits
+the operator's explicit confirmation for this revision. The newer commits in
+the working branch are outside that proposed publication.
+
+The [coordination registry](ui-blueprint/task-registry.md) tracks domain
+ownership and consumer acceptance. [Grammar and Library AX measurements](../development/grammar-library-ax.md)
+provides the reproducible procedure for the separately verified accessibility
+bounds of Present Simple, the empty Favorites slot, Import and the public
+Statistics buttons. The reader and fixtures described below record the
+qualification history. Earlier version numbers, process identities and frozen
+packages identify historical observations.
 
 ## Authority and protected boundaries
 
@@ -19,7 +29,8 @@ termination of our task-owned isolated diagnostic copies is authorized. Do not
 ask another general/lifecycle GO for these copies. Exact owner/process binding
 and one explicit recovery command remain; this grants no host reboot, production,
 storage or unrelated-process authority. Consumer processes belong to their owners.
-No new agents are authorized here; Reels supplies its existing reviewer.
+The November 19 user direction assigns implementation to finite workers. Root
+coordinates their work and reviews consumer evidence in the registry.
 
 ## Contract basis and distinct gaps
 
