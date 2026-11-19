@@ -1,4 +1,4 @@
-// Owner-run read-only qualification of one public AX button in Grammar Home.
+// Owner-run public AX measurements for Grammar Home and the empty Favorites slot.
 // Build with plugins/macos/NativeAcquisition.swift. Append a witnessed AX-screen x y
 // to select one concrete scroll area by its public hit-test parent chain.
 import AppKit
@@ -11,11 +11,15 @@ private struct Refusal: Error {
 
 @main
 private enum GrammarAXBounds {
-    static let areaID = "searchLearn.learner.grammar"
-    static let buttonName = "Present Simple"
 
     @MainActor static func run() throws {
-        let a = Array(CommandLine.arguments.dropFirst())
+        var a = Array(CommandLine.arguments.dropFirst())
+        let library = a.first == "library-empty-slot" || a.first == "library-slot-overlay-role"
+        let roleOnly = a.first == "library-slot-overlay-role"
+        if library { a.removeFirst() }
+        let areaID = library ? "searchLearn.learner.overlay" : "searchLearn.learner.grammar"
+        let buttonName = library ? "Favorites collection 1, empty" : "Present Simple"
+        if library && a.count != 7 { throw Refusal("library_overlay_witness_required") }
         guard (a.count == 5 || a.count == 7), let pid = Int32(a[0]), pid > 0,
               let birth = Double(a[2]), birth.isFinite, birth > 0,
               let cg = UInt32(a[3]), cg > 0, a[4].hasPrefix("/") else {
@@ -54,6 +58,19 @@ private enum GrammarAXBounds {
         func text(_ e: AXUIElement, _ key: String) throws -> String? {
             guard let raw = try attribute(e, key) else { return nil }
             return try limit.text(raw)
+        }
+        // Test only the owner-declared public literal. Avoid converting unrelated identifiers
+        // or descriptive strings to Swift values, including user-defined collection names.
+        func matches(_ e: AXUIElement, _ key: String, _ expected: String) throws -> Bool {
+            guard let raw = try attribute(e, key) else { return false }
+            guard CFGetTypeID(raw) == CFStringGetTypeID() else { throw Refusal("ax_string_type_unavailable") }
+            let value = unsafeDowncast(raw, to: CFString.self)
+            let literal = expected as CFString
+            return CFStringGetLength(value) == CFStringGetLength(literal) && CFEqual(value, literal)
+        }
+        func matchesButtonName(_ button: AXUIElement) throws -> Bool {
+            if library { return try matches(button, kAXDescriptionAttribute, buttonName) }
+            return try text(button, kAXDescriptionAttribute) == buttonName
         }
         func list(_ e: AXUIElement, windows: Bool, capacity: Int) throws -> [AXUIElement] {
             let key = (windows ? kAXWindowsAttribute : kAXChildrenAttribute) as CFString
@@ -116,6 +133,14 @@ private enum GrammarAXBounds {
             }
             return (w, frame)
         }
+        func publicContainerRole(_ area: AXUIElement) throws -> String {
+            let roles = [kAXGroupRole, kAXScrollAreaRole, kAXSplitGroupRole, kAXListRole, kAXLayoutAreaRole,
+                         kAXLayoutItemRole, kAXTabGroupRole, kAXToolbarRole, kAXRadioGroupRole, kAXOutlineRole]
+            guard let role = try text(area, kAXRoleAttribute), roles.contains(role) else {
+                throw Refusal("recognized_public_container_role_unavailable")
+            }
+            return role
+        }
         func areaAtWitness(_ point: CGPoint, root: AXUIElement) throws -> (area: AXUIElement, cost: Int) {
             try prepare(app)
             guard try rect(root).contains(point) else { throw Refusal("witness_outside_window") }
@@ -125,21 +150,35 @@ private enum GrammarAXBounds {
             var chain = [AXUIElement](), area: AXUIElement?
             while !CFEqual(element, root) {
                 try limit.reserveSelectionEntry()
-                guard chain.count < 32, !chain.contains(where: { CFEqual(element, $0) }),
-                      let role = try text(element, kAXRoleAttribute), role != kAXWindowRole,
-                      role != kAXPopoverRole else { throw Refusal("ax_hit_window_unresolved") }
+                guard chain.count < 32, !chain.contains(where: { CFEqual(element, $0) }) else {
+                    throw Refusal("ax_hit_window_unresolved")
+                }
                 chain.append(element)
-                if role == kAXScrollAreaRole && area == nil {
-                    guard try text(element, kAXIdentifierAttribute) == areaID else {
-                        throw Refusal("ax_hit_scroll_area_mismatch")
+                if library {
+                    // Compare the fixed public identifier on this parent path only.
+                    if try matches(element, kAXIdentifierAttribute, areaID) {
+                        guard area == nil else { throw Refusal("ambiguous_overlay_on_parent_path") }
+                        area = element
                     }
-                    area = element
+                } else {
+                    guard let role = try text(element, kAXRoleAttribute), role != kAXWindowRole,
+                          role != kAXPopoverRole else { throw Refusal("ax_hit_window_unresolved") }
+                    if role == kAXScrollAreaRole && area == nil {
+                        guard try text(element, kAXIdentifierAttribute) == areaID else {
+                            throw Refusal("ax_hit_scroll_area_mismatch")
+                        }
+                        area = element
+                    }
                 }
                 guard let parent = try attribute(element, kAXParentAttribute),
                       CFGetTypeID(parent) == AXUIElementGetTypeID() else { throw Refusal("ax_hit_parent_unavailable") }
                 element = unsafeDowncast(parent, to: AXUIElement.self)
             }
-            guard let area else { throw Refusal("ax_hit_scroll_area_unavailable") }
+            guard let area else { throw Refusal(library ? "ax_overlay_unavailable" : "ax_hit_scroll_area_unavailable") }
+            if library {
+                guard let owningWindow = try attribute(area, kAXWindowAttribute),
+                      CFEqual(owningWindow, root) else { throw Refusal("ax_overlay_window_unresolved") }
+            }
             return (area, chain.count)
         }
         func resolve(_ root: AXUIElement) throws -> (AXUIElement, AXUIElement) {
@@ -161,7 +200,7 @@ private enum GrammarAXBounds {
                         selectedArea = element
                     }
                 }
-                if inside, role == kAXButtonRole, try text(element, kAXDescriptionAttribute) == buttonName {
+                if inside, role == kAXButtonRole, try matchesButtonName(element) {
                     guard button == nil else { throw Refusal("ambiguous_button") }
                     button = element
                 }
@@ -173,10 +212,28 @@ private enum GrammarAXBounds {
             return (selectedArea, button)
         }
         let (firstWindow, firstWindowFrame) = try window()
+        if roleOnly, let witness {
+            let firstArea = try areaAtWitness(witness, root: firstWindow).area
+            let firstRole = try publicContainerRole(firstArea)
+            let secondArea = try areaAtWitness(witness, root: firstWindow).area
+            let secondRole = try publicContainerRole(secondArea)
+            let (lastWindow, lastFrame) = try window()
+            guard CFEqual(firstArea, secondArea), firstRole == secondRole, CFEqual(firstWindow, lastWindow),
+                  firstWindowFrame == lastFrame else { throw Refusal("ax_target_changed") }
+            try limit.check()
+            let report: [String:Any] = ["source":"native_ax", "field":"AXRole", "scope_ax_identifier":areaID,
+                "role":firstRole, "pid":pid, "bundle_id":a[1], "launch_time":birth, "window_id":cg,
+                "scope_selection":"unique_exact_identifier_on_ax_hit_parent_path_to_window",
+                "scope_witness_ax_screen_pt":[witness.x, witness.y], "consistency":"revalidated_nonatomic"]
+            print(String(decoding: try JSONSerialization.data(withJSONObject:report,options:.sortedKeys), as: UTF8.self))
+            return
+        }
         let (area, button) = try resolve(firstWindow)
+        let firstRole = library ? try publicContainerRole(area) : nil
         let bounds = try rect(button)
         let (secondArea, secondButton) = try resolve(firstWindow)
         let finalBounds = try rect(secondButton)
+        if let firstRole, try publicContainerRole(secondArea) != firstRole { throw Refusal("ax_target_changed") }
         let (lastWindow, lastWindowFrame) = try window()
         guard CFEqual(area, secondArea), CFEqual(button, secondButton), CFEqual(firstWindow, lastWindow),
               lastWindowFrame == firstWindowFrame, finalBounds == bounds else {
@@ -191,8 +248,11 @@ private enum GrammarAXBounds {
             "consistency":"revalidated_nonatomic", "uptime_start":start,
             "uptime_end":ProcessInfo.processInfo.systemUptime]
         if let witness {
-            result["scope_selection"] = "nearest_scroll_area_on_ax_hit_parent_path_to_exact_window"
-            result["uniqueness"] = "all_ax_children_of_this_scroll_area_excluding_separate_surfaces"
+            result["scope_selection"] = library ? "unique_exact_identifier_on_ax_hit_parent_path_to_window"
+                                                : "nearest_scroll_area_on_ax_hit_parent_path_to_exact_window"
+            result["uniqueness"] = library ? "all_ax_children_of_this_overlay_excluding_separate_surfaces"
+                                          : "all_ax_children_of_this_scroll_area_excluding_separate_surfaces"
+            if let firstRole { result["scope_ax_role"] = firstRole }
             result["scope_witness_ax_screen_pt"] = [witness.x, witness.y]
         }
         print(String(decoding: try JSONSerialization.data(withJSONObject:result,options:.sortedKeys), as: UTF8.self))
