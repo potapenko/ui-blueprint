@@ -24,6 +24,29 @@ struct DoubleCursor: View {
     var body: some View { HStack { CursorOverlay(); CursorOverlay() }.frame(width: 94, height: 40) }
 }
 
+struct TripleCursor: View {
+    var body: some View {
+        HStack { CursorOverlay(); CursorOverlay(); CursorOverlay() }.frame(width: 160, height: 40)
+    }
+}
+
+private struct PrivateCursorOverlay: NSViewRepresentable {
+    func makeNSView(context: Context) -> Anchor { Anchor() }
+    func updateNSView(_ view: Anchor, context: Context) {}
+}
+
+struct PrivateSlot: View {
+    var body: some View {
+        Button("Slot") {}.frame(width: 74, height: 32).overlay { PrivateCursorOverlay() }
+    }
+}
+
+struct PrivateImport: View {
+    var body: some View {
+        Button("Import") {}.frame(width: 118, height: 42).overlay { PrivateCursorOverlay() }
+    }
+}
+
 @main
 enum NativeOwnerFixture {
     @MainActor static func main() throws {
@@ -36,10 +59,14 @@ enum NativeOwnerFixture {
         switch args[1] {
         case "distinct":
             window.contentView = NSHostingView(rootView: HStack { Slot(); ImportControl() })
+        case "private-distinct":
+            window.contentView = NSHostingView(rootView: HStack { PrivateSlot(); PrivateImport() })
         case "same-owner-twice":
             window.contentView = NSHostingView(rootView: HStack { Slot(); Slot() })
         case "two-links":
             window.contentView = NSHostingView(rootView: DoubleCursor())
+        case "three-links":
+            window.contentView = NSHostingView(rootView: TripleCursor())
         default:
             throw CocoaError(.fileReadUnknown)
         }

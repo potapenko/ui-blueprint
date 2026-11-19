@@ -247,6 +247,16 @@ class CacheChecks(unittest.TestCase):
         self.assertEqual([n['parent'] for n in r.nodes],[None,0])
         self.assertEqual(r.nodes[0]['children'],[1])
 
+    def test_owner_only_selection_does_not_read_unrequested_nominal_types(self):
+        r = self.scoped_reader({1024:'App.Root', 2048:'App.Wrapper'}, {1024:[2048]},
+                               dict(type='App.PrivateSlot', native_match='within_owner'))
+        words = r.u32
+        r.u32 = lambda address: 100 if address == 2048 + 8 else words(address)
+        r.rule_owner = lambda model, cache: (100, 'App.PrivateSlot') if model == 100 else (None, None)
+        r.qualified_nominal = Mock(side_effect=AssertionError('unrequested nominal lookup'))
+        self.assertEqual(r.select_scope(1024), [2048])
+        r.qualified_nominal.assert_not_called()
+
     def test_owner_scan_and_selected_walk_share_the_record_limit(self):
         r = reader()
         r.owner_scan_cost = 1023

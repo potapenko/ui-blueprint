@@ -509,6 +509,7 @@ class CacheReader:
             return [root]
         seen, matches = set(), set()
         wanted_descendant = scope.get('containing_type')
+        within_owner = scope.get('native_match') == 'within_owner'
 
         owner_names = {}
         active_owners = set()
@@ -523,8 +524,10 @@ class CacheReader:
                 if self.scan_work > 1024:
                     raise Refusal('cache_scope_scan_limit', 2)
             seen.add(element)
-            metadata = self.pointer(self.u64(p))
-            name = self.qualified_nominal(metadata) if metadata else None
+            name = None
+            if not within_owner or wanted_descendant:
+                metadata = self.pointer(self.u64(p))
+                name = self.qualified_nominal(metadata) if metadata else None
             attribute, owner_name = self.rule_owner(self.u32(p+8), owner_names)
             owner_root = owner_name is not None and attribute not in active_owners
             if owner_root:
@@ -542,7 +545,7 @@ class CacheReader:
             if owner_root:
                 active_owners.remove(attribute)
             match = scope['type'] in names
-            if scope.get('native_match') == 'within_owner':
+            if within_owner:
                 match = owner_root and owner_name == scope['type']
             if match and (wanted_descendant is None or descendant_found):
                 matches.add(('owner', attribute) if owner_name == scope['type'] else ('element', element))
