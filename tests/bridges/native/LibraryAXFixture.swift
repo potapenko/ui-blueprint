@@ -5,7 +5,7 @@ import AppKit
 enum LibraryAXFixture {
     @MainActor static func main() throws {
         let args = CommandLine.arguments
-        guard args.count == 3, ["unique", "duplicate", "missing"].contains(args[1]) else {
+        guard args.count == 3, ["unique", "duplicate", "missing", "distinct-window", "same-frame-window"].contains(args[1]) else {
             throw CocoaError(.fileReadInvalidFileName)
         }
         let app = NSApplication.shared
@@ -36,6 +36,14 @@ enum LibraryAXFixture {
             other.frame = .init(x: 15, y: 100, width: 80, height: 25)
             overlay.addSubview(other)
         }
+        var sibling: NSWindow?
+        if ["distinct-window", "same-frame-window"].contains(args[1]) {
+            let other = NSWindow(contentRect: NSRect(x: 640, y: 160, width: 380, height: 200),
+                                 styleMask: [.titled, .closable, .resizable], backing: .buffered, defer: false)
+            if args[1] == "same-frame-window" { other.setFrame(window.frame, display: false) }
+            other.orderFront(nil)
+            sibling = other
+        }
         window.orderFront(nil)
         RunLoop.current.run(until: Date().addingTimeInterval(0.6))
         let identity = NSRunningApplication.current
@@ -44,10 +52,11 @@ enum LibraryAXFixture {
             throw CocoaError(.fileReadUnknown)
         }
         let frame = selected.accessibilityFrame()
-        let data: [String:Any] = ["pid":identity.processIdentifier, "bundle":bundle, "birth":date.timeIntervalSince1970,
+        var data: [String:Any] = ["pid":identity.processIdentifier, "bundle":bundle, "birth":date.timeIntervalSince1970,
             "cg":window.windowNumber, "path":path,
             "expected":[frame.minX, screen.frame.maxY - frame.maxY, frame.width, frame.height]]
+        if let sibling { data["sibling_window"] = sibling.windowNumber }
         try JSONSerialization.data(withJSONObject:data).write(to:URL(fileURLWithPath:args[2]), options:.withoutOverwriting)
-        app.run()
+        withExtendedLifetime(sibling) { app.run() }
     }
 }

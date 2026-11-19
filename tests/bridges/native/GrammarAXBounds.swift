@@ -120,14 +120,41 @@ private enum GrammarAXBounds {
             }
             let candidates = cgWindows.filter { ($0[kCGWindowOwnerPID as String] as? NSNumber)?.int32Value == pid &&
                                                 ($0[kCGWindowLayer as String] as? NSNumber)?.intValue == 0 }
-            guard candidates.count == 1, let info = candidates.first,
-                  (info[kCGWindowNumber as String] as? NSNumber)?.uint32Value == cg,
-                  let bounds = info[kCGWindowBounds as String] as? NSDictionary,
-                  let frame = CGRect(dictionaryRepresentation: bounds as CFDictionary) else {
-                throw Refusal("cg_window_unresolved")
+            let selected = candidates.filter { ($0[kCGWindowNumber as String] as? NSNumber)?.uint32Value == cg }
+            guard selected.count == 1, let info = selected.first else { throw Refusal("cg_window_unresolved") }
+            func cgBounds(_ entry: [String:Any]) throws -> CGRect {
+                guard let bounds = entry[kCGWindowBounds as String] as? NSDictionary,
+                      let frame = CGRect(dictionaryRepresentation: bounds as CFDictionary),
+                      frame.origin.x.isFinite, frame.origin.y.isFinite, frame.width.isFinite, frame.height.isFinite,
+                      !frame.isEmpty else { throw Refusal("cg_frame_unavailable") }
+                return frame
             }
-            let windows = try list(app, windows: true, capacity: 1)
-            guard let w = windows.first, try text(w, kAXRoleAttribute) == kAXWindowRole,
+            let frame = try cgBounds(info)
+            let w: AXUIElement
+            if let witness {
+                // No global one-window assumption. The AX object is selected by a public
+                // hit-test on this app and reports its containing window. Bind that window
+                // only if its frame belongs to exactly the selected on-screen normal CG window.
+                guard frame.contains(witness) else { throw Refusal("witness_outside_window") }
+                for sibling in candidates where (sibling[kCGWindowNumber as String] as? NSNumber)?.uint32Value != cg {
+                    if try cgBounds(sibling) == frame { throw Refusal("cg_window_frame_ambiguous") }
+                }
+                let hit = try hitAt(witness)
+                if let raw = try attribute(hit, kAXWindowAttribute), CFGetTypeID(raw) == AXUIElementGetTypeID() {
+                    w = unsafeDowncast(raw, to: AXUIElement.self)
+                } else {
+                    guard try text(hit, kAXRoleAttribute) == kAXWindowRole else {
+                        throw Refusal("ax_hit_window_unavailable")
+                    }
+                    w = hit
+                }
+            } else {
+                guard candidates.count == 1 else { throw Refusal("cg_window_unresolved") }
+                let windows = try list(app, windows: true, capacity: 1)
+                guard let first = windows.first else { throw Refusal("ax_cg_binding_unresolved") }
+                w = first
+            }
+            guard try text(w, kAXRoleAttribute) == kAXWindowRole,
                   try text(w, kAXSubroleAttribute) == kAXStandardWindowSubrole, try rect(w) == frame else {
                 throw Refusal("ax_cg_binding_unresolved")
             }
@@ -141,12 +168,16 @@ private enum GrammarAXBounds {
             }
             return role
         }
-        func areaAtWitness(_ point: CGPoint, root: AXUIElement) throws -> (area: AXUIElement, cost: Int) {
+        func hitAt(_ point: CGPoint) throws -> AXUIElement {
             try prepare(app)
-            guard try rect(root).contains(point) else { throw Refusal("witness_outside_window") }
             var hit: AXUIElement?
             guard AXUIElementCopyElementAtPosition(app, Float(point.x), Float(point.y), &hit) == .success,
-                  var element = hit else { throw Refusal("ax_hit_unavailable") }
+                  let hit else { throw Refusal("ax_hit_unavailable") }
+            return hit
+        }
+        func areaAtWitness(_ point: CGPoint, root: AXUIElement) throws -> (area: AXUIElement, cost: Int) {
+            guard try rect(root).contains(point) else { throw Refusal("witness_outside_window") }
+            var element = try hitAt(point)
             var chain = [AXUIElement](), area: AXUIElement?
             while !CFEqual(element, root) {
                 try limit.reserveSelectionEntry()
