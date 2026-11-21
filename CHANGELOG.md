@@ -3,6 +3,22 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.6.0
+
+- Add `Session::mark_or_render` to the opt-in GPUI source SDK. An element
+  whose native ID was erased stays interactive and reports an explicit
+  unmeasured marker result. Strict `mark` and required-anchor checks remain
+  available. Update the application's vendored SDK to use the new method.
+  The source export includes the integration instructions from the same commit.
+- Record observation-scoped branch provenance for successful direct SwiftUI
+  subtree selection. Each selected branch identifies its emitted roots or an
+  empty contribution. Earlier captures remain readable and product capture
+  permissions are unchanged.
+- Extend the source-only owner Accessibility examples and their qualification
+  for Favorites and the public Statistics control. Document reproduction on a
+  new Mac and include the Grammar hint and window-binding fixtures. These
+  examples report geometry only for their verified public controls.
+
 ## 0.5.1
 
 - Fix the native window helper's deadline handlers for window listing and PNG
