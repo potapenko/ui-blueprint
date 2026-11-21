@@ -91,10 +91,13 @@ impl ExampleView {
 
     fn mark(&self, id: &str, element: impl IntoElement) -> AnyElement {
         match &self.session {
-            Some(session) => session
-                .mark(id, element)
-                .expect("static diagnostic marker")
-                .into_any_element(),
+            Some(session) => {
+                let (element, status) = session.mark_or_render(id, element);
+                if let Err(gap) = status {
+                    eprintln!("{gap:?}");
+                }
+                element
+            }
             None => element.into_any_element(),
         }
     }

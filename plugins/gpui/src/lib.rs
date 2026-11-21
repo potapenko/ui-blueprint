@@ -8,7 +8,7 @@ mod session;
 mod types;
 mod window;
 
-pub use element::ProbeElement;
+pub use element::{ProbeElement, UnmeasuredMarker};
 pub use session::{Capture, Session};
 pub use types::{Configuration, Error, Marker, Request};
 pub use window::register;

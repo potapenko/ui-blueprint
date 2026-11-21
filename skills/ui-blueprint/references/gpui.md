@@ -29,6 +29,13 @@ account or item values as their IDs. Required anchors are a minimum, not a compl
 list of descendants. Native-key replacement, removal and root/window recreation
 invalidate old bindings. The producer validates the entire emitted set.
 
+When the vendored SDK provides `Session::mark_or_render`, keep its returned
+element and inspect the accompanying result. `UnmeasuredMarker` identifies a
+validated public label whose instrumentation failed. An erased element remains
+interactive. Include that gap in the app's diagnostic report if consumers need
+its name. A saved Snapshot contains measured occurrences only. Older SDK source
+pins require marking the typed native element before erasure.
+
 A root request collects admissible normal and deferred prepaint samples. Publication
 waits for post-draw retirement; GPUI0.3.12 on_next_frame callbacks alone run before
 drawing. Cached geometry cannot be re-labelled as a fresh sample. Requests and

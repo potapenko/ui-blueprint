@@ -1,6 +1,6 @@
 # Explicit GPUI layout probe
 
-- Node type: leaf; domain: `uib.gpui-probe`; contract: `UIB.GPUI-PROBE@2`.
+- Node type: leaf; domain: `uib.gpui-probe`; contract: `UIB.GPUI-PROBE@3`.
 - Authority: Active; stability: Evolving; bounded native root-mode qualification recorded in the package recipe.
 - Authority source: original approval message01a1db4b-9e3c-72e3-9f40-7babe4604262
   and parallel execution01a1db4c-a361-7683-9804-0461d38e25fb; direct root/default
@@ -46,6 +46,16 @@ Deferred same-window marked layers participate in the same bounded frame collect
 Publication occurs after its complete layout/lifecycle boundary, not before deferred
 prepaint or while a prior frame still owns removed occurrence state. Cached replay
 cannot silently turn a missing current sample into successful full marked coverage.
+
+The Reels integration at ed495f2 exposed an erased native identity during render.
+For optional instrumentation, `Session::mark_or_render` returns the original
+renderable element on refusal and a separate `UnmeasuredMarker` result. It
+reports the fixed reason and the validated public label when available. A
+malformed label is omitted. A successful marking result confirms attachment
+only. Capture still validates required anchors and emits actual measured samples.
+An erased child creates no synthetic identity, node or geometry. Keep named
+render-time refusals with the consuming app's diagnostic results. The strict
+`Session::mark` API and saved snapshot format retain their existing contracts.
 
 ## GPUI.IDENTITY — All emitted occurrences remain valid
 

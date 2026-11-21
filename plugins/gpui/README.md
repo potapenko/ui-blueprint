@@ -1,7 +1,7 @@
 # GPUI window geometry
 
 Opt-in Debug source package for gpui-kit0.9.1/gpui-pre0.3.12 and Rust1.100.0.
-[GPUI-PROBE@2](../../docs/specs/product/gpui-probe.md) extends the existing producer;
+[GPUI-PROBE@3](../../docs/specs/product/gpui-probe.md) extends the existing producer;
 core0.1 Snapshot and the existing Rust inspect/measure/check path are unchanged.
 The separate Cargo.lock keeps GPUI out of normal CLI builds.
 
@@ -42,6 +42,27 @@ structural labels (such as `row`) are separate opaque occurrences. Use domain-st
 native keys, not row indexes; their raw values are never exported. A RenderOnce
 wrapper may erase its ID: mark its actual native element or an existing parent
 frame, without adding a layout node merely for instrumentation.
+
+For optional instrumentation in a render function, keep the returned element
+and report the separate marking result. Apply this after the element's builders
+and before type erasure whenever its own geometry is required.
+
+```rust,ignore
+let (button, status) = session.mark_or_render("reels_action", button);
+if let Err(unmeasured) = status {
+    eprintln!("{unmeasured:?}");
+}
+toolbar.child(button)
+```
+
+An already-erased `AnyElement` still renders and handles input. Its public marker
+appears in the unmeasured result with `InvalidIdentity` and has no bounds.
+Invalid label text is omitted. A successful result here means the SDK attached
+the marker. The app must request a capture to obtain measured bounds. Preserve
+the marking result with consumer diagnostics if downstream users need the gap's
+name. A missing required anchor still refuses capture. Older vendored SDK pins
+expose only strict `mark`: update the source dependency to use this method.
+Installing a newer saved-data CLI does not update the app's vendored SDK.
 
 ## Frame completion and saved data
 

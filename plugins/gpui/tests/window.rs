@@ -447,3 +447,58 @@ fn foreign_app_with_equal_local_window_ids_is_rejected(cx: &mut TestAppContext) 
         })
         .unwrap();
 }
+
+#[gpui_kit::test]
+fn erased_marker_reports_gap_and_keeps_original_click_target(cx: &mut TestAppContext) {
+    struct ErasedButton {
+        clicks: usize,
+    }
+    impl Render for ErasedButton {
+        fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+            let probe = Session::for_window(window, cx).unwrap();
+            assert!(matches!(
+                probe.mark("action", div().id("strict").into_any_element()),
+                Err(Error::InvalidIdentity)
+            ));
+            let original = gpui_kit::component::button::Button::new("native-button")
+                .label("Fixture action")
+                .on_click(cx.listener(|this, _, _, _| this.clicks += 1))
+                .into_any_element();
+            let (button, status) = probe.mark_or_render("action", original);
+            let gap = status.unwrap_err();
+            assert_eq!(gap.marker(), Some("action"));
+            assert_eq!(gap.reason(), Error::InvalidIdentity);
+            let (button, status) = probe.mark_or_render("private invalid text", button);
+            let invalid = status.unwrap_err();
+            assert_eq!(invalid.marker(), None);
+            assert!(!format!("{invalid:?}").contains("private invalid text"));
+            let (content, status) =
+                probe.mark_or_render("content", div().id("content").child(button));
+            assert_eq!(status, Ok(()));
+            content
+        }
+    }
+    cx.update(|cx| {
+        gpui_kit::init(cx);
+        register(
+            Configuration::application("test.app", "fixture", "erased-run")
+                .required_anchors(&["content"]),
+            cx,
+        )
+        .unwrap();
+    });
+    let (handle, view) = cx.update(|cx| {
+        gpui_kit::open_window(WindowOptions::default(), cx, |_, cx| {
+            cx.new(|_| ErasedButton { clicks: 0 })
+        })
+        .unwrap()
+    });
+    let snapshot = capture(cx, handle, None).unwrap();
+    assert_eq!(markers(&snapshot, "content").len(), 1);
+    assert!(markers(&snapshot, "action").is_empty());
+    cx.update_window(handle, |_, window, cx| {
+        window.click("native-button", cx);
+        assert_eq!(view.read(cx).clicks, 1);
+    })
+    .unwrap();
+}

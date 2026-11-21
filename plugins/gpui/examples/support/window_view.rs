@@ -25,10 +25,13 @@ pub struct WindowView {
 }
 fn mark(probe: &Option<Session>, id: &str, element: impl IntoElement) -> AnyElement {
     match probe {
-        Some(session) => session
-            .mark(id, element)
-            .expect("fixed public marker on a native ID")
-            .into_any_element(),
+        Some(session) => {
+            let (element, status) = session.mark_or_render(id, element);
+            if let Err(gap) = status {
+                eprintln!("{gap:?}");
+            }
+            element
+        }
         None => element.into_any_element(),
     }
 }

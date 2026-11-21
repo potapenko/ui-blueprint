@@ -4,8 +4,8 @@ use crate::{
     session::next_generation,
 };
 use gpui_kit::{
-    A11ySubtreeBuilder, App, Bounds, Element, ElementId, GlobalElementId, InspectorElementId,
-    IntoElement, LayoutId, Pixels, Window, accesskit,
+    A11ySubtreeBuilder, AnyElement, App, Bounds, Element, ElementId, GlobalElementId,
+    InspectorElementId, IntoElement, LayoutId, Pixels, Window, accesskit,
 };
 use std::{
     any::TypeId,
@@ -44,37 +44,92 @@ pub struct PaintState<P> {
     _occurrence: Option<Rc<Lease>>,
     active: bool,
 }
+/// A marker that could not be measured. Only a validated public marker name is exposed.
+#[derive(Debug, PartialEq, Eq)]
+pub struct UnmeasuredMarker<'a> {
+    marker: Option<&'a str>,
+    reason: Error,
+}
+
+impl<'a> UnmeasuredMarker<'a> {
+    pub fn marker(&self) -> Option<&'a str> {
+        self.marker
+    }
+
+    pub fn reason(&self) -> Error {
+        self.reason
+    }
+}
+
 impl Session {
+    fn marker_scope(&self, id: &str) -> Result<bool, Error> {
+        crate::types::validate_id(id)?;
+        let state = self.0.borrow();
+        if state.config.window_root {
+            return if id == "window_root" {
+                Err(Error::InvalidIdentity)
+            } else {
+                Ok(false)
+            };
+        }
+        state
+            .config
+            .markers
+            .iter()
+            .position(|marker| marker.id == id)
+            .map(|index| index == 0)
+            .ok_or(Error::InvalidScope)
+    }
+
+    fn decorate<E: Element>(&self, id: &str, inner: E, legacy_root: bool) -> ProbeElement<E> {
+        ProbeElement {
+            inner,
+            session: self.clone(),
+            id: id.into(),
+            legacy_root,
+        }
+    }
+
     pub fn mark<T: IntoElement>(
         &self,
         id: &str,
         element: T,
     ) -> Result<ProbeElement<T::Element>, Error> {
-        crate::types::validate_id(id)?;
-        let (window_root, legacy_root) = {
-            let state = self.0.borrow();
-            let ix = state.config.markers.iter().position(|m| m.id == id);
-            if !state.config.window_root && ix.is_none() {
-                return Err(Error::InvalidScope);
-            }
-            (
-                state.config.window_root,
-                !state.config.window_root && ix == Some(0),
-            )
-        };
-        if window_root && id == "window_root" {
-            return Err(Error::InvalidIdentity);
-        }
+        let legacy_root = self.marker_scope(id)?;
         let inner = element.into_element();
         if inner.id().is_none() {
             return Err(Error::InvalidIdentity);
         }
-        Ok(ProbeElement {
-            inner,
-            session: self.clone(),
-            id: id.into(),
-            legacy_root,
-        })
+        Ok(self.decorate(id, inner, legacy_root))
+    }
+
+    /// Keep the original element when marking fails. The separate result reports whether
+    /// instrumentation was attached; actual geometry still requires a successful capture.
+    pub fn mark_or_render<'a, T: IntoElement>(
+        &self,
+        id: &'a str,
+        element: T,
+    ) -> (AnyElement, Result<(), UnmeasuredMarker<'a>>) {
+        let inner = element.into_element();
+        let scope = self.marker_scope(id).and_then(|legacy_root| {
+            inner
+                .id()
+                .map(|_| legacy_root)
+                .ok_or(Error::InvalidIdentity)
+        });
+        match scope {
+            Ok(legacy_root) => (
+                self.decorate(id, inner, legacy_root).into_any_element(),
+                Ok(()),
+            ),
+            Err(reason) => (
+                inner.into_any_element(),
+                Err(UnmeasuredMarker {
+                    marker: crate::types::validate_id(id).ok().map(|()| id),
+                    reason,
+                }),
+            ),
+        }
     }
 }
 impl<E: Element> IntoElement for ProbeElement<E> {
