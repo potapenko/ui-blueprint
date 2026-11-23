@@ -115,6 +115,55 @@ proves that the convenient seven-part fixture alone cannot qualify the real form
 A revised collector must also pass this source-shaped case. No third cosmetic
 capture of this unchanged failing route is scheduled.
 
+## Continued implementation — source parts and coordinates
+
+The user explicitly approved the execution plan (“Хорошо, делай по плану”).
+Selected new basis: DEBUG-CAPTURE@15 and TRANSFORM@4 pinned at4be9a662.
+The actor fixture independently verifies all seven root translations on that
+revision; Rust `measure` returns8pt for row-to-label leading inset. This remains
+fixture evidence and does not qualify native-image mapping.
+
+`capture-21` fixes the known split counterexample in the temporary ancestor
+candidate: continue along the complete parent path and retain the outermost
+occurrence of the same first body attribute, across intervening owners.
+Both branches are captured (165raw records); the split check and seven translated
+frames pass. `/Volumes/Develop-2TB/Develop/tmp/uib-actors-s03-_9n7zkwx/outer-ancestor.patch`
+was handed to the shared reader owner. This is a source ancestor, not a proof of
+an arbitrary complete body forest.
+
+The source-shaped top-controls profile uses the observed runtime boundary
+`SwiftUI.SystemScrollView`, not the erased public ScrollView name. It captures
+header/Close/query/toggle/viewport within432raw records. `capture-25` repeats that
+profile on `ACTOR_NO_ORACLE` (the geometry observers are compiled out), retaining
+those frames on ordinary Text/Dynamic/layout records within420raw records.
+Unknown Button/SystemScrollView records are not relabelled with parent geometry;
+the known surrounding source layout records remain separately attributable.
+
+The separate [native-overlay experiment](../../../../experiments/native/actor-native-parts/README.md)
+collects all qualified mounted cursor-backed row overlays inside one source owner
+and LazyVStack. It does not select a row by index, text or coordinates. A shared
+structural witness index resolves five native bindings; four belong to rows and
+one toggle is excluded. Successful prototype `capture-30` returns32canonical
+nodes from244selected records plus463discovery records, with zero model-range
+overlaps and normal detach. This closes the full-form traversal dead end for the
+bounded mounted-row scope without raising global limits.
+
+Important remaining evidence: source-shaped labels expose local layout but their
+transform returns **cache_value_dirty** (20nodes, not an unsupported descriptor).
+No dirty value is read, evaluated or replaced by an ancestor's mapping. The
+geometry-oracle fixture had consumed those transforms; it cannot alone establish
+availability in an unchanged donor. Normal active/focused source-state checks
+remain necessary; current successful cursor samples were inactive windows.
+
+Ten pure selection/admission checks pass. The source-like fixture with default
+query focus compiles; its new active-state run has not occurred. The saved-module
+live repeat (`capture-33`) has no terminal manifest: Apple debugserver is waiting
+inside task_for_pid for the owned synthetic target. Developer mode is enabled.
+The pending debugger and fixture remain owned; exact live identities/recovery
+instructions are retained only in the external task state. A system authorization
+check was handed to the user because Computer Use rejects SecurityAgent access.
+No product attach or publication occurred.
+
 ## Remaining implementation and acceptance
 
 S13 integrates the common body-owner correction, including disjoint-owner and

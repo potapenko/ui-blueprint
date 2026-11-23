@@ -2,6 +2,23 @@
 // The oracle uses public SwiftUI geometry and is independent of the cache reader.
 import Foundation
 import SwiftUI
+import AppKit
+
+// Qualification of the donor's existing, actionless NSViewRepresentable anchor.
+// Pure SwiftUI cannot provide this concrete NSView/weak-layout association.
+// All visible content remains SwiftUI; this view draws nothing and accepts no hit.
+final class ActorCursorFixtureView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+}
+
+private struct ActorCursorFixtureArea: NSViewRepresentable {
+    func makeNSView(context: Context) -> ActorCursorFixtureView {
+        let view = ActorCursorFixtureView()
+        view.setAccessibilityElement(false)
+        return view
+    }
+    func updateNSView(_ view: ActorCursorFixtureView, context: Context) {}
+}
 
 @MainActor
 private enum ActorOracle {
@@ -27,13 +44,25 @@ private enum ActorOracle {
 }
 
 private extension View {
+    @ViewBuilder
+    func actorCursorFixture() -> some View {
+        if ProcessInfo.processInfo.environment["UIB_ACTOR_CURSOR"] == "1" {
+            overlay { ActorCursorFixtureArea().accessibilityHidden(true) }
+        } else { self }
+    }
+
     func actorOracle(_ name: String) -> some View {
+        #if ACTOR_NO_ORACLE
+        // Paired control: compile out the observer itself, not only its IO.
+        self
+        #else
         onGeometryChange(for: [CGRect].self) { proxy in
             [proxy.frame(in: .named("actor-fixture-root")), proxy.frame(in: .global)]
         } action: { frames in
             ActorOracle.record(name, frames[0])
             ActorOracle.record(name + "-global", frames[1])
         }
+        #endif
     }
 }
 
@@ -158,10 +187,14 @@ struct ActorFixtureContent: View {
 // Synthetic strings and actions intentionally avoid all application/API state.
 struct SourceActorSearch: View {
     @Binding var query: String
+    @FocusState private var queryIsFocused: Bool
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
             TextField("Search", text: $query).textFieldStyle(.plain)
+                .focused($queryIsFocused)
+                .defaultFocus($queryIsFocused, true)
+                .accessibilityIdentifier("fixture.source.query")
         }
         .font(.body)
         .padding(.horizontal, 12)
@@ -192,6 +225,8 @@ struct SourceActorPicker: View {
                         .padding(8)
                         .contentShape(Rectangle())
                 }
+                .actorCursorFixture()
+                .accessibilityIdentifier("fixture.source.possible")
                 .actorOracle("toggle")
                 ScrollView {
                     LazyVStack(spacing: 0) {
@@ -206,6 +241,8 @@ struct SourceActorPicker: View {
                                     .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
+                            .actorCursorFixture()
+                            .accessibilityIdentifier("fixture.source.row.\(number)")
                             .actorOracle("row-\(number)")
                         }
                     }

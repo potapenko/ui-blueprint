@@ -2,7 +2,8 @@
 
 Usage: python3 -B actor_scope_check.py WIDE_DIRECTORY NARROW_DIRECTORY DUPLICATE_DIRECTORY [SPLIT_DIRECTORY]
 Consumes fixture-only body-owner attribution, never supplies product correspondence.
-Does not qualify scroll-content-to-window transforms or split owner completeness.
+Checks known translations against public SwiftUI global frames; never qualifies
+native-window/PNG mapping. Split-owner completeness is an optional negative case.
 """
 import json
 from pathlib import Path
@@ -57,6 +58,7 @@ def positive(directory):
         return True
 
     frames = {}
+    mapped = set()
     for source, part in PARTS.items():
         name = 'ActorScopeFixture.'+source
         candidates = [i for i, owner in owners.items() if owner == name and outermost(i, name)]
@@ -65,11 +67,23 @@ def positive(directory):
         assert state['availability'] == 'known', part
         geometry = state['value']['value']
         assert geometry['coordinate_space']['units'] == 'pt'
-        assert geometry['transform']['status'] == 'unknown', 'unqualified transform promoted'
         rect = geometry['shape']['value']
         frames[part] = [rect[k] for k in ('x', 'y', 'width', 'height')]
         assert frames[part][2:] == oracle['frames'][part][2:], part+' size mismatch'
-        if part not in ('row', 'label'):
+        transform = geometry['transform']
+        if transform['status'] == 'known':
+            mapping = transform['transform']
+            assert mapping['from'] == geometry['coordinate_space']
+            assert mapping['target'] == document['context']['target']
+            assert mapping['surface'] == nodes[candidates[0]]['surface']
+            assert mapping['to']['units'] == 'pt' and mapping['to']['origin'] == 'top_left'
+            affine = mapping['affine']
+            assert affine[:4] == [1, 0, 0, 1], 'unsupported fixture mapping'
+            converted = [rect['x']+affine[4], rect['y']+affine[5], rect['width'], rect['height']]
+            assert converted == oracle['frames'][part+'-global'], part+' transformed mismatch'
+            mapped.add(part)
+        elif part not in ('row', 'label'):
+            assert transform['status'] == 'unknown'
             assert frames[part] == oracle['frames'][part+'-global'], part+' global mismatch'
     # This checks an observed pair inside one fixture scroll subtree. It does not
     # promote the Snapshot's separate unknown transforms to a common space.
@@ -81,14 +95,14 @@ def positive(directory):
         if state['availability'] == 'known':
             rect = state['value']['value']['shape']['value']
             assert [rect['width'], rect['height']] != [37, 19], 'outside sentinel acquired'
-    return oracle['pid'], document['context']['target'], frames
+    return oracle['pid'], document['context']['target'], frames, mapped
 
 
 def main():
     assert len(sys.argv) in (4, 5), __doc__
     wide, narrow, duplicate = map(Path, sys.argv[1:4])
-    wide_pid, wide_target, wide_frames = positive(wide)
-    narrow_pid, narrow_target, narrow_frames = positive(narrow)
+    wide_pid, wide_target, wide_frames, wide_mapped = positive(wide)
+    narrow_pid, narrow_target, narrow_frames, narrow_mapped = positive(narrow)
     assert wide_pid == narrow_pid and wide_target == narrow_target, 'different process generations'
     assert wide_frames['query'][2]-narrow_frames['query'][2] == 140
     result = manifest(duplicate)
@@ -112,7 +126,9 @@ def main():
         else:
             assert result['snapshot'] is None and result['exit_status'] != 0
     print('PASS: seven part sizes; five global frame matches; same-process resize; duplicate refusal.')
-    print('PENDING: product capture, split body owners, scroll-content/window mapping.')
+    if wide_mapped == narrow_mapped == set(PARTS.values()):
+        print('PASS: all seven root-space translations match public SwiftUI geometry in both states.')
+    print('PENDING: product capture and native-window mapping; split coverage requires its separate case.')
 
 
 if __name__ == '__main__':
