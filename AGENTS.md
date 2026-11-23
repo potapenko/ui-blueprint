@@ -16,6 +16,8 @@ still govern other projects, production services, binary distribution and host r
 
 ## Communication for bug-fix chats
 
+Open a bug-fix chat when the request identifies a UI Blueprint failure to fix or explicitly asks to add missing tool support. Requests for an existing command, a screenshot, a measurement or a QA run belong in the requesting team's existing chat.
+
 For each new defect, follow the [bug chat onboarding and handoff](docs/plans/ui-blueprint/execution.md#bug-chat-handoff).
 Create a regular user-visible project chat, give it the context to prepare its
 own implementation plan, and exchange direct chat links with the reporter.
