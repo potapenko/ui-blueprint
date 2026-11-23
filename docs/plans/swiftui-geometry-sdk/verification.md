@@ -1,6 +1,6 @@
 # Acceptance, compatibility and release
 
-Part of [PLAN.UIB.SWIFTUI-GEOMETRY@1](../swiftui-geometry-sdk.md). Checks below are planned, not executed results. Keep acceptance proportional to the changed boundary and reuse valid evidence.
+Revision-1 alternative under [PLAN.UIB.SWIFTUI-GEOMETRY@2](../swiftui-geometry-sdk.md). Whole-application acquisition now takes precedence over the slice-first delivery below; follow [Xcode qualification](xcode-hierarchy.md) first. Checks below remain planned, not executed results; apply only to the selected implementation and reuse valid evidence.
 
 ## First usable slice: the stopping point for architectural experiments
 

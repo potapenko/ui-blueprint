@@ -1,6 +1,6 @@
 # Native integration and build plan
 
-Part of [PLAN.UIB.SWIFTUI-GEOMETRY@1](../swiftui-geometry-sdk.md). This is prospective scope; no app modification or launch was performed while writing the plan.
+Revision-1 alternative under [PLAN.UIB.SWIFTUI-GEOMETRY@2](../swiftui-geometry-sdk.md). The coverage table remains a regression inventory for one globally instrumented build, not separate builds/requests for annotation. First qualify the [Xcode whole-hierarchy route](xcode-hierarchy.md); do not assume these manual marker integrations are necessary. No app modification or launch was performed while writing this plan.
 
 ## Standard requirement for a consuming SwiftUI project
 

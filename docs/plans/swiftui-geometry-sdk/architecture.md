@@ -1,6 +1,6 @@
 # SDK, host and component query architecture
 
-Part of [PLAN.UIB.SWIFTUI-GEOMETRY@1](../swiftui-geometry-sdk.md). Everything marked proposed is an implementation choice awaiting plan approval; existing canonical semantics remain binding.
+Revision-1 alternative under [PLAN.UIB.SWIFTUI-GEOMETRY@2](../swiftui-geometry-sdk.md). The user rejected component-by-component delivery. Qualify the [Xcode whole-hierarchy route](xcode-hierarchy.md) first; this SDK/host design is not the selected default or authority for widespread marker edits. Existing canonical semantics remain binding.
 
 ## Package and responsibility split
 

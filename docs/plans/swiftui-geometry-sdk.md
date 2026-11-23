@@ -1,6 +1,6 @@
 # SwiftUI geometry SDK: execution plan
 
-- Plan: `PLAN.UIB.SWIFTUI-GEOMETRY@1`, 2026-11-23; status: proposed, planning complete, implementation not started.
+- Plan: `PLAN.UIB.SWIFTUI-GEOMETRY@2`, 2026-11-23; status: method selection reopened by direct user correction. The whole-application outcome below supersedes the component-by-component delivery premise of revision 1.
 - Blueprint plan/SDK owner: chat `01a20a46-e5d0-7710-a5ce-9a93d8b82f02`. The user designated [Добавь геометрию в сборку](codex://threads/01a20a56-736d-7751-a552-792eecdddb68) on 2026-11-23 as the native integration counterpart. This authorizes the named handoff, not new chats/workers or execution of the whole proposed plan.
 - User authority: the 2026-11-23 reply explicitly says «разрешаю добавить какое-то дополнительно в Mac-приложение, чтобы мы нормально собирали информацию с него» and «подготовь план». It agrees with the audit and requests Mac/future iPhone/iPad coverage. This authorizes this plan, not its execution now.
 - The former immutable-donor restriction is not a prerequisite for the proposed integration. Preserve old evidence/builds; qualify a new instrumented source revision instead of relabelling old observations.
@@ -8,9 +8,17 @@
 
 ## Outcome
 
-An agent selects an owned running SwiftUI app, lists its registered components, selects a component, obtains its actual children and layout rectangles, and measures size/gaps through the Rust engine. The same route works after resize, state changes and remount. Routine capture requires no LLDB, private SwiftUI graph decoding or new screen-specific extraction script.
+One application-wide diagnostic integration/build serves every requesting chat. One request captures the full available mounted hierarchy of the selected app/window, including its current presentation roots, with source geometry. Selection/measurement of individual components happens on that capture; it must not require new marker edits, a special app build or a new extraction chat. Rebuild only for actual source/dependency changes, never for each capture.
 
-Deliver one reusable Swift package, a matching installed CLI/skill route, and verified integrations in the real PlayPhrase.me Mac, iPhone and iPad compositions. A package build, fixture result or root-node count alone does not complete this outcome.
+The user explicitly rejected delivery as separate Random/Actors/Practice instrumentation tasks and pointed to Xcode's Debug View Hierarchy. First qualify that existing whole-hierarchy source and its saved archive; do not assume manual marker coverage is required. Screens not instantiated yet have no current layout; they enter later captures when normally opened in the same build. This does not justify omitting mounted nodes or redefining full capture as a small sample.
+
+## Revision 2: source selection before global instrumentation
+
+The new primary route is [Xcode hierarchy qualification](swiftui-geometry-sdk/xcode-hierarchy.md). Apple documents SwiftUI hierarchy/size inspection and export to `.viewhierarchy`. Source review also identified `LNViewHierarchyDumper`, a reusable development-only caller of Xcode's internal hierarchy framework. Neither route has yet been qualified on this app/Xcode27.2. There is no evidence here that per-element annotation is necessary or that the library already supplies complete Mac SwiftUI output.
+
+Required order: real owner-produced Xcode reference capture → inspect original archive and import its hierarchy/geometry → qualify repeatable whole-app acquisition → one integrated diagnostic build and installed consumer path → Mac-wide and mobile acceptance. Named dialogs are regression cases within that one delivery, not separate products or consumer prerequisites.
+
+The remaining revision-1 SDK design below and its three detailed leaves are retained as a **conditional alternative**, not the selected implementation. Do not begin widespread manual annotations, a file transport, macros or a new host solely on that earlier proposal. Reuse existing SDK where useful; select further integration only against observed gaps in the Xcode route. Old decoder-specific bans/failures do not establish that Apple's supported Xcode UI capture fails; they also do not automatically authorize reusing the withdrawn decoder.
 
 ## Basis: requirement, implementation, proposal
 
@@ -27,7 +35,7 @@ Mode on approval: **Evolve** in diagnostic observation, SDK/host API, CLI and in
 
 Before source edits, register the approved deltas in the selected contracts. Add bounded leaves for capture-host and component-query responsibilities; link them through the existing registry. Do not copy this plan into specifications or load unrelated product contracts. Open each affected screen's existing route before touching its source or running its scenarios.
 
-## Decisions proposed for approval
+## Revision-1 alternative: not selected pending Xcode qualification
 
 1. Extend `UIBlueprintSwiftUI`; do not add SwiftUI Introspect/ViewInspector, a second geometry engine, a new service or a macro framework.
 2. Keep the collector pure SwiftUI/Foundation/Combine. Add one optional `UIBlueprintCaptureHost` target in the same package for reusable admission, request IO, catalogue and publication; app adapters retain product state and scene ownership.
@@ -37,7 +45,7 @@ Before source edits, register the approved deltas in the selected contracts. Add
 6. Ship a standard tag-pinned Swift Package Manager entry. Keep legacy local-package consumption working during migration.
 7. Deliver a real Mac vertical slice before broad instrumentation, then finish the Mac coverage matrix, then qualify iPhone/iPad with the same SDK and protocol.
 
-## Execution sequence and exit criteria
+## Revision-1 implementation sequence: conditional alternative
 
 | Step | Work | Exit condition |
 | --- | --- | --- |
@@ -61,7 +69,7 @@ Within P1 first prove the missing parts by extending the existing app-owned SDK 
 
 ## Write scope and ownership
 
-For this planning task only: this file and its three linked plan leaves. No product specs, source, build configuration, installation, app processes or other chats change.
+This correction changes this plan and its linked planning documents only. It records the new user outcome and research evidence; no application source, package integration or live Xcode capture has been changed by the correction.
 
 On implementation approval, UI Blueprint owns `plugins/swiftui/`, a root `Package.swift`, narrowly affected `crates/cli/` and existing engine scope helpers if required, focused Swift/bridge/CLI tests, selected specs, SDK/skill/install documentation and release inventory. Preserve old package entry paths, wire formats and source-capture experiments.
 
@@ -75,4 +83,4 @@ Prove file-event delivery in the existing sandbox; selected-root request cost un
 
 ## Current state
 
-Plan only. Existing user permission removes the need to ask again whether diagnostic instrumentation may be added to the Mac app. Implementation begins after approval of this concrete plan or a direct instruction to execute it. No runtime results are claimed for proposed functionality.
+The user now explicitly directs a global solution and allows required app additions. The concrete acquisition method is being corrected under the latest request to investigate Xcode documentation; revision 1 is not blanket approval for its extra architecture. Next evidence is the owner-produced full Xcode hierarchy and its actual structured contents. No runtime results are claimed for either proposed acquisition method.
