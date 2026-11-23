@@ -52,7 +52,35 @@ target; the separate reviewed one-attempt owner packet governs acquisition.
 Observed implementation establishes the source-local relationship above. This
 adapter proposes only its lossless representation using the existing schema.
 
-Actual Guest Tour acquisition, full-card coverage, coordinate mapping and resize /
-composition acceptance remain pending. A synthetic normalization check cannot
-close those criteria. Runtime evidence belongs in the task-owned external area,
-not in this source directory. No released SDK or shared CLI behavior changes.
+## Actual first observation and remaining work
+
+The owner completed the one admitted G2 run on November 23: one hardware hit,
+normal detach, the same PID/birth/CG window, responsive AX/native capture, then
+LLDB exit 0. `context.card` measured 228 × 95 pt. The Rust engine measured its
+horizontal gap to the source target as 23.935294000000113 pt. Canonical validate,
+inspect and four measurements passed on the actual receipt.
+
+This was an intermediate zoom state: before 1920 × 1050, collector-after
+1910 × 1046, subsequently settled 900 × 572 pt. It does not measure the settled
+narrow image. The one-attempt package is consumed and must not be reused.
+All 20 card IDs remained present according to the owner's independent postcheck.
+
+Evidence retained outside Git: `/Volumes/Develop-2TB/Develop/tmp/` contains
+`uib-s14-normalize-2fzuh8dg/real-context-snapshot.json` and corresponding receipt,
+queries and measurements. The consumer's `playphraseme-guest-tour-01a20845-sy9r4vhv/`
+contains `evidence/source-g2-probe-receipt.json`, transcript and before/after native
+captures. Original acquisition is `uib-s14-g2.DtXJ4G7P/public-card.json`.
+
+The next candidate must avoid collecting the first frame of an animated resize.
+Proposed bounded method: establish a settled window first, arm the fixed sites,
+then let the owner open Tour through its normal control. Collect only the fixed
+public card/target frames, map viewport/origin, connections origin and card/group
+IDs at their existing source sites. Preserve separate observation intervals;
+require the expected card set, matching stationary-window identity and a normal
+detach. Missing fields or incomplete sets do not become a complete map.
+Qualify that change on an owned console fixture and obtain non-author review
+before a new consumer run. A new packet replaces, rather than resets, the consumed
+one. Full-map, stable wide/narrow and composition acceptance remain open.
+
+Runtime evidence belongs in the task-owned external area, not in this source
+directory. No released SDK or shared CLI behavior changes.
