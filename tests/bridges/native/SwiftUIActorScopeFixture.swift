@@ -47,7 +47,11 @@ struct ActorClose: View {
 
 struct ActorQuery: View {
     @Binding var query: String
-    var body: some View { TextField("Search", text: $query).actorOracle("query") }
+    var body: some View {
+        TextField("Search", text: $query)
+            .accessibilityIdentifier("fixture.actor.query")
+            .actorOracle("query")
+    }
 }
 
 struct ActorPossible: View {
@@ -87,6 +91,17 @@ struct ActorPicker: View {
     @State private var possible = false
 
     var body: some View {
+        Group {
+            pickerContent
+            if ProcessInfo.processInfo.environment["UIB_ACTOR_SPLIT_OWNER"] == "1" {
+                // Same body owner, separate output branch: an ancestry-only
+                // selector must not silently report the first branch as complete.
+                Color.purple.frame(width: 31, height: 13).actorOracle("split-owner")
+            }
+        }
+    }
+
+    private var pickerContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack { ActorHeader(); Spacer(); ActorClose() }
             ActorQuery(query: $query)
@@ -101,10 +116,15 @@ struct ActorPicker: View {
 
 struct ActorFixtureContent: View {
     @State private var narrow = false
+    @State private var unrelatedQuery = ""
 
     var body: some View {
         VStack(spacing: 17) {
             Color.orange.frame(width: 37, height: 19).actorOracle("outside")
+            if ProcessInfo.processInfo.environment["UIB_ACTOR_NEIGHBOR_FIELD"] == "1" {
+                TextField("Unrelated field", text: $unrelatedQuery)
+                    .accessibilityIdentifier("fixture.outside.query")
+            }
             ActorPicker()
             if ProcessInfo.processInfo.environment["UIB_ACTOR_DUPLICATE"] == "1" {
                 // Negative case: another source owner with the same native field class.

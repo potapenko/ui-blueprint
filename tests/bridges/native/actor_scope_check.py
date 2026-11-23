@@ -1,6 +1,6 @@
 """Check synthetic Actors captures against independent public SwiftUI geometry.
 
-Usage: python3 -B actor_scope_check.py WIDE_DIRECTORY NARROW_DIRECTORY DUPLICATE_DIRECTORY
+Usage: python3 -B actor_scope_check.py WIDE_DIRECTORY NARROW_DIRECTORY DUPLICATE_DIRECTORY [SPLIT_DIRECTORY]
 Consumes fixture-only body-owner attribution, never supplies product correspondence.
 Does not qualify scroll-content-to-window transforms or split owner completeness.
 """
@@ -85,8 +85,8 @@ def positive(directory):
 
 
 def main():
-    assert len(sys.argv) == 4, __doc__
-    wide, narrow, duplicate = map(Path, sys.argv[1:])
+    assert len(sys.argv) in (4, 5), __doc__
+    wide, narrow, duplicate = map(Path, sys.argv[1:4])
     wide_pid, wide_target, wide_frames = positive(wide)
     narrow_pid, narrow_target, narrow_frames = positive(narrow)
     assert wide_pid == narrow_pid and wide_target == narrow_target, 'different process generations'
@@ -95,6 +95,22 @@ def main():
     assert result['code'] == 'native_anchor_unresolved' and result['exit_status'] == 4
     assert result['snapshot'] is None and result['cleanup'] == 'detached_restored'
     assert not list(duplicate.glob('snapshot-*.json'))
+    if len(sys.argv) == 5:
+        split = Path(sys.argv[4])
+        result = manifest(split)
+        assert result['cleanup'] == 'detached_restored'
+        if result['status'] == 'ready':
+            expected = read(split/'oracle-after.json')['frames']['split-owner'][2:]
+            nodes = read(split/result['snapshot'])['artifact']['data']['nodes']
+            sizes = []
+            for node in nodes:
+                state = next(p['state'] for p in node['properties'] if p['field'] == 'layout_bounds')
+                if state['availability'] == 'known':
+                    rect = state['value']['value']['shape']['value']
+                    sizes.append([rect['width'], rect['height']])
+            assert expected in sizes, 'split body-owner branch silently omitted'
+        else:
+            assert result['snapshot'] is None and result['exit_status'] != 0
     print('PASS: seven part sizes; five global frame matches; same-process resize; duplicate refusal.')
     print('PENDING: product capture, split body owners, scroll-content/window mapping.')
 

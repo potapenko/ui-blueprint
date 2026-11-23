@@ -87,6 +87,21 @@ The fixture compiled with Swift6. Both positive Snapshots passed the installed
 five-global-frame, same-process-resize and duplicate-refusal checks.
 These results qualify the named synthetic checks only, not the product scenario.
 
+## Split-owner counterexample
+
+`actor-split-12` proves the contiguous prototype is insufficient: one ActorPicker
+body emits its picker plus a separate31×13pt branch. The public oracle records
+that branch, but the experimental Snapshot silently omits it while returning ready.
+The optional fourth directory to `actor_scope_check.py` catches this with
+`split body-owner branch silently omitted` (exit1). This is an intentionally
+failing regression against the temporary prototype, not a release candidate.
+The common reader owner must include all qualified branches or refuse this case.
+
+A separate fixture with `.accessibilityIdentifier` on the field found no identifier
+on the matched native AppKitTextField. This does not establish a product identity
+bridge. Shared reader inputs for further runs are frozen from58c3df0 under
+`source-pin`, avoiding concurrent S13 edits. Neither experiment contacted the donor.
+
 ## Remaining implementation and acceptance
 
 S13 integrates the common body-owner correction, including disjoint-owner and
