@@ -330,6 +330,23 @@ class CacheChecks(unittest.TestCase):
         r.anchored_scope=incomplete
         with self.assertRaisesRegex(Refusal,'anchor_owner_search_incomplete'):r.anchored_owner_scope(None)
 
+    def test_native_leaf_uses_selected_path_not_last_unrelated_candidate(self):
+        r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Field',native_match='ancestor_owner',
+                                     containing_type='App.Query',selection='geometry_records',leaf_types=['App.Query'])
+        r.c=SimpleNamespace(selected_window=100,objc=lambda *args:100)
+        r.native_views=lambda *args:[10,20]
+        r.represented_layout=lambda view:(view,100)
+        def scope(host,binding):
+            r.scan_work=8;r.anchor_next={binding[0]:binding[0]+1}
+            if binding[0]==20:raise Refusal('anchor_card_owner_unresolved')
+            return [500]
+        r.anchored_scope=scope
+        self.assertEqual(r.anchored_owner_scope(None),[500]);self.assertEqual(r.anchor_next,{10:11})
+        def two(host,binding):
+            r.scan_work=8;r.anchor_next={binding[0]:binding[0]+1};return [500]
+        r.anchored_scope=two
+        with self.assertRaisesRegex(Refusal,'native_leaf_multiple_anchors'):r.anchored_owner_scope(None)
+
     def test_native_candidate_wrong_window_refuses_before_binding(self):
         r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Cursor',native_match='ancestor_owner')
         r.c=SimpleNamespace(selected_window=100,objc=lambda obj,name:100 if obj==1 else 200)

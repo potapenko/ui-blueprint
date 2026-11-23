@@ -73,12 +73,16 @@ def request(raw):
         if scoped_native:
             required_keys = {'type', 'native_view_type', 'native_match'}
             if (scope['native_match'] not in ('within_owner', 'ancestor_owner', 'overlays_in_owner') or not required_keys <= set(scope)
-                    or set(scope) - required_keys - {'containing_type', 'selection'}):
+                    or set(scope) - required_keys - {'containing_type', 'selection', 'leaf_types'}):
                 raise Refusal('invalid_scope', 2)
         elif (not isinstance(scope, dict) or set(scope) not in
                 ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'},
                  {'type', 'containing_type', 'native_view_type', 'selection'},
                  {'type', 'containing_type', 'native_view_type', 'selection', 'leaf_types'})):
+            raise Refusal('invalid_scope', 2)
+        if (scoped_native and 'leaf_types' in scope
+                and (scope['native_match'] != 'ancestor_owner' or 'containing_type' not in scope
+                     or scope.get('selection') != 'geometry_records')):
             raise Refusal('invalid_scope', 2)
         if (scoped_native and scope['native_match'] == 'overlays_in_owner'
                 and (set(scope) != {'type', 'native_view_type', 'native_match', 'containing_type', 'selection'}

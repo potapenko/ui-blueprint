@@ -834,7 +834,7 @@ class CacheReader:
             raise Refusal('native_owner_window_mismatch')
         if not bindings or len({attribute for attribute, _ in bindings}) != len(bindings):
             raise Refusal('native_anchor_unresolved')
-        candidates = {}
+        candidates, witness_paths = {}, {}
         self.anchor_scan_base = 0
         for binding in bindings:
             try:
@@ -844,10 +844,16 @@ class CacheReader:
                     raise
             else:
                 candidates.setdefault(tuple(roots), []).append(binding[0])
+                if self.req['scope'].get('leaf_types'):
+                    witness_paths[binding[0]] = dict(self.anchor_next)
             self.anchor_scan_base += self.scan_work
         if len(candidates) != 1:
             raise Refusal('native_owner_unresolved' if not candidates else 'native_owner_ambiguous')
         roots, anchors = next(iter(candidates.items()))
+        if self.req['scope'].get('leaf_types'):
+            if len(anchors) != 1:
+                raise Refusal('native_leaf_multiple_anchors')
+            self.anchor_next = witness_paths[anchors[0]]
         self.selected_source = dict(selection_source='native_owner_ancestor', source_type=self.req['scope']['type'])
         self.anchor_ids = set(anchors)
         self.anchor_matches = 0

@@ -1,7 +1,7 @@
 # Native-bound SwiftUI source ancestor
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture.native-owner`.
-- Contract: `UIB.SWIFTUI-NATIVE-OWNER@1`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-NATIVE-OWNER@2`; Authority: Active; Stability: Evolving.
 - Authority: approved S13 source-attributed component plan and coordinator's
   explicit shared S03 reader assignment on2026-11-23.
 - Requires: [debug capture](swiftui-debug-capture.md), [IDENTITY@1](identity.md),
@@ -29,7 +29,7 @@ and is not accepted. Declared leaf cuts remain explicit excluded branches.
 
 Optional `scope.native_match="ancestor_owner"` uses the existing source type and
 exact native class, with optional containing_type and geometry_records selection.
-No leaf_types in this initial mode. Enumerate all matching native views within the
+Enumerate all matching native views within the
 original128-view bound; independently qualify every provider/weak graph binding. Check each native view
 belongs to the exact selected NSWindow before and after its weak binding; check
 the host membership at both ends. A same-class view in another window refuses.
@@ -61,3 +61,15 @@ remain absent rather than aliasing another declaration. Occurrence tokens are
 nonce-scoped, not raw attributes/pointers or cross-capture identities. These are
 runtime source associations, not app-declared components, action refs, visibility
 or completeness claims. Original node type and layout evidence remain unchanged.
+
+## OWNER.SINGLE-WITNESS-CUTS
+
+S03's source-shaped top-control fixture requires declared leaf cuts while the
+same native TextField class also occurs outside the picker. Optional leaf_types
+is admitted for ancestor_owner only with containing_type and geometry_records.
+Resolve every candidate first. Require exactly one qualifying native witness in
+the unique selected ancestor; otherwise refuse native_leaf_multiple_anchors.
+Preserve that selected witness's anchor_next path, rather than the last candidate's
+path. Inside a cut continue only along this path. All prior leaf-hit accounting,
+ancestry/binding checks, candidate search and original budgets remain. This does
+not permit multi-witness cuts or leaf_types in overlays_in_owner/within_owner.

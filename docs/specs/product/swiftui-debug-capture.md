@@ -11,7 +11,7 @@
   [IDENTITY@1](identity.md), [GEOMETRY@2](geometry.md), [PRIVACY@1](privacy.md),
   [EXCHANGE@2](exchange.md), [LIFECYCLE@1](lifecycle.md), [CLI@21](cli.md).
 - Conditional requires, mounted native parts: [NATIVE-PARTS@1](swiftui-native-parts.md).
-- Conditional requires, native body ancestors: [NATIVE-OWNER@1](swiftui-native-owner.md).
+- Conditional requires, native body ancestors: [NATIVE-OWNER@2](swiftui-native-owner.md).
 - Conditional requires, fixed backend: [BACKEND@1](swiftui-debug-backend.md).
 - Accepted/released baseline: none. Existing SDK/AX/GPUI paths are unchanged.
 - Implementation status: c89b277 is withdrawn from product use after actual getter

@@ -79,15 +79,23 @@ this is not exact equality. System Close internals and keycap text still contain
 dirty transforms. Do not substitute the known outer keycap/button frame for them.
 Artifacts: `random-events` / `random-extent` under the owned evidence root.
 
-Repeated attachment then exposed an event ownership failure, before any calls.
-Current source uses one owned primary SBListener throughout connect/attach/calls/
-recovery. Its new recovery draining has pure coverage but not a fresh live pass.
-One older loaded session remains held: fixture54791 / generation54791:1795460657.492167,
-LLDB58411 / backend58432; no product target. Normal owner termination command is
-queued but the old listener path does not consume the stop event. The user has
-been asked for explicit exceptional termination of this fixture and then its
-own debugger because the normal recovery route is unusable. No answer yet;
-no external termination performed. Do not auto-repeat collection or kill the peer.
+Recovery gate closed on2026-11-23. The operator explicitly authorized termination
+of only fixture54791 and its debugger/backend58411/58432. Identity and parent/path
+checks matched; all three processes were confirmed absent after that one cleanup.
+The fixed listener implementation then captured phases0/1/2 in the same fresh
+Random fixture55315:22/39/39nodes,69/86/86calls,372/588/459raw, all canonical valid,
+restored detach and ordinary phase transitions. Evidence `random-reviewed-{0,1,2}`.
+A separate fixture58537 intentionally entered recovery immediately after accepted
+RemoteAttach. The retained primary listener delivered its stop event, the explicit
+bound owner command was consumed, termination was observed, and the manifest
+reported owner_terminated_fixture/calls0/no Snapshot. Process absence was verified.
+Evidence `recovery-reviewed`. No exceptional kill was needed for this regression.
+
+Independent finite source review of0080570 from S15 repeated104checks and added
+wrong/unbound/uncertain attach and native-basis drift cases; no blocking finding
+in that reviewed scope. S03 repeated stock8c wide/narrow/split source fixtures;
+all seven frames and the split branch passed. Those reviews do not constitute
+whole-memory universal proof or a real product measurement.
 
 Review findings addressed in source: allocator `available` is free bytes, so every
 buffer header/item now fits the independently queried malloc_size extent before
@@ -102,10 +110,13 @@ source-shaped top-controls and native-overlay experiments await integrated repla
 Dedicated mounted-row helperbf6007c is now integrated through explicit
 `overlays_in_owner`, structural-cache and union-budget hooks; its integrated live
 regressions await the S03 owner. S15 likewise waits on a bounded
-selector, not transform arithmetic. Leaf cuts in ancestor_owner remain unsupported.
+selector, not transform arithmetic. NATIVE-OWNER@2 adds cuts only after all candidates resolve and exactly one
+qualifying witness remains; preserve that witness path. The S03 requested
+case has focused coverage and still needs integrated live replay.
 S03 supplied its experiment under1f807b33; no ownership is transferred silently.
 
 Runtime/packages: `/tmp/uib-s13-le8xj83i`; owned external scratch/evidence:
 `/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0`. Active fixtures/evidence remain
-needed. The builds chat owns adding swiftui_cache_transform.py to CACHE_FILES.
+needed. The builds chat owns adding swiftui_cache_transform.py, swiftui_debug_backend.py
+and swiftui_native_parts.py with historical manifest6 compatibility.
 No successful S13 part measurement, installation or release is claimed yet.
