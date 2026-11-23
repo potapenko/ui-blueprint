@@ -61,6 +61,13 @@ was not invoked. Evidence: `offline-group-id-getter.txt` in the component task a
   partial membership; absent group is known-none, not unavailable geometry.
 - `process_component.py RECEIPT UIB_BUNDLE`: normalize, validate and measure
   known frames through the matching installed Rust CLI after owner recovery.
+- `prepare_case.py --template VERIFIED_PROFILE --card ID --frame X Y W H
+  [--kind geometry|group]`: build one new private packet from the previously
+  verified fixed G2 assets. It compiles the read-only `identity.swift`, seals
+  scripts/profile/binaries and verifies all four source sites offline. It never
+  queries or attaches the app. Output names the one owner command and manifest.
+  Its wrapper returns4 with an explicit not-observed outcome on a clean deadline;
+  that result does not prove absence. Successful output runs canonical processing.
 - `check.py UIB_BUNDLE TASK_OUTPUT`: original13negative/synthetic width checks.
 - `check_component.py UIB_BUNDLE TASK_OUTPUT`:5component/5group negatives and
   Rust recomputation across different local origins (-10pt,4evidence records).

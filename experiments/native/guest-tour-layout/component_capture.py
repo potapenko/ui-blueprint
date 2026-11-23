@@ -192,13 +192,20 @@ def interrupt_for_timeout():
     reasons=[th for th in proc if th.GetStopReason() not in (lldb.eStopReasonNone,lldb.eStopReasonInvalid)]
     require(reasons and all(th.GetStopReason()==lldb.eStopReasonSignal and th.GetStopReasonDataAtIndex(0) in (2,17) for th in reasons),'timeout_unexpected_stop_retained')
     detach_owned()
+    if not fixtureMode:
+        require(after_gui['window_screen_pt']==before_gui['window_screen_pt'],'window_changed_after_detach')
+        outcome={'format':'playphraseme.guest-tour.outcome-1','status':'not_observed_within_interval','card':profile['card'],
+                 'before':before_gui,'after':after_gui,'detached_verified':True,'absence_proven':False,
+                 'reason':'no-complete-selected-component-before-deadline'}
+        fd=os.open(EVIDENCE/'outcome.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+        with os.fdopen(fd,'w') as stream:json.dump(outcome,stream,allow_nan=False)
     print('NO_SELECTED_COMPONENT; detached without geometry publication',flush=True)
 
 
 def run():
     global peer,proc,target,child,target_pid,contacted,before_gui,fixtureCase
     require(RUN_KIND in ('offline','owner','fixture','fixture-nohit','fixture-missing','fixture-absent','owner-group','fixture-group'),'invalid_mode')
-    require(os.isatty(0) and os.isatty(1),'interactive_owner_pty_required')
+    require(RUN_KIND=='offline' or os.isatty(0) and os.isatty(1),'interactive_owner_pty_required')
     require(profile['card'] in cards and type(profile['window_frame']) is list and len(profile['window_frame'])==4,'profile_refused')
     for path in expected:pin(path)
     mapped(os.getpid(),debug)
@@ -213,7 +220,7 @@ def run():
     if RUN_KIND=='offline':
         for kind in ('map','origin','card','group'):
             install(kind,False);drop_owned()
-        print('OFFLINE_THREE_SOURCE_SITES_VERIFIED; no process selected',flush=True)
+        print('OFFLINE_FOUR_SOURCE_SITES_VERIFIED; no process selected',flush=True)
         return
     left,right=socket.socketpair()
     peer=subprocess.Popen([peerbin,'--fd='+str(right.fileno())],pass_fds=(right.fileno(),),stdin=subprocess.DEVNULL,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
