@@ -84,13 +84,27 @@ Fresh fixture captures36/37 succeeded. No outstanding debugger hold from those r
 
 ## Remaining dependency and next action
 
-S13 integrated/registered the dedicated mode in0080570 and corrected the reported
-allocator-extent finding. Source glue review confirms cached-read privacy and union
-budget hooks. The helper's per-native selected-window recheck is tightened in this
-handoff. Fresh008runtime awaits the shared owner's listener/recovery qualification;
-do not attach the product on an unqualified peer. Distribution CACHE_FILES still
-needs the new helper/transform/backend modules through its existing build owner.
-Repeat exact integrated pin (including backend) before product admission. Consumer prepared
+S13 closed listener/recovery qualification in34e6fb1. Exact stock34e+qualified
+data-only peer passed S03 rows41 (8rows/8labels,230calls) and top42 (28nodes,
+433raw,151calls), canonical valid and normal detach. Exact one-shot product top
+admission d98f1865 was packaged and preflighted. It was **not run/consumed**:
+S13's first real product capture exposed `cache_association_limit` in eager global
+association loading before source selection, so Actors owner held the attempt.
+
+S13 delegated the addressed association helper to this chat. Its exact pointer
+hash agrees with binary disassembly and native libc++ vectors. Selected owner
+lookups match the old reader, and16focused checks pass. But nonempty topology
+does not: a UI child can be an SG sibling, and actual SG parents missed4of11
+recorded UI parent links. [ASSOCIATIONS@2](../../../specs/product/swiftui-graph-associations.md)
+therefore retains verified hash lookup while public nonempty parent/child methods
+refuse. S13 investigates a source-qualified structural iterator; no AG callback,
+sort, model evaluation, heuristic ancestry or cap increase has been authorized by
+this helper. Evidence43–47 and association comparison JSON remain external.
+
+Build owner01a20929-8e9a-7830-834d-3e558e9ff18d accepted the packaging dependency;
+manifest migration must preserve old6 verify/install/rollback. Do not release the
+source helper as an accepted Actors outcome. Repeat the corrected source path on
+fixture then reissue immutable product packet. Consumer prepared
 immutable Actors with SWIFTUI_VIEW_DEBUG=29 and get-task-allow; fresh identity and
 state are in external consumer-ready.json and must be revalidated by that owner.
 Next real case: ready-list parts, normal layout change and scroll through the same
