@@ -4,7 +4,8 @@
 
 The operator assigned a separate UI Blueprint chat to each of these open
 defects. Each implementation owner works with the original consumer on its
-reproduction. The coordinator handles versioning, installation and publication.
+reproduction. The builds and releases chat `01a20929-8e9a-7830-834d-3e558e9ff18d`
+handles versioning, installation and publication.
 
 | Open defect | UI Blueprint owner chat | Consumer chat | Product acceptance |
 | --- | --- | --- | --- |

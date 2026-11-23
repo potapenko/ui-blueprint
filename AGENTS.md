@@ -16,6 +16,9 @@ still govern other projects, production services, binary distribution and host r
 
 ## Communication for bug-fix chats
 
+On receipt of each new UI Blueprint bug, the coordinator creates a dedicated
+project chat and sends it the reproduction, expected result and consumer contact.
+Follow-ups and duplicate reports go to the existing owner of that defect.
 Each assigned chat owns its fix through verification with the affected consumer.
 Send the coordinator one completion message with the commit, the verified case
 and instructions for delivery. Before completion, contact the coordinator only
@@ -23,6 +26,11 @@ when progress requires a specific decision or action from someone else.
 Batch any necessary consumer handoff. Skip acknowledgements, routine progress
 messages, and duplicate reports. The coordinator follows the existing chat
 state and asks for an update only when it changes what can be done.
+
+The builds and releases chat (`01a20929-8e9a-7830-834d-3e558e9ff18d`) owns
+packaging, CI, local installation, publication and release verification for
+all accepted fixes. It takes over existing release runs and notifies the
+teams waiting for the fix once the published version is ready to use.
 
 ## Read only the applicable route
 
