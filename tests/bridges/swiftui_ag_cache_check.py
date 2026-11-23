@@ -58,6 +58,14 @@ class CacheChecks(unittest.TestCase):
             with self.assertRaisesRegex(Refusal,'cache_association_limit'):r.associations()
             r.ptr.assert_not_called()
 
+    def test_metadata_index_at_limit_reaches_bounded_record_read(self):
+        r=reader();r.pointer=lambda value:value
+        words={r.graph+0x118:500,516:600,524:8192}
+        r.u64=lambda address:words[address]
+        r.ptr=Mock(side_effect=Refusal('bounded_record_probe'))
+        with self.assertRaisesRegex(Refusal,'bounded_record_probe'):r.associations()
+        r.ptr.assert_called_once_with(616)
+
     def geometry_reader(self, pair):
         r = reader()
         r.geometry_type = lambda *_: 16

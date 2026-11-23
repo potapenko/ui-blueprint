@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@21`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@22`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -35,7 +35,7 @@ qualification with no retry/quota increase. Restart/new identity needs new hando
 The source owner executes the capture; tool preparation grants no ownership of its
 process, input or stores. No production installation is implied.
 
-S13@19 admits exactly one owner-run after the direct user continuation and the
+S13@19 admitted one owner-run after the direct user continuation and the
 owner's fresh2026-11-23 handoff: request `s13-random-favorite-one-1`, PID13623,
 bundle `me.playphraseme.reference.random.s13.w01a20844`, birth1795452212.070178,
 CG1969. Scope is RandomCompletionDialog with the existing
@@ -47,8 +47,17 @@ finite independent source reviews and allocator extent correction are recorded i
 [the S13 receipt](../../plans/ui-blueprint/receipts/s13-random-completion.md).
 The owner validates the unchanged identity/state/hashes and runs once. First
 refusal ends this admission; no retries/quotas/signature changes are authorized.
+That request was consumed with cache_association_limit/14calls/restored detach.
 A partial Snapshot does not complete card/keycap/icon/gap acceptance. Product
 recovery stays with this exact owner and its explicit bound command.
+
+S13@22 admits a new request `s13-random-favorite-one-2` for the same exact
+13623/birth1795452212.070178/CG1969 and scope, after the materially changed
+ASSOCIATION-INDEX@1 policy and exact interval-audit optimization. Its3090-owner
+stress fixture produces the same39source nodes/frames/hierarchy as the small
+fixture in5.0697s, within unchanged2MiB/10s/tree/output bounds. Same backend pin,
+immutable donor and preflight/first-refusal rules. This is one new qualification
+attempt, not retry permission for the consumed old package or other identities.
 
 S03@20 independently admits request `actors-top-qualification-1`, PID14438,
 bundle `me.playphraseme.reference.actors03.nov23`, birth1795452248.9056358,
