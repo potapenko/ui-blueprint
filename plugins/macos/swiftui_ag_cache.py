@@ -10,6 +10,7 @@ GEOMETRY = {
     'CGPoint': ('$sSo7CGPointVMn', 16, (0, 8)),
     'CGSize': ('$sSo6CGSizeVMn', 16, (0, 8)),
     'ViewSize': ('$s7SwiftUI8ViewSizeVMn', 32, (0, 16)),
+    'ViewTransform': ('$s7SwiftUI13ViewTransformVMn', 48, (0, 8, 16, 32)),
 }
 
 
@@ -267,7 +268,9 @@ class CacheReader:
 
     def geometry_type(self, metadata, key):
         name = self.nominal(metadata)
-        if name not in (('CGPoint',) if key == 'position' else ('CGSize', 'ViewSize')):
+        allowed = {'position': ('CGPoint',), 'size': ('CGSize', 'ViewSize'),
+                   'transform': ('ViewTransform',)}
+        if name not in allowed.get(key, ()):
             raise Refusal('cache_geometry_type')
         mangled, size, offsets = GEOMETRY[name]
         descriptor = self.ptr(metadata+8, 4)
@@ -275,14 +278,14 @@ class CacheReader:
         if (symbol.GetMangledName() != mangled
                 or symbol.GetStartAddress().GetLoadAddress(self.c.t) != descriptor):
             raise Refusal('cache_geometry_descriptor')
-        if self.value_size(metadata) != (size, size, 8) or self.u32(descriptor+20) != 2:
+        if self.value_size(metadata) != (size, size, 8) or self.u32(descriptor+20) != len(offsets):
             raise Refusal('cache_geometry_layout')
         vector = self.u32(descriptor+24)
-        if not 2 <= vector <= 8 or struct.unpack('<II', self.read(metadata+vector*8, 8)) != offsets:
+        if not 2 <= vector <= 8 or struct.unpack('<'+'I'*len(offsets), self.read(metadata+vector*8, 4*len(offsets))) != offsets:
             raise Refusal('cache_geometry_layout')
         return size
 
-    def geometry(self, attribute, metadata, key):
+    def cached_geometry(self, attribute, metadata, key):
         expected_size = self.geometry_type(metadata, key)
         resolved, reason = self.resolve(attribute)
         if resolved is None:
@@ -307,13 +310,23 @@ class CacheReader:
         value = self.cached_storage(p, flags, size)
         if value is None:
             return None, 'cache_value_dirty'
-        pair = struct.unpack('<dd', self.read(value+delta, 16))
-        self.geometry_ranges.append((value+delta, value+delta+16))
+        return value+delta, None
+
+    def geometry(self, attribute, metadata, key):
+        value, reason = self.cached_geometry(attribute, metadata, key)
+        if value is None:
+            return None, reason
+        pair = struct.unpack('<dd', self.read(value, 16))
+        self.geometry_ranges.append((value, value+16))
         if not all(math.isfinite(x) for x in pair) or (key == 'size' and min(pair) < 0):
             raise Refusal('cache_geometry_value')
         return pair, None
 
-    def properties(self, element):
+    def translation_inputs(self, attribute, metadata):
+        from swiftui_cache_transform import translation_inputs
+        return translation_inputs(self, attribute, metadata)
+
+    def properties(self, element, track_anchor=True):
         p = self.owned_record(element, 32)
         value, visited, result = self.u32(p+28), set(), []
         while value:
@@ -326,10 +339,10 @@ class CacheReader:
             if index >= count or count > 4096:
                 raise Refusal('cache_key_limit')
             key = self.cstring(self.ptr(self.ptr(table)+index*8), 64)
-            if key == 'layoutComputer' and hasattr(self, 'anchor_ids') and self.u32(v+8) in self.anchor_ids:
+            if track_anchor and key == 'layoutComputer' and hasattr(self, 'anchor_ids') and self.u32(v+8) in self.anchor_ids:
                 self.anchor_matches += 1
                 self.matched_anchor_node = len(self.nodes)
-            if key in ('position', 'size'):
+            if key in ('position', 'size', 'transform'):
                 # No read of any unrequested TreeValue's type/value payload.
                 result.append((key, self.ptr(v), self.u32(v+8)))
             value = self.u32(v+20)
@@ -393,23 +406,30 @@ class CacheReader:
             known = False
         return [root for _, root in sorted(selected, key=lambda item: item[0])], known
 
-    def walk(self, element, parent=None, depth=1, witness_only=False):
-        if (element in self.raw_seen or len(self.raw_seen) + getattr(self, 'owner_scan_cost', 0) >= 1024
+    def walk(self, element, parent=None, depth=1, witness_only=False, inherited_transform=None):
+        if (element in self.raw_seen or
+                len(self.raw_seen | getattr(self, 'transform_context_seen', set()) | {element})
+                + getattr(self, 'owner_scan_cost', 0) > 1024
                 or depth > self.req['limits']['max_depth']):
             raise Refusal('cache_tree_limit', 2)
         self.raw_seen.add(element)
+        transform = inherited_transform
         p = self.owned_record(element, 32)
         metadata, flags, model = self.pointer(self.u64(p)), self.u32(p+12), self.u32(p+8)
         if not flags & 1 and metadata and model != self.nil_attribute:
             anchor_before = getattr(self, 'anchor_matches', 0)
             fields = self.properties(element)
+            transform = next((field for field in fields if field[0] == 'transform'), transform)
+            if transform is not None and not any(field[0] == 'transform' for field in fields):
+                fields.append(transform)
             selection = self.req.get('scope', {}).get('selection')
             leaves = self.req.get('scope', {}).get('leaf_types', ())
             leaf = self.qualified_nominal(metadata) if leaves else None
             if leaves and leaf not in leaves:
                 _, leaf = self.rule_owner(model, self.leaf_owner_names)
             stop = leaf in leaves
-            omit = (not stop and selection == 'geometry_records' and parent is not None and not fields
+            omit = (not stop and selection == 'geometry_records' and parent is not None
+                    and not any(field[0] in ('position', 'size') for field in fields)
                     and anchor_before == self.anchor_matches
                     and (not self.req['scope'].get('containing_type')
                          or self.qualified_nominal(metadata) != self.req['scope']['containing_type']))
@@ -431,7 +451,7 @@ class CacheReader:
                 self.boundary_hits[leaf] = self.boundary_hits.get(leaf, 0)+1
                 next_element = self.anchor_next.get(element)
                 if next_element is not None:
-                    self.walk(next_element, parent, depth+1, witness_only=True)
+                    self.walk(next_element, parent, depth+1, witness_only=True, inherited_transform=transform)
                 return
         elif self.req.get('scope', {}).get('native_match') == 'within_owner':
             # A reference on a transparent record cannot identify an emitted view.
@@ -442,17 +462,17 @@ class CacheReader:
         if witness_only:
             next_element = self.anchor_next.get(element)
             if next_element is not None:
-                self.walk(next_element, parent, depth+1, witness_only=True)
+                self.walk(next_element, parent, depth+1, witness_only=True, inherited_transform=transform)
             return
         child = self.u32(p+20)
         while child:
-            self.walk(child, parent, depth+1)
+            self.walk(child, parent, depth+1, inherited_transform=transform)
             child = self.u32(self.owned_record(child, 32)+24)
         children, order_known = self.child_subgraphs(element)
         if not order_known and parent is not None:
             self.nodes[parent]['child_order_unknown'] = True
         for child in children:
-            self.walk(child, parent, depth+1)
+            self.walk(child, parent, depth+1, inherited_transform=transform)
 
     def qualified_nominal(self, metadata):
         metadata = self.pointer(metadata)
@@ -739,11 +759,53 @@ class CacheReader:
             index = node['parent']
         raise Refusal('anchor_descendant_unresolved')
 
+    def transform_context(self, element):
+        """Only the nearest recorded transform; never outside layout/model values."""
+        seen = set()
+        while element:
+            if element in seen or len(seen) >= self.req['limits']['max_depth']:
+                raise Refusal('cache_transform_parent_limit', 2)
+            seen.add(element)
+            self.transform_context_seen.add(element)
+            if (len(self.raw_seen | self.transform_context_seen)
+                    + getattr(self, 'owner_scan_cost', 0) > 1024):
+                raise Refusal('cache_transform_parent_limit', 2)
+            p = self.owned_record(element, 32)
+            model = self.u32(p+8)
+            if model != self.nil_attribute:
+                self.selected_models.add(model)
+            fields = self.properties(element, track_anchor=False)
+            transform = next((field for field in fields if field[0] == 'transform'), None)
+            if transform is not None:
+                return transform
+            owner = self.page_owner(element)
+            parent = self.u32(p+16)
+            if parent:
+                if self.page_owner(parent) != owner:
+                    raise Refusal('cache_transform_parent_ownership')
+                element = parent
+                continue
+            if self.u32(owner+0x60) != element:
+                return None
+            resolved, _ = self.resolve(model, links_only=True)
+            if resolved is None:
+                return None
+            parents = {(sg, parent) for sg, pairs in self.links.items()
+                       for parent, attribute in pairs if attribute == resolved[0]}
+            if len(parents) != 1:
+                return None
+            parent_owner, element = parents.pop()
+            if self.page_owner(element) != parent_owner:
+                raise Refusal('cache_transform_parent_ownership')
+        return None
+
     def walk_branches(self, selected_roots):
         branches = []
+        self.transform_context_seen = set()
         for root in selected_roots:
             first = len(self.nodes)
-            self.walk(root)
+            context = self.transform_context(root)
+            self.walk(root, inherited_transform=context)
             branches.append([i for i in range(first, len(self.nodes)) if self.nodes[i]['parent'] is None])
         return branches
 
@@ -800,7 +862,11 @@ class CacheReader:
             if name:
                 props.append(dict(id=0, attribute=dict(type=name)))
             reason = None
+            transform_inputs, transform_unknown = None, 'transform-not-exposed'
             for key, metadata, attribute in node['fields']:
+                if key == 'transform':
+                    transform_inputs, transform_unknown = self.translation_inputs(attribute, metadata)
+                    continue
                 pair, unknown = self.geometry(attribute, metadata, key)
                 if pair is None:
                     reason = unknown
@@ -808,6 +874,10 @@ class CacheReader:
                     props.append(dict(id=3 if key == 'position' else 4,
                         attribute=dict(type='__C.CGPoint' if key == 'position' else '__C.CGSize', value=pair)))
             item = dict(properties=props, children=[], child_order_unknown=node.get('child_order_unknown', False))
+            if transform_inputs is not None:
+                item['transform_inputs'] = transform_inputs
+            else:
+                item['transform_unknown_reason'] = transform_unknown
             if reason:
                 item['layout_unknown_reason'] = reason
             normalized.append(item)
@@ -820,7 +890,7 @@ class CacheReader:
                           for start, end in self.private_ranges)
         if model_reads:
             raise Refusal('cache_private_range')
-        self.c.cache_audit = dict(boundary_records=self.boundary_records, stopped_branches=self.boundary_hits, omitted_views=self.omitted_views, selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
+        self.c.cache_audit = dict(transform_context_records=len(self.transform_context_seen), boundary_records=self.boundary_records, stopped_branches=self.boundary_hits, omitted_views=self.omitted_views, selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)

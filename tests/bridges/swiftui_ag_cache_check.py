@@ -218,7 +218,7 @@ class CacheChecks(unittest.TestCase):
         r.u32 = lambda address: words.get(address, links(address))
         r.rule_owner = lambda model, _: ((101, 'App.Hint') if model in (2048, 3072) else
                                          (202, 'App.Hint') if model == 7168 else (None, None))
-        r.properties = lambda _: []
+        r.properties = lambda _, **kwargs: []
         r.protect_model = lambda _: None
         r.nominal = names.__getitem__
         raw = r.collect(None)

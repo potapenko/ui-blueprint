@@ -197,6 +197,26 @@ def snapshot(raw, req, metadata, start, end, selection_provenance=None):
                 coordinate_space=dict(id=key['key']+'-source-local', kind='local', units='pt', origin='top_left'),
                 shape=dict(shape='rect', value=dict(x=x, y=y, width=width, height=height)),
                 transform=dict(status='unknown', reason='debug-transform-not-qualified'))
+            inputs = node.get('transform_inputs')
+            if inputs is not None:
+                if (not isinstance(inputs, dict)
+                        or set(inputs) != {'position_adjustment', 'pending_translation', 'chain'}
+                        or not isinstance(inputs['chain'], list) or len(inputs['chain']) > 80):
+                    raise Refusal('invalid_transform_inputs', 2)
+                pairs = [inputs['position_adjustment'], inputs['pending_translation'], *inputs['chain']]
+                if any(not isinstance(pair, list) or len(pair) != 2
+                       or any(type(v) not in (int, float) or not math.isfinite(v) for v in pair)
+                       for pair in pairs):
+                    raise Refusal('invalid_transform_inputs', 2)
+                offset = [-sum(pair[axis] for pair in pairs) for axis in (0, 1)]
+                if not all(math.isfinite(v) for v in offset):
+                    raise Refusal('invalid_transform_inputs', 2)
+                geometry['transform'] = dict(status='known', transform=dict(
+                    **{'from': geometry['coordinate_space'],
+                       'to': dict(id=nonce+'-hosting-root', kind='local', units='pt', origin='top_left')},
+                    affine=[1, 0, 0, 1, *offset], target=metadata['target'], surface=surface,
+                    environment_revision=nonce, evidence=dict(evidence, provenance='derived',
+                        method='AttributeGraph.validated-translation-chain.raw-parent-path')))
             layout = dict(availability='known', value=dict(type='geometry', value=geometry))
         result = dict(key=key, surface=surface, native_role=native_role,
             properties=[prop('layout_bounds', layout)]+[prop(f, dict(availability='unknown',

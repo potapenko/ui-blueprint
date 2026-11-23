@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@14`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@15`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -169,7 +169,8 @@ Exact image UUIDs, NSHostingView class/field binding, ViewGraph identity and roo
 Subgraph ownership must be established before tree payloads. Every tree/value/node
 record must belong to the selected graph. Geometry requires target descriptor,
 value-witness, field-offset, range and cache-validity checks before reading payload.
-Read only position/size; ViewSize.value is CGSize at0, not its proposal at16.
+Read only position/size and the explicitly qualified inputs in
+[TRANSFORM@4](swiftui-cache-transform.md); ViewSize.value is CGSize at0, not its proposal at16.
 Dirty, stale, absent or unsupported cached values remain unknown; never evaluate
 or numerically repair them. Sizes must be finite/nonnegative, positions finite.
 Model value/body ranges are protected and audited on the canary; a constant boolean

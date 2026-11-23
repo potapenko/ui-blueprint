@@ -58,6 +58,37 @@ class CanonicalPrivacy(unittest.TestCase):
         self.assertEqual(doc['coverage']['status'], 'partial')
         self.assertEqual(doc['observations'][0]['freshness'], 'unverified')
 
+    def test_qualified_translation_keeps_source_and_binds_same_observed_root(self):
+        item = node(position=(4.5, -2.0), children=[node()])
+        item['transform_inputs'] = dict(position_adjustment=[1, 2],
+            pending_translation=[3, -4], chain=[[5, 6], [-0.5, 1]])
+        item['children'][0]['transform_inputs'] = dict(position_adjustment=[0, 0],
+            pending_translation=[-10, 2], chain=[])
+        data = json.loads(self.encode([item]))['artifact']['data']
+        geometries = [n['properties'][0]['state']['value']['value'] for n in data['nodes']]
+        first, second = [g['transform']['transform'] for g in geometries]
+        self.assertEqual(first['affine'], [1, 0, 0, 1, -8.5, -5])
+        self.assertEqual(first['to'], second['to'])
+        self.assertEqual(first['from'], geometries[0]['coordinate_space'])
+        self.assertEqual(first['target'], data['context']['target'])
+        self.assertEqual(first['surface'], data['context']['surfaces'][0])
+        self.assertEqual(first['environment_revision'], data['context']['environment_revision'])
+        self.assertEqual(first['evidence']['provenance'], 'derived')
+        self.assertEqual(geometries[0]['shape']['value']['x'], 4.5)
+        self.assertEqual(geometries[0]['shape']['value']['y'], -2.0)
+        self.assertEqual(data['observations'][0]['freshness'], 'unverified')
+
+    def test_unqualified_or_invalid_translation_does_not_create_shared_geometry(self):
+        item = node(); item['transform_unknown_reason'] = 'cache_transform_chain_unsupported'
+        data = json.loads(self.encode([item]))['artifact']['data']
+        self.assertEqual(data['nodes'][0]['properties'][0]['state']['value']['value']['transform']['status'], 'unknown')
+        valid = dict(position_adjustment=[0, 0], pending_translation=[0, 0], chain=[])
+        for bad in ({}, dict(valid, chain=[[1, 2]]*81), dict(valid, chain=[[True, 0]]),
+                    dict(valid, chain=[[1e308, 0], [1e308, 0]]), dict(valid, extra=CANARY)):
+            item['transform_inputs'] = bad
+            with self.assertRaisesRegex(codec.Refusal, 'invalid_transform_inputs'):
+                self.encode([item])
+
     def test_validator_and_installed_measure_read_real_canonical_shape(self):
         validator = Path('/Users/eugenepotapenko/.local/bin/uiblueprint-validate')
         self.assertTrue(validator.exists())
