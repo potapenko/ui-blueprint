@@ -111,7 +111,24 @@ fixture-only until separately reviewed. Evidence and owner instructions:
 Earlier real receipt/measurements remain in `uib-s14-normalize-2fzuh8dg/`.
 No debugger/fixture session is intentionally left running after qualification.
 
-Remaining acceptance: stationary context in the real source, grouped component,
-wide/narrow and conditional presence, then exact source distribution through the
-build/release owner. Source absence or consumer busy state is a specific live-run
-dependency, not permission to attach independently or claim completion.
+The corrected exact package at `/private/tmp/uib-s14-case-2weoa8x4`, manifest
+`f2829b1681b02e904c556bba5d588c3e13fefafa72eff570c2327d944c135fec`, passed
+non-author closure of both findings (canonical start/scale retention and exact
+package qualification). One real stationary-wide context run then completed:
+normal detach, responsive same G2, matching before/after window, canonical
+validate/inspect/six measurements and wrapper exit0. Evidence is retained at
+`/Volumes/Develop-2TB/Develop/tmp/uib-s14-case-bwo5_jv9/`. Its observations remain
+sequential; native PNG association does not claim presented-frame atomicity.
+
+The operator then explicitly corrected responsibility: this chat fixes Blueprint
+and tests the tool; the consumer performs interface measurements and acceptance.
+No further source measurement series is authorized for this chat under the old
+handoff. The borrowed G2 was returned wide/hello/English/paused/GRoff/Tourclosed,
+the desktop guard released, and no debugger retained. The narrow package was
+prepared but never attached; no composition toggle was performed.
+
+Consumer-side grouped-component, narrow and conditional-presence acceptance
+remain separate from these tool fixes. Deliver source with this qualification
+boundary; do not call the whole Guest Tour interface accepted. The build/release
+owner owns installation/versioning/publication, and the consumer owns subsequent
+product measurements. Preserve old observations instead of relabelling them.
