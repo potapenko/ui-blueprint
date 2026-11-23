@@ -68,9 +68,13 @@ owned internal apps/runtime `/tmp/uib-actors-s03-_34wh1b_`. Ownership notes appl
   normal detach. All8row and8label frames have known native-window mappings.
   Installed0.6.1 validator passes; ordinary Rust measure returns8pt leading gap
   for every row/label pair. This is the helper's runtime result, not installed glue.
--18focused helper checks pass: scope/admission, membership, ambiguity, incomplete
+-20focused helper checks pass: scope/admission, membership, ambiguity, incomplete
   ancestry, duplicate/stale/foreign binding, cycles, depth/record budget, private
   cached reads and per-class reuse. Fixture source compiles under Swift6.
+- Stock8c810b8 replay38/39/40 passes split/wide/narrow with all7exact transformed
+  frames and normal detach. Wide/narrow share one process;442→302pt query width.
+  Public body-owner extensions supply the correspondence. No prototype selector
+  patch was used for those three captures. Earlier duplicate10 remains old evidence.
 
 Earlier inactive label transforms were dirty; they remained unknown. After ordinary
 query focus, clean transforms were observed, but capture itself reported inactive:
@@ -80,9 +84,13 @@ Fresh fixture captures36/37 succeeded. No outstanding debugger hold from those r
 
 ## Remaining dependency and next action
 
-S13 must integrate/register the dedicated mode and accept helper/privacy review;
-its allocator-extent review finding is being corrected separately. Repeat exact
-integrated pin (including backend) before product admission. Consumer prepared
+S13 integrated/registered the dedicated mode in0080570 and corrected the reported
+allocator-extent finding. Source glue review confirms cached-read privacy and union
+budget hooks. The helper's per-native selected-window recheck is tightened in this
+handoff. Fresh008runtime awaits the shared owner's listener/recovery qualification;
+do not attach the product on an unqualified peer. Distribution CACHE_FILES still
+needs the new helper/transform/backend modules through its existing build owner.
+Repeat exact integrated pin (including backend) before product admission. Consumer prepared
 immutable Actors with SWIFTUI_VIEW_DEBUG=29 and get-task-allow; fresh identity and
 state are in external consumer-ready.json and must be revalidated by that owner.
 Next real case: ready-list parts, normal layout change and scroll through the same

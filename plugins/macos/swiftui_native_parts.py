@@ -204,9 +204,17 @@ class _Selection:
         r = self.r
         views = r.native_views(host, self.scope['native_view_type'])
         window = r.c.objc(host, 'window')
-        if not window or any(r.c.objc(view, 'window') != window for view in views):
+        if not window or window != r.c.selected_window:
             raise Refusal('native_parts_window_mismatch')
-        bindings = [represented_layout(r, view) for view in views]
+        bindings = []
+        for view in views:
+            if r.c.objc(view, 'window') != window:
+                raise Refusal('native_parts_window_mismatch')
+            bindings.append(represented_layout(r, view))
+            if r.c.objc(view, 'window') != window:
+                raise Refusal('native_parts_window_mismatch')
+        if r.c.objc(host, 'window') != window:
+            raise Refusal('native_parts_window_mismatch')
         if not bindings or len({attribute for attribute, _ in bindings}) != len(bindings):
             raise Refusal('native_anchor_unresolved')
         matches, indexed_count = self.witnesses(bindings)

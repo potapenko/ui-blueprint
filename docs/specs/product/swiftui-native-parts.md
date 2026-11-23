@@ -20,6 +20,8 @@ selection. The source owner declares the native representable's role and enclosi
 container. Enumerate all matching native views in the selected hosting root under
 the existing128-view bound. Verify each view's exact selected NSWindow membership,
 provider and current weak layout reference; incomplete enumeration refuses.
+Recheck each native window after binding and host membership at both ends;
+the host cannot redefine the capture's already selected window.
 
 Find exactly one graph-owned layoutComputer witness for every candidate. Follow
 each witness's validated parent/subgraph path to the exact graph root. The nearest

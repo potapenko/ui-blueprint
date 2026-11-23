@@ -37,7 +37,7 @@ class Graph:
         self.bindings = {}
         self.links = {5000: []}
         self.windows = {}
-        self.c = SimpleNamespace(objc=lambda view, key: self.windows.get(view, 99))
+        self.c = SimpleNamespace(objc=lambda view, key: self.windows.get(view, 99), selected_window=99)
         self.raw_seen = set()
         self.add(1000, 5000, 1, 1)
         self.add(1100, 5000, 2, 2, parent=1000)
@@ -141,6 +141,21 @@ class SelectionTests(unittest.TestCase):
         g = Graph()
         native, _, _, _ = g.cursor(0)
         g.windows[native] = 100
+        self.refuses(g, 'native_parts_window_mismatch')
+
+    def test_host_cannot_redefine_the_selected_window(self):
+        g = Graph(); g.cursor(0)
+        g.c.selected_window = 100
+        self.refuses(g, 'native_parts_window_mismatch')
+
+    def test_native_window_change_during_binding_refuses(self):
+        g = Graph(); native, _, _, _ = g.cursor(0)
+        original = g.represented_layout
+        def changed(view):
+            result = original(view)
+            g.windows[view] = 100
+            return result
+        g.represented_layout = changed
         self.refuses(g, 'native_parts_window_mismatch')
 
     def test_missing_layout_witness_refuses(self):
