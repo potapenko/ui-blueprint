@@ -14,6 +14,16 @@ again. Check the published tag and send waiting teams the version, commit and
 tag-pinned installation or SDK update instructions. Existing approval rules
 still govern other projects, production services, binary distribution and host reboots.
 
+## Communication for bug-fix chats
+
+Each assigned chat owns its fix through verification with the affected consumer.
+Send the coordinator one completion message with the commit, the verified case
+and instructions for delivery. Before completion, contact the coordinator only
+when progress requires a specific decision or action from someone else.
+Batch any necessary consumer handoff. Skip acknowledgements, routine progress
+messages, and duplicate reports. The coordinator follows the existing chat
+state and asks for an update only when it changes what can be done.
+
 ## Read only the applicable route
 
 - Product behavior, APIs, state, compatibility, product QA, or specification
