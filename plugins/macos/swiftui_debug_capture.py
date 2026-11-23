@@ -36,6 +36,7 @@ CONSUMER_ADMISSION = ('s13-random-favorite-one-1', 13623,
     dict(type='PlayphrasemeApp.RandomCompletionDialog',
          native_view_type='PlayphrasemeApp.PlayPhrasePointingHandCursorView',
          native_match='ancestor_owner', selection='geometry_records'))
+ACTORS_ADMISSION = ('actors-top-qualification-1', 14438, 'me.playphraseme.reference.actors03.nov23', 1795452248.9056358, 1988, {'type': 'PlayphrasemeApp.ActorPickerView', 'containing_type': 'PlayphrasemeApp.ActorSearchView', 'native_view_type': 'SwiftUI.AppKitTextField', 'native_match': 'ancestor_owner', 'selection': 'geometry_records', 'leaf_types': ['PlayphrasemeApp.ActorSearchView', 'SwiftUI.SystemScrollView', 'SwiftUI.Button']})
 CONSUMER_BACKEND_SHA256 = '3d835dfcab1ee93d2b2eb08d610df02db8b2fa1716889cb3f0b29722d3b3cf48'
 
 
@@ -44,7 +45,7 @@ def require_admitted_target(req):
         return True
     identity = (req['request_id'], req['pid'], req['expected_bundle'],
                 req['expected_launch_time'], req['window_id'], req.get('scope'))
-    if identity == CONSUMER_ADMISSION:
+    if identity in (CONSUMER_ADMISSION, ACTORS_ADMISSION):
         return False
     raise Refusal('product_capture_withdrawn')
 

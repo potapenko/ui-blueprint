@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@19`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@20`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -48,6 +48,16 @@ The owner validates the unchanged identity/state/hashes and runs once. First
 refusal ends this admission; no retries/quotas/signature changes are authorized.
 A partial Snapshot does not complete card/keycap/icon/gap acceptance. Product
 recovery stays with this exact owner and its explicit bound command.
+
+S03@20 independently admits request `actors-top-qualification-1`, PID14438,
+bundle `me.playphraseme.reference.actors03.nov23`, birth1795452248.9056358,
+CG1988. Exact source scope ActorPickerView containing ActorSearchView, native
+SwiftUI.AppKitTextField, ancestor_owner/geometry_records, leaf cuts ActorSearchView,
+SwiftUI.SystemScrollView and SwiftUI.Button. Same backend pin as S13. S03 owner
+qualified the exact34e6fb1 route on a two-TextField no-oracle fixture:28nodes,
+433raw,151calls, valid/detached and excluded neighboring field. Its8row route
+is a separate request and is not admitted by this tuple. Source/owner lifecycle,
+fresh preflight, once-only consumption and first-refusal rules above apply.
 
 An explicit request identifies one already-running, operator-owned process by
 PID, expected bundle and exact launch time, and one native window number.
