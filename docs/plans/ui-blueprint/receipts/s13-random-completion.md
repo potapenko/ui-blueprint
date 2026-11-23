@@ -119,4 +119,29 @@ Runtime/packages: `/tmp/uib-s13-le8xj83i`; owned external scratch/evidence:
 `/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0`. Active fixtures/evidence remain
 needed. The builds chat owns adding swiftui_cache_transform.py, swiftui_debug_backend.py
 and swiftui_native_parts.py with historical manifest6 compatibility.
+## Real consumer result and next mechanism
+
+The exact favorite-one request30a2a2e was executed once after the operator's direct
+continuation. The consumer had declined this method by its own classification;
+it confirmed no user/project/tool rejection existed and revalidated the unchanged
+window. The S13 implementation owner performed the pinned capture and retained
+its debugger lifecycle. Result: exit4/cache_association_limit,14calls,
+detached_restored, noSnapshot. The consumer independently verified Escape closes
+and Option–Shift–Space restores the same favorite-one on the same13623/1969,
+with the same paused source content. No source/signature/credentials were changed.
+Admission is consumed and disabled; no retry of that mechanism is authorized.
+
+The refusal is before source selection: eager association materialization loads
+all owners of the graph. New stress fixture with1500unrelated clear bodies
+reproduces it:3090association owners/3093subgraphs,14calls/same refusal/detach.
+Evidence `owner-favorite-one-1` and `stress-baseline` under the retained task root.
+Addressed parent/child vectors and keyed TreeData hash lookup have now been read
+from exact AttributeGraph accessor disassembly on the owned fixture. S03 owns the
+finite GraphAssociations helper/negative tests/contract; this owner integrates
+and checks topology equivalence then the unchanged stress fixture. No quota is
+increased and no AG getter/sort/update is permitted. Model-free metadata lookup
+must still qualify before the next real capture.
+
+Header reuse and witness-path-union helper from S15 is integrated separately;
+it preserves1024distinct raw headers and original byte/call/output limits.
 No successful S13 part measurement, installation or release is claimed yet.

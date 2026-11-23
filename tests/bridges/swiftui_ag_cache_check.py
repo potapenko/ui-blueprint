@@ -337,15 +337,20 @@ class CacheChecks(unittest.TestCase):
         r.native_views=lambda *args:[10,20]
         r.represented_layout=lambda view:(view,100)
         def scope(host,binding):
-            r.scan_work=8;r.anchor_next={binding[0]:binding[0]+1}
+            r.scan_work=8;r.anchor_next={500:binding[0],binding[0]:None}
             if binding[0]==20:raise Refusal('anchor_card_owner_unresolved')
             return [500]
         r.anchored_scope=scope
-        self.assertEqual(r.anchored_owner_scope(None),[500]);self.assertEqual(r.anchor_next,{10:11})
+        self.assertEqual(r.anchored_owner_scope(None),[500]);self.assertEqual(r.anchor_children,{500:(10,)})
         def two(host,binding):
-            r.scan_work=8;r.anchor_next={binding[0]:binding[0]+1};return [500]
+            r.scan_work=8;r.anchor_next={500:binding[0],binding[0]:None};return [500]
         r.anchored_scope=two
-        with self.assertRaisesRegex(Refusal,'native_leaf_multiple_anchors'):r.anchored_owner_scope(None)
+        self.assertEqual(r.anchored_owner_scope(None),[500])
+        self.assertEqual(set(r.anchor_children[500]),{10,20})
+        def duplicate(host,binding):
+            r.scan_work=8;r.anchor_next={500:10,10:None};return [500]
+        r.anchored_scope=duplicate
+        with self.assertRaisesRegex(Refusal,'ancestor_witness_ambiguous'):r.anchored_owner_scope(None)
 
     def test_native_candidate_wrong_window_refuses_before_binding(self):
         r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Cursor',native_match='ancestor_owner')

@@ -31,11 +31,7 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 # Filled only from the selected consumer owner's fresh identity handoff. A caller
 # cannot expand this gate with a request flag, filename or bundle prefix.
 # One S13 owner-run only, after sequential fixture/recovery qualification.
-CONSUMER_ADMISSION = ('s13-random-favorite-one-1', 13623,
-    'me.playphraseme.reference.random.s13.w01a20844', 1795452212.070178, 1969,
-    dict(type='PlayphrasemeApp.RandomCompletionDialog',
-         native_view_type='PlayphrasemeApp.PlayPhrasePointingHandCursorView',
-         native_match='ancestor_owner', selection='geometry_records'))
+CONSUMER_ADMISSION = None  # S13 attempt consumed: cache_association_limit, restored detach.
 ACTORS_ADMISSION = ('actors-top-qualification-1', 14438, 'me.playphraseme.reference.actors03.nov23', 1795452248.9056358, 1988, {'type': 'PlayphrasemeApp.ActorPickerView', 'containing_type': 'PlayphrasemeApp.ActorSearchView', 'native_view_type': 'SwiftUI.AppKitTextField', 'native_match': 'ancestor_owner', 'selection': 'geometry_records', 'leaf_types': ['PlayphrasemeApp.ActorSearchView', 'SwiftUI.SystemScrollView', 'SwiftUI.Button']})
 CONSUMER_BACKEND_SHA256 = '3d835dfcab1ee93d2b2eb08d610df02db8b2fa1716889cb3f0b29722d3b3cf48'
 

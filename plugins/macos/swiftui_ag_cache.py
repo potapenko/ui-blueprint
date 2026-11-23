@@ -38,6 +38,10 @@ class CacheReader:
             raise Refusal('cache_address_range')
         if any(address < end and address+size > start for start, end in self.private_ranges):
             raise Refusal('cache_private_range')
+        if hasattr(self, 'ancestor_cache'):
+            cached = self.ancestor_cache.cached_read(address, size)
+            if cached is not None:
+                return cached
         if hasattr(self, 'native_parts_headers'):
             from swiftui_native_parts import cached_read
             cached = cached_read(self, address, size)
@@ -182,6 +186,11 @@ class CacheReader:
             if self.ptr(owner+0x28) != self.graph:
                 raise Refusal('cache_foreign_graph')
         return self.address(offset, size)
+
+    def tree_element(self, element):
+        if hasattr(self, 'ancestor_cache'):
+            return self.ancestor_cache.tree_element(element)
+        return self.owned_record(element, 32)
 
     def resolve(self, attribute, links_only=False):
         delta, visited, first = 0, set(), attribute
@@ -332,7 +341,7 @@ class CacheReader:
         return translation_inputs(self, attribute, metadata)
 
     def properties(self, element, track_anchor=True):
-        p = self.owned_record(element, 32)
+        p = self.tree_element(element)
         value, visited, result = self.u32(p+28), set(), []
         while value:
             if value in visited or len(visited) >= 32:
@@ -386,7 +395,7 @@ class CacheReader:
             root = self.u32(subgraph+0x60)
             if not root:
                 continue
-            p = self.owned_record(root, 32)
+            p = self.tree_element(root)
             if self.page_owner(root) != subgraph:
                 raise Refusal('cache_subgraph_root')
             resolved, _ = self.resolve(self.u32(p+8), links_only=True)
@@ -402,7 +411,7 @@ class CacheReader:
             raise Refusal('cache_duplicate_subgraph')
         known = True
         if len({order for order, _ in selected}) != len(selected):
-            following = {root: self.u32(self.owned_record(root, 32)+24) for root in roots}
+            following = {root: self.u32(self.tree_element(root)+24) for root in roots}
             heads, chain = roots-set(following.values()), []
             if len(heads) == 1:
                 cursor = heads.pop()
@@ -415,18 +424,26 @@ class CacheReader:
             known = False
         return [root for _, root in sorted(selected, key=lambda item: item[0])], known
 
+    def witness_children(self, element):
+        if hasattr(self, 'anchor_children'):
+            return self.anchor_children.get(element, ())
+        child = self.anchor_next.get(element)
+        return () if child is None else (child,)
+
     def walk(self, element, parent=None, depth=1, witness_only=False, inherited_transform=None):
         if hasattr(self, 'native_parts_indexed'):
             from swiftui_native_parts import check_budget
             check_budget(self, element)
+        if hasattr(self, 'ancestor_cache'):
+            self.ancestor_cache.admit(element)
         if (element in self.raw_seen or
-                len(self.raw_seen | getattr(self, 'transform_context_seen', set()) | {element})
-                + getattr(self, 'owner_scan_cost', 0) > 1024
+                (not hasattr(self, 'ancestor_cache') and len(self.raw_seen | getattr(self, 'transform_context_seen', set()) | {element})
+                 + getattr(self, 'owner_scan_cost', 0) > 1024)
                 or depth > self.req['limits']['max_depth']):
             raise Refusal('cache_tree_limit', 2)
         self.raw_seen.add(element)
         transform = inherited_transform
-        p = self.owned_record(element, 32)
+        p = self.tree_element(element)
         metadata, flags, model = self.pointer(self.u64(p)), self.u32(p+12), self.u32(p+8)
         if not flags & 1 and metadata and model != self.nil_attribute:
             anchor_before = getattr(self, 'anchor_matches', 0)
@@ -461,8 +478,10 @@ class CacheReader:
                 self.nodes[parent]['leaf_type'] = leaf
                 self.boundary_records.append(dict(type=leaf, node_index=parent))
                 self.boundary_hits[leaf] = self.boundary_hits.get(leaf, 0)+1
-                next_element = self.anchor_next.get(element)
-                if next_element is not None:
+                next_elements = self.witness_children(element)
+                if len(next_elements) > 1:
+                    self.nodes[parent]['child_order_unknown'] = True
+                for next_element in next_elements:
                     self.walk(next_element, parent, depth+1, witness_only=True, inherited_transform=transform)
                 return
         elif self.req.get('scope', {}).get('native_match') in ('within_owner', 'ancestor_owner', 'overlays_in_owner'):
@@ -472,14 +491,16 @@ class CacheReader:
             if self.anchor_matches != before:
                 raise Refusal('anchor_scope_binding_unresolved')
         if witness_only:
-            next_element = self.anchor_next.get(element)
-            if next_element is not None:
+            next_elements = self.witness_children(element)
+            if len(next_elements) > 1 and parent is not None:
+                self.nodes[parent]['child_order_unknown'] = True
+            for next_element in next_elements:
                 self.walk(next_element, parent, depth+1, witness_only=True, inherited_transform=transform)
             return
         child = self.u32(p+20)
         while child:
             self.walk(child, parent, depth+1, inherited_transform=transform)
-            child = self.u32(self.owned_record(child, 32)+24)
+            child = self.u32(self.tree_element(child)+24)
         children, order_known = self.child_subgraphs(element)
         if not order_known and parent is not None:
             self.nodes[parent]['child_order_unknown'] = True
@@ -588,7 +609,7 @@ class CacheReader:
         owner_roots = {}
 
         def scan(element, depth):
-            p = self.owned_record(element, 32)
+            p = self.tree_element(element)
             if element in seen or len(seen) >= 1024 or depth > self.req['limits']['max_depth']:
                 raise Refusal('cache_scope_scan_limit', 2)
             if hasattr(self, 'scan_work'):
@@ -610,7 +631,7 @@ class CacheReader:
             child = self.u32(p+20)
             while child:
                 descendant_found |= scan(child, depth+1)
-                child = self.u32(self.owned_record(child, 32)+24)
+                child = self.u32(self.tree_element(child)+24)
             children, _ = self.child_subgraphs(element)
             for child in children:
                 descendant_found |= scan(child, depth+1)
@@ -744,7 +765,7 @@ class CacheReader:
                 local_seen.add(candidate)
                 if self.page_owner(candidate) != sg:
                     raise Refusal('anchor_parent_ownership')
-                record = self.owned_record(candidate, 32)
+                record = self.tree_element(candidate)
                 before = self.anchor_matches
                 self.properties(candidate)
                 if self.anchor_matches > before:
@@ -754,7 +775,7 @@ class CacheReader:
                     if len(pending)+len(local_seen) >= 64:
                         raise Refusal('anchor_witness_limit')
                     pending.append(child)
-                    child = self.u32(self.owned_record(child, 32)+24)
+                    child = self.u32(self.tree_element(child)+24)
             if self.anchor_matches != 1:
                 raise Refusal('anchor_scope_binding_unresolved')
             self.scan_work = len(local_seen)
@@ -773,9 +794,9 @@ class CacheReader:
                 self.anchor_next[element] = lower
                 lower = element
             self.scan_work += 1
-            if self.scan_work + getattr(self, 'anchor_scan_base', 0) > 1024:
+            if not hasattr(self, 'ancestor_cache') and self.scan_work + getattr(self, 'anchor_scan_base', 0) > 1024:
                 raise Refusal('anchor_parent_limit', 2)
-            p = self.owned_record(element, 32)
+            p = self.tree_element(element)
             metadata = self.pointer(self.u64(p))
             attribute, owner_name = self.rule_owner(self.u32(p+8), owners)
             if owner_name is not None and owner_name == scope.get('type') and (selected_attribute is None or attribute == selected_attribute):
@@ -851,9 +872,10 @@ class CacheReader:
             raise Refusal('native_owner_unresolved' if not candidates else 'native_owner_ambiguous')
         roots, anchors = next(iter(candidates.items()))
         if self.req['scope'].get('leaf_types'):
-            if len(anchors) != 1:
-                raise Refusal('native_leaf_multiple_anchors')
-            self.anchor_next = witness_paths[anchors[0]]
+            from swiftui_ancestor_cache import witness_path_union
+            if len(roots) != 1:
+                raise Refusal('native_owner_ambiguous')
+            self.anchor_children = witness_path_union(roots[0], {a: witness_paths[a] for a in anchors}, self.req['limits']['max_depth'])
         self.selected_source = dict(selection_source='native_owner_ancestor', source_type=self.req['scope']['type'])
         self.anchor_ids = set(anchors)
         self.anchor_matches = 0
@@ -885,10 +907,12 @@ class CacheReader:
                 check_budget(self, element)
             seen.add(element)
             self.transform_context_seen.add(element)
-            if (len(self.raw_seen | self.transform_context_seen)
+            if hasattr(self, 'ancestor_cache'):
+                self.ancestor_cache.admit(element)
+            if (not hasattr(self, 'ancestor_cache') and len(self.raw_seen | self.transform_context_seen)
                     + getattr(self, 'owner_scan_cost', 0) > 1024):
                 raise Refusal('cache_transform_parent_limit', 2)
-            p = self.owned_record(element, 32)
+            p = self.tree_element(element)
             model = self.u32(p+8)
             if model != self.nil_attribute:
                 self.selected_models.add(model)
@@ -944,6 +968,9 @@ class CacheReader:
             raise Refusal('cache_subgraph_root')
         self.nil_attribute = self.u32(self.symbol('AGAttributeNil', 'AttributeGraph'))
         self.associations()
+        if self.req.get('scope', {}).get('native_match') == 'ancestor_owner':
+            from swiftui_ancestor_cache import AncestorCache
+            self.ancestor_cache = AncestorCache(self)
         anchored = 'native_view_type' in self.req.get('scope', {})
         within_owner = self.req.get('scope', {}).get('native_match') == 'within_owner'
         ancestor_owner = self.req.get('scope', {}).get('native_match') == 'ancestor_owner'
@@ -1034,6 +1061,8 @@ class CacheReader:
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)
+        if hasattr(self, 'ancestor_cache'):
+            self.c.cache_audit.update(ancestor_unique_records=self.ancestor_cache.record_count(), ancestor_reused_reads=self.ancestor_cache.reused_reads)
         if native_parts:
             from swiftui_native_parts import record_count
             self.c.cache_audit.update(native_parts=self.native_parts_selection,

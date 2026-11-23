@@ -87,6 +87,11 @@ struct RandomCompletionDialog: View {
         }
     }
 }
+private struct S13UnrelatedRecord: View {
+    let index: Int
+    var body: some View { Color.clear.frame(width: Double(index % 3 + 1), height: 1) }
+}
+
 struct S13Root: View {
     @State private var phase = 1
     var body: some View {
@@ -95,6 +100,12 @@ struct S13Root: View {
             RandomCompletionDialog(phase: phase)
         }
         .frame(width: 760, height: 400)
+        .background {
+            if ProcessInfo.processInfo.environment["UIB_S13_ASSOCIATION_STRESS"] == "1" {
+                ZStack { ForEach(0..<1500) { S13UnrelatedRecord(index: $0) } }
+                    .allowsHitTesting(false).accessibilityHidden(true)
+            }
+        }
         .overlayPreferenceValue(S13Bounds.self) { anchors in
             GeometryReader { geometry in
                 let frames = anchors.mapValues { geometry[$0] }.merging(
