@@ -254,6 +254,7 @@ def main():
     else:
         if not 0 < args.timeout <= 30:
             raise Failure("invalid_deadline")
+        args.deadline = time.monotonic() + args.timeout
         result, raw = request(args.session, "windows" if args.command == "windows" else "capture",
                               args.window, args.generation, args.timeout)
         if raw is not None:
@@ -278,8 +279,13 @@ def measure(args, doc, raw, selected):
         task = Path(task)
         snapshot = task / "snapshot.json"
         snapshot.write_bytes(raw)
+        def remaining():
+            value = args.deadline - time.monotonic()
+            if value <= 0:
+                raise Failure("measurement_deadline")
+            return min(value, 10)
         subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", str(MAX_BYTES), str(snapshot)],
-                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=remaining())
         for node, name, state in selected:
             if state["availability"] != "known":
                 results.append(dict(key=node["key"], type=name, status="unknown", reason=state.get("reason")))
@@ -295,7 +301,7 @@ def measure(args, doc, raw, selected):
             query_path.write_bytes(encoded(dict(schema_version="0.2.0", artifact=dict(kind="geometry_query", data=query))))
             completed = subprocess.run([str(bundle / "uiblueprint"), "measure", "--snapshot", str(snapshot),
                 "--query", str(query_path), "--space", space["id"], "--max-input-bytes", str(MAX_BYTES + 16384),
-                "--max-output-bytes", str(MAX_BYTES * 2), "--json"], capture_output=True, timeout=10)
+                "--max-output-bytes", str(MAX_BYTES * 2), "--json"], capture_output=True, timeout=remaining())
             if completed.returncode not in (0, 4):
                 raise Failure("rust_measure_failed")
             answer = json.loads(completed.stdout)

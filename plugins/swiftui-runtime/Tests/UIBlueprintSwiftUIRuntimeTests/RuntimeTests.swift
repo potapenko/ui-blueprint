@@ -3,6 +3,37 @@ import XCTest
 
 #if DEBUG
 final class RuntimeTests: XCTestCase {
+    func testInvalidRequestsAreClaimedOnceWithoutFollowingSymlinks() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("uib-input-" + UUID().uuidString)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let original = root.appendingPathComponent("original")
+        try Data("preserve".utf8).write(to: original)
+        let symlink = root.appendingPathComponent("symlink.request.json")
+        try FileManager.default.createSymbolicLink(at: symlink, withDestinationURL: original)
+        let empty = root.appendingPathComponent("empty.request.json")
+        try Data().write(to: empty)
+        let oversized = root.appendingPathComponent("large.request.json")
+        try Data(repeating: 65, count: 16_385).write(to: oversized)
+        for path in [symlink, empty, oversized] {
+            XCTAssertThrowsError(try RuntimeInput.claim(path, in: root))
+            XCTAssertFalse(FileManager.default.fileExists(atPath: path.path))
+        }
+        XCTAssertEqual(try Data(contentsOf: original), Data("preserve".utf8))
+        XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: root.path), ["original"])
+    }
+
+    func testValidRequestClaimPreservesExactBytes() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent("uib-input-" + UUID().uuidString)
+        try FileManager.default.createDirectory(at: root, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let input = root.appendingPathComponent("valid.request.json")
+        let bytes = Data("{\"id\":\"literal\"}".utf8)
+        try bytes.write(to: input)
+        XCTAssertEqual(try RuntimeInput.claim(input, in: root), bytes)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: input.path))
+    }
+
     @MainActor func testTypeMetadataRedactsRuntimeAddresses() throws {
         XCTAssertEqual(try RuntimeCollector.sanitizedType("SwiftUI.(unknown context at $123abc).View"),
                        "SwiftUI.(private).View")

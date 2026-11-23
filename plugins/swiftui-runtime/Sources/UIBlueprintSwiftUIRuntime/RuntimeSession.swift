@@ -67,18 +67,18 @@ public final class BlueprintRuntimeSession {
             let id = String(file.lastPathComponent.dropLast(".request.json".count))
             guard UUID(uuidString: id) != nil else { continue }
             do {
-                let values = try file.resourceValues(forKeys: [.isRegularFileKey, .isSymbolicLinkKey, .fileSizeKey])
-                guard values.isRegularFile == true, values.isSymbolicLink != true,
-                      let size = values.fileSize, size > 0, size <= 16_384 else { throw RuntimeRefusal.invalidRequest }
-                let data = try Data(contentsOf: file)
-                // Claim this request before source work; another event cannot dispatch it twice.
-                try FileManager.default.removeItem(at: file)
+                // Claim invalid requests too: publishing their error must not
+                // retrigger the same input forever through directory events.
+                let data = try RuntimeInput.claim(file, in: directory)
                 if overloaded { throw RuntimeRefusal.busy }
                 guard let shape = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                       Set(shape.keys) == ["version", "id", "run", "capability", "operation", "window", "windowGeneration"]
                 else { throw RuntimeRefusal.invalidRequest }
                 let request = try JSONDecoder().decode(RuntimeRequest.self, from: data)
                 guard request.version == "1.0.0", request.id == id else { throw RuntimeRefusal.invalidRequest }
+                guard request.window == nil || (request.window! > 0 && request.window! <= Int(Int32.max)) else {
+                    throw RuntimeRefusal.invalidRequest
+                }
                 guard request.run == runID, request.capability == capability else { throw RuntimeRefusal.wrongSession }
                 guard !isCancelled(id) else { throw RuntimeRefusal.cancelled }
                 var response: [String: Any] = ["protocol": "1.0.0", "request_id": id, "run_id": runID]
