@@ -154,7 +154,8 @@ def launch(app, run_root, environment=None, arguments=None, expected_bundle=None
     while time.monotonic() < deadline:
         if error.exists():
             # Do not print unrelated application diagnostics or environment values.
-            text = error.read_bytes()[:1_048_576].decode("utf-8", "replace")
+            with error.open("rb") as stream:
+                text = stream.read(1_048_576).decode("utf-8", "replace")
             paths = [line.removeprefix("UIBLUEPRINT_SESSION ") for line in text.splitlines()
                      if line.startswith("UIBLUEPRINT_SESSION ")]
             if paths:
@@ -225,6 +226,7 @@ def main():
     p = sub.add_parser("launch")
     p.add_argument("--app", required=True)
     p.add_argument("--run-root", required=True)
+    p.add_argument("--recipe", help="Reuse the project's declared launch environment and arguments")
     p = sub.add_parser("prepare")
     p.add_argument("--recipe", required=True)
     p.add_argument("--build-root", required=True)
@@ -236,14 +238,17 @@ def main():
         p.add_argument("--generation")
         p.add_argument("--timeout", type=float, default=5)
         if operation != "windows":
-            p.add_argument("--out")
+            p.add_argument("--out", required=operation == "capture")
             p.add_argument("--type")
         if operation == "measure":
             p.add_argument("--relation", choices=("width", "height"), required=True)
             p.add_argument("--bundle", required=True)
     args = parser.parse_args()
     if args.command == "launch":
-        result = launch(args.app, args.run_root)
+        recipe = read_json(args.recipe, 16_384) if args.recipe else {}
+        if recipe and recipe.get("recipe_version") != "1.0.0":
+            raise Failure("invalid_project_recipe")
+        result = launch(args.app, args.run_root, recipe.get("environment"), recipe.get("arguments"), recipe.get("bundle"))
     elif args.command == "prepare":
         result = prepare(args)
     else:
@@ -252,6 +257,7 @@ def main():
         result, raw = request(args.session, "windows" if args.command == "windows" else "capture",
                               args.window, args.generation, args.timeout)
         if raw is not None:
+            result.pop("snapshot", None)
             if args.out:
                 publish(args.out, raw)
                 result["saved_snapshot"] = str(Path(args.out).absolute())
