@@ -1,0 +1,231 @@
+diff --git a/plugins/macos/swiftui_ag_cache.py b/plugins/macos/swiftui_ag_cache.py
+--- a/plugins/macos/swiftui_ag_cache.py
++++ b/plugins/macos/swiftui_ag_cache.py
+@@ -4,6 +4,8 @@
+ import struct
+ from swiftui_debug_fields import IMAGES
+ from swiftui_debug_snapshot import Refusal, encode
++from swiftui_capture_pair import charge_tree_record, charge_node
++from swiftui_source_selection import matches_owner, body_metadata, select_part
+ 
+ PROFILE = {**IMAGES, 'AttributeGraph': '6B3E4A3F-D05C-3A1B-B187-18075DC4DCC0'}
+ GEOMETRY = {
+@@ -18,7 +20,9 @@
+     def __init__(self, calls, req):
+         self.c, self.req = calls, req
+         self.symbols, self.names, self.hosts = {}, {}, {}
+-        self.reads, self.private_ranges, self.geometry_ranges = [], [], []
++        self.reads = getattr(calls, 'pair_reads', [])
++        self.private_ranges = getattr(calls, 'pair_private_ranges', [])
++        self.geometry_ranges = []
+         self.graph = self.table = self.base = self.limit = None
+         self.nodes, self.raw_seen = [], set()
+         self.unknown_order = 0
+@@ -416,6 +420,7 @@
+         return [root for _, root in sorted(selected, key=lambda item: item[0])], known
+ 
+     def walk(self, element, parent=None, depth=1, witness_only=False, inherited_transform=None):
++        charge_tree_record(self, element)
+         if hasattr(self, 'native_parts_indexed'):
+             from swiftui_native_parts import check_budget
+             check_budget(self, element)
+@@ -451,6 +456,7 @@
+             else:
+                 if len(self.nodes) >= self.req['limits']['max_nodes']:
+                     raise Refusal('tree_limit', 2)
++                charge_node(getattr(self, 'c', None), self.req['limits']['max_nodes'])
+                 node = dict(parent=parent, metadata=metadata, model=model, fields=fields, children=[])
+                 index = len(self.nodes)
+                 self.nodes.append(node)
+@@ -585,9 +591,10 @@
+ 
+         owner_names = {}
+         active_owners = set()
+-        owner_roots = {}
++        owner_roots, structural_records = {}, {}
+ 
+         def scan(element, depth):
++            charge_tree_record(self, element)
+             p = self.owned_record(element, 32)
+             if element in seen or len(seen) >= 1024 or depth > self.req['limits']['max_depth']:
+                 raise Refusal('cache_scope_scan_limit', 2)
+@@ -607,18 +614,26 @@
+                 owner_roots.setdefault(attribute, []).append(element)
+             names = {name, owner_name if owner_root else None}
+             descendant_found = False
++            structural_children = []
+             child = self.u32(p+20)
+             while child:
++                structural_children.append(child)
+                 descendant_found |= scan(child, depth+1)
+                 child = self.u32(self.owned_record(child, 32)+24)
+             children, _ = self.child_subgraphs(element)
+             for child in children:
++                structural_children.append(child)
+                 descendant_found |= scan(child, depth+1)
++            structural_records[element] = name, structural_children
+             if owner_root:
+                 active_owners.remove(attribute)
+             match = scope['type'] in names
+             if within_owner:
+                 match = owner_root and owner_name == scope['type']
++            if match and 'owner_argument_type' in scope:
++                selected_metadata = (body_metadata(self, attribute)
++                                     if owner_name == scope['type'] else metadata)
++                match = matches_owner(self, selected_metadata, scope)
+             if match and (wanted_descendant is None or descendant_found):
+                 if owner_name == scope['type']:
+                     matches.add(('body_owner', attribute, owner_name))
+@@ -634,7 +649,11 @@
+         self.unknown_order = 0
+         kind, identity, matched_type = matches.pop()
+         self.selected_source = dict(selection_source=kind, source_type=matched_type)
+-        return owner_roots[identity] if kind == 'body_owner' else [identity]
++        roots = owner_roots[identity] if kind == 'body_owner' else [identity]
++        if 'part' in scope:
++            roots = select_part(structural_records, roots, scope['part'])
++            self.selected_source['selection_source'] = 'source_part'
++        return roots
+ 
+     @staticmethod
+     def native_descriptor_matches(expected, symbol):
+@@ -878,6 +897,7 @@
+         """Only the nearest recorded transform; never outside layout/model values."""
+         seen = set()
+         while element:
++            charge_tree_record(self, element)
+             if element in seen or len(seen) >= self.req['limits']['max_depth']:
+                 raise Refusal('cache_transform_parent_limit', 2)
+             if hasattr(self, 'native_parts_indexed'):
+diff --git a/plugins/macos/swiftui_debug_snapshot.py b/plugins/macos/swiftui_debug_snapshot.py
+--- a/plugins/macos/swiftui_debug_snapshot.py
++++ b/plugins/macos/swiftui_debug_snapshot.py
+@@ -53,6 +53,12 @@
+ 
+ def request(raw):
+     data = decode(raw)
++    if isinstance(data, dict) and 'paired_surface' in data:
++        from swiftui_capture_pair import requests
++        primary, secondary = requests(data)
++        request(encode(primary))
++        request(encode(secondary))
++        return data
+     required = {'request_version', 'request_id', 'pid', 'expected_bundle',
+                 'expected_launch_time', 'window_id', 'limits'}
+     if not isinstance(data, dict) or set(data) not in (required, required | {'scope'}) or data['request_version'] != '1.0.0':
+@@ -68,7 +74,8 @@
+         if not isinstance(data[name], str) or not re.fullmatch(pattern, data[name]):
+             raise Refusal('invalid_identity', 2)
+     if 'scope' in data:
+-        scope = data['scope']
++        from swiftui_source_selection import validate_options
++        scope = validate_options(data['scope'])
+         scoped_native = isinstance(scope, dict) and 'native_match' in scope
+         if scoped_native:
+             required_keys = {'type', 'native_view_type', 'native_match'}
+@@ -166,14 +173,14 @@
+     selected = isinstance(source, dict)
+     if selected:
+         if (set(source) != {'selection_source', 'source_type', 'branches'}
+-                or source['selection_source'] not in ('body_owner', 'nominal_element', 'native_owner_ancestor', 'native_overlay_parts')
++                or source['selection_source'] not in ('body_owner', 'nominal_element', 'native_owner_ancestor', 'native_overlay_parts', 'source_part')
+                 or not isinstance(source['source_type'], str)
+                 or source['source_type'] != req.get('scope', {}).get('type')):
+             raise Refusal('invalid_selection_provenance', 2)
+         branches = source['branches']
+         if (not isinstance(branches, list) or not 1 <= len(branches) <= 1024
+                 or any(not isinstance(branch, list) for branch in branches)
+-                or (source['selection_source'] in ('nominal_element', 'native_owner_ancestor') and len(branches) != 1)):
++                or (source['selection_source'] in ('nominal_element', 'native_owner_ancestor', 'source_part') and len(branches) != 1)):
+             raise Refusal('invalid_selection_provenance', 2)
+     else:
+         if not isinstance(source, list):
+diff --git a/plugins/macos/swiftui_debug_capture.py b/plugins/macos/swiftui_debug_capture.py
+--- a/plugins/macos/swiftui_debug_capture.py
++++ b/plugins/macos/swiftui_debug_capture.py
+@@ -43,6 +43,8 @@
+ def require_admitted_target(req):
+     if req['expected_bundle'].startswith('me.uiblueprint.external-layout.canary.'):
+         return True
++    if 'paired_surface' in req:
++        raise Refusal('product_pair_capture_withdrawn')
+     identity = (req['request_id'], req['pid'], req['expected_bundle'],
+                 req['expected_launch_time'], req['window_id'], req.get('scope'))
+     if identity in (CONSUMER_ADMISSION, ACTORS_ADMISSION):
+@@ -462,6 +464,14 @@
+                 basis_window_points=basis, source='NSView.convertPoint.to-window-base')
+ 
+ 
++def revalidate_window(calls, req, binding):
++    window, root, host = binding
++    if (calls.objc(window, 'windowNumber') != req['window_id']
++            or calls.objc(window, 'contentView') != root):
++        raise Refusal('stale_window')
++    return native_mapping(calls, host, window, req)
++
++
+ def collect(calls, req):
+     c = calls
+     app = int.from_bytes(c.read(c.symbol('NSApp'), 8), 'little')
+@@ -482,6 +492,9 @@
+     pending, hosts, seen = [root], [], set()
+     while pending:
+         view = pending.pop()
++        if hasattr(c, 'pair_native_views'):
++            from swiftui_capture_pair import charge_native_view
++            charge_native_view(c, view)
+         if not view or view in seen or len(seen) >= 256:
+             raise Refusal('view_tree_limit', 2)
+         seen.add(view)
+@@ -498,6 +511,7 @@
+     # Multiple hosted surfaces must never be merged into one invented origin.
+     if len(hosts) != 1:
+         raise Refusal('hosting_surface_unresolved')
++    c.selected_binding = (window, root, hosts[0])
+     raw = collect_fields(c, hosts[0], req)
+     c.native_layout_mapping = native_mapping(c, hosts[0], window, req)
+     if c.objc(window, 'windowNumber') != req['window_id'] or c.objc(window, 'contentView') != root:
+@@ -560,14 +574,23 @@
+         calls = Calls(debugger, target, process, thread, deadline,
+                       event_listener=backend.listener if backend is not None else None)
+         calls.initialize()
+-        raw, window_state = collect(calls, req)
+-        calls.admit()
+-        # Only already allowlisted fields reach the canonical encoder.
+         provenance = {}
+-        payload = snapshot(raw, req, before, start, time.monotonic(), provenance,
+-                           getattr(calls, 'native_layout_mapping', None))
++        if 'paired_surface' in req:
++            from swiftui_capture_pair import collect as collect_pair, encode_pair
++            pair_records = collect_pair(calls, req, collect, revalidate_window)
++            calls.admit()
++            payload, outcome['surface_pair'] = encode_pair(
++                pair_records, req, before, start, time.monotonic())
++            window_state = None
++            del pair_records
++        else:
++            raw, window_state = collect(calls, req)
++            calls.admit()
++            # Only already allowlisted fields reach the canonical encoder.
++            payload = snapshot(raw, req, before, start, time.monotonic(), provenance,
++                               getattr(calls, 'native_layout_mapping', None))
++            del raw
+         outcome['native_layout_mapping'] = getattr(calls, 'native_layout_mapping', None)
+-        del raw
+         if metadata(helper, req, deadline) != before:
+             raise Refusal('stale_target')
+         calls.admit()
+@@ -631,8 +654,13 @@
+         if not backend.finish(detached):
+             payload = None
+             outcome.update(status='failed', code='backend_cleanup_pending', exit_status=1, snapshot=None)
++    if ('paired_surface' in req and payload is not None
++            and len(payload)+len(encode(outcome)) > req['limits']['max_output_bytes']):
++        payload = None
++        outcome.update(status='failed', code='output_limit', exit_status=2, snapshot=None)
+     if payload is None:
+         outcome['native_layout_mapping'] = None
++        outcome.pop('surface_pair', None)
+     created = None
+     try:
+         if payload is not None:
