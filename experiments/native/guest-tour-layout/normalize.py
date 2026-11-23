@@ -1,5 +1,6 @@
 """Offline, fixed-G2 source-local receipt -> canonical Snapshot. No acquisition."""
 import json
+import copy
 import math
 import re
 import sys
@@ -27,6 +28,8 @@ def numbers(value, count):
 def normalize(record):
     """Preserve the two observed frames; do not infer the rest of the map."""
     require(isinstance(record, dict))
+    if record.get("format") == "playphraseme.guest-tour.component-1":
+        return normalize_component(record)
     require(set(record) == {
         "source_site", "module_uuid", "card", "space", "target_xywh", "rect_xywh",
         "start_xy", "identity_before_after", "detached_verified", "observation_id",
@@ -95,6 +98,84 @@ def normalize(record):
         "source_state": None,
     }
     return {"schema_version": "0.1.0", "artifact": {"kind": "snapshot", "data": snapshot}}
+
+
+def normalize_component(record):
+    """Three attributed read intervals; SwiftUI global is not screen space."""
+    require(set(record) == {"format", "card", "module_uuid", "source_revision", "records", "units", "time_unit",
+                            "clock_domain", "detached_verified", "stationary_window", "before", "after", "fixture",
+                            "consistency", "groups"})
+    require(record["fixture"] is False and record["stationary_window"] is True)
+    require(record["detached_verified"] is True and record["module_uuid"] == MODULE)
+    require(record["source_revision"] == "e19b20c474afe6462786ca0dd3dd5ad9ae37dbce")
+    require(record["units"] == "pt" and record["time_unit"] == "ns" and record["groups"] == "not_collected")
+    require(record["consistency"] == "sequential-source-reads-not-presented-frame")
+    require(isinstance(record["clock_domain"], str) and re.fullmatch(r"owner-lldb-[a-f0-9]{32}", record["clock_domain"]))
+    require(record["before"] == record["after"])
+    require(isinstance(record["records"], list) and len(record["records"]) == 3)
+    rows = record["records"]
+    require([r["kind"] for r in rows] == ["map", "origin", "card"])
+    prior = -1
+    ids = set()
+    for row in rows:
+        require(set(row) == {"kind", "observation_id", "read_start", "read_end", "values"})
+        require(isinstance(row["observation_id"], str) and re.fullmatch(r"[a-f0-9]{32}", row["observation_id"]))
+        require(row["observation_id"] not in ids)
+        ids.add(row["observation_id"])
+        require(type(row["read_start"]) is int and type(row["read_end"]) is int and prior <= row["read_start"] <= row["read_end"] < 2**63)
+        require(row["read_start"] >= 0)
+        prior = row["read_end"]
+    map_values, origin_values, card_values = [r["values"] for r in rows]
+    require(set(map_values) == {"origin", "viewport", "scale"} and set(origin_values) == {"origin"}
+            and set(card_values) == {"target", "rect", "start"})
+    map_origin = numbers(map_values["origin"], 2)
+    connection_origin = numbers(origin_values["origin"], 2)
+    viewport = numbers(map_values["viewport"], 4)
+    require(min(viewport[2:]) > 0 and numbers(map_values["scale"], 1)[0] > 0)
+    card_row = rows[2]
+    result = normalize({"source_site": SOURCE, "module_uuid": MODULE, "card": record["card"],
+                        "space": "guest-tour GeometryReader local points", "target_xywh": card_values["target"],
+                        "rect_xywh": card_values["rect"], "start_xy": card_values["start"],
+                        "identity_before_after": IDENTITY, "detached_verified": True,
+                        "observation_id": card_row["observation_id"], "clock_domain": "owner-lldb-process.monotonic",
+                        "time_unit": "ns", "read_start": card_row["read_start"], "read_end": card_row["read_end"],
+                        "units": "pt", "before": record["before"], "after": record["after"], "runtime_state": "stationary-window-source-reads"})
+    snapshot = result["artifact"]["data"]
+    context = snapshot["context"]
+    context["scope_id"] = "guest-tour-component-" + record["card"]
+    snapshot["coverage"]["scope_id"] = context["scope_id"]
+    template = snapshot["observations"][0]
+    snapshot["observations"] = []
+    for row in rows:
+        observation = copy.deepcopy(template)
+        observation.update(id=row["observation_id"], start=row["read_start"] / 1_000_000,
+                           end=row["read_end"] / 1_000_000, clock_domain=record["clock_domain"],
+                           consistency_reason="sequential-source-reads-not-presented-frame")
+        observation["coverage"] = copy.deepcopy(snapshot["coverage"])
+        snapshot["observations"].append(observation)
+    global_space = {"id": "swiftui-global-" + card_row["observation_id"], "kind": "local", "origin": "top_left", "units": "pt"}
+
+    def transform(geometry, origin, row):
+        geometry["transform"] = {"status": "known", "transform": {
+            "from": geometry["coordinate_space"], "to": global_space, "affine": [1, 0, 0, 1, *origin],
+            "target": context["target"], "surface": context["surfaces"][0],
+            "environment_revision": context["environment_revision"],
+            "evidence": {"source_namespace": NAMESPACE, "observation_id": row["observation_id"], "method": "swiftui-global-origin-translation",
+                         "provenance": "derived", "uncertainty": None}}}
+
+    for node in snapshot["nodes"]:
+        transform(node["properties"][0]["state"]["value"]["value"], connection_origin, rows[1])
+    map_node = copy.deepcopy(snapshot["nodes"][0])
+    map_node["key"]["key"] = "map.viewport"
+    map_node["source_declarations"] = []
+    prop = map_node["properties"][0]
+    prop["evidence"].update(observation_id=rows[0]["observation_id"], method="map-source-static-locals")
+    geometry = prop["state"]["value"]["value"]
+    geometry["coordinate_space"]["id"] = "guest-tour-map-local-" + rows[0]["observation_id"]
+    geometry["shape"]["value"] = dict(zip(("x", "y", "width", "height"), viewport))
+    transform(geometry, map_origin, rows[0])
+    snapshot["nodes"].append(map_node)
+    return result
 
 
 def unique_object(pairs):

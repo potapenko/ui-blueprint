@@ -145,3 +145,28 @@ saved supporting research, not a released complete S14 fix. The next acquisition
 depends on the consumer naming the selected component, state and missing fields
 from its new plan. No new user permission loop is needed for already-authorized
 work; the missing dependency is the revised concrete component request.
+
+## Approved component repair — November 23
+
+The operator approved this chat's six-step repair plan with “Да, исправляй.”
+This supersedes the earlier dependency on a new component request. The owned
+write set remains this experiment directory; shared collectors and donor files
+are protected. First qualify the selected `context` card, viewport and local
+origins in a stationary window, then groups and component-state transitions.
+The source owner still operates the consumer app and verifies its recovery.
+
+The new fixed G2 component capture must select the requested public Card enum,
+read no other card's geometry, and preserve each read's actual interval. At most
+two owned hardware points may coexist. The map and connections origins establish
+relationships only between the two SwiftUI local spaces and their reported
+SwiftUI global space. Neither `.global` nor a CG window rectangle alone proves
+a transform to screen pixels. Window motion, foreign identity, missing fields,
+wrong module/source site, incomplete phases or unconfirmed cleanup must not
+publish a successful component observation. No expression evaluation, getters,
+software-breakpoint fallback, target writes, hidden retries or target termination.
+A fresh private package consumes its one admitted owner attempt before attach;
+old consumed packages remain unchanged. Fixture qualification and non-author
+review precede the real owner run. Existing canonical schema and measured values
+remain unchanged; coverage and consistency are explicit, never inferred from
+successful serialization. This is implementation of the approved bounded repair,
+not authority for a general debugger controller or a different product target.
