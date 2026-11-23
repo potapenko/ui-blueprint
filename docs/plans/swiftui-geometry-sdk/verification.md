@@ -1,79 +1,69 @@
-# Acceptance, compatibility and release
+# Приёмка: данные после каждого изменения
+Часть [PLAN.UIB.SWIFTUI-GEOMETRY@3](../swiftui-geometry-sdk.md). Все пункты — требуемые проверки, не заявленные результаты.
 
-Revision-1 alternative under [PLAN.UIB.SWIFTUI-GEOMETRY@2](../swiftui-geometry-sdk.md). Whole-application acquisition now takes precedence over the slice-first delivery below; follow [Xcode qualification](xcode-hierarchy.md) first. Checks below remain planned, not executed results; apply only to the selected implementation and reuse valid evidence.
+## Сквозной сценарий на одной сборке
+В одном owned процессе: tree/compound query → resize → live query → Search/Clip/Reels → popup → data change → scroll → close/reopen → повторные запросы. Между шагами нет source edits, новой instrumentation или rebuild. Используется установленный публичный workflow.
 
-## First usable slice: the stopping point for architectural experiments
+Проверять original source facts через Xcode Size inspector, controlled source fixture и original canonical bytes в Rust. Screenshot/source constants не подставляются вместо runtime layout. Старый sample не oracle нового размера окна.
 
-P1 must deliver Random and Actors from the real instrumented Mac app through the installed command. Before adding the rest of the coverage, demonstrate: discover component → capture → inspect actual parts → measure size and gap → resize → capture again → close/reopen → refuse an old occurrence.
+## Обязательная матрица
+| ID | Кейс | Условие прохода |
+| --- | --- | --- |
+| C01 | Nested stacks/Text/Image/Button | Настоящие SwiftUI nodes/frames, не только hosting wrappers. |
+| C02 | Full root и заранее неизвестный leaf | Без marker edits; full scope не подменён demo subset. |
+| C03 | Wide → narrow → wide | Новые actual frames/relations и viewport каждого live request. |
+| C04 | Resize во время capture | Нет mixed old/new settled result; drift обозначен, следующий запрос работает. |
+| C05 | Search → Clip → Reels → Search | Новые roots доступны той же сборке, старый экран не выдаётся как current. |
+| C06 | Popup open/close/reopen | Root/owner/occurrence актуальны; stale ref не выбирает новый popup. |
+| C07 | Conditional insert/remove | Текущий состав автоматически; absence только в covered scope. |
+| C08 | ForEach insert/remove/reorder, repeated types | Exact instances/ancestry; не случайный индекс. |
+| C09 | Lazy list/grid, scroll/reuse | Mounted frames актуальны; unmaterialized не имеет zero/old frame. |
+| C10 | Text/locale/font/Dynamic Type | Actual reflow и соседние размеры обновлены при том же ID. |
+| C11 | Async content/image load | Pending не назван final; после загрузки live query видит новый layout. |
+| C12 | Animation/transition | Bounded settled; sample явно transient; видео не блокирует стабильный диалог. |
+| C13 | Nested scroll/scale/rotation/clipping | Source spaces/transforms корректны; bounds не равны видимости. |
+| C14 | Несколько окон/popovers | Exact target и origins; нет выбора по title/похожей рамке. |
+| C15 | Другой display/scale | Source mapping обновлён, window-local не масштабирован искусственно. |
+| C16 | Restart/scene recreation | Старые sessions/refs отказаны; fresh bind восстанавливает работу. |
+| C17 | Два агента одновременно | Изолированные request/results, bounded очередь, нет чужого/старого response. |
+| C18 | Width/height/gap/inside batch | Одна observation basis, не смесь разных layout epochs. |
+| C19 | Большое дерево/pages | Локально полный доступный scope, bounded resources, no silent truncation. |
+| C20 | Экран/элемент ещё не создан | Подтверждённый not-mounted/materialized/ready; после открытия без rebuild. |
+| C21 | Cancel/busy/deadline/crash/disconnect | Terminal result, controlled cleanup, no late publish или kill чужого app. |
+| C22 | Wrong version/token/path, oversized/partial files | Отказ до недопустимого чтения; no overwrite/leak. |
+| C23 | Live против saved | Новый source read в live, original time у saved, no cache restamp. |
+| C24 | Debug off/Release | Нет active collector/IO/internal-framework linkage; UI/input/playback сохранены. |
+| C25 | iPhone/landscape iPad | Same semantics; actual composition/keyboard/safe area/scroll квалифицированы. |
+| C26 | Новый обычный View/dynamic leaf | Появляется без дополнительных marker sites или специальных readers. |
 
-Use SDK anchors as the geometry source, with independent focused fixture expectations and real-app source/state attribution. Do not validate a copied expected rectangle against itself or use source constants as measured output. Compare the instrumented app's ordinary behavior with the same product revision without activation. No new LLDB qualification is a prerequisite.
+Для обычных mounted C01–C11 нужны числа запрошенных layout properties. Unknown/unsupported не закрывает поддержку. Transparent node без layout box — подтверждённая source semantics, не оправдание пропуска измеряемых descendants.
 
-The file transport gets one bounded real-app proof early: focus/active state, open popup, selection and playback unchanged by a capture; complete result on success; terminal refusal for partial request/timeout. Two failures of the same mechanism without outcome improvement require revisiting that mechanism. Do not expand into a daemon or network service by default.
+Пройти весь [Mac inventory](integration.md), не только fixture. Именованные экраны — проверки общего механизма. Parameterized tests переиспользуют стандартные узлы вместо отдельной инфраструктуры на каждый screen.
 
-## Required scenario matrix
+## Что предотвращает повторение проблемы
+1. C03–C09/C16/C17/C23 обязательны при изменениях collector/cache/identity/decoder.
+2. Новые обычные View/compositions проверяются общей fixture/source inventory; не требуют отдельного integration заказа.
+3. Перед сменой Xcode/OS/backend — compatibility smoke: SwiftUI leaves, resize, dynamic insertion, popup, repeated query.
+4. App changes проверяют затронутые реальные экраны через тот же installed workflow; пробел не передаётся новому чату замера.
+5. Defect закрывается исходным failing case и state-change regression, не увеличением лимита или partial dump.
 
-| ID | Criterion |
-| --- | --- |
-| G01 | Catalogue identifies real scene, surface, component, occurrence and available parts. Duplicate labels/types do not cause guessing. |
-| G02 | Required parent/child rectangles and component memberships are complete within the declared scope; correct modifier boundary is measured. |
-| G03 | Resize/reflow updates source geometry; content-state changes and conditional parts have correct presence; no source constant is substituted. |
-| G04 | Close/reopen, remount, row reuse and scene replacement invalidate old occurrences; stale capture/publication is rejected. |
-| G05 | Selected small component works with a large sibling screen; source work/storage/output remain bounded and unrelated anchors are not resolved. |
-| G06 | A separate presentation has its own root and owner relation; any claimed cross-root mapping is demonstrated at changed size/position/scale. Missing mapping stays a failed/pending mapping criterion. |
-| G07 | One request cannot read another scene/run/device, escape its directory, overwrite another result or replay an old capability. |
-| G08 | Cancel, busy, timeout, partial copy, malformed/oversized request, coalesced events, unsupported version and output failure terminate truthfully without partial successful publication. |
-| G09 | Wrong/absent activation leaves normal Debug behavior unchanged; Release has no active host/ingress/collector or diagnostic IO. |
-| G10 | Capture does not move focus/pointer, scroll, open/close UI, pause playback, mutate observable product state or request redraw to sample. |
-| G11 | Public output/errors contain only approved structural metadata and geometry; canary credentials/query/model/media data never appear. |
-| G12 | Original canonical bytes validate and existing Rust inspect/measure/check return correct values and expected unknowns; legacy saved records remain readable. |
-| G13 | Mac coverage rows work in the real required states. A root frame or successful validation does not close missing inner parts. |
-| G14 | Phone and landscape iPad use the same protocol, with correct safe area/keyboard/scroll context; distinct scenes and device IDs stay isolated. |
-| G15 | A documented fresh invocation uses the installed package/skill and original app output without experimental scripts, manual JSON reconstruction or hidden source knowledge. |
+CI: deterministic decoder/SDK/identity/queue/compatibility tests и applicable builds. Live Mac/Simulator/Xcode acceptance выполняется в доступной среде отдельно; headless tests не выдаются за runtime proof.
 
-Real screenshots/interaction observations support no-regression checks for affected app behavior. Internal geometry acceptance does not require ImageGen or pixel-identical rendering: this plan proposes no visual design changes. Any unintended visual change is a regression to repair; an intentional redesign requires its separate existing approval route.
+## Свежесть и источник
+Xcode archive подтверждает content source. Автоматический runtime caller отдельно проверяется на повторяемость, freshness, lifecycle и реальные transitions. Совпавший формат не доказывает работоспособность capture.
 
-## Checks by implementation layer
+Source profile показывает реальные OS/Xcode/backend versions. Desktop успех не доказывает mobile/device/older OS. Поддержка каждой платформы фиксируется по её evidence.
 
-- Swift collector: focused identity/ancestry/scoped-selection/lifecycle/cancellation/cap tests; exact original Snapshot → canonical validator → Rust numeric checks. Include nested roots, repeated local IDs, large unrelated siblings and fractional coordinates.
-- Capture host: deterministic admission/IO tests with temporary owned files; real Mac sandbox event delivery and complete-publication check; bounded request replay/retention and shutdown of listener. No test writes into user stores.
-- CLI: selected component resolution, compact tree, version mismatch, scope ambiguity, original-byte validation, deadlines and exits; keep existing saved commands compatible. Use existing Rust command matrix only for affected packages/features.
-- Native integration: structural source check, actual consumers' Debug/Release builds, focused configuration/route checks, then relevant real app scenarios. Do not run unrelated business suites solely for marker additions.
-- Mobile: simulator compile and real flows on actual Phone/Tablet compositions; generic tvOS compilation only if shared changes affect it. Simulator proof is not physical-device proof or lowest-runtime proof.
-- Packaging: root/nested SPM product agreement, exact tag resolution, recorded lockfile, bundled helper/skill inventory, installed command and historical installer update/rollback compatibility.
+## Стоимость и безопасность
+На small/large scopes замерить layout wait/acquisition/normalization/query/transfer, retained bytes/nodes. Повторные запросы не накапливают файлы, descriptors или observers без границ. Evidence не коммитить.
 
-Record request-to-result latency and selected-scope size during the real runs, separately from device transfer and build time. Keep current request/deadline ceilings initially; report exhaustion rather than silently increasing them. No claim of low overhead follows merely from using SwiftUI preferences. Check idle activation performs no periodic capture and ordinary playback/input remains usable.
+Canary проверяет отсутствие credentials/learner/model text/raw memory в normalized output и errors. Raw archive имеет private retention. Имя «geometry» не доказывает, что upstream не собрал посторонние свойства.
 
-## Compatibility and scope changes
+Проверить focus/input/scroll/playback и возобновление после debugger-mode acquisition. Quiet sampling не объявлять без проверки. Если backend требует паузы, отразить и измерить её; пригодность обычному workflow решить по evidence.
 
-Preserve canonical core0.1/analysis0.2 meanings and the existing legacy Swift API. Represent new component relations/metadata using supported canonical structures where possible. If an existing structure cannot represent the required fact faithfully, register a versioned additive change and update affected readers before producing it; do not overload a field or silently patch saved files.
+## Поставка
+Installed CLI/skill делает live query без checkout experiments и ручного Xcode Export на каждое обращение. App/backend/CLI pins совместимы, legacy canonical records читаются, managed update/rollback сохранены.
 
-Version the host request/manifest protocol independently. Publish supported SDK/host/CLI capability ranges and capture provenance (app revision, SDK revision, build configuration, platform, run/scene/source state). Record source versions without exposing private paths/tokens. Build and SDK equality is verified rather than assumed from a nearby version string.
+Privacy/concurrency/compatibility review проводится в реально разрешённом объёме. Self-check/cold recipe не называются independent review. Source release ведёт существующий release owner; native production/App Store publication не входит.
 
-The historical immutable SwiftUI donor and its captures remain historical reference evidence. Newly instrumented captures get a new explicit app revision/configuration. Compare unchanged product behavior before using the new source as transfer evidence; never restamp the old baseline. Do not stop active owner processes or obsolete their experiments silently.
-
-## Review and release
-
-Review the final coherent SDK/host/API/IO boundary for privacy, compatibility and concurrency before broad distribution. The requirement for independent review does not authorize spawning workers; use an already authorized reviewer/owner or report that exact remaining review dependency. Routine local marker additions use focused self-checks plus runtime evidence.
-
-The existing builds/releases owner handles packaging, managed installation, CI, source tag and GitHub release under the repository's standing source-release authority after the accepted revision is supplied. Native app publication remains outside this plan. A changed package inventory must retain support for prior manifests and rollback; adding a helper is not just copying a file into an installed bundle.
-
-Deliver matched SDK source/tag, CLI/skill installation, app dependency revision and support matrix. Mac completion can be released while mobile remains explicitly a later milestone; never advertise mobile/device support solely from the package platform declaration. Fresh-use verification may be performed by the current executor from the installed recipe; do not call that independent/new-chat evidence.
-
-## Handoff and completion
-
-For each coverage row record only the current outcome, app/SDK/CLI pins, exact source observation/evidence path, scenarios checked, remaining unsupported fields and next owner. Link prior evidence instead of copying a running history. Retained evidence belongs in the authorized external task area, never in the installed package or repository as auxiliary logs.
-
-The handoff must provide one reproducible path: build/launch the explicitly enabled app once, select its private session, list components, capture one component, inspect/measure, repeat after state changes. Preparation errors identify the missing capability/action; they do not send a new chat into arbitrary AX/debugger experimentation.
-
-Complete P1/P2 only when the real Mac outcome exists. Complete mobile milestones only with their own actual evidence. The entire plan stays unfinished while a mandatory coverage or platform milestone is pending. Checkpoint task-owned changes in both current branches and retain accepted captures/builds with explicit ownership; remove only eligible owned scratch after its consumers finish.
-
-## Execution-specific risks and disposition
-
-| Risk | Required response |
-| --- | --- |
-| File watcher/copy races or sandbox refusal | Reproduce on owned diagnostic instance, correct completion/admission; keep existing URL compatibility, but do not call it quiet capture without proof. |
-| Markers perturb view identity or lifecycle | Preserve existing composition/IDs, test activation on/off, repair marker placement; do not change expected product layout. |
-| More than 256 nodes in a source scope | Partition at real boundaries and qualify needed source relationships; do not just raise the cap. |
-| No public cross-host transform | Keep local sizes/relations, name the exact blocked mapping; no private API/native-view adapter or fabricated affine. |
-| Missing real device or unsupported device container operation | Continue Mac/Simulator work, keep physical profile pending, identify exact device/tool prerequisite. |
-| Existing writers modify shared files | Rebase the plan's implementation basis on current branch state and agree the actual file handoff; do not create a worktree or overwrite peer changes. |
+Итог: одна интеграция/сборка, один live workflow, full tree/batch при необходимости, actual matrix и точные limits. Документы, tests, dump и tag не заменяют работающую цепочку.

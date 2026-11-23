@@ -1,10 +1,10 @@
 # Whole SwiftUI hierarchy through Xcode: qualification route
 
-Part of [PLAN.UIB.SWIFTUI-GEOMETRY@2](../swiftui-geometry-sdk.md), 2026-11-23. Research evidence and proposed next checks; no live result or adopted dependency is claimed.
+Research input to [PLAN.UIB.SWIFTUI-GEOMETRY@3](../swiftui-geometry-sdk.md), 2026-11-23. The live request/freshness contract and acceptance matrix govern source selection. Export is evidence, not an archive-only workflow; no live result or adopted dependency is claimed here.
 
 ## User correction and required outcome
 
-The user requested one global solution: add necessary support across the app once, reuse one build, and collect the whole currently mounted hierarchy in one capture. They explicitly rejected planning around whichever component a particular chat happens to need and cited Xcode's existing hierarchy viewer.
+The user requires one integration/build and fresh runtime geometry for subsequent requests. Full capture is available for discovery, not a single permanent dump or a requirement to export everything for every scalar. Dynamic screens/nodes enter subsequent requests automatically; component-by-component delivery was rejected.
 
 The previous inference that absence of a public DOM-like SwiftUI library API requires manual per-component markers was premature. Xcode itself is a separate available source. A failed custom ABI/cache reader is not a failure of the supported IDE workflow.
 
