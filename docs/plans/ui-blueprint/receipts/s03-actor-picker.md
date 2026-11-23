@@ -28,48 +28,72 @@ Restore is the intended repair mode; current work is bounded acquisition
 diagnosis, with no semantic contract change. Write scope at this checkpoint is
 this receipt only. Shared SDK/collector and S13/S14 files remain with their owners.
 
-## First concrete result
+## Execution plan and current evidence
 
-Reviewed source at `91afbd661d4f791b121764bce3a33f81963aa5ae`:
+The direct user follow-up “пиши мне план исправления … наконец-то решай задачу”
+on 2026-11-23 authorizes continued execution: own synthetic reproducer → bounded
+external selection → source coordinate checks/resize → unchanged product case →
+coordinator release. The open consumer report is no longer the prerequisite for
+all engineering work. Current writes also include
+[the fixture](../../../../tests/bridges/native/SwiftUIActorScopeFixture.swift) and
+[its independent oracle check](../../../../tests/bridges/native/actor_scope_check.py).
+S13 owner `01a20922-f6ad-7651-997b-cef1b3f09b12` owns shared cache-reader integration.
 
-- [ProbeModifiers.swift](../../../../plugins/swiftui/Sources/UIBlueprintSwiftUI/ProbeModifiers.swift)
-  collects `ProbeAnchors` created by the existing root/marker modifiers and
-  resolves selected anchors with `GeometryProxy`. It does not enumerate
-  unmarked SwiftUI children. A changed CLI command or larger limit cannot
-  supply missing anchors in an unchanged donor.
-- The installed bundle manifest identifies version-directory `0.6.1` and
-  source `223cf16808ffa9962ecc28018a8d69e372992c94`. An offline call to that
-  bundle's `require_admitted_target` with a synthetic non-fixture identity
-  returned `product_capture_withdrawn`. No process lookup or attach occurred.
-  This tests the admission gate, not the live picker or the cache decoder.
-- [The cache reader](../../../../plugins/macos/swiftui_ag_cache.py) has a
-  structural body-owner selector. Its contract requires exact source ownership,
-  bounded unique selection and qualification before consumer admission.
-  Per-node cache positions do not establish shared coordinates. The current
-  [runner](../../../../plugins/macos/swiftui_debug_capture.py) has
-  `CONSUMER_ADMISSION = None`; this investigation did not alter it.
-- Apple's [GeometryProxy](https://developer.apple.com/documentation/swiftui/geometryproxy)
-  and [NSHostingView](https://developer.apple.com/documentation/swiftui/nshostingview)
-  documentation describes local anchor resolution and the native hosting
-  boundary. These checked public APIs do not supply a demonstrated external
-  per-child layout route for this immutable donor. This is a bounded finding,
-  not a claim that all external mechanisms are impossible.
+The consumer's actual open-state report is now available under
+`/Volumes/Develop-2TB/Develop/tmp/playphraseme-actor-s03-BfglKRpK/geometry-ready/`:
+`actors-12749d99ba174c768b646f21378e4f8f-coverage.json` plus13Snapshots.
+The ready English guest state contains20options, possible matches Off.
+Only the toolbar actor key occurs in those records. Coverage explicitly lists
+`actor-picker-and-authentication-overlays` as unmeasured. PID25596,
+birth1795448743.971808, bundle `me.playphraseme.reference.actors03.nov23`, CG1047
+identify that historical capture, not automatic current attach authority.
+The consumer performs the next live product verification. Donor source at
+`e19b20c47` confirms `ActorPickerView` and `ActorSearchView`; rows are Button
+labels inside the former's ForEach, not standalone nominal row view types.
 
-## Pending consumer evidence
+## Reproducer and experimentally corrected selection
 
-One consolidated request was sent to the consumer for the new open-state
-manifest, exact command/scenario, source/SDK revision, live window identity and
-available picker markers/roots. At this checkpoint the consumer's latest
-reported collection is closed-state; it names
-`actor-picker-and-authentication-overlays` as unmeasured. The consumer was
-waiting for its desktop input lane. That result and the historical toolbar
-89×28 frame do not measure the requested picker children.
+Fixture evidence and the temporary experimental adapter are retained in
+`/Volumes/Develop-2TB/Develop/tmp/uib-actors-s03-_9n7zkwx/`.
+Its own app/runtime is `/tmp/uib-actors-s03-_34wh1b_/`.
+Both directories record task ownership and retention conditions. No donor code,
+SDK, admission gate, backend or installed distribution was changed.
 
-Next event: the owner returns the open-state report and source-bound selector
-facts. Analyze its original canonical records before choosing a correction.
-If the same missing-anchor boundary persists, qualify an external scoped source
-and its coordinate mapping with the existing collector owner; do not request
-donor instrumentation, enable a generic product admission, repeat whole-window
-scans, or relabel another geometry channel. Repeat the original scenario through
-the consumer only after a qualified candidate exists. No release is warranted
-by this checkpoint alone. Runtime, resize and consumer acceptance remain open.
+- Without the fixture's process-local `SWIFTUI_VIEW_DEBUG=29`, the recorded
+  graph root is zero; the reader refuses `cache_offset_limit` before selection.
+- With recording, whole-tree structural selection refuses `cache_scope_scan_limit`.
+- The existing native `SwiftUI.AppKitTextField` anchor binds, but nominal-only
+  ancestry refuses `anchor_card_owner_unresolved`. Bounded ancestry diagnostics
+  identify ActorQuery and ActorPicker through `rule_owner` on wrapper records.
+- The fixture-only `body_boundary.py` experiment retains the outermost contiguous
+  occurrence of that body owner on the proven native path. This produces24nodes
+  from142raw records and37scan records, with zero recorded model-range overlaps.
+  It is **not** a qualified complete-owner algorithm: disjoint body-owner branches
+  still require independent handling. Product admission stays closed.
+- `actor-wide-08` and `actor-narrow-09` both produce canonical valid Snapshots,
+  normal detach, identical pre/post oracle bytes per capture, and the same process
+  generation. All seven source-attributed part sizes exactly match the public
+  SwiftUI oracle. Header/Close/query/toggle/scroll frames also exactly match
+  `.global`. Query width changes442→302pt in the same process.
+- Row and label positions are local to scroll content. Their observed relative
+  offset matches the oracle; the content origin differs from the scroll frame
+  by native rounding. No universal translation or common Snapshot space is claimed.
+- `actor-duplicate-10` has a second picker/native field and refuses
+  `native_anchor_unresolved`, with no Snapshot and normal detach. The outside
+  37×19pt sentinel is absent from both positive captures.
+
+The fixture compiled with Swift6. Both positive Snapshots passed the installed
+0.6.1 canonical validator. `actor_scope_check.py` passed the seven-size,
+five-global-frame, same-process-resize and duplicate-refusal checks.
+These results qualify the named synthetic checks only, not the product scenario.
+
+## Remaining implementation and acceptance
+
+S13 integrates the common body-owner correction, including disjoint-owner and
+adjacent-owner negatives; this chat retains Actors fixture/consumer responsibility.
+S03 must qualify actual part attribution, source coordinate mappings across the
+scroll-content hosting boundary, and the immutable app's original open case plus
+layout change. Source rows and controls lack the fixture's convenient custom
+part types, so fixture names cannot be used as a donor recipe. No release is
+warranted until the consumer scenario passes. Existing AX/PNG/SDK behavior,
+model privacy, limits and owner recovery remain protected.
