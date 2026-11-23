@@ -67,6 +67,26 @@ jobs:
           command -v shellcheck >/dev/null || brew install shellcheck
           brew install-bundler-gems --add-groups=formula_test
           brew ruby -e 'require "formula_assertions"'
+      - name: Prepare offline Homebrew formula resolution
+        shell: bash
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+          HOMEBREW_NO_INSTALL_FROM_API: "1"
+        run: |
+          set -euo pipefail
+          time brew tap --force homebrew/core
+          test -d "$(brew --repo homebrew/core)/Formula"
+          time brew ruby -e 'require "formula"; require "formula_assertions"; Formulary.core_path("uiblueprint")'
+      - name: Verify local source installation
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate="$RUNNER_TEMP/uiblueprint-candidate"
+          mkdir "$candidate"
+          python3 -B release.py prepare --revision "$UIB_REVISION" --version "$UIB_VERSION" --destination "$candidate"
+          python3 -B release.py verify --destination "$candidate"
+          python3 -B tests/bridges/release_check.py --candidate "$candidate"
+          python3 -B release.py notes --revision "$UIB_REVISION" > "$candidate/RELEASE_NOTES.md"
       - name: Check CLI and release caller
         shell: bash
         run: |
@@ -83,16 +103,6 @@ jobs:
           cargo fmt --manifest-path plugins/gpui/Cargo.toml --all -- --check
           cargo clippy --locked --manifest-path plugins/gpui/Cargo.toml --all-targets -- -D warnings
           cargo test --locked --manifest-path plugins/gpui/Cargo.toml -- --test-threads=1
-      - name: Verify local source installation
-        shell: bash
-        run: |
-          set -euo pipefail
-          candidate="$RUNNER_TEMP/uiblueprint-candidate"
-          mkdir "$candidate"
-          python3 -B release.py prepare --revision "$UIB_REVISION" --version "$UIB_VERSION" --destination "$candidate"
-          python3 -B release.py verify --destination "$candidate"
-          python3 -B tests/bridges/release_check.py --candidate "$candidate"
-          python3 -B release.py notes --revision "$UIB_REVISION" > "$candidate/RELEASE_NOTES.md"
 
   draft:
     if: ${{ inputs.create_draft }}
