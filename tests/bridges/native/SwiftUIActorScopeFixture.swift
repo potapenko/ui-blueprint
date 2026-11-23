@@ -125,7 +125,11 @@ struct ActorFixtureContent: View {
                 TextField("Unrelated field", text: $unrelatedQuery)
                     .accessibilityIdentifier("fixture.outside.query")
             }
-            ActorPicker()
+            if ProcessInfo.processInfo.environment["UIB_ACTOR_SOURCE_SHAPE"] == "1" {
+                SourceActorPicker()
+            } else {
+                ActorPicker()
+            }
             if ProcessInfo.processInfo.environment["UIB_ACTOR_DUPLICATE"] == "1" {
                 // Negative case: another source owner with the same native field class.
                 ActorPicker()
@@ -146,6 +150,75 @@ struct ActorFixtureContent: View {
                 catch { return }
             }
         }
+    }
+}
+
+// Structural control for immutable e19b20c47's ActorPickerView: only the search
+// has its own View type; the header, toggle and repeated Button/Text rows do not.
+// Synthetic strings and actions intentionally avoid all application/API state.
+struct SourceActorSearch: View {
+    @Binding var query: String
+    var body: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "magnifyingglass")
+            TextField("Search", text: $query).textFieldStyle(.plain)
+        }
+        .font(.body)
+        .padding(.horizontal, 12)
+        .frame(minHeight: 36)
+        .actorOracle("query")
+    }
+}
+
+struct SourceActorPicker: View {
+    @State private var query = ""
+    @State private var possible = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 12) {
+                Text("Synthetic actors").font(.largeTitle.bold()).actorOracle("header")
+                Spacer()
+                Button {} label: { Label("Close", systemImage: "xmark") }
+                    .actorOracle("close")
+            }
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
+            VStack(spacing: 12) {
+                SourceActorSearch(query: $query)
+                Button { possible.toggle() } label: {
+                    Label("Include possible matches", systemImage: possible ? "checkmark.square" : "square")
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(8)
+                        .contentShape(Rectangle())
+                }
+                .actorOracle("toggle")
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(0..<20, id: \.self) { number in
+                            Button {} label: {
+                                Text("Synthetic option \(number)").actorOracle("label-\(number)")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.body)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 8)
+                                    .frame(minHeight: 36)
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .actorOracle("row-\(number)")
+                        }
+                    }
+                }
+                .frame(minHeight: 120, idealHeight: 360, maxHeight: 360)
+                .actorOracle("scroll")
+            }
+            .padding(16)
+            .padding(.horizontal, 8)
+            .padding(.bottom, 8)
+        }
+        .frame(width: 440)
+        .actorOracle("picker")
     }
 }
 

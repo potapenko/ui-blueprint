@@ -102,6 +102,19 @@ on the matched native AppKitTextField. This does not establish a product identit
 bridge. Shared reader inputs for further runs are frozen from58c3df0 under
 `source-pin`, avoiding concurrent S13 edits. Neither experiment contacted the donor.
 
+## Source-shaped volume control
+
+The fixture now also offers `UIB_ACTOR_SOURCE_SHAPE=1`:20synthetic Button/Text
+rows with the donor's structural distinction (only search is a separate View type).
+It deliberately does not claim copied product styling, data or behavior.
+`actor-source-shape-13` refuses `cache_tree_limit`; declaring SwiftUI.Button leaves
+in `actor-source-controls-14` still refuses. The bounded diagnostic in `capture-15`
+records1024raw records,40emitted nodes and six Button boundaries. No quota was
+raised, no Snapshot was published, and each attempt detached normally. This
+proves that the convenient seven-part fixture alone cannot qualify the real form.
+A revised collector must also pass this source-shaped case. No third cosmetic
+capture of this unchanged failing route is scheduled.
+
 ## Remaining implementation and acceptance
 
 S13 integrates the common body-owner correction, including disjoint-owner and
