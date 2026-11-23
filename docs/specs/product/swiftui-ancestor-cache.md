@@ -1,7 +1,7 @@
 # Bounded native ancestor structural reuse
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture.ancestor-cache`.
-- Contract: `UIB.SWIFTUI-ANCESTOR-CACHE@2`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-ANCESTOR-CACHE@3`; Authority: Active; Stability: Evolving.
 - Authority: the user's approved S15 repair and direct continuation through real
   Practice verification, plus S13's finite shared-owner handoff on2026-11-23 to
   chat `01a2094f-9996-72d3-8230-3b1e4f1ec16d` for this module and its checks.
@@ -65,6 +65,29 @@ multi-witness paths, without enlarging the root or discovery scope. Shared glue,
 request validation and contract routing remain S13-owned. Qualification requires
 positive multiple witnesses and malformed/cyclic/ambiguous/incomplete negative
 paths, plus the real Practice fixture before consumer admission.
+
+## ANCESTOR-CACHE.CONTAINER — bounded body within an owner
+
+The same S15 handoff explicitly approves `container_in_owner` as a separate
+selection mode. `container_types` declares an ordered path of1–4 exact source
+types, without changing `containing_type`. First establish every candidate and complete
+source-owner path using the original native-owner checks. Then inspect only those
+validated paths inside the exact owner for the requested source container.
+
+A matching source body attribute may occur on several wrapper records along one
+path: select its outermost occurrence within the owner. A different matching body
+attribute, repeated nominal container, divergent roots, missing or cyclic path,
+foreign binding or incomplete discovery refuses. Skip a witness only when its
+complete path proves absence of the requested container. All remaining witnesses
+must belong to one common container occurrence/root at each declared path step and
+appear exactly once in the output. Optional leaf cuts preserve their path union.
+
+Output names both the outer source owner and requested container with distinct
+`native_owner_container` provenance. Coverage is partial for that container,
+never complete owner/window coverage. Parent discovery contributes no invented
+geometry. Keep all existing source values, limits, privacy and lifecycle guards.
+Test no-match, one shared body, two containers/owners, divergent body roots and
+incomplete paths before the separate fixture and product qualification gates.
 
 ## ANCESTOR-CACHE.ACCEPT
 

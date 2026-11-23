@@ -7,7 +7,7 @@ from unittest.mock import Mock
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'plugins/macos'))
-from swiftui_ancestor_cache import AncestorCache, witness_path_union
+from swiftui_ancestor_cache import AncestorCache, witness_path_union, source_container, source_container_path
 from swiftui_debug_snapshot import Refusal
 
 
@@ -21,6 +21,60 @@ def reader():
 
 
 class AncestorCacheChecks(unittest.TestCase):
+    def test_exact_container_path_preserves_outer_owner_and_selects_declared_body(self):
+        r=self.container_reader({20:(7,'App.Scroll')},{30:'SwiftUI.VStack'})
+        paths={1:{10:20,20:30,30:40,40:None},2:{10:50,50:None}}
+        root,selected=source_container_path(r,10,paths,['App.Scroll','SwiftUI.VStack'])
+        self.assertEqual(root,30);self.assertEqual(set(selected),{1})
+        with self.assertRaisesRegex(Refusal,'ancestor_container_unresolved'):
+            source_container_path(r,10,paths,['App.Scroll','App.Missing'])
+
+    def test_container_path_rejects_unbounded_or_non_nominal_selectors(self):
+        r=self.container_reader({})
+        for types in [[],['App.X']*5,['x'],['App.X*'],['App.X',None]]:
+            with self.assertRaisesRegex(Refusal,'ancestor_container_path'):
+                source_container_path(r,10,{1:{10:None}},types)
+
+    def container_reader(self, bodies, nominals=None):
+        return SimpleNamespace(req={'limits':{'max_depth':256}},
+            ancestor_cache=SimpleNamespace(tree_element=Mock(side_effect=lambda element:element)),
+            pointer=lambda x:x,u64=lambda address:address,u32=lambda address:address-8,
+            rule_owner=lambda model,cache:bodies.get(model,(None,None)),
+            qualified_nominal=lambda metadata:(nominals or {}).get(metadata))
+
+    def test_container_uses_outermost_same_body_and_excludes_proven_nonmember(self):
+        r=self.container_reader({20:(7,'App.Scroll'),30:(7,'App.Scroll')})
+        paths={1:{10:20,20:30,30:50,50:None},2:{10:20,20:40,40:None},3:{10:60,60:None}}
+        root,selected=source_container(r,10,paths,'App.Scroll')
+        self.assertEqual(root,20);self.assertEqual(set(selected),{1,2})
+
+    def test_container_repeated_bodies_or_nominal_instances_refuse(self):
+        paths={1:{10:20,20:30,30:None}}
+        for r in [self.container_reader({20:(7,'App.Scroll'),30:(8,'App.Scroll')}),
+                  self.container_reader({}, {20:'App.Scroll',30:'App.Scroll'})]:
+            with self.assertRaisesRegex(Refusal,'ancestor_container_ambiguous'):
+                source_container(r,10,paths,'App.Scroll')
+
+    def test_container_same_body_on_divergent_branches_refuses(self):
+        r=self.container_reader({20:(7,'App.Scroll'),30:(7,'App.Scroll')})
+        with self.assertRaisesRegex(Refusal,'ancestor_container_ambiguous'):
+            source_container(r,10,{1:{10:20,20:None},2:{10:30,30:None}},'App.Scroll')
+
+    def test_container_no_match_and_incomplete_path_are_not_empty_success(self):
+        r=self.container_reader({})
+        with self.assertRaisesRegex(Refusal,'ancestor_container_unresolved'):
+            source_container(r,10,{1:{10:20,20:None}},'App.Scroll')
+        with self.assertRaisesRegex(Refusal,'ancestor_witness_path_incomplete'):
+            source_container(r,10,{1:{10:20}},'App.Scroll')
+
+    def test_container_foreign_record_and_owner_itself_refuse(self):
+        r=self.container_reader({10:(7,'App.Scroll')})
+        with self.assertRaisesRegex(Refusal,'ancestor_container_not_inside_owner'):
+            source_container(r,10,{1:{10:20,20:None}},'App.Scroll')
+        r.ancestor_cache.tree_element.side_effect=Refusal('cache_foreign_graph')
+        with self.assertRaisesRegex(Refusal,'cache_foreign_graph'):
+            source_container(r,10,{1:{10:20,20:None}},'App.Scroll')
+
     def test_multi_witness_paths_keep_shared_spine_and_every_branch(self):
         result=witness_path_union(10,{1:{10:20,20:30,30:None},2:{10:20,20:40,40:None}},256)
         self.assertEqual({k:set(v) for k,v in result.items()},{10:{20},20:{30,40}})

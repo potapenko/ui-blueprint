@@ -4,6 +4,7 @@ The caller owns structural type/path identification. Never wrap generic
 owned_record(size=32): attribute/model storage can have the same size.
 """
 from bisect import bisect_right, insort
+import re
 
 from swiftui_debug_snapshot import Refusal
 
@@ -47,9 +48,64 @@ def witness_path_union(root, paths, max_depth):
     return {element: tuple(values) for element, values in children.items()}
 
 
+def source_container(reader, owner_root, paths, container_type):
+    """Select one source container inside already validated owner witness paths.
+
+    The caller must prove exact owner/window/native candidates first. This helper
+    reads structural metadata only and never searches beyond those paths.
+    """
+    depth = reader.req['limits']['max_depth']
+    witness_path_union(owner_root, paths, depth)
+    facts, owner_names, selected = {}, {}, {}
+    for attribute, path in paths.items():
+        element, matches = owner_root, {}
+        while element is not None:
+            if element not in facts:
+                address = reader.ancestor_cache.tree_element(element)
+                metadata = reader.pointer(reader.u64(address))
+                body_attribute, body_type = reader.rule_owner(reader.u32(address+8), owner_names)
+                nominal = reader.qualified_nominal(metadata) if metadata else None
+                if body_type == container_type:
+                    if type(body_attribute) is not int or body_attribute <= 0:
+                        raise Refusal('ancestor_container_identity')
+                    facts[element] = ('body', body_attribute)
+                elif nominal == container_type:
+                    facts[element] = ('nominal', element)
+                else:
+                    facts[element] = None
+            identity = facts[element]
+            if identity is not None:
+                matches.setdefault(identity, element)  # outermost on this proved path
+            element = path[element]
+        if len(matches) > 1:
+            raise Refusal('ancestor_container_ambiguous')
+        if matches:
+            identity, root = next(iter(matches.items()))
+            selected.setdefault((identity, root), {})[attribute] = path
+    if len(selected) != 1:
+        raise Refusal('ancestor_container_unresolved' if not selected else 'ancestor_container_ambiguous')
+    (_, root), selected_paths = next(iter(selected.items()))
+    if root == owner_root:
+        raise Refusal('ancestor_container_not_inside_owner')
+    return root, selected_paths
+
+
+def source_container_path(reader, owner_root, paths, container_types):
+    """Compose up to four exact source boundaries; never guess a descendant."""
+    if (not isinstance(container_types, list) or not 1 <= len(container_types) <= 4
+            or any(not isinstance(name, str) or len(name) > 256
+                   or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)+', name)
+                   for name in container_types)):
+        raise Refusal('ancestor_container_path', 2)
+    root, selected_paths = owner_root, paths
+    for name in container_types:
+        root, selected_paths = source_container(reader, root, selected_paths, name)
+    return root, selected_paths
+
+
 class AncestorCache:
     def __init__(self, reader):
-        if reader.req.get('scope', {}).get('native_match') != 'ancestor_owner':
+        if reader.req.get('scope', {}).get('native_match') not in ('ancestor_owner', 'container_in_owner'):
             raise Refusal('ancestor_cache_scope', 2)
         self.reader = reader
         self.binding = self._binding()
