@@ -45,6 +45,9 @@ Group identity is a stored four-case enum. Static Optional nil/some is checked
 first; some reads only the first byte at the qualified56-byte Group? storage.
 The fixture confirms nil may also have byte0, so that byte alone never means
 “toolbar”. Missing/foreign/unsupported fields refuse, never default to a group.
+Offline disassembly of the pinned app's Group.id getter is `ldrb w0,[x20]; ret`
+at0x1146f58: it independently confirms that the stored ID is byte0. The getter
+was not invoked. Evidence: `offline-group-id-getter.txt` in the component task area.
 
 ## Files and use
 

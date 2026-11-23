@@ -30,6 +30,8 @@ def process(receipt, bundle):
 
     run([str(bundle / "uiblueprint-validate"), "--max-bytes", "65536", str(output)])
     snapshot = source["artifact"]["data"]
+    run([str(bundle / "uiblueprint"), "inspect", "--snapshot", str(output), "--ref", json.dumps(snapshot["nodes"][0]["key"]),
+         "--view", "design", "--max-input-bytes", "65536", "--max-output-bytes", "65536"])
     measurements = []
     for node in snapshot["nodes"]:
         if not node["properties"] or node["properties"][0]["state"]["availability"] != "known":
@@ -49,7 +51,8 @@ def process(receipt, bundle):
                 "--space", geometry["coordinate_space"]["id"], "--max-input-bytes", "65536", "--max-output-bytes", "65536", "--json"]))
             save(receipt.parent / (name + ".measurement.json"), measured)
             measurements.append({"id": name, "result": measured["artifact"]["data"]["result"]})
-    print(json.dumps({"snapshot": str(output), "validated": True, "measurements": measurements}, allow_nan=False))
+    print(json.dumps({"snapshot": str(output), "validated": True, "inspected": True,
+                      "components": snapshot["components"], "measurements": measurements}, allow_nan=False))
 
 
 if __name__ == "__main__":

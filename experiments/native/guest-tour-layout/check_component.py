@@ -68,6 +68,18 @@ def main():
             pass
         else:
             raise AssertionError("invalid group admitted")
+    group_receipt = {k: copy.deepcopy(v) for k, v in receipt.items() if k not in ("units", "consistency", "groups")}
+    group_receipt["format"] = "playphraseme.guest-tour.group-1"
+    group_receipt["records"] = [{"kind": "group", "observation_id": "e" * 32, "read_start": 1000, "read_end": 2000,
+                                  "values": {"availability": "known", "group": "toolbar"}}]
+    for group in ("toolbar", None):
+        group_receipt["records"][0]["values"]["group"] = group
+        group_source = normalize(group_receipt)
+        group_path = output / ("component-check-group-" + str(group) + ".json")
+        group_path.write_text(json.dumps(group_source))
+        subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", "65536", str(group_path)], check=True, timeout=10)
+        assert len(group_source["artifact"]["data"]["components"]) == (0 if group is None else 1)
+        assert group_source["artifact"]["data"]["nodes"][0]["properties"][0]["state"]["availability"] == "unknown"
     print("Synthetic component: 5 receipt and 5 group refusals; Rust transformed gap -10 pt, 4 contributing evidence records.")
 
 
