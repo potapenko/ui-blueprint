@@ -22,6 +22,7 @@ For each new defect, follow the [bug chat onboarding and handoff](docs/plans/ui-
 Create a regular user-visible project chat, give it the context to prepare its
 own implementation plan, and exchange direct chat links with the reporter.
 The coordinator's assignment ends when both chats have each other's link.
+Blueprint chats fix and regression-test the tool on project-owned fixtures. The reporting team runs all measurements and UI acceptance on its application, owns its windows, and changes its application code. Archive completed fix chats and measurement-only chats.
 
 The builds and releases chat (`01a20929-8e9a-7830-834d-3e558e9ff18d`) owns
 packaging, CI, local installation, publication and release verification for
