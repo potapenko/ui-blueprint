@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@18`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@19`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -26,13 +26,28 @@
 
 ## DEBUG-CAPTURE.SCOPE
 
-The source-pinned admission identifies one Reels cache qualification request ID and exact
-PID/bundle/birth/window. Other product identities refuse before debugger startup
+The source-pinned admission identifies one qualification request ID and exact
+PID/bundle/birth/window. Historical Reels admissions are consumed. Other product identities refuse before debugger startup
 and again at capture entry. Fixture admission remains separate. A consumer must
 revalidate the pinned identity immediately before one attempt; first refusal stops
 qualification with no retry/quota increase. Restart/new identity needs new handoff.
 The source owner executes the capture; tool preparation grants no ownership of its
 process, input or stores. No production installation is implied.
+
+S13@19 admits exactly one owner-run after the direct user continuation and the
+owner's fresh2026-11-23 handoff: request `s13-random-favorite-one-1`, PID13623,
+bundle `me.playphraseme.reference.random.s13.w01a20844`, birth1795452212.070178,
+CG1969. Scope is RandomCompletionDialog with the existing
+PlayPhrasePointingHandCursorView native class, ancestor_owner and geometry_records.
+Source e19b20c47/SDK4e8a9968 remains unchanged. Required fixed backend SHA256:
+`3d835dfcab1ee93d2b2eb08d610df02db8b2fa1716889cb3f0b29722d3b3cf48`.
+Primary-listener sequential fixture0/1/2 and pending-attach owner recovery passed;
+finite independent source reviews and allocator extent correction are recorded in
+[the S13 receipt](../../plans/ui-blueprint/receipts/s13-random-completion.md).
+The owner validates the unchanged identity/state/hashes and runs once. First
+refusal ends this admission; no retries/quotas/signature changes are authorized.
+A partial Snapshot does not complete card/keycap/icon/gap acceptance. Product
+recovery stays with this exact owner and its explicit bound command.
 
 An explicit request identifies one already-running, operator-owned process by
 PID, expected bundle and exact launch time, and one native window number.

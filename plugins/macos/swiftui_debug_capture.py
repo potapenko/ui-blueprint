@@ -30,10 +30,13 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 
 # Filled only from the selected consumer owner's fresh identity handoff. A caller
 # cannot expand this gate with a request flag, filename or bundle prefix.
-# The single Reels window-root attempt refused tree_limit. No further product
-# capture is admitted until a bounded, source-qualified subtree path is verified.
-CONSUMER_ADMISSION = None
-CONSUMER_BACKEND_SHA256 = None
+# One S13 owner-run only, after sequential fixture/recovery qualification.
+CONSUMER_ADMISSION = ('s13-random-favorite-one-1', 13623,
+    'me.playphraseme.reference.random.s13.w01a20844', 1795452212.070178, 1969,
+    dict(type='PlayphrasemeApp.RandomCompletionDialog',
+         native_view_type='PlayphrasemeApp.PlayPhrasePointingHandCursorView',
+         native_match='ancestor_owner', selection='geometry_records'))
+CONSUMER_BACKEND_SHA256 = '3d835dfcab1ee93d2b2eb08d610df02db8b2fa1716889cb3f0b29722d3b3cf48'
 
 
 def require_admitted_target(req):
