@@ -65,6 +65,8 @@ jobs:
           cargo fetch --locked
           cargo fetch --locked --manifest-path plugins/gpui/Cargo.toml
           command -v shellcheck >/dev/null || brew install shellcheck
+          brew install-bundler-gems --add-groups=formula_test
+          brew ruby -e 'require "formula_assertions"'
       - name: Check CLI and release caller
         shell: bash
         run: |
