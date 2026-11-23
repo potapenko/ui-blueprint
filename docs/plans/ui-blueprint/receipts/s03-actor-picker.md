@@ -1,176 +1,92 @@
-# S03.A Actors picker — acquisition dependency
+# S03.A Actors picker
 
-Status: **open; no picker geometry or fix accepted**. Updated 2026-11-23.
+Status: **candidate implemented; original consumer acceptance pending**.
+Updated2026-11-23. Owner `01a20923-023c-7cd0-8421-a2e20177df71`; consumer
+`01a20911-330a-7fa2-aa96-980371b389a7`; shared reader owner
+`01a20922-f6ad-7651-997b-cef1b3f09b12`; coordinator
+`01a1e565-14f6-7be0-aa02-cd648a1b0423` handles release/install/publication.
 
-## Scope and authority
+## Authority and scope
 
-The operator's separate-bug-chat directive, human turn
-`01a20921-a2b9-7dc0-ab2c-9106d7cd76aa` in coordinator
-`01a1e565-14f6-7be0-aa02-cd648a1b0423`, assigns this finite investigation and
-repair to `01a20923-023c-7cd0-8421-a2e20177df71`. Consumer:
-`01a20911-330a-7fa2-aa96-980371b389a7`.
-
-Required result: source-layout geometry of the open PlayPhrase.me actor picker,
-including header, Close, search field, toggle, scroll area, suggestion row and
-label, with explicit units and coordinate spaces. Donor source `e19b20c47`,
-SDK `4e8a9968`, UI authority `7de6680a` remain immutable. Xcode Inspector,
-AX rectangles and PNG estimates are not substitutes. The coordinator owns
-versioning, managed installation and publication.
+Direct human separate-bug-chat directive01a20921-a2b9 and this chat's explicit
+“Хорошо, делай по плану” authorize the repair: reproduce → select source parts →
+prove coordinates → unchanged product owner-run → release handoff. Required parts:
+header, Close, query, possible matches, viewport, suggestion row and label.
+Donor e19b20c47 / SDK4e8a9968 / UI authority7de6680a remains immutable.
+AX/PNG/Xcode geometry substitution and donor instrumentation remain forbidden.
 
 Basis: [registry](../../../specs/README.md) →
 [SWIFTUI-PROBE@3](../../../specs/product/swiftui-probe.md),
-[WINDOW-PROBE@1](../../../specs/product/window-probe.md), and their required
-MODEL, GEOMETRY, IDENTITY, PRIVACY, EXCHANGE, NATIVE, CLI, BOUNDARIES,
-PROJECTIONS and LIFECYCLE clauses. The external alternative is governed by
-[SWIFTUI-DEBUG-CAPTURE@14](../../../specs/product/swiftui-debug-capture.md).
-The installed `ui-blueprint` skill and its macOS/analysis recipes were read.
-Restore is the intended repair mode; current work is bounded acquisition
-diagnosis, with no semantic contract change. Write scope at this checkpoint is
-this receipt only. Shared SDK/collector and S13/S14 files remain with their owners.
+[WINDOW-PROBE@1](../../../specs/product/window-probe.md), their required closure,
+[DEBUG-CAPTURE](../../../specs/product/swiftui-debug-capture.md),
+[TRANSFORM](../../../specs/product/swiftui-cache-transform.md),
+[NATIVE-OWNER](../../../specs/product/swiftui-native-owner.md), and
+[NATIVE-PARTS@1](../../../specs/product/swiftui-native-parts.md).
+The latter is the additive Evolve inside the approved fix; old modes stay unchanged.
+S13 explicitly handed off the new helper/test/contract. Shared parser/reader/glue
+remain S13-owned. No product admission, install or publication is claimed here.
 
-## Execution plan and current evidence
+## Current implementation
 
-The direct user follow-up “пиши мне план исправления … наконец-то решай задачу”
-on 2026-11-23 authorizes continued execution: own synthetic reproducer → bounded
-external selection → source coordinate checks/resize → unchanged product case →
-coordinator release. The open consumer report is no longer the prerequisite for
-all engineering work. Current writes also include
-[the fixture](../../../../tests/bridges/native/SwiftUIActorScopeFixture.swift) and
-[its independent oracle check](../../../../tests/bridges/native/actor_scope_check.py).
-S13 owner `01a20922-f6ad-7651-997b-cef1b3f09b12` owns shared cache-reader integration.
+[swiftui_native_parts.py](../../../../plugins/macos/swiftui_native_parts.py) selects
+all native-backed overlay parts in one declared source owner/container. It proves
+window/provider/weak bindings and a complete parent path, indexes structural
+layoutComputer witnesses once per subgraph, and excludes a toggle outside the list.
+It does not select by index, geometry, UI text or model value. Discovery, selected
+walk and transform context share1024unique raw records, with bounded cached headers
+and protected-range rechecks. The per-class ivar cache revalidates each provider
+and weak reference. Existing byte/call/node limits and lifecycle stay unchanged.
 
-The consumer's actual open-state report is now available under
-`/Volumes/Develop-2TB/Develop/tmp/playphraseme-actor-s03-BfglKRpK/geometry-ready/`:
-`actors-12749d99ba174c768b646f21378e4f8f-coverage.json` plus13Snapshots.
-The ready English guest state contains20options, possible matches Off.
-Only the toolbar actor key occurs in those records. Coverage explicitly lists
-`actor-picker-and-authentication-overlays` as unmeasured. PID25596,
-birth1795448743.971808, bundle `me.playphraseme.reference.actors03.nov23`, CG1047
-identify that historical capture, not automatic current attach authority.
-The consumer performs the next live product verification. Donor source at
-`e19b20c47` confirms `ActorPickerView` and `ActorSearchView`; rows are Button
-labels inside the former's ForEach, not standalone nominal row view types.
+Public glue shape: `native_match=overlays_in_owner`, `type`, `containing_type`,
+`native_view_type`, `selection=geometry_records`; no leaf_types. Helper entrypoints:
+`select_parts(reader,host)`, `cached_read(reader,address,size)`,
+`check_budget(reader,element)`, `record_count(reader)` and `verify_parts(reader)`.
+Integrating owner must invoke budget checks on both walk and transform-context
+visits, use cached_read after normal range validation, and verify every native
+witness once after traversal. Provenance source is `native_overlay_parts`, not a
+complete body forest. Root/branch order grants no semantic identity.
 
-## Reproducer and experimentally corrected selection
+## Verified evidence
 
-Fixture evidence and the temporary experimental adapter are retained in
-`/Volumes/Develop-2TB/Develop/tmp/uib-actors-s03-_9n7zkwx/`.
-Its own app/runtime is `/tmp/uib-actors-s03-_34wh1b_/`.
-Both directories record task ownership and retention conditions. No donor code,
-SDK, admission gate, backend or installed distribution was changed.
+External evidence root `/Volumes/Develop-2TB/Develop/tmp/uib-actors-s03-_9n7zkwx`;
+owned internal apps/runtime `/tmp/uib-actors-s03-_34wh1b_`. Ownership notes apply.
 
-- Without the fixture's process-local `SWIFTUI_VIEW_DEBUG=29`, the recorded
-  graph root is zero; the reader refuses `cache_offset_limit` before selection.
-- With recording, whole-tree structural selection refuses `cache_scope_scan_limit`.
-- The existing native `SwiftUI.AppKitTextField` anchor binds, but nominal-only
-  ancestry refuses `anchor_card_owner_unresolved`. Bounded ancestry diagnostics
-  identify ActorQuery and ActorPicker through `rule_owner` on wrapper records.
-- The fixture-only `body_boundary.py` experiment retains the outermost contiguous
-  occurrence of that body owner on the proven native path. This produces24nodes
-  from142raw records and37scan records, with zero recorded model-range overlaps.
-  It is **not** a qualified complete-owner algorithm: disjoint body-owner branches
-  still require independent handling. Product admission stays closed.
-- `actor-wide-08` and `actor-narrow-09` both produce canonical valid Snapshots,
-  normal detach, identical pre/post oracle bytes per capture, and the same process
-  generation. All seven source-attributed part sizes exactly match the public
-  SwiftUI oracle. Header/Close/query/toggle/scroll frames also exactly match
-  `.global`. Query width changes442→302pt in the same process.
-- Row and label positions are local to scroll content. Their observed relative
-  offset matches the oracle; the content origin differs from the scroll frame
-  by native rounding. No universal translation or common Snapshot space is claimed.
-- `actor-duplicate-10` has a second picker/native field and refuses
-  `native_anchor_unresolved`, with no Snapshot and normal detach. The outside
-  37×19pt sentinel is absent from both positive captures.
+- Original open consumer manifest/13Snapshots: only toolbar actor marker;
+  `actor-picker-and-authentication-overlays` unmeasured. Real donor source confirms
+  rows are inline Button/Text, not separate nominal ActorRow types.
+- Seven-part fixture: wide/narrow dimensions and all7root translations match public
+  SwiftUI oracle. Duplicate picker refuses. Original contiguous owner candidate
+  omitted a split branch; outermost same-body ancestor fixes that fixture
+  (`capture-21`,165raw). S13 integrated it in8c810b8 as partial ancestor semantics.
+- Source-shaped20-option fixture: whole traversal refuses1024raw. Observed
+  `SwiftUI.SystemScrollView` leaf makes top-controls scope bounded. `capture-25`
+  proves the same top5frames with onGeometryChange compiled out;420raw.
+- `capture-37`: new helper + frozen8c810b8 with temporary fixture-only parser glue,
+  real no-oracle cursor fixture. Nine native candidates → eight row branches,
+  64nodes;747unique records,488selected records,2840cached header reads,214calls,
+  one cached class layout. Zero recorded model-range overlaps, no graph evaluation,
+  normal detach. All8row and8label frames have known native-window mappings.
+  Installed0.6.1 validator passes; ordinary Rust measure returns8pt leading gap
+  for every row/label pair. This is the helper's runtime result, not installed glue.
+-18focused helper checks pass: scope/admission, membership, ambiguity, incomplete
+  ancestry, duplicate/stale/foreign binding, cycles, depth/record budget, private
+  cached reads and per-class reuse. Fixture source compiles under Swift6.
 
-The fixture compiled with Swift6. Both positive Snapshots passed the installed
-0.6.1 canonical validator. `actor_scope_check.py` passed the seven-size,
-five-global-frame, same-process-resize and duplicate-refusal checks.
-These results qualify the named synthetic checks only, not the product scenario.
+Earlier inactive label transforms were dirty; they remained unknown. After ordinary
+query focus, clean transforms were observed, but capture itself reported inactive:
+causality is not claimed. Capture33 blocked at task_for_pid then ended
+attach_unavailable/0calls after user authorization; old target disappeared.
+Fresh fixture captures36/37 succeeded. No outstanding debugger hold from those runs.
 
-## Split-owner counterexample
+## Remaining dependency and next action
 
-`actor-split-12` proves the contiguous prototype is insufficient: one ActorPicker
-body emits its picker plus a separate31×13pt branch. The public oracle records
-that branch, but the experimental Snapshot silently omits it while returning ready.
-The optional fourth directory to `actor_scope_check.py` catches this with
-`split body-owner branch silently omitted` (exit1). This is an intentionally
-failing regression against the temporary prototype, not a release candidate.
-The common reader owner must include all qualified branches or refuse this case.
-
-A separate fixture with `.accessibilityIdentifier` on the field found no identifier
-on the matched native AppKitTextField. This does not establish a product identity
-bridge. Shared reader inputs for further runs are frozen from58c3df0 under
-`source-pin`, avoiding concurrent S13 edits. Neither experiment contacted the donor.
-
-## Source-shaped volume control
-
-The fixture now also offers `UIB_ACTOR_SOURCE_SHAPE=1`:20synthetic Button/Text
-rows with the donor's structural distinction (only search is a separate View type).
-It deliberately does not claim copied product styling, data or behavior.
-`actor-source-shape-13` refuses `cache_tree_limit`; declaring SwiftUI.Button leaves
-in `actor-source-controls-14` still refuses. The bounded diagnostic in `capture-15`
-records1024raw records,40emitted nodes and six Button boundaries. No quota was
-raised, no Snapshot was published, and each attempt detached normally. This
-proves that the convenient seven-part fixture alone cannot qualify the real form.
-A revised collector must also pass this source-shaped case. No third cosmetic
-capture of this unchanged failing route is scheduled.
-
-## Continued implementation — source parts and coordinates
-
-The user explicitly approved the execution plan (“Хорошо, делай по плану”).
-Selected new basis: DEBUG-CAPTURE@15 and TRANSFORM@4 pinned at4be9a662.
-The actor fixture independently verifies all seven root translations on that
-revision; Rust `measure` returns8pt for row-to-label leading inset. This remains
-fixture evidence and does not qualify native-image mapping.
-
-`capture-21` fixes the known split counterexample in the temporary ancestor
-candidate: continue along the complete parent path and retain the outermost
-occurrence of the same first body attribute, across intervening owners.
-Both branches are captured (165raw records); the split check and seven translated
-frames pass. `/Volumes/Develop-2TB/Develop/tmp/uib-actors-s03-_9n7zkwx/outer-ancestor.patch`
-was handed to the shared reader owner. This is a source ancestor, not a proof of
-an arbitrary complete body forest.
-
-The source-shaped top-controls profile uses the observed runtime boundary
-`SwiftUI.SystemScrollView`, not the erased public ScrollView name. It captures
-header/Close/query/toggle/viewport within432raw records. `capture-25` repeats that
-profile on `ACTOR_NO_ORACLE` (the geometry observers are compiled out), retaining
-those frames on ordinary Text/Dynamic/layout records within420raw records.
-Unknown Button/SystemScrollView records are not relabelled with parent geometry;
-the known surrounding source layout records remain separately attributable.
-
-The separate [native-overlay experiment](../../../../experiments/native/actor-native-parts/README.md)
-collects all qualified mounted cursor-backed row overlays inside one source owner
-and LazyVStack. It does not select a row by index, text or coordinates. A shared
-structural witness index resolves five native bindings; four belong to rows and
-one toggle is excluded. Successful prototype `capture-30` returns32canonical
-nodes from244selected records plus463discovery records, with zero model-range
-overlaps and normal detach. This closes the full-form traversal dead end for the
-bounded mounted-row scope without raising global limits.
-
-Important remaining evidence: source-shaped labels expose local layout but their
-transform returns **cache_value_dirty** (20nodes, not an unsupported descriptor).
-No dirty value is read, evaluated or replaced by an ancestor's mapping. The
-geometry-oracle fixture had consumed those transforms; it cannot alone establish
-availability in an unchanged donor. Normal active/focused source-state checks
-remain necessary; current successful cursor samples were inactive windows.
-
-Ten pure selection/admission checks pass. The source-like fixture with default
-query focus compiles; its new active-state run has not occurred. The saved-module
-live repeat (`capture-33`) has no terminal manifest: Apple debugserver is waiting
-inside task_for_pid for the owned synthetic target. Developer mode is enabled.
-The pending debugger and fixture remain owned; exact live identities/recovery
-instructions are retained only in the external task state. A system authorization
-check was handed to the user because Computer Use rejects SecurityAgent access.
-No product attach or publication occurred.
-
-## Remaining implementation and acceptance
-
-S13 integrates the common body-owner correction, including disjoint-owner and
-adjacent-owner negatives; this chat retains Actors fixture/consumer responsibility.
-S03 must qualify actual part attribution, source coordinate mappings across the
-scroll-content hosting boundary, and the immutable app's original open case plus
-layout change. Source rows and controls lack the fixture's convenient custom
-part types, so fixture names cannot be used as a donor recipe. No release is
-warranted until the consumer scenario passes. Existing AX/PNG/SDK behavior,
-model privacy, limits and owner recovery remain protected.
+S13 must integrate/register the dedicated mode and accept helper/privacy review;
+its allocator-extent review finding is being corrected separately. Repeat exact
+integrated pin (including backend) before product admission. Consumer prepared
+immutable Actors with SWIFTUI_VIEW_DEBUG=29 and get-task-allow; fresh identity and
+state are in external consumer-ready.json and must be revalidated by that owner.
+Next real case: ready-list parts, normal layout change and scroll through the same
+source producer; source component attribution, coordinate mapping and recovery
+must all pass. No fixture result closes that acceptance or authorizes publishing
+an unverified fix. Keep running owned fixtures/evidence until integrated replay;
+cleanup awaits confirmed process exit and consumers releasing these artifacts.

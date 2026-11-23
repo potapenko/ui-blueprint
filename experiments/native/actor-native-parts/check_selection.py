@@ -157,6 +157,31 @@ class SelectionTests(unittest.TestCase):
         g.cursor(0, owner_model=9)
         self.refuses(g, 'native_parts_owner_ambiguous')
 
+    def test_two_sibling_picker_owners_refuse(self):
+        g = Graph()
+        g.cursor(0)
+        _, root, _, _ = g.cursor(1)
+        # A neutral graph root contains two distinct Picker body occurrences.
+        # Neither is allowed to win merely because native_views listed it first.
+        g.records[1000] = (4, 0, 0, 0, 0, 0, 0)
+        g.add(1300, 5000, 1, 1, parent=1000)
+        data = list(g.records[1100]); data[3] = 1300; g.records[1100] = tuple(data)
+        g.add(1400, 5000, 1, 9, parent=1000)
+        g.add(1450, 5000, 2, 2, parent=1400)
+        model = g.records[root][1]
+        g.links[5000] = [(1450 if attr == 400000+model else parent, attr)
+                         for parent, attr in g.links[5000]]
+        self.refuses(g, 'native_parts_owner_ambiguous')
+
+    def test_incomplete_candidate_cannot_be_ignored_as_a_nonmatch(self):
+        g = Graph()
+        g.cursor(0)
+        _, root, _, _ = g.cursor(1, in_list=False)
+        model = g.records[root][1]
+        g.links[5000] = [(parent, attr) for parent, attr in g.links[5000]
+                         if attr != 400000+model]
+        self.refuses(g, 'native_parts_ancestry_incomplete')
+
     def test_index_depth_is_bounded_before_ancestor_selection(self):
         g = Graph()
         _, root, witness, _ = g.cursor(0)

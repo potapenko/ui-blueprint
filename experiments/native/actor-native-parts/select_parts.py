@@ -91,6 +91,10 @@ def select_native_overlays(self, host):
     self.anchor_ids={a for a,e,owner,w in selected};self.anchor_matches=0
     self.native_part_witnesses={w for a,e,owner,w in selected}
     self.owner_scan_cost=self.scan_work=self.scanned_records=len(records)
+    # Structural headers only, retained inside this stopped-process observation.
+    # An experimental caller may reuse these after rechecking privacy and charge
+    # the union of indexed/walked/context records instead of rereading the index.
+    self.native_parts_record_cache = records
     self.selected_source=None
     self.native_parts_selection={'native_candidates':len(views),'selected_parts':len(selected),'indexed_records':len(indexed),'discovery_records':len(records)}
     return [e for a,e,owner,w in selected]
