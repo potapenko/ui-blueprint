@@ -1,147 +1,83 @@
-# S13 Random completion layout repair
+# S13 — completed UI Blueprint repair and consumer handoff
 
-Owner: chat `01a20922-f6ad-7651-997b-cef1b3f09b12`; consumer
-`01a20844-7030-7701-a26a-88793ef9752e`. Current branch: `master`.
+Owner: chat `01a20922-f6ad-7651-997b-cef1b3f09b12`. Consumer:
+`01a20844-7030-7701-a26a-88793ef9752e`. All work is in the existing `master`.
 
-## Authorized outcome and basis
+## Scope and authority
 
-The operator approved the six-step implementation plan in this chat on
-2026-11-23: collect source-attributed RandomCompletionDialog parts on unchanged
-native e19b20c47 / SDK4e8a9968, establish a qualified common window/native-image
-space, use canonical Snapshot and Rust measurements, verify favorite-empty,
-favorite-one, common-next and word-next with the consumer, checkpoint and hand
-accepted source to the builds chat. This does not permit donor instrumentation,
-credentials changes, inferred transforms or replacing layout with AX rectangles.
-
-Traversal: registry90 → SWIFTUI-DEBUG-CAPTURE@14, SWIFTUI-PROBE@3,
-WINDOW-PROBE@1 (SwiftUI only), NATIVE@5, BOUNDARIES/MODEL/IDENTITY/PRIVACY/
-LIFECYCLE/PROJECTIONS@1, GEOMETRY@2, EXCHANGE@2, CLI@21.
-Governance: implementation, product-truth core/routing/change/evidence/delivery/
-coordination, QA, Apple-platform and Computer Use. Mode: Restore requested
-layout capability; any newly qualified transform requires explicit contract
-registration before collector implementation. Existing consumer admission stays
-closed until mechanism and owner identity are qualified.
-
-## Write ownership and protected behavior
-
-Coordinator granted exclusive write ownership of swiftui_ag_cache.py,
-swiftui_debug_snapshot.py, swiftui_debug_capture.py, their focused checks and
-swiftui-debug-capture.md. This receipt and S13-specific fixture files are owned
-by this task. Wire0.1, existing SDK/AX paths, quotas, protected model ranges,
-stale/ambiguous refusals, cleanup and other consumers remain protected.
-Versions, installer and publication belong to chat
+The operator approved the S13 implementation plan and continuation on2026-11-23.
+The later direct scope clarification assigns this chat the Blueprint code fix,
+regression on an owned test program and delivery; all subsequent PlayPhrase.me
+measurements, application interaction and UI acceptance belong to the consumer.
+No further application-process operation is pending here. Versioning, packaging,
+installation and source publication belong to builds chat
 `01a20929-8e9a-7830-834d-3e558e9ff18d`.
 
-## Current evidence and next decision
+Basis: registry → DEBUG-CAPTURE@22, TRANSFORM@7, BACKEND@1, NATIVE-OWNER@3,
+ANCESTOR-CACHE@2, NATIVE-PARTS@1, ASSOCIATION-INDEX@1 and their required
+Boundaries/Model/Identity/Geometry/Privacy/Exchange/Lifecycle/CLI leaves.
+Implementation/product-truth/QA/Apple/Computer Use and storage rules were applied.
+Unchanged donor e19b20c47 / SDK4e8a9968, credentials, executable sections and
+source files were protected. API/wire0.1, model exclusion and source attribution
+remain unchanged. No blanket arbitrary-process capture permission was introduced.
 
-Consumer restored all four source states and then an unchanged diagnostic launch
-with process-local SWIFTUI_VIEW_DEBUG=29. Exact current identity and all executable
-hashes are in
-`/Volumes/Develop-2TB/Develop/tmp/playphraseme-s13-blueprint-nbjj97jf/view-debug-29/identity-and-hashes.json`.
-Owner holds favorite-one; no support debugger has contacted that process. No
-get-task-allow was added. Our sandboxed ad-hoc fixture without that entitlement
-successfully captured with the Apple backend; that alone does not qualify the
-separately built immutable backend. Do not infer a product signing requirement
-from this result. No permission or product signature was changed.
+## Fix and exact evidence
 
-TRANSFORM@4 registers a bounded exact-profile cache-chain reader. In the same
-owned fixture, all11 independent public-anchor rectangles matched at initial,
-scrolled, resized and translated states. Scale1.25 kept27 affected records unknown.
-Original source positions remain unchanged. Integrated canonical output validates;
-shipping Rust measure returns209pt across two formerly separate source spaces.
-Evidence: `/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0/source-phases` and
-`integrated-phase4`. Pure checks:28 cache,25 capture/codec,8 transform checks pass.
-This is root-local numeric qualification, not native PNG mapping, S13 part
-attribution, independent privacy review or product acceptance.
+Commits4be9a662,00805707,34e6fb1 add exact-profile cached translations,
+source-native window mapping, source-owner metadata, bounded native part/ancestor
+selection and fixed-backend event/recovery handling. Unknown/dirty/scaled frames
+stay unknown. The backend rejects executable writes; its separate source/build
+provenance is retained with the task evidence. It is not a public binary release.
 
-Native-window mapping is now sourced through fixed AppKit point conversions and
-FP register restoration. The360×252pt host maps to a720×504 native PNG with scale2
-and the same process/window. Stored canonical mappings validate. The next exact
-checkpoint includes BACKEND@1 and NATIVE-OWNER@1 candidate code: fixed inherited
-socket, disk/mapped-file pins, software/code-write refusal, body ancestor fallback,
-source-owner metadata and multi-native selection. Product admission stays disabled.
-Independent privacy/lifecycle review and real consumer qualification remain open.
+The actual first Random request30a2a2e returned cache_association_limit after14calls,
+restored detach and noSnapshot. The consumer independently verified Escape and
+reopening favorite-one in the same13623/1969 and paused source state. That request
+is consumed; no real post-fix geometry acceptance is claimed.
 
-A source-built data-only backend rejected code writes, preserved those bytes,
-permitted/read back/released private data memory, and completed38-call native
-capture on the owned transform fixture. A sandboxed get-task-allow fixture also
-passed. A sandboxed fixture without it entered an uncertain asynchronous attach;
-its earlier recovery incorrectly labelled the peer exit as target termination.
-The target was still present afterwards. Fixed recovery now revalidates actual
-process/state/generation before any owner kill and distinguishes unbound peer exit.
-This history cannot establish a universal entitlement requirement. Never use the
-old recovery result as proof that a target exited.
+d097e623 repairs the concrete global-index failure. The explicit metadata-only
+cardinality guard changes1024→8192; the2MiB cumulative source-read budget,10s,
+1024selected raw-tree and256emitted-node limits remain. A precise sorted-endpoint
+privacy audit replaces the Cartesian scan without dropping any prior read or
+protected interval. The alternative dependency-subgraph topology was rejected
+because it omitted recorded siblings/parents; AG callbacks/sort are not used.
 
-Source-shaped Random fixture now produced39nodes/588raw/79calls with native-window
-mappings and attributed private RandomCompletionActionButton. Recorded raw layout
-and pixel-snapped public anchors differ by at most0.441176pt across9declared regions;
-this is not exact equality. System Close internals and keycap text still contain
-dirty transforms. Do not substitute the known outer keycap/button frame for them.
-Artifacts: `random-events` / `random-extent` under the owned evidence root.
+Owned stress fixture:3090association owners/3093subgraphs,1500unrelated clear
+bodies. Corrected output39nodes/588raw/622unique/89calls/5.0697s, canonical valid,
+restored detach and0protected overlaps. All39roles, rawframes, affines and child
+links exactly match the small fixture; the public oracle is unchanged. Recorded
+raw versus pixel-snapped public-anchor differences remain explicitly separate.
+Evidence root: `/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0`, especially
+`stress-baseline`, `stress-index-timing`, `stress-index-audit`,
+`random-reviewed-{0,1,2}` and `recovery-reviewed`.
 
-Recovery gate closed on2026-11-23. The operator explicitly authorized termination
-of only fixture54791 and its debugger/backend58411/58432. Identity and parent/path
-checks matched; all three processes were confirmed absent after that one cleanup.
-The fixed listener implementation then captured phases0/1/2 in the same fresh
-Random fixture55315:22/39/39nodes,69/86/86calls,372/588/459raw, all canonical valid,
-restored detach and ordinary phase transitions. Evidence `random-reviewed-{0,1,2}`.
-A separate fixture58537 intentionally entered recovery immediately after accepted
-RemoteAttach. The retained primary listener delivered its stop event, the explicit
-bound owner command was consumed, termination was observed, and the manifest
-reported owner_terminated_fixture/calls0/no Snapshot. Process absence was verified.
-Evidence `recovery-reviewed`. No exceptional kill was needed for this regression.
+Three sequential same-process state captures passed. A separate forced pending
+attach consumed the exact owner recovery command and confirmed fixture exit.
+The earlier held54791/58411/58432 were terminated only after the operator's exact
+exceptional authorization; all three were confirmed absent. No such exceptional
+operation was performed on PlayPhrase.me.
 
-Independent finite source review of0080570 from S15 repeated104checks and added
-wrong/unbound/uncertain attach and native-basis drift cases; no blocking finding
-in that reviewed scope. S03 repeated stock8c wide/narrow/split source fixtures;
-all seven frames and the split branch passed. Those reviews do not constitute
-whole-memory universal proof or a real product measurement.
+## Review and delivery
 
-Review findings addressed in source: allocator `available` is free bytes, so every
-buffer header/item now fits the independently queried malloc_size extent before
-read and used+available must equal that extent; private-type identity follows
-actual descriptor context rather than Swift mangling substitutions; exact native
-candidate window and native affine basis are rechecked. Additional lifecycle/source
-review is requested against the next checkpoint, not a product admission.
+S15 independently reviewed008identity/backend/recovery and repeated104checks;
+S03 closed the allocator finding and reviewed d097 with64checks plus300independent
+old/new interval cases. The final cache checks add8192/8193 boundaries. No blocking
+finding remained in those finite scopes; this is not universal platform coverage.
 
-The S03 outer-ancestor patch is integrated with a stronger complete-path condition;
-it is a source ancestor subtree, not complete arbitrary body forest. S03 split,
-source-shaped top-controls and native-overlay experiments await integrated replay.
-Dedicated mounted-row helperbf6007c is now integrated through explicit
-`overlays_in_owner`, structural-cache and union-budget hooks; its integrated live
-regressions await the S03 owner. S15 likewise waits on a bounded
-selector, not transform arithmetic. NATIVE-OWNER@2 adds cuts only after all candidates resolve and exactly one
-qualifying witness remains; preserve that witness path. The S03 requested
-case has focused coverage and still needs integrated live replay.
-S03 supplied its experiment under1f807b33; no ownership is transferred silently.
+Source fix pin: `e2e25b83` (containsd097). One new exact consumer qualification
+request `s13-random-favorite-one-2` is source-pinned; it was not run in this chat.
+The consumer received the method, evidence and remaining UI requirements directly.
+Build owner received all four new runtime module requirements and historical
+manifest6 compatibility obligations. Frozen0.7.0 packaging commit
+`d36d18bd8fc07620d449f02c752aebd11c90c408` received this chat's independent finite
+compatibility review: format6 inventories exactly match released0.6.1 across all
+four module selections; all10Python local imports are packaged; shell/diff checks
+pass. Actual install/publication verification remains with the builds owner.
 
-Runtime/packages: `/tmp/uib-s13-le8xj83i`; owned external scratch/evidence:
-`/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0`. Active fixtures/evidence remain
-needed. The builds chat owns adding swiftui_cache_transform.py, swiftui_debug_backend.py
-and swiftui_native_parts.py with historical manifest6 compatibility.
-## Real consumer result and next mechanism
+C04 pair and S15 frontier helpers remain separate candidates, not claimed runtime
+capabilities of this fix. Their chats were archived when shared-file handoff was
+attempted; no unarchive or silent transfer occurred. Shared collector writes here
+are finished; only the build owner's narrow manifest7 whitelist edit was authorized.
 
-The exact favorite-one request30a2a2e was executed once after the operator's direct
-continuation. The consumer had declined this method by its own classification;
-it confirmed no user/project/tool rejection existed and revalidated the unchanged
-window. The S13 implementation owner performed the pinned capture and retained
-its debugger lifecycle. Result: exit4/cache_association_limit,14calls,
-detached_restored, noSnapshot. The consumer independently verified Escape closes
-and Option–Shift–Space restores the same favorite-one on the same13623/1969,
-with the same paused source content. No source/signature/credentials were changed.
-Admission is consumed and disabled; no retry of that mechanism is authorized.
-
-The refusal is before source selection: eager association materialization loads
-all owners of the graph. New stress fixture with1500unrelated clear bodies
-reproduces it:3090association owners/3093subgraphs,14calls/same refusal/detach.
-Evidence `owner-favorite-one-1` and `stress-baseline` under the retained task root.
-Addressed parent/child vectors and keyed TreeData hash lookup have now been read
-from exact AttributeGraph accessor disassembly on the owned fixture. S03 owns the
-finite GraphAssociations helper/negative tests/contract; this owner integrates
-and checks topology equivalence then the unchanged stress fixture. No quota is
-increased and no AG getter/sort/update is permitted. Model-free metadata lookup
-must still qualify before the next real capture.
-
-Header reuse and witness-path-union helper from S15 is integrated separately;
-it preserves1024distinct raw headers and original byte/call/output limits.
-No successful S13 part measurement, installation or release is claimed yet.
+Runtime packages/backend: `/tmp/uib-s13-le8xj83i`. External evidence and source
+provenance remain retained for consumer/build delivery; ownership notes govern
+cleanup. Unrelated repository changes and after-title-spacing.png were untouched.
