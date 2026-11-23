@@ -1,4 +1,5 @@
 """Exact-profile cached geometry; never evaluate AttributeGraph or copy models."""
+from bisect import bisect_left, bisect_right
 import math
 import re
 import struct
@@ -49,6 +50,15 @@ class CacheReader:
                 return cached
         self.reads.append((address, address+size))
         return self.c.read(address, size)
+
+    def private_read_overlaps(self):
+        """Count the same read/private interval pairs without their Cartesian scan."""
+        if any(start >= end for start, end in self.private_ranges):
+            raise Refusal('cache_model_layout')
+        starts = sorted(start for start, _ in self.private_ranges)
+        ends = sorted(end for _, end in self.private_ranges)
+        return sum(bisect_left(starts, end)-bisect_right(ends, start)
+                   for start, end in self.reads)
 
     def u64(self, address):
         return struct.unpack('<Q', self.read(address, 8))[0]
@@ -371,7 +381,7 @@ class CacheReader:
         table = self.pointer(self.u64(self.graph+0x118))
         if table:
             entry, count = self.pointer(self.u64(table+16)), self.u64(table+24)
-            if count > 1024:
+            if count > 8192:
                 raise Refusal('cache_association_limit')
             seen = set()
             while entry:
@@ -379,14 +389,14 @@ class CacheReader:
                     raise Refusal('cache_association_cycle')
                 seen.add(entry)
                 owner, data, size = self.ptr(entry+16), self.pointer(self.u64(entry+24)), self.u64(entry+32)
-                if size > 1024:
+                if size > 8192:
                     raise Refusal('cache_association_limit')
                 self.links[owner] = [struct.unpack('<II', self.read(data+i*8, 8)) for i in range(size)]
                 entry = self.pointer(self.u64(entry))
             if len(seen) != count:
                 raise Refusal('cache_association_shape')
         array, count = self.pointer(self.u64(self.graph+0x128)), self.u32(self.graph+0x130)
-        if count > 1024:
+        if count > 8192:
             raise Refusal('cache_subgraph_limit')
         for index in range(count):
             subgraph = self.ptr(array+index*8)
@@ -1015,7 +1025,7 @@ class CacheReader:
         # Establish all known selected model-value ranges before geometry reads.
         for model in self.selected_models:
             self.protect_model(model)
-        if any(a < end and b > start for a, b in self.reads for start, end in self.private_ranges):
+        if self.private_read_overlaps():
             raise Refusal('cache_private_range')
         normalized = []
         body_owner_names, body_occurrences = {}, {}
@@ -1053,8 +1063,7 @@ class CacheReader:
             normalized[index]['children'] = [normalized[child] for child in node['children']]
             if node['parent'] is None:
                 roots.append(normalized[index])
-        model_reads = sum(a < end and b > start for a, b in self.reads
-                          for start, end in self.private_ranges)
+        model_reads = self.private_read_overlaps()
         if model_reads:
             raise Refusal('cache_private_range')
         self.c.cache_audit = dict(transform_context_records=len(self.transform_context_seen), boundary_records=self.boundary_records, stopped_branches=self.boundary_hits, omitted_views=self.omitted_views, selected_roots=len(selected_roots), scope_scan_records=getattr(self, 'scan_work', self.scanned_records), raw_records=len(self.raw_seen), views=len(self.nodes),

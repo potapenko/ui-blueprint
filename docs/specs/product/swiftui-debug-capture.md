@@ -1,7 +1,7 @@
 # External SwiftUI debug-layout capture candidate
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture`.
-- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@20`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-DEBUG-CAPTURE@21`; Authority: Active; Stability: Evolving.
 - Authority: the user's support assignment, directly verified Clip human turn
   `01a1e568-591d-7532-ba47-af6943b37d37`; finite fixture-only continuation from
   Reels `01a1e40e-5855-7ae2-9809-2729ab377ce2`. This registers the requested
@@ -10,6 +10,7 @@
 - Requires: [BOUNDARIES@1](boundaries.md), [MODEL@1](model.md),
   [IDENTITY@1](identity.md), [GEOMETRY@2](geometry.md), [PRIVACY@1](privacy.md),
   [EXCHANGE@2](exchange.md), [LIFECYCLE@1](lifecycle.md), [CLI@21](cli.md).
+- Conditional requires, full metadata index: [ASSOCIATION-INDEX@1](swiftui-association-index.md).
 - Conditional requires, mounted native parts: [NATIVE-PARTS@1](swiftui-native-parts.md).
 - Conditional requires, native body ancestors: [NATIVE-OWNER@3](swiftui-native-owner.md).
 - Conditional requires, fixed backend: [BACKEND@1](swiftui-debug-backend.md).

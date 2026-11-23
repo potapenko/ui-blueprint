@@ -39,6 +39,25 @@ class CacheChecks(unittest.TestCase):
         with self.assertRaises(Refusal): r.read(103, 2)
         self.assertEqual(r.reads, [(100,101),(101,102)])
 
+    def test_interval_audit_preserves_every_overlap_including_duplicate_ranges(self):
+        r=reader();r.private_ranges=[(10,20),(12,18),(10,20),(30,40)]
+        r.reads=[(a,b) for a in range(5,46) for b in range(a,46)]
+        expected=sum(a<end and b>start for a,b in r.reads for start,end in r.private_ranges)
+        self.assertEqual(r.private_read_overlaps(),expected)
+        r.reads=[(0,10),(20,30),(40,100),(10,10),(20,20)]
+        self.assertEqual(r.private_read_overlaps(),0)
+        r.private_ranges=[];self.assertEqual(r.private_read_overlaps(),0)
+        r.private_ranges=[(20,10)]
+        with self.assertRaisesRegex(Refusal,'cache_model_layout'):r.private_read_overlaps()
+
+    def test_metadata_index_overflow_refuses_before_records(self):
+        for count in (8193, 1<<63):
+            r=reader();r.u64=lambda address:500 if address==r.graph+0x118 else count
+            r.pointer=lambda value:value
+            r.ptr=Mock(side_effect=AssertionError('oversize index payload'))
+            with self.assertRaisesRegex(Refusal,'cache_association_limit'):r.associations()
+            r.ptr.assert_not_called()
+
     def geometry_reader(self, pair):
         r = reader()
         r.geometry_type = lambda *_: 16
