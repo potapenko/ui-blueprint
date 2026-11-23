@@ -38,6 +38,11 @@ class CacheReader:
             raise Refusal('cache_address_range')
         if any(address < end and address+size > start for start, end in self.private_ranges):
             raise Refusal('cache_private_range')
+        if hasattr(self, 'native_parts_headers'):
+            from swiftui_native_parts import cached_read
+            cached = cached_read(self, address, size)
+            if cached is not None:
+                return cached
         self.reads.append((address, address+size))
         return self.c.read(address, size)
 
@@ -411,6 +416,9 @@ class CacheReader:
         return [root for _, root in sorted(selected, key=lambda item: item[0])], known
 
     def walk(self, element, parent=None, depth=1, witness_only=False, inherited_transform=None):
+        if hasattr(self, 'native_parts_indexed'):
+            from swiftui_native_parts import check_budget
+            check_budget(self, element)
         if (element in self.raw_seen or
                 len(self.raw_seen | getattr(self, 'transform_context_seen', set()) | {element})
                 + getattr(self, 'owner_scan_cost', 0) > 1024
@@ -457,7 +465,7 @@ class CacheReader:
                 if next_element is not None:
                     self.walk(next_element, parent, depth+1, witness_only=True, inherited_transform=transform)
                 return
-        elif self.req.get('scope', {}).get('native_match') in ('within_owner', 'ancestor_owner'):
+        elif self.req.get('scope', {}).get('native_match') in ('within_owner', 'ancestor_owner', 'overlays_in_owner'):
             # A reference on a transparent record cannot identify an emitted view.
             before = self.anchor_matches
             self.properties(element)
@@ -519,22 +527,30 @@ class CacheReader:
         mangled = symbol.GetMangledName() or ''
         if not mangled.startswith('$s'):
             return None
-        tail = mangled[2:]
-        parts = []
-        for _ in range(2):
-            length = re.match(r'[0-9]+', tail)
-            if length is None or len(length[0]) > 3:
-                return None
-            count = int(length[0])
-            tail = tail[len(length[0]):]
-            part, tail = tail[:count], tail[count:]
-            if not 1 <= count <= 96 or len(part) != count or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', part):
-                return None
-            parts.append(part)
-        private = re.fullmatch(r'33(_[A-F0-9]{32})LLVMn', tail)
-        if private is None or parts[1] != name:
+        private = re.search(r'33(_[A-F0-9]{32})LLVMn$', mangled)
+        if private is None:
             return None
-        return parts[0]+'.('+parts[1]+' in '+private[1]+')'
+        # Swift substitutes repeated name fragments in mangled identifiers.
+        # Read the descriptor's actual module context instead of parsing those
+        # substitutions or trusting LLDB's abbreviated display name.
+        relative = struct.unpack('<i', self.read(descriptor+4, 4))[0]
+        if not relative:
+            return None
+        parent = descriptor+4+(relative & ~1)
+        parent = self.ptr(parent, 4) if relative & 1 else parent
+        if self.u32(parent) & 31 == 2:  # private file/anonymous context
+            relative = struct.unpack('<i', self.read(parent+4, 4))[0]
+            if not relative:
+                return None
+            address = parent+4+(relative & ~1)
+            parent = self.ptr(address, 4) if relative & 1 else address
+        if self.u32(parent) & 31 != 0:
+            return None  # nested/extension private names are not flat selectors
+        relative = struct.unpack('<i', self.read(parent+8, 4))[0]
+        module = self.cstring(parent+8+relative)
+        if not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', module):
+            return None
+        return module+'.('+name+' in '+private[1]+')'
 
     def rule_owner(self, model, owner_names):
         resolved, _ = self.resolve(model, links_only=True)
@@ -804,7 +820,18 @@ class CacheReader:
 
     def anchored_owner_scope(self, host):
         views = self.native_views(host, self.req['scope']['native_view_type'])
-        bindings = [self.represented_layout(view) for view in views]
+        window = self.c.objc(host, 'window')
+        if not window or window != self.c.selected_window:
+            raise Refusal('native_owner_window_mismatch')
+        bindings = []
+        for view in views:
+            if self.c.objc(view, 'window') != window:
+                raise Refusal('native_owner_window_mismatch')
+            bindings.append(self.represented_layout(view))
+            if self.c.objc(view, 'window') != window:
+                raise Refusal('native_owner_window_mismatch')
+        if self.c.objc(host, 'window') != window:
+            raise Refusal('native_owner_window_mismatch')
         if not bindings or len({attribute for attribute, _ in bindings}) != len(bindings):
             raise Refusal('native_anchor_unresolved')
         candidates = {}
@@ -847,6 +874,9 @@ class CacheReader:
         while element:
             if element in seen or len(seen) >= self.req['limits']['max_depth']:
                 raise Refusal('cache_transform_parent_limit', 2)
+            if hasattr(self, 'native_parts_indexed'):
+                from swiftui_native_parts import check_budget
+                check_budget(self, element)
             seen.add(element)
             self.transform_context_seen.add(element)
             if (len(self.raw_seen | self.transform_context_seen)
@@ -911,7 +941,11 @@ class CacheReader:
         anchored = 'native_view_type' in self.req.get('scope', {})
         within_owner = self.req.get('scope', {}).get('native_match') == 'within_owner'
         ancestor_owner = self.req.get('scope', {}).get('native_match') == 'ancestor_owner'
-        if ancestor_owner:
+        native_parts = self.req.get('scope', {}).get('native_match') == 'overlays_in_owner'
+        if native_parts:
+            from swiftui_native_parts import select_parts
+            selected_roots = select_parts(self, host)
+        elif ancestor_owner:
             selected_roots = self.anchored_owner_scope(host)
         elif within_owner:
             selected_roots = self.select_scope(root)
@@ -931,7 +965,10 @@ class CacheReader:
         branches = self.walk_branches(selected_roots)
         if set(self.boundary_hits) != set(self.req.get('scope', {}).get('leaf_types', ())):
             raise Refusal('scope_leaf_unresolved')
-        if ancestor_owner:
+        if native_parts:
+            from swiftui_native_parts import verify_parts
+            verify_parts(self)
+        elif ancestor_owner:
             if self.anchor_counts != {attribute: 1 for attribute in self.anchor_ids}:
                 raise Refusal('anchor_scope_binding_unresolved')
             if self.req['scope'].get('containing_type'):
@@ -991,6 +1028,10 @@ class CacheReader:
             model_ranges=len(self.private_ranges), model_range_reads=model_reads,
             geometry_reads=len(self.geometry_ranges), unknown_order_groups=self.unknown_order,
             evaluated_swiftui_or_graph=False)
+        if native_parts:
+            from swiftui_native_parts import record_count
+            self.c.cache_audit.update(native_parts=self.native_parts_selection,
+                unique_raw_records=record_count(self), reused_structural_reads=self.native_parts_reused_reads)
         if within_owner:
             self.c.cache_audit['native_match_node_index'] = self.matched_anchor_node
         if self.selected_source is not None:

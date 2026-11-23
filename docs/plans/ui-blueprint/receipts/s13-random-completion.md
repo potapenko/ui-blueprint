@@ -72,16 +72,36 @@ process/state/generation before any owner kill and distinguishes unbound peer ex
 This history cannot establish a universal entitlement requirement. Never use the
 old recovery result as proof that a target exited.
 
-Source-shaped Random fixture native-ancestor run has not produced a Snapshot:
-it entered the same pre-collection attach wait (calls0), with retained debugger.
-An explicit bound owner recovery command is queued for only that synthetic PID;
-no product process has been contacted. Investigate the attach stage before another
-comparable live attempt; do not widen quotas or present the selector as accepted.
+Source-shaped Random fixture now produced39nodes/588raw/79calls with native-window
+mappings and attributed private RandomCompletionActionButton. Recorded raw layout
+and pixel-snapped public anchors differ by at most0.441176pt across9declared regions;
+this is not exact equality. System Close internals and keycap text still contain
+dirty transforms. Do not substitute the known outer keycap/button frame for them.
+Artifacts: `random-events` / `random-extent` under the owned evidence root.
+
+Repeated attachment then exposed an event ownership failure, before any calls.
+Current source uses one owned primary SBListener throughout connect/attach/calls/
+recovery. Its new recovery draining has pure coverage but not a fresh live pass.
+One older loaded session remains held: fixture54791 / generation54791:1795460657.492167,
+LLDB58411 / backend58432; no product target. Normal owner termination command is
+queued but the old listener path does not consume the stop event. The user has
+been asked for explicit exceptional termination of this fixture and then its
+own debugger because the normal recovery route is unusable. No answer yet;
+no external termination performed. Do not auto-repeat collection or kill the peer.
+
+Review findings addressed in source: allocator `available` is free bytes, so every
+buffer header/item now fits the independently queried malloc_size extent before
+read and used+available must equal that extent; private-type identity follows
+actual descriptor context rather than Swift mangling substitutions; exact native
+candidate window and native affine basis are rechecked. Additional lifecycle/source
+review is requested against the next checkpoint, not a product admission.
 
 The S03 outer-ancestor patch is integrated with a stronger complete-path condition;
 it is a source ancestor subtree, not complete arbitrary body forest. S03 split,
 source-shaped top-controls and native-overlay experiments await integrated replay.
-Dedicated mounted-row selection is not integrated. S15 likewise waits on a bounded
+Dedicated mounted-row helperbf6007c is now integrated through explicit
+`overlays_in_owner`, structural-cache and union-budget hooks; its integrated live
+regressions await the S03 owner. S15 likewise waits on a bounded
 selector, not transform arithmetic. Leaf cuts in ancestor_owner remain unsupported.
 S03 supplied its experiment under1f807b33; no ownership is transferred silently.
 

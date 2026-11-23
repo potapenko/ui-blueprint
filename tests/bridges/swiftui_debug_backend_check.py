@@ -48,21 +48,21 @@ class BackendChecks(unittest.TestCase):
         self.assertFalse(b.attach_attempted)
 
     def test_attach_waits_for_matching_stopped_process(self):
-        b=FixedBackend(dict(executable='/unused',sha256='a'*64));b.verify_peer=Mock()
+        b=FixedBackend(dict(executable='/unused',sha256='a'*64));b.verify_peer=Mock();b.listener=Mock()
         process=SimpleNamespace(RemoteAttachToProcessWithID=Mock(return_value=True),
-            GetState=Mock(side_effect=[2,5]),GetProcessID=lambda:123)
+            GetState=Mock(side_effect=[2,5]),GetProcessID=lambda:123, GetBroadcaster=lambda:None)
         with patch('swiftui_debug_backend.time.sleep'),patch('swiftui_debug_backend.time.monotonic',side_effect=[0,.1,.2]):
-            b.attach(process,123,SimpleNamespace(Fail=lambda:False),SimpleNamespace(eStateStopped=5))
+            b.attach(process,123,SimpleNamespace(Fail=lambda:False),SimpleNamespace(eStateStopped=5,SBListener=lambda name:Mock(),SBEvent=Mock,SBProcess=SimpleNamespace(eBroadcastBitStateChanged=1,EventIsProcessEvent=lambda e:True,GetStateFromEvent=lambda e:5)))
         self.assertFalse(b.attach_pending)
         self.assertEqual(b.verify_peer.call_count,2)
         self.assertTrue(b.attach_attempted)
 
     def test_unfinished_attach_keeps_ownership_and_never_detaches_or_kills(self):
-        b=FixedBackend(dict(executable='/unused',sha256='a'*64));b.verify_peer=Mock()
-        process=SimpleNamespace(RemoteAttachToProcessWithID=lambda *args:True,GetState=lambda:2,Detach=Mock(),Kill=Mock())
+        b=FixedBackend(dict(executable='/unused',sha256='a'*64));b.verify_peer=Mock();b.listener=Mock()
+        process=SimpleNamespace(RemoteAttachToProcessWithID=lambda *args:True,GetState=lambda:2,Detach=Mock(),Kill=Mock(), GetBroadcaster=lambda:None)
         with patch('swiftui_debug_backend.time.monotonic',side_effect=[0,5]):
             with self.assertRaisesRegex(Refusal,'backend_attach_unconfirmed'):
-                b.attach(process,123,SimpleNamespace(Fail=lambda:False),SimpleNamespace(eStateStopped=5))
+                b.attach(process,123,SimpleNamespace(Fail=lambda:False),SimpleNamespace(eStateStopped=5,SBListener=lambda name:Mock(),SBEvent=Mock,SBProcess=SimpleNamespace(eBroadcastBitStateChanged=1,EventIsProcessEvent=lambda e:True,GetStateFromEvent=lambda e:5)))
         self.assertTrue(b.attach_pending)
         process.Detach.assert_not_called();process.Kill.assert_not_called()
         b.peer=Mock();b.peer.poll.return_value=None

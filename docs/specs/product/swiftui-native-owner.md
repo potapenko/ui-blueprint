@@ -30,7 +30,9 @@ and is not accepted. Declared leaf cuts remain explicit excluded branches.
 Optional `scope.native_match="ancestor_owner"` uses the existing source type and
 exact native class, with optional containing_type and geometry_records selection.
 No leaf_types in this initial mode. Enumerate all matching native views within the
-original128-view bound; independently qualify every provider/weak graph binding.
+original128-view bound; independently qualify every provider/weak graph binding. Check each native view
+belongs to the exact selected NSWindow before and after its weak binding; check
+the host membership at both ends. A same-class view in another window refuses.
 Duplicate attribute bindings, stale/foreign references or incomplete enumeration
 refuse. A matching class alone never determines the source owner.
 

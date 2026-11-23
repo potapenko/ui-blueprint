@@ -82,6 +82,30 @@ class TransformChecks(unittest.TestCase):
         self.assertEqual(result['chain'],((7.0,-11.0),))
         self.assertNotIn(2048,[call.args[0] for call in r.read.call_args_list])
 
+    def buffered(self, extent, available, size=32, count=1):
+        r=reader(head=2000)
+        r.u32=lambda address:{2060:count,2056:available,5008:size}[address]
+        r.ptr=lambda address,*args:{2000:3000,3008:4000,2048:5000,5000:6000}[address]
+        r.value_size=lambda metadata:(16,16,8)
+        r.c=SimpleNamespace(call=Mock(return_value=(extent,0,0,0)))
+        return r
+
+    def test_buffer_extent_is_allocator_owned_not_free_space(self):
+        for extent,available,size,passes in ((32,0,32,True),(64,32,32,True),
+                (16,0,32,False),(32,32,32,False),(32,0,64,False),(64,0,32,False),(0,0,32,False)):
+            r=self.buffered(extent,available,size)
+            with patch.object(transforms,'_descriptor',side_effect=[(5,'BufferedElement'),(6,'AnyElement'),(7,'_VTable')]), \
+                 patch.object(transforms,'_fields'), \
+                 patch.object(transforms,'_argument',return_value=(8,'SizedSpaceElement')):
+                if passes:
+                    result,reason=transforms.translation_inputs(r,1,2)
+                    self.assertIsNone(reason)
+                else:
+                    with self.assertRaisesRegex(Refusal,'cache_transform_(buffer_extent|item_layout)'):
+                        transforms.translation_inputs(r,1,2)
+            r.c.call.assert_called_once_with('malloc_size',5000)
+            self.assertFalse(any(5016<=c.args[0]<5048 for c in r.read.call_args_list))
+
     def test_translation_payload_requires_exact_layout(self):
         r=reader();r.value_size=lambda _: (24,24,8)
         r.u32=lambda address:2

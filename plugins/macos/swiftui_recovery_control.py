@@ -48,7 +48,7 @@ def termination_requested(directory_fd, filename, expected_pid, expected_generat
 
 
 def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, generation, owner, publish,
-                    termination_action=None, can_terminate=None):
+                    termination_action=None, can_terminate=None, event_listener=None):
     """Retain ownership; an explicit bound owner command is separate from Observe.
 
     The SBProcess stays attached to the original process; no PID-based reattach
@@ -79,6 +79,10 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
                     published = True
                 except BaseException:
                     pass  # Receipt IO must not abandon a live interrupted call.
+            if event_listener is not None:
+                event = lldb.SBEvent()
+                if event_listener.GetNextEvent(event) and lldb.SBProcess.EventIsProcessEvent(event):
+                    lldb.SBProcess.GetStateFromEvent(event)
             state = process.GetState()
             if state == lldb.eStateExited:
                 if not bound_at_entry:

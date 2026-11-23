@@ -314,6 +314,7 @@ class CacheChecks(unittest.TestCase):
 
     def test_multi_native_owner_requires_one_ancestor_and_accounts_all_paths(self):
         r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Cursor',native_match='ancestor_owner')
+        r.c=SimpleNamespace(selected_window=100,objc=lambda *args:100)
         r.native_views=lambda *args:[10,20,30]
         r.represented_layout=lambda view:(view,100)
         def scope(host,binding):
@@ -328,6 +329,14 @@ class CacheChecks(unittest.TestCase):
         def incomplete(*args):raise Refusal('anchor_owner_search_incomplete')
         r.anchored_scope=incomplete
         with self.assertRaisesRegex(Refusal,'anchor_owner_search_incomplete'):r.anchored_owner_scope(None)
+
+    def test_native_candidate_wrong_window_refuses_before_binding(self):
+        r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Cursor',native_match='ancestor_owner')
+        r.c=SimpleNamespace(selected_window=100,objc=lambda obj,name:100 if obj==1 else 200)
+        r.native_views=lambda *args:[10]
+        r.represented_layout=Mock(side_effect=AssertionError('foreign view payload'))
+        with self.assertRaisesRegex(Refusal,'native_owner_window_mismatch'):r.anchored_owner_scope(1)
+        r.represented_layout.assert_not_called()
 
     def test_geometry_selection_preserves_skipped_model_and_ancestor(self):
         r = reader()

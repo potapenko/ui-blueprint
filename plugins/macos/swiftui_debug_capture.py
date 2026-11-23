@@ -199,7 +199,7 @@ def verified_helper(bundle_path):
 
 class Calls:
     """Fixed getter calls, with no expression API or executable scratch storage."""
-    def __init__(self, debugger, target, process, thread, deadline):
+    def __init__(self, debugger, target, process, thread, deadline, event_listener=None):
         import lldb
         self.lldb = lldb
         self.d, self.t, self.p, self.thread = debugger, target, process, thread
@@ -228,8 +228,9 @@ class Calls:
         self.code = self.read(self.pc, 16)
         self.return_code = self.read(self.return_pc, 16)
         self.redzone = self.read(self.sp-128, 128)
-        self.listener = lldb.SBListener('uib-layout-calls')
-        self.listener.StartListeningForEvents(process.GetBroadcaster(), lldb.SBProcess.eBroadcastBitStateChanged)
+        self.listener = event_listener or lldb.SBListener('uib-layout-calls')
+        if event_listener is None:
+            self.listener.StartListeningForEvents(process.GetBroadcaster(), lldb.SBProcess.eBroadcastBitStateChanged)
 
     def admit(self):
         if time.monotonic() >= self.deadline:
@@ -270,7 +271,8 @@ class Calls:
         if name in self.symbols:
             return self.symbols[name]
         self.admit()
-        owners = {'objc_msgSend': 'libobjcMsgSend.dylib', 'NSApp': 'AppKit'}
+        owners = {'objc_msgSend': 'libobjcMsgSend.dylib', 'NSApp': 'AppKit',
+                  'malloc_size': 'libsystem_malloc.dylib'}
         owner = ('SwiftUI' if name == GETTER else 'libswiftCore.dylib'
                  if name in SWIFT_SYMBOLS else owners.get(name, 'libobjc.A.dylib'))
         addresses = set()
@@ -305,7 +307,7 @@ class Calls:
     def call(self, name, *args, fp_inputs=(), fp_count=0):
         if name not in ('objc_autoreleasePoolPush', 'objc_autoreleasePoolPop',
                         'objc_msgSend', 'sel_registerName', 'class_getInstanceSize',
-                        'class_getInstanceVariable', 'ivar_getOffset'):
+                        'class_getInstanceVariable', 'ivar_getOffset', 'malloc_size'):
             raise Refusal('forbidden_target_call')
         if (fp_count not in (0, 2, 4) or len(fp_inputs) not in (0, 2, 4)
                 or ((fp_inputs or fp_count) and name != 'objc_msgSend')
@@ -445,7 +447,9 @@ def native_mapping(calls, host, window, req):
     if bounds[:2] != (0.0, 0.0) or not flipped:
         return None
     basis = [calls.point_to_window(host, point) for point in ((0, 0), (1, 0), (0, 1))]
-    if (calls.objc(host, 'window') != window or calls.rect(host, 'bounds') != bounds
+    repeated_basis = [calls.point_to_window(host, point) for point in ((0, 0), (1, 0), (0, 1))]
+    if (repeated_basis != basis or bool(calls.objc(host, 'isFlipped')) != flipped
+            or calls.objc(host, 'window') != window or calls.rect(host, 'bounds') != bounds
             or calls.rect(window, 'frame') != frame
             or calls.objc(window, 'windowNumber') != req['window_id']):
         raise Refusal('stale_window')
@@ -469,6 +473,7 @@ def collect(calls, req):
     if len(selected) != 1:
         raise Refusal('window_unresolved')
     window = selected[0]
+    c.selected_window = window
     root = c.objc(window, 'contentView')
     pending, hosts, seen = [root], [], set()
     while pending:
@@ -548,7 +553,8 @@ def capture(debugger, request_path, bundle_path, output_path, backend_profile=No
         frame = thread.GetFrameAtIndex(0)
         if thread.GetQueueName() != 'com.apple.main-thread' or frame.GetFunctionName() != 'mach_msg2_trap':
             raise Refusal('main_thread_not_quiescent')
-        calls = Calls(debugger, target, process, thread, deadline)
+        calls = Calls(debugger, target, process, thread, deadline,
+                      event_listener=backend.listener if backend is not None else None)
         calls.initialize()
         raw, window_state = collect(calls, req)
         calls.admit()
@@ -609,7 +615,7 @@ def capture(debugger, request_path, bundle_path, output_path, backend_profile=No
                 outcome['cleanup'] = retain_debugger(debugger, process, lldb, fd,
                     req['request_id'], req['pid'], generation, owner, publish,
                     termination_action='terminate-owned-fixture' if fixture else 'terminate-admitted-source',
-                    can_terminate=bound_target)
+                    can_terminate=bound_target, event_listener=backend.listener if backend is not None else None)
         if not safe:
             if process is None or not process.IsValid():
                 outcome['cleanup'] = 'debugger_ownership_lost'

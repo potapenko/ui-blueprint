@@ -109,9 +109,22 @@ def _read(r, attribute, metadata):
             item_count += count
             if item_count > 64 or available > 8192:
                 raise Refusal('cache_transform_buffer_limit')
-            buffer = r.ptr(head+48) if count else 0
+            buffer = r.ptr(head+48) if count else r.pointer(r.u64(head+48))
+            if buffer:
+                if not hasattr(r, 'transform_buffer_extents'):
+                    r.transform_buffer_extents = {}
+                if buffer not in r.transform_buffer_extents:
+                    r.transform_buffer_extents[buffer] = r.c.call('malloc_size', buffer)[0]
+                extent_bytes = r.transform_buffer_extents[buffer]
+            else:
+                extent_bytes = 0
+            if (not 0 <= extent_bytes <= 8192 or available > extent_bytes
+                    or (count and (not buffer or extent_bytes < 16))):
+                raise Refusal('cache_transform_buffer_extent')
             used = 0
             for _ in range(count):
+                if used+16 > extent_bytes-available:
+                    raise Refusal('cache_transform_buffer_extent')
                 vtable = r.ptr(buffer+used)
                 vt_desc, vt_name = _descriptor(r, vtable, True)
                 if vt_name != '_VTable':
@@ -123,6 +136,8 @@ def _read(r, attribute, metadata):
                 extent, _, alignment = r.value_size(element_meta)
                 if alignment > 16 or size != (16+extent+15) & ~15:
                     raise Refusal('cache_transform_item_layout')
+                if used+size > extent_bytes-available:
+                    raise Refusal('cache_transform_buffer_extent')
                 used += size
                 total_bytes += size
                 if total_bytes > 8192:
@@ -130,6 +145,8 @@ def _read(r, attribute, metadata):
                 if kind == 'TranslationElement':
                     chain.append(_translation(r, element_meta, buffer+used-size+16))
                 # All other payloads, including coordinate-space names, stay unread.
+            if used+available != extent_bytes:
+                raise Refusal('cache_transform_buffer_extent')
         chain.append(_pair(r, head+32))
         head = r.pointer(r.u64(head+16))
         if bool(head) != bool(expected_depth):

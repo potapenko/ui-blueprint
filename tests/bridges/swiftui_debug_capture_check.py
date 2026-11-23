@@ -263,7 +263,7 @@ class CanonicalPrivacy(unittest.TestCase):
         def interrupted(): raise codec.Refusal('call_interrupted_owner_recovery')
         calls = SimpleNamespace(initialize=interrupted, close=lambda: False, count=1)
         backend = SimpleNamespace(connect=lambda *args: process, attach=lambda *args: None,
-            attach_attempted=True, attach_pending=False, attach_refused=False, finish=lambda detached: True)
+            listener=None, attach_attempted=True, attach_pending=False, attach_refused=False, finish=lambda detached: True)
         import swiftui_debug_backend
         with tempfile.TemporaryDirectory(prefix='uib-product-hold-') as directory:
             out = Path(directory); req = out/'request.json'; req.write_text(json.dumps(req_value))

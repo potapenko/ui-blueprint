@@ -16,7 +16,9 @@ Optional caller-owned `--backend-profile FILE` has version1.0.0, one absolute
 regular debugserver path, its SHA256 and policy `rw-data-only-v1`. The profile is
 not UI-derived. Reject malformed/oversized/duplicate fields and symlinks. Verify
 file content and the executing peer's path/device/inode before any target PID is
-sent. Use a private inherited socketpair; no listener address, reconnect or peer
+sent. Use a capture-owned SBListener and drain its state events during connection,
+attachment, fixed target calls and retained recovery; do not leave its primary
+queue unconsumed while a secondary observer is polled. Use a private inherited socketpair; no listener address, reconnect or peer
 substitution. The existing literal consumer target admission remains separate.
 A product attempt additionally requires the exact backend SHA pinned in source
 for that admission; an arbitrary caller-supplied hash is not qualification.

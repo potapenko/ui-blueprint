@@ -72,13 +72,17 @@ def request(raw):
         scoped_native = isinstance(scope, dict) and 'native_match' in scope
         if scoped_native:
             required_keys = {'type', 'native_view_type', 'native_match'}
-            if (scope['native_match'] not in ('within_owner', 'ancestor_owner') or not required_keys <= set(scope)
+            if (scope['native_match'] not in ('within_owner', 'ancestor_owner', 'overlays_in_owner') or not required_keys <= set(scope)
                     or set(scope) - required_keys - {'containing_type', 'selection'}):
                 raise Refusal('invalid_scope', 2)
         elif (not isinstance(scope, dict) or set(scope) not in
                 ({'type'}, {'type', 'containing_type'}, {'type', 'containing_type', 'native_view_type'},
                  {'type', 'containing_type', 'native_view_type', 'selection'},
                  {'type', 'containing_type', 'native_view_type', 'selection', 'leaf_types'})):
+            raise Refusal('invalid_scope', 2)
+        if (scoped_native and scope['native_match'] == 'overlays_in_owner'
+                and (set(scope) != {'type', 'native_view_type', 'native_match', 'containing_type', 'selection'}
+                     or scope['selection'] != 'geometry_records')):
             raise Refusal('invalid_scope', 2)
         for key, value in scope.items():
             if key == 'native_match':
@@ -158,7 +162,7 @@ def snapshot(raw, req, metadata, start, end, selection_provenance=None, window_m
     selected = isinstance(source, dict)
     if selected:
         if (set(source) != {'selection_source', 'source_type', 'branches'}
-                or source['selection_source'] not in ('body_owner', 'nominal_element', 'native_owner_ancestor')
+                or source['selection_source'] not in ('body_owner', 'nominal_element', 'native_owner_ancestor', 'native_overlay_parts')
                 or not isinstance(source['source_type'], str)
                 or source['source_type'] != req.get('scope', {}).get('type')):
             raise Refusal('invalid_selection_provenance', 2)
@@ -287,6 +291,8 @@ def snapshot(raw, req, metadata, start, end, selection_provenance=None, window_m
                     omitted_count=None, unknown_count=unknown)
     if req.get('scope', {}).get('selection') == 'geometry_records':
         coverage['scope_id'] += ':geometry-records-nearest-included-ancestor'
+    if req.get('scope', {}).get('native_match') == 'overlays_in_owner':
+        coverage['scope_id'] += ':mounted-native-overlay-parts'
     context = dict(schema_version='0.1.0', session_id='debug-'+nonce, target=metadata['target'],
         surfaces=[surface], scope_id=coverage['scope_id'], projection='design', fields=FIELDS,
         plugin=dict(id='swiftui-cache-layout', version='1.0.0'), environment_revision=nonce)

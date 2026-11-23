@@ -32,6 +32,7 @@ class FixedBackend:
         self.value = value
         self.path = Path(value['executable'])
         self.peer = None
+        self.listener = None
         self.finish_result = None
         self.attach_attempted = self.attach_pending = self.attach_refused = False
         self.attach_status = None
@@ -86,8 +87,17 @@ class FixedBackend:
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             right.close()
             error = lldb.SBError()
-            process = target.ConnectRemote(debugger.GetListener(), 'fd://'+str(left.detach()), 'gdb-remote', error)
-            if error.Fail() or process.GetState() != lldb.eStateConnected:
+            self.listener = lldb.SBListener('uib-fixed-backend-process')
+            process = target.ConnectRemote(self.listener, 'fd://'+str(left.detach()), 'gdb-remote', error)
+            if error.Fail() or not process.IsValid():
+                raise Refusal('backend_connection_failed')
+            deadline = time.monotonic()+3
+            while process.GetState() != lldb.eStateConnected and time.monotonic() < deadline:
+                event = lldb.SBEvent()
+                if self.listener.GetNextEvent(event) and lldb.SBProcess.EventIsProcessEvent(event):
+                    lldb.SBProcess.GetStateFromEvent(event)
+                time.sleep(.01)
+            if process.GetState() != lldb.eStateConnected:
                 raise Refusal('backend_connection_failed')
             self.verify_peer()
             return process
@@ -97,6 +107,9 @@ class FixedBackend:
 
     def attach(self, process, pid, error, lldb):
         self.verify_peer()
+        listener = self.listener
+        if listener is None:
+            raise Refusal('backend_listener_unavailable')
         self.attach_attempted = self.attach_pending = True
         accepted = process.RemoteAttachToProcessWithID(pid, error)
         if not accepted or error.Fail():
@@ -115,6 +128,9 @@ class FixedBackend:
             return
         deadline = time.monotonic()+4
         while time.monotonic() < deadline:
+            event = lldb.SBEvent()
+            if listener.GetNextEvent(event) and lldb.SBProcess.EventIsProcessEvent(event):
+                lldb.SBProcess.GetStateFromEvent(event)
             if process.GetState() == lldb.eStateStopped and process.GetProcessID() == pid:
                 self.attach_pending = False
                 self.verify_peer()

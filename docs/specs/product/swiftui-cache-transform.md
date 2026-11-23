@@ -1,7 +1,7 @@
 # Qualified cached SwiftUI translation
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture.transform`.
-- Contract: `UIB.SWIFTUI-CACHE-TRANSFORM@6`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-CACHE-TRANSFORM@7`; Authority: Active; Stability: Evolving.
 - Authority: direct approval of the S13 plan in chat
   `01a20922-f6ad-7651-997b-cef1b3f09b12`, 2026-11-23, to obtain source-attributed
   parts in a proved common window/native-frame space on the unchanged donor.
@@ -22,7 +22,13 @@ SwiftUI nominal descriptor and metadata field layout before reading storage.
 A metadata match alone is not semantic or runtime transform qualification.
 
 The profile handles exact ViewTransform Element/BufferedElement chains, at most16
-links and64 buffered items. Check metadata, superclass, field offsets, generic
+links and64 buffered items. `available` is free space, not allocation size.
+Before any buffer header, query the fixed read-only allocator `malloc_size` for
+that validated retained buffer pointer. Require a positive bounded extent, every
+header/payload inside it, and final used+available equal to that extent. Cache the
+extent only within the stopped observation; zero/foreign/invalid extents refuse.
+This fixed libsystem_malloc call consumes the existing call/deadline budget;
+no payload copying, graph evaluation or memory-protection change is added. Check metadata, superclass, field offsets, generic
 arguments, item sizes, cycles, depth and retained linkage before numeric reads.
 SizedSpaceElement, CoordinateSpaceElement and ScrollGeometryItem add no affine
 operation; their payloads/names stay unread. TranslationElement supplies its
@@ -65,8 +71,8 @@ that host.window is the exact selected window before/after these fixed getters.
 Only zero-origin flipped host bounds are admitted by this initial profile.
 Preserve FP registers under the existing call/restore protocol; no expression,
 SwiftUI callback or graph evaluation is permitted. Existing deadlines/call limits
-and owner recovery apply. Validate finite points/rectangles and matching geometry
-on recheck. Derive the affine basis into full-window top-left pt from those
+and owner recovery apply. Validate finite points/rectangles and matching bounds/frame, isFlipped and the
+full three-point basis on recheck. Derive the affine basis into full-window top-left pt from those
 reported points and the reported window height. Do not fit an image offset.
 The owned fixture reports bounds360×252pt and native basis (0,252), (1,252),
 (0,251); independent Blueprint PNG is720×504 at reported scale2 with known full-window

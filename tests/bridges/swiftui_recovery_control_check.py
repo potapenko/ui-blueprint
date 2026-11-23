@@ -109,6 +109,20 @@ class RecoveryInput(unittest.TestCase):
         self.assertIsNone(receipts[0]['command'])
         reader.assert_not_called(); process.Kill.assert_not_called(); process.Detach.assert_not_called()
 
+    def test_owned_listener_is_drained_during_recovery(self):
+        from unittest.mock import Mock
+        state=[2]
+        process=Mock();process.GetProcessID.return_value=123
+        process.GetState.side_effect=lambda:state[0];process.IsValid.return_value=True
+        process.Kill.side_effect=lambda:(state.__setitem__(0,10) or SimpleNamespace(Success=lambda:True))
+        listener=Mock();listener.GetNextEvent.side_effect=lambda event:(state.__setitem__(0,5) or True) if state[0]==2 else False
+        lldb=SimpleNamespace(eStateStopped=5,eStateExited=10,eStateDetached=9,SBEvent=Mock,
+            SBProcess=SimpleNamespace(EventIsProcessEvent=lambda e:True,GetStateFromEvent=lambda e:state[0]))
+        with patch('swiftui_recovery_control.termination_requested',return_value=True),patch('time.sleep'):
+            result=retain_debugger(SimpleNamespace(SetAsync=lambda _:None),process,lldb,0,'r',123,'g','o',lambda _:None,
+                                   termination_action='terminate-owned-fixture',event_listener=listener)
+        self.assertEqual(result,'owner_terminated_fixture');process.Kill.assert_called_once()
+
     def test_unbound_peer_exit_is_not_target_termination(self):
         from unittest.mock import Mock
         process=Mock();process.GetProcessID.return_value=0

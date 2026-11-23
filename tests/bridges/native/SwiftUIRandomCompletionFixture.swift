@@ -25,7 +25,7 @@ private extension View {
         #if S13_NO_ORACLE
         self
         #else
-        anchorPreference(key: S13Bounds.self, value: .bounds) { [name: $0] }
+        transformAnchorPreference(key: S13Bounds.self, value: .bounds) { value, anchor in value[name] = anchor }
         #endif
     }
 }
