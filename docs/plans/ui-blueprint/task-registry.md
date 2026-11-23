@@ -13,6 +13,13 @@ handles versioning, installation and publication.
 | S14 Guest Tour | `01a20922-fc3b-7d30-935a-652c6db5f3dc` | `01a20845-8b81-7e81-8c46-9f90b9f8f960` | Verify card IDs, card and target frames, viewport, groups and coordinate mappings on the open map and after a layout change. The owner takes over the existing investigation and fixture evidence. |
 | S03.A Actors picker | `01a20923-023c-7cd0-8421-a2e20177df71` | `01a20911-330a-7fa2-aa96-980371b389a7` | Use UI Blueprint to measure the open picker and its children with the consumer. |
 
+- **Closed — Search Paywall card and CTA.** The PlayPhrase.me Paywall owner
+  reported user acceptance of the native frames and Blueprint evidence at client
+  revision `bf44209890b40ce712fb9eb5e640d48a254726e9`. The client handoff
+  `docs/handoff/paywall.md` records the acceptance basis and remaining evidence
+  limits. [Paywall support](codex://threads/01a209c6-f155-7e90-8137-87dbc2c277c8)
+  is complete. [R11 cell geometry](codex://threads/01a209c1-eece-70d1-a7c1-f002c18b5401)
+  has its own fixture task and acceptance criteria.
 - **Local distribution.** The installed version is 0.6.1 at
   `223cf16808ffa9962ecc28018a8d69e372992c94`. It supports native PNG capture
   in an explicitly selected external task directory. Version 0.6.0 at
