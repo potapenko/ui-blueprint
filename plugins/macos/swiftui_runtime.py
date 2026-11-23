@@ -1,0 +1,308 @@
+#!/usr/bin/env python3
+"""Process-owned SwiftUI runtime requests; geometry arithmetic stays in Rust."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+import uuid
+
+MAX_BYTES = 16 * 1024 * 1024
+
+
+class Failure(Exception):
+    pass
+
+
+def unique_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise Failure("duplicate_json_key")
+        value[key] = item
+    return value
+
+
+def read_json(path, cap=MAX_BYTES):
+    path = Path(path)
+    info = path.lstat()
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_size > cap:
+        raise Failure("invalid_input_file")
+    with path.open("rb") as handle:
+        raw = handle.read(cap + 1)
+    if len(raw) > cap:
+        raise Failure("input_limit")
+    return json.loads(raw, object_pairs_hook=unique_object)
+
+
+def publish(path, data):
+    path = Path(path)
+    if not path.parent.is_dir() or path.parent.is_symlink():
+        raise Failure("invalid_output_directory")
+    fd, temporary = tempfile.mkstemp(prefix=".uib-", dir=path.parent)
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(data)
+        os.link(temporary, path)
+    finally:
+        os.unlink(temporary)
+
+
+def encoded(value):
+    return (json.dumps(value, separators=(",", ":"), allow_nan=False) + "\n").encode()
+
+
+def endpoint(path):
+    path = Path(path).absolute()
+    info = path.parent.lstat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o077:
+        raise Failure("endpoint_not_private")
+    value = read_json(path, 16_384)
+    if (value.get("protocol") != "1.0.0" or value.get("source") != "swiftui.runtime.layout"
+            or Path(value.get("directory", "")).resolve() != path.parent.resolve()
+            or type(value.get("pid")) is not int or value["pid"] <= 0):
+        raise Failure("incompatible_endpoint")
+    try:
+        os.kill(value["pid"], 0)
+    except ProcessLookupError:
+        raise Failure("target_unavailable") from None
+    return path.parent, value
+
+
+def request(session, operation, window=None, generation=None, timeout=5):
+    root, descriptor = endpoint(session)
+    request_id = str(uuid.uuid4())
+    input_path = root / (request_id + ".request.json")
+    response_path = root / (request_id + ".response.json")
+    cancel_path = root / (request_id + ".cancel")
+    snapshot_path = None
+    payload = dict(version="1.0.0", id=request_id, run=descriptor["run_id"],
+                   capability=descriptor["capability"], operation=operation,
+                   window=window, windowGeneration=generation)
+    publish(input_path, encoded(payload))
+    deadline = time.monotonic() + timeout
+    try:
+        while not response_path.exists():
+            if time.monotonic() >= deadline:
+                publish(cancel_path, b"cancel\n")
+                raise Failure("request_deadline_source_outcome_unknown")
+            time.sleep(0.025)
+        response = read_json(response_path, 16_384)
+        if (response.get("protocol") != "1.0.0" or response.get("request_id") != request_id
+                or response.get("run_id") != descriptor["run_id"]):
+            raise Failure("response_binding_mismatch")
+        if response.get("status") != "ok":
+            raise Failure(response.get("reason", "source_refused"))
+        if operation == "capture":
+            if response.get("snapshot") != request_id + ".snapshot.json":
+                raise Failure("invalid_snapshot_binding")
+            snapshot_path = root / response["snapshot"]
+            info = snapshot_path.lstat()
+            if not stat.S_ISREG(info.st_mode) or info.st_size > MAX_BYTES:
+                raise Failure("invalid_snapshot_file")
+            raw = snapshot_path.read_bytes()
+            if hashlib.sha256(raw).hexdigest() != response.get("sha256"):
+                raise Failure("snapshot_hash_mismatch")
+            return response, raw
+        return response, None
+    finally:
+        # Only this call's already completed products are acknowledged here.
+        # A timed-out call leaves cancellation and any late response for its owner.
+        if response_path.exists():
+            for path in (input_path, response_path, snapshot_path, cancel_path):
+                if path is not None:
+                    try:
+                        path.unlink()
+                    except FileNotFoundError:
+                        pass
+
+
+def launch(app, run_root, environment=None, arguments=None, expected_bundle=None):
+    app = Path(app).resolve()
+    if app.suffix != ".app" or not app.is_dir():
+        raise Failure("app_not_found")
+    if app.stat().st_dev != Path(tempfile.gettempdir()).stat().st_dev:
+        raise Failure("app_runtime_must_be_internal")
+    root = Path(run_root).resolve()
+    if not root.is_dir() or root.stat().st_dev != Path(tempfile.gettempdir()).stat().st_dev:
+        raise Failure("runtime_root_must_be_existing_internal_directory")
+    run = Path(tempfile.mkdtemp(prefix="uib-launch-", dir=root))
+    (run / "OWNERSHIP.md").write_text("Owner: invoking Blueprint task\nState: active\nPurpose: owned application launch. Retain app and session until owner releases them.\n")
+    output = run / "launch.stdout"
+    error = run / "launch.stderr"
+    env = dict(environment or {})
+    if any(k in env for k in ("HOME", "CODEX_HOME", "TMPDIR", "TMP", "TEMP")):
+        raise Failure("reserved_environment_key")
+    env.update(UIBLUEPRINT_RUNTIME="1", SWIFTUI_VIEW_DEBUG="29", TMPDIR=str(run), TMP=str(run), TEMP=str(run))
+    command = ["/usr/bin/open", "-n", "-g", "--stdout", str(output), "--stderr", str(error)]
+    for key, value in env.items():
+        if not re.fullmatch(r"[A-Z_][A-Z0-9_]*", key) or not isinstance(value, str):
+            raise Failure("invalid_environment")
+        command += ["--env", key + "=" + value]
+    command.append(str(app))
+    if arguments:
+        command += ["--args", *arguments]
+    subprocess.run(command, check=True, timeout=15, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    deadline = time.monotonic() + 20
+    while time.monotonic() < deadline:
+        if error.exists():
+            # Do not print unrelated application diagnostics or environment values.
+            text = error.read_bytes()[:1_048_576].decode("utf-8", "replace")
+            paths = [line.removeprefix("UIBLUEPRINT_SESSION ") for line in text.splitlines()
+                     if line.startswith("UIBLUEPRINT_SESSION ")]
+            if paths:
+                _, descriptor = endpoint(paths[-1])
+                if expected_bundle and descriptor.get("bundle") != expected_bundle:
+                    raise Failure("unexpected_bundle")
+                return dict(session=paths[-1], pid=descriptor["pid"], bundle=descriptor["bundle"],
+                            app=str(app), run_directory=str(run))
+        time.sleep(0.05)
+    raise Failure("runtime_hook_not_ready; owned_launch=" + str(run))
+
+
+def prepare(args):
+    recipe_path = Path(args.recipe).resolve()
+    recipe = read_json(recipe_path, 16_384)
+    allowed = {"recipe_version", "project_root", "project", "scheme", "product", "bundle", "environment", "arguments"}
+    if set(recipe) - allowed or recipe.get("recipe_version") != "1.0.0":
+        raise Failure("invalid_project_recipe")
+    project_root = (recipe_path.parent / recipe["project_root"]).resolve()
+    project = (project_root / recipe["project"]).resolve()
+    if not project.is_relative_to(project_root) or project.suffix != ".xcodeproj":
+        raise Failure("invalid_project")
+    product = recipe["product"]
+    if Path(product).name != product or not product.endswith(".app"):
+        raise Failure("invalid_product")
+    build_root = Path(args.build_root).resolve()
+    run_root = Path(args.run_root).resolve()
+    if not build_root.is_dir() or not run_root.is_dir():
+        raise Failure("prepare_roots_must_exist")
+    identity = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_root, text=True).strip()
+    with tempfile.TemporaryDirectory(prefix="uib-prepare-", dir=build_root) as task:
+        task = Path(task)
+        env = dict(os.environ, TMPDIR=str(task), TMP=str(task), TEMP=str(task))
+        log = task / "build.log"
+        command = ["xcodebuild", "-project", str(project), "-scheme", recipe["scheme"],
+                   "-configuration", "Debug", "-derivedDataPath", str(task / "DerivedData"), "build"]
+        with log.open("wb") as stream:
+            completed = subprocess.run(command, cwd=project_root, env=env, stdout=stream, stderr=subprocess.STDOUT, timeout=2400)
+        if completed.returncode:
+            raise Failure("project_build_failed")
+        if subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_root, text=True).strip() != identity:
+            raise Failure("source_revision_changed_during_build")
+        source = task / "DerivedData/Build/Products/Debug" / product
+        if not source.is_dir():
+            raise Failure("built_product_missing")
+        artifact = Path(tempfile.mkdtemp(prefix="uib-app-", dir=run_root))
+        shutil.copytree(source, artifact / product, symlinks=False)
+        (artifact / "OWNERSHIP.md").write_text(f"Owner: invoking Blueprint task\nState: active\nPurpose: retained diagnostic app at {identity}\nRetain until instance and consumers release it.\n")
+    return launch(artifact / product, run_root, recipe.get("environment"), recipe.get("arguments"), recipe["bundle"])
+
+
+def measured_nodes(snapshot, wanted_type):
+    nodes = snapshot["artifact"]["data"]["nodes"]
+    selected = []
+    for node in nodes:
+        role = node["native_role"]
+        name = role.get("value", {}).get("value", "") if role.get("availability") == "known" else ""
+        if wanted_type and name.split("<", 1)[0] != wanted_type:
+            continue
+        state = next(p["state"] for p in node["properties"] if p["field"] == "layout_bounds")
+        selected.append((node, name, state))
+    return selected
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    p = sub.add_parser("launch")
+    p.add_argument("--app", required=True)
+    p.add_argument("--run-root", required=True)
+    p = sub.add_parser("prepare")
+    p.add_argument("--recipe", required=True)
+    p.add_argument("--build-root", required=True)
+    p.add_argument("--run-root", required=True)
+    for operation in ("windows", "capture", "tree", "measure"):
+        p = sub.add_parser(operation)
+        p.add_argument("--session", required=True)
+        p.add_argument("--window", type=int)
+        p.add_argument("--generation")
+        p.add_argument("--timeout", type=float, default=5)
+        if operation != "windows":
+            p.add_argument("--out")
+            p.add_argument("--type")
+        if operation == "measure":
+            p.add_argument("--relation", choices=("width", "height"), required=True)
+            p.add_argument("--bundle", required=True)
+    args = parser.parse_args()
+    if args.command == "launch":
+        result = launch(args.app, args.run_root)
+    elif args.command == "prepare":
+        result = prepare(args)
+    else:
+        if not 0 < args.timeout <= 30:
+            raise Failure("invalid_deadline")
+        result, raw = request(args.session, "windows" if args.command == "windows" else "capture",
+                              args.window, args.generation, args.timeout)
+        if raw is not None:
+            if args.out:
+                publish(args.out, raw)
+                result["saved_snapshot"] = str(Path(args.out).absolute())
+            doc = json.loads(raw, object_pairs_hook=unique_object)
+            selected = measured_nodes(doc, args.type)
+            if args.command == "tree":
+                result["nodes"] = [dict(key=n["key"], type=t, children=n["children"], layout=s)
+                                   for n, t, s in selected]
+            elif args.command == "measure":
+                result["measurements"] = measure(args, doc, raw, selected)
+    print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
+
+
+def measure(args, doc, raw, selected):
+    bundle = Path(args.bundle).resolve()
+    results = []
+    with tempfile.TemporaryDirectory(prefix="uib-query-") as task:
+        task = Path(task)
+        snapshot = task / "snapshot.json"
+        snapshot.write_bytes(raw)
+        subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", str(MAX_BYTES), str(snapshot)],
+                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=10)
+        for node, name, state in selected:
+            if state["availability"] != "known":
+                results.append(dict(key=node["key"], type=name, status="unknown", reason=state.get("reason")))
+                continue
+            geometry = state["value"]["value"]
+            space = geometry["coordinate_space"]
+            query = dict(id="runtime-measure", scope_id=doc["artifact"]["data"]["context"]["scope_id"],
+                         targets=[node["key"]], applies_when=dict(platform=None, input_mode=None, text_scale=None),
+                         operation=args.relation, anchors=[dict(element=node["key"], frame_kind="layout_bounds",
+                             coordinate_space=space, fraction=0, axis="x" if args.relation == "width" else "y")],
+                         quantity_kind="length", units="pt")
+            query_path = task / "query.json"
+            query_path.write_bytes(encoded(dict(schema_version="0.2.0", artifact=dict(kind="geometry_query", data=query))))
+            completed = subprocess.run([str(bundle / "uiblueprint"), "measure", "--snapshot", str(snapshot),
+                "--query", str(query_path), "--space", space["id"], "--max-input-bytes", str(MAX_BYTES + 16384),
+                "--max-output-bytes", str(MAX_BYTES * 2), "--json"], capture_output=True, timeout=10)
+            if completed.returncode not in (0, 4):
+                raise Failure("rust_measure_failed")
+            answer = json.loads(completed.stdout)
+            data = answer.get("artifact", {}).get("data", answer)
+            compact = {k: v for k, v in data.items() if k not in ("snapshot", "evaluation", "source", "query")}
+            results.append(dict(key=node["key"], type=name, result=compact))
+    return results
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (Failure, OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+        code = str(error) if isinstance(error, Failure) else type(error).__name__
+        print(json.dumps(dict(status="failed", reason=code)), file=sys.stderr)
+        sys.exit(4)
