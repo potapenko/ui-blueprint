@@ -99,6 +99,87 @@ unresolved target remain distinct source outcomes. Report the actual result with
 opening permission dialogs, changing focus, broadening to another window or retrying
 automatically. Cleanup may reap owned helpers, never the user's application.
 
+## Partial coverage and AX identifiers
+
+If an SDK coverage manifest lists the requested overlay as unmeasured, first
+identify the requested frame kind. A separately authorized ordinary AX observation
+can provide accessibility bounds without changing the app. It does not recover
+missing SwiftUI layout bounds. Use the existing saved AX response when available;
+otherwise use the preparation/Observe recipe above for the owner's current window.
+Do not automatically fall back from a permission or identity refusal.
+
+The ordinary preparer selects the named process's `AXFocusedWindow`. It has no
+CGWindowID or arbitrary AXIdentifier subtree selector. `inspect --ref` selects a
+SourceKey in saved data; it does not narrow live acquisition. Repository fixture
+utilities and `native-session` are not interchangeable ordinary-app recipes.
+
+When `accessibility_name` is requested, inspect both the canonical property and
+`extensions`: `AXTitle` preserves the source title separately from the canonical
+name (which this collector reads from AXDescription). `AXIdentifier` is also an
+extension. Each extension's value is in `property.state.value.value` only when
+`property.state.availability` is `known`. Unknown, unsupported and empty differ.
+SourceKeys are observation-local aliases, not AXIdentifiers or reusable handles.
+
+For example, enumerate the recorded subtree of one exact observed AXIdentifier.
+`SNAPSHOT` must be one original observed ChannelResponse, not multiple NDJSON lines;
+`WANTED_AXID` is the caller's selected identifier, not a label guessed from pixels.
+This reads saved data only and preserves the original document:
+
+```sh
+python3 - "$SNAPSHOT" "$WANTED_AXID" <<'PY'
+import json, sys
+d = json.load(open(sys.argv[1]))
+a = d['artifact']
+assert a['kind'] == 'channel_response'
+r = a['data']['result']
+assert r['status'] == 'observed', 'response has no observed Snapshot'
+s = r['data']
+def known(state):
+    return state['value']['value'] if state['availability'] == 'known' else None
+def extension(node, name):
+    return next((known(e['property']['state']) for e in node['extensions']
+                 if e['name'] == name and e['namespace'] == 'macos.ax'), None)
+def key(k):
+    return (k['namespace'], k['key'])
+nodes = {key(n['key']): n for n in s['nodes']}
+roots = [n for n in s['nodes'] if extension(n, 'AXIdentifier') == sys.argv[2]]
+assert len(roots) == 1, f'expected one recorded root, found {len(roots)}'
+pending, seen = [roots[0]['key']], set()
+print(json.dumps({'coverage': s['coverage'], 'recorded_nodes': len(nodes)}))
+while pending:
+    k = key(pending.pop(0))
+    if k in seen:
+        continue
+    seen.add(k)
+    n = nodes[k]
+    print(json.dumps({f: n[f] for f in
+        ('key', 'native_role', 'properties', 'extensions', 'children')}))
+    pending.extend(n['children'])
+PY
+```
+
+Require the correct recorded ancestor as well as the label/identifier. A form's
+Close button and a full-window dismiss backdrop may both be named Close; a window
+close control is another object. Likewise, a named inner scroll area and its outer
+container can report different rectangles. Keep both identities and frame meanings.
+Copy the chosen node's exact `{namespace,key}` into `inspect --ref` and use the
+[factual query recipe](analysis.md#construct-a-factual-query) for Rust `measure`.
+
+The 0.6.1 preparer requests at most 160 nodes, depth 9, 512 KiB and 1000 ms. The collector
+walks breadth-first and charges discovered handles before collecting their children.
+An exhausted node budget can therefore leave a recorded group with `children: []`
+even when the runtime has children. A partial response with 160 nodes is evidence of
+reaching that ceiling, not proof of the missing nodes' runtime existence or absence.
+Check requested limits, depth, source outcome and available coverage before assigning
+a cause. Exit4 can accompany useful partial data; preserve the Observe exit immediately
+before another shell command overwrites it. Validation alone does not establish coverage.
+
+A successful observation with a smaller background list qualifies that state only.
+Do not switch to empty Favorites, hide rows, enlarge quotas or retry automatically to
+make the original case pass. If children remain unmeasured, report the available parent
+and controls separately, and request a qualified scoped route or an explicitly agreed
+new scenario. Do not describe a missing selector capability as an implemented feature.
+
 ## SwiftUI versus Compose
 
 Use native `accessibility_bounds` in their reported pt space and Compose

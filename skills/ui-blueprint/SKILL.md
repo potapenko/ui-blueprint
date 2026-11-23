@@ -43,6 +43,7 @@ Read only the reference needed for the task:
 | Explicit opt-in Kotlin Compose Desktop/macOS or Android geometry | [Compose](references/compose.md) |
 | Capture an independent lossless PNG of an exact native window | [macOS](references/macos.md#independent-native-png-from-the-selected-window) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
+| Find a missing native form/control in partial SDK or AX output | [macOS: partial coverage and AX identifiers](references/macos.md#partial-coverage-and-ax-identifiers) |
 | Opt-in SwiftUI window/root geometry or supplied SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
 | Opt-in GPUI window/root geometry or supplied Debug snapshot | [GPUI](references/gpui.md) and [Analysis](references/analysis.md) |
 | Compile a drawing package; generate/review an image when requested | [Export](references/export.md) |
