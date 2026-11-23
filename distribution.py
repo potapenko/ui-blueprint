@@ -29,8 +29,11 @@ COMMON = {'uiblueprint', 'uiblueprint-validate', 'distribution.py', 'RUN.md',
           'example-expectation.json', 'example-observed-brief.json', 'example-proposed-brief.json'}
 COMPOSE_FILES = {'ComposeMarker.kt', 'ProbeSession.kt', 'ProbeJson.kt', 'COMPOSE.md'}
 NATIVE_CALLER_FILES = {'native-prepare.py'}
-CACHE_FILES = {'swiftui_debug_capture.py', 'swiftui_ag_cache.py', 'swiftui_debug_fields.py',
+CACHE_FILES_V6 = {'swiftui_debug_capture.py', 'swiftui_ag_cache.py', 'swiftui_debug_fields.py',
                'swiftui_debug_snapshot.py', 'swiftui_recovery_control.py', 'native_prepare.py'}
+CACHE_FILES_V7 = {'swiftui_native_parts.py', 'swiftui_cache_transform.py',
+                  'swiftui_debug_backend.py', 'swiftui_ancestor_cache.py'}
+CACHE_FILES = CACHE_FILES_V6 | CACHE_FILES_V7
 WEB_FILES = {'web-geometry.cjs', 'WEB-FIRST-USE.md'}
 IMAGE_SUFFIXES = {'.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.ico', '.icns',
                   '.bmp', '.tif', '.tiff', '.heic', '.heif', '.avif', '.pdf', '.partial'}
@@ -162,7 +165,9 @@ def verify(fd):
     manifest = json.loads(raw)
     modules = manifest.get('modules')
     expected_names = files_for(modules)
-    if manifest.get('format') != 'ui-blueprint-local-6':
+    if manifest.get('format') == 'ui-blueprint-local-6':
+        expected_names -= CACHE_FILES_V7
+    elif manifest.get('format') != 'ui-blueprint-local-7':
         expected_names -= CACHE_FILES
     if manifest.get('format') in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3'):
         expected_names -= NATIVE_CALLER_FILES
@@ -170,7 +175,7 @@ def verify(fd):
         expected_names -= COMPOSE_FILES
     if manifest.get('format') == 'ui-blueprint-local-1':
         expected_names -= WEB_FILES  # old complete inventory remains removable
-    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6') or
+    if (manifest.get('format') not in ('ui-blueprint-local-1', 'ui-blueprint-local-2', 'ui-blueprint-local-3', 'ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6', 'ui-blueprint-local-7') or
             modules not in ('core', 'web', 'native', 'combined') or
             set(manifest.get('files', {})) != expected_names):
         raise ValueError('invalid distribution manifest; no files removed')
@@ -338,7 +343,7 @@ def build(args, fd):
             (sysroot / 'share/doc/rust/COPYRIGHT-library.html').read_bytes(), 0o644)
         if set(products) != files_for(args.modules):
             raise ValueError('unexpected bundle inventory')
-        manifest = {'format': 'ui-blueprint-local-6', 'source_revision': revision,
+        manifest = {'format': 'ui-blueprint-local-7', 'source_revision': revision,
             'modules': args.modules, 'target': TARGET, 'profile': 'release',
             'cli_features': cli_features, 'worker_features': ['web'] if 'web' in cli_features else [],
             'rustc': tool_version, 'swift': swift_version, 'host_os': platform.mac_ver()[0],

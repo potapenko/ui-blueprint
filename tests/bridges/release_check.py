@@ -35,7 +35,7 @@ def bundle_at(folder, revision='a' * 40):
     products = {name: ((name + '\n').encode(), 0o644) for name in dist.files_for('combined')}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "Usage: synthetic candidate\\n"\n', 0o755)
-    manifest = {'format': 'ui-blueprint-local-6', 'source_revision': revision,
+    manifest = {'format': 'ui-blueprint-local-7', 'source_revision': revision,
                 'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                                                 for name, (data, mode) in products.items()}}
     with dist.destination(folder) as fd:
@@ -603,6 +603,16 @@ esac
                     resolved = (path.parent / link.split('#', 1)[0]).resolve()
                     assert resolved.is_relative_to(skill.resolve()) and resolved.is_file(), link
         checks.smoke(installed)
+        if json.loads((installed / dist.MANIFEST).read_bytes())['format'] == 'ui-blueprint-local-7':
+            # Isolated Python cannot accidentally resolve modules from the source checkout.
+            modules = sorted(Path(name).stem for name in dist.CACHE_FILES)
+            run([sys.executable, '-I', '-B', '-c',
+                 'import importlib,sys;sys.path.insert(0,sys.argv[1]);'
+                 '[importlib.import_module(name) for name in sys.argv[2:]];'
+                 'from pathlib import Path;import swiftui_debug_capture as capture;'
+                 'assert capture.verified_helper(sys.argv[1])==Path(sys.argv[1])/"native-host-helper"',
+                 installed, *modules], env=env)
+            print('PASS installed capture modules import outside checkout without attachment')
         native_preparer_smoke(installed, stage)
         run([*command, '--uninstall'], env=env)
         assert not (prefix / 'share/uiblueprint').exists()
@@ -801,6 +811,61 @@ def native_inventory_upgrade(stage, versions):
     assert not current.exists() and not skill.exists()
     print('PASS historical manifest4/skill7 → manifest5/skill8 update, offline rollback, re-update/removal; missing/foreign skill files preserved')
 
+
+def cache_inventory_upgrade(stage, versions):
+    """Pinned manifest6 installer upgrades to7 without changing old receipts."""
+    historical = '223cf16808ffa9962ecc28018a8d69e372992c94'
+    bundle, candidate = stage / 'cache6-bundle', stage / 'cache6-candidate'
+    bundle_at(bundle)
+    manifest = json.loads((bundle / dist.MANIFEST).read_bytes())
+    for name in dist.CACHE_FILES_V7:
+        del manifest['files'][name]
+        (bundle / name).unlink()
+    manifest['format'] = 'ui-blueprint-local-6'
+    (bundle / dist.MANIFEST).write_bytes(dist.encoded(manifest))
+    candidate.mkdir()
+    release.write_candidates(bundle, candidate, version='0.0.11', revision='a'*40,
+        minimum='27.0.1', signing='unsigned',
+        installer_template=release.committed(historical, 'install.sh').decode(),
+        formula_template=(ROOT / 'uiblueprint.rb').read_text(),
+        skill_files={n: release.committed(historical, 'skills/ui-blueprint/'+n)
+                     for n in release.SKILL_FILES})
+    extracted = stage / 'cache6-extracted'
+    extracted.mkdir()
+    release.extract_candidate(candidate, extracted, release.read_candidate(candidate))
+    assert not any((extracted / name).exists() for name in dist.CACHE_FILES_V7)
+    prefix, skill = stage / 'cache6-prefix', stage / 'cache6-skill'
+    run(['sh', candidate/'install.sh', '--prefix', prefix, '--skill-dir', skill,
+         '--local-release', candidate])
+    current = prefix / 'share/uiblueprint/current'
+    old_receipt = (current / '.install-sha256').read_bytes()
+    new = ['sh', versions/'0.1.0/install.sh', '--prefix', prefix]
+    update = [*new, '--local-release', versions/'0.1.0']
+    # A foreign new-module filename in the old format is not legitimized by upgrade.
+    foreign = current / 'swiftui_cache_transform.py'
+    foreign.write_text('keep foreign file')
+    run(update, ok=False)
+    assert foreign.read_text() == 'keep foreign file'
+    foreign.unlink()
+    run(update)
+    assert json.loads((current / dist.MANIFEST).read_bytes())['format'] == 'ui-blueprint-local-7'
+    assert all((current / name).is_file() for name in dist.CACHE_FILES_V7)
+    missing = current / 'swiftui_native_parts.py'
+    original = missing.read_bytes()
+    missing.unlink()
+    rollback = [*new, '--version', '0.0.11']
+    run(rollback, ok=False)
+    assert current.resolve().name == '0.1.0'
+    missing.write_bytes(original)
+    run(rollback)
+    assert (current / '.install-sha256').read_bytes() == old_receipt
+    assert not any((current / name).exists() for name in dist.CACHE_FILES_V7)
+    run(update)
+    run([*new, '--uninstall'])
+    assert not current.exists() and not skill.exists()
+    print('PASS manifest6 ->7 ->6 rollback/re-update/removal; foreign/missing modules refused')
+
+
 def source_release_checks():
     license_text = (ROOT / 'LICENSE').read_text()
     assert license_text.startswith('MIT License\n')
@@ -889,6 +954,7 @@ def main():
             cross_inventory_checks(stage, versions, manifest_version)
         compose_inventory_upgrade(stage, versions)
         native_inventory_upgrade(stage, versions)
+        cache_inventory_upgrade(stage, versions)
         hostile_skill_checks(stage, versions)
         local_install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)

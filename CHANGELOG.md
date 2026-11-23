@@ -3,6 +3,24 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.7.0
+
+- Fix bounded SwiftUI owner association discovery using a metadata index and
+  audited read intervals. The source-shaped stress fixture now retains the same
+  geometry as the small fixture within the existing acquisition limits.
+  Existing exact owner-run qualification and recovery gates remain mandatory;
+  Random, Actors and Practice interface acceptance belongs to their consumers.
+- Add the source-specific Guest Tour component diagnostic under
+  `experiments/native/guest-tour-layout`, with canonical validation and Rust
+  measurements, preserved connector origins and annotation scale. Use requires
+  the separately verified immutable G2 profile and restricted backend. This is
+  not a general SwiftUI capture path or acceptance of the full Guest Tour UI.
+- Include the four required SwiftUI collector support modules in local bundle
+  format 7, preserving verification, update and rollback of formats 1–6.
+  No debugger binary or process authorization is distributed.
+- Clarify the installed skill's separate AX discovery path for partially
+  measured forms, including source identifiers and repeated Close controls.
+
 ## 0.6.1
 
 - Fix macOS window capture on an external volume. `capture-window` can now

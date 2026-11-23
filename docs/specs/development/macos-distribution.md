@@ -1,6 +1,6 @@
 # Mac distribution
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@8`.
+- Contract: `UIB.MAC-DISTRIBUTION@9`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -104,3 +104,13 @@ combined local packages after the first verified partial Reels capture. The
 package carries no consumed process grant. Operator-bound qualification remains
 a separate step. Existing CLI/wire and skill inventories retain their meaning.
 Manifest1–5 verification selects the recorded historical inventory for rollback.
+
+Manifest7 adds the native parts, cache transform, fixed backend and ancestor
+cache Python modules required
+by the selected committed collector. Release-owner packaging authority and S13/S03
+module handoffs select this additive inventory; this does not qualify new product
+captures. Preserve the exact six-module manifest6 inventory and all older formats
+for verification, update, rollback and removal. Verify isolated installed imports
+without attachment, plus format6→7→6 lifecycle and missing/foreign file refusal.
+S14 component experiments remain source-only with their separately qualified
+owner profile/backend; no debugger binary or process grant is bundled.
