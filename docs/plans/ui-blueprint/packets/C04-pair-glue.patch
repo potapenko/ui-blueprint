@@ -7,7 +7,7 @@ diff --git a/plugins/macos/swiftui_ag_cache.py b/plugins/macos/swiftui_ag_cache.
  from swiftui_debug_snapshot import Refusal, encode
 +from swiftui_capture_pair import charge_tree_record, charge_node
 +from swiftui_source_selection import matches_owner, body_metadata, select_part
- 
+
  PROFILE = {**IMAGES, 'AttributeGraph': '6B3E4A3F-D05C-3A1B-B187-18075DC4DCC0'}
  GEOMETRY = {
 @@ -18,7 +20,9 @@
@@ -23,7 +23,7 @@ diff --git a/plugins/macos/swiftui_ag_cache.py b/plugins/macos/swiftui_ag_cache.
          self.unknown_order = 0
 @@ -416,6 +420,7 @@
          return [root for _, root in sorted(selected, key=lambda item: item[0])], known
- 
+
      def walk(self, element, parent=None, depth=1, witness_only=False, inherited_transform=None):
 +        charge_tree_record(self, element)
          if hasattr(self, 'native_parts_indexed'):
@@ -38,12 +38,12 @@ diff --git a/plugins/macos/swiftui_ag_cache.py b/plugins/macos/swiftui_ag_cache.
                  index = len(self.nodes)
                  self.nodes.append(node)
 @@ -585,9 +591,10 @@
- 
+
          owner_names = {}
          active_owners = set()
 -        owner_roots = {}
 +        owner_roots, structural_records = {}, {}
- 
+
          def scan(element, depth):
 +            charge_tree_record(self, element)
              p = self.owned_record(element, 32)
@@ -86,7 +86,7 @@ diff --git a/plugins/macos/swiftui_ag_cache.py b/plugins/macos/swiftui_ag_cache.
 +            roots = select_part(structural_records, roots, scope['part'])
 +            self.selected_source['selection_source'] = 'source_part'
 +        return roots
- 
+
      @staticmethod
      def native_descriptor_matches(expected, symbol):
 @@ -878,6 +897,7 @@
@@ -101,7 +101,7 @@ diff --git a/plugins/macos/swiftui_debug_snapshot.py b/plugins/macos/swiftui_deb
 --- a/plugins/macos/swiftui_debug_snapshot.py
 +++ b/plugins/macos/swiftui_debug_snapshot.py
 @@ -53,6 +53,12 @@
- 
+
  def request(raw):
      data = decode(raw)
 +    if isinstance(data, dict) and 'paired_surface' in data:
@@ -154,8 +154,8 @@ diff --git a/plugins/macos/swiftui_debug_capture.py b/plugins/macos/swiftui_debu
      if identity in (CONSUMER_ADMISSION, ACTORS_ADMISSION):
 @@ -462,6 +464,14 @@
                  basis_window_points=basis, source='NSView.convertPoint.to-window-base')
- 
- 
+
+
 +def revalidate_window(calls, req, binding):
 +    window, root, host = binding
 +    if (calls.objc(window, 'windowNumber') != req['window_id']
