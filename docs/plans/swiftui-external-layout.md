@@ -1,10 +1,12 @@
 # External SwiftUI layout qualification
 
-The locally installed release is **0.5.1**, source
-`1fabf7bc6da2af6236ca0ba9049ecaea604a697e`. Services confirmed the V09
-timeout fix on its 1920×1050 window. The prepared GitHub source release awaits
-the operator's explicit confirmation for this revision. The newer commits in
-the working branch are outside that proposed publication.
+The locally installed release is **0.6.0**, source
+`1e131f7ced5babc4fdf03715d06dc925931f6560`. Reels and Shell qualification
+and the outstanding S14 acquisition dependency are recorded in the
+[current handoff](ui-blueprint/task-registry.md#current-handoff--2026-11-23).
+GitHub publication of this exact source release awaits the operator's explicit
+confirmation. Version 0.5.1 remains installed for rollback. Services verified
+its V09 timeout fix on a 1920×1050 window.
 
 The [coordination registry](ui-blueprint/task-registry.md) tracks domain
 ownership and consumer acceptance. [Grammar and Library AX measurements](../development/grammar-library-ax.md)

@@ -1,6 +1,31 @@
 # Единый реестр задач
 
-## Current migration support coordination — 2026-11-19
+## Current handoff — 2026-11-23
+
+- **Local distribution.** CLI, worker, native helper and skill are installed from
+  0.6.0 at `1e131f7ced5babc4fdf03715d06dc925931f6560`. The operator's
+  publication decision applies to this exact source release and tag in
+  `potapenko/ui-bluprint`. Version 0.5.1 remains available for local rollback.
+- **Consumer verification.** The release QA build of PlayPhrase.me completed
+  Search & Learn → Clip Search → loaded Reels → Search & Learn at both
+  1920×1050 and 961×1050 pt in one process. All eight captured SDK snapshots
+  validated. Shell reviewed the captures and separately verified that a button
+  remained actionable when its marker reported `UnmeasuredMarker / InvalidIdentity`.
+- **S14 Guest Tour — high priority, open.** UI Blueprint owner
+  `/root/settings_geometry`, consumer coordinator
+  `01a20845-8b81-7e81-8c46-9f90b9f8f960`. On the immutable e19b20c474 build,
+  request `gt-normal-01` captured 141 content markers and 12 toolbar surfaces.
+  Coverage explicitly excludes the open Tour overlay. The source-level debugger
+  proposal was withdrawn before attachment: the installed debugger/backend
+  pair has no verified pre-attach guarantee against software breakpoint writes,
+  including internal breakpoints. No live Tour locals were obtained.
+  Reopen acquisition only on new evidence of a compatible external route.
+  Acceptance still requires source-attributed card and target frames, groups,
+  viewport and applicable transforms on the real map, followed by a verified
+  layout change. Connector paths computed from measured inputs must be labelled
+  as derived. The S14 fix is absent from the 0.6.0 candidate.
+
+## Migration support coordination — 2026-11-19
 
 The user explicitly directed this chat to act as coordinator and assign implementation
 to workers. The active goal covers the UI Blueprint work requested by the
