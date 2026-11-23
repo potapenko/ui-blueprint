@@ -1,0 +1,71 @@
+diff --git a/lldb/tools/debugserver/source/MacOSX/MachProcess.mm b/lldb/tools/debugserver/source/MacOSX/MachProcess.mm
+index a162c942..a691c74c 100644
+--- a/lldb/tools/debugserver/source/MacOSX/MachProcess.mm
++++ b/lldb/tools/debugserver/source/MacOSX/MachProcess.mm
+@@ -2170,6 +2170,9 @@ static uint64_t bits(uint64_t value, uint32_t msbit, uint32_t lsbit) {
+                                     "0x%8.8llx, length = %llu, hardware = %i)",
+                    (uint64_t)addr, (uint64_t)length, hardware);
+ 
++  if (!hardware)
++    return nullptr;
++
+   DNBBreakpoint *bp = m_breakpoints.FindByAddress(addr);
+   if (bp)
+     bp->Retain();
+@@ -2452,54 +2455,8 @@ static uint64_t bits(uint64_t value, uint32_t msbit, uint32_t lsbit) {
+         }
+       }
+ 
+-      const nub_size_t break_op_size = bp->ByteSize();
+-      assert(break_op_size != 0);
+-      const uint8_t *const break_op =
+-          DNBArchProtocol::GetBreakpointOpcode(break_op_size);
+-      if (break_op_size > 0) {
+-        // Save the original opcode by reading it
+-        if (m_task.ReadMemory(addr, break_op_size, bp->SavedOpcodeBytes()) ==
+-            break_op_size) {
+-          // Write a software breakpoint in place of the original opcode
+-          if (m_task.WriteMemory(addr, break_op_size, break_op) ==
+-              break_op_size) {
+-            uint8_t verify_break_op[4];
+-            if (m_task.ReadMemory(addr, break_op_size, verify_break_op) ==
+-                break_op_size) {
+-              if (memcmp(break_op, verify_break_op, break_op_size) == 0) {
+-                bp->SetEnabled(true);
+-                // Let the thread list know that a breakpoint has been modified
+-                m_thread_list.NotifyBreakpointChanged(bp);
+-                DNBLogThreadedIf(LOG_BREAKPOINTS, "MachProcess::"
+-                                                  "EnableBreakpoint ( addr = "
+-                                                  "0x%8.8llx ) : SUCCESS.",
+-                                 (uint64_t)addr);
+-                return true;
+-              } else {
+-                DNBLogError("MachProcess::EnableBreakpoint ( addr = 0x%8.8llx "
+-                            "): breakpoint opcode verification failed.",
+-                            (uint64_t)addr);
+-              }
+-            } else {
+-              DNBLogError("MachProcess::EnableBreakpoint ( addr = 0x%8.8llx ): "
+-                          "unable to read memory to verify breakpoint opcode.",
+-                          (uint64_t)addr);
+-            }
+-          } else {
+-            DNBLogError("MachProcess::EnableBreakpoint ( addr = 0x%8.8llx ): "
+-                        "unable to write breakpoint opcode to memory.",
+-                        (uint64_t)addr);
+-          }
+-        } else {
+-          DNBLogError("MachProcess::EnableBreakpoint ( addr = 0x%8.8llx ): "
+-                      "unable to read memory at breakpoint address.",
+-                      (uint64_t)addr);
+-        }
+-      } else {
+-        DNBLogError("MachProcess::EnableBreakpoint ( addr = 0x%8.8llx ) no "
+-                    "software breakpoint opcode for current architecture.",
+-                    (uint64_t)addr);
+-      }
++      // Never substitute an instruction write for an unavailable hardware slot.
++      return false;
+     }
+   }
+   return false;
