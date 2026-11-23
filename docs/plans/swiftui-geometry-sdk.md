@@ -1,7 +1,7 @@
 # SwiftUI geometry SDK: execution plan
 
 - Plan: `PLAN.UIB.SWIFTUI-GEOMETRY@1`, 2026-11-23; status: proposed, planning complete, implementation not started.
-- Owner: chat `01a20a46-e5d0-7710-a5ce-9a93d8b82f02`; direct execution, no new chats or workers authorized by this plan.
+- Blueprint plan/SDK owner: chat `01a20a46-e5d0-7710-a5ce-9a93d8b82f02`. The user designated [Добавь геометрию в сборку](codex://threads/01a20a56-736d-7751-a552-792eecdddb68) on 2026-11-23 as the native integration counterpart. This authorizes the named handoff, not new chats/workers or execution of the whole proposed plan.
 - User authority: the 2026-11-23 reply explicitly says «разрешаю добавить какое-то дополнительно в Mac-приложение, чтобы мы нормально собирали информацию с него» and «подготовь план». It agrees with the audit and requests Mac/future iPhone/iPad coverage. This authorizes this plan, not its execution now.
 - The former immutable-donor restriction is not a prerequisite for the proposed integration. Preserve old evidence/builds; qualify a new instrumented source revision instead of relabelling old observations.
 - Source basis inspected: UI Blueprint `master` at `10cd1d8e`; PlayPhrase.me `beta-01` at `506527116a481617c9e75b816b1c07bd5c44a191`; installed/published CLI `0.6.1` at `223cf168`. Revalidate overlapping changes before implementation; stay on each current branch.
@@ -65,9 +65,9 @@ For this planning task only: this file and its three linked plan leaves. No prod
 
 On implementation approval, UI Blueprint owns `plugins/swiftui/`, a root `Package.swift`, narrowly affected `crates/cli/` and existing engine scope helpers if required, focused Swift/bridge/CLI tests, selected specs, SDK/skill/install documentation and release inventory. Preserve old package entry paths, wire formats and source-capture experiments.
 
-PlayPhrase.me owns its existing DeveloperControl integration, actual screen marker sites and scene hooks in `PlayphrasemeApp/`, `PlayphrasemePhone/`, `PlayphrasemeTablet/` and actual shared consumers in `PlayPhraseLearner/`; its Xcode package links/resolution, bounded build helper and diagnostic specs/docs/tests. No new product UI, networking feature or learner state owner is authorized by instrumentation.
+The designated PlayPhrase.me chat owns its existing DeveloperControl integration, actual screen marker sites and scene hooks in `PlayphrasemeApp/`, `PlayphrasemePhone/`, `PlayphrasemeTablet/` and actual shared consumers in `PlayPhraseLearner/`; its Xcode package links/resolution, bounded build helper and diagnostic specs/docs/tests. It owns all real-app measurements, windows and UI acceptance. Blueprint implementation/regression work uses project-owned fixtures. No new product UI, networking feature or learner state owner is authorized by instrumentation.
 
-Use one writer per overlapping file and existing owners. This plan does not interrupt active experiments, dispatch agents or send cross-chat instructions. The dedicated release chat retains packaging/publication ownership; execution handoff happens under actual authorization. Independent review required by privacy, compatibility and concurrency is a real gate, not permission to create reviewers automatically.
+Use one writer per overlapping file and existing owners. The user's named native counterpart received this plan and the direct Blueprint chat link on 2026-11-23; no implementation start or interruption of active experiments was dispatched. The dedicated release chat retains packaging/publication ownership. Independent review required by privacy, compatibility and concurrency is a real gate, not permission to create reviewers automatically.
 
 ## Decisions still requiring evidence, not another broad planning cycle
 
