@@ -8,6 +8,45 @@ from bisect import bisect_right, insort
 from swiftui_debug_snapshot import Refusal
 
 
+def witness_path_union(root, paths, max_depth):
+    """Merge already source-validated root-to-witness paths, never discover one.
+
+    paths maps unique native layout attributes to their recorded parent->child
+    chains. The selector owns window/graph/source-owner proof before this call.
+    Returned child order is unspecified and must not become semantic ordering.
+    """
+    if (type(root) is not int or root <= 0 or not isinstance(paths, dict)
+            or not 1 <= len(paths) <= 128 or type(max_depth) is not int
+            or not 1 <= max_depth <= 256):
+        raise Refusal('ancestor_witness_paths', 2)
+    children, parents, endpoints, union = {}, {}, set(), set()
+    for attribute, path in paths.items():
+        if type(attribute) is not int or attribute <= 0 or not isinstance(path, dict):
+            raise Refusal('ancestor_witness_paths', 2)
+        current, seen = root, set()
+        while current is not None:
+            if (type(current) is not int or current <= 0 or current in seen
+                    or current not in path or len(seen) >= max_depth):
+                raise Refusal('ancestor_witness_path_incomplete')
+            seen.add(current);union.add(current)
+            if len(union) > 1024:
+                raise Refusal('ancestor_cache_record_limit', 2)
+            child = path[current]
+            if child is None:
+                if current in endpoints or children.get(current):
+                    raise Refusal('ancestor_witness_ambiguous')
+                endpoints.add(current)
+            else:
+                if type(child) is not int or child <= 0:
+                    raise Refusal('ancestor_witness_paths', 2)
+                if current in endpoints or (child in parents and parents[child] != current):
+                    raise Refusal('ancestor_witness_ambiguous')
+                parents[child] = current
+                children.setdefault(current, set()).add(child)
+            current = child
+    return {element: tuple(values) for element, values in children.items()}
+
+
 class AncestorCache:
     def __init__(self, reader):
         if reader.req.get('scope', {}).get('native_match') != 'ancestor_owner':

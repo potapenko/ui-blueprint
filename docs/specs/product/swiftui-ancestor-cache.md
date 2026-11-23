@@ -1,7 +1,7 @@
 # Bounded native ancestor structural reuse
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture.ancestor-cache`.
-- Contract: `UIB.SWIFTUI-ANCESTOR-CACHE@1`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-ANCESTOR-CACHE@2`; Authority: Active; Stability: Evolving.
 - Authority: the user's approved S15 repair and direct continuation through real
   Practice verification, plus S13's finite shared-owner handoff on2026-11-23 to
   chat `01a2094f-9996-72d3-8230-3b1e4f1ec16d` for this module and its checks.
@@ -42,6 +42,29 @@ existing CacheReader owns traversal, metadata, privacy classification, normaliza
 call lifecycle and publication. Shared glue remains S13-owned. Original modes
 keep their current accounting. Source/raw geometry and canonical0.1 output do not
 change. Report repeated-read savings only as diagnostics, never complete coverage.
+
+## ANCESTOR-CACHE.CUTS — explicit source boundaries
+
+The S15 owner's2026-11-23 finite handoff also authorizes the union of validated
+paths for all qualifying native witnesses through explicit source-declared leaf
+cuts, with a separate material capture. The existing selector must first prove
+every candidate's window/graph/provider/weak identity and complete ancestry to
+one exact selected source owner/root. Missing, duplicate, foreign or ambiguous
+candidates refuse before merging. No first-match shortcut or geometry predicate.
+
+Inside a declared cut, traverse only the union of those witness paths. Keep the
+cut's measured source boundary, each qualifying witness exactly once, and explicit
+excluded children/partial coverage. A cut does not claim the hidden contents were
+measured. Preserve per-path depth/cycle checks, the distinct1024 budget and output
+limits. Reject intersecting paths that disagree about a node's parent or end at
+the same witness. Branch iteration order is not source child order; mark it unknown.
+The selected owner and exported structural context remain source-attributed.
+
+This extends the earlier single-witness leaf restriction solely for accounted
+multi-witness paths, without enlarging the root or discovery scope. Shared glue,
+request validation and contract routing remain S13-owned. Qualification requires
+positive multiple witnesses and malformed/cyclic/ambiguous/incomplete negative
+paths, plus the real Practice fixture before consumer admission.
 
 ## ANCESTOR-CACHE.ACCEPT
 

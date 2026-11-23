@@ -7,7 +7,7 @@ from unittest.mock import Mock
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'plugins/macos'))
-from swiftui_ancestor_cache import AncestorCache
+from swiftui_ancestor_cache import AncestorCache, witness_path_union
 from swiftui_debug_snapshot import Refusal
 
 
@@ -21,6 +21,41 @@ def reader():
 
 
 class AncestorCacheChecks(unittest.TestCase):
+    def test_multi_witness_paths_keep_shared_spine_and_every_branch(self):
+        result=witness_path_union(10,{1:{10:20,20:30,30:None},2:{10:20,20:40,40:None}},256)
+        self.assertEqual({k:set(v) for k,v in result.items()},{10:{20},20:{30,40}})
+
+    def test_witness_cycle_and_missing_link_refuse(self):
+        for path in [{10:20,20:10},{10:20},{20:None}]:
+            with self.assertRaisesRegex(Refusal,'ancestor_witness_path_incomplete'):
+                witness_path_union(10,{1:path},256)
+
+    def test_conflicting_parents_and_duplicate_or_ancestor_endpoints_refuse(self):
+        for paths in [
+            {1:{10:20,20:30,30:None},2:{10:40,40:30,30:None}},
+            {1:{10:20,20:None},2:{10:20,20:None}},
+            {1:{10:20,20:None},2:{10:20,20:30,30:None}},
+            {1:{10:20,20:30,30:None},2:{10:20,20:None}}]:
+            with self.assertRaisesRegex(Refusal,'ancestor_witness_ambiguous'):
+                witness_path_union(10,paths,256)
+
+    def test_path_depth_limit_is_not_erased_by_union(self):
+        with self.assertRaisesRegex(Refusal,'ancestor_witness_path_incomplete'):
+            witness_path_union(10,{1:{10:20,20:30,30:None}},2)
+
+    def test_outside_selected_root_context_is_not_emitted(self):
+        result=witness_path_union(20,{1:{10:20,20:30,30:None}},256)
+        self.assertEqual(result,{20:(30,)})
+
+    def test_many_valid_paths_still_share_distinct_record_ceiling(self):
+        paths={}
+        for attribute in range(1,7):
+            chain=list(range(attribute*1000,attribute*1000+200))
+            path={10:chain[0],**{a:b for a,b in zip(chain,chain[1:])},chain[-1]:None}
+            paths[attribute]=path
+        with self.assertRaisesRegex(Refusal,'ancestor_cache_record_limit'):
+            witness_path_union(10,paths,256)
+
     def test_repeated_ancestor_and_selected_context_count_once(self):
         r=reader();c=AncestorCache(r)
         for _ in range(6):
