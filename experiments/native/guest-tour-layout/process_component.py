@@ -19,7 +19,7 @@ def process(receipt, bundle):
     if len(raw) > 16384:
         raise ValueError("receipt_too_large")
     source = normalize(json.loads(raw, object_pairs_hook=unique_object))
-    output = receipt.parent / "component-snapshot.json"
+    output = receipt.with_name(receipt.stem + "-snapshot.json")
     save(output, source)
 
     def run(args):
@@ -32,6 +32,8 @@ def process(receipt, bundle):
     snapshot = source["artifact"]["data"]
     measurements = []
     for node in snapshot["nodes"]:
+        if not node["properties"] or node["properties"][0]["state"]["availability"] != "known":
+            continue
         geometry = node["properties"][0]["state"]["value"]["value"]
         for operation, axis in (("width", "x"), ("height", "y")):
             name = node["key"]["key"] + "." + operation

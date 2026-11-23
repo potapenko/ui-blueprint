@@ -30,6 +30,8 @@ def normalize(record):
     require(isinstance(record, dict))
     if record.get("format") == "playphraseme.guest-tour.component-1":
         return normalize_component(record)
+    if record.get("format") == "playphraseme.guest-tour.group-1":
+        return normalize_group(record)
     require(set(record) == {
         "source_site", "module_uuid", "card", "space", "target_xywh", "rect_xywh",
         "start_xy", "identity_before_after", "detached_verified", "observation_id",
@@ -176,6 +178,60 @@ def normalize_component(record):
     transform(geometry, map_origin, rows[0])
     snapshot["nodes"].append(map_node)
     return result
+
+
+def normalize_group(record):
+    """Only the selected card's reported membership; no group geometry or siblings."""
+    require(set(record) == {"format", "card", "module_uuid", "source_revision", "records", "time_unit", "clock_domain",
+                            "detached_verified", "stationary_window", "before", "after", "fixture"})
+    require(record["fixture"] is False and record["stationary_window"] is True and record["detached_verified"] is True)
+    require(record["module_uuid"] == MODULE and record["source_revision"] == "e19b20c474afe6462786ca0dd3dd5ad9ae37dbce")
+    require(record["card"] in CARDS and record["before"] == record["after"])
+    identity = record["before"]
+    require(isinstance(identity, dict) and set(identity) == {*IDENTITY, "bundle", "window_screen_pt"})
+    require(all(identity[k] == v for k, v in IDENTITY.items()) and identity["bundle"] == BUNDLE)
+    require(min(numbers(identity["window_screen_pt"], 4)[2:]) > 0)
+    require(record["time_unit"] == "ns" and isinstance(record["clock_domain"], str)
+            and re.fullmatch(r"owner-lldb-[a-f0-9]{32}", record["clock_domain"]))
+    require(isinstance(record["records"], list) and len(record["records"]) == 1)
+    row = record["records"][0]
+    require(set(row) == {"kind", "observation_id", "read_start", "read_end", "values"} and row["kind"] == "group")
+    oid = row["observation_id"]
+    require(isinstance(oid, str) and re.fullmatch(r"[a-f0-9]{32}", oid))
+    require(type(row["read_start"]) is int and type(row["read_end"]) is int and 0 <= row["read_start"] <= row["read_end"] < 2**63)
+    require(set(row["values"]) == {"availability", "group"} and row["values"]["availability"] == "known")
+    group = row["values"]["group"]
+    require(group in (None, "toolbar", "tabs", "modifiers", "query"))
+    surface = {"id": "cg-window-1060", "generation": oid}
+    scope = "guest-tour-group-" + record["card"]
+    coverage = {"scope_id": scope, "fields": ["layout_bounds"], "status": "partial", "omitted_count": None, "unknown_count": 1}
+    source = "PlayphrasemeGuestTourAnnotation.swift:104"
+    key = {"namespace": NAMESPACE, "key": record["card"] + ".card"}
+    declarations = [{"namespace": NAMESPACE, "name": name, "source": source, "sensitivity": "public",
+                     "state": {"availability": "known", "value": {"type": "text", "value": value}}}
+                    for name, value in (("card_id", record["card"]), ("group_id", group if group is not None else "none"),
+                                        ("observation_id", oid), ("module_uuid", MODULE))]
+    snapshot = {"id": "guest-tour-group-" + oid, "revision": 1, "source_state": None,
+        "context": {"schema_version": "0.1.0", "session_id": oid, "target": {"id": BUNDLE, "generation": "32187-1795448825.752163"},
+                    "surfaces": [surface], "scope_id": scope, "projection": "design", "fields": ["layout_bounds"],
+                    "plugin": {"id": NAMESPACE, "version": "0.1.0"}, "environment_revision": "local-only-" + oid},
+        "observations": [{"id": oid, "source_namespace": NAMESPACE, "channel": "external_semantics", "clock_domain": record["clock_domain"],
+                          "time_unit": "milliseconds", "start": row["read_start"] / 1_000_000, "end": row["read_end"] / 1_000_000,
+                          "answer_source": "live", "freshness": "unverified", "freshness_basis": "live_read", "last_verified": None,
+                          "consistency": "unknown", "consistency_reason": "source-execution-not-presented-frame", "coverage": coverage}],
+        "nodes": [{"key": key, "surface": surface, "children": [], "extensions": [], "properties": [
+                   {"field": "layout_bounds", "selection": "requested", "sensitivity": "public",
+                    "state": {"availability": "unknown", "reason": "group-only-observation"},
+                    "evidence": {"observation_id": oid, "source_namespace": NAMESPACE, "method": "source-stored-group-field",
+                                 "provenance": "reported", "uncertainty": None}}],
+                   "native_role": {"availability": "unsupported", "reason": "not_collected"}, "source_declarations": declarations}],
+        "components": [] if group is None else [{"logical_component_key": "guest-tour." + group, "members": [key],
+                                               "declaration_source": source + ":" + oid, "provenance": "reported"}],
+        "relations": [], "surface_records": [], "captures": [], "coverage": coverage,
+        "focus": {"keyboard": {"status": "unknown", "reason": "not_observed"}, "accessibility": {"status": "unknown", "reason": "not_observed"},
+                  "active_descendant": {"status": "unknown", "reason": "not_observed"}, "text_selection": None,
+                  "composition_state": {"field": "value", "selection": "not_requested"}}}
+    return {"schema_version": "0.1.0", "artifact": {"kind": "snapshot", "data": snapshot}}
 
 
 def unique_object(pairs):

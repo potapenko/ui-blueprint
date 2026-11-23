@@ -1,22 +1,27 @@
 """Fixed G2 component qualification, loaded by its sealed interactive LLDB.
 No target selection expressions or generic debugger commands are accepted.
 """
-import ctypes, hashlib, json, math, os, re, socket, subprocess, time, uuid, tempfile
+import ctypes, hashlib, json, math, os, re, socket, subprocess, time, uuid, tempfile, importlib.util
 from pathlib import Path
 import lldb
 D=Path(__file__).resolve().parent
+group_spec=importlib.util.spec_from_file_location('s14_fixed_group',D/'group_value.py')
+group_module=importlib.util.module_from_spec(group_spec)
+group_spec.loader.exec_module(group_module)
+read_group=group_module.read_group
 profile=json.loads((D/'profile.json').read_text())
 EVIDENCE=Path(profile['evidence'])
 RUN_KIND=RUN_KIND
 fixtureMode=RUN_KIND.startswith('fixture')
+groupMode=RUN_KIND.endswith('-group')
 debug=Path('/Applications/Xcode.app/Contents/Developer/usr/bin/lldb')
 peerbin=D/'debugserver'
 executable=Path('/private/tmp/playphraseme-guest-tour-runtime-axlhvjj9/PlayPhraseMe.app/Contents/MacOS/PlayPhraseMe')
 dylib=executable.with_name('PlayPhraseMe.debug.dylib')
-fixture=D/'Control'
+fixture=D/('GroupControl' if groupMode else 'Control')
 expected={Path(k):v for k,v in profile['pins'].items()}
 model=fixture if fixtureMode else dylib
-module_uuid=profile['fixture_uuid'] if fixtureMode else '3456EB33-6C0E-393F-8486-10961C55A994'
+module_uuid=profile['group_fixture_uuid' if groupMode else 'fixture_uuid'] if fixtureMode else '3456EB33-6C0E-393F-8486-10961C55A994'
 cards=set('language actor commonPhrases vocabulary favorites grammar statistics previous playPause next speed repeatPlayback focus context search grammarSearch clearSearch favoriteSearch randomPhrase randomWord randomFavorite practice fullscreen reels'.split())
 lib=ctypes.CDLL('/usr/lib/libproc.dylib')
 peer=proc=target=bp=child=None
@@ -129,10 +134,13 @@ def scalar_shape(name,typ,text):
 
 
 def read_card_id(frame):
-    value=frame.FindVariable('card',lldb.eNoDynamicValues)
+    name=('source.card' if fixtureMode else 'self.card') if groupMode else 'card'
+    if groupMode:
+        value=frame.FindVariable('source' if fixtureMode else 'self',lldb.eNoDynamicValues).GetNonSyntheticValue().GetChildMemberWithName('card',lldb.eNoDynamicValues).GetNonSyntheticValue()
+    else:value=frame.FindVariable('card',lldb.eNoDynamicValues)
     require(value.IsValid() and value.GetError().Success() and value.GetTypeName().split('.')[-1] in ('Card','PlayphrasemeGuestTourCard'),'card_type_refused')
-    raw=cmd('frame variable -d no-dynamic-values -R -S false -- card')
-    match=re.fullmatch(r'\([\w.]+\)\s+card\s*=\s*([A-Za-z][A-Za-z0-9_]*)\s*\{\s*\}',raw.strip())
+    raw=cmd('frame variable -d no-dynamic-values -R -S false -- '+name)
+    match=re.fullmatch(r'\([\w.]+\)\s+'+re.escape(name)+r'\s*=\s*([A-Za-z][A-Za-z0-9_]*)\s*\{\s*\}',raw.strip())
     require(match is not None and match[1] in cards,'card_value_refused')
     return match[1]
 
@@ -148,6 +156,8 @@ def read_fields(frame,fields):
 
 
 def site(kind):
+    if kind=='group':
+        return (Path(profile['group_fixture_source']),28,None,None) if fixtureMode else (Path(profile['source_directory'])/'PlayphrasemeGuestTourAnnotation.swift',104,9,0x1149998)
     source=profile['fixture_source'] if fixtureMode else profile['source_directory']+'/'+('PlayphrasemeGuestTourMap.swift' if kind=='map' else 'PlayphrasemeGuestTourConnections.swift')
     line,column,address=({'map':(10,None,None),'origin':(13,None,None),'card':(19,None,None)} if fixtureMode else
         {'map':(23,13,0x116de4c),'origin':(25,13,0x1169a0c),'card':(29,28,0x116a4d0)})[kind]
@@ -187,7 +197,7 @@ def interrupt_for_timeout():
 
 def run():
     global peer,proc,target,child,target_pid,contacted,before_gui,fixtureCase
-    require(RUN_KIND in ('offline','owner','fixture','fixture-nohit','fixture-missing','fixture-absent'),'invalid_mode')
+    require(RUN_KIND in ('offline','owner','fixture','fixture-nohit','fixture-missing','fixture-absent','owner-group','fixture-group'),'invalid_mode')
     require(os.isatty(0) and os.isatty(1),'interactive_owner_pty_required')
     require(profile['card'] in cards and type(profile['window_frame']) is list and len(profile['window_frame'])==4,'profile_refused')
     for path in expected:pin(path)
@@ -201,7 +211,7 @@ def run():
     target=dbg.CreateTarget(str(fixture if fixtureMode else (dylib if RUN_KIND=='offline' else executable)))
     require(target.IsValid(),'target_creation_refused')
     if RUN_KIND=='offline':
-        for kind in ('map','origin','card'):
+        for kind in ('map','origin','card','group'):
             install(kind,False);drop_owned()
         print('OFFLINE_THREE_SOURCE_SITES_VERIFIED; no process selected',flush=True)
         return
@@ -227,7 +237,7 @@ def run():
     own()
     if not fixtureMode:require(target.GetModuleAtIndex(0).GetUUIDString().upper()=='5CB8B83E-88FB-39EB-A162-36486FCD81D3','launcher_uuid_changed')
     require('arm64' in target.GetTriple() and target.GetNumWatchpoints()==0 and target.GetNumBreakpoints()==0,'unexpected_debug_state')
-    kind='map';pc=install(kind);records=[];selected='grammar' if RUN_KIND=='fixture-absent' else profile['card']
+    kind='group' if groupMode else 'map';pc=install(kind);records=[];selected='grammar' if RUN_KIND=='fixture-absent' else profile['card']
     dbg.SetAsync(True);prior=proc.GetStopID()
     require(proc.Continue().Success(),'continue_refused')
     if fixtureMode:
@@ -249,9 +259,24 @@ def run():
         proc.SetSelectedThread(th);th.SetSelectedFrame(0)
         started=time.monotonic_ns()
         fields=None
-        if kind=='map':fields=[('origin','CGPoint'),('viewport','CGRect'),('scale','CGFloat')]
+        if kind=='group':
+            if read_card_id(frame)==selected:
+                values=read_group(frame,proc,cmd,lldb,fixture=fixtureMode)
+                record={'kind':'group','observation_id':uuid.uuid4().hex,'read_start':started,'read_end':time.monotonic_ns(),'values':values}
+                detach_owned()
+                if not fixtureMode:require(after_gui['window_screen_pt']==before_gui['window_screen_pt'],'window_changed_after_detach')
+                envelope={'format':'playphraseme.guest-tour.group-1','card':selected,'module_uuid':module_uuid,
+                    'source_revision':'synthetic-owned-fixture' if fixtureMode else 'e19b20c474afe6462786ca0dd3dd5ad9ae37dbce','records':[record],
+                    'time_unit':'ns','clock_domain':'owner-lldb-'+uuid.uuid4().hex,'detached_verified':True,'stationary_window':not fixtureMode,
+                    'before':None if fixtureMode else before_gui,'after':None if fixtureMode else after_gui,'fixture':fixtureMode}
+                if not fixtureMode:
+                    fd=os.open(EVIDENCE/'group.json',os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+                    with os.fdopen(fd,'w') as f:json.dump(envelope,f,allow_nan=False)
+                print('GROUP_MEMBERSHIP '+json.dumps(envelope,allow_nan=False),flush=True)
+                return
+        elif kind=='map':fields=[('origin','CGPoint'),('viewport','CGRect'),('scale','CGFloat')]
         elif kind=='origin':fields=[('origin','CGPoint')]
-        elif read_card_id(frame)==selected:fields=[('target','CGRect'),('rect','CGRect'),('start','CGPoint')]
+        elif kind=='card' and read_card_id(frame)==selected:fields=[('target','CGRect'),('rect','CGRect'),('start','CGPoint')]
         if fields:
             if RUN_KIND=='fixture-missing':fields=[('missing','CGRect')]
             values=read_fields(frame,fields)

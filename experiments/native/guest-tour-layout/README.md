@@ -1,172 +1,104 @@
-# Guest Tour source-local observation
+# Guest Tour component acquisition
 
-This experiment converts the fixed S14 G2 collector's successful public receipt
-into the existing canonical Snapshot format. It never attaches, evaluates target
-expressions or operates an application. The input remains necessary provenance;
-normalization is not independent proof that a receipt came from the collector.
-
-The source pin is unchanged PlayPhrase.me revision
-`e19b20c474afe6462786ca0dd3dd5ad9ae37dbce`,
-`PlayphrasemeGuestTourConnections.swift` SHA-256
-`fed34661f15b526f70f07f352b0ae1cd4b5a3ded1e2ce6dcc0258f583bab884a`.
-At line 29, column 28, `rect` is `geometry[anchor]`; `target` is the target's
-global rectangle translated by this GeometryReader's global origin; `start`
-is the target midpoint. Only the first two are published as layout frames.
-The original source case name identifies their connection. No groups, window
-transform, viewport, connector path or other card frames are inferred.
-
-```sh
-python3 -B experiments/native/guest-tour-layout/normalize.py PUBLIC_CARD_JSON > SNAPSHOT_JSON
-```
-
-Run the matching installed `uiblueprint-validate` on that output, then use
-ordinary `inspect` and `measure` with its exact keys and coordinate space.
-The format stays core 0.1.0. Coverage is partial, presentation consistency and
-freshness remain unverified, and element/surface identities are observation-local.
-Nanoseconds are converted to canonical milliseconds; original integer timestamps
-are preserved as source metadata. Never merge separate hits into one observation.
-
-The focused synthetic check takes the matching distribution directory and an
-existing task-owned temporary output directory:
-
-```sh
-python3 -B experiments/native/guest-tour-layout/check.py UIB_BUNDLE TASK_OUTPUT
-```
-
-It exercises malformed/foreign/incomplete receipts, canonical validation,
-design inspection and a 77.5 pt width through the real Rust CLI. It acquires no
-application data. This passed against installed 0.6.1 with 13 refusal cases.
-
-## Scope and basis
-
-Execution authority: the operator's November 23 S14 fix assignment, relayed in
-chat `01a20922-fc3b-7d30-935a-652c6db5f3dc`; original consumer
-`01a20845-8b81-7e81-8c46-9f90b9f8f960`. This is a bounded supporting artifact,
-not a new acquisition permission or release admission. The existing collector
-remains owned by `owner_window_resize` until handoff.
-
-Registry 90 → BOUNDARIES@1 / MODEL@1 / IDENTITY@1 / GEOMETRY@2 / PRIVACY@1 /
-EXCHANGE@2 / LIFECYCLE@1 / CLI@21; analysis uses ANALYSIS@2 and its TYPES@1 /
-VALIDATION@1. The external debug-capture@14 route does not admit a new Guest Tour
-target; the separate reviewed one-attempt owner packet governs acquisition.
-Observed implementation establishes the source-local relationship above. This
-adapter proposes only its lossless representation using the existing schema.
-
-## Actual first observation and remaining work
-
-The owner completed the one admitted G2 run on November 23: one hardware hit,
-normal detach, the same PID/birth/CG window, responsive AX/native capture, then
-LLDB exit 0. `context.card` measured 228 × 95 pt. The Rust engine measured its
-horizontal gap to the source target as 23.935294000000113 pt. Canonical validate,
-inspect and four measurements passed on the actual receipt.
-
-This was an intermediate zoom state: before 1920 × 1050, collector-after
-1910 × 1046, subsequently settled 900 × 572 pt. It does not measure the settled
-narrow image. The one-attempt package is consumed and must not be reused.
-All 20 card IDs remained present according to the owner's independent postcheck.
-
-Evidence retained outside Git: `/Volumes/Develop-2TB/Develop/tmp/` contains
-`uib-s14-normalize-2fzuh8dg/real-context-snapshot.json` and corresponding receipt,
-queries and measurements. The consumer's `playphraseme-guest-tour-01a20845-sy9r4vhv/`
-contains `evidence/source-g2-probe-receipt.json`, transcript and before/after native
-captures. Original acquisition is `uib-s14-g2.DtXJ4G7P/public-card.json`.
-
-The investigated next candidate avoids the first frame of an animated resize.
-Its proposed bounded method was: establish a settled window first, arm the fixed sites,
-then let the owner open Tour through its normal control. Collect only the fixed
-public card/target frames, map viewport/origin, connections origin and card/group
-IDs at their existing source sites. Preserve separate observation intervals;
-require the expected card set, matching stationary-window identity and a normal
-detach. Missing fields or incomplete sets do not become a complete map.
-Qualify that change on an owned console fixture and obtain non-author review
-before a new consumer run. A new packet replaces, rather than resets, the consumed
-one. Full-map, stable wide/narrow and composition acceptance remain open.
-
-Runtime evidence belongs in the task-owned external area, not in this source
-directory. No released SDK or shared CLI behavior changes.
-
-## Sequential acquisition qualification
-
-`fixture.swift` and `sequence_fixture.py` are fixture-only. The Python file must
-be loaded in an owned interactive LLDB, with `__file__` set to its source path,
-`S14_SEQUENCE_RUNTIME` naming the prepared internal `uib-s14-map-*` directory,
-and `S14_SEQUENCE_MODE=map` or `groups`. That directory contains the signed
-owned `Control`, the pinned deny-write `debugserver`, `tmp/`, and
-`fixture-pins.json` with control/source SHA-256 and Mach-O UUID. It cannot select
-a product PID. Compile with `swiftc -g -Onone -module-name S14MapControl`, using
-an external module cache and the existing console-fixture debug entitlement.
-
-The map pass replaces one owned hardware breakpoint at a time: map locals →
-connections origin → repeated card locals. On the same fixture process it then
-changes the ordinary input from baseline to expanded. Actual qualification
-observed viewport widths 600 → 800, card widths 100 → 160, and three → two cards,
-followed by normal detach, `recovered` and exit 0. All literal frame values were
-checked independently. The groups pass observed the same three → two transition.
-Evidence: `uib-s14-normalize-2fzuh8dg/fixture-{map,groups}-two-phases.json`.
-Current internal runtime: `/private/tmp/uib-s14-map-t125icnf`; no live session
-remains after those tests.
-
-Earlier qualification exposed two concrete constraints. After attachment macOS
-reparents the inferior to debugserver; `Popen.poll()` can cache a false exit on
-ECHILD. Live identity now uses the actual image, and the child is waited only
-after detach. Also, installing a third simultaneous user breakpoint was refused.
-The sequential method keeps one owned point; LLDB's own additional hardware-point
-warnings are retained, never replaced with software breakpoints. Failed fixture
-attempts were explicitly recovered in their original PTYs before exiting.
-
-The fixture's raw enum case prints `group {}` without the associated group ID.
-A bounded one-byte fixture read distinguishes its cases, but this is not yet a
-qualified decoder of the app's group data. In the actual app's row child closure,
-DWARF exposes `card` and `self` but does not capture `attachment`; do not reuse the
-fixture selector there. Actual group extraction remains an explicit dependency.
-
-Offline G2 sites resolve uniquely in module UUID 3456EB33-6C0E-393F-8486-10961C55A994:
-Map.swift 23:13 → 0x116de4c (`origin`, `viewport`, `scale`), Connections.swift
-25:13 → 0x1169a0c (`origin`), Connections.swift 29:28 → 0x116a4d0 (card pair).
-Full filenames retain the PlayphrasemeGuestTour prefix. These are file addresses,
-not live load addresses or product admission. The next implementation is a fixed
-stationary-window profile using these sites and the existing G2 lifecycle guards;
-then non-author review and one batched owner run. No consumed packet is reset.
-This former full-map continuation is superseded by the consumer direction below.
-
-## Current handoff: component-level requests
-
-The actual human message `01a20941-e1d1-79d0-b8fe-5b32e49d40a8` in consumer chat
-`01a20845-8b81-7e81-8c46-9f90b9f8f960` was read directly. It requires transferring
-Guest Tour logic first, then checking individual tooltips; full-screen pixel
-matching and complete map acquisition must not block that work. The consumer
-has explicitly withdrawn new live sessions on its PID under the old full-map
-objective and is preparing a read-only implementation plan.
-
-Consequently, do not prepare or launch the former full-map owner run. Preserve
-the actual context receipt and canonical analysis as a usable starting point,
-with their intermediate-state limitations. The fixture-only sequential work is
-saved supporting research, not a released complete S14 fix. The next acquisition
-depends on the consumer naming the selected component, state and missing fields
-from its new plan. No new user permission loop is needed for already-authorized
-work; the missing dependency is the revised concrete component request.
-
-## Approved component repair — November 23
-
+Owner: S14 chat `01a20922-fc3b-7d30-935a-652c6db5f3dc`.
+Consumer: `01a20845-8b81-7e81-8c46-9f90b9f8f960`.
 The operator approved this chat's six-step repair plan with “Да, исправляй.”
-This supersedes the earlier dependency on a new component request. The owned
-write set remains this experiment directory; shared collectors and donor files
-are protected. First qualify the selected `context` card, viewport and local
-origins in a stationary window, then groups and component-state transitions.
-The source owner still operates the consumer app and verifies its recovery.
+Owned paths: this directory. Donor files, shared collectors, permissions and
+other consumers are protected. Earlier full-map sequencing is not a prerequisite.
 
-The new fixed G2 component capture must select the requested public Card enum,
-read no other card's geometry, and preserve each read's actual interval. At most
-two owned hardware points may coexist. The map and connections origins establish
-relationships only between the two SwiftUI local spaces and their reported
-SwiftUI global space. Neither `.global` nor a CG window rectangle alone proves
-a transform to screen pixels. Window motion, foreign identity, missing fields,
-wrong module/source site, incomplete phases or unconfirmed cleanup must not
-publish a successful component observation. No expression evaluation, getters,
-software-breakpoint fallback, target writes, hidden retries or target termination.
-A fresh private package consumes its one admitted owner attempt before attach;
-old consumed packages remain unchanged. Fixture qualification and non-author
-review precede the real owner run. Existing canonical schema and measured values
-remain unchanged; coverage and consistency are explicit, never inferred from
-successful serialization. This is implementation of the approved bounded repair,
-not authority for a general debugger controller or a different product target.
+## Contract basis and boundaries
+
+Registry90 → BOUNDARIES@1 / MODEL@1 / IDENTITY@1 / GEOMETRY@2 / PRIVACY@1 /
+EXCHANGE@2 / LIFECYCLE@1 / CLI@21; ANALYSIS@2 with TYPES@1 / VALIDATION@1.
+The previously withdrawn debug-capture@14 product admission is not reused.
+The approved component repair qualifies its own exact process/source packet.
+Fixture evidence is not product acceptance. Consumer ownership and non-author
+review precede each newly qualified real packet; no user-wide permission loop.
+
+The fixed G2 profile reads the selected public Card enum and that card's frames,
+map viewport/origins, or separately its stored annotation group. Other card IDs
+may be examined to find the requested card, but their geometry is not collected.
+No expressions, getters, injected code, software breakpoints, target writes,
+model payloads, automatic retries or target termination. At most one owned
+hardware point at a time; the deny-write backend is attested before PID contact.
+Existing source values, distinct read intervals and unknown presentation
+consistency are preserved. A stationary CG window alone is not an atomic frame.
+
+## Source pin
+
+Unchanged PlayPhrase.me `e19b20c474afe6462786ca0dd3dd5ad9ae37dbce`,
+G2 module UUID `3456EB33-6C0E-393F-8486-10961C55A994`.
+Files below have the `PlayphrasemeGuestTour` prefix:
+
+| Source site | File address | Selected fields |
+| --- | --- | --- |
+| Map.swift 23:13 | 0x116de4c | origin, viewport, scale |
+| Connections.swift 25:13 | 0x1169a0c | origin |
+| Connections.swift 29:28 | 0x116a4d0 | card; selected target, rect, start |
+| Annotation.swift 104:9 | 0x1149998 | self.card; selected description.group |
+
+These are offline file addresses, revalidated after attach, not load addresses.
+`rect=geometry[anchor]`; target is a registered global rectangle translated by
+connections origin. Map viewport uses its own reported origin. Local→SwiftUI
+.global translations are explicit; no screen/image transform is inferred.
+Group identity is a stored four-case enum. Static Optional nil/some is checked
+first; some reads only the first byte at the qualified56-byte Group? storage.
+The fixture confirms nil may also have byte0, so that byte alone never means
+“toolbar”. Missing/foreign/unsupported fields refuse, never default to a group.
+
+## Files and use
+
+- `component_capture.py`: sealed-LLDB fixed G2 acquisition; modes owner /
+  owner-group and separate owned-fixture qualifications. A trusted private
+  profile pins paths/hashes, selected card and exact stationary window frame.
+  It has no generic PID, expression or source selector interface.
+- `group_value.py`: fixed typed group decoder; actual five-state runtime checks.
+- `normalize.py`: original single-pair and new component/group receipts to
+  core0.1 Snapshot. Group-only design observations retain unknown layout and
+  partial membership; absent group is known-none, not unavailable geometry.
+- `process_component.py RECEIPT UIB_BUNDLE`: normalize, validate and measure
+  known frames through the matching installed Rust CLI after owner recovery.
+- `check.py UIB_BUNDLE TASK_OUTPUT`: original13negative/synthetic width checks.
+- `check_component.py UIB_BUNDLE TASK_OUTPUT`:5component/5group negatives and
+  Rust recomputation across different local origins (-10pt,4evidence records).
+- `fixture.swift`, `group_fixture.swift`, `sequence_fixture.py`: synthetic owned
+  console processes and finite acquisition qualification. They never select
+  the consumer app. Compiler caches go external; executables/runtime internal.
+
+A sealed package includes these needed modules, fixed profile, identity helper,
+restricted backend, source/UUID pins, SHA256SUMS and an owner instruction. The
+owner's original interactive PTY stays alive after a refusal. Only an explicit
+same-PTY recovery may delete owned points and attempt the first detach; a failed
+or unconfirmed detach is never retried. Normal output requires verified detach
+and independently checked survivor identity. One owner attempt is consumed
+before attach. No old consumed package is reset or silently reprofiled.
+
+## Verified results and current dependency
+
+First actual G2 one-hit run: context228×95pt and Rust-measured horizontal gap
+23.935294000000113pt; canonical validate/inspect/measure passed. Normal detach,
+same PID/birth/CG, responsive AX/native capture and LLDB exit0 were independently
+confirmed by the consumer. It was an intermediate zoom state, not the settled
+900×572pt image. Full map/B0 was never accepted.
+
+Selected-component fixture: skipped language/actor, returned only context's
+geometry plus viewport/origins. No-hit, absent-card and missing-field recovery
+passed. Sequential fixture separately verified width600→800, cards3→2,
+card width100→160. Group decoder verified all four IDs plus known-none, and
+integrated group acquisition returned language→toolbar and context→none.
+All successful fixtures subsequently printed recovered and exited0.
+
+The first stationary-window package (c806f3c) is frozen at
+`/private/tmp/uib-s14-component-pgqeozra`, manifest SHA256
+`57109c184fbecf160ce2ee46a0959d031e8c6c6948faef9aa8589c21ac36e342`.
+Its owner-run/review is pending with the consumer; do not mutate it while waiting.
+Later group-support candidate: `/private/tmp/uib-s14-component-next-eaygtpbk`,
+fixture-only until separately reviewed. Evidence and owner instructions:
+`/Volumes/Develop-2TB/Develop/tmp/uib-s14-component-uejd128x/`.
+Earlier real receipt/measurements remain in `uib-s14-normalize-2fzuh8dg/`.
+No debugger/fixture session is intentionally left running after qualification.
+
+Remaining acceptance: stationary context in the real source, grouped component,
+wide/narrow and conditional presence, then exact source distribution through the
+build/release owner. Source absence or consumer busy state is a specific live-run
+dependency, not permission to attach independently or claim completion.
