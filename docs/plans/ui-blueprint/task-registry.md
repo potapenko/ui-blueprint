@@ -2,10 +2,20 @@
 
 ## Current handoff — 2026-11-23
 
-- **Local distribution.** CLI, worker, native helper and skill are installed from
-  0.6.0 at `1e131f7ced5babc4fdf03715d06dc925931f6560`. The operator's
-  publication decision applies to this exact source release and tag in
-  `potapenko/ui-bluprint`. Version 0.5.1 remains available for local rollback.
+The operator assigned a separate UI Blueprint chat to each of these open
+defects. Each implementation owner works with the original consumer on its
+reproduction. The coordinator handles versioning, installation and publication.
+
+| Open defect | UI Blueprint owner chat | Consumer chat | Product acceptance |
+| --- | --- | --- | --- |
+| S13 Random completion dialog | `01a20922-f6ad-7651-997b-cef1b3f09b12` | `01a20844-7030-7701-a26a-88793ef9752e` | Measure the applicable Close, Replay and Next parts with the dialog in the same source state and coordinate space. |
+| S14 Guest Tour | `01a20922-fc3b-7d30-935a-652c6db5f3dc` | `01a20845-8b81-7e81-8c46-9f90b9f8f960` | Verify card IDs, card and target frames, viewport, groups and coordinate mappings on the open map and after a layout change. The owner takes over the existing investigation and fixture evidence. |
+| S03.A Actors picker | `01a20923-023c-7cd0-8421-a2e20177df71` | `01a20911-330a-7fa2-aa96-980371b389a7` | Use UI Blueprint to measure the open picker and its children with the consumer. |
+
+- **Local distribution.** The installed version is 0.6.1 at
+  `223cf16808ffa9962ecc28018a8d69e372992c94`. It supports native PNG capture
+  in an explicitly selected external task directory. Version 0.6.0 at
+  `1e131f7ced5babc4fdf03715d06dc925931f6560` is retained for rollback.
 - **Consumer verification.** The release QA build of PlayPhrase.me completed
   Search & Learn → Clip Search → loaded Reels → Search & Learn at both
   1920×1050 and 961×1050 pt in one process. All eight captured SDK snapshots
