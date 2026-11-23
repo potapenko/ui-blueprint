@@ -20,6 +20,7 @@ PATCH = Path(__file__).with_name("deny-software.patch").resolve()
 # for executable memory access exists on the mock, even on slot exhaustion.
 STUB = r"""
 #include <cassert>
+#include <cstddef>
 using nub_addr_t = unsigned long;
 using nub_size_t = unsigned long;
 #define DNBLogThreadedIf(...) ((void)0)
