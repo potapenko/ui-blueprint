@@ -71,8 +71,8 @@ queries and measurements. The consumer's `playphraseme-guest-tour-01a20845-sy9r4
 contains `evidence/source-g2-probe-receipt.json`, transcript and before/after native
 captures. Original acquisition is `uib-s14-g2.DtXJ4G7P/public-card.json`.
 
-The next candidate must avoid collecting the first frame of an animated resize.
-Proposed bounded method: establish a settled window first, arm the fixed sites,
+The investigated next candidate avoids the first frame of an animated resize.
+Its proposed bounded method was: establish a settled window first, arm the fixed sites,
 then let the owner open Tour through its normal control. Collect only the fixed
 public card/target frames, map viewport/origin, connections origin and card/group
 IDs at their existing source sites. Preserve separate observation intervals;
@@ -127,3 +127,21 @@ Full filenames retain the PlayphrasemeGuestTour prefix. These are file addresses
 not live load addresses or product admission. The next implementation is a fixed
 stationary-window profile using these sites and the existing G2 lifecycle guards;
 then non-author review and one batched owner run. No consumed packet is reset.
+This former full-map continuation is superseded by the consumer direction below.
+
+## Current handoff: component-level requests
+
+The actual human message `01a20941-e1d1-79d0-b8fe-5b32e49d40a8` in consumer chat
+`01a20845-8b81-7e81-8c46-9f90b9f8f960` was read directly. It requires transferring
+Guest Tour logic first, then checking individual tooltips; full-screen pixel
+matching and complete map acquisition must not block that work. The consumer
+has explicitly withdrawn new live sessions on its PID under the old full-map
+objective and is preparing a read-only implementation plan.
+
+Consequently, do not prepare or launch the former full-map owner run. Preserve
+the actual context receipt and canonical analysis as a usable starting point,
+with their intermediate-state limitations. The fixture-only sequential work is
+saved supporting research, not a released complete S14 fix. The next acquisition
+depends on the consumer naming the selected component, state and missing fields
+from its new plan. No new user permission loop is needed for already-authorized
+work; the missing dependency is the revised concrete component request.
