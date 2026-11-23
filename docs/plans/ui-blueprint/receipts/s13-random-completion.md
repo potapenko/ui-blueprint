@@ -40,7 +40,9 @@ hashes are in
 `/Volumes/Develop-2TB/Develop/tmp/playphraseme-s13-blueprint-nbjj97jf/view-debug-29/identity-and-hashes.json`.
 Owner holds favorite-one; no support debugger has contacted that process. No
 get-task-allow was added. Our sandboxed ad-hoc fixture without that entitlement
-successfully captured and detached, so an entitlement change is not a prerequisite.
+successfully captured with the Apple backend; that alone does not qualify the
+separately built immutable backend. Do not infer a product signing requirement
+from this result. No permission or product signature was changed.
 
 TRANSFORM@4 registers a bounded exact-profile cache-chain reader. In the same
 owned fixture, all11 independent public-anchor rectangles matched at initial,
@@ -52,14 +54,36 @@ Evidence: `/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0/source-phases` and
 This is root-local numeric qualification, not native PNG mapping, S13 part
 attribution, independent privacy review or product acceptance.
 
-Next: qualify scoped parent context and native-window conversion, preserve the
-no-executable-write debugger boundary before a consumer attempt, then test actual
-Random selection/parts. Existing literal product admission stays disabled.
-The S03 owner separately supplied a contiguous-body prototype and a failing split
-body regression; do not integrate that prototype as complete owner coverage.
-S03 source-shaped20-row capture also exhausts1024raw records; neither negative is
-closed by the translation work. Bodies and source-scoped part collection remain
-separate from transform arithmetic.
+Native-window mapping is now sourced through fixed AppKit point conversions and
+FP register restoration. The360×252pt host maps to a720×504 native PNG with scale2
+and the same process/window. Stored canonical mappings validate. The next exact
+checkpoint includes BACKEND@1 and NATIVE-OWNER@1 candidate code: fixed inherited
+socket, disk/mapped-file pins, software/code-write refusal, body ancestor fallback,
+source-owner metadata and multi-native selection. Product admission stays disabled.
+Independent privacy/lifecycle review and real consumer qualification remain open.
+
+A source-built data-only backend rejected code writes, preserved those bytes,
+permitted/read back/released private data memory, and completed38-call native
+capture on the owned transform fixture. A sandboxed get-task-allow fixture also
+passed. A sandboxed fixture without it entered an uncertain asynchronous attach;
+its earlier recovery incorrectly labelled the peer exit as target termination.
+The target was still present afterwards. Fixed recovery now revalidates actual
+process/state/generation before any owner kill and distinguishes unbound peer exit.
+This history cannot establish a universal entitlement requirement. Never use the
+old recovery result as proof that a target exited.
+
+Source-shaped Random fixture native-ancestor run has not produced a Snapshot:
+it entered the same pre-collection attach wait (calls0), with retained debugger.
+An explicit bound owner recovery command is queued for only that synthetic PID;
+no product process has been contacted. Investigate the attach stage before another
+comparable live attempt; do not widen quotas or present the selector as accepted.
+
+The S03 outer-ancestor patch is integrated with a stronger complete-path condition;
+it is a source ancestor subtree, not complete arbitrary body forest. S03 split,
+source-shaped top-controls and native-overlay experiments await integrated replay.
+Dedicated mounted-row selection is not integrated. S15 likewise waits on a bounded
+selector, not transform arithmetic. Leaf cuts in ancestor_owner remain unsupported.
+S03 supplied its experiment under1f807b33; no ownership is transferred silently.
 
 Runtime/packages: `/tmp/uib-s13-le8xj83i`; owned external scratch/evidence:
 `/Volumes/Develop-2TB/Develop/tmp/uib-s13-lqen4na0`. Active fixtures/evidence remain

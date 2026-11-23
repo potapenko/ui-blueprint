@@ -48,7 +48,7 @@ def termination_requested(directory_fd, filename, expected_pid, expected_generat
 
 
 def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, generation, owner, publish,
-                    termination_action=None):
+                    termination_action=None, can_terminate=None):
     """Retain ownership; an explicit bound owner command is separate from Observe.
 
     The SBProcess stays attached to the original process; no PID-based reattach
@@ -63,6 +63,10 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
                       termination_action=termination_action,
                       detach_attempted=False)
     published = False
+    try:
+        bound_at_entry = process.GetProcessID() == pid and (can_terminate is None or can_terminate())
+    except BaseException:
+        bound_at_entry = False
     while True:
         try:
             time.sleep(.1)
@@ -77,18 +81,24 @@ def retain_debugger(debugger, process, lldb, directory_fd, request_id, pid, gene
                     pass  # Receipt IO must not abandon a live interrupted call.
             state = process.GetState()
             if state == lldb.eStateExited:
+                if not bound_at_entry:
+                    return 'unbound_backend_exit'
                 if accepted:
                     return ('owner_terminated_source' if termination_action == 'terminate-admitted-source'
                             else 'owner_terminated_fixture')
                 return 'exit_after_failed_owner_command' if attempted else 'external_target_exit'
             if state == lldb.eStateDetached or not process.IsValid():
                 return 'debugger_ownership_lost'
-            if termination_action and not attempted and termination_requested(
-                    directory_fd, command, pid, generation, owner, termination_action):
+            if (termination_action and not attempted and state == lldb.eStateStopped
+                    and process.GetProcessID() == pid and termination_requested(
+                    directory_fd, command, pid, generation, owner, termination_action)):
                 # Observe never writes this command. For a product the owner must
                 # first obtain separate human authorization for this exact target.
                 # Mark before dispatch: even an exception must not retry termination.
                 attempted = True
+                if can_terminate is not None and not can_terminate():
+                    continue
+                bound_at_entry = True
                 accepted = process.Kill().Success()
         except BaseException:
             # Partial commands, interrupts, and debugger errors never detach/resume

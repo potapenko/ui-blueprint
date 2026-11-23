@@ -89,6 +89,35 @@ class CanonicalPrivacy(unittest.TestCase):
             with self.assertRaisesRegex(codec.Refusal, 'invalid_transform_inputs'):
                 self.encode([item])
 
+    def test_native_affine_uses_reported_basis_and_preserves_missing_mapping(self):
+        mapping = dict(window_id=456, host_bounds=[0,0,300,200], window_frame=[50,60,320,240],
+            host_is_flipped=True, basis_window_points=[[7,220],[8,220],[7,219]],
+            source='NSView.convertPoint.to-window-base')
+        self.assertEqual(codec.native_affine(mapping,REQ),[1,0,0,1,7,20])
+        self.assertIsNone(codec.native_affine(None,REQ))
+        for bad in (dict(mapping,window_id=999),dict(mapping,host_is_flipped=False),
+                    dict(mapping,host_bounds=[1,0,300,200]),dict(mapping,basis_window_points=[[0,0]]*3)):
+            with self.assertRaisesRegex(codec.Refusal,'invalid_native_mapping'):codec.native_affine(bad,REQ)
+        item=node();item['transform_inputs']=dict(position_adjustment=[1,2],pending_translation=[3,4],chain=[])
+        data=json.loads(codec.snapshot(json.dumps([item]).encode(),REQ,META,1,2,None,mapping))['artifact']['data']
+        transform=data['nodes'][0]['properties'][0]['state']['value']['value']['transform']['transform']
+        self.assertEqual(transform['affine'],[1,0,0,1,3,14])
+        self.assertEqual(transform['to']['kind'],'window')
+
+    def test_body_owner_metadata_is_nonce_scoped_and_not_a_component_claim(self):
+        item=node();item['body_owner']=dict(type='App.(PrivateView in _'+'A'*32+')',occurrence=0)
+        raw=self.encode([item]);data=json.loads(raw)['artifact']['data'];ext=data['nodes'][0]['extensions']
+        self.assertEqual([p['name'] for p in ext],['body_owner_type','body_owner_occurrence'])
+        self.assertIn(data['context']['environment_revision'],ext[1]['property']['state']['value']['value'])
+        self.assertEqual(data['components'],[])
+        with tempfile.TemporaryDirectory(prefix='uib-body-metadata-') as directory:
+            path=Path(directory)/'snapshot.json';path.write_bytes(raw)
+            validated=subprocess.run(['/Users/eugenepotapenko/.local/bin/uiblueprint-validate',
+                '--max-bytes','1048576',str(path)],capture_output=True,timeout=5)
+            self.assertEqual(validated.returncode,0,validated.stdout)
+        item['body_owner']['occurrence']=True
+        with self.assertRaisesRegex(codec.Refusal,'invalid_body_owner'):self.encode([item])
+
     def test_validator_and_installed_measure_read_real_canonical_shape(self):
         validator = Path('/Users/eugenepotapenko/.local/bin/uiblueprint-validate')
         self.assertTrue(validator.exists())
@@ -233,14 +262,20 @@ class CanonicalPrivacy(unittest.TestCase):
         lldb = SimpleNamespace(SBError=lambda: error, eStateStopped=1, eStateDetached=2)
         def interrupted(): raise codec.Refusal('call_interrupted_owner_recovery')
         calls = SimpleNamespace(initialize=interrupted, close=lambda: False, count=1)
+        backend = SimpleNamespace(connect=lambda *args: process, attach=lambda *args: None,
+            attach_attempted=True, attach_pending=False, attach_refused=False, finish=lambda detached: True)
+        import swiftui_debug_backend
         with tempfile.TemporaryDirectory(prefix='uib-product-hold-') as directory:
             out = Path(directory); req = out/'request.json'; req.write_text(json.dumps(req_value))
             with patch.dict(sys.modules, lldb=lldb), patch.object(capture, 'CONSUMER_ADMISSION', binding), \
+                    patch.object(capture, 'CONSUMER_BACKEND_SHA256', 'a'*64), \
+                    patch.object(swiftui_debug_backend, 'profile', return_value={'sha256':'a'*64}), \
+                    patch.object(swiftui_debug_backend, 'FixedBackend', return_value=backend), \
                     patch.object(capture, 'verified_helper', return_value=None), \
                     patch.object(capture, 'metadata', return_value=META), \
                     patch.object(capture, 'Calls', return_value=calls), \
                     patch.object(capture, 'retain_debugger', return_value='external_target_exit') as hold:
-                capture.capture(debugger, str(req), '', str(out))
+                capture.capture(debugger, str(req), '', str(out), '/fixture/backend-profile')
             self.assertEqual(hold.call_args.kwargs['termination_action'], 'terminate-admitted-source')
             self.assertFalse((out/'snapshot-own-fixture.json').exists())
 
@@ -325,9 +360,11 @@ class CanonicalPrivacy(unittest.TestCase):
         calls = SimpleNamespace(symbol=lambda _: 10, selector=lambda x: x, objc=objc,
             read=lambda address, _: (1).to_bytes(8, 'little') if address==10 else b'[]')
         with patch.object(capture, 'collect_fields', return_value=b'[]') as fields, \
-                patch.object(capture, 'is_host', return_value=True):
+                patch.object(capture, 'is_host', return_value=True), \
+                patch.object(capture, 'native_mapping', return_value=None) as mapping:
             raw, flags = capture.collect(calls, REQ)
         fields.assert_called_once_with(calls, 4, REQ)
+        mapping.assert_called_once_with(calls, 4, 3, REQ)
         self.assertEqual(raw, b'[]')
         self.assertNotIn((4, 'subviews'), messages)
         self.assertEqual(flags['values'], dict(is_key_window=False, is_main_window=True, app_is_active=True))

@@ -274,11 +274,60 @@ class CacheChecks(unittest.TestCase):
         r.owned_record = lambda offset, size: offset
         r.resolve = lambda *a, **kw: ((8192,0,8192),None)
         r.links = {3000:[(4000,8192)],5000:[(6000,8192)]}
+        r.rule_owner = lambda *args: (None, None)
         r.select_scope = Mock(side_effect=Refusal('cache_scope_unresolved'))
         with self.assertRaises(Refusal) as error:
             r.anchored_scope(700)
         self.assertEqual(error.exception.code,'anchor_card_owner_unresolved')
         r.select_scope.assert_not_called()
+
+    def ancestor_reader(self, owners, graph_root=5120):
+        r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Cursor')
+        r.graph_root=graph_root;r.pointer=lambda value:value
+        r.native_layout_anchor=lambda *args:(512,100)
+        r.page_owner=lambda element:100;r.owned_record=lambda element,size:element
+        r.u64=lambda element:element;r.qualified_nominal=lambda meta:None
+        words={196:1024}
+        for element,parent in ((1024,2048),(2048,3072),(3072,4096),(4096,5120),(5120,0)):
+            words.update({element+8:element+100,element+16:parent})
+        r.u32=words.__getitem__;r.rule_owner=lambda model,cache:owners.get(model,(None,None))
+        r.links={};r.resolve=lambda *args,**kwargs:(None,'unavailable')
+        return r
+
+    def test_body_ancestor_continues_across_wrapper_owners(self):
+        r=self.ancestor_reader({2148:(7,'App.Card'),3172:(8,'App.Wrapper'),4196:(7,'App.Card')})
+        self.assertEqual(r.anchored_scope(0),[4096])
+        self.assertEqual(r.scanned_records,5)
+
+    def test_body_ancestor_never_switches_to_a_different_same_named_owner(self):
+        r=self.ancestor_reader({2148:(7,'App.Card'),4196:(9,'App.Card')})
+        self.assertEqual(r.anchored_scope(0),[2048])
+
+    def test_incomplete_path_cannot_publish_a_body_fallback(self):
+        r=self.ancestor_reader({2148:(7,'App.Card')},graph_root=9999)
+        with self.assertRaises(Refusal):r.anchored_scope(0)
+
+    def test_existing_nominal_ancestor_retains_precedence(self):
+        r=self.ancestor_reader({2148:(7,'App.Card'),4196:(7,'App.Card')})
+        r.qualified_nominal=lambda meta:'App.Card' if meta==3072 else None
+        self.assertEqual(r.anchored_scope(0),[3072])
+
+    def test_multi_native_owner_requires_one_ancestor_and_accounts_all_paths(self):
+        r=reader();r.req['scope']=dict(type='App.Card',native_view_type='App.Cursor',native_match='ancestor_owner')
+        r.native_views=lambda *args:[10,20,30]
+        r.represented_layout=lambda view:(view,100)
+        def scope(host,binding):
+            r.scan_work=8
+            if binding[0]==30:raise Refusal('anchor_card_owner_unresolved')
+            return [500]
+        r.anchored_scope=scope
+        self.assertEqual(r.anchored_owner_scope(None),[500])
+        self.assertEqual(r.anchor_ids,{10,20});self.assertEqual(r.owner_scan_cost,24)
+        r.anchored_scope=lambda host,binding:[binding[0]]
+        with self.assertRaisesRegex(Refusal,'native_owner_ambiguous'):r.anchored_owner_scope(None)
+        def incomplete(*args):raise Refusal('anchor_owner_search_incomplete')
+        r.anchored_scope=incomplete
+        with self.assertRaisesRegex(Refusal,'anchor_owner_search_incomplete'):r.anchored_owner_scope(None)
 
     def test_geometry_selection_preserves_skipped_model_and_ancestor(self):
         r = reader()

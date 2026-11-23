@@ -342,6 +342,10 @@ class CacheReader:
             if track_anchor and key == 'layoutComputer' and hasattr(self, 'anchor_ids') and self.u32(v+8) in self.anchor_ids:
                 self.anchor_matches += 1
                 self.matched_anchor_node = len(self.nodes)
+                if hasattr(self, 'anchor_counts'):
+                    attribute = self.u32(v+8)
+                    self.anchor_counts[attribute] = self.anchor_counts.get(attribute, 0)+1
+                    self.matched_anchor_nodes[attribute] = len(self.nodes)
             if key in ('position', 'size', 'transform'):
                 # No read of any unrequested TreeValue's type/value payload.
                 result.append((key, self.ptr(v), self.u32(v+8)))
@@ -453,7 +457,7 @@ class CacheReader:
                 if next_element is not None:
                     self.walk(next_element, parent, depth+1, witness_only=True, inherited_transform=transform)
                 return
-        elif self.req.get('scope', {}).get('native_match') == 'within_owner':
+        elif self.req.get('scope', {}).get('native_match') in ('within_owner', 'ancestor_owner'):
             # A reference on a transparent record cannot identify an emitted view.
             before = self.anchor_matches
             self.properties(element)
@@ -501,6 +505,37 @@ class CacheReader:
             descriptor = self.ptr(address, 4) if relative & 1 else address
         return None
 
+    def source_nominal_identity(self, metadata):
+        public = self.qualified_nominal(metadata)
+        if public is not None:
+            return public
+        name = self.nominal(metadata)
+        if name is None:
+            return None
+        descriptor = self.ptr(metadata+8, 4)
+        symbol = self.c.t.ResolveLoadAddress(descriptor).GetSymbol()
+        if symbol.GetStartAddress().GetLoadAddress(self.c.t) != descriptor:
+            return None
+        mangled = symbol.GetMangledName() or ''
+        if not mangled.startswith('$s'):
+            return None
+        tail = mangled[2:]
+        parts = []
+        for _ in range(2):
+            length = re.match(r'[0-9]+', tail)
+            if length is None or len(length[0]) > 3:
+                return None
+            count = int(length[0])
+            tail = tail[len(length[0]):]
+            part, tail = tail[:count], tail[count:]
+            if not 1 <= count <= 96 or len(part) != count or not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*', part):
+                return None
+            parts.append(part)
+        private = re.fullmatch(r'33(_[A-F0-9]{32})LLVMn', tail)
+        if private is None or parts[1] != name:
+            return None
+        return parts[0]+'.('+parts[1]+' in '+private[1]+')'
+
     def rule_owner(self, model, owner_names):
         resolved, _ = self.resolve(model, links_only=True)
         if resolved is None:
@@ -518,7 +553,7 @@ class CacheReader:
                         '$s7SwiftUI11DynamicBody33_A4C1D658B3717A3062FEFC91A812D6EBLLVMn')):
                 accessor = self.ptr(rule+16)
                 if self.qualified_nominal(accessor) == 'SwiftUI.ViewBodyAccessor':
-                    name = self.qualified_nominal(self.ptr(accessor+16))
+                    name = self.source_nominal_identity(self.ptr(accessor+16))
             owner_names[attribute] = name
         return attribute, owner_names[attribute]
 
@@ -668,8 +703,8 @@ class CacheReader:
             raise Refusal('expired_layout_reference')
         return attribute, subgraph
 
-    def anchored_scope(self, host):
-        anchor_id, sg = self.native_layout_anchor(host, self.req['scope']['native_view_type'])
+    def anchored_scope(self, host, binding=None):
+        anchor_id, sg = binding if binding is not None else self.native_layout_anchor(host, self.req['scope']['native_view_type'])
         self.anchor_ids = {anchor_id}
         # Start in the weak attribute's subgraph. Follow recorded parents and
         # cross a subgraph root only via its unique graph-owned attachment site.
@@ -711,6 +746,9 @@ class CacheReader:
             element = matches[0]
             self.anchor_next = {}
         lower = None
+        owners = {}
+        selected_body = selected_attribute = None
+        complete_path = False
         while element:
             if element in seen or len(seen) >= self.req['limits']['max_depth']:
                 raise Refusal('anchor_parent_limit', 2)
@@ -719,13 +757,21 @@ class CacheReader:
                 self.anchor_next[element] = lower
                 lower = element
             self.scan_work += 1
+            if self.scan_work + getattr(self, 'anchor_scan_base', 0) > 1024:
+                raise Refusal('anchor_parent_limit', 2)
             p = self.owned_record(element, 32)
             metadata = self.pointer(self.u64(p))
+            attribute, owner_name = self.rule_owner(self.u32(p+8), owners)
+            if owner_name is not None and owner_name == scope.get('type') and (selected_attribute is None or attribute == selected_attribute):
+                selected_body, selected_attribute = element, attribute
             if metadata and self.qualified_nominal(metadata) == scope['type']:
                 # An actual nominal ancestor is a source component boundary.
                 # Verify the requested video descendant inside that boundary.
                 self.scanned_records = len(seen)
                 return [element]
+            if element == getattr(self, 'graph_root', None):
+                complete_path = True
+                break
             parent = self.u32(p+16)
             if parent:
                 if self.page_owner(parent) != self.page_owner(element):
@@ -746,11 +792,47 @@ class CacheReader:
             owner, element = parents.pop()
             if self.page_owner(element) != owner:
                 raise Refusal('anchor_parent_ownership')
+        self.scanned_records = len(seen)
+        if selected_body is not None:
+            if not complete_path:
+                raise Refusal('anchor_body_boundary_incomplete')
+            self.selected_source = dict(selection_source='native_owner_ancestor', source_type=scope['type'])
+            return [selected_body]
+        if binding is not None and not complete_path:
+            raise Refusal('anchor_owner_search_incomplete')
         raise Refusal('anchor_card_owner_unresolved')
 
-    def verify_anchor_ancestry(self):
+    def anchored_owner_scope(self, host):
+        views = self.native_views(host, self.req['scope']['native_view_type'])
+        bindings = [self.represented_layout(view) for view in views]
+        if not bindings or len({attribute for attribute, _ in bindings}) != len(bindings):
+            raise Refusal('native_anchor_unresolved')
+        candidates = {}
+        self.anchor_scan_base = 0
+        for binding in bindings:
+            try:
+                roots = self.anchored_scope(host, binding)
+            except Refusal as error:
+                if error.code != 'anchor_card_owner_unresolved':
+                    raise
+            else:
+                candidates.setdefault(tuple(roots), []).append(binding[0])
+            self.anchor_scan_base += self.scan_work
+        if len(candidates) != 1:
+            raise Refusal('native_owner_unresolved' if not candidates else 'native_owner_ambiguous')
+        roots, anchors = next(iter(candidates.items()))
+        self.selected_source = dict(selection_source='native_owner_ancestor', source_type=self.req['scope']['type'])
+        self.anchor_ids = set(anchors)
+        self.anchor_matches = 0
+        self.anchor_counts = {}
+        self.matched_anchor_nodes = {}
+        self.owner_scan_cost = self.scanned_records = self.anchor_scan_base
+        return list(roots)
+
+    def verify_anchor_ancestry(self, index=None):
         required = self.req['scope']['containing_type']
-        index = self.matched_anchor_node
+        if index is None:
+            index = self.matched_anchor_node
         while index is not None:
             node = self.nodes[index]
             if (self.qualified_nominal(node['metadata']) == required
@@ -819,6 +901,7 @@ class CacheReader:
         if self.u8(subgraph+0x68):
             raise Refusal('cache_invalid_subgraph')
         root, self.graph = self.u32(subgraph+0x60), self.ptr(subgraph+0x28)
+        self.graph_root = root
         self.table = self.symbol('AG::data::_shared_table_bytes', 'AttributeGraph')
         self.base, self.limit = self.ptr(self.table), self.u32(self.table+0x18)
         if self.page_owner(root) != subgraph:
@@ -827,7 +910,10 @@ class CacheReader:
         self.associations()
         anchored = 'native_view_type' in self.req.get('scope', {})
         within_owner = self.req.get('scope', {}).get('native_match') == 'within_owner'
-        if within_owner:
+        ancestor_owner = self.req.get('scope', {}).get('native_match') == 'ancestor_owner'
+        if ancestor_owner:
+            selected_roots = self.anchored_owner_scope(host)
+        elif within_owner:
             selected_roots = self.select_scope(root)
             self.owner_scan_cost = self.scanned_records
             matches = self.native_views(host, self.req['scope']['native_view_type'])
@@ -845,7 +931,13 @@ class CacheReader:
         branches = self.walk_branches(selected_roots)
         if set(self.boundary_hits) != set(self.req.get('scope', {}).get('leaf_types', ())):
             raise Refusal('scope_leaf_unresolved')
-        if anchored:
+        if ancestor_owner:
+            if self.anchor_counts != {attribute: 1 for attribute in self.anchor_ids}:
+                raise Refusal('anchor_scope_binding_unresolved')
+            if self.req['scope'].get('containing_type'):
+                for index in self.matched_anchor_nodes.values():
+                    self.verify_anchor_ancestry(index)
+        elif anchored:
             if self.anchor_matches != 1:
                 raise Refusal('anchor_scope_binding_unresolved')
             if not within_owner:
@@ -856,6 +948,7 @@ class CacheReader:
         if any(a < end and b > start for a, b in self.reads for start, end in self.private_ranges):
             raise Refusal('cache_private_range')
         normalized = []
+        body_owner_names, body_occurrences = {}, {}
         for node in self.nodes:
             props = []
             name = self.nominal(node['metadata'])
@@ -874,6 +967,10 @@ class CacheReader:
                     props.append(dict(id=3 if key == 'position' else 4,
                         attribute=dict(type='__C.CGPoint' if key == 'position' else '__C.CGSize', value=pair)))
             item = dict(properties=props, children=[], child_order_unknown=node.get('child_order_unknown', False))
+            owner_attribute, owner_type = self.rule_owner(node['model'], body_owner_names)
+            if owner_type is not None:
+                occurrence = body_occurrences.setdefault(owner_attribute, len(body_occurrences))
+                item['body_owner'] = dict(type=owner_type, occurrence=occurrence)
             if transform_inputs is not None:
                 item['transform_inputs'] = transform_inputs
             else:

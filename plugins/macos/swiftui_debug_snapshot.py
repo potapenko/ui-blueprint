@@ -72,7 +72,7 @@ def request(raw):
         scoped_native = isinstance(scope, dict) and 'native_match' in scope
         if scoped_native:
             required_keys = {'type', 'native_view_type', 'native_match'}
-            if (scope['native_match'] != 'within_owner' or not required_keys <= set(scope)
+            if (scope['native_match'] not in ('within_owner', 'ancestor_owner') or not required_keys <= set(scope)
                     or set(scope) - required_keys - {'containing_type', 'selection'}):
                 raise Refusal('invalid_scope', 2)
         elif (not isinstance(scope, dict) or set(scope) not in
@@ -124,20 +124,48 @@ def _pair(attribute, type_name, nonnegative=False):
     return value
 
 
-def snapshot(raw, req, metadata, start, end, selection_provenance=None):
+def native_affine(mapping, req):
+    if mapping is None:
+        return None
+    expected = {'window_id', 'host_bounds', 'window_frame', 'host_is_flipped',
+                'basis_window_points', 'source'}
+    if (not isinstance(mapping, dict) or set(mapping) != expected
+            or mapping['window_id'] != req['window_id']
+            or type(mapping['window_id']) is not int or mapping['host_is_flipped'] is not True
+            or mapping['source'] != 'NSView.convertPoint.to-window-base'):
+        raise Refusal('invalid_native_mapping', 2)
+    bounds, frame, points = mapping['host_bounds'], mapping['window_frame'], mapping['basis_window_points']
+    if (not isinstance(points, (list, tuple)) or len(points) != 3
+            or any(not isinstance(pair, (list, tuple)) or len(pair) != size
+                   for pair, size in [(bounds, 4), (frame, 4), *((point, 2) for point in points)])
+            or any(type(v) not in (int, float) or not math.isfinite(v)
+                   for pair in (bounds, frame, *points) for v in pair)
+            or bounds[:2] not in ([0, 0], (0, 0)) or min(*bounds[2:], *frame[2:]) <= 0):
+        raise Refusal('invalid_native_mapping', 2)
+    origin, x, y = points
+    affine = [x[0]-origin[0], origin[1]-x[1], y[0]-origin[0], origin[1]-y[1],
+              origin[0], frame[3]-origin[1]]
+    determinant = affine[0]*affine[3]-affine[1]*affine[2]
+    if not all(math.isfinite(v) for v in affine) or not math.isfinite(determinant) or determinant == 0:
+        raise Refusal('invalid_native_mapping', 2)
+    return affine
+
+
+def snapshot(raw, req, metadata, start, end, selection_provenance=None, window_mapping=None):
     """Return canonical bytes; unqualified transforms never join node spaces."""
+    window_affine = native_affine(window_mapping, req)
     source = decode(raw)
     selected = isinstance(source, dict)
     if selected:
         if (set(source) != {'selection_source', 'source_type', 'branches'}
-                or source['selection_source'] not in ('body_owner', 'nominal_element')
+                or source['selection_source'] not in ('body_owner', 'nominal_element', 'native_owner_ancestor')
                 or not isinstance(source['source_type'], str)
                 or source['source_type'] != req.get('scope', {}).get('type')):
             raise Refusal('invalid_selection_provenance', 2)
         branches = source['branches']
         if (not isinstance(branches, list) or not 1 <= len(branches) <= 1024
                 or any(not isinstance(branch, list) for branch in branches)
-                or (source['selection_source'] == 'nominal_element' and len(branches) != 1)):
+                or (source['selection_source'] in ('nominal_element', 'native_owner_ancestor') and len(branches) != 1)):
             raise Refusal('invalid_selection_provenance', 2)
     else:
         if not isinstance(source, list):
@@ -211,17 +239,39 @@ def snapshot(raw, req, metadata, start, end, selection_provenance=None):
                 offset = [-sum(pair[axis] for pair in pairs) for axis in (0, 1)]
                 if not all(math.isfinite(v) for v in offset):
                     raise Refusal('invalid_transform_inputs', 2)
+                affine = [1, 0, 0, 1, *offset]
+                destination = dict(id=nonce+'-hosting-root', kind='local', units='pt', origin='top_left')
+                method = 'AttributeGraph.validated-translation-chain.raw-parent-path'
+                if window_affine is not None:
+                    a, b, c, d, tx, ty = window_affine
+                    affine = [a, b, c, d, a*offset[0]+c*offset[1]+tx, b*offset[0]+d*offset[1]+ty]
+                    if not all(math.isfinite(v) for v in affine):
+                        raise Refusal('invalid_native_mapping', 2)
+                    destination = dict(id=nonce+'-native-window', kind='window', units='pt', origin='top_left')
+                    method += '.NSView.convertPoint'
                 geometry['transform'] = dict(status='known', transform=dict(
-                    **{'from': geometry['coordinate_space'],
-                       'to': dict(id=nonce+'-hosting-root', kind='local', units='pt', origin='top_left')},
-                    affine=[1, 0, 0, 1, *offset], target=metadata['target'], surface=surface,
-                    environment_revision=nonce, evidence=dict(evidence, provenance='derived',
-                        method='AttributeGraph.validated-translation-chain.raw-parent-path')))
+                    **{'from': geometry['coordinate_space'], 'to': destination},
+                    affine=affine, target=metadata['target'], surface=surface,
+                    environment_revision=nonce, evidence=dict(evidence, provenance='derived', method=method)))
             layout = dict(availability='known', value=dict(type='geometry', value=geometry))
         result = dict(key=key, surface=surface, native_role=native_role,
             properties=[prop('layout_bounds', layout)]+[prop(f, dict(availability='unknown',
                 reason='not-exposed-by-layout-getter')) for f in FIELDS[1:]],
             children=[], extensions=[], source_declarations=[])
+        owner = node.get('body_owner')
+        if owner is not None:
+            if (not isinstance(owner, dict) or set(owner) != {'type', 'occurrence'}
+                    or not isinstance(owner['type'], str) or not 1 <= len(owner['type']) <= 256
+                    or any(ord(c) < 32 or ord(c) >= 127 for c in owner['type'])
+                    or type(owner['occurrence']) is not int or not 0 <= owner['occurrence'] < req['limits']['max_nodes']):
+                raise Refusal('invalid_body_owner', 2)
+            owner_evidence = dict(evidence, method='AttributeGraph.validated-rule-type.ViewBodyAccessor')
+            for name, text in (('body_owner_type', owner['type']),
+                               ('body_owner_occurrence', nonce+'-body-'+str(owner['occurrence']))):
+                result['extensions'].append(dict(namespace=NAMESPACE, name=name,
+                    property=dict(selection='requested', field='description', sensitivity='public',
+                                  evidence=owner_evidence, state=dict(availability='known',
+                                      value=dict(type='text', value=text)))))
         nodes.append(result)
         result['children'] = [visit(child, depth+1) for child in children]
         return key

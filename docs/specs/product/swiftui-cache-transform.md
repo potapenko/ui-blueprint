@@ -1,7 +1,7 @@
 # Qualified cached SwiftUI translation
 
 - Node type: leaf; domain: `uib.swiftui-debug-capture.transform`.
-- Contract: `UIB.SWIFTUI-CACHE-TRANSFORM@4`; Authority: Active; Stability: Evolving.
+- Contract: `UIB.SWIFTUI-CACHE-TRANSFORM@6`; Authority: Active; Stability: Evolving.
 - Authority: direct approval of the S13 plan in chat
   `01a20922-f6ad-7651-997b-cef1b3f09b12`, 2026-11-23, to obtain source-attributed
   parts in a proved common window/native-frame space on the unchanged donor.
@@ -56,6 +56,26 @@ Root-local qualification does not establish a native-window or PNG transform.
 Those require same-generation host/window membership, sourced native conversion,
 origin/scale and exact capture metadata. Never use screenshot tracing or a fitted
 constant to assert that mapping.
+
+## TRANSFORM.NATIVE — owned-fixture qualification
+
+The native candidate may obtain NSWindow.frame, the selected NSHostingView.bounds,
+its isFlipped flag and convertPoint:toView:nil for (0,0), (1,0), (0,1). Require
+that host.window is the exact selected window before/after these fixed getters.
+Only zero-origin flipped host bounds are admitted by this initial profile.
+Preserve FP registers under the existing call/restore protocol; no expression,
+SwiftUI callback or graph evaluation is permitted. Existing deadlines/call limits
+and owner recovery apply. Validate finite points/rectangles and matching geometry
+on recheck. Derive the affine basis into full-window top-left pt from those
+reported points and the reported window height. Do not fit an image offset.
+The owned fixture reports bounds360×252pt and native basis (0,252), (1,252),
+(0,251); independent Blueprint PNG is720×504 at reported scale2 with known full-window
+mapping and the same process/window. Root-to-window publication is qualified for
+this fixed ABI/profile; independent review and product acceptance remain separate.
+Compose that sourced affine with each known cached translation, preserving raw
+rectangles and derived evidence. Unknown native mappings retain hosting-root
+geometry; unsupported cached transforms stay unknown. PNG association remains a
+separate same-state capture record, never a presented-frame atomicity claim.
 
 ## TRANSFORM.COMPATIBILITY
 

@@ -46,14 +46,14 @@ class RecoveryInput(unittest.TestCase):
                 os.close(fd)
 
     def test_external_exit_and_failed_command_are_not_owner_success(self):
-        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9, eStateStopped=5)
         debugger = SimpleNamespace(SetAsync=lambda _: None)
         for command, success, expected in [(False, False, 'external_target_exit'),
                 (True, False, 'exit_after_failed_owner_command'),
                 (True, True, 'owner_terminated_fixture')]:
             states = iter([5, 10])
             kills = []
-            process = SimpleNamespace(GetState=lambda: next(states), IsValid=lambda: True,
+            process = SimpleNamespace(GetProcessID=lambda:123, GetState=lambda: next(states), IsValid=lambda: True,
                 Kill=lambda: (kills.append(1) or SimpleNamespace(Success=lambda: success)))
             with patch('swiftui_recovery_control.termination_requested', return_value=command), \
                     patch('time.sleep', return_value=None):
@@ -62,10 +62,10 @@ class RecoveryInput(unittest.TestCase):
             self.assertEqual(len(kills), int(command))
 
     def test_failed_command_is_never_retried_and_receipt_failure_keeps_hold(self):
-        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9, eStateStopped=5)
         debugger = SimpleNamespace(SetAsync=lambda _: None)
         states = iter([5, 5, 5, 10]); kills = []
-        process = SimpleNamespace(GetState=lambda: next(states), IsValid=lambda: True,
+        process = SimpleNamespace(GetProcessID=lambda:123, GetState=lambda: next(states), IsValid=lambda: True,
             Kill=lambda: (kills.append(1) or SimpleNamespace(Success=lambda: False)))
         def unavailable(_): raise OSError()
         with patch('swiftui_recovery_control.termination_requested', return_value=True), \
@@ -75,12 +75,13 @@ class RecoveryInput(unittest.TestCase):
         self.assertEqual(kills, [1])
 
     def test_repeated_interrupts_in_delay_and_backend_keep_hold(self):
-        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9, eStateStopped=5)
         from unittest.mock import Mock
         debugger = Mock()
         debugger.SetAsync.side_effect = [KeyboardInterrupt(), None]
         process = Mock()
         process.GetState.side_effect = [KeyboardInterrupt(), 5, 10]
+        process.GetProcessID.return_value = 123
         process.IsValid.return_value = True
         delays = iter([KeyboardInterrupt(), KeyboardInterrupt(), None, OSError()])
         def delay(_):
@@ -95,9 +96,10 @@ class RecoveryInput(unittest.TestCase):
 
     def test_hold_without_action_cannot_consume_a_termination_command(self):
         from unittest.mock import Mock
-        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9, eStateStopped=5)
         debugger = SimpleNamespace(SetAsync=lambda _: None)
         process = Mock(); process.GetState.side_effect = [5, 5, 10]
+        process.GetProcessID.return_value = 123
         process.IsValid.return_value = True
         receipts = []
         with patch('swiftui_recovery_control.termination_requested', return_value=True) as reader, \
@@ -106,6 +108,26 @@ class RecoveryInput(unittest.TestCase):
         self.assertEqual(result, 'external_target_exit')
         self.assertIsNone(receipts[0]['command'])
         reader.assert_not_called(); process.Kill.assert_not_called(); process.Detach.assert_not_called()
+
+    def test_unbound_peer_exit_is_not_target_termination(self):
+        from unittest.mock import Mock
+        process=Mock();process.GetProcessID.return_value=0
+        process.GetState.side_effect=[5,10];process.IsValid.return_value=True
+        lldb=SimpleNamespace(eStateStopped=5,eStateExited=10,eStateDetached=9)
+        with patch('swiftui_recovery_control.termination_requested',return_value=True),patch('time.sleep'):
+            result=retain_debugger(SimpleNamespace(SetAsync=lambda _:None),process,lldb,0,'r',123,'g','o',lambda _:None,
+                                   termination_action='terminate-owned-fixture')
+        self.assertEqual(result,'unbound_backend_exit');process.Kill.assert_not_called()
+
+    def test_generation_revalidation_failure_never_kills(self):
+        from unittest.mock import Mock
+        process=Mock();process.GetProcessID.return_value=123
+        process.GetState.side_effect=[5,10];process.IsValid.return_value=True
+        lldb=SimpleNamespace(eStateStopped=5,eStateExited=10,eStateDetached=9)
+        with patch('swiftui_recovery_control.termination_requested',return_value=True),patch('time.sleep'):
+            result=retain_debugger(SimpleNamespace(SetAsync=lambda _:None),process,lldb,0,'r',123,'g','o',lambda _:None,
+                                   termination_action='terminate-owned-fixture',can_terminate=lambda:False)
+        self.assertEqual(result,'unbound_backend_exit');process.Kill.assert_not_called()
 
     def test_product_action_requires_exact_separate_command(self):
         with tempfile.TemporaryDirectory(prefix='uib-product-recovery-command-') as directory:
@@ -130,9 +152,10 @@ class RecoveryInput(unittest.TestCase):
 
     def test_admitted_source_exit_is_not_labelled_as_fixture(self):
         from unittest.mock import Mock
-        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9)
+        lldb = SimpleNamespace(eStateExited=10, eStateDetached=9, eStateStopped=5)
         debugger = SimpleNamespace(SetAsync=lambda _: None)
         process = Mock(); process.GetState.side_effect = [5, 10]
+        process.GetProcessID.return_value = 123
         process.IsValid.return_value = True; process.Kill.return_value.Success.return_value = True
         with patch('swiftui_recovery_control.termination_requested', return_value=True), \
                 patch('time.sleep', return_value=None):

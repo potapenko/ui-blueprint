@@ -9,6 +9,7 @@ import sys
 sys.dont_write_bytecode = True
 import os
 import hashlib
+import math
 from pathlib import Path
 import platform
 import plistlib
@@ -32,6 +33,7 @@ from swiftui_debug_snapshot import Refusal, MAX_BYTES, decode, encode, request, 
 # The single Reels window-root attempt refused tree_limit. No further product
 # capture is admitted until a bounded, source-qualified subtree path is verified.
 CONSUMER_ADMISSION = None
+CONSUMER_BACKEND_SHA256 = None
 
 
 def require_admitted_target(req):
@@ -300,11 +302,15 @@ class Calls:
                 raise Refusal('return_state_changed')
         self.altered = False
 
-    def call(self, name, *args):
+    def call(self, name, *args, fp_inputs=(), fp_count=0):
         if name not in ('objc_autoreleasePoolPush', 'objc_autoreleasePoolPop',
                         'objc_msgSend', 'sel_registerName', 'class_getInstanceSize',
                         'class_getInstanceVariable', 'ivar_getOffset'):
             raise Refusal('forbidden_target_call')
+        if (fp_count not in (0, 2, 4) or len(fp_inputs) not in (0, 2, 4)
+                or ((fp_inputs or fp_count) and name != 'objc_msgSend')
+                or any(type(v) not in (int, float) or not math.isfinite(v) for v in fp_inputs)):
+            raise Refusal('unsupported_geometry_abi')
         self.admit()
         # Preserve the existing acquisition ceiling; cache reads own no Swift array.
         limit = 256 if name == 'objc_autoreleasePoolPop' else 254
@@ -316,6 +322,13 @@ class Calls:
         self.altered = True
         for i, value in enumerate(args):
             self.setreg('x'+str(i), value)
+        for i, value in enumerate(fp_inputs):
+            error = self.lldb.SBError()
+            data = self.lldb.SBData.CreateDataFromDoubleArray(
+                self.t.GetByteOrder(), self.t.GetAddressByteSize(), [float(value)])
+            reg = self.thread.GetFrameAtIndex(0).FindRegister('d'+str(i))
+            if not reg.IsValid() or not reg.SetData(data, error) or error.Fail():
+                raise Refusal('geometry_register_write_failed')
         self.setreg('sp', self.return_sp)
         self.setreg('lr', self.return_pc)
         self.setreg('pc', address)
@@ -353,7 +366,17 @@ class Calls:
         if self.thread.GetStopReasonDataAtIndex(0) != self.bp.GetID():
             raise Refusal('unexpected_breakpoint_owner_recovery')
         self.inflight = False
-        value = tuple(frame.FindRegister('x'+str(i)).GetValueAsUnsigned() for i in range(4))
+        if fp_count:
+            values = []
+            for i in range(fp_count):
+                error = self.lldb.SBError()
+                value = frame.FindRegister('d'+str(i)).GetData().GetDouble(error, 0)
+                if error.Fail() or not math.isfinite(value):
+                    raise Refusal('invalid_native_geometry')
+                values.append(value)
+            value = tuple(values)
+        else:
+            value = tuple(frame.FindRegister('x'+str(i)).GetValueAsUnsigned() for i in range(4))
         self.restore()
         return value
 
@@ -374,6 +397,20 @@ class Calls:
         if not obj:
             raise Refusal('object_unavailable')
         return self.call('objc_msgSend', obj, self.selector(name), *args)[0]
+
+    def rect(self, obj, selector):
+        if not obj or selector not in ('frame', 'bounds'):
+            raise Refusal('unsupported_geometry_selector')
+        value = self.call('objc_msgSend', obj, self.selector(selector), fp_count=4)
+        if min(value[2:]) < 0:
+            raise Refusal('invalid_native_geometry')
+        return value
+
+    def point_to_window(self, view, point):
+        if not view:
+            raise Refusal('object_unavailable')
+        return self.call('objc_msgSend', view, self.selector('convertPoint:toView:'), 0,
+                         fp_inputs=point, fp_count=2)
 
     def close(self):
         """True only when resuming the interrupted app is supported by this run."""
@@ -397,6 +434,24 @@ class Calls:
             return True
         except BaseException:
             return False
+
+
+def native_mapping(calls, host, window, req):
+    if calls.objc(host, 'window') != window:
+        raise Refusal('stale_window')
+    bounds = calls.rect(host, 'bounds')
+    frame = calls.rect(window, 'frame')
+    flipped = bool(calls.objc(host, 'isFlipped'))
+    if bounds[:2] != (0.0, 0.0) or not flipped:
+        return None
+    basis = [calls.point_to_window(host, point) for point in ((0, 0), (1, 0), (0, 1))]
+    if (calls.objc(host, 'window') != window or calls.rect(host, 'bounds') != bounds
+            or calls.rect(window, 'frame') != frame
+            or calls.objc(window, 'windowNumber') != req['window_id']):
+        raise Refusal('stale_window')
+    return dict(window_id=req['window_id'], host_bounds=list(bounds),
+                window_frame=list(frame), host_is_flipped=flipped,
+                basis_window_points=basis, source='NSView.convertPoint.to-window-base')
 
 
 def collect(calls, req):
@@ -435,6 +490,7 @@ def collect(calls, req):
     if len(hosts) != 1:
         raise Refusal('hosting_surface_unresolved')
     raw = collect_fields(c, hosts[0], req)
+    c.native_layout_mapping = native_mapping(c, hosts[0], window, req)
     if c.objc(window, 'windowNumber') != req['window_id'] or c.objc(window, 'contentView') != root:
         raise Refusal('stale_window')
     flags = dict(is_key_window=bool(c.objc(window, 'isKeyWindow')),
@@ -444,21 +500,30 @@ def collect(calls, req):
                      consistency='unknown', interval='selected-stopped-process', values=flags)
 
 
-def capture(debugger, request_path, bundle_path, output_path):
+def capture(debugger, request_path, bundle_path, output_path, backend_profile=None):
     """LLDB entry; its caller discards all LLDB streams, including backtraces."""
     import lldb
     req = read_request(request_path)
     fd = output_directory(output_path, req)
-    process = calls = None
+    process = calls = backend = None
     owner = uuid.uuid4().hex
     before = None
     safe = True
     fixture = False
     payload = None
     outcome = dict(manifest_version='1.0.0', request_id=req['request_id'], status='failed', code='capture_failed', exit_status=1,
-                   cleanup='not_attached', snapshot=None, calls=0, native_window_state=None, cache_audit=None)
+                   cleanup='not_attached', snapshot=None, calls=0, native_window_state=None,
+                   native_layout_mapping=None, cache_audit=None)
     try:
         fixture = require_admitted_target(req)
+        if backend_profile is not None:
+            from swiftui_debug_backend import FixedBackend, profile
+            selected_backend = profile(backend_profile)
+            if not fixture and selected_backend['sha256'] != CONSUMER_BACKEND_SHA256:
+                raise Refusal('backend_not_qualified')
+            backend = FixedBackend(selected_backend)
+        elif not fixture:
+            raise Refusal('qualified_backend_required')
         helper = verified_helper(bundle_path)
         before = metadata(helper, req)
         debugger.SetAsync(False)
@@ -467,7 +532,12 @@ def capture(debugger, request_path, bundle_path, output_path):
         debugger.HandleCommand('settings set target.process.disable-memory-cache true')
         target = debugger.CreateTarget('')
         error = lldb.SBError()
-        process = target.AttachToProcessWithID(debugger.GetListener(), req['pid'], error)
+        if backend is None:
+            process = target.AttachToProcessWithID(debugger.GetListener(), req['pid'], error)
+        else:
+            debugger.HandleCommand('settings set plugin.process.gdb-remote.packet-timeout 3')
+            process = backend.connect(debugger, target, lldb)
+            backend.attach(process, req['pid'], error, lldb)
         start = time.monotonic()
         deadline = start+req['limits']['deadline_ms']/1000
         if error.Fail() or not process.IsValid():
@@ -484,7 +554,9 @@ def capture(debugger, request_path, bundle_path, output_path):
         calls.admit()
         # Only already allowlisted fields reach the canonical encoder.
         provenance = {}
-        payload = snapshot(raw, req, before, start, time.monotonic(), provenance)
+        payload = snapshot(raw, req, before, start, time.monotonic(), provenance,
+                           getattr(calls, 'native_layout_mapping', None))
+        outcome['native_layout_mapping'] = getattr(calls, 'native_layout_mapping', None)
         del raw
         if metadata(helper, req, deadline) != before:
             raise Refusal('stale_target')
@@ -499,8 +571,17 @@ def capture(debugger, request_path, bundle_path, output_path):
         payload = None
         outcome['code'] = 'capture_failed'
     finally:
+        if backend is not None and (not backend.attach_attempted or backend.attach_refused):
+            if not backend.finish(True):
+                outcome.update(code='backend_cleanup_pending', exit_status=1)
+            if backend.attach_refused:
+                outcome['cleanup'] = 'peer_closed_after_refused_attach'
+                outcome['backend_attach'] = backend.attach_status
+            process = None
+        if backend is not None and backend.attach_pending:
+            safe = False
         if calls is not None:
-            safe = calls.close()
+            safe = calls.close() and safe
             outcome['calls'] = calls.count
             outcome['cache_audit'] = getattr(calls, 'cache_audit', None)
         if process is not None and process.IsValid() and process.GetState() != lldb.eStateDetached:
@@ -517,16 +598,31 @@ def capture(debugger, request_path, bundle_path, output_path):
                 # alive until the exact fixture owner decides or an exit is observed.
                 generation = before['target']['generation'] if before else str(req['pid'])+':unverified'
                 def publish(checkpoint):
+                    checkpoint.update(calls=outcome['calls'], process_id=process.GetProcessID(),
+                                      process_state=process.GetState())
                     write_new(fd, 'recovery-'+req['request_id']+'.json', encode(checkpoint))
+                def bound_target():
+                    try:
+                        return process.GetProcessID() == req['pid'] and metadata(helper, req) == before
+                    except BaseException:
+                        return False
                 outcome['cleanup'] = retain_debugger(debugger, process, lldb, fd,
                     req['request_id'], req['pid'], generation, owner, publish,
-                    termination_action='terminate-owned-fixture' if fixture else 'terminate-admitted-source')
+                    termination_action='terminate-owned-fixture' if fixture else 'terminate-admitted-source',
+                    can_terminate=bound_target)
         if not safe:
             if process is None or not process.IsValid():
                 outcome['cleanup'] = 'debugger_ownership_lost'
             payload = None
             outcome.update(status='failed', code='owner_recovery_required', exit_status=4,
                            snapshot=None, native_window_state=None)
+    if backend is not None:
+        detached = outcome['cleanup'] in ('peer_closed_after_refused_attach', 'detached_restored', 'owner_terminated_fixture', 'owner_terminated_source', 'external_target_exit', 'exit_after_failed_owner_command')
+        if not backend.finish(detached):
+            payload = None
+            outcome.update(status='failed', code='backend_cleanup_pending', exit_status=1, snapshot=None)
+    if payload is None:
+        outcome['native_layout_mapping'] = None
     created = None
     try:
         if payload is not None:
@@ -549,6 +645,7 @@ def main():
     parser.add_argument('--request', type=Path, required=True)
     parser.add_argument('--bundle', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--backend-profile', type=Path)
     try:
         args = parser.parse_args()
         req = read_request(args.request)
@@ -565,7 +662,10 @@ def main():
         if b'lldb-2103.0.34.407\n' not in version:
             raise Refusal('unsupported_debugger')
         script = 'swiftui_debug_capture.capture(lldb.debugger, '+', '.join(repr(str(p.resolve()))
-            for p in (args.request, args.bundle, args.out))+')'
+            for p in (args.request, args.bundle, args.out))
+        if args.backend_profile is not None:
+            script += ', '+repr(str(args.backend_profile.absolute()))
+        script += ')'
         run_lldb(lldb_path, 'command script import '+shlex.quote(str(Path(__file__).resolve()))
                  +'\nscript '+script+'\n')
         result = decode((args.out/('manifest-'+req['request_id']+'.json')).read_bytes())

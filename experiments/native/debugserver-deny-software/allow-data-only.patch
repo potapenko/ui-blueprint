@@ -1,0 +1,37 @@
+--- a/lldb/tools/debugserver/source/MacOSX/MachVMMemory.cpp
++++ b/lldb/tools/debugserver/source/MacOSX/MachVMMemory.cpp
+@@ -311,13 +311,29 @@
+ 
+ nub_size_t MachVMMemory::Write(task_t task, nub_addr_t address,
+                                const void *data, nub_size_t data_count) {
+-  // Geometry observation needs no writes to the target address space.
+-  return 0;
++  return WriteRegion(task, address, data, data_count);
+ }
+ 
+ nub_size_t MachVMMemory::WriteRegion(task_t task, const nub_addr_t address,
+                                      const void *data,
+                                      const nub_size_t data_count) {
+-  // Geometry observation needs no writes to the target address space.
+-  return 0;
+-}
++  if (!data || !data_count || address + data_count < address)
++    return 0;
++  MachVMRegion region(task);
++  nub_size_t checked = 0;
++  while (checked < data_count) {
++    if (!region.GetRegionForAddress(address + checked))
++      return 0;
++    const auto permissions = region.GetDNBPermissions();
++    if (!(permissions & eMemoryPermissionsWritable) ||
++        (permissions & eMemoryPermissionsExecutable))
++      return 0;
++    const auto remaining = region.BytesRemaining(address + checked);
++    if (!remaining)
++      return 0;
++    checked += std::min<nub_size_t>(remaining, data_count - checked);
++  }
++  // Never change VM protection, allocate executable scratch, or write code.
++  m_err = ::mach_vm_write(task, address, (pointer_t)data, data_count);
++  return m_err.Success() ? data_count : 0;
++}
