@@ -84,3 +84,46 @@ one. Full-map, stable wide/narrow and composition acceptance remain open.
 
 Runtime evidence belongs in the task-owned external area, not in this source
 directory. No released SDK or shared CLI behavior changes.
+
+## Sequential acquisition qualification
+
+`fixture.swift` and `sequence_fixture.py` are fixture-only. The Python file must
+be loaded in an owned interactive LLDB, with `__file__` set to its source path,
+`S14_SEQUENCE_RUNTIME` naming the prepared internal `uib-s14-map-*` directory,
+and `S14_SEQUENCE_MODE=map` or `groups`. That directory contains the signed
+owned `Control`, the pinned deny-write `debugserver`, `tmp/`, and
+`fixture-pins.json` with control/source SHA-256 and Mach-O UUID. It cannot select
+a product PID. Compile with `swiftc -g -Onone -module-name S14MapControl`, using
+an external module cache and the existing console-fixture debug entitlement.
+
+The map pass replaces one owned hardware breakpoint at a time: map locals →
+connections origin → repeated card locals. On the same fixture process it then
+changes the ordinary input from baseline to expanded. Actual qualification
+observed viewport widths 600 → 800, card widths 100 → 160, and three → two cards,
+followed by normal detach, `recovered` and exit 0. All literal frame values were
+checked independently. The groups pass observed the same three → two transition.
+Evidence: `uib-s14-normalize-2fzuh8dg/fixture-{map,groups}-two-phases.json`.
+Current internal runtime: `/private/tmp/uib-s14-map-t125icnf`; no live session
+remains after those tests.
+
+Earlier qualification exposed two concrete constraints. After attachment macOS
+reparents the inferior to debugserver; `Popen.poll()` can cache a false exit on
+ECHILD. Live identity now uses the actual image, and the child is waited only
+after detach. Also, installing a third simultaneous user breakpoint was refused.
+The sequential method keeps one owned point; LLDB's own additional hardware-point
+warnings are retained, never replaced with software breakpoints. Failed fixture
+attempts were explicitly recovered in their original PTYs before exiting.
+
+The fixture's raw enum case prints `group {}` without the associated group ID.
+A bounded one-byte fixture read distinguishes its cases, but this is not yet a
+qualified decoder of the app's group data. In the actual app's row child closure,
+DWARF exposes `card` and `self` but does not capture `attachment`; do not reuse the
+fixture selector there. Actual group extraction remains an explicit dependency.
+
+Offline G2 sites resolve uniquely in module UUID 3456EB33-6C0E-393F-8486-10961C55A994:
+Map.swift 23:13 → 0x116de4c (`origin`, `viewport`, `scale`), Connections.swift
+25:13 → 0x1169a0c (`origin`), Connections.swift 29:28 → 0x116a4d0 (card pair).
+Full filenames retain the PlayphrasemeGuestTour prefix. These are file addresses,
+not live load addresses or product admission. The next implementation is a fixed
+stationary-window profile using these sites and the existing G2 lifecycle guards;
+then non-author review and one batched owner run. No consumed packet is reset.
