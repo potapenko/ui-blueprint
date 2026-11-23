@@ -3,6 +3,13 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.6.1
+
+- Fix macOS window capture on an external volume. `capture-window` can now
+  save its PNG and metadata in a new capture directory under the caller’s
+  approved temporary directory on that volume. Existing captures are protected
+  against overwrite.
+
 ## 0.6.0
 
 - Add `Session::mark_or_render` to the opt-in GPUI source SDK. An element
