@@ -1,8 +1,35 @@
 // S15 synthetic geometry oracle, based on immutable native e19b20c47.
 // Keeps the Practice layout operators; no history, clipboard, network or app SDK.
-// Cursor adapters, app modal keyboard routing and localization are not reproduced.
-// This fixture cannot qualify those omitted parts or the real application's scope.
+// Native cursor attachments reproduce source geometry witnesses only; they do
+// not own visible content, actions or layout. Modal keyboard routing/localization
+// are omitted. This fixture cannot qualify those parts or the application's scope.
+import AppKit
 import SwiftUI
+
+// The donor already uses an actionless NSView overlay for pointing-hand cursor
+// delivery. A pure SwiftUI replacement would remove the native layout witness
+// being qualified. This test adapter intentionally has no cursor/input behavior.
+final class S15CursorView: NSView {
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+}
+
+struct S15CursorArea: NSViewRepresentable {
+    func makeNSView(context: Context) -> S15CursorView {
+        let view = S15CursorView()
+        view.setAccessibilityElement(false)
+        return view
+    }
+    func updateNSView(_ view: S15CursorView, context: Context) {}
+}
+
+private struct S15CursorWitness: ViewModifier {
+    @Environment(\.isEnabled) private var isEnabled
+    func body(content: Content) -> some View {
+        content.overlay {
+            if isEnabled { S15CursorArea().accessibilityHidden(true) }
+        }
+    }
+}
 
 private struct PracticeBounds: PreferenceKey {
     static let defaultValue: [String: [Anchor<CGRect>]] = [:]
@@ -14,9 +41,17 @@ private struct PracticeBounds: PreferenceKey {
 
 private extension View {
     func oracle(_ role: String) -> some View {
+        #if S15_NO_ORACLE
+        self
+        #else
         transformAnchorPreference(key: PracticeBounds.self, value: .bounds) { values, anchor in
             values[role, default: []].append(anchor)
         }
+        #endif
+    }
+
+    func cursorWitness() -> some View {
+        modifier(S15CursorWitness())
     }
 }
 
@@ -46,6 +81,7 @@ struct MacPracticeMaterial: View {
                         .oracle("pill-label-\(entry.id)")
                 }
                 .buttonStyle(.plain)
+                .cursorWitness()
                 .oracle("pill-button-\(entry.id)")
             }
         }
@@ -90,6 +126,7 @@ struct MacPracticeRoot: View {
                 Button("Close", systemImage: "xmark") {}
                     .buttonStyle(.glass).labelStyle(.iconOnly)
                     .font(.body.weight(.semibold)).buttonBorderShape(.circle).controlSize(.large)
+                    .cursorWitness()
                     .oracle("close")
             }
             .padding(.horizontal, 24).padding(.vertical, 16)
@@ -147,7 +184,7 @@ struct MacPracticeRoot: View {
             Spacer(minLength: 4)
             Menu { Button("Lesson 2") {} } label: { Text("Lesson 2") }
                 .menuStyle(.button).oracle("lesson-selector")
-        }.oracle("selectors")
+        }.cursorWitness().oracle("selectors")
     }
     private var footer: some View {
         ViewThatFits(in: .horizontal) {
@@ -159,13 +196,13 @@ struct MacPracticeRoot: View {
         Button {} label: {
             Text("Start new lesson").font(.body.weight(.semibold))
                 .frame(maxWidth: .infinity).padding(.vertical, 6)
-        }.disabled(empty).oracle("new-lesson")
+        }.cursorWitness().disabled(empty).oracle("new-lesson")
     }
     private var copyButton: some View {
         Button {} label: {
             Label("Copy practice prompt", systemImage: "checkmark")
                 .font(.body.weight(.semibold)).frame(maxWidth: .infinity).padding(.vertical, 6)
-        }.disabled(empty).oracle("copy")
+        }.cursorWitness().disabled(empty).oracle("copy")
     }
 }
 
@@ -181,6 +218,7 @@ private struct PracticeFixtureRoot: View {
         }
         .frame(width: 900, height: 820)
         .oracle("fixture-root")
+        #if !S15_NO_ORACLE
         .overlayPreferenceValue(PracticeBounds.self) { anchors in
             GeometryReader { root in
                 let frames = anchors.mapValues { occurrences in occurrences.map { root[$0] } }
@@ -195,6 +233,7 @@ private struct PracticeFixtureRoot: View {
                 }
             }
         }
+        #endif
     }
 }
 

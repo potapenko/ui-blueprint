@@ -83,11 +83,52 @@ Evidence: `/Volumes/Develop-2TB/Develop/tmp/uib-s15-practice-dhesfnl8`, includin
 Owned runtime and pinned scripts: `/private/tmp/uib-s15-practice-bbrbr9r2`.
 The exact failure and source fixture were sent directly to S13 and the consumer.
 
+## Native-witness continuation — 2026-11-23
+
+The user's follow-up explicitly requires continuing through the complete fix and
+real Practice verification, coordinating with the collector owner. No new plan
+approval is needed. S13 confirmed the `ancestor_owner` fixture seam. The fixture
+now has actionless native cursor overlays at the donor's Close, selectors, pills,
+New and Copy sites; disabled controls omit the witness through `isEnabled`.
+All visible content remains SwiftUI. `S15_NO_ORACLE` removes test anchor machinery
+for collection without claiming the resulting graph equals the donor's graph.
+Both variants compile. Oracle runs with cursor witnesses cover collapsed,
+expanded and empty states:21/22/17 roles; popup heights412.5/628.5/354.5pt.
+Prompt appears only expanded; pills/disclosure are absent empty. These checks
+establish the fixture oracle, not external collector or donor acceptance.
+
+Exact S13 candidate `0080570764b063e51e000fa10ebb0809d5e3d6ff` was independently
+reviewed in this chat for identity/backend listener ownership/recovery delta and
+native mapping/candidate-window checks. All104 focused checks were repeated from
+a staged Git copy:34 cache,9 transform,6 backend,27 capture,10 recovery,18 parts.
+Three additional mocked rejected/unbound, uncertain/bound and wrong-PID attach
+cases preserved target ownership; a changed second native basis refused stale_window.
+The dedicated primary listener is passed through connect, attach, calls and recovery.
+No blocking finding remained in this finite review. This is not a full private
+memory/backend binary audit or live qualification. The review and its limits were
+sent directly to S13; shared files remain owned by that chat.
+
+S13's prior loaded session still retains synthetic fixture PID54791, debugger58411
+and backend58432. Its queued normal recovery has not completed. The owner asked
+the user separately for exceptional process cleanup because the capture contract
+forbids external termination as a recovery substitute. This chat neither grants
+that exception nor touches those processes. S13 explicitly withholds new live
+attachment until the repaired procedure is qualified. The source review does not
+clear that runtime gate.
+
+The consumer freshly confirmed its unchanged PID18630 / birth1795452287.72546 /
+CG2024. It was launched without SWIFTUI_VIEW_DEBUG=29; the last observed state is
+Lesson2,2/2, collapsed, copied. Its new focused AX read returned target_unresolved,
+so current UI content is not freshly established. Any diagnostic launch is performed
+by that owner only, after a qualified exact command; no preemptive relaunch or
+entitlement change was requested.
+
 ## Next event and acceptance
 
-Waiting for S13's qualified bounded selector and native-window mapping revision.
-That owner has the reproducible scan-limit failure; do not duplicate its reader
-or select convenient branches while silently omitting others. A new mechanism
+Waiting for S13's successful sequential capture/restoration on the reviewed
+candidate after resolution of its exact retained-session recovery. That owner has
+the reproducible scan-limit failure; do not duplicate its reader or select
+convenient branches while silently omitting others. A new mechanism
 must first pass this fixture, retaining attribution and unknown/refusal behavior.
 Only then qualify an exact consumer-owned Practice identity and command. Verify
 collapsed2/2 plus an owner-performed state change, every requested part and its
