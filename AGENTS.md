@@ -1,7 +1,18 @@
 # Repository instructions
 
-This file contains local routing only. The operator's global `AGENTS.md` and
+This file contains project-specific instructions. The operator's global `AGENTS.md` and
 its conditional governance documents remain applicable; do not copy them here.
+
+## Standing authority for UI Blueprint source releases
+
+The user's instruction of 2026-11-23 (message `01a208f6-bbc6-7062-bf36-b0016c78c735`)
+replaces per-release confirmation for the UI Blueprint source channel. Implement
+requested fixes, select the version, verify the exact revision and install it
+through the managed installer. Publish the verified revision promptly as a
+source-only GitHub tag and release in `potapenko/ui-blueprint` without asking
+again. Check the published tag and send waiting teams the version, commit and
+tag-pinned installation or SDK update instructions. Existing approval rules
+still govern other projects, production services, binary distribution and host reboots.
 
 ## Read only the applicable route
 
