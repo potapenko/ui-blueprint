@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Finite offline command/binding/limits checks; no screen capture or app changes."""
 import argparse
+import os
 from pathlib import Path
 import subprocess
 import tempfile
@@ -28,6 +29,32 @@ def main():
                  '--out',str(root/'not-created'),'--request-id','wrong']
         result = subprocess.run([str(args.helper),'capture-window',*wrong],capture_output=True,timeout=3)
         assert result.returncode == 4 and not result.stdout and not (root/'not-created').exists()
+        task = os.environ.get('TMPDIR')
+        if task and Path(task).parts[1:2] == ('Volumes',) and Path(task).parent.name == 'tmp':
+            # This configuration also exercises the normal parser on an existing nested
+            # private directory. A wrong PID must reach identity lookup without creating output.
+            run = Path(task)
+            def expect_invalid(output, env=None):
+                flags = list(wrong)
+                flags[flags.index('--out') + 1] = str(output)
+                refusal = subprocess.run([str(args.helper), 'capture-window', *flags],
+                                         env=env, capture_output=True, timeout=3)
+                assert refusal.returncode == 2 and not refusal.stdout, refusal.stderr
+            expect_invalid(run.parent / 'unselected-sibling' / 'out')
+            alias = root / 'alias'
+            alias.symlink_to(root, target_is_directory=True)
+            expect_invalid(alias / 'out')
+            expect_invalid(alias / 'out', {**os.environ, 'TMPDIR': str(alias)})
+            alias.unlink()
+            root.chmod(0o755)
+            nested = subprocess.run([str(args.helper), 'capture-window', *wrong], capture_output=True, timeout=3)
+            assert nested.returncode == 4 and not nested.stdout
+            root.chmod(0o777)
+            try:
+                expect_invalid(root / 'out')
+            finally:
+                root.chmod(0o700)
+            print('External task directory scope/symlink/permissions: passed')
         print('Helper help/invalid-input/privacy/wrong-process: 6 passed')
     assert not root.exists()
 

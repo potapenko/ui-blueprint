@@ -19,13 +19,13 @@ final class NativeArtifactWriter: @unchecked Sendable {
     private var failed = false
     private var promoted = false
 
-    init(directory url: URL, destination: String, cap: Int, deadline: Double,
+    init(directory url: URL, destination: String, cap: Int, deadline: Double, captureDirectory: FileHandle? = nil,
          output: @escaping @Sendable (Int32, UnsafeRawPointer, Int) -> Int = { Darwin.write($0, $1, $2) }) throws {
         guard cap > 0, deadline.isFinite, !destination.isEmpty,
               !destination.contains("/"), !destination.utf8.contains(0), destination != ".", destination != ".."
         else { throw NativeAcquisitionError.invalidValue }
         self.cap = cap; self.deadline = deadline; self.destination = destination; self.output = output
-        directory = open(url.path, O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW)
+        directory = captureDirectory.map { dup($0.fileDescriptor) } ?? open(url.path, O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW)
         guard directory >= 0 else { throw NativeAcquisitionError.io }
         var info = stat()
         guard fstat(directory, &info) == 0, info.st_uid == geteuid() else {
@@ -92,16 +92,16 @@ final class NativeArtifactWriter: @unchecked Sendable {
     }
 }
 
-func writeNativePNG(_ image: CGImage, admission: NativeAcquisition, directory: URL, name: String) throws -> Int {
+func writeNativePNG(_ image: CGImage, admission: NativeAcquisition, directory: URL, name: String, captureDirectory: FileHandle? = nil) throws -> Int {
     let imageDirectory = directory.resolvingSymlinksInPath().path
     let temporaryRoot = FileManager.default.temporaryDirectory.resolvingSymlinksInPath().path
-    guard name.hasSuffix(".png"), imageDirectory == temporaryRoot || imageDirectory.hasPrefix(temporaryRoot + "/")
+    guard name.hasSuffix(".png"), captureDirectory != nil || imageDirectory == temporaryRoot || imageDirectory.hasPrefix(temporaryRoot + "/")
     else { throw NativeAcquisitionError.invalidValue }
     try admission.imageFootprint(width: image.width, height: image.height, rowBytes: image.bytesPerRow)
     guard image.bitsPerComponent == 8, image.bitsPerPixel == 32,
           image.colorSpace?.model == .rgb else { throw NativeAcquisitionError.invalidValue }
     let writer = try NativeArtifactWriter(directory: directory, destination: name,
-        cap: admission.limits.png_bytes, deadline: admission.deadline)
+        cap: admission.limits.png_bytes, deadline: admission.deadline, captureDirectory: captureDirectory)
     let consumer = try writer.consumer()
     guard let destination = CGImageDestinationCreateWithDataConsumer(consumer, UTType.png.identifier as CFString, 1, nil)
     else { throw NativeAcquisitionError.io }
@@ -109,11 +109,11 @@ func writeNativePNG(_ image: CGImage, admission: NativeAcquisition, directory: U
     return try writer.finish(encoderSucceeded: CGImageDestinationFinalize(destination))
 }
 
-func writeNativeSidecar(_ value: [String: Any], name: String, admission: NativeAcquisition, directory: URL) throws -> Int {
+func writeNativeSidecar(_ value: [String: Any], name: String, admission: NativeAcquisition, directory: URL, captureDirectory: FileHandle? = nil) throws -> Int {
     let frame = try NativeJSONFrame(capacity: admission.limits.sidecar_bytes, deadline: admission.deadline)
     try frame.encode(value)
     let writer = try NativeArtifactWriter(directory: directory, destination: name,
-        cap: admission.limits.sidecar_bytes, deadline: admission.deadline)
+        cap: admission.limits.sidecar_bytes, deadline: admission.deadline, captureDirectory: captureDirectory)
     let size = frame.bytes { writer.put($0.baseAddress!, count: $0.count) }
     return try writer.finish(encoderSucceeded: size == frame.count)
 }

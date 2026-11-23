@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 89 (recoverable GPUI marker refusals).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 90 (external task-scoped native capture directory).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -98,7 +98,7 @@ remain separate. Existing SwiftUI, Web, Compose, core and release scope are prot
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
 | External SwiftUI debug-layout candidate | [SWIFTUI-DEBUG-CAPTURE@14](product/swiftui-debug-capture.md) | Product admission withdrawn after real Settings failure; retained owner recovery |
-| Independent lossless native PNG | [NATIVE-CAPTURE@1](product/native-capture.md) | Explicit exact process/window capture; donor code unchanged |
+| Independent lossless native PNG | [NATIVE-CAPTURE@2](product/native-capture.md) | Explicit exact process/window capture; donor code unchanged |
 | Explicit GPUI runtime geometry | [GPUI-PROBE@3](product/gpui-probe.md) | Registered window root, dynamic marked occurrences and explicit subtree; no client implementation |
 | Explicit real-app SwiftUI geometry | [SWIFTUI-PROBE@3](product/swiftui-probe.md) | Debug producer, mounted subtree and explicit subset, real app proof required |
 | Ordinary SwiftUI Search with localhost | [NORMAL-SEARCH@1](product/swiftui-normal-search.md) | Real API/media, normal workspace geometry and same-session resize; no artificial error scenario |

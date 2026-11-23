@@ -75,17 +75,16 @@ and unsupported parts. A root rectangle or marker count alone does not prove cov
 
 ## Files and delivery
 
-Use a unique system-temp directory for transient observations, queries and exports.
-Remove only named run-owned non-image files after their result is accepted; verify
-removal and remove empty directories only. Never recursively delete a directory
-containing images. Do not create persistent output directories without authorization.
+Use the operator's designated temporary storage. Verify that the intended volume
+is mounted and writable before creating a unique private task directory. Record
+its owner, purpose and retention condition. Keep accepted images and any evidence
+still needed by another consumer; clean up only identified disposable task files.
+The [macOS recipe](references/macos.md#independent-native-png-from-the-selected-window)
+shows how to direct native window captures to a task directory on a mounted volume.
 
-All created images, screenshots and variants belong in system temp and are never
-agent-cleaned. If a tool chooses its own output path, copy into temp without deleting,
-moving or overwriting the original, and disclose that the tool-managed original remains.
-Show images inline with the retained absolute temp path; a saved-file notice is not
-delivery. Check privacy before collecting/exporting pixels; text redaction does not
-redact a screenshot. Do not transmit private UI data merely because export succeeded.
+Show requested images inline using the retained file. If a tool controls the original
+location, copy the needed output into the task directory and disclose that the
+original remains. Check privacy before collecting, showing or transmitting pixels.
 
 Report the answer first, followed by the measured value/units/space and source scope,
 any unmet requirement and material unknowns. Separate numeric checks, interaction

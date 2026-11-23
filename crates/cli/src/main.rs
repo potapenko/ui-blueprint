@@ -29,7 +29,7 @@ use uiblueprint_schema::{analysis::*, model::*, validation};
 
 const HELP: &str = "UI Blueprint: local saved-snapshot geometry and engineering export\n\
 Version: uiblueprint --version\n\
-Native PNG: capture-window --pid PID --window-id CG_WINDOW_ID --expected-bundle BUNDLE --out NEW_SYSTEM_TEMP_DIRECTORY --request-id ID [--deadline-ms N] [--expected-launch-time SECONDS]\n\
+Native PNG: capture-window --pid PID --window-id CG_WINDOW_ID --expected-bundle BUNDLE --out NEW_TASK_TEMP_DIRECTORY --request-id ID [--deadline-ms N] [--expected-launch-time SECONDS]\n\
 Compose import: import-compose --input FILE --max-input-bytes N --max-output-bytes N (saved explicit debug probe; no live revalidation)\n\
 Declared comparison: compare --before FILE --after FILE --correspondence FILE --max-input-bytes N --max-output-bytes N --max-entries N [--json]\n\
 Comparison diagnostic: compare --before FILE --after FILE --diagnose --max-input-bytes N --max-output-bytes N [--json]\n\

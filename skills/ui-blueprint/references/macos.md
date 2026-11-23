@@ -165,6 +165,25 @@ version). This path requires existing Screen Recording permission; it never open
 a permission prompt. It performs no app launch, focus, input or resize. The app
 owner supplies an authorized live PID and expected bundle ID.
 
+For an operator-designated mounted volume, set `UIB_VOLUME` to its mount path
+and `UIB_TMP_BASE` to its approved existing directory named `tmp` on that volume.
+In a task shell verify the mount before creating private temporary storage:
+
+```sh
+test -n "${UIB_VOLUME:-}" && test -n "${UIB_TMP_BASE:-}" &&
+test "$(stat -f %d "$UIB_VOLUME")" != "$(stat -f %d "$(dirname "$UIB_VOLUME")")" &&
+test "$(stat -f %d "$UIB_TMP_BASE")" = "$(stat -f %d "$UIB_VOLUME")" &&
+test -d "$UIB_TMP_BASE" && test -w "$UIB_TMP_BASE" || exit 1
+UIB_RUN=$(mktemp -d "$UIB_TMP_BASE/uib-window.XXXXXXXX") || exit 1
+export TMPDIR="$UIB_RUN" TMP="$UIB_RUN" TEMP="$UIB_RUN"
+```
+
+Record the task owner, purpose and retention condition in this directory.
+The capture helper admits destinations below this caller-owned 0700 task root;
+intervening directories must remain on the same device, owned and free of symlinks,
+with write access restricted to their owner.
+Where system temp is the approved storage, the existing system-temp recipe applies.
+
 First obtain actual CGWindowIDs for that PID, without capturing anything:
 
 ```sh
@@ -184,11 +203,10 @@ Only numeric metadata from the selected PID is returned, never foreign titles.
   --out "$UIB_RUN/native-window" --request-id "window-reference"
 ```
 
-`UIB_RUN` is an existing caller-owned system-temp directory; `native-window` must
+`UIB_RUN` is the verified caller-owned task directory; `native-window` must
 not yet exist. The command returns bounded JSON and writes `window.png` plus
 `capture.json`. PNG is native lossless full-window SDR, at source scale, without
-shadow/cursor/audio/child windows and without resizing/upscaling. Preserve all
-images including staging files; failures never authorize image deletion.
+shadow/cursor/audio/child windows and without resizing/upscaling. Keep images and staging files according to the task ownership and retention policy.
 The default deadline is5seconds; `--deadline-ms` accepts100–10000. Pixel ceilings
 4096 per side and8,388,608 total refuse larger output rather than downscale it.
 

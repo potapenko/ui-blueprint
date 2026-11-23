@@ -12,6 +12,7 @@ enum NativeWindowCapture {
         let window: UInt32
         let bundle: String
         let output: URL
+        let parentDirectory: FileHandle
         let request: String
         let deadlineMS: Int
         let expectedLaunch: Double?
@@ -42,15 +43,58 @@ enum NativeWindowCapture {
                 guard let number = Double(value), number.isFinite, number > 0 else { throw invalid() }
                 launch = number
             }
-            let output = URL(fileURLWithPath: path).standardizedFileURL
-            let parent = output.deletingLastPathComponent().resolvingSymlinksInPath()
-            let temp = FileManager.default.temporaryDirectory.resolvingSymlinksInPath().path
-            guard parent.path == temp || parent.path.hasPrefix(temp + "/"),
-                  output.lastPathComponent != ".", output.lastPathComponent != ".." else {
-                throw Refusal(code: "destination_must_be_system_temp", exit: 2)
+            let url = URL(fileURLWithPath: path)
+            let output = url.standardizedFileURL
+            func canonical(_ path: String) throws -> String {
+                guard let actual = realpath(path, nil) else { throw Refusal(code: "invalid_destination", exit: 2) }
+                defer { free(actual) }
+                return String(cString: actual)
+            }
+            let parent = try canonical(output.deletingLastPathComponent().path)
+            let temp = try canonical(FileManager.default.temporaryDirectory.path)
+            let flags = O_RDONLY | O_DIRECTORY | O_CLOEXEC
+            let parentDirectory: FileHandle
+            if path.hasPrefix("/Volumes/") || parent.hasPrefix("/Volumes/") || (parent != temp && !parent.hasPrefix(temp + "/")) {
+                // Darwin Foundation may return the user cache volume even when TMPDIR
+                // names a different, explicitly selected task workspace.
+                guard path == output.path, let task = ProcessInfo.processInfo.environment["TMPDIR"],
+                      task.hasPrefix("/") else { throw Refusal(code: "destination_must_be_system_temp", exit: 2) }
+                let taskPath = task.hasSuffix("/") ? String(task.dropLast()) : task
+                let components = URL(fileURLWithPath: taskPath).pathComponents
+                let parentPath = output.deletingLastPathComponent().path
+                guard components.count >= 5, components[1] == "Volumes", components[components.count-2] == "tmp",
+                      parent == parentPath, parentPath == taskPath || parentPath.hasPrefix(taskPath + "/") else {
+                    throw Refusal(code: "destination_must_be_system_temp", exit: 2)
+                }
+                func ownedDirectory(_ fd: Int32, on device: dev_t? = nil) throws -> FileHandle {
+                    guard fd >= 0 else { throw Refusal(code: "invalid_destination", exit: 2) }
+                    let handle = FileHandle(fileDescriptor: fd, closeOnDealloc: true)
+                    var info = stat()
+                    guard fstat(fd, &info) == 0, info.st_uid == geteuid(),
+                          device.map({ info.st_dev == $0 && info.st_mode & 0o022 == 0 }) ?? (info.st_mode & 0o777 == 0o700) else {
+                        throw Refusal(code: "invalid_destination", exit: 2)
+                    }
+                    return handle
+                }
+                var handle = try ownedDirectory(open(taskPath, flags | O_NOFOLLOW_ANY))
+                var mount = statfs()
+                let volume = "/Volumes/" + components[2]
+                guard fstatfs(handle.fileDescriptor, &mount) == 0, withUnsafeBytes(of: &mount.f_mntonname, {
+                    String(decoding: $0.prefix(while: { $0 != 0 }), as: UTF8.self) == volume
+                }) else { throw Refusal(code: "invalid_destination", exit: 2) }
+                var rootInfo = stat()
+                guard fstat(handle.fileDescriptor, &rootInfo) == 0 else { throw Refusal(code: "invalid_destination", exit: 2) }
+                for child in parentPath.dropFirst(taskPath.count).split(separator: "/") {
+                    handle = try ownedDirectory(openat(handle.fileDescriptor, String(child), flags | O_NOFOLLOW), on: rootInfo.st_dev)
+                }
+                parentDirectory = handle
+            } else {
+                let fd = open(parent, flags | O_NOFOLLOW_ANY)
+                guard fd >= 0 else { throw Refusal(code: "invalid_destination", exit: 2) }
+                parentDirectory = FileHandle(fileDescriptor: fd, closeOnDealloc: true)
             }
             return Options(pid: pid, window: window, bundle: bundle,
-                output: parent.appendingPathComponent(output.lastPathComponent, isDirectory: true),
+                output: URL(fileURLWithPath: parent, isDirectory: true).appendingPathComponent(output.lastPathComponent, isDirectory: true), parentDirectory: parentDirectory,
                 request: request, deadlineMS: deadline, expectedLaunch: launch)
         }
     }
@@ -104,7 +148,7 @@ enum NativeWindowCapture {
         }
     }
     static let help = """
-    capture-window --pid PID --window-id CG_WINDOW_ID --expected-bundle BUNDLE --out NEW_SYSTEM_TEMP_DIRECTORY --request-id ID [--deadline-ms 100..10000] [--expected-launch-time SECONDS]
+    capture-window --pid PID --window-id CG_WINDOW_ID --expected-bundle BUNDLE --out NEW_TASK_TEMP_DIRECTORY --request-id ID [--deadline-ms 100..10000] [--expected-launch-time SECONDS]
     capture-window --list-windows --pid PID --expected-bundle BUNDLE [--expected-launch-time SECONDS]
     Exact already-running window; lossless native window.png + capture.json. No shadow/cursor/audio/child windows, no focus/resize/permission prompt/retry. Default deadline5000ms; maximum4096x4096 and8388608 pixels. All image files remain, including partials on failure.
     """
@@ -117,21 +161,37 @@ enum NativeWindowCapture {
             image_width: 4096, image_height: 4096, image_pixels: 8388608,
             image_bytes: 67108864, png_bytes: 67108864, sidecar_bytes: 16384)
     }
-    static func newDirectory(_ url: URL) throws {
-        let parent = open(url.deletingLastPathComponent().path, O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC)
-        guard parent >= 0 else { throw Refusal(code: "invalid_destination", exit: 2) }
-        defer { close(parent) }
+    static func requireSameDirectory(_ url: URL, _ held: FileHandle) throws {
+        var expected = stat(), actual = stat()
+        let fd = open(url.path, O_RDONLY | O_DIRECTORY | O_NOFOLLOW_ANY | O_CLOEXEC)
+        guard fd >= 0 else { throw Refusal(code: "destination_changed", exit: 2) }
+        defer { close(fd) }
+        guard fstat(held.fileDescriptor, &expected) == 0, fstat(fd, &actual) == 0,
+              expected.st_dev == actual.st_dev, expected.st_ino == actual.st_ino else {
+            throw Refusal(code: "destination_changed", exit: 2)
+        }
+    }
+    @discardableResult static func newDirectory(_ url: URL, parentDirectory: FileHandle) throws -> FileHandle {
+        try requireSameDirectory(url.deletingLastPathComponent(), parentDirectory)
+        let parent = parentDirectory.fileDescriptor
         var info = stat()
         guard fstat(parent, &info) == 0, info.st_uid == geteuid(),
               mkdirat(parent, url.lastPathComponent, mode_t(0o700)) == 0 else {
             throw Refusal(code: "destination_exists_or_unavailable", exit: 2)
         }
+        let directory = openat(parent, url.lastPathComponent, O_RDONLY | O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC)
+        guard directory >= 0 else { throw Refusal(code: "invalid_destination", exit: 2) }
+        let handle = FileHandle(fileDescriptor: directory, closeOnDealloc: true)
+        guard fstat(directory, &info) == 0, info.st_uid == geteuid(), info.st_mode & 0o077 == 0 else {
+            throw Refusal(code: "invalid_destination", exit: 2)
+        }
+        return handle
     }
     static func rect(_ value: CGRect) -> [String: Double] {
         ["x": value.minX, "y": value.minY, "width": value.width, "height": value.height]
     }
-    static func imageHash(_ url: URL, maxBytes: Int) throws -> String {
-        let fd = open(url.path, O_RDONLY | O_NOFOLLOW | O_CLOEXEC)
+    static func imageHash(_ directory: FileHandle, maxBytes: Int) throws -> String {
+        let fd = openat(directory.fileDescriptor, "window.png", O_RDONLY | O_NOFOLLOW | O_CLOEXEC)
         guard fd >= 0 else { throw NativeAcquisitionError.io }
         let file = FileHandle(fileDescriptor: fd, closeOnDealloc: true)
         defer { try? file.close() }
@@ -143,14 +203,14 @@ enum NativeWindowCapture {
         }
         return hash.finalize().map { String(format: "%02x", $0) }.joined()
     }
-    @MainActor static func execute(_ options: Options, deadline: Double) async throws -> (metadata: [String: Any], geometry: CaptureGeometry, process: ProcessIdentity) {
+    @MainActor static func execute(_ options: Options, deadline: Double) async throws -> (metadata: [String: Any], geometry: CaptureGeometry, process: ProcessIdentity, directory: FileHandle) {
         let started = ProcessInfo.processInfo.systemUptime
         let startedUTC = Date().timeIntervalSince1970
         let process = try ProcessIdentity.read(options)
         let before = try CaptureGeometry.read(windowID: options.window, pid: options.pid)
         guard before.frame.width > 0, before.frame.height > 0 else { throw invalid() }
         guard CGPreflightScreenCaptureAccess() else { throw OwnedCaptureError.permissionRequired }
-        try newDirectory(options.output)
+        let directory = try newDirectory(options.output, parentDirectory: options.parentDirectory)
         let acquisition = try NativeAcquisition(limits(), deadline: deadline)
         let acquiredStart = ProcessInfo.processInfo.systemUptime
         // This command owns its process; no H01 parent or reusable session is created.
@@ -160,8 +220,8 @@ enum NativeWindowCapture {
         let acquiredEnd = ProcessInfo.processInfo.systemUptime
         guard try ProcessIdentity.read(options) == process else { throw OwnedCaptureError.staleTarget }
         try before.requireUnchanged(CaptureGeometry.read(windowID: options.window, pid: options.pid))
-        let bytes = try writeNativePNG(capture.image, admission: acquisition, directory: options.output, name: "window.png")
-        let hash = try imageHash(options.output.appendingPathComponent("window.png"), maxBytes: limits().png_bytes)
+        let bytes = try writeNativePNG(capture.image, admission: acquisition, directory: options.output, name: "window.png", captureDirectory: directory)
+        let hash = try imageHash(directory, maxBytes: limits().png_bytes)
         guard try ProcessIdentity.read(options) == process else { throw OwnedCaptureError.staleTarget }
         try before.requireUnchanged(CaptureGeometry.read(windowID: options.window, pid: options.pid))
         try acquisition.check()
@@ -193,7 +253,7 @@ enum NativeWindowCapture {
             "mapping": mapping,
             "association": ["layout_snapshot_modified": false, "layout_root_to_window": "consumer_verification_required",
                 "presented_frame_atomicity": "unknown", "occlusion": "not_established"]]
-        return (metadata, before, process)
+        return (metadata, before, process, directory)
     }
     @MainActor static func run(_ arguments: [String]) async -> Int32 {
         if arguments == ["--help"] { FileHandle.standardOutput.write(Data((help + "\n").utf8)); return 0 }
@@ -222,15 +282,16 @@ enum NativeWindowCapture {
             guard data.count + 1 <= 16384 else { throw NativeAcquisitionError.limit }
             // Publication is one complete response. Metadata accompanies the retained PNG.
             let admission = try NativeAcquisition(limits(), deadline: deadline)
-            _ = try writeNativeSidecar(result, name: "capture.json", admission: admission, directory: options.output)
+            _ = try writeNativeSidecar(result, name: "capture.json", admission: admission, directory: options.output, captureDirectory: captured.directory)
             do {
                 guard try ProcessIdentity.read(options) == captured.process else { throw OwnedCaptureError.staleTarget }
                 try captured.geometry.requireUnchanged(CaptureGeometry.read(windowID: options.window, pid: options.pid))
+                try requireSameDirectory(options.output, captured.directory)
                 try admission.check()
             } catch {
                 // Only this request's non-image sidecar is retired on failed final validation.
                 // PNG/staging image paths are always retained and never advertised as success.
-                try? FileManager.default.removeItem(at: options.output.appendingPathComponent("capture.json"))
+                _ = unlinkat(captured.directory.fileDescriptor, "capture.json", 0)
                 throw error
             }
             FileHandle.standardOutput.write(data); FileHandle.standardOutput.write(Data([10]))

@@ -1,17 +1,18 @@
 # Exact native window PNG
 
-- Node type: leaf; domain: `uib.native-capture`; contract: `UIB.NATIVE-CAPTURE@1`.
+- Node type: leaf; domain: `uib.native-capture`; contract: `UIB.NATIVE-CAPTURE@2`.
 - Authority: Active / Evolving; bounded local qualification: [delivery](../../plans/native-window-capture.md).
 - Authority source: direct user messages01a1ddf8-8471-7e91-88d4-dc38e80cf501 and
   01a1ddfa-0e60-74d2-b771-de13f9467652, chat01a1dcba-7955-7591-9bfb-4d0078eea8cf,
   2026-11-15: Blueprint itself captures the native window; donors remain read-only.
+  @2 follows the operator’s 2026-11-23 external task storage and retention instruction.
 - Requires: [NATIVE@5](native.md), [IDENTITY@1](identity.md),
   [GEOMETRY@2](geometry.md), [PRIVACY@1](privacy.md), [CLI@21](cli.md).
 
 ## CAPTURE.CALL — One ordinary installed command
 
 `uiblueprint capture-window --pid P --window-id W --expected-bundle B
---out NEW_SYSTEM_TEMP_DIRECTORY --request-id ID [--deadline-ms N]
+--out NEW_TASK_TEMP_DIRECTORY --request-id ID [--deadline-ms N]
 [--expected-launch-time SECONDS]` uses the matching installed native-host-helper.
 The macos feature and matching helper are required; unavailable builds refuse5.
 The app must already be running and its selected window authorized for capture.
@@ -43,9 +44,13 @@ Reuse existing CaptureLifecycle, CaptureGeometry and capped NativeArtifacts PNG
 encoding. Natural source scale comes from SCContentFilter.pointPixelScale, never
 inferred only from buffer size. Full single-window frame, no shadow/cursor/audio,
 SDR, no child windows, no resize/upscale or image recomposition. Lossless PNG only.
-The caller supplies a new directory under system temp; create private exclusive
-files, never overwrite. Original/staging/failure images remain and are never cleaned
-by the agent. Advertise only a complete validated PNG; failed images stay unadvertised.
+The caller supplies a new output directory under system temp or a new private directory below
+an explicitly selected private task TMPDIR on a mounted volume. The external
+TMPDIR is a caller-owned 0700 task directory under a directory named tmp. Intermediate directories below it must remain on the same device, caller-owned and not writable by other users. Match
+the canonical path without symlink traversal. Hold the selected directories
+through capture and publication. Write exclusive private files, never overwrite.
+Advertise only a complete validated PNG. The caller manages retained images
+and staging files according to the current task storage and retention policy.
 PNG is independent native capture, not a CUA frame or a renderer recreation.
 
 ## CAPTURE.METADATA — Association without a producer change
