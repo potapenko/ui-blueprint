@@ -41,6 +41,9 @@ These are offline file addresses, revalidated after attach, not load addresses.
 `rect=geometry[anchor]`; target is a registered global rectangle translated by
 connections origin. Map viewport uses its own reported origin. Local→SwiftUI
 .global translations are explicit; no screen/image transform is inferred.
+The card's canonical extensions preserve `connector_start_x_pt`,
+`connector_start_y_pt` and their `connector_start_space`; the viewport preserves
+the dimensionless `annotation_scale`. Each uses its actual read Observation.
 Group identity is a stored four-case enum. Static Optional nil/some is checked
 first; some reads only the first byte at the qualified56-byte Group? storage.
 The fixture confirms nil may also have byte0, so that byte alone never means

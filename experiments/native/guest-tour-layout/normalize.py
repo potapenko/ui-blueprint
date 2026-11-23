@@ -82,6 +82,13 @@ def normalize(record):
                                               declaration("module_uuid", MODULE), declaration("read_interval_ns", f"{start}:{end}")],
                       "properties": [{"field": "layout_bounds", "selection": "requested", "sensitivity": "public", "evidence": evidence,
                                       "state": {"availability": "known", "value": {"type": "geometry", "value": geometry}}}]})
+    for axis, value in zip(("x", "y"), connector_start):
+        nodes[0]["extensions"].append({"namespace": NAMESPACE, "name": "connector_start_" + axis + "_pt",
+            "property": {"field": "value", "selection": "requested", "sensitivity": "public", "evidence": evidence,
+                         "state": {"availability": "known", "value": {"type": "number", "value": value}}}})
+    nodes[0]["extensions"].append({"namespace": NAMESPACE, "name": "connector_start_space",
+        "property": {"field": "value", "selection": "requested", "sensitivity": "public", "evidence": evidence,
+                     "state": {"availability": "known", "value": {"type": "text", "value": space["id"]}}}})
     snapshot = {
         "id": "guest-tour-" + observation_id, "revision": 1,
         "context": {"schema_version": "0.1.0", "session_id": observation_id,
@@ -170,6 +177,11 @@ def normalize_component(record):
     map_node = copy.deepcopy(snapshot["nodes"][0])
     map_node["key"]["key"] = "map.viewport"
     map_node["source_declarations"] = []
+    map_node["extensions"] = [{"namespace": NAMESPACE, "name": "annotation_scale",
+        "property": {"field": "value", "selection": "requested", "sensitivity": "public",
+                     "evidence": {"source_namespace": NAMESPACE, "observation_id": rows[0]["observation_id"],
+                                  "method": "map-source-static-locals", "provenance": "reported", "uncertainty": None},
+                     "state": {"availability": "known", "value": {"type": "number", "value": map_values["scale"][0]}}}}]
     prop = map_node["properties"][0]
     prop["evidence"].update(observation_id=rows[0]["observation_id"], method="map-source-static-locals")
     geometry = prop["state"]["value"]["value"]

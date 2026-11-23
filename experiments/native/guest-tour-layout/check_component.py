@@ -30,6 +30,13 @@ def main():
     assert len(snapshot["observations"]) == 3
     assert all(o["consistency"] == "unknown" for o in snapshot["observations"])
     first, _, viewport = snapshot["nodes"]
+    assert [(x["name"], x["property"]["state"]["value"]["value"]) for x in first["extensions"][:2]] == [
+        ("connector_start_x_pt", 240), ("connector_start_y_pt", 210)]
+    assert first["extensions"][2]["property"]["state"]["value"]["value"] == first["properties"][0]["state"]["value"]["value"]["coordinate_space"]["id"]
+    assert all(x["property"]["evidence"]["observation_id"] == receipt["records"][2]["observation_id"] for x in first["extensions"])
+    scale = viewport["extensions"][0]
+    assert scale["name"] == "annotation_scale" and scale["property"]["state"]["value"] == {"type": "number", "value": 1}
+    assert scale["property"]["evidence"]["observation_id"] == receipt["records"][0]["observation_id"]
     space = first["properties"][0]["state"]["value"]["value"]["transform"]["transform"]["to"]
     query = {"schema_version": "0.2.0", "artifact": {"kind": "geometry_query", "data": {
         "id": "different-local-origins", "scope_id": snapshot["context"]["scope_id"],
