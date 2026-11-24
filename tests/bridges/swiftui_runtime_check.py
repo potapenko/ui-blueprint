@@ -140,6 +140,35 @@ class RuntimeChecks(unittest.TestCase):
                 self.assertEqual(sentinel.read_bytes(), b"preserve")
                 self.assertEqual(list(root.iterdir()), [sentinel])
 
+    def test_measure_preflight_expiry_never_dispatches_source(self):
+        argv = ["caller", "measure", "--session", "unused", "--type", "Fixture.Root",
+                "--relation", "width", "--bundle", "/unused", "--timeout", "1"]
+        with patch.object(runtime.sys, "argv", argv), \
+             patch.object(runtime.time, "monotonic", side_effect=[100, 102]), \
+             patch.object(runtime, "require_result_only"), patch.object(runtime, "request") as request:
+            with self.assertRaisesRegex(runtime.Failure, "^measurement_deadline$"):
+                runtime.main()
+            request.assert_not_called()
+
+    def test_preflight_and_source_share_the_absolute_deadline(self):
+        argv = ["caller", "measure", "--session", "unused", "--type", "Fixture.Root",
+                "--relation", "width", "--bundle", "/unused", "--timeout", "1"]
+        with patch.object(runtime.sys, "argv", argv), \
+             patch.object(runtime.time, "monotonic", side_effect=[100, 100.25]), \
+             patch.object(runtime, "require_result_only"), \
+             patch.object(runtime, "request", return_value=({}, None)) as request, patch("builtins.print"):
+            runtime.main()
+            self.assertEqual(request.call_args.args[4], .75)
+            self.assertEqual(request.call_args.kwargs, {"deadline": 101})
+
+    def test_endpoint_preparation_expiry_refuses_before_publication(self):
+        with patch.object(runtime, "endpoint", return_value=(Path("/unused"), dict(run_id="run", capability="private"))), \
+             patch.object(runtime.time, "monotonic", side_effect=[100, 102]), \
+             patch.object(runtime, "publish") as publish:
+            with self.assertRaisesRegex(runtime.Failure, "^request_deadline_before_dispatch$"):
+                runtime.request("unused", "capture", timeout=1)
+            publish.assert_not_called()
+
     def test_large_capacity_and_result_only_bundle_admission(self):
         self.assertEqual(runtime.MAX_BYTES, 1_073_741_824)
         for kind in ("source_nodes", "native_nodes"):

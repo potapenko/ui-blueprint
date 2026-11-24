@@ -2,7 +2,7 @@
 
 Owner: [capacity implementation](codex://threads/01a20f35-c7e4-7490-9d62-2e06b6357999).
 Review/architecture: [SDK owner](codex://threads/01a20a46-e5d0-7710-a5ce-9a93d8b82f02).
-Status: fixture-qualified candidate; independent review and actual app acceptance pending.
+Status: fixture-qualified candidate; review requested a caller deadline correction; actual app acceptance pending.
 
 ## Authority, basis and scope
 
@@ -102,6 +102,18 @@ result-only-timing.json and concurrency-eight-baseline.json. Internal app/tests 
 candidate Rust bundle: `/tmp/uib-large-runtime-01a20f35-kf70_nls`; these are task-owned
 verification artifacts, not an installed release. Evidence retained through review
 and actual consumer acceptance; builds/runtime cleaned only after consumers exit.
+
+## Independent review delta
+
+SDK owner reviewed1598658 capacity/compatibility/privacy and Rust borrowed result
+projection without blocking findings there; independently reran Python14/14 and
+checked saved timings/legacy SHA. One P2: slow Rust-help preflight could consume
+the overall deadline while source request restarted the full duration. Correction
+passes the same absolute deadline through preflight/request/measurement and checks
+it again before source publication, including endpoint setup. Focused fake-clock
+tests prove no dispatch after expiry and exact remaining budget. Python17/17 and
+diff checks pass. SDK/Rust and their existing runtime evidence are unchanged;
+delta review is pending, with no redundant build/live matrix.
 
 ## Remaining acceptance
 

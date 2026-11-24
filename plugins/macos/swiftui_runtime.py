@@ -152,7 +152,9 @@ def endpoint(path):
     return path.parent, value
 
 
-def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None):
+def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None, *, deadline=None):
+    if deadline is None:
+        deadline = time.monotonic() + timeout
     root, descriptor = endpoint(session)
     if subtree_type is not None:
         if (operation != "capture" or not isinstance(subtree_type, str) or not subtree_type
@@ -173,8 +175,9 @@ def request(session, operation, window=None, generation=None, timeout=30, subtre
                    window=window, windowGeneration=generation)
     if subtree_type is not None:
         payload["subtreeType"] = subtree_type
+    if time.monotonic() >= deadline:
+        raise Failure("request_deadline_before_dispatch")
     publish(input_path, encoded(payload))
-    deadline = time.monotonic() + timeout
     try:
         while not response_path.exists():
             if time.monotonic() >= deadline:
@@ -350,8 +353,12 @@ def main():
         args.deadline = time.monotonic() + args.timeout
         if args.command == "measure":
             require_result_only(args.bundle, args.timeout)
+        remaining = args.deadline - time.monotonic()
+        if remaining <= 0:
+            raise Failure("measurement_deadline" if args.command == "measure" else "request_deadline_before_dispatch")
         result, raw = request(args.session, args.command if args.command in ("windows", "discover") else "capture",
-                              args.window, args.generation, args.timeout, getattr(args, "subtree_type", None))
+                              args.window, args.generation, remaining, getattr(args, "subtree_type", None),
+                              deadline=args.deadline)
         if raw is not None:
             artifact = "discovery" if args.command == "discover" else "snapshot"
             result.pop(artifact, None)
