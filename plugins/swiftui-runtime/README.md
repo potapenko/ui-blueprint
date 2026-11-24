@@ -58,6 +58,15 @@ python3 -B "$CALLER" measure --session "$SESSION_DESCRIPTOR" --window "$WINDOW" 
   --type SwiftUI.Color --relation width --bundle "$UIB_BUNDLE"
 ```
 
+`discover --session ... --window ... --generation ... --out NEW_FILE` saves
+source-reported nominal type counts and compact topology without serializing a
+full geometry Snapshot. It requires the `discover-types` endpoint capability.
+The separate versioned artifact preserves observation/run/window attribution and
+all source nodes under the same limits; it contains no geometry or model values.
+Use it to identify a source-backed candidate for a subsequent fresh subtree query,
+not as a stable index handle or proof of a missing custom View's identity. See
+[discovery instructions](../../skills/ui-blueprint/references/swiftui-runtime.md#discover-actual-types-when-a-full-snapshot-overflows).
+
 With a matching SDK, `capture`, `tree` and `measure` also accept
 `--subtree-type ExampleApp.SearchRoot`. This selects one exact source-reported
 nominal type and all its descendants before serialization; ancestors are retained
@@ -118,7 +127,7 @@ their bounding envelope as containment. Source-local dimensions remain available
 Full real-app coverage/transitions remain incomplete. They do not block the
 user-authorized experimental release; packaging/installation verification and
 the documented capability boundary govern that delivery under
-[SWIFTUI-RUNTIME@5](../../docs/specs/product/swiftui-runtime-probe.md).
+[SWIFTUI-RUNTIME@6](../../docs/specs/product/swiftui-runtime-probe.md).
 
 The agent-facing preparation and query instructions live in
 [setup](../../skills/ui-blueprint/references/swiftui-setup.md) and

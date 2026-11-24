@@ -145,9 +145,51 @@ final class RuntimeTests: XCTestCase {
             try RuntimeEncoding.snapshot(value, session: "s", bundle: "fixture", request: "r", sequence: 1)
         }
         XCTAssertThrowsError(try encode(full)) { XCTAssertEqual($0 as? RuntimeRefusal, .outputLimit) }
+        let inventory = try RuntimeEncoding.discovery(full, session: "s", bundle: "fixture", request: "r")
+        XCTAssertLessThan(inventory.count, 1_000_000)
         let selected = try full.selecting(type: "Fixture.Dialog")
         XCTAssertEqual(selected.nodes.count, 2)
         XCTAssertLessThan(try encode(selected).count, 16_384)
+    }
+
+    func testDiscoveryPreservesTypeCountsTopologyAndUnknownTypesWithoutGeometry() throws {
+        let nodes = [
+            RuntimeNode(index: 0, parent: nil, hostingRoot: 0, type: "Fixture.Root", position: .zero, size: .init(width: 400, height: 300)),
+            RuntimeNode(index: 1, parent: 0, hostingRoot: 0, type: "SwiftUI.Text", position: nil, size: nil),
+            RuntimeNode(index: 2, parent: 0, hostingRoot: 0, type: "SwiftUI.Text", position: nil, size: nil),
+            RuntimeNode(index: 3, parent: nil, hostingRoot: 1, type: nil, position: nil, size: nil)
+        ]
+        let observation = RuntimeObservation(id: "o", start: 1, end: 2, window: 7,
+            windowGeneration: "g", nodes: nodes, hostingRoots: 2)
+        let bytes = try RuntimeEncoding.discovery(observation, session: "s", bundle: "fixture", request: "r")
+        let doc = try XCTUnwrap(JSONSerialization.jsonObject(with: bytes) as? [String: Any])
+        XCTAssertEqual(doc["kind"] as? String, "swiftui_runtime_discovery")
+        XCTAssertEqual(doc["discovery_version"] as? String, "1.0.0")
+        XCTAssertNil(doc["artifact"])
+        XCTAssertEqual(doc["observation_id"] as? String, "o")
+        let types = doc["types"] as! [[String: Any]]
+        XCTAssertEqual(types.map { $0["name"] as! String }, ["Fixture.Root", "SwiftUI.Text"])
+        XCTAssertEqual(types.map { $0["count"] as! Int }, [1, 2])
+        let output = doc["nodes"] as! [[String: Any]]
+        XCTAssertEqual(output.map { $0["index"] as! Int }, [0, 1, 2, 3])
+        XCTAssertEqual(output[2]["parent"] as? Int, 0)
+        XCTAssertEqual(output[2]["type_index"] as? Int, 1)
+        XCTAssertTrue(output[3]["type_index"] is NSNull)
+        XCTAssertEqual(Set(output[0].keys), ["index", "parent", "type_index", "hosting_root"])
+        let coverage = doc["coverage"] as! [String: Any]
+        XCTAssertEqual(coverage["nodes_without_type"] as? Int, 1)
+        XCTAssertEqual(coverage["status"] as? String, "partial")
+    }
+
+    func testDiscoveryKeepsTheOutputByteLimit() throws {
+        let nodes = (0..<300).map { index in
+            RuntimeNode(index: index, parent: nil, hostingRoot: 0,
+                type: "Fixture." + String(repeating: "x", count: 65_000) + String(index), position: nil, size: nil)
+        }
+        let observation = RuntimeObservation(id: "o", start: 1, end: 2, window: 7, windowGeneration: "g", nodes: nodes)
+        XCTAssertThrowsError(try RuntimeEncoding.discovery(observation, session: "s", bundle: "fixture", request: "r")) {
+            XCTAssertEqual($0 as? RuntimeRefusal, .outputLimit)
+        }
     }
 
     func testTransformOrderAndUnknownEncoding() throws {

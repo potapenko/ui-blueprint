@@ -2,6 +2,7 @@
 """Focused transport/selection tests. Live tests use an owned running fixture."""
 import importlib.util
 import json
+import hashlib
 from pathlib import Path
 import tempfile
 import subprocess
@@ -101,6 +102,43 @@ class RuntimeChecks(unittest.TestCase):
                     self.assertEqual(published[0]["subtreeType"], selector)
                 self.assertEqual(set(published[0]), expected)
                 self.assertEqual(list(root.iterdir()), [])
+
+    def test_discovery_requires_capability_before_publication(self):
+        with patch.object(runtime, "endpoint", return_value=(Path("/unused"), {"capabilities": ["capture-subtree-type"]})), \
+             patch.object(runtime, "publish") as publish:
+            with self.assertRaisesRegex(runtime.Failure, "discovery_unsupported_by_endpoint"):
+                runtime.request("unused", "discover")
+            publish.assert_not_called()
+
+    def test_discovery_payload_binding_hash_and_owned_cleanup(self):
+        for fault in (None, "binding", "hash"):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                descriptor = dict(run_id="run", capability="private", capabilities=["discover-types"])
+                raw = b'{"discovery_version":"1.0.0"}'
+                sentinel = root / "unrelated.json"
+                sentinel.write_bytes(b"preserve")
+                def respond(path, data):
+                    request = json.loads(data)
+                    self.assertEqual(request["operation"], "discover")
+                    self.assertNotIn("subtreeType", request)
+                    name = request["id"] + ".discovery.json"
+                    if fault != "binding":
+                        (root / name).write_bytes(raw)
+                    response = dict(protocol="1.0.0", request_id=request["id"], run_id="run", status="ok",
+                                    discovery="unrelated.json" if fault == "binding" else name,
+                                    sha256="wrong" if fault == "hash" else hashlib.sha256(raw).hexdigest())
+                    (root / (request["id"] + ".response.json")).write_text(json.dumps(response))
+                with patch.object(runtime, "endpoint", return_value=(root, descriptor)), \
+                     patch.object(runtime, "publish", side_effect=respond):
+                    if fault:
+                        expected = "invalid_discovery_binding" if fault == "binding" else "discovery_hash_mismatch"
+                        with self.assertRaisesRegex(runtime.Failure, expected):
+                            runtime.request("unused", "discover")
+                    else:
+                        self.assertEqual(runtime.request("unused", "discover")[1], raw)
+                self.assertEqual(sentinel.read_bytes(), b"preserve")
+                self.assertEqual(list(root.iterdir()), [sentinel])
 
     def test_type_selection_keeps_unknown_geometry(self):
         node = dict(key={"namespace": "swiftui.runtime.layout", "key": "n1"},

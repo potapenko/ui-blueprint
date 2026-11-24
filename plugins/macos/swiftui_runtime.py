@@ -142,11 +142,13 @@ def request(session, operation, window=None, generation=None, timeout=5, subtree
             raise Failure("invalid_subtree_type")
         if "capture-subtree-type" not in descriptor.get("capabilities", []):
             raise Failure("subtree_selection_unsupported_by_endpoint")
+    if operation == "discover" and "discover-types" not in descriptor.get("capabilities", []):
+        raise Failure("discovery_unsupported_by_endpoint")
     request_id = str(uuid.uuid4())
     input_path = root / (request_id + ".request.json")
     response_path = root / (request_id + ".response.json")
     cancel_path = root / (request_id + ".cancel")
-    snapshot_path = None
+    artifact_path = None
     payload = dict(version="1.0.0", id=request_id, run=descriptor["run_id"],
                    capability=descriptor["capability"], operation=operation,
                    window=window, windowGeneration=generation)
@@ -166,23 +168,24 @@ def request(session, operation, window=None, generation=None, timeout=5, subtree
             raise Failure("response_binding_mismatch")
         if response.get("status") != "ok":
             raise Failure(response.get("reason", "source_refused"))
-        if operation == "capture":
-            if response.get("snapshot") != request_id + ".snapshot.json":
-                raise Failure("invalid_snapshot_binding")
-            snapshot_path = root / response["snapshot"]
-            info = snapshot_path.lstat()
+        if operation in ("capture", "discover"):
+            artifact = "snapshot" if operation == "capture" else "discovery"
+            if response.get(artifact) != request_id + "." + artifact + ".json":
+                raise Failure("invalid_" + artifact + "_binding")
+            artifact_path = root / response[artifact]
+            info = artifact_path.lstat()
             if not stat.S_ISREG(info.st_mode) or info.st_size > MAX_BYTES:
-                raise Failure("invalid_snapshot_file")
-            raw = snapshot_path.read_bytes()
+                raise Failure("invalid_" + artifact + "_file")
+            raw = artifact_path.read_bytes()
             if hashlib.sha256(raw).hexdigest() != response.get("sha256"):
-                raise Failure("snapshot_hash_mismatch")
+                raise Failure(artifact + "_hash_mismatch")
             return response, raw
         return response, None
     finally:
         # Only this call's already completed products are acknowledged here.
         # A timed-out call leaves cancellation and any late response for its owner.
         if response_path.exists():
-            for path in (input_path, response_path, snapshot_path, cancel_path):
+            for path in (input_path, response_path, artifact_path, cancel_path):
                 if path is not None:
                     try:
                         path.unlink()
@@ -298,14 +301,15 @@ def main():
     p.add_argument("--recipe", required=True)
     p.add_argument("--build-root", required=True)
     p.add_argument("--run-root", required=True)
-    for operation in ("windows", "capture", "tree", "measure"):
+    for operation in ("windows", "capture", "tree", "measure", "discover"):
         p = sub.add_parser(operation)
         p.add_argument("--session", required=True)
         p.add_argument("--window", type=int)
         p.add_argument("--generation")
         p.add_argument("--timeout", type=float, default=5)
         if operation != "windows":
-            p.add_argument("--out", required=operation == "capture")
+            p.add_argument("--out", required=operation in ("capture", "discover"))
+        if operation not in ("windows", "discover"):
             p.add_argument("--type", help="Filter returned nodes after capture (unchanged)")
             p.add_argument("--subtree-type", help="Select one exact nominal type and descendants before export")
         if operation == "measure":
@@ -321,20 +325,22 @@ def main():
         if not 0 < args.timeout <= 30:
             raise Failure("invalid_deadline")
         args.deadline = time.monotonic() + args.timeout
-        result, raw = request(args.session, "windows" if args.command == "windows" else "capture",
+        result, raw = request(args.session, args.command if args.command in ("windows", "discover") else "capture",
                               args.window, args.generation, args.timeout, getattr(args, "subtree_type", None))
         if raw is not None:
-            result.pop("snapshot", None)
+            artifact = "discovery" if args.command == "discover" else "snapshot"
+            result.pop(artifact, None)
             if args.out:
                 publish(args.out, raw)
-                result["saved_snapshot"] = str(Path(args.out).absolute())
-            doc = json.loads(raw, object_pairs_hook=unique_object)
-            selected = measured_nodes(doc, args.type)
-            if args.command == "tree":
-                result["nodes"] = [dict(key=n["key"], type=t, children=n["children"], layout=s)
-                                   for n, t, s in selected]
-            elif args.command == "measure":
-                result["measurements"] = measure(args, doc, raw, selected)
+                result["saved_" + artifact] = str(Path(args.out).absolute())
+            if args.command != "discover":
+                doc = json.loads(raw, object_pairs_hook=unique_object)
+                selected = measured_nodes(doc, args.type)
+                if args.command == "tree":
+                    result["nodes"] = [dict(key=n["key"], type=t, children=n["children"], layout=s)
+                                       for n, t, s in selected]
+                elif args.command == "measure":
+                    result["measurements"] = measure(args, doc, raw, selected)
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
 
 

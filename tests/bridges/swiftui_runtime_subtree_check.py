@@ -99,6 +99,17 @@ def main():
                     assert len(legacy_doc["nodes"]) == len(full_doc["nodes"]), "legacy --type must not change capture scope"
                     assert "selection" not in json.loads(legacy.stdout)
                     summary["legacy_whole_nodes"] = len(legacy_doc["nodes"])
+                    legacy_help = subprocess.check_output([sys.executable, "-B", args.legacy_caller,
+                                                           "capture", "--help"], timeout=5)
+                    if b"--subtree-type" in legacy_help:  # 0.8 callers only support full capture.
+                        legacy_scoped_output = evidence / "legacy-subtree.json"
+                        legacy_scoped = subprocess.run([sys.executable, "-B", args.legacy_caller, "capture", *binding,
+                            "--subtree-type", "SwiftUI.SpacingLayout", "--out", str(legacy_scoped_output)],
+                            check=True, capture_output=True, timeout=15)
+                        legacy_scoped_doc = json.loads(legacy_scoped_output.read_bytes())["artifact"]["data"]
+                        assert len(legacy_scoped_doc["nodes"]) == len(doc["nodes"])
+                        assert_closure(legacy_scoped_doc)
+                        summary["legacy_subtree_nodes"] = json.loads(legacy_scoped.stdout)["nodes"]
         summary["phases"].append(dict(phase=phase, result=result))
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:

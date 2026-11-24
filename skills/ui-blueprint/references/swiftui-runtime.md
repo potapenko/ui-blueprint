@@ -47,6 +47,48 @@ to distinguish repeated components. `measure` supports width/height and delegate
 arithmetic to the matching Rust validator/engine. It does not turn missing source
 geometry into an inferred size.
 
+## Discover actual types when a full Snapshot overflows
+
+With a matching SDK/caller advertising `discover-types`, save a new compact source
+inventory without canonical geometry export:
+
+```sh
+python3 -B "$CALLER" discover --session "$SESSION" \
+  --window "$WINDOW" --generation "$GENERATION" --out "$NEW_DISCOVERY"
+python3 - "$NEW_DISCOVERY" <<'PYTHON'
+import json, sys
+with open(sys.argv[1]) as source:
+    inventory = json.load(source)
+for item in inventory["types"]:
+    print(item["count"], item["name"])
+PYTHON
+```
+
+This versioned **discovery artifact is not a Snapshot** and is not input to the
+Rust geometry validator. It includes actual nominal types and occurrence counts,
+plus source-order `nodes` with `index`, `parent`, `hosting_root`, `type_index`.
+`type_index` addresses the `types` array; null means the source did not expose a
+type. Follow parent links within this one artifact to understand where candidates
+occur. No model values, UI text, raw pointers, full generic signatures or geometry
+are exported. Stdout is only a compact saved-file receipt.
+
+A count of1 makes a type unique in **that observation**, not a confirmed identity
+of the requested dialog. Confirm its source hierarchy/meaning in the requested
+app state, then pass its exact `name` to `--subtree-type`. The next capture reads
+again and may return `subtreeNotFound` or `ambiguousSubtree` after a state change.
+Discovery indices are not future capture handles. A symbol/source-code View name
+absent from the list is not an exposed nominal node; don't guess an identity or
+call an unrelated unique node the requested component. If no attributable unique
+root exists, report that remaining selection limitation.
+
+Discovery uses the same16384-node/depth512 source bounds and16MiB artifact cap.
+It still calls the same opaque Apple getter; compact output is not a cheaper or
+preemptible source-read guarantee. `coverage` reports source/unknown-type/hosting
+root counts; completeness concerns the exposed source tree, not every application
+View. `sourceLimit`, cancellation and stale-window refusals still apply. A legacy
+SDK returns `discovery_unsupported_by_endpoint` before dispatch. Update the SDK
+through the owning build workflow; no silent fallback to full capture is used.
+
 ## Select a component before export
 
 A matching newer SDK/caller can select a subtree before serializing the canonical

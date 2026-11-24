@@ -43,7 +43,7 @@ public final class BlueprintRuntimeSession {
         source = listener
         listener.resume()
         let descriptor: [String: Any] = ["protocol": "1.0.0", "source": "swiftui.runtime.layout",
-            "capabilities": ["capture-subtree-type"],
+            "capabilities": ["capture-subtree-type", "discover-types"],
             "run_id": runID, "capability": capability, "pid": ProcessInfo.processInfo.processIdentifier,
             "bundle": bundle, "directory": directory.path,
             "os": ProcessInfo.processInfo.operatingSystemVersionString,
@@ -92,17 +92,25 @@ public final class BlueprintRuntimeSession {
                 var response: [String: Any] = ["protocol": "1.0.0", "request_id": id, "run_id": runID]
                 switch request.operation {
                 case "windows": response["windows"] = collector.windows()
-                case "capture":
+                case "capture", "discover":
                     let observation = try collector.capture(windowNumber: request.window, expectedGeneration: request.windowGeneration)
                         .selecting(type: request.subtreeType)
                     guard !isCancelled(id) else { throw RuntimeRefusal.cancelled }
-                    guard sequence < UInt64.max else { throw RuntimeRefusal.sourceLimit }
-                    sequence += 1
-                    let bytes = try RuntimeEncoding.snapshot(observation, session: runID, bundle: bundle, request: id, sequence: sequence)
+                    let bytes: Data
+                    let artifact: String
+                    if request.operation == "discover" {
+                        artifact = "discovery"
+                        bytes = try RuntimeEncoding.discovery(observation, session: runID, bundle: bundle, request: id)
+                    } else {
+                        artifact = "snapshot"
+                        guard sequence < UInt64.max else { throw RuntimeRefusal.sourceLimit }
+                        sequence += 1
+                        bytes = try RuntimeEncoding.snapshot(observation, session: runID, bundle: bundle, request: id, sequence: sequence)
+                    }
                     guard !isCancelled(id) else { throw RuntimeRefusal.cancelled }
-                    let name = id + ".snapshot.json"
+                    let name = id + "." + artifact + ".json"
                     try publish(bytes, name: name)
-                    response["snapshot"] = name
+                    response[artifact] = name
                     response["sha256"] = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
                     response["nodes"] = observation.nodes.count
                     if let selection = observation.selection {

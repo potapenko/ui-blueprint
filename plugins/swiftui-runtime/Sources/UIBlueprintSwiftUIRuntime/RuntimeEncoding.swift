@@ -4,6 +4,36 @@ import Foundation
 enum RuntimeEncoding {
     static let namespace = "swiftui.runtime.layout"
 
+    /// A source topology inventory, deliberately not a canonical geometry Snapshot.
+    static func discovery(_ observation: RuntimeObservation, session: String, bundle: String,
+                          request: String) throws -> Data {
+        let grouped = Dictionary(grouping: observation.nodes.compactMap(\.type), by: { $0 })
+        let names = grouped.keys.sorted()
+        let indices = Dictionary(uniqueKeysWithValues: names.enumerated().map { ($0.element, $0.offset) })
+        let unknown = observation.nodes.filter { $0.type == nil }.count
+        let nodes: [[String: Any]] = observation.nodes.map { node in
+            ["index": node.index, "parent": node.parent.map { $0 as Any } ?? NSNull(),
+             "hosting_root": node.hostingRoot,
+             "type_index": node.type.flatMap { indices[$0] }.map { $0 as Any } ?? NSNull()]
+        }
+        let document: [String: Any] = ["discovery_version": "1.0.0", "kind": "swiftui_runtime_discovery",
+            "source_namespace": namespace, "session_id": session, "request_id": request,
+            "target": ["id": bundle, "generation": session],
+            "window": observation.window, "window_generation": observation.windowGeneration,
+            "observation_id": observation.id, "start": observation.start, "end": observation.end,
+            "clock_domain": "runtime-\(session)", "time_unit": "seconds", "freshness_basis": "live_read",
+            "consistency": "unknown", "consistency_reason": "main-actor-layout-sample-not-presented-frame",
+            "coverage": ["status": unknown == 0 && observation.emptyHostingRoots == 0 ? "complete" : "partial",
+                "scope_id": "window-\(observation.window)", "source_nodes": observation.nodes.count,
+                "nodes_without_type": unknown, "hosting_roots": observation.hostingRoots,
+                "empty_hosting_roots": observation.emptyHostingRoots],
+            "types": names.map { ["name": $0, "count": grouped[$0]!.count] as [String: Any] },
+            "nodes": nodes]
+        let data = try JSONSerialization.data(withJSONObject: document, options: [.sortedKeys])
+        guard data.count <= 16 * 1024 * 1024 else { throw RuntimeRefusal.outputLimit }
+        return data
+    }
+
     static func snapshot(_ observation: RuntimeObservation, session: String, bundle: String,
                          request: String, sequence: UInt64) throws -> Data {
         let target = ["id": bundle, "generation": session]
