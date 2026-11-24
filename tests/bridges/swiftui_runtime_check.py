@@ -140,6 +140,20 @@ class RuntimeChecks(unittest.TestCase):
                 self.assertEqual(sentinel.read_bytes(), b"preserve")
                 self.assertEqual(list(root.iterdir()), [sentinel])
 
+    def test_large_capacity_and_result_only_bundle_admission(self):
+        self.assertEqual(runtime.MAX_BYTES, 1_073_741_824)
+        for kind in ("source_nodes", "native_nodes"):
+            value = dict(kind=kind, limit=1048576, observed=1048577)
+            self.assertEqual(runtime.source_limit_detail(value), value)
+        for help_text, valid in ((b"Measure --json --result-only", True), (b"old --json", False)):
+            result = subprocess.CompletedProcess([], 0, stdout=help_text, stderr=b"")
+            with patch.object(runtime.subprocess, "run", return_value=result):
+                if valid:
+                    runtime.require_result_only("/unused", 30)
+                else:
+                    with self.assertRaisesRegex(runtime.Failure, "^result_only_measurement_unsupported_by_bundle$"):
+                        runtime.require_result_only("/unused", 30)
+
     def test_source_limit_details_are_bounded_and_private(self):
         valid = dict(kind="source_nodes", limit=16384, observed=16385)
         self.assertEqual(runtime.source_limit_detail(valid), valid)

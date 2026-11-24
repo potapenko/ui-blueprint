@@ -44,8 +44,8 @@ final class SourceLimitTests: XCTestCase {
         XCTAssertThrowsError(try RuntimeCollector.collect(roots, root: 1, nodes: &over)) { error in
             let limit = error as? RuntimeSourceLimit
             XCTAssertEqual(limit?.kind, .sourceNodes)
-            XCTAssertEqual(limit?.kind.limit, 16_384)
-            XCTAssertEqual(limit?.observed, 16_385)
+            XCTAssertEqual(limit?.kind.limit, 1_048_576)
+            XCTAssertEqual(limit?.observed, 1_048_577)
         }
     }
 }

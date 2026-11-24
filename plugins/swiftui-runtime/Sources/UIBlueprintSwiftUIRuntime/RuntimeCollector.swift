@@ -21,7 +21,7 @@ struct RuntimeSourceLimit: Error {
 
         var limit: UInt64 {
             switch self {
-            case .nativeNodes, .sourceNodes: return 16_384
+            case .nativeNodes, .sourceNodes: return 1_048_576
             case .nativeDepth, .sourceDepth: return 512
             case .typeNameBytes: return 65_536
             case .typeNameControls: return 0
@@ -128,9 +128,9 @@ struct RuntimeSubtreeSelection {
 
 @MainActor
 final class RuntimeCollector {
-    static let maxNodes = 16_384
+    static let maxNodes = 1_048_576
     static let maxDepth = 512
-    static let maxBytes = 16 * 1024 * 1024
+    nonisolated static let maxBytes = 1024 * 1024 * 1024
 
     private final class Witness {
         weak var window: NSWindow?

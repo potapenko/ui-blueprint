@@ -673,6 +673,53 @@ pub(crate) fn json(
     Ok(output.bytes)
 }
 
+/// CLI-only projection of a fully validated measurement, never a canonical case.
+pub(crate) fn measurement_result_json(
+    case: &MeasurementCase,
+    limit: usize,
+) -> Result<Vec<u8>, Failure> {
+    validate_measurement_case(case).map_err(|_| Failure::invalid("invalid_analysis"))?;
+    #[derive(serde::Serialize)]
+    struct Source<'a> {
+        id: &'a Id,
+        revision: u64,
+        context: &'a Context,
+        observations: &'a [Observation],
+        coverage: &'a Coverage,
+    }
+    #[derive(serde::Serialize)]
+    struct Reply<'a> {
+        output_version: &'static str,
+        kind: &'static str,
+        source: &'static str,
+        live_revalidated: bool,
+        snapshot: Source<'a>,
+        query: &'a GeometryQuery,
+        evaluation: &'a EvaluationInput,
+        result: &'a MeasurementResult,
+    }
+    let reply = Reply {
+        output_version: "1.0.0",
+        kind: "measurement_result",
+        source: "saved",
+        live_revalidated: false,
+        snapshot: Source {
+            id: &case.snapshot.id,
+            revision: case.snapshot.revision,
+            context: &case.snapshot.context,
+            observations: &case.snapshot.observations,
+            coverage: &case.snapshot.coverage,
+        },
+        query: &case.query,
+        evaluation: &case.evaluation,
+        result: &case.result,
+    };
+    let mut output = Bounded::new(limit);
+    serde_json::to_writer(&mut output, &reply).map_err(|_| output.error())?;
+    output.write_all(b"\n").map_err(|_| output.error())?;
+    Ok(output.bytes)
+}
+
 pub(crate) fn analysis_json(document: AnalysisDocument, limit: usize) -> Result<Vec<u8>, Failure> {
     let validation = match &document.artifact {
         AnalysisArtifact::Measurement(case) => validate_measurement_case(case),

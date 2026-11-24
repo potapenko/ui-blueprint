@@ -30,7 +30,7 @@ enum RuntimeEncoding {
             "types": names.map { ["name": $0, "count": grouped[$0]!.count] as [String: Any] },
             "nodes": nodes]
         let data = try JSONSerialization.data(withJSONObject: document, options: [.sortedKeys])
-        guard data.count <= 16 * 1024 * 1024 else { throw RuntimeRefusal.outputLimit }
+        guard data.count <= RuntimeCollector.maxBytes else { throw RuntimeRefusal.outputLimit }
         return data
     }
 
@@ -136,7 +136,7 @@ enum RuntimeEncoding {
             "captures": [], "coverage": coverage]
         let envelope: [String: Any] = ["schema_version": "0.1.0", "artifact": ["kind": "snapshot", "data": snapshot]]
         let data = try JSONSerialization.data(withJSONObject: envelope, options: [.sortedKeys])
-        guard data.count <= 16 * 1024 * 1024 else { throw RuntimeRefusal.outputLimit }
+        guard data.count <= RuntimeCollector.maxBytes else { throw RuntimeRefusal.outputLimit }
         return data
     }
 

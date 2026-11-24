@@ -684,6 +684,25 @@ fn production_roundtrip_keeps_difficult_float_bits_without_an_epsilon() {
     };
     assert_eq!(amount.to_bits(), 1.2345678901234567_f64.to_bits());
     uiblueprint_engine::verify_analysis_result(&doc).expect("exact roundtrip recomputation");
+    let output = case
+        .command("measure", "query", false, true, 200_000, 200_000)
+        .arg("--result-only")
+        .output()
+        .unwrap();
+    assert!(output.status.success());
+    let reply: serde_json::Value = serde_json::from_slice(&output.stdout).unwrap();
+    let result: MeasurementResult = serde_json::from_value(reply["result"].clone()).unwrap();
+    let MeasurementResult::Known { measurement } = result else {
+        panic!("known")
+    };
+    let Value::Quantity {
+        amount: short_amount,
+        ..
+    } = measurement.value
+    else {
+        panic!("quantity")
+    };
+    assert_eq!(short_amount.to_bits(), amount.to_bits());
 }
 
 #[test]
@@ -716,4 +735,108 @@ fn explicit_evaluation_space_must_resolve_unambiguously_and_match() {
         2,
         "ambiguous_space",
     );
+}
+
+#[test]
+fn result_only_matches_full_measurement_and_preserves_observation_context() {
+    let mut case = Case::new();
+    for unknown in [false, true] {
+        if unknown {
+            case.query.applies_when.platform = Some(Id("fixture".into()));
+            case.save();
+        }
+        let full = case.run("measure", "query", false, true, None);
+        let short = case
+            .command("measure", "query", false, true, 200_000, 200_000)
+            .arg("--result-only")
+            .output()
+            .unwrap();
+        assert_eq!(short.status.code(), full.status.code());
+        assert!(short.stderr.is_empty());
+        let full: serde_json::Value = serde_json::from_slice(&full.stdout).unwrap();
+        let reply: serde_json::Value = serde_json::from_slice(&short.stdout).unwrap();
+        let original = &full["artifact"]["data"];
+        assert_eq!(reply["output_version"], "1.0.0");
+        assert_eq!(reply["kind"], "measurement_result");
+        assert_eq!(reply["source"], "saved");
+        assert_eq!(reply["live_revalidated"], false);
+        for field in ["query", "evaluation", "result"] {
+            assert_eq!(reply[field], original[field]);
+        }
+        for field in ["id", "revision", "context", "observations", "coverage"] {
+            assert_eq!(reply["snapshot"][field], original["snapshot"][field]);
+        }
+        assert_eq!(reply["snapshot"].as_object().unwrap().len(), 5);
+        assert!(reply["snapshot"].get("nodes").is_none());
+        assert_eq!(short.status.code(), Some(if unknown { 4 } else { 0 }));
+    }
+}
+
+#[test]
+fn result_only_budget_includes_newline_and_never_publishes_partial_output() {
+    let case = Case::new();
+    let run = |cap| {
+        case.command("measure", "query", false, true, 200_000, cap)
+            .arg("--result-only")
+            .output()
+            .unwrap()
+    };
+    let successful = run(200_000);
+    assert!(successful.status.success());
+    assert_eq!(successful.stdout.last(), Some(&b'\n'));
+    let exact = run(successful.stdout.len());
+    assert_eq!(exact.stdout, successful.stdout);
+    assert!(exact.status.success());
+    let refused = run(successful.stdout.len() - 1);
+    assert_eq!(refused.status.code(), Some(2));
+    assert!(refused.stdout.is_empty());
+}
+
+#[test]
+fn result_only_preserves_malformed_graph_and_binding_refusals() {
+    let mut case = Case::new();
+    for binding in [true, false] {
+        if binding {
+            case.evaluation.snapshot_id = Id("PRIVATE_CANARY_BAD_BINDING".into());
+        } else {
+            case.evaluation.snapshot_id = case.snapshot.id.clone();
+            case.snapshot.nodes[0].children.push(SourceKey {
+                namespace: Id("missing".into()),
+                key: Id("PRIVATE_CANARY_DANGLING".into()),
+            });
+        }
+        case.save();
+        let full = case.run("measure", "query", true, true, None);
+        let short = case
+            .command("measure", "query", true, true, 200_000, 200_000)
+            .arg("--result-only")
+            .output()
+            .unwrap();
+        assert_eq!(short.status.code(), Some(2));
+        assert_eq!(short.status.code(), full.status.code());
+        assert_eq!(short.stderr, full.stderr);
+        assert!(short.stdout.is_empty());
+        assert!(!String::from_utf8_lossy(&short.stderr).contains("PRIVATE_CANARY"));
+    }
+}
+
+#[test]
+fn result_only_incompatible_flags_refuse_before_input_work() {
+    let case = Case::new();
+    for (operation, json, duplicate) in [
+        ("check", true, false),
+        ("measure", false, false),
+        ("measure", true, true),
+    ] {
+        let mut command = case.command(operation, "expectation", false, json, 200_000, 200_000);
+        command.arg("--result-only");
+        if duplicate {
+            command.arg("--result-only");
+        }
+        // If flag admission were postponed, this missing input would produce IO.
+        fs::rename(case.dir.join("snapshot"), case.dir.join("temporarily-held")).unwrap();
+        let output = command.output().unwrap();
+        fs::rename(case.dir.join("temporarily-held"), case.dir.join("snapshot")).unwrap();
+        error(output, 2, "invalid_arguments");
+    }
 }

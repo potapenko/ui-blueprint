@@ -73,18 +73,26 @@ nominal type and all its descendants before serialization; ancestors are retaine
 and explicitly labelled as context. It does not change the existing post-capture
 `--type` filter. Missing/ambiguous types refuse, and the caller checks the endpoint's
 `capture-subtree-type` capability before dispatch. Source node/depth and output
-bounds are unchanged; whole-window output may still exceed16MiB. Some custom View
+capacity is1048576 nodes/native views and1GiB per artifact; depth512 remains. Some custom View
 names are not exposed as standalone source nodes. See [scoped query semantics](../../skills/ui-blueprint/references/swiftui-runtime.md#select-a-component-before-export).
 
 A matching SDK/caller preserves `sourceLimit` and exit4 while adding a bounded
 `source_limit` diagnostic: `kind`, `limit`, `observed`. For example,
-`{"kind":"source_nodes","limit":16384,"observed":16385}` means the collector
-encountered at least16385 nodes, not that it counted the entire tree. Other kinds
+`{"kind":"source_nodes","limit":1048576,"observed":1048577}` means the collector
+encountered at least1048577 nodes, not that it counted the entire tree. Other kinds
 distinguish native/source depth, native nodes, type-name bytes/control presence
 and exhausted snapshot sequence. No type names or model values are included.
-Old SDKs may omit this detail; old callers still report the original refusal.
+New callers also accept historical16384-node diagnostics from0.10.1; older SDKs may omit detail. Use the matching updated SDK/caller for larger artifacts.
 `--subtree-type` does not bypass source limits: uniqueness is established only
 after the whole bounded source read. A hard source overflow publishes no artifact.
+
+The runtime caller defaults to30seconds (explicit maximum120). Capture plus
+measurement shares that budget; cancellation never claims to preempt the getter.
+For measurements it checks the matching Rust CLI's `--result-only` support before
+source dispatch. Rust still validates the original complete Snapshot and computes
+the result; the versioned CLI reply preserves source context/observations/coverage
+without returning the full graph a second time. The original canonical record
+remains the replay source. Old ordinary Rust `--json` output is unchanged.
 
 Launch returns the private session descriptor and exact PID. The descriptor's
 capability is not copied into reports. Capture/measure always acquires new data;
@@ -137,7 +145,7 @@ their bounding envelope as containment. Source-local dimensions remain available
 Full real-app coverage/transitions remain incomplete. They do not block the
 user-authorized experimental release; packaging/installation verification and
 the documented capability boundary govern that delivery under
-[SWIFTUI-RUNTIME@7](../../docs/specs/product/swiftui-runtime-probe.md).
+[SWIFTUI-RUNTIME@8](../../docs/specs/product/swiftui-runtime-probe.md).
 
 The agent-facing preparation and query instructions live in
 [setup](../../skills/ui-blueprint/references/swiftui-setup.md) and

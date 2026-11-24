@@ -42,7 +42,7 @@ def main():
             return
         assert completed.returncode == 0, completed.stderr
         raw = output.read_bytes()
-        assert len(raw) <= 16 * 1024 * 1024
+        assert len(raw) <= 1024 * 1024 * 1024
         assert b"UIB_RUNTIME_MODEL_CANARY_317cce" not in raw
         receipt, document = json.loads(completed.stdout), json.loads(raw)
         if operation == "discover":
@@ -55,12 +55,12 @@ def main():
             summary["discoveries"].append(dict(nodes=len(document["nodes"]), bytes=len(raw),
                 types=len(document["types"]), observation=document["observation_id"]))
         else:
-            subprocess.run([str(Path(args.bundle) / "uiblueprint-validate"), "--max-bytes", "16777216", str(output)],
+            subprocess.run([str(Path(args.bundle) / "uiblueprint-validate"), "--max-bytes", "1073741824", str(output)],
                            check=True, capture_output=True, timeout=10)
         return document
 
     phase(0)
-    call("large-whole", "capture", expected="outputLimit")
+    call("large-whole", "capture")
     discovery = call("large-discovery", "discover")
     by_name = {t["name"]: t for t in discovery["types"]}
     # This qualified fixture's observed source container encloses its button parts.
@@ -81,7 +81,8 @@ def main():
     duplicated = call("duplicated-discovery", "discover")
     assert next(t["count"] for t in duplicated["types"] if t["name"] == selector) == 2
     phase(5)
-    call("source-limit", "discover", expected="sourceLimit")
+    expanded = call("expanded-source", "discover")
+    assert len(expanded["nodes"]) > 16384
     phase(4)
     small = call("small-discovery", "discover")
     full = call("small-whole", "capture")["artifact"]["data"]

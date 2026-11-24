@@ -14,7 +14,7 @@ import tempfile
 import time
 import uuid
 
-MAX_BYTES = 16 * 1024 * 1024
+MAX_BYTES = 1024 * 1024 * 1024
 
 
 class Failure(Exception):
@@ -24,12 +24,12 @@ class Failure(Exception):
 
 
 def source_limit_detail(value):
-    limits = {"native_nodes": 16384, "native_depth": 512, "source_nodes": 16384,
-              "source_depth": 512, "type_name_bytes": 65536, "type_name_controls": 0,
-              "snapshot_sequence": 18446744073709551615}
+    limits = {"native_nodes": (16384, 1048576), "native_depth": (512,), "source_nodes": (16384, 1048576),
+              "source_depth": (512,), "type_name_bytes": (65536,), "type_name_controls": (0,),
+              "snapshot_sequence": (18446744073709551615,)}
     if (not isinstance(value, dict) or set(value) != {"kind", "limit", "observed"}
             or not isinstance(value["kind"], str) or value["kind"] not in limits
-            or type(value["limit"]) is not int or value["limit"] != limits[value["kind"]]
+            or type(value["limit"]) is not int or value["limit"] not in limits[value["kind"]]
             or type(value["observed"]) is not int or not 0 <= value["observed"] <= 18446744073709551615):
         raise Failure("invalid_source_limit_detail")
     kind, observed = value["kind"], value["observed"]
@@ -152,7 +152,7 @@ def endpoint(path):
     return path.parent, value
 
 
-def request(session, operation, window=None, generation=None, timeout=5, subtree_type=None):
+def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None):
     root, descriptor = endpoint(session)
     if subtree_type is not None:
         if (operation != "capture" or not isinstance(subtree_type, str) or not subtree_type
@@ -329,7 +329,7 @@ def main():
         p.add_argument("--session", required=True)
         p.add_argument("--window", type=int)
         p.add_argument("--generation")
-        p.add_argument("--timeout", type=float, default=5)
+        p.add_argument("--timeout", type=float, default=30)
         if operation != "windows":
             p.add_argument("--out", required=operation in ("capture", "discover"))
         if operation not in ("windows", "discover"):
@@ -345,9 +345,11 @@ def main():
     elif args.command == "prepare":
         result = prepare(args)
     else:
-        if not 0 < args.timeout <= 30:
+        if not 0 < args.timeout <= 120:
             raise Failure("invalid_deadline")
         args.deadline = time.monotonic() + args.timeout
+        if args.command == "measure":
+            require_result_only(args.bundle, args.timeout)
         result, raw = request(args.session, args.command if args.command in ("windows", "discover") else "capture",
                               args.window, args.generation, args.timeout, getattr(args, "subtree_type", None))
         if raw is not None:
@@ -367,6 +369,13 @@ def main():
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
 
 
+def require_result_only(bundle, timeout):
+    result = subprocess.run([str(Path(bundle).resolve() / "uiblueprint"), "--help"],
+                            capture_output=True, timeout=min(timeout, 5))
+    if result.returncode != 0 or b"measure --json --result-only" not in result.stdout.lower():
+        raise Failure("result_only_measurement_unsupported_by_bundle")
+
+
 def measure(args, doc, raw, selected):
     bundle = Path(args.bundle).resolve()
     results = []
@@ -378,7 +387,7 @@ def measure(args, doc, raw, selected):
             value = args.deadline - time.monotonic()
             if value <= 0:
                 raise Failure("measurement_deadline")
-            return min(value, 10)
+            return value
         # Rust measure loads the original Snapshot with Document::from_json,
         # including semantic validation. Avoid parsing a large window twice
         # before its first useful query. An all-unknown/empty selection still
@@ -401,12 +410,14 @@ def measure(args, doc, raw, selected):
             query_path.write_bytes(encoded(dict(schema_version="0.2.0", artifact=dict(kind="geometry_query", data=query))))
             completed = subprocess.run([str(bundle / "uiblueprint"), "measure", "--snapshot", str(snapshot),
                 "--query", str(query_path), "--space", space["id"], "--max-input-bytes", str(MAX_BYTES + 16384),
-                "--max-output-bytes", str(MAX_BYTES * 2), "--json"], capture_output=True, timeout=remaining())
+                "--max-output-bytes", str(MAX_BYTES * 2), "--json", "--result-only"], capture_output=True, timeout=remaining())
             if completed.returncode not in (0, 4):
                 raise Failure("rust_measure_failed")
             answer = json.loads(completed.stdout)
-            data = answer.get("artifact", {}).get("data", answer)
-            compact = {k: v for k, v in data.items() if k not in ("snapshot", "evaluation", "source", "query")}
+            if (answer.get("output_version") != "1.0.0" or answer.get("kind") != "measurement_result"
+                    or answer.get("snapshot", {}).get("id") != doc["artifact"]["data"]["id"]):
+                raise Failure("invalid_measurement_result")
+            compact = {"result": answer["result"]}
             results.append(dict(key=node["key"], type=name, result=compact))
     return results
 

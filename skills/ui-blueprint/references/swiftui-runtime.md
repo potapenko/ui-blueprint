@@ -81,7 +81,7 @@ absent from the list is not an exposed nominal node; don't guess an identity or
 call an unrelated unique node the requested component. If no attributable unique
 root exists, report that remaining selection limitation.
 
-Discovery uses the same16384-node/depth512 source bounds and16MiB artifact cap.
+Discovery uses the same1048576-node/depth512 source bounds and1GiB artifact cap.
 It still calls the same opaque Apple getter; compact output is not a cheaper or
 preemptible source-read guarantee. `coverage` reports source/unknown-type/hosting
 root counts; completeness concerns the exposed source tree, not every application
@@ -117,8 +117,8 @@ records excluded context branches. Original local spaces, transforms, inherited
 source keys and retained child order remain. Context ancestors are not complete
 exports of their other children; the Snapshot scope is the subtree with context.
 
-The source still reads the selected window under the same 16384-node/depth512
-bounds, and the response still has the 16MiB limit. The flag can resolve an
+The source still reads the selected window under the same 1048576-node/depth512
+bounds, and the response still has the 1GiB limit. The flag can resolve an
 **output** overflow when the requested subtree is small; it cannot bypass a source
 limit or guarantee that Apple's getter does less work. An oversized subtree still
 refuses. No automatic fallback changes an ordinary whole-window request.
@@ -135,7 +135,7 @@ task's evidence area:
 ```sh
 python3 -B "$CALLER" capture --session "$SESSION" \
   --window "$WINDOW" --generation "$GENERATION" --out "$SNAPSHOT"
-"$UIB_BUNDLE/uiblueprint-validate" --max-bytes 16777216 "$SNAPSHOT"
+"$UIB_BUNDLE/uiblueprint-validate" --max-bytes 1073741824 "$SNAPSHOT"
 ```
 
 Then follow [factual queries](analysis.md#construct-a-factual-query), preserving
@@ -224,7 +224,16 @@ no Snapshot or discovery artifact is published. Neither discovery nor subtree
 selection bypasses source limits. Do not infer the application's guard from a
 fixture failure or change the target state to hide an overflow.
 
-Normal default timeout is five seconds, with an overall CLI cap of thirty.
+Normal default timeout is thirty seconds, with an explicit overall CLI cap of120.
+The request metadata cap remains16KiB; depth512 and privacy rules are unchanged.
+Use the updated SDK and matching caller for the larger artifact/node capacity.
+New callers retain historical source_limit node ceilings from0.10.1 endpoints.
+Live measurement requires Rust help advertising `measure --json --result-only`
+before source dispatch. This small versioned CLI reply retains original context,
+observations, coverage, query/evaluation and computed evidence; it is not an
+analysis0.2 MeasurementCase or a replacement for the original replay Snapshot.
+Old standalone Rust `--json` still returns the full canonical case. No expensive
+fallback runs when the selected Rust bundle lacks the new mode.
 Do not turn a source failure into repeated rebuilds, polling captures, Xcode
 sessions or a new application-specific extractor. Route a reproducible tool
 defect to the Blueprint owner with a sanitized failure and exact version; the

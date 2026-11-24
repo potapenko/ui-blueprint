@@ -49,9 +49,9 @@ def main():
             return {"reason": failure, "seconds": elapsed}
         assert completed.returncode == 0, completed.stderr
         raw = output.read_bytes()
-        assert len(raw) <= 16 * 1024 * 1024
+        assert len(raw) <= 1024 * 1024 * 1024
         assert b"UIB_RUNTIME_MODEL_CANARY_317cce" not in raw
-        subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", "16777216", str(output)],
+        subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", "1073741824", str(output)],
                        check=True, capture_output=True, timeout=10)
         doc = json.loads(raw)["artifact"]["data"]
         assert_closure(doc)
@@ -63,9 +63,7 @@ def main():
         (control / "phase").write_text(str(phase))
         time.sleep(.5)  # fixture-owned state input, no production UI automation
         name = "phase-" + str(len(summary["phases"]))
-        if phase == 5:
-            result = invoke(name, "SwiftUI.SpacingLayout", "sourceLimit")
-        elif phase in (2, 3):
+        if phase in (2, 3):
             result = invoke(name, "SwiftUI.SpacingLayout", "subtreeNotFound" if phase == 2 else "ambiguousSubtree")
         else:
             result, doc = invoke(name, "SwiftUI.SpacingLayout")
@@ -83,7 +81,9 @@ def main():
             assert (180 if phase == 1 else 120) in amounts, measurements
             result["rust_color_widths"] = amounts
             if phase == 0:
-                summary["whole_large"] = invoke(name + "-whole", failure="outputLimit")
+                full_result, full_doc = invoke(name + "-whole")
+                assert full_result["bytes"] > 16 * 1024 * 1024
+                summary["whole_large"] = dict(nodes=len(full_doc["nodes"]), bytes=full_result["bytes"])
                 summary["ambiguous_common_type"] = invoke(name + "-buttons", "SwiftUI.Button", "ambiguousSubtree")
                 summary["not_source_exposed"] = invoke(name + "-custom", "SubtreeProbe.ScopeDialog", "subtreeNotFound")
             if phase == 4:
@@ -94,7 +94,7 @@ def main():
                     legacy = subprocess.run([sys.executable, "-B", args.legacy_caller, "capture", *binding,
                         "--type", "SwiftUI.Color", "--out", str(legacy_output)], check=True, capture_output=True, timeout=15)
                     legacy_doc = json.loads(legacy_output.read_bytes())["artifact"]["data"]
-                    subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", "16777216", str(legacy_output)],
+                    subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", "1073741824", str(legacy_output)],
                                    check=True, capture_output=True, timeout=10)
                     assert len(legacy_doc["nodes"]) == len(full_doc["nodes"]), "legacy --type must not change capture scope"
                     assert "selection" not in json.loads(legacy.stdout)
@@ -117,7 +117,7 @@ def main():
     ids = [result["observation_id"] for result, _ in captured]
     assert len(set(ids)) == 4
     summary["concurrent_distinct"] = 4
-    assert len({phase["result"]["observation_id"] for phase in summary["phases"] if "observation_id" in phase["result"]}) == 4
+    assert len({phase["result"]["observation_id"] for phase in summary["phases"] if "observation_id" in phase["result"]}) == 5
     summary["canary_absent"] = True
     summary["cancel_and_input"] = endpoint_refusals(args.caller, identity["session"], window)
     # Stale bindings remain authoritative even with a valid selector.

@@ -1,12 +1,13 @@
 # CLI и bounded output
 - Node type: leaf; domain: `uib.cli`.
-- Contract: `UIB.CLI@21`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @20 with additive Compose import; existing raw JSON/commands preserved.
+- Contract: `UIB.CLI@22`; stable clauses: `UIB.CLI.CONTENT`, `UIB.CLI.INSPECT`, `UIB.CLI.OBSERVE`; routes DIFF@2/CLI-ACTIONS@3; supersedes @21 with opt-in result-only measurement; existing raw JSON/commands preserved.
 - Authority: Active / Stability: Evolving; current norms; accepted/released baseline: none.
 - Authority source: UIB.TZ@1.4 / UIB.DRAWING@1.1, user confirmation 2026-10-06; C00 CONTENT preserved; INSPECT selected under ROADMAP/PLAN.UIB@1 by [L01 packet](../../plans/ui-blueprint/packets/L01-inspect-json.md); CLI-ACTIONS selected by [the action caller packet](../../plans/ui-blueprint/packets/L01-actions-contract.md).
 - Read when: CLI commands, compact/JSON и публикация; skip unrelated domains/reference/future nodes.
 - Requires: [UIB.EXCHANGE@1](exchange.md), [UIB.PRIVACY@1](privacy.md).
 - Conditional requires, native PNG command: [NATIVE-CAPTURE@1](native-capture.md); existing Observe providers unchanged.
 - Conditional requires, Compose saved probe import: [COMPOSE@1](compose.md); existing Observe providers unchanged.
+- Conditional requires, result-only measurements: [ANALYSIS@3](analysis.md#uibanalysisresult-only); opt-in CLI envelope, old JSON unchanged.
 - Conditional requires, product version: [RELEASES@1](../development/releases.md) defines --version; existing commands and data versions stay unchanged.
 - Conditional requires, Observe diagnostic option: [OBSERVE-DIAGNOSTICS@3](cli-observe-diagnostics.md); default output preserved.
 - Optional shipped Node caller: [WEB-FIRST-USE@7](web-first-use.md); explicit URL/component preparation, no change to Rust CLI grammar or OBSERVE below.

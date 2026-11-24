@@ -1,6 +1,6 @@
 # Local measurement and check artifacts
 
-- Node type: branch + leaf; domain: `uib.analysis`; contract: `UIB.ANALYSIS@2`; supersedes @1.
+- Node type: branch + leaf; domain: `uib.analysis`; contract: `UIB.ANALYSIS@3`; supersedes @2 with opt-in CLI result-only output.
 - Authority: Active / Stability: Evolving; accepted/released implementation: none.
 - Authority source: ROADMAP D03 delegation under approved PLAN.UIB@1; root-accepted decision8fdf608 and [registration packet](../../plans/ui-blueprint/packets/L01-analysis-registration.md).
 - Read when: local measurement/check JSON, result space, evaluation input or version integration.
@@ -69,6 +69,13 @@ Exits remain0 known/pass,1 IO/internal,2 invalid/limit,3 measured fail,4 unknown
 5 unsupported finite mode. Measurement never gains a normative pass/fail result.
 The schema validator keeps flags/output/exits0/2/1; valid/0 means contract-valid
 declarations, never independently recomputed arithmetic or real-world verification.
+
+## UIB.ANALYSIS.RESULT-ONLY
+The user-authorized large Mac runtime continuation (chat01a20a46 →01a20f35,2026-11-24) and SDK owner's exact CLI lane approval add `measure --json --result-only`. On the same41.8MB Snapshot, existing full JSON took2.703s plus0.260s Python decode and returned42.1MB; compact text took1.771s. This measured serialization/return cost motivates one optional CLI envelope, not another engine or weaker input validation.
+
+The new reply is `{output_version:"1.0.0",kind:"measurement_result",source:"saved",live_revalidated:false,snapshot:{id,revision,context,observations,coverage},query,evaluation,result}`. All nested data is borrowed unchanged from the validated input and canonical query/evaluation/engine result. Observation clocks/times/freshness/coverage and result evidence are retained. No nodes/relations/captures or full Snapshot are repeated. This is NOT analysis0.2 MeasurementCase, a canonical validator input, a standalone recomputable case or fresh collection. Retain the original Snapshot for replay/verification. Existing `--json`/compact/check output and all canonical schemas stay unchanged.
+
+Require both measure and --json; reject duplicate/incompatible flags before input work. Keep full input/semantic/query/evaluation and result validation, exact numeric/evidence semantics, normal known0/unknown4 exits, aggregate input/output limits including newline, and no partial stdout on failure. Matching runtime callers check CLI help support before source dispatch and never silently fall back to the expensive mode. Verify exact result/query/evaluation equality against old JSON on the same input, unknown metadata, malformed graph/wrong binding, flag refusal and output boundary. No batch arithmetic or dependency changes are authorized here.
 
 ## UIB.ANALYSIS.MIGRATION
 

@@ -130,7 +130,7 @@ final class RuntimeTests: XCTestCase {
         }
     }
 
-    func testLargeWindowOutputLimitStillAllowsCompleteSmallSubtree() throws {
+    func testLargeWindowAndCompleteSmallSubtreeBothExport() throws {
         var nodes = [RuntimeNode(index: 0, parent: nil, hostingRoot: 0, type: "Fixture.Root", position: .zero,
             size: .init(width: 500, height: 400), positionSource: 0, sizeSource: 0)]
         for index in 1..<10_000 {
@@ -144,7 +144,7 @@ final class RuntimeTests: XCTestCase {
         func encode(_ value: RuntimeObservation) throws -> Data {
             try RuntimeEncoding.snapshot(value, session: "s", bundle: "fixture", request: "r", sequence: 1)
         }
-        XCTAssertThrowsError(try encode(full)) { XCTAssertEqual($0 as? RuntimeRefusal, .outputLimit) }
+        XCTAssertGreaterThan(try encode(full).count, 16 * 1024 * 1024)
         let inventory = try RuntimeEncoding.discovery(full, session: "s", bundle: "fixture", request: "r")
         XCTAssertLessThan(inventory.count, 1_000_000)
         let selected = try full.selecting(type: "Fixture.Dialog")
@@ -181,15 +181,16 @@ final class RuntimeTests: XCTestCase {
         XCTAssertEqual(coverage["status"] as? String, "partial")
     }
 
-    func testDiscoveryKeepsTheOutputByteLimit() throws {
+    func testDiscoveryAcceptsMoreThanTheFormerOutputByteLimit() throws {
         let nodes = (0..<300).map { index in
             RuntimeNode(index: index, parent: nil, hostingRoot: 0,
                 type: "Fixture." + String(repeating: "x", count: 65_000) + String(index), position: nil, size: nil)
         }
         let observation = RuntimeObservation(id: "o", start: 1, end: 2, window: 7, windowGeneration: "g", nodes: nodes)
-        XCTAssertThrowsError(try RuntimeEncoding.discovery(observation, session: "s", bundle: "fixture", request: "r")) {
-            XCTAssertEqual($0 as? RuntimeRefusal, .outputLimit)
-        }
+        let bytes = try RuntimeEncoding.discovery(observation, session: "s", bundle: "fixture", request: "r")
+        XCTAssertGreaterThan(bytes.count, 16 * 1024 * 1024)
+        XCTAssertLessThan(bytes.count, RuntimeCollector.maxBytes)
+        XCTAssertEqual(RuntimeCollector.maxBytes, 1_073_741_824)
     }
 
     func testTransformOrderAndUnknownEncoding() throws {

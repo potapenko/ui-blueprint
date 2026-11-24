@@ -413,6 +413,7 @@ pub(crate) struct Arguments {
     pub max_input: usize,
     pub max_output: usize,
     pub json: bool,
+    pub result_only: bool,
 }
 impl Arguments {
     pub fn parse(args: Vec<OsString>) -> Result<Self, Failure> {
@@ -432,12 +433,20 @@ impl Arguments {
         let mut max_input = None;
         let mut max_output = None;
         let mut json = false;
+        let mut result_only = false;
         while let Some(flag) = args.next() {
             if flag == "--json" {
                 if json {
                     return Err(Failure::invalid("invalid_arguments"));
                 }
                 json = true;
+                continue;
+            }
+            if flag == "--result-only" {
+                if result_only {
+                    return Err(Failure::invalid("invalid_arguments"));
+                }
+                result_only = true;
                 continue;
             }
             let value = args.next().ok_or(Failure::invalid("invalid_arguments"))?;
@@ -473,6 +482,9 @@ impl Arguments {
             (Command::Measure, None, Some(path)) => QueryFile::Query(path),
             _ => return Err(missing),
         };
+        if result_only && (command != Command::Measure || !json) {
+            return Err(missing);
+        }
         if result_version.is_some() && !json {
             return Err(missing);
         }
@@ -501,6 +513,7 @@ impl Arguments {
             max_input: max_input.ok_or(missing)?,
             max_output: max_output.ok_or(missing)?,
             json,
+            result_only,
         })
     }
 }

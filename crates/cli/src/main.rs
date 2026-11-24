@@ -48,6 +48,7 @@ Actions support one Web SetChecked, Focus, Type or native-button Activate throug
 Web Focus/Activate(Semantic)/Type(Keyboard) require --expectation FILE; SetChecked(Setter) retains the legacy path. Never infer expected state from typed text.\n\
 Usage: uiblueprint check|measure --snapshot FILE --expectation FILE --space SPACE_ID --max-input-bytes N --max-output-bytes N [--evaluation FILE] [--json --result-version VERSION]\n\
 Saved input accepts Snapshot or observed ChannelResponse; expectation/query stay canonical. Bounds are explicit; local analysis collects nothing.\n\
+Measure --json --result-only returns a versioned CLI measurement_result with source identity/observations/coverage, without repeating Snapshot nodes. Retain the input for replay.\n\
 Measure also accepts --query FILE instead of --expectation. Measure JSON is analysis0.2; check JSON defaults to core0.1, with explicit0.2 for converted/conditional results.\n\
 Neighbors: uiblueprint neighbors --snapshot FILE --ref SOURCE_KEY_JSON --max-relations N --max-input-bytes N --max-output-bytes N [--json]\n\
 Inspect: uiblueprint inspect --snapshot FILE --ref SOURCE_KEY_JSON --view interaction|design --max-input-bytes N --max-output-bytes N [--json]\n\
@@ -146,7 +147,17 @@ fn execute(args: Arguments) -> Result<(Vec<u8>, u8), Failure> {
             } else {
                 4
             };
-            let bytes = if args.json {
+            let bytes = if args.result_only {
+                output::measurement_result_json(
+                    &MeasurementCase {
+                        snapshot,
+                        query,
+                        evaluation,
+                        result,
+                    },
+                    args.max_output,
+                )?
+            } else if args.json {
                 output::analysis_json(
                     AnalysisDocument {
                         schema_version: AnalysisVersion::CURRENT,
