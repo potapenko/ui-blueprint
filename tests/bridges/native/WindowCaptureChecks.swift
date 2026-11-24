@@ -15,6 +15,21 @@ import Darwin
         refuses { _ = try NativeWindowCapture.discoveryOptions(["--list-windows","--pid","123","--out","/Users/unknown"]) }
         let options = try NativeWindowCapture.Options.parse(valid)
         expect(options.pid == 123 && options.window == 456 && options.deadlineMS == 5000)
+        // The list-windows numeric identity must survive JSON -> caller argv ->
+        // capture parsing exactly. Adjacent representable values must not collapse
+        // into the same identity; this is not a timestamp tolerance.
+        let reportedLaunch = 1795545649.1296577
+        for launch in [reportedLaunch.nextDown, reportedLaunch, reportedLaunch.nextUp,
+                       1795546099.8983998, 1795546204.382087, 1795546285.3076348] {
+            let data = try JSONSerialization.data(withJSONObject: ["launch_time": launch], options: [.sortedKeys])
+            let decoded = try JSONDecoder().decode([String: Double].self, from: data)
+            let argument = String(decoded["launch_time"]!)
+            let parsed = try NativeWindowCapture.Options.parse(valid + ["--expected-launch-time", argument])
+            expect(parsed.expectedLaunch?.bitPattern == launch.bitPattern)
+            let listed = try NativeWindowCapture.discoveryOptions(["--list-windows", "--pid", "123",
+                "--expected-bundle", "public.app", "--expected-launch-time", argument])
+            expect(listed.expectedLaunch?.bitPattern == launch.bitPattern)
+        }
         refuses { _ = try NativeWindowCapture.Options.parse([]) }
         refuses { _ = try NativeWindowCapture.Options.parse(valid + ["--pid","999"]) }
         refuses { _ = try NativeWindowCapture.Options.parse(valid + ["--unknown","private-canary"]) }
