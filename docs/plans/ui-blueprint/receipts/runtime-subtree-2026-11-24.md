@@ -1,7 +1,7 @@
 # Runtime component export under the existing output limit
 
 Owner: [outputLimit fix](codex://threads/01a20ed3-77b9-78c0-9ab3-ce714c6bb86c).
-Status: released in0.9.0; Practice consumer acceptance passed; other consumer cases remain open.
+Status: released in0.9.0; Practice and bounded Random acceptance passed; other consumer cases remain open.
 Release owner: [builds/releases](codex://threads/01a20929-8e9a-7830-834d-3e558e9ff18d).
 
 ## Basis and scope
@@ -84,8 +84,8 @@ properties occupy553844bytes and declarations253364 of roughly988KB; this suppor
 payload duplication as a cost, not a measured diagnosis of consumers' private trees.
 Custom ScopeDialog is not a standalone source node even though its content is
 present; such source omissions are not fixed or relabelled as not-mounted.
-Actors, Random and the separate native resize/dialog chain remain consumer-owned
-and unverified. Practice acceptance below does not cover full-window export.
+Actors and the separate native resize/dialog chain remain consumer-owned and
+unverified. Component acceptances below do not cover full-window export.
 
 
 ## Practice consumer acceptance — 2026-11-24
@@ -105,3 +105,18 @@ commit a4d1c2906f2967fa30c3e0d8b87fc353bfde3702; same PID50264/window15518.
 For these states use `--subtree-type PlayphrasemeApp.MacPracticeRoot` in the
 command above. Full export is no longer needed for this accepted component.
 Other screens and the existing whole-window outputLimit remain outside acceptance.
+
+
+## Random consumer acceptance — 2026-11-24
+
+[Random owner](codex://threads/01a20844-7030-7701-a26a-88793ef9752e) confirmed
+source-reported `PlayphrasemeApp.RandomCompletionDialog` on0.9.0 with matching
+embedded SDK. Valid snapshots, child parts and working Rust measurements passed
+for favorite-one, favorite-empty and common-next. In the original favorite-one
+case:324 selected subtree nodes,261 ancestors,11033 source nodes in the window.
+The initial favorite-one scoped-export acceptance is passed by the consumer.
+Owner-held reports: `/Volumes/Develop-2TB/Develop/tmp/playphraseme-s13-uib090-jckkjby7`.
+
+The fourth word-next case on the full Vocabulary page returns sourceLimit before
+Snapshot. That separate source-bound limitation is already with the coordinator;
+this acceptance neither closes it nor authorizes raising limits or a duplicate task.
