@@ -3,6 +3,34 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.11.0
+
+- Support complete large Mac runtime observations with up to 1,048,576 source
+  nodes/native views and 1 GiB canonical or discovery artifacts. Matching SDK,
+  caller and Rust input budgets agree; source completeness, unique selection,
+  privacy filtering, depth/type/metadata limits and cancellation remain protected.
+- Resolve the previous large full-window output and filled Word/Next source-limit
+  cases on the qualified macOS 27.0.1 arm64 profile. Actual full Search, resize,
+  Practice, post-close and Word/Next observations validated and measured in Rust.
+  The final single live query exported 36,517 nodes / 87,799,692 bytes and measured
+  dialog width 576 pt in 5.6679 s, using explicit `--timeout 120`, without subtree
+  fallback, application rebuild, markers or retry.
+- Use one absolute deadline across preflight, capture and Rust measurement.
+  Default timeout is 30 s; explicit values up to 120 s are supported. The heavy
+  combined case above does not establish default-30 or universal latency bounds.
+- Add opt-in `measure --json --result-only` to avoid returning the entire source
+  Snapshot again while preserving identity, observations, coverage and result
+  evidence. This CLI envelope is not a canonical Snapshot or standalone replay
+  artifact; retain the original input. Existing `--json` output is unchanged.
+- Validate source graphs with one iterative traversal, preserving all cycle,
+  dangling-reference, duplicate, delta and other semantic checks. On the same
+  accepted Word input, validation and scalar measurements became substantially
+  faster with exactly equal measurement responses.
+- This remains an opt-in Mac Debug source profile. Mobile support is deferred.
+  The 1 GiB ceiling is not a peak-memory guarantee, and the opaque framework
+  getter is not preemptible; preserve owner recovery and avoid automatic retries
+  after an unknown outcome. Rebuild the app with the matching SDK.
+
 ## 0.10.1
 
 - Explain SwiftUI runtime `sourceLimit` refusals with optional fixed diagnostic
