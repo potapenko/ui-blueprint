@@ -69,6 +69,8 @@ final class RuntimeTests: XCTestCase {
         XCTAssertEqual(try RuntimeCollector.sanitizedType("SwiftUI.(unknown context at $123abc).View"),
                        "SwiftUI.(private).View")
         XCTAssertThrowsError(try RuntimeCollector.sanitizedType("bad\nname"))
+        XCTAssertEqual(try RuntimeCollector.sanitizedType("SwiftUI.ModifiedContent<App.View, SwiftUI.Padding>"),
+                       "SwiftUI.ModifiedContent")
     }
 
     @MainActor func testEncodingDoesNotInventCommonCoordinates() throws {
@@ -86,7 +88,18 @@ final class RuntimeTests: XCTestCase {
         let props = try XCTUnwrap(nodes[1]["properties"] as? [[String: Any]])
         XCTAssertEqual((props[0]["state"] as? [String: Any])?["availability"] as? String, "unknown")
         XCTAssertEqual((nodes[0]["children"] as? [[String: Any]])?.count, 1)
-        XCTAssertTrue(String(decoding: bytes, as: UTF8.self).contains("runtime-transform-not-yet-qualified"))
+        XCTAssertTrue(String(decoding: bytes, as: UTF8.self).contains("source-transform-unavailable"))
+    }
+
+    func testTransformOrderAndUnknownEncoding() throws {
+        let source: [String: Any] = ["positionAdjustment": [3, 4], "items": [
+            ["translation": [3, 4]], ["affineTransform": [2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]],
+            ["translation": [10, 20]], [:]]]
+        XCTAssertEqual(try XCTUnwrap(RuntimeAffine.decode(source)).values, [2, 0, 0, 3, 10, 20])
+        XCTAssertNil(RuntimeAffine.decode(["positionAdjustment": [0, 0], "items": [["projectionTransform": []]]]))
+        XCTAssertNil(RuntimeAffine.decode(["positionAdjustment": [true, false], "items": []]))
+        XCTAssertNil(RuntimeAffine.decode(["positionAdjustment": [0, 0], "items": [["affineTransform":
+            [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]]]]))
     }
 }
 #endif

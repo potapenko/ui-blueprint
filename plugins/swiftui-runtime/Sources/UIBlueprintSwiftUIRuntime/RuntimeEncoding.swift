@@ -13,9 +13,9 @@ enum RuntimeEncoding {
             "uncertainty": NSNull()]
         let fields = ["layout_bounds"]
         let missing = observation.nodes.filter { $0.position == nil || $0.size == nil }.count
-        let coverage: [String: Any] = ["status": missing == 0 ? "complete" : "partial",
+        let coverage: [String: Any] = ["status": missing == 0 && observation.emptyHostingRoots == 0 ? "complete" : "partial",
             "scope_id": "window-\(observation.window)", "fields": fields,
-            "omitted_count": 0, "unknown_count": missing]
+            "omitted_count": observation.emptyHostingRoots == 0 ? 0 : NSNull(), "unknown_count": missing]
         let childMap = Dictionary(grouping: observation.nodes.compactMap { node in
             node.parent.map { ($0, node.index) }
         }, by: { $0.0 })
@@ -23,25 +23,55 @@ enum RuntimeEncoding {
             ["namespace": namespace, "key": "\(observation.id)-n\(index)"]
         }
         let nodes: [[String: Any]] = observation.nodes.map { node in
+            let inherited = (node.positionSource != nil && node.positionSource != node.index)
+                || (node.sizeSource != nil && node.sizeSource != node.index)
+            var geometryEvidence = evidence
+            if inherited {
+                geometryEvidence["provenance"] = "derived"
+                geometryEvidence["method"] = "NSHostingView.debug-layout-input-context"
+            }
             var state: [String: Any] = ["availability": "unknown", "reason": "source-has-no-position-size-pair"]
             if let position = node.position, let size = node.size {
+                let localSpace = ["id": "\(observation.id)-local-\(node.index)",
+                                  "kind": "local", "units": "pt", "origin": "top_left"]
+                var transform: [String: Any] = ["status": "unknown", "reason": "source-transform-unavailable"]
+                if let affine = node.transform {
+                    var mappingEvidence = evidence
+                    mappingEvidence["provenance"] = "derived"
+                    mappingEvidence["method"] = "SwiftUI.ViewTransform.qualified-affine-context"
+                    transform = ["status": "known", "transform": ["from": localSpace,
+                        "to": ["id": "\(observation.id)-swiftui-global-\(node.hostingRoot)",
+                               "kind": "local", "units": "pt", "origin": "top_left"],
+                        "affine": affine.values, "target": target, "surface": surface,
+                        "environment_revision": observation.id, "evidence": mappingEvidence]]
+                }
                 let geometry: [String: Any] = ["frame_kind": "layout_bounds",
-                    "coordinate_space": ["id": "\(observation.id)-local-\(node.index)",
-                        "kind": "local", "units": "pt", "origin": "top_left"],
+                    "coordinate_space": localSpace,
                     "shape": ["shape": "rect", "value": ["x": position.x, "y": position.y,
                         "width": size.width, "height": size.height]],
-                    "transform": ["status": "unknown", "reason": "runtime-transform-not-yet-qualified"]]
+                    "transform": transform]
                 state = ["availability": "known", "value": ["type": "geometry", "value": geometry]]
             }
             let role: [String: Any] = node.type.map {
                 ["availability": "known", "value": ["type": "text", "value": $0]]
             } ?? ["availability": "unknown", "reason": "source-type-not-exposed"]
+            var declarations = [declaration("hosting_root", .number(Double(node.hostingRoot)))]
+            if let source = node.positionSource, source != node.index {
+                declarations.append(declaration("layout_position_source", .text(key(source)["key"]!)))
+            }
+            if let source = node.sizeSource, source != node.index {
+                declarations.append(declaration("layout_size_source", .text(key(source)["key"]!)))
+            }
+            if node.parent == nil {
+                declarations += [declaration("request_id", .text(request)),
+                                 declaration("hosting_root_count", .number(Double(observation.hostingRoots))),
+                                 declaration("empty_hosting_root_count", .number(Double(observation.emptyHostingRoots)))]
+            }
             return ["key": key(node.index), "surface": surface, "native_role": role,
                 "properties": [["selection": "requested", "field": "layout_bounds", "sensitivity": "public",
-                    "evidence": evidence, "state": state]],
+                    "evidence": geometryEvidence, "state": state]],
                 "children": childMap[node.index, default: []].map { key($0.1) }, "extensions": [],
-                "source_declarations": [declaration("hosting_root", .number(Double(node.hostingRoot))),
-                                        declaration("request_id", .text(request))]]
+                "source_declarations": declarations]
         }
         let observed: [String: Any] = ["id": observation.id, "source_namespace": namespace,
             "channel": "opt_in_layout_probe", "start": observation.start, "end": observation.end,

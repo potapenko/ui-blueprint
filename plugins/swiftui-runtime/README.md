@@ -10,7 +10,8 @@ after a real-app trap; corrected app qualification remains pending.
 
 ## Integrate once
 
-Link the local package `plugins/swiftui-runtime`, product
+Link the repository-root Swift package at the selected published tag/revision,
+or the local package `plugins/swiftui-runtime`, product
 `UIBlueprintSwiftUIRuntime`, to the actual Mac application target. Retain one
 session in the existing application startup owner, outside `body`:
 
@@ -89,9 +90,23 @@ requests produced eight distinct observations in about0.125s on the test host.
 Synthetic model canary was absent after allowlisting. These are fixture results,
 not PlayPhrase.me acceptance or a cross-platform claim.
 
-Source nodes without a reported position/size pair remain unknown. Transforms
-are currently unqualified and source-local spaces remain separate: cross-node
-gaps/window overlays are pending, not manufactured from coordinates. Real-app
-coverage, repeated navigation/popup, Release, privacy/concurrency review and
-installed-skill delivery remain open under
-[SWIFTUI-RUNTIME@2](../../docs/specs/product/swiftui-runtime-probe.md).
+The scoped7b candidate now captures real PlayPhrase.me without the former trap:
+6286 nodes, canonical validation and fresh Rust width/height queries passed.
+The next normalization candidate resolves source-inherited layout inputs with
+defining-node attribution, includes toolbar/nested hosting views and attaches
+qualified 2D affine mappings within each hosting tree. Its public GeometryProxy
+fixture covers resize/conditional content, text reflow, padding, button labels,
+scrolling, scale/rotation and a separate toolbar root; the canonical snapshots
+and Rust width/gap checks pass. Generic type arguments are omitted from nominal
+labels to keep full trees readable and bounded; node identities/links remain.
+
+Cross-host/window/screen mapping is not inferred. Perspective/3D remains unknown;
+Rust rectangle relations reject rotated/sheared mapped shapes rather than use
+their bounding envelope as containment. Source-local dimensions remain available.
+Final real-app coverage/transitions, focused normalization review and installed
+release acceptance remain open under
+[SWIFTUI-RUNTIME@3](../../docs/specs/product/swiftui-runtime-probe.md).
+
+The agent-facing preparation and query instructions live in
+[setup](../../skills/ui-blueprint/references/swiftui-setup.md) and
+[runtime queries](../../skills/ui-blueprint/references/swiftui-runtime.md).

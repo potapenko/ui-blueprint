@@ -340,8 +340,13 @@ def measure(args, doc, raw, selected):
             if value <= 0:
                 raise Failure("measurement_deadline")
             return min(value, 10)
-        subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", str(MAX_BYTES), str(snapshot)],
-                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=remaining())
+        # Rust measure loads the original Snapshot with Document::from_json,
+        # including semantic validation. Avoid parsing a large window twice
+        # before its first useful query. An all-unknown/empty selection still
+        # needs the independent validator because no measurement will run.
+        if not any(state["availability"] == "known" for _, _, state in selected):
+            subprocess.run([str(bundle / "uiblueprint-validate"), "--max-bytes", str(MAX_BYTES), str(snapshot)],
+                           check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=remaining())
         for node, name, state in selected:
             if state["availability"] != "known":
                 results.append(dict(key=node["key"], type=name, status="unknown", reason=state.get("reason")))

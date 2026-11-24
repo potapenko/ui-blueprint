@@ -83,15 +83,28 @@ frame or proof that the animation finished.
 Source namespace is `swiftui.runtime.layout`; older marked snapshots use
 `swiftui.layout`, while Accessibility is another source. The collector exports
 structural types and allowlisted geometry, not view model values or UI text.
-The raw SwiftUI tree can contain logical wrappers without their own position/size.
-An unknown leaf and a measured ancestor remain two different facts.
+The debug tree records changed layout inputs. The qualified collector resolves
+unchanged position/size through that same tree's context, marks inherited layout
+as derived, and records `layout_position_source`/`layout_size_source` declarations
+pointing to the defining nodes. This is source-specific inheritance, not copying
+an arbitrary ancestor rectangle. A missing root context remains unknown. Nominal
+types omit recursively repeated generic arguments; distinct occurrences retain
+their keys and child links.
 
-The current candidate reports known source-local layout rectangles in points.
-Common coordinate transforms and full toolbar/nested-host coverage are still
-under qualification. Do not claim window-wide completion from a large node count,
-subtract unrelated local coordinates for gaps, substitute AX bounds, or infer
-pixel visibility from layout. Follow the published release's verified capability
-boundary; candidate evidence does not certify all screens or mobile platforms.
+Known source-local layout rectangles use points. A qualified affine maps them to
+that hosting tree's SwiftUI-global space, including offsets, scrolling, scale
+and 2D rotation. Different hosting roots still have separate spaces; a toolbar's
+global coordinates do not establish a mapping to the content root merely because
+their values look compatible. The collector also visits toolbar and nested native
+hosting views and reports empty roots as incomplete. Real-app coverage acceptance
+remains separate from the general fixture qualification.
+
+Rust can measure axis-preserving mapped rectangles. Rotated/sheared mapped shapes
+currently return `unsupported_shape` for rectangle relations; their source-local
+width/height remain available. Do not turn a bounding envelope into containment
+or visibility truth, subtract unrelated local coordinates, or substitute AX
+bounds. Follow the release's actual capability boundary; a large node count does
+not certify all screens or mobile platforms.
 
 Record the actual source/window/generation, request/observation ID, measured value,
 units, frame kind, space and material unknowns. Width/height are layout dimensions,

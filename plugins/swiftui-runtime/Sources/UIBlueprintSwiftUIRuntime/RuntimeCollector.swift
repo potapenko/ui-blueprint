@@ -28,6 +28,9 @@ struct RuntimeNode {
     let type: String?
     let position: CGPoint?
     let size: CGSize?
+    var positionSource: Int? = nil
+    var sizeSource: Int? = nil
+    var transform: RuntimeAffine? = nil
 }
 
 struct RuntimeObservation {
@@ -37,6 +40,8 @@ struct RuntimeObservation {
     let window: Int
     let windowGeneration: String
     let nodes: [RuntimeNode]
+    var hostingRoots: Int = 0
+    var emptyHostingRoots: Int = 0
 }
 
 @MainActor
@@ -78,6 +83,7 @@ final class RuntimeCollector {
         var nodes: [RuntimeNode] = []
         var nativeCount = 0
         var hostCount = 0
+        var emptyHostCount = 0
 
         func visit(_ view: NSView, depth: Int) throws {
             nativeCount += 1
@@ -85,19 +91,22 @@ final class RuntimeCollector {
             if let host = view as? any RuntimeHosting {
                 let root = hostCount
                 hostCount += 1
+                let before = nodes.count
                 try Self.collect(try host.runtimeGeometryTree(), root: root, nodes: &nodes)
-                return
+                if nodes.count == before { emptyHostCount += 1 }
             }
             for child in view.subviews { try visit(child, depth: depth + 1) }
         }
-        try visit(content, depth: 0)
+        var nativeRoot = content
+        while let parent = nativeRoot.superview, parent.window === window { nativeRoot = parent }
+        try visit(nativeRoot, depth: 0)
         guard hostCount > 0, !nodes.isEmpty else { throw RuntimeRefusal.unsupportedSource }
         guard window.isVisible, window.contentView === content, witness(window) == generation else {
             throw RuntimeRefusal.staleWindow
         }
         return RuntimeObservation(id: UUID().uuidString, start: start,
             end: ProcessInfo.processInfo.systemUptime, window: window.windowNumber,
-            windowGeneration: generation, nodes: nodes)
+            windowGeneration: generation, nodes: nodes, hostingRoots: hostCount, emptyHostingRoots: emptyHostCount)
     }
 
     private func witness(_ window: NSWindow) -> String {
@@ -117,18 +126,29 @@ final class RuntimeCollector {
             guard let data = fields.first(where: { $0.label == "data" })?.value as? [_ViewDebug.Property: Any],
                   let children = fields.first(where: { $0.label == "childData" })?.value as? [_ViewDebug.Data]
             else { throw RuntimeRefusal.unsupportedSource }
-            // Do not reflect or encode value/environment/displayList/model payloads.
-            let sourceType = (data[.type] as? Any.Type).map { String(reflecting: $0) }
+            // Metatype lookup is not reflection/encoding of the source value's fields.
+            let metatype = (data[.type] as? Any.Type) ?? data[.value].map { Swift.type(of: $0) }
+            let sourceType = metatype.map { String(reflecting: $0) }
             let type = try sourceType.map(sanitizedType)
-            let position = data[.position] as? CGPoint
-            let size = data[.size] as? CGSize
+            let index = nodes.count
+            let ancestor = parent.map { nodes[$0] }
+            let position = data[.position] == nil ? ancestor?.position : data[.position] as? CGPoint
+            let size = data[.size] == nil ? ancestor?.size : data[.size] as? CGSize
+            guard data[.position] == nil || position != nil, data[.size] == nil || size != nil else {
+                throw RuntimeRefusal.unsupportedSource
+            }
+            let positionSource = data[.position] == nil ? ancestor?.positionSource : index
+            let sizeSource = data[.size] == nil ? ancestor?.sizeSource : index
+            let transform: RuntimeAffine?
+            if let value = data[.transform] { transform = RuntimeAffine.source(value) }
+            else { transform = ancestor?.transform }
             if let position, !position.x.isFinite || !position.y.isFinite { throw RuntimeRefusal.invalidGeometry }
             if let size, !size.width.isFinite || !size.height.isFinite || size.width < 0 || size.height < 0 {
                 throw RuntimeRefusal.invalidGeometry
             }
-            let index = nodes.count
             nodes.append(RuntimeNode(index: index, parent: parent, hostingRoot: root,
-                                     type: type, position: position, size: size))
+                                     type: type, position: position, size: size,
+                                     positionSource: positionSource, sizeSource: sizeSource, transform: transform))
             guard pending.count + children.count + nodes.count <= maxNodes else { throw RuntimeRefusal.sourceLimit }
             pending.append(contentsOf: children.reversed().map { ($0, Optional(index), depth + 1) })
         }
@@ -138,8 +158,8 @@ final class RuntimeCollector {
         guard name.utf8.count <= 65_536, !name.unicodeScalars.contains(where: { $0.value < 32 }) else {
             throw RuntimeRefusal.sourceLimit
         }
-        return name.replacingOccurrences(of: #"\(unknown context at \$[0-9a-fA-F]+\)"#,
-                                        with: "(private)", options: .regularExpression)
+        return String(name.prefix(while: { $0 != "<" })).replacingOccurrences(
+            of: #"\(unknown context at \$[0-9a-fA-F]+\)"#, with: "(private)", options: .regularExpression)
     }
 }
 #endif
