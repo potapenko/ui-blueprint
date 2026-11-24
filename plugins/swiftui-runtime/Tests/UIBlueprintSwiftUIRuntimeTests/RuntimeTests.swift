@@ -2,10 +2,19 @@ import XCTest
 @testable import UIBlueprintSwiftUIRuntime
 #if DEBUG
 import RuntimeUpdateScope
+import Darwin
 #endif
 
 #if DEBUG
 final class RuntimeTests: XCTestCase {
+    func testStaticGetterContextIsTheSwiftClassMetatype() throws {
+        let metatype = try XCTUnwrap(_typeByName("SwiftUI.UpdateGroup"))
+        let image = try XCTUnwrap(dlopen("/System/Library/Frameworks/SwiftUICore.framework/SwiftUICore", RTLD_LAZY))
+        defer { dlclose(image) }
+        let exported = try XCTUnwrap(dlsym(image, "$s7SwiftUI11UpdateGroupCN"))
+        XCTAssertEqual(unsafeBitCast(metatype, to: UnsafeRawPointer.self), UnsafeRawPointer(exported))
+    }
+
     @MainActor func testUpdateScopeRestoresContextOnNestedAndThrowingPaths() throws {
         let os = ProcessInfo.processInfo.operatingSystemVersion
         guard os.majorVersion == 27, os.minorVersion == 0, os.patchVersion == 1 else {
