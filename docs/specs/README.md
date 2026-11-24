@@ -111,7 +111,7 @@ remain separate. Existing SwiftUI, Web, Compose, core and release scope are prot
 | Source borrowing or provenance | [Reference tree](reference/README.md) | Select mechanism; historical catalog is not a fresh code/license audit |
 | Rust source | [RUST.md](../../RUST.md) plus selected product leaf | Local engineering rules, no product authority by themselves |
 | Toolchain, Cargo, dependencies, targets/features/checks | [DEV.RUST@5](development/rust.md) | Workspace feature matrix and optional SwiftUI/GPUI source checks; runtime acceptance separate |
-| Agent skill and prompt installation | [AGENT-SKILL@7](development/agent-skill.md) | Root-first geometry, complete installed platform recipes, drawing and cold-use checks |
+| Agent skill and prompt installation | [AGENT-SKILL@8](development/agent-skill.md) | Root-first geometry, complete installed platform recipes, drawing and cold-use checks |
 | D01–D07 decisions, T01/S01 implementation handoff | [Decision route](development/decisions/README.md) | Active / Evolving; delegated ROADMAP choices and explicit unresolved proof obligations |
 | New product contract | [Feature template](templates/feature-spec.md) | Register authority/revision/dependencies before implementation; template grants none |
 ## Routing invariants

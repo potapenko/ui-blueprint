@@ -63,9 +63,11 @@ for(const key of ['stat','access','mkdtemp','open','readFile','unlink','rmdir'])
 def inventory_compatibility():
     stage = Path(tempfile.mkdtemp(prefix='uib-dist-inventory-'))
     try:
-        for version in (1, 2, 3, 4, 5, 6, 7):
+        for version in (1, 2, 3, 4, 5, 6, 7, 8):
             for modules in ('core', 'web', 'native', 'combined'):
                 names = dist.files_for(modules)
+                if version < 8:
+                    names -= dist.RUNTIME_FILES
                 if version == 6:
                     names -= dist.CACHE_FILES_V7
                 if version < 6:

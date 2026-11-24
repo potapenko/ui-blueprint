@@ -1,6 +1,6 @@
 # Mac distribution
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@9`.
+- Contract: `UIB.MAC-DISTRIBUTION@10`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -114,3 +114,13 @@ for verification, update, rollback and removal. Verify isolated installed import
 without attachment, plus format6→7→6 lifecycle and missing/foreign file refusal.
 S14 component experiments remain source-only with their separately qualified
 owner profile/backend; no debugger binary or process grant is bundled.
+
+Manifest8 delivers the experimental Debug Mac runtime caller `swiftui_runtime.py`
+in native/combined bundles, separately from the legacy debugger/cache modules.
+The matching skill adds `references/swiftui-setup.md` and `references/swiftui-runtime.md`.
+Root SwiftPM products and SDK source are obtained from the same pinned source tag;
+they are not injected into apps by the installer. User release-now direction on
+2026-11-24 authorizes this experimental delivery with explicit limitations.
+Formats1–7 retain their exact CLI inventories and their six/seven/eight skill files.
+Verify7→8→7 rollback, missing/foreign files, isolated caller and matching skill.
+No new app permission, production binary or full platform qualification follows.

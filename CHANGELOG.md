@@ -3,6 +3,25 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.8.0
+
+- Publish an experimental, opt-in Mac Debug SwiftUI runtime library and matching
+  `swiftui_runtime.py` caller. Prepare and launch an owned integrated app, list
+  windows and request fresh canonical geometry without Xcode GUI or LLDB attach.
+  The root Swift package exposes both the marker and runtime library products.
+- Include portable agent setup and runtime-query guides with the matching skill.
+  Local bundle format 8 preserves verification and rollback of formats 1–7.
+- Preserve source-local geometry and attributed inherited layout; qualified 2D
+  affine facts remain scoped to each hosting tree. Cross-host/window/screen mapping
+  is not inferred. Rotated/sheared rectangle relations can return
+  `unsupported_shape`; perspective/3D mapping remains unknown.
+- This is an experimental macOS 27.0.1 source profile, not full application,
+  mobile or platform-matrix acceptance. The scoped predecessor captured 6,286
+  real-app nodes; a later resize attempt timed out. The current normalization
+  has owned-fixture evidence; complete real-app requalification remains pending.
+  A timeout does not prove the framework call stopped: preserve owner recovery
+  and do not automatically retry or terminate the app.
+
 ## 0.7.0
 
 - Fix bounded SwiftUI owner association discovery using a metadata index and

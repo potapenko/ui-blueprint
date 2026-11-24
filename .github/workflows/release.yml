@@ -99,7 +99,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          swift test --package-path plugins/swiftui --scratch-path "$RUNNER_TEMP/swiftui-probe"
+          swift test --package-path . --scratch-path "$RUNNER_TEMP/swiftui-probe"
+          python3 -B tests/bridges/swiftui_runtime_check.py
           cargo fmt --manifest-path plugins/gpui/Cargo.toml --all -- --check
           cargo clippy --locked --manifest-path plugins/gpui/Cargo.toml --all-targets -- -D warnings
           cargo test --locked --manifest-path plugins/gpui/Cargo.toml -- --test-threads=1

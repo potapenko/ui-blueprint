@@ -98,3 +98,10 @@ checks; real PlayPhrase.me window and GPUI native-example qualification remain s
 - Shared policy changes require the affected feature matrix, workflow validation,
   changed-link checks and a checkpoint. Local results do not prove a hosted run;
   source CI does not replace adapter runtime QA or establish release readiness.
+
+Experimental runtime source release0.8.0 uses the root SwiftPM entry in the
+source-release workflow: its tests include the existing marker SDK and the new
+Debug runtime package. The matching standalone Python caller checks also run.
+This replaces the nested marker-only check in that workflow; Cargo matrix and
+real-app/platform qualification remain unchanged. User release-now direction
+on2026-11-24 permits documented experimental limits, not packaging regressions.

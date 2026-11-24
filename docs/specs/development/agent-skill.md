@@ -1,5 +1,5 @@
 # Agent skill and prompt installation
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@7`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@8`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: approved six-step plan (2026-10-13), real installation approval
   (2026-10-14), and completion instruction (2026-11-14) recorded below.
@@ -98,3 +98,10 @@ CLI/wire/analysis/export semantics and public release boundaries remain protecte
 KC-COMPOSE-001: human-approved2026-10-23 plan adds the portable [Compose@1](../product/compose.md) recipe and source-included collector. Existing installation and drawing behavior stay unchanged; Desktop/Android runtime acceptance is separate.
 WINDOW-ROOT-001: direct user message01a1dbc5-5599-7481-aed8-7eda49313fb1 authorizes
 root-first skill routing, complete SwiftUI/GPUI references and matching local install.
+
+RUNTIME-RELEASE-001: direct2026-11-24 experimental source-release instruction
+adds portable SwiftUI setup/runtime references to the format8 ten-file skill.
+Prepare/build and instance ownership remain separate from fresh geometry requests.
+Preserve exact historical six/seven/eight-file skill inventories during rollback.
+Runtime support is opt-in Debug Mac with the pinned release's stated limits;
+no GUI Xcode or shared mouse queue is required for ordinary requests.

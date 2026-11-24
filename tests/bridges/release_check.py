@@ -35,7 +35,7 @@ def bundle_at(folder, revision='a' * 40):
     products = {name: ((name + '\n').encode(), 0o644) for name in dist.files_for('combined')}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nprintf "Usage: synthetic candidate\\n"\n', 0o755)
-    manifest = {'format': 'ui-blueprint-local-7', 'source_revision': revision,
+    manifest = {'format': 'ui-blueprint-local-8', 'source_revision': revision,
                 'modules': 'combined', 'files': {name: {'sha256': dist.digest(data), 'mode': mode}
                                                 for name, (data, mode) in products.items()}}
     with dist.destination(folder) as fd:
@@ -603,7 +603,7 @@ esac
                     resolved = (path.parent / link.split('#', 1)[0]).resolve()
                     assert resolved.is_relative_to(skill.resolve()) and resolved.is_file(), link
         checks.smoke(installed)
-        if json.loads((installed / dist.MANIFEST).read_bytes())['format'] == 'ui-blueprint-local-7':
+        if json.loads((installed / dist.MANIFEST).read_bytes())['format'] in ('ui-blueprint-local-7', 'ui-blueprint-local-8'):
             # Isolated Python cannot accidentally resolve modules from the source checkout.
             modules = sorted(Path(name).stem for name in dist.CACHE_FILES)
             run([sys.executable, '-I', '-B', '-c',
@@ -613,6 +613,12 @@ esac
                  'assert capture.verified_helper(sys.argv[1])==Path(sys.argv[1])/"native-host-helper"',
                  installed, *modules], env=env)
             print('PASS installed capture modules import outside checkout without attachment')
+        if json.loads((installed / dist.MANIFEST).read_bytes())['format'] == 'ui-blueprint-local-8':
+            caller = installed / 'swiftui_runtime.py'
+            assert caller.read_bytes() == release.committed(record['source_revision'], 'plugins/macos/swiftui_runtime.py')
+            help_result = run([sys.executable, '-I', '-B', caller, '--help'], env=env)
+            assert all(word in help_result.stdout for word in (b'prepare', b'launch', b'windows', b'capture', b'measure'))
+            print('PASS installed standalone runtime caller provenance/help outside checkout')
         native_preparer_smoke(installed, stage)
         run([*command, '--uninstall'], env=env)
         assert not (prefix / 'share/uiblueprint').exists()
@@ -637,7 +643,7 @@ def cross_inventory_checks(stage, versions, manifest_version):
     old_bundle = stage / f'legacy{manifest_version} inventory bundle'
     old_folder.mkdir()
     old_bundle.mkdir()
-    names = dist.files_for('combined') - dist.CACHE_FILES - dist.COMPOSE_FILES - dist.NATIVE_CALLER_FILES
+    names = dist.files_for('combined') - dist.RUNTIME_FILES - dist.CACHE_FILES - dist.COMPOSE_FILES - dist.NATIVE_CALLER_FILES
     if manifest_version == 1:
         names -= dist.WEB_FILES
     products = {name: ((name + '\n').encode(), 0o644) for name in names}
@@ -651,7 +657,7 @@ def cross_inventory_checks(stage, versions, manifest_version):
     # Pinned historical template: do not regenerate the old installer from current code.
     historical = '907b9b2c87fcb0475a64da939b4eaf8ec9358beb^'
     old_skill_files = tuple(name for name in release.SKILL_FILES
-                            if name not in ('references/compose.md', 'references/gpui.md'))
+                            if name not in ('references/compose.md', 'references/gpui.md') and name not in release.RUNTIME_SKILL_FILES)
     with patch.object(release, 'SKILL_FILES', old_skill_files):
         release.write_candidates(old_bundle, old_folder, version=old_version, revision='a' * 40,
             minimum='27.0.1', signing='unsigned',
@@ -699,7 +705,7 @@ def cross_inventory_checks(stage, versions, manifest_version):
     extra.unlink()
     run(install, env=env)
     assert os.readlink(current) == 'versions/0.1.0'
-    assert len((current / 'skill/.skill-sha256').read_text().splitlines()) == 8
+    assert len((current / 'skill/.skill-sha256').read_text().splitlines()) == len(release.SKILL_FILES)
     # New code verifies both inventories; the old shipped script cannot be upgraded in place.
     rollback = [*new, '--version', old_version]
     inactive_source = legacy / 'RUN.md'
@@ -723,7 +729,7 @@ def compose_inventory_upgrade(stage, versions):
     """The installed Compose manifest3 upgrades without losing the matching skill."""
     bundle = stage / 'compose3-bundle'
     bundle.mkdir()
-    names = dist.files_for('combined') - dist.CACHE_FILES - dist.NATIVE_CALLER_FILES
+    names = dist.files_for('combined') - dist.RUNTIME_FILES - dist.CACHE_FILES - dist.NATIVE_CALLER_FILES
     products = {name: ((name + '\n').encode(), 0o644) for name in names}
     for name in release.BINARIES:
         products[name] = (b'#!/bin/sh\nexit 0\n', 0o755)
@@ -733,7 +739,7 @@ def compose_inventory_upgrade(stage, versions):
     with dist.destination(bundle) as fd:
         dist.publish(fd, products, manifest)
     candidate = stage / 'compose3-candidate'; candidate.mkdir()
-    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/gpui.md')
+    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/gpui.md' and name not in release.RUNTIME_SKILL_FILES)
     with patch.object(release, 'SKILL_FILES', old_skill_files):
         release.write_candidates(bundle, candidate, version='0.0.9', revision='a'*40,
             minimum='27.0.1', signing='unsigned',
@@ -761,7 +767,7 @@ def native_inventory_upgrade(stage, versions):
     bundle = stage / 'native4-bundle'
     bundle_at(bundle)
     manifest = json.loads((bundle / dist.MANIFEST).read_bytes())
-    for name in dist.CACHE_FILES:
+    for name in dist.CACHE_FILES | dist.RUNTIME_FILES:
         del manifest['files'][name]
         (bundle/name).unlink()
     manifest['format'] = 'ui-blueprint-local-4'
@@ -769,7 +775,7 @@ def native_inventory_upgrade(stage, versions):
     candidate = stage / 'native4-candidate'
     candidate.mkdir()
     historical = '2e30f7fbc7d136f48a45bc194c4ae2fea6eb086a'
-    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/gpui.md')
+    old_skill_files = tuple(name for name in release.SKILL_FILES if name != 'references/gpui.md' and name not in release.RUNTIME_SKILL_FILES)
     with patch.object(release, 'SKILL_FILES', old_skill_files):
         release.write_candidates(bundle, candidate, version='0.0.10', revision='a'*40,
             minimum='27.0.1', signing='unsigned',
@@ -801,7 +807,7 @@ def native_inventory_upgrade(stage, versions):
     assert foreign.read_text() == 'keep this foreign file'
     foreign.unlink()
     run(update)
-    assert len((current/'skill/.skill-sha256').read_text().splitlines()) == 8
+    assert len((current/'skill/.skill-sha256').read_text().splitlines()) == len(release.SKILL_FILES)
     assert (skill/'references/gpui.md').is_file()
     run([*new, '--version', '0.0.10'])
     assert (current/'skill/.skill-sha256').read_bytes() == original
@@ -818,7 +824,7 @@ def cache_inventory_upgrade(stage, versions):
     bundle, candidate = stage / 'cache6-bundle', stage / 'cache6-candidate'
     bundle_at(bundle)
     manifest = json.loads((bundle / dist.MANIFEST).read_bytes())
-    for name in dist.CACHE_FILES_V7:
+    for name in dist.CACHE_FILES_V7 | dist.RUNTIME_FILES:
         del manifest['files'][name]
         (bundle / name).unlink()
     manifest['format'] = 'ui-blueprint-local-6'
@@ -829,7 +835,7 @@ def cache_inventory_upgrade(stage, versions):
         installer_template=release.committed(historical, 'install.sh').decode(),
         formula_template=(ROOT / 'uiblueprint.rb').read_text(),
         skill_files={n: release.committed(historical, 'skills/ui-blueprint/'+n)
-                     for n in release.SKILL_FILES})
+                     for n in release.skill_inventory('ui-blueprint-local-6')})
     extracted = stage / 'cache6-extracted'
     extracted.mkdir()
     release.extract_candidate(candidate, extracted, release.read_candidate(candidate))
@@ -848,7 +854,7 @@ def cache_inventory_upgrade(stage, versions):
     assert foreign.read_text() == 'keep foreign file'
     foreign.unlink()
     run(update)
-    assert json.loads((current / dist.MANIFEST).read_bytes())['format'] == 'ui-blueprint-local-7'
+    assert json.loads((current / dist.MANIFEST).read_bytes())['format'] in ('ui-blueprint-local-7', 'ui-blueprint-local-8')
     assert all((current / name).is_file() for name in dist.CACHE_FILES_V7)
     missing = current / 'swiftui_native_parts.py'
     original = missing.read_bytes()
@@ -864,6 +870,52 @@ def cache_inventory_upgrade(stage, versions):
     run([*new, '--uninstall'])
     assert not current.exists() and not skill.exists()
     print('PASS manifest6 ->7 ->6 rollback/re-update/removal; foreign/missing modules refused')
+
+
+def runtime_inventory_upgrade(stage, versions):
+    """Use the released manifest7 installer and eight-file skill as the baseline."""
+    historical = 'd36d18bd8fc07620d449f02c752aebd11c90c408'
+    bundle, candidate = stage/'runtime7-bundle', stage/'runtime7-candidate'
+    bundle_at(bundle)
+    manifest = json.loads((bundle/dist.MANIFEST).read_bytes())
+    for name in dist.RUNTIME_FILES:
+        del manifest['files'][name]
+        (bundle/name).unlink()
+    manifest['format'] = 'ui-blueprint-local-7'
+    (bundle/dist.MANIFEST).write_bytes(dist.encoded(manifest))
+    candidate.mkdir()
+    release.write_candidates(bundle, candidate, version='0.0.12', revision='a'*40,
+        minimum='27.0.1', signing='unsigned',
+        installer_template=release.committed(historical, 'install.sh').decode(),
+        formula_template=(ROOT/'uiblueprint.rb').read_text(),
+        skill_files={n: release.committed(historical, 'skills/ui-blueprint/'+n)
+                     for n in release.skill_inventory('ui-blueprint-local-7')})
+    extracted = stage/'runtime7-extracted'; extracted.mkdir()
+    release.extract_candidate(candidate, extracted, release.read_candidate(candidate))
+    assert not (extracted/'swiftui_runtime.py').exists()
+    prefix, skill = stage/'runtime7-prefix', stage/'runtime7-skill'
+    run(['sh',candidate/'install.sh','--prefix',prefix,'--skill-dir',skill,'--local-release',candidate])
+    current = prefix/'share/uiblueprint/current'
+    old_receipt = (current/'.install-sha256').read_bytes()
+    old_skill = (skill/'.skill-sha256').read_bytes()
+    new = ['sh',versions/'0.1.0/install.sh','--prefix',prefix]
+    update = [*new,'--local-release',versions/'0.1.0']
+    foreign = skill/'references/swiftui-setup.md'; foreign.write_text('preserve foreign recipe')
+    run(update,ok=False); assert foreign.read_text()=='preserve foreign recipe'; foreign.unlink()
+    run(update)
+    assert json.loads((current/dist.MANIFEST).read_bytes())['format']=='ui-blueprint-local-8'
+    assert (current/'swiftui_runtime.py').is_file()
+    for name in release.RUNTIME_SKILL_FILES: assert (skill/name).is_file()
+    rollback = [*new,'--version','0.0.12']
+    missing = skill/'references/swiftui-runtime.md'; original = missing.read_bytes(); missing.unlink()
+    run(rollback,ok=False); assert current.resolve().name=='0.1.0'; missing.write_bytes(original)
+    run(rollback)
+    assert (current/'.install-sha256').read_bytes()==old_receipt
+    assert (skill/'.skill-sha256').read_bytes()==old_skill
+    assert not (current/'swiftui_runtime.py').exists()
+    run(update); run([*new,'--uninstall'])
+    assert not current.exists() and not skill.exists()
+    print('PASS actual historical7/skill8 ->8/skill10 update, rollback, reactivation, removal and foreign/missing recipe refusal')
 
 
 def source_release_checks():
@@ -955,6 +1007,7 @@ def main():
         compose_inventory_upgrade(stage, versions)
         native_inventory_upgrade(stage, versions)
         cache_inventory_upgrade(stage, versions)
+        runtime_inventory_upgrade(stage, versions)
         hostile_skill_checks(stage, versions)
         local_install_checks(stage, versions)
         hostile_archive_checks(stage, bundle, versions)
