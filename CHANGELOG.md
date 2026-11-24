@@ -3,6 +3,22 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.10.1
+
+- Explain SwiftUI runtime `sourceLimit` refusals with optional fixed diagnostic
+  fields `source_limit.kind`, `limit` and `observed`. Only the guard that actually
+  refused is reported, without source types, UI/model values, paths or raw errors.
+- Preserve protocol 1.0.0, `reason=sourceLimit`, exit 4, all limits and refusal
+  without a Snapshot or discovery artifact. Older callers retain the prior
+  refusal; matching callers also accept old endpoints without diagnostic detail.
+- Observed node counts can be a lower bound, not the total rejected tree size.
+  The owned fixture's 16,384/16,385 boundary does not diagnose Word/Next.
+  Supporting an oversized source scope and fixing Word/Next are not claimed.
+- Update the matching skill with the consumer repeat and sanitized reporting
+  procedure. Rebuild the opted-in app with the matching SDK; request only
+  status/reason/source_limit from the same Word/Next state before attributing
+  the actual cause. Existing successful geometry and marker acceptance stay separate.
+
 ## 0.10.0
 
 - Add opt-in `discover` to the experimental SwiftUI runtime SDK and caller.
