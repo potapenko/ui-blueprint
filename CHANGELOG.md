@@ -3,6 +3,23 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.10.0
+
+- Add opt-in `discover` to the experimental SwiftUI runtime SDK and caller.
+  It exports a bounded version 1.0.0 source inventory with observed nominal type
+  counts and compact topology, bound to the selected run/window/observation.
+  It contains no geometry, model values or UI text and is not a canonical Snapshot.
+- Use actual discovered types and hierarchy to attribute a candidate for a later
+  fresh `capture --subtree-type` request. Uniqueness is revalidated at capture;
+  a symbol or Swift View name alone does not prove a runtime node exists.
+  No ActorPickerView selector is confirmed by this release.
+- Preserve full and scoped capture, source/output limits and privacy filtering.
+  Older endpoints reject discovery before dispatch. Rebuild the opted-in Debug
+  app with the matching SDK; updating the caller alone does not add the capability.
+- Large whole-window geometry `outputLimit` and Vocabulary `sourceLimit` remain
+  open. Owned-fixture discovery and compatibility checks do not establish Actors
+  or other consumer interface acceptance.
+
 ## 0.9.0
 
 - Add `--subtree-type` to the experimental SwiftUI runtime caller. The matching
