@@ -214,6 +214,16 @@ examined every unmounted or unsupported part of the application.
 | `measurement_deadline` | The bounded capture-plus-Rust query did not finish. Narrow the requested type/saved analysis scope when appropriate; don't increase the global limit blindly. |
 | Unknown geometry or transform | Report that property as unavailable; a neighbor, ancestor or screenshot estimate is not the missing source fact. |
 
+For `sourceLimit`, a matching SDK/caller can include `source_limit` with only
+`kind`, `limit`, `observed`. Preserve these fields in the sanitized report. For
+example, `source_nodes / 16384 / 16385` proves at least16385 encountered nodes,
+not the total size of the rejected tree. Other kinds distinguish native nodes,
+native/source depth, type-name bytes/control presence and exhausted snapshot
+sequence. Old endpoints may omit the detail. The reason and exit4 stay unchanged;
+no Snapshot or discovery artifact is published. Neither discovery nor subtree
+selection bypasses source limits. Do not infer the application's guard from a
+fixture failure or change the target state to hide an overflow.
+
 Normal default timeout is five seconds, with an overall CLI cap of thirty.
 Do not turn a source failure into repeated rebuilds, polling captures, Xcode
 sessions or a new application-specific extractor. Route a reproducible tool

@@ -2,7 +2,8 @@
 
 Owner: [source-limit defect](codex://threads/01a20f35-c7e4-7490-9d62-2e06b6357999).
 Consumer: [Random](codex://threads/01a20844-7030-7701-a26a-88793ef9752e).
-Status: diagnostic candidate; consumer cause and successful Word/Next geometry pending.
+Status: independently reviewed diagnostic change; runtime consumer cause pending.
+Word/Next product geometry separately passed via the official marker SDK.
 
 ## Authority and Spec Basis
 
@@ -28,7 +29,7 @@ numeric evidence of the actual guard; it does not reinterpret caps or scope.
 
 Write scope: RuntimeCollector/Session, Python caller, separate SourceLimitTests,
 focused Python checks and source-limit harness reusing the existing owned subtree
-fixture, runtime spec/registry/README and this receipt. Protected: prior successful
+fixture, runtime spec/registry/README/installed skill reference and this receipt. Protected: prior successful
 geometry, default/scoped/discovery behavior, field allowlist, all caps, protocol,
 core schemas, cancellation, request binding, app state and consumer-owned evidence.
 No raw captures, command logs or private descriptors belong in Git.
@@ -61,7 +62,14 @@ exclusion and four distinct concurrent captures. Actual0.9 caller still passes
 411-node whole and357-node scoped captures. The discovery suite passed with
 7595 nodes/94 types/473732bytes, fresh removal/duplicate cases, correct source
 refusal, cancellation and matching411-node small whole/inventory counts.
-Independent review is pending; no consumer acceptance is inferred.
+Independent compatibility/privacy review by SDK owner01a20a46 accepted4e88c57f
+without blockers. Reviewer inspected exactdiff, ran Python13/13/diff-check, and
+checked saved capture/discovery diagnostics, exact legacy refusal and live-suite
+summaries. Swift/source boundary/live captures remain author-run, not reviewer-run.
+Reviewed SHA256 prefixes: Collector240ae427807204b6, Session08396800f321402a,
+caller4d7c5f6ef94d8aa1. Reviewer requested the same diagnostic explanation in the
+installed runtime skill reference; that documentation-only follow-up adds no
+behavior or new approval cycle.
 
 Owned external evidence:
 `/Volumes/Develop-2TB/Develop/tmp/uib-source-limit-01a20f35-2rd876rk/evidence`.
@@ -69,6 +77,16 @@ Internal fixture/runtime:
 `/tmp/uib-source-limit-01a20f35-gzzo71sz`.
 Retention: evidence through review and consumer handoff; temporary builds/app only
 until reviewer releases their use and the owned process exits. No screenshots.
+
+## Separate consumer product acceptance
+
+Random reported fresh official SwiftUI marker geometry and Rust0.10.0 agreement:
+card576×151pt, Replay/Next261×39pt, gap7pt, Next Enter34×15pt. Its evidence is
+`/Volumes/Develop-2TB/Develop/tmp/playphraseme-s13-word-final-obnv6_kc`.
+This closes the consumer's product measurements, not general runtime support.
+In the same window with SDK/caller5e187382, runtime capture and discovery both
+returned sourceLimit/4 without geometry. Their guard is still unreported. No
+additional read of the consumer's private process or descriptor was made here.
 
 ## Consumer repeat and decision boundary
 
