@@ -3,7 +3,9 @@
 Owner: [source-limit defect](codex://threads/01a20f35-c7e4-7490-9d62-2e06b6357999).
 Consumer: [Random](codex://threads/01a20844-7030-7701-a26a-88793ef9752e).
 Status: diagnostic change released in0.10.1; consumer confirmed the source-node cap.
-General runtime support for this oversized Word/Next state remains unsupported.
+The later [capacity continuation](runtime-capacity-2026-11-24.md) supersedes this
+legacy limitation and records accepted full real Word/Next support; the diagnosis
+and0.10.1 release history below remain unchanged.
 Word/Next product geometry separately passed via the official marker SDK.
 
 ## Authority and Spec Basis

@@ -2,8 +2,8 @@
 
 Owner: [capacity implementation](codex://threads/01a20f35-c7e4-7490-9d62-2e06b6357999).
 Review/architecture: [SDK owner](codex://threads/01a20a46-e5d0-7710-a5ce-9a93d8b82f02).
-Status: full native capacity acceptance passed; graph-validation performance delta
-and one live combined Word query remain under review/verification.
+Status: independent review, five full native cases and live combined Word query
+passed. Accepted source4c670502; release-owner delivery pending.
 
 ## Authority, basis and scope
 
@@ -177,13 +177,46 @@ These are bounded individual measurements, not a universal latency guarantee.
 Evidence: word-validation-cost.txt, word-validation-cost-new.txt and
 word-graph-performance.json in the implementation owner's existing evidence area.
 
-## Remaining acceptance
+## Final independent review and live combined acceptance — 2026-11-25
 
-Finite review of the Schema delta, then one native-owned live combined Word
-measurement using the SAME retained app/SDK and updated matching Rust/caller.
-The supported explicit --timeout120 is appropriate for this heavy full-window
-query; default30 is not claimed to cover source capture plus measurement here.
-Do not repeat the five accepted UI cases or rebuild unchanged SwiftUI SDK merely
-for the Rust graph check. Native original data/app and both candidate bundles
-remain retained until that consumer and the release owner finish. Packaging,
-VERSION and publication stay with01a20929 after the accepted final pin.
+SDK owner independently accepted4c6705027d6ea643a40ec10b6f940d8113a51b71 without
+blocking findings, reviewed graph/delta semantics and the focused regression
+oracles, and independently validated the original native83.8MB Word file with the
+candidate validator. Runtime capture/build evidence remains native-owner-run.
+
+Native owner then reused the unchanged0adf35edc binary/SDK7c764cda and caller with
+new Rust4c670502, verified hashes before/after, and made exactly one normal live
+measure on original filled Vocabulary page1–20 with Word completion Replay/Next.
+All20 UI rows remained. `--type PlayphrasemeApp.RandomCompletionDialog --relation
+width --timeout 120 --out NEW_FULL_SNAPSHOT` was used WITHOUT --subtree-type.
+
+Result: exit0,5.667869541s, full36517nodes/87799692bytes, complete exposed layout
+coverage omitted0/unknown0, one dialog match, Rust width576pt. Source interval
+2.024236583s; observation E53385BE-CC4E-4EC4-BBD3-0BEAA16CD48A, scopewindow-19259.
+The source read also differs from the earlier run, so the entire live improvement
+is not attributed solely to Rust. This is an explicit120s-budget pass, not a claim
+that default30 was tested on this final combined call. No rebuild, hidden retry,
+smaller state, marker or scoped fallback was used. Five earlier full cases stand.
+
+Native-owned final evidence: `retained/combined-graph/result.md`, summary.json,
+command.json, combined-result.json and word-next-full.json under the same native
+external task area above. Binding/file hash/freshness attribution was checked by
+that owner. Process6139 stopped, dialog closed/playback paused, normal panel
+restored, input/caffeinate released and private launch/session scratch removed.
+Candidate bundle is no longer held by an active native operation. Exact app and
+original observations remain with the native owner until release handoff completes.
+
+## Release handoff
+
+Accepted implementation comprises1598658 capacity/result-only,7c764cda shared
+absolute deadline and4c670502 graph-validation optimization. This documentation
+checkpoint changes no tested binary. SDK/caller hashes remain7c-compatible;
+Rust bundle-graph supplies the final validation change. Embedded candidate CLI
+version0.10.1 is historical, not a claim about the installed0.10.1 release.
+
+All assigned real Mac outcomes now exist. Source/version/package/installation/
+publication handoff goes directly to01a20929; no new user/root GO or UI repeat.
+The final implementation-owner bundle stays frozen until release consumption is
+finished. Native original data/app remain owner-controlled; this task never
+operated its process or transferred private endpoint capabilities. Mobile and
+universal1GiB-latency/memory guarantees remain outside this scoped acceptance.
