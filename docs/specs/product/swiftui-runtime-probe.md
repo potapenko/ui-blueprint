@@ -1,6 +1,6 @@
 # In-process SwiftUI runtime geometry
-- Node type: leaf; domain: `uib.swiftui-runtime`; contract: `UIB.SWIFTUI-RUNTIME@3`.
-- Authority: Active; stability: Evolving; no app/release acceptance claimed.
+- Node type: leaf; domain: `uib.swiftui-runtime`; contract: `UIB.SWIFTUI-RUNTIME@4`.
+- Authority: Active; stability: Evolving; experimental release scope below, full app acceptance remains incomplete.
 - Authority: direct user continuation in chat01a20a46 on2026-11-23: continue until fresh query geometry works, without new plans, screen-specific fixes or GUI Xcode dependencies; PLAN.UIB.SWIFTUI-GEOMETRY@3 records scope.
 - Requires: [BOUNDARIES](boundaries.md), [MODEL](model.md), [IDENTITY](identity.md), [GEOMETRY](geometry.md), [PRIVACY](privacy.md), [EXCHANGE](exchange.md), [LIFECYCLE](lifecycle.md), [CACHE](cache.md), [CLI](cli.md).
 - Scope: separate opt-in Debug library and matching caller; existing marker SDK, external debugger/cache acquisition, snapshots and actions stay unchanged.
@@ -43,6 +43,11 @@ Internal app/package/runtime storage and external compiler/evidence storage foll
 
 ## RUNTIME.ACCEPT
 Qualify CLI-built fixture and actual app startup roots; repeated capture after resize, conditional rows, navigation/popup changes, stale window/run and simultaneous requests. Validate original canonical bytes and measure with Rust; prove canary exclusion before publication and Release exclusion. The six-field raw fixture example is not whole-app acceptance. Follow PLAN@3 C01–C26; unresolved mapped coordinates or required properties remain open.
+
+## RUNTIME.EXPERIMENTAL-RELEASE
+Direct user instruction on2026-11-24 in chat01a20a46: “Можешь ты уже зарелизить то, что есть, а потом сами агенты будут тебе баги кидать.” This authorizes shipping the current mechanism as opt-in experimental Mac support before the full C01–C26/native normalization matrix is complete. Packaging/installation compatibility and truthful capability documentation remain required. Do not describe this release as universal SwiftUI/iPhone/iPad support or mark unfinished scenarios passed. Further scenario qualification is consumer follow-up, not a prerequisite for this release.
+
+Evidence boundary: scoped source7b596bd passed real PlayPhrase.me capture, fresh Rust width961pt/height921pt, eight concurrent reads and actual Debug/Release exclusion. Its resize chain encountered a measurement timeout and was not accepted. Normalizer e7e41c66 passed the public GeometryProxy/affine/toolbar fixture, canonical validation and Rust width/gap; it has not yet passed the same real-app sequence. Source-call deadlines are not hard preemption; mapped rotated/sheared rectangle relations and cross-host mappings retain their documented limits. This explicit experimental scope supersedes the earlier full-matrix publication gate, not the underlying desired behavior or privacy/source invariants.
 
 ## Source evidence
 Installed Xcode27.2 SDK interfaces expose typed getter and `_ViewDebug.Data`; inspected paths are SwiftUI/SwiftUICore arm64e swiftinterfaces. No upstream implementation copied. Preliminary owned SwiftUI App fixture gives188→212→188 nodes and width80→140→80 without GUI/LLDB, with canary absent after field allowlisting. Runtime29/287 startup profiles were compared; neither bypasses filtering. Real PlayPhrase.me acceptance remains pending.

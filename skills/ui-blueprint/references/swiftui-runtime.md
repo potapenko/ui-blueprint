@@ -1,5 +1,11 @@
 # Fresh SwiftUI geometry requests
 
+This is experimental Mac support introduced in 0.8.0. A prior scoped build
+passed real PlayPhrase.me capture and concurrent reads; its resize measurement
+timed out. The current normalization passed the general fixture, and the full
+real-app state-change sequence remains pending. Report exact failures rather
+than silently treating these scenarios as qualified.
+
 Use an integrated app prepared through [SwiftUI setup](swiftui-setup.md).
 All commands below use the matching installed
 `CALLER="$UIB_BUNDLE/swiftui_runtime.py"` and the owner's private `SESSION`

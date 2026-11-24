@@ -1,4 +1,4 @@
-# UI Blueprint SwiftUI runtime (Debug candidate)
+# UI Blueprint SwiftUI runtime (experimental Debug support)
 
 This package exposes existing SwiftUI hosting trees from inside an opted-in
 macOS Debug process. It adds no markers to individual views and uses no Xcode
@@ -6,7 +6,10 @@ GUI, LLDB attach, raster-layer capture or input automation. Xcode/Apple SDK tool
 are needed to build. The underscored Apple source is qualified per OS/toolchain.
 The current arm64/macOS27.0.1 candidate brackets the getter in SwiftUI's main
 UpdateGroup and restores it on every exit. The earlier unscoped call is withdrawn
-after a real-app trap; corrected app qualification remains pending.
+after a real-app trap. The scoped call passed real PlayPhrase.me capture; the
+newer normalization has fixture qualification and awaits its full app sequence.
+The user explicitly chose an experimental 0.8.0 release now, with subsequent
+defects reported by consuming agents.
 
 ## Integrate once
 
@@ -103,9 +106,10 @@ labels to keep full trees readable and bounded; node identities/links remain.
 Cross-host/window/screen mapping is not inferred. Perspective/3D remains unknown;
 Rust rectangle relations reject rotated/sheared mapped shapes rather than use
 their bounding envelope as containment. Source-local dimensions remain available.
-Final real-app coverage/transitions, focused normalization review and installed
-release acceptance remain open under
-[SWIFTUI-RUNTIME@3](../../docs/specs/product/swiftui-runtime-probe.md).
+Full real-app coverage/transitions remain incomplete. They do not block the
+user-authorized experimental release; packaging/installation verification and
+the documented capability boundary govern that delivery under
+[SWIFTUI-RUNTIME@4](../../docs/specs/product/swiftui-runtime-probe.md).
 
 The agent-facing preparation and query instructions live in
 [setup](../../skills/ui-blueprint/references/swiftui-setup.md) and

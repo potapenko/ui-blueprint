@@ -24,8 +24,15 @@ Other app behavior may have its own permissions; don't change them for Blueprint
 
 ## Compatibility and authorization
 
+Version 0.8.0 introduces this as **opt-in experimental Mac support**. The user
+chose to make the current tool available before completing the full scenario
+matrix. Use it for development and report reproducible defects; don't interpret
+the release as a guarantee for every screen or OS. The scoped collector worked
+in PlayPhrase.me; the newest inherited-layout/affine normalizer has fixture
+qualification, with its full real-app sequence still pending.
+
 Use the selected release's actual qualification matrix. The current source
-candidate targets arm64 macOS 27.0.1 with Xcode 27.2; its underscored SwiftUI API
+profile targets arm64 macOS 27.0.1 with Xcode 27.2; its underscored SwiftUI API
 is version-qualified. macOS 14 in Package.swift is a compile floor, not a runtime
 support claim. iPhone, iPad, Intel and other OS versions are not qualified by this
 Mac path. Do not bypass `unsupportedRuntimeProfile` or guess a different mask.
