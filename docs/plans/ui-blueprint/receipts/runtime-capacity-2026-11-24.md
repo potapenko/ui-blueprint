@@ -2,7 +2,8 @@
 
 Owner: [capacity implementation](codex://threads/01a20f35-c7e4-7490-9d62-2e06b6357999).
 Review/architecture: [SDK owner](codex://threads/01a20a46-e5d0-7710-a5ce-9a93d8b82f02).
-Status: fixture-qualified candidate; review requested a caller deadline correction; actual app acceptance pending.
+Status: full native capacity acceptance passed; graph-validation performance delta
+and one live combined Word query remain under review/verification.
 
 ## Authority, basis and scope
 
@@ -113,13 +114,76 @@ passes the same absolute deadline through preflight/request/measurement and chec
 it again before source publication, including endpoint setup. Focused fake-clock
 tests prove no dispatch after expiry and exact remaining budget. Python17/17 and
 diff checks pass. SDK/Rust and their existing runtime evidence are unchanged;
-delta review is pending, with no redundant build/live matrix.
+SDK owner independently accepted7c764cda after Python17/17/diff checks. No redundant
+SDK build/live matrix was repeated for that caller correction.
+
+## Actual native capacity acceptance — 2026-11-25
+
+Native owner01a20a56 ran one Debug binary0adf35edc7b48c26577377e47caedb0fa4da9a2a
+with SDK7c764cda and matching candidate Rust/caller. Full Search, resize, Practice,
+fresh post-close and original filled Word/Next all passed. Entire original
+Snapshots validated with complete exposed layout coverage, omitted0/unknown0.
+Practice appears once while open and is absent in the fresh closed graph.
+
+| Phase | Nodes | Bytes | Rust size, pt |
+| --- | ---: | ---: | --- |
+| Search | 11844 | 28384535 | 1920×921 |
+| Resize | 13191 | 31642245 | 1900×901 |
+| Practice | 13839 | 33132513 | 560×355 |
+| Closed | 13191 | 31642245 | 1900×901 |
+| Word/Next | 34884 | 83808614 | 576×151 |
+
+Word preserves all20 actual Vocabulary rows, Replay/Next/Enter; no markers, trimmed
+lists, fixture state or subtree fallback. The closed Random feature chat was not
+restarted to do product work; the SDK coordinator assigned this separate geometry
+QA to the existing native owner. Exact source spaces/observations, full files and
+consumer report are retained by that owner at
+`/Volumes/Develop-2TB/Develop/tmp/playphraseme-blueprint-capacity-zyf80ld9/retained`.
+Read result.md/summary.json for provenance and limitations, not a new app capture.
+
+Word used default30 with no retry: capture30.8576s, source18.9999s, validation4.3296s,
+separate saved width/height20.2028/20.2634s, total76.1975s. The external supervisor40s
+did not change caller admission. Live combined measure was not run in that chain.
+Full capacity passes stand independently of the remaining latency verification.
+
+## Graph-validation performance correction
+
+The next finite SDK-owner-authorized lane is only schema validation/graph.rs,
+focused graph tests and this receipt. Mode: behavior-preserving; no API/schema,
+Engine or semantic contract change. Read current graph_refs in full, including
+its use in validate_delta. A temporary read-only optimized probe on the exact
+saved Word Snapshot measured file read0.204s, JSON decode0.284s, one full semantic
+validation3.986s. Repeated subtree traversals/cloned keys dominated, not JSON or
+geometry arithmetic. All existing validation calls remain required.
+
+Replace repeated ancestor walks with one iterative DFS using borrowed keys and
+visiting/finished sets. Each edge is checked once; shared DAG children are valid,
+back-edges/self/disconnected cycles and dangling keys retain DanglingReference.
+Duplicate identities remain checked first, relations/focus afterward. No recursion,
+untrusted fast flag, skipped branch, typestate framework or validation bypass.
+
+Focused tests: all512 directed three-node graphs agree with independent Kahn
+indegree elimination; diamond/multiple-parent/reordered nodes and a10000-node
+chain pass; detached cycles, duplicates and dangling edges refuse. Delta cyclic
+upserts, dangling upserts/removals, repaired-parent removal and remove/upsert
+conflict retain their outcomes. Schema graph4/goldens4(including126 cases)/analysis12/
+channel2, CLI analysis16/binary21 and affected Clippy all-targets pass; fmt/diff pass.
+
+On the unchanged real Word input: one semantic validation now0.041319s;
+validator CLI0.395607s; width0.515100s and height0.548148s. Both entire result-only
+responses are exactly equal to the native owner's earlier responses, including
+query/evaluation/context/observations/coverage/result/evidence and576×151pt.
+These are bounded individual measurements, not a universal latency guarantee.
+Evidence: word-validation-cost.txt, word-validation-cost-new.txt and
+word-graph-performance.json in the implementation owner's existing evidence area.
 
 ## Remaining acceptance
 
-SDK owner reviews the coherent saved candidate. Then native owner runs complete
-Search/Practice export plus resize on one build; Random repeats original full
-Word/Next and gets actual runtime geometry. Candidate source and matching caller/
-Rust are provided together. No subset fallback, markers or changed app state count
-as these passes. Release owner packages the accepted candidate afterward. This
-receipt does not close the original defect before those real outcomes exist.
+Finite review of the Schema delta, then one native-owned live combined Word
+measurement using the SAME retained app/SDK and updated matching Rust/caller.
+The supported explicit --timeout120 is appropriate for this heavy full-window
+query; default30 is not claimed to cover source capture plus measurement here.
+Do not repeat the five accepted UI cases or rebuild unchanged SwiftUI SDK merely
+for the Rust graph check. Native original data/app and both candidate bundles
+remain retained until that consumer and the release owner finish. Packaging,
+VERSION and publication stay with01a20929 after the accepted final pin.

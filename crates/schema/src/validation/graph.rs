@@ -61,21 +61,33 @@ fn graph_refs(
     focus: &Focus,
     observations: &[Observation],
 ) -> Result {
-    for node in nodes.values() {
-        for child in &node.children {
-            require(
-                nodes.contains_key(child),
-                ValidationError::DanglingReference,
-            )?;
+    // Visit each directed edge once. Finished subgraphs may be shared by several
+    // parents; only an edge back into the current DFS path is a cycle.
+    let mut visiting = BTreeSet::new();
+    let mut finished = BTreeSet::new();
+    for root in nodes.keys() {
+        if finished.contains(*root) {
+            continue;
         }
-        let mut pending = node.children.clone();
-        let mut seen = BTreeSet::new();
-        while let Some(key) = pending.pop() {
-            require(key != node.key, ValidationError::DanglingReference)?;
-            if seen.insert(key.clone())
-                && let Some(child) = nodes.get(&key)
-            {
-                pending.extend(child.children.iter().cloned());
+        let mut pending = vec![(*root, false)];
+        while let Some((key, exiting)) = pending.pop() {
+            if exiting {
+                visiting.remove(key);
+                finished.insert(key);
+                continue;
+            }
+            if finished.contains(key) {
+                continue;
+            }
+            require(visiting.insert(key), ValidationError::DanglingReference)?;
+            let node = nodes.get(key).ok_or(ValidationError::DanglingReference)?;
+            pending.push((key, true));
+            for child in node.children.iter().rev() {
+                require(
+                    nodes.contains_key(child),
+                    ValidationError::DanglingReference,
+                )?;
+                pending.push((child, false));
             }
         }
     }

@@ -225,6 +225,11 @@ selection bypasses source limits. Do not infer the application's guard from a
 fixture failure or change the target state to hide an overflow.
 
 Normal default timeout is thirty seconds, with an explicit overall CLI cap of120.
+For a heavy full-window live measurement, pass `--timeout 120` explicitly. A
+qualified34884-node Mac Word/Next source read alone took about19s, before encoding
+and Rust analysis; default30 is not a guarantee for that combined workflow.
+Reuse a saved full Snapshot for related measurements instead of repeating capture.
+Timeout never guarantees preemption of the synchronous getter; do not auto-retry.
 The request metadata cap remains16KiB; depth512 and privacy rules are unchanged.
 Use the updated SDK and matching caller for the larger artifact/node capacity.
 New callers retain historical source_limit node ceilings from0.10.1 endpoints.
