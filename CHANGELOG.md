@@ -3,6 +3,25 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.9.0
+
+- Add `--subtree-type` to the experimental SwiftUI runtime caller. The matching
+  SDK selects one exact nominal source type before canonical serialization,
+  retaining its descendants and attributed ancestor context within existing
+  output, node and depth limits. Missing and duplicate matches refuse explicitly.
+- Preserve default whole-window capture and the existing post-capture `--type`
+  filter. New callers reject scoped requests to older endpoints before dispatch;
+  rebuild the opted-in Debug app with the matching SDK to use component export.
+- Large whole-window `outputLimit` remains open. Custom View names may not appear
+  in the source tree, and common types can be ambiguous. No usable source root
+  for MacPracticeRoot or RandomCompletionDialog has been demonstrated; choose a
+  type from actual source evidence, not an assumed screen or dialog name.
+- Owned-fixture qualification covers bounded component export, fresh changes,
+  concurrent observations, refusal paths and legacy caller behavior. This does
+  not establish consumer UI acceptance or general whole-window/mobile support.
+- Add regression coverage for exact native capture launch-identity round trips.
+  No production capture correction is claimed for the earlier transient refusal.
+
 ## 0.8.0
 
 - Publish an experimental, opt-in Mac Debug SwiftUI runtime library and matching
