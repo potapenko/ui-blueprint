@@ -2,7 +2,8 @@
 
 Owner: [source-limit defect](codex://threads/01a20f35-c7e4-7490-9d62-2e06b6357999).
 Consumer: [Random](codex://threads/01a20844-7030-7701-a26a-88793ef9752e).
-Status: independently reviewed diagnostic change; runtime consumer cause pending.
+Status: diagnostic change released in0.10.1; consumer confirmed the source-node cap.
+General runtime support for this oversized Word/Next state remains unsupported.
 Word/Next product geometry separately passed via the official marker SDK.
 
 ## Authority and Spec Basis
@@ -37,8 +38,8 @@ No raw captures, command logs or private descriptors belong in Git.
 ## Evidence
 
 Consumer0.9.0 a4d1c290 has three successful states with11033/10406/13163 source
-nodes; Word/Next reports sourceLimit without guard detail. Its cause remains
-unknown. Saved outcome paths are under
+nodes; Word/Next initially reported sourceLimit without guard detail. That older
+response alone did not establish the cause. Saved outcome paths are under
 `/Volumes/Develop-2TB/Develop/tmp/playphraseme-s13-uib090-jckkjby7`.
 
 Owned SwiftUIRuntimeSubtreeFixture with1100 rows produces source_nodes,
@@ -73,10 +74,10 @@ behavior or new approval cycle.
 
 Owned external evidence:
 `/Volumes/Develop-2TB/Develop/tmp/uib-source-limit-01a20f35-2rd876rk/evidence`.
-Internal fixture/runtime:
-`/tmp/uib-source-limit-01a20f35-gzzo71sz`.
-Retention: evidence through review and consumer handoff; temporary builds/app only
-until reviewer releases their use and the owned process exits. No screenshots.
+Former internal fixture/runtime: `/tmp/uib-source-limit-01a20f35-gzzo71sz`.
+The owned process stopped; temporary builds/cache/app/private runtime were removed
+after review, recovering212565269bytes. The small ownership note remains. Retain
+external fixture evidence for the source-scope contract handoff; no screenshots.
 
 ## Separate consumer product acceptance
 
@@ -85,12 +86,19 @@ card576×151pt, Replay/Next261×39pt, gap7pt, Next Enter34×15pt. Its evidence i
 `/Volumes/Develop-2TB/Develop/tmp/playphraseme-s13-word-final-obnv6_kc`.
 This closes the consumer's product measurements, not general runtime support.
 In the same window with SDK/caller5e187382, runtime capture and discovery both
-returned sourceLimit/4 without geometry. Their guard is still unreported. No
-additional read of the consumer's private process or descriptor was made here.
+returned sourceLimit/4 without geometry. The0.10.1 repeat below establishes the
+guard. No read of the consumer's private process or descriptor was made here.
 
 ## Consumer repeat and decision boundary
 
-After the release owner's matching SDK/caller delivery and consumer-owned rebuild:
+Release owner delivered [v0.10.1](https://github.com/potapenko/ui-blueprint/releases/tag/v0.10.1),
+commit9ce1e01428f768f62a7615f3607f5324b2b43772. Random then reported one repeat
+in the original full Word/Next state with matching SDK/caller0.10.1: failed,
+sourceLimit, kind=source_nodes, limit=16384, observed=16385. This is consumer-run
+app evidence, separate from the owned fixture. The diagnostic is accepted in the
+real failure path. It proves at least16385 encountered source nodes; it does not
+establish the final full-tree count or a failure of depth/type/output limits.
+The actual repeat used:
 
 ```sh
 python3 -B "$CALLER" capture --session "$SESSION" \
@@ -98,11 +106,18 @@ python3 -B "$CALLER" capture --session "$SESSION" \
   --subtree-type PlayphrasemeApp.RandomCompletionDialog --out "$NEW_SNAPSHOT"
 ```
 
-Keep the actual Word/Next state. Return only status/reason/source_limit on failure;
-never share the private session descriptor. If it succeeds, validate and measure
-the new Snapshot in the normal owner workflow. A source_nodes/depth overflow
-cannot be repaired by skipping unvisited branches and still prove window-wide
-uniqueness. Supporting that case needs an explicitly approved source-scope or
-resource-contract change with its own completeness/identity proof. Raising caps,
-changing the state, introducing app markers or claiming geometry are outside this
-diagnostic candidate. No Word/Next pass is claimed.
+No further unchanged repeat is needed. Runtime@7 RUNTIME.SUBTREE requires a
+complete window-source read under RUNTIME.DATA limits before selecting the unique
+type. The confirmed source-node overflow therefore prevents this path from proving
+uniqueness or publishing geometry; dropping unvisited branches would violate it.
+
+To support this case while keeping the current caps, a separate approved evolution
+must define an explicitly addressable smaller acquisition scope BEFORE whole-window
+collection, its fresh identity, completeness and uniqueness domain, and inherited
+geometry context. That changes RUNTIME.REQUEST/SUBTREE/DATA; a feasible source-backed
+mechanism must be established before implementation. This is a required design
+decision, not an already implemented or qualified alternative. Raising the node cap
+is a different resource-contract change and remains outside this assignment.
+The present task changes neither contract nor app to bypass that boundary. General
+runtime Word/Next geometry remains unsupported; the independent official marker
+geometry acceptance stands.
