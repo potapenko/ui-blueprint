@@ -47,6 +47,42 @@ to distinguish repeated components. `measure` supports width/height and delegate
 arithmetic to the matching Rust validator/engine. It does not turn missing source
 geometry into an inferred size.
 
+## Select a component before export
+
+A matching newer SDK/caller can select a subtree before serializing the canonical
+Snapshot. This is separate from `--type`, which remains an output filter:
+
+```sh
+python3 -B "$CALLER" capture --session "$SESSION" \
+  --window "$WINDOW" --generation "$GENERATION" \
+  --subtree-type ExampleApp.SearchRoot --out "$NEW_SNAPSHOT"
+```
+
+`--subtree-type` also works with `tree` and `measure`. It requires one exact
+**source-reported nominal type**, including its module. It does not search labels,
+generic arguments or source-code view names that SwiftUI does not expose as nodes.
+The SDK resolves it in this new observation; zero matches gives `subtreeNotFound`,
+more than one gives `ambiguousSubtree`, without choosing the first match or
+publishing a partial file. Some custom View bodies are exposed only as their
+underlying framework nodes. `subtreeNotFound` does not prove the UI is unmounted;
+report that applicability gap rather than adding app markers to manufacture a pass.
+
+Output contains the complete selected subtree and its ancestor chain needed for
+source geometry attribution. `selection` reports the source/subtree/context/excluded
+node counts and selected observation key. Per-node declarations distinguish
+`selected_root`, `descendant` and `ancestor_context`; `excluded_direct_children`
+records excluded context branches. Original local spaces, transforms, inherited
+source keys and retained child order remain. Context ancestors are not complete
+exports of their other children; the Snapshot scope is the subtree with context.
+
+The source still reads the selected window under the same 16384-node/depth512
+bounds, and the response still has the 16MiB limit. The flag can resolve an
+**output** overflow when the requested subtree is small; it cannot bypass a source
+limit or guarantee that Apple's getter does less work. An oversized subtree still
+refuses. No automatic fallback changes an ordinary whole-window request.
+`subtree_selection_unsupported_by_endpoint` means the app has an older SDK;
+update the SDK and matching caller through the owning build/release workflow.
+
 ## One observation for related measurements
 
 For several measurements that must refer to the same layout, capture once and

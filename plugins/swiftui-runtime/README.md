@@ -58,6 +58,15 @@ python3 -B "$CALLER" measure --session "$SESSION_DESCRIPTOR" --window "$WINDOW" 
   --type SwiftUI.Color --relation width --bundle "$UIB_BUNDLE"
 ```
 
+With a matching SDK, `capture`, `tree` and `measure` also accept
+`--subtree-type ExampleApp.SearchRoot`. This selects one exact source-reported
+nominal type and all its descendants before serialization; ancestors are retained
+and explicitly labelled as context. It does not change the existing post-capture
+`--type` filter. Missing/ambiguous types refuse, and the caller checks the endpoint's
+`capture-subtree-type` capability before dispatch. Source node/depth and output
+bounds are unchanged; whole-window output may still exceed16MiB. Some custom View
+names are not exposed as standalone source nodes. See [scoped query semantics](../../skills/ui-blueprint/references/swiftui-runtime.md#select-a-component-before-export).
+
 Launch returns the private session descriptor and exact PID. The descriptor's
 capability is not copied into reports. Capture/measure always acquires new data;
 measurement uses the matching Rust engine, not Python geometry arithmetic.
@@ -109,7 +118,7 @@ their bounding envelope as containment. Source-local dimensions remain available
 Full real-app coverage/transitions remain incomplete. They do not block the
 user-authorized experimental release; packaging/installation verification and
 the documented capability boundary govern that delivery under
-[SWIFTUI-RUNTIME@4](../../docs/specs/product/swiftui-runtime-probe.md).
+[SWIFTUI-RUNTIME@5](../../docs/specs/product/swiftui-runtime-probe.md).
 
 The agent-facing preparation and query instructions live in
 [setup](../../skills/ui-blueprint/references/swiftui-setup.md) and

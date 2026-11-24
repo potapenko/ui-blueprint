@@ -14,7 +14,7 @@ enum RuntimeEncoding {
         let fields = ["layout_bounds"]
         let missing = observation.nodes.filter { $0.position == nil || $0.size == nil }.count
         let coverage: [String: Any] = ["status": missing == 0 && observation.emptyHostingRoots == 0 ? "complete" : "partial",
-            "scope_id": "window-\(observation.window)", "fields": fields,
+            "scope_id": observation.scopeID, "fields": fields,
             "omitted_count": observation.emptyHostingRoots == 0 ? 0 : NSNull(), "unknown_count": missing]
         let childMap = Dictionary(grouping: observation.nodes.compactMap { node in
             node.parent.map { ($0, node.index) }
@@ -62,6 +62,20 @@ enum RuntimeEncoding {
             if let source = node.sizeSource, source != node.index {
                 declarations.append(declaration("layout_size_source", .text(key(source)["key"]!)))
             }
+            if let selection = observation.selection {
+                let role = node.index == selection.root ? "selected_root"
+                    : selection.ancestors.contains(node.index) ? "ancestor_context" : "descendant"
+                declarations.append(declaration("selection_role", .text(role)))
+                let excluded = selection.originalChildCounts[node.index, default: 0]
+                    - childMap[node.index, default: []].count
+                declarations.append(declaration("excluded_direct_children", .number(Double(excluded))))
+                if node.index == selection.root {
+                    declarations += [declaration("selection_source_nodes", .number(Double(selection.sourceNodes))),
+                        declaration("selection_subtree_nodes", .number(Double(selection.subtree.count))),
+                        declaration("selection_ancestor_nodes", .number(Double(selection.ancestors.count))),
+                        declaration("selection_excluded_nodes", .number(Double(selection.sourceNodes - observation.nodes.count)))]
+                }
+            }
             if node.parent == nil {
                 declarations += [declaration("request_id", .text(request)),
                                  declaration("hosting_root_count", .number(Double(observation.hostingRoots))),
@@ -81,7 +95,7 @@ enum RuntimeEncoding {
             "coverage": coverage]
         let snapshot: [String: Any] = ["id": observation.id, "revision": sequence, "source_state": NSNull(),
             "surface_records": [], "context": ["schema_version": "0.1.0", "session_id": session,
-                "target": target, "surfaces": [surface], "scope_id": "window-\(observation.window)",
+                "target": target, "surfaces": [surface], "scope_id": observation.scopeID,
                 "projection": "design", "fields": fields,
                 "plugin": ["id": "swiftui-runtime-probe", "version": "1.0.0"],
                 "environment_revision": observation.id],

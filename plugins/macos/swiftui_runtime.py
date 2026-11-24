@@ -133,8 +133,15 @@ def endpoint(path):
     return path.parent, value
 
 
-def request(session, operation, window=None, generation=None, timeout=5):
+def request(session, operation, window=None, generation=None, timeout=5, subtree_type=None):
     root, descriptor = endpoint(session)
+    if subtree_type is not None:
+        if (operation != "capture" or not isinstance(subtree_type, str) or not subtree_type
+                or len(subtree_type.encode("utf-8")) > 1024
+                or any(ord(c) < 32 or 127 <= ord(c) <= 159 for c in subtree_type)):
+            raise Failure("invalid_subtree_type")
+        if "capture-subtree-type" not in descriptor.get("capabilities", []):
+            raise Failure("subtree_selection_unsupported_by_endpoint")
     request_id = str(uuid.uuid4())
     input_path = root / (request_id + ".request.json")
     response_path = root / (request_id + ".response.json")
@@ -143,6 +150,8 @@ def request(session, operation, window=None, generation=None, timeout=5):
     payload = dict(version="1.0.0", id=request_id, run=descriptor["run_id"],
                    capability=descriptor["capability"], operation=operation,
                    window=window, windowGeneration=generation)
+    if subtree_type is not None:
+        payload["subtreeType"] = subtree_type
     publish(input_path, encoded(payload))
     deadline = time.monotonic() + timeout
     try:
@@ -297,7 +306,8 @@ def main():
         p.add_argument("--timeout", type=float, default=5)
         if operation != "windows":
             p.add_argument("--out", required=operation == "capture")
-            p.add_argument("--type")
+            p.add_argument("--type", help="Filter returned nodes after capture (unchanged)")
+            p.add_argument("--subtree-type", help="Select one exact nominal type and descendants before export")
         if operation == "measure":
             p.add_argument("--relation", choices=("width", "height"), required=True)
             p.add_argument("--bundle", required=True)
@@ -312,7 +322,7 @@ def main():
             raise Failure("invalid_deadline")
         args.deadline = time.monotonic() + args.timeout
         result, raw = request(args.session, "windows" if args.command == "windows" else "capture",
-                              args.window, args.generation, args.timeout)
+                              args.window, args.generation, args.timeout, getattr(args, "subtree_type", None))
         if raw is not None:
             result.pop("snapshot", None)
             if args.out:

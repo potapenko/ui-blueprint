@@ -6,6 +6,7 @@ from pathlib import Path
 import tempfile
 import subprocess
 import unittest
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location("swiftui_runtime", Path(__file__).parents[2] / "plugins/macos/swiftui_runtime.py")
 runtime = importlib.util.module_from_spec(spec)
@@ -62,6 +63,44 @@ class RuntimeChecks(unittest.TestCase):
             Path(root).chmod(0o755)
             with self.assertRaisesRegex(runtime.Failure, "endpoint_not_private"):
                 runtime.endpoint(Path(root) / "session.json")
+
+    def test_scoped_request_requires_capability_before_publication(self):
+        for descriptor in ({}, {"capabilities": []}):
+            with patch.object(runtime, "endpoint", return_value=(Path("/unused"), descriptor)), \
+                 patch.object(runtime, "publish") as publish:
+                with self.assertRaisesRegex(runtime.Failure, "subtree_selection_unsupported_by_endpoint"):
+                    runtime.request("unused", "capture", subtree_type="Fixture.Dialog")
+                publish.assert_not_called()
+
+    def test_scoped_request_rejects_invalid_selector_before_publication(self):
+        for name in ("", "bad\nname", "é" * 513):
+            with patch.object(runtime, "endpoint", return_value=(Path("/unused"), {"capabilities": ["capture-subtree-type"]})), \
+                 patch.object(runtime, "publish") as publish:
+                with self.assertRaisesRegex(runtime.Failure, "invalid_subtree_type"):
+                    runtime.request("unused", "capture", subtree_type=name)
+                publish.assert_not_called()
+
+    def test_request_shape_stays_legacy_without_opt_in(self):
+        for selector in (None, "Fixture.Dialog"):
+            with tempfile.TemporaryDirectory() as root:
+                root = Path(root)
+                descriptor = dict(run_id="run", capability="private", capabilities=["capture-subtree-type"])
+                published = []
+                def respond(path, raw):
+                    payload = json.loads(raw)
+                    published.append(payload)
+                    (root / (payload["id"] + ".response.json")).write_text(json.dumps(dict(
+                        protocol="1.0.0", request_id=payload["id"], run_id="run", status="failed", reason="sourceNotReady")))
+                with patch.object(runtime, "endpoint", return_value=(root, descriptor)), \
+                     patch.object(runtime, "publish", side_effect=respond):
+                    with self.assertRaisesRegex(runtime.Failure, "sourceNotReady"):
+                        runtime.request("unused", "capture", subtree_type=selector)
+                expected = {"version", "id", "run", "capability", "operation", "window", "windowGeneration"}
+                if selector is not None:
+                    expected.add("subtreeType")
+                    self.assertEqual(published[0]["subtreeType"], selector)
+                self.assertEqual(set(published[0]), expected)
+                self.assertEqual(list(root.iterdir()), [])
 
     def test_type_selection_keeps_unknown_geometry(self):
         node = dict(key={"namespace": "swiftui.runtime.layout", "key": "n1"},

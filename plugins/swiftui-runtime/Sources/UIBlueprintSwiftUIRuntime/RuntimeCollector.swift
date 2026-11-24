@@ -7,6 +7,7 @@ enum RuntimeRefusal: String, Error {
     case invalidRequest, wrongSession, busy, cancelled, sourceNotReady
     case ambiguousWindow, staleWindow, unsupportedSource, sourceLimit, invalidGeometry
     case outputLimit, outputFailure, launchProfileRequired
+    case subtreeNotFound, ambiguousSubtree
     case unsupportedRuntimeProfile, updateContextUnavailable
 }
 
@@ -39,9 +40,67 @@ struct RuntimeObservation {
     let end: Double
     let window: Int
     let windowGeneration: String
-    let nodes: [RuntimeNode]
+    var nodes: [RuntimeNode]
     var hostingRoots: Int = 0
     var emptyHostingRoots: Int = 0
+    var selection: RuntimeSubtreeSelection? = nil
+
+    var scopeID: String {
+        let windowScope = "window-\(window)"
+        return selection.map { "\(windowScope)/subtree-n\($0.root)-with-ancestors" } ?? windowScope
+    }
+
+    func selecting(type: String?) throws -> RuntimeObservation {
+        guard let type else { return self }
+        try RuntimeSubtreeSelection.validate(type)
+        let matches = nodes.filter { $0.type == type }
+        guard !matches.isEmpty else { throw RuntimeRefusal.subtreeNotFound }
+        guard matches.count == 1 else { throw RuntimeRefusal.ambiguousSubtree }
+        let root = matches[0].index
+        let byIndex = Dictionary(uniqueKeysWithValues: nodes.map { ($0.index, $0) })
+        var ancestors = Set<Int>()
+        var parent = matches[0].parent
+        while let index = parent {
+            ancestors.insert(index)
+            parent = byIndex[index]?.parent
+        }
+        // Collector order is parent-before-child; keep all actual descendants.
+        var subtree: Set<Int> = [root]
+        for node in nodes where node.parent.map(subtree.contains) == true {
+            subtree.insert(node.index)
+        }
+        let retained = subtree.union(ancestors)
+        let children = Dictionary(grouping: nodes.compactMap { $0.parent }, by: { $0 })
+        var result = self
+        result.selection = RuntimeSubtreeSelection(type: type, root: root, subtree: subtree,
+            ancestors: ancestors, sourceNodes: nodes.count,
+            originalChildCounts: children.mapValues(\.count))
+        result.nodes = nodes.filter { retained.contains($0.index) }
+        return result
+    }
+}
+
+struct RuntimeSubtreeSelection {
+    let type: String
+    let root: Int
+    let subtree: Set<Int>
+    let ancestors: Set<Int>
+    let sourceNodes: Int
+    let originalChildCounts: [Int: Int]
+
+    static func validate(_ type: String) throws {
+        guard !type.isEmpty, type.utf8.count <= 1024,
+              !type.unicodeScalars.contains(where: { $0.value < 32 || (127...159).contains($0.value) }) else {
+            throw RuntimeRefusal.invalidRequest
+        }
+    }
+
+    func metadata(observation: String) -> [String: Any] {
+        ["type": type, "root_key": "\(observation)-n\(root)",
+         "source_nodes": sourceNodes, "subtree_nodes": subtree.count,
+         "ancestor_context_nodes": ancestors.count,
+         "excluded_source_nodes": sourceNodes - subtree.count - ancestors.count]
+    }
 }
 
 @MainActor

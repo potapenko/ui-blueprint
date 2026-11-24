@@ -1,5 +1,5 @@
 # Specification registry
-- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 91 (C04 offline paired-window candidate).
+- Node type: root; contract: `UIB.ROUTING@1`; registry revision: 92 (runtime subtree selection).
 - Authority: Active; stability: Evolving; accepted local implementation: `a0265843634fce8bc6a942fc1f276391a51c54c6`, [I02 matrix/versions/recipe](../development/distribution.md), [Native Q01 acceptance52930eb](../plans/ui-blueprint/receipts/Q01-integrated-acceptance.md#current-native-final-reconciliation--bounded-acceptance-2026-10-10); released implementation: none.
 - Read when: selecting product/development contracts or recovering uncertain routes; skip when a fully read, current selected closure already governs the task.
 - Requires: select only the route below; branch summaries do not replace leaves.
@@ -97,7 +97,7 @@ remain separate. Existing SwiftUI, Web, Compose, core and release scope are prot
 `L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
-| In-process fresh SwiftUI queries and CLI preparation | [SWIFTUI-RUNTIME@4](product/swiftui-runtime-probe.md) | PLAN.UIB.SWIFTUI-GEOMETRY@3; user-authorized experimental release before full native/matrix acceptance |
+| In-process fresh SwiftUI queries and CLI preparation | [SWIFTUI-RUNTIME@5](product/swiftui-runtime-probe.md) | PLAN.UIB.SWIFTUI-GEOMETRY@3; user-authorized experimental release before full native/matrix acceptance |
 | C04 source-selected parent/popover candidate | [SWIFTUI-CAPTURE-PAIR@1](product/swiftui-capture-pair.md) | Approved offline implementation; donor unchanged, no capture/admission |
 | External SwiftUI debug-layout candidate | [SWIFTUI-DEBUG-CAPTURE@14](product/swiftui-debug-capture.md) | Product admission withdrawn after real Settings failure; retained owner recovery |
 | Independent lossless native PNG | [NATIVE-CAPTURE@2](product/native-capture.md) | Explicit exact process/window capture; donor code unchanged |

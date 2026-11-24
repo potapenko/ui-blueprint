@@ -1,5 +1,5 @@
 # In-process SwiftUI runtime geometry
-- Node type: leaf; domain: `uib.swiftui-runtime`; contract: `UIB.SWIFTUI-RUNTIME@4`.
+- Node type: leaf; domain: `uib.swiftui-runtime`; contract: `UIB.SWIFTUI-RUNTIME@5`.
 - Authority: Active; stability: Evolving; experimental release scope below, full app acceptance remains incomplete.
 - Authority: direct user continuation in chat01a20a46 on2026-11-23: continue until fresh query geometry works, without new plans, screen-specific fixes or GUI Xcode dependencies; PLAN.UIB.SWIFTUI-GEOMETRY@3 records scope.
 - Requires: [BOUNDARIES](boundaries.md), [MODEL](model.md), [IDENTITY](identity.md), [GEOMETRY](geometry.md), [PRIVACY](privacy.md), [EXCHANGE](exchange.md), [LIFECYCLE](lifecycle.md), [CACHE](cache.md), [CLI](cli.md).
@@ -24,6 +24,15 @@ Operations: enumerate this instance's available windows, capture an explicitly s
 Each live capture performs a new source read. Node keys are observation-scoped. Window witnesses retain generation only while the exact weak window identity remains. Multiple agents use distinct request/result names; capture is serialized on this app's main actor, independent of the shared desktop-input lane.
 
 Input publication is atomic. Consume each complete bounded request once; publish one complete response or fixed failure. Output is written atomically without overwrite. Cancel markers suppress geometry publication when cancellation arrives during the synchronous source call. A client timeout does not prove that the opaque framework call stopped; do not retry a still-active capture or kill the app. Queue/storage are bounded and caller-owned completed files are acknowledged/removed only by their consumer.
+
+## RUNTIME.SUBTREE — explicit pre-serialization selection
+Runtime outputLimit defect assignment (chat01a20ed3, continuation2026-11-24) authorizes additive `--subtree-type` for capture/tree/measure. It matches one exact nominal source type (module included) in the fresh selected window, before canonical serialization; zero matches refuse `subtreeNotFound`, multiple refuse `ambiguousSubtree`. Empty or control-bearing names and names over1024 UTF-8 bytes refuse. No index from another observation or first-match fallback.
+
+The new endpoint advertises `capture-subtree-type`; callers refuse an old endpoint without dispatching a scoped request. The existing protocol1.0.0 request remains unchanged without selection; an optional `subtreeType` field is admitted only for capture. Existing `--type` stays a post-capture output filter. No automatic scoped fallback for whole-window requests.
+
+Retain the selected root, all its source descendants and its exact ancestor chain for inherited geometry provenance. Preserve indices, properties, original spaces/transforms and retained child order. Explicit declarations label selected root/descendant/ancestor context and omitted direct children on context ancestors; selection metadata records original visited, subtree, context and excluded node counts. Scope names that observed subtree plus its ancestor context, never the whole window. Coverage concerns retained nodes; empty hosting roots conservatively keep coverage partial. Excluded sibling/root nodes are outside this scope, not claimed absent from the application.
+
+The source still reads the hosting trees and obeys the original node/depth limits before selection. Output stays16MiB; no truncation, relaxed privacy filtering, changed geometry or limit increase. This addresses bounded component export, not oversized whole-window capture or opaque getter allocation. Qualify a large source tree whose whole-window output refuses but whose small subtree validates/measures through the normal caller; test missing/ambiguous selectors, source limits, ancestor closure, canary exclusion, old/new endpoint compatibility and fresh changes.
 
 ## RUNTIME.DATA
 Source namespace `swiftui.runtime.layout`; plugin `swiftui-runtime-probe`; canonical core0.1 Snapshot and existing Rust analysis remain. Source-local positions are not declared window/screen coordinates without qualified mapping. Missing geometry remains unknown; known sizes/positions preserve numeric values. Original source hierarchy is retained, including unmeasured wrappers. Complete source-tree discovery and availability of every requested property are distinct.

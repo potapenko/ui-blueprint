@@ -91,6 +91,65 @@ final class RuntimeTests: XCTestCase {
         XCTAssertTrue(String(decoding: bytes, as: UTF8.self).contains("source-transform-unavailable"))
     }
 
+    func testSubtreePreservesAncestorClosureAndRefusesAmbiguity() throws {
+        let nodes = [
+            RuntimeNode(index: 0, parent: nil, hostingRoot: 0, type: "Fixture.Root", position: .zero, size: .init(width: 100, height: 80)),
+            RuntimeNode(index: 1, parent: 0, hostingRoot: 0, type: "Fixture.Sibling", position: nil, size: nil),
+            RuntimeNode(index: 2, parent: 0, hostingRoot: 0, type: "Fixture.Dialog", position: .zero, size: .init(width: 100, height: 80), positionSource: 0, sizeSource: 0),
+            RuntimeNode(index: 3, parent: 2, hostingRoot: 0, type: "Fixture.Label", position: .zero, size: .init(width: 100, height: 80), positionSource: 0, sizeSource: 0),
+            RuntimeNode(index: 4, parent: nil, hostingRoot: 1, type: "Fixture.OtherHost", position: nil, size: nil)
+        ]
+        let full = RuntimeObservation(id: "o", start: 1, end: 2, window: 1,
+            windowGeneration: "g", nodes: nodes, hostingRoots: 2)
+        let selected = try full.selecting(type: "Fixture.Dialog")
+        XCTAssertEqual(selected.nodes.map(\.index), [0, 2, 3])
+        XCTAssertEqual(selected.nodes[1].positionSource, 0)
+        XCTAssertEqual(selected.selection?.ancestors, [0])
+        XCTAssertEqual(selected.selection?.subtree, [2, 3])
+        XCTAssertEqual(selected.selection?.sourceNodes, 5)
+        XCTAssertEqual(selected.scopeID, "window-1/subtree-n2-with-ancestors")
+        func encode(_ value: RuntimeObservation) throws -> Data {
+            try RuntimeEncoding.snapshot(value, session: "s", bundle: "fixture", request: "r", sequence: 1)
+        }
+        XCTAssertEqual(try encode(full), try encode(full.selecting(type: nil)))
+        let bytes = try encode(selected)
+        let doc = try XCTUnwrap(JSONSerialization.jsonObject(with: bytes) as? [String: Any])
+        let data = (doc["artifact"] as! [String: Any])["data"] as! [String: Any]
+        let output = data["nodes"] as! [[String: Any]]
+        XCTAssertEqual((output[0]["children"] as! [[String: String]]).map { $0["key"]! }, ["o-n2"])
+        XCTAssertFalse(String(decoding: bytes, as: UTF8.self).contains("Fixture.Sibling"))
+        let decl = output[0]["source_declarations"] as! [[String: Any]]
+        let count = decl.first { $0["name"] as? String == "excluded_direct_children" }!
+        XCTAssertEqual(((count["state"] as! [String: Any])["value"] as! [String: Any])["value"] as? Int, 1)
+        XCTAssertThrowsError(try full.selecting(type: "Absent")) { XCTAssertEqual($0 as? RuntimeRefusal, .subtreeNotFound) }
+        var ambiguous = full
+        ambiguous.nodes.append(RuntimeNode(index: 5, parent: nil, hostingRoot: 1, type: "Fixture.Dialog", position: nil, size: nil))
+        XCTAssertThrowsError(try ambiguous.selecting(type: "Fixture.Dialog")) { XCTAssertEqual($0 as? RuntimeRefusal, .ambiguousSubtree) }
+        for invalid in ["", "bad\nname", String(repeating: "é", count: 513)] {
+            XCTAssertThrowsError(try full.selecting(type: invalid)) { XCTAssertEqual($0 as? RuntimeRefusal, .invalidRequest) }
+        }
+    }
+
+    func testLargeWindowOutputLimitStillAllowsCompleteSmallSubtree() throws {
+        var nodes = [RuntimeNode(index: 0, parent: nil, hostingRoot: 0, type: "Fixture.Root", position: .zero,
+            size: .init(width: 500, height: 400), positionSource: 0, sizeSource: 0)]
+        for index in 1..<10_000 {
+            nodes.append(RuntimeNode(index: index, parent: 0, hostingRoot: 0,
+                type: index == 1 ? "Fixture.Dialog" : "Fixture.Row", position: .zero,
+                size: .init(width: 80, height: 20), positionSource: 0, sizeSource: 0,
+                transform: RuntimeAffine(values: [1, 0, 0, 1, 0, 0])))
+        }
+        let full = RuntimeObservation(id: "fixture-observation", start: 1, end: 2, window: 1,
+            windowGeneration: "g", nodes: nodes, hostingRoots: 1)
+        func encode(_ value: RuntimeObservation) throws -> Data {
+            try RuntimeEncoding.snapshot(value, session: "s", bundle: "fixture", request: "r", sequence: 1)
+        }
+        XCTAssertThrowsError(try encode(full)) { XCTAssertEqual($0 as? RuntimeRefusal, .outputLimit) }
+        let selected = try full.selecting(type: "Fixture.Dialog")
+        XCTAssertEqual(selected.nodes.count, 2)
+        XCTAssertLessThan(try encode(selected).count, 16_384)
+    }
+
     func testTransformOrderAndUnknownEncoding() throws {
         let source: [String: Any] = ["positionAdjustment": [3, 4], "items": [
             ["translation": [3, 4]], ["affineTransform": [2, 0, 0, 0, 0, 3, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]],

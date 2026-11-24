@@ -43,6 +43,7 @@ public final class BlueprintRuntimeSession {
         source = listener
         listener.resume()
         let descriptor: [String: Any] = ["protocol": "1.0.0", "source": "swiftui.runtime.layout",
+            "capabilities": ["capture-subtree-type"],
             "run_id": runID, "capability": capability, "pid": ProcessInfo.processInfo.processIdentifier,
             "bundle": bundle, "directory": directory.path,
             "os": ProcessInfo.processInfo.operatingSystemVersionString,
@@ -72,9 +73,16 @@ public final class BlueprintRuntimeSession {
                 let data = try RuntimeInput.claim(file, in: directory)
                 if overloaded { throw RuntimeRefusal.busy }
                 guard let shape = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                      Set(shape.keys) == ["version", "id", "run", "capability", "operation", "window", "windowGeneration"]
+                      (Set(shape.keys) == ["version", "id", "run", "capability", "operation", "window", "windowGeneration"]
+                       || Set(shape.keys) == ["version", "id", "run", "capability", "operation", "window", "windowGeneration", "subtreeType"])
                 else { throw RuntimeRefusal.invalidRequest }
                 let request = try JSONDecoder().decode(RuntimeRequest.self, from: data)
+                if let value = shape["subtreeType"] {
+                    guard request.operation == "capture", let type = value as? String else {
+                        throw RuntimeRefusal.invalidRequest
+                    }
+                    try RuntimeSubtreeSelection.validate(type)
+                }
                 guard request.version == "1.0.0", request.id == id else { throw RuntimeRefusal.invalidRequest }
                 guard request.window == nil || (request.window! > 0 && request.window! <= Int(Int32.max)) else {
                     throw RuntimeRefusal.invalidRequest
@@ -86,6 +94,7 @@ public final class BlueprintRuntimeSession {
                 case "windows": response["windows"] = collector.windows()
                 case "capture":
                     let observation = try collector.capture(windowNumber: request.window, expectedGeneration: request.windowGeneration)
+                        .selecting(type: request.subtreeType)
                     guard !isCancelled(id) else { throw RuntimeRefusal.cancelled }
                     guard sequence < UInt64.max else { throw RuntimeRefusal.sourceLimit }
                     sequence += 1
@@ -96,6 +105,9 @@ public final class BlueprintRuntimeSession {
                     response["snapshot"] = name
                     response["sha256"] = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
                     response["nodes"] = observation.nodes.count
+                    if let selection = observation.selection {
+                        response["selection"] = selection.metadata(observation: observation.id)
+                    }
                     response["window"] = observation.window
                     response["window_generation"] = observation.windowGeneration
                     response["observation_id"] = observation.id
@@ -137,5 +149,6 @@ private struct RuntimeRequest: Decodable {
     let operation: String
     let window: Int?
     let windowGeneration: String?
+    let subtreeType: String?
 }
 #endif
