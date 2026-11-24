@@ -59,6 +59,63 @@ def encoded(value):
     return (json.dumps(value, separators=(",", ":"), allow_nan=False) + "\n").encode()
 
 
+def project_recipe(path):
+    recipe = read_json(path, 16_384)
+    required = {"recipe_version", "project_root", "project", "scheme", "product", "bundle"}
+    if (not isinstance(recipe, dict) or not required <= recipe.keys()
+            or set(recipe) - required - {"environment", "arguments"}
+            or recipe.get("recipe_version") != "1.0.0"
+            or any(not isinstance(recipe[k], str) or not recipe[k] for k in required)):
+        raise Failure("invalid_project_recipe")
+    env, arguments = recipe.get("environment", {}), recipe.get("arguments", [])
+    if (not isinstance(env, dict) or any(not re.fullmatch(r"[A-Z_][A-Z0-9_]*", k)
+            or not isinstance(v, str) or "\0" in v for k, v in env.items())
+            or not isinstance(arguments, list) or any(not isinstance(a, str) or "\0" in a for a in arguments)):
+        raise Failure("invalid_project_recipe")
+    if set(env) & {"HOME", "CODEX_HOME", "TMPDIR", "TMP", "TEMP", "UIBLUEPRINT_RUNTIME", "SWIFTUI_VIEW_DEBUG"}:
+        raise Failure("reserved_environment_key")
+    return recipe
+
+
+def source_identity(root):
+    """Fingerprint Git-visible working inputs, including unstaged/untracked edits.
+
+    External local packages and ignored generated inputs retain their owner's
+    separate provenance; this does not claim an atomic filesystem snapshot.
+    """
+    def git(*args):
+        return subprocess.check_output(["git", *args], cwd=root, timeout=15)
+    revision = git("rev-parse", "HEAD").decode().strip()
+    names = sorted(set(git("ls-files", "--cached", "--others", "--exclude-standard", "-z").split(b"\0")) - {b""})
+    digest = hashlib.sha256()
+    for name in names:
+        digest.update(len(name).to_bytes(8, "big")); digest.update(name)
+        path = Path(root) / os.fsdecode(name)
+        try:
+            info = path.lstat()
+        except FileNotFoundError:
+            digest.update(b"missing"); continue
+        digest.update(str(stat.S_IFMT(info.st_mode) | (info.st_mode & 0o111)).encode())
+        if stat.S_ISLNK(info.st_mode):
+            digest.update(os.fsencode(os.readlink(path)))
+        elif stat.S_ISREG(info.st_mode):
+            content = hashlib.sha256()
+            with path.open("rb") as stream:
+                for chunk in iter(lambda: stream.read(1_048_576), b""):
+                    content.update(chunk)
+            digest.update(content.digest())
+        elif stat.S_ISDIR(info.st_mode):
+            # A submodule has its own working tree; include it recursively.
+            if (path / ".git").exists():
+                digest.update(encoded(source_identity(path)))
+            else:
+                raise Failure("unsupported_source_entry")
+        else:
+            raise Failure("unsupported_source_entry")
+    return dict(revision=revision, git_visible_inputs_sha256=digest.hexdigest(),
+                dirty=bool(git("status", "--porcelain=v1", "--untracked-files=all")))
+
+
 def endpoint(path):
     path = Path(path).absolute()
     info = path.parent.lstat()
@@ -170,10 +227,7 @@ def launch(app, run_root, environment=None, arguments=None, expected_bundle=None
 
 def prepare(args):
     recipe_path = Path(args.recipe).resolve()
-    recipe = read_json(recipe_path, 16_384)
-    allowed = {"recipe_version", "project_root", "project", "scheme", "product", "bundle", "environment", "arguments"}
-    if set(recipe) - allowed or recipe.get("recipe_version") != "1.0.0":
-        raise Failure("invalid_project_recipe")
+    recipe = project_recipe(recipe_path)
     project_root = (recipe_path.parent / recipe["project_root"]).resolve()
     project = (project_root / recipe["project"]).resolve()
     if not project.is_relative_to(project_root) or project.suffix != ".xcodeproj":
@@ -185,7 +239,7 @@ def prepare(args):
     run_root = Path(args.run_root).resolve()
     if not build_root.is_dir() or not run_root.is_dir():
         raise Failure("prepare_roots_must_exist")
-    identity = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_root, text=True).strip()
+    identity = source_identity(project_root)
     with tempfile.TemporaryDirectory(prefix="uib-prepare-", dir=build_root) as task:
         task = Path(task)
         env = dict(os.environ, TMPDIR=str(task), TMP=str(task), TEMP=str(task))
@@ -196,15 +250,19 @@ def prepare(args):
             completed = subprocess.run(command, cwd=project_root, env=env, stdout=stream, stderr=subprocess.STDOUT, timeout=2400)
         if completed.returncode:
             raise Failure("project_build_failed")
-        if subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=project_root, text=True).strip() != identity:
-            raise Failure("source_revision_changed_during_build")
+        if source_identity(project_root) != identity or project_recipe(recipe_path) != recipe:
+            raise Failure("source_inputs_changed_during_build")
         source = task / "DerivedData/Build/Products/Debug" / product
         if not source.is_dir():
             raise Failure("built_product_missing")
         artifact = Path(tempfile.mkdtemp(prefix="uib-app-", dir=run_root))
         shutil.copytree(source, artifact / product, symlinks=False)
-        (artifact / "OWNERSHIP.md").write_text(f"Owner: invoking Blueprint task\nState: active\nPurpose: retained diagnostic app at {identity}\nRetain until instance and consumers release it.\n")
-    return launch(artifact / product, run_root, recipe.get("environment"), recipe.get("arguments"), recipe["bundle"])
+        (artifact / "OWNERSHIP.md").write_text(f"Owner: invoking Blueprint task\nState: active\nPurpose: retained diagnostic app at {identity['revision']}\nRetain until instance and consumers release it.\n")
+        build_identity = dict(source=identity, recipe_sha256=hashlib.sha256(encoded(recipe)).hexdigest())
+        publish(artifact / "build-identity.json", encoded(build_identity))
+    result = launch(artifact / product, run_root, recipe.get("environment"), recipe.get("arguments"), recipe["bundle"])
+    result["build_identity"] = build_identity
+    return result
 
 
 def measured_nodes(snapshot, wanted_type):
@@ -245,9 +303,7 @@ def main():
             p.add_argument("--bundle", required=True)
     args = parser.parse_args()
     if args.command == "launch":
-        recipe = read_json(args.recipe, 16_384) if args.recipe else {}
-        if recipe and recipe.get("recipe_version") != "1.0.0":
-            raise Failure("invalid_project_recipe")
+        recipe = project_recipe(args.recipe) if args.recipe else {}
         result = launch(args.app, args.run_root, recipe.get("environment"), recipe.get("arguments"), recipe.get("bundle"))
     elif args.command == "prepare":
         result = prepare(args)

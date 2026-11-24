@@ -44,9 +44,16 @@ Read only the reference needed for the task:
 | Capture an independent lossless PNG of an exact native window | [macOS](references/macos.md#independent-native-png-from-the-selected-window) |
 | Read an ordinary Mac window using prepared trusted inputs | [macOS](references/macos.md) |
 | Find a missing native form/control in partial SDK or AX output | [macOS: partial coverage and AX identifiers](references/macos.md#partial-coverage-and-ax-identifiers) |
+| Prepare a SwiftUI Mac app once for geometry requests without Xcode GUI | [SwiftUI preparation](references/swiftui-setup.md) |
+| Query an integrated SwiftUI process after resize, navigation or data changes | [SwiftUI runtime queries](references/swiftui-runtime.md) |
 | Opt-in SwiftUI window/root geometry or supplied SDK snapshot | [macOS](references/macos.md#opt-in-swiftui-layout-observations) and [Analysis](references/analysis.md) |
 | Opt-in GPUI window/root geometry or supplied Debug snapshot | [GPUI](references/gpui.md) and [Analysis](references/analysis.md) |
 | Compile a drawing package; generate/review an image when requested | [Export](references/export.md) |
+
+For a fresh SwiftUI runtime request, use the runtime route above. Its one-time
+app integration and reusable build are separate from each measurement; do not
+add markers or rebuild for each requested element. The older marked SDK and
+external cache reader remain distinct sources with their own coverage.
 
 Use supplied saved data directly when it answers the question. Otherwise observe
 the authorized target once, then analyze the returned source. After an authorized

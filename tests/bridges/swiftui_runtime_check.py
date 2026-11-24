@@ -4,6 +4,7 @@ import importlib.util
 import json
 from pathlib import Path
 import tempfile
+import subprocess
 import unittest
 
 spec = importlib.util.spec_from_file_location("swiftui_runtime", Path(__file__).parents[2] / "plugins/macos/swiftui_runtime.py")
@@ -12,6 +13,37 @@ spec.loader.exec_module(runtime)
 
 
 class RuntimeChecks(unittest.TestCase):
+    def test_source_identity_tracks_dirty_and_untracked_input_bytes(self):
+        with tempfile.TemporaryDirectory() as root:
+            def git(*args):
+                subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
+            git("init")
+            path = Path(root) / "App.swift"
+            path.write_text("original")
+            git("add", "App.swift")
+            git("-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-m", "fixture")
+            clean = runtime.source_identity(root)
+            self.assertFalse(clean["dirty"])
+            path.write_text("changed")
+            dirty = runtime.source_identity(root)
+            self.assertEqual(clean["revision"], dirty["revision"])
+            self.assertNotEqual(clean["git_visible_inputs_sha256"], dirty["git_visible_inputs_sha256"])
+            generated = Path(root) / "NewView.swift"
+            generated.write_text("one")
+            untracked = runtime.source_identity(root)
+            generated.write_text("two")
+            self.assertNotEqual(untracked, runtime.source_identity(root))
+
+    def test_launch_recipe_rejects_malformed_arguments_and_reserved_environment(self):
+        with tempfile.TemporaryDirectory() as root:
+            path = Path(root) / "recipe.json"
+            recipe = dict(recipe_version="1.0.0", project_root=".", project="App.xcodeproj",
+                          scheme="App", product="App.app", bundle="me.example.app")
+            for extra in (dict(arguments="--wrong"), dict(environment={"SWIFTUI_VIEW_DEBUG": "287"})):
+                path.write_text(json.dumps(dict(recipe, **extra)))
+                with self.assertRaises(runtime.Failure):
+                    runtime.project_recipe(path)
+
     def test_duplicate_json_refuses(self):
         with self.assertRaises(runtime.Failure):
             json.loads('{"id":"a","id":"b"}', object_pairs_hook=runtime.unique_object)
