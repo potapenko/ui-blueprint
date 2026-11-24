@@ -11,6 +11,29 @@ enum RuntimeRefusal: String, Error {
     case unsupportedRuntimeProfile, updateContextUnavailable
 }
 
+/// Fixed, value-free evidence from the guard that refused acquisition.
+struct RuntimeSourceLimit: Error {
+    enum Kind: String {
+        case nativeNodes = "native_nodes", nativeDepth = "native_depth"
+        case sourceNodes = "source_nodes", sourceDepth = "source_depth"
+        case typeNameBytes = "type_name_bytes", typeNameControls = "type_name_controls"
+        case snapshotSequence = "snapshot_sequence"
+
+        var limit: UInt64 {
+            switch self {
+            case .nativeNodes, .sourceNodes: return 16_384
+            case .nativeDepth, .sourceDepth: return 512
+            case .typeNameBytes: return 65_536
+            case .typeNameControls: return 0
+            case .snapshotSequence: return UInt64.max
+            }
+        }
+    }
+    let kind: Kind
+    let observed: UInt64
+    var metadata: [String: Any] { ["kind": kind.rawValue, "limit": kind.limit, "observed": observed] }
+}
+
 @MainActor
 protocol RuntimeHosting {
     func runtimeGeometryTree() throws -> [_ViewDebug.Data]
@@ -146,7 +169,12 @@ final class RuntimeCollector {
 
         func visit(_ view: NSView, depth: Int) throws {
             nativeCount += 1
-            guard nativeCount <= Self.maxNodes, depth <= Self.maxDepth else { throw RuntimeRefusal.sourceLimit }
+            guard nativeCount <= Self.maxNodes else {
+                throw RuntimeSourceLimit(kind: .nativeNodes, observed: UInt64(nativeCount))
+            }
+            guard depth <= Self.maxDepth else {
+                throw RuntimeSourceLimit(kind: .nativeDepth, observed: UInt64(depth))
+            }
             if let host = view as? any RuntimeHosting {
                 let root = hostCount
                 hostCount += 1
@@ -180,7 +208,12 @@ final class RuntimeCollector {
     static func collect(_ roots: [_ViewDebug.Data], root: Int, nodes: inout [RuntimeNode]) throws {
         var pending = roots.reversed().map { ($0, Optional<Int>.none, 0) }
         while let (value, parent, depth) = pending.popLast() {
-            guard nodes.count < maxNodes, depth <= maxDepth else { throw RuntimeRefusal.sourceLimit }
+            guard nodes.count < maxNodes else {
+                throw RuntimeSourceLimit(kind: .sourceNodes, observed: UInt64(nodes.count) + 1)
+            }
+            guard depth <= maxDepth else {
+                throw RuntimeSourceLimit(kind: .sourceDepth, observed: UInt64(depth))
+            }
             let fields = Mirror(reflecting: value).children
             guard let data = fields.first(where: { $0.label == "data" })?.value as? [_ViewDebug.Property: Any],
                   let children = fields.first(where: { $0.label == "childData" })?.value as? [_ViewDebug.Data]
@@ -208,14 +241,20 @@ final class RuntimeCollector {
             nodes.append(RuntimeNode(index: index, parent: parent, hostingRoot: root,
                                      type: type, position: position, size: size,
                                      positionSource: positionSource, sizeSource: sizeSource, transform: transform))
-            guard pending.count + children.count + nodes.count <= maxNodes else { throw RuntimeRefusal.sourceLimit }
+            guard pending.count + children.count + nodes.count <= maxNodes else {
+                throw RuntimeSourceLimit(kind: .sourceNodes,
+                                         observed: UInt64(pending.count + children.count + nodes.count))
+            }
             pending.append(contentsOf: children.reversed().map { ($0, Optional(index), depth + 1) })
         }
     }
 
     static func sanitizedType(_ name: String) throws -> String {
-        guard name.utf8.count <= 65_536, !name.unicodeScalars.contains(where: { $0.value < 32 }) else {
-            throw RuntimeRefusal.sourceLimit
+        guard name.utf8.count <= 65_536 else {
+            throw RuntimeSourceLimit(kind: .typeNameBytes, observed: UInt64(name.utf8.count))
+        }
+        guard !name.unicodeScalars.contains(where: { $0.value < 32 }) else {
+            throw RuntimeSourceLimit(kind: .typeNameControls, observed: 1)
         }
         return String(name.prefix(while: { $0 != "<" })).replacingOccurrences(
             of: #"\(unknown context at \$[0-9a-fA-F]+\)"#, with: "(private)", options: .regularExpression)

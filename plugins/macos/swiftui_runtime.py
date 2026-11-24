@@ -18,7 +18,26 @@ MAX_BYTES = 16 * 1024 * 1024
 
 
 class Failure(Exception):
-    pass
+    def __init__(self, reason, source_limit=None):
+        super().__init__(reason)
+        self.source_limit = source_limit
+
+
+def source_limit_detail(value):
+    limits = {"native_nodes": 16384, "native_depth": 512, "source_nodes": 16384,
+              "source_depth": 512, "type_name_bytes": 65536, "type_name_controls": 0,
+              "snapshot_sequence": 18446744073709551615}
+    if (not isinstance(value, dict) or set(value) != {"kind", "limit", "observed"}
+            or not isinstance(value["kind"], str) or value["kind"] not in limits
+            or type(value["limit"]) is not int or value["limit"] != limits[value["kind"]]
+            or type(value["observed"]) is not int or not 0 <= value["observed"] <= 18446744073709551615):
+        raise Failure("invalid_source_limit_detail")
+    kind, observed = value["kind"], value["observed"]
+    if ((kind == "snapshot_sequence" and observed != value["limit"])
+            or (kind == "type_name_controls" and observed != 1)
+            or (kind not in ("snapshot_sequence", "type_name_controls") and observed <= value["limit"])):
+        raise Failure("invalid_source_limit_detail")
+    return value
 
 
 def unique_object(pairs):
@@ -167,7 +186,11 @@ def request(session, operation, window=None, generation=None, timeout=5, subtree
                 or response.get("run_id") != descriptor["run_id"]):
             raise Failure("response_binding_mismatch")
         if response.get("status") != "ok":
-            raise Failure(response.get("reason", "source_refused"))
+            reason = response.get("reason", "source_refused")
+            detail = None
+            if reason == "sourceLimit" and "source_limit" in response:
+                detail = source_limit_detail(response["source_limit"])
+            raise Failure(reason, detail)
         if operation in ("capture", "discover"):
             artifact = "snapshot" if operation == "capture" else "discovery"
             if response.get(artifact) != request_id + "." + artifact + ".json":
@@ -393,5 +416,8 @@ if __name__ == "__main__":
         main()
     except (Failure, OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
         code = str(error) if isinstance(error, Failure) else type(error).__name__
-        print(json.dumps(dict(status="failed", reason=code)), file=sys.stderr)
+        failure = dict(status="failed", reason=code)
+        if isinstance(error, Failure) and error.source_limit is not None:
+            failure["source_limit"] = error.source_limit
+        print(json.dumps(failure), file=sys.stderr)
         sys.exit(4)

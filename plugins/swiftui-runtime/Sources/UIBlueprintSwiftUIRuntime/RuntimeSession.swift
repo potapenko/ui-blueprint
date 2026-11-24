@@ -103,7 +103,9 @@ public final class BlueprintRuntimeSession {
                         bytes = try RuntimeEncoding.discovery(observation, session: runID, bundle: bundle, request: id)
                     } else {
                         artifact = "snapshot"
-                        guard sequence < UInt64.max else { throw RuntimeRefusal.sourceLimit }
+                        guard sequence < UInt64.max else {
+                            throw RuntimeSourceLimit(kind: .snapshotSequence, observed: sequence)
+                        }
                         sequence += 1
                         bytes = try RuntimeEncoding.snapshot(observation, session: runID, bundle: bundle, request: id, sequence: sequence)
                     }
@@ -124,9 +126,12 @@ public final class BlueprintRuntimeSession {
                 response["status"] = "ok"
                 try writeJSON(response, name: id + ".response.json")
             } catch {
-                let code = (error as? RuntimeRefusal)?.rawValue ?? "requestOrOutputFailure"
-                try? writeJSON(["protocol": "1.0.0", "request_id": id, "run_id": runID,
-                                "status": "failed", "reason": code], name: id + ".response.json")
+                let limit = error as? RuntimeSourceLimit
+                let code = limit != nil ? "sourceLimit" : (error as? RuntimeRefusal)?.rawValue ?? "requestOrOutputFailure"
+                var response: [String: Any] = ["protocol": "1.0.0", "request_id": id, "run_id": runID,
+                                               "status": "failed", "reason": code]
+                if let limit { response["source_limit"] = limit.metadata }
+                try? writeJSON(response, name: id + ".response.json")
             }
         }
     }

@@ -140,6 +140,44 @@ class RuntimeChecks(unittest.TestCase):
                 self.assertEqual(sentinel.read_bytes(), b"preserve")
                 self.assertEqual(list(root.iterdir()), [sentinel])
 
+    def test_source_limit_details_are_bounded_and_private(self):
+        valid = dict(kind="source_nodes", limit=16384, observed=16385)
+        self.assertEqual(runtime.source_limit_detail(valid), valid)
+        for value in (None, {}, dict(valid, secret="PRIVATE_CANARY"),
+                      dict(valid, kind="PRIVATE_CANARY"), dict(valid, kind=[]),
+                      dict(valid, observed=True), dict(valid, observed=16384),
+                      dict(valid, observed=1 << 64), dict(valid, limit=16385),
+                      dict(kind="type_name_controls", limit=0, observed=2)):
+            with self.assertRaisesRegex(runtime.Failure, "^invalid_source_limit_detail$"):
+                runtime.source_limit_detail(value)
+        for kind, limit, observed in (("type_name_bytes", 65536, 65537),
+                                      ("source_depth", 512, 513), ("native_depth", 512, 513),
+                                      ("native_nodes", 16384, 16385), ("type_name_controls", 0, 1),
+                                      ("snapshot_sequence", (1 << 64) - 1, (1 << 64) - 1)):
+            value = dict(kind=kind, limit=limit, observed=observed)
+            self.assertEqual(runtime.source_limit_detail(value), value)
+
+    def test_source_limit_preserves_legacy_reason_and_cleans_only_own_response(self):
+        for detail in (None, dict(kind="source_nodes", limit=16384, observed=16385)):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                sentinel = root / "unrelated"
+                sentinel.write_bytes(b"preserve")
+                def respond(path, raw):
+                    payload = json.loads(raw)
+                    response = dict(protocol="1.0.0", request_id=payload["id"], run_id="run",
+                                    status="failed", reason="sourceLimit")
+                    if detail is not None:
+                        response["source_limit"] = detail
+                    (root / (payload["id"] + ".response.json")).write_text(json.dumps(response))
+                with patch.object(runtime, "endpoint", return_value=(root, dict(run_id="run", capability="private"))), \
+                     patch.object(runtime, "publish", side_effect=respond):
+                    with self.assertRaisesRegex(runtime.Failure, "^sourceLimit$") as caught:
+                        runtime.request("unused", "capture")
+                    self.assertEqual(caught.exception.source_limit, detail)
+                self.assertEqual(list(root.iterdir()), [sentinel])
+                self.assertEqual(sentinel.read_bytes(), b"preserve")
+
     def test_type_selection_keeps_unknown_geometry(self):
         node = dict(key={"namespace": "swiftui.runtime.layout", "key": "n1"},
                     native_role=dict(availability="known", value=dict(type="text", value="SwiftUI.Button<SwiftUI.Text>")),
