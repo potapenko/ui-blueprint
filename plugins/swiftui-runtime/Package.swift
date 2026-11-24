@@ -6,7 +6,9 @@ let package = Package(
     platforms: [.macOS(.v14)],
     products: [.library(name: "UIBlueprintSwiftUIRuntime", type: .static, targets: ["UIBlueprintSwiftUIRuntime"])],
     targets: [
-        .target(name: "UIBlueprintSwiftUIRuntime"),
-        .testTarget(name: "UIBlueprintSwiftUIRuntimeTests", dependencies: ["UIBlueprintSwiftUIRuntime"])
+        .target(name: "RuntimeUpdateScope", publicHeadersPath: "include",
+                cSettings: [.define("UIBLUEPRINT_RUNTIME_DEBUG", .when(configuration: .debug))]),
+        .target(name: "UIBlueprintSwiftUIRuntime", dependencies: ["RuntimeUpdateScope"]),
+        .testTarget(name: "UIBlueprintSwiftUIRuntimeTests", dependencies: ["UIBlueprintSwiftUIRuntime", "RuntimeUpdateScope"])
     ]
 )

@@ -4,6 +4,9 @@ This package exposes existing SwiftUI hosting trees from inside an opted-in
 macOS Debug process. It adds no markers to individual views and uses no Xcode
 GUI, LLDB attach, raster-layer capture or input automation. Xcode/Apple SDK tools
 are needed to build. The underscored Apple source is qualified per OS/toolchain.
+The current arm64/macOS27.0.1 candidate brackets the getter in SwiftUI's main
+UpdateGroup and restores it on every exit. The earlier unscoped call is withdrawn
+after a real-app trap; corrected app qualification remains pending.
 
 ## Integrate once
 
@@ -91,4 +94,4 @@ are currently unqualified and source-local spaces remain separate: cross-node
 gaps/window overlays are pending, not manufactured from coordinates. Real-app
 coverage, repeated navigation/popup, Release, privacy/concurrency review and
 installed-skill delivery remain open under
-[SWIFTUI-RUNTIME@1](../../docs/specs/product/swiftui-runtime-probe.md).
+[SWIFTUI-RUNTIME@2](../../docs/specs/product/swiftui-runtime-probe.md).

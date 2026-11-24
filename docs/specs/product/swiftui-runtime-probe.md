@@ -1,12 +1,14 @@
 # In-process SwiftUI runtime geometry
-- Node type: leaf; domain: `uib.swiftui-runtime`; contract: `UIB.SWIFTUI-RUNTIME@1`.
+- Node type: leaf; domain: `uib.swiftui-runtime`; contract: `UIB.SWIFTUI-RUNTIME@2`.
 - Authority: Active; stability: Evolving; no app/release acceptance claimed.
 - Authority: direct user continuation in chat01a20a46 on2026-11-23: continue until fresh query geometry works, without new plans, screen-specific fixes or GUI Xcode dependencies; PLAN.UIB.SWIFTUI-GEOMETRY@3 records scope.
 - Requires: [BOUNDARIES](boundaries.md), [MODEL](model.md), [IDENTITY](identity.md), [GEOMETRY](geometry.md), [PRIVACY](privacy.md), [EXCHANGE](exchange.md), [LIFECYCLE](lifecycle.md), [CACHE](cache.md), [CLI](cli.md).
 - Scope: separate opt-in Debug library and matching caller; existing marker SDK, external debugger/cache acquisition, snapshots and actions stay unchanged.
 
 ## RUNTIME.SOURCE
-Use the installed SDK's typed `NSHostingView._viewDebugData()` inside the opted-in process on the main actor. A protocol conformance locates existing hosting roots, including SwiftUI App-created roots, without replacing UI. This underscored development API is version-qualified, not a universal stable Apple API guarantee. No LLDB attach, JIT, memory-address calling, getter ABI emulation or raster-layer encoding belongs to this path.
+Use the installed SDK's typed `NSHostingView._viewDebugData()` inside the opted-in process on the main actor and within a verified SwiftUI main UpdateGroup scope. A protocol conformance locates existing hosting roots, including SwiftUI App-created roots, without replacing UI. This underscored development API is version-qualified, not a universal stable Apple API guarantee. No LLDB attach, JIT, absolute-address calls, getter ABI emulation or raster-layer encoding belongs to this path.
+
+The unscoped getter candidate is withdrawn after real PlayPhrase.me trapped at a nil `UpdateGroup.current` in `AGAttribute.syncMainIfReferences`. A narrow Debug C bridge binds named exported UpdateGroup main/current/begin/end/isMain symbols from the system SwiftUICore image, using verified Swift calling convention/self context and balanced owned references. Unsupported symbols, non-main execution, incompatible scope or an unqualified OS refuse before calling the getter. The initial scope profile is macOS27.0.1; nested and throwing paths must restore the previous context. This synchronization does not grant UI mutation or raw model serialization authority. Actual app requalification remains required.
 
 The Mac-only diagnostic adapter may read its own NSApplication/NSWindow/NSView identities and geometry; all visible content remains SwiftUI. The separate existing pure marker SDK does not acquire an AppKit dependency. Native app changes and real-app acceptance belong to the native owner.
 
@@ -36,3 +38,5 @@ Qualify CLI-built fixture and actual app startup roots; repeated capture after r
 
 ## Source evidence
 Installed Xcode27.2 SDK interfaces expose typed getter and `_ViewDebug.Data`; inspected paths are SwiftUI/SwiftUICore arm64e swiftinterfaces. No upstream implementation copied. Preliminary owned SwiftUI App fixture gives188→212→188 nodes and width80→140→80 without GUI/LLDB, with canary absent after field allowlisting. Runtime29/287 startup profiles were compared; neither bypasses filtering. Real PlayPhrase.me acceptance remains pending.
+
+@2 is a Restore correction to the authorized general source: the actual fault offset856 resolves to the nil-current-UpdateGroup guard. A standalone fixture reproduces that guard's SIGTRAP without the scope and returns123 with it; nested geometry captures record current-context0→1→1→1→0 and unchanged field filtering. This is not yet proof of the corrected real-app scenario.

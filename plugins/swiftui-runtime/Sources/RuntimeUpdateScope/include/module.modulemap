@@ -1,0 +1,4 @@
+module RuntimeUpdateScope {
+    header "RuntimeUpdateScope.h"
+    export *
+}

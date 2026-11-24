@@ -1,8 +1,30 @@
 import XCTest
 @testable import UIBlueprintSwiftUIRuntime
+#if DEBUG
+import RuntimeUpdateScope
+#endif
 
 #if DEBUG
 final class RuntimeTests: XCTestCase {
+    @MainActor func testUpdateScopeRestoresContextOnNestedAndThrowingPaths() throws {
+        let os = ProcessInfo.processInfo.operatingSystemVersion
+        guard os.majorVersion == 27, os.minorVersion == 0, os.patchVersion == 1 else {
+            throw XCTSkip("Runtime source profile is qualified separately for each OS")
+        }
+        let initial = UIBRuntimeUpdateCurrent()
+        let value = try RuntimeUpdateContext.perform {
+            XCTAssertEqual(UIBRuntimeUpdateCurrent(), 1)
+            return try RuntimeUpdateContext.perform {
+                XCTAssertEqual(UIBRuntimeUpdateCurrent(), 1)
+                return 123
+            }
+        }
+        XCTAssertEqual(value, 123)
+        XCTAssertEqual(UIBRuntimeUpdateCurrent(), initial)
+        XCTAssertThrowsError(try RuntimeUpdateContext.perform { throw RuntimeRefusal.cancelled })
+        XCTAssertEqual(UIBRuntimeUpdateCurrent(), initial)
+    }
+
     func testInvalidRequestsAreClaimedOnceWithoutFollowingSymlinks() throws {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent("uib-input-" + UUID().uuidString)
         try FileManager.default.createDirectory(at: root, withIntermediateDirectories: false)

@@ -97,7 +97,7 @@ remain separate. Existing SwiftUI, Web, Compose, core and release scope are prot
 `L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
-| In-process fresh SwiftUI queries and CLI preparation | [SWIFTUI-RUNTIME@1](product/swiftui-runtime-probe.md) | Direct2026-11-23 continuation of PLAN.UIB.SWIFTUI-GEOMETRY@3; Debug candidate, actual app acceptance pending |
+| In-process fresh SwiftUI queries and CLI preparation | [SWIFTUI-RUNTIME@2](product/swiftui-runtime-probe.md) | PLAN.UIB.SWIFTUI-GEOMETRY@3; scoped Debug candidate after real unscoped trap, actual app requalification pending |
 | C04 source-selected parent/popover candidate | [SWIFTUI-CAPTURE-PAIR@1](product/swiftui-capture-pair.md) | Approved offline implementation; donor unchanged, no capture/admission |
 | External SwiftUI debug-layout candidate | [SWIFTUI-DEBUG-CAPTURE@14](product/swiftui-debug-capture.md) | Product admission withdrawn after real Settings failure; retained owner recovery |
 | Independent lossless native PNG | [NATIVE-CAPTURE@2](product/native-capture.md) | Explicit exact process/window capture; donor code unchanged |

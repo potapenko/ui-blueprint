@@ -7,15 +7,18 @@ enum RuntimeRefusal: String, Error {
     case invalidRequest, wrongSession, busy, cancelled, sourceNotReady
     case ambiguousWindow, staleWindow, unsupportedSource, sourceLimit, invalidGeometry
     case outputLimit, outputFailure, launchProfileRequired
+    case unsupportedRuntimeProfile, updateContextUnavailable
 }
 
 @MainActor
 protocol RuntimeHosting {
-    func runtimeGeometryTree() -> [_ViewDebug.Data]
+    func runtimeGeometryTree() throws -> [_ViewDebug.Data]
 }
 
 extension NSHostingView: RuntimeHosting {
-    func runtimeGeometryTree() -> [_ViewDebug.Data] { _viewDebugData() }
+    func runtimeGeometryTree() throws -> [_ViewDebug.Data] {
+        try RuntimeUpdateContext.perform { _viewDebugData() }
+    }
 }
 
 struct RuntimeNode {
@@ -82,7 +85,7 @@ final class RuntimeCollector {
             if let host = view as? any RuntimeHosting {
                 let root = hostCount
                 hostCount += 1
-                try Self.collect(host.runtimeGeometryTree(), root: root, nodes: &nodes)
+                try Self.collect(try host.runtimeGeometryTree(), root: root, nodes: &nodes)
                 return
             }
             for child in view.subviews { try visit(child, depth: depth + 1) }
