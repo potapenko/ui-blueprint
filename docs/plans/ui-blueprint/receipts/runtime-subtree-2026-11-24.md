@@ -1,7 +1,7 @@
 # Runtime component export under the existing output limit
 
 Owner: [outputLimit fix](codex://threads/01a20ed3-77b9-78c0-9ab3-ce714c6bb86c).
-Status: fixture-qualified, independently reviewed candidate; release and consumer acceptance pending.
+Status: released in0.9.0; Practice consumer acceptance passed; other consumer cases remain open.
 Release owner: [builds/releases](codex://threads/01a20929-8e9a-7830-834d-3e558e9ff18d).
 
 ## Basis and scope
@@ -84,5 +84,24 @@ properties occupy553844bytes and declarations253364 of roughly988KB; this suppor
 payload duplication as a cost, not a measured diagnosis of consumers' private trees.
 Custom ScopeDialog is not a standalone source node even though its content is
 present; such source omissions are not fixed or relabelled as not-mounted.
-Practice, Actors, Random and the native resize/dialog chain remain consumer-owned
-and unverified. Image/fixture success is not dialog or full-window acceptance.
+Actors, Random and the separate native resize/dialog chain remain consumer-owned
+and unverified. Practice acceptance below does not cover full-window export.
+
+
+## Practice consumer acceptance — 2026-11-24
+
+[Practice S15 owner](codex://threads/01a20912-a8de-7040-b51f-6ae6df2d4585)
+reported three validated real-app captures using the unique runtime selector
+`PlayphrasemeApp.MacPracticeRoot`. This is consumer-run evidence, not another
+capture by the tool owner. App source5223c1e25; SDK/caller release0.9.0,
+commit a4d1c2906f2967fa30c3e0d8b87fc353bfde3702; same PID50264/window15518.
+
+| Practice state | Subtree nodes | Ancestor context nodes | Layout size, pt |
+| --- | ---: | ---: | --- |
+| Empty | 1337 | 261 | 560 × 355 |
+| 2/2, collapsed | 1616 | 261 | 560 × 413 |
+| 1/2, expanded | 1633 | 261 | 560 × 740 |
+
+For these states use `--subtree-type PlayphrasemeApp.MacPracticeRoot` in the
+command above. Full export is no longer needed for this accepted component.
+Other screens and the existing whole-window outputLimit remain outside acceptance.
