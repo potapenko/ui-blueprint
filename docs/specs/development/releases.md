@@ -9,8 +9,8 @@
   Later on2026-11-06 the user selected MIT and explicitly rejected binary release
   attachments: releases identify verified source; prompt installation builds locally.
 - Read when: product version, release preparation/workflow or release instructions.
-- Requires: [MAC-DISTRIBUTION@10](macos-distribution.md), [CLI@21](../product/cli.md),
-  [AGENT-SKILL@8](agent-skill.md), [DEV.RUST@5](rust.md).
+- Requires: [MAC-DISTRIBUTION@11](macos-distribution.md), [CLI@21](../product/cli.md),
+  [AGENT-SKILL@9](agent-skill.md), [DEV.RUST@5](rust.md).
 - Precedence: this approved scope permits the named README, CLI and workflow edits
   previously excluded by the older preparation-only contract. Other guards remain.
 

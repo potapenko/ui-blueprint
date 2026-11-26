@@ -1,5 +1,5 @@
 # Agent skill and prompt installation
-- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@8`.
+- Node type: leaf; domain: `uib.agent-skill`; contract: `UIB.AGENT-SKILL@9`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: approved six-step plan (2026-10-13), real installation approval
   (2026-10-14), and completion instruction (2026-11-14) recorded below.
@@ -105,3 +105,8 @@ Prepare/build and instance ownership remain separate from fresh geometry request
 Preserve exact historical six/seven/eight-file skill inventories during rollback.
 Runtime support is opt-in Debug Mac with the pinned release's stated limits;
 no GUI Xcode or shared mouse queue is required for ordinary requests.
+
+SIMULATOR-RELEASE-001: user26Nov2026 release-now direction adds the portable
+Simulator reference to the eleven-file format9 skill. Preserve all prior skill
+inventories during update/rollback. Simulator preparation and source/PNG pairing
+use an explicitly owned device/app; runtime data is not universal mobile coverage.

@@ -3,6 +3,29 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.12.0
+
+- Add experimental iOS Simulator support to the opt-in Debug SwiftUI runtime
+  product, with the standalone `swiftui_simulator.py` launcher and source/PNG
+  pairing caller alongside the existing runtime query caller.
+- Bind launch to the explicitly owned Simulator, exact app container and returned
+  PID. Pair canonical geometry with a native lossless Simulator PNG, preserving
+  window metadata and hashes and declaring sequential, non-atomic consistency.
+  SwiftUI-host-to-screen mapping still requires its qualified source profile.
+- Include the portable Simulator setup/query guide in the matching eleven-file
+  skill. Local bundle format 9 preserves exact formats 1–8 and verified rollback.
+- Qualified local evidence uses iOS 27.2 arm64 Simulator on Apple Silicon:
+  Search/More/close at 390×844 and 440×956 pt with 3× PNGs, Reels, Clip grid/
+  Filters/viewer and the shared Search Download form. Clip Download's unavailable
+  state is not qualification of a ready form. Debug/Release build and runtime
+  exclusion were checked by the SDK/app owner; no full Phone matrix is claimed.
+- The SwiftPM iOS 17 declaration is a compile floor, not runtime qualification.
+  Physical devices, iPad, other runtimes and Mac-hosted Phone layouts remain
+  unqualified. Existing Mac support and Rust geometry semantics are preserved.
+- Apply the existing type-name byte guard to the exported nominal name after
+  removing generic specialization, retaining control-character rejection and
+  keeping generic arguments/model values out of the result.
+
 ## 0.11.0
 
 - Support complete large Mac runtime observations with up to 1,048,576 source

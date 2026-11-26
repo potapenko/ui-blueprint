@@ -1,6 +1,6 @@
 # Mac distribution
 - Node type: leaf; domain: `uib.distribution`.
-- Contract: `UIB.MAC-DISTRIBUTION@10`.
+- Contract: `UIB.MAC-DISTRIBUTION@11`.
 - Authority: Active; stability: Evolving; released baseline: none.
 - Authority source: user approval in this chat on 2026-10-13 of the six-step
   Mac archive/curl/Homebrew plan, followed by “Подготовь всё до публикации,
@@ -124,3 +124,12 @@ they are not injected into apps by the installer. User release-now direction on
 Formats1–7 retain their exact CLI inventories and their six/seven/eight skill files.
 Verify7→8→7 rollback, missing/foreign files, isolated caller and matching skill.
 No new app permission, production binary or full platform qualification follows.
+
+Manifest9 adds the standalone `swiftui_simulator.py` from plugins/ios to native
+and combined Mac tool bundles, alongside `swiftui_runtime.py`. The matching skill
+adds `references/swiftui-simulator.md` (eleven files). User26Nov2026 release-now
+authority selects experimental iOS Simulator delivery; physical devices/iPad and
+the full Phone matrix are not qualified. SDK source remains tag-pinned SwiftPM.
+Preserve exact CLI/skill inventories1–8 and verify8→9→8 rollback, missing/foreign
+caller/recipe refusal and isolated installed sibling imports/help without simctl.
+No device/app launch, permission or production binary distribution is implicit.

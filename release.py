@@ -25,8 +25,10 @@ BINARIES = ('uiblueprint', 'uiblueprint-validate', 'session-worker', 'native-hos
 SKILL_FILES = ('SKILL.md', 'agents/openai.yaml', 'references/analysis.md',
                'references/export.md', 'references/macos.md', 'references/web.md',
                'references/compose.md', 'references/gpui.md',
-               'references/swiftui-setup.md', 'references/swiftui-runtime.md')
+               'references/swiftui-setup.md', 'references/swiftui-runtime.md',
+               'references/swiftui-simulator.md')
 RUNTIME_SKILL_FILES = {'references/swiftui-setup.md', 'references/swiftui-runtime.md'}
+SIMULATOR_SKILL_FILES = {'references/swiftui-simulator.md'}
 VERSION = re.compile(r'[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?\Z')
 NUMERIC_VERSION = re.compile(r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\Z')
 
@@ -88,6 +90,9 @@ def committed_skill(revision):
 
 def skill_inventory(bundle_format):
     names = set(SKILL_FILES)
+    if bundle_format == 'ui-blueprint-local-9':
+        return names
+    names -= SIMULATOR_SKILL_FILES
     if bundle_format == 'ui-blueprint-local-8':
         return names
     names -= RUNTIME_SKILL_FILES
@@ -101,7 +106,7 @@ def skill_inventory(bundle_format):
 
 
 def make_skill_archive(output, files):
-    if set(files) not in [skill_inventory(f'ui-blueprint-local-{v}') for v in range(1, 9)]:
+    if set(files) not in [skill_inventory(f'ui-blueprint-local-{v}') for v in range(1, 10)]:
         raise ValueError('invalid skill inventory')
     for name, data in files.items():
         if not name.endswith('.md'):
@@ -298,10 +303,11 @@ def extract_candidate(folder, bundle, record):
     with tarfile.open(folder / archive_name(record['version']), 'r:gz') as archive:
         members = archive.getmembers()
         names = {m.name for m in members}
-        format7 = expected - dist.RUNTIME_FILES
+        format8 = expected - dist.SIMULATOR_FILES
+        format7 = format8 - dist.RUNTIME_FILES
         previous = format7 - dist.CACHE_FILES
         legacy = previous - dist.NATIVE_CALLER_FILES
-        inventories = (expected, format7, format7 - dist.CACHE_FILES_V7, previous, legacy, legacy - dist.COMPOSE_FILES, legacy - dist.COMPOSE_FILES - dist.WEB_FILES)
+        inventories = (expected, format8, format7, format7 - dist.CACHE_FILES_V7, previous, legacy, legacy - dist.COMPOSE_FILES, legacy - dist.COMPOSE_FILES - dist.WEB_FILES)
         if len(members) != len(names) or names not in inventories or any(not m.isfile() for m in members):
             raise ValueError('invalid release archive inventory')
         for member in members:

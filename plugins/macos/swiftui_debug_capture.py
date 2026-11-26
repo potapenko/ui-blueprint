@@ -184,7 +184,7 @@ def verified_helper(bundle_path):
     if manifest_path.is_symlink() or manifest_path.stat().st_size > MAX_BYTES:
         raise Refusal('invalid_bundle', 2)
     manifest = decode(manifest_path.read_bytes())
-    if manifest['format'] not in ('ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6', 'ui-blueprint-local-7', 'ui-blueprint-local-8') or manifest['modules'] not in ('native', 'combined'):
+    if manifest['format'] not in ('ui-blueprint-local-4', 'ui-blueprint-local-5', 'ui-blueprint-local-6', 'ui-blueprint-local-7', 'ui-blueprint-local-8', 'ui-blueprint-local-9') or manifest['modules'] not in ('native', 'combined'):
         raise Refusal('invalid_bundle', 2)
     helper = bundle/'native-host-helper'
     expected = manifest['files']['native-host-helper']
