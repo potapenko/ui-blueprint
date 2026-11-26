@@ -59,6 +59,7 @@ import UIKit
             let actual = view.convert(point, to: window)
             let expectedX = m[0]*point.x + m[2]*point.y + m[4]
             let expectedY = m[1]*point.x + m[3]*point.y + m[5]
+            // Roundoff qualification only; preserve original bounds and coefficients.
             guard actual.x.isFinite, actual.y.isFinite,
                   abs(actual.x-expectedX) <= 1e-7, abs(actual.y-expectedY) <= 1e-7 else { return nil }
         }

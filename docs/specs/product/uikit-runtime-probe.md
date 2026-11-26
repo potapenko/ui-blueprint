@@ -28,7 +28,9 @@ class table. UIKit is a narrow diagnostic adapter, not a visible UI implementati
 Original bounds are local top-left points, including nonzero bounds.origin.
 Do not serialize UIView.frame as a precise transformed rectangle. For a qualified
 2D layer ancestry, derive the local-to-window affine using public point conversion
-and verify it against converted bounds corners. Perspective/3D, nonfinite or
+and verify it against converted bounds corners. The1e-7pt corner-agreement guard
+qualifies floating-point roundoff only: it does not alter bounds/coefficients or
+change Rust rule tolerances. Perspective/3D, nonfinite or
 unverified mappings remain unknown; local bounds remain useful. A window space
 is separate from SwiftUI global spaces. No inferred cross-source mapping.
 
@@ -51,7 +53,7 @@ Release excludes SDK integration; preparation and consumer application changes
 belong to their owners. Packaging/install/source publication belong to releases.
 
 ## UIKIT.ACCEPT
-Project-owned SwiftUI Menu/Picker: open → capture UIKit-only popup window → close
+Project-owned SwiftUI Menu/Picker: open → capture selected-window UIKit popup subtree → close
 → reopen; fresh hierarchy/bounds, canonical validator and Rust measurement.
 Fixture covers nonzero bounds origin/scroll, affine scale/rotation, unsupported
 perspective and animated model values. Check stale/ambiguous window, cancellation,
