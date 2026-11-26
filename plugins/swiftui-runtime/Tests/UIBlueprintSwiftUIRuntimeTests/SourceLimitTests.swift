@@ -8,6 +8,7 @@ final class SourceLimitTests: XCTestCase {
     @MainActor func testTypeByteBoundaryAndControlPresenceKeepFixedEvidence() throws {
         let nominal = "Fixture." + String(repeating: "a", count: 65_528)
         XCTAssertEqual(try RuntimeCollector.sanitizedType(nominal), nominal)
+        XCTAssertEqual(try RuntimeCollector.sanitizedType("SwiftUI.ModifiedContent<" + String(repeating: "x", count: 70_000) + ">"), "SwiftUI.ModifiedContent")
         for (name, kind, observed) in [(nominal + "a", RuntimeSourceLimit.Kind.typeNameBytes, UInt64(65_537)),
                                         ("canary\nprivate", .typeNameControls, 1)] {
             XCTAssertThrowsError(try RuntimeCollector.sanitizedType(name)) { error in

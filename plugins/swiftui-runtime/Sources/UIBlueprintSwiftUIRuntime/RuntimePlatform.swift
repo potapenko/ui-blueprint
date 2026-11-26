@@ -56,6 +56,7 @@ extension UIWindow {
                 "window_to_screen": [x.x-origin.x, x.y-origin.y, y.x-origin.x, y.y-origin.y, origin.x, origin.y],
                 "safe_area": [window.safeAreaInsets.top, window.safeAreaInsets.left,
                               window.safeAreaInsets.bottom, window.safeAreaInsets.right],
+                "scene_state": window.windowScene?.activationState.rawValue ?? -1,
                 "orientation": window.windowScene?.interfaceOrientation.rawValue ?? 0]
         #endif
     }

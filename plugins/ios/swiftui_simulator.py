@@ -11,7 +11,7 @@ import json
 import os
 from pathlib import Path
 import plistlib
-import shutil
+import re
 import struct
 import subprocess
 import sys
@@ -40,7 +40,9 @@ def simctl(*args, timeout=30, env=None):
 def launch(args, caller):
     app = Path(args.app).resolve()
     root = Path(args.run_root).resolve()
-    if not app.is_dir() or not root.is_dir() or app.stat().st_dev != Path("/private/tmp").stat().st_dev:
+    if (not app.is_dir() or not root.is_dir()
+            or app.stat().st_dev != Path("/private/tmp").stat().st_dev
+            or root.stat().st_dev != Path("/private/tmp").stat().st_dev):
         raise ValueError("internal_app_and_existing_runtime_required")
     info = plistlib.loads((app / "Info.plist").read_bytes())
     bundle = info["CFBundleIdentifier"]
@@ -56,21 +58,22 @@ def launch(args, caller):
             del env[key]
     options = dict(recipe.get("environment", {}), UIBLUEPRINT_RUNTIME="1", SWIFTUI_VIEW_DEBUG="29")
     env.update({"SIMCTL_CHILD_" + key: value for key, value in options.items()})
-    # No terminate-running-process flag: the owner must resolve old runs itself.
-    simctl("launch", "--stdout=" + str(run / "stdout"), "--stderr=" + str(run / "stderr"),
-           args.simulator, bundle, *recipe.get("arguments", []), env=env)
+    container = Path(simctl("get_app_container", args.simulator, bundle, "data")).resolve()
+    previous = set((container / "tmp").glob("uiblueprint-runtime-*/session.json"))
+    # simctl's stdout/stderr destinations are interpreted by the simulated OS.
+    # Bind only a newly created descriptor in this app's exact data container to
+    # the PID returned by LaunchServices; never scan other apps or reuse old runs.
+    launched = simctl("launch", args.simulator, bundle, *recipe.get("arguments", []), env=env)
+    match = re.fullmatch(re.escape(bundle) + r": (\d+)", launched)
+    if not match:
+        raise ValueError("unresolved_launched_pid")
+    pid = int(match.group(1))
     deadline = time.monotonic() + 20
     while time.monotonic() < deadline:
-        error = run / "stderr"
-        if error.exists():
-            with error.open("rb") as stream:
-                lines = stream.read(1_048_576).decode("utf-8", "replace").splitlines()
-            paths = [s.removeprefix("UIBLUEPRINT_SESSION ") for s in lines if s.startswith("UIBLUEPRINT_SESSION ")]
-            if paths:
-                _, descriptor = caller.endpoint(paths[-1])
-                if descriptor["bundle"] != bundle:
-                    raise ValueError("launched_bundle_mismatch")
-                return dict(session=paths[-1], pid=descriptor["pid"], bundle=bundle,
+        for path in set((container / "tmp").glob("uiblueprint-runtime-*/session.json")) - previous:
+            _, descriptor = caller.endpoint(path)
+            if descriptor["bundle"] == bundle and descriptor["pid"] == pid:
+                return dict(session=str(path), pid=pid, bundle=bundle,
                             simulator=args.simulator, app=str(app), run_directory=str(run))
         time.sleep(.05)
     raise ValueError("runtime_hook_not_ready; owned_launch=" + str(run))
@@ -92,6 +95,8 @@ def pair(args, caller):
     window = candidates[0]
     if window.get("platform") != "ios-simulator":
         raise ValueError("simulator_metadata_required")
+    if window.get("scene_state") != 0:
+        raise ValueError("foreground_scene_required_for_png_pair")
     response, raw = caller.request(args.session, "capture", window["window"], window["generation"], args.timeout)
     with tempfile.TemporaryDirectory(prefix="uib-simulator-pair-", dir="/private/tmp") as temporary:
         png = Path(temporary) / "screen.png"
@@ -151,6 +156,10 @@ if __name__ == "__main__":
         main()
     except Exception as error:
         # Fixed codes only; no source payload/launch environment in exceptions.
-        reason = str(error) if type(error) is ValueError else type(error).__name__
-        print(json.dumps(dict(status="failed", reason=reason)), file=sys.stderr)
+        is_source_refusal = type(error).__name__ == "Failure" and type(error).__module__ == "blueprint_runtime"
+        reason = str(error) if type(error) is ValueError or is_source_refusal else type(error).__name__
+        failure = dict(status="failed", reason=reason)
+        if is_source_refusal and error.source_limit is not None:
+            failure["source_limit"] = error.source_limit
+        print(json.dumps(failure), file=sys.stderr)
         sys.exit(4)

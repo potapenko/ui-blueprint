@@ -256,13 +256,14 @@ final class RuntimeCollector {
     }
 
     static func sanitizedType(_ name: String) throws -> String {
-        guard name.utf8.count <= 65_536 else {
-            throw RuntimeSourceLimit(kind: .typeNameBytes, observed: UInt64(name.utf8.count))
+        let nominal = String(name.prefix(while: { $0 != "<" }))
+        guard nominal.utf8.count <= 65_536 else {
+            throw RuntimeSourceLimit(kind: .typeNameBytes, observed: UInt64(nominal.utf8.count))
         }
         guard !name.unicodeScalars.contains(where: { $0.value < 32 }) else {
             throw RuntimeSourceLimit(kind: .typeNameControls, observed: 1)
         }
-        return String(name.prefix(while: { $0 != "<" })).replacingOccurrences(
+        return nominal.replacingOccurrences(
             of: #"\(unknown context at \$[0-9a-fA-F]+\)"#, with: "(private)", options: .regularExpression)
     }
 }

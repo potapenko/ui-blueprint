@@ -1,6 +1,6 @@
 # SwiftUI Simulator geometry
 - Domain: `uib.swiftui-simulator`; contract: `UIB.SWIFTUI-SIMULATOR@1`.
-- Authority: Active; stability: Evolving; local implementation, not released.
+- Authority: Active; stability: Evolving; experimental release permitted below.
 - Authority source: user26Nov2026 messages01a21855-0622/96e1, existing SDK owner
   tasked with Phone capture and permitted diagnostic donor integration.
 - Requires: [runtime contract](swiftui-runtime-probe.md).
@@ -14,6 +14,13 @@ Window numeric IDs are assigned by the session to weak window witnesses; they ar
 not CGWindowIDs or pointers. Each capture binds the exact run/window generation.
 Use the same source field allowlist, inherited-context attribution, limits and
 canonical engine. No raw value/environment/debug archive serialization.
+
+Phone Reels exposed a66323-byte recursively specialized type signature while
+the exported nominal type is short. Apply the65536-byte type-name budget after
+stripping generic arguments, preserving the control-character rejection. This
+corrects the shared normalizer's ordering; it does not export generic payloads,
+raise the nominal-name ceiling or change successful existing records. Full source
+type reflection is temporary framework metadata, not a model-value read.
 
 The synchronization adapter verifies system SwiftUICore/SwiftCore symbols in the
 Simulator runtime image and brackets the getter in the main UpdateGroup scope.
@@ -46,3 +53,12 @@ Small fixture then actual Phone Search/More composition with parent/child nodes,
 layout bounds and screenshot mapping. Verify repeated reads, presentation roots,
 unknown fields, stale binding, privacy and Mac compatibility. Missing Reels/Clip/
 Download proof stays pending; no whole-platform qualification from one screen.
+
+## Experimental release direction
+
+The user directly instructed this SDK chat on2026-11-26 to stop expanding screen
+checks and publish the existing version promptly for waiting agents, with defects
+reported afterward. This authorizes source publication and matching installation
+of the current experimental Simulator path before exhaustive Phone qualification.
+Preserve the existing Mac channel and truthful per-surface evidence. Do not
+resume broad application QA or claim physical-device/iPad/Mac-host qualification.
