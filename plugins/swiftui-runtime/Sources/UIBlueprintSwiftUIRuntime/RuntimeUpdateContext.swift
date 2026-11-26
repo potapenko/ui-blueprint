@@ -8,7 +8,14 @@ enum RuntimeUpdateContext {
         throw RuntimeRefusal.unsupportedRuntimeProfile
         #else
         let os = ProcessInfo.processInfo.operatingSystemVersion
-        guard os.majorVersion == 27, os.minorVersion == 0, os.patchVersion == 1 else {
+        #if os(iOS) && targetEnvironment(simulator)
+        let supported = os.majorVersion == 27 && os.minorVersion == 2 && os.patchVersion == 0
+        #elseif os(macOS)
+        let supported = os.majorVersion == 27 && os.minorVersion == 0 && os.patchVersion == 1
+        #else
+        let supported = false
+        #endif
+        guard supported else {
             throw RuntimeRefusal.unsupportedRuntimeProfile
         }
         guard let token = UIBRuntimeUpdateBegin() else { throw RuntimeRefusal.updateContextUnavailable }

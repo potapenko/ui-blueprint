@@ -4,7 +4,7 @@ import PackageDescription
 // Tag-pinned source entry point. Nested packages remain usable by local owners.
 let package = Package(
     name: "UIBlueprint",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v14), .iOS(.v17)],
     products: [
         .library(name: "UIBlueprintSwiftUI", targets: ["UIBlueprintSwiftUI"]),
         .library(name: "UIBlueprintSwiftUIRuntime", type: .static, targets: ["UIBlueprintSwiftUIRuntime"])

@@ -1,5 +1,9 @@
 #if DEBUG
+#if os(macOS)
 import AppKit
+#elseif os(iOS)
+import UIKit
+#endif
 import Foundation
 import SwiftUI
 
@@ -32,17 +36,6 @@ struct RuntimeSourceLimit: Error {
     let kind: Kind
     let observed: UInt64
     var metadata: [String: Any] { ["kind": kind.rawValue, "limit": kind.limit, "observed": observed] }
-}
-
-@MainActor
-protocol RuntimeHosting {
-    func runtimeGeometryTree() throws -> [_ViewDebug.Data]
-}
-
-extension NSHostingView: RuntimeHosting {
-    func runtimeGeometryTree() throws -> [_ViewDebug.Data] {
-        try RuntimeUpdateContext.perform { _viewDebugData() }
-    }
 }
 
 struct RuntimeNode {
@@ -133,41 +126,41 @@ final class RuntimeCollector {
     nonisolated static let maxBytes = 1024 * 1024 * 1024
 
     private final class Witness {
-        weak var window: NSWindow?
+        weak var window: RuntimeWindow?
         let generation = UUID().uuidString
-        init(_ window: NSWindow) { self.window = window }
+        init(_ window: RuntimeWindow) { self.window = window }
     }
     private var witnesses: [Int: Witness] = [:]
 
     func windows() -> [[String: Any]] {
         witnesses = witnesses.filter { $0.value.window != nil }
-        return NSApp.windows.filter { $0.isVisible && $0.windowNumber > 0 }.map { window in
+        return RuntimePlatform.windows.map { window in
             let generation = witness(window)
-            return ["window": window.windowNumber, "generation": generation,
+            var value: [String: Any] = ["window": windowID(window), "generation": generation,
                     "width": window.frame.width, "height": window.frame.height,
                     "is_key": window.isKeyWindow]
+            value.merge(RuntimePlatform.metadata(window)) { _, new in new }
+            return value
         }
     }
 
     func capture(windowNumber: Int?, expectedGeneration: String?) throws -> RuntimeObservation {
         let profile = ProcessInfo.processInfo.environment["SWIFTUI_VIEW_DEBUG"]
         guard profile == "29" || profile == "287" else { throw RuntimeRefusal.launchProfileRequired }
-        let candidates = NSApp.windows.filter {
-            $0.isVisible && $0.windowNumber > 0 && (windowNumber == nil || $0.windowNumber == windowNumber)
-        }
+        let candidates = RuntimePlatform.windows.filter { windowNumber == nil || windowID($0) == windowNumber }
         guard !candidates.isEmpty else { throw RuntimeRefusal.sourceNotReady }
         guard candidates.count == 1 else { throw RuntimeRefusal.ambiguousWindow }
         let window = candidates[0]
         let generation = witness(window)
         guard expectedGeneration == nil || expectedGeneration == generation else { throw RuntimeRefusal.staleWindow }
-        guard let content = window.contentView else { throw RuntimeRefusal.sourceNotReady }
+        guard let content = window.runtimeContent else { throw RuntimeRefusal.sourceNotReady }
         let start = ProcessInfo.processInfo.systemUptime
         var nodes: [RuntimeNode] = []
         var nativeCount = 0
         var hostCount = 0
         var emptyHostCount = 0
 
-        func visit(_ view: NSView, depth: Int) throws {
+        func visit(_ view: RuntimeView, depth: Int) throws {
             nativeCount += 1
             guard nativeCount <= Self.maxNodes else {
                 throw RuntimeSourceLimit(kind: .nativeNodes, observed: UInt64(nativeCount))
@@ -188,17 +181,30 @@ final class RuntimeCollector {
         while let parent = nativeRoot.superview, parent.window === window { nativeRoot = parent }
         try visit(nativeRoot, depth: 0)
         guard hostCount > 0, !nodes.isEmpty else { throw RuntimeRefusal.unsupportedSource }
-        guard window.isVisible, window.contentView === content, witness(window) == generation else {
+        guard window.runtimeVisible, window.runtimeContent === content, witness(window) == generation else {
             throw RuntimeRefusal.staleWindow
         }
         return RuntimeObservation(id: UUID().uuidString, start: start,
-            end: ProcessInfo.processInfo.systemUptime, window: window.windowNumber,
+            end: ProcessInfo.processInfo.systemUptime, window: windowID(window),
             windowGeneration: generation, nodes: nodes, hostingRoots: hostCount, emptyHostingRoots: emptyHostCount)
     }
 
-    private func witness(_ window: NSWindow) -> String {
+    private var nextWindowID = 1
+    private func windowID(_ window: RuntimeWindow) -> Int {
+        #if os(macOS)
+        return window.windowNumber
+        #else
+        if let existing = witnesses.first(where: { $0.value.window === window }) { return existing.key }
+        let key = nextWindowID
+        nextWindowID += 1
+        witnesses[key] = Witness(window)
+        return key
+        #endif
+    }
+
+    private func witness(_ window: RuntimeWindow) -> String {
         witnesses = witnesses.filter { $0.value.window != nil }
-        let key = window.windowNumber
+        let key = windowID(window)
         if let existing = witnesses[key], existing.window === window { return existing.generation }
         let value = Witness(window)
         witnesses[key] = value

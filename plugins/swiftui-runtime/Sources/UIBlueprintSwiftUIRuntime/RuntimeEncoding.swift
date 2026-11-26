@@ -39,7 +39,7 @@ enum RuntimeEncoding {
         let target = ["id": bundle, "generation": session]
         let surface = ["id": "window-\(observation.window)", "generation": observation.windowGeneration]
         let evidence: [String: Any] = ["observation_id": observation.id, "source_namespace": namespace,
-            "provenance": "reported", "method": "NSHostingView.typed-viewDebugData.geometry-allowlist",
+            "provenance": "reported", "method": RuntimePlatform.sourceMethod + ".typed-viewDebugData.geometry-allowlist",
             "uncertainty": NSNull()]
         let fields = ["layout_bounds"]
         let missing = observation.nodes.filter { $0.position == nil || $0.size == nil }.count
@@ -58,7 +58,7 @@ enum RuntimeEncoding {
             var geometryEvidence = evidence
             if inherited {
                 geometryEvidence["provenance"] = "derived"
-                geometryEvidence["method"] = "NSHostingView.debug-layout-input-context"
+                geometryEvidence["method"] = RuntimePlatform.sourceMethod + ".debug-layout-input-context"
             }
             var state: [String: Any] = ["availability": "unknown", "reason": "source-has-no-position-size-pair"]
             if let position = node.position, let size = node.size {

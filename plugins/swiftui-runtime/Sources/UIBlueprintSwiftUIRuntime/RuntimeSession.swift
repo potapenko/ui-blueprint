@@ -1,5 +1,4 @@
 #if DEBUG
-import AppKit
 import CryptoKit
 import Darwin
 import Foundation

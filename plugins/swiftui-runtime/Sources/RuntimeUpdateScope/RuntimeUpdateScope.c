@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
+#include <TargetConditionals.h>
 
 // These concrete exported Swift signatures were checked against Xcode27.2's
 // SwiftUICore.tbd and macOS27.0.1 code. swift_context supplies class metadata
@@ -24,8 +26,15 @@ static pthread_once_t symbols_once = PTHREAD_ONCE_INIT;
 static void *system_symbol(const char *name, const char *image_prefix) {
     void *value = dlsym(RTLD_DEFAULT, name);
     Dl_info info = {0};
-    if (!value || !dladdr(value, &info) || !info.dli_fname ||
-        strncmp(info.dli_fname, image_prefix, strlen(image_prefix)) != 0) return NULL;
+    if (!value || !dladdr(value, &info) || !info.dli_fname) return NULL;
+    const char *path = info.dli_fname;
+#if TARGET_OS_SIMULATOR
+    // Simulator system images may be rooted under the selected runtime bundle.
+    // Only strip that exact dyld-provided root, never search an arbitrary path.
+    const char *root = getenv("DYLD_ROOT_PATH");
+    if (root && root[0] && strncmp(path, root, strlen(root)) == 0) path += strlen(root);
+#endif
+    if (strncmp(path, image_prefix, strlen(image_prefix)) != 0) return NULL;
     return value;
 }
 
