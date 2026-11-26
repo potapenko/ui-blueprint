@@ -119,3 +119,46 @@ Do not bypass limits or retry an unknown source outcome automatically.
 After consumers finish, stop only owned apps/helpers, uninstall run-owned test
 installations and shut down owned devices as the project requires. Preserve the
 accepted native PNG/canonical pairs and reusable app only under a named handoff.
+
+## UIKit-only menus and popups
+
+Use a release whose SDK descriptor advertises `capture-uikit`, and its matching
+caller. SDK0.12.0 does not have this capability: update the app's tag-pinned
+`UIBlueprintSwiftUIRuntime` dependency and build the diagnostic app once using
+its owner's existing recipe. Updating only the CLI cannot change an old `.app`.
+Keep that new app running for all subsequent popup changes/queries.
+
+```sh
+python3 -B "$UIB_BUNDLE/swiftui_runtime.py" windows --session "$SESSION"
+python3 -B "$UIB_BUNDLE/swiftui_runtime.py" capture --source uikit \
+  --session "$SESSION" --window "$WINDOW" --generation "$GENERATION" \
+  --out "$NEW_SNAPSHOT"
+python3 -B "$UIB_BUNDLE/swiftui_runtime.py" tree --source uikit \
+  --session "$SESSION" --window "$WINDOW" --generation "$GENERATION"
+python3 -B "$UIB_BUNDLE/swiftui_runtime.py" measure --source uikit \
+  --session "$SESSION" --window "$WINDOW" --generation "$GENERATION" \
+  --type "$OBSERVED_CLASS" --relation width --bundle "$UIB_BUNDLE"
+```
+
+`--source uikit` also works on Simulator `pair`. Default capture/discover remain
+SwiftUI; there is no fallback or mixed tree. `discover --source uikit` is not an
+operation: inspect the canonical UIKit `tree` instead. Existing exact
+`--subtree-type` selection works on fresh nominal UIKit class metadata and refuses
+multiple matches. Type names are framework observations, not stable app IDs.
+
+A popup may live inside the main window's UIKit hierarchy. A new nonkey window
+can instead be `UITextEffectsWindow`; neither `is_key` nor window enumeration
+alone identifies a popup. Select each relevant window explicitly from the fresh
+list and inspect its hierarchy; do not assume the highest/newest window is it.
+In the owned Menu fixture, `_UIContextMenuView` was in window1 while window2 was
+the text-effects window. This is evidence for selection, not a class-name rule.
+
+Namespace `uikit.runtime.layout` reports UIView model `bounds`, parent-child
+links, and verified affine mapping to the selected window in points. Nonzero
+bounds origins are preserved. Perspective/3D or unverified transforms stay
+unknown; use local dimensions where appropriate. Rust does not turn a rotated
+bounding envelope into an exact rectangle relation. Do not substitute frame,
+AX bounds, pixel estimates, SwiftUI global coordinates or a presentation frame.
+No text, accessibility values, model values or raw descriptions are collected.
+Complete coverage means this window's UIView hierarchy and requested bounds,
+not every rendered glyph/layer, visible region or surface in another process.

@@ -150,3 +150,13 @@ the documented capability boundary govern that delivery under
 The agent-facing preparation and query instructions live in
 [setup](../../skills/ui-blueprint/references/swiftui-setup.md) and
 [runtime queries](../../skills/ui-blueprint/references/swiftui-runtime.md).
+
+## Explicit UIKit source in Simulator
+
+The matching SDK/caller adds `capture/tree/measure --source uikit` and capability
+`capture-uikit` on iOS27.2.0 arm64 Simulator. It reads public UIView hierarchy,
+model bounds and verified local-to-window affine mappings, in the separate
+`uikit.runtime.layout` namespace. Default SwiftUI and Mac behavior remain.
+No UI strings/models or presentation layers are serialized. Unsupported 3D
+mapping stays unknown. A native menu can be in the main window's UIKit tree;
+nonkey does not imply popup ownership. See the portable [UIKit recipe](../../skills/ui-blueprint/references/swiftui-simulator.md#uikit-only-menus-and-popups).

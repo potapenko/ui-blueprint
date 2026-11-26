@@ -50,6 +50,11 @@ struct RuntimeNode {
     var transform: RuntimeAffine? = nil
 }
 
+enum RuntimeSource: String {
+    case swiftui, uikit
+    var namespace: String { self == .uikit ? "uikit.runtime.layout" : "swiftui.runtime.layout" }
+}
+
 struct RuntimeObservation {
     let id: String
     let start: Double
@@ -60,6 +65,8 @@ struct RuntimeObservation {
     var hostingRoots: Int = 0
     var emptyHostingRoots: Int = 0
     var selection: RuntimeSubtreeSelection? = nil
+    var source: RuntimeSource = .swiftui
+    var windowMetadata: [String: Any] = [:]
 
     var scopeID: String {
         let windowScope = "window-\(window)"
@@ -144,7 +151,8 @@ final class RuntimeCollector {
         }
     }
 
-    func capture(windowNumber: Int?, expectedGeneration: String?) throws -> RuntimeObservation {
+    func capture(windowNumber: Int?, expectedGeneration: String?, source: RuntimeSource = .swiftui) throws -> RuntimeObservation {
+        if source == .uikit, !RuntimePlatform.supportsUIKit { throw RuntimeRefusal.unsupportedSource }
         let profile = ProcessInfo.processInfo.environment["SWIFTUI_VIEW_DEBUG"]
         guard profile == "29" || profile == "287" else { throw RuntimeRefusal.launchProfileRequired }
         let candidates = RuntimePlatform.windows.filter { windowNumber == nil || windowID($0) == windowNumber }
@@ -179,14 +187,23 @@ final class RuntimeCollector {
         }
         var nativeRoot = content
         while let parent = nativeRoot.superview, parent.window === window { nativeRoot = parent }
-        try visit(nativeRoot, depth: 0)
-        guard hostCount > 0, !nodes.isEmpty else { throw RuntimeRefusal.unsupportedSource }
+        if source == .uikit {
+            #if os(iOS) && targetEnvironment(simulator)
+            nodes = try RuntimeUIKit.collect(window)
+            #else
+            throw RuntimeRefusal.unsupportedSource
+            #endif
+        } else {
+            try visit(nativeRoot, depth: 0)
+            guard hostCount > 0, !nodes.isEmpty else { throw RuntimeRefusal.unsupportedSource }
+        }
         guard window.runtimeVisible, window.runtimeContent === content, witness(window) == generation else {
             throw RuntimeRefusal.staleWindow
         }
         return RuntimeObservation(id: UUID().uuidString, start: start,
             end: ProcessInfo.processInfo.systemUptime, window: windowID(window),
-            windowGeneration: generation, nodes: nodes, hostingRoots: hostCount, emptyHostingRoots: emptyHostCount)
+            windowGeneration: generation, nodes: nodes, hostingRoots: hostCount, emptyHostingRoots: emptyHostCount,
+            source: source, windowMetadata: source == .uikit ? RuntimePlatform.uikitMetadata(window) : [:])
     }
 
     private var nextWindowID = 1

@@ -1,5 +1,5 @@
 # SwiftUI Simulator geometry
-- Domain: `uib.swiftui-simulator`; contract: `UIB.SWIFTUI-SIMULATOR@1`.
+- Domain: `uib.swiftui-simulator`; contract: `UIB.SWIFTUI-SIMULATOR@2`.
 - Authority: Active; stability: Evolving; experimental release permitted below.
 - Authority source: user26Nov2026 messages01a21855-0622/96e1, existing SDK owner
   tasked with Phone capture and permitted diagnostic donor integration.
@@ -44,7 +44,9 @@ Record actual pixel dimensions and window/screen scale/bounds; qualify mapping
 using public geometry observations in the fixture before claiming an app pair.
 Capture before/after More and viewport change with new observations. Capture
 timestamps delimit sequential observations, not an atomic GPU frame guarantee.
-System-owned native surfaces without SwiftUI data remain explicitly uncovered.
+The SwiftUI source leaves native surfaces without hosting data uncovered.
+The explicitly selected [UIKit source](uikit-runtime-probe.md) adds UIView geometry
+under user26Nov authority without changing this source or claiming pixel visibility.
 Mac-hosted Phone evidence, if used, is separately labeled with platform changes.
 
 ## Acceptance

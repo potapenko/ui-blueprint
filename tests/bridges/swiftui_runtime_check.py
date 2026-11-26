@@ -65,6 +65,41 @@ class RuntimeChecks(unittest.TestCase):
             with self.assertRaisesRegex(runtime.Failure, "endpoint_not_private"):
                 runtime.endpoint(Path(root) / "session.json")
 
+    def test_uikit_requires_explicit_capability_before_dispatch(self):
+        for operation, source, expected in (("capture", "uikit", "uikit_source_unsupported_by_endpoint"),
+                                             ("discover", "uikit", "invalid_source_selection"),
+                                             ("capture", "other", "invalid_source_selection")):
+            with patch.object(runtime, "endpoint", return_value=(Path("/unused"), {})), \
+                 patch.object(runtime, "publish") as publish:
+                with self.assertRaisesRegex(runtime.Failure, expected):
+                    runtime.request("unused", operation, source=source)
+                publish.assert_not_called()
+
+    def test_uikit_response_must_match_requested_source(self):
+        for source in ("uikit.runtime.layout", "swiftui.runtime.layout"):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                doc = dict(artifact=dict(data=dict(context=dict(plugin=dict(id="uikit-runtime-probe")),
+                    observations=[dict(source_namespace=source)], nodes=[dict(key=dict(namespace=source))])))
+                raw = runtime.encoded(doc)
+                descriptor = dict(run_id="run", capability="private", capabilities=["capture-uikit"])
+                def respond(path, data):
+                    request = json.loads(data)
+                    self.assertEqual(request["source"], "uikit")
+                    name = request["id"] + ".snapshot.json"
+                    (root / name).write_bytes(raw)
+                    (root / (request["id"] + ".response.json")).write_bytes(runtime.encoded(dict(
+                        protocol="1.0.0", request_id=request["id"], run_id="run", status="ok", source=source,
+                        snapshot=name, sha256=hashlib.sha256(raw).hexdigest())))
+                with patch.object(runtime, "endpoint", return_value=(root, descriptor)), \
+                     patch.object(runtime, "publish", side_effect=respond):
+                    if source == "uikit.runtime.layout":
+                        self.assertEqual(runtime.request("unused", "capture", source="uikit")[1], raw)
+                    else:
+                        with self.assertRaisesRegex(runtime.Failure, "source_binding_mismatch"):
+                            runtime.request("unused", "capture", source="uikit")
+                self.assertEqual(list(root.iterdir()), [])
+
     def test_scoped_request_requires_capability_before_publication(self):
         for descriptor in ({}, {"capabilities": []}):
             with patch.object(runtime, "endpoint", return_value=(Path("/unused"), descriptor)), \
@@ -159,7 +194,7 @@ class RuntimeChecks(unittest.TestCase):
              patch.object(runtime, "request", return_value=({}, None)) as request, patch("builtins.print"):
             runtime.main()
             self.assertEqual(request.call_args.args[4], .75)
-            self.assertEqual(request.call_args.kwargs, {"deadline": 101})
+            self.assertEqual(request.call_args.kwargs, {"deadline": 101, "source": "swiftui"})
 
     def test_endpoint_preparation_expiry_refuses_before_publication(self):
         with patch.object(runtime, "endpoint", return_value=(Path("/unused"), dict(run_id="run", capability="private"))), \

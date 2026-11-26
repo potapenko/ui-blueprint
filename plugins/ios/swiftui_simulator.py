@@ -97,7 +97,7 @@ def pair(args, caller):
         raise ValueError("simulator_metadata_required")
     if window.get("scene_state") != 0:
         raise ValueError("foreground_scene_required_for_png_pair")
-    response, raw = caller.request(args.session, "capture", window["window"], window["generation"], args.timeout)
+    response, raw = caller.request(args.session, "capture", window["window"], window["generation"], args.timeout, source=args.source)
     with tempfile.TemporaryDirectory(prefix="uib-simulator-pair-", dir="/private/tmp") as temporary:
         png = Path(temporary) / "screen.png"
         start = time.monotonic()
@@ -123,7 +123,10 @@ def pair(args, caller):
                         pixel_width=width, pixel_height=height, screenshot_start=start, screenshot_end=end,
                         screenshot_clock="host-monotonic", consistency="sequential-not-atomic",
                         screen_pt_to_png=[scale, 0, 0, scale, 0, 0],
-                        swiftui_host_mapping="requires-qualified-source-profile")
+                        swiftui_host_mapping="not-applicable" if args.source == "uikit" else "requires-qualified-source-profile")
+        if args.source == "uikit":
+            metadata["source_namespace"] = "uikit.runtime.layout"
+            metadata["uikit_mapping"] = "model-local-to-window; screen-pair-requires-qualification"
         caller.publish(output / "pair.json", caller.encoded(metadata))
     return dict(status="ok", directory=str(output), nodes=response["nodes"],
                 observation_id=response["observation_id"], pixel_width=width, pixel_height=height)
@@ -141,6 +144,7 @@ def main():
     p.add_argument("--session", required=True)
     p.add_argument("--simulator", required=True)
     p.add_argument("--window", type=int)
+    p.add_argument("--source", choices=("swiftui", "uikit"), default="swiftui")
     p.add_argument("--out", required=True)
     p.add_argument("--timeout", type=float, default=30)
     args = parser.parse_args()

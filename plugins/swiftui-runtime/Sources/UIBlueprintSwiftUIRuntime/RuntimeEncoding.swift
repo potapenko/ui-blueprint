@@ -36,10 +36,15 @@ enum RuntimeEncoding {
 
     static func snapshot(_ observation: RuntimeObservation, session: String, bundle: String,
                          request: String, sequence: UInt64) throws -> Data {
+        let uikit = observation.source == .uikit
+        let namespace = observation.source.namespace
+        func declaration(_ name: String, _ value: Value) -> [String: Any] {
+            RuntimeEncoding.declaration(name, value, namespace: namespace)
+        }
         let target = ["id": bundle, "generation": session]
         let surface = ["id": "window-\(observation.window)", "generation": observation.windowGeneration]
         let evidence: [String: Any] = ["observation_id": observation.id, "source_namespace": namespace,
-            "provenance": "reported", "method": RuntimePlatform.sourceMethod + ".typed-viewDebugData.geometry-allowlist",
+            "provenance": "reported", "method": uikit ? "UIView.bounds.model-geometry" : RuntimePlatform.sourceMethod + ".typed-viewDebugData.geometry-allowlist",
             "uncertainty": NSNull()]
         let fields = ["layout_bounds"]
         let missing = observation.nodes.filter { $0.position == nil || $0.size == nil }.count
@@ -68,10 +73,10 @@ enum RuntimeEncoding {
                 if let affine = node.transform {
                     var mappingEvidence = evidence
                     mappingEvidence["provenance"] = "derived"
-                    mappingEvidence["method"] = "SwiftUI.ViewTransform.qualified-affine-context"
+                    mappingEvidence["method"] = uikit ? "UIView.convert-point.verified-model-affine" : "SwiftUI.ViewTransform.qualified-affine-context"
                     transform = ["status": "known", "transform": ["from": localSpace,
-                        "to": ["id": "\(observation.id)-swiftui-global-\(node.hostingRoot)",
-                               "kind": "local", "units": "pt", "origin": "top_left"],
+                        "to": ["id": uikit ? "\(observation.id)-uikit-window" : "\(observation.id)-swiftui-global-\(node.hostingRoot)",
+                               "kind": uikit ? "window" : "local", "units": "pt", "origin": "top_left"],
                         "affine": affine.values, "target": target, "surface": surface,
                         "environment_revision": observation.id, "evidence": mappingEvidence]]
                 }
@@ -85,7 +90,8 @@ enum RuntimeEncoding {
             let role: [String: Any] = node.type.map {
                 ["availability": "known", "value": ["type": "text", "value": $0]]
             } ?? ["availability": "unknown", "reason": "source-type-not-exposed"]
-            var declarations = [declaration("hosting_root", .number(Double(node.hostingRoot)))]
+            var declarations = uikit ? [declaration("geometry_basis", .text("UIView-model-bounds-not-presentation-or-visibility"))]
+                : [declaration("hosting_root", .number(Double(node.hostingRoot)))]
             if let source = node.positionSource, source != node.index {
                 declarations.append(declaration("layout_position_source", .text(key(source)["key"]!)))
             }
@@ -107,9 +113,22 @@ enum RuntimeEncoding {
                 }
             }
             if node.parent == nil {
-                declarations += [declaration("request_id", .text(request)),
-                                 declaration("hosting_root_count", .number(Double(observation.hostingRoots))),
-                                 declaration("empty_hosting_root_count", .number(Double(observation.emptyHostingRoots)))]
+                declarations.append(declaration("request_id", .text(request)))
+                if uikit {
+                    for name in observation.windowMetadata.keys.sorted() {
+                        let value = observation.windowMetadata[name]!
+                        if let text = value as? String { declarations.append(declaration(name, .text(text))) }
+                        else if let number = value as? NSNumber { declarations.append(declaration(name, .number(number.doubleValue))) }
+                        else if let numbers = value as? [NSNumber] {
+                            for (index, number) in numbers.enumerated() {
+                                declarations.append(declaration("\(name)_\(index)", .number(number.doubleValue)))
+                            }
+                        }
+                    }
+                } else {
+                    declarations += [declaration("hosting_root_count", .number(Double(observation.hostingRoots))),
+                        declaration("empty_hosting_root_count", .number(Double(observation.emptyHostingRoots)))]
+                }
             }
             return ["key": key(node.index), "surface": surface, "native_role": role,
                 "properties": [["selection": "requested", "field": "layout_bounds", "sensitivity": "public",
@@ -127,7 +146,7 @@ enum RuntimeEncoding {
             "surface_records": [], "context": ["schema_version": "0.1.0", "session_id": session,
                 "target": target, "surfaces": [surface], "scope_id": observation.scopeID,
                 "projection": "design", "fields": fields,
-                "plugin": ["id": "swiftui-runtime-probe", "version": "1.0.0"],
+                "plugin": ["id": uikit ? "uikit-runtime-probe" : "swiftui-runtime-probe", "version": "1.0.0"],
                 "environment_revision": observation.id],
             "observations": [observed], "nodes": nodes, "relations": [], "components": [],
             "focus": ["keyboard": ["status": "not_requested"], "accessibility": ["status": "not_requested"],
@@ -149,7 +168,7 @@ enum RuntimeEncoding {
             }
         }
     }
-    private static func declaration(_ name: String, _ value: Value) -> [String: Any] {
+    private static func declaration(_ name: String, _ value: Value, namespace: String = namespace) -> [String: Any] {
         ["namespace": namespace, "name": name, "state": ["availability": "known", "value": value.json],
          "sensitivity": "public", "source": "in-process-runtime-geometry"]
     }

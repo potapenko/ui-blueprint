@@ -152,10 +152,14 @@ def endpoint(path):
     return path.parent, value
 
 
-def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None, *, deadline=None):
+def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None, *, deadline=None, source="swiftui"):
     if deadline is None:
         deadline = time.monotonic() + timeout
     root, descriptor = endpoint(session)
+    if source not in ("swiftui", "uikit") or (source == "uikit" and operation != "capture"):
+        raise Failure("invalid_source_selection")
+    if source == "uikit" and "capture-uikit" not in descriptor.get("capabilities", []):
+        raise Failure("uikit_source_unsupported_by_endpoint")
     if subtree_type is not None:
         if (operation != "capture" or not isinstance(subtree_type, str) or not subtree_type
                 or len(subtree_type.encode("utf-8")) > 1024
@@ -173,6 +177,8 @@ def request(session, operation, window=None, generation=None, timeout=30, subtre
     payload = dict(version="1.0.0", id=request_id, run=descriptor["run_id"],
                    capability=descriptor["capability"], operation=operation,
                    window=window, windowGeneration=generation)
+    if source == "uikit":
+        payload["source"] = "uikit"
     if subtree_type is not None:
         payload["subtreeType"] = subtree_type
     if time.monotonic() >= deadline:
@@ -205,6 +211,16 @@ def request(session, operation, window=None, generation=None, timeout=30, subtre
             raw = artifact_path.read_bytes()
             if hashlib.sha256(raw).hexdigest() != response.get("sha256"):
                 raise Failure(artifact + "_hash_mismatch")
+            if source == "uikit":
+                if response.get("source") != "uikit.runtime.layout":
+                    raise Failure("source_binding_mismatch")
+                document = json.loads(raw, object_pairs_hook=unique_object)
+                snapshot = document.get("artifact", {}).get("data", {})
+                if (snapshot.get("context", {}).get("plugin", {}).get("id") != "uikit-runtime-probe"
+                        or not snapshot.get("observations") or not snapshot.get("nodes")
+                        or any(o.get("source_namespace") != "uikit.runtime.layout" for o in snapshot["observations"])
+                        or any(n.get("key", {}).get("namespace") != "uikit.runtime.layout" for n in snapshot["nodes"])):
+                    raise Failure("source_binding_mismatch")
             return response, raw
         return response, None
     finally:
@@ -336,6 +352,7 @@ def main():
         if operation != "windows":
             p.add_argument("--out", required=operation in ("capture", "discover"))
         if operation not in ("windows", "discover"):
+            p.add_argument("--source", choices=("swiftui", "uikit"), default="swiftui")
             p.add_argument("--type", help="Filter returned nodes after capture (unchanged)")
             p.add_argument("--subtree-type", help="Select one exact nominal type and descendants before export")
         if operation == "measure":
@@ -358,7 +375,7 @@ def main():
             raise Failure("measurement_deadline" if args.command == "measure" else "request_deadline_before_dispatch")
         result, raw = request(args.session, args.command if args.command in ("windows", "discover") else "capture",
                               args.window, args.generation, remaining, getattr(args, "subtree_type", None),
-                              deadline=args.deadline)
+                              deadline=args.deadline, source=getattr(args, "source", "swiftui"))
         if raw is not None:
             artifact = "discovery" if args.command == "discover" else "snapshot"
             result.pop(artifact, None)

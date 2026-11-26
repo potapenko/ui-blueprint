@@ -36,6 +36,14 @@ extension UIWindow {
 #endif
 
 @MainActor enum RuntimePlatform {
+    nonisolated static var supportsUIKit: Bool {
+        #if os(iOS) && targetEnvironment(simulator) && arch(arm64)
+        let version = ProcessInfo.processInfo.operatingSystemVersion
+        return version.majorVersion == 27 && version.minorVersion == 2 && version.patchVersion == 0
+        #else
+        return false
+        #endif
+    }
     nonisolated static var sourceMethod: String {
         #if os(macOS)
         "NSHostingView"
@@ -59,6 +67,19 @@ extension UIWindow {
                 "scene_state": window.windowScene?.activationState.rawValue ?? -1,
                 "orientation": window.windowScene?.interfaceOrientation.rawValue ?? 0]
         #endif
+    }
+
+    static func uikitMetadata(_ window: RuntimeWindow) -> [String: Any] {
+        var result = metadata(window)
+        #if os(iOS)
+        // No qualified screen transform is claimed by the UIKit model source.
+        result.removeValue(forKey: "window_to_screen")
+        result["window_bounds"] = [window.bounds.origin.x, window.bounds.origin.y,
+                                   window.bounds.width, window.bounds.height]
+        result["screen_bounds"] = [window.screen.bounds.origin.x, window.screen.bounds.origin.y,
+                                   window.screen.bounds.width, window.screen.bounds.height]
+        #endif
+        return result
     }
 
     static var windows: [RuntimeWindow] {

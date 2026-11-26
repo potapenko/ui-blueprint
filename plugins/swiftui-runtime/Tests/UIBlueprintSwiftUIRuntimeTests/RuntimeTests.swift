@@ -91,6 +91,39 @@ final class RuntimeTests: XCTestCase {
         XCTAssertTrue(String(decoding: bytes, as: UTF8.self).contains("source-transform-unavailable"))
     }
 
+    func testUIKitEncodingKeepsBoundsAndDistinctSourceWithUnknownPerspectiveMapping() throws {
+        let node = RuntimeNode(index: 0, parent: nil, hostingRoot: 0, type: "UIKit.UIView",
+            position: .init(x: 7, y: 11), size: .init(width: 80, height: 30),
+            positionSource: 0, sizeSource: 0)
+        var observation = RuntimeObservation(id: "u", start: 1, end: 2, window: 2,
+            windowGeneration: "g", nodes: [node], source: .uikit)
+        func snapshot() throws -> [String: Any] {
+            let bytes = try RuntimeEncoding.snapshot(observation, session: "s", bundle: "fixture", request: "r", sequence: 1)
+            let document = try XCTUnwrap(JSONSerialization.jsonObject(with: bytes) as? [String: Any])
+            return (document["artifact"] as! [String: Any])["data"] as! [String: Any]
+        }
+        let first = try snapshot()
+        let firstNode = (first["nodes"] as! [[String: Any]])[0]
+        XCTAssertEqual((firstNode["key"] as! [String: String])["namespace"], "uikit.runtime.layout")
+        func geometry(_ node: [String: Any]) -> [String: Any] {
+            let property = (node["properties"] as! [[String: Any]])[0]
+            let state = property["state"] as! [String: Any]
+            return (state["value"] as! [String: Any])["value"] as! [String: Any]
+        }
+        let original = geometry(firstNode)
+        XCTAssertEqual((original["transform"] as! [String: Any])["status"] as? String, "unknown")
+        let rect = (original["shape"] as! [String: Any])["value"] as! [String: Double]
+        XCTAssertEqual(rect, ["x": 7, "y": 11, "width": 80, "height": 30])
+        observation.nodes[0].transform = RuntimeAffine(values: [1, 0, 0, 1, 50, 60])
+        let mapped = geometry((try snapshot()["nodes"] as! [[String: Any]])[0])
+        let transform = (mapped["transform"] as! [String: Any])["transform"] as! [String: Any]
+        XCTAssertEqual((transform["to"] as! [String: String])["kind"], "window")
+        XCTAssertEqual((transform["to"] as! [String: String])["id"], "u-uikit-window")
+        XCTAssertEqual((transform["evidence"] as! [String: Any])["method"] as? String,
+                       "UIView.convert-point.verified-model-affine")
+        XCTAssertFalse(RuntimePlatform.supportsUIKit) // This test target runs on macOS.
+    }
+
     func testSubtreePreservesAncestorClosureAndRefusesAmbiguity() throws {
         let nodes = [
             RuntimeNode(index: 0, parent: nil, hostingRoot: 0, type: "Fixture.Root", position: .zero, size: .init(width: 100, height: 80)),
