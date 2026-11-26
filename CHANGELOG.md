@@ -3,6 +3,28 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.13.0
+
+- Add explicit `--source uikit` for runtime capture/tree/measure and Simulator
+  source/PNG pairing. The new `uikit.runtime.layout` namespace exports the
+  selected UIWindow's complete UIView hierarchy and original local bounds.
+  Default requests remain SwiftUI, with no implicit source fallback.
+- Qualify 2D local-to-window mappings from public point conversion, preserving
+  original bounds and coefficients. Perspective/3D or unverified mappings stay
+  unknown. The corner-agreement guard checks floating-point roundoff only;
+  it does not change geometry or Rust rule tolerances.
+- Report UIKit model/layout geometry, not presentation frames, visible/hit regions,
+  clipping or occlusion. UIKit window spaces are distinct from SwiftUI spaces.
+  No UI text, accessibility values, model descriptions or raw pointers are exported.
+- Require the matching Debug SDK and caller. Older endpoints lacking
+  `capture-uikit` refuse before collection; updating CLI alone is insufficient.
+  Rebuild the owned app once, then reuse it for subsequent queries.
+- Qualified support is iOS 27.2 arm64 Simulator. Owned Menu/Picker, affine/scroll,
+  privacy and compatibility checks passed; original Sorting/VideoSize acceptance
+  remains with Search and Services. A popup may be a subtree of the main window,
+  not a separate window. Phone design, Mac behavior and existing limits remain.
+  Physical devices, iPad and universal system-surface coverage are not claimed.
+
 ## 0.12.0
 
 - Add experimental iOS Simulator support to the opt-in Debug SwiftUI runtime
