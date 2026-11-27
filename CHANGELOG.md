@@ -3,6 +3,27 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.14.0
+
+- Add experimental tvOS 27.2 arm64 Simulator admission to the existing opt-in
+  Debug SwiftUI and explicit UIKit sources. Root and nested SwiftPM packages
+  declare a tvOS 17 compile floor; this is not older-runtime/device qualification.
+- Report `tvos-simulator` metadata with fixed orientation 0. Simulator pairing
+  accepts the explicit iOS/TV platform tags and preserves exact device/container,
+  session/window binding, native lossless PNG hashes and sequential consistency.
+  Existing Mac/iOS defaults, privacy, limits and Rust arithmetic stay unchanged.
+- Qualify TV source geometry against a public GeometryProxy and native PNG oracle
+  at 2× for one static translated/scaled hosting root. Actual ordinary,
+  actions-after-hold, focus, fullscreen and return observations validated on one
+  unchanged app; Rust player sizes were 1200×675 → 1920×1080 → 1200×675 pt.
+  Independently addressed sessions passed wrong-device refusal and isolation.
+- SDK Release compilation excludes runtime symbols. Full native app Release,
+  Settings/child-list, capture during active hold, physical Apple TV and general
+  focus-animation presentation bounds are not qualified by this release.
+- Install the matching caller/skill and use the public SDK tag or a supplied
+  immutable TV app. Each app owner retains its device, private session and data;
+  geometry queries do not require rebuilding or a shared desktop-input queue.
+
 ## 0.13.0
 
 - Add explicit `--source uikit` for runtime capture/tree/measure and Simulator
