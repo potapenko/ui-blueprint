@@ -1,4 +1,4 @@
-#if DEBUG && os(iOS) && targetEnvironment(simulator)
+#if DEBUG && (os(iOS) || os(tvOS)) && targetEnvironment(simulator)
 import UIKit
 
 /// Read-only model geometry. No text, accessibility, descriptions or presentation layers.

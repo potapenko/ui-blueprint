@@ -97,6 +97,7 @@ remain separate. Existing SwiftUI, Web, Compose, core and release scope are prot
 `L01-GEOMETRY-INPUT-001`: [ANALYSIS@2](product/analysis.md) adds direct observed ChannelResponse input to local measure/check under root's selected read-only geometry goal. Original Snapshot/evidence, TYPES/VALIDATION@1, core0.1/analysis0.2, output/arithmetic and inspect/diff/transport unchanged; source/runtime acceptance separate.
 | Task | Entry | Authority / selection |
 | --- | --- | --- |
+| Local SwiftUI TV capture in isolated Simulators | [TVOS-RUNTIME@1](product/tvos-runtime-probe.md) | Direct user27Nov; local capture qualification and reusable app |
 | Explicit UIKit popup hierarchy | [UIKIT-RUNTIME@1](product/uikit-runtime-probe.md) | User26Nov general UIKit capture and release instruction |
 | Local SwiftUI Phone capture in Simulator | [SWIFTUI-SIMULATOR@2](product/swiftui-simulator-probe.md) | User26Nov diagnostic integration; local first Search/More qualification |
 | In-process fresh SwiftUI queries and CLI preparation | [SWIFTUI-RUNTIME@8](product/swiftui-runtime-probe.md) | PLAN.UIB.SWIFTUI-GEOMETRY@3; user-authorized experimental release before full native/matrix acceptance |

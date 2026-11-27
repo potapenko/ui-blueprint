@@ -162,3 +162,27 @@ AX bounds, pixel estimates, SwiftUI global coordinates or a presentation frame.
 No text, accessibility values, model values or raw descriptions are collected.
 Complete coverage means this window's UIView hierarchy and requested bounds,
 not every rendered glyph/layer, visible region or surface in another process.
+
+
+## Local tvOS candidate (not part of released 0.13.0)
+
+A TV-enabled SDK build and matching candidate `swiftui_simulator.py` admit
+`tvos-simulator` explicitly on arm64 tvOS 27.2. Never relabel it as iOS or use the
+unchanged 0.13.0 Simulator caller for pairs. Runtime caller and Rust wire remain
+compatible. Use a supplied immutable TV `.app`, exact owned UDID, a fresh private
+run root and the TV recipe. Launch once, then use the normal windows/discover/
+capture/measure commands and `pair --simulator UDID --window WINDOW` repeatedly.
+One `.app` may be installed in multiple devices; never copy another device's
+container/session. A first launch may show the existing TV sign-in presentation;
+close with the TV Back command to stay guest, never complete account activation.
+
+The default source is SwiftUI; `--source uikit` selects UIView model geometry.
+TV screen points, screen scale, safe area and window-to-screen matrix are reported;
+PNG mapping and model-versus-presentation bounds need the supplied qualification.
+Focus animations and held remote states require fresh reads, not a saved snapshot.
+`pair` is sequential, not an atomic frame. Physical Apple TV is unqualified.
+TV input via serve-sim currently provides a stream but remote-button support is
+not qualified. Device Hub's explicitly selected TV has Back/Select/directions/
+Play-Pause controls; physical desktop input requires its existing reservation.
+No geometry request needs that desktop reservation. See the local handoff for
+actual tested states and pending input coverage; one screen is not all-TV proof.

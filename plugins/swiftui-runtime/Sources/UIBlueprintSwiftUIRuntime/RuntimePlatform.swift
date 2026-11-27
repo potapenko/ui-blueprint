@@ -4,7 +4,7 @@ import SwiftUI
 import AppKit
 typealias RuntimeWindow = NSWindow
 typealias RuntimeView = NSView
-#elseif os(iOS)
+#elseif os(iOS) || os(tvOS)
 import UIKit
 typealias RuntimeWindow = UIWindow
 typealias RuntimeView = UIView
@@ -23,7 +23,7 @@ extension NSWindow {
     var runtimeContent: NSView? { contentView }
     var runtimeVisible: Bool { isVisible }
 }
-#elseif os(iOS)
+#elseif os(iOS) || os(tvOS)
 extension _UIHostingView: RuntimeHosting {
     func runtimeGeometryTree() throws -> [_ViewDebug.Data] {
         try RuntimeUpdateContext.perform { _viewDebugData() }
@@ -37,7 +37,7 @@ extension UIWindow {
 
 @MainActor enum RuntimePlatform {
     nonisolated static var supportsUIKit: Bool {
-        #if os(iOS) && targetEnvironment(simulator) && arch(arm64)
+        #if (os(iOS) || os(tvOS)) && targetEnvironment(simulator) && arch(arm64)
         let version = ProcessInfo.processInfo.operatingSystemVersion
         return version.majorVersion == 27 && version.minorVersion == 2 && version.patchVersion == 0
         #else
@@ -59,19 +59,26 @@ extension UIWindow {
         let origin = window.convert(CGPoint.zero, to: window.screen.coordinateSpace)
         let x = window.convert(CGPoint(x: 1, y: 0), to: window.screen.coordinateSpace)
         let y = window.convert(CGPoint(x: 0, y: 1), to: window.screen.coordinateSpace)
-        return ["platform": "ios-simulator", "screen_width": bounds.width,
+        #if os(tvOS)
+        let platform = "tvos-simulator"
+        let orientation = 0 // tvOS display orientation is fixed by the runtime.
+        #else
+        let platform = "ios-simulator"
+        let orientation = window.windowScene?.interfaceOrientation.rawValue ?? 0
+        #endif
+        return ["platform": platform, "screen_width": bounds.width,
                 "screen_height": bounds.height, "screen_scale": window.screen.scale,
                 "window_to_screen": [x.x-origin.x, x.y-origin.y, y.x-origin.x, y.y-origin.y, origin.x, origin.y],
                 "safe_area": [window.safeAreaInsets.top, window.safeAreaInsets.left,
                               window.safeAreaInsets.bottom, window.safeAreaInsets.right],
                 "scene_state": window.windowScene?.activationState.rawValue ?? -1,
-                "orientation": window.windowScene?.interfaceOrientation.rawValue ?? 0]
+                "orientation": orientation]
         #endif
     }
 
     static func uikitMetadata(_ window: RuntimeWindow) -> [String: Any] {
         var result = metadata(window)
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         // No qualified screen transform is claimed by the UIKit model source.
         result.removeValue(forKey: "window_to_screen")
         result["window_bounds"] = [window.bounds.origin.x, window.bounds.origin.y,

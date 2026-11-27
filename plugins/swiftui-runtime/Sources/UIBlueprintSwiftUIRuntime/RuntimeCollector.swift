@@ -1,7 +1,7 @@
 #if DEBUG
 #if os(macOS)
 import AppKit
-#elseif os(iOS)
+#elseif os(iOS) || os(tvOS)
 import UIKit
 #endif
 import Foundation
@@ -188,7 +188,7 @@ final class RuntimeCollector {
         var nativeRoot = content
         while let parent = nativeRoot.superview, parent.window === window { nativeRoot = parent }
         if source == .uikit {
-            #if os(iOS) && targetEnvironment(simulator)
+            #if (os(iOS) || os(tvOS)) && targetEnvironment(simulator)
             nodes = try RuntimeUIKit.collect(window)
             #else
             throw RuntimeRefusal.unsupportedSource

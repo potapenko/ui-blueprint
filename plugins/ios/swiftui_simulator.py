@@ -50,7 +50,7 @@ def launch(args, caller):
     if recipe and recipe["bundle"] != bundle:
         raise ValueError("recipe_bundle_mismatch")
     run = Path(tempfile.mkdtemp(prefix="uib-simulator-launch-", dir=root))
-    (run / "OWNERSHIP.md").write_text("Owner: invoking Phone capture task\nPurpose: owned Simulator launch\nState: active\nRetain while app/consumers need descriptor; stop/uninstall only this owned app before cleanup.\n")
+    (run / "OWNERSHIP.md").write_text("Owner: invoking Simulator capture task\nPurpose: owned Simulator launch\nState: active\nRetain while app/consumers need descriptor; stop/uninstall only this owned app before cleanup.\n")
     simctl("install", args.simulator, str(app), timeout=60)
     env = dict(os.environ)
     for key in list(env):
@@ -93,7 +93,7 @@ def pair(args, caller):
     if len(candidates) != 1:
         raise ValueError("ambiguous_or_unavailable_window")
     window = candidates[0]
-    if window.get("platform") != "ios-simulator":
+    if window.get("platform") not in ("ios-simulator", "tvos-simulator"):
         raise ValueError("simulator_metadata_required")
     if window.get("scene_state") != 0:
         raise ValueError("foreground_scene_required_for_png_pair")
@@ -114,7 +114,7 @@ def pair(args, caller):
         if window not in latest["windows"]:
             raise ValueError("window_metadata_changed_during_pair")
         output.mkdir(mode=0o700)
-        (output / "OWNERSHIP.md").write_text("Owner: invoking Phone capture task\nState: retained\nPurpose: source geometry/native PNG pair\nRelease: consuming reference owner accepts/supersedes pair.\n")
+        (output / "OWNERSHIP.md").write_text("Owner: invoking Simulator capture task\nState: retained\nPurpose: source geometry/native PNG pair\nRelease: consuming reference owner accepts/supersedes pair.\n")
         caller.publish(output / "snapshot.json", raw)
         caller.publish(output / "screen.png", image)
         metadata = dict(pair_version="1.0.0", simulator=args.simulator, pid=descriptor["pid"],
