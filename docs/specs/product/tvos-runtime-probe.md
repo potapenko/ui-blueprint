@@ -1,6 +1,6 @@
 # tvOS Simulator runtime geometry
 - Contract: `UIB.TVOS-RUNTIME@1`; domain: `uib.tvos-runtime`.
-- Authority: Active; stability: Evolving; local qualification, not released.
+- Authority: Active; stability: Evolving; qualified local source; release acceptance recorded separately.
 - Authority: direct user27Nov2026 message01a21d38-a0b4 in TV planning chat01a21d10.
 - Requires: [Simulator](swiftui-simulator-probe.md), [UIKit](uikit-runtime-probe.md).
 
@@ -35,3 +35,12 @@ Two concurrent independently owned TV sessions must reject swapped bindings and
 produce their own fresh observations. Provide reusable local bundle/app/recipe,
 source and diagnostic revision, exact device/input commands and retained evidence.
 No Phone evidence alone closes this TV qualification.
+
+
+## Release scope correction
+Direct user27Nov2026 in this SDK chat: test Blueprint on one own TV instance,
+publish the tool and return it; do not take over consumer provisioning or keep
+walking the application. Experimental release includes the verified source and
+pair mechanism. Settings/child-list, in-flight held/presentation bounds and
+physical Apple TV remain unqualified. A coverage boundary is not an acceptance
+claim. Existing adapter/privacy/limits remain protected.

@@ -38,3 +38,18 @@ code; no UIKit presentation or source value collection is introduced.
 First proof: typed SDK tvOS compile + actual native Debug build, first fresh
 2208-node canonical capture valid. Runtime 27.2, arm64, window1920×1080pt,
 screen scale2; input/state and mapping qualification still in progress.
+
+
+Final user correction27Nov: Blueprint owns one test instance and tool release;
+consumer provisioning/application work remains with the TV coordinator. Stop
+expanding screen QA. Source candidate1a9b25e9 accepted finite compatibility review
+by existing release owner (0 blockers). Public-oracle fixture proves translated/
+scaled bounds and exact native PNG at2x; UIKit model capture valid. Actual native
+ordinary/actions/focus/fullscreen/return valid on one app. Settings/child list and
+active-held capture remain unqualified after Device Hub timeout/recovery failure.
+SDK Release tvOS compile/symbol exclusion passed. Full native Release build was
+not accepted: first MCP call timed out while leaving its build alive; stopped
+owned build, bounded shell attempt later stopped under corrected tool-only scope.
+No Release-app success claim. Parent independently verified two actual consumer
+sessions, swapped-device refusal and stop/relaunch isolation; this owner did not
+provision them. Evidence retained externally at the existing task path.

@@ -164,9 +164,9 @@ Complete coverage means this window's UIView hierarchy and requested bounds,
 not every rendered glyph/layer, visible region or surface in another process.
 
 
-## Local tvOS candidate (not part of released 0.13.0)
+## tvOS Simulator (0.14.0)
 
-A TV-enabled SDK build and matching candidate `swiftui_simulator.py` admit
+The TV-enabled SDK and matching `swiftui_simulator.py` admit
 `tvos-simulator` explicitly on arm64 tvOS 27.2. Never relabel it as iOS or use the
 unchanged 0.13.0 Simulator caller for pairs. Runtime caller and Rust wire remain
 compatible. Use a supplied immutable TV `.app`, exact owned UDID, a fresh private
@@ -186,3 +186,17 @@ not qualified. Device Hub's explicitly selected TV has Back/Select/directions/
 Play-Pause controls; physical desktop input requires its existing reservation.
 No geometry request needs that desktop reservation. See the local handoff for
 actual tested states and pending input coverage; one screen is not all-TV proof.
+
+
+Qualified TV geometry: a public SwiftUI GeometryProxy oracle and native PNG agree
+for a translated/scaled marker (global240,160,225×112.5pt → pixel480,320,450×225
+at2x). This qualifies the tested single hosting root, not arbitrary cross-host
+transforms or animated presentation bounds. Actual PlayPhrase.me TV ordinary,
+actions-after-hold, changed focus, fullscreen and return captures validated on
+one unchanged app; Rust player1200×675 →1920×1080 →1200×675pt. UIKit model capture
+also validated. Device Hub Back, held Select, directional focus and double Select
+worked in those cases. Settings/child-list and capture during an actively held
+button were not qualified: Device Hub later timed out. Do not label them passed
+or redesign the app to satisfy capture. Two independently addressed TV consumers
+passed wrong-device refusal and stop/relaunch isolation; provisioning remains
+with each consumer coordinator, not the Blueprint collector.
