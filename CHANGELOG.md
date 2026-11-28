@@ -3,6 +3,24 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.14.1
+
+- Qualify UIKit local-to-window model mappings when the complete layer ancestry
+  provably preserves the z=0 plane, even if its 4×4 matrices contain an inert
+  depth-perspective term. This corrects unknown mappings for planar focused
+  descendants in the qualified tvOS Simulator profile.
+- Require finite matrices, exact plane-preserving structural terms and zero
+  layer depth/anchor depth. Preserve the existing all-affine path. Effective
+  perspective, tilted/depth-displaced planes and unverified mappings remain
+  unknown; no class-specific rule or epsilon relaxes those structural guards.
+- Derive coefficients through the same public coordinate conversion and existing
+  corner roundoff check. Original bounds, geometry, wire formats, privacy,
+  limits, SwiftUI defaults and presentation/hit/visibility boundaries are unchanged.
+- Owned fixture qualification covers 16 matrix cases, focused List descendants,
+  fresh/stale/privacy behavior, canonical validation and exact Rust window-space
+  measurement. Actual TV04 app replay remains with its owner. Previously saved
+  unknown observations are not rewritten; use a fresh capture after SDK update.
+
 ## 0.14.0
 
 - Add experimental tvOS 27.2 arm64 Simulator admission to the existing opt-in
