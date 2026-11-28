@@ -228,3 +228,39 @@ regions or animated presentation bounds. An affine mapping may rotate/skew the
 rectangle; do not call its AABB an exact rectangle. A projective mapping is still
 unsupported by this source; no four-corner-only qualification or arbitrary3D
 projection fallback was added.
+
+
+## Configured UILabel typography (explicit opt-in)
+
+Use a matching SDK endpoint advertising `capture-uikit-label-style`. The old
+layout-only snapshot does not contain fonts/colors; update the diagnostic SDK and
+build once. Then reuse that build for all states. Request only when needed:
+
+```sh
+python3 -B "$UIB_BUNDLE/swiftui_runtime.py" capture --source uikit --label-style \
+  --session "$SESSION" --window "$WINDOW" --generation "$GENERATION" --out "$NEW_SNAPSHOT"
+python3 -B "$UIB_BUNDLE/swiftui_simulator.py" pair --source uikit --label-style \
+  --session "$SESSION" --simulator "$OWNED_SIMULATOR_UDID" --window "$WINDOW" --out "$NEW_PAIR_DIRECTORY"
+```
+
+Each UILabel's existing node has `source_declarations` named `label_style_*`:
+font_name/family/point_size(pt)/symbolic_traits and optional font_weight_trait,
+text_color/highlighted_text_color extended-srgb RGBA, fit/highlight/enabled flags,
+and actual interface-style/contrast/gamut/legibility traits. Keep node SourceKey,
+snapshot/window/run and `label_style_observation_id`; metadata is one observation,
+not an independent lookup to join onto an older snapshot. Availability is explicit;
+nil highlighted color is absent, not black/transparent. Extended-sRGB conversion
+may produce finite components outside0...1; don't silently clamp or rename them.
+UIFont's numeric weight trait is not CSS weight. The full descriptor is not dumped.
+
+These are CONFIGURED UILabel settings. `effective_paint_font/color` remain unknown:
+no attributed runs, glyph fallback, autosizing or rendering effects are inspected.
+`adjusts_font_size_to_fit_width=false` alone does not prove actual glyph font.
+No label text, attributedText, accessibility values, model data or descriptions
+are read. Default commands omit this data; SwiftUI and old SDKs refuse opt-in.
+The screen PNG privacy boundary remains separate from metadata filtering.
+
+SF Symbols: UIImage.SymbolConfiguration on the qualified27.2 SDK has public
+constructors/removal/equality but no pointSize/weight getters. Image bounds or a
+nil preferred configuration do not prove the resolved symbol settings. Keep those
+fields unknown; never inspect descriptions/private ivars or infer a font size.

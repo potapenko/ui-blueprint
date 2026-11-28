@@ -3,7 +3,7 @@ import UIKit
 
 /// Read-only model geometry. No text, accessibility, descriptions or presentation layers.
 @MainActor enum RuntimeUIKit {
-    static func collect(_ window: UIWindow) throws -> [RuntimeNode] {
+    static func collect(_ window: UIWindow, labelStyle: Bool = false) throws -> [RuntimeNode] {
         var nodes: [RuntimeNode] = []
         var pending: [(UIView, Int?, Int)] = [(window, nil, 0)]
         while let (view, parent, depth) = pending.popLast() {
@@ -22,6 +22,9 @@ import UIKit
                 type: try RuntimeCollector.sanitizedType(String(reflecting: type(of: view))),
                 position: bounds.origin, size: bounds.size, positionSource: index, sizeSource: index,
                 transform: mapping(view, to: window)))
+            if labelStyle, let label = view as? UILabel {
+                nodes[index].labelStyle = RuntimeLabelStyle.collect(label)
+            }
             let children = view.subviews
             guard nodes.count + pending.count + children.count <= RuntimeCollector.maxNodes else {
                 throw RuntimeSourceLimit(kind: .nativeNodes,

@@ -92,6 +92,14 @@ enum RuntimeEncoding {
             } ?? ["availability": "unknown", "reason": "source-type-not-exposed"]
             var declarations = uikit ? [declaration("geometry_basis", .text("UIView-model-bounds-not-presentation-or-visibility"))]
                 : [declaration("hosting_root", .number(Double(node.hostingRoot)))]
+            if let style = node.labelStyle {
+                for name in style.keys.sorted() {
+                    declarations.append(["namespace": namespace, "name": "label_style_" + name,
+                        "state": style[name]!.state, "sensitivity": "public",
+                        "source": "UILabel.public-configured-style"])
+                }
+                declarations.append(declaration("label_style_observation_id", .text(observation.id)))
+            }
             if let source = node.positionSource, source != node.index {
                 declarations.append(declaration("layout_position_source", .text(key(source)["key"]!)))
             }

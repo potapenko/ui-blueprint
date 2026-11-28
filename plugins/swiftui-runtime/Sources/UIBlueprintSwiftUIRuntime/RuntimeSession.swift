@@ -42,7 +42,7 @@ public final class BlueprintRuntimeSession {
         source = listener
         listener.resume()
         let descriptor: [String: Any] = ["protocol": "1.0.0", "source": "swiftui.runtime.layout",
-            "capabilities": ["capture-subtree-type", "discover-types"] + (RuntimePlatform.supportsUIKit ? ["capture-uikit"] : []),
+            "capabilities": ["capture-subtree-type", "discover-types"] + (RuntimePlatform.supportsUIKit ? ["capture-uikit", "capture-uikit-label-style"] : []),
             "run_id": runID, "capability": capability, "pid": ProcessInfo.processInfo.processIdentifier,
             "bundle": bundle, "directory": directory.path,
             "os": ProcessInfo.processInfo.operatingSystemVersionString,
@@ -73,12 +73,18 @@ public final class BlueprintRuntimeSession {
                 if overloaded { throw RuntimeRefusal.busy }
                 guard let shape = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                       Set(["version", "id", "run", "capability", "operation", "window", "windowGeneration"]).isSubset(of: Set(shape.keys)),
-                      Set(shape.keys).isSubset(of: ["version", "id", "run", "capability", "operation", "window", "windowGeneration", "subtreeType", "source"])
+                      Set(shape.keys).isSubset(of: ["version", "id", "run", "capability", "operation", "window", "windowGeneration", "subtreeType", "source", "labelStyle"])
                 else { throw RuntimeRefusal.invalidRequest }
                 let request = try JSONDecoder().decode(RuntimeRequest.self, from: data)
                 if let value = shape["source"] {
                     guard request.operation == "capture", value as? String == "uikit",
                           RuntimePlatform.supportsUIKit else { throw RuntimeRefusal.unsupportedSource }
+                }
+                if shape.keys.contains("labelStyle") {
+                    guard request.operation == "capture", request.source == "uikit",
+                          request.labelStyle == true, RuntimePlatform.supportsUIKit else {
+                        throw RuntimeRefusal.invalidRequest
+                    }
                 }
                 if let value = shape["subtreeType"] {
                     guard request.operation == "capture", let type = value as? String else {
@@ -97,7 +103,7 @@ public final class BlueprintRuntimeSession {
                 case "windows": response["windows"] = collector.windows()
                 case "capture", "discover":
                     let observation = try collector.capture(windowNumber: request.window, expectedGeneration: request.windowGeneration,
-                        source: request.source == "uikit" ? .uikit : .swiftui)
+                        source: request.source == "uikit" ? .uikit : .swiftui, labelStyle: request.labelStyle == true)
                         .selecting(type: request.subtreeType)
                     guard !isCancelled(id) else { throw RuntimeRefusal.cancelled }
                     let bytes: Data
@@ -119,6 +125,7 @@ public final class BlueprintRuntimeSession {
                     response[artifact] = name
                     response["sha256"] = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
                     if observation.source == .uikit { response["source"] = observation.source.namespace }
+                    if request.labelStyle == true { response["label_style"] = true }
                     response["nodes"] = observation.nodes.count
                     if let selection = observation.selection {
                         response["selection"] = selection.metadata(observation: observation.id)
@@ -169,5 +176,6 @@ private struct RuntimeRequest: Decodable {
     let windowGeneration: String?
     let subtreeType: String?
     let source: String?
+    let labelStyle: Bool?
 }
 #endif

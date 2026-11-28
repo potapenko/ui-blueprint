@@ -80,6 +80,8 @@ def launch(args, caller):
 
 
 def pair(args, caller):
+    if getattr(args, "label_style", False) and args.source != "uikit":
+        raise ValueError("invalid_label_style_selection")
     output = Path(args.out).absolute()
     if output.exists():
         raise ValueError("output_must_not_exist")
@@ -97,7 +99,7 @@ def pair(args, caller):
         raise ValueError("simulator_metadata_required")
     if window.get("scene_state") != 0:
         raise ValueError("foreground_scene_required_for_png_pair")
-    response, raw = caller.request(args.session, "capture", window["window"], window["generation"], args.timeout, source=args.source)
+    response, raw = caller.request(args.session, "capture", window["window"], window["generation"], args.timeout, source=args.source, label_style=getattr(args, "label_style", False))
     with tempfile.TemporaryDirectory(prefix="uib-simulator-pair-", dir="/private/tmp") as temporary:
         png = Path(temporary) / "screen.png"
         start = time.monotonic()
@@ -145,6 +147,7 @@ def main():
     p.add_argument("--simulator", required=True)
     p.add_argument("--window", type=int)
     p.add_argument("--source", choices=("swiftui", "uikit"), default="swiftui")
+    p.add_argument("--label-style", action="store_true", help="Opt-in configured UILabel font/colors; UIKit only")
     p.add_argument("--out", required=True)
     p.add_argument("--timeout", type=float, default=30)
     args = parser.parse_args()

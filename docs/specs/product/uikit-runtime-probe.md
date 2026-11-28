@@ -1,5 +1,5 @@
 # UIKit runtime geometry
-- Domain: `uib.uikit-runtime`; contract: `UIB.UIKIT-RUNTIME@2`.
+- Domain: `uib.uikit-runtime`; contract: `UIB.UIKIT-RUNTIME@3`.
 - Authority: Active; stability: Evolving; accepted/released baseline: none.
 - Authority source: user26Nov2026 in SDK chat01a20a46-e5d0-7710-a5ce-9a93d8b82f02:
   add general UIKit popup geometry, release it and hand it to Search, without
@@ -87,3 +87,30 @@ refused a planar-affine model mapping. New admission proves plane preservation
 across the complete layer ancestry, not four-point coincidence alone. Original
 saved unknown records stay unknown; only fresh captures can use qualification.
 No new paint/presentation/hit/AABB channel or class-name exception is introduced.
+
+
+## UIKIT.LABEL-STYLE — explicit configured metadata
+TV00-TYPOGRAPHY-1 under the general UIKit/TV capture request adds optional
+`labelStyle=true` to UIKit capture only (`--label-style` in callers/pair).
+Capability `capture-uikit-label-style`; old endpoints refuse before dispatch.
+Omission preserves existing geometry-only behavior and does not read UILabel
+style. Reuse identity, quotas, privacy, snapshot hashes and cancellation.
+On each UILabel retain source declarations on its original same-observation key:
+configured UIFont fontName/familyName/pointSize(pt)/symbolicTraits and optional
+finite descriptor weight; configured textColor/highlightedTextColor resolved
+against label.traitCollection and converted to extended sRGB RGBA. Record numeric
+interface style/contrast/gamut/legibility and configured fit/highlight/enabled
+flags. Finite numeric values only; metadata strings max256UTF8bytes, no controls
+or path separators. Missing/nonrepresentable values explicitly unknown. Pattern
+colors unsupported; nil highlighted color absent, not transparent or black.
+No text/attributedText/AX/model/descriptor dump/image description read/export.
+Only exact public weight entry is extracted from the public traits dictionary.
+Color conversion is attributed, not claimed to preserve an original colorspace.
+Configured metadata is NOT effective glyph/paint typography; attributed override,
+autosizing, fallback glyphs and rendering effects remain unqualified even if
+fit flags are false. UIFont weight is its numeric trait, not an invented CSS
+weight. No SF Symbol pointSize/weight inference; no public getters qualified.
+Known declarations use UILabel.public-configured-style provenance plus original
+snapshot observation/window/run; explicit style schema1 and effectivepaintunknown.
+Default source/geometry/core0.1 remain compatible; no historical snapshot upgrade.
+Fixture and consumer fresh captures must independently qualify this route.

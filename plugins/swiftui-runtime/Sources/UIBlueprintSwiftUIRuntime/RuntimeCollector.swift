@@ -48,6 +48,7 @@ struct RuntimeNode {
     var positionSource: Int? = nil
     var sizeSource: Int? = nil
     var transform: RuntimeAffine? = nil
+    var labelStyle: [String: RuntimeStyleValue]? = nil
 }
 
 enum RuntimeSource: String {
@@ -151,7 +152,8 @@ final class RuntimeCollector {
         }
     }
 
-    func capture(windowNumber: Int?, expectedGeneration: String?, source: RuntimeSource = .swiftui) throws -> RuntimeObservation {
+    func capture(windowNumber: Int?, expectedGeneration: String?, source: RuntimeSource = .swiftui, labelStyle: Bool = false) throws -> RuntimeObservation {
+        guard !labelStyle || source == .uikit else { throw RuntimeRefusal.invalidRequest }
         if source == .uikit, !RuntimePlatform.supportsUIKit { throw RuntimeRefusal.unsupportedSource }
         let profile = ProcessInfo.processInfo.environment["SWIFTUI_VIEW_DEBUG"]
         guard profile == "29" || profile == "287" else { throw RuntimeRefusal.launchProfileRequired }
@@ -189,7 +191,7 @@ final class RuntimeCollector {
         while let parent = nativeRoot.superview, parent.window === window { nativeRoot = parent }
         if source == .uikit {
             #if (os(iOS) || os(tvOS)) && targetEnvironment(simulator)
-            nodes = try RuntimeUIKit.collect(window)
+            nodes = try RuntimeUIKit.collect(window, labelStyle: labelStyle)
             #else
             throw RuntimeRefusal.unsupportedSource
             #endif

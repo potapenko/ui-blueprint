@@ -152,7 +152,7 @@ def endpoint(path):
     return path.parent, value
 
 
-def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None, *, deadline=None, source="swiftui"):
+def request(session, operation, window=None, generation=None, timeout=30, subtree_type=None, *, deadline=None, source="swiftui", label_style=False):
     if deadline is None:
         deadline = time.monotonic() + timeout
     root, descriptor = endpoint(session)
@@ -160,6 +160,10 @@ def request(session, operation, window=None, generation=None, timeout=30, subtre
         raise Failure("invalid_source_selection")
     if source == "uikit" and "capture-uikit" not in descriptor.get("capabilities", []):
         raise Failure("uikit_source_unsupported_by_endpoint")
+    if type(label_style) is not bool or (label_style and (source != "uikit" or operation != "capture")):
+        raise Failure("invalid_label_style_selection")
+    if label_style and "capture-uikit-label-style" not in descriptor.get("capabilities", []):
+        raise Failure("label_style_unsupported_by_endpoint")
     if subtree_type is not None:
         if (operation != "capture" or not isinstance(subtree_type, str) or not subtree_type
                 or len(subtree_type.encode("utf-8")) > 1024
@@ -179,6 +183,8 @@ def request(session, operation, window=None, generation=None, timeout=30, subtre
                    window=window, windowGeneration=generation)
     if source == "uikit":
         payload["source"] = "uikit"
+    if label_style:
+        payload["labelStyle"] = True
     if subtree_type is not None:
         payload["subtreeType"] = subtree_type
     if time.monotonic() >= deadline:
@@ -211,6 +217,8 @@ def request(session, operation, window=None, generation=None, timeout=30, subtre
             raw = artifact_path.read_bytes()
             if hashlib.sha256(raw).hexdigest() != response.get("sha256"):
                 raise Failure(artifact + "_hash_mismatch")
+            if label_style and response.get("label_style") is not True:
+                raise Failure("label_style_binding_mismatch")
             if source == "uikit":
                 if response.get("source") != "uikit.runtime.layout":
                     raise Failure("source_binding_mismatch")
@@ -353,6 +361,7 @@ def main():
             p.add_argument("--out", required=operation in ("capture", "discover"))
         if operation not in ("windows", "discover"):
             p.add_argument("--source", choices=("swiftui", "uikit"), default="swiftui")
+            p.add_argument("--label-style", action="store_true", help="Opt-in configured UILabel font/colors; UIKit only")
             p.add_argument("--type", help="Filter returned nodes after capture (unchanged)")
             p.add_argument("--subtree-type", help="Select one exact nominal type and descendants before export")
         if operation == "measure":
@@ -375,7 +384,8 @@ def main():
             raise Failure("measurement_deadline" if args.command == "measure" else "request_deadline_before_dispatch")
         result, raw = request(args.session, args.command if args.command in ("windows", "discover") else "capture",
                               args.window, args.generation, remaining, getattr(args, "subtree_type", None),
-                              deadline=args.deadline, source=getattr(args, "source", "swiftui"))
+                              deadline=args.deadline, source=getattr(args, "source", "swiftui"),
+                              label_style=getattr(args, "label_style", False))
         if raw is not None:
             artifact = "discovery" if args.command == "discover" else "snapshot"
             result.pop(artifact, None)
