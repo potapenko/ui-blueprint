@@ -155,8 +155,11 @@ the text-effects window. This is evidence for selection, not a class-name rule.
 
 Namespace `uikit.runtime.layout` reports UIView model `bounds`, parent-child
 links, and verified affine mapping to the selected window in points. Nonzero
-bounds origins are preserved. Perspective/3D or unverified transforms stay
-unknown; use local dimensions where appropriate. Rust does not turn a rotated
+bounds origins are preserved. The qualified focus correction also admits a
+3D matrix representation only when the entire layer ancestry preserves z=0
+exactly with constant homogeneous denominator1; this includes inert m34 in
+settled tvOS focus descendants. Effective perspective, tilt/depth under
+perspective, nonfinite or unverified transforms remain unknown. Rust does not turn a rotated
 bounding envelope into an exact rectangle relation. Do not substitute frame,
 AX bounds, pixel estimates, SwiftUI global coordinates or a presentation frame.
 No text, accessibility values, model values or raw descriptions are collected.
@@ -200,3 +203,28 @@ button were not qualified: Device Hub later timed out. Do not label them passed
 or redesign the app to satisfy capture. Two independently addressed TV consumers
 passed wrong-device refusal and stop/relaunch isolation; provisioning remains
 with each consumer coordinator, not the Blueprint collector.
+
+
+### Settled TV focus descendants
+
+The general UIKit mapping correction is SDK-side: updating only this caller
+cannot add transforms to a0.14 app or a saved unknown Snapshot. Build once with
+the corrected SDK, then repeat the original `pair --source uikit` on the selected
+owned window. A standard focused SwiftUI List fixture now reports verified
+window transforms for its floating-content descendants. Preserve original node
+keys/ancestry and bounds; do not infer a centered expansion from class names or
+pixels. Consumer-specific focus screens still require their own fresh capture.
+
+For a Rust query in window space, copy the target geometry's existing known
+`transform.transform` record into `evaluation_input.transforms`, preserving its
+source/target, surface and environment/observation evidence. Bind the original
+snapshot ID/revision/context, use that transform's `to` as result_space and keep
+the query anchor in its original local coordinate_space. `--space` alone supplies
+no transforms. Do not construct a matrix from an assumed inset. The fixture's
+window-width query is in `tests/bridges/uikit_focus_geometry_check.py`.
+
+These remain model layout bounds, not focus shadow/ink, paint, visibility, hit
+regions or animated presentation bounds. An affine mapping may rotate/skew the
+rectangle; do not call its AABB an exact rectangle. A projective mapping is still
+unsupported by this source; no four-corner-only qualification or arbitrary3D
+projection fallback was added.

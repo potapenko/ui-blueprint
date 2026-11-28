@@ -1,5 +1,5 @@
 # UIKit runtime geometry
-- Domain: `uib.uikit-runtime`; contract: `UIB.UIKIT-RUNTIME@1`.
+- Domain: `uib.uikit-runtime`; contract: `UIB.UIKIT-RUNTIME@2`.
 - Authority: Active; stability: Evolving; accepted/released baseline: none.
 - Authority source: user26Nov2026 in SDK chat01a20a46-e5d0-7710-a5ce-9a93d8b82f02:
   add general UIKit popup geometry, release it and hand it to Search, without
@@ -30,8 +30,14 @@ Do not serialize UIView.frame as a precise transformed rectangle. For a qualifie
 2D layer ancestry, derive the local-to-window affine using public point conversion
 and verify it against converted bounds corners. The1e-7pt corner-agreement guard
 qualifies floating-point roundoff only: it does not alter bounds/coefficients or
-change Rust rule tolerances. Perspective/3D, nonfinite or
-unverified mappings remain unknown; local bounds remain useful. A window space
+change Rust rule tolerances. Additionally admit a finite 3D matrix chain whose
+restriction to the model z=0 plane is provably affine: every transform and
+sublayerTransform has exact m13=m23=m43=m14=m24=0, m44=1, and every layer has
+zPosition=anchorPointZ=0. m34 may be nonzero because this invariant makes its
+perspective denominator exactly1. No epsilon weakens these structural guards.
+Keep the existing all-2D-affine path. Derive coefficients from public conversion
+and verify all bounds corners as before. Any effective perspective, tilted plane,
+nonfinite or unverified mapping remains unknown; local bounds remain useful. A window space
 is separate from SwiftUI global spaces. No inferred cross-source mapping.
 
 Record window/screen geometry, scale, orientation and scene state as attributed
@@ -72,3 +78,12 @@ Selected basis: registry96 → SWIFTUI-SIMULATOR@1 → SWIFTUI-RUNTIME@8 and its
 BOUNDARIES@1/MODEL@1/IDENTITY@1/GEOMETRY@2/PRIVACY@1/EXCHANGE@2/LIFECYCLE@1/
 CACHE@1/CLI@22 closure; AGENT-SKILL@9 for the portable recipe. UIKit is the only
 semantic addition. Remaining dependency: consumer-owned app rebuild and acceptance.
+
+
+`UIKIT-FOCUS-002`, Restore/qualification under the existing general UIKit/TV
+capture request and TV00-GEOMETRY-FOCUS-1: tvOS27.2 standard focused List fixture
+reproduced m34=-0.001 with all content on z=0; the prior IsAffine-only guard
+refused a planar-affine model mapping. New admission proves plane preservation
+across the complete layer ancestry, not four-point coincidence alone. Original
+saved unknown records stay unknown; only fresh captures can use qualification.
+No new paint/presentation/hit/AABB channel or class-name exception is introduced.

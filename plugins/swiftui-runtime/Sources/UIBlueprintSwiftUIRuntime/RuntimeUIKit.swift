@@ -35,18 +35,26 @@ import UIKit
     static func mapping(_ view: UIView, to window: UIWindow) -> RuntimeAffine? {
         // Check the full layer ancestry, including intermediary non-UIView layers.
         // A four-point coincidence alone cannot qualify a perspective transform.
+        // tvOS focus uses m34 even for a plane that stays exactly at z=0.
+        var allAffine = true
+        var planePreserved = true
         var layer: CALayer? = view.layer
         var reachedWindow = false
         var depth = 0
         while let current = layer {
             guard depth <= RuntimeCollector.maxDepth,
-                  CATransform3DIsAffine(current.transform),
-                  CATransform3DIsAffine(current.sublayerTransform) else { return nil }
+                  finite(current.transform), finite(current.sublayerTransform),
+                  current.zPosition.isFinite, current.anchorPointZ.isFinite else { return nil }
+            allAffine = allAffine && CATransform3DIsAffine(current.transform)
+                && CATransform3DIsAffine(current.sublayerTransform)
+            planePreserved = planePreserved && preservesModelPlane(current.transform)
+                && preservesModelPlane(current.sublayerTransform)
+                && current.zPosition == 0 && current.anchorPointZ == 0
             if current === window.layer { reachedWindow = true; break }
             layer = current.superlayer
             depth += 1
         }
-        guard reachedWindow else { return nil }
+        guard reachedWindow, allAffine || planePreserved else { return nil }
         let origin = view.convert(CGPoint.zero, to: window)
         let x = view.convert(CGPoint(x: 1, y: 0), to: window)
         let y = view.convert(CGPoint(x: 0, y: 1), to: window)
@@ -64,6 +72,18 @@ import UIKit
                   abs(actual.x-expectedX) <= 1e-7, abs(actual.y-expectedY) <= 1e-7 else { return nil }
         }
         return RuntimeAffine(values: m)
+    }
+
+    private static func finite(_ t: CATransform3D) -> Bool {
+        [t.m11,t.m12,t.m13,t.m14,t.m21,t.m22,t.m23,t.m24,
+         t.m31,t.m32,t.m33,t.m34,t.m41,t.m42,t.m43,t.m44].allSatisfy(\.isFinite)
+    }
+
+    static func preservesModelPlane(_ t: CATransform3D) -> Bool {
+        // For every (x,y,0,1), output z=0 and w=1. In-plane mapping is affine.
+        // Check exactly, not with a tolerance: tiny tilt plus perspective is projective.
+        finite(t) && t.m13 == 0 && t.m23 == 0 && t.m43 == 0
+            && t.m14 == 0 && t.m24 == 0 && t.m44 == 1
     }
 }
 #endif
