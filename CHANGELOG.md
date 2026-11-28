@@ -3,6 +3,25 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.15.0
+
+- Add explicit `--label-style` for UIKit runtime captures, including Simulator
+  pairing. Matching endpoints advertise `capture-uikit-label-style`; old endpoints
+  refuse before dispatch. Omitted options preserve geometry-only behavior and
+  do not read UILabel style. A matching Debug SDK rebuild is required.
+- Attach allowlisted configured UILabel font names/family, point size in points,
+  symbolic traits, optional numeric font weight, fit/highlight/enabled flags and
+  numeric trait context to the original node and observation. Configured text and
+  highlight colors are resolved against that label's traits into named extended
+  sRGB RGBA; missing or unsupported colors remain unknown.
+- This is configured metadata, not effective glyph/paint typography. Attributed
+  overrides, fitting, fallback and rendering effects are not inspected; effective
+  paint font/color always remain unknown. No text, attributed runs, accessibility
+  values, models, full descriptor dumps or SF Symbol size/weight are collected.
+- Preserve existing source identity, geometry, wire format, privacy and limits.
+  Owned-fixture font/color, dynamic traits, refusal and compatibility checks pass;
+  actual TV05 title acceptance remains with its application owner after rebuild.
+
 ## 0.14.1
 
 - Qualify UIKit local-to-window model mappings when the complete layer ancestry
