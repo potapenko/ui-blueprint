@@ -3,6 +3,31 @@
 The version covers the complete UI Blueprint distribution: CLI, collectors,
 helpers and agent skill. Versions of recorded data formats are independent.
 
+## 0.16.0
+
+- Add an explicitly integrated Debug Simulator `BlueprintFontResolutionProbe`
+  that resolves the supplied SwiftUI Font token in its mounted
+  `fontResolutionContext` using public APIs. Both `UIBLUEPRINT_RUNTIME=1` and
+  `UIBLUEPRINT_FONT_RESOLUTION=1` are required to mount its transparent,
+  zero-sized, noninteractive anchor. API availability is gated to iOS/tvOS 26+;
+  runtime qualification remains the supported 27.2 arm64 Simulator profile.
+- Add opt-in `--font-resolution` for UIKit capture and Simulator pairing, with
+  capability/request/response binding. Old endpoints refuse before dispatch;
+  default captures do not evaluate the resolver. One matching SDK/caller update
+  and authorized diagnostic app integration are required.
+- Record resolved point size, public CoreText names/traits, explicit role,
+  mount/context revision and source observation on the original anchor node.
+  Read only the latest mounted SwiftUI context; pending UI updates are not drained.
+  Unmount clears the resolver and remount has a new identity.
+- This is not automatic Text discovery, a Text rectangle, or effective glyph/paint
+  typography. No text, attributed runs, raw Font/Context, model data or descriptor
+  dumps are exported. Paint/fitting/fallback remains unknown. Existing capture,
+  geometry, privacy, quotas and wire behavior stay unchanged.
+- Owned-fixture off/on PNG and public bounds agree; dynamic context resolution
+  changes 68→104→68 pt with matching public oracles and lifecycle checks.
+  Actual TV header A/B and Vocabulary Filters replay remain consumer-owned;
+  no generic all-SwiftUI or full native Release-app acceptance is claimed.
+
 ## 0.15.0
 
 - Add explicit `--label-style` for UIKit runtime captures, including Simulator
