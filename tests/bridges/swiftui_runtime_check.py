@@ -58,6 +58,18 @@ class RuntimeChecks(unittest.TestCase):
                     runtime.request("unused", operation, source=source, label_style=value)
                 publish.assert_not_called()
 
+    def test_font_resolution_refuses_invalid_selection_and_old_endpoint(self):
+        for operation, source, value, expected in (
+            ("capture","swiftui",True,"invalid_font_resolution_selection"),
+            ("windows","swiftui",True,"invalid_font_resolution_selection"),
+            ("capture","uikit",1,"invalid_font_resolution_selection"),
+            ("capture","uikit",True,"font_resolution_unsupported_by_endpoint")):
+            with patch.object(runtime,"endpoint",return_value=(Path("/unused"),{"capabilities":["capture-uikit"]})), \
+                 patch.object(runtime,"publish") as publish:
+                with self.assertRaisesRegex(runtime.Failure,expected):
+                    runtime.request("unused",operation,source=source,font_resolution=value)
+                publish.assert_not_called()
+
     def test_duplicate_json_refuses(self):
         with self.assertRaises(runtime.Failure):
             json.loads('{"id":"a","id":"b"}', object_pairs_hook=runtime.unique_object)
@@ -139,6 +151,35 @@ class RuntimeChecks(unittest.TestCase):
                             runtime.request("unused", "capture", source="uikit", label_style=enabled)
                     else:
                         self.assertEqual(runtime.request("unused", "capture", source="uikit", label_style=enabled)[1], raw)
+                self.assertEqual(list(root.iterdir()), [])
+
+    def test_font_resolution_response_requires_ack_and_keeps_legacy_request_shape(self):
+        for enabled, acknowledge in ((False, False), (True, False), (True, True)):
+            with tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                source = "uikit.runtime.layout"
+                raw = runtime.encoded(dict(artifact=dict(data=dict(context=dict(plugin=dict(id="uikit-runtime-probe")),
+                    observations=[dict(source_namespace=source)], nodes=[dict(key=dict(namespace=source))]))))
+                descriptor = dict(run_id="run", capability="private", capabilities=["capture-uikit", "capture-swiftui-font-resolution"])
+                def respond(path, data):
+                    request = json.loads(data)
+                    self.assertEqual(request.get("fontResolution", False), enabled)
+                    if not enabled:
+                        self.assertNotIn("fontResolution", request)
+                    name = request["id"] + ".snapshot.json"
+                    (root / name).write_bytes(raw)
+                    response = dict(protocol="1.0.0", request_id=request["id"], run_id="run", status="ok",
+                                    source=source, snapshot=name, sha256=hashlib.sha256(raw).hexdigest())
+                    if acknowledge:
+                        response["font_resolution"] = True
+                    (root / (request["id"] + ".response.json")).write_bytes(runtime.encoded(response))
+                with patch.object(runtime, "endpoint", return_value=(root, descriptor)), \
+                     patch.object(runtime, "publish", side_effect=respond):
+                    if enabled and not acknowledge:
+                        with self.assertRaisesRegex(runtime.Failure, "font_resolution_binding_mismatch"):
+                            runtime.request("unused", "capture", source="uikit", font_resolution=enabled)
+                    else:
+                        self.assertEqual(runtime.request("unused", "capture", source="uikit", font_resolution=enabled)[1], raw)
                 self.assertEqual(list(root.iterdir()), [])
 
     def test_scoped_request_requires_capability_before_publication(self):
@@ -235,7 +276,7 @@ class RuntimeChecks(unittest.TestCase):
              patch.object(runtime, "request", return_value=({}, None)) as request, patch("builtins.print"):
             runtime.main()
             self.assertEqual(request.call_args.args[4], .75)
-            self.assertEqual(request.call_args.kwargs, {"deadline": 101, "source": "swiftui", "label_style": False})
+            self.assertEqual(request.call_args.kwargs, {"deadline": 101, "source": "swiftui", "label_style": False, "font_resolution": False})
 
     def test_endpoint_preparation_expiry_refuses_before_publication(self):
         with patch.object(runtime, "endpoint", return_value=(Path("/unused"), dict(run_id="run", capability="private"))), \

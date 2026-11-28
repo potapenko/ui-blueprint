@@ -3,7 +3,7 @@ import UIKit
 
 /// Read-only model geometry. No text, accessibility, descriptions or presentation layers.
 @MainActor enum RuntimeUIKit {
-    static func collect(_ window: UIWindow, labelStyle: Bool = false) throws -> [RuntimeNode] {
+    static func collect(_ window: UIWindow, labelStyle: Bool = false, fontResolution: Bool = false) throws -> [RuntimeNode] {
         var nodes: [RuntimeNode] = []
         var pending: [(UIView, Int?, Int)] = [(window, nil, 0)]
         while let (view, parent, depth) = pending.popLast() {
@@ -24,6 +24,9 @@ import UIKit
                 transform: mapping(view, to: window)))
             if labelStyle, let label = view as? UILabel {
                 nodes[index].labelStyle = RuntimeLabelStyle.collect(label)
+            }
+            if fontResolution, let probe = view as? RuntimeFontResolutionView {
+                nodes[index].fontResolution = probe.sample?()
             }
             let children = view.subviews
             guard nodes.count + pending.count + children.count <= RuntimeCollector.maxNodes else {

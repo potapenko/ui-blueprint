@@ -42,7 +42,7 @@ public final class BlueprintRuntimeSession {
         source = listener
         listener.resume()
         let descriptor: [String: Any] = ["protocol": "1.0.0", "source": "swiftui.runtime.layout",
-            "capabilities": ["capture-subtree-type", "discover-types"] + (RuntimePlatform.supportsUIKit ? ["capture-uikit", "capture-uikit-label-style"] : []),
+            "capabilities": ["capture-subtree-type", "discover-types"] + (RuntimePlatform.supportsUIKit ? ["capture-uikit", "capture-uikit-label-style", "capture-swiftui-font-resolution"] : []),
             "run_id": runID, "capability": capability, "pid": ProcessInfo.processInfo.processIdentifier,
             "bundle": bundle, "directory": directory.path,
             "os": ProcessInfo.processInfo.operatingSystemVersionString,
@@ -73,7 +73,7 @@ public final class BlueprintRuntimeSession {
                 if overloaded { throw RuntimeRefusal.busy }
                 guard let shape = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                       Set(["version", "id", "run", "capability", "operation", "window", "windowGeneration"]).isSubset(of: Set(shape.keys)),
-                      Set(shape.keys).isSubset(of: ["version", "id", "run", "capability", "operation", "window", "windowGeneration", "subtreeType", "source", "labelStyle"])
+                      Set(shape.keys).isSubset(of: ["version", "id", "run", "capability", "operation", "window", "windowGeneration", "subtreeType", "source", "labelStyle", "fontResolution"])
                 else { throw RuntimeRefusal.invalidRequest }
                 let request = try JSONDecoder().decode(RuntimeRequest.self, from: data)
                 if let value = shape["source"] {
@@ -83,6 +83,12 @@ public final class BlueprintRuntimeSession {
                 if shape.keys.contains("labelStyle") {
                     guard request.operation == "capture", request.source == "uikit",
                           request.labelStyle == true, RuntimePlatform.supportsUIKit else {
+                        throw RuntimeRefusal.invalidRequest
+                    }
+                }
+                if shape.keys.contains("fontResolution") {
+                    guard request.operation == "capture", request.source == "uikit",
+                          request.fontResolution == true, RuntimePlatform.supportsUIKit else {
                         throw RuntimeRefusal.invalidRequest
                     }
                 }
@@ -103,7 +109,7 @@ public final class BlueprintRuntimeSession {
                 case "windows": response["windows"] = collector.windows()
                 case "capture", "discover":
                     let observation = try collector.capture(windowNumber: request.window, expectedGeneration: request.windowGeneration,
-                        source: request.source == "uikit" ? .uikit : .swiftui, labelStyle: request.labelStyle == true)
+                        source: request.source == "uikit" ? .uikit : .swiftui, labelStyle: request.labelStyle == true, fontResolution: request.fontResolution == true)
                         .selecting(type: request.subtreeType)
                     guard !isCancelled(id) else { throw RuntimeRefusal.cancelled }
                     let bytes: Data
@@ -126,6 +132,7 @@ public final class BlueprintRuntimeSession {
                     response["sha256"] = SHA256.hash(data: bytes).map { String(format: "%02x", $0) }.joined()
                     if observation.source == .uikit { response["source"] = observation.source.namespace }
                     if request.labelStyle == true { response["label_style"] = true }
+                    if request.fontResolution == true { response["font_resolution"] = true }
                     response["nodes"] = observation.nodes.count
                     if let selection = observation.selection {
                         response["selection"] = selection.metadata(observation: observation.id)
@@ -177,5 +184,6 @@ private struct RuntimeRequest: Decodable {
     let subtreeType: String?
     let source: String?
     let labelStyle: Bool?
+    let fontResolution: Bool?
 }
 #endif

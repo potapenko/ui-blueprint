@@ -45,7 +45,13 @@ class PairChecks(unittest.TestCase):
             with patch.object(simulator,"simctl",return_value=str(root/"app")):
                 with self.assertRaisesRegex(RuntimeError,"capture-reached"):
                     simulator.pair(args,caller)
-            self.assertEqual(caller.request.call_args.kwargs, dict(source="uikit",label_style=True))
+            self.assertEqual(caller.request.call_args.kwargs, dict(source="uikit",label_style=True,font_resolution=False))
+
+    def test_font_resolution_rejects_default_source_before_endpoint(self):
+        caller = Mock()
+        with self.assertRaisesRegex(ValueError,"invalid_font_resolution_selection"):
+            simulator.pair(SimpleNamespace(label_style=False,font_resolution=True,source="swiftui"),caller)
+        caller.endpoint.assert_not_called()
 
     def test_explicit_supported_platforms_reach_capture(self):
         for platform in ("ios-simulator", "tvos-simulator"):

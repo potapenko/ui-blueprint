@@ -264,3 +264,43 @@ SF Symbols: UIImage.SymbolConfiguration on the qualified27.2 SDK has public
 constructors/removal/equality but no pointSize/weight getters. Image bounds or a
 nil preferred configuration do not prove the resolved symbol settings. Keep those
 fields unknown; never inspect descriptions/private ivars or infer a font size.
+
+
+## Explicit SwiftUI font resolution probe
+
+UIKit label metadata cannot resolve arbitrary SwiftUI Text. Where authorized,
+add a Debug-only `BlueprintFontResolutionProbe(font: SAME_FONT, role: STATIC_ROLE)`
+in the source Text's background immediately at its font boundary, preserving all
+font/layout modifiers. The probe reads inherited `fontResolutionContext` from
+that mount; it never reads Text content or uses a default EnvironmentValues.
+This is instrumented source attribution, not universal automatic typography.
+One qualified source build is reused. Keep the entire import/background inside
+`#if DEBUG`; the public resolver requires26+, minimumdeployment need not change.
+
+Launch that diagnostic build with both existing `UIBLUEPRINT_RUNTIME=1` (launcher)
+and recipe environment `UIBLUEPRINT_FONT_RESOLUTION=1`. Without the latter the
+probe mounts nothing. Ask explicitly using matching capability:
+
+```sh
+python3 -B "$UIB_BUNDLE/swiftui_simulator.py" pair --source uikit --font-resolution \
+  --session "$SESSION" --simulator "$OWNED_SIMULATOR_UDID" --window "$WINDOW" --out "$NEW_PAIR_DIRECTORY"
+```
+
+The UIKit anchor node's `font_resolution_*` source declarations report role,
+mount_id/context_revision, resolvedpoint_size(pt), publicCTFontPostScript/family/
+traits and bold/italic/monospaced flags. Originalnode/window/run/observation binds
+these values. The supplied Font is resolved on each requestedcapture using the
+latest SwiftUI environment update at that mount; pendingUIupdates are not drained
+and consistency remainsunknown. Do not rename the zero-sized anchor's rectangle
+as the Text's geometry, or join it to another snapshot. Report source role/delta.
+Unmount removes the anchor; a remount has a new mount identity. No globalregistry.
+
+Before trusting an integration, compare samecomposition probeoff/on publicbounds
+and nativePNG. ControlledTVqualification matched PNG exactly and resolved68→104→68
+pt across actualDynamicTypecontextchanges, with removed/remountedprobe identity
+checks. These fixture values are NOT the font of a different app/header. The
+consumer must repeat in its actualmountedsourcecontext and verify appearance.
+UIFontmetadata/glyphfitting/attributedstyles/ink/paint/SFconfig are distinct:
+`effective_paint_font` remainsunknown. No Font.Contextdescription/fullEnvironment,
+model/text/attributedruns or CTFontdescriptor dump is exported. Oldendpoints
+refuse `--font-resolution`; oldsavedSnapshots cannot gain resolution metadata.

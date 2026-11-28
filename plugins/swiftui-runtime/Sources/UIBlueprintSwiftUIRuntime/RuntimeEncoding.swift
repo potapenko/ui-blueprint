@@ -100,6 +100,14 @@ enum RuntimeEncoding {
                 }
                 declarations.append(declaration("label_style_observation_id", .text(observation.id)))
             }
+            if let resolved = node.fontResolution {
+                for name in resolved.keys.sorted() {
+                    declarations.append(["namespace": namespace, "name": "font_resolution_" + name,
+                        "state": resolved[name]!.state, "sensitivity": "public",
+                        "source": "SwiftUI.Font.resolve-mounted-context"])
+                }
+                declarations.append(declaration("font_resolution_observation_id", .text(observation.id)))
+            }
             if let source = node.positionSource, source != node.index {
                 declarations.append(declaration("layout_position_source", .text(key(source)["key"]!)))
             }
